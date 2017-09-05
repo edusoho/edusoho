@@ -65,7 +65,7 @@ class CourseProduct extends Product implements Owner, Refund
 
     public function afterRefuseRefund($order)
     {
-         $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
+        $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
     }
 
     public function afterAdoptRefund($order)

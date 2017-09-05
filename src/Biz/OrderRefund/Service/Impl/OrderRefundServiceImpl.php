@@ -4,7 +4,6 @@ namespace Biz\OrderRefund\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OrderRefund\Service\OrderRefundService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\OrderFacade\Product\Product;
 use AppBundle\Common\StringToolkit;
 
@@ -73,7 +72,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             throw $exception;
         }
 
-        return $product;  
+        return $product;
     }
 
     public function cancelRefund($orderId)
