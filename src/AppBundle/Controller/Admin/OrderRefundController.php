@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -31,7 +30,7 @@ class OrderRefundController extends BaseController
 
         $userIds = array_merge(ArrayToolkit::column($refunds, 'created_user_id'), ArrayToolkit::column($refunds, 'deal_user_id'));
         $users = $this->getUserService()->findUsersByIds($userIds);
-        
+
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
 
@@ -98,7 +97,7 @@ class OrderRefundController extends BaseController
 
     protected function sendAuditRefundNotification($product, $order, $data)
     {
-        if (isset($data['result']) &&  $data['result']== 'pass') {
+        if (isset($data['result']) && $data['result'] == 'pass') {
             $message = $this->setting('refund.successNotification');
         } else {
             $message = $this->setting('refund.failedNotification');
@@ -110,7 +109,7 @@ class OrderRefundController extends BaseController
         $backUrl = $product->backUrl;
         $targetUrl = $this->generateUrl($backUrl['routing'], $backUrl['params']);
         $variables = array(
-            'item' => "<a href='{$targetUrl}'>".$product->title."</a>",
+            'item' => "<a href='{$targetUrl}'>".$product->title.'</a>',
             'amount' => $order['pay_amount'],
             'note' => $data['note'],
         );
