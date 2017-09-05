@@ -135,8 +135,7 @@ class Lesson extends BaseResource
 
         $resourceUrl = $this->generateUrl(
             'global_file_document_player',
-            array('globalId' => $file['globalId'], 'token' => $result['token']),
-            true
+            array('globalId' => $file['globalId'], 'token' => $result['token'])
         );
 
         $lesson['content'] = array(
