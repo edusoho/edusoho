@@ -24,9 +24,11 @@ class HTMLPurifierFactory
         $config->set('Cache.SerializerPath', $this->config['cacheDir']);
 
         if ($trusted) {
+            //    $config->set('HTML.Trusted', true);
             $config->set('Filter.ExtractStyleBlocks', true);
             $config->set('Attr.EnableID', true);
             $config->set('HTML.SafeEmbed', true);
+            $config->set('HTML.SafeScripting', array());
             $config->set('HTML.SafeObject', true);
             $config->set('Output.FlashCompat', true);
             $config->set('HTML.FlashAllowFullScreen', true);

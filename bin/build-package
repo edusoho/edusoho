@@ -21,7 +21,17 @@ cd scripts
 git pull
 cd ..
 
+
 if [ "$SKIP" = 'n' ]; then
+#compile static resource file with webpack
+echo $(tput setaf 2)remove old node_modules and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
+rm -rf app/caches node_modules
+yarn
+
+#compile static resource file with webpack
+echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
+npm run compile
+
 #compile static resource file with webpack
 echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
 npm run compile

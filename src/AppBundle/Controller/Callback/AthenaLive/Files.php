@@ -105,7 +105,7 @@ class Files extends AthenaLiveBase
         $file['lazyConvert'] = false;
 
         try {
-            if ($userToken['type'] == 'open_course') {
+            if ($type == 'open_course') {
                 $this->getUploadFileService()->addFile('opencoursematerial', $course['id'], $file, 'cloud');
             } else {
                 $this->getUploadFileService()->addFile('coursematerial', $course['courseSetId'], $file, 'cloud');

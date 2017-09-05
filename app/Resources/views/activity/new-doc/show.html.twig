@@ -13,7 +13,7 @@
         data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>
     </div>
-    {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+    {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
           {% if setting("developer.cloud_sdk_cdn") %}
             {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
           {% else %}

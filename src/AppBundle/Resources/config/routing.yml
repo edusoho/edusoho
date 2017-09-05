@@ -966,6 +966,7 @@ group_upload:
 my_bill:
     path: /my/bill
     defaults: { _controller: AppBundle:My/Coin:cashBill }
+
 my_coin:
     path:     /my/coin
     defaults: { _controller: AppBundle:My/Coin:index }
@@ -983,13 +984,6 @@ note_cancel_like:
     defaults: { _controller: AppBundle:Note:cancelLike }
     methods: [POST]
 
-invite_promote_link:
-    path:     /my/invitecode/promotelink
-    defaults: { _controller: AppBundle:My/Coin:promoteLink }
-
-write_invitecode:
-    path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: AppBundle:My/Coin:writeInvitecode }
 receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
@@ -2929,3 +2923,10 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
+v2_demo:
+    path: /v2/demo
+    defaults: { _controller: AppBundle:V2:demo }
+
+v2_demo_modal:
+    path: /v2/demo/modal
+    defaults: { _controller: AppBundle:V2:modal }

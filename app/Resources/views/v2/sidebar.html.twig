@@ -1,0 +1,29 @@
+<div class="cd-sidebar">
+  <ul class="cd-sidebar__list">
+    <li class="cd-sidebar__heading">
+      {{ 'user.account_center'|trans }}
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
+      <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
+    </li>
+    {% if setting('coin.coin_enabled', 0) %}
+      <li class="cd-sidebar__item  {% if side_nav == 'my-coin' %} active {% endif %}">
+        <a href="{{ path('my_coin') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
+      </li>
+    {% endif %}
+    {% if setting('invite.invite_code_setting', 0) %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
+        <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
+      </li>
+    {% endif %}
+    <li class="cd-sidebar__item {% if side_nav == 'my-coupon' %} active {% endif %}">
+      <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
+    </li>
+    {% if setting('reward_point').enable|default(0)%}
+      <li class="cd-sidebar__item {% if side_nav == 'my-reward-point' %} active {% endif %}">
+        <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
+      </li>
+    {% endif %}
+    {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
+  </ul>
+</div>

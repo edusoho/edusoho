@@ -36,6 +36,16 @@ class Ppt extends Activity
 
     public function create($fields)
     {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $media = json_decode($fields['media'], true);
+
+        if (empty($media['id'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $fields['mediaId'] = $media['id'];
+
         $default = array(
             'finishDetail' => 1,
             'finishType' => 'end',

@@ -6,9 +6,7 @@
 {% set bodyClass = 'course-dashboard-page' %}
 
 
-{% block title %}
-  {{ course_set.title }} - {{ parent() }}
-{% endblock %}
+{% block title %}{{ course_set.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
   {% for tag in course_set.tags %}{{ tag.name }}{% if not loop.last %},{% endif %}{% else %}{{ parent() }}{% endfor %}
