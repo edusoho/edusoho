@@ -14,7 +14,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
+class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 {
     private $biz;
 
@@ -94,7 +94,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
                     break;
                 case 'lesson':
                     $fields['seq'] = $seq;
-                    //++$seq;
+                    ++$seq;
                     $fields['number'] = $this->updateTaskSeq($chapterId, $taskNumber, $seq);
                     $this->chapterBatchUpdateHelper->add('id', $chapterId, $fields);
                     break;

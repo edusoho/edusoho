@@ -3199,8 +3199,6 @@ my.learning.course.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View
-my.learning.course.click_loading_more: 'Click to load more'
-my.learning.course.loading: 'loading...'
 my.learning.live: 'My Live'
 my.learning.live.course_updating: Updating
 my.learning.live.course_finished: Finished
