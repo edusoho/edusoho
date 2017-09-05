@@ -2,7 +2,6 @@
 
 namespace Biz\Coupon\State;
 
-
 interface CouponInterface
 {
     public function using($params);
@@ -10,5 +9,4 @@ interface CouponInterface
     public function used();
 
     public function cancelUsing();
-
 }

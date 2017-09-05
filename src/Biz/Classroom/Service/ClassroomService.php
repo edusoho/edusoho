@@ -129,6 +129,8 @@ interface ClassroomService
 
     public function becomeStudent($classroomId, $userId, $info = array());
 
+    public function becomeStudentWithOrder($classroomId, $userId, $info = array());
+
     public function becomeAuditor($classroomId, $userId);
 
     public function becomeAssistant($classroomId, $userId);

@@ -19,7 +19,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $user = $this->biz['user'];
         /* @var $currency Currency */
-        $currency = $this->biz['currency'];
+        $currency = $this->getCurrency();
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $user['id'],
@@ -96,6 +96,45 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount'] / 100);
 
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
+    }
+
+    public function createSpecialOrder(Product $product, $userId, $params = array())
+    {
+        $currency = $this->getCurrency();
+        $orderFields = array(
+            'title' => $product->title,
+            'user_id' => $userId,
+            'created_reason' => empty($params['created_reason']) ? '' : $params['created_reason'],
+            'source' => empty($params['source']) ? 'self' : $params['source'],
+            'price_type' => empty($params['price_type']) ? $currency->isoCode : $params['price_type'],
+        );
+
+        $orderItems = $this->makeOrderItems($product);
+
+        $order = $this->getWorkflowService()->start($orderFields, $orderItems);
+
+        $this->getWorkflowService()->paying($order['id'], array());
+
+        $data = array(
+            'trade_sn' => '',
+            'pay_time' => 0,
+            'order_sn' => $order['sn'],
+        );
+        $order = $this->getWorkflowService()->paid($data);
+
+        return $order;
+    }
+
+    public function getOrderProduct($targetType, $params)
+    {
+        if (!empty($this->biz['order.product.'.$targetType])) {
+            $product = $this->biz['order.product.'.$targetType];
+            $product->init($params);
+
+            return $product;
+        } else {
+            throw $this->createServiceException("The {$targetType} product not found");
+        }
     }
 
     /**
