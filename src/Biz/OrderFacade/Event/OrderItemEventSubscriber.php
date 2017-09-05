@@ -28,6 +28,15 @@ class OrderItemEventSubscriber extends EventSubscriber
         $product->paidCallback($orderItem);
     }
 
+    public function onClassroomPaid(Event $event)
+    {
+        $orderItem = $event->getSubject();
+
+        $product = $this->getProduct($orderItem['target_type']);
+
+        $product->paidCallback($orderItem);
+    }
+
     /**
      * @param $targetType
      *

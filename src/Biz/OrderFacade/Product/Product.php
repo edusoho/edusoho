@@ -7,6 +7,7 @@ use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\Sms\Service\SmsService;
 use Codeages\Biz\Framework\Context\BizAware;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 
 abstract class Product extends BizAware
 {
@@ -107,6 +108,8 @@ abstract class Product extends BizAware
     {
         $this->smsCallback($orderItem);
         $this->callback($orderItem);
+
+        return PaidCallback::SUCCESS;
     }
 
     public function callback($orderItem)
