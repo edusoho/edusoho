@@ -11,11 +11,6 @@ class ClosedOrderStatus extends AbstractOrderStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(CreatedOrderStatus::NAME, PayingOrderStatus::NAME);
-    }
-
     public function process($data = array())
     {
         $closeTime = time();
@@ -25,10 +20,17 @@ class ClosedOrderStatus extends AbstractOrderStatus
         ));
 
         $items = $this->getOrderItemDao()->findByOrderId($this->order['id']);
-        foreach ($items as $item) {
-            $this->getOrderItemDao()->update($item['id'], array(
+        foreach ($items as $key => $item) {
+            $items[$key] = $this->getOrderItemDao()->update($item['id'], array(
                 'status' => ClosedOrderStatus::NAME,
                 'close_time' => $closeTime
+            ));
+        }
+
+        $deducts = $this->getOrderItemDeductDao()->findByOrderId($this->order['id']);
+        foreach ($deducts as $key => $deduct) {
+            $deducts[$key] = $this->getOrderItemDeductDao()->update($deduct['id'], array(
+                'status' => ClosedOrderStatus::NAME,
             ));
         }
 

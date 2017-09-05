@@ -17,6 +17,11 @@ class PaymentTradeDaoImpl extends GeneralDaoImpl implements PaymentTradeDao
         ));
     }
 
+    public function findByOrderSns($orderSns)
+    {
+        return $this->findInField('order_sn', $orderSns);
+    }
+
     public function findByOrderSn($orderSn)
     {
         return $this->findByFields(array(
@@ -38,7 +43,11 @@ class PaymentTradeDaoImpl extends GeneralDaoImpl implements PaymentTradeDao
             'serializes' => array(
                 'platform_created_result' => 'json',
                 'notify_data' => 'json'
-            )
+            ),
+            'conditions' => array(
+                'order_sn IN (:order_sns)',
+            ),
+                
         );
     }
 }

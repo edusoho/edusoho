@@ -11,11 +11,6 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array();
-    }
-
     public function closed($data = array())
     {
         return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);

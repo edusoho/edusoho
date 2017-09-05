@@ -6,17 +6,20 @@ class RefundingStatus extends AbstractStatus
 {
     const NAME = 'refunding';
 
-    public function getPriorStatus()
+    public function getName()
     {
-        return array(PaidStatus::NAME);
+        return self::NAME;
     }
 
     public function refunded()
     {
-        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
-            'status' => RefundedStatus::NAME,
-            'refund_success_time' => time()
-        ));
+        return $this->getPayStatus(RefundedStatus::NAME)->process();
+    }
 
+    public function process($data = array())
+    {
+        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
+            'status' => RefundingStatus::NAME,
+        ));
     }
 }

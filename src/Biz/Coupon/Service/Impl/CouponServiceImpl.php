@@ -7,11 +7,14 @@ use Biz\BaseService;
 use Biz\Card\Service\CardService;
 use Biz\Coupon\Dao\CouponDao;
 use Biz\Coupon\Service\CouponService;
+use Biz\Coupon\State\ReceiveCoupon;
+use Biz\Coupon\State\UsingCoupon;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CouponServiceImpl extends BaseService implements CouponService
 {
@@ -32,7 +35,10 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function updateCoupon($couponId, $fields)
     {
-        return $this->getCouponDao()->update($couponId, $fields);
+        $coupon = $this->getCouponDao()->update($couponId, $fields);
+        $this->dispatchEvent('coupon.update', $coupon);
+
+        return $coupon;
     }
 
     public function findCouponsByBatchId($batchId, $start, $limit)
@@ -121,6 +127,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                     'settingName' => $inviteSetting[$settingName],
                 );
                 $this->getNotificationService()->notify($userId, 'invite-reward', $message);
+                $this->dispatchEvent('invite.reward', $coupon, array('message' => $message));
 
                 return $coupon;
             } else {
@@ -308,40 +315,6 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponDao()->getByCode($code);
     }
 
-    public function useCoupon($code, $order)
-    {
-        $coupon = $this->getCouponDao()->getByCode($code, array('lock' => 1));
-        $user = $this->getUserService()->getUser($order['userId']);
-        if (empty($coupon)) {
-            return null;
-        }
-
-        if ($coupon['status'] == 'used') {
-            return null;
-        }
-
-        $coupon = $this->getCouponDao()->update(
-            $coupon['id'],
-            array(
-                'status' => 'used',
-                'targetType' => $order['targetType'],
-                'targetId' => $order['targetId'],
-                'orderTime' => time(),
-                'userId' => $order['userId'],
-                'orderId' => $order['id'],
-            )
-        );
-        $this->getLogService()->info(
-            'coupon',
-            'use',
-            "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}",
-            $coupon
-        );
-        $this->dispatchEvent('coupon.use', $coupon);
-
-        return $coupon;
-    }
-
     private function receiveCouponByUserId($couponId, $useId)
     {
         $coupon = $this->getCouponDao()->update(
@@ -378,6 +351,25 @@ class CouponServiceImpl extends BaseService implements CouponService
             return $coupon['rate'];
         } else {
             return round($price * ((10 - $coupon['rate']) / 10), 2);
+        }
+    }
+
+    public function getCouponStateById($couponId)
+    {
+        $coupon = $this->getCoupon($couponId);
+
+        if (!$coupon) {
+            throw new InvalidArgumentException(sprintf('Coupon with id %d does not exist', $couponId));
+        }
+
+        switch ($coupon['status']) {
+            case 'using':
+                return new UsingCoupon($this->biz, $coupon);
+            case 'receive':
+                return new ReceiveCoupon($this->biz, $coupon);
+            default:
+                throw new InvalidArgumentException('Invalid coupon status given');
+                break;
         }
     }
 

@@ -6,9 +6,15 @@ class ClosedStatus extends AbstractStatus
 {
     const NAME = 'closed';
 
-    public function getPriorStatus()
+    public function getName()
     {
-        return array(ClosingStatus::NAME);
+        self::NAME;
     }
 
+    public function process($data = array())
+    {
+        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
+            'status' => ClosedStatus::NAME,
+        ));
+    }
 }

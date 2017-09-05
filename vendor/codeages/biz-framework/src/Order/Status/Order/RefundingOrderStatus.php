@@ -11,11 +11,6 @@ class RefundingOrderStatus extends AbstractOrderStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(PaidOrderStatus::NAME, FailOrderStatus::NAME, SuccessOrderStatus::NAME);
-    }
-
     public function process($data = array())
     {
         $order = $this->changeStatus(self::NAME);
