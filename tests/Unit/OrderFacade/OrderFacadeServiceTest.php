@@ -74,7 +74,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             'created_reason' => '课程用户导入订单',
             'price_type' => 'CNY',
         );
-        $order = $this->getOrderFacadeService()->createImportOrder($courseProduct, 10, $params);
+        $order = $this->getOrderFacadeService()->createSpecialOrder($courseProduct, 10, $params);
 
         $this->assertEquals('paid', $order['status']);
         $this->assertArraySubset($params, $order);
@@ -98,7 +98,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             'created_reason' => '班级用户导入订单',
             'price_type' => 'CNY',
         );
-        $order = $this->getOrderFacadeService()->createImportOrder($product, 10, $params);
+        $order = $this->getOrderFacadeService()->createSpecialOrder($product, 10, $params);
 
         $this->assertEquals('paid', $order['status']);
         $this->assertEquals(10 * 100, $order['price_amount']);
