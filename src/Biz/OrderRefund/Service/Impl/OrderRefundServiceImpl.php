@@ -66,7 +66,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             $this->beginTransaction();
             $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data, false);
 
-            $product->afterAdoptRefund();
+            $product->afterAdoptRefund($order);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

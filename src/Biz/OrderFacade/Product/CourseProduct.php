@@ -70,7 +70,7 @@ class CourseProduct extends Product implements Owner, Refund
 
     public function afterAdoptRefund($order)
     {
-        $this->exitOwner();
+        $this->exitOwner($order['user_id']);
     }
 
     public function exitOwner($userId)
