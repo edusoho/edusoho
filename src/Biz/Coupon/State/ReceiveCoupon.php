@@ -6,7 +6,7 @@ class ReceiveCoupon extends Coupon implements CouponInterface
 {
     public function using($params)
     {
-       $this->getCouponService()->updateCoupon(
+        $this->getCouponService()->updateCoupon(
             $this->coupon['id'],
             array(
                 'status' => 'using',

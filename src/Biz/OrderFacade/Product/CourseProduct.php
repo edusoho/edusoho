@@ -41,9 +41,10 @@ class CourseProduct extends Product implements Owner, Refund
 
     public function callback($orderItem)
     {
+        $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
-            'orderId' => $orderItem['order_id'],
-            'remark' => '',
+            'orderId' => $order['id'],
+            'note' => $order['created_reason'],
         );
 
         if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
@@ -105,5 +106,10 @@ class CourseProduct extends Product implements Owner, Refund
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

@@ -70,48 +70,47 @@ class MemberServiceImpl extends BaseService implements MemberService
             $data['price'] = 0;
         }
 
-        $systemOrder = array(
-            'userId' => $userId,
-            'title' => $orderTitle,
-            'targetType' => OrderService::TARGETTYPE_COURSE,
-            'targetId' => $courseId,
-            'amount' => $data['price'],
-            'totalPrice' => $course['price'],
-            'snPrefix' => OrderService::SNPREFIX_C,
-            'payment' => $orderPayment,
-            'data' => $data,
-        );
+        try {
+            $this->beginTransaction();
+            if ($data['price'] > 0) {
+                //支付完成后会自动加入课程
+                $order = $this->createOrder($course['id'], $user['id'], $data['price'], $orderPayment, $data['remark']);
+            } else {
+                $info = array(
+                    'orderId' => 0,
+                    'note' => $data['remark'],
+                );
 
-        $order = $this->getOrderService()->createSystemOrder($systemOrder);
+                $this->becomeStudent($course['id'], $user['id'], $info);
+                $order = array('id' => 0);
+            }
 
-        $info = array(
-            'orderId' => $order['id'],
-            'note' => $data['remark'],
-            'becomeUseMember' => isset($data['becomeUseMember']) ? $data['becomeUseMember'] : false,
-        );
+            $member = $this->getCourseMember($course['id'], $user['id']);
 
-        $this->becomeStudent($order['targetId'], $order['userId'], $info);
-
-        $member = $this->getCourseMember($course['id'], $user['id']);
-
-        if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
-            $this->getNotificationService()->notify(
-                $member['userId'],
-                'student-create',
-                array(
+            $currentUser = $this->getCurrentUser();
+            if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
+                $message = array(
                     'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
-                )
+                    'userId' => $currentUser['id'],
+                    'userName' => $currentUser['nickname'],
+                    'type' => 'create',
+                );
+                $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
+            }
+
+            $this->getLogService()->info(
+                'course',
+                'add_student',
+                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
             );
+            $this->commit();
+
+            return array($course, $member, $order);
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-
-        $this->getLogService()->info(
-            'course',
-            'add_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
-        );
-
-        return array($course, $member, $order);
     }
 
     public function removeCourseStudent($courseId, $userId)
@@ -609,14 +608,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             'deadline' => $deadline,
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
-            'remark' => empty($order['note']) ? '' : $order['note'],
+            'remark' => empty($info['note']) ? '' : $info['note'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         );
-
-        if (empty($fields['remark'])) {
-            $fields['remark'] = empty($info['note']) ? '' : $info['note'];
-        }
 
         $member = $this->getMemberDao()->create($fields);
 
@@ -1083,6 +1078,19 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
     }
 
+    protected function createOrder($courseId, $userId, $price, $source, $remark)
+    {
+        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
+        $courseProduct->price = $price;
+
+        $params = array(
+            'created_reason' => $remark,
+            'source' => $source,
+        );
+
+        return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
+    }
+
     /**
      * @return CourseMemberDao
      */
@@ -1129,6 +1137,11 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 
     /**

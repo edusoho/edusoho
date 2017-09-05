@@ -399,63 +399,9 @@ class ClassroomManageController extends BaseController
                 throw $this->createNotFoundException("用户{$data['nickname']}不存在");
             }
 
-            if ($this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id'])) {
-                throw $this->createNotFoundException('用户已经是学员，不能添加！');
-            }
-
-            $classroomSetting = $this->getSettingService()->get('classroom');
-
-            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
-
-            if (empty($data['price'])) {
-                $data['price'] = 0;
-            }
-
-            $order = $this->getOrderService()->createOrder(
-                array(
-                    'userId' => $user['id'],
-                    'title' => "购买{$classroomName}《{$classroom['title']}》(管理员添加)",
-                    'targetType' => 'classroom',
-                    'targetId' => $classroom['id'],
-                    'amount' => $data['price'],
-                    'payment' => 'outside',
-                    'snPrefix' => 'CR',
-                    'totalPrice' => $classroom['price'],
-                )
-            );
-
-            $this->getOrderService()->payOrder(
-                array(
-                    'sn' => $order['sn'],
-                    'status' => 'success',
-                    'amount' => $order['amount'],
-                    'paidTime' => time(),
-                )
-            );
-
-            $info = array(
-                'orderId' => $order['id'],
-                'note' => $data['remark'],
-            );
-            $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
-
-            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-            $currentUser = $this->getCurrentUser();
-            $message = array(
-                'classroomId' => $classroom['id'],
-                'classroomTitle' => $classroom['title'],
-                'userId' => $currentUser['id'],
-                'userName' => $currentUser['nickname'],
-                'type' => 'create',
-            );
-
-            $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
-
-            $this->getLogService()->info(
-                'classroom',
-                'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
-            );
+            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $data['isNotify'] = 1;
+            $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
             return $this->createJsonResponse(array('success' => 1));
         }

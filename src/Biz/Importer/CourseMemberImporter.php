@@ -24,7 +24,7 @@ class CourseMemberImporter extends Importer
         $importData = $request->request->get('importData');
         $courseId = $request->request->get('courseId');
         $price = $request->request->get('price');
-        $remark = $request->request->get('remark');
+        $remark = $request->request->get('remark', '通过批量导入添加');
         $course = $this->getCourseService()->getCourse($courseId);
         $orderData = array(
             'amount' => $price,
@@ -39,6 +39,7 @@ class CourseMemberImporter extends Importer
         $existsUserCount = 0;
         $successCount = 0;
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -56,56 +57,14 @@ class CourseMemberImporter extends Importer
             if ($isCourseStudent || $isCourseTeacher) {
                 ++$existsUserCount;
             } else {
-                $currentUser = $this->biz['user'];
-
-                $order = $this->getOrderService()->createOrder(
-                    array(
-                        'userId' => $user['id'],
-                        'title' => sprintf('购买课程《%s》-%s(管理员添加)', $courseSet['title'], $course['title']),
-                        'targetType' => 'course',
-                        'targetId' => $course['id'],
-                        'totalPrice' => $course['price'],
-                        'amount' => empty($orderData['amount']) ? 0 : $orderData['amount'],
-                        'payment' => 'outside',
-                        'snPrefix' => 'C',
-                        'note' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                    )
+                $data = array(
+                    'price' => $orderData['amount'],
+                    'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
+                    'isAdminAdded' => 1,
                 );
+                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], $data);
 
-                $this->getOrderService()->payOrder(
-                    array(
-                        'sn' => $order['sn'],
-                        'status' => 'success',
-                        'amount' => $order['amount'],
-                        'paidTime' => time(),
-                    )
-                );
-
-                $info = array(
-                    'orderId' => $order['id'],
-                );
-
-                if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
-                    ++$successCount;
-                }
-
-                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
-
-                $message = array(
-                    'courseId' => $course['id'],
-                    'courseTitle' => $courseSet['title'],
-                    'userId' => $currentUser['id'],
-                    'userName' => $currentUser['nickname'],
-                    'type' => 'create',
-                );
-
-                $this->getNotificationService()->notify($member['userId'], 'course-student', $message);
-
-                $this->getLogService()->info(
-                    'course',
-                    'add_student',
-                    "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加"
-                );
+                ++$successCount;
             }
         }
 
@@ -454,21 +413,6 @@ class CourseMemberImporter extends Importer
     protected function getUserService()
     {
         return $this->getServiceKernel()->getBiz()->service('User:UserService');
-    }
-
-    protected function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order:OrderService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('User:NotificationService');
-    }
-
-    protected function getLogService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('System:LogService');
     }
 
     /**
