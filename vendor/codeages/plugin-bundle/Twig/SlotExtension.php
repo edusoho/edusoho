@@ -20,7 +20,7 @@ class SlotExtension extends \Twig_Extension
 
     public function slot($name, $args)
     {
-        return $this->manager->fire($name, $args);
+        return $this->manager->fire($name, $args = array());
     }
 
     public function getName()
