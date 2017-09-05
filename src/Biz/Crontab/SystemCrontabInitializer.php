@@ -123,8 +123,7 @@ class SystemCrontabInitializer
                 'class' => 'Biz\User\Job\UpdateInviteRecordOrderInfoJob',
                 'args' => array(),
             ));
-        }  
-
+        }
     }
 
     /**
