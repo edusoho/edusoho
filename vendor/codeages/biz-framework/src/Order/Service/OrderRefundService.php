@@ -8,5 +8,5 @@ interface OrderRefundService
 
     public function countRefunds($conditions);
 
-    public function getById($id);
+    public function getOrderRefundById($id);
 }

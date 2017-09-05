@@ -69,7 +69,7 @@ class OrderRefundController extends BaseController
 
     public function auditRefundAction(Request $request, $refundId)
     {
-        $refund = $this->getBizOrderRefundService()->getById($refundId);
+        $refund = $this->getBizOrderRefundService()->getOrderRefundById($refundId);
         $order = $this->getOrderService()->getOrder($refund['order_id']);
 
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
