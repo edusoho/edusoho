@@ -520,7 +520,20 @@ class SettingsController extends BaseController
 
     public function findPayPasswordAction(Request $request)
     {
-        return $this->render('settings/find-pay-password.html.twig');
+        $user = $this->getCurrentUser();
+        $hasLoginPassword = strlen($user['password']) > 0;
+        $hasPayPassword = strlen($user['payPassword']) > 0;
+        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+        $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+        return $this->render('settings/find-pay-password.html.twig', array(
+            'hasLoginPassword' => $hasLoginPassword,
+            'hasPayPassword' => $hasPayPassword,
+            'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
+            'hasVerifiedMobile' => $hasVerifiedMobile,
+            'verifiedMobile' => $verifiedMobile,
+        ));
     }
 
     protected function findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
