@@ -12,44 +12,35 @@ class OrderRefundController extends BaseController
 {
     public function refundsAction(Request $request, $targetType)
     {
-        $conditions = $this->prepareRefundSearchConditions($request->query->all());
-
-        $processor = $this->getOrderRefundProcessor($targetType);
-
-        $conditions['targetType'] = $targetType;
-        if (!empty($conditions['title'])) {
-            $targets = $processor->findByLikeTitle(trim($conditions['title']));
-            $conditions['targetIds'] = ArrayToolkit::column($targets, 'id');
-            if (count($conditions['targetIds']) == 0) {
-                return $this->render('admin/order-refund/refunds.html.twig', array(
-                        'refunds' => array(),
-                        'users' => array(),
-                        'orders' => array(),
-                        'paginator' => new Paginator($request, 0, 20),
-                        'targetType' => $targetType,
-                    )
-                );
-            }
-        }
-
+        //$conditions = $this->prepareRefundSearchConditions($request->query->all());
+        $conditions = $request->query->all();
         $paginator = new Paginator(
-            $this->get('request'),
-            $this->getOrderService()->countRefunds($conditions),
+            $request,
+            $this->getBizOrderRefundService()->countRefunds($conditions),
             20
         );
 
-        $refunds = $this->getOrderService()->searchRefunds(
+        $refunds = $this->getBizOrderRefundService()->searchRefunds(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userIds = array_merge(ArrayToolkit::column($refunds, 'userId'), ArrayToolkit::column($refunds, 'operator'));
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
-        return $this->render('admin/order-refund/refunds.html.twig', array(
+        $orderIds = ArrayToolkit::column($refunds, 'order_id');
+
+        $userIds = array_merge(ArrayToolkit::column($refunds, 'created_user_id'), ArrayToolkit::column($refunds, 'deal_user_id'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($orders, 'id');
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        return $this->render("admin/order-refund/refund-{$targetType}.html.twig", array(
             'refunds' => $refunds,
+            'orderItems' => $orderItems,
             'users' => $users,
             'orders' => $orders,
             'paginator' => $paginator,
@@ -76,76 +67,56 @@ class OrderRefundController extends BaseController
         return $conditions;
     }
 
-    public function cancelRefundAction(Request $request, $id)
+    public function auditRefundAction(Request $request, $refundId)
     {
-        $order = $this->getOrderService()->getOrder($id);
-        $this->getOrderRefundProcessor($order['targetType'])->cancelRefundOrder($id);
+        $refund = $this->getBizOrderRefundService()->getById($refundId);
+        $order = $this->getOrderService()->getOrder($refund['order_id']);
 
-        return $this->createJsonResponse(true);
-    }
-
-    public function auditRefundAction(Request $request, $id)
-    {
-        $order = $this->getOrderService()->getOrder($id);
+        $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $pass = $request->request->get('result');
+            $fileds = $request->request->all();
+            $refundData = array('deal_reason' => $request->request->get('note'));
 
-            $pass = $data['result'] == 'pass' ? true : false;
-
-            $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
-            $orderRefundProcessor = $this->getOrderRefundProcessor($order['targetType']);
-            $orderRefundProcessor->auditRefundOrder($id, $pass, $data);
-
-            if ($order['targetType'] == 'course') {
-                $this->sendAuditRefundNotification($orderRefundProcessor, $order, $data);
+            if ('pass' === $pass) {
+                $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
             } else {
-                if ($pass) {
-                    $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_pass'));
-                } else {
-                    $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_reject', 'reason' => $data['note']));
-                }
+                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], $refundData);
             }
+            $this->sendAuditRefundNotification($product, $order, $fileds);
+            $this->setFlashMessage('success', 'admin.order_refund_handle.success');
 
-            return $this->createJsonResponse(true);
+            return $this->redirect($this->generateUrl('admin_order_refunds', array('targetType' => $product->targetType)));
         }
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
-            'order' => $order,
+            'refund' => $refund,
+            'trade' => $trade,
         ));
     }
 
-    protected function sendAuditRefundNotification($orderRefundProcessor, $order, $data)
+    protected function sendAuditRefundNotification($product, $order, $data)
     {
-        $target = $orderRefundProcessor->getTarget($order['targetId']);
-        if (empty($target)) {
-            return false;
-        }
-
-        if ($data['result'] == 'pass') {
-            $message = $this->setting('refund.successNotification', '');
+        if (isset($data['result']) &&  $data['result']== 'pass') {
+            $message = $this->setting('refund.successNotification');
         } else {
-            $message = $this->setting('refund.failedNotification', '');
+            $message = $this->setting('refund.failedNotification');
         }
-
         if (empty($message)) {
             return false;
         }
 
-        $targetUrl = $this->generateUrl($order['targetType'].'_show', array('id' => $order['targetId']));
+        $backUrl = $product->backUrl;
+        $targetUrl = $this->generateUrl($backUrl['routing'], $backUrl['params']);
         $variables = array(
-            'item' => "<a href='{$targetUrl}'>{$target['title']}</a>",
-            'amount' => $data['amount'],
+            'item' => "<a href='{$targetUrl}'>".$product->title."</a>",
+            'amount' => $order['pay_amount'],
             'note' => $data['note'],
         );
 
         $message = StringToolkit::template($message, $variables);
-        $this->getNotificationService()->notify($order['userId'], 'default', $message);
-    }
-
-    protected function getOrderRefundProcessor($targetType)
-    {
-        return OrderRefundProcessorFactory::create($targetType);
+        $this->getNotificationService()->notify($order['created_user_id'], 'default', $message);
     }
 
     protected function getOrderService()
@@ -153,8 +124,23 @@ class OrderRefundController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
+    protected function getOrderRefundService()
+    {
+        return $this->createService('OrderRefund:OrderRefundService');
+    }
+
+    protected function getBizOrderRefundService()
+    {
+        return $this->createService('Order:OrderRefundService');
+    }
+
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

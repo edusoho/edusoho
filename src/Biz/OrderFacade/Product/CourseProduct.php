@@ -51,24 +51,29 @@ class CourseProduct extends Product implements Owner, Refund
         }
     }
 
-    public function applyRefund()
+    public function afterApplyRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
     }
 
-    public function cancelRefund()
+    public function afterCancelRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
     }
 
-    public function adoptRefund()
+    public function afterRefuseRefund($order)
     {
-        $this->removeOwner();
+         $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
     }
 
-    public function removeOwner($userId)
+    public function afterAdoptRefund($order)
+    {
+        $this->exitOwner();
+    }
+
+    public function exitOwner($userId)
     {
         $this->getCourseMemberService()->removeStudent($this->targetId, $userId);
     }

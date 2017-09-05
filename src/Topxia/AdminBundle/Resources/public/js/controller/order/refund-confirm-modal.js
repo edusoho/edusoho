@@ -10,7 +10,6 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: $form,
-            autoSubmit: false,
             autoFocus: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -18,13 +17,13 @@ define(function(require, exports, module) {
                 }
 
                 $('#refund-confirm-btn').button('submiting').addClass('disabled');
-                $.post($form.attr('action'), $form.serialize(), function(response){
-                    $modal.modal('hide');
-                    Notify.success(Translator.trans('退款申请处理结果已提交'));
-                    window.location.reload();
-                });
-            }
 
+                // $.post($form.attr('action'), $form.serialize(), function(response){
+                //     $modal.modal('hide');
+                //     Notify.success(Translator.trans('退款申请处理结果已提交'));
+                //     window.location.reload();
+                // });
+            }
         });
 
         validator.addItem({

@@ -35,8 +35,10 @@ class PayServiceImpl extends BaseService implements PayService
         try {
             $lock->get("trade_create_{$data['order_sn']}");
             $this->beginTransaction();
-
-            $trade = $this->createPaymentTrade($data);
+            $trade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
+            if(empty($trade)) {
+                $trade = $this->createPaymentTrade($data);
+            }
 
             if ($trade['cash_amount'] != 0) {
                 $result = $this->createPaymentPlatformTrade($data, $trade);
@@ -44,7 +46,7 @@ class PayServiceImpl extends BaseService implements PayService
                     'platform_created_result' => $result
                 ));
             } else {
-                $mockNotify = array (
+                $mockNotify = array(
                     'status' => 'paid',
                     'paid_time' => time(),
                     'cash_flow' => '',
@@ -61,8 +63,8 @@ class PayServiceImpl extends BaseService implements PayService
             $lock->release("trade_create_{$data['order_sn']}");
         } catch (\Exception $e) {
             $this->rollback();
-            $lock->release("trade_create_{$data['order_sn']}");
             throw $e;
+            $lock->release("trade_create_{$data['order_sn']}");
         }
         return $trade;
     }

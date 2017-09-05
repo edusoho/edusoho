@@ -19,7 +19,15 @@ class OrderItemRefundDaoImpl extends GeneralDaoImpl implements OrderItemRefundDa
     public function declares()
     {
         return array(
-            'timestamps' => array('created_time', 'updated_time')
+            'timestamps' => array('created_time', 'updated_time'),
+            'orderbys' => array(
+                'id',
+                'created_time'
+            ),
+            'serializes' => array(
+            ),
+            'conditions' => array(
+            )
         );
     }
 }
