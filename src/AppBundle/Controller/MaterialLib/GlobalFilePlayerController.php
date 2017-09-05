@@ -46,6 +46,11 @@ class GlobalFilePlayerController extends BaseController
     {
         $ssl = $request->isSecure() ? true : false;
         $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        return $this->redirect($this->generateUrl('global_file_document_player',
+            array(
+                'globalId' => $file['globalId'],
+                'token' => $player['token']
+            )));
 
         return $this->render('material-lib/player/global-player.html.twig', array(
             'file' => $file,
