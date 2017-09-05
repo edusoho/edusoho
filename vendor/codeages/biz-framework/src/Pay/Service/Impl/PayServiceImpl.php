@@ -326,9 +326,9 @@ class PayServiceImpl extends BaseService implements PayService
         $siteFlow = $this->getSiteCashFlowDao()->create($siteFlow);
         $amount = $flowType == 'inflow' ? $siteFlow['amount'] : 0 - $siteFlow['amount'];
         if ($isCoin) {
-            $this->getAccountService()->waveCashAmount($siteFlow['seller_id'], $amount);
-        } else {
             $this->getAccountService()->waveAmount($siteFlow['seller_id'], $amount);
+        } else {
+            $this->getAccountService()->waveCashAmount($siteFlow['seller_id'], $amount);
         }
 
         return $siteFlow;
