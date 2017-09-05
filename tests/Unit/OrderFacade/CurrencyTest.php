@@ -14,7 +14,7 @@ class CurrencyTest extends BaseTestCase
             'coin_enabled' => 0,
             'cash_model' => 'currency',
             'coin_name' => '',
-            'cash_rate' => 1
+            'cash_rate' => 1,
         );
         $this->getSettingService()->set('coin', $coinSetting);
 
