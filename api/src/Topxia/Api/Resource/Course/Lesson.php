@@ -138,6 +138,8 @@ class Lesson extends BaseResource
             array('globalId' => $file['globalId'], 'token' => $result['token'])
         );
 
+        file_put_contents('1.txt',$resourceUrl);
+
         $lesson['content'] = array(
             'previewUrl' => ($ssl ? 'https://' : 'http://').'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
             'resource' => $resourceUrl,
