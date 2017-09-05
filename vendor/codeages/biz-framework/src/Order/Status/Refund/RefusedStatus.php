@@ -11,11 +11,6 @@ class RefusedStatus extends AbstractRefundStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(AuditingStatus::NAME);
-    }
-
     public function process($data = array())
     {
         $orderRefund = $this->getOrderRefundDao()->update($this->orderRefund['id'], array(

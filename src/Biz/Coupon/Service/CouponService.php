@@ -2,6 +2,8 @@
 
 namespace Biz\Coupon\Service;
 
+use Biz\Coupon\State\CouponInterface;
+
 interface CouponService
 {
     public function getCoupon($id);
@@ -38,7 +40,11 @@ interface CouponService
 
     public function checkCoupon($code, $id, $type);
 
-    public function useCoupon($code, $order);
-
     public function getDeductAmount($coupon, $price);
+
+    /**
+     * @param $couponId
+     * @return CouponInterface
+     */
+    public function getCouponStateById($couponId);
 }

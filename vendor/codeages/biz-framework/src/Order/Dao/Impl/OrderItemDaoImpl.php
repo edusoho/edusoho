@@ -16,6 +16,11 @@ class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
         ));
     }
 
+    public function findByOrderIds($orderIds)
+    {
+        return $this->findInField('order_id', $orderIds);
+    }
+
     public function declares()
     {
         return array(
@@ -28,7 +33,9 @@ class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
                 'signed_data' => 'json'
             ),
             'conditions' => array(
+                'order_id IN (:order_ids)',
                 'status = :status',
+                'target_id IN (:target_ids)',
                 'target_id = :target_id',
                 'target_type = :target_type',
                 'created_time >= :start_time',

@@ -33,6 +33,12 @@ class RedisCache
         $this->eventDispatcher->dispatch('dao.cache.set', new CacheEvent($key, $value, $lifetime));
     }
 
+    public function incr($key)
+    {
+        $newValue = $this->redis->incr($key);
+        $this->eventDispatcher->dispatch('dao.cache.set', new CacheEvent($key, $newValue));
+    }
+
     public function del($key)
     {
         $this->redis->del($key);

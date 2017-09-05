@@ -6,7 +6,6 @@ use Codeages\Biz\Framework\Context\Biz;
 
 abstract class AbstractJob implements Job, \ArrayAccess
 {
-
     const SUCCESS = 'success';
     const FAILURE = 'failure';
     const RETRY = 'retry';

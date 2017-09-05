@@ -40,9 +40,8 @@ class OrderRefundContext
     function __call($method, $arguments)
     {
         $status = $this->getNextStatusName($method);
-        $nextStatusProcessor = $this->biz["order_refund_status.{$status}"];
 
-        if (!in_array($this->orderRefund['status'], $nextStatusProcessor->getPriorStatus())) {
+        if (!method_exists($this->status, $method)) {
             throw new AccessDeniedException("can't change {$this->orderRefund['status']} to {$status}.");
         }
 

@@ -6,6 +6,8 @@ interface OrderService
 {
     public function findOrderItemsByOrderId($orderId);
 
+    public function findOrderItemsByOrderIds($orderIds);
+
     public function findOrderItemDeductsByItemId($itemId);
 
     public function getOrder($id);
@@ -16,6 +18,8 @@ interface OrderService
 
     public function countOrders($conditions);
 
+    public function countGroupByDate($conditions, $sort);
+
     public function searchOrderItems($conditions, $orderBy, $start, $limit);
 
     public function countOrderItems($conditions);
@@ -24,6 +28,8 @@ interface OrderService
 
     public function findOrderItemDeductsByOrderId($orderId);
 
+    public function findOrderLogsByOrderId($orderId);
+    
     public function countOrderLogs($conditions);
 
     public function searchOrderLogs($conditions, $orderBy, $start, $limit);

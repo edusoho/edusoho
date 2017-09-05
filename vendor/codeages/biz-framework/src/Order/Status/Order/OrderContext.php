@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class OrderContext
 {
@@ -40,9 +41,8 @@ class OrderContext
     function __call($method, $arguments)
     {
         $status = $this->getNextStatusName($method);
-        $nextStatusProcessor = $this->biz["order_status.{$status}"];
 
-        if (!in_array($this->order['status'], $nextStatusProcessor->getPriorStatus())) {
+        if (!method_exists($this->status, $method)) {
             throw new AccessDeniedException("can't change {$this->order['status']} to {$status}.");
         }
 
@@ -65,7 +65,8 @@ class OrderContext
         }
 
         $this->createOrderLog($order);
-        $this->dispatch("order.{$status}", $order);
+        $this->dispatch($status, $order);
+
         return $order;
     }
 
@@ -102,19 +103,36 @@ class OrderContext
         return $this->biz['dispatcher'];
     }
 
-    protected function dispatch($eventName, $subject, $arguments = array())
+    protected function dispatch($status, $order)
     {
-        if ($subject instanceof Event) {
-            $event = $subject;
-        } else {
-            $event = new Event($subject, $arguments);
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
+        foreach ($orderItems as $orderItem) {
+            $orderItem['order'] = $order;
+            $this->getDispatcher()->dispatch("order.item.{$orderItem['target_type']}.{$status}", new Event($orderItem));
         }
 
-        return $this->getDispatcher()->dispatch($eventName, $event);
+        $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+        foreach ($deducts as $deduct) {
+            $deduct['order'] = $order;
+            if (!empty($indexedOrderItems[$deduct['item_id']])) {
+                $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
+            }
+            $this->getDispatcher()->dispatch("order.deduct.{$deduct['deduct_type']}.{$status}", new Event($deduct));
+        }
+
+        $order['items'] = $orderItems;
+        $order['deducts'] = $deducts;
+        return $this->getDispatcher()->dispatch("order.{$status}", new Event($order));
     }
 
     protected function getOrderLogDao()
     {
         return $this->biz->dao('Order:OrderLogDao');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

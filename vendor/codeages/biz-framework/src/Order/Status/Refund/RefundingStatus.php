@@ -11,11 +11,6 @@ class RefundingStatus extends AbstractRefundStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(AuditingStatus::NAME);
-    }
-
     public function refunded($data = array())
     {
         return $this->getOrderRefundStatus(RefundedStatus::NAME)->process($data);
