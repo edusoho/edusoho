@@ -133,12 +133,7 @@ class Lesson extends BaseResource
 
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
-        $resourceUrl = $this->generateUrl(
-            'global_file_document_player',
-            array('globalId' => $file['globalId'], 'token' => $result['token'])
-        );
-
-        file_put_contents('1.txt',$resourceUrl);
+        $resourceUrl = ($ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/global_file/{$file['globalId']}/player?token={$result['token']}";
 
         $lesson['content'] = array(
             'previewUrl' => ($ssl ? 'https://' : 'http://').'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
