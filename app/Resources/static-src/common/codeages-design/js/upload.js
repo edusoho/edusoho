@@ -1,6 +1,8 @@
 import { imageScale } from './utils';
 
 (function($) {
+  let isfirst = true;
+
   $(document).on('change.cd.local.upload', '[data-toggle="local-upload"]', function() {
     let fr = new FileReader();
     let $this = $(this);
@@ -16,9 +18,12 @@ import { imageScale } from './utils';
 
       if (showType === 'background-image') {
         $target.css('background-image', `url(${src})`);
-        let html = '<div class="mask"></div>';
 
-        $target.addClass('done').append(html);
+        if (isfirst) {
+          let html = '<div class="mask"></div>';
+          $target.addClass('done').append(html);
+          isfirst = false;
+        }
 
       } else if (showType === 'image') {
         let image = new Image();
