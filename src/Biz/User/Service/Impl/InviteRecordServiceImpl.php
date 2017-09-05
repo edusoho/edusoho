@@ -53,9 +53,44 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function flushOrderInfo($conditions = array(), $start = 0, $limit = PHP_INT_MAX)
+    {
+        $records = $this->searchRecords(
+            $conditions,
+            array(),
+            $start,
+            $limit
+        );
+
+        foreach ($records as $record) {
+            $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
+            $fields['amount'] = $orderInfo['totalPrice'];
+            $fields['cashAmount'] = $orderInfo['amount'];
+            $fields['coinAmount'] = $orderInfo['coinAmount'];
+            $this->updateOrderInfoById($record['id'], $fields);
+        }
+
+        unset($records);
+    }
+
     public function findByInviteUserIds($userIds)
     {
         return $this->getInviteRecordDao()->findByInviteUserIds($userIds);
+    }
+
+    public function updateOrderInfoById($id, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('amount', 'cashAmount', 'coinAmount'));
+
+        return $this->getInviteRecordDao()->update($id, $fields);
+    }
+
+    public function getOrderInfoByUserIdAndInviteTime($userId, $inviteTime)
+    {
+        $user = $this->getCurrentUser();
+        $conditions = array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime);
+
+        return $this->getOrderService()->analysis($conditions);
     }
 
     // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
@@ -122,6 +157,33 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     public function sumCouponRateByInviteUserId($userId)
     {
         return $this->getInviteRecordDao()->sumCouponRateByInviteUserId($userId);
+    }
+
+    public function searchRecordGroupByInviteUserId($conditions, $start, $limit)
+    {
+        $records = $this->getInviteRecordDao()->searchRecordGroupByInviteUserId($conditions, $start, $limit);
+
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $users = $this->getUserService()->findUsersByIds($inviteUserIds);
+        $premiumUserCounts = $this->countPremiumUserByInviteUserIds($inviteUserIds);
+        $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
+
+        foreach ($records as &$record) {
+            $record['premiumUserCounts'] = empty($premiumUserCounts[$record['inviteUserId']]) ? 0 : $premiumUserCounts[$record['inviteUserId']]['invitedUserCount'];
+            $record['invitedUserNickname'] = $users[$record['inviteUserId']]['nickname'];
+        }
+
+        return $records;
+    }
+
+    public function countPremiumUserByInviteUserIds($userIds)
+    {
+        return $this->getInviteRecordDao()->countPremiumUserByInviteUserIds($userIds);
+    }
+
+    public function countInviteUser($conditions)
+    {
+        return $this->getInviteRecordDao()->countInviteUser($conditions);
     }
 
     private function _prepareConditions($conditions)
