@@ -1812,7 +1812,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->countCourseTasksByClassroomId($classroomId);
     }
 
-    public function findUserJoinedCoursesInClassroom($userId, $classroomId)
+    public function findUserPaidCoursesInClassroom($userId, $classroomId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
@@ -1820,11 +1820,23 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $parentCourseIds = ArrayToolkit::column($courses, 'parentId');
 
-        $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMember = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
 
-        $paidCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
+        $paidCourseIds = ArrayToolkit::column($coursesMember, 'courseId');
+        $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
+        
+        $orderIds = ArrayToolkit::column($coursesMember, 'orderId');
+        $conditions = array(
+            'order_ids' => $orderIds,
+            'target_ids' => $paidCourseIds,
+            'target_type' => 'course',
+            'status' => 'success'
+        );
 
-        return $this->getCourseService()->findCoursesByIds($paidCourseIds);
+        $orderItems = $this->getOrderService()->searchOrderItems($conditions, array(), 0, PHP_INT_MAX);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        return array($paidCourses, $orderItems);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
