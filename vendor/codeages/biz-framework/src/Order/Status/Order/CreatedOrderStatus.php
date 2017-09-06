@@ -16,6 +16,11 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);
     }
 
+    public function paid($data = array())
+    {
+        return $this->getOrderStatus(PaidOrderStatus::NAME)->process($data);
+    }
+
     public function paying($data = array())
     {
         return $this->getOrderStatus(PayingOrderStatus::NAME)->process($data);

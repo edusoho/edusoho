@@ -32,6 +32,16 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             $order = $this->saveOrder($order, $orderItems);
             $order = $this->createOrderDeducts($order, $fields);
             $order = $this->createOrderItems($order, $orderItems);
+
+            if (0 == $order['pay_amount']) {
+                $data = array(
+                    'order_sn' => $order['sn'],
+                    'pay_time' => time(),
+                    'payment' => 'none'
+                );
+                $order = $this->paid($data);
+            }
+
             $this->commit();
         } catch (AccessDeniedException $e) {
             $this->rollback();
