@@ -86,23 +86,43 @@ class CashierController extends BaseController
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
         if ($trade['type'] == 'recharge') {
-            $goto = $this->generateUrl('my_coin');
+            $type = 'recharge';
         } else {
-            $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
-
-            $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $item1 = reset($items);
-
-            $biz = $this->getBiz();
-            /* @var $product Product */
-            $product = $biz['order.product.'.$item1['target_type']];
-            $product->init(array('targetId' => $item1['target_id']));
-
-            $goto = $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
+            $type = 'purchase';
         }
 
+        return $this->forward("AppBundle:Cashier/Cashier:{$type}Success", array(
+            'request' => $request
+        ));
+    }
+
+    public function rechargeSuccessAction(Request $request)
+    {
+        $tradeSn = $request->query->get('trade_sn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
         return $this->render('cashier/success.html.twig', array(
-            'goto' => $goto,
+            'goto' => $this->generateUrl('my_coin'),
+        ));
+    }
+
+    public function purchaseSuccessAction(Request $request)
+    {
+        $tradeSn = $request->query->get('trade_sn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
+
+        $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $item1 = reset($items);
+
+        $biz = $this->getBiz();
+        /* @var $product Product */
+        $product = $biz['order.product.'.$item1['target_type']];
+        $product->init(array('targetId' => $item1['target_id']));
+
+        return $this->render('cashier/success.html.twig', array(
+            'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
         ));
     }
 
