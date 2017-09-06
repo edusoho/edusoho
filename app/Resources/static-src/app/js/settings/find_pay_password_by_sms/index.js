@@ -1,4 +1,7 @@
 import SmsSender from 'app/common/widget/sms-sender';
+
+let smsSend = '.js-sms-send';
+let $smsCode = $(smsSend);
 let $form = $('#settings-find-pay-password-form');
 let validator = $form.validate({
   rules: {
@@ -21,15 +24,13 @@ $('#submit-btn').click(() => {
   }
 })
 
-$(".js-sms-send").click(()=>{
-  var smsSender = new SmsSender({
-    element: '.js-sms-send',
-    url: $('.js-sms-send').data('smsUrl'),
-    smsType: $('.js-sms-send').data('smsType'),
-    preSmsSend: function () {
-      var couldSender = true;
-      return couldSender;
+$smsCode.on('click', () => {
+  new SmsSender({
+    element: smsSend,
+    url: $smsCode.data('smsUrl'),
+    smsType: $smsCode.data('smsType'),
+    preSmsSend: () => {
+      return true;
     }
   });
-  $('.js-sms-send').off('click');
 })

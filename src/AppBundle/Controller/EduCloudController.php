@@ -34,7 +34,7 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
-                    'mobile' => '',
+                    'mobile' => $to,
                     'category' => $smsType,
                     'sendStyle' => 'templateId',
                     'description' => $description,
