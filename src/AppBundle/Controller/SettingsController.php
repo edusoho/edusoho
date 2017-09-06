@@ -351,7 +351,6 @@ class SettingsController extends BaseController
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.success'));
             }
-            
         }
 
         return $this->render('settings/pay-password.html.twig');
@@ -527,6 +526,7 @@ class SettingsController extends BaseController
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
         $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+
         return $this->render('settings/find-pay-password.html.twig', array(
             'hasLoginPassword' => $hasLoginPassword,
             'hasPayPassword' => $hasPayPassword,
@@ -674,19 +674,17 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
-
-                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.incorrect_password'), 403); 
+                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.incorrect_password'), 403);
             }
 
             if ($hasSecurityQuestions) {
-                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.not_modify_aligin_hint'), 403); 
+                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.not_modify_aligin_hint'), 403);
             }
 
             if ($request->request->get('question-1') == $request->request->get('question-2')
                 || $request->request->get('question-1') == $request->request->get('question-3')
                 || $request->request->get('question-2') == $request->request->get('question-3')) {
-
-                return $this->createJsonResponse(array('message' => 'user.settings.security.security_questions.type_duplicate_hint'), 403); 
+                return $this->createJsonResponse(array('message' => 'user.settings.security.security_questions.type_duplicate_hint'), 403);
             }
 
             $fields = array(
@@ -701,29 +699,20 @@ class SettingsController extends BaseController
             $hasSecurityQuestions = true;
             $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 
-            return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.success')); 
+            return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.success'));
         }
 
         return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
     }
 
-    protected function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
-    {
-        return $this->render('settings/bind-mobile.html.twig', array(
-            'hasVerifiedMobile' => $hasVerifiedMobile,
-            'setMobileResult' => $setMobileResult,
-            'verifiedMobile' => $verifiedMobile,
-        ));
-    }
-
     public function bindMobileAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser()->toArray();
+        $user = $this->getCurrentUser();
         $verifiedMobile = '';
-        $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
+        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
 
         if ($hasVerifiedMobile) {
-            $verifiedMobile = $currentUser['verifiedMobile'];
+            $verifiedMobile = $user['verifiedMobile'];
         }
 
         $setMobileResult = 'none';
@@ -734,9 +723,7 @@ class SettingsController extends BaseController
             return $this->render('settings/edu-cloud-error.html.twig', array());
         }
 
-        $user = $this->getCurrentUser();
-
-        if ($user->isLogin() && empty($user['password'])) {
+        if ($this->isSocialLogin($user)) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
 
             return $this->redirect($this->generateUrl('settings_setup_password'));
@@ -745,8 +732,7 @@ class SettingsController extends BaseController
         if ($request->getMethod() === 'POST') {
             $password = $request->request->get('password');
 
-            if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-
+            if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
@@ -756,16 +742,31 @@ class SettingsController extends BaseController
 
             if ($result) {
                 $verifiedMobile = $sessionField['to'];
-                $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
+                $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.success'));
-
             } else {
                 return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.fail'), 403);
             }
         }
 
-        return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+        return $this->render('settings/bind-mobile.html.twig', array(
+            'hasVerifiedMobile' => $hasVerifiedMobile,
+            'setMobileResult' => $setMobileResult,
+            'verifiedMobile' => $verifiedMobile,
+        ));
+    }
+
+    /**
+     * if user login in  socail way such as QQ, user has no pasword
+     *
+     * @param  $user
+     *
+     * @return bool
+     */
+    private function isSocialLogin($user)
+    {
+        return $user->isLogin() && empty($user['password']);
     }
 
     public function passwordCheckAction(Request $request)
@@ -874,7 +875,6 @@ class SettingsController extends BaseController
 
                 return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
             }
-
         }
 
         return $this->render('settings/email.html.twig', array(
@@ -907,7 +907,7 @@ class SettingsController extends BaseController
             return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email']))));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
-            
+
             return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
         }
     }

@@ -1851,9 +1851,9 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
-es-webpack-engine@~3.4.4:
-  version "3.4.4"
-  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.4.4.tgz#7c8d4db428107645d17be5523016141bc47e05b8"
+es-webpack-engine@~3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/es-webpack-engine/-/es-webpack-engine-3.4.5.tgz#7aee5878f54d253d73e789b39efefe83a67452a5"
   dependencies:
     babel-cli "6.18.0"
     babel-core "6.8.0"
@@ -1891,7 +1891,6 @@ es-webpack-engine@~3.4.4:
     serve-index "^1.8.0"
     style-loader "0.13.1"
     url-loader "0.5.7"
-    watch-ignore-webpack-plugin "^1.0.0"
     webpack "^1.14.0"
     webpack-bundle-analyzer "^2.3.1"
     webpack-dev-middleware "^1.10.2"
@@ -5311,10 +5310,6 @@ warning@2.x:
   resolved "https://registry.npmjs.org/warning/-/warning-2.1.0.tgz#21220d9c63afc77a8c92111e011af705ce0c6901"
   dependencies:
     loose-envify "^1.0.0"
-
-watch-ignore-webpack-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/watch-ignore-webpack-plugin/-/watch-ignore-webpack-plugin-1.0.0.tgz#bf3470f9833aced75f5de05bccc4882b8f5ad93c"
 
 watchpack@^0.2.1:
   version "0.2.9"

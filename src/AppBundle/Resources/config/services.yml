@@ -161,3 +161,7 @@ services:
     export_factory:
         class: AppBundle\Component\Export\Factory
         arguments: ['@service_container']
+
+    mysql_storage :
+        class: Codeages\RateLimiter\Storage\MySQLPDOStorage
+        arguments: ['@service_container']
