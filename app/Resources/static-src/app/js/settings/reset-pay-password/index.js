@@ -1,26 +1,31 @@
-let validator = $('#settings-pay-password-form').validate({
+import notify from 'common/notify';
+
+$('#settings-pay-password-form').validate({
+  currentDom: '#password-save-btn',
+  ajax: true,
   rules: {
-    'form[oldPayPassword]': {
+    'oldPayPassword': {
       required: true,
       minlength: 5,
       maxlength: 20
     },
-    'form[newPayPassword]': {
+    'newPayPassword': {
       required: true,
       minlength: 5,
       maxlength: 20
     },
-    'form[confirmPayPassword]': {
+    'confirmPayPassword': {
       required: true,
       equalTo: '#form_newPayPassword'
     }
-  }
-})
-
-$('#password-save-btn').on('click', (event) => {
-  const $this = $(event.currentTarget);
-  if (validator.form()) {
-    $this.button('loading');
-    $('#settings-pay-password-form').submit();
+  },
+  submitSuccess(data) {
+    notify('success', Translator.trans(data.message));
+    
+    $('.modal').modal('hide');
+    window.location.reload();
+  },
+  submitError(data) {
+    notify('danger',  Translator.trans(data.responseJSON.message));
   }
 })

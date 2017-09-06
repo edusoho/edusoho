@@ -294,13 +294,17 @@ class SettingsController extends BaseController
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+        $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+        $hasEmail = strlen($user['email']) > 0;
+        $email = $hasEmail ? $user['email'] : '';
+        $hasVerifiedEmail = $user['emailVerified'];
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
         $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
             && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
-        $itemScore = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
-        $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
+        $itemScore = floor(100.0 / (4.0 + ($showBindMobile ? 1.0 : 0)));
+        $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0) + ($hasVerifiedEmail ? $itemScore : 0);
 
         if ($progressScore <= 1) {
             $progressScore = 0;
@@ -312,6 +316,10 @@ class SettingsController extends BaseController
             'hasPayPassword' => $hasPayPassword,
             'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
             'hasVerifiedMobile' => $hasVerifiedMobile,
+            'verifiedMobile' => $verifiedMobile,
+            'hasEmail' => $hasEmail,
+            'email' => $email,
+            'hasVerifiedEmail' => $hasVerifiedEmail,
         ));
     }
 
@@ -325,12 +333,6 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
-        $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
 
@@ -338,27 +340,21 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $passwords = $request->request->all();
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
+            $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword']);
 
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
+            if (!$validatePassed) {
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.incorrect_login_password'), 403);
+            } else {
+                $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 
-                    return $this->redirect($this->generateUrl('settings_pay_password'));
-                } else {
-                    $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', 'user.settings.security.pay_password_set.success');
-                }
-
-                return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.success'));
             }
+            
         }
 
-        return $this->render('settings/pay-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/pay-password.html.twig');
     }
 
     public function setPayPasswordAction(Request $request)
@@ -438,13 +434,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $form = $this->createFormBuilder()
-        // ->add('currentUserLoginPassword','password')
-            ->add('oldPayPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
 
@@ -452,25 +441,20 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $passwords = $request->request->all();
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
+            $validatePassed = $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']);
 
-                if (!($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']))) {
-                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_pay_password');
-                } else {
-                    $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', 'user.settings.security.pay_password_set.reset_success');
-                }
+            if (!$validatePassed) {
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.incorrect_pay_password'), 403);
+            } else {
+                $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
 
-                return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.reset_success'));
             }
         }
 
-        return $this->render('settings/reset-pay-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/reset-pay-password.html.twig');
     }
 
     protected function setPayPasswordPage($request, $userId)
@@ -740,10 +724,10 @@ class SettingsController extends BaseController
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-                $this->setFlashMessage('danger', 'site.incorrect.password');
+
                 SmsToolkit::clearSmsSession($request, $scenario);
 
-                return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+                return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
             }
 
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
@@ -752,11 +736,10 @@ class SettingsController extends BaseController
                 $verifiedMobile = $sessionField['to'];
                 $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
-                $setMobileResult = 'success';
-                $this->setFlashMessage('success', 'user.settings.security.mobile_bind.success');
+                return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.success'));
+
             } else {
-                $setMobileResult = 'fail';
-                $this->setFlashMessage('danger', 'user.settings.security.mobile_bind.fail');
+                return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.fail'), 403);
             }
         }
 
@@ -788,12 +771,6 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
-        $form = $this->createFormBuilder()
-            ->add('currentPassword', 'password')
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
-            ->getForm();
-
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
 
@@ -801,25 +778,19 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $passwords = $request->request->all();
+            $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword']);
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
+            if (!$validatePassed) {
+                return $this->createJsonResponse(array('message' => 'user.settings.security.password_modify.incorrect_password'), 403);
+            } else {
+                $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
 
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
-                    $this->setFlashMessage('danger', 'user.settings.security.password_modify.incorrect_password');
-                } else {
-                    $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-                    $this->setFlashMessage('success', 'site.modify.success');
-                }
-
-                return $this->redirect($this->generateUrl('settings_password'));
+                return $this->createJsonResponse(array('message' => 'site.modify.success'));
             }
         }
 
-        return $this->render('settings/password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/password.html.twig');
     }
 
     public function emailAction(Request $request)
@@ -832,73 +803,59 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
-        $form = $this->createFormBuilder()
-            ->add('password', 'password')
-            ->add('email', 'text')
-            ->getForm();
-
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $data = $request->request->all();
 
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
+            $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
-                if (!$isPasswordOk) {
-                    $this->setFlashMessage('danger', 'site.incorrect.password');
-
-                    return $this->redirect($this->generateUrl('settings_email'));
-                }
-
-                $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
-
-                if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
-                    $this->setFlashMessage('danger', 'user.settings.email.new_email_same_old');
-
-                    return $this->redirect($this->generateUrl('settings_email'));
-                }
-
-                if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
-                    $this->setFlashMessage('danger', 'user.settings.email.new_email_not_unique');
-
-                    return $this->redirect($this->generateUrl('settings_email'));
-                }
-
-                $tokenArgs = array(
-                    'userId' => $user['id'],
-                    'duration' => 60 * 60 * 24,
-                    'data' => $data['email'],
-                );
-
-                $token = $this->getTokenService()->makeToken('email-verify', $tokenArgs);
-                $token = $token['token'];
-                try {
-                    $site = $this->setting('site', array());
-                    $mailOptions = array(
-                        'to' => $data['email'],
-                        'template' => 'email_reset_email',
-                        'params' => array(
-                            'sitename' => $site['name'],
-                            'siteurl' => $site['url'],
-                            'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
-                            'nickname' => $user['nickname'],
-                        ),
-                    );
-                    $mailFactory = $this->getBiz()->offsetGet('mail_factory');
-                    $mail = $mailFactory($mailOptions);
-                    $mail->send();
-                    $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
-                } catch (\Exception $e) {
-                    $this->setFlashMessage('danger', 'user.settings.email.send_error');
-                    $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
-                }
-
-                return $this->redirect($this->generateUrl('settings_email'));
+            if (!$isPasswordOk) {
+                return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
             }
+
+            $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
+
+            if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
+                return $this->createJsonResponse(array('message' => 'user.settings.email.new_email_same_old'), 403);
+            }
+
+            if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
+                return $this->createJsonResponse(array('message' => 'user.settings.email.new_email_not_unique'), 403);
+            }
+
+            $tokenArgs = array(
+                'userId' => $user['id'],
+                'duration' => 60 * 60 * 24,
+                'data' => $data['email'],
+            );
+
+            $token = $this->getTokenService()->makeToken('email-verify', $tokenArgs);
+            $token = $token['token'];
+            try {
+                $site = $this->setting('site', array());
+                $mailOptions = array(
+                    'to' => $data['email'],
+                    'template' => 'email_reset_email',
+                    'params' => array(
+                        'sitename' => $site['name'],
+                        'siteurl' => $site['url'],
+                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                        'nickname' => $user['nickname'],
+                    ),
+                );
+                $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+                $mail = $mailFactory($mailOptions);
+                $mail->send();
+
+                return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email']))));
+            } catch (\Exception $e) {
+                $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
+
+                return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
+            }
+
         }
 
         return $this->render('settings/email.html.twig', array(
-            'form' => $form->createView(),
             'mailer' => $mailer,
             'cloudEmail' => $cloudEmail,
         ));
@@ -924,13 +881,13 @@ class SettingsController extends BaseController
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
             $mail->send();
-            $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
+
+            return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email']))));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
-            $this->setFlashMessage('danger', 'user.settings.email.send_error');
+            
+            return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
         }
-
-        return $this->createJsonResponse(true);
     }
 
     public function bindsAction(Request $request)
@@ -1177,7 +1134,7 @@ class SettingsController extends BaseController
     protected function downloadImg($url)
     {
         $currentUser = $this->getCurrentUser();
-//        $filename    = md5($url).'_'.time();
+        //        $filename    = md5($url).'_'.time();
         $filePath = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
 
         $fp = fopen($filePath, 'w');

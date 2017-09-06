@@ -233,6 +233,7 @@ form.btn.create: Add
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
+form.btn.verifying: Verifying
 form.btn.select: Select
 form.btn.modify: Edit
 form.btn.finish: Finish
@@ -244,6 +245,7 @@ form.btn.save_and_continue_add: 'Save and continue'
 form.btn.reset: Reset
 form.btn.view: View
 form.btn.bind: Bind
+form.btn.bind_account: 'Bind account'
 form.btn.search: Search
 form.btn.use: Use
 form.btn.reply: Publish
@@ -2171,9 +2173,10 @@ user.settings.security.set_pay_password_success: 'New payment password setting s
 user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
-user.settings.security.high_level: 'Security level: High'
-user.settings.security.middle_level: 'Security level: Medium'
-user.settings.security.low_level: 'Security level: Low'
+user.settings.security.level: Security level
+user.settings.security.high_level: 'High'
+user.settings.security.middle_level: 'Medium'
+user.settings.security.low_level: 'Low'
 user.settings.security.login_password_tips: 'The password used to login the system.'
 user.settings.security.pay_password_tips: 'The password to perform a payment.'
 user.settings.security.questions: 'Security questions'
@@ -2184,8 +2187,11 @@ user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
 user.settings.security.password_modify.current_password: 'Current Password'
+user.settings.security.password_modify.current_password_placeholder: Please input current password
 user.settings.security.password_modify.new_password: 'New Password'
+user.settings.security.password_modify.new_password_placeholder: Please input new password
 user.settings.security.password_modify.confirm_password: 'Confirm Password'
+user.settings.security.password_modify.confirm_password_placeholder: Please input new password again
 user.settings.security.password_modify.input_password_tips: 'Re-enter your password'
 user.settings.security.password_modify.incorrect_password: Incorrect password
 user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn btn-primary'>reset the password now</a></p>\n"
@@ -2209,11 +2215,13 @@ user.settings.security.pay_password_set.content_title: 'Security setting'
 user.settings.security.pay_password_set.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security setting</a></li> <li class=\"active\">set payment password</li>\n"
 user.settings.security.pay_password_set.input_login_password: 'Please enter the login password'
 user.settings.security.pay_password_set.new_pay_password: 'New Payment Password'
+user.settings.security.pay_password_set.new_pay_password_placeholder: Please input new payment password
 user.settings.security.pay_password_set.user_login_password: 'Login Password'
 user.settings.security.pay_password_set.confirm_pay_password: 'Confirm Payment Password'
 user.settings.security.pay_password_set.old_pay_password: 'Old Payment Password'
+user.settings.security.pay_password_set.old_pay_password_placeholder: Please input old payment password
 user.settings.security.pay_password_set.input_pay_password_again: 'Please enter the payment password again'
-user.settings.security.pay_password_set.success: New pay password had set successfully, you can reset it here next time.
+user.settings.security.pay_password_set.success: New pay password had set successfully
 user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully

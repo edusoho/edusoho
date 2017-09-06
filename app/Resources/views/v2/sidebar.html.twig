@@ -24,9 +24,9 @@
         <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
       </li>
     {% endif %}
-
-    {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
     
+    {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
+  
     <li class="cd-sidebar__heading">
       {{'user.settings.menu_heading'|trans}}
     </li>
@@ -49,6 +49,9 @@
         <a href="{{ path('settings_binds') }}">{{'user.settings.oauth_menu'|trans}}</a>
       </li>
     {% endif %}
+<<<<<<< HEAD
 
+=======
+>>>>>>> beta/8.1.2
   </ul>
 </div>

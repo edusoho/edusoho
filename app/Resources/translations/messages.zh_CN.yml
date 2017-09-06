@@ -309,6 +309,7 @@ form.btn.create: 创建
 form.btn.back_to_homepage: 返回首页
 form.btn.register: 注册
 form.btn.verify: 验证
+form.btn.verifying: 正在验证中
 form.btn.select: 选择
 form.btn.modify: 修改
 form.btn.finish: 完成
@@ -320,6 +321,7 @@ form.btn.save_and_continue_add: 保存并继续添加
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
+form.btn.bind_account: 绑定账号
 form.btn.search: 搜索
 form.btn.use: 使用
 form.btn.reply: 发表
@@ -2794,9 +2796,10 @@ user.settings.security.set_pay_password_success: 新支付密码设置成功。
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
-user.settings.security.high_level: 安全等级：高
-user.settings.security.middle_level: 安全等级：中
-user.settings.security.low_level: 安全等级：低
+user.settings.security.level: 安全等级
+user.settings.security.high_level: 高
+user.settings.security.middle_level: 中
+user.settings.security.low_level: 低
 user.settings.security.login_password_tips: 登录网校时需要输入的密码
 user.settings.security.pay_password_tips: 在网校进行消费行为时需要输入的密码
 user.settings.security.questions: 安全问题
@@ -2809,8 +2812,11 @@ user.settings.security.password_modify.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">登录密码修改</li>
 user.settings.security.password_modify.current_password: 当前密码
+user.settings.security.password_modify.current_password_placeholder: 请输入当前密码
 user.settings.security.password_modify.new_password: 新密码
+user.settings.security.password_modify.new_password_placeholder: 请输入新密码
 user.settings.security.password_modify.confirm_password: 确认密码
+user.settings.security.password_modify.confirm_password_placeholder: 请再次输入新密码
 user.settings.security.password_modify.input_password_tips: 请再输入一次密码
 user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
 user.settings.security.password_modify.success: 当前密码不正确，请重试！
@@ -2842,11 +2848,13 @@ user.settings.security.pay_password_set.bread_crumbs: >
   <li class="active">设置支付密码</li>
 user.settings.security.pay_password_set.input_login_password: 请输入用户登录密码
 user.settings.security.pay_password_set.new_pay_password: 新支付密码
+user.settings.security.pay_password_set.new_pay_password_placeholder: 请输入新支付密码
 user.settings.security.pay_password_set.user_login_password: 用户登录密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
+user.settings.security.pay_password_set.old_pay_password_placeholder: 请输入旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
-user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
