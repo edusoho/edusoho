@@ -8,9 +8,10 @@
     data-token="{{ upload_token('default', 'image') }}" 
     data-file-upload="{{path('file_upload')}}" 
     data-crop="{{ path('file_img_crop') }}" 
-    data-upload-url="{{ path('settings_profile_avatar_crop_modal')}}" 
+    data-crop-modal="{{ path(cropModalUrl)}}" 
+    data-save-url="{{ path(saveUrl) }}"
     data-show-type="image" 
-    data-crop-width="270" 
+    data-crop-width="270"
     data-crop-height="270" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"  />
   </label>

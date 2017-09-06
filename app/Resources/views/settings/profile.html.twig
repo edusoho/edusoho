@@ -25,7 +25,10 @@
           修改头像
         </div>
       </div>
-      {% include 'common/crop-image.html.twig' %}
+      {% include 'common/crop-image.html.twig' with {
+        cropModalUrl: 'settings_profile_avatar_crop_modal',
+        saveUrl: 'settings_avatar_crop'
+      }%}
     </div>
     <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
       <label for="nickname">{{'user.fields.username_label'|trans}}</label>

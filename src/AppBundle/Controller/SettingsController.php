@@ -219,14 +219,11 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
-            $user = $this->getUserService()->getUser($currentUser['id']);
-            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
-
+            $result = $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
+            $image = $this->getWebExtension()->getFpath($result['largeAvatar']);
             return $this->createJsonResponse(array(
-                'status' => 'success',
-                'avatar' => $avatar
-            ));
+                'image' => $image
+            ), 200);
         }
 
         return $this->render('settings/profile-avatar-crop-modal.html.twig');

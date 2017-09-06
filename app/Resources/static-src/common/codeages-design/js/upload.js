@@ -44,7 +44,7 @@ import { imageScale } from './utils';
         image.src = src;
       }
       let $modal = $("#modal");
-      $modal.load($this.data('uploadUrl')).modal('show');
+      $modal.load($this.data('cropModal')).modal('show');
     }
 
     fr.readAsDataURL(this.files[0]);
@@ -82,12 +82,15 @@ import { imageScale } from './utils';
     };
     
     let saveAvatar = function(ret){
-        return new Promise(function(resolve, reject) {
-            $.post($this.data('uploadUrl'), function(data){
-              console.log(data);
-            });
-        });
-      }
+      return new Promise(function(resolve, reject) {
+          $.post($this.data('saveUrl'),{images: ret}, function(data){
+              if (res.message) {
+                $('#profile-avatar').attr('src', res.avatar);
+                notify('success', Translator.trans('site.upload_success_hint'));
+              }
+          });
+      });
+    }
 
     uploadImage().then(function(ret) {
       return cropImage(ret);

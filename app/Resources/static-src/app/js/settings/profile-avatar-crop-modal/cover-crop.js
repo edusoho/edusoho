@@ -34,7 +34,7 @@ class CoverCrop {
 
   imageInit() {
     let sourceImg = $('.upload-source-img.active');
-    console.log(sourceImg);
+
     $(this.avatarCrop).attr({
       'src': sourceImg.attr('src'),
       'width': sourceImg.attr('width'),
@@ -56,24 +56,7 @@ class CoverCrop {
     });
 
     imageCrop.afterCrop = (res) => {
-      // let $saveBtn = $(this.saveBtn);
-      
-      // let url = $saveBtn.data('url');
-
-
       this.$uploadInput.trigger('upload-image', res);
-      // $.post(url, { images: res }, (res) => {
-      //   if (res.status === 'success') {
-      //     $('#profile-avatar').attr('src', res.avatar);
-
-      //     $('#modal').modal('hide');
-          
-      //     notify('success', Translator.trans('site.upload_success_hint'));
-      //   } else {
-      //     notify('danger', Translator.trans('upload_fail_retry_hint'));
-      //     $saveBtn.button('reset');
-      //   }
-      // });
     }
 
     return imageCrop;
