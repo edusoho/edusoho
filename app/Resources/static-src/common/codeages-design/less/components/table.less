@@ -1,8 +1,11 @@
 .table-responsive.cd-table-responsive {
   margin-bottom: 24px;
+  overflow-x: visible;
   min-height: auto;
   @media(max-width: @screen-xs-max) {
-    min-height: .01%;
+    overflow-x: auto;
+    min-height: 0.01%;
+    border: none;
   }
   > .cd-table {
     border: 0;
@@ -12,9 +15,9 @@
 
 .table.cd-table {
   margin-bottom: 24px;
-  > tbody > tr > td, 
-  > tbody > tr > th, 
-  > thead > tr > td, 
+  > tbody > tr > td,
+  > tbody > tr > th,
+  > thead > tr > td,
   > thead > tr > th {
     font-size: 12px;
     color: @cd-gray-dark;
@@ -26,6 +29,7 @@
     border: none;
     padding: 16px;
     line-height: 20px;
+    vertical-align: middle;
   }
   > tbody > tr > th:first-child,
   > thead > tr > th:first-child {
@@ -87,4 +91,3 @@
     }
   }
 }
-

@@ -11,10 +11,13 @@ class MigrationBootstrap
 
     protected $directories;
 
-    public function __construct($db, \ArrayObject $directories)
+    protected $table;
+
+    public function __construct($db, \ArrayObject $directories, $table = 'migrations')
     {
         $this->db = $db;
         $this->directories = $directories;
+        $this->table = $table;
     }
 
     public function boot()
@@ -22,11 +25,11 @@ class MigrationBootstrap
         $container = new Container();
         $container['db'] = $this->db;
 
-        // see: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/mysql-enums.html
+        see: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/mysql-enums.html
         $container['db']->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         $container['phpmig.adapter'] = function ($container) {
-            return new Adapter\Doctrine\DBAL($container['db'], 'migrations');
+            return new Adapter\Doctrine\DBAL($this->db, $this->table);
         };
 
         $migrations = array();

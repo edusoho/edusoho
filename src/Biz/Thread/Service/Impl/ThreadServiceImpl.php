@@ -57,8 +57,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread['title'] = $this->sensitiveFilter($thread['title'], $thread['targetType'].'-thread-create');
         $thread['content'] = $this->sensitiveFilter($thread['content'], $thread['targetType'].'-thread-create');
-        $thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
-        $thread['content'] = $this->purifyHtml(empty($thread['content'])) ? '' : $thread['content'];
+        $thread['title'] = $this->purifyHtml($thread['title']);
+        $thread['content'] = $this->purifyHtml($thread['content']);
         $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         $user = $this->getCurrentUser();
@@ -84,7 +84,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->create($thread);
-
         if (!empty($thread['ats'])) {
             foreach ($thread['ats'] as $userId) {
                 if ($thread['userId'] == $userId) {
@@ -379,7 +378,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
-//回复的回复的人给该回复的作者发通知
+        //回复的回复的人给该回复的作者        发通知
 
         if ($post['parentId'] > 0 && ($parent['userId'] != $post['userId']) && (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
@@ -400,7 +399,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.delete', $post);
 
-//        $thread = $this->getThread($post['threadId']);
+        //        $thread = $this->getThread($post['threadId']);
 
         $totalDeleted = 1;
 

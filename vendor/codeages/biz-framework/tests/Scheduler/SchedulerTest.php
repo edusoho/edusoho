@@ -190,6 +190,51 @@ class SchedulerTest extends IntegrationTestCase
         $this->assertNotEmpty($savedJob['deleted_time']);
     }
 
+    public function testFailJobResult()
+    {
+
+        $job = array(
+            'name' => 'test',
+            'source' => 'MAIN',
+            'expression' => time()-2,
+//            'nextFireTime' => time()-1,
+            'class' => 'Tests\\Example\\Job\\ExampleFailJob',
+            'args' => array('courseId' => 1),
+            'priority' => 100,
+            'misfire_threshold' => 3000,
+            'misfire_policy' => 'missed',
+        );
+
+        $job = $this->getSchedulerService()->register($job);
+        $this->getSchedulerService()->execute();
+
+        $savedJob = $this->getJobDao()->get($job['id']);
+        $jobFireds = $this->getSchedulerService()->findJobFiredsByJobId($savedJob['id']);
+        $this->assertEquals('failure', $jobFireds[0]['status']);
+    }
+
+    public function testAcquiredJobResult()
+    {
+        $job = array(
+            'name' => 'test',
+            'source' => 'MAIN',
+            'expression' => time()-2,
+//            'nextFireTime' => time()-1,
+            'class' => 'Tests\\Example\\Job\\ExampleAcquiredJob',
+            'args' => array('courseId' => 1),
+            'priority' => 100,
+            'misfire_threshold' => 3000,
+            'misfire_policy' => 'missed',
+        );
+
+        $job = $this->getSchedulerService()->register($job);
+        $this->getSchedulerService()->execute();
+
+        $savedJob = $this->getJobDao()->get($job['id']);
+        $jobFireds = $this->getSchedulerService()->findJobFiredsByJobId($savedJob['id']);
+        $this->assertEquals('acquired', $jobFireds[0]['status']);
+    }
+
     protected function asserts($excepted, $acturel)
     {
         $keys = array_keys($excepted);

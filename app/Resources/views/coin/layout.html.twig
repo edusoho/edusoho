@@ -36,6 +36,7 @@
             <a href="{{path('vip_history')}}">{{'user.vip_history_menu'|trans}}</a>
           </li>
           {% endif %}
+          {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
         </ul>
       </div>
     {% endblock %}
