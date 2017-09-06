@@ -351,7 +351,6 @@ class SettingsController extends BaseController
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.success'));
             }
-            
         }
 
         return $this->render('settings/pay-password.html.twig');
@@ -653,19 +652,17 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
-
-                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.incorrect_password'), 403); 
+                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.incorrect_password'), 403);
             }
 
             if ($hasSecurityQuestions) {
-                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.not_modify_aligin_hint'), 403); 
+                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.not_modify_aligin_hint'), 403);
             }
 
             if ($request->request->get('question-1') == $request->request->get('question-2')
                 || $request->request->get('question-1') == $request->request->get('question-3')
                 || $request->request->get('question-2') == $request->request->get('question-3')) {
-
-                return $this->createJsonResponse(array('message' => 'user.settings.security.security_questions.type_duplicate_hint'), 403); 
+                return $this->createJsonResponse(array('message' => 'user.settings.security.security_questions.type_duplicate_hint'), 403);
             }
 
             $fields = array(
@@ -680,7 +677,7 @@ class SettingsController extends BaseController
             $hasSecurityQuestions = true;
             $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 
-            return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.success')); 
+            return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.success'));
         }
 
         return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
@@ -725,7 +722,6 @@ class SettingsController extends BaseController
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
@@ -738,7 +734,6 @@ class SettingsController extends BaseController
                 $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.success'));
-
             } else {
                 return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.fail'), 403);
             }
@@ -853,7 +848,6 @@ class SettingsController extends BaseController
 
                 return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
             }
-
         }
 
         return $this->render('settings/email.html.twig', array(
@@ -886,7 +880,7 @@ class SettingsController extends BaseController
             return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email']))));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
-            
+
             return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
         }
     }
