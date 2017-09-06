@@ -7,9 +7,8 @@
 
               {% if tab=="trend" %}
 	          <div id="line-data"></div>
-	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'> 
-	          </input><input id="classroomIncomeStartDate"  type="hidden" value='{% if classroomIncomeStartDate %}{{classroomIncomeStartDate}}{% endif %}'> 
-	          </input>
+	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>
+	          <input id="classroomIncomeStartDate"  type="hidden" value='{% if classroomIncomeStartDate %}{{classroomIncomeStartDate}}{% endif %}'>
               {% elseif tab=="detail" %}
                       {% include 'admin/operation-analysis/classroomIncome.table.html.twig' %}
               {% endif %}
