@@ -40,6 +40,15 @@ site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
 
+site.incorrect.password: 密码错误
+user.settings.security.mobile_bind.success: 手机绑定成功
+user.settings.security.mobile_bind.fail: 手机绑定失败
+
+site.modify.success: 修改成功
+user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
+
+
+
 site.audio.quality.quota: 音质
 site.audio.quality.low: 流畅 
 site.audio.quality.normal: 标准
@@ -67,7 +76,19 @@ user.unfollow_success_hint: 取消关注成功
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 user.card_load_hint: 名片加载中
 
-material.share.teacher_nickname_label: 请输入老师的名称
+user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
+user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+
+user.settings.security.pay_password_set.success: 新支付密码设置成功
+user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
+
+user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样
+user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试
+user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员
+user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+
+material.share.teacher_nickname_label: 老师的名称
+
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -445,6 +466,9 @@ user.account.cancel_order_hint: 真的要取消订单吗？
 user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
 user.account.cancel_order_success_hint: 订单已取消成功！
+
+user.fields.idcard_front_placeholder: 请上传身份证正面照
+user.fields.idcard_back_placeholder: 请上传身份证反面照
 
 open_course.lesson.create_error:  课时创建失败
 open_course.lesson.create_success: 课时创建成功

@@ -37,6 +37,13 @@ site.video.quality.low: Smooth
 site.video.quality.normal: Standard 
 site.video.quality.high: High Definition 
 
+site.incorrect.password: Incorrect password
+user.settings.security.mobile_bind.success: Bind mobile successfully
+user.settings.security.mobile_bind.fail: Bind mobile fail
+
+site.modify.success: Modify successfully
+user.settings.security.password_modify.incorrect_password: Incorrect password
+
 site.audio.quality.quota: Audio
 site.audio.quality.low: Smooth 
 site.audio.quality.normal: Standard 
@@ -59,7 +66,20 @@ user.unfollow_success_hint: Unfollow succeed
 user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
 user.card_load_hint: User card loading
 
-material.share.teacher_nickname_label: Please input teacher nickname
+
+user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
+user.settings.security.pay_password_set.reset_success: Rest pay password successfully
+
+user.settings.security.pay_password_set.success: New pay password had set successfully
+user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
+
+user.settings.email.new_email_same_old: New eamil is same as old one.
+user.settings.email.new_email_not_unique: The email is not unique, change it.
+user.settings.email.send_error: Eamil send fail, please contact system administrator.
+user.settings.email.send_success: Please verify your email address. We’ve sent a confirmation email to:<strong>%email%</strong><br>Click the confirmation link in that email to finish.
+
+material.share.teacher_nickname_label: teacher nickname
+
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
@@ -516,6 +536,9 @@ user.account.cancel_order_hint: Do you want to cancel the order?
 user.account.refund_cancel_success_hint: The refund application has been canceled!
 user.account.cancel_order_fail_hint: Order Cancel Failed!
 user.account.cancel_order_success_hint: Order canceled!
+
+user.fields.idcard_front_placeholder: Please upload Id crad front
+user.fields.idcard_back_placeholder: Please upload Id crad back
 
 open_course.lesson.create_error:  Lesson create error
 open_course.lesson.create_success: Lesson create success

@@ -128,6 +128,7 @@
 .cd-form-group-action {
   position: relative;
   padding-right: 158px;
+  .action-button,
   .captcha-img {
     position: absolute;
     top: 5px;
@@ -178,5 +179,21 @@
     > input {
       display: none;
     }
+  }
+}
+
+.cd-select {
+  position: relative;
+  .form-control {
+    -webkit-appearance: none;
+    border: none;
+  }
+  &:after {
+    position: absolute;
+    top: 8px;
+    right: -4px;
+    content: '\e979';
+    font-family: 'codeages-icon';
+    font-size: 14px;
   }
 }

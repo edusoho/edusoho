@@ -1,0 +1,67 @@
+{% extends 'settings/layout.html.twig' %}
+{% block title %}{{'user.settings.email'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'email' %}
+{% do script(['libs/jquery-validation.js','app/js/settings/email/index.js']) %}
+
+{% block main %}
+  {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}{{'user.settings.email.content_title'|trans}}{% endblock %}
+    {% block body %}
+    {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
+      <form id="setting-email-form" class="form-horizontal" method="post" >
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>{{'user.settings.email.current_email'|trans}}</label></div>
+          <div class="col-md-8 controls">
+            <span class="form-control-static">
+              {% set emailArr = app.user.email|split('@') %}
+              {% if emailArr[1] != 'edusoho.net' %}
+                {{ app.user.email }}
+                {% if app.user.emailVerified %}
+                  <span class="color-success">({{'user.settings.email.verified'|trans}})</span>
+                {% else %}
+                  <p class="help-block mtm">
+                    {{'user.settings.email.unverified_tips'|trans}}
+                    <a id="send-verify-email" class="btn btn-info btn-sm" href="javascript:;" data-url="{{ path('settings_email_verify') }}">{{'user.settings.email.verify_btn'|trans}}</a>
+                  </p>
+                {% endif %}
+              {% else %}
+                <span class="color-success">{{'user.settings.email.setup_email_tips'|trans}}</span>
+              {% endif %}
+
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label" for="{{ 'user.settings.email.new_email'|trans }}">{{ form_label(form.email, 'user.settings.email.new_email'|trans) }}</div>
+          <div class="col-md-8 controls">
+            {{ form_widget(form.email, {attr:{class:'form-control'}}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">{{ form_label(form.password, 'user.fields.login_password'|trans) }}</div>
+          <div class="col-md-8 controls">
+            {{ form_widget(form.password, {attr:{class:'form-control'}}) }}
+            <p class="help-block">{{'user.settings.email.verify_password_tips'|trans}}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"></div>
+          <div class="col-md-8 controls">
+            {{ form_rest(form) }}
+            <button id="email-save-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    {% else %}
+      <div class="alert alert-danger">{{'user.settings.email.no_change_email_tips'|trans}}</div>
+    {% endif %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

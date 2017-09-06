@@ -1,125 +1,106 @@
-{% extends 'settings/layout.html.twig' %}
+{% extends 'v2/layout.html.twig' %}
+
 {% block title %}{{'user.settings.verification'|trans}} - {{ parent() }}{% endblock %}
-{% set side_nav = 'approval' %}
-{% if app.user.approvalStatus not in ['approving', 'approved'] %}
+
+{% if app.user.approvalStatus in ['unapprove', 'approve_fail'] %}
 	{% do script(['libs/jquery-validation.js', 'app/js/settings/approval/index.js']) %}
 {% endif %}
 
-{% block main %}
+{% set side_nav = 'approval' %}
 
-    {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
+{% block page_title %}
+  {{'user.settings.verification.content_title'|trans}}
+{% endblock %}
 
-        {% block heading %}  {{'user.settings.verification.content_title'|trans}}
-        {% endblock %}
+{% block main_body %}
+  {% if app.user.approvalStatus == 'approving' %}
+    {# <div class="alert cd-alert cd-alert-info">
+      {{'user.settings.verification.approving_tips'|trans}}
+    </div> #}
+    <div class="cd-feedback cd-feedback-info">
+      <div class="feedback-icon"><i class="cd-icon cd-icon-info"></i></div>
+      <div class="feedback-title">认证审核中</div>
+      <div class="feedback-content">你的信息正在审核中，请耐心等待</div>
+      <div class="approval-info">
+        <p>真实姓名：{{profile.truename}}</p>
+        <p>身份证号：{{profile.idcard}}</p>
+      </div>
+    </div>
+  {% elseif  app.user.approvalStatus == 'approved' %}
+    {# <div class="alert cd-alert cd-alert-success">
+      {{'user.settings.verification.approved_tips'|trans}}
+    </div> #}
+    <div class="cd-feedback cd-feedback-info">
+      <div class="feedback-icon"><i class="cd-icon cd-icon-info"></i></div>
+      <div class="feedback-title">你已经通过实名认证</div>
+      <div class="feedback-content">认证通过后实名信息无法修改</div>
+      <div class="approval-info">
+        <p>真实姓名：{{profile.truename}}</p>
+        <p>身份证号：{{profile.idcard}}</p>
+      </div>
+    </div>
+  {% elseif  app.user.approvalStatus == 'unapprove' %}
+    <div class="alert cd-alert cd-alert-warning">
+      {# {{'user.settings.verification.unapprove_tips'|trans}} #}
+      审核未通过，请重新上传身份证图片并保证画面清晰。
+    </div>
+  {% elseif app.user.approvalStatus == 'approve_fail' %}
+    <div class="alert cd-alert cd-alert-danger">
+      {# {{'user.settings.verification.approve_failed_tips'|trans}} #}
+      实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务。
+    </div>
+  {% endif %}
 
-        {% block body %}
-
-            {% if app.user.approvalStatus in ['approved', 'unapprove', 'approve_fail','approving'] %}
-                    <form id="approval-form" class="form-horizontal" method="post" enctype="multipart/form-data">
-
-                        {{ web_macro.flash_messages() }}
-                            <div class="help-block approval">
-                                <label class="col-md-2 control-label" ></label>
-                                {% if app.user.approvalStatus == 'approving' %}
-                                    <div class="alert alert-info" role="alert">{{'user.settings.verification.approving_tips'|trans}}
-                                    </div>
-                                {% elseif  app.user.approvalStatus == 'approved' %}
-                                    <div class="alert alert-success" role="alert">{{'user.settings.verification.approved_tips'|trans}}
-                                    </div>
-                                {% elseif  app.user.approvalStatus == 'unapprove' %}
-                                    <div class="alert alert-warning" role="alert">{{'user.settings.verification.unapprove_tips'|trans}}
-                                    </div>
-                                {% elseif app.user.approvalStatus == 'approve_fail' %}
-                                    <p class="color-danger" >
-                                        {{'user.settings.verification.approve_failed_tips'|trans}}
-                                    </p>
-                                {% endif %}
-                            </div>
-
-                        {% if app.user.approvalStatus != 'approving' %}
-
-                            <div class="form-group">
-                                <div class="col-md-2 control-label">
-                                    <label for="truename">{{'user.fileds.realname'|trans}}</label>
-                                </div>
-                                <div class="col-md-8 controls">
-                                    {% if  app.user.approvalStatus in ['approved']  %}
-                                         <input disabled="true" type="text" id="truename" name="truename" class="form-control" value="{{profile.truename}}"  disabled="">
-                                    {% else %}
-                                         <input type="text" id="truename" name="truename" class="form-control" value="" >
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                            <div class="col-md-2 control-label">
-                                <label for="idcard">{{'user.fields.idcard_label'|trans}}</label>
-                            </div>
-                            <div class="col-md-8 controls">
-                                {% if  app.user.approvalStatus in ['approved']  %}
-                                    <input type="text" id="idcard" name="idcard" class="form-control" value="{{profile.idcard}}"disabled="true">
-                                {% else %}
-                                    <input type="text" id="idcard" name="idcard" class="form-control" value="">
-                                {% endif %}
-                            </div>
-                            </div>
-                            {% if app.user.approvalStatus != 'approved' %}
-                            <div class="form-group">
-                                <div class="col-md-2 control-label">
-                                        <label>{{'user.settings.verification.photo_require'|trans}}</label>
-                                </div>
-                                <div class="col-md-8 form-control-static">
-                                  <p class="color-warning"> {{'user.settings.verification.photo_require_tips'|trans|raw}}</p>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-md-2 control-label">
-                                    <label for="faceImg">{{'user.settings.verification.idcard_front_photo'|trans}}</label>
-                                </div>
-                                <div class="col-md-8 form-control-static">
-                                    {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                        <input type="file" id="faceImg" name="faceImg" accept="image/bmp,image/jpeg,image/png" disabled="true">
-                                    {% else %}
-                                        <input type="file" id="faceImg" name="faceImg" accept="image/bmp,image/jpeg,image/png" >
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                             <div class="form-group">
-                                <div class="col-md-2 control-label">
-                                    <label for="backImg">{{'user.settings.verification.idcard_back_photo'|trans}}</label>
-                                </div>
-                                <div class="col-md-8 form-control-static">
-                                    {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                        <input type="file" id="backImg" name="backImg" accept="image/bmp,image/jpeg,image/png" disabled="true">
-                                    {% else %}
-                                        <input type="file" id="backImg" name="backImg" accept="image/bmp,image/jpeg,image/png">
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-7 col-md-offset-2">
-                                    {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                        <button type="submit" class="btn btn-primary" disabled="true">{{'form.btn.submit_disabled'|trans}}</button>
-                                    {% else %}
-                                        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-                    </form>
-
-                    {% endif %}
-
-                 {% endif %}
-
-            {% endif %}
-
-        {% endblock %}
-
-    {% endembed %}
-
+  {% if app.user.approvalStatus in ['unapprove', 'approve_fail'] %}
+    <form id="approval-form" class="row cd-row" method="post" enctype="multipart/form-data">
+      <div class="col-md-5">
+        <div class="form-group cd-form-group">
+          <label class="required" for="truename">{{'user.fileds.realname'|trans}}</label>
+            <input type="text" id="truename" name="truename" class="form-control" value="">
+        </div>
+      </div>
+      <div class="col-md-5 col-md-offset-1">
+        <div class="form-group cd-form-group">
+          <label class="required" for="idcard">{{'user.fields.idcard_label'|trans}}</label>
+            <input type="text" id="idcard" name="idcard" class="form-control" value="">
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="cd-id-card" id="id-card-front">
+          <div class="card-icon">
+            <i class="cd-icon cd-icon-id-front"></i>
+          </div>
+          <div class="card-title">{{'user.fields.idcard_front_title'|trans }}</div>
+          <label for="faceImg" class="card-label">
+            <input id="faceImg" type="file" name="faceImg" accept="image/bmp,image/jpeg,image/png"
+            data-toggle="file-review" data-target="#id-card-front" data-display="{{ 'user.fields.idcard_front_placeholder'|trans }}">
+          </label>
+        </div>
+      </div>
+      <div class="col-md-5 col-md-offset-1">
+        <div class="cd-id-card" id="#id-card-back">
+          <div class="card-icon">
+            <i class="cd-icon cd-icon-id-back"></i>
+          </div>
+          <div class="card-title">{{'user.fields.idcard_back_title'|trans }}</div>
+          <label for="backImg" class="card-label">
+            <input id="backImg" type="file" name="backImg" accept="image/bmp,image/jpeg,image/png"
+            data-toggle="file-review" data-target="#id-card-back" data-display="{{ 'user.fields.idcard_back_placeholder'|trans }}">
+          </label>
+        </div>
+      </div>
+      <div class="col-md-11">
+        <div class="cd-mb16 cd-text-medium cd-text-gray-dark">认证须知</div>
+        <div class="cd-text-xs cd-text-gray cd-mb32">
+          <p>1、我们将在你提交身份证信息后的 5 个工作日（不包含节假日）内完成审核，审核结果将会以短信和系统通知的形式发送给你；</p>
+          <p>2、如若账号还未绑定手机，建议你提前绑定手机；</p>
+          <p>3、实名认证审核完成后，将无法修改和删除，请谨慎填写；</p>
+          <p>4、你需要准备身份证照片（需正反两面），请确保证件照片清晰可见，严禁 PS，具体可参考实名认证常见问题。</p>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <button type="submit" class="btn cd-btn cd-btn-primary">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </form>
+  {% endif %}
 {% endblock %}

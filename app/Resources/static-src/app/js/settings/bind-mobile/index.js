@@ -1,7 +1,13 @@
-let $form = $('#bind-mobile-form');
-let $smsCode = $('.js-sms-send');
+import SmsSender from 'app/common/widget/sms-sender';
+import notify from 'common/notify';
 
-let validator = $form.validate({
+let $form = $('#bind-mobile-form');
+let smsSend = '.js-sms-send';
+let $smsCode = $(smsSend);
+
+$form.validate({
+  currentDom: '#submit-btn',
+  ajax: true,
   rules: {
     password: {
       required: true,
@@ -16,10 +22,9 @@ let validator = $form.validate({
         type: 'get',
         callback: (bool) => {
           if (bool) {
-            $smsCode.removeClass('disabled');
-          }
-          else {
-            $smsCode.addClass('disabled');
+            $smsCode.removeAttr('disabled');
+          } else {
+            $smsCode.attr('disabled', true);
           }
         }
       },
@@ -36,5 +41,22 @@ let validator = $form.validate({
     sms_code: {
       required: Translator.trans('site.captcha_code.required')
     }
+  },
+  submitSuccess(data) {
+    notify('success', Translator.trans(data.message));
+    
+    $('.modal').modal('hide');
+    window.location.reload();
+  },
+  submitError(data) {
+    notify('danger',  Translator.trans(data.responseJSON.message));
   }
 });
+
+$smsCode.on('click', function() {
+  new SmsSender({
+    element: smsSend,
+    url: $(smsSend).data('url'),
+    smsType: 'sms_bind',
+  })
+})
