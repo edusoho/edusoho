@@ -674,19 +674,19 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
-                $this->setFlashMessage('danger', 'user.settings.security.questions.set.incorrect_password');
 
-                return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
+                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.incorrect_password'), 403); 
             }
 
             if ($hasSecurityQuestions) {
-                throw new \RuntimeException('您已经设置过安全问题，不可再次修改。');
+                return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.not_modify_aligin_hint'), 403); 
             }
 
             if ($request->request->get('question-1') == $request->request->get('question-2')
                 || $request->request->get('question-1') == $request->request->get('question-3')
                 || $request->request->get('question-2') == $request->request->get('question-3')) {
-                throw new \RuntimeException('2个问题不能一样。');
+
+                return $this->createJsonResponse(array('message' => 'user.settings.security.security_questions.type_duplicate_hint'), 403); 
             }
 
             $fields = array(
@@ -698,9 +698,10 @@ class SettingsController extends BaseController
                 'securityAnswer3' => $request->request->get('answer-3'),
             );
             $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
-            $this->setFlashMessage('success', 'user.settings.security.questions.set.success');
             $hasSecurityQuestions = true;
             $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+
+            return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.success')); 
         }
 
         return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
