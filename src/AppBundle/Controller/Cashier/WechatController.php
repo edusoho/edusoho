@@ -18,7 +18,7 @@ class WechatController extends BaseController
         $result = $this->getPayService()->createTrade($trade);
 
         if ($result['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('cashier_pay_success', array('sn' => $result['order_sn'])));
+            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
         }
 
         if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
