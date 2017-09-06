@@ -14,7 +14,18 @@ let validator = $form.validate({
       required: true,
       equalTo: '#form_payPassword'
     }
-  }
+  },
+  messages: {
+    'form[currentUserLoginPassword]': {
+      required: '请输入用户登录密码'
+    },
+    'form[payPassword]': {
+      required: '请输入新的支付密码',
+    },
+    'form[confirmPayPassword]': {
+      required: '请确认输入的支付密码',
+    }
+  },
 })
 
 console.log(validator);
