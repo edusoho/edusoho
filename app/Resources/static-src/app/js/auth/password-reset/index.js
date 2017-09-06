@@ -1,3 +1,4 @@
+import SmsSender from 'app/common/widget/sms-sender';
 let validator = null;
 let $form = null;
 
@@ -33,6 +34,18 @@ $('.js-find-by-mobile').click(function () {
   $('#password-reset-form').hide();
   $('#password-reset-by-mobile-form').show();
 
+})
+
+$('.js-sms-send').click(()=>{
+  var smsSender = new SmsSender({
+    element: '.js-sms-send',
+    url: $('.js-sms-send').data('smsUrl'),
+    smsType: $('.js-sms-send').data('smsType'),
+    preSmsSend: function () {
+      var couldSender = true;
+      return couldSender;
+    }
+  });
 })
 
 function makeValidator(type) {
@@ -84,4 +97,3 @@ function makeValidator(type) {
     })
   }
 };
-

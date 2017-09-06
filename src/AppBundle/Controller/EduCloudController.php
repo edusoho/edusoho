@@ -34,7 +34,7 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
-                    'mobile' => $to,
+                    'mobile' => '',
                     'category' => $smsType,
                     'sendStyle' => 'templateId',
                     'description' => $description,
@@ -262,7 +262,7 @@ class EduCloudController extends BaseController
 
             return $errorMsg;
         }
-        if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password'))) {
+        if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'))) {
             $captchaNum = strtolower($request->request->get('captcha_num'));
 
             if ($request->getSession()->get('captcha_code') != $captchaNum) {
