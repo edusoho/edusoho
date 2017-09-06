@@ -50,7 +50,6 @@ class TaskPluginController extends BaseController
             'nextOffsetSeq' => $nextOffsetSeq,
             'course' => $course,
         ));
-
     }
 
     public function noteAction(Request $request, $courseId, $taskId)
