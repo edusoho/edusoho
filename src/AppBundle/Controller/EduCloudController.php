@@ -262,7 +262,7 @@ class EduCloudController extends BaseController
 
             return $errorMsg;
         }
-        if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind'))) {
+        if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password'))) {
             $captchaNum = strtolower($request->request->get('captcha_num'));
 
             if ($request->getSession()->get('captcha_code') != $captchaNum) {
