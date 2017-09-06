@@ -36,9 +36,9 @@
     <div class="setting-content">{{'user.settings.security.login_password_tips'|trans}}</div>
     <div class="setting-action">
       {% if hasLoginPassword %}
-        <div class="cd-setting-status cd-setting-status-done">已设置</div>
+        <div class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</div>
       {% else %}
-        <div class="cd-setting-status">未设置</div>
+        <div class="cd-setting-status">{{'site.setting.unfinished'|trans}}</div>
       {% endif %}
       <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
     </div>
@@ -50,10 +50,10 @@
     <div class="setting-content">{{'user.settings.security.pay_password_tips'|trans}}</div>
     <div class="setting-action">
       {% if hasPayPassword %}
-        <div class="cd-setting-status cd-setting-status-done">已设置</div>
+        <div class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</div>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.reset'|trans}}</button>
       {% else %}
-        <div class="cd-setting-status">未设置</div>
+        <div class="cd-setting-status">{{'site.setting.unfinished'|trans}}</div>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
       {% endif %}
     </div>
@@ -65,10 +65,10 @@
     <div class="setting-content">{{'user.settings.security.questions_tips'|trans}}</div>
     <div class="setting-action">
       {% if hasFindPayPasswordQuestion %}
-        <div class="cd-setting-status cd-setting-status-done">已设置</div>
+        <div class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</div>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.view'|trans}}</button>
       {% else %}
-        <div class="cd-setting-status">未设置</div>
+        <div class="cd-setting-status">{{'site.setting.unfinished'|trans}}</div>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
       {% endif %}
     </div>
@@ -80,17 +80,17 @@
       <div class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</div>
       <div class="setting-content">
         {% if hasVerifiedMobile %}
-          已验证手机：{{ verifiedMobile }}
+          {{'site.verify.mobile_finished'|trans}}：{{ verifiedMobile }}
         {% else %}
           {{'user.settings.security.mobile_bind_tips'|trans}}
         {% endif %}
       </div>
       <div class="setting-action">
         {% if hasVerifiedMobile %}
-          <div class="cd-setting-status cd-setting-status-done">已验证</div>
+          <div class="cd-setting-status cd-setting-status-done">{{'site.verify.finished'|trans}}</div>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
         {% else %}
-          <div class="cd-setting-status">未验证</div>
+          <div class="cd-setting-status">{{'site.verify.unfinished'|trans}}</div>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
         {% endif %}
       </div>
@@ -99,26 +99,27 @@
 
   <div class="cd-setting">
     <div class="setting-icon"><i class="cd-icon cd-icon-email"></i></div>
-    <div class="setting-title">邮箱设置</div>
+    <div class="setting-title">{{'user.settings.email_menu'|trans}}</div>
     <div class="setting-content">
       {% if hasEmail %}
-        已设置邮箱：{{ email }}
+        {{'site.setting.email_finished'|trans}}：{{ email }}
       {% else %}
-        xxxxxxxxxxxxx
+        邮箱可用于找回密码
+        {# {{'user.settings.security.email_setting_tips'|trans}} #}
       {% endif %}
     </div>
     <div class="setting-action">
       {% if hasEmail %}
         {% if hasVerifiedEmail %}
-          <div class="cd-setting-status cd-setting-status-done">已验证</div>
+          <div class="cd-setting-status cd-setting-status-done">{{'site.verify.finished'|trans}}</div>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
         {% else %}
-          <div class="cd-setting-status">未验证</div>
+          <div class="cd-setting-status">{{'site.verify.unfinished'|trans}}</div>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
-          <button class="btn cd-btn cd-btn-ghost-primary" id="send-verify-email" data-url="{{ path('settings_email_verify') }}" data-loading-text="{{'form.btn.verifying'|trans}}">验证</button>
+          <button class="btn cd-btn cd-btn-ghost-primary" id="send-verify-email" data-url="{{ path('settings_email_verify') }}" data-loading-text="{{'form.btn.verifying'|trans}}">{{'form.btn.verify'|trans}}</button>
         {% endif %}
       {% else %}
-        <div class="cd-setting-status">未设置</div>
+        <div class="cd-setting-status">{{'site.setting.unfinished'|trans}}</div>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
       {% endif %}
     </div>
