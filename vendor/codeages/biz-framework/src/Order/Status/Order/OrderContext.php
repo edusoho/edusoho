@@ -89,7 +89,7 @@ class OrderContext
             }
 
             $processor = $this->getDeductCallback($deduct);
-            if (!empty($processor) && $processor instanceof OrderStatusCallback) {
+            if (!empty($processor) && $processor instanceof OrderStatusCallback && method_exists($processor, $status)) {
                 $results[] = $processor->$status($deduct);
             }
         }
@@ -98,7 +98,7 @@ class OrderContext
             $orderItem['order'] = $order;
 
             $processor = $this->getProductCallback($orderItem);
-            if (!empty($processor) && $processor instanceof OrderStatusCallback) {
+            if (!empty($processor) && $processor instanceof OrderStatusCallback && method_exists($processor, $status)) {
                 $results[] = $processor->$status($orderItem);
             }
         }

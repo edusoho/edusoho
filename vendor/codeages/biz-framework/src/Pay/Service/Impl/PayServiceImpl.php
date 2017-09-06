@@ -381,12 +381,13 @@ class PayServiceImpl extends BaseService implements PayService
         $amount = $flowType == 'inflow' ? $userFlow['amount'] : 0 - $userFlow['amount'];
 
         if ($isCoin) {
-            $userBalance = $this->getAccountService()->waveAmount($userFlow['user_id'], 0 - $userFlow['amount']);
+            $userBalance = $this->getAccountService()->waveAmount($userFlow['user_id'], $amount);
             $userFlow['user_balance'] = empty($userBalance['amount']) ? 0 : $userBalance['amount'];
         } else {
             $userBalance = $this->getAccountService()->waveCashAmount($userFlow['user_id'], $amount);
             $userFlow['user_balance'] = empty($userBalance['cash_amount']) ? 0 : $userBalance['cash_amount'];
         }
+
         return $this->getUserCashflowDao()->create($userFlow);
     }
 
