@@ -50,6 +50,7 @@
 
           <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
         </div>
+        <input type="hidden" name="courseId" value="{{ course.id }}">
       </form>
       <table class="table table-striped table-hover" id="order-table">
           {% include 'order/order-table.html.twig' with {mode:'course'} %}

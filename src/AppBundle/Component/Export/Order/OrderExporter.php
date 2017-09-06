@@ -4,6 +4,7 @@ namespace AppBundle\Component\Export\Order;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class OrderExporter extends Exporter
 {
@@ -26,8 +27,8 @@ class OrderExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $orders = $this->getOrderService()->searchOrders($this->conditions, array('createdTime' => 'DESC'), $start, $limit);
-        $userIds = ArrayToolkit::column($orders, 'userId');
+        $orders = $this->getOrderService()->searchOrders($this->conditions, array('created_time' => 'DESC'), $start, $limit);
+        $userIds = ArrayToolkit::column($orders, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
@@ -50,11 +51,10 @@ class OrderExporter extends Exporter
             )
         );
         if (!empty($conditions['startDateTime']) && !empty($conditions['startDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['startDateTime']);
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+            $conditions['end_time'] = strtotime($conditions['startDateTime']);
         }
 
-        $conditions['targetType'] = $this->target;
 
         return $conditions;
     }
@@ -79,7 +79,7 @@ class OrderExporter extends Exporter
 
             $member[] = $order['title'];
 
-            $member[] = $order['totalPrice'];
+            $member[] = $order['price_amount'];
 
             if (!empty($order['coupon'])) {
                 $member[] = $order['coupon'];
@@ -87,9 +87,9 @@ class OrderExporter extends Exporter
                 $member[] = '无';
             }
 
-            $member[] = $order['couponDiscount'];
-            $member[] = $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) : '0';
-            $member[] = $order['amount'];
+            $member[] = empty($order['couponDiscount']) ? '' : $order['couponDiscount'];
+            $member[] = !empty($order['coinRate']) ? ($order['coinAmount'] / $order['coinRate']) : '0';
+            $member[] = $order['pay_amount'];
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
             if (!empty($payment[$orderPayment])) {
@@ -98,8 +98,8 @@ class OrderExporter extends Exporter
                 $member[] = $payment['none'];
             }
 
-            $member[] = $users[$order['userId']]['nickname'];
-            $member[] = $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] : '-';
+            $member[] = $users[$order['user_id']]['nickname'];
+            $member[] = $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'] : '-';
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $member[] = '管理员添加';
@@ -107,10 +107,10 @@ class OrderExporter extends Exporter
                 $member[] = '-';
             }
 
-            $member[] = date('Y-n-d H:i:s', $order['createdTime']);
+            $member[] = date('Y-n-d H:i:s', $order['created_time']);
 
-            if ($order['paidTime'] != 0) {
-                $member[] = date('Y-n-d H:i:s', $order['paidTime']);
+            if ($order['pay_time'] != 0) {
+                $member[] = date('Y-n-d H:i:s', $order['pay_time']);
             } else {
                 $member[] = '-';
             }
