@@ -178,6 +178,19 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
+    public function analysis($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('sum(`totalPrice`) as totalPrice, sum(`amount`) as amount, sum(`coinAmount`) as coinAmount');
+
+        $result = $builder->execute()->fetch();
+        foreach ($result as $key => $value) {
+            $result[$key] = empty($value) ? 0 : $value;
+        }
+
+        return $result;
+    }
+
     public function analysisAmountDataByTime($startTime, $endTime)
     {
         $sql = "SELECT sum(amount) AS count, from_unixtime(paidTime,'%Y-%m-%d') AS date FROM `{$this->table}` WHERE`paidTime`>= ?  AND `paidTime`<= ? AND `status`='paid'  GROUP BY from_unixtime(`paidTime`,'%Y-%m-%d') ORDER BY date ASC ";

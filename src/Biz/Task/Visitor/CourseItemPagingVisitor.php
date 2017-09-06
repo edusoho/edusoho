@@ -152,8 +152,17 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     {
         if ($items) {
             $lastOne = end($items);
+            $hasChapterCount = $this->getChapterDao()->count(array(
+                'courseId' => $this->courseId,
+                'seq_GT' => $lastOne['seq'],
+            ));
 
-            return $lastOne['seq'] + 1;
+            $hasTaskCount = $this->getTaskDao()->count(array(
+                'courseId' => $this->courseId,
+                'seq_GT' => $lastOne['seq'],
+            ));
+
+            return $hasChapterCount || $hasTaskCount ? ($lastOne['seq'] + 1) : null;
         }
 
         return null;

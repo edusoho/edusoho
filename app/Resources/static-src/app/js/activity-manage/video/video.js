@@ -138,11 +138,14 @@ export default class Video {
         if (file.length !== 0 && file.length !== undefined) {
           let $minute = $('#minute');
           let $second = $('#second');
+          let $length = $('#length');
+          
           let length = parseInt(file.length);
           let minute = parseInt(length / 60);
           let second = length % 60;
           $minute.val(minute);
           $second.val(second);
+          $length.val(length);
           file.minute = minute;
           file.second = second;
         }

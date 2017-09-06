@@ -105,7 +105,7 @@ interface TaskService
      */
     public function canLearnTask($taskId);
 
- // 任务是否可学
+    // 任务是否可学
 
     /**
      * return if the task has been learned.

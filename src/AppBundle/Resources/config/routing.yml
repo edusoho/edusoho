@@ -2755,6 +2755,10 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
+global_file_document_player:
+  path: /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:globalDocumentPlayer }
+
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }

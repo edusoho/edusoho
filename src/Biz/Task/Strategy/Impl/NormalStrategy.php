@@ -13,6 +13,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     public function accept(CourseStrategyVisitorInterface $visitor)
     {
         $method = 'visit'.substr(strrchr(__CLASS__, '\\'), 1);
+
         return $visitor->$method($this);
     }
 

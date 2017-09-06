@@ -51,7 +51,7 @@
           {% endif %}
         </td>
       </tr>
-      <tr> <td width="25%">{{'order.real_pay'|trans}}</td>
+      {#<tr> <td width="25%">{{'order.real_pay'|trans}}</td>
         <td width="75%">
           <span class="color-warning">{{ order.totalPrice }}</span>
           {% if order.priceType == "RMB" %}
@@ -60,7 +60,7 @@
           {{setting("coin.coin_name")}}
           {% endif %}
         </td>
-      </tr>
+      </tr>#}
       {% if setting("coin.coin_enabled")|default(0) == 1 %}
       <tr> 
         <td width="25%">

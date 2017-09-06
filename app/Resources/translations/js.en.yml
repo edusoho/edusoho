@@ -81,8 +81,7 @@ user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.basic_info.nickname_change_fail: 'Nickname had changed fail'
 
-material.share.teacher_nickname_label: Please input teacher nickname
-
+material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
