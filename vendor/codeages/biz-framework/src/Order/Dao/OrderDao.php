@@ -10,5 +10,7 @@ interface OrderDao extends GeneralDaoInterface
 
     public function findByIds(array $ids);
 
-    public function countGroupByDate($conditions, $sort);
+    public function countGroupByDate($conditions, $sort, $dateColumn = 'pay_time');
+    
+    public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time');
 }

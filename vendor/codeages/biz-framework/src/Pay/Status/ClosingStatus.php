@@ -11,6 +11,13 @@ class ClosingStatus extends AbstractStatus
         return self::NAME;
     }
 
+    public function process($data = array())
+    {
+        return $this->getPaymentTradeDao()->update($this->paymentTrade['id'], array(
+            'status' => self::NAME,
+        ));
+    }
+
     public function closed()
     {
         return $this->getPayStatus(ClosedStatus::NAME)->process();

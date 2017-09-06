@@ -18,7 +18,7 @@ class RefundingStatus extends AbstractStatus
 
     public function process($data = array())
     {
-        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
+        return $this->getPaymentTradeDao()->update($this->paymentTrade['id'], array(
             'status' => RefundingStatus::NAME,
         ));
     }

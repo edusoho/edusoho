@@ -3,6 +3,7 @@
 namespace Codeages\Biz\Framework\Pay\Service\Impl;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Codeages\Biz\Framework\Service\BaseService;
@@ -30,6 +31,17 @@ class PayServiceImpl extends BaseService implements PayService
             'type'
         ));
 
+        if ('recharge' == $data['type']) {
+            return $this->createRechargeTrade($data);
+        } else if ('purchase' == $data['type']) {
+            return $this->createPurchaseTrade($data);
+        } else {
+            throw new InvalidArgumentException("can't create the type of {$data['type']} trade");
+        }
+    }
+
+    protected function createPurchaseTrade($data)
+    {
         $lock = $this->biz['lock'];
 
         try {
@@ -55,16 +67,43 @@ class PayServiceImpl extends BaseService implements PayService
                     'pay_amount' => '0',
                 );
 
-                $this->updateTradeToPaid($mockNotify);
-                $trade = $this->getPaymentTradeDao()->get($trade['id']);
+                $trade = $this->updateTradeToPaid($mockNotify);
             }
 
             $this->commit();
+
             $lock->release("trade_create_{$data['order_sn']}");
         } catch (\Exception $e) {
             $this->rollback();
-            throw $e;
             $lock->release("trade_create_{$data['order_sn']}");
+            throw $e;
+        }
+
+        return $trade;
+    }
+
+    protected function createRechargeTrade($data)
+    {
+        $lock = $this->biz['lock'];
+
+        try {
+            $lockName = 'trade_create_recharge_trade_'.$this->biz['user']['id'];
+
+            $lock->get($lockName);
+            $this->beginTransaction();
+            $trade = $this->createPaymentTrade($data);
+
+            $result = $this->createPaymentPlatformTrade($data, $trade);
+            $trade = $this->getPaymentTradeDao()->update($trade['id'], array(
+                'platform_created_result' => $result
+            ));
+
+            $this->commit();
+            $lock->release($lockName);
+        } catch (\Exception $e) {
+            $this->rollback();
+            $lock->release($lockName);
+            throw $e;
         }
         return $trade;
     }
@@ -136,6 +175,7 @@ class PayServiceImpl extends BaseService implements PayService
             }
 
             $this->dispatch('payment_trade.paid', $trade, $data);
+            return $trade;
         }
     }
 
@@ -148,7 +188,6 @@ class PayServiceImpl extends BaseService implements PayService
     {
         try {
             $this->beginTransaction();
-            $this->createCashFlows($trade, $data);
             $trade = $this->getPaymentTradeDao()->update($trade['id'], array(
                 'status' => $data['status'],
                 'pay_time' => $data['paid_time'],
@@ -156,6 +195,7 @@ class PayServiceImpl extends BaseService implements PayService
                 'notify_data' => $data,
                 'currency' => $data['cash_type'],
             ));
+            $this->createCashFlows($trade, $data);
             $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.paid', $data['trade_sn'], "交易号{$data['trade_sn']}，账目流水处理成功", $data);
             $this->commit();
             return $trade;
@@ -203,9 +243,7 @@ class PayServiceImpl extends BaseService implements PayService
             'status' => 'refunding',
             'apply_refund_time' => time()
         ));
-        $this->dispatch('trade.refunding', $trade);
-
-        // TODO: 当支付宝时，直接修改状态为refunded
+        $this->dispatch('payment_trade.refunding', $trade);
 
         return $trade;
     }
@@ -273,7 +311,9 @@ class PayServiceImpl extends BaseService implements PayService
 
         $savedTrade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
         if (empty($savedTrade)) {
-            return $this->getPaymentTradeDao()->create($trade);
+            $trade = $this->getPaymentTradeDao()->create($trade);
+            $this->lockCoin($trade);
+            return $trade;
         } else {
             return $this->getPaymentTradeDao()->update($savedTrade['id'], $trade);
         }
@@ -284,94 +324,80 @@ class PayServiceImpl extends BaseService implements PayService
         return $this->getUserCashflowDao()->findByTradeSn($sn);
     }
 
+    protected function lockCoin($trade)
+    {
+        if ($trade['coin_amount']>0) {
+            $user = $this->biz['user'];
+            $this->getAccountService()->lockCoin($user['id'], $trade['coin_amount']);
+        }
+    }
+
     protected function createCashFlows($trade, $notifyData)
     {
-        $inflow = $this->createUserFlow($trade, array('amount' => $notifyData['pay_amount']), 'inflow');
-        $outflow = $this->createUserFlow($trade, $inflow, 'outflow');
-        $this->createSiteFlow($trade, $outflow, 'inflow');
+        $flow = $this->createUserFlow('buyer', $trade, array('amount' => $notifyData['pay_amount']), 'inflow');
+        $flow = $this->createUserFlow('buyer', $trade, $flow, 'outflow');
+
+        $flow = $this->createUserFlow('seller', $trade, $flow, 'inflow');
 
         if ('recharge' == $trade['type']) {
-            $outflow = $this->createSiteFlow($trade, $outflow, 'outflow', true);
-            $this->createUserFlow($trade, $outflow, 'inflow', true);
+            $flow = $this->createUserFlow('seller', $trade, $flow, 'outflow', true);
+            $this->createUserFlow('buyer', $trade, $flow, 'inflow', true);
         } elseif ('purchase' == $trade['type']) {
             if (!empty($trade['coin_amount'])) {
-                $outflow = $this->createUserFlow($trade, $outflow, 'outflow', true);
-                $this->createSiteFlow($trade, $outflow, 'inflow', true);
+                $flow = $this->createUserFlow('buyer', $trade, $flow, 'outflow', true);
+                $this->createUserFlow('seller', $trade, $flow, 'inflow', true);
             }
         }
     }
 
-    protected function createSiteFlow($trade, $flow = array(), $flowType, $isCoin = false)
-    {
-        $siteFlow = array(
-            'sn' => $this->generateSn(),
-            'title' => $trade['title'],
-            'trade_sn' => $trade['trade_sn'],
-            'order_sn' => $trade['order_sn'],
-            'platform_sn' => $trade['platform_sn'],
-            'platform' => $trade['platform'],
-            'price_type' => $trade['price_type'],
-            'currency' => $isCoin ? 'coin': $trade['currency'],
-            'amount' => empty($flow) ? 0 : ($isCoin && $flowType == 'outflow' ? $flow['amount'] * $this->getCoinRate() : $flow['amount']),
-            'pay_time' => $trade['pay_time'],
-            'user_cashflow' => empty($flow['sn']) ? '' : $flow['sn'],
-            'type' => $flowType,
-            'seller_id' => $trade['seller_id']
-        );
-
-        if ($siteFlow['amount'] == 0) {
-            return array();
-        }
-
-        $siteFlow = $this->getSiteCashFlowDao()->create($siteFlow);
-        $amount = $flowType == 'inflow' ? $siteFlow['amount'] : 0 - $siteFlow['amount'];
-        if ($isCoin) {
-            $this->getAccountService()->waveAmount($siteFlow['seller_id'], $amount);
-        } else {
-            $this->getAccountService()->waveCashAmount($siteFlow['seller_id'], $amount);
-        }
-
-        return $siteFlow;
-    }
-
-    protected function createUserFlow($trade, $parentFlow, $flowType, $isCoin = false)
+    protected function createUserFlow($userType, $trade, $parentFlow, $flowType, $isCoin = false)
     {
         $userFlow = array(
             'sn' => $this->generateSn(),
             'type' => $flowType,
             'parent_sn' => empty($parentFlow['sn']) ? '' : $parentFlow['sn'],
             'currency' => $isCoin ? 'coin': $trade['currency'],
-            'user_id' => $trade['user_id'],
+            'amount_type' => $isCoin ? 'coin': 'money',
+            'user_id' => $userType == 'buyer' ? $trade['user_id'] : $trade['seller_id'],
             'trade_sn' => $trade['trade_sn'],
             'order_sn' => $trade['order_sn'],
             'platform' => $trade['platform'],
+            'user_type' => $userType
         );
 
-        if ($isCoin && $flowType == 'inflow') {
+        if ($this->isRechargeCoin($isCoin, $userType, $flowType)
+            || $this->isDischargeCoin($isCoin, $userType, $flowType)) {
             $userFlow['amount'] = $trade['cash_amount'] * $this->getCoinRate();
-        } else if ($isCoin && $flowType == 'outflow') {
-            $userFlow['amount'] = $trade['coin_amount'] + $trade['cash_amount'] * $this->getCoinRate();
+        } else if ($isCoin) {
+            $userFlow['amount'] = $trade['coin_amount'];
         } else {
             $userFlow['amount'] = $trade['cash_amount'];
         }
 
-        if ($userFlow['amount'] == 0) {
+        if ($userFlow['amount'] <= 0) {
             return array();
         }
 
-        $userFlow = $this->getUserCashflowDao()->create($userFlow);
         $amount = $flowType == 'inflow' ? $userFlow['amount'] : 0 - $userFlow['amount'];
+
         if ($isCoin) {
-            $this->getAccountService()->waveAmount($userFlow['user_id'], $amount);
+            $userBalance = $this->getAccountService()->waveAmount($userFlow['user_id'], 0 - $userFlow['amount']);
+            $userFlow['user_balance'] = empty($userBalance['amount']) ? 0 : $userBalance['amount'];
         } else {
-            $this->getAccountService()->waveCashAmount($userFlow['user_id'], $amount);
+            $userBalance = $this->getAccountService()->waveCashAmount($userFlow['user_id'], $amount);
+            $userFlow['user_balance'] = empty($userBalance['cash_amount']) ? 0 : $userBalance['cash_amount'];
         }
-        return $userFlow;
+        return $this->getUserCashflowDao()->create($userFlow);
     }
 
-    protected function getSiteCashFlowDao()
+    protected function isRechargeCoin($isCoin, $userType, $flowType)
     {
-        return $this->biz->dao('Pay:SiteCashflowDao');
+        return $isCoin && $userType == 'buyer' && $flowType == 'inflow';
+    }
+
+    protected function isDischargeCoin($isCoin, $userType, $flowType)
+    {
+        return $isCoin && $userType == 'seller' && $flowType == 'outflow';
     }
 
     protected function generateSn($prefix = '')
@@ -411,9 +437,7 @@ class PayServiceImpl extends BaseService implements PayService
 
     protected function getPayment($payment)
     {
-        $payments = $this->findEnabledPayments();
-//        return $this->biz['payment.'.$payment];
-        return new $payments[$payment]['class']($this->biz);
+        return $this->biz['payment.'.$payment];
     }
 
     protected function createPaymentPlatformTrade($data, $trade)

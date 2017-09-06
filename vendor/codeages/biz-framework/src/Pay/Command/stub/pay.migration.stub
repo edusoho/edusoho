@@ -30,6 +30,18 @@ class CashFlow extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帐目流水';
         ");
 
+        if (!$this->isFieldExist('biz_user_cashflow', 'user_type')) {
+            $connection->exec(
+                "ALTER TABLE `biz_user_cashflow` Add column `user_type` VARCHAR(32) NOT NULL COMMENT '用户类型：seller, buyer';"
+            );
+        }
+
+        if (!$this->isFieldExist('biz_user_cashflow', 'amount_type')) {
+            $connection->exec(
+                "ALTER TABLE `biz_user_cashflow` Add column `amount_type` VARCHAR(32) NOT NULL COMMENT 'ammount的类型：coin, money';"
+            );
+        }
+
         $connection->exec("
             CREATE TABLE `biz_user_balance` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -70,26 +82,6 @@ class CashFlow extends Migration
         ");
 
         $connection->exec("
-            CREATE TABLE `biz_site_cashflow` (
-              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-              `title` varchar(1024) NOT NULL COMMENT '标题',
-              `sn` varchar(64) NOT NULL COMMENT '流水号',
-              `user_cashflow` varchar(64) NOT NULL COMMENT '用户的扣款流水号',
-              `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
-              `order_sn` varchar(64) NOT NULL COMMENT '客户订单号',
-              `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
-              `platform_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',
-              `price_type` varchar(32) NOT NULL COMMENT '标价类型，现金支付or虚拟币',
-              `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的货币类型',
-              `amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易金额',
-              `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
-              `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
-              `created_time` int(10) unsigned NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
-
-        $connection->exec("
             CREATE TABLE `biz_pay_account` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
@@ -123,20 +115,6 @@ class CashFlow extends Migration
         if (!$this->isFieldExist('biz_payment_trade', 'user_id')) {
             $connection->exec(
                 "ALTER TABLE `biz_payment_trade` Add column `user_id` int(10) unsigned not null  COMMENT '卖家Id' after `seller_id`;"
-            );
-        }
-
-        if (!$this->isFieldExist('biz_site_cashflow', 'type')) {
-            $connection->exec(
-                "ALTER TABLE `biz_site_cashflow` Add column `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型';"
-            );
-        }
-
-        $connection->exec("ALTER TABLE `biz_site_cashflow` Add column `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id';");
-
-        if (!$this->isFieldExist('biz_payment_trade', 'apply_refund_time')) {
-            $connection->exec(
-                "ALTER TABLE `biz_payment_trade` Add column `apply_refund_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款时间';"
             );
         }
 

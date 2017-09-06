@@ -58,11 +58,21 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchAll();
     }
 
-    public function countGroupByDate($conditions, $sort)
+    public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
     {
         $conditions = $this->handleConditions($conditions);
         $builder = $this->createQueryBuilder($conditions)
-            ->select("count(id) as count ,from_unixtime(pay_time,'%Y-%m-%d') date")
+            ->select("sum({$column}) as count ,from_unixtime({$dateColumn},'%Y-%m-%d') date")
+            ->groupBy("date {$sort}");
+
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
+    public function countGroupByDate($conditions, $sort, $dateColumn = 'pay_time')
+    {
+        $conditions = $this->handleConditions($conditions);
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(id) as count ,from_unixtime({$dateColumn},'%Y-%m-%d') date")
             ->groupBy("date {$sort}");
 
         return $builder->execute()->fetchAll(0) ?: array();

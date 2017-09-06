@@ -13,8 +13,14 @@ class ClosedStatus extends AbstractStatus
 
     public function process($data = array())
     {
-        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
+        $trade = $this->getPaymentTradeDao()->update($this->paymentTrade['id'], array(
             'status' => ClosedStatus::NAME,
         ));
+        return $this->getAccountService()->releaseCoin($trade['user_id'], $trade['coin_amount']);
+    }
+
+    protected function getAccountService()
+    {
+        return $this->biz->service('Pay:AccountService');
     }
 }
