@@ -24,7 +24,7 @@
               href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
             {% endif %}
           >
-            {% if course.price > 0 %}
+            {% if course.originPrice > 0 %}
               {{ 'course.btn.buy'|trans }}
             {% else %}
               {{ 'course.btn.join'|trans }}
