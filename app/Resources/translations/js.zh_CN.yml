@@ -96,6 +96,7 @@ user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并
 
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+user.settings.basic_info.nickname_change_fail: 用户名修改失败
 
 material.share.teacher_nickname_label: 请输入老师的名称
 
