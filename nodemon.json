@@ -1,14 +1,6 @@
-<<<<<<< HEAD
-=======
 {
   "watch": [
     "webpack.config.js",
-<<<<<<< HEAD
-    "nodemon.json"
-  ]
-}
->>>>>>> master
-=======
     ".webpack-watch.log"
   ],
   "delay": 2500,
@@ -16,4 +8,3 @@
     "restart": "osascript -e 'display notification \"app restarted\" with title \"nodemon\"'"
   }
 }
->>>>>>> 4d9dd540e66572ed0020e9bcd19fad2cc3c4bb05
