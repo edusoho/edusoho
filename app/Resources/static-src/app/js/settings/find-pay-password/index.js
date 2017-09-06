@@ -21,7 +21,6 @@ $('#answer-question-btn').on('click', (event) => {
 
 let messageDanger = $('.alert-danger').text();
 let messageSuccess = $('.alert-success').text();
-console.log(messageSuccess);
 
 if (messageDanger) {
   notify('danger', Translator.trans(messageDanger));
