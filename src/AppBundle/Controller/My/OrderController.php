@@ -67,7 +67,7 @@ class OrderController extends BaseController
                 $conditions['start_time'] = $conditions['end_time'] - 90 * 24 * 3600;
                 break;
         }
-        
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
