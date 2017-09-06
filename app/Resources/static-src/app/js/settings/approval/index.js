@@ -10,7 +10,7 @@ $('#approval-form').validate({
     faceImg: 'required isImage limitSize',
     backImg: 'required isImage limitSize'
   },
-  message: {
+  messages: {
     faceImg: {
       required: Translator.trans('user.fields.idcard_front_placeholder')
     },

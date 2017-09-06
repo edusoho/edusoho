@@ -102,19 +102,19 @@ class SettingsController extends BaseController
             $nickname = $request->request->get('nickname');
 
             if ($this->getSensitiveService()->scanText($nickname)) {
-                $this->setFlashMessage('danger', 'user.settings.basic_info.illegal_nickname');
+                return $this->createJsonResponse(array('message' => 'user.settings.basic_info.illegal_nickname'), 403);
+            }
 
-                return $this->redirect($this->generateUrl('settings'));
+            list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+
+            if ($result !== 'success') {
+                return $this->createJsonResponse(array('message' => $message), 403);
             }
 
             $this->getAuthService()->changeNickname($user['id'], $nickname);
-            $this->setFlashMessage('success', 'user.settings.basic_info.nickname_change_successfully');
 
-            return $this->redirect($this->generateUrl('settings'));
+            return $this->createJsonResponse(array('message' => 'user.settings.basic_info.nickname_change_successfully'));
         }
-
-        return $this->render('settings/nickname.html.twig', array(
-        ));
     }
 
     public function nicknameCheckAction(Request $request)
@@ -211,6 +211,23 @@ class SettingsController extends BaseController
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
         ));
+    }
+
+    //传头像，新的交互
+    public function profileAvatarCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() === 'POST') {
+            $options = $request->request->all();
+            $result = $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
+            $image = $this->getWebExtension()->getFpath($result['largeAvatar']);
+            return $this->createJsonResponse(array(
+                'image' => $image
+            ), 200);
+        }
+
+        return $this->render('settings/profile-avatar-crop-modal.html.twig');
     }
 
     public function avatarFetchPartnerAction(Request $request)
