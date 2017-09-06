@@ -113,6 +113,17 @@ class SystemCrontabInitializer
                 'misfire_policy' => 'executing',
             ));
         }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'UpdateInviteRecordOrderInfoJob', 'source' => self::SOURCE_SYSTEM));
+        if ($count == 0) {
+            self::getSchedulerService()->register(array(
+                'name' => 'UpdateInviteRecordOrderInfoJob',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '0 * * * *',
+                'class' => 'Biz\User\Job\UpdateInviteRecordOrderInfoJob',
+                'args' => array(),
+            ));
+        }
     }
 
     /**
