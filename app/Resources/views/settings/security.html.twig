@@ -82,17 +82,17 @@
       <span class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</span>
       <span class="setting-content">
         {% if hasVerifiedMobile %}
-          {{'site.verify.mobile_finished'|trans}}：{{ verifiedMobile }}
+          {{'site.bind.mobile_finished'|trans}}：{{ verifiedMobile }}
         {% else %}
           {{'user.settings.security.mobile_bind_tips'|trans}}
         {% endif %}
       </span>
       <span class="setting-action">
         {% if hasVerifiedMobile %}
-          <span class="cd-setting-status cd-setting-status-done">{{'site.verify.finished'|trans}}</span>
+          <span class="cd-setting-status cd-setting-status-done">{{'site.bind.finished'|trans}}</span>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
         {% else %}
-          <span class="cd-setting-status">{{'site.verify.unfinished'|trans}}</span>
+          <span class="cd-setting-status">{{'site.bind.unfinished'|trans}}</span>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
         {% endif %}
       </span>

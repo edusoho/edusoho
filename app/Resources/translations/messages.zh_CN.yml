@@ -135,8 +135,10 @@ site.setting.finished: 已设置
 site.setting.unfinished: 未设置
 site.verify.finished: 已验证
 site.verify.unfinished: 未验证
+site.bind.finished: 已绑定
+site.bind.unfinished: 未绑定
 site.setting.email_finished: 已设置邮箱
-site.verify.mobile_finished: 已验证手机
+site.bind.mobile_finished: 已绑定手机
 
 # email 模板
 email.password_reset: >
