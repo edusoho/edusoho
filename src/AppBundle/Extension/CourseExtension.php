@@ -77,7 +77,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'tabs' => array(
                     'tasks' => array(
                         'name' => 'course.tab.tasks',
-                        'content' => 'AppBundle:Course/Course:tasks',
+                        'content' => 'AppBundle:My/Course:tasks',
                     ),
                     'threads' => array(
                         'name' => 'course.tab.threads',

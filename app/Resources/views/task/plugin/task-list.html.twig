@@ -3,9 +3,6 @@
 
 {% block content %}
 
-  {% if course.isDefault %}
-    {% include 'task/plugin/list/free-mode-list.html.twig' %}
-  {% else %}
-    {% include 'task/plugin/list/lock-mode-list.html.twig' %}
-  {% endif %}
+  {% include 'task/plugin/list/content.html.twig' %}
+
 {% endblock %}
