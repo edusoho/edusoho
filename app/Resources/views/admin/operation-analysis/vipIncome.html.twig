@@ -8,8 +8,7 @@
               {% if tab=="trend" %}
 	          <div id="line-data"></div>
 	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'> 
-	          </input><input id="vipIncomeStartDate"  type="hidden" value='{% if vipIncomeStartDate %}{{vipIncomeStartDate}}{% endif %}'> 
-	          </input>
+	          <input id="vipIncomeStartDate"  type="hidden" value='{% if vipIncomeStartDate %}{{vipIncomeStartDate}}{% endif %}'>
               {% elseif tab=="detail" %}
                       {% include 'admin/operation-analysis/vipIncome.table.html.twig' %}
               {% endif %}

@@ -12,23 +12,25 @@
           <tbody>
             {% if courseIncomeDetail %}
             {% for data in courseIncomeDetail %}
-            {% if courses[data.targetId].price|default(null)%}
+            {% if courses[data.course_id].price|default(null)%}
               <tr>
                    <td>{{data.title}}<br>{{'admin.operation_analysis.paid_course.order'|trans}}：{{data.sn}}</td>
-                    <td class="text-danger">{{data.amount}}</td>
-                    <td class="text-danger">{{data.totalPrice}}</td>
-                    <td>{% if  data.coupon %}{{'admin.operation_analysis.income.discount_code'|trans}}<br>[{{data.coupon}}]{% endif %}</td>
-                   <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
-                   <td>{{data.createdTime|date("Y-m-d H:i:s")}}<br>{{data.paidTime|date("Y-m-d H:i:s")}}</td>
+                    <td class="text-danger">{{data.pay_amount}}</td>
+                    <td class="text-danger">{{data.price_amount}}</td>
+                    <td>这里填写优惠信息</td>
+                    {#<td>{% if  data.coupon %}{{'admin.operation_analysis.income.discount_code'|trans}}<br>[{{data.coupon}}]{% endif %}</td>#}
+                   <td> {{ admin_macro.user_link(users[data.user_id]) }}</td>
+                   <td>{{data.created_time|date("Y-m-d H:i:s")}}<br>{{data.pay_time|date("Y-m-d H:i:s")}}</td>
               </tr>
               {% else %}
               <tr class="danger">
                     <td>{{data.title}}({{'admin.operation_analysis.paid_course.empty'|trans}})<br>{{'admin.operation_analysis.paid_course.order'|trans}}：{{data.sn}}</td>
-                    <td class="text-danger">{{data.amount}}</td>
+                    <td class="text-danger">{{data.pay_amount}}</td>
                     <td class="text-danger"> --</td>
-                    <td>{% if  data.coupon %}{{'admin.operation_analysis.income.discount_code'|trans}}<br>[{{data.coupon}}]{% endif %}</td>
-                   <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
-                   <td>{{data.createdTime|date("Y-m-d H:i:s")}}<br>{{data.paidTime|date("Y-m-d H:i:s")}}</td>
+                    <td>这里填写优惠信息</td>
+                {#<td>{% if  data.coupon %}{{'admin.operation_analysis.income.discount_code'|trans}}<br>[{{data.coupon}}]{% endif %}</td>#}
+                   <td> {{ admin_macro.user_link(users[data.user_id]) }}</td>
+                   <td>{{data.pay_time|date("Y-m-d H:i:s")}}<br>{{data.pay_time|date("Y-m-d H:i:s")}}</td>
               </tr>
               {% endif %}
             {% endfor %}
