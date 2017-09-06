@@ -71,6 +71,7 @@ user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不�
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
 
 user.settings.security.pay_password_set.success: 新支付密码设置成功
+user.settings.security.pay_password_find.by_mobile.verify_success: 验证通过，你可以开始更新支付密码。
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 
 user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样
