@@ -36,6 +36,6 @@
     <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
       {{'form.btn.cancel'|trans}}
     </button>
-    <button id="submit-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#setting-email-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+    <button id="submit-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#setting-email-form" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-goto-url="{{path('settings_email_verify_detail')}}">{{'form.btn.submit'|trans}}</button>
   {% endif %}
 {% endblock %}

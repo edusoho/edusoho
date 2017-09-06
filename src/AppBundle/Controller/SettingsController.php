@@ -902,6 +902,11 @@ class SettingsController extends BaseController
         }
     }
 
+    public function emailVerifyDetailAction()
+    {
+        return $this->render('settings/email-verfiy.html.twig');
+    }
+
     public function bindsAction(Request $request)
     {
         $user = $this->getCurrentUser();

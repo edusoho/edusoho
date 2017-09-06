@@ -6,7 +6,10 @@ $('#send-verify-email').click(function() {
 
   $.post($btn.data('url')).done(function(data) {
     notify('success', Translator.trans(data.message));
-    window.location.reload();
+    
+    setTimeout(function() {
+      window.location.reload();
+    }, 3000);
     
   }).fail(function(data) {
     $btn.button('reset');

@@ -1,5 +1,7 @@
 import notify from 'common/notify';
 
+let $btn = $('#submit-btn');
+
 $('#setting-email-form').validate({
   currentDom: '#submit-btn',
   ajax: true,
@@ -8,10 +10,18 @@ $('#setting-email-form').validate({
     'email': 'required es_email'
   },
   submitSuccess(data) {
-    notify('success', Translator.trans(data.message));
+    let url = $btn.data('goto-url');
+
+    $.get(url).done(function(html) {
+      $('#modal').html(html);
+    })
     
-    $('.modal').modal('hide');
-    window.location.reload();
+    // notify('success', Translator.trans(data.message));
+    // $('.modal').modal('hide');
+    
+    // setTimeout(function() {
+    //   window.location.reload();
+    // }, 3000);
   },
   submitError(data) {
     notify('danger',  Translator.trans(data.responseJSON.message));
