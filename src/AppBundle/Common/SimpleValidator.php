@@ -68,7 +68,7 @@ class SimpleValidator
 
     public static function bankCardId($value)
     {
-        return (bool) preg_match('/^(\d{16}|\d{19})$/', $value);
+        return (bool) preg_match('/^(\d{16,19})$/', $value);
     }
 
     public static function mobile($value)

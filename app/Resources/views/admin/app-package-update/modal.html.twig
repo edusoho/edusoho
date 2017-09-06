@@ -9,9 +9,15 @@
 {% block body %}
   <input type="hidden" name="package-type" value="{{ app.request.get('type')|default('') }}">
 
-  <div class="alert alert-warning">
+  {% if setting('developer.debug')  %}
+    <div class="alert alert-danger">
+    {{'admin.cloud.app.upgrades_danger.tips'|trans}}
+    </div>
+  {% else %}
+     <div class="alert alert-warning">
     {{ 'admin.cloud.app.upgrades.tips'|trans }}
   </div>
+  {% endif %}
 
   <table class="table">
     <thead>

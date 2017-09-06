@@ -4,6 +4,10 @@ namespace Biz\CloudPlatform\Service;
 
 interface AppService
 {
+    const CORE_TYPE = 'core';
+    const THEME_TYPE = 'theme';
+    const PLUGIN_TYPE = 'plugin';
+
     public function getAppByCode($code);
 
     public function findApps($start, $limit);

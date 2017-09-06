@@ -64,7 +64,7 @@ class AnnotationExampleDaoTest extends IntegrationTestCase
         $this->assertNull($geted);
 
         $cache = $this->redis->get($this->getPrimaryCacheKey(999));
-        $this->assertNull($cache);
+        $this->assertFalse($cache);
     }
 
     public function testGetByName_HitCache()

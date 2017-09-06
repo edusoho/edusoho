@@ -1,9 +1,11 @@
+import notify from 'common/notify';
+
 let editor = CKEDITOR.replace('profile_about', {
   toolbar: 'Simple',
   filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
 });
 
-$(".date").datetimepicker({
+$(".js-date").datetimepicker({
   autoclose: true,
   format: 'yyyy-mm-dd',
   minView: 'month',
@@ -12,6 +14,17 @@ $(".date").datetimepicker({
 
 $("#user-profile-form").validate({
   rules: {
+    'nickname': {
+			required: true,
+			chinese_alphanumeric: true,
+			byte_minlength: 4,
+			byte_maxlength: 18,
+			nickname: true,
+			chinese_alphanumeric: true,
+			es_remote: {
+				type: 'get',
+			}
+		},
     'profile[truename]': {
       minlength: 2,
       maxlength: 18
@@ -41,4 +54,22 @@ $("#user-profile-form").validate({
     'profile[dateField5]': 'date',
     'profile[dateField5]': 'date'
   }
+});
+
+$('#form-nickname-submit').on('click', function() {
+  let $this = $(this);
+  let url = $this.data('url');
+  let nickname = $('#nickname').val();
+  let data = {
+    nickname: nickname
+  };
+
+  $.post(url, data).done(function(data) {
+    notify('success', Translator.trans(data.message));
+    $this.closest('.cd-form-group').find('[data-target="form-static-text"] span').text(nickname);
+    $this.siblings('[data-dismiss="form-editable-close"]').click();
+
+  }).fail(function(data) {
+    notify('danger', Translator.trans(data.responseJSON.message));
+  })
 })

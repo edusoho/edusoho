@@ -10,22 +10,20 @@
     window.open(picUrl);
   });
 
-  $(document).on('change.cd.file.review', '[data-toggle="file-review"]', function() {
-    let fr = new FileReader();
+  $(document).on('click.cd.form.editable', '[data-toggle="form-editable"]', function() {
     let $this = $(this);
-    let target = $this.data('target');
-    let $target = $(target);
+    let parent = $this.closest('[data-target="form-static-text"]');
+    let $formGroup = $this.closest('.cd-form-group');
+    parent.hide();
+    $formGroup.find('[data-target="form-editable"]').show().find('input').focus().select();
+  });
 
-    fr.onload = function(e) {
-      let src = e.target.result;
-      $target.css('background-image', `url(${src})`);
-      
-      let html = '<div class="mask"></div>';
-
-      $target.addClass('done').append(html);
-    }
-
-    fr.readAsDataURL(this.files[0]);
+  $(document).on('click.cd.form.editable.close', '[data-dismiss="form-editable-close"]', function() {
+    let $this = $(this);
+    let parent = $this.closest('[data-target="form-editable"]');
+    let $formGroup = $this.closest('.cd-form-group');
+    parent.hide();
+    $formGroup.find('[data-target="form-static-text"]').show();
   });
 
 })(jQuery);
