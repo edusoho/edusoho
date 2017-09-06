@@ -8,6 +8,11 @@
   {% endif %}
   <script src="{{ cdnUrl }}/js-sdk/sdk-v1.js"></script>
   {% do script(['app/js/material-lib/global-document-player/index.js']) %}
-  <div class="iframe-parent-content" id="global-player" data-res-no="{{ globalId }}" data-token="{{ token }}" ></div>
+  <div class="iframe-parent-content" id="global-player"
+       data-res-no="{{ globalId }}"
+       data-token="{{ token }}"
+       data-user-id="{{app.user.id|default(0)}}"
+       data-user-name="{{app.user.username|default('')}}"
+  ></div>
 {% endblock %}
 

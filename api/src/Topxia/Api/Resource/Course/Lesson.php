@@ -136,7 +136,6 @@ class Lesson extends BaseResource
         $resourceUrl = ($ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/global_file/{$file['globalId']}/player?token={$result['token']}";
 
         $lesson['content'] = array(
-//            'previewUrl' => ($ssl ? 'https://' : 'http://').'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
             'resource' => $resourceUrl,
             'previewUrl' => $resourceUrl,
         );
