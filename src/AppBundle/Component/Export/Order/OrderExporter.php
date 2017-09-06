@@ -55,7 +55,6 @@ class OrderExporter extends Exporter
             $conditions['end_time'] = strtotime($conditions['startDateTime']);
         }
 
-
         return $conditions;
     }
 
