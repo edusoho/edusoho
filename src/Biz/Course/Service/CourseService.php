@@ -78,6 +78,7 @@ interface CourseService
     /**
      * @param $courseId
      * @param array $paging array('direction' => 'up or down', 'offsetSeq' => '0', 'limit' => 10)
+     *
      * @return mixed
      */
     public function findCourseItemsByPaging($courseId, $paging = array());
