@@ -12,8 +12,8 @@ class UpdateInviteRecordOrderInfoJob extends AbstractJob
         $count = $this->getInviteRecordService()->countRecords($conditions);
         $pageCount = 200;
         $page = ceil($count / $pageCount);
-        for ($i = 0; $i < $page; $i++) {
-            $this->getInviteRecordService()->flushOrderInfo($conditions, $i * $pageCount, ($i+1) * $pageCount);
+        for ($i = 0; $i < $page; ++$i) {
+            $this->getInviteRecordService()->flushOrderInfo($conditions, $i * $pageCount, ($i + 1) * $pageCount);
         }
     }
 
