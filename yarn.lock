@@ -1876,11 +1876,7 @@ es-to-primitive@^1.1.1:
 
 es-webpack-engine@~3.4.5:
   version "3.4.5"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/es-webpack-engine/-/es-webpack-engine-3.4.5.tgz#7aee5878f54d253d73e789b39efefe83a67452a5"
-=======
   resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.4.5.tgz#7aee5878f54d253d73e789b39efefe83a67452a5"
->>>>>>> 1e0a049bf0e5fdfacc2a41c5bd4e982fb0f63e72
   dependencies:
     babel-cli "6.18.0"
     babel-core "6.8.0"
