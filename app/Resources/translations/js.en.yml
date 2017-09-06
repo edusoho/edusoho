@@ -52,7 +52,13 @@ site.audio.quality.high: High Definition
 site.service_error_hint: Server Error!
 site.form.submit_error: Form submit error
 
+site.cancel: Cancel
+site.confirm: Confirm
 site.response_error: Response error
+site.loading: loading...
+site.loading_error: loading error...
+site.collect_cuccess_hint: Collect cuccess
+site.uncollect_cuccess_hint: Cancel to collect success
 
 admin.site.cloude_sms_enable_hint: Open cloud SMS first
 
@@ -64,6 +70,10 @@ user.card_load_hint: User card loading
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully
 
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
+
 user.settings.security.pay_password_set.success: New pay password had set successfully
 user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
 
@@ -72,7 +82,11 @@ user.settings.email.new_email_not_unique: The email is not unique, change it.
 user.settings.email.send_error: Eamil send fail, please contact system administrator.
 user.settings.email.send_success: Please verify your email address. We’ve sent a confirmation email to:<strong>%email%</strong><br>Click the confirmation link in that email to finish.
 
-material.share.teacher_nickname_label: teacher nickname
+user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
+user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
+
+material.share.teacher_nickname_label: Please input teacher nickname
+
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
@@ -172,6 +186,7 @@ Site.delete_fail_hint: Delete failed
 Site.upload_success_hint: Uploaded successfully
 Site.upload_fail_retry_hint: Upload failed, please try again
 Site.save_success_hint: Saved successfully
+Site.save_error_hint: Saved failed
 Site.searching_hint: Search ...
 Site.search_hint: Search
 Site.choose_gender_hint: Please select gender
@@ -450,6 +465,23 @@ course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
 
+material_lib.content_title: Teaching Lib
+material_lib.detail.content_title: Resource detail
+material_lib.have_no_permission_hint: Sorry, you have no permission
+meterial_lib.select_resource_delete_hint: Please select you want to delete the resource
+meterial_lib.confirm_share_resource_hint: Sure you want to share this resource
+meterial_lib.confirm_unshare_resource_hint: Sure you want to cancel the share the resource
+meterial_lib.select_resource_operate_hint: Please select your resource to operate 
+meterial_lib.select_share_resource_hint: Please select you want to share resource
+meterial_lib.unshare_resource_success_hint: Cancel the share resource of success
+meterial_lib.share_resource_success_hint: Share resource success
+meterial_lib.share_resource_erroe_hint: Share resource error
+meterial_lib.delete_resource_success_hint: Delete resource success
+meterial_lib.generate_screenshots_success_hint: Generate screenshots success
+meterial_lib.generate_screenshots_error_hint: Generate screenshots error
+meterial_lib.batch_manage: Manage
+meterial_lib.complete_manage: Complete manage
+
 course.marking_hint: Please score
 course.marking_one_star: Poor
 course.marking_two_star: Not good
@@ -500,7 +532,9 @@ group.post.reply_fail_hint: Posted reply failed, please try again
 cny: CNY
 pay.security.password.save_fail_hint: The payment password setting failed
 
+user.account.refund_cancel_title: Cancel refund application
 user.account.refund_cancel_hint: Do you really want to cancel your refund application?
+user.account.cancel_order_title: Cancel order
 user.account.cancel_order_hint: Do you want to cancel the order?
 user.account.refund_cancel_success_hint: The refund application has been canceled!
 user.account.cancel_order_fail_hint: Order Cancel Failed!
@@ -638,6 +672,9 @@ validate.email_or_mobile_check.message: Do not allow 11-bit pure numbers beginni
 validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
+validate.tag_required_hint: Please input tags
+
+
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
 page.file_converting.message: Converting in file format
@@ -694,7 +731,7 @@ validate_old.valid_email_input.message: %display% is not formatted correctly
 validate_old.valid_url_input.message: %display% is not formatted correctly
 validate_pld.valid_number_input.message: %display% is not formatted correctly
 validate_old.valid_date_input.message: %display% is not formatted correctly
-validate_pld.max.message: %display% must be greater than or equal to %max%
+validate_old.max.message: %display% must be greater than or equal to %max%
 validate_old.min.message: %display% must be less than or equal to %min%
 validate_old.max_length.message: %display% must be less than or equal to %max%
 validate_old.min_length.message: %display% must be greater than or equal to %min%

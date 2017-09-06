@@ -327,6 +327,7 @@ form.btn.save_and_continue_add: 保存并继续添加
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
+form.btn.bind_account: 绑定账号
 form.btn.search: 搜索
 form.btn.use: 使用
 form.btn.reply: 发表
@@ -397,7 +398,9 @@ form.input_mobile: 输入手机号码
 
 #财务通用
 finance.income: 收入
+finance.total_income: 总计收入
 finance.expense: 支出
+finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
@@ -410,7 +413,7 @@ finance.max_can_use_coin: 最大可用%coinName%
 
 #插件
 vip: 会员
-plugin.charge_coin.recharge: 充 值
+plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
@@ -456,7 +459,7 @@ order.status.paid: 已付款
 order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
-order.real_pay: 实付(元)
+order.real_pay: 实付金额
 order.buyers: 购买者
 order.id: 订单号
 order.token_id: 商户订单号
@@ -885,7 +888,7 @@ course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划首次发布后“学习有效期”不能再修改。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；管理员在后台关闭课程后，可以修改日期。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
@@ -2435,6 +2438,7 @@ classroom.expiry_mode_end_date: 截止日期
 classroom.expiry_mode_days: 有效期天数
 classroom.expiry_mode_forever: 永久有效
 classroom.edit_expiry_mode: 修改学员有效期
+classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
 classroom.not_edit: 班级不能修改
 classroom.publish_tips: 有效期，请班级发布后再增加。
 classroom.title_label: 班级标题
@@ -2775,6 +2779,9 @@ user.settings.avatar: >
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
 user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机。
+user.settings.profile.change_avatar: 修改头像
+user.settings.profile.choose_again: 重新选择
+user.settings.profile.save_avatar: 保存头像
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -2785,7 +2792,7 @@ user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址�
 user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
-user.settings.security.get_sms_code_btn: 短信验证
+user.settings.security.get_sms_code_btn: 获取验证码
 user.settings.security.input_sms_code: 填写你的短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
@@ -2795,6 +2802,7 @@ user.settings.security.content_title: 安全设置
 user.settings.security.reset_pay_password: 重设支付密码
 user.settings.security.reset_pay_password_success: 重设支付密码成功
 user.settings.security.set_pay_password_success: 新支付密码设置成功。
+user.settings.security.set_pay_password_success.closed_automatically: 5秒后该页面自动关闭
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
@@ -2802,12 +2810,13 @@ user.settings.security.level: 安全等级
 user.settings.security.high_level: 高
 user.settings.security.middle_level: 中
 user.settings.security.low_level: 低
-user.settings.security.login_password_tips: 登录网校时需要输入的密码
-user.settings.security.pay_password_tips: 在网校进行消费行为时需要输入的密码
+user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
+user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强帐户安全性
 user.settings.security.questions: 安全问题
-user.settings.security.questions_tips: 通过设置并且验证安全问题，保护帐号密码安全
+user.settings.security.questions_tips: 设置安全问题，保护账号密码安全，也可用于找回支付密码
 user.settings.security.mobile_bind: 手机绑定
-user.settings.security.mobile_bind_tips: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
+user.settings.security.mobile_bind_tips: 增加登录、支付时的安全性，同时还可用于找回登录密码和支付密码
+user.settings.security.email_setting_tips: 可用于找回登录密码
 user.settings.security.password_modify: 密码修改
 user.settings.security.password_modify.content_title: 安全设置
 user.settings.security.password_modify.bread_crumbs: >
@@ -2934,10 +2943,17 @@ user.settings.verification.photo_require: 照片要求
 user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png、bmp，每张图片文件大小不能超过2M
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
-user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
-user.settings.verification.approved_tips: 恭喜您，已通过实名认证！
-user.settings.verification.unapprove_tips: 您尚未实名认证
-user.settings.verification.approve_failed_tips: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
+
+user.settings.verification.approving_title_tips: 认证审核中
+user.settings.verification.approving_content_tips: 您的信息正在审核中，请耐心等待
+user.settings.verification.approved_title_tips: 您已经通过实名认证
+user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
+
+user.settings.verification.unapprove_tips: 实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务
+user.settings.verification.approve_failed_tips: 审核未通过，请重新上传身份证图片并保证画面清晰。
+
+user.settings.verification.notice: 认证须知
+user.settings.verification.notice_content: "<p>1、我们将在你提交身份证信息后的 5 个工作日（不包含节假日）内完成审核，审核结果将会以短信和系统通知的形式发送给你；<br> 2、如若账号还未绑定手机，建议你提前绑定手机；<br> 3、实名认证审核完成后，将无法修改和删除，请谨慎填写；<br> 4、你需要准备身份证照片（需正反两面），请确保证件照片清晰可见，严禁 PS，具体可参考实名认证常见问题。</p>"
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
@@ -3002,10 +3018,13 @@ user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值
 user.account.my_bill: 我的现金账单
-user.account.my_invite_code: 邀请码
+user.account.invite_code: 邀请码
+user.account.my_invite_code: 我的邀请码
 user.account.my_invite_code.invite: 邀请好友
+user.account.my_invite_code.invited: 已邀请好友
 user.account.my_invite_code.invite.modal_title: 分享邀请链接
-user.account.my_invite_code.invite.copy_btn: 复制到剪贴板
+user.account.my_invite_code.invite.copy_btn: 复制邀请链接
+user.account.my_invite_code.has_received_coupons: 已获得优惠券
 
 user.account.other_invite_code: TA的邀请码
 user.account.other_invite_code.modal_title: 填写TA的邀请码
@@ -3014,7 +3033,7 @@ user.account.other_invite_code.invite_code: TA的邀请码
 user.account.other_invite_code.reward_after_custom_tips: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
 user.account.other_invite_code.reward_tips: 填写TA的邀请码，TA会获得邀请奖励。
 
-user.account.my_invite_code.no_reward_tips: 给TA分享您的邀请码或者邀请链接。
+user.account.my_invite_code.no_reward_tips: 分享你的邀请码或者邀请链接。
 user.account.my_invite_code.reward_after_consume_tips: TA在消费后您将获得%promote_user_value%元优惠券。
 user.account.my_invite_code.reward_after_register_tips: TA注册后将获得%promoted_user_value%元优惠券。
 user.account.my_invite_code.reward_after_register_reward_tips: 同时您将获得%promote_user_value%元优惠券。
@@ -3030,6 +3049,7 @@ user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
 user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
+user.orders.refunding_status: 退款中
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
 user.orders.target_course: 所属课程
@@ -3049,6 +3069,7 @@ user.orders.refund_apply_time: 退款申请时间
 user.orders.refund_status: 退款状态
 user.orders.refund_id: 订单号：%sn%
 user.orders.refund_empty: 没有退款记录
+user.orders.placeholder_order_name: 输入订单名称搜索
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包
@@ -4074,6 +4095,8 @@ my.learning.course.learning_empty: 暂无学习中的课程
 my.learning.course.lesson_num: 第%num%课时
 my.learning.course.total_learn_time: 学习总时长
 my.learning.course.watch: 查看课程
+my.learning.course.click_loading_more: 点击加载更多
+my.learning.course.loading: 加载中...
 
 # 我的直播
 my.learning.live: 我的直播
@@ -7473,6 +7496,7 @@ admin.cloud.app.upgrades.upgrade: 升级
 admin.cloud.app.upgrades.install: 安装
 admin.cloud.app.upgrades.app: 应用
 admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
 admin.cloud.app.upgrades.app_name: 应用名称
 admin.cloud.app.upgrades.app_version: 应用名称
 admin.cloud.app.upgrades.backupDB: 备份数据库
@@ -7867,3 +7891,179 @@ join.time: 加入时间
 
 register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 
+log.module.user: 用户
+log.module.course: 课程
+log.module.classroom: 班级
+log.module.group: 小组话题
+log.module.upload_file: 文件
+log.module.order: 订单
+log.module.article: 资讯
+log.module.category: 栏目
+log.module.content: 资讯内容
+log.module.notify: 通知
+log.module.sms: 短信
+log.module.tag: 标签
+log.module.system: 系统设置
+log.module.crontab: 定时任务
+log.module.marker: 驻点
+log.module.vip: 会员
+log.module.coin: 虚拟币
+log.module.coupon: 优惠码
+log.module.money_card: 学习卡
+log.module.discount: 打折活动
+log.module.exercise: 练习
+log.module.homework: 作业
+log.module.question_plus: 题库增强版
+log.module.announcement: 公告
+log.module.open_course: 公开课
+
+log.action.course.create: 创建课程
+log.action.course.update: 修改课程
+log.action.course.update_picture: 更新课程图片
+log.action.course.publish: 发布课程
+log.action.course.close: 关闭课程
+log.action.course.delete: 删除课程
+log.action.course.add_task: 添加学习任务
+log.action.course.update_task: 更新学习任务
+log.action.course.delete_task: 删除学习任务
+log.action.course.add_student: 添加课程学员
+log.action.course.remove_student: 移除课程学员
+log.action.course.update_teacher: 更新课程教师
+log.action.course.cancel_teachers_all: 取消用户的教师身份
+log.action.course.delete_taskLearn: 删除任务学习记录
+log.action.course.delete_chapter: 删除章节
+log.action.course.delete_favorite: 删除收藏
+log.action.course.delete_note: 删除笔记
+log.action.course.delete_thread: 删除话题
+log.action.course.delete_review: 删除评价
+log.action.course.delete_announcement: 删除公告
+log.action.course.delete_status: 删除动态
+log.action.course.recommend: 课程推荐
+log.action.course.cancel_recommend: 取消课程推荐
+log.action.course.delete_material: 移除资料
+log.action.course.add_testpaper: 新增试卷
+log.action.course.publish_testpaper: 发布试卷
+log.action.course.close_testpaper: 关闭试卷
+log.action.course.delete_testpaper: 删除试卷
+log.action.course.add_question: 新增题目
+log.action.course.delete_question: 删除题目
+log.action.course.refresh_learning_progress: 刷新学习进度
+log.action.course.sync_when_task_create: 同步创建任务
+log.action.course.sync_when_task_update: 同步更新任务
+log.action.course.sync_when_task_delete: 同步删除任务
+log.action.course.clone_course_set: 复制课程
+log.action.user.exportCsv: 导出
+log.action.user.add: 新增
+log.action.user.edit: 修改
+log.action.user.send_email_verify: 邮箱验证
+log.action.user.nickname_change: 修改昵称
+log.action.user.password-changed: 重置密码
+log.action.user.pay-password-changed: 重置支付密码
+log.action.user.verifiedMobile-changed: 重置手机
+log.action.user.change_role: 修改角色
+log.action.user.unbind: 解绑用户
+log.action.user.login_success: 登录成功
+log.action.user.login_fail: 登录失败
+log.action.user.lock: 禁封用户
+log.action.user.unlock: 解禁用户
+log.action.user.recommend: 推荐用户
+log.action.user.cancel_recommend: 取消推荐用户
+log.action.user.approved: 实名认证成功
+log.action.user.approval_fail: 实名认证失败
+log.action.user.password-reset: 重置密码邮件发送
+log.action.system.email_send_check: 邮件自检
+log.action.system.setting_email_change: 更变邮箱
+log.action.system.setting_email-verify: 邮箱验证
+log.action.system.update_settings: 更新设置
+log.action.system.questions_settings: 题库设置
+log.action.system.customerServiceSetting: 客服管理
+log.action.system.setting_userCenter: 用户中心设置
+log.action.system.update_block: 更新编辑区
+log.action.system.update_app_version: 更新版本
+log.action.classroom.create: 新增班级
+log.action.classroom.delete: 删除班级
+log.action.classroom.add_course: 添加课程
+log.action.classroom.add_student: 添加学员
+log.action.classroom.delete_course: 移除课程
+log.action.classroom.delete_review: 删除评价
+log.action.classroom.delete_thread: 删除话题
+log.action.classroom.update_picture: 更新图片
+log.action.classroom.remove_student: 移除学员
+log.action.classroom.recommend: 推荐班级
+log.action.classroom.cancel_recommend: 取消推荐
+log.action.article.update_settings: 更新设置
+log.action.article.create: 新增
+log.action.article.update: 修改
+log.action.article.update_property: 更新属性
+log.action.article.cancel_property: 取消属性
+log.action.article.trash: 移动到回收站
+log.action.article.removeThumb: 移除图片
+log.action.article.delete: 删除
+log.action.article.publish: 发布
+log.action.article.unpublish: 取消发布
+log.action.notify.create: 创建
+log.action.notify.check_fail: 检测
+log.action.order.pay_result: 支付结果
+log.action.order.andit_refund: 退款审核
+log.action.order.refund_cancel: 取消退款
+log.action.order.unbind-back: 解绑银行卡
+log.action.category.create: 新增
+log.action.category.update: 修改
+log.action.category.delete: 删除
+log.action.content.create: 新增
+log.action.content.update: 修改
+log.action.content.trash: 移动到回收站
+log.action.content.delete: 删除
+log.action.content.publish: 发布
+log.action.crontab.job_start: 开始任务
+log.action.crontab.job_end: 结束任务
+log.action.upload_file.create: 新增文件
+log.action.upload_file.delete: 删除文件
+log.action.upload_file.download: 下载文件
+log.action.upload_file.cloud_convert_callback: 回调处理
+log.action.upload_file.cloud_convert_error: 转码失败
+log.action.marker.create: 增加驻点
+log.action.marker.delete: 删除驻点
+log.action.marker.mediaId_notExist: 视频不存在
+log.action.marker.delete_question: 删除驻点问题
+log.action.group.create_thread: 新增话题
+log.action.group.delete_thread: 删除话题
+log.action.group.close_thread: 关闭话题
+log.action.group.open_thread: 开启话题
+log.action.sms.sms_forget_password: 登录密码重置
+log.action.sms.sms_user_pay: 使用网站余额支付
+log.action.sms.sms_forget_pay_password: 支付密码重置
+log.action.sms.sms_bind: 手机绑定
+log.action.sms.sms_classroom_publish: 新班级发布
+log.action.sms.sms_course_publish: 新课程发布
+log.action.sms.sms_normal_lesson_publish: 学习任务发布通知（普通课程）
+log.action.sms.sms_live_lesson_publish: 学习任务发布通知（直播）
+log.action.sms.sms_live_play_one_day: 直播开播前通知（提前1天）
+log.action.sms.sms_live_play_one_hour: 直播开播前通知（提前1小时）
+log.action.sms.sms_homework_check: 作业完成批阅
+log.action.sms.sms_testpaper_check: 试卷完成批阅
+log.action.sms.sms_course_buy_notify: 课程购买
+log.action.sms.sms_classroom_buy_notify: 班级购买
+log.action.sms.sms_vip_buy_notify: 会员购买
+log.action.sms.sms_coin_buy_notify: 虚拟币充值
+log.action.tag.create: 新增
+log.action.tag.update: 修改
+log.action.tag.delete: 删除
+log.action.coin.update_settings: 设置
+log.action.coin.add_coin: 增加
+log.action.coin.deduct_coin: 扣除
+log.action.announcement.delete: 删除公告
+log.action.open_course.create_course: 创建公开课
+log.action.open_course.update_course: 更新公开课
+log.action.open_course.delete_course: 删除课程
+log.action.open_course.pulish_course: 发布公开课
+log.action.open_course.close_course: 关闭公开课
+log.action.open_course.update_picture: 更新公开课图片
+log.action.open_course.add_lesson: 添加公开课课时
+log.action.open_course.update_lesson: 更新公开课课时
+log.action.open_course.delete_lesson: 删除课时
+log.action.open_course.delete_member: 删除学员
+log.action.open_course.add_material: 新增资料
+log.action.open_course.delete_material: 移除资料
+log.action.open_course.update_teacher: 更新公开课教师
+log.action.open_course.delete_recommend_course: 删除推荐课程

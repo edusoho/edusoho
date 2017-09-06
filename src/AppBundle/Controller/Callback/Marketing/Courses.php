@@ -44,8 +44,9 @@ class Courses extends MarketingBase
             $conditions,
             array('updatedTime' => 'desc'),
             0,
-            5
+            100
         );
+
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
@@ -64,6 +65,9 @@ class Courses extends MarketingBase
             }
             $result['title'] = $this->fillName($course, $courseSet);
             $results[] = $result;
+            if (count($results) >= 5) {
+                break;
+            }
         }
 
         return $results;

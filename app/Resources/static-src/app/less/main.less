@@ -7,7 +7,7 @@
 
 
 // 变量
-@import '~libs/less/variable.less';
+@import '~common/variable.less';
 @img-src: "/static-dist/app/img/";
 
 // 图标
@@ -15,6 +15,9 @@
 
 // 临时文件，存放老的样式，随时会删除
 @import "temp/index.less";
+
+// 重置复写组件
+@import "reset/index.less";
 
 // 共通
 @import "common/common.less";
@@ -75,6 +78,7 @@
 @import "component/es-step.less";       // 步骤进度
 @import "component/search-with-btn.less"; // 步骤进度
 @import "component/tabs-wrapper.less";
+@import "component/uploader.less";
 
 @import 'component/load-animation.less';
 @import 'component/color-lump.less';

@@ -1061,7 +1061,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about']);
+            $currentUser = $this->biz['user'];
+            $trusted = $currentUser->isAdmin();
+            $fields['about'] = $this->purifyHtml($fields['about'], $trusted);
         }
 
         if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {

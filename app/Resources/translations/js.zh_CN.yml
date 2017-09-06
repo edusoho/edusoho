@@ -9,6 +9,7 @@ site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
 site.upload_fail_retry_hint: 上传失败,请重试
 site.save_success_hint: 保存成功
+site.save_error_hint: 保存失败
 site.searching_hint: 搜索中...
 site.search_hint: 搜索
 site.choose_gender_hint: 请选择性别
@@ -37,6 +38,8 @@ site.video.quality.quota: 画质
 site.video.quality.low: 流畅 
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
+site.cancel: 取消
+site.confirm: 确定
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -59,6 +62,12 @@ site.service_error_hint: 服务器错误!
 site.form.submit_error: 表单提交失败
 site.response_error: 请求出错
 
+site.loading: 加载中...
+site.loading_error: 加载出错...
+site.collect_cuccess_hint: 收藏成功
+site.uncollect_cuccess_hint: 取消收藏成功
+
+
 admin.site.cloude_sms_enable_hint: 请先开启云短信
 
 user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机号)
@@ -78,8 +87,11 @@ user.settings.security.questions.set.success: 安全问题设置成功
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
 
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
+
 user.settings.security.pay_password_set.success: 新支付密码设置成功
-user.settings.security.pay_password_find.by_mobile.verify_success: 验证通过，你可以开始更新支付密码。
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 
 user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样
@@ -87,7 +99,11 @@ user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一�
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员
 user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
 
-material.share.teacher_nickname_label: 老师的名称
+user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
+user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+
+material.share.teacher_nickname_label: 请输入老师的名称
+
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -290,7 +306,7 @@ classroom.sign_rank_hint: 于%time%签到,第%rank%个签到.
 
 coin.invite_code_required_error_hint: 请输入邀请码
 coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字母组成
-coin.invite_url_copy_success_hint: 链接复制成功
+coin.invite_url_copy_success_hint: 已复制邀请链接到剪切板，快去分享吧！
 
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
@@ -390,6 +406,24 @@ course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
 
+material_lib.content_title: 教学资料库
+material_lib.detail.content_title: 资源详情
+material_lib.have_no_permission_hint: 抱歉，您无权操作此文件
+meterial_lib.select_resource_delete_hint: 请先选择你要删除的资源
+meterial_lib.confirm_share_resource_hint: 确定要分享这些资源吗？
+meterial_lib.confirm_unshare_resource_hint: 确定要取消分享这个资源吗？
+meterial_lib.select_resource_operate_hint: 请先选择你要操作的资源
+meterial_lib.select_share_resource_hint: 请先选择你要分享的资源
+meterial_lib.unshare_resource_success_hint: 取消分享资源成功
+meterial_lib.share_resource_success_hint: 分享资源成功
+meterial_lib.share_resource_erroe_hint: 分享资源失败
+meterial_lib.delete_resource_success_hint: 删除资源成功
+meterial_lib.generate_screenshots_success_hint: 生成截图成功
+meterial_lib.generate_screenshots_error_hint: 生成截图失败
+meterial_lib.batch_manage: 批量管理
+meterial_lib.complete_manage: 完成管理
+
+
 course.marking_hint: 请打分
 course.marking_one_star: 很差
 course.marking_two_star: 较差
@@ -440,7 +474,9 @@ group.post.reply_fail_hint: 发表回复失败，请重试
 cny: 元
 pay.security.password.save_fail_hint: 支付密码设置失败
 
+user.account.refund_cancel_title: 取消退款
 user.account.refund_cancel_hint: 真的要取消退款吗？
+user.account.cancel_order_title: 取消订单
 user.account.cancel_order_hint: 真的要取消订单吗？
 user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
@@ -573,6 +609,7 @@ validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 
 validate.choose_item.message: 请选择%display%
+validate.tag_required_hint: 请输入标签
 
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
@@ -635,8 +672,8 @@ validate_old.valid_email_input.message: %display%的格式不正确
 validate_old.valid_url_input.message: %display%的格式不正确
 validate_pld.valid_number_input.message: %display%的格式不正确
 validate_old.valid_date_input.message: %display%的格式不正确
-validate_pld.max.message: %display%必须大于或者等于%max%
-validate_old.min.message: %display%必须小于或者等于%min%
+validate_old.max.message: %display%必须小于或者等于%max%
+validate_old.min.message: %display%必须大于或者等于%min%
 validate_old.max_length.message: %display%的长度必须小于或等于%max%
 validate_old.min_length.message: %display%的长度必须大于或等于%min%
 validate_old.mobile.message: 手机号码格式有误

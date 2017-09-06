@@ -6,7 +6,7 @@
 {% block body %}
 
   <p>
-    <span>{{'finance.balance'|trans}}: <strong class="amount-num">{{userAccount(user.id).cash}}</strong> {{ setting('coin.coin_name') }}</span>
+    <span>{{'finance.balance'|trans}}: <strong class="amount-num">{{user_account(user.id).cash}}</strong> {{ setting('coin.coin_name') }}</span>
     <span class="mll">{{'coin.recharge'|trans}}: <strong class="inflow-num">{{userInCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
     <span class="mll">{{'coin.consume'|trans}}: <strong class="outflow-num">{{userOutCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
   </p>

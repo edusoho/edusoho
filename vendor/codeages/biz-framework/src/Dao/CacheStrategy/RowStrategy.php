@@ -56,6 +56,9 @@ class RowStrategy implements CacheStrategy
 
     public function afterQuery(GeneralDaoInterface $dao, $method, $arguments, $data)
     {
+        if (empty($data)) {
+            return ;
+        }
         if (strpos($method, 'get') !== 0) {
             return;
         }
