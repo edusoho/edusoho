@@ -93,24 +93,19 @@ class CashierController extends BaseController
 
         return $this->forward("AppBundle:Cashier/Cashier:{$type}Success", array(
             'request' => $request,
+            'trade' => $trade
         ));
     }
 
-    public function rechargeSuccessAction(Request $request)
+    public function rechargeSuccessAction(Request $request, $trade)
     {
-        $tradeSn = $request->query->get('trade_sn');
-        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-
         return $this->render('cashier/success.html.twig', array(
             'goto' => $this->generateUrl('my_coin'),
         ));
     }
 
-    public function purchaseSuccessAction(Request $request)
+    public function purchaseSuccessAction(Request $request, $trade)
     {
-        $tradeSn = $request->query->get('trade_sn');
-        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-
         $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
 
         $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
