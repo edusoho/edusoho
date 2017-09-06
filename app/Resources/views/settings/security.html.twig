@@ -39,10 +39,15 @@
     <span class="setting-action">
       {% if hasLoginPassword %}
         <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
+          {{'form.btn.modify'|trans}}
+        </button>
       {% else %}
         <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
+          {{'form.btn.set'|trans}}
+        </button>
       {% endif %}
-      <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
     </span>
   </div>
 
@@ -53,7 +58,7 @@
     <span class="setting-action">
       {% if hasPayPassword %}
         <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.reset'|trans}}</button>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
       {% else %}
         <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
