@@ -9,6 +9,7 @@ use AppBundle\Common\StringToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,7 @@ class OrderController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $conditions['targetType'] = $targetType;
+        $conditions['order_item_target_type'] = $targetType;
 
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
@@ -31,8 +32,8 @@ class OrderController extends BaseController
         $conditions = $this->prepareConditions($conditions);
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']);
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+            $conditions['end_time'] = strtotime($conditions['endDateTime']);
         }
 
         $paginator = new Paginator(
@@ -40,21 +41,36 @@ class OrderController extends BaseController
             $this->getOrderService()->countOrders($conditions),
             20
         );
+
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderSns = ArrayToolkit::column($orders, 'sn');
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
+        $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
+
+        foreach ($orders as &$order) {
+            $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
+            $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
+        }
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time(
+            if ((($expiredOrderToBeUpdated['created_time'] + 48 * 60 * 60) < time(
                     )) && ($expiredOrderToBeUpdated['status'] == 'created')
             ) {
-                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-                $orders[$index]['status'] = 'cancelled';
+//                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+//                $orders[$index]['status'] = 'cancelled';
             }
         }
 
@@ -72,18 +88,30 @@ class OrderController extends BaseController
 
     protected function prepareConditions($conditions)
     {
-        if ($conditions['targetType'] != 'course') {
+        if ($conditions['order_item_target_type'] != 'course') {
             return $conditions;
         }
         if (isset($conditions['courseSetTitle'])) {
-            $conditions['title'] = $conditions['courseSetTitle'];
+            $conditions['order_item_title'] = $conditions['courseSetTitle'];
         }
 
         if (!empty($conditions['courseSetId'])) {
             $courses = $this->getCourseService()->findCoursesByCourseSetId($conditions['courseSetId']);
             $courseIds = ArrayToolkit::column($courses, 'courseSetId');
-            $conditions['targetIds'] = empty($courseIds) ? array(-1) : $courseIds;
+            $conditions['order_item_target_ids'] = empty($courseIds) ? array(-1) : $courseIds;
             unset($conditions['targetId']);
+        }
+        if (isset($conditions['buyer'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['mobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['email'])) {
+            $user = $this->getUserService()->getUserByEmail($conditions['email']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
         }
 
         return $conditions;
@@ -273,7 +301,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return OrderService
+     * @return \Codeages\Biz\Framework\Order\Service\OrderService
      */
     protected function getOrderService()
     {
@@ -392,5 +420,13 @@ class OrderController extends BaseController
     protected function getCashOrdersService()
     {
         return $this->createService('Cash:CashOrdersService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

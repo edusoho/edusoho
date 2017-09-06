@@ -11,6 +11,7 @@ use Biz\Order\Service\OrderFacadeService;
 use Biz\Order\Service\OrderService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -125,9 +126,14 @@ class OrderController extends BaseController
         $order = $this->getOrderService()->getOrder($id);
 
         preg_match('/管理员添加/', $order['title'], $order['edit']);
-        $user = $this->getUserService()->getUser($order['userId']);
+        $user = $this->getUserService()->getUser($order['user_id']);
 
-        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
+        $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($order['id']);
+
+        //orderItem和order的对应关系不是一对一，所以这里会有问题
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
@@ -135,6 +141,8 @@ class OrderController extends BaseController
             'order' => $order,
             'user' => $user,
             'orderLogs' => $orderLogs,
+            'orderItems' => $orderItems,
+            'paymentTrade' => $paymentTrade,
             'users' => $users,
         ));
     }
@@ -164,7 +172,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return OrderService
+     * @return \Codeages\Biz\Framework\Order\Service\OrderService
      */
     protected function getOrderService()
     {
@@ -209,5 +217,13 @@ class OrderController extends BaseController
     protected function getOrderFacadeService()
     {
         return $this->createService('Order:OrderFacadeService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

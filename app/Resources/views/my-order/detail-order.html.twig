@@ -28,25 +28,27 @@
       </tr>
       <tr> <td width="25%">{{'order.price'|trans}}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.totalPrice }}</span>
-          {% if order.priceType == "RMB" %}
+          <span class="color-warning">{{ order.price_amount }}</span>
+          {% if paymentTrade.currency|default('') == "RMB" %}
           {{'site.currency.CNY'|trans}}
-          {% elseif order.priceType == "Coin" %}
+          {% elseif paymentTrade.currency|default('') == "Coin" %}
           {{setting("coin.coin_name")}}
           {% endif %}
         </td>
       </tr>
       <tr> <td width="25%">{{'plugin.coupon.code'|trans}}</td>
         <td width="75%">
-          {% if order.coupon %}{{ order.coupon }}{% else %}{{'site.data.empty'|trans}}{% endif %}
+          {#todo coupon的逻辑不确定#}
+          {#{% if order.coupon %}{{ order.coupon }}{% else %}{{'site.data.empty'|trans}}{% endif %}#}
         </td>
       </tr>
       <tr> <td width="25%">{{'plugin.coupon.amount'|trans}}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.couponDiscount }}</span>
-          {% if order.priceType == "RMB" %}
+          {#todo coupon相关逻辑不确定#}
+          {#<span class="color-warning">{{ order.couponDiscount }}</span>#}
+          {% if paymentTrade.currency|default('') == "RMB" %}
           {{'site.currency.CNY'|trans}}
-          {% elseif order.priceType == "Coin" %}
+          {% elseif paymentTrade.currency|default('') == "Coin" %}
           {{setting("coin.coin_name")}}
           {% endif %}
         </td>
@@ -73,28 +75,31 @@
       {% endif %}
       <tr> <td width="25%">{{'order.payment_pattern.cash'|trans}}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.amount }}</span> {{'site.currency.CNY'|trans}}
+          <span class="color-warning">{{ order.pay_amount }}</span> {{'site.currency.CNY'|trans}}
         </td>
       </tr>
       <tr> <td width="25%">{{'order.payment_pattern'|trans}}</td>
            <td width="75%">
             {# {% if order.payment == 'none' %} 暂无 #}
-            {{ order_payment(order) }}
+             {#order_payment 不清晰#}
+            {#{{ order_payment(order) }}#}
            </td>
       </tr>
       <tr> <td width="25%">{{'order.bank_code'|trans}}</td>
            <td width="75%">
-            {% if order.bank == null %} {{'site.data.empty'|trans}}
-            {% else %} {{ order.bank }}
-            {% endif %}
+             {#todo 临时屏蔽#}
+            {#{% if order.bank == null %} {{'site.data.empty'|trans}}#}
+            {#{% else %} {{ order.bank }}#}
+            {#{% endif %}#}
            </td>
       </tr>
-      <tr> <td width="25%">{{'order.createdTime'|trans}}</td> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
+      <tr> <th width="25%">{{'order.createdTime'|trans}}</th> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td> </tr>
       {% if order.status == 'paid' %}
-        <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
-        {% if order.token %}
-          <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.token}}</td> </tr>
-        {% endif %}
+        <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        {#{% if order.token %}#}
+          {#<tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.token}}</td> </tr>#}
+        {#{% endif %}#}
+        <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{ 'token暂时没有' }}</td> </tr>
       {% endif %}
       <tr>
         <td width="25%">{{'user.orders.detail.special_operations'|trans}}</td>
@@ -106,7 +111,7 @@
   <div class="tab-pane fade" id="log">
     {% if orderLogs %}
       <table class="table cd-table">
-        <tdead>
+        <thead>
           <tr>
             <td width="50%">{{'user.orders.detail.log_info'|trans}}</td>
             <td width="25%">{{'user.orders.detail.operator'|trans}}</td>
@@ -115,12 +120,13 @@
         </thead>
         <tbody>
           {% for orderLog in orderLogs %}
-            {% set logUser = users[orderLog.userId]|default(null) %}
+            {% set logUser = users[orderLog.user_id]|default(null) %}
             <tr>
               <td>
-                {{ orderLog.message | plain_text(50) }}
+                {#todo这里没有message#}
+                {#{{ orderLog.message | plain_text(50) }}#}
                 <br>
-                <span class="color-gray text-sm">{{ orderLog.type }}</span>
+                <span class="color-gray text-sm">{{ orderLog.status }}</span>
               </td>
               <td>
                 {% if logUser %}
@@ -131,9 +137,9 @@
                 {% endif %}
               </td>
               <td>
-                {{ orderLog.createdTime|date('Y-n-d H:i')}}
+                {{ orderLog.created_time|date('Y-n-d H:i')}}
                 <br>
-                <span class="color-gray text-sm">{{ orderLog.ip}}</span>
+                {#<span class="color-gray text-sm">{{ orderLog.ip}}</span>#}IP暂时找不到地方记录
               </td>
             </tr>
           {% endfor %}
