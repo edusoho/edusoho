@@ -1,4 +1,5 @@
 import { imageScale } from './utils';
+import notify from 'common/notify';
 
 (function($) {
   $(document).on('change.cd.local.upload', '[data-toggle="local-upload"]', function() {
@@ -7,6 +8,7 @@ import { imageScale } from './utils';
     console.log(this, 'this', this.files[0]);
     let target = $this.data('target');
     let $target = $(target);
+    let $modal = $("#modal");
 
     let showType = $this.data('show-type') || 'background-image';
 
@@ -43,8 +45,7 @@ import { imageScale } from './utils';
         
         image.src = src;
       }
-      let $modal = $("#modal");
-      $modal.load($this.data('cropModal')).modal('show');
+      $modal.load($this.data('saveUrl')).modal('show');
     }
 
     fr.readAsDataURL(this.files[0]);
@@ -52,6 +53,7 @@ import { imageScale } from './utils';
 
   $(document).on('upload-image', '.js-upload-image.active' , function(e, cropOptions) {
     let $this = $(this);
+ let $modal = $("#modal");
     let fromData = new FormData();
     fromData.append('token', $this.data('token'));
     fromData.append('_csrf_token', $('meta[name=csrf-token]').attr('content'));
@@ -75,7 +77,6 @@ import { imageScale } from './utils';
     let cropImage = function(ret){
       return new Promise(function(resolve, reject) {
         $.post($this.data('crop'), cropOptions, function(data){
-          console.log(data);
           resolve(data);
         });
       });
@@ -84,11 +85,12 @@ import { imageScale } from './utils';
     let saveAvatar = function(ret){
       return new Promise(function(resolve, reject) {
           $.post($this.data('saveUrl'),{images: ret}, function(data){
-              if (res.message) {
-                $('#profile-avatar').attr('src', res.avatar);
+              if (data.image) {
+                $($this.data('targeImg')).attr('src', data.image);
                 notify('success', Translator.trans('site.upload_success_hint'));
+                $modal.modal('hide');
               }
-          });
+          }).error(function() { alert("error"); })
       });
     }
 

@@ -213,6 +213,7 @@ class SettingsController extends BaseController
         ));
     }
 
+    //传头像，新的交互
     public function profileAvatarCropModalAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
