@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-import 'common/codeages-design/js/upload';
 
 let editor = CKEDITOR.replace('profile_about', {
   toolbar: 'Simple',
