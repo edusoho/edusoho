@@ -19,9 +19,10 @@
       </div>
         {% if product|default() %}
         <div class="order-detail-bg">
-          {% include 'order/show/coupon-item.html.twig' %}
 
           {{ slot('order.show.deducts', {'product': product}) }}
+
+          {% include 'order/show/coupon-item.html.twig' %}
 
         </div>
       {% endif %} 
@@ -30,7 +31,7 @@
         <div class="total-price">
           {{'order.confirm.pay_rmb'|trans}}
             <span class="pay-rmb" id="price-show">
-             {{ product.price|price_format }} 
+             {{ product.originPrice|price_format }}
             </span>
         </div>
       </div>

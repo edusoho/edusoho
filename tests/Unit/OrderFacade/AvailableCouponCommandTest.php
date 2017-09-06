@@ -15,7 +15,7 @@ class AvailableCouponCommandTest extends BaseTestCase
         /* @var $product Product */
         $product->targetId = 1;
         $product->targetType = 'course';
-        $product->price = 100;
+        $product->originPrice = 100;
 
         $coupons = array(
             array('type' => 'minus', 'rate' => 30),

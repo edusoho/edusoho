@@ -3,6 +3,7 @@
 namespace Biz\OrderFacade\Command\Deduct;
 
 use Biz\Card\Service\CardService;
+use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
@@ -15,7 +16,7 @@ class AvailableCouponCommand extends Command
 
         if ($availableCoupons) {
             foreach ($availableCoupons as $key => &$coupon) {
-                $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->price);
+                $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->originPrice);
             }
 
             usort($availableCoupons, function ($coupon1, $coupon2) {

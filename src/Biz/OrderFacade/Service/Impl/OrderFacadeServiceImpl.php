@@ -40,7 +40,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $orderItem = array(
             'target_id' => $product->targetId,
             'target_type' => $product->targetType,
-            'price_amount' => $product->price,
+            'price_amount' => $product->originPrice,
             'pay_amount' => $product->getPayablePrice(),
             'title' => $product->title,
         );

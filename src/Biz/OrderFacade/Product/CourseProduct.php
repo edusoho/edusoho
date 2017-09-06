@@ -18,6 +18,13 @@ class CourseProduct extends Product implements Owner, Refund
 
     public $courseSet;
 
+    /**
+     * 课程展示价格
+     *
+     * @var float
+     */
+    public $price;
+
     public function init(array $params)
     {
         $this->targetId = $params['targetId'];
@@ -27,6 +34,7 @@ class CourseProduct extends Product implements Owner, Refund
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
+        $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
     }
 

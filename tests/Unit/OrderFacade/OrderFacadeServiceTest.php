@@ -22,7 +22,7 @@ class OrderFacadeServiceTest extends BaseTestCase
         $biz = $this->getBiz();
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 200, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 100, 'originPrice' => 200, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
@@ -53,7 +53,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testCreateCourseImportOrder()
     {
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 10, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 1, 'originPrice' => 10, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
         ));
 
         $this->mockBiz('Course:MemberService', array(

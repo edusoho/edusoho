@@ -20,7 +20,7 @@ class PickCouponCommand extends Command
 
             $coupon = $this->getCouponService()->getCouponByCode($params['couponCode']);
 
-            $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->price);
+            $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->originPrice);
 
             $deduct = array(
                 'deduct_amount' => $coupon['deduct_amount'],

@@ -15,7 +15,7 @@ class AvailablePaidCoursesCommandTest extends BaseTestCase
         /* @var $product Product */
         $product->targetId = 1;
         $product->targetType = 'classroom';
-        $product->price = 100;
+        $product->originPrice = 100;
 
         $this->mockBiz('System:SettingService', array(
             array('functionName' => 'get', 'returnValue' => array('discount_buy' => 1)),

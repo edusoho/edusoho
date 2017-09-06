@@ -15,14 +15,14 @@ class PickedDeductWrapperTest extends BaseTestCase
             ->getMock();
         $command1->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->price = $product->price - 10;
+                $product->originPrice = $product->originPrice - 10;
             });
 
         $command2 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command2->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->price = $product->price - 20;
+                $product->originPrice = $product->originPrice - 20;
             });
 
         $wrapper = new PickedDeductWrapper();
@@ -34,9 +34,9 @@ class PickedDeductWrapperTest extends BaseTestCase
         $wrapper->addCommand($command2, 2);
 
         $courseProduct = new CourseProduct();
-        $courseProduct->price = 100;
+        $courseProduct->originPrice = 100;
         $wrapper->wrapper($courseProduct, array());
 
-        $this->assertEquals(70, $courseProduct->price);
+        $this->assertEquals(70, $courseProduct->originPrice);
     }
 }

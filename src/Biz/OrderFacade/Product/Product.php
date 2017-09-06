@@ -36,7 +36,7 @@ abstract class Product extends BizAware
      *
      * @var float
      */
-    public $price;
+    public $originPrice;
 
     /**
      * 可使用的折扣
@@ -95,7 +95,7 @@ abstract class Product extends BizAware
 
     public function getPayablePrice()
     {
-        $payablePrice = $this->price;
+        $payablePrice = $this->originPrice;
         foreach ($this->pickedDeducts as $deduct) {
             $payablePrice -= $deduct['deduct_amount'];
         }

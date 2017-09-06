@@ -22,7 +22,7 @@ class ClassroomProduct extends Product
         $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
         $this->successUrl = array('classroom_show', array('id' => $this->targetId));
         $this->title = $classroom['title'];
-        $this->price = $classroom['price'];
+        $this->originPrice = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
         $this->maxRate = $classroom['maxRate'];
     }

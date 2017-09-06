@@ -13,7 +13,7 @@ class PickCouponCommandTest extends BaseTestCase
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
         /* @var $product Product */
-        $product->price = 100;
+        $product->originPrice = 100;
 
         $this->mockBiz('Coupon:CouponService', array(
             array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
