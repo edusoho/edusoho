@@ -39,6 +39,10 @@ import notify from 'common/notify';
     let fr = new FileReader();
     let $this = $(this);
     let showType = $this.data('show-type') || 'background-image';
+    if(this.files[0].size > 2*1024*1024 ){
+      notify('danger', Translator.trans('uploader.size_limit_hint')); 
+      return;
+    }
 
     fr.onload = function(e) {
       let src = e.target.result;
@@ -55,7 +59,9 @@ import notify from 'common/notify';
   $(document).on('upload-image', '.js-upload-image.active' , function(e, cropOptions) {
     let $this = $(this);
     let $modal = $("#modal");
+
     let fromData = new FormData();
+
     fromData.append('token', $this.data('token'));
     fromData.append('_csrf_token', $('meta[name=csrf-token]').attr('content'));
     fromData.append('file', this.files[0]);
@@ -91,7 +97,10 @@ import notify from 'common/notify';
                 notify('success', Translator.trans('site.upload_success_hint'));
                 $modal.modal('hide');
               }
-          }).error(function() { notify('danger', Translator.trans('site.upload_fail_retry_hint')); })
+          }).error(function() { 
+            notify('danger', Translator.trans('site.upload_fail_retry_hint'));
+            $modal.modal('hide');
+          })
       });
     }
 
@@ -99,8 +108,15 @@ import notify from 'common/notify';
       return cropImage(ret);
     }).then(function(ret) {
       return saveAvatar(ret);
+    }).catch(function(reason){
+      notify('danger', Translator.trans(reason));
+      $modal.modal('hide');
     });
 
   });
+
+  $('#modal').on('hide.bs.modal', function () {
+    $('[data-toggle="local-upload"]').val('');
+  })
 
 })(jQuery);
