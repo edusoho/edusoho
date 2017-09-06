@@ -369,7 +369,9 @@ define(function (require, exports, module) {
           videoQuality: 'normal',
           audioQuality: 'normal'
         },
-        'document': {},
+        'document': {
+          type : 'html'
+        },
         'ppt': {},
         'audio': {
           videoQuality: 'normal',
@@ -378,6 +380,7 @@ define(function (require, exports, module) {
       }
 
       var params = {};
+
       var extOutput = extOutputs[file.ext.toLocaleLowerCase()];
       if (extOutput == 'video') {
         if (this.get('process') == 'none' || this.get('process') == 'auto') {
@@ -385,6 +388,10 @@ define(function (require, exports, module) {
         } else if (this.get('process') instanceof Object){
           params = this.get('process');
         }
+      }
+
+      if (extOutput == 'document' || extOutput == 'ppt') {
+          params = paramsDefault[extOutput];
       }
 
       params.output = extOutput;

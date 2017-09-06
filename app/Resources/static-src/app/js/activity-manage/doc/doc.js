@@ -67,6 +67,7 @@ export default class Document {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
+      $('[name="media"]').val(JSON.stringify(file));
     });
 
     $('#condition-select').on('change', event => {

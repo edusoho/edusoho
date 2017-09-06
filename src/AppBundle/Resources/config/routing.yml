@@ -966,6 +966,7 @@ group_upload:
 my_bill:
     path: /my/bill
     defaults: { _controller: AppBundle:My/Coin:cashBill }
+
 my_coin:
     path:     /my/coin
     defaults: { _controller: AppBundle:My/Coin:index }
@@ -983,13 +984,6 @@ note_cancel_like:
     defaults: { _controller: AppBundle:Note:cancelLike }
     methods: [POST]
 
-invite_promote_link:
-    path:     /my/invitecode/promotelink
-    defaults: { _controller: AppBundle:My/Coin:promoteLink }
-
-write_invitecode:
-    path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: AppBundle:My/Coin:writeInvitecode }
 receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
@@ -1665,6 +1659,10 @@ course_task_show_plugins:
 course_task_show_plugin_task_list:
   path: /course/{courseId}/task/{taskId}/plugin/task_list
   defaults: { _controller: AppBundle:TaskPlugin:taskList }
+
+course_task_show_plugin_task_list_by_paging:
+  path: /course/{courseId}/plugin/task_list/paging
+  defaults: { _controller: AppBundle:TaskPlugin:taskListByPaging }
 
 course_task_plugin_note:
   path: /course/{courseId}/task/{taskId}/plugin/note
@@ -2753,6 +2751,10 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
+global_file_document_player:
+  path: /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:globalDocumentPlayer }
+
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
@@ -2814,6 +2816,10 @@ course_order_repay:
 course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
+
+course_task_paging_show:
+  path: /course/{courseId}/tasks/paging
+  defaults: { _controller: AppBundle:Course/Course:tasksByPaging }
 
 course_set_archive:
   path: /archive/course # 学习引擎2.0版本前该页面有SEO
@@ -2928,7 +2934,6 @@ pre_export:
 try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
-
 
 v2_demo:
     path: /v2/demo

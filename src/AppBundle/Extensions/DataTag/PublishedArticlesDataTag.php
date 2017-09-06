@@ -35,7 +35,7 @@ class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag
                 continue;
             }
 
-            if ($article['categoryId'] == $categorise[$article['categoryId']]['id']) {
+            if (!empty($categorise[$article['categoryId']]) && $article['categoryId'] == $categorise[$article['categoryId']]['id']) {
                 $articles[$key]['category'] = $categorise[$article['categoryId']];
             }
         }
