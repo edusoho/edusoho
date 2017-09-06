@@ -66,7 +66,7 @@ class EduCloudController extends BaseController
             ));
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($currentUser['email']);
 
-        return $this->createJsonResponse(array('ACK' => 'ok', 'allowance' => ($maxAllowance <= 3) ? 0 : $maxAllowance));
+        return $this->createJsonResponse(array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance));
     }
 
     public function smsCheckAction(Request $request, $type)
@@ -257,6 +257,7 @@ class EduCloudController extends BaseController
         }
         // send 6 times in an hour
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($user['email']);
+
         if ($maxAllowance == 0) {
             $errorMsg = '暂停发送验证码短信，请稍后再试';
 
