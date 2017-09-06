@@ -92,7 +92,7 @@ class CashierController extends BaseController
         }
 
         return $this->forward("AppBundle:Cashier/Cashier:{$type}Success", array(
-            'request' => $request
+            'request' => $request,
         ));
     }
 
