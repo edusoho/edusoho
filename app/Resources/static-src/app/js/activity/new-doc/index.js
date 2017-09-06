@@ -1,3 +1,5 @@
+
+let url = $('.js-cloud-url').data('url');
 (function(url) {
     window.QiQiuYun || (window.QiQiuYun = {});
     var xhr = new XMLHttpRequest();
@@ -7,7 +9,7 @@
     var script = document.createElement('script');
     script.text = xhr.responseText;
     firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
-})('//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js');
+})(url);
 
 let $element = $('#document-content');
 let watermarkUrl = $element.data('watermark-url');

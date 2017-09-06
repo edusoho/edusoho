@@ -29,6 +29,19 @@ class GlobalFilePlayerController extends BaseController
         throw $this->createNotFoundException('not support play');
     }
 
+    public function globalDocumentPlayerAction(Request $request, $globalId)
+    {
+        $token = $request->query->get('token');
+
+        return $this->render(
+            'material-lib/player/global-document-player.html.twig',
+            array(
+                'globalId' => $globalId,
+                'token' => $token,
+            )
+        );
+    }
+
     public function globalPlayer($file, $request)
     {
         $ssl = $request->isSecure() ? true : false;
