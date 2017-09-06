@@ -51,20 +51,14 @@ class OrderController extends BaseController
 
         $orderIds = ArrayToolkit::column($orders, 'id');
         $orderSns = ArrayToolkit::column($orders, 'sn');
-        $itemConditions = array(
-            'order_ids' => $orderIds,
-        );
-        $tradeConditions = array(
-            'order_sns' => $orderSns,
-        );
-        $orderItems = $this->getOrderService()->searchOrderItems($itemConditions, array(), 0, PHP_INT_MAX);
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
 
-        $paymentTrades = $this->getPayService()->searchTrades($tradeConditions, array(), 0, PHP_INT_MAX);
+        $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
 
         foreach ($orders as &$order) {
-            //@TODO： orderItem和Order不是一一对应的，这个要在产品上做改变
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
         }

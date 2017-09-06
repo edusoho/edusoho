@@ -30,12 +30,23 @@ class OrderController extends BaseController
     {
         $user = $this->getCurrentUser();
         $status = $request->get('status');
+        $keyWord = $request->get('q');
+        $payWays = $request->get('payWays');
 
         $conditions = array(
             'user_id' => $user['id'],
-            'status' => $request->get('status'),
-            'title' => $request->get('q'),
         );
+        if (!empty($status)) {
+            $conditions['status'] = $status;
+        }
+
+        if (!empty($keyWord)) {
+            $conditions['order_item_title'] = $keyWord;
+        }
+
+        if (!empty($payWays)) {
+            $conditions['payment'] = $payWays;
+        }
 
         $conditions['start_time'] = 0;
         $conditions['end_time'] = time();
@@ -56,7 +67,9 @@ class OrderController extends BaseController
                 $conditions['start_time'] = $conditions['end_time'] - 90 * 24 * 3600;
                 break;
         }
-        $conditions['payment'] = $request->get('payWays');
+
+
+        var_dump($conditions);
 
         $paginator = new Paginator(
             $request,
@@ -75,16 +88,10 @@ class OrderController extends BaseController
 
         $orderIds = ArrayToolkit::column($orders, 'id');
         $orderSns = ArrayToolkit::column($orders, 'sn');
-        $itemConditions = array(
-            'order_ids' => $orderIds,
-        );
-        $tradeConditions = array(
-            'order_sns' => $orderSns,
-        );
-        $orderItems = $this->getOrderService()->searchOrderItems($itemConditions, array(), 0, PHP_INT_MAX);
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
 
-        $paymentTrades = $this->getPayService()->searchTrades($tradeConditions, array(), 0, PHP_INT_MAX);
+        $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
 
         foreach ($orders as &$order) {

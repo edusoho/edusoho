@@ -95,10 +95,11 @@
       </tr>
       <tr> <th width="25%">{{'order.createdTime'|trans}}</th> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td> </tr>
       {% if order.status == 'paid' %}
-        <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
-        {% if order.token %}
-          <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.token}}</td> </tr>
-        {% endif %}
+        <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        {#{% if order.token %}#}
+          {#<tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.token}}</td> </tr>#}
+        {#{% endif %}#}
+        <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{ 'token暂时没有' }}</td> </tr>
       {% endif %}
       <tr>
         <td width="25%">{{'user.orders.detail.special_operations'|trans}}</td>
@@ -138,7 +139,7 @@
               <td>
                 {{ orderLog.created_time|date('Y-n-d H:i')}}
                 <br>
-                <span class="color-gray text-sm">{{ orderLog.ip}}</span>
+                {#<span class="color-gray text-sm">{{ orderLog.ip}}</span>#}IP暂时找不到地方记录
               </td>
             </tr>
           {% endfor %}
