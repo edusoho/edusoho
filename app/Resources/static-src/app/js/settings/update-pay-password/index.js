@@ -2,7 +2,6 @@ import notify from 'common/notify';
 let $form = $('#pay-password-reset-update-form');
 
 let validator = $form.validate({
-  currentDom: '#submit-btn',
   rules: {
     'form[currentUserLoginPassword]': {
       required: true,

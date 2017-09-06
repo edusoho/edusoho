@@ -1,6 +1,8 @@
 import SmsSender from 'app/common/widget/sms-sender';
 let validator = null;
 let $form = null;
+let smsSend = '.js-sms-send';
+let $smsCode = $(smsSend);
 
 if ($('.js-find-password li').length > 1) {
   $('.js-find-by-email').click(function () {
@@ -36,14 +38,13 @@ $('.js-find-by-mobile').click(function () {
 
 })
 
-$('.js-sms-send').click(()=>{
-  var smsSender = new SmsSender({
-    element: '.js-sms-send',
-    url: $('.js-sms-send').data('smsUrl'),
-    smsType: $('.js-sms-send').data('smsType'),
-    preSmsSend: function () {
-      var couldSender = true;
-      return couldSender;
+$smsCode.click(() => {
+  const smsSender = new SmsSender({
+    element: smsSend,
+    url: $smsCode.data('smsUrl'),
+    smsType: $smsCode.data('smsType'),
+    preSmsSend: () => {
+      return true;
     }
   });
 })

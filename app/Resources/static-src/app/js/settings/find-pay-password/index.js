@@ -17,8 +17,6 @@ $('#answer-question-btn').on('click', (event) => {
   }
 })
 
-
-
 let messageDanger = $('.alert-danger').text();
 let messageSuccess = $('.alert-success').text();
 
