@@ -34,7 +34,7 @@
       <label for="question-2">{{'user.settings.security.questions.second_question'|trans}}</label>
       <div class="cd-select">
         <select class="form-control" id="question-2" name="question-2">
-          {{ select_options(questionOptions, question2|default('parents') ) }}
+          {{ select_options(questionOptions, question2|default('teacher') ) }}
         </select>
       </div>
     </div>
@@ -47,7 +47,7 @@
       <label for="question-3">{{'user.settings.security.questions.third_question'|trans}}</label>
       <div class="cd-select">
         <select class="form-control" id="question-3" name="question-3">
-          {{ select_options(questionOptions, question3|default('parents') ) }}
+          {{ select_options(questionOptions, question3|default('lover') ) }}
         </select>
       </div>
     </div>
@@ -77,10 +77,14 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
-    {{'form.btn.cancel'|trans}}
-  </button>
   {% if not hasSecurityQuestions %}
-    <button id="password-save-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#settings-pay-password-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+    <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
+      {{'form.btn.cancel'|trans}}
+    </button>
+    <button id="password-save-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#settings-security-questions-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+  {% else %}
+    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-dismiss="modal">
+      {{'form.btn.close'|trans}}
+    </button>
   {% endif %}
 {% endblock %}

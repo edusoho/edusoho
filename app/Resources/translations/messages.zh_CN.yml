@@ -131,6 +131,12 @@ site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%�
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
 site.btn.detail: 详情
+site.setting.finished: 已设置
+site.setting.unfinished: 未设置
+site.verify.finished: 已验证
+site.verify.unfinished: 未验证
+site.setting.email_finished: 已设置邮箱
+site.verify.mobile_finished: 已验证手机
 
 # email 模板
 email.password_reset: >
@@ -2824,7 +2830,7 @@ user.settings.security.password_modify.success: 当前密码不正确，请重�
 user.settings.security.no_password_tips: >
   <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
   <p>为了帐号的安全，请通过邮箱找回密码的方式，重设密码！</p>
-  <p><a href="%passwordResetUrl%" class='btn btn-primary'>现在就去重设密码</a></p>
+  <p><a href="%passwordResetUrl%" class='btn cd-btn cd-btn-primary'>现在就去重设密码</a></p>
 user.settings.security.password_reset: 重设密码
 user.settings.security.password_reset.content_title: 重设密码
 user.settings.security.password_reset.email: 邮箱地址
