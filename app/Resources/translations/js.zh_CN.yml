@@ -73,8 +73,16 @@ user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机�
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
-user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
+
 user.card_load_hint: 名片加载中
+
+
+user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
+
+user.settings.security.questions.set.incorrect_password: 您的登录密码错误，不能设置安全问题
+user.settings.security.questions.set.not_modify_aligin_hint: 您已经设置过安全问题，不可再次修改
+
+user.settings.security.questions.set.success: 安全问题设置成功
 
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
@@ -90,8 +98,7 @@ user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 
-material.share.teacher_nickname_label: 请输入老师的名称
-
+material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
