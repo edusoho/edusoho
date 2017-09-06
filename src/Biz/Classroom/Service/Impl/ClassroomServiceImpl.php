@@ -1824,13 +1824,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $paidCourseIds = ArrayToolkit::column($coursesMember, 'courseId');
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
-        
+
         $orderIds = ArrayToolkit::column($coursesMember, 'orderId');
         $conditions = array(
             'order_ids' => $orderIds,
             'target_ids' => $paidCourseIds,
             'target_type' => 'course',
-            'status' => 'success'
+            'status' => 'success',
         );
 
         $orderItems = $this->getOrderService()->searchOrderItems($conditions, array(), 0, PHP_INT_MAX);

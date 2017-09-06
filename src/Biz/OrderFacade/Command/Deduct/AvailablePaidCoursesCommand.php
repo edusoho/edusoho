@@ -4,7 +4,6 @@ namespace Biz\OrderFacade\Command\Deduct;
 
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\MathToolkit;
 
 class AvailablePaidCoursesCommand extends Command
@@ -22,7 +21,7 @@ class AvailablePaidCoursesCommand extends Command
         }
 
         $user = $this->getUser();
-        
+
         list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom($user['id'], $product->targetId);
 
         foreach ($orderItems as $item) {
@@ -32,7 +31,7 @@ class AvailablePaidCoursesCommand extends Command
 
             $course = $paidCourses[$item['target_id']];
             $course['paidPrice'] = MathToolkit::simple($item['pay_amount'], 0.01);
-            
+
             $product->availableDeducts['paidCourses'][] = $course;
         }
     }
