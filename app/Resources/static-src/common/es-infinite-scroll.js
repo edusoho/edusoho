@@ -30,7 +30,7 @@ export default class ESInfiniteScroll extends Emitter {
           }
         }
       });
-      
+
     })
   }
 
