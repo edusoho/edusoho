@@ -1016,26 +1016,21 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $form = $this->createFormBuilder()
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
-            ->getForm();
-
         if ($request->getMethod() === 'POST') {
+            $passwords = $request->request->all();
+
             $targetPath = $this->getTargetPath($request);
-            $form->bind($request);
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
-                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+            $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
 
-                return $this->redirect($targetPath);
-            }
+            return $this->createJsonResponse(array(
+                'message' => 'user.settings.pay_password_set.success', 
+                'data' => array('target' => $targetPath) 
+            ));
+            
         }
 
-        return $this->render('settings/setup-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/setup-password.html.twig');
     }
 
     public function setupCheckNicknameAction(Request $request)

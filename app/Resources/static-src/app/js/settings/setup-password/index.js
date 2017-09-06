@@ -1,26 +1,29 @@
+import notify from 'common/notify';
+
 let $form = $('#setup-password-form');
-let $btn = $('#password-save-btn');
 
-if ($form.length) {
-  let validator = $form.validate({
-    rules: {
-      'form[newPassword]': {
-        required: true,
-        minlength: 5,
-        maxlength: 20,
-      },
-      'form[confirmPassword]': {
-        required: true,
-        equalTo: '#form_newPassword',
-      }
+$form.validate({
+  rules: {
+    ajax: true,
+    currentDom: '#form-submit',
+    'newPassword': {
+      required: true,
+      minlength: 5,
+      maxlength: 20,
+    },
+    'confirmPassword': {
+      required: true,
+      equalTo: '#form_newPassword',
+    },
+    submitSuccess(data) {
+      notify('success', Translator.trans(data.message));
+      
+      console.log(1111);
+      // $('.modal').modal('hide');
+      // window.location.reload();
+    },
+    submitError(data) {
+      notify('danger',  Translator.trans(data.responseJSON.message));
     }
-  });
-
-  $btn.click(() => {
-    if (validator.form()) {
-      $btn.button('loadding');
-      $form.submit();
-    }
-  })
-}
-
+  }
+});
