@@ -2172,6 +2172,7 @@ user.settings.security.content_title: 'Security Setting'
 user.settings.security.reset_pay_password: 'Payment password resetting'
 user.settings.security.reset_pay_password_success: 'Payment password resetting successfully'
 user.settings.security.set_pay_password_success: 'New payment password setting successfully。'
+user.settings.security.set_pay_password_success.closed_automatically: 5秒后该页面自动关闭
 user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
