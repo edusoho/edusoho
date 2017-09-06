@@ -10,6 +10,14 @@ class CurrencyTest extends BaseTestCase
 {
     public function testFormatParts()
     {
+        $coinSetting = array(
+            'coin_enabled' => 0,
+            'cash_model' => 'currency',
+            'coin_name' => '',
+            'cash_rate' => 1,
+        );
+        $this->getSettingService()->set('coin', $coinSetting);
+
         $currency = new Currency($this->getBiz());
 
         $this->assertEquals('￥1024.11', implode('', $currency->formatParts('1024.11')));

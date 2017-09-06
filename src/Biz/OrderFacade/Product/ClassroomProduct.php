@@ -5,7 +5,6 @@ namespace Biz\OrderFacade\Product;
 use Biz\Accessor\AccessorInterface;
 use Biz\Classroom\Service\ClassroomService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 
 class ClassroomProduct extends Product
 {
@@ -21,7 +20,7 @@ class ClassroomProduct extends Product
 
         $this->targetId = $params['targetId'];
         $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
-        $this->successUrl = array('my_course_show', array('id' => $this->targetId));
+        $this->successUrl = array('classroom_show', array('id' => $this->targetId));
         $this->title = $classroom['title'];
         $this->price = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
@@ -37,7 +36,7 @@ class ClassroomProduct extends Product
         }
     }
 
-    public function paidCallback($orderItem)
+    public function callback($orderItem)
     {
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
@@ -49,8 +48,6 @@ class ClassroomProduct extends Product
         if (!$isStudent) {
             $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
         }
-
-        return PaidCallback::SUCCESS;
     }
 
     /**
