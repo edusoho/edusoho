@@ -4,6 +4,7 @@ class CoverCrop {
   constructor(props) {
     this.avatarCrop = props.avatarCrop;
     this.saveBtn = props.saveBtn;
+    this.$uploadInput = $('.js-upload-image.active')
     this.init();
   }
 
@@ -23,7 +24,8 @@ class CoverCrop {
           large: [200, 200],
           medium: [120, 120],
           small: [48, 48]
-        }
+        },
+        post: false
       });
 
       $this.button('loading');
@@ -31,7 +33,8 @@ class CoverCrop {
   }
 
   imageInit() {
-    let sourceImg = $('#upload-source-img');
+    let sourceImg = $('.upload-source-img.active');
+    console.log(sourceImg);
     $(this.avatarCrop).attr({
       'src': sourceImg.attr('src'),
       'width': sourceImg.attr('width'),
@@ -48,28 +51,29 @@ class CoverCrop {
     let imageCrop = new EsImageCrop({
       element: this.avatarCrop,
       cropedWidth: 200,
-      cropedHeight: 200
+      cropedHeight: 200,
+      group: 'user'
     });
 
     imageCrop.afterCrop = (res) => {
-      let $saveBtn = $(this.saveBtn);
+      // let $saveBtn = $(this.saveBtn);
       
-      let url = $saveBtn.data('url');
+      // let url = $saveBtn.data('url');
 
-      console.log('res', res);
 
-      $.post(url, { images: res }, (res) => {
-        if (res.status === 'success') {
-          $('#profile-avatar').attr('src', res.avatar);
+      this.$uploadInput.trigger('upload-image', res);
+      // $.post(url, { images: res }, (res) => {
+      //   if (res.status === 'success') {
+      //     $('#profile-avatar').attr('src', res.avatar);
 
-          $('#modal').modal('hide');
+      //     $('#modal').modal('hide');
           
-          notify('success', Translator.trans('site.upload_success_hint'));
-        } else {
-          notify('danger', Translator.trans('upload_fail_retry_hint'));
-          $saveBtn.button('reset');
-        }
-      });
+      //     notify('success', Translator.trans('site.upload_success_hint'));
+      //   } else {
+      //     notify('danger', Translator.trans('upload_fail_retry_hint'));
+      //     $saveBtn.button('reset');
+      //   }
+      // });
     }
 
     return imageCrop;

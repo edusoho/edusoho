@@ -15,40 +15,36 @@
     <div class="alert cd-alert cd-alert-info">{{'user.settings.basic_info.alter_description'|trans}}</div>
   {% endif %}
 
-  <form id="user-profile-form" class="row cd-row" method="post">
-    {{ web_macro.flash_messages(true) }}
-    <div class="col-md-11 cd-mb32">
-      <div class="cd-image-upload cd-mr24">
-        <img class="cd-avatar cd-avatar-lg" id="profile-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
-        <div class="image-upload-mask">
-          <div class="image-upload-content">
-            <i class="cd-icon cd-icon-camera"></i>
-            修改头像
-          </div>
+  {{ web_macro.flash_messages(true) }}
+  <div class="cd-mb32">
+    <div class="cd-image-upload cd-mr24">
+      <img class="cd-avatar cd-avatar-lg" id="profile-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+      <div class="image-upload-mask">
+        <div class="image-upload-content">
+          <i class="cd-icon cd-icon-camera"></i>
+          修改头像
         </div>
-        <label class="image-upload-label">
-          <input type="file" accept="image/bmp,image/jpeg,image/png"
-          data-toggle="local-upload" data-show-type="image" data-target="#avatar-crop-button" data-crop-width="270" data-crop-height="270">
-          <button type="button" id="avatar-crop-button" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_profile_avatar_crop_modal')}}"></button>
-        </label>
       </div>
-      <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
-        <label for="nickname">{{'user.fields.username_label'|trans}}</label>
-         <div class="static-text" data-target="form-static-text">
-          <span>{{app.user.nickname}}</span>
-          {% if setting('user_partner.nickname_enabled') %}
-            <a href="javascript:;" data-toggle="form-editable"><i class="cd-icon cd-icon-edit"></i>修改</a>
-          {% endif %}
-        </div> 
-        <div data-target="form-editable" style="display:none">
-          <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}">
-          <div class="action-button">
-            <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">保存</div>
-            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-close">取消</div>
-          </div>
-        </div> 
-      </div>
+      {% include 'common/crop-image.html.twig' %}
     </div>
+    <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
+      <label for="nickname">{{'user.fields.username_label'|trans}}</label>
+        <div class="static-text" data-target="form-static-text">
+        <span>{{app.user.nickname}}</span>
+        {% if setting('user_partner.nickname_enabled') %}
+          <a href="javascript:;" data-toggle="form-editable"><i class="cd-icon cd-icon-edit"></i>修改</a>
+        {% endif %}
+      </div> 
+      <div data-target="form-editable" style="display:none">
+        <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}">
+        <div class="action-button">
+          <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">保存</div>
+          <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-close">取消</div>
+        </div>
+      </div> 
+    </div>
+  </div>
+  <form id="user-profile-form" class="row cd-row" method="post">
     <div class="col-md-5">
       <div class="form-group cd-form-group">
         <label for="profile_truename">{{'user.fileds.realname'|trans}}</label>
