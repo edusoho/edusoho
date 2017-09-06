@@ -40,6 +40,6 @@
 </table>
 
 {% if showPaginator %}
-	{{web_macro.paginator(paginator)}}
+	{{admin_macro.paginator(paginator)}}
 	<input id="pageinator-url"  type="hidden" value="{{path('admin_opencourse_analysis_referer_detail_list',{id:targetId})}}">
 {% endif %}

@@ -121,7 +121,7 @@ class SmsToolkit
         ));
     }
 
-    public static function getShortLink($url)
+    public static function getShortLink($url, $conditions = array())
     {
         $apis = array(
             'eduCloud' => 'http://kzedu.cc/app/shorturl',
@@ -130,7 +130,7 @@ class SmsToolkit
         );
 
         foreach ($apis as $key => $api) {
-            $response = CurlToolkit::request('POST', $api, array('url' => $url));
+            $response = CurlToolkit::request('POST', $api, array('url' => $url), $conditions);
             if ($key == 'eduCloud') {
                 if (isset($response['short_url'])) {
                     return $response['short_url'];

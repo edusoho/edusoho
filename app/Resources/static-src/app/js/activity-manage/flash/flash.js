@@ -64,6 +64,7 @@ export default class Flash {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
+      $('[name="media"]').val(JSON.stringify(file));
       if(this.validator2) {
         this.validator2.form();
       }

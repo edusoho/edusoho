@@ -293,6 +293,13 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $package = $this->getCenterPackageInfo($packageId);
             // $errors  = $this->checkPluginDepend($package);
+            $product = $package['product'];
+            if ($product['code'] == 'MAIN') {
+                $app = $this->getAppByCode('MAIN');
+                if ($package['fromVersion'] != $app['version']) {
+                    $errors[] = sprintf('当前版本(%s)依赖不匹配，或页面请求已过期，请刷新后重试', $app['version']);
+                }
+            }
 
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
                 $errors[] = sprintf('EduSoho版本需大于等于%s，您的版本为%s，请先升级EduSoho', $package['edusohoMinVersion'], System::VERSION);
@@ -368,10 +375,10 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $e->getMessage();
         }
 
-        last:
-        if (!empty($errors)) {
-            UpgradeLock::unlock();
-        }
+        last :
+            if (!empty($errors)) {
+                UpgradeLock::unlock();
+            }
 
         $this->_submitRunLogForPackageUpdate('备份数据库', $package, $errors);
 
@@ -445,10 +452,10 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $e->getMessage();
         }
 
-        last:
-        if (!empty($errors)) {
-            UpgradeLock::unlock();
-        }
+        last :
+            if (!empty($errors)) {
+                UpgradeLock::unlock();
+            }
         $this->_submitRunLogForPackageUpdate('备份文件', $package, $errors);
 
         return $errors;
@@ -529,6 +536,14 @@ class AppServiceImpl extends BaseService implements AppService
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
                 goto last;
             }
+
+            try {
+                $this->deleteCache();
+            } catch (\Exception $e) {
+                $errors[] = sprintf('删除缓存时时发生了错误：%s', $e->getMessage());
+                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+                goto last;
+            }
         }
 
         try {
@@ -574,8 +589,8 @@ class AppServiceImpl extends BaseService implements AppService
             UpgradeLock::unlock();
         }
 
-        last:
-        $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
+        last :
+            $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
 
         if (empty($info)) {
             $result = $errors;
@@ -601,7 +616,7 @@ class AppServiceImpl extends BaseService implements AppService
         sleep($tryCount * 2);
 
         try {
-            $cachePath = $this->biz['cache_directory'];
+            $cachePath = dirname($this->biz['cache_directory']);
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
             clearstatcache(true);
@@ -695,11 +710,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         include_once $packageDir.'/Upgrade.php';
 
-        if (in_array($package['id'], array(1056, 1057))) {
-            $upgrade = new \EduSohoPluginUpgrade($this->biz);
-        } else {
-            $upgrade = new \EduSohoUpgrade($this->biz);
-        }
+        $upgrade = new \EduSohoUpgrade($this->biz);
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
@@ -845,6 +856,7 @@ class AppServiceImpl extends BaseService implements AppService
             'name' => 'EduSoho主系统',
             'description' => 'EduSoho主系统',
             'icon' => '',
+            'type' => AppService::CORE_TYPE,
             'version' => System::VERSION,
             'fromVersion' => '0.0.0',
             'developerId' => 1,
@@ -875,9 +887,9 @@ class AppServiceImpl extends BaseService implements AppService
         $newApp['protocol'] = $protocol;
 
         if (file_exists($packageDir.'/ThemeApp')) {
-            $newApp['type'] = 'theme';
+            $newApp['type'] = AppService::THEME_TYPE;
         } else {
-            $newApp['type'] = 'plugin';
+            $newApp['type'] = AppService::PLUGIN_TYPE;
         }
 
         $app = $this->getAppDao()->getByCode($package['product']['code']);

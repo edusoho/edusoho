@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Targetlog\Dao\TargetlogDao;
 
 class TargetlogDaoImpl extends GeneralDaoImpl implements TargetlogDao
 {
-    protected $table = 'target_log';
+    protected $table = 'biz_targetlog';
 
     public function declares()
     {

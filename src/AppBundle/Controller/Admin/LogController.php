@@ -26,16 +26,15 @@ class LogController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-        $moduleDicts = $this->getLogService()->getLogModuleDicts();
-
+        $modules = $this->getLogService()->getModules();
         $module = isset($conditions['module']) ? $conditions['module'] : '';
-        $actions = $this->getLogService()->findLogActionDictsyModule($module);
+        $actions = $this->getLogService()->getActionsByModule($module);
 
         return $this->render('admin/system/log/logs.html.twig', array(
             'logs' => $logs,
             'paginator' => $paginator,
             'users' => $users,
-            'moduleDicts' => $moduleDicts,
+            'modules' => $modules,
             'actions' => $actions,
         ));
     }
@@ -45,10 +44,11 @@ class LogController extends BaseController
         $module = $request->query->get('module');
         $actions = array();
         if (!empty($module)) {
-            $actions = $this->getLogService()->findLogActionDictsyModule($module);
+            $actions = $this->getLogService()->getActionsByModule($module);
         }
 
         return $this->render('admin/system/log/log-action-options.html.twig', array(
+            'module' => $module,
             'actions' => $actions,
         ));
     }

@@ -28,8 +28,8 @@
   <div class="form-group">
     <select class="form-control" name="module" id="log-module">
         <option value="">{{'admin.system_log.all_module_option'|trans}}</option>
-        {% for key, value in moduleDicts %}
-          <option value="{{key}}"  {% if app.request.query.get('module') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
+        {% for module in modules %}
+          <option value="{{ module }}" {% if app.request.query.get('module') == module %} selected="{{ module }}" {% endif %}>{{ ('log.module.' ~ module)|trans }}</option>
         {% endfor %}
     </select>
   </div>
@@ -38,8 +38,8 @@
     <select class="form-control" name="action" id="log-action" data-url="{{path('admin_logs_action_dicts')}}">
        {% if actions|default(null) %}
           <option value="">{{'admin.system_log.all_operation_option'|trans}}</option>
-          {% for key, value in actions %}
-            <option value="{{key}}" {% if app.request.query.get('action') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
+          {% for action in actions %}
+            <option value="{{ action }}" {% if app.request.query.get('action') == action %}selected="{{ action }}" {% endif %}>{{ ('log.action.' ~ app.request.query.get('module') ~ '.' ~ action)|trans }}</option>
           {% endfor %}
         {% else %}
           <option value="">{{'admin.system_log.all_operation_option'|trans}}</option>
@@ -74,7 +74,7 @@
           {% endif %}
         <td>
           <div style="word-break: break-all;word-wrap: break-word;">
-            {{ log.message }}
+            {{ log_trans(log.message, log.data) }}
             {% if log.data %}
               <a href="javascript:;" class="text-sm text-warning show-data">{{'admin.system_log.show_data'|trans}}</a>
               <a href="javascript:;" class="text-sm text-warning hide-data" style="display:none;">{{'admin.system_log.hide_data'|trans}}</a>
@@ -87,7 +87,7 @@
         <td>
           <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
           <br />
-          <a  class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ convertIP(log.ip) }}</a>
+          <a  class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ convert_ip(log.ip) }}</a>
         </td>
       </tr>
     {% else %}

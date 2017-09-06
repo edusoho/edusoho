@@ -35,18 +35,10 @@ class DictionaryExtension extends \Twig_Extension
 
     public function dictSelectOptions($type, $selected = null, $empty = null)
     {
-        $dictionaryItems = $this->getDictionaryService()->findDictionaryItemByType($type);
-        if ($type == 'refund_reason') {
-            $choices['reason'] = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('refund_reason', 'select_reason');
-            $selected = 'reason';
-        }
-
-        foreach ($dictionaryItems as $key => $value) {
-            $choices[$key] = $value['name'];
-        }
-        $choices['other'] = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('refund_reason', 'other');
+        $choices = $this->container->get('codeages_plugin.dict_twig_extension')->getDict($type);
 
         $html = '';
+
         if (!is_null($empty)) {
             if (is_array($empty)) {
                 foreach ($empty as $key => $value) {

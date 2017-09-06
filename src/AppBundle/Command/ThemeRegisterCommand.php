@@ -35,9 +35,6 @@ class ThemeRegisterCommand extends BaseCommand
         $meta = $this->parseMeta($code, $themeDir);
         $output->writeln('<comment>  - 获取主题元信息...</comment><info>OK</info>');
 
-        $this->executeInstall($themeDir);
-        $output->writeln('<comment>  - 执行安装脚本...</comment><info>OK</info>');
-
         $meta['type'] = 'theme';
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln('<comment>  - 添加应用记录...</comment><info>OK</info>');
@@ -47,25 +44,12 @@ class ThemeRegisterCommand extends BaseCommand
 
         PluginUtil::refresh();
         $output->writeln('<comment>  - 刷新主题缓存...</comment><info>OK</info>');
-
         $output->writeln('<info>注册成功....</info>');
-    }
 
-    private function executeInstall($pluginDir)
-    {
-        $installFile = $pluginDir.'/Scripts/InstallScript.php';
-
-        if (file_exists($installFile)) {
-            include $installFile;
-
-            if (!class_exists('InstallScript')) {
-                throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
-            }
-
-            $installer = new \InstallScript($this->getContainer()->get('biz'));
-            $installer->setInstallMode('command');
-            $installer->execute();
-        }
+        $theme = $meta;
+        $theme['uri'] = $code;
+        $this->getBiz()->service('Theme:ThemeService')->changeTheme($theme);
+        $output->writeln('<info>应用主题成功...</info>');
     }
 
     private function parseMeta($code, $pluginDir)
