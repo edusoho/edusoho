@@ -1,6 +1,8 @@
+import notify from 'common/notify';
 let $form = $('#pay-password-reset-update-form');
 
 let validator = $form.validate({
+  currentDom: '#submit-btn',
   rules: {
     'form[currentUserLoginPassword]': {
       required: true,
@@ -37,3 +39,14 @@ $('#payPassword-save-btn').on('click', (event) => {
     $form.submit();
   }
 })
+
+let messageDanger = $('.alert-danger').text();
+let messageSuccess = $('.alert-success').text();
+
+if (messageDanger) {
+  notify('danger', Translator.trans(messageDanger));
+}
+
+if (messageSuccess) {
+  notify('success', Translator.trans(messageSuccess));
+}
