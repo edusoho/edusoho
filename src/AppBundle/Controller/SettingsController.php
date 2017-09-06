@@ -225,7 +225,7 @@ class SettingsController extends BaseController
 
             return $this->createJsonResponse(array(
                 'status' => 'success',
-                'avatar' => $avatar
+                'avatar' => $avatar,
             ));
         }
 
