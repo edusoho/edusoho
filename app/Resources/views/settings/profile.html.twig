@@ -159,7 +159,7 @@
             {% elseif field.type == "float" %}
               <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.two_decimal_places'|trans}}" name="profile[{{field.fieldName}}]" class="form-control"  value="{{ profile[field.fieldName]|default('') }}">
             {% elseif field.type == "date" %}
-              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
             {% elseif field.type == "varchar" %}
               <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
             {% endif %}
