@@ -14,4 +14,9 @@ class MathToolkit
 
         return $data;
     }
+
+    public static function simple($number, $multiplicator)
+    {
+        return $number * $multiplicator;
+    }
 }

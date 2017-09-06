@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\Framework\Order\Service\Impl;
 
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -47,8 +48,31 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         }
 
         $this->createOrderLog($order);
-        $this->dispatch('order.created', $order);
+        $this->dispatchOrderStatus('created', $order);
         return $order;
+    }
+
+    protected function dispatchOrderStatus($status, $order)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
+        foreach ($orderItems as $orderItem) {
+            $orderItem['order'] = $order;
+            $this->dispatch("order.item.{$orderItem['target_type']}.{$status}", $orderItem);
+        }
+
+        $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+        foreach ($deducts as $deduct) {
+            $deduct['order'] = $order;
+            if (!empty($indexedOrderItems[$deduct['item_id']])) {
+                $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
+            }
+            $this->dispatch("order.deduct.{$deduct['deduct_type']}.{$status}", $deduct);
+        }
+
+        $order['items'] = $orderItems;
+        $order['deducts'] = $deducts;
+        return $this->dispatch("order.{$status}", $order);
     }
 
     protected function validateLogin()
@@ -264,11 +288,12 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function adoptRefund($id, $data = array(), $waitNotify = true)
     {
         $this->validateLogin();
-        $refund = $this->getOrderRefundContext($id)->refunding($data);
-        $this->getOrderContext($refund['order_id'])->refunding($data);
 
         if (!$waitNotify) {
             $refund = $this->setRefunded($id, $data);
+        } else {
+            $refund = $this->getOrderRefundContext($id)->refunding($data);
+            $this->getOrderContext($refund['order_id'])->refunding($data);
         }
 
         return $refund;
@@ -379,6 +404,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $orderContext->setOrder($order);
 
         return $orderContext;
+    }
+
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 
     protected function getOrderRefundDao()

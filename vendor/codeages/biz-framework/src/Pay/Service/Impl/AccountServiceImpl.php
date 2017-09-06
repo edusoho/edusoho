@@ -143,6 +143,11 @@ class AccountServiceImpl extends BaseService implements AccountService
             throw $this->createInvalidArgumentException('user_id is required.');
         }
 
+        $savedUser = $this->getUserBalanceDao()->getByUserId($user['user_id']);
+        if (!empty($savedUser)) {
+            return $savedUser;
+        }
+
         $user = ArrayToolkit::parts($user, array('user_id'));
         return $this->getUserBalanceDao()->create($user);
     }

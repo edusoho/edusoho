@@ -21,6 +21,11 @@ class AuditingStatus extends AbstractRefundStatus
         return $this->getOrderRefundStatus(RefusedStatus::NAME)->process($data);
     }
 
+    public function refunded($data)
+    {
+        return $this->getOrderRefundStatus(RefundedStatus::NAME)->process($data);
+    }
+
     public function cancel()
     {
         return $this->getOrderRefundStatus(CancelStatus::NAME)->process();

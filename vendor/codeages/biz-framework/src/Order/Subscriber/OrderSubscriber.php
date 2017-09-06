@@ -13,7 +13,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     public static function getSubscribedEvents()
     {
         return array(
-            'pay.success' => 'onPaid',
+            'payment_trade.paid' => 'onPaid',
             'order.paid' => 'onOrderPaid',
             'payment_trade.refunded' => 'onTradeRefunded'
         );
@@ -34,6 +34,8 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         unset($order['deducts']);
 
         $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
+
+        $results = array();
         foreach ($deducts as $deduct) {
             $deduct['order'] = $order;
             if (!empty($indexedOrderItems[$deduct['item_id']])) {
@@ -42,11 +44,10 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
 
             $processor = $this->getDeductPaidCallback($deduct);
             if (!empty($processor)) {
-                $processor->paidCallback($deduct);
+                $results[] = $processor->paidCallback($deduct);
             }
         }
 
-        $results = array();
         foreach ($orderItems as $orderItem) {
             $orderItem['order'] = $order;
 
@@ -56,9 +57,10 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
             }
         }
 
+        $results = array_unique($results);
         if (in_array(PaidCallback::SUCCESS, $results) && count($results) == 1) {
             $this->getWorkflowService()->finish($order['id']);
-        } else if (count($results) > 0){
+        } else if (count($results) > 0) {
             $this->getWorkflowService()->fail($order['id']);
         }
     }

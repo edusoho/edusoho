@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class OrderContext
 {
@@ -65,6 +66,7 @@ class OrderContext
 
         $this->createOrderLog($order);
         $this->dispatch($status, $order);
+
         return $order;
     }
 
@@ -104,6 +106,7 @@ class OrderContext
     protected function dispatch($status, $order)
     {
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
         foreach ($orderItems as $orderItem) {
             $orderItem['order'] = $order;
             $this->getDispatcher()->dispatch("order.item.{$orderItem['target_type']}.{$status}", new Event($orderItem));
@@ -112,6 +115,9 @@ class OrderContext
         $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
         foreach ($deducts as $deduct) {
             $deduct['order'] = $order;
+            if (!empty($indexedOrderItems[$deduct['item_id']])) {
+                $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
+            }
             $this->getDispatcher()->dispatch("order.deduct.{$deduct['deduct_type']}.{$status}", new Event($deduct));
         }
 

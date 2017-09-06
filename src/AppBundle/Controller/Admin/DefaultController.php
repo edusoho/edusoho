@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use Vip\Service\Vip\VipService;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;
@@ -256,12 +257,12 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
 
-        $conditions = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
-        $newOrders = $this->getOrderService()->analysisOrderDate($conditions);
+        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'status' => 'paid');
+        $newOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newOrderCount'] = $newOrders;
 
-        $conditions['totalPriceGreaterThan'] = 0;
-        $newPaidOrders = $this->getOrderService()->analysisOrderDate($conditions);
+        $conditions['price_amiunt_GT'] = 0;
+        $newPaidOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newPaidOrderCount'] = $newPaidOrders;
 
         $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
@@ -275,7 +276,34 @@ class DefaultController extends BaseController
 
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
-        $orderDatas = $this->getOrderService()->analysisPaidOrderGroupByTargetType($startTime, 'targetType');
+        $courseOrdersCount = $this->getOrderService()->countOrders(array(
+            'pay_time_GT' => $startTime,
+            'order_item_target_type' => 'course',
+            'price_amount_GT' => 0,
+            'status' => 'paid',
+        ));
+
+        $classroomOrdersCount = $this->getOrderService()->countOrders(array(
+            'pay_time_GT' => $startTime,
+            'order_item_target_type' => 'classroom',
+            'price_amount_GT' => 0,
+            'status' => 'paid',
+        ));
+
+        if (!$this->isPluginInstalled('vip')) {
+            $vipOrdersCount = $this->getOrderService()->countOrders(array(
+                'pay_time_GT' => $startTime,
+                'order_item_target_type' => 'vip',
+                'price_amount_GT' => 0,
+                'status' => 'paid',
+            ));
+        }
+
+        $orderDatas = array(
+            'course' => array('targetType' => 'course', 'value' => $courseOrdersCount),
+            'vip' => array('targetType' => 'vip', 'value' => isset($vipOrdersCount) ?: 0),
+            'classroom' => array('targetType' => 'classroom', 'value' => $classroomOrdersCount),
+        );
 
         $defaults = array(
             'course' => array('targetType' => 'course', 'value' => 0),

@@ -71,6 +71,7 @@ class CashierController extends BaseController
             'cash_amount' => $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount) * 100,
             'create_ip' => $request->getClientIp(),
             'price_type' => 'money',
+            'type' => 'purchase',
             'attach' => array(
                 'user_id' => $order['user_id'],
             ),
@@ -81,18 +82,31 @@ class CashierController extends BaseController
 
     public function successAction(Request $request)
     {
-        $sn = $request->query->get('sn');
-        $order = $this->getOrderService()->getOrderBySn($sn);
+        $tradeSn = $request->query->get('trade_sn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
+            'trade' => $trade,
+        ));
+    }
+
+    public function rechargeSuccessAction($trade)
+    {
+        return $this->render('cashier/success.html.twig', array(
+            'goto' => $this->generateUrl('my_coin'),
+        ));
+    }
+
+    public function purchaseSuccessAction($trade)
+    {
+        $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
 
         $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-
         $item1 = reset($items);
 
         $biz = $this->getBiz();
-
         /* @var $product Product */
         $product = $biz['order.product.'.$item1['target_type']];
-
         $product->init(array('targetId' => $item1['target_id']));
 
         return $this->render('cashier/success.html.twig', array(

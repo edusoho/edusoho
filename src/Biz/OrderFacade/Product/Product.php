@@ -6,6 +6,7 @@ use AppBundle\Common\StringToolkit;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\Sms\Service\SmsService;
 use Codeages\Biz\Framework\Context\BizAware;
+use AppBundle\Common\MathToolkit;
 
 abstract class Product extends BizAware
 {
@@ -102,6 +103,16 @@ abstract class Product extends BizAware
         return $payablePrice > 0 ? $payablePrice : 0;
     }
 
+    public function paidCallback($orderItem)
+    {
+        $this->smsCallback($orderItem);
+        $this->callback($orderItem);
+    }
+
+    public function callback($orderItem)
+    {
+    }
+
     protected function smsCallback($orderItem)
     {
         $smsType = 'sms_'.$this->targetType.'_buy_notify';
@@ -111,7 +122,8 @@ abstract class Product extends BizAware
             $parameters = array();
             $parameters['order_title'] = $orderItem['title'];
             $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
-            $parameters['totalPrice'] = $orderItem['order']['pay_amount'].'元';
+            $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
+            $parameters['totalPrice'] = $price.'元';
 
             $description = $parameters['order_title'].'成功回执';
 

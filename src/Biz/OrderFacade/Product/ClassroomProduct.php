@@ -20,7 +20,7 @@ class ClassroomProduct extends Product
 
         $this->targetId = $params['targetId'];
         $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
-        $this->successUrl = array('my_course_show', array('id' => $this->targetId));
+        $this->successUrl = array('classroom_show', array('id' => $this->targetId));
         $this->title = $classroom['title'];
         $this->price = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
@@ -36,11 +36,30 @@ class ClassroomProduct extends Product
         }
     }
 
+    public function callback($orderItem)
+    {
+        $order = $this->getOrderService()->getOrder($orderItem['order_id']);
+        $info = array(
+            'orderId' => $order['id'],
+            'note' => $order['created_reason'],
+        );
+
+        $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
+        if (!$isStudent) {
+            $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+        }
+    }
+
     /**
      * @return ClassroomService
      */
     private function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

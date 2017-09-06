@@ -4,9 +4,11 @@ namespace Biz\OrderFacade\Product;
 
 interface Refund
 {
-    public function applyRefund();
+    public function afterApplyRefund();
 
-    public function cancelRefund();
+    public function afterAdoptRefund($order);
 
-    public function adoptRefund();
+    public function afterCancelRefund();
+
+    public function afterRefuseRefund($order);
 }

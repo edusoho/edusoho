@@ -4,8 +4,8 @@ namespace Tests\Unit\OrderFacade;
 
 use Biz\BaseTestCase;
 use Biz\OrderFacade\OrderFacadeServiceProvider;
-use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
+use Biz\OrderFacade\Product\ClassroomProduct;
 
 class OrderFacadeServiceProviderTest extends BaseTestCase
 {

@@ -6,10 +6,9 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class CourseProduct extends Product implements PaidCallback, Owner, Refund
+class CourseProduct extends Product implements Owner, Refund
 {
     const TYPE = 'course';
 
@@ -40,40 +39,42 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
         }
     }
 
-    public function paidCallback($orderItem)
+    public function callback($orderItem)
     {
+        $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
-            'orderId' => $orderItem['order_id'],
-            'remark' => '',
+            'orderId' => $order['id'],
+            'note' => $order['created_reason'],
         );
-
-        $this->smsCallback($orderItem);
 
         if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
             $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
         }
-
-        return PaidCallback::SUCCESS;
     }
 
-    public function applyRefund()
+    public function afterApplyRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
     }
 
-    public function cancelRefund()
+    public function afterCancelRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
     }
 
-    public function adoptRefund()
+    public function afterRefuseRefund($order)
     {
-        $this->removeOwner();
+        $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
     }
 
-    public function removeOwner($userId)
+    public function afterAdoptRefund($order)
+    {
+        $this->exitOwner($order['user_id']);
+    }
+
+    public function exitOwner($userId)
     {
         $this->getCourseMemberService()->removeStudent($this->targetId, $userId);
     }
@@ -105,5 +106,10 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

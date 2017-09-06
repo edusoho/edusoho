@@ -137,8 +137,10 @@ class StudentManageController extends BaseController
                 $data['isAdminAdded'] = true;
             }
 
+            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
+
             $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(

@@ -115,8 +115,8 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
 
-        $income = $this->getOrderService()->sumOrderPriceByTarget('course', $course['id']);
-        $this->getCourseDao()->update($course['id'], array('income' => $income));
+        /*$income = $this->getOrderService()->sumOrderPriceByTarget('course', $course['id']);
+        $this->getCourseDao()->update($course['id'], array('income' => $income));*/
     }
 
     private function sendWelcomeMsg(Event $event)

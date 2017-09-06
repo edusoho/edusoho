@@ -570,14 +570,8 @@ admin_order_refunds:
     defaults: { _controller: AppBundle:Admin/OrderRefund:refunds }
     permissions: [admin_finance]
 
-admin_order_cancel_refund:
-    path: /order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:Admin/OrderRefund:cancelRefund }
-    methods: [POST]
-    permissions: [admin_finance]
-
 admin_order_audit_refund:
-    path: /order/{id}/audit_refund
+    path: /order/{refundId}/audit_refund
     defaults: { _controller: AppBundle:Admin/OrderRefund:auditRefund }
     permissions: [admin_finance]
 
