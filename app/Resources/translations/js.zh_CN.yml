@@ -77,6 +77,10 @@ user.settings.security.questions.set.success: 安全问题设置成功
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
 
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
+
 user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_find.by_mobile.verify_success: 验证通过，你可以开始更新支付密码。
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确

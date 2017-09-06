@@ -63,6 +63,10 @@ user.card_load_hint: User card loading
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully
 
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
+
 user.settings.security.pay_password_set.success: New pay password had set successfully
 user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
 

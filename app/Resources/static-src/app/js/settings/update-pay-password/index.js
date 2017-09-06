@@ -17,13 +17,13 @@ let validator = $form.validate({
   },
   messages: {
     'form[currentUserLoginPassword]': {
-      required: '请输入用户登录密码'
+      required: Translator.trans('user.settings.security.pay_password.set_login_password')
     },
     'form[payPassword]': {
-      required: '请输入新的支付密码',
+      required: Translator.trans('user.settings.security.pay_password.set_new_pay_password')
     },
     'form[confirmPayPassword]': {
-      required: '请确认输入的支付密码',
+      required: Translator.trans('user.settings.security.pay_password.confirm_new_pay_password')
     }
   },
 })
