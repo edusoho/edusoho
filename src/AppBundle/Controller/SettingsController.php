@@ -109,7 +109,7 @@ class SettingsController extends BaseController
 
             list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-            if ($result !== 'success') {
+            if ($result !== 'success' && $user['nickname'] != $nickname) {
                 return $this->createJsonResponse(array('message' => $message), 403);
             }
 
