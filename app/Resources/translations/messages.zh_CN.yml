@@ -2794,7 +2794,7 @@ user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址�
 user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
-user.settings.security.get_sms_code_btn: 短信验证
+user.settings.security.get_sms_code_btn: 获取验证码
 user.settings.security.input_sms_code: 填写你的短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
@@ -2804,6 +2804,7 @@ user.settings.security.content_title: 安全设置
 user.settings.security.reset_pay_password: 重设支付密码
 user.settings.security.reset_pay_password_success: 重设支付密码成功
 user.settings.security.set_pay_password_success: 新支付密码设置成功。
+user.settings.security.set_pay_password_success.closed_automatically: 5秒后该页面自动关闭
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
@@ -2875,11 +2876,19 @@ user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">找回支付密码</li>
+user.settings.security.pay_password_find.way: 选择找回方式
+user.settings.security.pay_password.validate_info: 验证信息
 user.settings.security.pay_password_find.by_question: 通过安全问题找回
 user.settings.security.pay_password_find.by_question.answer: 安全问题答案
+user.settings.security.pay_password_find.by_mobile.unbound: 未绑定手机？
+user.settings.security.pay_password_find.by_mobile.immediately_bind: 立即绑定
 user.settings.security.pay_password_find.by_mobile: 通过手机找回
+user.settings.security.pay_password_find.by_mobile_current: 当前手机
+user.settings.security.pay_password_find.by_mobile_phone: 通过手机号码找回
 user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
+user.settings.security.pay_password_find.current_empty: 未设置安全问题？
 user.settings.security.pay_password_find.empty: 您还没有安全问题，请先设置
+user.settings.security.pay_password_find.start_set: 立即设置
 user.settings.security.pay_password_find.wrong_answer: 回答错误
 user.settings.security.pay_password_find.correct_answer: 回答正确，你可以开始更新支付密码。
 user.settings.security.pay_password_find.unbind_mobile: 您还没有绑定手机，请先绑定。

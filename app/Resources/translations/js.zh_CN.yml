@@ -28,6 +28,7 @@ site.date.second: 秒
 site.data.get_sms_code_btn: 获取短信验证码
 site.data.get_sms_code_again_btn: 秒后重新获取
 site.data.get_sms_code_success_hint: 发送短信成功
+site.data.get_sms_code_allowance_success_hint: 发送短信成功,还有%allowance%次发送机会
 site.data.get_sms_code_failure_hint: 发送短信失败，请联系管理员
 site.data.expand: 展开
 site.data.collapse: 收起
@@ -87,6 +88,10 @@ user.settings.security.questions.set.success: 安全问题设置成功
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
 
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
+
 user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 
@@ -98,6 +103,8 @@ user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 user.settings.basic_info.nickname_change_fail: 用户名修改失败
+
+user.settings.unbind_success: 取消绑定成功
 
 material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
@@ -167,7 +174,7 @@ activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
 activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
-activity.audio_manage.media_error_hint: 请上传或选择文档
+activity.document_manage.media_error_hint: 请上传或选择文档
 activity.audio_manage.finish_detail_required_error_hint: 请输入完成条件
 activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数字
 

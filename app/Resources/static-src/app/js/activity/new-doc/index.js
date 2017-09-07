@@ -27,7 +27,11 @@ function initDocPlayer(contents) {
   let doc = new QiQiuYun.Player({
     id: 'document-content',
     resNo: $element.data('resNo'),
-    token: $element.data('token')
+    token: $element.data('token'),
+    user: {
+      id: $element.data('userId'),
+      name: $element.data('nickName')
+    }
   });
 
 
