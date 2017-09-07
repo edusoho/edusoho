@@ -9,6 +9,8 @@
   {% else %}
     <div class="iframe-parent-content iframe-parent-full" id="document-content" data-res-no="{{ doc.file.globalId }}"
          data-token="{{ docMedia.token }}"
+         data-user-id="{{app.user.id|default(0)}}"
+         data-user-name="{{app.user.username|default('')}}"
       {% if setting('magic.doc_watermark') %}
         data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>
