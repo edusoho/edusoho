@@ -25,7 +25,8 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             'created_reason',
             'seller_id',
             'price_type',
-            'deducts'
+            'deducts',
+            'create_extra'
         ));
 
         $orderDeducts = empty($order['deducts']) ? array() : $order['deducts'];

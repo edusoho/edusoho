@@ -258,6 +258,9 @@ class OrderServiceTest extends IntegrationTestCase
                 'price_amount' => 100,
                 'target_id' => 1,
                 'target_type' => 'course',
+                'create_extra' => array(
+                    'xxx' => 'xxx'
+                ),
                 'deducts' => array(
                     array(
                         'deduct_id' => 1,
@@ -279,6 +282,9 @@ class OrderServiceTest extends IntegrationTestCase
                 'price_amount' => 110,
                 'target_id' => 2,
                 'target_type' => 'course',
+                'create_extra' => array(
+                    'xxx' => 'xxx'
+                ),
                 'deducts' => array(
                     array(
                         'deduct_id' => 3,
@@ -315,6 +321,9 @@ class OrderServiceTest extends IntegrationTestCase
             'price_type' => 'coin',
             'user_id' => $this->biz['user']['id'],
             'created_reason' => '购买',
+            'create_extra' => array(
+                'xxx' => 'xxx'
+            )
         );
     }
 
