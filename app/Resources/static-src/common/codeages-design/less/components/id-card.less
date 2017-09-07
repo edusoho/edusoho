@@ -7,7 +7,16 @@
   background-position: center;
   background-size: 100%;
   margin-bottom: 32px;
+  .form-error-message {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 12px;
+  }
   &.done {
+    .form-error-message {
+      display: none;
+    }
     .card-icon i {
       opacity: 0;
       color: rgba(255, 255, 255, 0.7);
@@ -17,9 +26,6 @@
       opacity: 0;
       color: rgba(255, 255, 255, 0.7);
       .cd-transition;
-    }
-    .form-error-message {
-      opacity: 0;
     }
     &:hover {
       .card-icon i {

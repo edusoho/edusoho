@@ -135,8 +135,10 @@ site.setting.finished: 已设置
 site.setting.unfinished: 未设置
 site.verify.finished: 已验证
 site.verify.unfinished: 未验证
+site.bind.finished: 已绑定
+site.bind.unfinished: 未绑定
 site.setting.email_finished: 已设置邮箱
-site.verify.mobile_finished: 已验证手机
+site.bind.mobile_finished: 已绑定手机
 
 # email 模板
 email.password_reset: >
@@ -2949,7 +2951,7 @@ user.settings.verification.approving_content_tips: 您的信息正在审核中�
 user.settings.verification.approved_title_tips: 您已经通过实名认证
 user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
 
-user.settings.verification.unapprove_tips: 实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务
+user.settings.verification.unapprove_tips: 实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务。
 user.settings.verification.approve_failed_tips: 审核未通过，请重新上传身份证图片并保证画面清晰。
 
 user.settings.verification.notice: 认证须知

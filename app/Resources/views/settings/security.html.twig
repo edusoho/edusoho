@@ -39,10 +39,15 @@
     <span class="setting-action">
       {% if hasLoginPassword %}
         <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
+          {{'form.btn.modify'|trans}}
+        </button>
       {% else %}
         <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">
+          {{'form.btn.set'|trans}}
+        </button>
       {% endif %}
-      <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
     </span>
   </div>
 
@@ -53,7 +58,7 @@
     <span class="setting-action">
       {% if hasPayPassword %}
         <span class="cd-setting-status cd-setting-status-done">{{'site.setting.finished'|trans}}</span>
-        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.reset'|trans}}</button>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
       {% else %}
         <span class="cd-setting-status">{{'site.setting.unfinished'|trans}}</span>
         <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
@@ -82,17 +87,17 @@
       <span class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</span>
       <span class="setting-content">
         {% if hasVerifiedMobile %}
-          {{'site.verify.mobile_finished'|trans}}：{{ verifiedMobile }}
+          {{'site.bind.mobile_finished'|trans}}：{{ blur_phone_number(verifiedMobile) }}
         {% else %}
           {{'user.settings.security.mobile_bind_tips'|trans}}
         {% endif %}
       </span>
       <span class="setting-action">
         {% if hasVerifiedMobile %}
-          <span class="cd-setting-status cd-setting-status-done">{{'site.verify.finished'|trans}}</span>
+          <span class="cd-setting-status cd-setting-status-done">{{'site.bind.finished'|trans}}</span>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
         {% else %}
-          <span class="cd-setting-status">{{'site.verify.unfinished'|trans}}</span>
+          <span class="cd-setting-status">{{'site.bind.unfinished'|trans}}</span>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
         {% endif %}
       </span>

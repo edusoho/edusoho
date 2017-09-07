@@ -84,6 +84,9 @@ user.settings.email.send_success: Please verify your email address. We’ve sent
 
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
+user.settings.basic_info.nickname_change_fail: 'Nickname had changed fail'
+
+user.settings.unbind_success: 取消绑定成功
 
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share

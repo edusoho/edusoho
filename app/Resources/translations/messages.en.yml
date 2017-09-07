@@ -110,8 +110,10 @@ site.setting.finished: Setting finished
 site.setting.unfinished: Setting unfinished
 site.verify.finished: Verify finished
 site.verify.unfinished: Verify unfinished
+site.bind.finished: 已绑定
+site.bind.unfinished: 未绑定
 site.setting.email_finished: Setting email finished
-site.verify.mobile_finished: Verify mobile finished
+site.bind.mobile_finished: Binding mobile finished
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
