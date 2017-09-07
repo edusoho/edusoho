@@ -147,7 +147,8 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             'serializes' => array(
                 'pay_data' => 'json',
                 'callback' => 'json',
-                'signed_data' => 'json'
+                'signed_data' => 'json',
+                'create_extra' => 'json'
             ),
             'orderbys' => array(
                 'id',

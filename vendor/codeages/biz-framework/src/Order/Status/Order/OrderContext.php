@@ -111,7 +111,7 @@ class OrderContext
         $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
 
         $results = array();
-        $method = ucfirst($status);
+        $method = 'on'.ucfirst($status);
         foreach ($deducts as $deduct) {
             $deduct['order'] = $order;
             if (!empty($indexedOrderItems[$deduct['item_id']])) {

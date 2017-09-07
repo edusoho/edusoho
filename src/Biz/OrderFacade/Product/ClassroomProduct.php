@@ -66,7 +66,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     /**
      * @return ClassroomService
      */
-    private function getClassroomService()
+    protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
     }
