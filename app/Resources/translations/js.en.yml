@@ -87,6 +87,8 @@ user.settings.basic_info.nickname_change_successfully: 'Nickname had changed suc
 user.settings.basic_info.nickname_change_fail: 'Nickname had changed fail'
 
 user.settings.unbind_success: 取消绑定成功
+user.settings.unbind_title: 取消绑定
+user.settings.unbind_content: 确定要取消绑定吗？
 
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
