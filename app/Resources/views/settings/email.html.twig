@@ -11,10 +11,13 @@
 {% block body %}
   {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
     <form id="setting-email-form" method="post" action="{{path('settings_email')}}">
-      <div class="form-group cd-form-group">
-        <label class="readonly">{{'user.settings.email.current_email'|trans}}</label>
-        <input type="text" class="form-control" value="{{ app.user.email }}" readonly>
-      </div>
+      {% set emailArr = app.user.email|split('@') %}
+      {% if emailArr[1] != 'edusoho.net' %}
+        <div class="form-group cd-form-group">
+          <label class="readonly">{{'user.settings.email.current_email'|trans}}</label>
+          <input type="text" class="form-control" value="{{ blur_number(app.user.email) }}" readonly>
+        </div>
+      {% endif %}
       <div class="form-group cd-form-group">
         <label for="email">{{'user.settings.email.new_email'|trans}}</label>
         <input type="email" class="form-control" name="email">
