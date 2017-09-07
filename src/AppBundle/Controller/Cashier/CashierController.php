@@ -34,7 +34,7 @@ class CashierController extends BaseController
 
         if ($order['status'] == SuccessOrderStatus::NAME) {
             return $this->forward('AppBundle:Cashier/Cashier:purchaseSuccess', array('trade' => array(
-                'order_sn' => $order['sn']
+                'order_sn' => $order['sn'],
             )));
         }
 
