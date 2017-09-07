@@ -313,7 +313,8 @@ class SettingsController extends BaseController
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
         $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
-        $hasEmail = strlen($user['email']) > 0;
+        $hasEmail = strlen($user['email']) > 0 && stripos($user['email'], '@edusoho.net') === false;
+
         $email = $hasEmail ? $user['email'] : '';
         $hasVerifiedEmail = $user['emailVerified'];
 
