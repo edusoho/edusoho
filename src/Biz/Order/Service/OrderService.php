@@ -132,4 +132,9 @@ interface OrderService
     public function findOrderLogsByOrderIds(array $orderIds);
 
     public function findOrderRefundsByOrderIds(array $orderIds);
+
+    /*
+    * return sum(`totalPrice`), sum(`amount`), sum(`coinAmount`)
+    */
+    public function analysis($conditions);
 }

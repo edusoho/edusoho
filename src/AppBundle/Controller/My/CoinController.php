@@ -168,7 +168,7 @@ class CoinController extends BaseController
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
-        $couponRateSum = $this->getInviteRecordService()->sumCouponRateByInviteUserId($user->getId());
+        $couponRateSum = $this->getInviteRecordService()->sumCouponRateByInviteUserId($user['id']);
 
         return $this->render('coin/invite-code.html.twig', array(
             'code' => $user['inviteCode'],
