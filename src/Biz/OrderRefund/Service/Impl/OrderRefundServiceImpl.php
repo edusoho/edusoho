@@ -94,7 +94,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     {
         $user = $this->getCurrentUser();
         if (!$user->isAdmin()) {
-            throw $this->createAccessDeniedException("you are not allowed to do this");
+            throw $this->createAccessDeniedException('you are not allowed to do this');
         }
     }
 
