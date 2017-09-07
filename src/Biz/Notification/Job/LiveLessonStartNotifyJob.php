@@ -52,7 +52,7 @@ class LiveLessonStartNotifyJob extends AbstractJob
             'convNo' => $conv['no'],
         );
         $body = array(
-            'type' => 'live_start',
+            'type' => 'live.start',
             'courseId' => $courseId,
             'lessonId' => $lessonId,
             'lessonTitle' => $lessonTitle,
