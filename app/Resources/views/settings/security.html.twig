@@ -82,7 +82,7 @@
       <div class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</div>
       <div class="setting-content">
         {% if hasVerifiedMobile %}
-          {{'site.verify.mobile_finished'|trans}}：{{ verifiedMobile }}
+          {{'site.verify.mobile_finished'|trans}}：{{ blur_phone_number(verifiedMobile) }}
         {% else %}
           {{'user.settings.security.mobile_bind_tips'|trans}}
         {% endif %}
