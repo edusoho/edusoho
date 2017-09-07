@@ -75,12 +75,14 @@ abstract class Product extends BizAware
 
     /**
      * 商品数量
-     * @var integer
+     *
+     * @var int
      */
     public $num = 1;
 
     /**
      * 商品单位
+     *
      * @var string
      */
     public $unit = '';

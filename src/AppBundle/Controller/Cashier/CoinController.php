@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Currency;
-use Biz\OrderFacade\Product\Product;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\AccountService;

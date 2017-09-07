@@ -26,7 +26,7 @@ class AvailablePaidCoursesCommandTest extends BaseTestCase
         );
         $this->mockBiz('Classroom:ClassroomService', array(
             array('functionName' => 'findUserPaidCoursesInClassroom', 'returnValue' => array(
-                array(1 => array('id'=>1, 'originPrice' => 10)),array(array('id'=>1, 'target_id' => 1, 'pay_amount' => 10))
+                array(1 => array('id' => 1, 'originPrice' => 10)), array(array('id' => 1, 'target_id' => 1, 'pay_amount' => 10)),
             )),
         ));
 
