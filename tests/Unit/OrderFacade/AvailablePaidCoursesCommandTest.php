@@ -23,10 +23,11 @@ class AvailablePaidCoursesCommandTest extends BaseTestCase
 
         $classroomCourses = array(
             array('id' => 1, 'originPrice' => 10),
-            array('id' => 2, 'originPrice' => 20),
         );
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'findUserJoinedCoursesInClassroom', 'returnValue' => $classroomCourses),
+            array('functionName' => 'findUserPaidCoursesInClassroom', 'returnValue' => array(
+                array(1 => array('id'=>1, 'originPrice' => 10)),array(array('id'=>1, 'target_id' => 1, 'pay_amount' => 10))
+            )),
         ));
 
         $command = new AvailablePaidCoursesCommand();

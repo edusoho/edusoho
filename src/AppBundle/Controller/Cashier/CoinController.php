@@ -38,13 +38,12 @@ class CoinController extends BaseController
 
         $item = reset($orderItems);
 
-        $biz = $this->getBiz();
-
-        /* @var $product Product */
-        //todo 命名问题
-        $product = $biz['order.product.'.$item['target_type']];
-
-        $product->init(array('targetId' => $item['target_id']));
+        $params = array(
+            'targetId' => $item['target_id'],
+            'num' => $item['num'],
+            'unit' => $item['unit'],
+        );
+        $product = $this->getOrderFacadeService()->getOrderProduct($item['target_type'], $params);
 
         return $this->getCurrency()->convertToCoin($order['pay_amount'] * $product->maxRate / 100);
     }
@@ -89,5 +88,10 @@ class CoinController extends BaseController
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    private function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 }
