@@ -1,14 +1,13 @@
 <?php
+
 namespace Tests\Queue;
 
-use Tests\IntegrationTestCase;
 use Codeages\Biz\Framework\Queue\Worker;
 use Codeages\Biz\Framework\Queue\JobFailer;
 use Codeages\Biz\Framework\Queue\Driver\DatabaseQueue;
 use Tests\Fixtures\QueueJob\ExampleFinishedJob;
 use Tests\Fixtures\QueueJob\ExampleFailedJob;
 use Tests\Fixtures\QueueJob\ExampleFailedRetryJob;
-use Tests\Fixtures\QueueJob\ExampleTimeoutJob;
 
 class WorkerTest extends QueueBaseTestCase
 {
@@ -26,11 +25,11 @@ class WorkerTest extends QueueBaseTestCase
             'once' => true,
         );
 
-        $worker = new Worker($queue, $failer, $options);
+        $worker = new Worker($queue, $failer, $this->createLock(), $this->biz['logger'], $options);
         $worker->runNextJob();
 
-        $this->assertTrue($this->biz['logger.test_handler']->hasInfo("ExampleFinishedJob executed."));
-        $this->assertNotInDatabase($queueOptions['table'], array('queue' => self::TEST_QUEUE));
+        $this->assertTrue($this->biz['logger.test_handler']->hasInfo('ExampleFinishedJob executed.'));
+        $this->assertCount(0, $this->fetchAllFromDatabase($queueOptions['table'], array('queue' => self::TEST_QUEUE)));
     }
 
     public function testRun_FailedJob()
@@ -47,15 +46,16 @@ class WorkerTest extends QueueBaseTestCase
             'once' => true,
         );
 
-        $worker = new Worker($queue, $failer, $options);
+        $worker = new Worker($queue, $failer, $this->createLock(), $this->biz['logger'], $options);
         $worker->runNextJob();
 
-        $this->assertTrue($this->biz['logger.test_handler']->hasInfo("ExampleFailedJob executed."));
-        $this->assertNotInDatabase($queueOptions['table'], array('queue' => self::TEST_QUEUE));
-        $this->assertInDatabase('biz_queue_failed_job', array(
+        $this->assertTrue($this->biz['logger.test_handler']->hasInfo('ExampleFailedJob executed.'));
+
+        $this->assertCount(0, $this->fetchAllFromDatabase($queueOptions['table'], array('queue' => self::TEST_QUEUE)));
+        $this->assertCount(1, $this->fetchAllFromDatabase('biz_queue_failed_job', array(
             'queue' => self::TEST_QUEUE,
-            'reason' => 'ExampleFailedJob execute failed.'
-        ));
+            'reason' => 'ExampleFailedJob execute failed.',
+        )));
     }
 
     public function testRun_FailedRetryJob()
@@ -72,15 +72,16 @@ class WorkerTest extends QueueBaseTestCase
             'once' => true,
         );
 
-        $worker = new Worker($queue, $failer, $options);
+        $worker = new Worker($queue, $failer, $this->createLock(), $this->biz['logger'], $options);
         $worker->runNextJob();
 
-        $this->assertTrue($this->biz['logger.test_handler']->hasInfo("ExampleFailedRetryJob executed."));
-        $this->assertNotInDatabase($queueOptions['table'], array(
+        $this->assertTrue($this->biz['logger.test_handler']->hasInfo('ExampleFailedRetryJob executed.'));
+
+        $this->assertCount(0, $this->fetchAllFromDatabase($queueOptions['table'], array(
             'queue' => self::TEST_QUEUE,
             'executions' => 1,
             'reserved_time' => 0,
             'expired_time' => 0,
-        ));
+        )));
     }
 }

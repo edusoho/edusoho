@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class Setting extends Migration
+class BizSetting extends Migration
 {
     /**
      * Do the migration
@@ -11,15 +11,15 @@ class Setting extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("
+        $connection->exec('
             CREATE TABLE `biz_setting` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `name` varchar(64) NOT NULL,
-            `data` longtext NOT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `name` (`name`)
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `name` varchar(64) NOT NULL,
+              `data` longtext NOT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `name` (`name`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
     }
 
     /**
@@ -29,6 +29,6 @@ class Setting extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_setting`");
+        $connection->exec('DROP TABLE `biz_setting`');
     }
 }

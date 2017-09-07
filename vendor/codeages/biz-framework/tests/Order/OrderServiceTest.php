@@ -85,6 +85,36 @@ class OrderServiceTest extends IntegrationTestCase
         $this->assertCreatedOrder($mockOrder, $mockedOrderItems, $order);
     }
 
+    public function testCreateOrderWhenZeroPayAmount()
+    {
+        $mockedOrderItems = array(
+            array(
+                'title' => '人工智能神经网络',
+                'detail' => '<div>独创的教学</div>',
+                'price_amount' => 100,
+                'target_id' => 1,
+                'target_type' => 'course',
+                'deducts' => array(
+                    array(
+                        'deduct_id' => 1,
+                        'deduct_type' => 'discount',
+                        'deduct_amount' => 20,
+                        'detail' => '打折活动扣除10元'
+                    ),
+                    array(
+                        'deduct_id' => 2,
+                        'deduct_type' => 'coupon',
+                        'deduct_amount' => 80,
+                        'detail' => '使用优惠码扣除8元'
+                    )
+                )
+            )
+        );
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+        $this->assertEquals('paid', $order['status']);
+    }
+
     public function testPay()
     {
         $mockedOrderItems = $this->mockOrderItems();

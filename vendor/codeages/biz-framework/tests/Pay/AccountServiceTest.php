@@ -79,6 +79,26 @@ class AccountServiceTest extends IntegrationTestCase
         $this->assertEquals(-10, $userBalance['amount']);
     }
 
+    public function testLockedAmount()
+    {
+        $user = array(
+            'user_id' => $this->biz['user']['id']
+        );
+
+        $this->getAccountService()->createUserBalance($user);
+
+        $userBalance = $this->getAccountService()->waveAmount($user['user_id'], 10);
+        $this->assertEquals(10, $userBalance['amount']);
+
+        $userBalance = $this->getAccountService()->lockCoin($user['user_id'], 5);
+        $this->assertEquals(5, $userBalance['amount']);
+        $this->assertEquals(5, $userBalance['locked_amount']);
+
+        $userBalance = $this->getAccountService()->releaseCoin($user['user_id'], 3);
+        $this->assertEquals(8, $userBalance['amount']);
+        $this->assertEquals(2, $userBalance['locked_amount']);
+    }
+
     protected function getAccountService()
     {
         return $this->biz->service('Pay:AccountService');

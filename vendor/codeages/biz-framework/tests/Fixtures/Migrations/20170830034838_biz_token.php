@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class Token extends Migration
+class BizToken extends Migration
 {
     /**
      * Do the migration
@@ -35,7 +35,6 @@ class Token extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_token`");
-
+        $connection->exec('DROP TABLE `biz_token`');
     }
 }

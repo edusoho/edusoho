@@ -14,6 +14,12 @@ class PayServiceTest extends IntegrationTestCase
             'id' => 1
         );
         $this->biz['user'] = $currentUser;
+
+        $this->biz['payment.platforms.options'] = array(
+            'wechat' => array(
+                'appid'=>'aaa'
+            )
+        );
     }
 
     public function testCreateTrade()
@@ -31,7 +37,7 @@ class PayServiceTest extends IntegrationTestCase
     {
         $this->assertNotEmpty($trade);
         $this->assertNotEmpty($trade['trade_sn']);
-        $this->assertEquals('created', $trade['status']);
+        $this->assertEquals('paying', $trade['status']);
         $this->assertEquals($data['order_sn'], $trade['order_sn']);
         $this->assertEquals($data['price_type'], $trade['price_type']);
         $this->assertEquals($data['amount'], $trade['amount']);
@@ -65,6 +71,62 @@ class PayServiceTest extends IntegrationTestCase
         $this->assertPaidTrade($notifyData, $trade);
     }
 
+    public function testLockedAmount()
+    {
+        $user = array(
+            'user_id' => $this->biz['user']['id']
+        );
+
+        $this->getAccountService()->createUserBalance($user);
+
+        $userBalance = $this->getAccountService()->waveAmount($user['user_id'], 100);
+        $this->assertEquals(100, $userBalance['amount']);
+
+        $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
+
+        $data = $this->mockTrade();
+        $data['coin_amount'] = 20;
+        $trade = $this->getPayService()->createTrade($data);
+
+
+        $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
+        $this->assertEquals(80, $userBalance['amount']);
+        $this->assertEquals(20, $userBalance['locked_amount']);
+    }
+
+    public function testReleaseAmount()
+    {
+        $user = array(
+            'user_id' => $this->biz['user']['id']
+        );
+
+        $this->getAccountService()->createUserBalance($user);
+
+        $userBalance = $this->getAccountService()->waveAmount($user['user_id'], 100);
+        $this->assertEquals(100, $userBalance['amount']);
+
+        $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
+
+        $data = $this->mockTrade();
+        $data['coin_amount'] = 20;
+        $trade = $this->getPayService()->createTrade($data);
+
+
+        $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
+        $this->assertEquals(80, $userBalance['amount']);
+        $this->assertEquals(20, $userBalance['locked_amount']);
+
+        $this->getPayService()->closeTradesByOrderSn($trade['order_sn']);
+        $data = array(
+            'sn' => $trade['trade_sn']
+        );
+        $this->getPayService()->notifyClosed($data);
+
+        $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
+        $this->assertEquals(100, $userBalance['amount']);
+        $this->assertEquals(0, $userBalance['locked_amount']);
+    }
+
     public function testCreateZeroTrade()
     {
         $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
@@ -79,6 +141,16 @@ class PayServiceTest extends IntegrationTestCase
 
     public function testRechargeNotify()
     {
+        $user = array(
+            'user_id' => $this->biz['user']['id']
+        );
+        $this->getAccountService()->createUserBalance($user);
+
+        $seller = array(
+            'user_id' => 12
+        );
+        $this->getAccountService()->createUserBalance($seller);
+
         $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
 
         $data = $this->mockTrade();
@@ -94,6 +166,9 @@ class PayServiceTest extends IntegrationTestCase
 
         $trade = $this->getPaymentTradeDao()->get($trade['id']);
         $this->assertPaidTrade($notifyData, $trade);
+
+        $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
+        $this->assertEquals('80', $userBalance['amount']);
     }
 
     protected function assertPaidTrade($notifyData, $trade)
@@ -105,55 +180,43 @@ class PayServiceTest extends IntegrationTestCase
         $this->assertEquals($notifyData['fee_type'], $trade['currency']);
         $this->assertNotEmpty($trade['notify_data']);
         $this->assertEquals($notifyData['transaction_id'], $trade['platform_sn']);
+        $cashFlows = $this->getUserCashflowDao()->findByTradeSn($trade['trade_sn']);
+        $this->assertEquals(5,count($cashFlows));
 
-        if (in_array($trade['type'], array('purchase', 'recharge')))  {
-            $cashFlows = $this->getUserCashflowDao()->findByTradeSn($trade['trade_sn']);
-
-            $this->assertEquals(3,count($cashFlows));
-            foreach ($cashFlows as $cashFlow) {
-                $this->assertNotEmpty($cashFlow['sn']);
-                $this->assertTrue(in_array($cashFlow['type'], array('inflow', 'outflow')));
+        foreach ($cashFlows as $cashFlow) {
+            $this->assertNotEmpty($cashFlow['sn']);
+            $this->assertTrue(in_array($cashFlow['type'], array('inflow', 'outflow')));
+            if ('buyer' == $cashFlow['user_type']) {
                 $this->assertEquals($this->biz['user']['id'], $cashFlow['user_id']);
-                $this->assertEquals($trade['order_sn'], $cashFlow['order_sn']);
-                $this->assertEquals($trade['trade_sn'], $cashFlow['trade_sn']);
-                $this->assertEquals($trade['platform'], $cashFlow['platform']);
+            } else if ('seller' == $cashFlow['user_type']) {
+                $this->assertEquals($trade['seller_id'], $cashFlow['user_id']);
+            }
+            $this->assertEquals($trade['order_sn'], $cashFlow['order_sn']);
+            $this->assertEquals($trade['trade_sn'], $cashFlow['trade_sn']);
+            $this->assertEquals($trade['platform'], $cashFlow['platform']);
 
-                if ($cashFlow['type'] == 'outflow') {
-                    $this->assertNotEmpty($cashFlow['parent_sn']);
-                }
+            if ($cashFlow['type'] == 'outflow') {
+                $this->assertNotEmpty($cashFlow['parent_sn']);
+            }
+        }
 
-                if($cashFlow['currency'] == 'coin' && $cashFlow['type'] == 'outflow') {
-                    $this->assertEquals($trade['coin_amount'] + $trade['cash_amount'] * $this->getCoinRate(), $cashFlow['amount']);
-                }
-
-                if($cashFlow['currency'] == 'coin' && $cashFlow['type'] == 'inflow') {
+        if ($trade['type'] == 'recharge') {
+            foreach ($cashFlows as $cashFlow) {
+                if($cashFlow['currency'] == 'coin') {
                     $this->assertEquals($trade['cash_amount'] * $this->getCoinRate(), $cashFlow['amount']);
-                }
-
-                if($cashFlow['currency'] != 'coin') {
-                    $this->assertEquals($trade['currency'], $cashFlow['currency']);
+                } else {
                     $this->assertEquals($trade['cash_amount'], $cashFlow['amount']);
                 }
             }
+        }
 
-            $siteCashflows = $this->getSiteCashflowDao()->findByTradeSn($trade['trade_sn']);
-            foreach ($siteCashflows as $index => $siteCashflow) {
-                $this->assertNotEmpty($siteCashflow['sn']);
-                $this->assertEquals($trade['trade_sn'], $siteCashflow['trade_sn']);
-                $this->assertTrue(in_array($siteCashflow['currency'], array('CNY', 'coin')));
-
-                if ('coin' == $siteCashflow['currency']) {
-                    $this->assertEquals($trade['coin_amount'] + $trade['cash_amount'] * $this->getCoinRate(), $siteCashflow['amount']);
+        if ($trade['type'] == 'purchase')  {
+            foreach ($cashFlows as $cashFlow) {
+                if($cashFlow['currency'] == 'coin') {
+                    $this->assertEquals($trade['coin_amount'], $cashFlow['amount']);
                 } else {
-                    $this->assertEquals($trade['cash_amount'], $siteCashflow['amount']);
+                    $this->assertEquals($trade['cash_amount'], $cashFlow['amount']);
                 }
-
-                $this->assertEquals($trade['platform'], $siteCashflow['platform']);
-                $this->assertEquals($trade['title'], $siteCashflow['title']);
-                $this->assertEquals($trade['order_sn'], $siteCashflow['order_sn']);
-                $this->assertEquals($trade['platform_sn'], $siteCashflow['platform_sn']);
-                $this->assertEquals($trade['price_type'], $siteCashflow['price_type']);
-                $this->assertEquals($trade['pay_time'], $siteCashflow['pay_time']);
             }
         }
     }
@@ -161,7 +224,9 @@ class PayServiceTest extends IntegrationTestCase
     public function testFindPaymentPlatforms()
     {
         $this->biz['payment.platforms.options'] = array(
-            'wechat' => array('appid'=>'aaa')
+            'wechat' => array(
+                'appid'=>'bcbc'
+            )
         );
 
         $payments = $this->getPayService()->findEnabledPayments();
@@ -177,7 +242,7 @@ class PayServiceTest extends IntegrationTestCase
     {
         return array(
             'goods_title' => 'java基础课程',
-            'goods_desc' => 'java基础课程，适合初学者',
+            'goods_detail' => 'java基础课程，适合初学者',
             'attach' => array(
                 'user_id' => 1
             ),
@@ -189,7 +254,8 @@ class PayServiceTest extends IntegrationTestCase
             'pay_type' => 'Native',
             'price_type' => 'money',
             'platform' => 'wechat',
-            'seller_id' => '12'
+            'seller_id' => '12',
+            'type' => 'purchase'
         );
 
     }
@@ -303,5 +369,10 @@ class PayServiceTest extends IntegrationTestCase
     protected function getPayService()
     {
         return $this->biz->service('Pay:PayService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->biz->service('Pay:AccountService');
     }
 }

@@ -23,8 +23,8 @@ before_script:
   - composer install
 
 script: 
-  - phpunit
-  - CACHE_ENABLED=true phpunit
+  - vendor/bin/phpunit
+  - CACHE_ENABLED=true vendor/bin/phpunit
 
 cache:
   directories:

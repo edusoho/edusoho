@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddOrderSignStatus extends Migration
+class AddLockedAmount extends Migration
 {
     /**
      * Do the migration
@@ -10,14 +10,11 @@ class AddOrderSignStatus extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $db = $biz['db'];
-        if (!$this->isFieldExist('biz_order', 'signed_time')) {
-            $db->exec(
-                "ALTER TABLE `biz_order` Add column `signed_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '签收时间';"
-            );
+        $connection = $biz['db'];
 
-            $db->exec(
-                "ALTER TABLE `biz_order` Add column `signed_data` TEXT COMMENT '签收的信息';"
+        if (!$this->isFieldExist('biz_user_balance', 'locked_amount')) {
+            $connection->exec(
+                "ALTER TABLE `biz_user_balance` Add column `locked_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额';"
             );
         }
     }
@@ -38,6 +35,5 @@ class AddOrderSignStatus extends Migration
      */
     public function down()
     {
-
     }
 }

@@ -39,6 +39,35 @@ class OrderContext
         return $this->status;
     }
 
+    public function created($data)
+    {
+        $this->status = $this->biz["order_status.created"];
+
+        try {
+            $this->biz['db']->beginTransaction();
+            $order = $this->status->process($data);
+            $this->biz['db']->commit();
+        } catch (AccessDeniedException $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        } catch (InvalidArgumentException $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        } catch (NotFoundException $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw new ServiceException($e->getMessage());
+        }
+
+        $this->createOrderLog($order);
+        $order = $this->dispatch('created', $order);
+        $this->onOrderStatusChange('created', $order);
+
+        return $order;
+    }
+
     function __call($method, $arguments)
     {
         $status = $this->getNextStatusName($method);
@@ -82,6 +111,7 @@ class OrderContext
         $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
 
         $results = array();
+        $method = ucfirst($status);
         foreach ($deducts as $deduct) {
             $deduct['order'] = $order;
             if (!empty($indexedOrderItems[$deduct['item_id']])) {
@@ -89,8 +119,8 @@ class OrderContext
             }
 
             $processor = $this->getDeductCallback($deduct);
-            if (!empty($processor) && $processor instanceof OrderStatusCallback && method_exists($processor, $status)) {
-                $results[] = $processor->$status($deduct);
+            if (!empty($processor) && $processor instanceof OrderStatusCallback && method_exists($processor, $method)) {
+                $results[] = $processor->$method($deduct);
             }
         }
 
@@ -98,8 +128,8 @@ class OrderContext
             $orderItem['order'] = $order;
 
             $processor = $this->getProductCallback($orderItem);
-            if (!empty($processor) && $processor instanceof OrderStatusCallback && method_exists($processor, $status)) {
-                $results[] = $processor->$status($orderItem);
+            if (!empty($processor) && $processor instanceof OrderStatusCallback && method_exists($processor, $method)) {
+                $results[] = $processor->$method($orderItem);
             }
         }
 

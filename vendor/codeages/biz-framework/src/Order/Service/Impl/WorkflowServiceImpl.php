@@ -25,64 +25,18 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             'created_reason',
             'seller_id',
             'price_type',
+            'deducts'
         ));
 
-        try {
-            $this->beginTransaction();
-            $order = $this->saveOrder($order, $orderItems);
-            $order = $this->createOrderDeducts($order, $fields);
-            $order = $this->createOrderItems($order, $orderItems);
+        $orderDeducts = empty($order['deducts']) ? array() : $order['deducts'];
+        unset($order['deducts']);
 
-            if (0 == $order['pay_amount']) {
-                $data = array(
-                    'order_sn' => $order['sn'],
-                    'pay_time' => time(),
-                    'payment' => 'none'
-                );
-                $order = $this->paid($data);
-            }
-
-            $this->commit();
-        } catch (AccessDeniedException $e) {
-            $this->rollback();
-            throw $e;
-        } catch (InvalidArgumentException $e) {
-            $this->rollback();
-            throw $e;
-        } catch (NotFoundException $e) {
-            $this->rollback();
-            throw $e;
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw new ServiceException($e);
-        }
-
-        $this->createOrderLog($order);
-        $this->dispatchOrderStatus('created', $order);
-        return $order;
-    }
-
-    protected function dispatchOrderStatus($status, $order)
-    {
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-        $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
-        foreach ($orderItems as $orderItem) {
-            $orderItem['order'] = $order;
-            $this->dispatch("order.item.{$orderItem['target_type']}.{$status}", $orderItem);
-        }
-
-        $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
-        foreach ($deducts as $deduct) {
-            $deduct['order'] = $order;
-            if (!empty($indexedOrderItems[$deduct['item_id']])) {
-                $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
-            }
-            $this->dispatch("order.deduct.{$deduct['deduct_type']}.{$status}", $deduct);
-        }
-
-        $order['items'] = $orderItems;
-        $order['deducts'] = $deducts;
-        return $this->dispatch("order.{$status}", $order);
+        $data = array(
+            'order' => $order,
+            'orderDeducts' => $orderDeducts,
+            'orderItems' => $orderItems
+        );
+        return $this->getOrderContext()->created($data);
     }
 
     protected function validateLogin()
@@ -109,127 +63,6 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         }
 
         return $orderItems;
-    }
-
-    protected function saveOrder($order, $items)
-    {
-        $user = $this->biz['user'];
-        $order['sn'] = $this->generateSn();
-        $order['price_amount'] = $this->countOrderPriceAmount($items);
-        $order['price_type'] = empty($order['price_type']) ? 'money' : $order['price_type'];
-        $order['pay_amount'] = $this->countOrderPayAmount($order['price_amount'], $items);
-        $order['created_user_id'] = $user['id'];
-        $order = $this->getOrderDao()->create($order);
-        return $order;
-    }
-
-    protected function createOrderDeducts($order, $fields)
-    {
-        if(!empty($fields['deducts'])) {
-            $orderInfo = ArrayToolkit::parts($order, array(
-                'user_id',
-                'seller_id',
-            ));
-            $orderInfo['order_id'] = $order['id'];
-            $order['deducts'] = $this->createDeducts($orderInfo, $fields['deducts']);
-        }
-        return $order;
-    }
-
-    protected function countOrderPriceAmount($items)
-    {
-        $priceAmount = 0;
-        foreach ($items as $item) {
-            $priceAmount = $priceAmount + $item['price_amount'];
-        }
-        return $priceAmount;
-    }
-
-    protected function countOrderPayAmount($payAmount, $items)
-    {
-        foreach ($items as $item) {
-            if (empty($item['deducts'])) {
-                continue;
-            }
-
-            foreach ($item['deducts'] as $deduct) {
-                $payAmount = $payAmount - $deduct['deduct_amount'];
-            }
-        }
-
-        if ($payAmount<0) {
-            $payAmount = 0;
-        }
-
-        return $payAmount;
-    }
-
-    protected function generateSn()
-    {
-        return date('YmdHis', time()).mt_rand(10000, 99999);
-    }
-
-    protected function createOrderItems($order, $items)
-    {
-        $savedItems = array();
-        foreach ($items as $item) {
-            $deducts = array();
-            if (!empty($item['deducts'])) {
-                $deducts = $item['deducts'];
-                unset($item['deducts']);
-            }
-            $item['order_id'] = $order['id'];
-            $item['seller_id'] = $order['seller_id'];
-            $item['user_id'] = $order['user_id'];
-            $item['sn'] = $this->generateSn();
-            $item['pay_amount'] = $this->countOrderItemPayAmount($item, $deducts);
-            $item = $this->getOrderItemDao()->create($item);
-            $item['deducts'] = $this->createDeducts($item, $deducts);
-            $savedItems[] = $item;
-        }
-
-        $order['items'] = $savedItems;
-        return $order;
-    }
-
-    protected function countOrderItemPayAmount($item, $deducts)
-    {
-        $priceAmount = $item['price_amount'];
-
-        foreach ($deducts as $deduct) {
-            $priceAmount = $priceAmount - $deduct['deduct_amount'];
-        }
-
-        return $priceAmount;
-    }
-
-    protected function createDeducts($item, $deducts)
-    {
-        $savedDeducts = array();
-        foreach ($deducts as $deduct) {
-            $deduct['item_id'] = $item['id'];
-            $deduct['order_id'] = $item['order_id'];
-            $deduct['seller_id'] = $item['seller_id'];
-            $deduct['user_id'] = $item['user_id'];
-            $savedDeducts[] = $this->getOrderItemDeductDao()->create($deduct);
-        }
-        return $savedDeducts;
-    }
-
-    protected function createOrderLog($order, $dealData = array())
-    {
-        $orderLog = array(
-            'status' => $order['status'],
-            'order_id' => $order['id'],
-            'user_id' => $this->biz['user']['id'],
-            'deal_data' => $dealData
-        );
-        return $this->getOrderLogDao()->create($orderLog);
-    }
-
-    protected function getOrderLogDao()
-    {
-        return $this->biz->dao('Order:OrderLogDao');
     }
 
     public function paying($id, $data = array())
@@ -388,6 +221,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $orderRefund;
     }
 
+    protected function generateSn()
+    {
+        return date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
     protected function getOrderRefundContext($id)
     {
         $orderRefundContext = $this->biz['order_refund_context'];
@@ -402,9 +240,13 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $orderRefundContext;
     }
 
-    protected function getOrderContext($orderId)
+    protected function getOrderContext($orderId = 0)
     {
         $orderContext = $this->biz['order_context'];
+
+        if ($orderId == 0) {
+            return $orderContext;
+        }
 
         $order = $this->getOrderDao()->get($orderId);
         if (empty($order)) {

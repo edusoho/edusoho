@@ -19,6 +19,7 @@ class Order extends Migration
               `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
               `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
               `price_amount` INT(10) unsigned NOT NULL COMMENT '订单总金额',
+              `price_type` varchar(32) not null  COMMENT '标价类型，现金支付or虚拟币；money, coin',
               `pay_amount` INT(10) unsigned NOT NULL COMMENT '应付金额',
               `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
               `callback` TEXT COMMENT '商品中心的异步回调信息',
@@ -27,6 +28,8 @@ class Order extends Migration
               `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
               `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间，交易成功后不得退款',
               `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+              `signed_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '签收时间',
+              `signed_data` TEXT COMMENT '签收的信息',
               `close_data` TEXT COMMENT '交易关闭描述',
               `close_user_id` INT(10) unsigned DEFAULT '0' COMMENT '关闭交易的用户',
               `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
@@ -50,6 +53,8 @@ class Order extends Migration
               `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
               `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
               `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间，交易成功后不得退款',
+              `signed_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '签收时间',
+              `signed_data` TEXT COMMENT '签收的信息',
               `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
               `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
               `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
@@ -95,6 +100,83 @@ class Order extends Migration
               UNIQUE(`sn`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
+
+        $connection->exec("
+          CREATE TABLE `biz_order_item_refund` (
+            `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+            `order_refund_id` INT(10) unsigned NOT NULL COMMENT '退款订单id',
+            `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+            `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
+            `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
+            `amount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '涉及金额',
+            `coin_amount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '涉及虚拟币金额',
+            `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+            `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
+            `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            PRIMARY KEY (`id`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+
+        if (!$this->isFieldExist('biz_order_item_refund', 'coin_amount')) {
+            $connection->exec(
+                "ALTER TABLE `biz_order_item_refund` Add column `coin_amount` INT(10) unsigned NOT NULL COMMENT '涉及虚拟币金额';"
+            );
+        }
+
+        if ($this->isFieldExist('biz_order_item_refund', 'currency')) {
+            $connection->exec(
+                "ALTER TABLE `biz_order_item_refund` drop column `currency`;"
+            );
+        }
+
+        $connection->exec("
+            CREATE TABLE `biz_order_log` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `order_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '订单id',
+              `status` VARCHAR(32) NOT NULL COMMENT '订单状态',
+              `user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户',
+              `deal_data` TEXT COMMENT '处理数据',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+
+        if (!$this->isFieldExist('biz_order_log', 'order_refund_id')) {
+            $connection->exec(
+                "ALTER TABLE `biz_order_log` Add column `order_refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '退款id';"
+            );
+        }
+
+        if (!$this->isFieldExist('biz_order_item', 'refund_status')) {
+            $connection->exec(
+                "ALTER TABLE `biz_order_item` Add column `refund_status` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '退款状态';"
+            );
+        }
+
+        if (!$this->isFieldExist('biz_order_item', 'refund_id')) {
+            $connection->exec(
+                "ALTER TABLE `biz_order_item` Add column `refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '最新退款id';"
+            );
+        }
+
+        if (!$this->isFieldExist('biz_order', 'payment')) {
+            $connection->exec(
+                "ALTER TABLE `biz_order` ADD COLUMN `payment` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '支付类型' AFTER `pay_time`;"
+            );
+        }
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $biz = $this->getContainer();
+        $db = $biz['db'];
+
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $db->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
     }
 
     /**

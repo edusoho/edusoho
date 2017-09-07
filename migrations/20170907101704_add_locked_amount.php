@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddRefundStatusOrderItem extends Migration
+class AddLockedAmount extends Migration
 {
     /**
      * Do the migration
@@ -12,15 +12,9 @@ class AddRefundStatusOrderItem extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isFieldExist('biz_order_item', 'refund_status')) {
+        if (!$this->isFieldExist('biz_user_balance', 'locked_amount')) {
             $connection->exec(
-                "ALTER TABLE `biz_order_item` Add column `refund_status` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '退款状态';"
-            );
-        }
-
-        if (!$this->isFieldExist('biz_order_item', 'refund_id')) {
-            $connection->exec(
-                "ALTER TABLE `biz_order_item` Add column `refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '最新退款id';"
+                "ALTER TABLE `biz_user_balance` Add column `locked_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额';"
             );
         }
     }
@@ -41,6 +35,5 @@ class AddRefundStatusOrderItem extends Migration
      */
     public function down()
     {
-
     }
 }
