@@ -19,6 +19,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         if (!ArrayToolkit::requireds($record, array('member_id', 'target_type', 'operate_type'))) {
             throw $this->createInvalidArgumentException('参数不正确，记录创建失败！');
         }
+
         return $this->getRecordDao()->create($record);
     }
 
