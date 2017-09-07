@@ -222,6 +222,7 @@ class SettingsController extends BaseController
             $options = $request->request->all();
             $result = $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
             $image = $this->getWebExtension()->getFpath($result['largeAvatar']);
+
             return $this->createJsonResponse(array(
                 'image' => $image,
             ), 200);
