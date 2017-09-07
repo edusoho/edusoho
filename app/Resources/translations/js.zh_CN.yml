@@ -104,6 +104,10 @@ user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 user.settings.basic_info.nickname_change_fail: 用户名修改失败
 
+user.settings.login_password_success: 设置登录密码成功
+user.settings.login_password_fail: 设置登录密码失败
+
+material.share.teacher_nickname_label: 请输入老师的名称
 user.settings.unbind_success: 取消绑定成功
 user.settings.unbind_title: 取消绑定
 user.settings.unbind_content: 确定要取消绑定吗？
