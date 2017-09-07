@@ -53,6 +53,5 @@ class AddNumTypeToOrderItem extends Migration
      */
     public function down()
     {
-
     }
 }
