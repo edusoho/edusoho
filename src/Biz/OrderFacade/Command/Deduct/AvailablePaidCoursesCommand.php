@@ -4,6 +4,7 @@ namespace Biz\OrderFacade\Command\Deduct;
 
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
+use AppBundle\Common\MathToolkit;
 
 class AvailablePaidCoursesCommand extends Command
 {
@@ -20,12 +21,18 @@ class AvailablePaidCoursesCommand extends Command
         }
 
         $user = $this->getUser();
-        $paidCourses = $this->getClassroomService()->findUserJoinedCoursesInClassroom($user['id'], $product->targetId);
 
-        foreach ($paidCourses as $course) {
-            if ($course['originPrice'] > 0) {
-                $product->availableDeducts['paidCourses'][] = $course;
+        list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom($user['id'], $product->targetId);
+
+        foreach ($orderItems as $item) {
+            if ($item['pay_amount'] <= 0) {
+                continue;
             }
+
+            $course = $paidCourses[$item['target_id']];
+            $course['paidPrice'] = MathToolkit::simple($item['pay_amount'], 0.01);
+
+            $product->availableDeducts['paidCourses'][] = $course;
         }
     }
 
@@ -37,6 +44,16 @@ class AvailablePaidCoursesCommand extends Command
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
+    }
+
+    private function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 
     protected function getUser()
