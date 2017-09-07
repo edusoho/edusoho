@@ -4,9 +4,10 @@ namespace Biz\OrderFacade\Product;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Classroom\Service\ClassroomService;
+use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class ClassroomProduct extends Product
+class ClassroomProduct extends Product implements OrderStatusCallback
 {
     const TYPE = 'classroom';
 
@@ -38,15 +39,27 @@ class ClassroomProduct extends Product
 
     public function callback($orderItem)
     {
+        $this->smsCallback($orderItem);
+
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
             'orderId' => $order['id'],
             'note' => $order['created_reason'],
         );
 
-        $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
-        if (!$isStudent) {
-            $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+        try {
+
+            $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
+            if (!$isStudent) {
+                $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+            }
+
+            return OrderStatusCallback::SUCCESS;
+        } catch (\Exception $e) {
+            $this->getLogService()->error('order', 'classroom_callback', 'order.classroom_callback.fail',
+                array('error' => $e->getMessage(), 'context' => $orderItem));
+
+            return false;
         }
     }
 
@@ -56,10 +69,5 @@ class ClassroomProduct extends Product
     private function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
-    }
-
-    private function getOrderService()
-    {
-        return $this->biz->service('Order:OrderService');
     }
 }

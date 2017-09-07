@@ -7973,6 +7973,8 @@ log.action.order.pay_result: 支付结果
 log.action.order.andit_refund: 退款审核
 log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
+log.action.order.course_callback: 课程回调
+log.action.order.classroom_callback: 班级回调
 log.action.category.create: 新增
 log.action.category.update: 修改
 log.action.category.delete: 删除
@@ -8033,5 +8035,7 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+order.course_callback.fail: 订单处理成功，但是用户加入课程失败
+order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
 
 coupon.had_been_used: 优惠码已经被使用了

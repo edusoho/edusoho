@@ -3,12 +3,15 @@
 namespace Biz\OrderFacade\Product;
 
 use AppBundle\Common\StringToolkit;
+use Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\Sms\Service\SmsService;
+use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 
-abstract class Product extends BizAware
+abstract class Product extends BizAware implements OrderStatusCallback
 {
     /**
      * 商品ID
@@ -103,16 +106,6 @@ abstract class Product extends BizAware
         return $payablePrice > 0 ? $payablePrice : 0;
     }
 
-    public function paidCallback($orderItem)
-    {
-        $this->smsCallback($orderItem);
-        $this->callback($orderItem);
-    }
-
-    public function callback($orderItem)
-    {
-    }
-
     protected function smsCallback($orderItem)
     {
         $smsType = 'sms_'.$this->targetType.'_buy_notify';
@@ -137,5 +130,21 @@ abstract class Product extends BizAware
     private function getSmsService()
     {
         return $this->biz->service('Sms:SmsService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->biz->service('System:LogService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

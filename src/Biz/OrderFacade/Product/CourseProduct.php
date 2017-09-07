@@ -6,9 +6,10 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class CourseProduct extends Product implements Owner, Refund
+class CourseProduct extends Product implements Owner, Refund, OrderStatusCallback
 {
     const TYPE = 'course';
 
@@ -47,16 +48,27 @@ class CourseProduct extends Product implements Owner, Refund
         }
     }
 
-    public function callback($orderItem)
+    public function onPaid($orderItem)
     {
+        $this->smsCallback($orderItem);
+
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
             'orderId' => $order['id'],
             'note' => $order['created_reason'],
         );
 
-        if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
-            $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+        try {
+            if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
+                $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+            }
+
+            return OrderStatusCallback::SUCCESS;
+        } catch (\Exception $e) {
+            $this->getLogService()->error('order', 'course_callback', 'order.course_callback.fail',
+                array('error' => $e->getMessage(), 'context' => $orderItem));
+
+            return false;
         }
     }
 
@@ -95,7 +107,7 @@ class CourseProduct extends Product implements Owner, Refund
     /**
      * @return MemberService
      */
-    private function getCourseMemberService()
+    protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
     }
@@ -114,10 +126,5 @@ class CourseProduct extends Product implements Owner, Refund
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
-    }
-
-    protected function getOrderService()
-    {
-        return $this->biz->service('Order:OrderService');
     }
 }

@@ -9,6 +9,7 @@ use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Command\OrderPayCheck\CoinCheckCommand;
 use Biz\OrderFacade\Command\OrderPayCheck\CouponCheckCommand;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
+use Biz\OrderFacade\Deduct\CouponDeduct;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;
@@ -23,6 +24,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
     public function register(Container $biz)
     {
         $this->registerProduct($biz);
+
+        $this->registerDeduct($biz);
 
         $this->registerCommands($biz);
 
@@ -45,6 +48,16 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $product->setBiz($biz);
 
             return $product;
+        });
+    }
+
+    private function registerDeduct(Container $biz)
+    {
+        $biz[sprintf('order.deduct.%s', CouponDeduct::TYPE)] = $biz->factory(function ($biz) {
+            $deduct = new CouponDeduct();
+            $deduct->setBiz($biz);
+
+            return $deduct;
         });
     }
 
