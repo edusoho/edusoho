@@ -101,7 +101,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(*)');
-
         return (int) $builder->execute()->fetchColumn(0);
     }
 
