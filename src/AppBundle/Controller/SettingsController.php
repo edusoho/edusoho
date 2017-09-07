@@ -889,12 +889,13 @@ class SettingsController extends BaseController
                 $mailFactory = $this->getBiz()->offsetGet('mail_factory');
                 $mail = $mailFactory($mailOptions);
                 $mail->send();
+
                 return $this->render('settings/email-verfiy.html.twig',
                     array(
                         'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email'])),
                         'data' => array(
                             'email' => $user['email'],
-                        )
+                        ),
                 ));
             } catch (\Exception $e) {
                 $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
@@ -929,12 +930,13 @@ class SettingsController extends BaseController
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
             $mail->send();
+
             return $this->render('settings/email-verfiy.html.twig',
                 array(
                     'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email'])),
                     'data' => array(
                         'email' => $user['email'],
-                    )
+                    ),
             ));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());

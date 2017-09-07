@@ -1685,12 +1685,12 @@ class WebExtension extends \Twig_Extension
 
     public function getLoginEmailAddress($email)
     {
-        $dress = explode("@",$email);
+        $dress = explode('@', $email);
         $dress = strtolower($dress[1]);
         $emailAddressMap = array(
             'gmail.com' => 'mail.google.com',
             'vip.qq.com' => 'mail.qq.com',
-            'vip.163.com' => 'vip.163.com',            
+            'vip.163.com' => 'vip.163.com',
             'foxmail.com' => 'mail.qq.com',
             'hotmail.com' => 'www.hotmail.com',
             '188.com' => 'www.188.com',
