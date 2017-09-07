@@ -2306,6 +2306,7 @@ user.settings.verification.approved_content_tips: After certification by real na
 
 user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
 user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
+user.settings.verification.approve_failed_reason_tips: 审核未通过，原因是：%reason%。请修改信息后重新认证。
 
 user.settings.verification.notice: Certification requirements
 user.settings.verification.notice_content: "<p>1、We will after you submit id card information within 5 working days (not including holidays) to complete the audit, the audit results will be sent to you in the form of text messages and system notification.<br>2、If your account is not binding mobile phone, suggest you binding mobile phone in advance.<br>3、Real-name certification audit is completed, will not be able to modify, and delete, please carefully fill in.<br>4、You need to prepare id photos (front and back), please ensure that the id photo is visible, it is strictly prohibited to PS, specific real-name authentication common problems for reference.</p>"
