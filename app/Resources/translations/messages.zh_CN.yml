@@ -2804,7 +2804,7 @@ user.settings.security.content_title: 安全设置
 user.settings.security.reset_pay_password: 重设支付密码
 user.settings.security.reset_pay_password_success: 重设支付密码成功
 user.settings.security.set_pay_password_success: 新支付密码设置成功。
-user.settings.security.set_pay_password_success.closed_automatically: 5秒后该页面自动关闭
+user.settings.security.set_pay_password_success.closed_automatically: 3 秒后该页面自动关闭
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
