@@ -68,21 +68,21 @@ if (app.scheduleCrontab) {
   $.post(app.scheduleCrontab);
 }
 
-$("i.hover-spin").mouseenter(function () {
-  $(this).addClass("md-spin");
+$('i.hover-spin').mouseenter(function () {
+  $(this).addClass('md-spin');
 }).mouseleave(function () {
-  $(this).removeClass("md-spin");
+  $(this).removeClass('md-spin');
 });
 
-if ($(".set-email-alert").length > 0) {
-  $(".set-email-alert .close").click(function () {
-    Cookies.set("close_set_email_alert", 'true');
+if ($('.set-email-alert').length > 0) {
+  $('.set-email-alert .close').click(function () {
+    Cookies.set('close_set_email_alert', 'true');
   });
 }
 
-if ($(".announcements-alert").length > 0) {
-  if ($('.announcements-alert .swiper-container .swiper-wrapper').children().length > 1) {
-    let noticeSwiper = new Swiper('.alert-notice .swiper-container', {
+if ($('#announcements-alert').length > 0) {
+  if ($('#announcements-alert .swiper-container .swiper-wrapper').children().length > 1) {
+    let noticeSwiper = new Swiper('#announcements-alert .swiper-container', {
       speed: 300,
       loop: true,
       mode: 'vertical',
@@ -91,27 +91,27 @@ if ($(".announcements-alert").length > 0) {
     });
   }
 
-  $(".announcements-alert .close").click(function () {
-    Cookies.set("close_announcements_alert", 'true', {
+  $('#announcements-alert .close').click(function () {
+    Cookies.set('close_announcements_alert', 'true', {
       path: '/'
     });
   });
 }
 
 if (!isMobileDevice()) {
-  $("body").on("mouseenter", "li.nav-hover", function (event) {
-    $(this).addClass("open");
-  }).on("mouseleave", "li.nav-hover", function (event) {
-    $(this).removeClass("open");
+  $('body').on('mouseenter', 'li.nav-hover', function (event) {
+    $(this).addClass('open');
+  }).on('mouseleave', 'li.nav-hover', function (event) {
+    $(this).removeClass('open');
   });
 } else {
-  $("li.nav-hover >a").attr("data-toggle", "dropdown");
+  $('li.nav-hover >a').attr('data-toggle', 'dropdown');
 }
 
-$(".js-search").focus(function () {
-  $(this).prop("placeholder", "").addClass("active");
+$('.js-search').focus(function () {
+  $(this).prop('placeholder', '').addClass('active');
 }).blur(function () {
-  $(this).prop("placeholder", Translator.trans('site.search_hint')).removeClass("active");
+  $(this).prop('placeholder', Translator.trans('site.search_hint')).removeClass('active');
 });
 
 $("select[name='language']").change(function () {

@@ -70,6 +70,10 @@ $('#form-nickname-submit').on('click', function() {
     $this.siblings('[data-dismiss="form-editable-close"]').click();
 
   }).fail(function(data) {
-    notify('danger', Translator.trans(data.responseJSON.message));
+    if (data.responseJSON.message) {
+      notify('danger', Translator.trans(data.responseJSON.message));
+    } else {
+      notify('danger', Translator.trans('user.settings.basic_info.nickname_change_fail'));
+    }
   })
 })

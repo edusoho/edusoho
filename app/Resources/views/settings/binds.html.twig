@@ -6,6 +6,8 @@
 
 {% set settings = setting('login_bind', []) %}
 
+{% do script(['app/js/settings/binds/index.js']) %}
+
 {% block page_title %}
   {{ 'user.settings.oauth.content_title'|trans }}
 {% endblock %}
@@ -15,19 +17,19 @@
   {% for type, client in clients %}
     {% if settings[type ~ '_enabled']|default(false) and type != 'weixinmob' %}
       <div class="cd-setting">
-        <div class="setting-icon">
+        <span class="setting-icon">
           <i class="cd-icon cd-icon-{{ client.icon_class }}"></i>
-        </div>
-        <div class="setting-title">{% if type == 'weixinweb' %}{{ 'user.settings.oauth.weixin'|trans }}{% else %}{{ client.name }}{% endif %}</div>
-        <div class="setting-action">
+        </span>
+        <span class="setting-title">{% if type == 'weixinweb' %}{{ 'user.settings.oauth.weixin'|trans }}{% else %}{{ client.name }}{% endif %}</span>
+        <span class="setting-action">
           {% if client.status|default(null) == 'bind' %}
-            <div class="cd-setting-status cd-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</div>
-            <a class="btn cd-btn cd-btn-default" href="{{ path('settings_binds_unbind', {'type':type}) }}">{{ 'form.btn.bind_cancel'|trans }}</a>
+            <span class="cd-setting-status cd-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</span>
+            <a class="btn cd-btn cd-btn-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
           {% else %}
-            <div class="cd-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</div>
+            <span class="cd-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
             <a class="btn cd-btn cd-btn-default" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
           {% endif %}
-        </div>
+        </span>
       </div>
     {% endif %}
   {% endfor %}

@@ -12,7 +12,9 @@
 
 {% block main_body %}
   {% if fromCourse %}
-    <div class="alert cd-alert cd-alert-info">{{'user.settings.basic_info.alter_description'|trans}}</div>
+    <div class="alert cd-alert cd-alert-info">
+      {{'user.settings.basic_info.alter_description'|trans}}
+    </div>
   {% endif %}
 
   {{ web_macro.flash_messages(true) }}
@@ -36,14 +38,14 @@
           <div class="static-text" data-target="form-static-text">
           <span>{{app.user.nickname}}</span>
           {% if setting('user_partner.nickname_enabled') %}
-            <a href="javascript:;" data-toggle="form-editable"><i class="cd-icon cd-icon-edit"></i>修改</a>
+            <i class="cd-icon cd-icon-edit cd-text cd-icon-hover" data-toggle="form-editable"></i>
           {% endif %}
         </div> 
         <div data-target="form-editable" style="display:none">
           <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}">
           <div class="action-button">
-            <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">保存</div>
-            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-close">取消</div>
+            <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">{{'form.btn.save'|trans}}</div>
+            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-close">{{'form.btn.cancel'|trans}}</div>
           </div>
         </div> 
       </div>
@@ -156,7 +158,7 @@
             {% elseif field.type == "float" %}
               <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.two_decimal_places'|trans}}" name="profile[{{field.fieldName}}]" class="form-control"  value="{{ profile[field.fieldName]|default('') }}">
             {% elseif field.type == "date" %}
-              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
             {% elseif field.type == "varchar" %}
               <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
             {% endif %}

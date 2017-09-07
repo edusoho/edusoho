@@ -110,8 +110,10 @@ site.setting.finished: Setting finished
 site.setting.unfinished: Setting unfinished
 site.verify.finished: Verify finished
 site.verify.unfinished: Verify unfinished
+site.bind.finished: 已绑定
+site.bind.unfinished: 未绑定
 site.setting.email_finished: Setting email finished
-site.verify.mobile_finished: Verify mobile finished
+site.bind.mobile_finished: Binding mobile finished
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -2158,6 +2160,9 @@ user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get mor
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
+user.settings.profile.change_avatar: Modify picture
+user.settings.profile.choose_again: Choose again
+user.settings.profile.save_avatar: Save picture
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
 user.settings.security.setup_login_password: 'Set password'
@@ -2189,6 +2194,7 @@ user.settings.security.questions: 'Security questions'
 user.settings.security.questions_tips: 'To protect your account by setting up securtiy quesions.'
 user.settings.security.mobile_bind: 'Bound phone number'
 user.settings.security.mobile_bind_tips: 'To increasing the securtiy of loging account and buyting course, and find the log in password, payment password.'
+user.settings.security.email_setting_tips: Can be used to retrieve the login password
 user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
@@ -2283,10 +2289,18 @@ user.settings.verification.photo_require: 'Photo Requirements'
 user.settings.verification.photo_require_tips: 'Pictures must be clear and in color. The format can be jpg, gif or png. Size of each image should be no larger than 2 M.'
 user.settings.verification.idcard_front_photo: 'Front Side'
 user.settings.verification.idcard_back_photo: 'Back Side'
-user.settings.verification.approving_tips: 'Real name is being verified，administrator will reply soon'
-user.settings.verification.approved_tips: 'Congratulations, real name has been verified！'
-user.settings.verification.unapprove_tips: 'Your real name has not been verified'
-user.settings.verification.approve_failed_tips: 'Real name verification not passed, please update according to the advice and try again.'
+
+user.settings.verification.approving_title_tips: Certification audit
+user.settings.verification.approving_content_tips: Your information is under review, please be patient
+user.settings.verification.approved_title_tips: You have already through real-name authentication
+user.settings.verification.approved_content_tips: After certification by real name information cannot be modified
+
+user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
+user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
+
+user.settings.verification.notice: Certification requirements
+user.settings.verification.notice_content: "<p>1、We will after you submit id card information within 5 working days (not including holidays) to complete the audit, the audit results will be sent to you in the form of text messages and system notification.<br>2、If your account is not binding mobile phone, suggest you binding mobile phone in advance.<br>3、Real-name certification audit is completed, will not be able to modify, and delete, please carefully fill in.<br>4、You need to prepare id photos (front and back), please ensure that the id photo is visible, it is strictly prohibited to PS, specific real-name authentication common problems for reference.</p>"
+
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
 user.settings.avatar.reselect: 'Reselect an image'
