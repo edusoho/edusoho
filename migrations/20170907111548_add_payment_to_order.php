@@ -34,6 +34,5 @@ class AddPaymentToOrder extends Migration
      */
     public function down()
     {
-
     }
 }
