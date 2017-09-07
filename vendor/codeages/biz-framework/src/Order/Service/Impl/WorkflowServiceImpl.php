@@ -2,13 +2,10 @@
 
 namespace Codeages\Biz\Framework\Order\Service\Impl;
 
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class WorkflowServiceImpl extends BaseService implements WorkflowService
@@ -140,7 +137,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $orderRefund;
     }
 
-    public function adoptRefund($id, $data = array(), $waitNotify = true)
+    public function adoptRefund($id, $data = array())
     {
         $this->validateLogin();
         $refund = $this->getOrderRefundContext($id)->refunding($data);

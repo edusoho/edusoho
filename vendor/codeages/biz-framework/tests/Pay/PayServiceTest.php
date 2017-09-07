@@ -20,6 +20,11 @@ class PayServiceTest extends IntegrationTestCase
                 'appid'=>'aaa'
             )
         );
+
+        $this->biz['payment.options'] = array(
+            'closed_notify' => true,
+            'refunded_notify' => true
+        );
     }
 
     public function testCreateTrade()
