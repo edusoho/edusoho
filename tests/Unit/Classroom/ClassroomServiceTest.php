@@ -1424,10 +1424,10 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'findCoursesByStudentIdAndCourseIds', 'returnValue' => array(array('id' => 1, 'courseId' => $course1['id'], 'orderId' => 1)))
+            array('functionName' => 'findCoursesByStudentIdAndCourseIds', 'returnValue' => array(array('id' => 1, 'courseId' => $course1['id'], 'orderId' => 1))),
         ));
         $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'searchOrderItems', 'returnValue' => array(array('id' => 1, 'order_id' => 1)))
+            array('functionName' => 'searchOrderItems', 'returnValue' => array(array('id' => 1, 'order_id' => 1))),
         ));
 
         list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom(1, $classroom['id']);
