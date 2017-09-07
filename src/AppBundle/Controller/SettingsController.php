@@ -352,7 +352,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
-        if ($user->isLogin() && empty($user['password']) || 1) {
+        if ($user->isLogin() && empty($user['password'])) {
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_pay_password')));
         }
 
@@ -1008,17 +1008,21 @@ class SettingsController extends BaseController
 
         $targetPath = $request->query->get('targetPath');
         $showType = $request->query->get('showType', 'modal');
+        $form = $this->createFormBuilder()
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+       
 
         if ($request->getMethod() === 'POST') {
-            $passwords = $request->request->all();
-
-            $form = $this->createFormBuilder()
-                ->add('newPassword', 'password')
-                ->add('confirmPassword', 'password')
-                ->getForm();
+            if (!empty($user['password'])) {
+               return $this->createJsonResponse(array(
+                    'message' => 'user.settings.login_password_fail', 
+                ), 500); 
+            }
             $form->bind($request);
-
             if ($form->isValid()) {
+                $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
                 return $this->createJsonResponse(array(
                     'message' => 'user.settings.login_password_success', 
@@ -1033,6 +1037,7 @@ class SettingsController extends BaseController
         return $this->render('settings/setup-password.html.twig' ,array(
             'targetPath' => $targetPath,
             'showType' => $showType,
+            'form' => $form->createView(),
         ));
     }
 
