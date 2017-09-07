@@ -10,18 +10,7 @@ $('#setting-email-form').validate({
     'email': 'required es_email'
   },
   submitSuccess(data) {
-    let url = $btn.data('goto-url');
-console.log(data);
-    $.get(url, data).done(function(html) {
-      $('#modal').html(html);
-    })
-    
-    // notify('success', Translator.trans(data.message));
-    // $('.modal').modal('hide');
-    
-    // setTimeout(function() {
-    //   window.location.reload();
-    // }, 3000);
+      $('#modal').html(data);
   },
   submitError(data) {
     notify('danger',  Translator.trans(data.responseJSON.message));
