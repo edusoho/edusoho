@@ -2970,7 +2970,7 @@ user.settings.avatar.upload_hint: >
 user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
-user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.crop_hint: 选择裁切区域
 user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
 # 个人设置模块-邮箱设置
