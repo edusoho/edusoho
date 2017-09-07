@@ -8,6 +8,7 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -512,21 +513,21 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         $detailConditions = array(
-            'paidStartTime' => $timeRange['startTime'],
-            'paidEndTime' => $timeRange['endTime'],
-            'status' => 'paid',
-            'targetType' => 'course',
+            'operate_time_GT' => $timeRange['startTime'],
+            'operate_time_LT' => $timeRange['endTime'],
+            'operate_type' => 'join',
+            'target_type' => 'course',
         );
-        $count = $this->getOrderService()->countOrders($detailConditions);
+        $count = $this->getMemberOperationService()->countRecords($detailConditions);
         $paginator = new Paginator(
             $request,
             $count,
             20
         );
 
-        $joinLessonDetail = $this->getOrderService()->searchOrders(
+        $joinLessonDetail = $this->getMemberOperationService()->searchRecords(
             $detailConditions,
-            'latest',
+            array('operate_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -534,27 +535,31 @@ class AnalysisController extends BaseController
         $joinLessonData = '';
 
         if ($tab == 'trend') {
-            $joinLessonData = $this->getOrderService()->analysisCourseOrderDataByTimeAndStatus(
-                $timeRange['startTime'],
-                $timeRange['endTime'],
-                'paid'
+            $joinLessonData = $this->getMemberOperationService()->countGroupByDate(
+                $detailConditions,
+                'ASC'
             );
             $data = $this->fillAnalysisData($condition, $joinLessonData);
             $this->sumTrendDataCount($joinLessonData);
         }
 
-        $courseIds = ArrayToolkit::column($joinLessonDetail, 'targetId');
+        $courseIds = ArrayToolkit::column($joinLessonDetail, 'target_id');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $userIds = ArrayToolkit::column($joinLessonDetail, 'userId');
+        $userIds = ArrayToolkit::column($joinLessonDetail, 'member_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $joinLessonStartData = $this->getOrderService()->searchOrders(array('status' => 'paid'), 'early', 0, 1);
+        $joinLessonStartData = $this->getMemberOperationService()->searchRecords(
+            array('operate_type' => 'join'),
+            array('operate_time' => 'ASC'),
+            0,
+            1
+        );
 
         foreach ($joinLessonStartData as $key) {
-            $joinLessonStartDate = date('Y-m-d', $key['createdTime']);
+            $joinLessonStartDate = date('Y-m-d', $key['operate_time']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
@@ -1806,5 +1811,13 @@ class AnalysisController extends BaseController
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    public function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 }
