@@ -527,7 +527,7 @@ class SettingsController extends BaseController
 
                     return $this->render('settings/pay-password-success.html.twig', array(
                         'goto' => $this->generateUrl('settings_security', array(), true),
-                        'duration' => 5,
+                        'duration' => 3,
                     ));
                 } else {
                     $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
