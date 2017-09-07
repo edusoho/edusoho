@@ -13,7 +13,7 @@
        data-token="{{ token }}"
        data-user-id="{{app.user.id|default(0)}}"
        data-user-name="{{app.user.username|default('')}}"
-       data-client-type="{{ app.request.get('clientType')|default('mobile') }}"
+       data-client-type="{{ app.request.get('clientType')|default('app') }}"
   ></div>
 {% endblock %}
 
