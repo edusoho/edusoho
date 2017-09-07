@@ -105,6 +105,8 @@ user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 user.settings.basic_info.nickname_change_fail: 用户名修改失败
 
 user.settings.unbind_success: 取消绑定成功
+user.settings.unbind_title: 取消绑定
+user.settings.unbind_content: 确定要取消绑定吗？
 
 material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
