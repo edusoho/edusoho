@@ -4,7 +4,6 @@ namespace Biz\OrderRefund\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OrderRefund\Service\OrderRefundService;
-use Biz\OrderFacade\Product\Product;
 use AppBundle\Common\StringToolkit;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
@@ -63,7 +62,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
         try {
             $this->beginTransaction();
-            $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data, false);
+            $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data);
 
             $product->afterAdoptRefund($order);
             $this->commit();
@@ -95,7 +94,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     {
         $user = $this->getCurrentUser();
         if (!$user->isAdmin()) {
-            throw $this->createAccessDeniedException("(#{$orderId}), you are not allowed to do this");
+            throw $this->createAccessDeniedException("you are not allowed to do this");
         }
     }
 
