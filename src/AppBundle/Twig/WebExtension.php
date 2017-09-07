@@ -122,6 +122,8 @@ class WebExtension extends \Twig_Extension
             //todo covertIP 要删除
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
             new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
+
+            new \Twig_SimpleFunction('blur_user_name', array($this, 'blurUserName')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
             new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
             new \Twig_SimpleFunction('blur_number', array($this, 'blur_number')),
@@ -1579,6 +1581,11 @@ class WebExtension extends \Twig_Extension
         return time();
     }
 
+    public function blurUserName($name)
+    {
+        return mb_substr($name, 0, 1, 'UTF-8').'**';
+    }
+
     public function blur_phone_number($phoneNum)
     {
         $head = substr($phoneNum, 0, 3);
@@ -1678,12 +1685,12 @@ class WebExtension extends \Twig_Extension
 
     public function getLoginEmailAddress($email)
     {
-        $dress = explode("@",$email);
+        $dress = explode('@', $email);
         $dress = strtolower($dress[1]);
         $emailAddressMap = array(
             'gmail.com' => 'mail.google.com',
             'vip.qq.com' => 'mail.qq.com',
-            'vip.163.com' => 'vip.163.com',            
+            'vip.163.com' => 'vip.163.com',
             'foxmail.com' => 'mail.qq.com',
             'hotmail.com' => 'www.hotmail.com',
             '188.com' => 'www.188.com',
