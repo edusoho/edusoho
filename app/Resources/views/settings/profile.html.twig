@@ -115,14 +115,16 @@
     <div class="col-md-5">
       <div class="form-group cd-form-group">
         <label for="profile_site">{{'user.settings.basic_info.personal_space'|trans}}</label>
-        <input type="text" id="profile_site" name="profile[site]" class="form-control" value="{{ profile.site|default('') }}">
+        <input type="text" id="profile_site" name="profile[site]" class="form-control" value="{{ profile.site|default('') }}" placeholder="http://">
       </div>
     </div>
 
     <div class="col-md-5  col-md-offset-1">
       <div class="form-group cd-form-group">
         <label for="weibo">{{'user.fileds.microblog'|trans}}</label>
-        <input type="text" id="weibo" name="profile[weibo]" class="form-control"  value="{{ profile.weibo|default('') }}">
+        <input type="text" id="weibo" name="profile[weibo]" class="form-control"  value="{{ profile.weibo|default('') }}" placeholder="http://">
+        <input class="hidden" type="text" name="profile[isWeiboPublic]" value="1"/>
+        <div class="help-block">{{'user.settings.basic_info.public'|trans}}</div>
       </div>
     </div>
 
@@ -130,6 +132,7 @@
       <div class="form-group cd-form-group">
         <label for="profile_weixin">{{'user.fileds.wechat'|trans}}</label>
         <input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
+        <input class="hidden" type="text" name="profile[isWeixinPublic]" value="1"/>
       </div>
     </div>
 
@@ -137,6 +140,7 @@
       <div class="form-group cd-form-group">
         <label for="profile_qq">{{'user.fileds.qq'|trans}}</label>
         <input type="text" id="profile_qq" name="profile[qq]" class="form-control" value="{{ profile.qq|default('') }}">
+        <input class="hidden" type="text" name="profile[isQQPublic]" value="1"/>
       </div>
     </div>
 
