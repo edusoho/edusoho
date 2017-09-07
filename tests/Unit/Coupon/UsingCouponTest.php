@@ -15,7 +15,7 @@ class UsingCouponTest extends BaseTestCase
     public function testUsing()
     {
         $coupon = new UsingCoupon($this->getBiz(), array());
-        $coupon->using(array());
+        $coupon->using();
     }
 
     public function testUsed()
@@ -25,11 +25,17 @@ class UsingCouponTest extends BaseTestCase
             'type' => 'minus',
             'status' => 'using',
             'rate' => 10,
+            'deadline' => 0,
         ));
 
         $couponState = $this->getCouponService()->getCouponStateById($coupon['id']);
 
-        $couponState->used();
+        $couponState->used(array(
+            'targetType' => 'course',
+            'targetId' => 1,
+            'userId' => 1,
+            'orderId' => 1,
+        ));
 
         $newCoupon = $this->getCouponDao()->get($coupon['id']);
 
@@ -47,6 +53,7 @@ class UsingCouponTest extends BaseTestCase
             'targetId' => 10,
             'orderTime' => 1234,
             'orderId' => 11,
+            'deadline' => 0,
         ));
 
         $couponState = $this->getCouponService()->getCouponStateById($coupon['id']);
@@ -56,10 +63,7 @@ class UsingCouponTest extends BaseTestCase
         $newCoupon = $this->getCouponDao()->get($coupon['id']);
 
         $this->assertArraySubset(
-            array('status' => 'receive',
-            'targetType' => '',
-            'targetId' => 0,
-            'orderId' => 0, ), $newCoupon);
+            array('status' => 'receive'), $newCoupon);
     }
 
     /**

@@ -51,7 +51,7 @@ class CardController extends BaseController
         }
 
         $cardsDetail = $this->getCardService()->findCardDetailsByCardTypeAndCardIds($cardType, $cardIds);
-
+        
         return $this->render('card/index.html.twig', array(
             'cards' => empty($cards) ? null : $cards,
             'cardDetails' => ArrayToolkit::index($cardsDetail, 'id'),

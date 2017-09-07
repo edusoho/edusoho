@@ -6,8 +6,11 @@ use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
+use Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Framework\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;
@@ -28,11 +31,15 @@ class CashierController extends BaseController
         if (!$order) {
             throw new NotFoundHttpException();
         }
-        
-        if ($order['status'] == 'success') {
+
+        if ($order['status'] == SuccessOrderStatus::NAME) {
             return $this->forward('AppBundle:Cashier/Cashier:purchaseSuccess', array('trade' => array(
                 'order_sn' => $order['sn']
             )));
+        }
+
+        if (!in_array($order['status'], array(CreatedOrderStatus::NAME, PayingStatus::NAME))) {
+            return $this->createMessageResponse('info', $this->trans('cashier.order.status.changed_tips'));
         }
 
         $payments = $this->getPayService()->findEnabledPayments();

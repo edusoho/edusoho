@@ -13,18 +13,7 @@ class CouponDeduct extends Deduct implements OrderStatusCallback
     {
         $coupon = $this->getCouponService()->getCouponStateById($orderDeduct['deduct_id']);
 
-        $params = array(
-            'userId' => $orderDeduct['user_id'],
-            'orderId' => $orderDeduct['order_id'],
-            'targetType' => '',
-            'targetId' => 0,
-        );
-
-        if ($orderDeduct['item']) {
-            $params['targetType'] = $orderDeduct['item']['target_type'];
-            $params['targetId'] = $orderDeduct['item']['target_id'];
-        }
-        $coupon->using($params);
+        $coupon->using();
     }
 
     public function onClosed($orderDeduct)
@@ -36,7 +25,20 @@ class CouponDeduct extends Deduct implements OrderStatusCallback
     public function onPaid($orderDeduct)
     {
         $coupon = $this->getCouponService()->getCouponStateById($orderDeduct['deduct_id']);
-        $coupon->used();
+
+        $params = array(
+            'userId' => $orderDeduct['user_id'],
+            'orderId' => $orderDeduct['order_id'],
+            'targetType' => '',
+            'targetId' => 0,
+        );
+
+        if ($orderDeduct['item']) {
+            $params['targetType'] = $orderDeduct['item']['target_type'];
+            $params['targetId'] = $orderDeduct['item']['target_id'];
+        }
+
+        $coupon->used($params);
 
         return OrderStatusCallback::SUCCESS;
     }

@@ -7,17 +7,22 @@ use Biz\User\Service\UserService;
 
 class UsingCoupon extends Coupon implements CouponInterface
 {
-    public function using($params)
+    public function using()
     {
         throw new \Exception('Can not using coupon which status is using!');
     }
 
-    public function used()
+    public function used($params)
     {
         $coupon = $this->getCouponService()->updateCoupon(
             $this->coupon['id'],
             array(
                 'status' => 'used',
+                'targetType' => $params['targetType'],
+                'targetId' => $params['targetId'],
+                'orderTime' => time(),
+                'userId' => $params['userId'],
+                'orderId' => $params['orderId'],
             )
         );
 
@@ -44,10 +49,6 @@ class UsingCoupon extends Coupon implements CouponInterface
     {
         $this->getCouponService()->updateCoupon($this->coupon['id'], array(
             'status' => 'receive',
-            'targetType' => '',
-            'targetId' => 0,
-            'orderTime' => time(),
-            'orderId' => 0,
         ));
     }
 

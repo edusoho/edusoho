@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Biz\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
@@ -155,7 +156,7 @@ class OrderController extends BaseController
     public function cancelAction(Request $request, $id)
     {
         $this->tryManageOrder($id);
-        $order = $this->getOrderService()->cancelOrder($id, '取消订单');
+        $order = $this->getWorkflowService()->close($id, array('type' => 'manual'));
 
         return $this->createJsonResponse(true);
     }
@@ -178,6 +179,14 @@ class OrderController extends BaseController
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
+     * @return WorkflowService
+     */
+    protected function getWorkflowService()
+    {
+        return $this->createService('Order:WorkflowService');
     }
 
     /**

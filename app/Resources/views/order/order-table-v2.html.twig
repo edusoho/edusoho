@@ -40,7 +40,7 @@
           <div class="table-action__item">
             <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
           </div>
-          {% if order.status == 'refunding' or  order.status == 'created' %}
+          {% if order.status in ['refunding', 'created', 'paying'] %}
             <div class="table-action__item dropdown">
               <a href="javascript:;" class="cd-link-primary" data-toggle="dropdown">
                 更多<i class="cd-text-xs cd-icon cd-icon-arrow-down"></i>
@@ -50,7 +50,7 @@
                 {% if order.status == 'refunding' %}
                   <li><a href="javascript:;" class="js-cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.orders.cancel_refund'|trans}}</a></li>
                 {% endif %}
-                {% if order.status == 'created' %}
+                {% if order.status in ['created', 'paying'] %}
                   <li>
                     <a href="">{{'user.orders.pay'|trans}}[这里的支付链接是啥？]</a>
                     {#<a href="{{path('pay_center_show', {sn:order.sn, targetType:order.item.target_type})}}">{{'user.orders.pay'|trans}}[这里的支付链接是啥？]</a>#}
