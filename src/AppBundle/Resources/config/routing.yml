@@ -430,7 +430,7 @@ settings_password:
 settings_email:
     path:  /settings/email
     defaults: { _controller: AppBundle:Settings:email }
-
+    
 settings_email_verify:
     path:  /settings/email/verify
     defaults: { _controller: AppBundle:Settings:emailVerify }

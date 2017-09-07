@@ -63,6 +63,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
+        $approval = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $user['approvalStatus']);
 
         if ($request->getMethod() === 'POST') {
             $faceImg = $request->files->get('faceImg');
@@ -85,6 +86,7 @@ class SettingsController extends BaseController
 
         return $this->render('settings/approval.html.twig', array(
             'profile' => $profile,
+            'approval' => $approval,
         ));
     }
 
@@ -107,7 +109,7 @@ class SettingsController extends BaseController
 
             list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-            if ($result !== 'success') {
+            if ($result !== 'success' && $user['nickname'] != $nickname) {
                 return $this->createJsonResponse(array('message' => $message), 403);
             }
 
@@ -313,7 +315,8 @@ class SettingsController extends BaseController
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
         $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
-        $hasEmail = strlen($user['email']) > 0;
+        $hasEmail = strlen($user['email']) > 0 && stripos($user['email'], '@edusoho.net') === false;
+
         $email = $hasEmail ? $user['email'] : '';
         $hasVerifiedEmail = $user['emailVerified'];
 
@@ -887,7 +890,13 @@ class SettingsController extends BaseController
                 $mail = $mailFactory($mailOptions);
                 $mail->send();
 
-                return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email']))));
+                return $this->render('settings/email-verfiy.html.twig',
+                    array(
+                        'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])),
+                        'data' => array(
+                            'email' => $data['email'],
+                        ),
+                ));
             } catch (\Exception $e) {
                 $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
 
@@ -922,7 +931,13 @@ class SettingsController extends BaseController
             $mail = $mailFactory($mailOptions);
             $mail->send();
 
-            return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email']))));
+            return $this->render('settings/email-verfiy.html.twig',
+                array(
+                    'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email'])),
+                    'data' => array(
+                        'email' => $user['email'],
+                    ),
+            ));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
 

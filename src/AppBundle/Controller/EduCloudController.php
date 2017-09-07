@@ -255,14 +255,7 @@ class EduCloudController extends BaseController
 
             return $errorMsg;
         }
-        // send 6 times in an hour
-        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($user['email']);
 
-        if ($maxAllowance == 0) {
-            $errorMsg = '暂停发送验证码短信，请稍后再试';
-
-            return $errorMsg;
-        }
         if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'))) {
             $captchaNum = strtolower($request->request->get('captcha_num'));
 
@@ -354,6 +347,15 @@ class EduCloudController extends BaseController
             $errorMsg = sprintf('手机号错误:%s', $to);
 
             return  $errorMsg;
+        }
+
+        // send 6 times in an hour
+        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($user['email']);
+
+        if ($maxAllowance == 0) {
+            $errorMsg = '暂停发送验证码短信，请稍后再试';
+
+            return $errorMsg;
         }
 
         return $errorMsg;

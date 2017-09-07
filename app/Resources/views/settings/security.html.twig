@@ -109,9 +109,9 @@
     <span class="setting-title">{{'user.settings.email_menu'|trans}}</span>
     <span class="setting-content">
       {% if hasEmail %}
-        {{'site.setting.email_finished'|trans}}：{{ email }}
+        {{'site.setting.email_finished'|trans}}：{{ blur_number(email) }}
       {% else %}
-        {{'user.settings.security.email_bind_tips'|trans}}
+        {{'user.settings.security.email_setting_tips'|trans}}
       {% endif %}
     </span>
     <span class="setting-action">

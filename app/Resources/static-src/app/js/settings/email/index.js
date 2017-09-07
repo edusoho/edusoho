@@ -1,5 +1,7 @@
 import notify from 'common/notify';
 
+let $btn = $('#submit-btn');
+
 $('#setting-email-form').validate({
   currentDom: '#submit-btn',
   ajax: true,
@@ -8,10 +10,7 @@ $('#setting-email-form').validate({
     'email': 'required es_email'
   },
   submitSuccess(data) {
-    notify('success', Translator.trans(data.message));
-    
-    $('.modal').modal('hide');
-    window.location.reload();
+      $('#modal').html(data);
   },
   submitError(data) {
     notify('danger',  Translator.trans(data.responseJSON.message));
