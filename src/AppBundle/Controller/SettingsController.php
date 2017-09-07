@@ -352,10 +352,8 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
-        if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+        if ($user->isLogin() && empty($user['password']) || 1) {
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_pay_password')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -454,9 +452,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_reset_pay_password')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -665,9 +661,7 @@ class SettingsController extends BaseController
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_security_questions')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -735,9 +729,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_bind_mobile')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -792,9 +784,7 @@ class SettingsController extends BaseController
         }
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_password')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -1016,21 +1006,34 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        $targetPath = $request->query->get('targetPath');
+        $showType = $request->query->get('showType', 'modal');
+
         if ($request->getMethod() === 'POST') {
             $passwords = $request->request->all();
 
-            $targetPath = $this->getTargetPath($request);
+            $form = $this->createFormBuilder()
+                ->add('newPassword', 'password')
+                ->add('confirmPassword', 'password')
+                ->getForm();
+            $form->bind($request);
 
-            $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
-
-            return $this->createJsonResponse(array(
-                'message' => 'user.settings.pay_password_set.success', 
-                'data' => array('target' => $targetPath) 
-            ));
-            
+            if ($form->isValid()) {
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                return $this->createJsonResponse(array(
+                    'message' => 'user.settings.login_password_success', 
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'message' => 'user.settings.login_password_fail', 
+                ), 500);
+            }    
         }
 
-        return $this->render('settings/setup-password.html.twig');
+        return $this->render('settings/setup-password.html.twig' ,array(
+            'targetPath' => $targetPath,
+            'showType' => $showType,
+        ));
     }
 
     public function setupCheckNicknameAction(Request $request)
