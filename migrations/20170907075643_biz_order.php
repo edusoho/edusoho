@@ -154,13 +154,13 @@ class BizOrder extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("
+        $connection->exec('
             DROP TABLE `biz_order`;
             DROP TABLE `biz_order_item`;
             DROP TABLE `biz_order_item_deduct`;
             DROP TABLE `biz_order_refund`;
             DROP TABLE `biz_order_item_refund`;
             DROP TABLE `biz_order_log`;
-        ");
+        ');
     }
 }
