@@ -4,6 +4,7 @@ namespace Codeages\Biz\Framework\Order\Subscriber;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -19,7 +20,13 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     public function onTradeRefunded(Event $event)
     {
         $trade = $event->getSubject();
-        $this->getWorkflowService()->setRefunded($trade['refund_id']);
+        $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $refundIds = ArrayToolkit::column($orderItems, 'refund_id');
+        $refundIds = array_unique($refundIds);
+        foreach ($refundIds as $refundId) {
+            $this->getWorkflowService()->setRefunded($refundId);
+        }
     }
 
     public function onPaid(Event $event)
@@ -37,6 +44,11 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     protected function getWorkflowService()
     {
         return $this->getBiz()->service('Order:WorkflowService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
     }
 
     private function getDispatcher()
