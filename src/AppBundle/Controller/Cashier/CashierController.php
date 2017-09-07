@@ -28,6 +28,12 @@ class CashierController extends BaseController
         if (!$order) {
             throw new NotFoundHttpException();
         }
+        
+        if ($order['status'] == 'success') {
+            return $this->forward('AppBundle:Cashier/Cashier:purchaseSuccess', array('trade' => array(
+                'order_sn' => $order['sn']
+            )));
+        }
 
         $payments = $this->getPayService()->findEnabledPayments();
 
