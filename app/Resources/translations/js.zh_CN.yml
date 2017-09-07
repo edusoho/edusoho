@@ -167,7 +167,7 @@ activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
 activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
-activity.audio_manage.media_error_hint: 请上传或选择文档
+activity.document_manage.media_error_hint: 请上传或选择文档
 activity.audio_manage.finish_detail_required_error_hint: 请输入完成条件
 activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数字
 
