@@ -2979,6 +2979,7 @@ user.settings.email.content_title: 邮箱设置
 user.settings.email.no_change_email_tips: 管理员尚未设置邮件服务器，不能更改邮箱地址。
 user.settings.email.current_email: 当前登录邮箱
 user.settings.email.verified: 已验证
+user.settings.email.verifiy: 邮箱验证
 user.settings.email.unverified_tips: 邮箱地址尚未验证，
 user.settings.email.verify_btn: 去验证
 user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
@@ -2987,7 +2988,7 @@ user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校�
 user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样。
 user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
-user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+user.settings.email.send_success: 请登录邮箱%email%<br>并点击验证链接以完成验证
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
