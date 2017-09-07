@@ -4,6 +4,10 @@ class Order {
        this.$priceShow = this.$element.find('#price-show');
        this.initEvent();
 
+       this.$element.submit( event => {
+         $('#order-create-btn').button('loading');
+         return true;
+       });
     }
 
     initEvent() {
