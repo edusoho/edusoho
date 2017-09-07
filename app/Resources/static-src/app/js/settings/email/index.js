@@ -11,8 +11,8 @@ $('#setting-email-form').validate({
   },
   submitSuccess(data) {
     let url = $btn.data('goto-url');
-
-    $.get(url).done(function(html) {
+console.log(data);
+    $.get(url, data).done(function(html) {
       $('#modal').html(html);
     })
     
