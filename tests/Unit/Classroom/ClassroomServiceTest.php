@@ -1406,6 +1406,36 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertCount(0, $result);
     }
 
+    public function testFindUserPaidCoursesInClassroom()
+    {
+        $textClassroom = array(
+            'title' => 'test',
+        );
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $course1 = $this->createCourse('Test Course 1');
+        $course2 = $this->createCourse('Test Course 2');
+        $course3 = $this->createCourse('Test Course 3');
+
+        $courseIds = array($course1['id'], $course2['id'], $course3['id']);
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'findCoursesByStudentIdAndCourseIds', 'returnValue' => array(array('id' => 1, 'courseId' => $course1['id'], 'orderId' => 1))),
+        ));
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'searchOrderItems', 'returnValue' => array(array('id' => 1, 'order_id' => 1))),
+        ));
+
+        list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom(1, $classroom['id']);
+
+        $this->assertEquals(1, count($paidCourses));
+        $this->assertEquals(1, count($orderItems));
+    }
+
     protected function mockCourse($title = 'Test Course 1')
     {
         return array(

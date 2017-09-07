@@ -53,12 +53,12 @@ class ClassroomProduct extends Product
     /**
      * @return ClassroomService
      */
-    private function getClassroomService()
+    protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->biz->service('Order:OrderService');
     }
