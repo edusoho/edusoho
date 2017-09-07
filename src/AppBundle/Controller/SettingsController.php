@@ -222,8 +222,9 @@ class SettingsController extends BaseController
             $options = $request->request->all();
             $result = $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
             $image = $this->getWebExtension()->getFpath($result['largeAvatar']);
+
             return $this->createJsonResponse(array(
-                'image' => $image
+                'image' => $image,
             ), 200);
         }
 
@@ -521,7 +522,10 @@ class SettingsController extends BaseController
                     $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
-                    return $this->render('settings/pay-password-success.html.twig');
+                    return $this->render('settings/pay-password-success.html.twig', array(
+                        'goto' => $this->generateUrl('settings_security', array(), true),
+                        'duration' => 5,
+                    ));
                 } else {
                     $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
                 }
@@ -531,12 +535,31 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
     }
 
-    protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
+    public function findPayPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $hasLoginPassword = strlen($user['password']) > 0;
+        $hasPayPassword = strlen($user['payPassword']) > 0;
+        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+        $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+
+        return $this->render('settings/find-pay-password.html.twig', array(
+            'hasLoginPassword' => $hasLoginPassword,
+            'hasPayPassword' => $hasPayPassword,
+            'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
+            'hasVerifiedMobile' => $hasVerifiedMobile,
+            'verifiedMobile' => $verifiedMobile,
+        ));
+    }
+
+    protected function findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
     {
         $questionNum = mt_rand(0, 2);
         $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
 
-        return $this->render('settings/find-pay-password.html.twig', array(
+        return $this->render('settings/find-pay-password-by-question.html.twig', array(
             'question' => $question,
             'questionNum' => $questionNum,
             'hasSecurityQuestions' => $hasSecurityQuestions,
@@ -544,7 +567,7 @@ class SettingsController extends BaseController
         ));
     }
 
-    public function findPayPasswordAction(Request $request)
+    public function findPayPasswordByQuestionAction(Request $request)
     {
         $user = $this->getCurrentUser();
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
@@ -577,7 +600,7 @@ class SettingsController extends BaseController
             if (!$isAnswerRight) {
                 $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.wrong_answer');
 
-                return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
+                return $this->findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
             }
 
             $this->setFlashMessage('success', 'user.settings.security.pay_password_find.correct_answer');
@@ -585,7 +608,7 @@ class SettingsController extends BaseController
             return $this->setPayPasswordPage($request, $user['id']);
         }
 
-        return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
+        return $this->findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
     }
 
     public function findPayPasswordBySmsAction(Request $request)
@@ -700,23 +723,14 @@ class SettingsController extends BaseController
         return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
     }
 
-    protected function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
-    {
-        return $this->render('settings/bind-mobile.html.twig', array(
-            'hasVerifiedMobile' => $hasVerifiedMobile,
-            'setMobileResult' => $setMobileResult,
-            'verifiedMobile' => $verifiedMobile,
-        ));
-    }
-
     public function bindMobileAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser()->toArray();
+        $user = $this->getCurrentUser();
         $verifiedMobile = '';
-        $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
+        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
 
         if ($hasVerifiedMobile) {
-            $verifiedMobile = $currentUser['verifiedMobile'];
+            $verifiedMobile = $user['verifiedMobile'];
         }
 
         $setMobileResult = 'none';
@@ -727,9 +741,7 @@ class SettingsController extends BaseController
             return $this->render('settings/edu-cloud-error.html.twig', array());
         }
 
-        $user = $this->getCurrentUser();
-
-        if ($user->isLogin() && empty($user['password'])) {
+        if ($this->isSocialLogin($user)) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
 
             return $this->redirect($this->generateUrl('settings_setup_password'));
@@ -748,7 +760,7 @@ class SettingsController extends BaseController
 
             if ($result) {
                 $verifiedMobile = $sessionField['to'];
-                $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
+                $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.success'));
             } else {
@@ -756,7 +768,23 @@ class SettingsController extends BaseController
             }
         }
 
-        return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+        return $this->render('settings/bind-mobile.html.twig', array(
+            'hasVerifiedMobile' => $hasVerifiedMobile,
+            'setMobileResult' => $setMobileResult,
+            'verifiedMobile' => $verifiedMobile,
+        ));
+    }
+
+    /**
+     * if user login in  socail way such as QQ, user has no pasword
+     *
+     * @param  $user
+     *
+     * @return bool
+     */
+    private function isSocialLogin($user)
+    {
+        return $user->isLogin() && empty($user['password']);
     }
 
     public function passwordCheckAction(Request $request)

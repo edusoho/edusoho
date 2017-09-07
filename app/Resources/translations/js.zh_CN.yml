@@ -28,6 +28,7 @@ site.date.second: 秒
 site.data.get_sms_code_btn: 获取短信验证码
 site.data.get_sms_code_again_btn: 秒后重新获取
 site.data.get_sms_code_success_hint: 发送短信成功
+site.data.get_sms_code_allowance_success_hint: 发送短信成功,还有%allowance%次发送机会
 site.data.get_sms_code_failure_hint: 发送短信失败，请联系管理员
 site.data.expand: 展开
 site.data.collapse: 收起
@@ -86,6 +87,10 @@ user.settings.security.questions.set.success: 安全问题设置成功
 
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
 
 user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
