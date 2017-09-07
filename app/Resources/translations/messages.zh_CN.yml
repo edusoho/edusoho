@@ -2932,6 +2932,7 @@ user.settings.basic_info.occupation: 职业
 user.settings.basic_info.rank: 头衔
 user.settings.basic_info.personal_signature: 个人签名
 user.settings.basic_info.personal_space: 个人空间
+user.settings.basic_info.public: 微博、微信、QQ信息将会展示在您的个人主页
 user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
