@@ -32,7 +32,7 @@ import notify from 'common/notify';
         $input.after(image);
       };
       image.src = src;
-      $modal.load($input.data('saveUrl')).modal('show');
+      $modal.load($input.data('saveUrl')).modal({backdrop: 'static', keyboard: false});
   }
 
   $(document).on('change.cd.local.upload', '[data-toggle="local-upload"]', function() {
