@@ -50,6 +50,5 @@ class AddUserType extends Migration
      */
     public function down()
     {
-
     }
 }
