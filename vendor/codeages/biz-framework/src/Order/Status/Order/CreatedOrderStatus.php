@@ -125,6 +125,10 @@ class CreatedOrderStatus extends AbstractOrderStatus
             $priceAmount = $priceAmount - $deduct['deduct_amount'];
         }
 
+        if ($priceAmount < 0) {
+            $priceAmount = 0;
+        }
+
         return $priceAmount;
     }
 

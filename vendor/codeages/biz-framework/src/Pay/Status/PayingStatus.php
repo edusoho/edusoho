@@ -20,7 +20,7 @@ class PayingStatus extends AbstractStatus
 
     public function paid($data)
     {
-        // TODO
+        return $this->getPayStatus(PaidStatus::NAME)->process();
     }
 
     public function closing()

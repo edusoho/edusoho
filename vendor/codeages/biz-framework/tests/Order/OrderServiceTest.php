@@ -190,6 +190,7 @@ class OrderServiceTest extends IntegrationTestCase
         $this->assertEquals($mockOrder['source'], $order['source']);
         $this->assertEquals($mockOrder['callback'], $order['callback']);
         $this->assertEquals($mockOrder['created_reason'], $order['created_reason']);
+        $this->assertEquals($mockOrder['create_extra'], $order['create_extra']);
         $this->assertEquals($this->sumOrderPriceAmount($mockedOrderItems), $order['price_amount']);
         $this->assertEquals($this->sumOrderPayAmount($mockedOrderItems), $order['pay_amount']);
         $this->assertEquals($this->biz['user']['id'], $order['user_id']);
@@ -212,6 +213,7 @@ class OrderServiceTest extends IntegrationTestCase
             $this->assertEquals($this->sumOrderItemPayAmount($mockedItem), $item['pay_amount']);
             $this->assertEquals($mockedItem['target_id'], $item['target_id']);
             $this->assertEquals($mockedItem['target_type'], $item['target_type']);
+            $this->assertEquals($mockedItem['create_extra'], $item['create_extra']);
             $this->assertEquals($order['user_id'], $item['user_id']);
             $this->assertEquals($order['seller_id'], $item['seller_id']);
 
