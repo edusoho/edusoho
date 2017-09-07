@@ -411,14 +411,15 @@ class CourseSetController extends BaseController
             $courseId = $courses[0]['id'];
         }
 
-        $count = $this->getMemberService()->countMembers(array('courseId' => $courseId));
+        $count = $this->getMemberService()->countMembers(array('courseId' => $courseId,'role'=>'student'));
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $students = $this->getMemberService()->findCourseStudents(
-            $courseId,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+        $students =$this->getMemberService()->searchMembers(
+                array('courseId'=>$courseId, 'role'=>'student'),
+                array('createdTime'=>'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
         );
 
         foreach ($students as $key => &$student) {
