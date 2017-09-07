@@ -6,12 +6,12 @@ $form.validate({
   ajax: true,
   rules: {
     currentDom: '#form-submit',
-    'newPassword': {
+    'form[newPassword]': {
       required: true,
       minlength: 5,
       maxlength: 20,
     },
-    'confirmPassword': {
+    'form[confirmPassword]': {
       required: true,
       equalTo: '#form_newPassword',
     },
