@@ -749,11 +749,7 @@ class SettingsController extends BaseController
         if ($request->getMethod() === 'POST') {
             $password = $request->request->get('password');
 
-<<<<<<< HEAD
-            if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
-=======
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
->>>>>>> beta/8.1.2
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
