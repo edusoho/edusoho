@@ -132,7 +132,16 @@ class PayServiceImpl extends BaseService implements PayService
         }
 
         foreach ($trades as $trade) {
-            $this->getTradeContext($trade['id'])->closing();
+            $trade = $this->getTradeContext($trade['id'])->closing();
+
+            if($this->isCloseByPayment()){
+                $this->closeByPayment($trade);
+            } else {
+                $data = array(
+                    'sn' => $trade['trade_sn'],
+                );
+                $this->notifyClosed($data);
+            }
         }
     }
 
@@ -143,6 +152,16 @@ class PayServiceImpl extends BaseService implements PayService
 
         $this->updateTradeToPaid($data);
         return $result;
+    }
+
+    protected function isCloseByPayment()
+    {
+        return empty($this->biz['payment.options']['closed_notify']) ? false : $this->biz['payment.options']['closed_notify'];
+    }
+
+    protected function closeByPayment($trade)
+    {
+
     }
 
     protected function updateTradeToPaid($data)

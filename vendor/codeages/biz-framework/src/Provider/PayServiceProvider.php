@@ -23,7 +23,8 @@ class PayServiceProvider implements ServiceProviderInterface
 
         $biz['payment.options'] = function () {
             return array(
-                'refund.wait_notify' => false
+                'closed_notify' => false,
+                'refunded_notify' => false
             );
         };
 
