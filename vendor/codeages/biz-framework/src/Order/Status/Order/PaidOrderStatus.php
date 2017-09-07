@@ -68,4 +68,9 @@ class PaidOrderStatus extends AbstractOrderStatus
     {
         return $this->getOrderStatus(FailOrderStatus::NAME)->process($data);
     }
+
+    public function refunding($data = array())
+    {
+        return $this->getOrderStatus(RefundingOrderStatus::NAME)->process($data);
+    }
 }

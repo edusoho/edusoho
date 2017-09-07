@@ -19,7 +19,8 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     public function onTradeRefunded(Event $event)
     {
         $trade = $event->getSubject();
-        $this->getWorkflowService()->setRefunded($trade['refund_id']);
+        $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
+        $this->getWorkflowService()->setRefunded($order['refund_id']);
     }
 
     public function onPaid(Event $event)
@@ -37,6 +38,11 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     protected function getWorkflowService()
     {
         return $this->getBiz()->service('Order:WorkflowService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
     }
 
     private function getDispatcher()

@@ -232,6 +232,20 @@ class PayServiceImpl extends BaseService implements PayService
             throw new AccessDeniedException('can not refund, becourse the paid trade is expired.');
         }
 
+        if($this->isRefundByPayment()){
+            return $this->refundByPayment($trade);
+        }
+
+        return $this->markRefunded($trade);
+    }
+
+    protected function isRefundByPayment()
+    {
+        return empty($this->biz['payment.options']['refunded_notify']) ? false : $this->biz['payment.options']['refunded_notify'];
+    }
+
+    protected function refundByPayment($trade)
+    {
         $paymentGetWay = $this->getPayment($trade['platform']);
         $response = $paymentGetWay->applyRefund($trade);
 
@@ -248,6 +262,17 @@ class PayServiceImpl extends BaseService implements PayService
         return $trade;
     }
 
+    protected function markRefunded($trade)
+    {
+        $flow = $this->createUserFlow('seller', $trade, array(), 'outflow');
+        if (!empty($trade['coin_amount'])) {
+            $flow = $this->createUserFlow('seller', $trade, $flow, 'outflow', true);
+            $this->createUserFlow('buyer', $trade, $flow, 'inflow', true);
+        }
+
+        return $this->getTradeContext($trade['id'])->refunded();
+    }
+
     public function notifyRefunded($payment, $data)
     {
         $paymentGetWay = $this->getPayment($payment);
@@ -256,13 +281,7 @@ class PayServiceImpl extends BaseService implements PayService
 
         $trade = $this->getPaymentTradeDao()->getByTradeSn($tradeSn);
 
-        $flow = $this->createSiteFlow($trade, array(), 'outflow');
-        if (!empty($trade['coin_amount'])) {
-            $flow = $this->createSiteFlow($trade, $flow, 'outflow', true);
-            $this->createUserFlow($trade, $flow, 'inflow', true);
-        }
-
-        return $this->getTradeContext($trade['id'])->refunded();
+        return $this->markRefunded($trade);
     }
 
     protected function validateLogin()
