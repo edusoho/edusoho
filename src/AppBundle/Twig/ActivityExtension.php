@@ -85,7 +85,7 @@ class ActivityExtension extends \Twig_Extension
             return null;
         }
 
-        if ($type == 'testpaper') {
+        if (in_array($type, array('testpaper', 'live'))) {
             $len *= 60;
         }
         $h = floor($len / 3600);
