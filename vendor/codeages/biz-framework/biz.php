@@ -28,6 +28,8 @@ $biz->register(new \Codeages\Biz\Framework\Provider\TokenServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\SettingServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
+$biz->register(new \Codeages\Biz\Framework\Provider\OrderServiceProvider());
+$biz->register(new \Codeages\Biz\Framework\Provider\PayServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), [
     'monolog.logfile' => $biz['log_dir'].'/biz.log',
 ]);

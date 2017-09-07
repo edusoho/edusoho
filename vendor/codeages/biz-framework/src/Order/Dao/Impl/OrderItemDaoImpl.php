@@ -30,7 +30,6 @@ class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
                 'created_time'
             ),
             'serializes' => array(
-                'signed_data' => 'json',
                 'create_extra' => 'json'
             ),
             'conditions' => array(
