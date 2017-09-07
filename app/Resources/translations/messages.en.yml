@@ -2320,7 +2320,7 @@ user.settings.avatar.upload_hint: "you can upload the file of JPG,GIF,PNG，and 
 user.settings.avatar.upload_btn: 'Upload New Photo'
 user.settings.avatar.using_current_avatar: 'Set as avatar'
 user.settings.avatar.setup_hint: 'Please set custom profile photo。'
-user.settings.avatar.crop_hint: 'Tip:Please select an image crop area'
+user.settings.avatar.crop_hint: 'Please select an image crop area'
 user.settings.avatar.fetch_form_partner_error: Fetch your avatar from partner encountered an error.
 user.settings.email: 'Email setting'
 user.settings.email.content_title: 'Email setting'
