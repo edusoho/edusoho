@@ -892,9 +892,9 @@ class SettingsController extends BaseController
 
                 return $this->render('settings/email-verfiy.html.twig',
                     array(
-                        'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email'])),
+                        'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])),
                         'data' => array(
-                            'email' => $user['email'],
+                            'email' => $data['email'],
                         ),
                 ));
             } catch (\Exception $e) {
