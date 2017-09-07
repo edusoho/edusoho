@@ -17,7 +17,6 @@ class CancelOrderJob extends AbstractJob
      */
     private function getWorkflowService()
     {
-       return $this->biz->service('Order:WorkflowService');
+        return $this->biz->service('Order:WorkflowService');
     }
-
 }
