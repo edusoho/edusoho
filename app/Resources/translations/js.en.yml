@@ -85,8 +85,7 @@ user.settings.email.send_success: Please verify your email address. We’ve sent
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 
-material.share.teacher_nickname_label: Please input teacher nickname
-
+material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
@@ -145,7 +144,7 @@ activity.audio_manage.length_unsigned_integer_error_hint: The duration must be g
 activity.audio_manage.second_range_error_hint: Seconds between 0-59
 activity.audio_manage.media_error_hint: Please upload or select an audio file
 
-activity.audio_manage.media_error_hint: Please upload or select the document
+activity.document_manage.media_error_hint: Please upload or select the document
 activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
 activity.audio_manage.finish_detail_digits_error_hint: The completion condition must be a number
 

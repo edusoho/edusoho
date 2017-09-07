@@ -59,6 +59,8 @@ interface TaskService
 
     public function findTasksFetchActivityAndResultByCourseId($courseId);
 
+    public function wrapTaskResultToTasks($courseId, $tasks);
+
     /**
      * for question and testpaper ranges.
      *

@@ -1668,6 +1668,10 @@ course_task_show_plugin_task_list:
   path: /course/{courseId}/task/{taskId}/plugin/task_list
   defaults: { _controller: AppBundle:TaskPlugin:taskList }
 
+course_task_show_plugin_task_list_by_paging:
+  path: /course/{courseId}/plugin/task_list/paging
+  defaults: { _controller: AppBundle:TaskPlugin:taskListByPaging }
+
 course_task_plugin_note:
   path: /course/{courseId}/task/{taskId}/plugin/note
   defaults: { _controller: AppBundle:TaskPlugin:note }
@@ -2755,6 +2759,10 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
+global_file_document_player:
+  path: /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:globalDocumentPlayer }
+
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
@@ -2816,6 +2824,10 @@ course_order_repay:
 course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
+
+course_task_paging_show:
+  path: /course/{courseId}/tasks/paging
+  defaults: { _controller: AppBundle:Course/Course:tasksByPaging }
 
 course_set_archive:
   path: /archive/course # 学习引擎2.0版本前该页面有SEO

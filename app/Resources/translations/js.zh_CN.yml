@@ -77,6 +77,7 @@ user.unfollow_success_hint: 取消关注成功
 
 user.card_load_hint: 名片加载中
 
+
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 
 user.settings.security.questions.set.incorrect_password: 您的登录密码错误，不能设置安全问题
@@ -102,8 +103,7 @@ user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 
-material.share.teacher_nickname_label: 请输入老师的名称
-
+material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -171,7 +171,7 @@ activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
 activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
-activity.audio_manage.media_error_hint: 请上传或选择文档
+activity.document_manage.media_error_hint: 请上传或选择文档
 activity.audio_manage.finish_detail_required_error_hint: 请输入完成条件
 activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数字
 

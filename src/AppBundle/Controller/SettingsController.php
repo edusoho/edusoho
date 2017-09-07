@@ -213,20 +213,18 @@ class SettingsController extends BaseController
         ));
     }
 
+    //传头像，新的交互
     public function profileAvatarCropModalAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
 
         if ($request->getMethod() === 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
-            $user = $this->getUserService()->getUser($currentUser['id']);
-            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
-
+            $result = $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
+            $image = $this->getWebExtension()->getFpath($result['largeAvatar']);
             return $this->createJsonResponse(array(
-                'status' => 'success',
-                'avatar' => $avatar,
-            ));
+                'image' => $image,
+            ), 200);
         }
 
         return $this->render('settings/profile-avatar-crop-modal.html.twig');
@@ -751,7 +749,11 @@ class SettingsController extends BaseController
         if ($request->getMethod() === 'POST') {
             $password = $request->request->get('password');
 
+<<<<<<< HEAD
             if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
+=======
+            if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
+>>>>>>> beta/8.1.2
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
