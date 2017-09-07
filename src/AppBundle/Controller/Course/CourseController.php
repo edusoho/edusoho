@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
-use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
@@ -458,7 +457,7 @@ class CourseController extends CourseBaseController
                 'course' => $course,
                 'member' => $member,
                 'nextOffsetSeq' => $nextOffsetSeq,
-                'courseItems' => $courseItems
+                'courseItems' => $courseItems,
             )
         );
     }

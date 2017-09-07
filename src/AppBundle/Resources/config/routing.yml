@@ -430,7 +430,7 @@ settings_password:
 settings_email:
     path:  /settings/email
     defaults: { _controller: AppBundle:Settings:email }
-
+    
 settings_email_verify:
     path:  /settings/email/verify
     defaults: { _controller: AppBundle:Settings:emailVerify }
@@ -1182,6 +1182,10 @@ password_reset_by_sms:
 settings_find_pay_password_by_sms:
     path:  /settings/find_pay_password_by_sms
     defaults: { _controller: AppBundle:Settings:findPayPasswordBySms }
+
+settings_find_pay_password_by_question:
+    path:  /settings/find_pay_password_by_question
+    defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
 
 order_pay_sms_verification:
     path:  /order/sms_verification
@@ -2754,6 +2758,10 @@ material_unshare:
 material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
+
+global_file_document_player:
+  path: /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:globalDocumentPlayer }
 
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8

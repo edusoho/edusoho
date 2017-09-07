@@ -14,7 +14,7 @@ class QueueServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $biz)
     {
-        $biz['migration.directories'][] = dirname(dirname(__DIR__)).'/migrations/queue';
+        $biz['migration.directories'][] = dirname(dirname(__DIR__)).'/migrations/Queue';
         $biz['autoload.aliases']['Queue'] = 'Codeages\Biz\Framework\Queue';
         $biz['console.commands'][] = function () use ($biz) {
             return new WorkerCommand($biz);

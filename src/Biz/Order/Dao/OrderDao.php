@@ -49,4 +49,6 @@ interface OrderDao extends GeneralDaoInterface
     public function searchBill($conditions, $orderBy, $start, $limit);
 
     public function countUserBill($conditions);
+
+    public function analysis($conditions);
 }

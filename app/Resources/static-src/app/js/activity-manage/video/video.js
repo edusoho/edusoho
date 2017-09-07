@@ -138,11 +138,14 @@ export default class Video {
         if (file.length !== 0 && file.length !== undefined) {
           let $minute = $('#minute');
           let $second = $('#second');
+          let $length = $('#length');
+          
           let length = parseInt(file.length);
           let minute = parseInt(length / 60);
           let second = length % 60;
           $minute.val(minute);
           $second.val(second);
+          $length.val(length);
           file.minute = minute;
           file.second = second;
         }
@@ -152,6 +155,7 @@ export default class Video {
       placeMediaAttr(file);
 
       $('[name="ext[mediaSource]"]').val(file.source);
+      $("#step2-form").valid();
       if (file.source == 'self') {
         $("#ext_mediaId").val(file.id);
         $("#ext_mediaUri").val('');
