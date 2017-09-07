@@ -63,6 +63,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
+        $approval = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $user['approvalStatus']);
 
         if ($request->getMethod() === 'POST') {
             $faceImg = $request->files->get('faceImg');
@@ -85,6 +86,7 @@ class SettingsController extends BaseController
 
         return $this->render('settings/approval.html.twig', array(
             'profile' => $profile,
+            'approval' => $approval,
         ));
     }
 
