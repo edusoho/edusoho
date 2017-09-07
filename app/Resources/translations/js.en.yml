@@ -24,6 +24,7 @@ site.date.month: Month
 site.data.get_sms_code_btn: Get SMS verification code
 site.data.get_sms_code_again_btn: Reacquire later after
 site.data.get_sms_code_success_hint: Send SMS successful
+site.data.get_sms_code_allowance_success_hint: 发送短信成功,还有%allowance%次发送机会
 site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
 site.data.expand: expand
 site.data.collapse: collpase
@@ -69,6 +70,10 @@ user.card_load_hint: User card loading
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully
 
+user.settings.security.pay_password.set_login_password: 请输入用户登录密码
+user.settings.security.pay_password.set_new_pay_password: 请输入新的支付密码
+user.settings.security.pay_password.confirm_new_pay_password: 请确认输入的支付密码
+
 user.settings.security.pay_password_set.success: New pay password had set successfully
 user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
 
@@ -80,6 +85,10 @@ user.settings.email.send_success: Please verify your email address. We’ve sent
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.basic_info.nickname_change_fail: 'Nickname had changed fail'
+
+user.settings.unbind_success: 取消绑定成功
+user.settings.unbind_title: 取消绑定
+user.settings.unbind_content: 确定要取消绑定吗？
 
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
@@ -140,7 +149,7 @@ activity.audio_manage.length_unsigned_integer_error_hint: The duration must be g
 activity.audio_manage.second_range_error_hint: Seconds between 0-59
 activity.audio_manage.media_error_hint: Please upload or select an audio file
 
-activity.audio_manage.media_error_hint: Please upload or select the document
+activity.document_manage.media_error_hint: Please upload or select the document
 activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
 activity.audio_manage.finish_detail_digits_error_hint: The completion condition must be a number
 
@@ -172,7 +181,6 @@ activity.homework_manage.date_and_time_error_hint: 'Please enter the correct dat
 activity.homework_manage.objective_question_hint: >
 
 #大写的开头没用到，等待删除
-Site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install% test% </a>
 Site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
 Site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
 Site.date_format_is: 'Minutes %minutes% seconds %seconds%'
@@ -190,14 +198,6 @@ Site.captcha_code.required: Please enter the verification code
 Site.data.create: Add
 Site.data.not_found: Not found ...
 Site.data.delete_name_hint: Really want to delete the% name%?
-Site.data.uncheck_name_hint: No %name% selected
-Site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
-Site.data.delete_submiting_hint: Deleting ...
-Site.date.year: Years
-Site.date.month: Month
-Site.data.get_sms_code_btn: Get SMS verification code
-Site.data.get_sms_code_again_btn: Reacquire later after
-Site.data.get_sms_code_success_hint: Send SMS successful
 Site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
 site.maxlength_hint: You can only enter %length% characters at most
 Site.browser_useless_play_video_hint: Your browser can not play the video.

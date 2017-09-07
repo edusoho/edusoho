@@ -44,7 +44,6 @@ $form.validate({
   },
   submitSuccess(data) {
     notify('success', Translator.trans(data.message));
-    
     $('.modal').modal('hide');
     window.location.reload();
   },
@@ -56,7 +55,7 @@ $form.validate({
 $smsCode.on('click', function() {
   new SmsSender({
     element: smsSend,
-    url: $(smsSend).data('url'),
+    url: $smsCode.data('url'),
     smsType: 'sms_bind',
   })
 })
