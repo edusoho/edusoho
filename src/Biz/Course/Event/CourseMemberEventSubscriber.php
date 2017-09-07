@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Event;
 
 use AppBundle\Common\ArrayToolkit;
@@ -175,6 +176,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             array('lastLearnTime' => time(), 'finishedTime' => $finishTime)
         );
     }
+
     private function getCourseFinishTime($taskResult)
     {
         $student = $this->getCourseMemberService()->getCourseMember($taskResult['courseId'], $taskResult['userId']);
@@ -190,7 +192,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $setting = $this->getSettingService()->get('course', array());
         $valuesToBeReplace = array('{{nickname}}', '{{course}}');
-        $valuesToReplace = array($user['nickname'], ' ' . $courseSet['title'] . '-' . $course['title'] . ' ');
+        $valuesToReplace = array($user['nickname'], ' '.$courseSet['title'].'-'.$course['title'].' ');
         $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
 
         return $welcomeMessageBody;
