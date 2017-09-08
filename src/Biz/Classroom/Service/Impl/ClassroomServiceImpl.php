@@ -890,6 +890,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
+        $this->createOperateRecord($member, 'join', $order);
+
         $params = array(
             'orderId' => $fields['orderId'],
             'note' => $fields['remark'],
@@ -1932,6 +1934,24 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
+    protected function createOperateRecord($member, $operateType, $data = array())
+    {
+        $currentUser = $this->getCurrentUser();
+        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
+
+        $record = array(
+            'member_id' => $member['userId'],
+            'target_id' => $member['classroomId'],
+            'target_type' => 'classroom',
+            'operate_type' => $operateType,
+            'operate_time' => time(),
+            'operator_id' => $operatorId,
+            'data' => $data,
+        );
+
+        return $this->getMemberOperationService()->createRecord($record);
+    }
+
     /**
      * @return FileService
      */
@@ -2068,5 +2088,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->biz->service('MemberOperation:MemberOperationService');
     }
 }

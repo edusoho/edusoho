@@ -37,7 +37,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         }
     }
 
-    public function callback($orderItem)
+    public function onPaid($orderItem)
     {
         $this->smsCallback($orderItem);
 
@@ -48,7 +48,6 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         );
 
         try {
-
             $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
             if (!$isStudent) {
                 $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
