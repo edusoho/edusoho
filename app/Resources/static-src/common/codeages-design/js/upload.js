@@ -41,8 +41,16 @@ import notify from 'common/notify';
     let fr = new FileReader();
     let $this = $(this);
     let showType = $this.data('show-type') || 'background-image';
-    if(this.files[0].size > 2*1024*1024 ){
-      notify('danger', Translator.trans('uploader.size_limit_hint')); 
+    
+    let fileTypes = ['image/bmp', 'image/jpeg', 'image/png'];
+
+    if(this.files[0].size > 2 * 1024 * 1024 ){
+      notify('danger', Translator.trans('uploader.size_2m_limit_hint')); 
+      return;
+    }
+
+    if (!fileTypes.includes(this.files[0].type)) {
+      notify('danger', Translator.trans('uploader.type_denied_limit_hint')); 
       return;
     }
 
@@ -65,7 +73,6 @@ import notify from 'common/notify';
     let fromData = new FormData();
 
     fromData.append('token', $this.data('token'));
-    fromData.append('_csrf_token', $('meta[name=csrf-token]').attr('content'));
     fromData.append('file', this.files[0]);
 
     let uploadImage = function(ret){

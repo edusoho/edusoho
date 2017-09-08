@@ -97,6 +97,7 @@ uploader.title: Upload
 uploader.error_hint: Upload failed, please try again!
 uploader.num_limit_hint: Add too many files!
 uploader.size_limit_hint: File is too large, please upload a smaller file!
+uploader.size_2m_limit_hint: 文件过大，请上传小于2M的文件！
 uploader.type_denied_limit_hint: File type is wrong!
 uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
 uploader.btn.batch_paused: Paused All
