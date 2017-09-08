@@ -2937,6 +2937,7 @@ user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+user.settings.basic_info.shange_avatar: 修改头像
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
