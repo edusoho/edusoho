@@ -325,7 +325,6 @@ class PayServiceImpl extends BaseService implements PayService
             'seller_id' => empty($data['seller_id']) ? 0 : $data['seller_id'],
             'user_id' => $this->biz['user']['id'],
             'status' => 'paying',
-            'notify_url' => $data['notify_url']
         );
 
         if (!empty($data['type'])) {
