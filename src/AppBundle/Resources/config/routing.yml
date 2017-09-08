@@ -1018,7 +1018,7 @@ cashier_pay_success:
     defaults: { _controller: AppBundle:Cashier/Cashier:success }
 
 cashier_pay_notify:
-    path: /cashier/{payment}/notify
+    path: /callback/{payment}/notify
     defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
