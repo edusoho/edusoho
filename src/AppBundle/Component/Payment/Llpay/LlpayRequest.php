@@ -41,7 +41,7 @@ class LlpayRequest extends Request
         if (!$identify) {
             $identify = $this->getIdentify();
         }
-        $converted['user_id'] = $identify.'_'.$params['userId'];
+        $converted['user_id'] = $identify . '_' . $params['userId'];
         $converted['timestamp'] = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
             $converted['url_return'] = $params['returnUrl'];
@@ -51,7 +51,8 @@ class LlpayRequest extends Request
         $converted['bank_code'] = '';
         $converted['pay_type'] = '2';
         $user = $this->geUserService()->getUser($params['userId']);
-        $converted['risk_item'] = json_encode(array('frms_ware_category' => 1008, 'user_info_mercht_userno' => $identify.'_'.$params['userId'], 'user_info_dt_register' => date('YmdHis', $user['createdTime'])));
+        $bindPhone = $this->processBindPhone($user);
+        $converted['risk_item'] = json_encode(array('frms_ware_category' => 1008, 'user_info_bind_phone' => $bindPhone, 'user_info_mercht_userno' => $identify . '_' . $params['userId'], 'user_info_dt_register' => date('YmdHis', $user['createdTime'])));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
         }
@@ -98,7 +99,7 @@ class LlpayRequest extends Request
 
     public function signParams($params)
     {
-        return  SignatureToolkit::signParams($params, $this->options);
+        return SignatureToolkit::signParams($params, $this->options);
     }
 
     protected function geUserService()
@@ -113,4 +114,17 @@ class LlpayRequest extends Request
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
+
+    private function processBindPhone($user)
+    {
+        $bindPhone = '';
+        if (！empty($user['verifiedMobile'])) {
+            $head = substr($user['verifiedMobile'], 0, 4);
+            $tail = substr($user['verifiedMobile'], -4, 4);
+            $bindPhone = $head . '****' . $tail;
+
+        }
+        return $bindPhone;
+    }
+
 }
