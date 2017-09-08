@@ -1,5 +1,5 @@
+/migrations
 /app/cache
-/bin
 /vendor
 /composer.lock
 /composer.phar
@@ -8,3 +8,4 @@
 .php_cs.cache
 .sonar/
 .idea/
+/var

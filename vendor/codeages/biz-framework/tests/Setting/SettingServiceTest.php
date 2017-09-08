@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Setting;
 
 use Tests\IntegrationTestCase;
@@ -23,7 +24,6 @@ class SettingServiceTest extends IntegrationTestCase
 
         $value = $this->getSettingService()->get('error_key', 'default value');
         $this->assertEquals('default value', $value);
-
     }
 
     public function testGet_WithDot()
@@ -83,7 +83,7 @@ class SettingServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testSet_WithDot_InvalidKey()
     {
@@ -102,7 +102,7 @@ class SettingServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testRemove_ErrorKey()
     {
@@ -122,7 +122,7 @@ class SettingServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testRemove_WithDot_ErrorSubKey()
     {
@@ -132,7 +132,7 @@ class SettingServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testRemove_WithDot_InvalidKeyValueType()
     {

@@ -13,9 +13,6 @@ use Codeages\Biz\Framework\Provider\QueueServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Codeages\Biz\Framework\Context\Biz;
-
-use Tests\Assert\InDatabase;
-use PHPUnit\Framework\Constraint\LogicalNot;
 use Monolog\Logger;
 use Monolog\Handler\TestHandler;
 
@@ -106,7 +103,7 @@ class IntegrationTestCase extends TestCase
         }
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
-            $biz['dao.cache.array_storage'] = function() {
+            $biz['dao.cache.array_storage'] = function () {
                 return new Codeages\Biz\Framework\Dao\ArrayStorage();
             };
         }
@@ -115,11 +112,14 @@ class IntegrationTestCase extends TestCase
             return new TestHandler();
         };
 
-        $biz['logger'] = function($biz) {
+        $biz['logger'] = function ($biz) {
             $logger = new Logger('phpunit');
-            $logger->pushHandler($biz['logger.test_handler'] );
+            $logger->pushHandler($biz['logger.test_handler']);
+
             return $logger;
         };
+
+        $biz['lock.flock.directory'] = sys_get_temp_dir();
 
         $biz->boot();
 
@@ -139,32 +139,41 @@ class IntegrationTestCase extends TestCase
         return $seeder->run($isRun);
     }
 
-    protected function assertInDatabase($table, array $criteria = array(), $message = '')
-    {
-        $constraint = new InDatabase($this->biz['db'], $table, $criteria);
-        static::assertThat(null, $constraint, $message);
-    }
-
-    protected function assertNotInDatabase($table, array $criteria = array(), $message = '')
-    {
-        $constraint = new LogicalNot(
-            new InDatabase($this->biz['db'], $table, $criteria)
-        );
-        static::assertThat(null, $constraint, $message);
-    }
-
-    protected function assertDatabaseRecordsNum($expectedNumber, array $criteria = array(), $message = '')
-    {
-
-    }
-
     protected function grabAllFromDatabase($table, $column, array $criteria = array())
     {
-
     }
 
-    protected function grabSingleFromDatabase($table, $column, array $criteria = array())
+    protected function grabFromDatabase($table, $column, array $criteria = array())
     {
+    }
 
+    protected function fetchFromDatabase($table, array $criteria = array())
+    {
+        $builder = $this->biz['db']->createQueryBuilder();
+        $builder->select('*')->from($table);
+
+        $index = 0;
+        foreach ($criteria as $key => $value) {
+            $builder->andWhere("{$key} = ?");
+            $builder->setParameter($index, $value);
+            ++$index;
+        }
+
+        return $builder->execute()->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    protected function fetchAllFromDatabase($table, array $criteria = array())
+    {
+        $builder = $this->biz['db']->createQueryBuilder();
+        $builder->select('*')->from($table);
+
+        $index = 0;
+        foreach ($criteria as $key => $value) {
+            $builder->andWhere("{$key} = ?");
+            $builder->setParameter($index, $value);
+            ++$index;
+        }
+
+        return $builder->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
