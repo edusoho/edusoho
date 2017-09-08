@@ -4,12 +4,7 @@
       <tr> <td width="25%">{{'order.id'|trans}}</td> <td width="75%">{{ order.sn }}</td> </tr>
       <tr> <td width="25%">{{'order.status'|trans}}</td>
            <td width="75%">
-            {% if order.status == 'created' %} {{'order.status.created'|trans}}
-            {% elseif order.status == 'paid' %} {{'order.status.paid'|trans}}
-            {% elseif order.status == 'cancelled' %} {{'order.status.cancel'|trans}}
-            {% elseif order.status == 'refunding' %} {{'order.status.refunding'|trans}}
-            {% elseif order.status == 'refunded' %} {{'order.status.refunded'|trans}}
-            {% endif %}
+             {{ dict_text('orderStatus', order.status) }}
            </td>
       </tr>
       <tr>
