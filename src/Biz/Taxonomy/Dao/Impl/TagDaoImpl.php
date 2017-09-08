@@ -34,7 +34,7 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
         if (empty($ids)) {
             return array();
         }
-        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql = "SELECT * FROM {$this->table()} WHERE id IN ({$marks});";
 
         return $this->db()->fetchAll($sql, $ids);
@@ -46,7 +46,7 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($names) - 1).'?';
+        $marks = str_repeat('?,', count($names) - 1) . '?';
         $sql = "SELECT * FROM {$this->table()} WHERE name IN ({$marks});";
 
         return $this->db()->fetchAll($sql, $names);
@@ -54,9 +54,8 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
 
     public function findAll($start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table()} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        $sql = "SELECT * FROM {$this->table()} ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, array());
     }
 
@@ -80,11 +79,5 @@ class TagDaoImpl extends GeneralDaoImpl implements TagDao
         $sql = "SELECT COUNT(*) FROM {$this->table()} ";
 
         return $this->db()->fetchColumn($sql, array());
-    }
-
-    protected function filterStartLimit(&$start, &$limit)
-    {
-        $start = (int) $start;
-        $limit = (int) $limit;
     }
 }

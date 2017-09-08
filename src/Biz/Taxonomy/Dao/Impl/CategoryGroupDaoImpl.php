@@ -36,10 +36,4 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
         return array(
         );
     }
-
-    protected function filterStartLimit(&$start, &$limit)
-    {
-        $start = (int) $start;
-        $limit = (int) $limit;
-    }
 }

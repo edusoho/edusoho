@@ -92,7 +92,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
 
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
@@ -120,8 +120,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
-
+        $sql .= "ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
@@ -133,7 +133,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
-
+        $sql = $this->sql($sql);
         return $this->db()->fetchColumn($sql, $params);
     }
 
@@ -145,13 +145,14 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
-
+        $sql .= "ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$groupBy}, COUNT(id) AS count")
             ->groupBy($groupBy)
@@ -189,15 +190,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $fields = array_keys($conditions);
         array_walk($fields, function (&$value) {
-            $value = $value.' = ? ';
+            $value = $value . ' = ? ';
         });
 
-        $wherePart = '('.implode(') '.'AND'.' (', $fields).')';
+        $wherePart = '(' . implode(') ' . 'AND' . ' (', $fields) . ')';
 
         $declares = $this->declares();
         $selectFields = array_merge(array('id'), $declares['orderbys']);
         array_walk($selectFields, function (&$value) {
-            $value = 'MAX('.$value.') AS '.$value;
+            $value = 'MAX(' . $value . ') AS ' . $value;
         });
 
         $selectList = implode(',', $selectFields);
@@ -217,13 +218,14 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             $sql .= " AND c.status = 'published' ";
         }
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        $sql .= " ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, $start, $limit);
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
     public function searchMemberIds($conditions, $orderBys, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions);
         $declares = $this->declares();
         foreach ($orderBys ?: array() as $order => $sort) {
@@ -233,7 +235,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
         if (isset($conditions['unique'])) {
             $builder->select('userId');
-            $builder->from('('.$builder->getSQL().')', $this->table());
+            $builder->from('(' . $builder->getSQL() . ')', $this->table());
             //when we use distinct in strict mode, it's not allowed to order by field that is not in select part,
             //so we use a sub query, and reset result field here.
             $builder->select('distinct userId');
@@ -278,7 +280,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= ' AND m.role = ? AND c.type =  ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0';
 
         return $this->db()->fetchColumn($sql, array($userId, $role, $type, $isLearned));
@@ -287,7 +289,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= ' AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0';
 
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
@@ -296,7 +298,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function countMemberNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= ' AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0';
 
         if ($onlyPublished) {
@@ -313,9 +315,10 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         $isLearned,
         $start,
         $limit
-    ) {
+    )
+    {
         $sql = "SELECT m.* FROM {$this->table} m";
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= 'AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
@@ -325,18 +328,19 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= 'AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= " ORDER BY createdTime DESC";
 
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, array($userId, $role, $isLearned));
     }
 
     public function countMemberByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= ' AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?';
 
         return $this->db()->fetchColumn($sql, array($userId, $type, $isLearned, $role));
@@ -349,25 +353,19 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
     }
 
-    public function findMembersNotInClassroomByUserIdAndRoleAndType(
-        $userId,
-        $role,
-        $type,
-        $start,
-        $limit,
-        $onlyPublished = true
-    ) {
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true)
+    {
         $sql = "SELECT m.* FROM {$this->table} m ";
 
-        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLE_NAME . ' AS c ON m.userId = ? ';
         $sql .= ' AND m.role =  ? AND c.type = ? AND m.courseId = c.id AND c.parentId = 0';
 
         if ($onlyPublished) {
             $sql .= " AND c.status = 'published' ";
         }
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        $sql .= " ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, array($userId, $role, $type));
     }
 
@@ -415,7 +413,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
         $builder = new DynamicQueryBuilder($this->db(), $conditions);
         $builder->from($this->table(), 'm')
-            ->join('m', 'course_v8', 'c', 'm.courseId = c.id '.$joinConnections)
+            ->join('m', 'course_v8', 'c', 'm.courseId = c.id ' . $joinConnections)
             ->andWhere('m.isLearned = :isLearned')
             ->andWhere('m.userId = :userId')
             ->andWhere('m.role = :role')
@@ -489,7 +487,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             return !empty($value);
         });
         foreach ($conditions as $key => $value) {
-            $sql .= $key.' = ? AND ';
+            $sql .= $key . ' = ? AND ';
             array_push($params, $value);
         }
 
