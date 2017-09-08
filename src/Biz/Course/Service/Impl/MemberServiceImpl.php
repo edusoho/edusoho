@@ -79,6 +79,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $info = array(
                     'orderId' => 0,
                     'note' => $data['remark'],
+                    'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
                 );
 
                 $this->becomeStudent($course['id'], $user['id'], $info);
@@ -616,6 +617,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->create($fields);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
+        $this->createOperateRecord($member, 'join', $order);
 
         $this->dispatchEvent(
             'course.join',
@@ -1091,6 +1093,24 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
+    protected function createOperateRecord($member, $operateType, $data = array())
+    {
+        $currentUser = $this->getCurrentUser();
+        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
+
+        $record = array(
+            'member_id' => $member['userId'],
+            'target_id' => $member['courseId'],
+            'target_type' => 'course',
+            'operate_type' => $operateType,
+            'operate_time' => time(),
+            'operator_id' => $operatorId,
+            'data' => $data,
+        );
+
+        return $this->getMemberOperationService()->createRecord($record);
+    }
+
     /**
      * @return CourseMemberDao
      */
@@ -1214,5 +1234,10 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCategoryService()
     {
         return $this->biz->service('Taxonomy:CategoryService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->biz->service('MemberOperation:MemberOperationService');
     }
 }
