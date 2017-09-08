@@ -119,7 +119,7 @@ class LlpayRequest extends Request
     {
         $bindPhone = '';
         if (！empty($user['verifiedMobile'])) {
-            $head = substr($user['verifiedMobile'], 0, 4);
+            $head = substr($user['verifiedMobile'], 0, 3);
             $tail = substr($user['verifiedMobile'], -4, 4);
             $bindPhone = $head.'****'.$tail;
         }
