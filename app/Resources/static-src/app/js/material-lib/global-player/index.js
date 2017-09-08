@@ -5,6 +5,6 @@ new QiQiuYun.Player({
   token: $element.data('token'),
   user: {
     id: $element.data('userId'),
-    name: $element.data('nickName')
+    name: $element.data('userName')
   }
 });

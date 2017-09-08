@@ -64,12 +64,17 @@ $('#form-nickname-submit').on('click', function() {
     nickname: nickname
   };
 
+  $this.button('loading');
+
   $.post(url, data).done(function(data) {
+    $this.button('reset');
     notify('success', Translator.trans(data.message));
     $this.closest('.cd-form-group').find('[data-target="form-static-text"] span').text(nickname);
-    $this.siblings('[data-dismiss="form-editable-close"]').click();
+    $('#nickname').data('save-value', $('#nickname').val());
+    $this.siblings('[data-dismiss="form-editable-cancel"]').click();
 
   }).fail(function(data) {
+    $this.button('reset');
     if (data.responseJSON.message) {
       notify('danger', Translator.trans(data.responseJSON.message));
     } else {

@@ -54,6 +54,7 @@ site.form.submit_error: Form submit error
 
 site.cancel: Cancel
 site.confirm: Confirm
+site.close: Close
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...
@@ -85,8 +86,13 @@ user.settings.email.send_success: Please verify your email address. We’ve sent
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.basic_info.nickname_change_fail: 'Nickname had changed fail'
+user.settings.login_password_success: 设置登录密码成功
+
+material.share.teacher_nickname_label: Please input teacher nickname
 
 user.settings.unbind_success: 取消绑定成功
+user.settings.unbind_title: 取消绑定
+user.settings.unbind_content: 确定要取消绑定吗？
 
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
@@ -95,6 +101,7 @@ uploader.title: Upload
 uploader.error_hint: Upload failed, please try again!
 uploader.num_limit_hint: Add too many files!
 uploader.size_limit_hint: File is too large, please upload a smaller file!
+uploader.size_2m_limit_hint: 文件过大，请上传小于2M的文件！
 uploader.type_denied_limit_hint: File type is wrong!
 uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
 uploader.btn.batch_paused: Paused All

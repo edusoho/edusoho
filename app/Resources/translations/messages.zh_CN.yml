@@ -2804,7 +2804,7 @@ user.settings.security.content_title: 安全设置
 user.settings.security.reset_pay_password: 重设支付密码
 user.settings.security.reset_pay_password_success: 重设支付密码成功
 user.settings.security.set_pay_password_success: 新支付密码设置成功。
-user.settings.security.set_pay_password_success.closed_automatically: 5秒后该页面自动关闭
+user.settings.security.set_pay_password_success.closed_automatically: 3 秒后该页面自动关闭
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
@@ -2932,10 +2932,12 @@ user.settings.basic_info.occupation: 职业
 user.settings.basic_info.rank: 头衔
 user.settings.basic_info.personal_signature: 个人签名
 user.settings.basic_info.personal_space: 个人空间
+user.settings.basic_info.public: 微博、微信、QQ信息将会展示在您的个人主页
 user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+user.settings.basic_info.shange_avatar: 修改头像
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
@@ -2946,16 +2948,16 @@ user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
 
-user.settings.verification.approving_title_tips: 认证审核中
-user.settings.verification.approving_content_tips: 您的信息正在审核中，请耐心等待
-user.settings.verification.approved_title_tips: 您已经通过实名认证
+user.settings.verification.approving_title_tips: 审核中
+user.settings.verification.approving_content_tips: 申请已提交，请耐心等待审核结果
+user.settings.verification.approved_title_tips: 已实名认证
 user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
 
-user.settings.verification.unapprove_tips: 实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务。
+user.settings.verification.unapprove_tips: 为保护您的帐号安全、获得更好的服务，请尽快完成实名认证。
 user.settings.verification.approve_failed_tips: 审核未通过，请重新上传身份证图片并保证画面清晰。
-
+user.settings.verification.approve_failed_reason_tips: 审核未通过，原因是：%reason%。请修改信息后重新认证。
 user.settings.verification.notice: 认证须知
-user.settings.verification.notice_content: "<p>1、我们将在你提交身份证信息后的 5 个工作日（不包含节假日）内完成审核，审核结果将会以短信和系统通知的形式发送给你；<br> 2、如若账号还未绑定手机，建议你提前绑定手机；<br> 3、实名认证审核完成后，将无法修改和删除，请谨慎填写；<br> 4、你需要准备身份证照片（需正反两面），请确保证件照片清晰可见，严禁 PS，具体可参考实名认证常见问题。</p>"
+user.settings.verification.notice_content: "<p>1、请确保身份证照片清晰可认，严禁PS，否则将由您本人承担相应的法律后果。<br> 2、实名认证成功后，将无法修改和删除实名信息，请谨慎填写。<br> 3、我们将尽快审核您提交的信息，处理完成后您将会收到系统通知。</p>"
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
@@ -2970,7 +2972,7 @@ user.settings.avatar.upload_hint: >
 user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
-user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.crop_hint: 选择裁切区域
 user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
 # 个人设置模块-邮箱设置
@@ -2979,6 +2981,10 @@ user.settings.email.content_title: 邮箱设置
 user.settings.email.no_change_email_tips: 管理员尚未设置邮件服务器，不能更改邮箱地址。
 user.settings.email.current_email: 当前登录邮箱
 user.settings.email.verified: 已验证
+user.settings.email.verifiy: 邮箱验证
+user.settings.email.verifiy_send: 验证邮件已发送
+user.settings.email.not_verifiy: 暂不验证
+user.settings.email.goto_verifiy: 前往验证
 user.settings.email.unverified_tips: 邮箱地址尚未验证，
 user.settings.email.verify_btn: 去验证
 user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
@@ -2987,7 +2993,7 @@ user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校�
 user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样。
 user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
-user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+user.settings.email.send_success: 请登录邮箱%email%<br>并点击验证链接以完成验证
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
@@ -3057,7 +3063,7 @@ user.orders.order_id: 订单号：%sn%
 user.orders.target_course: 所属课程
 user.orders.target_course_deleted: 该课程已被删除
 user.orders.cancel_refund: 取消退款
-user.orders.pay: 去支付
+user.orders.pay: 支付订单
 user.orders.cancel_order: 取消订单
 user.orders.detail.modal_title: 订单详情
 user.orders.detail.special_operations: 特殊操作

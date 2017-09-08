@@ -2287,10 +2287,13 @@ user.settings.basic_info.occupation: Occupation
 user.settings.basic_info.rank: Title
 user.settings.basic_info.personal_signature: 'Personal signature'
 user.settings.basic_info.personal_space: 'Personal space'
+user.settings.basic_info.public: 微博、微信、QQ信息将会展示在您的个人主页
 user.settings.basic_info.self_introduction: 'About me'
 user.settings.basic_info.alter_description: 'You can create a course after setting till and self-introduction.'
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
+user.settings.basic_info.shange_avatar: 修改头像
+
 user.settings.verification: 'Real-name authentication'
 user.settings.verification.username_modify: 'Update username'
 user.settings.verification.content_title: 'Real-name authentication'
@@ -2299,16 +2302,18 @@ user.settings.verification.photo_require_tips: 'Pictures must be clear and in co
 user.settings.verification.idcard_front_photo: 'Front Side'
 user.settings.verification.idcard_back_photo: 'Back Side'
 
-user.settings.verification.approving_title_tips: Certification audit
-user.settings.verification.approving_content_tips: Your information is under review, please be patient
-user.settings.verification.approved_title_tips: You have already through real-name authentication
-user.settings.verification.approved_content_tips: After certification by real name information cannot be modified
+user.settings.verification.approving_title_tips: 审核中
+user.settings.verification.approving_content_tips: 申请已提交，请耐心等待审核结果
+user.settings.verification.approved_title_tips: 已实名认证
+user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
 
+user.settings.verification.unapprove_tips: 为保护您的帐号安全、获得更好的服务，请尽快完成实名认证。
 user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
 user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
+user.settings.verification.approve_failed_reason_tips: 审核未通过，原因是：%reason%。请修改信息后重新认证。
 
-user.settings.verification.notice: Certification requirements
-user.settings.verification.notice_content: "<p>1、We will after you submit id card information within 5 working days (not including holidays) to complete the audit, the audit results will be sent to you in the form of text messages and system notification.<br>2、If your account is not binding mobile phone, suggest you binding mobile phone in advance.<br>3、Real-name certification audit is completed, will not be able to modify, and delete, please carefully fill in.<br>4、You need to prepare id photos (front and back), please ensure that the id photo is visible, it is strictly prohibited to PS, specific real-name authentication common problems for reference.</p>"
+user.settings.verification.notice: 认证须知
+user.settings.verification.notice_content: "<p>1、请确保身份证照片清晰可认，严禁PS，否则将由您本人承担相应的法律后果。<br> 2、实名认证成功后，将无法修改和删除实名信息，请谨慎填写。<br> 3、我们将尽快审核您提交的信息，处理完成后您将会收到系统通知。</p>"
 
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
@@ -2320,13 +2325,17 @@ user.settings.avatar.upload_hint: "you can upload the file of JPG,GIF,PNG，and 
 user.settings.avatar.upload_btn: 'Upload New Photo'
 user.settings.avatar.using_current_avatar: 'Set as avatar'
 user.settings.avatar.setup_hint: 'Please set custom profile photo。'
-user.settings.avatar.crop_hint: 'Tip:Please select an image crop area'
+user.settings.avatar.crop_hint: 'Please select an image crop area'
 user.settings.avatar.fetch_form_partner_error: Fetch your avatar from partner encountered an error.
 user.settings.email: 'Email setting'
 user.settings.email.content_title: 'Email setting'
 user.settings.email.no_change_email_tips: 'Mail server has not been set by administrator, can not change email'
 user.settings.email.current_email: 'Current Email'
 user.settings.email.verified: Verified
+user.settings.email.verifiy: 邮箱验证
+user.settings.email.verifiy_send: 验证邮件已发送
+user.settings.email.not_verifiy: 暂不验证
+user.settings.email.goto_verifiy: 前往验证
 user.settings.email.unverified_tips: 'Mail address hasn''t been verified.'
 user.settings.email.verify_btn: Verify
 user.settings.email.setup_email_tips: 'You haven''t set your email, please set your new email below.'

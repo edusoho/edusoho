@@ -63,6 +63,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
+        $approval = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $user['approvalStatus']);
 
         if ($request->getMethod() === 'POST') {
             $faceImg = $request->files->get('faceImg');
@@ -85,6 +86,7 @@ class SettingsController extends BaseController
 
         return $this->render('settings/approval.html.twig', array(
             'profile' => $profile,
+            'approval' => $approval,
         ));
     }
 
@@ -107,7 +109,7 @@ class SettingsController extends BaseController
 
             list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-            if ($result !== 'success') {
+            if ($result !== 'success' && $user['nickname'] != $nickname) {
                 return $this->createJsonResponse(array('message' => $message), 403);
             }
 
@@ -303,7 +305,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (!$user['setup'] || stripos($user['email'], '@eduoho.net') != false) {
+        if ($user['setup'] == 0 || stripos($user['email'], '@eduoho.net') != false) {
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
@@ -313,7 +315,8 @@ class SettingsController extends BaseController
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
         $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
-        $hasEmail = strlen($user['email']) > 0;
+        $hasEmail = strlen($user['email']) > 0 && stripos($user['email'], '@edusoho.net') === false;
+
         $email = $hasEmail ? $user['email'] : '';
         $hasVerifiedEmail = $user['emailVerified'];
 
@@ -352,9 +355,7 @@ class SettingsController extends BaseController
         }
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_pay_password')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -452,9 +453,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_reset_pay_password')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -524,7 +523,7 @@ class SettingsController extends BaseController
 
                     return $this->render('settings/pay-password-success.html.twig', array(
                         'goto' => $this->generateUrl('settings_security', array(), true),
-                        'duration' => 5,
+                        'duration' => 3,
                     ));
                 } else {
                     $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
@@ -685,9 +684,7 @@ class SettingsController extends BaseController
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_security_questions')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -742,15 +739,13 @@ class SettingsController extends BaseController
         }
 
         if ($this->isSocialLogin($user)) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_bind_mobile')));
         }
 
         if ($request->getMethod() === 'POST') {
             $password = $request->request->get('password');
 
-            if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
+            if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
@@ -808,14 +803,8 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (empty($user['setup'])) {
-            return $this->redirect($this->generateUrl('settings_setup'));
-        }
-
         if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_password')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -840,8 +829,8 @@ class SettingsController extends BaseController
         $mailer = $this->getSettingService()->get('mailer', array());
         $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
 
-        if (empty($user['setup'])) {
-            return $this->redirect($this->generateUrl('settings_setup'));
+        if ($user->isLogin() && empty($user['password'])) {
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_email')));
         }
 
         if ($request->getMethod() === 'POST') {
@@ -887,7 +876,13 @@ class SettingsController extends BaseController
                 $mail = $mailFactory($mailOptions);
                 $mail->send();
 
-                return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email']))));
+                return $this->render('settings/email-verfiy.html.twig',
+                    array(
+                        'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])),
+                        'data' => array(
+                            'email' => $data['email'],
+                        ),
+                ));
             } catch (\Exception $e) {
                 $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
 
@@ -922,7 +917,13 @@ class SettingsController extends BaseController
             $mail = $mailFactory($mailOptions);
             $mail->send();
 
-            return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email']))));
+            return $this->render('settings/email-verfiy.html.twig',
+                array(
+                    'message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email'])),
+                    'data' => array(
+                        'email' => $user['email'],
+                    ),
+            ));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
 
@@ -1036,24 +1037,37 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        $targetPath = $request->query->get('targetPath');
+        $showType = $request->query->get('showType', 'modal');
         $form = $this->createFormBuilder()
             ->add('newPassword', 'password')
             ->add('confirmPassword', 'password')
             ->getForm();
 
         if ($request->getMethod() === 'POST') {
-            $targetPath = $this->getTargetPath($request);
+            if (!empty($user['password'])) {
+                return $this->createJsonResponse(array(
+                    'message' => 'user.settings.login_password_fail',
+                ), 500);
+            }
             $form->bind($request);
-
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
 
-                return $this->redirect($targetPath);
+                return $this->createJsonResponse(array(
+                    'message' => 'user.settings.login_password_success',
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'message' => 'user.settings.login_password_fail',
+                ), 500);
             }
         }
 
         return $this->render('settings/setup-password.html.twig', array(
+            'targetPath' => $targetPath,
+            'showType' => $showType,
             'form' => $form->createView(),
         ));
     }

@@ -1,5 +1,5 @@
 <label class="image-upload-label">
-  <input type="file" name="file" class="js-upload-image" accept="image/bmp,image/jpeg,image/png"
+  <input type="file" name="file" class="js-upload-image hidden" accept="image/bmp,image/jpeg,image/png"
   data-toggle="local-upload"
   data-token="{{ upload_token('default', 'image') }}" 
   data-file-upload="{{path('file_upload')}}" 
@@ -9,5 +9,4 @@
   data-show-type="image" 
   data-crop-width="270"
   data-crop-height="270" />
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"  />
 </label>
