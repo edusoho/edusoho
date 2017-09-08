@@ -2,15 +2,7 @@
 
 namespace Codeages\Biz\Framework\Provider;
 
-use Codeages\Biz\Framework\Pay\Payment\AlipayInTimeGetway;
-use Codeages\Biz\Framework\Pay\Payment\WechatGetway;
-use Codeages\Biz\Framework\Pay\Status\ClosedStatus;
-use Codeages\Biz\Framework\Pay\Status\ClosingStatus;
-use Codeages\Biz\Framework\Pay\Status\PaidStatus;
-use Codeages\Biz\Framework\Pay\Status\PayingStatus;
 use Codeages\Biz\Framework\Pay\Status\PaymentTradeContext;
-use Codeages\Biz\Framework\Pay\Status\RefundedStatus;
-use Codeages\Biz\Framework\Pay\Status\RefundingStatus;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -44,7 +36,7 @@ class PayServiceProvider implements ServiceProviderInterface
     {
         $paymentDefaultPlatforms = array(
             'wechat' => array(
-                'class' => WechatGetway::class,
+                'class' => '\Codeages\Biz\Framework\Pay\Payment\WechatGetway',
                 'appid' => '',
                 'mch_id' => '',
                 'key' => '',
@@ -52,7 +44,7 @@ class PayServiceProvider implements ServiceProviderInterface
                 'key_path' => '',
             ),
             'alipay.in_time' => array(
-                'class' => AlipayInTimeGetway::class,
+                'class' => '\Codeages\Biz\Framework\Pay\Payment\AlipayInTimeGetway',
                 'seller_email' => '',
                 'partner' => '',
                 'key' => '',
