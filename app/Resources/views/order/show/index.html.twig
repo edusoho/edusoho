@@ -40,7 +40,7 @@
          <a
           href="{{ path(product.backUrl.routing, product.backUrl.params) }}"
           class="btn btn-link">{{'form.btn.cancel'|trans}}</a> 
-          <button class="btn btn-primary" id="order-create-btn" type="submit" data-loading-text="{{ 'order.confirm.submit_btn'|trans }}">{{'order.confirm.submit_btn'|trans}}</button>
+          <button class="btn btn-primary" id="order-create-btn" type="submit" data-loading-text="{{ 'order.confirm.submit_btn_loading'|trans }}">{{'order.confirm.submit_btn'|trans}}</button>
       </div>  
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

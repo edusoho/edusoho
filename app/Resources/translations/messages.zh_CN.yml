@@ -479,6 +479,7 @@ order.confirm: 订单确认
 order.confirm.pay_rmb: 应付金额：
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
+order.confirm.submit_btn_loading: 正在提交...
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）

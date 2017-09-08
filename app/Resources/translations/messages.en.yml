@@ -393,6 +393,7 @@ order.confirm: 'Confirm'
 order.confirm.pay_rmb: 'Price:'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
+order.confirm.submit_btn_loading: Submiting...
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
