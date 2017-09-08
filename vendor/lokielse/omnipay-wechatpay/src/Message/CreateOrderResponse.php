@@ -21,14 +21,14 @@ class CreateOrderResponse extends BaseAbstractResponse
     public function getAppOrderData()
     {
         if ($this->isSuccessful()) {
-            $data = [
+            $data = array(
                 'appid'     => $this->request->getAppId(),
                 'partnerid' => $this->request->getMchId(),
                 'prepayid'  => $this->getPrepayId(),
                 'package'   => 'Sign=WXPay',
                 'noncestr'  => md5(uniqid()),
                 'timestamp' => time(),
-            ];
+            );
 
             $data['sign'] = Helper::sign($data, $this->request->getApiKey());
         } else {
@@ -54,12 +54,12 @@ class CreateOrderResponse extends BaseAbstractResponse
     public function getJsOrderData()
     {
         if ($this->isSuccessful()) {
-            $data = [
+            $data = array(
                 'appId'     => $this->request->getAppId(),
                 'package'   => 'prepay_id=' . $this->getPrepayId(),
                 'nonceStr'  => md5(uniqid()),
                 'timeStamp' => time() . '',
-            ];
+            );
 
             $data['signType'] = 'MD5';
             $data['paySign']  = Helper::sign($data, $this->request->getApiKey());
