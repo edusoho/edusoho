@@ -48,7 +48,6 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         );
 
         try {
-
             $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
             if (!$isStudent) {
                 $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);

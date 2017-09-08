@@ -1946,8 +1946,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operate_type' => $operateType,
             'operate_time' => time(),
             'operator_id' => $operatorId,
-            'data' => $data
+            'data' => $data,
         );
+
         return $this->getMemberOperationService()->createRecord($record);
     }
 

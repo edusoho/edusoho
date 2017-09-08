@@ -79,7 +79,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $info = array(
                     'orderId' => 0,
                     'note' => $data['remark'],
-                    'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1
+                    'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
                 );
 
                 $this->becomeStudent($course['id'], $user['id'], $info);
@@ -1105,8 +1105,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             'operate_type' => $operateType,
             'operate_time' => time(),
             'operator_id' => $operatorId,
-            'data' => $data
+            'data' => $data,
         );
+
         return $this->getMemberOperationService()->createRecord($record);
     }
 
