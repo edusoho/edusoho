@@ -109,14 +109,14 @@ class WechatGetway extends AbstractGetway
     {
         $gateway = $this->createGetWay("WechatPay");
 
-        $response = $gateway->refund([
+        $response = $gateway->refund(array(
             'transaction_id' => $trade['platform_sn'],
             'out_trade_no' => $trade['trade_sn'],
             'out_refund_no' => time(),
             'total_fee' => $trade['cash_amount'],
             'refund_fee' => $trade['cash_amount'],
             'refund_desc' => empty($trade['refund_reason']) ? '' : $trade['refund_reason']
-        ])->send();
+        ))->send();
 
         return $response;
     }
