@@ -15,7 +15,6 @@ class SchedulerServiceProvider implements ServiceProviderInterface
         $biz['scheduler.options'] = array(
             'max_num' => 10,
             'timeout' => 120,
-            'max_retry_num' => 5
         );
 
         $biz['console.commands'][] = function () use ($biz) {

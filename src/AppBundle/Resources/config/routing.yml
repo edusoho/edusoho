@@ -2957,3 +2957,4 @@ order_calculate_price:
 product_member_exit:
     path: /product/{targetId}/type/{targetType}/owner/exit
     defaults: { _controller: AppBundle:Product/Owner:exit}
+

@@ -56,3 +56,4 @@ deployment-config.json
 ./vendor
 .webpack-watch.log
 /web/MP_*
+.webpack-watch.log

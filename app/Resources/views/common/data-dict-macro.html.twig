@@ -51,6 +51,20 @@
 {% endmacro %}
 
 {% macro refundStatus(status) %}
+    {% if status == 'created' %}
+        <span class="cd-status cd-status-info">{{ 'common.orderStatus.created'|trans }}</span>
+    {% elseif status == 'paid' %}
+        <span class="cd-status cd-status-success">{{ 'common.orderStatus.paid'|trans }}</span>
+    {% elseif status == 'refunding' %}
+        <span class="cd-status cd-status-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
+    {% elseif status == 'refunded' %}
+        <span class="cd-status cd-status-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="cd-status cd-status-disabled">{{ 'common.orderStatus.cancelled'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro refundStatus(status) %}
     {% if status == 'auditing' %}
         <span class="text-warning">{{ 'common.refundStatus.created'|trans }}</span>
     {% elseif status == 'refunded' %}

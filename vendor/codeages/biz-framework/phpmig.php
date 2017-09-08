@@ -25,6 +25,4 @@ $container['phpmig.adapter'] = function ($c) {
 
 $container['phpmig.migrations_path'] = __DIR__ . '/tests/Fixtures/Migrations';
 
-$container['db']->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
 return $container;

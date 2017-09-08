@@ -29,6 +29,10 @@ class Biz extends Container
         $biz['migration.directories'] = new \ArrayObject();
         $biz['console.commands'] = new \ArrayObject();
 
+        $biz['console.commands'][] = function () {
+            return new \Codeages\Biz\Framework\Command\EnvWriteCommand();
+        };
+
         $biz['autoload.aliases'] = new \ArrayObject(array('' => 'Biz'));
 
         $biz['dispatcher'] = function () {
