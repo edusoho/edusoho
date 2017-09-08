@@ -1,104 +1,146 @@
-.cd-step {
-  margin-bottom: 0;
-  padding: 24px 0;
-  li {
-    float: left;
-    width: 25%;
-    @media(max-width: @screen-xs-max) {
-      width: 32%;
-    }
-    padding: 4px;
-    list-style-type: none;
-    color: @cd-bg-dark;
-    font-size: 14px;
-    text-align: center;
-    .number {
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-      display: inline-block;
-      margin-right: 8px;
-      font-size: 12px;
-      border: 1px solid @cd-bg-dark;
-      background-color: #fff;
-      color: @cd-gray-light;
-      .border-radius(50%);
-      &.pass-icon {
-        color: #fff !important;
-        background-color: @brand-primary;
+.cd-steps {
+  padding: 24px 12px;
+  &.cd-steps-4 {
+    .cd-steps-item {
+      &:not(:last-child) {
+        margin-right: -39px;
+        width: 33.3%;
+      }
+      &:first-child {
+        .cd-steps-content {
+          .content-wrap {
+            .circle-wrap {
+              margin-left: 4px;
+            }
+          }
+        }
+      }
+      .cd-steps-tail {
+        padding-right: 39px;
       }
     }
-    .info {
-      color: @cd-gray-light;
-      font-size: 14px;
-      letter-spacing: 0;
-      line-height: 1;
+  }
+
+  &.cd-steps-3 {
+    .cd-steps-item {
+      &:not(:last-child) {
+        margin-right: -75px;
+        width: 50%;
+      }
+      .cd-steps-tail {
+        padding-right: 75px;
+      }
     }
-    &.done,
+  }
+
+  &.cd-steps-2 {
+    .cd-steps-item {
+      &:not(:last-child) {
+        margin-right: -50px;
+        width: 90%;
+        @media(max-width: @screen-xs-max) {
+          width: 70%;
+        }
+      }
+      .cd-steps-tail {
+        padding-right: 50px;
+      }
+    }
+  }
+
+  .cd-steps-item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    // 第一个孩子
+    &:first-child {
+      .cd-steps-content {
+        .content-wrap {
+          .content-number {
+            margin-left: 36px;
+          }
+        }
+      }
+    }
+    // 最后一个孩子
+    &:last-child {
+      .cd-steps-tail {
+        padding-right: 0;
+        display: none;
+      }
+      .cd-steps-content {
+        .content-wrap {
+          & + .content-wrap {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+    // 连接线
+    .cd-steps-tail {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      top: 13px;
+      padding: 0 10px;
+      i {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        background: @cd-bg-dark;
+        height: 2px;
+        .border-radius(2px);
+        width: 100%;
+      }
+    }
+    // 圈圈提示
+    .cd-steps-content {
+      .content-wrap {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        background-color: #fff;
+        & + .content-wrap {
+          margin-left: -4px;
+          padding-right: 10px;
+          font-size: 14px;
+          line-height: 24px;
+        }
+      }
+
+      .content-number {
+        margin-left: 16px;
+        margin-right: 8px;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        line-height: 24px;
+        text-align: center;
+        border: 1px solid @cd-bg-dark;
+        background-color: #fff;
+        color: @cd-gray-light;
+        .border-radius(50%);
+      }
+
+      .content-wrapinfo {
+        font-size: 14px;
+        line-height: 1;
+        color: @cd-gray-light;
+      }
+    }
+
     &.doing {
-      border-color: @brand-primary;
-      .number {
+      .content-number {
         color: @brand-primary;
         border-color: @brand-primary;
       }
-      .info {
+      .content-icon {
+        background-color: @brand-primary;
+        color: #fff;
+      }
+      .content-info {
         color: @cd-gray-dark;
       }
-    }
-    &.doing {
-      color: @cd-bg-dark;
-    }
-  }
-  .cd-step__one {
-    @media(max-width: @screen-xs-max) {
-      width: 35%;
-    }
-  }
-  .cd-step__three {
-    float: right;
-    @media(min-width: @screen-xs-max) {
-      padding-left: 28px;
-    }
-    .number {
-      @media(min-width: @screen-xs-max) {
-        margin-left: 16px;
-      }
-    }
-  }
-  .cd-step__two {
-    @media(min-width: @screen-xs-max) {
-      width: 50%;
-    }
-    width: 32%;
-  }
-}
-
-
-.cd-step__divided {
-  @media(min-width: @screen-xs-max) {
-    &:after {
-      content: "";
-      height: 2px;
-      position: absolute;
-      top: 50%;
-      right: 18%;
-      width: 24%;
-      background-color: @cd-bg-dark;
-    }
-    &.done:after {
-      background-color: @brand-primary;
-    }
-    &:before {
-      content: "";
-      height: 2px;
-      position: absolute;
-      top: 50%;
-      left: 22%;
-      width: 20%;
-      background-color: @cd-bg-dark;
-    }
-    &.doing:before {
-      background-color: @brand-primary;
     }
   }
 }
