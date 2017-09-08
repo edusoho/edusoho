@@ -65,6 +65,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
         if ($buyType == 'upgrade') {
+            $unitType = $member['boughtUnit'];
+            $duration = $member['boughtDuration'];
+
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         } else {
             if (!ArrayToolkit::requireds($fields, array('unit', 'duration'))) {
@@ -250,35 +253,21 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             return;
         }
 
-        if ($order['data']['buyType'] == 'new') {
-            $vip = $this->getVipService()->becomeMember(
-                $order['userId'],
-                $order['data']['targetId'],
-                $order['data']['duration'],
-                $order['data']['unitType'],
-                $order['id']
-            );
+        $vip = $this->getVipService()->becomeMember(
+            $order['userId'],
+            $order['data']['targetId'],
+            $order['data']['duration'],
+            $order['data']['unitType'],
+            $order['id']
+        );
 
-            $level = $this->getLevelService()->getLevel($vip['levelId']);
+        $level = $this->getLevelService()->getLevel($vip['levelId']);
+
+        if ($order['data']['buyType'] == 'new') {
             $message = '您已经成功加入'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         } elseif ($order['data']['buyType'] == 'renew') {
-            $vip = $this->getVipService()->renewMember(
-                $order['userId'],
-                $order['data']['duration'],
-                $order['data']['unitType'],
-                $order['id']
-            );
-
-            $level = $this->getLevelService()->getLevel($vip['levelId']);
             $message = '您的'.$level['name'].'已成功续费，当前的有效期至：'.date('Y-m-d', $vip['deadline']);
         } elseif ($order['data']['buyType'] == 'upgrade') {
-            $vip = $this->getVipService()->upgradeMember(
-                $order['userId'],
-                $order['data']['targetId'],
-                $order['id']
-            );
-
-            $level = $this->getLevelService()->getLevel($vip['levelId']);
             $message = '您已经升级到'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         }
 

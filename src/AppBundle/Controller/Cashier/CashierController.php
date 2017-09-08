@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
@@ -117,10 +116,12 @@ class CashierController extends BaseController
         $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
         $item1 = reset($items);
 
-        $biz = $this->getBiz();
-        /* @var $product Product */
-        $product = $biz['order.product.'.$item1['target_type']];
-        $product->init(array('targetId' => $item1['target_id']));
+        $params = array(
+            'targetId' => $item1['target_id'],
+            'num' => $item1['num'],
+            'unit' => $item1['unit'],
+        );
+        $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
 
         return $this->render('cashier/success.html.twig', array(
             'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
