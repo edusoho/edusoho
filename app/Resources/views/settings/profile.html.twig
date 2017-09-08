@@ -42,10 +42,10 @@
           {% endif %}
         </div> 
         <div data-target="form-editable" style="display:none">
-          <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}">
+          <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}" data-save-value="{{app.user.nickname}}">
           <div class="action-button">
             <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">{{'form.btn.save'|trans}}</div>
-            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-close">{{'form.btn.cancel'|trans}}</div>
+            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-cancel">{{'form.btn.cancel'|trans}}</div>
           </div>
         </div> 
       </div>
