@@ -2292,6 +2292,8 @@ user.settings.basic_info.self_introduction: 'About me'
 user.settings.basic_info.alter_description: 'You can create a course after setting till and self-introduction.'
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
+user.settings.basic_info.shange_avatar: 修改头像
+
 user.settings.verification: 'Real-name authentication'
 user.settings.verification.username_modify: 'Update username'
 user.settings.verification.content_title: 'Real-name authentication'
@@ -2331,6 +2333,9 @@ user.settings.email.no_change_email_tips: 'Mail server has not been set by admin
 user.settings.email.current_email: 'Current Email'
 user.settings.email.verified: Verified
 user.settings.email.verifiy: 邮箱验证
+user.settings.email.verifiy_send: 验证邮件已发送
+user.settings.email.not_verifiy: 暂不验证
+user.settings.email.goto_verifiy: 前往验证
 user.settings.email.unverified_tips: 'Mail address hasn''t been verified.'
 user.settings.email.verify_btn: Verify
 user.settings.email.setup_email_tips: 'You haven''t set your email, please set your new email below.'

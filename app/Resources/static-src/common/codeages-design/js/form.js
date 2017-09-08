@@ -18,11 +18,13 @@
     $formGroup.find('[data-target="form-editable"]').show().find('input').focus().select();
   });
 
-  $(document).on('click.cd.form.editable.close', '[data-dismiss="form-editable-close"]', function() {
+  $(document).on('click.cd.form.editable.cancel', '[data-dismiss="form-editable-cancel"]', function() {
     let $this = $(this);
     let parent = $this.closest('[data-target="form-editable"]');
     let $formGroup = $this.closest('.cd-form-group');
     parent.hide();
+    let saveValue = $formGroup.find('input').data('save-value');
+    $formGroup.find('input').val(saveValue);
     $formGroup.find('[data-target="form-static-text"]').show();
   });
 

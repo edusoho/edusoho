@@ -67,7 +67,8 @@ $('#form-nickname-submit').on('click', function() {
   $.post(url, data).done(function(data) {
     notify('success', Translator.trans(data.message));
     $this.closest('.cd-form-group').find('[data-target="form-static-text"] span').text(nickname);
-    $this.siblings('[data-dismiss="form-editable-close"]').click();
+    $('#nickname').data('save-value', $('#nickname').val());
+    $this.siblings('[data-dismiss="form-editable-cancel"]').click();
 
   }).fail(function(data) {
     if (data.responseJSON.message) {

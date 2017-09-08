@@ -2937,6 +2937,7 @@ user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+user.settings.basic_info.shange_avatar: 修改头像
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
@@ -2981,6 +2982,9 @@ user.settings.email.no_change_email_tips: 管理员尚未设置邮件服务器�
 user.settings.email.current_email: 当前登录邮箱
 user.settings.email.verified: 已验证
 user.settings.email.verifiy: 邮箱验证
+user.settings.email.verifiy_send: 验证邮件已发送
+user.settings.email.not_verifiy: 暂不验证
+user.settings.email.goto_verifiy: 前往验证
 user.settings.email.unverified_tips: 邮箱地址尚未验证，
 user.settings.email.verify_btn: 去验证
 user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
