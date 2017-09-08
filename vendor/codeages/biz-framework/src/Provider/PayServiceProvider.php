@@ -89,12 +89,12 @@ class PayServiceProvider implements ServiceProviderInterface
         };
 
         $statusArray = array(
-            PayingStatus::class,
-            ClosingStatus::class,
-            ClosedStatus::class,
-            PaidStatus::class,
-            RefundingStatus::class,
-            RefundedStatus::class,
+            '\Codeages\Biz\Framework\Pay\Status\ClosedStatus',
+            '\Codeages\Biz\Framework\Pay\Status\PayingStatus',
+            '\Codeages\Biz\Framework\Pay\Status\ClosingStatus',
+            '\Codeages\Biz\Framework\Pay\Status\PaidStatus',
+            '\Codeages\Biz\Framework\Pay\Status\RefundingStatus',
+            '\Codeages\Biz\Framework\Pay\Status\RefundedStatus',
         );
 
         foreach ($statusArray as $status) {
