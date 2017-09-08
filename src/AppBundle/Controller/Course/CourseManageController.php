@@ -884,7 +884,7 @@ class CourseManageController extends BaseController
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
         }
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
         //
 //        foreach ($orders as $index => $expiredOrderToBeUpdated) {
 //            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())

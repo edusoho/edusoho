@@ -6,8 +6,9 @@
   <tr>
     <th width="25%">{{'order.name'|trans}}</th>
     <th>{{'order.id'|trans}}</th>
+    <th class="text-right">{{'order.price_amount'|trans }}</th>
+    <th class="text-right">{{'order.discount_amount'|trans }}</th>
     <th class="text-right">{{'order.real_pay'|trans}}</th>
-    <th>{{'order.payment_pattern'|trans}}</th>
     <th>{{'order.createdTime'|trans}}</th>
     <th>{{'order.status'|trans}}</th>
     <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
@@ -29,10 +30,9 @@
         {% endif %}
       </td>
       <td>{{order.sn}}</td>
-      <td class="text-right">{{order.pay_amount}}</td>
-      <td>
-        {{ dict_text('payment', order.payment)|default('--') }}
-      </td>
+      <td class="text-right">{{ order.price_amount  }}</td>
+      <td class="text-right">{{ order.price_amount - order.pay_amount  }}</td>
+      <td class="text-right">{{ order.pay_amount }}</td>
       <td>{{ order.created_time|date('Y-n-d H:i:s') }}</td>
       <td>{{ dict_macro.orderStatusV2(order.status) }}</td>
       <td>
@@ -52,8 +52,8 @@
                 {% endif %}
                 {% if order.status in ['created', 'paying'] %}
                   <li>
-                    <a href="">{{'user.orders.pay'|trans}}[这里的支付链接是啥？]</a>
-                    {#<a href="{{path('pay_center_show', {sn:order.sn, targetType:order.item.target_type})}}">{{'user.orders.pay'|trans}}[这里的支付链接是啥？]</a>#}
+                    <a href="">{{'user.orders.pay'|trans}}</a>
+                    <a href="{{path('cashier_show', {sn:order.sn})}}">{{'user.orders.pay'|trans}}</a>
                   </li>
                   <li><a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a></li>
                 {% endif %}
