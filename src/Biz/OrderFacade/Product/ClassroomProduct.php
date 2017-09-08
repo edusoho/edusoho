@@ -37,7 +37,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         }
     }
 
-    public function callback($orderItem)
+    public function onPaid($orderItem)
     {
         $this->smsCallback($orderItem);
 
