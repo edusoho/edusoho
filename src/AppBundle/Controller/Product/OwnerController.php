@@ -23,7 +23,7 @@ class OwnerController extends BaseController
         $order = $this->getOrderService()->getOrder($member['orderId']);
 
         if ('POST' == $request->getMethod()) {
-            if (!empty($request->request->get('applyRefund'))) {
+            if ($request->request->get('applyRefund')) {
                 return $this->forward('AppBundle:Order/OrderRefund:refund', array(
                     'request' => $request,
                     'orderId' => $member['orderId'],
