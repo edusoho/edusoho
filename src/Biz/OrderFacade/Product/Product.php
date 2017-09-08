@@ -76,6 +76,20 @@ abstract class Product extends BizAware implements OrderStatusCallback
      */
     public $maxRate = 100;
 
+    /**
+     * 商品数量
+     *
+     * @var int
+     */
+    public $num = 1;
+
+    /**
+     * 商品单位
+     *
+     * @var string
+     */
+    public $unit = '';
+
     abstract public function init(array $params);
 
     abstract public function validate();
@@ -122,6 +136,11 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
             $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
         }
+    }
+
+    public function getCreateExtra()
+    {
+        return '';
     }
 
     /**
