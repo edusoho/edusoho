@@ -3063,7 +3063,7 @@ user.orders.order_id: 订单号：%sn%
 user.orders.target_course: 所属课程
 user.orders.target_course_deleted: 该课程已被删除
 user.orders.cancel_refund: 取消退款
-user.orders.pay: 去支付
+user.orders.pay: 支付订单
 user.orders.cancel_order: 取消订单
 user.orders.detail.modal_title: 订单详情
 user.orders.detail.special_operations: 特殊操作

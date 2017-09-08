@@ -40,6 +40,7 @@ site.video.quality.normal: 标准
 site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
+site.close: 关闭
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -487,7 +488,7 @@ pay.security.password.save_fail_hint: 支付密码设置失败
 user.account.refund_cancel_title: 取消退款
 user.account.refund_cancel_hint: 真的要取消退款吗？
 user.account.cancel_order_title: 取消订单
-user.account.cancel_order_hint: 真的要取消订单吗？
+user.account.cancel_order_hint: 确定要取消订单吗？
 user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
 user.account.cancel_order_success_hint: 订单已取消成功！
