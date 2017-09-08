@@ -305,7 +305,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (!$user['setup'] || stripos($user['email'], '@eduoho.net') != false) {
+        if ($user['setup'] == 0 || stripos($user['email'], '@eduoho.net') != false) {
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
@@ -803,10 +803,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (empty($user['setup'])) {
-            return $this->redirect($this->generateUrl('settings_setup'));
-        }
-
         if ($user->isLogin() && empty($user['password'])) {
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_password')));
         }
@@ -833,8 +829,8 @@ class SettingsController extends BaseController
         $mailer = $this->getSettingService()->get('mailer', array());
         $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
 
-        if (empty($user['setup'])) {
-            return $this->redirect($this->generateUrl('settings_setup'));
+        if ($user->isLogin() && empty($user['password'])) {
+            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_email')));
         }
 
         if ($request->getMethod() === 'POST') {
