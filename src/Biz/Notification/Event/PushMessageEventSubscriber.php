@@ -853,8 +853,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'lessonId' => $thread['relationId'],
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
-                'title' => "{$thread['target']['title']} 有新问题",
-                'message' => $this->plainText($thread['content'], 50),
+                'title' => "课程提问",
+                'message' => "您的课程有新的提问《{$thread['title']}》",
             );
 
             foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
@@ -925,44 +925,46 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
         if ($this->isIMEnabled()) {
-            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-                return;
-            }
+//            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+//                return;
+//            }
+//
+//            if ($threadPost['thread']['type'] != 'question') {
+//                return;
+//            }
 
-            if ($threadPost['thread']['type'] != 'question') {
-                return;
-            }
+//            foreach ($threadPost['target']['teacherIds'] as $teacherId) {
+//                if ($teacherId != $threadPost['userId']) {
+//                    continue;
+//                }
+            $postUser = $this->getUserService()->getUser($threadPost['userId']);
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
+            );
 
-            foreach ($threadPost['target']['teacherIds'] as $teacherId) {
-                if ($teacherId != $threadPost['userId']) {
-                    continue;
-                }
+            $to = array(
+                'type' => 'user',
+                'id' => $threadPost['thread']['userId'],
+                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+            );
 
-                $from = array(
-                    'type' => $threadPost['target']['type'],
-                    'id' => $threadPost['target']['id'],
-                );
+            $threadType = $this->getThreadType($threadPost['thread']['type']);
 
-                $to = array(
-                    'type' => 'user',
-                    'id' => $threadPost['thread']['userId'],
-                    'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
-                );
+            $body = array(
+                'type' => 'question.answered',
+                'threadId' => $threadPost['threadId'],
+                'courseId' => $threadPost['target']['id'],
+                'lessonId' => $threadPost['thread']['relationId'],
+                'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                'questionTitle' => $threadPost['thread']['title'],
+                'postContent' => $threadPost['content'],
+                'title' => "{$threadType}回复",
+                'message' => "[{$postUser['nickname']}]回复了你的{$threadType}《{$threadPost['thread']['title']}》",
+            );
 
-                $body = array(
-                    'type' => 'question.answered',
-                    'threadId' => $threadPost['threadId'],
-                    'courseId' => $threadPost['target']['id'],
-                    'lessonId' => $threadPost['thread']['relationId'],
-                    'questionCreatedTime' => $threadPost['thread']['createdTime'],
-                    'questionTitle' => $threadPost['thread']['title'],
-                    'postContent' => $threadPost['content'],
-                    'title' => "{$threadPost['thread']['title']}有新回复",
-                    'message' => $this->plainText($threadPost['content'], 50),
-                );
-
-                $this->createPushJob($from, $to, $body);
-            }
+            $this->createPushJob($from, $to, $body);
+//            }
         }
     }
 
@@ -1464,7 +1466,10 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $user = $this->getBiz()->offsetGet('user');
 
         if ($this->isIMEnabled()) {
-            if (!$user->isAdmin() || $user['id'] == $thread['userId']) {
+//            if (!$user->isAdmin() || $user['id'] == $thread['userId']) {
+//                return;
+//            }
+            if ($user['id'] == $thread['userId']) {
                 return;
             }
 
@@ -1487,7 +1492,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
-                'message' => "您的{$threadType}《{$thread['title']}》被管理员编辑",
+                'message' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]编辑",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1535,6 +1540,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         if ($this->isIMEnabled()) {
 
+            $user = $this->getBiz()->offsetGet('user');
             $from = array(
                 'type' => $thread['target']['type'],
                 'id' => $thread['target']['id'],
@@ -1554,7 +1560,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
-                'message' => "您的{$threadType}《{$thread['title']}》被删除",
+                'message' => "您的{$threadType}《{$thread['title']}》被[{$user['nickname']}]删除",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1637,14 +1643,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             if ($threadPost['target']['type'] != 'course') {
                 return;
             }
+//
+//            if ($threadPost['thread']['type'] != 'question') {
+//                return;
+//            }
 
-            if ($threadPost['thread']['type'] != 'question') {
-                return;
-            }
-
-            if (!$user->isAdmin()) {
-                return;
-            }
+//            if (!$user->isAdmin()) {
+//                return;
+//            }
 
             $from = array(
                 'type' => $threadPost['target']['type'],
@@ -1669,7 +1675,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
                 'title' => "《{$threadPost['thread']['title']}》",
-                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被管理员编辑",
+                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被[{$user['nickname']}]编辑",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1688,13 +1694,17 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.delete');
 
         if ($this->isIMEnabled()) {
-            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+//            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+//                return;
+//            }
+            if ($threadPost['target']['type'] != 'course') {
                 return;
             }
-
-            if ($threadPost['thread']['type'] != 'question') {
-                return;
-            }
+//
+//            if ($threadPost['thread']['type'] != 'question') {
+//                return;
+//            }
+            $user = $this->getBiz()->offsetGet('user');
 
             $from = array(
                 'type' => $threadPost['target']['type'],
@@ -1719,7 +1729,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
                 'title' => "《{$threadPost['thread']['title']}》",
-                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被删除",
+                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复[{$user['nickname']}]被删除",
             );
 
             $this->createPushJob($from, $to, $body);
