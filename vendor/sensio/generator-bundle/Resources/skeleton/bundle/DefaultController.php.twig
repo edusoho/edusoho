@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ namespace }}\Controller;
+
+{% block use_statements %}
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+{% if 'annotation' == format -%}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+{% endif %}
+{% endblock use_statements %}
+
+{% block class_definition %}
+class DefaultController extends Controller
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {% if 'annotation' == format -%}
+    /**
+     * @Route("/")
+     */
+    {% endif -%}
+    public function indexAction()
+    {
+        return $this->render('{{ bundle }}:Default:index.html.twig');
+    }
+{% endblock class_body %}
+}
