@@ -40,10 +40,13 @@ fileType:
     
 orderStatus:
     created: Unpaid
+    paying: Paying
     paid: Paid
     refunding: Refunding
     refunded: Refunded
-    cancelled: Cancelled
+    success: Success
+    fail: Fail
+    closed: Closed
 
 refundStatus:
     created: Applied

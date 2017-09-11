@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\MathToolkit;
 use Biz\Cash\Service\CashService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
@@ -124,18 +125,20 @@ class OrderController extends BaseController
     public function detailAction(Request $request, $id)
     {
         $order = $this->getOrderService()->getOrder($id);
+        $order = $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
 
         preg_match('/管理员添加/', $order['title'], $order['edit']);
         $user = $this->getUserService()->getUser($order['user_id']);
 
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($order['id']);
 
-        //orderItem和order的对应关系不是一对一，所以这里会有问题
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
         $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
+        $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
 
         return $this->render('order/detail-modal.html.twig', array(
             'order' => $order,
@@ -143,6 +146,7 @@ class OrderController extends BaseController
             'orderLogs' => $orderLogs,
             'orderItems' => $orderItems,
             'paymentTrade' => $paymentTrade,
+            'orderDeducts' => $orderDeducts,
             'users' => $users,
         ));
     }

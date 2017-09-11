@@ -364,6 +364,8 @@ order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
 order.due_pay: duePay(CNY)
+order.price_amount: PriceAmount
+order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
 order.id: 'Order'
