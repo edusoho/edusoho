@@ -29,6 +29,10 @@ class AvailablePaidCoursesCommand extends Command
                 continue;
             }
 
+            if (empty($paidCourses[$item['target_id']])) {
+                continue;
+            }
+
             $course = $paidCourses[$item['target_id']];
             $course['paidPrice'] = MathToolkit::simple($item['pay_amount'], 0.01);
 

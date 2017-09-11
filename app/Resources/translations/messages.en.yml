@@ -435,6 +435,9 @@ order.vip_order.renew_tips: '%level.name% renew vip x %duration%'
 order.vip_order.buy_tips: 'Buy %level.name% vip x %duration%'
 order.pay: 'Pay the order'
 order.success: 'Order finished'
+#TODO trans
+order.refund.notify_admin: '用户%nickname%申请退款 <a href="%targetUrl%">%title%</a>，请审核'
+
 pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'

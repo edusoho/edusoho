@@ -10,12 +10,12 @@ class OwnerController extends BaseController
 {
     public function exitAction(Request $request, $targetId, $targetType)
     {
-        $biz = $this->getBiz();
         $user = $this->getUser();
-        $product = $biz['order.product.'.$targetType];
-        $product->init(array('targetId' => $targetId));
-        $userId = $user->getId();
-        $member = $product->getOwner($userId);
+
+        $params = array('targetId' => $targetId);
+        $product = $this->getOrderFacadeService()->getOrderProduct($targetType, $params);
+        
+        $member = $product->getOwner($user['id']);
 
         if (empty($member)) {
             throw $this->createNotFoundException();
@@ -29,7 +29,7 @@ class OwnerController extends BaseController
                     'orderId' => $member['orderId'],
                 ));
             }
-            $product->exitOwner($userId);
+            $product->exitOwner($user['id']);
 
             return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
         }
@@ -50,5 +50,10 @@ class OwnerController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 }

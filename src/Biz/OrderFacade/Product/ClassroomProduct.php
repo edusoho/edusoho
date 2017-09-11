@@ -7,7 +7,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class ClassroomProduct extends Product implements OrderStatusCallback
+class ClassroomProduct extends Product implements Owner, Refund, OrderStatusCallback
 {
     const TYPE = 'classroom';
 
@@ -60,6 +60,38 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
             return false;
         }
+    }
+
+    public function afterApplyRefund()
+    {
+        $user = $this->biz['user'];
+        $this->getClassroomService()->lockStudent($this->targetId, $user['id']);
+    }
+
+    public function afterAdoptRefund($order)
+    {
+        $this->exitOwner($order['user_id']);
+    }
+
+    public function afterCancelRefund()
+    {
+        $user = $this->biz['user'];
+        $this->getClassroomService()->unlockStudent($this->targetId, $user['id']);
+    }
+
+    public function afterRefuseRefund($order)
+    {
+        $this->getClassroomService()->unlockStudent($this->targetId, $order['user_id']);
+    }
+
+    public function exitOwner($userId)
+    {
+        $this->getClassroomService()->removeStudent($this->targetId, $userId);
+    }
+
+    public function getOwner($userId)
+    {
+        return $this->getClassroomService()->getClassroomMember($this->targetId, $userId);
     }
 
     /**

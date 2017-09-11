@@ -15,7 +15,7 @@
     {% if member.locked|default("0") == "1" %}
       <div class="alert alert-warning">
         {{ 'classroom.refund_tips'|trans }}
-        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">
+        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {orderId:member.orderId}) }}">
           {{ 'classroom.cancle_refund_btn'|trans }}
         </button>
       </div>

@@ -351,37 +351,9 @@ class ClassroomManageController extends BaseController
     public function removeAction($classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-
-        $user = $this->getCurrentUser();
-
-        $condition = array(
-            'targetType' => 'classroom',
-            'targetId' => $classroomId,
-            'userId' => $userId,
-            'status' => 'paid',
-        );
-        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
-        $order = current($orders);
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
-
-        $reason = array(
-            'type' => 'other',
-            'note' => '"'.$user['nickname'].'"'.' 手动移除',
-            'operator' => $user['id'],
-        );
-
-        $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
-        $message = array(
-            'classroomId' => $classroom['id'],
-            'classroomTitle' => $classroom['title'],
-            'userId' => $user['id'],
-            'userName' => $user['nickname'],
-            'type' => 'remove',
-        );
-        $this->getNotificationService()->notify($userId, 'classroom-student', $message);
-
+        
         return $this->createJsonResponse(true);
     }
 
