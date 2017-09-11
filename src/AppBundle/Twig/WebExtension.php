@@ -1691,10 +1691,13 @@ class WebExtension extends \Twig_Extension
             'gmail.com' => 'mail.google.com',
             'vip.qq.com' => 'mail.qq.com',
             'vip.163.com' => 'vip.163.com',
+            'vip.sina.com' => 'mail.sina.com.cn',
             'foxmail.com' => 'mail.qq.com',
             'hotmail.com' => 'www.hotmail.com',
             '188.com' => 'www.188.com',
             '139.com' => 'mail.10086.cn',
+            '126.com' => 'www.126.com',
+            'yeah.net' => 'yeah.net',
         );
 
         if (!empty($emailAddressMap[$dress])) {
