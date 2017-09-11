@@ -14,21 +14,21 @@
           <td>
             <div class="chearfix">
               <img class="pull-left mrl" src="{{ item.picture|default(asset('assets/img/default/vip-default.png')) }}" style="width:100px;"/>
-              <a class="pull-left" href="{{ path('vip') }}" target="_blank" >{{item.name}}
+              <a class="pull-left" href="{{ path('vip') }}" target="_blank" >{{ item.name }}
               </a>
             </div>
           </td>
           <td>
-            <span id="rmb{{item.id}}" class="rmbPrice">{{item.monthPrice}}</span>
+            <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.monthPrice }}">{{ item.monthPrice }}</span>
           </td>
           <td>
-            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
+            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{ item.id }}]" data-id="{{ item.id }}"/> <label>%</label>
           </td>
           <td>
-            <span id="deRmb{{item.id}}">{{ (item.maxRate * item.monthPrice / 100)|number_format(2, '.') }}</span>
+            <span id="deRmb{{ item.id }}">{{ (item.maxRate * item.monthPrice / 100)|number_format(2, '.') }}</span>
           </td>
           <td>
-            <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.monthPrice * set.cash_rate)|number_format(2, '.') }}</span>
+            <span id="cash{{ item.id }}">{{ (item.maxRate / 100 * item.monthPrice * set.cash_rate)|number_format(2, '.') }}</span>
           </td>
         </tr>
       {% endfor %}
