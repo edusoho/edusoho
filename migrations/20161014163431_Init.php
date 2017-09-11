@@ -1255,7 +1255,7 @@ class Init extends Migration
 
             CREATE TABLE IF NOT EXISTS `cash_flow` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
-              `userId` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
+              `userId` int(10) unsigned NOT NULL COMMENT '帐号ID，即用户ID',
               `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
               `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
               `amount` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
