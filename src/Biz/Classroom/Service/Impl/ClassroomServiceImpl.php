@@ -790,7 +790,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'remove_student',
             "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})"
         );
-        
+
         $this->dispatchEvent(
             'classroom.quit',
             new Event($classroom, array('userId' => $member['userId'], 'member' => $member))
@@ -886,7 +886,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'role' => array('student'),
             'remark' => empty($info['note']) ? '' : $info['note'],
             'deadline' => $deadline,
-            'refundDeadline' => empty($refundSetting['maxRefundDays']) ? 0 : strtotime("+ {$refundSetting['maxRefundDays']}days")
+            'refundDeadline' => empty($refundSetting['maxRefundDays']) ? 0 : strtotime("+ {$refundSetting['maxRefundDays']}days"),
         );
 
         if (!empty($member)) {

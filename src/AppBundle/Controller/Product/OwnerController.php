@@ -14,7 +14,7 @@ class OwnerController extends BaseController
 
         $params = array('targetId' => $targetId);
         $product = $this->getOrderFacadeService()->getOrderProduct($targetType, $params);
-        
+
         $member = $product->getOwner($user['id']);
 
         if (empty($member)) {

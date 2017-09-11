@@ -4,7 +4,6 @@ namespace Biz\OrderRefund\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OrderRefund\Service\OrderRefundService;
-use AppBundle\Common\StringToolkit;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
@@ -132,7 +131,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             'targetType' => $product->targetType,
             'title' => $product->title,
             'userId' => $user['id'],
-            'nickname' => $user['nickname']
+            'nickname' => $user['nickname'],
         );
 
         $this->getNotificationService()->notify($user['id'], 'order-refund', $message);
@@ -143,9 +142,9 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $user = $this->getCurrentUser();
 
         $admins = $this->getUserService()->searchUsers(
-            array('roles' => 'ADMIN'), 
-            array('id' => 'DESC'), 
-            0, 
+            array('roles' => 'ADMIN'),
+            array('id' => 'DESC'),
+            0,
             PHP_INT_MAX
         );
 
@@ -155,7 +154,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             'targetType' => $product->targetType,
             'title' => $product->title,
             'userId' => $user['id'],
-            'nickname' => $user['nickname']
+            'nickname' => $user['nickname'],
         );
 
         foreach ($admins as $key => $admin) {
