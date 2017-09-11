@@ -924,6 +924,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
+        $user = $this->getBiz()->offsetGet('user');
         if ($this->isIMEnabled()) {
 //            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
 //                return;
@@ -932,6 +933,9 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 //            if ($threadPost['thread']['type'] != 'question') {
 //                return;
 //            }
+            if ($user['id'] == $threadPost['thread']['userId']) {
+                return ;
+            }
 
 //            foreach ($threadPost['target']['teacherIds'] as $teacherId) {
 //                if ($teacherId != $threadPost['userId']) {
@@ -1729,7 +1733,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
                 'title' => "《{$threadPost['thread']['title']}》",
-                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复[{$user['nickname']}]被删除",
+                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被[{$user['nickname']}]删除",
             );
 
             $this->createPushJob($from, $to, $body);
