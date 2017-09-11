@@ -60,7 +60,7 @@ class CashierController extends BaseController
         }
 
         $payment = $request->request->get('payment');
-        $payment = substr($payment, 0, stripos($payment, '.'));
+        $payment = preg_replace('/\.\w+/', '', $payment);
         $payment = ucfirst($payment);
 
         $trade = $this->makeTrade($order, $request);
