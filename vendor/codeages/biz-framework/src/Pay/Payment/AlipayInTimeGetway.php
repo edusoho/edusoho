@@ -10,7 +10,7 @@ class AlipayInTimeGetway extends AbstractGetway
 {
     public function createTrade($data)
     {
-        if (ArrayToolkit::requireds($data, array(
+        if (!ArrayToolkit::requireds($data, array(
             'goods_title',
             'goods_detail',
             'attach',
@@ -24,8 +24,8 @@ class AlipayInTimeGetway extends AbstractGetway
         }
 
         $gateway = $this->createGetWay();
-        $gateway->setReturnUrl($data['notify_url']);
-        $gateway->setNotifyUrl($data['return_url']);
+        $gateway->setReturnUrl($data['return_url']);
+        $gateway->setNotifyUrl($data['notify_url']);
 
         $order = array();
         $order['subject'] = $data['goods_title'];
@@ -54,7 +54,7 @@ class AlipayInTimeGetway extends AbstractGetway
                 array(
                     'status' => 'paid',
                     'cash_flow' => $data['trade_no'],
-                    'paid_time' => strtotime($data['gmt_payment']),
+                    'paid_time' => !empty($data['gmt_payment']) ? strtotime($data['gmt_payment']) : strtotime($data['notify_time']),
                     'pay_amount' => (int)($data['total_fee']*100),
                     'cash_type' => 'RMB',
                     'trade_sn' => $data['out_trade_no'],
@@ -86,7 +86,7 @@ class AlipayInTimeGetway extends AbstractGetway
 
     protected function getSetting()
     {
-        $config = $this->biz['payment.alipay.in_time'];
+        $config = $this->biz['payment.platforms']['alipay.in_time'];
         return array(
             'seller_email' => $config['seller_email'],
             'partner' => $config['partner'],

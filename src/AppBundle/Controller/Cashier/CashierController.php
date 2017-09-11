@@ -60,6 +60,7 @@ class CashierController extends BaseController
         }
 
         $payment = $request->request->get('payment');
+        $payment = substr($payment, 0, stripos($payment, '.'));
         $payment = ucfirst($payment);
 
         $trade = $this->makeTrade($order, $request);
@@ -96,7 +97,7 @@ class CashierController extends BaseController
     {
         $tradeSn = $request->query->get('trade_sn');
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-
+var_dump($tradeSn);exit();
         return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
             'trade' => $trade,
         ));
