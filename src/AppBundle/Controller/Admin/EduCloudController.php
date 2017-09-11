@@ -1018,7 +1018,7 @@ class EduCloudController extends BaseController
             $appImSetting = $this->getSettingService()->get('app_im', array());
             $user = $this->getUser();
 
-            //去云平台判断im账号是否存在
+            //去云平台判断im帐号是否存在
             $api = IMAPIFactory::create();
             $imAccount = $api->get('/me/account');
 
@@ -1029,7 +1029,7 @@ class EduCloudController extends BaseController
             $status = $request->request->get('status', 0);
             $imStatus = $status ? 'enable' : 'disable';
 
-            //更改云IM账号状态
+            //更改云IM帐号状态
             $api->post('/me/account', array('status' => $imStatus));
 
             $appImSetting['enabled'] = $status;
