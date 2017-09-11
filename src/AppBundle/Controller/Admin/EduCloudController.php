@@ -49,7 +49,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-//概览页，服务概况页
+    //概览页，服务概况页
     // refactor
     public function myCloudOverviewAction(Request $request)
     {
