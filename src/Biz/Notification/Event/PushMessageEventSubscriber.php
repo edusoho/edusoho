@@ -457,6 +457,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'course.thread.stick',
+                'courseId' => $thread['target']['id'],
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
@@ -493,6 +494,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'course.thread.unstick',
+                'courseId' => $thread['target']['id'],
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
@@ -529,6 +531,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'course.thread.unelite',
+                'courseId' => $thread['target']['id'],
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
@@ -565,6 +568,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'course.thread.elite',
+                'courseId' => $thread['target']['id'],
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
@@ -1479,6 +1483,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'course.thread.update',
+                'courseId' => $thread['target']['id'],
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
@@ -1545,6 +1550,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $body = array(
                 'type' => 'course.thread.delete',
+                'courseId' => $thread['target']['id'],
                 'threadId' => $thread['id'],
                 'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
@@ -1927,18 +1933,18 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     protected function createJob($lesson)
     {
-        if ($lesson['startTime'] >= (time() + 60 * 60)) {
-            $startJob = array(
-                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
-                'expression' => $lesson['startTime'] - 60 * 60,
-                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
-                'args' => array(
-                    'targetType' => 'lesson',
-                    'targetId' => $lesson['id'],
-                ),
-            );
-            $this->getSchedulerService()->register($startJob);
-        }
+//        if ($lesson['startTime'] >= (time() + 60 * 60)) {
+//            $startJob = array(
+//                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
+//                'expression' => $lesson['startTime'] - 60 * 60,
+//                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
+//                'args' => array(
+//                    'targetType' => 'lesson',
+//                    'targetId' => $lesson['id'],
+//                ),
+//            );
+//            $this->getSchedulerService()->register($startJob);
+//        }
 
 
         if ($lesson['type'] == 'live') {
