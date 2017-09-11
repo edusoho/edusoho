@@ -1206,8 +1206,34 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         if ($coupon['status'] != 'receive') {
             return;
         }
+        if ($this->isIMEnabled()) {
+            $from = array(
+                'type' => 'coupon',
+                'id' => $coupon['id']
+            );
 
-        //        $this->getPushService()->pushCouponReceived($coupon);
+            $to = array(
+                'type' => 'user',
+                'id' => $coupon['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            if ($coupon['type'] == 'minus') {
+                $message = "您有一张价值".$coupon['rate']."元的优惠券领取成功";
+            } else {
+                $message = "您有一张抵扣为".$coupon['rate']."折的优惠券领取成功";
+            }
+
+            $body = array(
+                'type' => 'coupon.receive',
+                'couponId' => $coupon['id'],
+                'title' => "获得新的优惠券",
+                'message' => $message,
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+
     }
 
 
