@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Cashier;
 
+use AppBundle\Component\Payment\Wxpay\JsApiPay;
 use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
@@ -12,6 +13,16 @@ use AppBundle\Common\MathToolkit;
 class WechatController extends BaseController
 {
     public function payAction($trade)
+    {
+        if ($this->getWebExtension()->isMicroMessenger()) {
+            $this->get('session')->set('trade_info', $trade);
+            return $this->redirect($this->generateUrl('cashier_wechat_h5_pay'));
+        } else {
+            return $this->forward('AppBundle:Cashier/Wechat:qrcode', array('trade' => $trade));
+        }
+    }
+
+    public function qrcodeAction($trade)
     {
         $trade['pay_type'] = 'Native';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
@@ -35,6 +46,47 @@ class WechatController extends BaseController
         }
 
         return $this->createMessageResponse('warning', $result['platform_created_result']['return_msg'], '微信支付设置错误');
+    }
+
+    public function H5Action()
+    {
+        $biz = $this->getBiz();
+
+        $request = $this->get('request_stack')->getMasterRequest();
+
+        $options = $biz['payment.platforms.options']['wechat'];
+        $jsApi = new JsApiPay(array(
+            'appid' => $options['appid'],
+            'account' => $options['mch_id'],
+            'key' => $options['key'],
+            'secret' => $options['secret'],
+            'redirect_uri' => $this->generateUrl('cashier_wechat_h5_pay', array(), true),
+            'isMicroMessenger' => true,
+        ), $request);
+
+        $openid = $jsApi->getOpenid();
+
+        $trade = $this->get('session')->get('trade_info');
+        $trade['open_id'] = $openid;
+        $trade['pay_type'] = 'Js';
+        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
+        $result = $this->getPayService()->createTrade($trade);
+
+        if ($result['status'] == 'paid') {
+            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
+        }
+
+        $result = MathToolkit::multiply(
+            $result,
+            array('cash_amount'),
+            0.01
+        );
+
+        return $this->render(
+            'cashier/wechat/h5.html.twig', array(
+            'trade' => $result,
+            'jsApiParameters' => json_encode($result['platform_created_result']),
+        ));
     }
 
     public function rollAction(Request $request)

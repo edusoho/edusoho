@@ -1004,6 +1004,10 @@ cashier_pay:
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
+cashier_wechat_h5_pay:
+    path:   /pay/center/wxpay
+    defaults: { _controller: AppBundle:Cashier/Wechat:h5 }
+
 cashier_password_check:
     path:  /cashier/password/check
     defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
@@ -1066,10 +1070,6 @@ pay_result_notice:
 wxpay_roll:
     path: /pay/wxpay/roll
     defaults: {_controller: AppBundle:PayCenter:wxpayRoll }
-
-pay_center_wxpay:
-    path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:PayCenter:wxpay }
 
 order_show:
     path:  /order/show
