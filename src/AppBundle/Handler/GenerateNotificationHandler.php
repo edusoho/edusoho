@@ -58,6 +58,9 @@ class GenerateNotificationHandler
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 
         foreach ((array) $courses as $key => $course) {
+            if ($course['parentId'] != 0) {
+               continue;
+            }
             $message = array(
                 'courseId' => $course['id'],
                 'courseTitle' => $course['title'],
