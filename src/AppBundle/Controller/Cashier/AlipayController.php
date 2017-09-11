@@ -25,8 +25,8 @@ class AlipayController extends BaseController
 
     public function notifyAction(Request $request, $payment)
     {
-
         $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
+
         return $this->createJsonResponse($result);
     }
 
@@ -34,9 +34,9 @@ class AlipayController extends BaseController
     {
         $data = $request->query->all();
         $this->getPayService()->notifyPaid('alipay.in_time', $data);
+
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), true));
     }
-
 
     /**
      * @return PayService

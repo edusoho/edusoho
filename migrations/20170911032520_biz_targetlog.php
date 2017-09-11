@@ -37,6 +37,6 @@ class BizTargetlog extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_targetlog`");
+        $connection->exec('DROP TABLE `biz_targetlog`');
     }
 }
