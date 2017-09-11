@@ -1711,6 +1711,5 @@ class WebExtension extends \Twig_Extension
     public function getUploadSdk()
     {
         return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js';
-        //http://localhost:12345/build-dev/sdk.js
     }
 }
