@@ -1557,7 +1557,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         if ($this->isCloudSearchEnabled()) {
             $args = array(
                 'category' => 'thread',
-                'id' => $thread['targetType'].'_'.$thread['id'],
+                'id' => $thread['target']['type'].'_'.$thread['id'],
             );
             $this->createSearchJob('delete', $args);
         }
@@ -1571,7 +1571,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         if ($this->isCloudSearchEnabled()) {
             $args = array(
                 'category' => 'thread',
-                'id' => $thread['targetType'].'_'.$thread['id'],
+                'id' => $thread['target']['type'].'_'.$thread['id'],
             );
             $this->createSearchJob('delete', $args);
         }
@@ -1585,7 +1585,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         if ($this->isCloudSearchEnabled()) {
             $args = array(
                 'category' => 'thread',
-                'id' => $thread['targetType'].'_'.$thread['id'],
+                'id' => $thread['target']['type'].'_'.$thread['id'],
             );
             $this->createSearchJob('delete', $args);
         }
