@@ -16,17 +16,6 @@ let validator = $form.validate({
       equalTo: '#form_payPassword'
     }
   },
-  messages: {
-    'form[currentUserLoginPassword]': {
-      required: Translator.trans('user.settings.security.pay_password.set_login_password')
-    },
-    'form[payPassword]': {
-      required: Translator.trans('user.settings.security.pay_password.set_new_pay_password')
-    },
-    'form[confirmPayPassword]': {
-      required: Translator.trans('user.settings.security.pay_password.confirm_new_pay_password')
-    }
-  },
 })
 
 console.log(validator);

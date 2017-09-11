@@ -21,11 +21,11 @@ $('#settings-pay-password-form').validate({
   },
   submitSuccess(data) {
     notify('success', Translator.trans(data.message));
-    
+
     $('.modal').modal('hide');
     window.location.reload();
   },
   submitError(data) {
-    notify('danger',  Translator.trans(data.responseJSON.message));
+    notify('danger', Translator.trans(data.responseJSON.message));
   }
 })
