@@ -19,8 +19,8 @@
 
   {{ web_macro.flash_messages(true) }}
   <form id="user-profile-form" class="row cd-row" method="post">
-    <div class="col-md-11 cd-mb32">
-      <div class="cd-image-upload cd-mr24">
+    <div class="col-md-11">
+      <div class="cd-image-upload cd-mr24 cd-mb32">
         <img class="cd-avatar cd-avatar-lg" id="profile-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
         <div class="image-upload-mask">
           <div class="image-upload-content">
