@@ -156,6 +156,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
+            new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
         );
     }
 
@@ -1705,5 +1706,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return 'http://mail.'.$dress;
+    }
+
+    public function getUploadSdk()
+    {
+        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js';
+        //http://localhost:12345/build-dev/sdk.js
     }
 }
