@@ -128,7 +128,7 @@
         color: @cd-gray-light;
       }
     }
-
+    &.done,
     &.doing {
       .content-number {
         color: @brand-primary;
@@ -140,6 +140,16 @@
       }
       .content-info {
         color: @cd-gray-dark;
+      }
+    }
+
+    &.doing {
+      @media(max-width: @screen-xs-max) {
+        text-align: center;
+        width: 100% !important;
+        .cd-steps-tail {
+          display: none;
+        }
       }
     }
   }
