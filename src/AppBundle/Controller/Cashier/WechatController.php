@@ -16,6 +16,7 @@ class WechatController extends BaseController
     {
         if ($this->getWebExtension()->isMicroMessenger()) {
             $this->get('session')->set('trade_info', $trade);
+
             return $this->redirect($this->generateUrl('cashier_wechat_h5_pay'));
         } else {
             return $this->forward('AppBundle:Cashier/Wechat:qrcode', array('trade' => $trade));
@@ -50,6 +51,12 @@ class WechatController extends BaseController
 
     public function H5Action()
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，支付失败。');
+        }
+
         $biz = $this->getBiz();
 
         $request = $this->get('request_stack')->getMasterRequest();
@@ -67,6 +74,11 @@ class WechatController extends BaseController
         $openid = $jsApi->getOpenid();
 
         $trade = $this->get('session')->get('trade_info');
+
+        if ($user['id'] != $trade['user_id']) {
+            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
+        }
+
         $trade['open_id'] = $openid;
         $trade['pay_type'] = 'Js';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
