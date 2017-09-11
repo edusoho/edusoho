@@ -1030,6 +1030,10 @@ cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Wechat:roll }
 
+cashier_alipay_return:
+    path:   /cashier/alipay/return
+    defaults: { _controller: AppBundle:Cashier/Alipay:return }
+
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind
     defaults: { _controller: AppBundle:PayCenter:unbindAuth}
