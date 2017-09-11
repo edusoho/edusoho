@@ -107,8 +107,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             if (isset($paymentSetting['alipay_enabled']) && $paymentSetting['alipay_enabled']) {
                 $enabledPayments['alipay.in_time'] = array(
                     'seller_email' => $paymentSetting['alipay_account'],
-                    'partner' => $paymentSetting['alipay_secret'],
-                    'key' => $paymentSetting['alipay_key'],
+                    'partner' => $paymentSetting['alipay_key'],
+                    'key' => $paymentSetting['alipay_secret'],
                 );
             }
 
