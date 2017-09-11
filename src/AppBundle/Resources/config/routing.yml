@@ -1030,6 +1030,10 @@ cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Wechat:roll }
 
+cashier_wechat_h5_return:
+    path:   /cashier/wechat/h5_return
+    defaults: { _controller: AppBundle:Cashier/Wechat:h5Return }
+
 cashier_alipay_return:
     path:   /cashier/alipay/return
     defaults: { _controller: AppBundle:Cashier/Alipay:return }

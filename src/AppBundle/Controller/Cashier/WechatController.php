@@ -49,7 +49,7 @@ class WechatController extends BaseController
         return $this->createMessageResponse('warning', $result['platform_created_result']['return_msg'], '微信支付设置错误');
     }
 
-    public function H5Action()
+    public function h5Action()
     {
         $user = $this->getUser();
 
@@ -99,6 +99,18 @@ class WechatController extends BaseController
             'trade' => $result,
             'jsApiParameters' => json_encode($result['platform_created_result']),
         ));
+    }
+
+    public function h5ReturnAction(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
+        
+        if ($trade['trade_state'] === 'SUCCESS') {
+            $this->getPayService()->notifyPaid('wechat', Helper::array2xml($trade));
+        }
+
+        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)));
     }
 
     public function rollAction(Request $request)

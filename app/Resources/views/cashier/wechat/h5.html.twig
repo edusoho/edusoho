@@ -16,7 +16,7 @@
         <button class="btn btn-primary js-wxpay">{{'pay_center.pay.weixin_pay.pay_btn'|trans}}</button>
       </div>
       <div id="jsApiParameters" data-value="{{ jsApiParameters }}"
-           data-goto="{{ path('cashier_pay_success', {'trade_sn':trade.trade_sn}) }}">
+           data-goto="{{ path('cashier_wechat_h5_return', {'tradeSn':trade.trade_sn}) }}">
       </div>
     </div>
   </div>
