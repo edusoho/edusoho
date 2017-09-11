@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\MathToolkit;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Biz\Order\Service\OrderService;
@@ -49,25 +50,25 @@ class OrderController extends BaseController
             $conditions['payment'] = $payWays;
         }
 
-        $conditions['start_time'] = 0;
-        $conditions['end_time'] = time();
-        switch ($request->get('lastHowManyMonths')) {
-            case 'oneWeek':
-                $conditions['start_time'] = $conditions['end_time'] - 7 * 24 * 3600;
-                break;
-            case 'twoWeeks':
-                $conditions['start_time'] = $conditions['end_time'] - 14 * 24 * 3600;
-                break;
-            case 'oneMonth':
-                $conditions['start_time'] = $conditions['end_time'] - 30 * 24 * 3600;
-                break;
-            case 'twoMonths':
-                $conditions['start_time'] = $conditions['end_time'] - 60 * 24 * 3600;
-                break;
-            case 'threeMonths':
-                $conditions['start_time'] = $conditions['end_time'] - 90 * 24 * 3600;
-                break;
-        }
+//        $conditions['start_time'] = 0;
+//        $conditions['end_time'] = time();
+//        switch ($request->get('lastHowManyMonths')) {
+//            case 'oneWeek':
+//                $conditions['start_time'] = $conditions['end_time'] - 7 * 24 * 3600;
+//                break;
+//            case 'twoWeeks':
+//                $conditions['start_time'] = $conditions['end_time'] - 14 * 24 * 3600;
+//                break;
+//            case 'oneMonth':
+//                $conditions['start_time'] = $conditions['end_time'] - 30 * 24 * 3600;
+//                break;
+//            case 'twoMonths':
+//                $conditions['start_time'] = $conditions['end_time'] - 60 * 24 * 3600;
+//                break;
+//            case 'threeMonths':
+//                $conditions['start_time'] = $conditions['end_time'] - 90 * 24 * 3600;
+//                break;
+//        }
 
         $paginator = new Paginator(
             $request,
@@ -75,8 +76,8 @@ class OrderController extends BaseController
             20
         );
 
-        $createdOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'created'));
-        $refundingOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'refunding'));
+        $createdOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'status' => 'created'));
+        $refundingOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'status' => 'refunding'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('created_time' => 'DESC'),
@@ -93,13 +94,13 @@ class OrderController extends BaseController
         $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
 
         foreach ($orders as &$order) {
-            //@TODO： orderItem和Order不是一一对应的，这个要在产品上做改变
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
+            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         $waitToBePaidCountConditions = array('userId' => $user['id'], 'status' => 'created');
-        $waitToBePaidCount = $this->getOrderService()->countOrders($waitToBePaidCountConditions);
+//        $waitToBePaidCount = $this->getOrderService()->countOrders($waitToBePaidCountConditions);
         //
 //        foreach ($orders as $index => $expiredOrderToBeUpdated) {
 //            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
@@ -122,15 +123,17 @@ class OrderController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $order = $this->tryManageOrder($id);
+        $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
 
         $user = $this->getUserService()->getUser($order['user_id']);
 
         $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($order['id']);
 
-        //orderItem和order的对应关系不是一对一，所以这里会有问题
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
         $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
+        $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
 
@@ -140,6 +143,7 @@ class OrderController extends BaseController
             'orderItems' => $orderItems,
             'paymentTrade' => $paymentTrade,
             'orderLogs' => $orderLogs,
+            'orderDeducts' => $orderDeducts,
             'users' => $users,
         ));
     }
