@@ -435,7 +435,7 @@ EOD;
         'developer' => array('cloud_api_failover' => 1),
         'auth' => array(
             'register_mode' => 'email',
-            'email_activation_title' => '请激活您的{{sitename}}账号',
+            'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
             'welcome_sender' => $user['nickname'],

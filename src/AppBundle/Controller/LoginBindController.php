@@ -445,10 +445,10 @@ class LoginBindController extends BaseController
                 return '微博注册帐号';
                 break;
             case 'qq':
-                return 'QQ注册账号';
+                return 'QQ注册帐号';
                 break;
             case 'renren':
-                return '人人注册账号';
+                return '人人注册帐号';
                 break;
             default:
                 return '';
