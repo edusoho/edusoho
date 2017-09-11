@@ -51,7 +51,7 @@ class WechatController extends BaseController
 
     public function H5Action()
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getUser();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
