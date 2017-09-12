@@ -11,6 +11,17 @@ echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
 SKIP=$3
 fi
 
+version=$2;
+upgradefile="scripts/upgrade-${version}.php";
+
+if [ ! -f "$upgradefile" ]; then
+    echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile},\\/n 输入y创建${upgradefile}, 输入n忽略脚本 y|n";
+    read LINE; 
+    if [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
+        echo "升级包制作中止，请创建升级脚本 ${upgradefile}"; 
+        exit 1
+    fi
+fi
 # pull the last version of repository
 echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
 git pull
