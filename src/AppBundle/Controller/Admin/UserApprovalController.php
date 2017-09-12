@@ -12,7 +12,7 @@ class UserApprovalController extends BaseController
     public function approvalsAction(Request $request, $approvalStatus)
     {
         $fields = $request->query->all();
-        
+
         $conditions = array(
             'roles' => '',
             'keywordType' => '',

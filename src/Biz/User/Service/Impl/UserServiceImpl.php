@@ -99,7 +99,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function searchApprovalsCount(array $conditions)
     {
         $conditions = $this->_prepareApprovalConditions($conditions);
-        
+
         return $this->getUserApprovalDao()->count($conditions);
     }
 
