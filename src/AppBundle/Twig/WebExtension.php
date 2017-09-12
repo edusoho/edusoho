@@ -1710,7 +1710,6 @@ class WebExtension extends \Twig_Extension
 
     public function getUploadSdk()
     {
-        return '//oilgb9e2p.qnssl.com/js-sdk/uploader/sdk-v1.js';
-//        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js';
+        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js';
     }
 }
