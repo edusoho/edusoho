@@ -237,6 +237,8 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'seq >= :seq_GE',
                 'seq > :seq_GT',
                 'seq < :seq_LT',
+                'seq >= :seq_GTE',
+                'seq <= :seq_LTE',
                 'startTime >= :startTime_GE',
                 'createdTime >= :createdTime_GE',
                 'createdTime <= :createdTime_LE',

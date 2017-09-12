@@ -40,6 +40,7 @@ class HTMLHelper
         $purifier = $factory->create($trusted);
 
         $html = $purifier->purify($html);
+        $html = str_replace('http-equiv', '', $html);
         if (!$trusted) {
             return $html;
         }

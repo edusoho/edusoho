@@ -46,7 +46,7 @@
 </script>
 
 <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-<script src="{{ url('jstranslation_js', {'domain': 'js'}) }}?locales=
+<script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales=
 {% if app.request.hasSession() %}
 {{ app.request.session.get('_locale',app.request.locale) }}
 {% else %}
