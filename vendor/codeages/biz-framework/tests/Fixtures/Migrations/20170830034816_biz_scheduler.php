@@ -12,7 +12,7 @@ class BizScheduler extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE IF NOT EXISTS `biz_job_pool` (
+            CREATE TABLE IF NOT EXISTS `job_pool` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
               `name` varchar(128) NOT NULL DEFAULT 'default' COMMENT '组名',
               `max_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大数',
@@ -25,7 +25,7 @@ class BizScheduler extends Migration
         ");
 
         $connection->exec("
-            CREATE TABLE IF NOT EXISTS `biz_job` (
+            CREATE TABLE IF NOT EXISTS `job` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
               `name` varchar(128) NOT NULL COMMENT '任务名称',
               `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
@@ -49,7 +49,7 @@ class BizScheduler extends Migration
         ");
 
         $connection->exec("
-            CREATE TABLE IF NOT EXISTS `biz_job_fired` (
+            CREATE TABLE IF NOT EXISTS `job_fired` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
               `job_id` int(10) NOT NULL COMMENT 'jobId',
               `fired_time` int(10) unsigned NOT NULL COMMENT '触发时间',
@@ -63,7 +63,7 @@ class BizScheduler extends Migration
         ");
 
         $connection->exec("
-            CREATE TABLE IF NOT EXISTS `biz_job_log` (
+            CREATE TABLE IF NOT EXISTS `job_log` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
               `job_id` int(10) unsigned NOT NULL COMMENT '任务编号',
               `job_fired_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '激活的任务编号',

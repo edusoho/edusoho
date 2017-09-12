@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.8.3] - 2017-09-07
+
+* 修复 `MigrationBootstrap` 在 PHP 5.3 下报错的问题。
+
+## [0.8.2] - 2017-09-06
+
+* 新增 `Codeages\Biz\Framework\Utility\Env`。
+* 新增 `env:write` 命令。
+
 ## [0.8.1] - 2017-08-31
 
 * RedisCache 新增 incr 方法。

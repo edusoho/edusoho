@@ -1,3 +1,6 @@
+dist: precise
+language: php
+
 branches:
   - master
   - develop
@@ -5,8 +8,6 @@ branches:
 services:
   - mysql
   - redis-server
-
-language: php
 
 php:
   - '5.3'
