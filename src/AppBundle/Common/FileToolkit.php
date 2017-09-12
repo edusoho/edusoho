@@ -1023,6 +1023,8 @@ class FileToolkit
         $rawImage = $imagine->open($filePath);
 
         $naturalSize = $rawImage->getSize();
+        $naturalWidth = $naturalSize->getWidth();
+        $naturalHeight = $naturalSize->getHeight();
         $rate = $naturalSize->getWidth() / $options['width'];
 
         $options['w'] = $rate * $options['w'];
@@ -1033,7 +1035,7 @@ class FileToolkit
         $filePaths = array();
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
-                if (($options['w'] == $value[0]) && ($options['h'] == $value[1]) && ($filesize < 102400)) {
+                if (($naturalWidth == $value[0]) && ($naturalHeight == $value[1]) && ($filesize < 102400)) {
                     $filePaths[$key] = $filePath;
                 } else {
                     $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
