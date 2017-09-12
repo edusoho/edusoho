@@ -1770,7 +1770,7 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime' => time(),
         ));
 
-        $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approved');
+        $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approving');
         $currentUser = $this->getCurrentUser();
         $this->getUserApprovalDao()->update(
             $lastestApproval['id'],

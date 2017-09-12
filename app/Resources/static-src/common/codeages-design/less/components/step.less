@@ -1,0 +1,103 @@
+.cd-step {
+  margin-bottom: 0;
+  padding: 24px 0;
+  li {
+    float: left;
+    width: 25%;
+    @media(max-width: @screen-xs-max) {
+      width: 32%;
+    }
+    list-style-type: none;
+    color: @cd-bg-dark;
+    font-size: 14px;
+    text-align: center;
+    .number {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 12px;
+      border: 1px solid @cd-bg-dark;
+      background-color: #fff;
+      color: @cd-gray-light;
+      .border-radius(50%);
+      &.pass-icon {
+        color: #fff !important;
+        background-color: @brand-primary;
+      }
+    }
+    .info {
+      color: @cd-gray-light;
+      font-size: 14px;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+    &.done,
+    &.doing {
+      border-color: @brand-primary;
+      .number {
+        color: @brand-primary;
+        border-color: @brand-primary;
+      }
+      .info {
+        color: @cd-gray-dark;
+      }
+    }
+    &.doing {
+      color: @cd-bg-dark;
+    }
+  }
+  .cd-step__one {
+    @media(max-width: @screen-xs-max) {
+      width: 35%;
+    }
+  }
+  .cd-step__three {
+    float: right;
+    @media(min-width: @screen-xs-max) {
+      padding-left: 28px;
+    }
+    .number {
+      @media(min-width: @screen-xs-max) {
+        margin-left: 16px;
+      }
+    }
+  }
+  .cd-step__two {
+    @media(min-width: @screen-xs-max) {
+      width: 50%;
+    }
+    width: 32%;
+  }
+}
+
+
+.cd-step__divided {
+  @media(min-width: @screen-xs-max) {
+    &:after {
+      content: "";
+      height: 2px;
+      position: absolute;
+      top: 50%;
+      right: 18%;
+      width: 24%;
+      background-color: @cd-bg-dark;
+    }
+    &.done:after {
+      background-color: @brand-primary;
+    }
+    &:before {
+      content: "";
+      height: 2px;
+      position: absolute;
+      top: 50%;
+      left: 22%;
+      width: 20%;
+      background-color: @cd-bg-dark;
+    }
+    &.doing:before {
+      background-color: @brand-primary;
+    }
+  }
+}

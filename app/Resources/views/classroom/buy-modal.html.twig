@@ -63,7 +63,7 @@
       {% endif %}
     {% else %}
       {% if avatarAlert|default(null) %}
-        <div class="alert alert-warning">{{ 'classroom.buy_classroom.no_avatar_tips'|trans({'%avatarSettingUrl%': path('settings_avatar')})|raw }}</div>
+        <div class="alert alert-warning">{{ 'classroom.buy_classroom.no_avatar_tips'|trans({'%avatarSettingUrl%': path('settings')})|raw }}</div>
       {% else %}
         <div class="alert alert-info">{{'classroom.buy_classroom.classroom_free_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans),'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</div>
       {% endif %}
