@@ -62,7 +62,7 @@ class OrderInfo extends AbstractResource
         );
 
         $orderInfo['verifiedMobile'] = (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '';
-        $orderInfo['hasPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+        $orderInfo['hasPayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
 
         $coinSetting = $this->service('System:SettingService')->get('coin');
         if (!empty($coinSetting['coin_name'])) {
@@ -77,8 +77,8 @@ class OrderInfo extends AbstractResource
         $orderInfo['priceType'] = $currency->isoCode == 'CNY' ? 'RMB' : 'Coin';
         if (!empty($coinSetting['coin_enabled'])) {
             $orderInfo['cashRate'] = $currency->exchangeRate;
-            $orderInfo['coinPayAmount'] = 1;
-            $orderInfo['maxCoin'] = round(($orderInfo['totalPrice'] * $orderInfo['maxRate'] / 100) * $orderInfo['cashRate'], 2);
+            $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
+            $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
         }
 
         return $orderInfo;
@@ -107,7 +107,7 @@ class OrderInfo extends AbstractResource
             $params['num'] = $defaultDuration;
         }
     }
-    
+
     private function getProduct($targetType, $params)
     {
         $biz = $this->getBiz();
