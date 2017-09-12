@@ -44,7 +44,7 @@ class Order extends AbstractResource
 
         return array(
             'id' => $result['id'],
-            'sn' => $result['orderSn']
+            'sn' => $result['order_sn']
         );
     }
 
