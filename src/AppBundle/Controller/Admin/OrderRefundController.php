@@ -12,6 +12,7 @@ class OrderRefundController extends BaseController
     public function refundsAction(Request $request, $targetType)
     {
         $conditions = $this->prepareRefundSearchConditions($request->query->all());
+
         $paginator = new Paginator(
             $request,
             $this->getBizOrderRefundService()->countRefunds($conditions),
@@ -62,6 +63,11 @@ class OrderRefundController extends BaseController
             unset($conditions['nickname']);
         }
 
+        if (!empty($conditions['titleLike'])) {
+            $orderItems = $this->getOrderService()->searchOrders(array('title_like' => $conditions['titleLike']), array(), 0, PHP_INT_MAX);
+            $conditions['order_ids'] = !empty($orderItems) ? ArrayToolkit::column($orderItems, 'id') : array(0);
+            unset($conditions['titleLike']);
+        }
         return $conditions;
     }
 
