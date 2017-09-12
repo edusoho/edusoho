@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae0d4b431dfef73746f055dca998a804",
+    "content-hash": "c9605c36ffcc51a0db0e62901b200e97",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -246,19 +246,20 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.6.3",
+            "version": "v0.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "85ee9da1af656957438464d41909a71984973707"
+                "reference": "8991451a259b1a7bcf53a94d0bef02d0cbdeef94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/85ee9da1af656957438464d41909a71984973707",
-                "reference": "85ee9da1af656957438464d41909a71984973707",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8991451a259b1a7bcf53a94d0bef02d0cbdeef94",
+                "reference": "8991451a259b1a7bcf53a94d0bef02d0cbdeef94",
                 "shasum": ""
             },
             "require": {
+                "codeages/symfony-lock-lite": "^1.0",
                 "davedevelopment/phpmig": "~1.2",
                 "doctrine/annotations": "~1.2",
                 "doctrine/dbal": "~2.4",
@@ -282,14 +283,17 @@
             "autoload": {
                 "psr-4": {
                     "Codeages\\Biz\\Framework\\": "src/"
-                }
+                },
+                "files": [
+                    "src/functions.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-08-24T00:57:59+00:00"
+            "time": "2017-09-07T07:45:54+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -494,6 +498,64 @@
             ],
             "description": "A PHP REST API Client.",
             "time": "2017-07-02T16:55:37+00:00"
+        },
+        {
+            "name": "codeages/symfony-lock-lite",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/symfony-lock-lite.git",
+                "reference": "b7ae3e4566e07583be56640d63acf18c61399651"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeages/symfony-lock-lite/zipball/b7ae3e4566e07583be56640d63acf18c61399651",
+                "reference": "b7ae3e4566e07583be56640d63acf18c61399651",
+                "shasum": ""
+            },
+            "require": {
+                "php": "> 5.3.0",
+                "psr/log": "~1.0",
+                "symfony/polyfill-php70": "^1.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4|^5|6",
+                "predis/predis": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Lock\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                },
+                {
+                    "name": "Jérémy Derussé",
+                    "email": "jeremy@derusse.com"
+                }
+            ],
+            "description": "Symfony Lock Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "cas",
+                "flock",
+                "locking",
+                "mutex",
+                "redlock",
+                "semaphore"
+            ],
+            "time": "2017-08-27T05:41:40+00:00"
         },
         {
             "name": "codeages/web-lib",
