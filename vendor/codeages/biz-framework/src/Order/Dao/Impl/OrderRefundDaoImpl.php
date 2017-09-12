@@ -20,6 +20,10 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
             'serializes' => array(
             ),
             'conditions' => array(
+                'status = :status',
+                'user_id = :user_id',
+                'deal_user_id = :deal_user_id',
+                'order_id = :order_id',
             )
         );
     }

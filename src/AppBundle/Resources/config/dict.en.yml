@@ -49,10 +49,10 @@ orderStatus:
     closed: Closed
 
 refundStatus:
-    created: Applied
-    success: Success
-    failed: Failed
-    cancelled: Cancelled
+    auditing: Applied
+    refunded: Success
+    refused: Failed
+    cancel: Cancelled
 
 payment:
     none: --

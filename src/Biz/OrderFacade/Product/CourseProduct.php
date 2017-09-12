@@ -32,8 +32,8 @@ class CourseProduct extends Product implements Owner, Refund, OrderStatusCallbac
         $course = $this->getCourseService()->getCourse($this->targetId);
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
-        $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $this->title = $this->courseSet['title'].'-'.$course['title'];
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
