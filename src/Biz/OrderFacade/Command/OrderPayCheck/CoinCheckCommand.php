@@ -4,8 +4,8 @@ namespace Biz\OrderFacade\Command\OrderPayCheck;
 
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CoinCheckCommand extends OrderPayCheckCommand
 {
@@ -16,7 +16,7 @@ class CoinCheckCommand extends OrderPayCheckCommand
         }
 
         if (empty($params['payPassword'])) {
-            throw new InvalidArgumentException('Missing payPassword');
+            throw new OrderPayCheckException('Missing payPassword', 2000);
         }
 
         $user = $this->biz['user'];
@@ -24,13 +24,13 @@ class CoinCheckCommand extends OrderPayCheckCommand
         $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
 
         if ($balance['amount'] < $params['coinAmount']) {
-            throw new InvalidArgumentException('Bad Coin Amount');
+            throw new OrderPayCheckException('Your balance is insufficient', 2001);
         }
 
         $isCorrect = $this->getAccountService()->validatePayPassword($user->getId(), $params['payPassword']);
 
         if (!$isCorrect) {
-            throw new InvalidArgumentException('Incorrect payPassword');
+            throw new OrderPayCheckException('Incorrect payPassword', 2002);
         }
     }
 

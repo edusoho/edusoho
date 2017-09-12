@@ -3,13 +3,14 @@
 namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
+use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use AppBundle\Common\MathToolkit;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Service\WorkflowService;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
@@ -71,29 +72,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return array($orderItem);
     }
 
-    public function checkOrderBeforePay($sn, $params)
-    {
-        $order = $this->getOrderService()->getOrderBySn($sn);
-
-        if (!$order) {
-            throw new ServiceException('订单不存在', 2008);
-        }
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw new ServiceException('用户未登录，不能支付。');
-        }
-
-        if ($order['user_id'] != $user['id']) {
-            throw new ServiceException('不是您的订单，不能支付', 2004);
-        }
-
-        $this->biz['order.pay.checker']->check($order, $params);
-
-        return $order;
-    }
-
     public function getTradePayCashAmount($order, $coinAmount)
     {
         $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount'] / 100);
@@ -131,6 +109,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     public function getOrderProduct($targetType, $params)
     {
         if (!empty($this->biz['order.product.'.$targetType])) {
+            /* @var $product Product */
             $product = $this->biz['order.product.'.$targetType];
             $product->init($params);
 
@@ -138,6 +117,65 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         } else {
             throw $this->createServiceException("The {$targetType} product not found");
         }
+    }
+
+    public function payingOrder($orderSn, $params)
+    {
+        $order = $this->checkOrderBeforePay($orderSn, $params);
+
+        $trade = $this->makeTrade($order, $params);
+
+        $this->getWorkflowService()->paying($order['id'], array());
+
+        return $trade;
+    }
+
+    private function checkOrderBeforePay($sn, $params)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (!$order) {
+            throw new OrderPayCheckException('订单不存在', 2004);
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw new OrderPayCheckException('用户未登录，不能支付。', 20005);
+        }
+
+        if ($order['user_id'] != $user['id']) {
+            throw new OrderPayCheckException('不是您的订单，不能支付', 2006);
+        }
+
+        /** @var $orderPayChecker OrderPayChecker */
+        $orderPayChecker = $this->biz['order.pay.checker'];
+        $orderPayChecker->check($order, $params);
+
+        return $order;
+    }
+
+    private function makeTrade($order, $params)
+    {
+        $coinAmount = isset($params['coinAmount']) ? $params['coinAmount'] : 0;
+        $trade = array(
+            'goods_title' => $order['title'],
+            'goods_detail' => '',
+            'order_sn' => $order['sn'],
+            'amount' => $order['pay_amount'],
+            'platform' => $params['payment'],
+            'user_id' => $order['user_id'],
+            'coin_amount' => $coinAmount * 100,
+            'cash_amount' => $this->getTradePayCashAmount($order, $coinAmount) * 100,
+            'create_ip' => isset($params['clientIp']) ? $params['clientIp'] : '127.0.0.1',
+            'price_type' => 'money',
+            'type' => 'purchase',
+            'attach' => array(
+                'user_id' => $order['user_id'],
+            ),
+        );
+
+        return $trade;
     }
 
     /**

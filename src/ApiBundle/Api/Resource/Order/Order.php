@@ -5,7 +5,9 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Order\Service\OrderFacadeService;
+use Biz\OrderFacade\Product\Product;
+use Biz\OrderFacade\Service\OrderFacadeService;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Order extends AbstractResource
@@ -19,12 +21,31 @@ class Order extends AbstractResource
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
+        if (isset($params['coinPayAmount'])) {
+            $params['coinAmount'] = $params['coinPayAmount'];
+            unset($params['coinPayAmount']);
+        }
+
         if (isset($params['payPassword'])) {
             $params['payPassword'] = $this->decrypt($params['payPassword']);
         }
 
-        list($order) = $this->getOrderFacadeService()->createOrder($params['targetType'], $params['targetId'], $params);
-        return $order;
+        /* @var $product Product */
+        $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
+        $product->setPickedDeduct($params);
+        $order = $this->getOrderFacadeService()->create($product);
+        $params['clientIp'] = $this->getClientIp();
+        $params['payment'] = 'alipay.in_time';
+        $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
+        $trade['pay_type'] = 'Native';
+        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
+        $trade['return_url'] = $this->generateUrl('cashier_alipay_return', array(), true);
+        $result = $this->getPayService()->createTrade($trade);
+
+        return array(
+            'id' => $result['id'],
+            'sn' => $result['orderSn']
+        );
     }
 
     private function decrypt($payPassword)
@@ -33,10 +54,18 @@ class Order extends AbstractResource
     }
 
     /**
+     * @return PayService
+     */
+    private function getPayService()
+    {
+        return $this->service('Pay:PayService');
+    }
+
+    /**
      * @return OrderFacadeService
      */
     private function getOrderFacadeService()
     {
-        return $this->service('Order:OrderFacadeService');
+        return $this->service('OrderFacade:OrderFacadeService');
     }
 }

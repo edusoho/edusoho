@@ -3,8 +3,8 @@
 namespace Biz\OrderFacade\Command\OrderPayCheck;
 
 use Biz\Coupon\Service\CouponService;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CouponCheckCommand extends OrderPayCheckCommand
 {
@@ -17,7 +17,7 @@ class CouponCheckCommand extends OrderPayCheckCommand
                 $coupon = $this->getCouponService()->getCoupon($deduct['deduct_id']);
 
                 if ($coupon['status'] !== 'using') {
-                    throw new ServiceException('coupon.had_been_used');
+                    throw new OrderPayCheckException('coupon.had_been_used', 2003);
                 }
             }
         }

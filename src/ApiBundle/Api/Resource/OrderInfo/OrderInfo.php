@@ -113,7 +113,6 @@ class OrderInfo extends AbstractResource
         $biz = $this->getBiz();
 
         /* @var $product Product */
-        //todo 命名问题
         $product = $biz['order.product.'.$targetType];
 
         $product->init($params);
@@ -127,13 +126,5 @@ class OrderInfo extends AbstractResource
     private function getAccountService()
     {
         return $this->service('Pay:AccountService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    private function getCourseService()
-    {
-        return $this->service('Course:CourseService');
     }
 }
