@@ -1,0 +1,28 @@
+.cd-step {
+  li {
+    .number {
+      &.pass-icon {
+        background-color: @brand-primary;
+      }
+    }
+    &.done,
+    &.doing {
+      border-color: @brand-primary;
+      .number {
+        color: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
+  }
+}
+
+.cd-step__divided {
+  @media(min-width: @screen-xs-max) {
+    &.done:after {
+      background-color: @brand-primary;
+    }
+    &.doing:before {
+      background-color: @brand-primary;
+    }
+  }
+}

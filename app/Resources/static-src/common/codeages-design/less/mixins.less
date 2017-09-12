@@ -32,6 +32,10 @@
   color: #fff;
 }
 
+.cd-text-info {
+  color: @brand-info;
+}
+
 .cd-text-xs {
   font-size: 12px;
 }
@@ -62,6 +66,10 @@
   @media(max-width: @screen-md-max) {
     font-size: 24px;
   }
+}
+
+.cd-line-height-sm {
+  line-height: 20px;
 }
 
 .cd-text-medium {
@@ -98,16 +106,36 @@
   .cd-transition;
   &:hover {
     .cd-transition;
-    color: darken(@brand-primary, 10%);
+    color: darken(@brand-primary, 5%);
   }
 }
 
+.cd-mr24 {
+  margin-right: 24px !important;
+}
+
+.cd-mb16 {
+  margin-bottom: 16px !important;
+}
+
 .cd-mb24 {
-  margin-bottom: 24px;
+  margin-bottom: 24px !important;
+}
+
+.cd-mb32 {
+  margin-bottom: 32px !important;
 }
 
 .cd-mt16 {
-  margin-top: 16px;
+  margin-top: 16px !important;
+}
+
+.cd-mt40 {
+  margin-top: 40px !important;
+}
+
+.cd-mb40 {
+  margin-bottom: 40px !important;
 }
 
 .cd-transition(@property: all, @time: .3s) {

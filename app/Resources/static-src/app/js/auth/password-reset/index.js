@@ -1,5 +1,8 @@
+import SmsSender from 'app/common/widget/sms-sender';
 let validator = null;
 let $form = null;
+let smsSend = '.js-sms-send';
+let $smsCode = $(smsSend);
 
 if ($('.js-find-password li').length > 1) {
   $('.js-find-by-email').click(function () {
@@ -33,6 +36,17 @@ $('.js-find-by-mobile').click(function () {
   $('#password-reset-form').hide();
   $('#password-reset-by-mobile-form').show();
 
+})
+
+$smsCode.click(() => {
+  const smsSender = new SmsSender({
+    element: smsSend,
+    url: $smsCode.data('smsUrl'),
+    smsType: $smsCode.data('smsType'),
+    preSmsSend: () => {
+      return true;
+    }
+  });
 })
 
 function makeValidator(type) {
@@ -84,4 +98,3 @@ function makeValidator(type) {
     })
   }
 };
-
