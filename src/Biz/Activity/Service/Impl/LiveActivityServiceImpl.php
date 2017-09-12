@@ -55,7 +55,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         if (isset($live['error'])) {
-            $error = $live['error'] == '账号已过期' ? '直播服务已过期' : $live['error'];
+            $error = $live['error'] == '帐号已过期' ? '直播服务已过期' : $live['error'];
             throw $this->createServiceException($error);
         }
 

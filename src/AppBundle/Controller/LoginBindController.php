@@ -445,10 +445,10 @@ class LoginBindController extends BaseController
                 return '微博注册帐号';
                 break;
             case 'qq':
-                return 'QQ注册账号';
+                return 'QQ注册帐号';
                 break;
             case 'renren':
-                return '人人注册账号';
+                return '人人注册帐号';
                 break;
             default:
                 return '';
@@ -460,16 +460,16 @@ class LoginBindController extends BaseController
         switch ($type) {
             case 'weixinweb':
             case 'weixinmob':
-                return '微信绑定已有账号';
+                return '微信绑定已有帐号';
                 break;
             case 'weibo':
-                return '微博绑定已有账号';
+                return '微博绑定已有帐号';
                 break;
             case 'qq':
-                return 'QQ绑定已有账号';
+                return 'QQ绑定已有帐号';
                 break;
             case 'renren':
-                return '人人绑定已有账号';
+                return '人人绑定已有帐号';
                 break;
             default:
                 return '';

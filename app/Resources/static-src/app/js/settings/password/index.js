@@ -1,26 +1,31 @@
-let validator = $('#settings-password-form').validate({
+import notify from 'common/notify';
+
+$('#settings-password-form').validate({
+  currentDom: '#password-save-btn',
+  ajax: true,
   rules: {
-    'form[currentPassword]': {
+    'currentPassword': {
       required: true,
     },
-    'form[newPassword]': {
+    'newPassword': {
       required: true,
       minlength: 5,
       maxlength: 20,
       visible_character: true
     },
-    'form[confirmPassword]': {
+    'confirmPassword': {
       required: true,
       equalTo: '#form_newPassword',
       visible_character: true
     }
-  }
-})
-
-$('#password-save-btn').on('click', (event) => {
-  const $this = $(event.currentTarget);
-  if (validator.form()) {
-    $this.button('loading');
-    $('#settings-password-form').submit();
+  },
+  submitSuccess(data) {
+    notify('success', Translator.trans(data.message));
+    
+    $('.modal').modal('hide');
+    window.location.reload();
+  },
+  submitError(data) {
+    notify('danger',  Translator.trans(data.responseJSON.message));
   }
 })
