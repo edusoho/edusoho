@@ -5,6 +5,7 @@ use Phpmig\Migration\Migration;
 class BizUserCashflowAddTitle extends Migration
 {
     //TODO: 继承到BIZ，最够变成一个脚本
+
     /**
      * Do the migration
      */
