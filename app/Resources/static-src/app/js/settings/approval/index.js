@@ -10,4 +10,12 @@ $('#approval-form').validate({
     faceImg: 'required isImage limitSize',
     backImg: 'required isImage limitSize'
   },
-})
+  messages: {
+    faceImg: {
+      required: Translator.trans('user.fields.idcard_front_placeholder')
+    },
+    backImg: {
+      required: Translator.trans('user.fields.idcard_back_placeholder')
+    }
+  }
+});

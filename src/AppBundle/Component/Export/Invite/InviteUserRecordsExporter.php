@@ -42,7 +42,7 @@ class InviteUserRecordsExporter extends Exporter
             $start,
             $limit
         );
-        
+
         return $this->getUserRecordContent($records);
     }
 

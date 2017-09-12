@@ -1,3 +1,4 @@
+import notify from 'common/notify';
 let $form = $('#pay-password-reset-update-form');
 
 let validator = $form.validate({
@@ -14,7 +15,7 @@ let validator = $form.validate({
       required: true,
       equalTo: '#form_payPassword'
     }
-  }
+  },
 })
 
 console.log(validator);
@@ -26,3 +27,14 @@ $('#payPassword-save-btn').on('click', (event) => {
     $form.submit();
   }
 })
+
+let messageDanger = $('.alert-danger').text();
+let messageSuccess = $('.alert-success').text();
+
+if (messageDanger) {
+  notify('danger', Translator.trans(messageDanger));
+}
+
+if (messageSuccess) {
+  notify('success', Translator.trans(messageSuccess));
+}

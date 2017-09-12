@@ -35,7 +35,7 @@ body.cd-design {
 .cd-content {
   position: relative;
   border-radius: 4px;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .cd-main {
@@ -66,14 +66,25 @@ body.cd-design {
 
 .cd-main__body {
   padding: 32px 32px;
-  min-height: 600px;
+  min-height: 800px;
   @media(max-width: @screen-xs-max) {
     padding: 24px;
+    min-height: auto
   }
 }
 
 .cd-icon {
   line-height: 1;
+}
+
+.cd-icon-hover {
+  color: @cd-gray-light;
+  cursor: pointer;
+  .cd-transition;
+  &:hover {
+    color: @cd-gray;
+    .cd-transition;
+  }
 }
 
 .cd-empty {

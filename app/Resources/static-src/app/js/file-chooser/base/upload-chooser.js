@@ -49,7 +49,7 @@ export default class UploaderChooser extends Chooser {
     let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
-    }, {});
+    },{});
 
     if(this.element.find('[name=support_mobile]').length > 0){
       uploadProcess.supportMobile = this.element.find('[name=support_mobile]').val();
