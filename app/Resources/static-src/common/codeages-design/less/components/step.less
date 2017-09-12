@@ -52,7 +52,7 @@
     position: relative;
     display: inline-block;
     vertical-align: top;
-    // 第一个孩子
+
     &:first-child {
       .cd-steps-content {
         .content-wrap {
@@ -62,7 +62,7 @@
         }
       }
     }
-    // 最后一个孩子
+
     &:last-child {
       .cd-steps-tail {
         padding-right: 0;
@@ -76,24 +76,24 @@
         }
       }
     }
-    // 连接线
+
     .cd-steps-tail {
       position: absolute;
       left: 0;
-      width: 100%;
       top: 11px;
       padding: 0 10px;
+      width: 100%;
       i {
         position: relative;
         display: inline-block;
         vertical-align: top;
-        background: @cd-bg-dark;
+        width: 100%;
         height: 2px;
         .border-radius(2px);
-        width: 100%;
+        background: @cd-bg-dark;
       }
     }
-    // 圈圈提示
+
     .cd-steps-content {
       .content-wrap {
         position: relative;
@@ -128,6 +128,7 @@
         color: @cd-gray-light;
       }
     }
+
     &.done,
     &.doing {
       .content-number {
