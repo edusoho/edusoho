@@ -98,6 +98,8 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchApprovalsCount(array $conditions)
     {
+        $conditions = $this->_prepareApprovalConditions($conditions);
+        
         return $this->getUserApprovalDao()->count($conditions);
     }
 
@@ -284,6 +286,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareApprovalConditions($conditions);
         $approvals = $this->getUserApprovalDao()->search($conditions, $orderBy, $start, $limit);
 
         return $approvals;
@@ -1925,6 +1928,22 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserPayAgreements($id)
     {
         return $this->getUserPayAgreementDao()->delete($id);
+    }
+
+    protected function _prepareApprovalConditions($conditions)
+    {
+        if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'truename') {
+            $conditions['truename'] = $conditions['keyword'];
+        }
+
+        if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'idcard') {
+            $conditions['idcard'] = $conditions['keyword'];
+        }
+
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
+        return $conditions;
     }
 
     /**

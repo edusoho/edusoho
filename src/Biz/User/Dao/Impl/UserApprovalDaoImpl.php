@@ -21,19 +21,6 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
         return $this->findInField('userId', $userIds);
     }
 
-    protected function createQueryBuilder($conditions)
-    {
-        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
-            $conditions['truename'] = "%{$conditions['keyword']}%";
-        }
-
-        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'idcard') {
-            $conditions['idcard'] = "%{$conditions['keyword']}%";
-        }
-
-        return parent::createQueryBuilder($conditions);
-    }
-
     public function declares()
     {
         return array(
@@ -43,6 +30,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
                 'createTime >=:startTime',
                 'createTime <=:endTime',
                 'idcard LIKE :idcard',
+                'status = :approvalStatus'
             ),
         );
     }
