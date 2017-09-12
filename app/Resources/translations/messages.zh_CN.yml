@@ -8044,3 +8044,5 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 
 coupon.had_been_used: 优惠码已经被使用了
+
+cashflow.title: 名称
