@@ -15,9 +15,9 @@ version=$2;
 upgradefile="scripts/upgrade-${version}.php";
 
 if [ ! -f "$upgradefile" ]; then
-    echo "升级脚本不存在，请确是否需要升级脚本，并认开其他发者是否已经上传了升级脚本${upgradefile}, 输入y创建${upgradefile}, 输入n忽略脚本，继续生成升级包 y|n";
+    echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile}, 输入y创建${upgradefile}, 输入n忽略脚本 y|n";
     read LINE; 
-    if [ "$LINE" == "N" ] || [ "$LINE" == "n" ]; then
+    if [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
         echo "升级包制作中止，请创建升级脚本 ${upgradefile}"; 
         exit 1
     fi
