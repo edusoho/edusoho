@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\Framework\Pay\Service\Impl;
 
+use Codeages\Biz\Framework\Pay\Dao\UserCashflowDao;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Util\RandomToolkit;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
@@ -208,6 +209,21 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getUserBalanceDao()->getByUserId($userId);
     }
 
+    public function searchUserCashflows($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getUserCashflowDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countUserCashflows($conditions)
+    {
+        return $this->getUserCashflowDao()->count($conditions);
+    }
+
+    public function sumColumnByConditions($column, $conditions)
+    {
+        return $this->getUserCashflowDao()->sumColumnByConditions($column, $conditions);
+    }
+
     protected function getPasswordEncoder()
     {
         return new PasswordEncoder('sha256');
@@ -226,5 +242,13 @@ class AccountServiceImpl extends BaseService implements AccountService
     protected function getSecurityAnswerDao()
     {
         return $this->biz->dao('Pay:SecurityAnswerDao');
+    }
+
+    /**
+     * @return UserCashflowDao
+     */
+    protected function getUserCashflowDao()
+    {
+        return $this->biz->dao('Pay:UserCashflowDao');
     }
 }

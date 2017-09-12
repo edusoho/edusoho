@@ -51,7 +51,7 @@
         <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'all'}) }}">{{ testpaper.name }}</a>
       </h3>
     </div>
-    <div class="testpaper-describe">{{ testpaper.description|raw }}</div>
+    <div class="testpaper-describe">{{ testpaper.description|purify_and_trim_html|raw }}</div>
     <div class="mvm testpaper-meta">
       <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ testpaper.createdTime|date('Y-m-d H:i') }}</span>
     </div>
