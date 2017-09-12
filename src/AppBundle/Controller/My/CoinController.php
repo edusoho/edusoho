@@ -8,7 +8,6 @@ use AppBundle\Common\StringToolkit;
 use Biz\Card\Service\CardService;
 use Biz\Cash\Service\CashService;
 use Biz\User\Service\UserService;
-use Biz\Order\Service\OrderService;
 use Biz\Coupon\Service\CouponService;
 use Biz\System\Service\SettingService;
 use Biz\Cash\Service\CashOrdersService;
@@ -16,10 +15,12 @@ use Biz\Cash\Service\CashAccountService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\InviteRecordService;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class CoinController extends BaseController
 {
@@ -37,14 +38,8 @@ class CoinController extends BaseController
             return $this->createMessageResponse('error', '网校虚拟币未开启！');
         }
 
-        $account = $this->getAccountService()->getUserBalanceByUserId($user->id);
-
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user->id);
         $chargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
-
-        //这里判断没账户创建账户
-//        if (empty($account)) {
-//            $this->getCashAccountService()->createAccount($user->id);
-//        }
 
         $fields = $request->query->all();
         $conditions = array();
@@ -53,29 +48,12 @@ class CoinController extends BaseController
             $conditions = $fields;
         }
 
-        $conditions['type'] = 'coin';
+        $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $user->id;
+        $conditions['user_type'] = 'buyer';
 
         $conditions['created_time_GTE'] = 0;
         $conditions['created_time_LTE'] = time();
-
-        switch ($request->get('lastHowManyMonths')) {
-            case 'oneWeek':
-                $conditions['startTime'] = $conditions['endTime'] - 7 * 24 * 3600;
-                break;
-            case 'twoWeeks':
-                $conditions['startTime'] = $conditions['endTime'] - 14 * 24 * 3600;
-                break;
-            case 'oneMonth':
-                $conditions['startTime'] = $conditions['endTime'] - 30 * 24 * 3600;
-                break;
-            case 'twoMonths':
-                $conditions['startTime'] = $conditions['endTime'] - 60 * 24 * 3600;
-                break;
-            case 'threeMonths':
-                $conditions['startTime'] = $conditions['endTime'] - 90 * 24 * 3600;
-                break;
-        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -99,7 +77,7 @@ class CoinController extends BaseController
         $amountOutflow = MathToolkit::multiply($amountOutflow, array('amount'), 0.01);
 
         return $this->render('coin/index.html.twig', array(
-            'account' => $account,
+            'balance' => $balance,
             'cashes' => $cashes,
             'paginator' => $paginator,
             'ChargeCoin' => $chargeCoin,
@@ -410,5 +388,13 @@ class CoinController extends BaseController
     protected function getAccountService()
     {
         return $this->getBiz()->service('Pay:AccountService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->getBiz()->service('Pay:PayService');
     }
 }
