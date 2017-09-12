@@ -15,6 +15,7 @@ use Biz\Cash\Service\CashOrdersService;
 use Biz\Cash\Service\CashAccountService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\InviteRecordService;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -36,13 +37,14 @@ class CoinController extends BaseController
             return $this->createMessageResponse('error', '网校虚拟币未开启！');
         }
 
-        $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
+        $account = $this->getAccountService()->getUserBalanceByUserId($user->id);
 
         $chargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
 
-        if (empty($account)) {
-            $this->getCashAccountService()->createAccount($user->id);
-        }
+        //这里判断没账户创建账户
+//        if (empty($account)) {
+//            $this->getCashAccountService()->createAccount($user->id);
+//        }
 
         $fields = $request->query->all();
         $conditions = array();
@@ -51,11 +53,11 @@ class CoinController extends BaseController
             $conditions = $fields;
         }
 
-        $conditions['cashType'] = 'Coin';
-        $conditions['userId'] = $user->id;
+        $conditions['type'] = 'coin';
+        $conditions['user_id'] = $user->id;
 
-        $conditions['startTime'] = 0;
-        $conditions['endTime'] = time();
+        $conditions['created_time_GTE'] = 0;
+        $conditions['created_time_LTE'] = time();
 
         switch ($request->get('lastHowManyMonths')) {
             case 'oneWeek':
@@ -77,11 +79,11 @@ class CoinController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCashService()->searchFlowsCount($conditions),
+            $this->getAccountService()->countUserCashflows($conditions),
             20
         );
 
-        $cashes = $this->getCashService()->searchFlows(
+        $cashes = $this->getAccountService()->searchUserCashflows(
             $conditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -89,10 +91,12 @@ class CoinController extends BaseController
         );
 
         $conditions['type'] = 'inflow';
-        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+        $amountInflow = $this->getAccountService()->sumColumnByConditions('amount' ,$conditions);
+        $amountInflow = MathToolkit::multiply($amountInflow, array('amount'), 0.01);
 
         $conditions['type'] = 'outflow';
-        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+        $amountOutflow = $this->getAccountService()->sumColumnByConditions('amount', $conditions);
+        $amountOutflow = MathToolkit::multiply($amountOutflow, array('amount'), 0.01);
 
         return $this->render('coin/index.html.twig', array(
             'account' => $account,
@@ -398,5 +402,13 @@ class CoinController extends BaseController
     protected function getAppService()
     {
         return $this->getBiz()->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    protected function getAccountService()
+    {
+        return $this->getBiz()->service('Pay:AccountService');
     }
 }
