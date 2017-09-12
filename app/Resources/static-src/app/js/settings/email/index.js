@@ -1,23 +1,18 @@
-let validator = $('#setting-email-form').validate({
+import notify from 'common/notify';
+
+let $btn = $('#submit-btn');
+
+$('#setting-email-form').validate({
+  currentDom: '#submit-btn',
+  ajax: true,
   rules: {
-    'form[password]': 'required',
-    'form[email]': 'required es_email'
+    'password': 'required',
+    'email': 'required es_email'
+  },
+  submitSuccess(data) {
+      $('#modal').html(data);
+  },
+  submitError(data) {
+    notify('danger',  Translator.trans(data.responseJSON.message));
   }
-})
-
-$('#email-save-btn').on('click', (event) => {
-  let $this = $(event.currentTarget);
-
-  if(validator.form()) {
-    $this.button('loading');
-    $('#setting-email-form').submit();
-  }
-})
-
-$('#send-verify-email').click(function() {
-  let $btn = $(this);
-  $btn.button('loading');
-  $.post($btn.data('url'), function() {
-    window.location.reload();
-  });
 });

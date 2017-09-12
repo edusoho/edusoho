@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/material-lib/global-player/index"],[function(a,e){"use strict";var l=$("#global-player");new QiQiuYun.Player({id:"global-player",resNo:l.data("resNo"),token:l.data("token"),user:{id:l.data("userId"),name:l.data("userName")}})}]);

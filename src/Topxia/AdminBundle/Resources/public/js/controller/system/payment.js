@@ -107,7 +107,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="llpay_key"]',
                     required: true,
-                    errormessageRequired: '请输入商户账号'
+                    errormessageRequired: '请输入商户帐号'
                 });
                 validator.addItem({
                     element: '[name=llpay_secret]',

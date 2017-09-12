@@ -15,7 +15,7 @@
             <label class="control-label">{{'order.confirm.sms_code.bind_mobile_tips'|trans({'%blur_phone_number%':blur_phone_number(verifiedMobile)})}} </label>
           </div>
           <div class="col-md-3">
-            <a class="text-sm color-gray" href="{{path('settings_bind_mobile')}}" target="_blank">{{'order.confirm.sms_code.change_mobile_btn'|trans}}</a>
+            <a class="text-sm color-gray" href="{{path('settings_security')}}" target="_blank">{{'order.confirm.sms_code.change_mobile_btn'|trans}}</a>
           </div>
         </div>
         <br>
@@ -36,7 +36,7 @@
       </div>
     </form>
   {% else %}
-    <p class="mt20 mb20 text-center">{{'order.confirm.sms_code.not_bind_mobile_tips'|trans}}<a class="btn btn-primary ml10" href="{{path('settings_bind_mobile')}}" target="_blank">{{'order.confirm.sms_code.bind_btn'|trans}}</a></p>
+    <p class="mt20 mb20 text-center">{{'order.confirm.sms_code.not_bind_mobile_tips'|trans}}<a class="btn btn-primary ml10" href="{{path('settings_security')}}" target="_blank">{{'order.confirm.sms_code.bind_btn'|trans}}</a></p>
   {% endif %}
 {% endblock %}
 
