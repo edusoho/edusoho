@@ -836,9 +836,6 @@ class WebExtension extends \Twig_Extension
         return $this->trans('site.twig.extension.time_interval.minute_second', array('%diff_minute%' => $minutes, '%diff_second%' => $seconds));
     }
 
-    /**
-     *这个是不是没有用了？
-     */
     public function timeRangeFilter($start, $end)
     {
         $range = date('Y-n-d H:i', $start).' - ';
@@ -1710,7 +1707,6 @@ class WebExtension extends \Twig_Extension
 
     public function getUploadSdk()
     {
-        return '//oilgb9e2p.qnssl.com/js-sdk/uploader/sdk-v1.js';
-//        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js';
+        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js';
     }
 }
