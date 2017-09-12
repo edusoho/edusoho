@@ -31,6 +31,11 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $this->findInField('id', $ids);
     }
 
+    public function findBySns(array $orderSns)
+    {
+        return $this->findInField('sn', $orderSns);
+    }
+
     public function count($conditions)
     {
         $conditions = $this->handleConditions($conditions);
