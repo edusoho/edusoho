@@ -17,7 +17,6 @@ class OrderInfoFilter extends Filter
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
             'totalPrice' => $data['totalPrice'],
-            'title' => $data['title'],
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],
             'hasPayPassword' => empty($data['hasPayPassword']) ? 0 : 1,
             'verifiedMobile' => empty($data['verifiedMobile']) ? '' : $data['verifiedMobile'],
@@ -33,6 +32,12 @@ class OrderInfoFilter extends Filter
             'fullCoinPayable' => $this->fullCoinPayable($data)
         );
 
+        if ($data['targetType'] == 'vip') {
+            $orderInfo['title'] = $data['level']['name'];
+        } else {
+            $orderInfo['title'] = $data[$data['targetType']]['title'];
+        }
+
         $data = $orderInfo;
     }
 
@@ -46,7 +51,13 @@ class OrderInfoFilter extends Filter
             return 1;
         }
 
-        if ($data['cashRate'] != 0 && $data['maxRate'] == 100) {
+        if ($data['targetType'] == 'vip') {
+            $maxRate = $data['level']['maxRate'];
+        } else {
+            $maxRate = $data[$data['targetType']]['maxRate'];
+        }
+
+        if ($data['cashRate'] != 0 && $maxRate == 100) {
             return 1;
         }
 
