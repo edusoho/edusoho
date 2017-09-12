@@ -884,7 +884,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-            if ($member &&  array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+            if ($member && array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
                 return true;
             }
         }
