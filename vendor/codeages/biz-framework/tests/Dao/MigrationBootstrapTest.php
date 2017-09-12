@@ -31,5 +31,6 @@ class MigrationBootstrapTest extends TestCase
         $container = $bootstrap->boot();
 
         $this->assertInstanceOf('Pimple\Container', $container);
+        $this->assertInstanceOf('Phpmig\Adapter\AdapterInterface', $container['phpmig.adapter']);
     }
 }

@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## [0.8.3] - 2017-09-07
+
+* 修复 `MigrationBootstrap` 在 PHP 5.3 下报错的问题。
+
+## [0.8.2] - 2017-09-06
+
+* 新增 `Codeages\Biz\Framework\Utility\Env`。
+* 新增 `env:write` 命令。
+
+## [0.8.1] - 2017-08-31
+
+* RedisCache 新增 incr 方法。
+
+## [0.8.0] - 2017-08-29
+
+* 新增 Console 组件，`bin/biz`。
+* 各个组件的 migration 不再自动注册，需调用命令 `bin/biz {...}:table` 系列命令，主动创建各个组件的 migration。
+
+## [0.7.0] - 2017-08-29
+
+* 新增 Queue 组件。
+
 ## [0.6.2] - 2017-08-14
 
 * 表名 `target_log` 重命名为 `biz_targetlog`。
