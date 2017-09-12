@@ -10,16 +10,16 @@ class QueueServiceImpl extends BaseService implements QueueService
 {
     public function pushJob(Job $job, $queue = null)
     {
-        $queueName = empty($queue) ? 'default' : (string) $queue; 
-        $queue = $this->biz['queue.'.$queueName];
+        $queueName = empty($queue) ? 'default' : (string) $queue;
+        $queue = $this->biz['queue.connection.'.$queueName];
         $queue->push($job);
     }
-    
+
     public function getFailedJob($id)
     {
         return $this->getFailedJobDao()->get($id);
     }
-    
+
     public function countFailedJobs($conditions)
     {
         return $this->getFailedJobDao()->count($conditions);

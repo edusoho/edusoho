@@ -23,17 +23,6 @@ $container['phpmig.adapter'] = function ($c) {
     return new Adapter\Doctrine\DBAL($c['db'], 'migrations');
 };
 
-$container['phpmig.migrations'] = function () {
-    $finder = new Finder();
-    $finder->in(__DIR__.DIRECTORY_SEPARATOR.'migrations');
-    $finder->files()->name('*.php');
-
-    $files = array();
-    foreach ($finder as $file) {
-        $files[] = $file->getRealPath();
-    }
-
-    return $files;
-};
+$container['phpmig.migrations_path'] = __DIR__ . '/tests/Fixtures/Migrations';
 
 return $container;

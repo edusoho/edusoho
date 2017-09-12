@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\Biz\Framework\Queue;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -14,20 +15,17 @@ abstract class AbstractJob implements Job
 
     protected $biz;
 
-    protected $queueName;
-
-    public function __construct($body = null, array $metadata = array(), $queueName = null)
+    public function __construct($body = null, array $metadata = array())
     {
         $this->setBody($body);
         $this->setMetadata($metadata);
-        $this->queueName = empty($queueName) ? 'default' : (string) $queueName;
     }
 
     public function getId()
     {
         return $this->id;
     }
-    
+
     public function setId($id)
     {
         $this->id = $id;
@@ -49,7 +47,7 @@ abstract class AbstractJob implements Job
             return $this->metadata;
         }
 
-        if (! is_scalar($key)) {
+        if (!is_scalar($key)) {
             throw new \InvalidArgumentException('Non-scalar argument provided for key');
         }
 
@@ -59,14 +57,15 @@ abstract class AbstractJob implements Job
 
         return $default;
     }
-    
+
     public function setMetadata($spec = null, $value = null)
     {
         if (is_scalar($spec)) {
             $this->metadata[$spec] = $value;
+
             return $this;
         }
-        if (! is_array($spec) && ! $spec instanceof Traversable) {
+        if (!is_array($spec) && !$spec instanceof Traversable) {
             throw new InvalidArgumentException(sprintf(
                 'Expected a string, array, or Traversable argument in first position; received "%s"',
                 (is_object($spec) ? get_class($spec) : gettype($spec))
@@ -75,12 +74,8 @@ abstract class AbstractJob implements Job
         foreach ($spec as $key => $value) {
             $this->metadata[$key] = $value;
         }
-        return $this;
-    }
 
-    public function getQueueName()
-    {
-        return $this->queueName;
+        return $this;
     }
 
     public function setBiz(Biz $biz)

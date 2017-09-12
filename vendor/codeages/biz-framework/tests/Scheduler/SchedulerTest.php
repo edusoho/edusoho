@@ -192,11 +192,10 @@ class SchedulerTest extends IntegrationTestCase
 
     public function testFailJobResult()
     {
-
         $job = array(
             'name' => 'test',
             'source' => 'MAIN',
-            'expression' => time()-2,
+            'expression' => time() - 2,
 //            'nextFireTime' => time()-1,
             'class' => 'Tests\\Example\\Job\\ExampleFailJob',
             'args' => array('courseId' => 1),
@@ -218,7 +217,7 @@ class SchedulerTest extends IntegrationTestCase
         $job = array(
             'name' => 'test',
             'source' => 'MAIN',
-            'expression' => time()-2,
+            'expression' => time() - 2,
 //            'nextFireTime' => time()-1,
             'class' => 'Tests\\Example\\Job\\ExampleAcquiredJob',
             'args' => array('courseId' => 1),
