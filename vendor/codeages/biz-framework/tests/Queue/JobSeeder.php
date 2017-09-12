@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Queue;
 
 use Codeages\Biz\Framework\UnitTests\DatabaseSeeder;
