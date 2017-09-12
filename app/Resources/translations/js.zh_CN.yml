@@ -28,6 +28,7 @@ site.date.second: 秒
 site.data.get_sms_code_btn: 获取短信验证码
 site.data.get_sms_code_again_btn: 秒后重新获取
 site.data.get_sms_code_success_hint: 发送短信成功
+site.data.get_sms_code_allowance_success_hint: 发送短信成功,还有%allowance%次发送机会
 site.data.get_sms_code_failure_hint: 发送短信失败，请联系管理员
 site.data.expand: 展开
 site.data.collapse: 收起
@@ -39,6 +40,16 @@ site.video.quality.normal: 标准
 site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
+site.close: 关闭
+
+site.incorrect.password: 密码错误
+user.settings.security.mobile_bind.success: 手机绑定成功
+user.settings.security.mobile_bind.fail: 手机绑定失败
+
+site.modify.success: 修改成功
+user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
+
+
 
 site.audio.quality.quota: 音质
 site.audio.quality.low: 流畅 
@@ -64,10 +75,41 @@ user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机�
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
-user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
+
 user.card_load_hint: 名片加载中
 
+
+user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
+
+user.settings.security.questions.set.incorrect_password: 您的登录密码错误，不能设置安全问题
+user.settings.security.questions.set.not_modify_aligin_hint: 您已经设置过安全问题，不可再次修改
+
+user.settings.security.questions.set.success: 安全问题设置成功
+
+user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
+user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+
+user.settings.security.pay_password_set.success: 新支付密码设置成功
+user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
+
+user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样
+user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试
+user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员
+user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+
+user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
+user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+user.settings.basic_info.nickname_change_fail: 用户名修改失败
+
+user.settings.login_password_success: 设置登录密码成功
+user.settings.login_password_fail: 设置登录密码失败
+
 material.share.teacher_nickname_label: 请输入老师的名称
+user.settings.unbind_success: 取消绑定成功
+user.settings.unbind_title: 取消绑定
+user.settings.unbind_content: 确定要取消绑定吗？
+
+material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -75,6 +117,7 @@ uploader.error_hint: 上传失败，请重试！
 uploader.error.bad_file.hint: 你的源文件可能已损坏，请检查后重新上传
 uploader.num_limit_hint: 添加的文件数量过多！
 uploader.size_limit_hint: 文件过大，请上传较小的文件！
+uploader.size_2m_limit_hint: 文件过大，请上传小于2M的文件！
 uploader.type_denied_limit_hint: 文件类型错误！
 uploader.btn.batch_paused: 全部暂停
 uploader.btn.batch_continue: 全部继续
@@ -135,7 +178,7 @@ activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
 activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
-activity.audio_manage.media_error_hint: 请上传或选择文档
+activity.document_manage.media_error_hint: 请上传或选择文档
 activity.audio_manage.finish_detail_required_error_hint: 请输入完成条件
 activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数字
 
@@ -441,10 +484,13 @@ pay.security.password.save_fail_hint: 支付密码设置失败
 user.account.refund_cancel_title: 取消退款
 user.account.refund_cancel_hint: 真的要取消退款吗？
 user.account.cancel_order_title: 取消订单
-user.account.cancel_order_hint: 真的要取消订单吗？
+user.account.cancel_order_hint: 确定要取消订单吗？
 user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
 user.account.cancel_order_success_hint: 订单已取消成功！
+
+user.fields.idcard_front_placeholder: 请上传身份证正面照
+user.fields.idcard_back_placeholder: 请上传身份证反面照
 
 open_course.lesson.create_error:  课时创建失败
 open_course.lesson.create_success: 课时创建成功
