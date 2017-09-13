@@ -23,15 +23,15 @@ class AccountController extends BaseController
         );
 
         $userCashflows = $this->getAccountService()->searchUserCashflows(
-            $conditions, 
-            array(), 
+            $conditions,
+            array(),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render('admin/my-account/index.html.twig', array(
             'account' => $account,
-            'userCashflows' => $userCashflows
+            'userCashflows' => $userCashflows,
         ));
     }
 
