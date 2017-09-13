@@ -11,7 +11,7 @@ class AlipayController extends BaseController
 {
     public function payAction($trade)
     {
-        $trade['pay_type'] = 'Native';
+        $trade['pay_type'] = 'Web';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
         $trade['return_url'] = $this->generateUrl('cashier_alipay_return', array(), true);
         $result = $this->getPayService()->createTrade($trade);
