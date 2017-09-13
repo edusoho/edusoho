@@ -20,7 +20,7 @@ class AlipayController extends BaseController
             return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
         }
 
-        return $this->redirect($result['platform_created_result']);
+        return $this->redirect($result['platform_created_result']['url']);
     }
 
     public function notifyAction(Request $request, $payment)
