@@ -1221,25 +1221,24 @@ class ClassroomServiceTest extends BaseTestCase
         $teacher2 = $this->createTeacher('2');
         $teacher3 = $this->createTeacher('3');
         $teacher4 = $this->createTeacher('4');
-        $teacher5 = $this->createTeacher('5');
-        $teacher6 = $this->createTeacher('6');
-        $teacher7 = $this->createTeacher('7');
-        $teacher8 = $this->createTeacher('8');
+
         $textClassroom = array(
             'title' => 'test',
         );
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher2['id']);
-        $teacherIds = array($teacher1['id'], $teacher2['id'], $teacher3['id'], $teacher4['id']);
+        
+        $this->getClassroomService()->becomeStudent($classroom['id'], $teacher1['id']);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $teacher3['id']);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $teacher4['id']);
+
+        $teacherIds = array($teacher3['id'], $teacher4['id']);
         $this->getClassroomService()->updateAssistants($classroom['id'], $teacherIds);
         $assitantIds = $this->getClassroomService()->findAssistants($classroom['id']);
-        $this->assertEquals(count($assitantIds), 4);
-        $teacherIds = array($teacher1['id'], $teacher3['id'], $teacher5['id'], $teacher7['id']);
-        $this->getClassroomService()->updateAssistants($classroom['id'], $teacherIds);
-        $assitantIds = $this->getClassroomService()->findAssistants($classroom['id']);
-        $this->assertEquals(count($assitantIds), 4);
+        $this->assertEquals(2, count($assitantIds));
     }
 
     /**
