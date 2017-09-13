@@ -1,5 +1,5 @@
 .cd-steps {
-
+  padding-left: 0;
   &.cd-steps-4 {
     .cd-steps-item {
       &:not(:last-child) {
@@ -7,8 +7,8 @@
         width: 33.3%;
       }
       &:first-child {
-        .cd-steps-content {
-          .content-wrap {
+        .cd-steps-step {
+          .step-wrap {
             .circle-wrap {
               margin-left: 4px;
             }
@@ -54,10 +54,12 @@
     vertical-align: top;
 
     &:first-child {
-      .cd-steps-content {
-        .content-wrap {
-          .content-number {
-            margin-left: 36px;
+      .cd-steps-step {
+        .step-wrap {
+          .step-number {
+            @media(min-width: @screen-sm-min) {
+              margin-left: 36px;
+            }
           }
         }
       }
@@ -68,9 +70,9 @@
         padding-right: 0;
         display: none;
       }
-      .cd-steps-content {
-        .content-wrap {
-          & + .content-wrap {
+      .cd-steps-step {
+        .step-wrap {
+          & + .step-wrap {
             padding-right: 0;
           }
         }
@@ -94,13 +96,13 @@
       }
     }
 
-    .cd-steps-content {
-      .content-wrap {
+    .cd-steps-step {
+      .step-wrap {
         position: relative;
         display: inline-block;
         vertical-align: top;
         background-color: #fff;
-        & + .content-wrap {
+        & + .step-wrap {
           margin-left: -4px;
           padding-right: 16px;
           font-size: 14px;
@@ -108,7 +110,7 @@
         }
       }
 
-      .content-number {
+      .step-number {
         margin-left: 14px;
         margin-right: 8px;
         width: 24px;
@@ -122,7 +124,7 @@
         .border-radius(50%);
       }
 
-      .content-info {
+      .step-info {
         font-size: 14px;
         line-height: 1;
         color: @cd-gray-light;
@@ -131,15 +133,15 @@
 
     &.done,
     &.doing {
-      .content-number {
+      .step-number {
         color: @brand-primary;
         border-color: @brand-primary;
       }
-      .content-icon {
+      .step-icon {
         background-color: @brand-primary;
         color: #fff;
       }
-      .content-info {
+      .step-info {
         color: @cd-gray-dark;
       }
     }
