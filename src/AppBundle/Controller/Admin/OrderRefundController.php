@@ -11,8 +11,8 @@ class OrderRefundController extends BaseController
 {
     public function refundsAction(Request $request, $targetType)
     {
-        //$conditions = $this->prepareRefundSearchConditions($request->query->all());
-        $conditions = $request->query->all();
+        $conditions = $this->prepareRefundSearchConditions($request->query->all());
+
         $paginator = new Paginator(
             $request,
             $this->getBizOrderRefundService()->countRefunds($conditions),
@@ -53,14 +53,20 @@ class OrderRefundController extends BaseController
 
         if (!empty($conditions['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($conditions['orderSn']);
-            $conditions['orderId'] = $order ? $order['id'] : -1;
+            $conditions['order_id'] = !empty($order) ? $order['id'] : -1;
             unset($conditions['orderSn']);
         }
 
         if (!empty($conditions['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $conditions['userId'] = $user ? $user['id'] : -1;
+            $conditions['user_id'] = !empty($user) ? $user['id'] : -1;
             unset($conditions['nickname']);
+        }
+
+        if (!empty($conditions['titleLike'])) {
+            $orderItems = $this->getOrderService()->searchOrders(array('title_like' => $conditions['titleLike']), array(), 0, PHP_INT_MAX);
+            $conditions['order_ids'] = !empty($orderItems) ? ArrayToolkit::column($orderItems, 'id') : array(0);
+            unset($conditions['titleLike']);
         }
 
         return $conditions;

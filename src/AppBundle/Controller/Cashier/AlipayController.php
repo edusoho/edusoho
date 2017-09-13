@@ -12,7 +12,7 @@ class AlipayController extends BaseController
 {
     public function payAction($trade)
     {
-        $trade['pay_type'] = 'Web';
+        $trade['platform_type'] = 'Web';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
         $trade['return_url'] = $this->generateUrl('cashier_alipay_return', array(), true);
         $result = $this->getPayService()->createTrade($trade);
@@ -34,7 +34,7 @@ class AlipayController extends BaseController
     public function returnAction(Request $request)
     {
         $data = $request->query->all();
-        $this->getPayService()->notifyPaid('alipay.in_time', $data);
+        $this->getPayService()->notifyPaid('alipay', $data);
 
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), true));
     }

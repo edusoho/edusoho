@@ -9,7 +9,7 @@ use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class CourseProduct extends Product implements Owner, Refund, OrderStatusCallback
+class CourseProduct extends Product implements Owner, OrderStatusCallback
 {
     const TYPE = 'course';
 
@@ -32,8 +32,8 @@ class CourseProduct extends Product implements Owner, Refund, OrderStatusCallbac
         $course = $this->getCourseService()->getCourse($this->targetId);
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
-        $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $this->title = $this->courseSet['title'].'-'.$course['title'];
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
@@ -72,31 +72,36 @@ class CourseProduct extends Product implements Owner, Refund, OrderStatusCallbac
         }
     }
 
-    public function afterApplyRefund()
+    public function onApplyRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
     }
 
-    public function afterCancelRefund()
+    public function onCancelRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
     }
 
-    public function afterRefuseRefund($order)
+    public function onAdoptRefund()
+    {
+        $this->getCourseMemberService()->removeStudent($this->targetId, $userId);
+    }
+
+    public function onRefuseRefund($order)
     {
         $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
     }
 
-    public function afterAdoptRefund($order)
+    public function exitOwner($data)
     {
-        $this->exitOwner($order['user_id']);
-    }
-
-    public function exitOwner($userId)
-    {
-        $this->getCourseMemberService()->removeStudent($this->targetId, $userId);
+        $user = $this->biz['user'];
+        $this->getCourseMemberService()->removeStudent(
+            $this->targetId,
+            $user->getId(),
+            array('reason' => $data['reason']['note'])
+        );
     }
 
     public function getOwner($userId)

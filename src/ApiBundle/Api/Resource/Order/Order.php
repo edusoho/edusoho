@@ -30,7 +30,7 @@ class Order extends AbstractResource
             $product->setPickedDeduct($params);
             $order = $this->getOrderFacadeService()->create($product);
             $params['clientIp'] = $this->getClientIp();
-            $params['payment'] = 'alipay.in_time';
+            $params['payment'] = 'alipay';
             $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
             $trade['pay_type'] = 'Wap';
             $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
