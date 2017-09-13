@@ -109,7 +109,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $userIds = ArrayToolkit::column($records, 'member_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 

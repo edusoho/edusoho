@@ -130,7 +130,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
         $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student');
-                
+
         $course = $this->getCourseService()->getCourse($courseId);
 
         $this->getLogService()->info(
@@ -453,6 +453,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     /**
      * //这个方法应该是取消教师角色的时候退出课程用到的
+     *
      * @todo 当用户拥有大量的教学计划老师角色时，这个方法效率是有就有问题咯！鉴于短期内用户不会拥有大量的教学计划老师角色，先这么做着。
      */
     public function cancelTeacherInAllCourses($userId)
@@ -1135,6 +1136,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->rollback();
             throw $e;
         }
+
         return $member;
     }
 
@@ -1149,7 +1151,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->rollback();
             throw $e;
         }
-        
+
         return $result;
     }
 
