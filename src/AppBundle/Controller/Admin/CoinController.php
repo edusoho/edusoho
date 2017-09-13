@@ -145,7 +145,7 @@ class CoinController extends BaseController
                 array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         } elseif ($type == 'vip') {
             // todo
-            $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
+            $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
         }
 
         return $this->render('admin/coin/coin-table-setting.html.twig', array(

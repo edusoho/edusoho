@@ -16,142 +16,57 @@ class EduCloudController extends BaseController
 {
     public function smsSendAction(Request $request)
     {
-        if ($request->isMethod('POST')) {
-            if ($this->setting('cloud_sms.sms_enabled') != '1') {
-                return $this->createJsonResponse(array('error' => '短信服务未开启，请联系网校管理员'));
-            }
+        $currentUser = $this->getCurrentUser();
+        $currentTime = time();
 
-            $currentUser = $this->getCurrentUser();
-            $currentTime = time();
+        $smsType = $request->request->get('sms_type');
+        $to = $request->get('to');
 
-            $smsType = $request->request->get('sms_type');
-            $this->checkSmsType($smsType, $currentUser);
+        $errorMsg = $this->checkErrorMsg($currentUser, $currentTime, $smsType, $request);
 
-            if (!in_array($smsType, array('sms_user_pay', 'system_remind'))) {
-                $captchaNum = strtolower($request->request->get('captcha_num'));
+        if (!empty($errorMsg)) {
+            return $this->createJsonResponse(array('error' => $errorMsg));
+        }
 
-                if ($request->getSession()->get('captcha_code') != $captchaNum) {
-                    return $this->createJsonResponse(array('error' => '验证码错误'));
-                }
-            }
+        $description = $this->generateDescription($smsType);
+        $smsCode = $this->generateSmsCode();
 
-            $targetSession = $request->getSession()->get($smsType);
-            $smsLastTime = $targetSession['sms_last_time'];
-            $allowedTime = 120;
-
-            if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-                return $this->createJsonResponse(array('error' => '请等待120秒再申请', 'message' => "{$smsLastTime}|{$currentTime}"));
-            }
-
-            if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
-                $to = $request->request->get('to');
-
-                if ($smsType == 'sms_bind') {
-                    $description = '手机绑定';
-                } else {
-                    $description = '用户注册';
-                }
-
-                $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
-
-                if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])) {
-                    return $this->createJsonResponse(array('error' => '您已经绑定了该手机号码'));
-                }
-
-                if (!$this->getUserService()->isMobileUnique($to)) {
-                    return $this->createJsonResponse(array('error' => '该手机号码已被其他用户绑定'));
-                }
-            }
-
-            if ($smsType == 'sms_forget_password') {
-                $description = '登录密码重置';
-                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
-
-                if (empty($targetUser)) {
-                    return $this->createJsonResponse(array('error' => '用户不存在'));
-                }
-
-                if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
-                    return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
-                }
-
-                if ($targetUser['verifiedMobile'] != $request->request->get('to')) {
-                    return $this->createJsonResponse(array('error' => '手机与用户名不匹配'));
-                }
-
-                $to = $targetUser['verifiedMobile'];
-            }
-
-            if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
-                $user = $currentUser->toArray();
-
-                if ($smsType == 'sms_user_pay') {
-                    $description = '网站余额支付';
-                } else {
-                    $description = '支付密码重置';
-                }
-
-                if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
-                    return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
-                }
-
-                if ($user['verifiedMobile'] != $request->request->get('to')) {
-                    return $this->createJsonResponse(array('error' => '您输入的手机号，不是已绑定的手机'));
-                }
-
-                $to = $user['verifiedMobile'];
-            }
-
-            if ($smsType == 'system_remind') {
-                $to = $request->request->get('to');
-                $description = '直播公开课';
-            }
-
-            if (!$this->checkPhoneNum($to)) {
-                return $this->createJsonResponse(array('error' => sprintf('手机号错误:%s', $to)));
-            }
-
-            $smsCode = $this->generateSmsCode();
-
-            try {
-                $api = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
                     'mobile' => $to,
                     'category' => $smsType,
                     'sendStyle' => 'templateId',
                     'description' => $description,
                     'verify' => $smsCode,
                 ));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
 
-                if (isset($result['error'])) {
-                    return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $result['error'])));
-                }
-            } catch (\Exception $e) {
-                $message = $e->getMessage();
+            return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $message)));
+        }
+        if (isset($result['error'])) {
+            return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $result['error'])));
+        }
 
-                return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $message)));
-            }
+        $result['to'] = $to;
+        $result['smsCode'] = $smsCode;
+        $result['userId'] = $currentUser['id'];
 
-            $result['to'] = $to;
-            $result['smsCode'] = $smsCode;
-            $result['userId'] = $currentUser['id'];
+        if ($currentUser['id'] != 0) {
+            $result['nickname'] = $currentUser['nickname'];
+        }
 
-            if ($currentUser['id'] != 0) {
-                $result['nickname'] = $currentUser['nickname'];
-            }
+        $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
-            $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
-
-            $request->getSession()->set($smsType, array(
+        $request->getSession()->set($smsType, array(
                 'to' => $to,
                 'sms_code' => $smsCode,
                 'sms_last_time' => $currentTime,
             ));
+        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($currentUser['email']);
 
-            return $this->createJsonResponse(array('ACK' => 'ok'));
-        }
-
-        return $this->createJsonResponse(array('error' => 'GET method'));
+        return $this->createJsonResponse(array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance));
     }
 
     public function smsCheckAction(Request $request, $type)
@@ -300,6 +215,152 @@ class EduCloudController extends BaseController
         }
     }
 
+    protected function generateDescription($smsType)
+    {
+        $description = '';
+        switch ($smsType) {
+            case 'sms_bind':
+                $description = '手机绑定';
+                break;
+            case 'sms_registration':
+                $description = '用户注册';
+                break;
+            case 'sms_forget_password':
+                $description = '登录密码重置';
+                break;
+            case 'sms_user_pay':
+                $description = '网站余额支付';
+                break;
+            case 'sms_forget_pay_password':
+                $description = '支付密码重置';
+                break;
+            case 'system_remind':
+                $description = '直播公开课';
+                break;
+            default:
+                $description = '';
+                break;
+        }
+
+        return $description;
+    }
+
+    protected function checkErrorMsg($user, $currentTime, $smsType, $request)
+    {
+        $errorMsg = '';
+        $to = $request->get('to');
+        $this->checkSmsType($smsType, $user);
+        if ($this->setting('cloud_sms.sms_enabled') != '1') {
+            $errorMsg = '短信服务未开启，请联系网校管理员';
+
+            return $errorMsg;
+        }
+
+        if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'))) {
+            $captchaNum = strtolower($request->request->get('captcha_num'));
+
+            if ($request->getSession()->get('captcha_code') != $captchaNum) {
+                $errorMsg = '验证码错误';
+
+                return $errorMsg;
+            }
+        }
+
+        $targetSession = $request->getSession()->get($smsType);
+        $smsLastTime = $targetSession['sms_last_time'];
+        $allowedTime = 120;
+
+        if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
+            $errorMsg = '请等待120秒再申请';
+
+            return $errorMsg;
+        }
+
+        if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
+            if ($smsType == 'sms_bind') {
+                $description = '手机绑定';
+            } else {
+                $description = '用户注册';
+            }
+
+            $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+
+            if ($hasVerifiedMobile && ($to == $user['verifiedMobile'])) {
+                $errorMsg = '您已经绑定了该手机号码';
+
+                return  $errorMsg;
+            }
+
+            if (!$this->getUserService()->isMobileUnique($to)) {
+                $errorMsg = '该手机号码已被其他用户绑定';
+
+                return  $errorMsg;
+            }
+        }
+
+        if ($smsType == 'sms_forget_password') {
+            $description = '登录密码重置';
+            $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
+
+            if (empty($targetUser)) {
+                $errorMsg = '用户不存在';
+
+                return  $errorMsg;
+            }
+
+            if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
+                $errorMsg = '用户没有被绑定的手机号';
+
+                return  $errorMsg;
+            }
+
+            if ($targetUser['verifiedMobile'] != $to) {
+                $errorMsg = '手机与用户名不匹配';
+
+                return  $errorMsg;
+            }
+        }
+
+        if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
+            if ($smsType == 'sms_user_pay') {
+                $description = '网站余额支付';
+            } else {
+                $description = '支付密码重置';
+            }
+
+            if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
+                $errorMsg = '用户没有被绑定的手机号';
+
+                return  $errorMsg;
+
+                return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
+            }
+
+            if ($user['verifiedMobile'] != $request->request->get('to')) {
+                $errorMsg = '您输入的手机号，不是已绑定的手机';
+
+                return  $errorMsg;
+            }
+        }
+
+        if (!$this->checkPhoneNum($to)) {
+            $errorMsg = sprintf('手机号错误:%s', $to);
+
+            return  $errorMsg;
+        }
+
+        // send 6 times in an hour
+        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($user['email']);
+
+        if ($maxAllowance == 0) {
+            $errorMsg = '暂停发送验证码短信，请稍后再试';
+
+            return $errorMsg;
+        }
+
+        return $errorMsg;
+    }
+
     /**
      * @return LogService
      */
@@ -327,5 +388,12 @@ class EduCloudController extends BaseController
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getRateLimiter($id, $maxAllowance, $period)
+    {
+        $factory = $this->getBiz()->offsetGet('ratelimiter.factory');
+
+        return $factory($id, $maxAllowance, $period);
     }
 }

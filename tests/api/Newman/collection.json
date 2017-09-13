@@ -12685,7 +12685,7 @@
 				}
 			],
 			"dataMode": "params",
-			"description": "手机号注册（手机号已被其他账号绑定）",
+			"description": "手机号注册（手机号已被其他帐号绑定）",
 			"headerData": [],
 			"headers": "",
 			"helperAttributes": {},

@@ -118,8 +118,8 @@ class LlpayRequest extends Request
     private function processBindPhone($user)
     {
         $bindPhone = '';
-        if (！empty($user['verifiedMobile'])) {
-            $head = substr($user['verifiedMobile'], 0, 4);
+        if (!empty($user['verifiedMobile'])) {
+            $head = substr($user['verifiedMobile'], 0, 3);
             $tail = substr($user['verifiedMobile'], -4, 4);
             $bindPhone = $head.'****'.$tail;
         }
