@@ -95,6 +95,7 @@ class StudentManageController extends BaseController
         $condition['targetId'] = $courseId;
         $condition['targetType'] = 'course';
         $condition['status'] = 'success';
+        $condition['operate_type'] = 'exit';
 
         $paginator = new Paginator(
             $request,

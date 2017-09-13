@@ -1126,17 +1126,30 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     private function addMember($member, $reason, $data = array())
     {
-        $member = $this->getMemberDao()->create($fields);
-        $this->createOperateRecord($member, 'join', $reason, $data);
-
+        try {
+            $this->beginTransaction();
+            $member = $this->getMemberDao()->create($member);
+            $this->createOperateRecord($member, 'join', $reason, $data);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
         return $member;
     }
 
     private function removeMember($member, $reason = '', $data = array())
     {
-        $result = $this->getMemberDao()->delete($member['id']);
-        $this->createOperateRecord($member, 'exit', $reason, $data);
-
+        try {
+            $this->beginTransaction();
+            $result = $this->getMemberDao()->delete($member['id']);
+            $this->createOperateRecord($member, 'exit', $reason, $data);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+        
         return $result;
     }
 
