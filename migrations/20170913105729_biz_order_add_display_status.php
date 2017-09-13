@@ -25,7 +25,7 @@ class BizOrderAddDisplayStatus extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order` DROP COLUMN `display_status`;");
+        $db->exec('ALTER TABLE `biz_order` DROP COLUMN `display_status`;');
     }
 
     protected function isFieldExist($table, $filedName)
