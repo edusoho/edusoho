@@ -80,6 +80,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                     'orderId' => 0,
                     'note' => $data['remark'],
                     'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
+                    'reason' => 'course.member.operation.reason.admin_operate',
                 );
 
                 $this->becomeStudent($course['id'], $user['id'], $info);
@@ -114,6 +115,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
+    // 手动移除
     public function removeCourseStudent($courseId, $userId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -128,7 +130,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($member['role'] !== 'student') {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
-        $result = $this->removeMember($member, 'course.member.operation.remove_course_student');
+        $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student');
                 
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -451,6 +453,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
+     * //这个方法应该是取消教师角色的时候退出课程用到的
      * @todo 当用户拥有大量的教学计划老师角色时，这个方法效率是有就有问题咯！鉴于短期内用户不会拥有大量的教学计划老师角色，先这么做着。
      */
     public function cancelTeacherInAllCourses($userId)
@@ -460,7 +463,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
 
-            $this->removeMember($member, 'course.member.operation.reason.cancle_teacher');
+            $this->removeMember($member, 'course.member.operation.reason.cancle_teacher_role');
 
             $fields = array(
                 'teacherIds' => array_diff($course['teacherIds'], array($member['userId'])),
@@ -615,7 +618,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $member = $this->addMember($fields, 'course.member.operation.reason.buy', $order);
+        $reason = empty($info['reason']) ? $info['reason'] : 'course.member.operation.reason.buy';
+        $member = $this->addMember($fields, $reason, $order);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
 
@@ -732,7 +736,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $deadline;
     }
 
-    public function removeStudent($courseId, $userId)
+    public function removeStudent($courseId, $userId, $info)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -746,7 +750,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
-        $this->removeMember($member, 'course.member.operation.remove');
+        $reason = empty($info['reason']) ? '' : $info['reason'];
+        $this->removeMember($member, $reason);
 
         $this->getCourseDao()->update(
             $courseId,
@@ -1110,8 +1115,11 @@ class MemberServiceImpl extends BaseService implements MemberService
             'data' => $data,
         );
 
-        if ($operateType == 'exit') {
-
+        $orderItem = $this->getOrderService()->getOrderItemByOrderIdAndTargetIdAndTargetType($member['orderId'], $member['courseId'], 'course');
+        if ($orderItem['refund_id'] !== 0 && $orderItem['refund_status'] == 'refunded') {
+            $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
+            $record['reason'] = $orderRefund['reason'];
+            $record['refunded'] = 1;
         }
 
         return $this->getMemberOperationService()->createRecord($record);
@@ -1125,7 +1133,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    private function removeMember($member, $reason, $data = array())
+    private function removeMember($member, $reason = '', $data = array())
     {
         $result = $this->getMemberDao()->delete($member['id']);
         $this->createOperateRecord($member, 'exit', $reason, $data);
@@ -1179,6 +1187,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return OrderRefundService
+     */
+    protected function getOrderRefundService()
+    {
+        return $this->createService('Order:OrderRefundService');
     }
 
     protected function getOrderFacadeService()

@@ -37,4 +37,6 @@ interface OrderService
     public function countOrderLogs($conditions);
 
     public function searchOrderLogs($conditions, $orderBy, $start, $limit);
+
+    public function getOrderItemByOrderIdAndTargetIdAndTargetType($orderId, $targetId, $targetType);
 }

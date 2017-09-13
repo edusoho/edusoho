@@ -98,31 +98,28 @@ class StudentManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->countRefunds($condition),
+            $this->getMemberOperationService()->countRecords($condition),
             20
         );
 
-        $refunds = $this->getOrderService()->searchRefunds(
+        $records = $this->getMemberOperationService()->searchRecords(
             $condition,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        foreach ($refunds as $key => $refund) {
-            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-
-            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
-        }
+        
+        $userIds = ArrayToolkit::column($records, 'member_id');
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render(
             'course-manage/student/quit-records.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'refunds' => $refunds,
+                'records' => $records,
+                'users' => $users,
                 'paginator' => $paginator,
-                'role' => 'student',
             )
         );
     }
@@ -777,6 +774,11 @@ class StudentManageController extends BaseController
     protected function getLearningDataAnalysisService()
     {
         return $this->createService('Course:LearningDataAnalysisService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 
     protected function getServiceKernel()
