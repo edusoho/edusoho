@@ -4,7 +4,6 @@ namespace Omnipay\Alipay\Requests;
 
 use Omnipay\Alipay\Responses\LegacyWapPurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
-
 /**
  * Class LegacyWapPurchaseRequest
  * @package   Omnipay\Alipay\Requests
@@ -12,14 +11,9 @@ use Omnipay\Common\Message\ResponseInterface;
  */
 class LegacyWapPurchaseRequest extends AbstractLegacyRequest
 {
-
     protected $service = 'alipay.wap.create.direct.pay.by.user';
-
     protected $key;
-
     protected $privateKey;
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -29,32 +23,16 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     public function getData()
     {
         $this->validateParams();
-
         $data = $this->filter($this->parameters->all());
-
-        $data['service']   = $this->service;
-        $data['sign']      = $this->sign($data, $this->getSignType());
+        $data['service'] = $this->service;
+        $data['sign'] = $this->sign($data, $this->getSignType());
         $data['sign_type'] = $this->getSignType();
-
         return $data;
     }
-
-
     protected function validateParams()
     {
-        $this->validate(
-            'partner',
-            '_input_charset',
-            'sign_type',
-            'out_trade_no',
-            'subject',
-            'total_fee',
-            'seller_id',
-            'payment_type'
-        );
+        $this->validate('partner', '_input_charset', 'sign_type', 'out_trade_no', 'subject', 'total_fee', 'seller_id', 'payment_type');
     }
-
-
     /**
      * @return mixed
      */
@@ -62,8 +40,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('sign_type');
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -75,8 +51,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->response = new LegacyWapPurchaseResponse($this, $data);
     }
-
-
     /**
      * @return mixed
      */
@@ -84,8 +58,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('partner');
     }
-
-
     /**
      * @param $value
      *
@@ -95,8 +67,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('partner', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -104,8 +74,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('_input_charset');
     }
-
-
     /**
      * @param $value
      *
@@ -115,8 +83,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('_input_charset', $value);
     }
-
-
     /**
      * @param $value
      *
@@ -126,8 +92,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('sign_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -135,8 +99,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *
@@ -146,8 +108,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('notify_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -155,8 +115,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('return_url');
     }
-
-
     /**
      * @param $value
      *
@@ -166,8 +124,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('return_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -175,8 +131,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('out_trade_no');
     }
-
-
     /**
      * @param $value
      *
@@ -186,8 +140,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('out_trade_no', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -195,8 +147,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('subject');
     }
-
-
     /**
      * @param $value
      *
@@ -206,8 +156,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('subject', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -215,8 +163,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('total_fee');
     }
-
-
     /**
      * @param $value
      *
@@ -226,8 +172,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('total_fee', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -235,8 +179,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('seller_id');
     }
-
-
     /**
      * @param $value
      *
@@ -246,8 +188,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('seller_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -255,8 +195,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('payment_type');
     }
-
-
     /**
      * @param $value
      *
@@ -266,8 +204,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('payment_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -275,8 +211,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('show_url');
     }
-
-
     /**
      * @param $value
      *
@@ -286,8 +220,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('show_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -295,8 +227,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('body');
     }
-
-
     /**
      * @param $value
      *
@@ -306,8 +236,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('body', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -315,8 +243,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('it_b_pay');
     }
-
-
     /**
      * @param $value
      *
@@ -326,8 +252,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('it_b_pay', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -335,8 +259,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('extern_token');
     }
-
-
     /**
      * @param $value
      *
@@ -346,8 +268,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('extern_token', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -355,8 +275,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('otherfee');
     }
-
-
     /**
      * @param $value
      *
@@ -366,8 +284,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('otherfee', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -375,8 +291,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('airticket');
     }
-
-
     /**
      * @param $value
      *
@@ -386,8 +300,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('airticket', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -395,8 +307,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('rn_check');
     }
-
-
     /**
      * @param $value
      *
@@ -406,8 +316,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('rn_check', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -415,8 +323,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('buyer_cert_no');
     }
-
-
     /**
      * @param $value
      *
@@ -426,8 +332,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('buyer_cert_no', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -435,8 +339,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('buyer_real_name');
     }
-
-
     /**
      * @param $value
      *
@@ -446,8 +348,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('buyer_real_name', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -455,8 +355,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('scene');
     }
-
-
     /**
      * @param $value
      *
@@ -466,8 +364,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('scene', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -475,8 +371,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('hb_fq_param');
     }
-
-
     /**
      * @param $value
      *
@@ -486,8 +380,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('hb_fq_param', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -495,8 +387,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('goods_type');
     }
-
-
     /**
      * @param $value
      *
@@ -506,8 +396,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('goods_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -515,8 +403,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('app_pay');
     }
-
-
     /**
      * @param $value
      *
@@ -526,8 +412,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('app_pay', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -535,8 +419,6 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('promo_params');
     }
-
-
     /**
      * @param $value
      *

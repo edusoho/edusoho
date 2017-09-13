@@ -5,6 +5,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\ResourceKernel;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
@@ -433,7 +434,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $fields;
     }
 
-    public function createOrder2()
+    public function createOrder()
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
@@ -444,29 +445,47 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', '用户未登录，购买失败！');
         }
 
-        /** @var $newApiResourceKernel ResourceKernel */
-        $newApiResourceKernel = $this->controller->get('api_resource_kernel');
+        try {
+            /** @var $newApiResourceKernel ResourceKernel */
+            $newApiResourceKernel = $this->controller->get('api_resource_kernel');
 
-        $coinAmount = $this->getUseCoinAmount();
-        $apiRequest = new ApiRequest(
-            '/api/orders',
-            'POST',
-            array(),
-            array(
-                'targetType' => $targetType,
-                'targetId' => $targetId,
-                'unencryptedPayPassword' => $this->getParam('payPassword'),
-                'couponCode' => $this->getParam('couponCode', ''),
-                'unit' => $this->getParam('unitType', ''),
-                'num' => $this->getParam('duration', 1),
-                'coinAmount' => $coinAmount
-            ),
-            array()
-        );
+            $coinAmount = $this->getUseCoinAmount();
+            $apiRequest = new ApiRequest(
+                '/api/orders',
+                'POST',
+                array(),
+                array(
+                    'targetType' => $targetType,
+                    'targetId' => $targetId,
+                    'unencryptedPayPassword' => $this->getParam('payPassword'),
+                    'couponCode' => $this->getParam('couponCode', ''),
+                    'unit' => $this->getParam('unitType', ''),
+                    'num' => $this->getParam('duration', 1),
+                    'coinAmount' => $coinAmount
+                ),
+                array()
+            );
 
-        $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
+            $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
+            $trade = $this->getPayService()->getTradeByTradeSn($result['sn']);
+            if ($trade['status'] === 'paid') {
+                return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
+            } else {
+                $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
+                return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
+            }
+        } catch (\Exception $exception) {
+            return $this->createErrorResponse('error', $exception->getMessage());
+        }
 
-        return $result;
+    }
+
+    /**
+     * @return PayService
+     */
+    private function getPayService()
+    {
+        return $this->controller->getService('Pay:PayService');
     }
 
     private function getUseCoinAmount()
@@ -490,7 +509,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $cashRate = $coinSetting['cash_rate'];
         }
 
-        $totalPrice = $this->getParam('totalPrice');
+        $totalPrice = $this->getParam('totalPrice', 0);
         $coinPayAmount = 0;
         if ($payment == 'coin') {
             $coinPayAmount = round($totalPrice * $cashRate, 2);
@@ -499,7 +518,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $coinPayAmount;
     }
 
-    public function createOrder()
+    public function createOrderBack()
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');

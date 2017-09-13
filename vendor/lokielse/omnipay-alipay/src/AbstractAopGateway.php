@@ -11,29 +11,13 @@ use Omnipay\Alipay\Requests\AopTradeRefundRequest;
 use Omnipay\Alipay\Requests\DataServiceBillDownloadUrlQueryRequest;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Exception\InvalidRequestException;
-
 abstract class AbstractAopGateway extends AbstractGateway
 {
-
-    protected $endpoints = [
-        'production' => 'https://openapi.alipay.com/gateway.do',
-        'sandbox'    => 'https://openapi.alipaydev.com/gateway.do',
-    ];
-
-
+    protected $endpoints = array('production' => 'https://openapi.alipay.com/gateway.do', 'sandbox' => 'https://openapi.alipaydev.com/gateway.do');
     public function getDefaultParameters()
     {
-        return [
-            'format'    => 'JSON',
-            'charset'   => 'UTF-8',
-            'signType'  => 'RSA',
-            'version'   => '1.0',
-            'timestamp' => date('Y-m-d H:i:s'),
-            'alipaySdk' => 'lokielse/omnipay-alipay',
-        ];
+        return array('format' => 'JSON', 'charset' => 'UTF-8', 'signType' => 'RSA', 'version' => '1.0', 'timestamp' => date('Y-m-d H:i:s'), 'alipaySdk' => 'lokielse/omnipay-alipay');
     }
-
-
     /**
      * @return mixed
      */
@@ -41,8 +25,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('app_id');
     }
-
-
     /**
      * @param $value
      *
@@ -52,8 +34,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('app_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -61,8 +41,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('format');
     }
-
-
     /**
      * @param $value
      *
@@ -72,8 +50,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('format', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -81,8 +57,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('charset');
     }
-
-
     /**
      * @param $value
      *
@@ -92,8 +66,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('charset', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -101,8 +73,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('sign_type');
     }
-
-
     /**
      * @param $value
      *
@@ -112,8 +82,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('sign_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -121,8 +89,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('version');
     }
-
-
     /**
      * @param $value
      *
@@ -132,8 +98,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('version', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -141,8 +105,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('private_key');
     }
-
-
     /**
      * @param $value
      *
@@ -152,8 +114,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('private_key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -161,8 +121,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('encrypt_key');
     }
-
-
     /**
      * @param $value
      *
@@ -172,8 +130,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('encrypt_key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -181,8 +137,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *
@@ -192,8 +146,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('notify_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -201,8 +153,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('timestamp');
     }
-
-
     /**
      * @param $value
      *
@@ -212,8 +162,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('timestamp', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -221,8 +169,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('app_auth_token');
     }
-
-
     /**
      * @param $value
      *
@@ -232,8 +178,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('app_auth_token', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -241,8 +185,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('alipay_public_key');
     }
-
-
     /**
      * @param $value
      *
@@ -252,8 +194,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('alipay_public_key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -261,8 +201,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('endpoint');
     }
-
-
     /**
      * @return mixed
      */
@@ -270,8 +208,6 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->getParameter('alipay_sdk');
     }
-
-
     /**
      * @param $value
      *
@@ -281,14 +217,10 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('alipay_sdk', $value);
     }
-
-
     public function production()
     {
         return $this->setEnvironment('production');
     }
-
-
     /**
      * @param $value
      *
@@ -298,17 +230,12 @@ abstract class AbstractAopGateway extends AbstractGateway
     public function setEnvironment($value)
     {
         $env = strtolower($value);
-
-        if (! isset($this->endpoints[$env])) {
+        if (!isset($this->endpoints[$env])) {
             throw new InvalidRequestException('The environment is invalid');
         }
-
         $this->setEndpoint($this->endpoints[$env]);
-
         return $this;
     }
-
-
     /**
      * @param $value
      *
@@ -318,26 +245,20 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         return $this->setParameter('endpoint', $value);
     }
-
-
     public function sandbox()
     {
         return $this->setEnvironment('sandbox');
     }
-
-
     /**
      * @param array $parameters
      *
      * @return AopCompletePurchaseRequest
      * @throws InvalidRequestException
      */
-    public function completePurchase(array $parameters = [])
+    public function completePurchase(array $parameters = array())
     {
         return $this->createRequest(AopCompletePurchaseRequest::class, $parameters);
     }
-
-
     /**
      * Query Order Status
      *
@@ -345,12 +266,10 @@ abstract class AbstractAopGateway extends AbstractGateway
      *
      * @return AopTradeQueryRequest
      */
-    public function query(array $parameters = [])
+    public function query(array $parameters = array())
     {
         return $this->createRequest(AopTradeQueryRequest::class, $parameters);
     }
-
-
     /**
      * Refund
      *
@@ -358,12 +277,10 @@ abstract class AbstractAopGateway extends AbstractGateway
      *
      * @return AopTradeRefundRequest
      */
-    public function refund(array $parameters = [])
+    public function refund(array $parameters = array())
     {
         return $this->createRequest(AopTradeRefundRequest::class, $parameters);
     }
-
-
     /**
      * Query Refund Status
      *
@@ -371,12 +288,10 @@ abstract class AbstractAopGateway extends AbstractGateway
      *
      * @return AopTradeRefundQueryRequest
      */
-    public function refundQuery(array $parameters = [])
+    public function refundQuery(array $parameters = array())
     {
         return $this->createRequest(AopTradeRefundQueryRequest::class, $parameters);
     }
-
-
     /**
      * Cancel Order
      *
@@ -384,12 +299,10 @@ abstract class AbstractAopGateway extends AbstractGateway
      *
      * @return AopTradeCancelRequest
      */
-    public function cancel(array $parameters = [])
+    public function cancel(array $parameters = array())
     {
         return $this->createRequest(AopTradeCancelRequest::class, $parameters);
     }
-
-
     /**
      * Settle
      *
@@ -397,18 +310,16 @@ abstract class AbstractAopGateway extends AbstractGateway
      *
      * @return AopTradeCancelRequest
      */
-    public function settle(array $parameters = [])
+    public function settle(array $parameters = array())
     {
         return $this->createRequest(AopTradeOrderSettleRequest::class, $parameters);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function queryBillDownloadUrl(array $parameters = [])
+    public function queryBillDownloadUrl(array $parameters = array())
     {
         return $this->createRequest(DataServiceBillDownloadUrlQueryRequest::class, $parameters);
     }

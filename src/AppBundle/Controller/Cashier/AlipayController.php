@@ -41,6 +41,9 @@ class AlipayController extends BaseController
 
     public function returnForAppAction(Request $request)
     {
+        $data = $request->query->all();
+        $this->getPayService()->notifyPaid('alipay.in_time', $data);
+
         return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?1';</script>");
     }
 

@@ -3,7 +3,6 @@
 namespace Omnipay\WechatPay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
-
 /**
  * Class CompletePurchaseResponse
  * @package Omnipay\WechatPay\Message
@@ -12,7 +11,6 @@ use Omnipay\Common\Message\AbstractResponse;
  */
 class CompletePurchaseResponse extends AbstractResponse
 {
-
     /**
      * Is the response successful?
      *
@@ -22,24 +20,16 @@ class CompletePurchaseResponse extends AbstractResponse
     {
         return $this->isPaid();
     }
-
-
     public function isPaid()
     {
         $data = $this->getData();
-
         return $data['paid'];
     }
-
-
     public function isSignMatch()
     {
         $data = $this->getData();
-
         return $data['sign_match'];
     }
-
-
     public function getRequestData()
     {
         return $this->request->getData();

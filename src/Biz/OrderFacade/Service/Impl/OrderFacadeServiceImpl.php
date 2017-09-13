@@ -135,17 +135,17 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (!$order) {
-            throw new OrderPayCheckException('订单不存在', 2004);
+            throw new OrderPayCheckException('order.pay_check_msg.order_not_exist', 2004);
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw new OrderPayCheckException('用户未登录，不能支付。', 20005);
+            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 20005);
         }
 
         if ($order['user_id'] != $user['id']) {
-            throw new OrderPayCheckException('不是您的订单，不能支付', 2006);
+            throw new OrderPayCheckException('order.pay_check_msg.not_same_user', 2006);
         }
 
         /** @var $orderPayChecker OrderPayChecker */

@@ -4,13 +4,9 @@ namespace Omnipay\Alipay\Requests;
 
 use Omnipay\Alipay\Responses\LegacyCompletePurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
-
 class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
 {
-
     protected $verifyNotifyId = true;
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -21,8 +17,6 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParams();
     }
-
-
     /**
      * @return mixed
      */
@@ -30,8 +24,6 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('params');
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -47,14 +39,9 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
             $request->setResult($data['result']);
             $request->setAlipayPublicKey($this->getAlipayPublicKey());
             $data = $request->send()->getData();
-
-            $data = array_map(
-                function ($v) {
-                    return substr($v, 1, mb_strlen($v) - 2) . '';
-                },
-                $data
-            );
-
+            $data = array_map(function ($v) {
+                return substr($v, 1, mb_strlen($v) - 2) . '';
+            }, $data);
             if (array_get($data, 'success') == 'true') {
                 $data['trade_status'] = 'TRADE_SUCCESS';
             } else {
@@ -67,14 +54,10 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
             $request->setVerifyNotifyId($this->verifyNotifyId);
             $request->setKey($this->getKey());
             $response = $request->send();
-
             $data = $response->getData();
         }
-
         return $this->response = new LegacyCompletePurchaseResponse($this, $data);
     }
-
-
     /**
      * @param $value
      *
@@ -84,8 +67,6 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('params', $value);
     }
-
-
     /**
      * @param boolean $verifyNotifyId
      *
@@ -94,7 +75,6 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
     public function setVerifyNotifyId($verifyNotifyId)
     {
         $this->verifyNotifyId = $verifyNotifyId;
-
         return $this;
     }
 }

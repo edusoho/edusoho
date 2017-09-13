@@ -4,16 +4,12 @@ namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\LegacyWapPurchaseRequest;
 use Omnipay\Common\Message\RedirectResponseInterface;
-
 class LegacyWapPurchaseResponse extends AbstractLegacyResponse implements RedirectResponseInterface
 {
-
     /**
      * @var LegacyWapPurchaseRequest
      */
     protected $request;
-
-
     /**
      * Is the response successful?
      *
@@ -23,20 +19,14 @@ class LegacyWapPurchaseResponse extends AbstractLegacyResponse implements Redire
     {
         return true;
     }
-
-
     public function isRedirect()
     {
         return true;
     }
-
-
     public function getRedirectUrl()
     {
         return $this->request->getEndpoint() . '?' . http_build_query($this->getRedirectData());
     }
-
-
     /**
      * Gets the redirect form data array, if the redirect method is POST.
      */
@@ -44,8 +34,6 @@ class LegacyWapPurchaseResponse extends AbstractLegacyResponse implements Redire
     {
         return $this->data;
     }
-
-
     /**
      * Get the required redirect method (either GET or POST).
      */

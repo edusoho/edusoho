@@ -6,7 +6,6 @@ use Guzzle\Http\Client;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\WechatPay\Helper;
-
 /**
  * Class RefundOrderRequest
  * @package Omnipay\WechatPay\Message
@@ -15,10 +14,7 @@ use Omnipay\WechatPay\Helper;
  */
 class RefundOrderRequest extends BaseAbstractRequest
 {
-
     protected $endpoint = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -28,29 +24,11 @@ class RefundOrderRequest extends BaseAbstractRequest
     public function getData()
     {
         $this->validate('app_id', 'mch_id', 'out_trade_no', 'cert_path', 'key_path');
-
-        $data = array (
-            'appid'           => $this->getAppId(),
-            'mch_id'          => $this->getMchId(),
-            'device_info'     => $this->getDeviceInfo(),//<>
-            'transaction_id'  => $this->getTransactionId(),
-            'out_trade_no'    => $this->getOutTradeNo(),
-            'out_refund_no'   => $this->getOutRefundNo(),
-            'total_fee'       => $this->getTotalFee(),
-            'refund_fee'      => $this->getRefundFee(),
-            'refund_fee_type' => $this->getRefundFee(),//<>
-            'op_user_id'      => $this->getOpUserId() ?: $this->getMchId(),
-            'nonce_str'       => md5(uniqid()),
-        );
-
+        $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'device_info' => $this->getDeviceInfo(), 'transaction_id' => $this->getTransactionId(), 'out_trade_no' => $this->getOutTradeNo(), 'out_refund_no' => $this->getOutRefundNo(), 'total_fee' => $this->getTotalFee(), 'refund_fee' => $this->getRefundFee(), 'refund_fee_type' => $this->getRefundFee(), 'op_user_id' => $this->getOpUserId() ?: $this->getMchId(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-
         $data['sign'] = Helper::sign($data, $this->getApiKey());
-
         return $data;
     }
-
-
     /**
      * @return mixed
      */
@@ -58,8 +36,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('out_trade_no');
     }
-
-
     /**
      * @param mixed $outTradeNo
      */
@@ -67,8 +43,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('out_trade_no', $outTradeNo);
     }
-
-
     /**
      * @return mixed
      */
@@ -76,8 +50,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('op_user_id');
     }
-
-
     /**
      * @param mixed $opUserId
      */
@@ -85,8 +57,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('op_user_id', $opUserId);
     }
-
-
     /**
      * @return mixed
      */
@@ -94,8 +64,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('out_refund_no');
     }
-
-
     /**
      * @param mixed $outRefundNo
      */
@@ -103,8 +71,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('out_refund_no', $outRefundNo);
     }
-
-
     /**
      * @return mixed
      */
@@ -112,8 +78,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('device_Info');
     }
-
-
     /**
      * @param mixed $deviceInfo
      */
@@ -121,8 +85,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('device_Info', $deviceInfo);
     }
-
-
     /**
      * @return mixed
      */
@@ -130,14 +92,10 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('transaction_id');
     }
-
-
     public function setTransactionId($transactionId)
     {
         $this->setParameter('transaction_id', $transactionId);
     }
-
-
     /**
      * @return mixed
      */
@@ -145,8 +103,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('total_fee');
     }
-
-
     /**
      * @param mixed $totalFee
      */
@@ -154,8 +110,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('total_fee', $totalFee);
     }
-
-
     /**
      * @return mixed
      */
@@ -163,8 +117,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('refund_fee');
     }
-
-
     /**
      * @param mixed $refundFee
      */
@@ -172,8 +124,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('refund_fee', $refundFee);
     }
-
-
     /**
      * @return mixed
      */
@@ -181,8 +131,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('refund_fee_type');
     }
-
-
     /**
      * @param mixed $refundFeeType
      */
@@ -190,8 +138,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('refund_fee_type', $refundFeeType);
     }
-
-
     /**
      * @return mixed
      */
@@ -199,8 +145,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('cert_path');
     }
-
-
     /**
      * @param mixed $certPath
      */
@@ -208,8 +152,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('cert_path', $certPath);
     }
-
-
     /**
      * @return mixed
      */
@@ -217,8 +159,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('key_path');
     }
-
-
     /**
      * @param mixed $keyPath
      */
@@ -226,8 +166,6 @@ class RefundOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('key_path', $keyPath);
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -237,21 +175,12 @@ class RefundOrderRequest extends BaseAbstractRequest
      */
     public function sendData($data)
     {
-        $options = array (
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_SSLCERTTYPE    => 'PEM',
-            CURLOPT_SSLKEYTYPE     => 'PEM',
-            CURLOPT_SSLCERT        => $this->getCertPath(),
-            CURLOPT_SSLKEY         => $this->getKeyPath(),
-        );
-
-        $body         = Helper::array2xml($data);
-        $request      = $this->httpClient->post($this->endpoint, null, $data)->setBody($body);
+        $options = array(CURLOPT_SSL_VERIFYPEER => true, CURLOPT_SSL_VERIFYHOST => 2, CURLOPT_SSLCERTTYPE => 'PEM', CURLOPT_SSLKEYTYPE => 'PEM', CURLOPT_SSLCERT => $this->getCertPath(), CURLOPT_SSLKEY => $this->getKeyPath());
+        $body = Helper::array2xml($data);
+        $request = $this->httpClient->post($this->endpoint, null, $data)->setBody($body);
         $request->getCurlOptions()->overwriteWith($options);
-        $response     = $request->send()->getBody();
+        $response = $request->send()->getBody();
         $responseData = Helper::xml2array($response);
-
         return $this->response = new CloseOrderResponse($this, $responseData);
     }
 }

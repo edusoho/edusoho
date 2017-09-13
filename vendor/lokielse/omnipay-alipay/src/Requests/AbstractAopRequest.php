@@ -5,25 +5,15 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Common\Signer;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
-
 abstract class AbstractAopRequest extends AbstractRequest
 {
-
     protected $method;
-
     protected $privateKey;
-
     protected $encryptKey;
-
     protected $alipayPublicKey;
-
     protected $endpoint = 'https://openapi.alipay.com/gateway.do';
-
     protected $returnable = false;
-
     protected $notifiable = false;
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -33,45 +23,24 @@ abstract class AbstractAopRequest extends AbstractRequest
     public function getData()
     {
         $this->validateParams();
-
         $this->setDefaults();
-
         $this->convertToString();
-
         $data = $this->parameters->all();
-
         $data['method'] = $this->method;
-
         ksort($data);
-
         $data['sign'] = $this->sign($data, $this->getSignType());
-
         return $data;
     }
-
-
     public function validateParams()
     {
-        $this->validate(
-            'app_id',
-            'format',
-            'charset',
-            'sign_type',
-            'timestamp',
-            'version',
-            'biz_content'
-        );
+        $this->validate('app_id', 'format', 'charset', 'sign_type', 'timestamp', 'version', 'biz_content');
     }
-
-
     protected function setDefaults()
     {
-        if (! $this->getTimestamp()) {
+        if (!$this->getTimestamp()) {
             $this->setTimestamp(date('Y-m-d H:i:s'));
         }
     }
-
-
     /**
      * @return mixed
      */
@@ -79,8 +48,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('timestamp');
     }
-
-
     /**
      * @param $value
      *
@@ -90,8 +57,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('timestamp', $value);
     }
-
-
     protected function convertToString()
     {
         foreach ($this->parameters->all() as $key => $value) {
@@ -100,15 +65,11 @@ abstract class AbstractAopRequest extends AbstractRequest
             }
         }
     }
-
-
     protected function sign($params, $signType)
     {
         $signer = new Signer($params);
-        $signer->setIgnores(['sign']);
-
+        $signer->setIgnores(array('sign'));
         $signType = strtoupper($signType);
-
         if ($signType == 'RSA') {
             $sign = $signer->signWithRSA($this->getPrivateKey());
         } elseif ($signType == 'RSA2') {
@@ -116,11 +77,8 @@ abstract class AbstractAopRequest extends AbstractRequest
         } else {
             throw new InvalidRequestException('The signType is invalid');
         }
-
         return $sign;
     }
-
-
     /**
      * @return mixed
      */
@@ -128,8 +86,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->privateKey;
     }
-
-
     /**
      * @param $value
      *
@@ -138,11 +94,8 @@ abstract class AbstractAopRequest extends AbstractRequest
     public function setPrivateKey($value)
     {
         $this->privateKey = $value;
-
         return $this;
     }
-
-
     /**
      * @return mixed
      */
@@ -150,8 +103,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('sign_type');
     }
-
-
     /**
      * @return mixed
      */
@@ -159,8 +110,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->alipayPublicKey;
     }
-
-
     /**
      * @param $value
      *
@@ -169,26 +118,16 @@ abstract class AbstractAopRequest extends AbstractRequest
     public function setAlipayPublicKey($value)
     {
         $this->alipayPublicKey = $value;
-
         return $this;
     }
-
-
     public function sendData($data)
     {
-        $url  = $this->getRequestUrl($data);
+        $url = $this->getRequestUrl($data);
         $body = $this->getRequestBody();
-
-        $response = $this->httpClient->post($url)/**/
-        ->setBody($body, 'application/x-www-form-urlencoded')/**/
-        ->send()->getBody();
-
+        $response = $this->httpClient->post($url)->setBody($body, 'application/x-www-form-urlencoded')->send()->getBody();
         $response = $this->decode($response);
-
         return $response;
     }
-
-
     /**
      * @param $data
      *
@@ -197,16 +136,11 @@ abstract class AbstractAopRequest extends AbstractRequest
     protected function getRequestUrl($data)
     {
         $queryParams = $data;
-
         unset($queryParams['biz_content']);
         ksort($queryParams);
-
         $url = sprintf('%s?%s', $this->getEndpoint(), http_build_query($queryParams));
-
         return $url;
     }
-
-
     /**
      * @return mixed
      */
@@ -214,8 +148,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->endpoint;
     }
-
-
     /**
      * @param $value
      *
@@ -224,26 +156,17 @@ abstract class AbstractAopRequest extends AbstractRequest
     public function setEndpoint($value)
     {
         $this->endpoint = $value;
-
         return $this;
     }
-
-
     /**
      * @return string
      */
     protected function getRequestBody()
     {
-        $params = [
-            'biz_content' => $this->getBizContent()
-        ];
-
+        $params = array('biz_content' => $this->getBizContent());
         $body = http_build_query($params);
-
         return $body;
     }
-
-
     /**
      * @return mixed
      */
@@ -251,14 +174,10 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('biz_content');
     }
-
-
     protected function decode($data)
     {
         return json_decode($data, true);
     }
-
-
     /**
      * @param null $key
      * @param null $default
@@ -272,15 +191,12 @@ abstract class AbstractAopRequest extends AbstractRequest
         } else {
             $data = $this->getBizContent();
         }
-
         if (is_null($key)) {
             return $data;
         } else {
             return array_get($data, $key, $default);
         }
     }
-
-
     /**
      * @return mixed
      */
@@ -288,8 +204,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('app_id');
     }
-
-
     /**
      * @param $value
      *
@@ -299,8 +213,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('app_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -308,8 +220,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('format');
     }
-
-
     /**
      * @param $value
      *
@@ -319,8 +229,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('format', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -328,8 +236,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('charset');
     }
-
-
     /**
      * @param $value
      *
@@ -339,8 +245,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('charset', $value);
     }
-
-
     /**
      * @param $value
      *
@@ -350,8 +254,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('sign_type', $value);
     }
-
-
     /**
      * @param $value
      *
@@ -361,8 +263,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('biz_content', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -370,8 +270,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('alipay_sdk');
     }
-
-
     /**
      * @param $value
      *
@@ -381,8 +279,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('alipay_sdk', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -390,8 +286,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *
@@ -401,8 +295,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('notify_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -410,8 +302,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('return_url');
     }
-
-
     /**
      * @param $value
      *
@@ -421,8 +311,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('return_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -430,8 +318,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->encryptKey;
     }
-
-
     /**
      * @param $value
      *
@@ -440,11 +326,8 @@ abstract class AbstractAopRequest extends AbstractRequest
     public function setEncryptKey($value)
     {
         $this->encryptKey = $value;
-
         return $this;
     }
-
-
     /**
      * @return mixed
      */
@@ -452,8 +335,6 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->getParameter('version');
     }
-
-
     /**
      * @param $value
      *
@@ -463,86 +344,61 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         return $this->setParameter('version', $value);
     }
-
-
     public function validateBizContent()
     {
         $data = $this->getBizContent();
-
         if (is_string($data)) {
             $data = json_decode($data, true);
         }
-
         foreach (func_get_args() as $key) {
-            if (! array_has($data, $key)) {
-                throw new InvalidRequestException("The biz_content $key parameter is required");
+            if (!array_has($data, $key)) {
+                throw new InvalidRequestException("The biz_content {$key} parameter is required");
             }
         }
     }
-
-
     public function validateBizContentOne()
     {
         $data = $this->getBizContent();
-
         if (is_string($data)) {
             $data = json_decode($data, true);
         }
-
         $keys = func_get_args();
-
         $allEmpty = true;
-
         foreach ($keys as $key) {
             if (array_has($data, $key)) {
                 $allEmpty = false;
                 break;
             }
         }
-
         if ($allEmpty) {
-            throw new InvalidRequestException(
-                sprintf('The biz_content (%s) parameter must provide one at least', implode(',', $keys))
-            );
+            throw new InvalidRequestException(sprintf('The biz_content (%s) parameter must provide one at least', implode(',', $keys)));
         }
     }
-
-
     protected function filter($data)
     {
-        if (! $this->returnable) {
+        if (!$this->returnable) {
             unset($data['return_url']);
         }
-
-        if (! $this->notifiable) {
+        if (!$this->notifiable) {
             unset($data['notify_url']);
         }
     }
-
-
     protected function validateOne()
     {
         $keys = func_get_args();
-
         if ($keys && is_array($keys[0])) {
             $keys = $keys[0];
         }
-
         $allEmpty = true;
-
         foreach ($keys as $key) {
             $value = $this->parameters->get($key);
-
-            if (! empty($value)) {
+            if (!empty($value)) {
                 $allEmpty = false;
                 break;
             }
         }
-
         if ($allEmpty) {
-            throw new InvalidRequestException(
-                sprintf('The parameters (%s) must provide one at least', implode(',', $keys))
-            );
+            throw new InvalidRequestException(sprintf('The parameters (%s) must provide one at least', implode(',', $keys)));
         }
     }
 }
