@@ -15,7 +15,6 @@ class BizUserCashflowAddTitle extends Migration
         if (!$this->isFieldExist('biz_user_cashflow', 'title')) {
             $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称'");
         }
-
     }
 
     /**
