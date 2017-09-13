@@ -5,9 +5,36 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Echats\EchartsBuilder;
+use AppBundle\Common\Paginator;
 
 class AccountController extends BaseController
 {
+    public function myAccountAction(Request $request)
+    {
+        $account = $this->getAccountService()->getUserBalanceByUserId(0);
+
+        $conditions = array('user_id' => 0);
+        $cashflowCount = $this->getAccountService()->countUserCashflows($conditions);
+
+        $paginator = new Paginator(
+            $request,
+            $cashflowCount,
+            20
+        );
+
+        $userCashflows = $this->getAccountService()->searchUserCashflows(
+            $conditions, 
+            array(), 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('admin/my-account/index.html.twig', array(
+            'account' => $account,
+            'userCashflows' => $userCashflows
+        ));
+    }
+
     public function IndexAction(Request $request)
     {
         $weekAndMonthDate = array(
@@ -194,5 +221,10 @@ class AccountController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 }
