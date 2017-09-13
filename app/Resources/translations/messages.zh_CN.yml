@@ -131,6 +131,14 @@ site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%�
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
 site.btn.detail: 详情
+site.setting.finished: 已设置
+site.setting.unfinished: 未设置
+site.verify.finished: 已验证
+site.verify.unfinished: 未验证
+site.bind.finished: 已绑定
+site.bind.unfinished: 未绑定
+site.setting.email_finished: 已设置邮箱
+site.bind.mobile_finished: 已绑定手机
 
 # email 模板
 email.password_reset: >
@@ -261,6 +269,8 @@ user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
 user.fields.idcard_label: 身份证号
+user.fields.idcard_front_title: 上传身份证正面照
+user.fields.idcard_back_title: 上传身份证反面照
 user.fields.mobile_label: 手机号码
 user.fields.mobile_label.bind: 已绑定
 user.fields.mobile_label.no_bind: 未绑定
@@ -307,6 +317,7 @@ form.btn.create: 创建
 form.btn.back_to_homepage: 返回首页
 form.btn.register: 注册
 form.btn.verify: 验证
+form.btn.verifying: 正在验证中
 form.btn.select: 选择
 form.btn.modify: 修改
 form.btn.finish: 完成
@@ -318,6 +329,7 @@ form.btn.save_and_continue_add: 保存并继续添加
 form.btn.reset: 重置
 form.btn.view: 查看
 form.btn.bind: 绑定
+form.btn.bind_account: 绑定帐号
 form.btn.search: 搜索
 form.btn.use: 使用
 form.btn.reply: 发表
@@ -2761,6 +2773,7 @@ user.settings: 个人设置
 user.settings.basic.page_title: 基础信息
 user.settings.menu_heading: 个人设置
 user.settings.basic_info_menu: 基础信息
+user.settings.personal_info_menu: 个人信息
 user.settings.avatar_menu: 头像设置
 user.settings.verification_menu: 实名认证
 user.settings.security_menu: 安全设置
@@ -2774,6 +2787,9 @@ user.settings.avatar: >
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
 user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机。
+user.settings.profile.change_avatar: 修改头像
+user.settings.profile.choose_again: 重新选择
+user.settings.profile.save_avatar: 保存头像
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -2784,7 +2800,7 @@ user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址�
 user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
-user.settings.security.get_sms_code_btn: 短信验证
+user.settings.security.get_sms_code_btn: 获取验证码
 user.settings.security.input_sms_code: 填写你的短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
@@ -2794,26 +2810,32 @@ user.settings.security.content_title: 安全设置
 user.settings.security.reset_pay_password: 重设支付密码
 user.settings.security.reset_pay_password_success: 重设支付密码成功
 user.settings.security.set_pay_password_success: 新支付密码设置成功。
+user.settings.security.set_pay_password_success.closed_automatically: 3 秒后该页面自动关闭
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
-user.settings.security.high_level: 安全等级：高
-user.settings.security.middle_level: 安全等级：中
-user.settings.security.low_level: 安全等级：低
-user.settings.security.login_password_tips: 登录网校时需要输入的密码
-user.settings.security.pay_password_tips: 在网校进行消费行为时需要输入的密码
+user.settings.security.level: 安全等级
+user.settings.security.high_level: 高
+user.settings.security.middle_level: 中
+user.settings.security.low_level: 低
+user.settings.security.login_password_tips: 经常更改密码有助于保护您的帐号安全
+user.settings.security.pay_password_tips: 用于支付时的二次密码校验，加强账户安全性
 user.settings.security.questions: 安全问题
-user.settings.security.questions_tips: 通过设置并且验证安全问题，保护帐号密码安全
+user.settings.security.questions_tips: 设置安全问题，保护帐号密码安全，也可用于找回支付密码
 user.settings.security.mobile_bind: 手机绑定
-user.settings.security.mobile_bind_tips: 增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。
+user.settings.security.mobile_bind_tips: 增加登录、支付时的安全性，同时还可用于找回登录密码和支付密码
+user.settings.security.email_setting_tips: 可用于找回登录密码
 user.settings.security.password_modify: 密码修改
 user.settings.security.password_modify.content_title: 安全设置
 user.settings.security.password_modify.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">登录密码修改</li>
 user.settings.security.password_modify.current_password: 当前密码
+user.settings.security.password_modify.current_password_placeholder: 请输入当前密码
 user.settings.security.password_modify.new_password: 新密码
+user.settings.security.password_modify.new_password_placeholder: 请输入新密码
 user.settings.security.password_modify.confirm_password: 确认密码
+user.settings.security.password_modify.confirm_password_placeholder: 请再次输入新密码
 user.settings.security.password_modify.input_password_tips: 请再输入一次密码
 user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
 user.settings.security.password_modify.success: 当前密码不正确，请重试！
@@ -2821,7 +2843,7 @@ user.settings.security.password_modify.success: 当前密码不正确，请重�
 user.settings.security.no_password_tips: >
   <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
   <p>为了帐号的安全，请通过邮箱找回密码的方式，重设密码！</p>
-  <p><a href="%passwordResetUrl%" class='btn btn-primary'>现在就去重设密码</a></p>
+  <p><a href="%passwordResetUrl%" class='btn cd-btn cd-btn-primary'>现在就去重设密码</a></p>
 user.settings.security.password_reset: 重设密码
 user.settings.security.password_reset.content_title: 重设密码
 user.settings.security.password_reset.email: 邮箱地址
@@ -2845,11 +2867,13 @@ user.settings.security.pay_password_set.bread_crumbs: >
   <li class="active">设置支付密码</li>
 user.settings.security.pay_password_set.input_login_password: 请输入用户登录密码
 user.settings.security.pay_password_set.new_pay_password: 新支付密码
+user.settings.security.pay_password_set.new_pay_password_placeholder: 请输入新支付密码
 user.settings.security.pay_password_set.user_login_password: 用户登录密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
+user.settings.security.pay_password_set.old_pay_password_placeholder: 请输入旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
-user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
@@ -2858,11 +2882,19 @@ user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">找回支付密码</li>
+user.settings.security.pay_password_find.way: 选择找回方式
+user.settings.security.pay_password.validate_info: 验证信息
 user.settings.security.pay_password_find.by_question: 通过安全问题找回
 user.settings.security.pay_password_find.by_question.answer: 安全问题答案
+user.settings.security.pay_password_find.by_mobile.unbound: 未绑定手机？
+user.settings.security.pay_password_find.by_mobile.immediately_bind: 立即绑定
 user.settings.security.pay_password_find.by_mobile: 通过手机找回
+user.settings.security.pay_password_find.by_mobile_current: 当前手机
+user.settings.security.pay_password_find.by_mobile_phone: 通过手机号码找回
 user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
+user.settings.security.pay_password_find.current_empty: 未设置安全问题？
 user.settings.security.pay_password_find.empty: 您还没有安全问题，请先设置
+user.settings.security.pay_password_find.start_set: 立即设置
 user.settings.security.pay_password_find.wrong_answer: 回答错误
 user.settings.security.pay_password_find.correct_answer: 回答正确，你可以开始更新支付密码。
 user.settings.security.pay_password_find.unbind_mobile: 您还没有绑定手机，请先绑定。
@@ -2906,10 +2938,12 @@ user.settings.basic_info.occupation: 职业
 user.settings.basic_info.rank: 头衔
 user.settings.basic_info.personal_signature: 个人签名
 user.settings.basic_info.personal_space: 个人空间
+user.settings.basic_info.public: 微博、微信、QQ信息将会展示在您的个人主页
 user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
 user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
 user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+user.settings.basic_info.shange_avatar: 修改头像
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
@@ -2919,10 +2953,17 @@ user.settings.verification.photo_require: 照片要求
 user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png、bmp，每张图片文件大小不能超过2M
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
-user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
-user.settings.verification.approved_tips: 恭喜您，已通过实名认证！
-user.settings.verification.unapprove_tips: 您尚未实名认证
-user.settings.verification.approve_failed_tips: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
+
+user.settings.verification.approving_title_tips: 审核中
+user.settings.verification.approving_content_tips: 申请已提交，请耐心等待审核结果
+user.settings.verification.approved_title_tips: 已实名认证
+user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
+
+user.settings.verification.unapprove_tips: 为保护您的帐号安全、获得更好的服务，请尽快完成实名认证。
+user.settings.verification.approve_failed_tips: 审核未通过，请重新上传身份证图片并保证画面清晰。
+user.settings.verification.approve_failed_reason_tips: 审核未通过，原因是：%reason%。请修改信息后重新认证。
+user.settings.verification.notice: 认证须知
+user.settings.verification.notice_content: "<p>1、请确保身份证照片清晰可认，严禁PS，否则将由您本人承担相应的法律后果。<br> 2、实名认证成功后，将无法修改和删除实名信息，请谨慎填写。<br> 3、我们将尽快审核您提交的信息，处理完成后您将会收到系统通知。</p>"
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
@@ -2937,7 +2978,7 @@ user.settings.avatar.upload_hint: >
 user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
-user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.crop_hint: 选择裁切区域
 user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
 # 个人设置模块-邮箱设置
@@ -2946,6 +2987,10 @@ user.settings.email.content_title: 邮箱设置
 user.settings.email.no_change_email_tips: 管理员尚未设置邮件服务器，不能更改邮箱地址。
 user.settings.email.current_email: 当前登录邮箱
 user.settings.email.verified: 已验证
+user.settings.email.verifiy: 邮箱验证
+user.settings.email.verifiy_send: 验证邮件已发送
+user.settings.email.not_verifiy: 暂不验证
+user.settings.email.goto_verifiy: 前往验证
 user.settings.email.unverified_tips: 邮箱地址尚未验证，
 user.settings.email.verify_btn: 去验证
 user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
@@ -2954,7 +2999,7 @@ user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校�
 user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样。
 user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
-user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+user.settings.email.send_success: 请登录邮箱%email%<br>并点击验证链接以完成验证
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
@@ -3024,7 +3069,7 @@ user.orders.order_id: 订单号：%sn%
 user.orders.target_course: 所属课程
 user.orders.target_course_deleted: 该课程已被删除
 user.orders.cancel_refund: 取消退款
-user.orders.pay: 去支付
+user.orders.pay: 支付订单
 user.orders.cancel_order: 取消订单
 user.orders.detail.modal_title: 订单详情
 user.orders.detail.special_operations: 特殊操作
@@ -4064,6 +4109,8 @@ my.learning.course.learning_empty: 暂无学习中的课程
 my.learning.course.lesson_num: 第%num%课时
 my.learning.course.total_learn_time: 学习总时长
 my.learning.course.watch: 查看课程
+my.learning.course.click_loading_more: 点击加载更多
+my.learning.course.loading: 加载中...
 
 # 我的直播
 my.learning.live: 我的直播
@@ -8044,3 +8091,5 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 
 coupon.had_been_used: 优惠码已经被使用了
+
+cashflow.title: 名称

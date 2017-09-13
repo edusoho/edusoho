@@ -155,6 +155,7 @@ export default class Video {
       placeMediaAttr(file);
 
       $('[name="ext[mediaSource]"]').val(file.source);
+      $("#step2-form").valid();
       if (file.source == 'self') {
         $("#ext_mediaId").val(file.id);
         $("#ext_mediaUri").val('');

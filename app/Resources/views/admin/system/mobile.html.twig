@@ -93,7 +93,7 @@
               {% endif %}
           </div>
 
-          <button class="btn btn-default btn-sm" id="{{ moobileId }}-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:banner}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'admin.mobile_manage.upload_btn'|trans}}</button>
+          <a class="btn btn-default btn-sm" id="{{ moobileId }}-upload" data-url="{{ path('admin_operation_mobile_picture_upload', {type:banner}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'admin.mobile_manage.upload_btn'|trans}}</a>
           <button class="btn btn-default btn-sm" id="{{ moobileId }}-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:banner}) }}" {% if not mobile[banner] %}style="display:none;"{% endif %}>{{'admin.mobile_manage.delete_btn'|trans}}</button>
 
           <p class="help-block">{{'admin.mobile_manage.img_tips'|trans}}</p>

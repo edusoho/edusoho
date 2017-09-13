@@ -29,4 +29,11 @@ interface AccountService
     public function releaseCoin($userId, $coinAmount);
 
     public function decreaseLockedCoin($userId, $amount);
+
+    public function countUserCashflows($conditions);
+
+    public function searchUserCashflows($conditions, $orderBy, $start, $limit);
+
+    public function sumColumnByConditions($column, $conditions);
+
 }

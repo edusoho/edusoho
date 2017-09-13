@@ -883,6 +883,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $member['remark'] = $fields['remark'];
             } else {
                 $member['role'] = array('student');
+                $member['deadline'] = $deadline;
             }
 
             $member = $this->getClassroomMemberDao()->update($member['id'], $member);
