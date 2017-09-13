@@ -34,6 +34,7 @@ class AlipayController extends BaseController
     public function returnAction(Request $request)
     {
         $data = $request->query->all();
+        $data['platform_type'] = 'Web';
         $this->getPayService()->notifyPaid('alipay', $data);
 
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), true));
@@ -42,7 +43,8 @@ class AlipayController extends BaseController
     public function returnForAppAction(Request $request)
     {
         $data = $request->query->all();
-        $this->getPayService()->notifyPaid('alipay.in_time', $data);
+        $data['platform_type'] = 'Wap';
+        $this->getPayService()->notifyPaid('alipay', $data);
 
         return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?1';</script>");
     }
