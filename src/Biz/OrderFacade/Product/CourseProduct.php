@@ -9,7 +9,7 @@ use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class CourseProduct extends Product implements Owner, Refund, OrderStatusCallback
+class CourseProduct extends Product implements Owner, OrderStatusCallback
 {
     const TYPE = 'course';
 

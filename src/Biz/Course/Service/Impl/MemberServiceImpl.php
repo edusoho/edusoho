@@ -736,7 +736,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $deadline;
     }
 
-    public function removeStudent($courseId, $userId, $info)
+    public function removeStudent($courseId, $userId, $info = array())
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
