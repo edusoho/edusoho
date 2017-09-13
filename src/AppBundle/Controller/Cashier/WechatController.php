@@ -16,6 +16,7 @@ class WechatController extends BaseController
     {
         if ($this->getWebExtension()->isMicroMessenger()) {
             $this->get('session')->set('trade_info', $trade);
+
             return $this->redirect($this->generateUrl('cashier_wechat_h5_pay'));
         } else {
             return $this->forward('AppBundle:Cashier/Wechat:qrcode', array('trade' => $trade));
