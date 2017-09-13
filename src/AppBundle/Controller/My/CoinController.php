@@ -69,7 +69,7 @@ class CoinController extends BaseController
         );
 
         $conditions['type'] = 'inflow';
-        $amountInflow = $this->getAccountService()->sumColumnByConditions('amount' ,$conditions);
+        $amountInflow = $this->getAccountService()->sumColumnByConditions('amount', $conditions);
         $amountInflow = MathToolkit::multiply($amountInflow, array('amount'), 0.01);
 
         $conditions['type'] = 'outflow';
