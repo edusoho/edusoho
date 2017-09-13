@@ -24,3 +24,24 @@ $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), ar
 $biz->boot();
 
 return $biz;
+
+/**
+ * @param $arguments
+ * @return mixed|string
+ */
+function getAppEvn($arguments)
+{
+    //check if set variable environment
+    $variables = array_filter($arguments, function ($arg) {
+        return strpos($arg, '-e=') === 0 || strpos($arg, '--env=') === 0;
+    });
+
+    if (empty($variables)) {
+        return $env = 'dev';
+    }
+    //get first environment
+    $env = array_shift($variables);
+    // get environment value
+    $variables = explode("=", $env);
+    return $env = array_pop($variables);
+}
