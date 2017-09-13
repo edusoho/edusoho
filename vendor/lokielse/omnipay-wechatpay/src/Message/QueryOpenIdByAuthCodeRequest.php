@@ -5,7 +5,6 @@ namespace Omnipay\WechatPay\Message;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\WechatPay\Helper;
-
 /**
  * Class QueryOpenIdByAuthCodeRequest
  * @package Omnipay\WechatPay\Message
@@ -14,10 +13,7 @@ use Omnipay\WechatPay\Helper;
  */
 class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
 {
-
     protected $endpoint = 'https://api.mch.weixin.qq.com/tools/authcodetoopenid';
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -26,24 +22,12 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
      */
     public function getData()
     {
-
         $this->validate('app_id', 'mch_id', 'auth_code');
-
-        $data = array (
-            'appid'     => $this->getAppId(),
-            'mch_id'    => $this->getMchId(),
-            'auth_code' => $this->getAuthCode(),
-            'nonce_str' => md5(uniqid()),
-        );
-
+        $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'auth_code' => $this->getAuthCode(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-
         $data['sign'] = Helper::sign($data, $this->getApiKey());
-
         return $data;
     }
-
-
     /**
      * @return mixed
      */
@@ -51,8 +35,6 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
     {
         return $this->getParameter('auth_code');
     }
-
-
     /**
      * @param mixed $authCode
      */
@@ -60,8 +42,6 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
     {
         $this->setParameter('auth_code', $authCode);
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -71,10 +51,9 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
      */
     public function sendData($data)
     {
-        $request      = $this->httpClient->post($this->endpoint)->setBody(Helper::array2xml($data));
-        $response     = $request->send()->getBody();
+        $request = $this->httpClient->post($this->endpoint)->setBody(Helper::array2xml($data));
+        $response = $request->send()->getBody();
         $responseData = Helper::xml2array($response);
-
         return $this->response = new CloseOrderResponse($this, $responseData);
     }
 }

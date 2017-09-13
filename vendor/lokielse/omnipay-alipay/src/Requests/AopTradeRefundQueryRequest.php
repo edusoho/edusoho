@@ -5,7 +5,6 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Responses\AopTradeRefundQueryResponse;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
-
 /**
  * Class AopTradeRefundQueryRequest
  * @package Omnipay\Alipay\Requests
@@ -13,10 +12,7 @@ use Omnipay\Common\Message\ResponseInterface;
  */
 class AopTradeRefundQueryRequest extends AbstractAopRequest
 {
-
     protected $method = 'alipay.trade.fastpay.refund.query';
-
-
     /**
      * Send the request with specified data
      *
@@ -28,24 +24,14 @@ class AopTradeRefundQueryRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-
         return $this->response = new AopTradeRefundQueryResponse($this, $data);
     }
-
-
     public function validateParams()
     {
         parent::validateParams();
-
         $this->validateBizContent('out_request_no');
-
-        $this->validateBizContentOne(
-            'trade_no',
-            'out_trade_no'
-        );
+        $this->validateBizContentOne('trade_no', 'out_trade_no');
     }
-
-
     /**
      * @return mixed
      */
@@ -53,8 +39,6 @@ class AopTradeRefundQueryRequest extends AbstractAopRequest
     {
         return $this->getParameter('out_trade_no');
     }
-
-
     /**
      * @param $value
      *
@@ -64,8 +48,6 @@ class AopTradeRefundQueryRequest extends AbstractAopRequest
     {
         return $this->setParameter('out_trade_no', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -73,8 +55,6 @@ class AopTradeRefundQueryRequest extends AbstractAopRequest
     {
         return $this->getParameter('trade_no');
     }
-
-
     /**
      * @param $value
      *

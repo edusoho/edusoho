@@ -4,7 +4,6 @@ namespace Omnipay\Alipay\Requests;
 
 use Omnipay\Alipay\Responses\AopTradeAppPayResponse;
 use Omnipay\Common\Message\ResponseInterface;
-
 /**
  * Class AopTradeAppPayRequest
  * @package Omnipay\Alipay\Requests
@@ -12,10 +11,7 @@ use Omnipay\Common\Message\ResponseInterface;
  */
 class AopTradeAppPayRequest extends AbstractAopRequest
 {
-
     protected $method = 'alipay.trade.app.pay';
-
-
     /**
      * Send the request with specified data
      *
@@ -26,11 +22,8 @@ class AopTradeAppPayRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data['order_string'] = http_build_query($data);
-
         return $this->response = new AopTradeAppPayResponse($this, $data);
     }
-
-
     /**
      * @return mixed
      */
@@ -38,8 +31,6 @@ class AopTradeAppPayRequest extends AbstractAopRequest
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *

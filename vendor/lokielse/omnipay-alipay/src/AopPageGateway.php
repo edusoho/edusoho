@@ -3,7 +3,6 @@
 namespace Omnipay\Alipay;
 
 use Omnipay\Alipay\Requests\AopTradePagePayRequest;
-
 /**
  * Class AopPageGateway
  * @package Omnipay\Alipay
@@ -11,7 +10,6 @@ use Omnipay\Alipay\Requests\AopTradePagePayRequest;
  */
 class AopPageGateway extends AbstractAopGateway
 {
-
     /**
      * Get gateway display name
      *
@@ -21,8 +19,6 @@ class AopPageGateway extends AbstractAopGateway
     {
         return 'Alipay Page Gateway';
     }
-
-
     /**
      * @return mixed
      */
@@ -30,8 +26,6 @@ class AopPageGateway extends AbstractAopGateway
     {
         return $this->getParameter('return_url');
     }
-
-
     /**
      * @param $value
      *
@@ -41,14 +35,12 @@ class AopPageGateway extends AbstractAopGateway
     {
         return $this->setParameter('return_url', $value);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function purchase(array $parameters = [])
+    public function purchase(array $parameters = array())
     {
         return $this->createRequest(AopTradePagePayRequest::class, $parameters);
     }

@@ -9,5 +9,4 @@ namespace Omnipay\WechatPay\Message;
  */
 class QueryOrderResponse extends BaseAbstractResponse
 {
-
 }

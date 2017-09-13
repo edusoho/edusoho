@@ -7,21 +7,12 @@ use Omnipay\Alipay\Requests\LegacyCompleteRefundRequest;
 use Omnipay\Alipay\Requests\LegacyQueryRequest;
 use Omnipay\Alipay\Requests\LegacyRefundRequest;
 use Omnipay\Common\AbstractGateway;
-
 abstract class AbstractLegacyGateway extends AbstractGateway
 {
-
     public function getDefaultParameters()
     {
-        return [
-            'inputCharset' => 'UTF-8',
-            'signType'     => 'MD5',
-            'paymentType'  => '1',
-            'alipaySdk'    => 'lokielse/omnipay-alipay',
-        ];
+        return array('inputCharset' => 'UTF-8', 'signType' => 'MD5', 'paymentType' => '1', 'alipaySdk' => 'lokielse/omnipay-alipay');
     }
-
-
     /**
      * @return mixed
      */
@@ -29,8 +20,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('partner');
     }
-
-
     /**
      * @param $value
      *
@@ -40,8 +29,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('partner', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -49,8 +36,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('sign_type');
     }
-
-
     /**
      * @param $value
      *
@@ -60,8 +45,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('sign_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -69,8 +52,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('payment_type');
     }
-
-
     /**
      * @param $value
      *
@@ -80,8 +61,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('payment_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -89,8 +68,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('key');
     }
-
-
     /**
      * @param $value
      *
@@ -100,8 +77,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -109,8 +84,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('private_key');
     }
-
-
     /**
      * @param $value
      *
@@ -120,8 +93,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('private_key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -129,8 +100,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('alipay_public_key');
     }
-
-
     /**
      * @param $value
      *
@@ -140,8 +109,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('alipay_public_key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -149,8 +116,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('seller_id');
     }
-
-
     /**
      * @param $value
      *
@@ -160,8 +125,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('seller_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -169,8 +132,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('seller_email');
     }
-
-
     /**
      * @param $value
      *
@@ -180,8 +141,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('seller_email', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -189,8 +148,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('seller_account_name');
     }
-
-
     /**
      * @param $value
      *
@@ -200,8 +157,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('seller_account_name', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -209,8 +164,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *
@@ -220,8 +173,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('notify_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -229,8 +180,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('return_url');
     }
-
-
     /**
      * @param $value
      *
@@ -240,8 +189,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('return_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -249,8 +196,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('_input_charset');
     }
-
-
     /**
      * @param $value
      *
@@ -260,8 +205,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('_input_charset', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -269,8 +212,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('it_b_pay');
     }
-
-
     /**
      * @param $value
      *
@@ -280,8 +221,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('it_b_pay', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -289,8 +228,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->getParameter('alipay_sdk');
     }
-
-
     /**
      * @param $value
      *
@@ -300,47 +237,39 @@ abstract class AbstractLegacyGateway extends AbstractGateway
     {
         return $this->setParameter('alipay_sdk', $value);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return LegacyCompletePurchaseRequest
      */
-    public function completePurchase(array $parameters = [])
+    public function completePurchase(array $parameters = array())
     {
         return $this->createRequest(LegacyCompletePurchaseRequest::class, $parameters);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return LegacyRefundRequest
      */
-    public function refund(array $parameters = [])
+    public function refund(array $parameters = array())
     {
         return $this->createRequest(LegacyRefundRequest::class, $parameters);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return LegacyRefundRequest
      */
-    public function completeRefund(array $parameters = [])
+    public function completeRefund(array $parameters = array())
     {
         return $this->createRequest(LegacyCompleteRefundRequest::class, $parameters);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return LegacyQueryRequest
      */
-    public function query(array $parameters = [])
+    public function query(array $parameters = array())
     {
         return $this->createRequest(LegacyQueryRequest::class, $parameters);
     }

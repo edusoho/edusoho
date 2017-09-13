@@ -5,7 +5,6 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Common\Signer;
 use Omnipay\Alipay\Responses\LegacyAppPurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
-
 /**
  * Class LegacyAppPurchaseRequest
  * @package Omnipay\Alipay\Requests
@@ -13,12 +12,8 @@ use Omnipay\Common\Message\ResponseInterface;
  */
 class LegacyAppPurchaseRequest extends AbstractLegacyRequest
 {
-
     protected $service = 'mobile.securitypay.pay';
-
     protected $privateKey;
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -28,55 +23,26 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     public function getData()
     {
         $this->validateParams();
-
         $params = $this->getParamsToSign();
-
         $signer = new Signer($params);
-        $sign   = $signer->signWithRSA($this->privateKey);
-
-        $resp['order_string'] = sprintf(
-            '%s&sign="%s"&sign_type="RSA"',
-            $signer->getContentToSign(),
-            urlencode($sign)
-        );
-
+        $sign = $signer->signWithRSA($this->privateKey);
+        $resp['order_string'] = sprintf('%s&sign="%s"&sign_type="RSA"', $signer->getContentToSign(), urlencode($sign));
         return $resp;
     }
-
-
     protected function validateParams()
     {
-        $this->validate(
-            'partner',
-            '_input_charset',
-            'sign_type',
-            'notify_url',
-            'out_trade_no',
-            'subject',
-            'total_fee',
-            'payment_type'
-        );
+        $this->validate('partner', '_input_charset', 'sign_type', 'notify_url', 'out_trade_no', 'subject', 'total_fee', 'payment_type');
     }
-
-
     private function getParamsToSign()
     {
-        $params            = $this->parameters->all();
+        $params = $this->parameters->all();
         $params['service'] = $this->service;
-
         $params = array_filter($params, 'strlen');
-
-        $params = array_map(
-            function ($v) {
-                return sprintf('"%s"', $v);
-            },
-            $params
-        );
-
+        $params = array_map(function ($v) {
+            return sprintf('"%s"', $v);
+        }, $params);
         return $params;
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -88,8 +54,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->response = new LegacyAppPurchaseResponse($this, $data);
     }
-
-
     /**
      * @return mixed
      */
@@ -97,8 +61,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('partner');
     }
-
-
     /**
      * @param $value
      *
@@ -108,8 +70,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('partner', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -117,8 +77,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('_input_charset');
     }
-
-
     /**
      * @param $value
      *
@@ -128,8 +86,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('_input_charset', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -137,8 +93,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('sign_type');
     }
-
-
     /**
      * @param $value
      *
@@ -148,8 +102,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('sign_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -157,8 +109,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *
@@ -168,8 +118,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('notify_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -177,8 +125,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('app_id');
     }
-
-
     /**
      * @param $value
      *
@@ -188,8 +134,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('app_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -197,8 +141,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('appenv');
     }
-
-
     /**
      * @param $value
      *
@@ -208,8 +150,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('appenv', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -217,8 +157,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('out_trade_no');
     }
-
-
     /**
      * @param $value
      *
@@ -228,8 +166,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('out_trade_no', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -237,8 +173,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('subject');
     }
-
-
     /**
      * @param $value
      *
@@ -248,8 +182,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('subject', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -257,8 +189,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('payment_type');
     }
-
-
     /**
      * @param $value
      *
@@ -268,8 +198,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('payment_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -277,8 +205,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('seller_id');
     }
-
-
     /**
      * @param $value
      *
@@ -288,8 +214,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('seller_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -297,8 +221,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('total_fee');
     }
-
-
     /**
      * @param $value
      *
@@ -308,8 +230,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('total_fee', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -317,8 +237,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('body');
     }
-
-
     /**
      * @param $value
      *
@@ -328,8 +246,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('body', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -337,8 +253,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('goods_type');
     }
-
-
     /**
      * @param $value
      *
@@ -348,8 +262,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('goods_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -357,8 +269,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('hb_fq_param');
     }
-
-
     /**
      * @param $value
      *
@@ -368,8 +278,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('hb_fq_param', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -377,8 +285,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('rn_check');
     }
-
-
     /**
      * @param $value
      *
@@ -388,8 +294,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('rn_check', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -397,8 +301,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('it_b_pay');
     }
-
-
     /**
      * @param $value
      *
@@ -408,8 +310,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('it_b_pay', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -417,8 +317,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('extern_token');
     }
-
-
     /**
      * @param $value
      *
@@ -428,8 +326,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('extern_token', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -437,8 +333,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('promo_params');
     }
-
-
     /**
      * @param $value
      *
@@ -448,8 +342,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('promo_params', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -457,8 +349,6 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->privateKey;
     }
-
-
     /**
      * @param $value
      *

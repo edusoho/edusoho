@@ -5,7 +5,6 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Responses\AopTradeQueryResponse;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
-
 /**
  * Class AopTradeQueryRequest
  * @package Omnipay\Alipay\Requests
@@ -13,10 +12,7 @@ use Omnipay\Common\Message\ResponseInterface;
  */
 class AopTradeQueryRequest extends AbstractAopRequest
 {
-
     protected $method = 'alipay.trade.query';
-
-
     /**
      * Send the request with specified data
      *
@@ -28,18 +24,11 @@ class AopTradeQueryRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-
         return $this->response = new AopTradeQueryResponse($this, $data);
     }
-
-
     public function validateParams()
     {
         parent::validateParams();
-
-        $this->validateBizContentOne(
-            'trade_no',
-            'out_trade_no'
-        );
+        $this->validateBizContentOne('trade_no', 'out_trade_no');
     }
 }
