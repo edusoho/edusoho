@@ -10,24 +10,28 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
     public function countUsersByConditions($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return parent::countUsersByConditions($conditions);
     }
 
     public function searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return parent::searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit);
     }
 
     public function countUserCashflows($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return parent::countUserCashflows($conditions);
     }
 
     public function searchUserCashflows($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return parent::searchUserCashflows($conditions, $orderBy, $start, $limit);
     }
 
@@ -61,7 +65,5 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         }
 
         return $conditions;
-
     }
-
 }

@@ -378,7 +378,6 @@ class CoinController extends BaseController
             20
         );
 
-
         $sort = $condition['orderBY'];
 
         unset($condition['orderBY']);
@@ -617,7 +616,7 @@ class CoinController extends BaseController
         $amountInflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
 
         $conditions['type'] = 'outflow';
-        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount' ,$conditions);
+        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
 
         return $this->render('admin/coin/cash-bill.html.twig', array(
             'cashes' => $cashes,
@@ -728,7 +727,6 @@ class CoinController extends BaseController
             }
             unset($condition['searchType']);
             unset($condition['keyword']);
-
         }
 
         if (isset($condition['sort'])) {
