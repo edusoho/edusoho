@@ -2,6 +2,8 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\ResourceKernel;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
@@ -429,6 +431,72 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         return $fields;
+    }
+
+    public function createOrder2()
+    {
+        $targetType = $this->getParam('targetType');
+        $targetId = $this->getParam('targetId');
+
+        $user = $this->controller->getUserByToken($this->request);
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '用户未登录，购买失败！');
+        }
+
+        /** @var $newApiResourceKernel ResourceKernel */
+        $newApiResourceKernel = $this->controller->get('api_resource_kernel');
+
+        $coinAmount = $this->getUseCoinAmount();
+        $apiRequest = new ApiRequest(
+            '/api/orders',
+            'POST',
+            array(),
+            array(
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+                'unencryptedPayPassword' => $this->getParam('payPassword'),
+                'couponCode' => $this->getParam('couponCode', ''),
+                'unit' => $this->getParam('unitType', ''),
+                'num' => $this->getParam('duration', 1),
+                'coinAmount' => $coinAmount
+            ),
+            array()
+        );
+
+        $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
+
+        return $result;
+    }
+
+    private function getUseCoinAmount()
+    {
+        $payment = $this->getParam('payment', 'alipay');
+        $priceType = 'RMB';
+        $coinSetting = $this->controller->setting('coin');
+        $coinEnabled = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'];
+
+        if ($coinEnabled && isset($coinSetting['price_type'])) {
+            $priceType = $coinSetting['price_type'];
+        }
+
+        if ($payment == 'coin' && !$coinEnabled) {
+            return $this->createErrorResponse('coin_close', '网校关闭了课程购买！');
+        }
+
+        $cashRate = 1;
+
+        if ($coinEnabled && isset($coinSetting['cash_rate'])) {
+            $cashRate = $coinSetting['cash_rate'];
+        }
+
+        $totalPrice = $this->getParam('totalPrice');
+        $coinPayAmount = 0;
+        if ($payment == 'coin') {
+            $coinPayAmount = round($totalPrice * $cashRate, 2);
+        }
+
+        return $coinPayAmount;
     }
 
     public function createOrder()

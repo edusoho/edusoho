@@ -91,6 +91,7 @@ class OrderInfo extends AbstractResource
             $defaultUnitType = 'month';
             $defaultDuration = 3;
             if ($vipSetting && !empty($vipSetting['buyType'])) {
+                //按年月
                 if ($vipSetting['buyType'] == '10') {
                     $defaultDuration = $vipSetting['default_buy_months10'];
                     //按年

@@ -21,14 +21,7 @@ class Order extends AbstractResource
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        if (isset($params['coinPayAmount'])) {
-            $params['coinAmount'] = $params['coinPayAmount'];
-            unset($params['coinPayAmount']);
-        }
-
-        if (isset($params['payPassword'])) {
-            $params['payPassword'] = $this->decrypt($params['payPassword']);
-        }
+        $this->filterParams($params);
 
         /* @var $product Product */
         $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
@@ -46,6 +39,22 @@ class Order extends AbstractResource
             'id' => $result['id'],
             'sn' => $result['order_sn']
         );
+    }
+
+    public function filterParams(&$params)
+    {
+        if (isset($params['coinPayAmount'])) {
+            $params['coinAmount'] = $params['coinPayAmount'];
+            unset($params['coinPayAmount']);
+        }
+
+        if (isset($params['payPassword'])) {
+            $params['payPassword'] = $this->decrypt($params['payPassword']);
+        }
+
+        if (isset($params['unencryptedPayPassword'])) {
+            $params['payPassword'] = $params['unencryptedPayPassword'];
+        }
     }
 
     private function decrypt($payPassword)
