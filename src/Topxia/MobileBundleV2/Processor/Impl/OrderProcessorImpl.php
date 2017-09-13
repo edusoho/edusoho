@@ -444,29 +444,38 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', '用户未登录，购买失败！');
         }
 
-        /** @var $newApiResourceKernel ResourceKernel */
-        $newApiResourceKernel = $this->controller->get('api_resource_kernel');
+        try {
+            /** @var $newApiResourceKernel ResourceKernel */
+            $newApiResourceKernel = $this->controller->get('api_resource_kernel');
 
-        $coinAmount = $this->getUseCoinAmount();
-        $apiRequest = new ApiRequest(
-            '/api/orders',
-            'POST',
-            array(),
-            array(
-                'targetType' => $targetType,
-                'targetId' => $targetId,
-                'unencryptedPayPassword' => $this->getParam('payPassword'),
-                'couponCode' => $this->getParam('couponCode', ''),
-                'unit' => $this->getParam('unitType', ''),
-                'num' => $this->getParam('duration', 1),
-                'coinAmount' => $coinAmount
-            ),
-            array()
-        );
+            $coinAmount = $this->getUseCoinAmount();
+            $apiRequest = new ApiRequest(
+                '/api/orders',
+                'POST',
+                array(),
+                array(
+                    'targetType' => $targetType,
+                    'targetId' => $targetId,
+                    'unencryptedPayPassword' => $this->getParam('payPassword'),
+                    'couponCode' => $this->getParam('couponCode', ''),
+                    'unit' => $this->getParam('unitType', ''),
+                    'num' => $this->getParam('duration', 1),
+                    'coinAmount' => $coinAmount
+                ),
+                array()
+            );
 
-        $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
+            $trade = $newApiResourceKernel->handleApiRequest($apiRequest, false);
 
-        return $result;
+            if ($trade['status'] === 'paid') {
+                return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
+            } else {
+                return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
+            }
+        } catch (\Exception $exception) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+
     }
 
     private function getUseCoinAmount()
