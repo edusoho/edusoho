@@ -49,10 +49,10 @@ orderStatus:
     closed: 已关闭
 
 refundStatus:
-    created: 已申请
-    success: 退款成功
-    failed: 退款失败
-    cancelled: 已取消
+    auditing: 已申请
+    refunded: 退款成功
+    refused: 退款失败
+    cancel: 已取消
 
 payment:
     none: --

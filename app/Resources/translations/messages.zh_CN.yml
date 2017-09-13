@@ -986,20 +986,10 @@ course.members_manage.quit_records.content_title: 学员管理
 course.members_manage.quit_records.name: 学员名称
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
-course.members_manage.quit_records.cash_count: 退款金额
 course.members_manage.quit_records.date: 退出日期
-course.members_manage.quit_records.tips: >
-  <li class="mt10 mb10">
-    仅显示通过现金购买加入的学员退款记录
-  </li>
-  <li>
-    班级教学计划退款情况请在班级管理中查看
-  </li>
 course.members_manage.quit_records.empty: 无学员记录
 course.members_manage.quit_records.join_time: 加入课程时间：
 course.members_manage.quit_records.success: 退款成功
-course.members_manage.quit_records.failed: 退款失败
-course.members_manage.quit_records.cancel: 退款取消
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
