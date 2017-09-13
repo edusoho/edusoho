@@ -509,7 +509,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $cashRate = $coinSetting['cash_rate'];
         }
 
-        $totalPrice = $this->getParam('totalPrice');
+        $totalPrice = $this->getParam('totalPrice', 0);
         $coinPayAmount = 0;
         if ($payment == 'coin') {
             $coinPayAmount = round($totalPrice * $cashRate, 2);
