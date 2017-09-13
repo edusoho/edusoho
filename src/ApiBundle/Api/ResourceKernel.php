@@ -137,12 +137,14 @@ class ResourceKernel
         return $this->handleApiRequest($apiRequest);
     }
 
-    private function handleApiRequest(ApiRequest $apiRequest)
+    public function handleApiRequest(ApiRequest $apiRequest, $needAuth = true)
     {
         $pathMeta = $this->pathParser->parse($apiRequest);
         $resourceProxy = $this->resManager->create($pathMeta);
 
-        $this->container->get('api_authentication_manager')->authenticate($resourceProxy, $pathMeta->getResMethod());
+        if ($needAuth) {
+            $this->container->get('api_authentication_manager')->authenticate($resourceProxy, $pathMeta->getResMethod());
+        }
 
         return $this->invoke($apiRequest, $resourceProxy, $pathMeta);
     }

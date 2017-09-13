@@ -140,7 +140,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     public function getCreateExtra()
     {
-        return '';
+        return array();
     }
 
     /**

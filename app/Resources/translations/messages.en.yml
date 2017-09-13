@@ -6406,8 +6406,15 @@ join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
-coupon.had_been_used: Coupon had been used.
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
 
 cashflow.title: Name
+
+order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.order_not_exist: Order not exist
+order.pay_check_msg.user_not_login: User not login
+order.pay_check_msg.not_same_user: Not your order
+order.pay_check_msg.missing_pay_password: Missing payPassword
+order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
+order.pay_check_msg.balance_not_enough: Your balance is insufficient

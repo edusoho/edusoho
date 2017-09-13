@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class BizUserCashflowAddTitle extends Migration
+class BizPaymentTradeAddCreatedParams extends Migration
 {
     /**
      * Do the migration
@@ -12,8 +12,8 @@ class BizUserCashflowAddTitle extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isFieldExist('biz_user_cashflow', 'title')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称'");
+        if (!$this->isFieldExist('biz_payment_trade', 'platform_created_params')) {
+            $connection->exec("ALTER TABLE `biz_payment_trade` ADD COLUMN `platform_created_params` text COMMENT '在第三方系统创建支付订单时的参数信息'");
         }
     }
 
@@ -25,7 +25,7 @@ class BizUserCashflowAddTitle extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec('ALTER TABLE `biz_user_cashflow` DROP COLUMN `title`;');
+        $connection->exec('ALTER TABLE `biz_payment_trade` DROP COLUMN `platform_created_params`;');
     }
 
     protected function isFieldExist($table, $filedName)

@@ -148,6 +148,11 @@ abstract class AbstractResource
     {
         return $this->container->get('api.plugin.config.manager')->isPluginInstalled($code);
     }
+
+    public function getClientIp()
+    {
+        return $this->container->get('request')->getClientIp();
+    }
     
     protected function makePagingObject($objects, $total, $offset, $limit)
     {

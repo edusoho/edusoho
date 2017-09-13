@@ -80,7 +80,6 @@ class MemberServiceImpl extends BaseService implements MemberService
                     'orderId' => 0,
                     'note' => $data['remark'],
                     'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
-                    'reason' => 'course.member.operation.reason.admin_operate',
                 );
 
                 $this->becomeStudent($course['id'], $user['id'], $info);
@@ -618,7 +617,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $reason = empty($info['reason']) ? $info['reason'] : 'course.member.operation.reason.buy';
+        $reason = empty($info['note']) ? 'course.member.operation.reason.buy' : $info['note'];
         $member = $this->addMember($fields, $reason, $order);
 
         $this->refreshMemberNoteNumber($courseId, $userId);

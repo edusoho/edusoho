@@ -6,6 +6,9 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
+use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Product\Product;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OrderInfo extends AbstractResource
@@ -20,14 +23,63 @@ class OrderInfo extends AbstractResource
 
         $this->addVipParams($params);
 
-        list($checkInfo, $orderInfo) = $this->service('Order:OrderFacadeService')->getOrderInfo($params['targetType'], $params['targetId'], $params);
+        $product = $this->getProduct($params['targetType'], $params);
 
-        if (isset($checkInfo['error'])) {
-            throw new BadRequestHttpException($checkInfo['error'], null, ErrorCode::INVALID_ARGUMENT);
+        $product->setAvailableDeduct();
+        $product->setPickedDeduct(array());
+
+        return $this->getOrderInfoFromProduct($product);
+    }
+
+    private function getOrderInfoFromProduct(Product $product)
+    {
+        $orderInfo = array(
+            'targetId' => $product->targetId,
+            'targetType' => $product->targetType,
+            'title' => $product->title,
+            'maxRate' => $product->maxRate,
+            'unitType' => $product->unit,
+            'duration' => $product->num,
+            'totalPrice' => $product->getPayablePrice(),
+        );
+
+        if ($extra = $product->getCreateExtra()) {
+            $orderInfo['buyType'] = $extra['buyType'];
         }
 
-        $this->addOrderAssocInfo($orderInfo);
+        if ($product->availableDeducts && isset($product->availableDeducts['coupon'])) {
+            $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
+        } else {
+            $orderInfo['availableCoupons'] = array();
+        }
 
+        $user = $this->getCurrentUser();
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
+        $orderInfo['account'] = array(
+            'id' => $balance['id'],
+            'userId' => $balance['user_id'],
+            'cash' => $balance['amount']
+        );
+
+        $orderInfo['verifiedMobile'] = (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '';
+        $orderInfo['hasPayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
+
+        $coinSetting = $this->service('System:SettingService')->get('coin');
+        if (!empty($coinSetting['coin_name'])) {
+            $orderInfo['coinName'] = $coinSetting['coin_name'];
+        } else {
+            $orderInfo['coinName'] = '虚拟币';
+        }
+
+        $biz = $this->getBiz();
+        /** @var  $currency  Currency */
+        $currency = $biz['currency'];
+        $orderInfo['priceType'] = $currency->isoCode == 'CNY' ? 'RMB' : 'Coin';
+        if (!empty($coinSetting['coin_enabled'])) {
+            $orderInfo['cashRate'] = $currency->exchangeRate;
+            $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
+            $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
+        }
 
         return $orderInfo;
     }
@@ -39,6 +91,7 @@ class OrderInfo extends AbstractResource
             $defaultUnitType = 'month';
             $defaultDuration = 3;
             if ($vipSetting && !empty($vipSetting['buyType'])) {
+                //按年月
                 if ($vipSetting['buyType'] == '10') {
                     $defaultDuration = $vipSetting['default_buy_months10'];
                     //按年
@@ -52,35 +105,27 @@ class OrderInfo extends AbstractResource
             }
 
             $params['unit'] = $defaultUnitType;
-            $params['duration'] = $defaultDuration;
+            $params['num'] = $defaultDuration;
         }
     }
 
-    private function addOrderAssocInfo(&$orderInfo)
+    private function getProduct($targetType, $params)
     {
-        $couponTargetId = $orderInfo['targetId'];
-        if ($orderInfo['targetType'] == 'course') {
-            $course = $this->getCourseService()->getCourse($orderInfo['targetId']);
-            $couponTargetId = $course['courseSetId'];
-        }
-        $orderInfo['availableCoupons'] = $this->service('Card:CardService')->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
-            $orderInfo['targetType'], $couponTargetId
-        );
+        $biz = $this->getBiz();
 
-        $coinSetting = $this->service('System:SettingService')->get('coin');
+        /* @var $product Product */
+        $product = $biz['order.product.'.$targetType];
 
-        if (!empty($coinSetting['coin_name'])) {
-            $orderInfo['coinName'] = $coinSetting['coin_name'];
-        } else {
-            $orderInfo['coinName'] = '虚拟币';
-        }
+        $product->init($params);
+
+        return $product;
     }
 
     /**
-     * @return CourseService
+     * @return AccountService
      */
-    private function getCourseService()
+    private function getAccountService()
     {
-        return $this->service('Course:CourseService');
+        return $this->service('Pay:AccountService');
     }
 }
