@@ -24,7 +24,7 @@ class PayCenter extends AbstractResource
 
         $trade = $this->getPayService()->getTradeByTradeSn($params['orderId']);
         $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
-
+        var_dump($platformCreatedResult);exit;
         if ($trade['status'] === 'paid') {
             $trade['paymentForm'] = array();
             $trade['paymentHtml'] = '';
@@ -35,6 +35,16 @@ class PayCenter extends AbstractResource
         }
 
         return $trade;
+    }
+
+    private function makePayForm($data)
+    {
+        $form = array();
+        $form['action'] = $this->url.'?_input_charset=utf-8';
+        $form['method'] = 'post';
+        $form['params'] = $this->convertParams($this->params);
+
+        return $form;
     }
 
     private function generatePaymentForm($order, $request)
