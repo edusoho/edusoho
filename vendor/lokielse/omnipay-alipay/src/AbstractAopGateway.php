@@ -11,7 +11,7 @@ use Omnipay\Alipay\Requests\AopTradeRefundRequest;
 use Omnipay\Alipay\Requests\DataServiceBillDownloadUrlQueryRequest;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Exception\InvalidRequestException;
-abstract class AbstractAopGateway extends AbstractGateway
+abstract class AbstractAopGateway extends \Omnipay\Common\AbstractGateway
 {
     protected $endpoints = array('production' => 'https://openapi.alipay.com/gateway.do', 'sandbox' => 'https://openapi.alipaydev.com/gateway.do');
     public function getDefaultParameters()
@@ -231,7 +231,7 @@ abstract class AbstractAopGateway extends AbstractGateway
     {
         $env = strtolower($value);
         if (!isset($this->endpoints[$env])) {
-            throw new InvalidRequestException('The environment is invalid');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The environment is invalid');
         }
         $this->setEndpoint($this->endpoints[$env]);
         return $this;
@@ -257,7 +257,7 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function completePurchase(array $parameters = array())
     {
-        return $this->createRequest(AopCompletePurchaseRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopCompletePurchaseRequest', $parameters);
     }
     /**
      * Query Order Status
@@ -268,7 +268,7 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function query(array $parameters = array())
     {
-        return $this->createRequest(AopTradeQueryRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeQueryRequest', $parameters);
     }
     /**
      * Refund
@@ -279,7 +279,7 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function refund(array $parameters = array())
     {
-        return $this->createRequest(AopTradeRefundRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeRefundRequest', $parameters);
     }
     /**
      * Query Refund Status
@@ -290,7 +290,7 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function refundQuery(array $parameters = array())
     {
-        return $this->createRequest(AopTradeRefundQueryRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeRefundQueryRequest', $parameters);
     }
     /**
      * Cancel Order
@@ -301,7 +301,7 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function cancel(array $parameters = array())
     {
-        return $this->createRequest(AopTradeCancelRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeCancelRequest', $parameters);
     }
     /**
      * Settle
@@ -312,7 +312,7 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function settle(array $parameters = array())
     {
-        return $this->createRequest(AopTradeOrderSettleRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeOrderSettleRequest', $parameters);
     }
     /**
      * @param array $parameters
@@ -321,6 +321,6 @@ abstract class AbstractAopGateway extends AbstractGateway
      */
     public function queryBillDownloadUrl(array $parameters = array())
     {
-        return $this->createRequest(DataServiceBillDownloadUrlQueryRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\DataServiceBillDownloadUrlQueryRequest', $parameters);
     }
 }

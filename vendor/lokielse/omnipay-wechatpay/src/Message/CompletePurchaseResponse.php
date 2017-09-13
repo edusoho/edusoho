@@ -9,7 +9,7 @@ use Omnipay\Common\Message\AbstractResponse;
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_1
  *
  */
-class CompletePurchaseResponse extends AbstractResponse
+class CompletePurchaseResponse extends \Omnipay\Common\Message\AbstractResponse
 {
     /**
      * Is the response successful?

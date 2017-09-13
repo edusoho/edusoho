@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/api.htm?docType=4&apiId=759
  */
-class AopTradeRefundRequest extends AbstractAopRequest
+class AopTradeRefundRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.trade.refund';
     protected $notifiable = true;
@@ -25,7 +25,7 @@ class AopTradeRefundRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-        return $this->response = new AopTradeRefundResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\AopTradeRefundResponse($this, $data);
     }
     public function validateParams()
     {

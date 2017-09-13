@@ -8,7 +8,7 @@ use Omnipay\Alipay\Responses\VerifyNotifyIdResponse;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-class AopNotifyRequest extends AbstractAopRequest
+class AopNotifyRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     /**
      * @var ParameterBag
@@ -38,7 +38,7 @@ class AopNotifyRequest extends AbstractAopRequest
         if (!$params) {
             $params = array_merge($_GET, $_POST);
         }
-        $this->params = new ParameterBag($params);
+        $this->params = new \Symfony\Component\HttpFoundation\ParameterBag($params);
         return $params;
     }
     /**
@@ -60,13 +60,13 @@ class AopNotifyRequest extends AbstractAopRequest
     public function validateParams()
     {
         if (empty($this->params->all())) {
-            throw new InvalidRequestException('The `params` or $_REQUEST is empty');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `params` or $_REQUEST is empty');
         }
         if (!$this->params->has('sign_type')) {
-            throw new InvalidRequestException('The `sign_type` is required');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `sign_type` is required');
         }
         if (!$this->params->has('sign')) {
-            throw new InvalidRequestException('The `sign` is required');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `sign` is required');
         }
     }
     /**
@@ -85,31 +85,31 @@ class AopNotifyRequest extends AbstractAopRequest
                 $this->verifyNotifyId();
             }
         }
-        return $this->response = new AopNotifyResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\AopNotifyResponse($this, $data);
     }
     protected function verifySignature()
     {
-        $signer = new Signer($this->params->all());
+        $signer = new \Omnipay\Alipay\Common\Signer($this->params->all());
         $signer->setSort($this->sort);
         $signer->setEncodePolicy($this->encodePolicy);
         $content = $signer->getContentToSign();
         $sign = $this->params->get('sign');
         $signType = $this->params->get('sign_type');
         if ($signType == 'RSA2') {
-            $match = ($tmp = new Signer()) ? $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey(), OPENSSL_ALGO_SHA256) : $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey(), OPENSSL_ALGO_SHA256);
+            $match = ($tmp = new \Omnipay\Alipay\Common\Signer()) ? $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey(), OPENSSL_ALGO_SHA256) : $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey(), OPENSSL_ALGO_SHA256);
         } else {
-            $match = ($tmp = new Signer()) ? $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey()) : $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey());
+            $match = ($tmp = new \Omnipay\Alipay\Common\Signer()) ? $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey()) : $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey());
         }
         if (!$match) {
-            throw new InvalidRequestException('The signature is not match');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The signature is not match');
         }
     }
     protected function verifyNotifyId()
     {
         if (!$this->getPartner()) {
-            throw new InvalidRequestException('The partner is required for notify_id verify');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The partner is required for notify_id verify');
         }
-        $request = new LegacyVerifyNotifyIdRequest($this->httpClient, $this->httpRequest);
+        $request = new \Omnipay\Alipay\Requests\LegacyVerifyNotifyIdRequest($this->httpClient, $this->httpRequest);
         $request->setPartner($this->getPartner());
         $request->setNotifyId($this->params->get('notify_id'));
         /**
@@ -117,7 +117,7 @@ class AopNotifyRequest extends AbstractAopRequest
          */
         $response = $request->send();
         if (!$response->isSuccessful()) {
-            throw new InvalidRequestException('The notify_id is not trusted');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The notify_id is not trusted');
         }
     }
     /**

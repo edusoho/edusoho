@@ -2,7 +2,7 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class VerifyNotifyIdResponse extends AbstractLegacyResponse
+class VerifyNotifyIdResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
     /**
      * Is the response successful?

@@ -11,7 +11,7 @@ use Omnipay\WechatPay\Helper;
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_6&index=8
  * @method DownloadBillResponse send()
  */
-class DownloadBillRequest extends BaseAbstractRequest
+class DownloadBillRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
     protected $endpoint = 'https://api.mch.weixin.qq.com/pay/downloadbill';
     /**
@@ -25,7 +25,7 @@ class DownloadBillRequest extends BaseAbstractRequest
         $this->validate('app_id', 'mch_id', 'bill_date');
         $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'device_info' => $this->getDeviceInfo(), 'bill_date' => $this->getBillDate(), 'bill_type' => $this->getBillType(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-        $data['sign'] = Helper::sign($data, $this->getApiKey());
+        $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         return $data;
     }
     /**
@@ -80,18 +80,18 @@ class DownloadBillRequest extends BaseAbstractRequest
     public function sendData($data)
     {
         $responseData = $this->post($this->endpoint, $data, 120);
-        return $this->response = new DownloadBillResponse($this, $responseData);
+        return $this->response = new \Omnipay\WechatPay\Message\DownloadBillResponse($this, $responseData);
     }
     private function post($url, $data = array(), $timeout = 3)
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, Helper::array2xml($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, \Omnipay\WechatPay\Helper::array2xml($data));
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $result = curl_exec($ch);
         if (preg_match('#return_code#', $result)) {
-            $result = Helper::xml2array($result);
+            $result = \Omnipay\WechatPay\Helper::xml2array($result);
         } else {
             $result = array(array('return_code' => 'SUCCESS', 'raw' => $result));
         }

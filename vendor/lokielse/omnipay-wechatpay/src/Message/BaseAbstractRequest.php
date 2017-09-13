@@ -7,7 +7,7 @@ use Omnipay\Common\Message\AbstractRequest;
  * Class BaseAbstractRequest
  * @package Omnipay\WechatPay\Message
  */
-abstract class BaseAbstractRequest extends AbstractRequest
+abstract class BaseAbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     /**
      * @return mixed

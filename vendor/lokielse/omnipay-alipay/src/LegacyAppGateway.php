@@ -8,7 +8,7 @@ use Omnipay\Alipay\Requests\LegacyAppPurchaseRequest;
  * @package Omnipay\Alipay
  * @link    https://doc.open.alipay.com/doc2/detail?treeId=59&articleId=103563&docType=1
  */
-class LegacyAppGateway extends AbstractLegacyGateway
+class LegacyAppGateway extends \Omnipay\Alipay\AbstractLegacyGateway
 {
     /**
      * Get gateway display name
@@ -48,6 +48,6 @@ class LegacyAppGateway extends AbstractLegacyGateway
      */
     public function purchase(array $parameters = array())
     {
-        return $this->createRequest(LegacyAppPurchaseRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyAppPurchaseRequest', $parameters);
     }
 }

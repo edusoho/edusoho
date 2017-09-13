@@ -6,7 +6,7 @@ namespace Omnipay\WechatPay;
  * Class JsGateway
  * @package Omnipay\WechatPay
  */
-class JsGateway extends BaseAbstractGateway
+class JsGateway extends \Omnipay\WechatPay\BaseAbstractGateway
 {
     public function getName()
     {

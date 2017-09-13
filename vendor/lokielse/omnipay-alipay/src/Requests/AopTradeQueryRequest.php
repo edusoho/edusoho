@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/api.htm?docType=4&apiId=757
  */
-class AopTradeQueryRequest extends AbstractAopRequest
+class AopTradeQueryRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.trade.query';
     /**
@@ -24,7 +24,7 @@ class AopTradeQueryRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-        return $this->response = new AopTradeQueryResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\AopTradeQueryResponse($this, $data);
     }
     public function validateParams()
     {

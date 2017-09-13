@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/doc2/apiDetail.htm?apiId=1054&docType=4
  */
-class DataServiceBillDownloadUrlQueryRequest extends AbstractAopRequest
+class DataServiceBillDownloadUrlQueryRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.data.dataservice.bill.downloadurl.query';
     /**
@@ -24,7 +24,7 @@ class DataServiceBillDownloadUrlQueryRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-        return $this->response = new DataServiceBillDownloadUrlQueryResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\DataServiceBillDownloadUrlQueryResponse($this, $data);
     }
     public function validateParams()
     {

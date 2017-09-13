@@ -9,7 +9,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    http://aopsdkdownload.cn-hangzhou.alipay-pub.aliyun-inc.com/demo/alipaysinglequery.zip
  */
-class LegacyQueryRequest extends AbstractLegacyRequest
+class LegacyQueryRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     protected $service = 'single_trade_query';
     /**
@@ -26,7 +26,7 @@ class LegacyQueryRequest extends AbstractLegacyRequest
         $xml = simplexml_load_string($result);
         $json = json_encode($xml);
         $data = json_decode($json, true);
-        return $this->response = new LegacyQueryResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyQueryResponse($this, $data);
     }
     /**
      * Get the raw data array for this message. The format of this varies from gateway to

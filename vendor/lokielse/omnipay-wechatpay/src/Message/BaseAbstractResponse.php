@@ -7,7 +7,7 @@ use Omnipay\Common\Message\AbstractResponse;
  * Class BaseAbstractResponse
  * @package Omnipay\WechatPay\Message
  */
-abstract class BaseAbstractResponse extends AbstractResponse
+abstract class BaseAbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 {
     /**
      * Is the response successful?

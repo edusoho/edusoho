@@ -8,7 +8,7 @@ use Omnipay\Alipay\Requests\AopTradeWapPayRequest;
  * @package Omnipay\Alipay
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=203&articleId=105288&docType=1
  */
-class AopWapGateway extends AbstractAopGateway
+class AopWapGateway extends \Omnipay\Alipay\AbstractAopGateway
 {
     /**
      * Get gateway display name
@@ -42,6 +42,6 @@ class AopWapGateway extends AbstractAopGateway
      */
     public function purchase(array $parameters = array())
     {
-        return $this->createRequest(AopTradeWapPayRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\AopTradeWapPayRequest', $parameters);
     }
 }

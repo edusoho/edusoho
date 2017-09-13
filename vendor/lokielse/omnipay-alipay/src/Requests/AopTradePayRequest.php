@@ -12,7 +12,7 @@ use Omnipay\Common\Exception\InvalidRequestException;
  *
  * @link    https://doc.open.alipay.com/docs/api.htm?docType=4&apiId=850
  */
-class AopTradePayRequest extends AbstractAopRequest
+class AopTradePayRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.trade.pay';
     protected $notifiable = true;
@@ -34,7 +34,7 @@ class AopTradePayRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-        $this->response = new AopTradePayResponse($this, $data);
+        $this->response = new \Omnipay\Alipay\Responses\AopTradePayResponse($this, $data);
         if ($this->response->isWaitPay() && $this->polling) {
             $this->polling();
         }
@@ -69,7 +69,7 @@ class AopTradePayRequest extends AbstractAopRequest
     }
     protected function query()
     {
-        $request = new AopTradeQueryRequest($this->httpClient, $this->httpRequest);
+        $request = new \Omnipay\Alipay\Requests\AopTradeQueryRequest($this->httpClient, $this->httpRequest);
         $request->initialize($this->parameters->all());
         $request->setEndpoint($this->getEndpoint());
         $request->setPrivateKey($this->getPrivateKey());
@@ -78,7 +78,7 @@ class AopTradePayRequest extends AbstractAopRequest
     }
     protected function cancel()
     {
-        $request = new AopTradeCancelRequest($this->httpClient, $this->httpRequest);
+        $request = new \Omnipay\Alipay\Requests\AopTradeCancelRequest($this->httpClient, $this->httpRequest);
         $request->initialize($this->parameters->all());
         $request->setEndpoint($this->getEndpoint());
         $request->setPrivateKey($this->getPrivateKey());

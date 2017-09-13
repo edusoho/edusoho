@@ -9,7 +9,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * Class LegacyVerifyAppPayReturnRequest
  * @package Omnipay\Alipay\Requests
  */
-class LegacyVerifyAppPayReturnRequest extends AbstractLegacyRequest
+class LegacyVerifyAppPayReturnRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
@@ -40,14 +40,14 @@ class LegacyVerifyAppPayReturnRequest extends AbstractLegacyRequest
         $this->validate('result');
         $result = $this->getResult();
         if (!is_string($result)) {
-            throw new InvalidRequestException('The result should be string');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The result should be string');
         }
         parse_str($result, $data);
         if (!isset($data['sign'])) {
-            throw new InvalidRequestException('The `result` is invalid');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `result` is invalid');
         }
         if (!isset($data['sign_type'])) {
-            throw new InvalidRequestException('The `result` is invalid');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `result` is invalid');
         }
     }
     /**
@@ -67,7 +67,7 @@ class LegacyVerifyAppPayReturnRequest extends AbstractLegacyRequest
      */
     public function sendData($data)
     {
-        $request = new LegacyNotifyRequest($this->httpClient, $this->httpRequest);
+        $request = new \Omnipay\Alipay\Requests\LegacyNotifyRequest($this->httpClient, $this->httpRequest);
         $request->initialize($this->parameters->all());
         $request->setParams($data);
         $request->setSort(false);

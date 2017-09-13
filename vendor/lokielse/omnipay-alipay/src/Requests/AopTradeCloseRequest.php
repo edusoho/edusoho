@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/doc2/apiDetail.htm?apiId=1058&docType=4
  */
-class AopTradeCloseRequest extends AbstractAopRequest
+class AopTradeCloseRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.trade.close';
     /**
@@ -24,7 +24,7 @@ class AopTradeCloseRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-        return $this->response = new AopTradeCloseResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\AopTradeCloseResponse($this, $data);
     }
     public function validateParams()
     {

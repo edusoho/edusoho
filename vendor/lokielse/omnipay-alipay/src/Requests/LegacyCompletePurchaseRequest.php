@@ -4,7 +4,7 @@ namespace Omnipay\Alipay\Requests;
 
 use Omnipay\Alipay\Responses\LegacyCompletePurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
-class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
+class LegacyCompletePurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     protected $verifyNotifyId = true;
     /**
@@ -34,7 +34,7 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
     public function sendData($data)
     {
         if (array_get($data, 'result')) {
-            $request = new LegacyVerifyAppPayReturnRequest($this->httpClient, $this->httpRequest);
+            $request = new \Omnipay\Alipay\Requests\LegacyVerifyAppPayReturnRequest($this->httpClient, $this->httpRequest);
             $request->initialize($this->parameters->all());
             $request->setResult($data['result']);
             $request->setAlipayPublicKey($this->getAlipayPublicKey());
@@ -48,7 +48,7 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
                 $data['trade_status'] = 'WAIT_BUYER_PAY';
             }
         } else {
-            $request = new LegacyNotifyRequest($this->httpClient, $this->httpRequest);
+            $request = new \Omnipay\Alipay\Requests\LegacyNotifyRequest($this->httpClient, $this->httpRequest);
             $request->initialize($this->parameters->all());
             $request->setAlipayPublicKey($this->getAlipayPublicKey());
             $request->setVerifyNotifyId($this->verifyNotifyId);
@@ -56,7 +56,7 @@ class LegacyCompletePurchaseRequest extends AbstractLegacyRequest
             $response = $request->send();
             $data = $response->getData();
         }
-        return $this->response = new LegacyCompletePurchaseResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyCompletePurchaseResponse($this, $data);
     }
     /**
      * @param $value

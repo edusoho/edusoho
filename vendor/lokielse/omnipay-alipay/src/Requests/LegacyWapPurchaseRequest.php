@@ -9,7 +9,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package   Omnipay\Alipay\Requests
  * @link      https://doc.open.alipay.com/docs/doc.htm?treeId=60&articleId=104790&docType=1
  */
-class LegacyWapPurchaseRequest extends AbstractLegacyRequest
+class LegacyWapPurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     protected $service = 'alipay.wap.create.direct.pay.by.user';
     protected $key;
@@ -49,7 +49,7 @@ class LegacyWapPurchaseRequest extends AbstractLegacyRequest
      */
     public function sendData($data)
     {
-        return $this->response = new LegacyWapPurchaseResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyWapPurchaseResponse($this, $data);
     }
     /**
      * @return mixed

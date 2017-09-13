@@ -2,7 +2,7 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class AopTradeAppPayResponse extends AbstractResponse
+class AopTradeAppPayResponse extends \Omnipay\Alipay\Responses\AbstractResponse
 {
     /**
      * Is the response successful?

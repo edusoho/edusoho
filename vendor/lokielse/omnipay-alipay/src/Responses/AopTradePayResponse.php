@@ -3,7 +3,7 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopTradePayRequest;
-class AopTradePayResponse extends AbstractAopResponse
+class AopTradePayResponse extends \Omnipay\Alipay\Responses\AbstractAopResponse
 {
     protected $key = 'alipay_trade_pay_response';
     /**

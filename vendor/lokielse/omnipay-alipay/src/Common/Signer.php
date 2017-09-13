@@ -105,12 +105,12 @@ class Signer
         $sign = null;
         try {
             openssl_sign($content, $sign, $res, $alg);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($e->getCode() == 2) {
                 $message = $e->getMessage();
                 $message .= '
 应用私钥格式有误，见 https://github.com/lokielse/omnipay-alipay/wiki/FAQs';
-                throw new Exception($message, $e->getCode(), $e);
+                throw new \Exception($message, $e->getCode(), $e);
             }
         }
         openssl_free_key($res);
@@ -189,7 +189,7 @@ class Signer
             $message = 'The public key is invalid';
             $message .= '
 支付宝公钥格式有误，见 https://github.com/lokielse/omnipay-alipay/wiki/FAQs';
-            throw new Exception($message);
+            throw new \Exception($message);
         }
         $result = (bool) openssl_verify($content, base64_decode($sign), $res, $alg);
         openssl_free_key($res);

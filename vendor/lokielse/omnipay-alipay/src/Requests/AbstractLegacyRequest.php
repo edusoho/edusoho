@@ -5,7 +5,7 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Common\Signer;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
-abstract class AbstractLegacyRequest extends AbstractRequest
+abstract class AbstractLegacyRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     protected $endpoint = 'https://mapi.alipay.com/gateway.do';
     protected $service;
@@ -131,25 +131,25 @@ abstract class AbstractLegacyRequest extends AbstractRequest
             }
         }
         if ($allEmpty) {
-            throw new InvalidRequestException(sprintf('The parameters (%s) must provide one at least', implode(',', $keys)));
+            throw new \Omnipay\Common\Exception\InvalidRequestException(sprintf('The parameters (%s) must provide one at least', implode(',', $keys)));
         }
     }
     protected function sign($params, $signType)
     {
-        $signer = new Signer($params);
+        $signer = new \Omnipay\Alipay\Common\Signer($params);
         $signType = strtoupper($signType);
         if ($signType == 'MD5') {
             if (!$this->getKey()) {
-                throw new InvalidRequestException('The `key` is required for `MD5` sign_type');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The `key` is required for `MD5` sign_type');
             }
             $sign = $signer->signWithMD5($this->getKey());
         } elseif ($signType == 'RSA') {
             if (!$this->getPrivateKey()) {
-                throw new InvalidRequestException('The `private_key` is required for `RSA` sign_type');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The `private_key` is required for `RSA` sign_type');
             }
             $sign = $signer->signWithRSA($this->getPrivateKey());
         } else {
-            throw new InvalidRequestException('The signType is not allowed');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The signType is not allowed');
         }
         return $sign;
     }

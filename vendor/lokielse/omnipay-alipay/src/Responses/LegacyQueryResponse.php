@@ -2,7 +2,7 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class LegacyQueryResponse extends AbstractLegacyResponse
+class LegacyQueryResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
     /**
      * Is the response successful?

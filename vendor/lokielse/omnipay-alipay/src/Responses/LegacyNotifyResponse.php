@@ -3,7 +3,7 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\LegacyNotifyRequest;
-class LegacyNotifyResponse extends AbstractLegacyResponse
+class LegacyNotifyResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
     /**
      * @var LegacyNotifyRequest

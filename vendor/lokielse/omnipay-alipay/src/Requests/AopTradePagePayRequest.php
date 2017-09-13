@@ -8,14 +8,14 @@ use Omnipay\Alipay\Responses\AopTradePagePayResponse;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/doc2/detail.htm?treeId=270&articleId=105901&docType=1
  */
-class AopTradePagePayRequest extends AbstractAopRequest
+class AopTradePagePayRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.trade.page.pay';
     protected $returnable = true;
     protected $notifiable = true;
     public function sendData($data)
     {
-        return $this->response = new AopTradePagePayResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\AopTradePagePayResponse($this, $data);
     }
     public function validateParams()
     {

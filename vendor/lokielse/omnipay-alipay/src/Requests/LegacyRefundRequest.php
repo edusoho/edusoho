@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=66&articleId=103600&docType=1
  */
-class LegacyRefundRequest extends AbstractLegacyRequest
+class LegacyRefundRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     protected $service = 'refund_fastpay_by_platform_pwd';
     /**
@@ -103,13 +103,13 @@ class LegacyRefundRequest extends AbstractLegacyRequest
         foreach ($this->getRefundItems() as $item) {
             $item = (array) $item;
             if (!isset($item['out_trade_no'])) {
-                throw new InvalidRequestException('The field `out_trade_no` is not exist in item');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The field `out_trade_no` is not exist in item');
             }
             if (!isset($item['amount'])) {
-                throw new InvalidRequestException('The field `amount` is not exist in item');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The field `amount` is not exist in item');
             }
             if (!isset($item['reason'])) {
-                throw new InvalidRequestException('The field `reason` is not exist in item');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The field `reason` is not exist in item');
             }
             $strings[] = implode('^', array($item['out_trade_no'], $item['amount'], $item['reason']));
         }
@@ -168,7 +168,7 @@ class LegacyRefundRequest extends AbstractLegacyRequest
      */
     public function sendData($data)
     {
-        return $this->response = new LegacyRefundResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyRefundResponse($this, $data);
     }
     /**
      * @param $value

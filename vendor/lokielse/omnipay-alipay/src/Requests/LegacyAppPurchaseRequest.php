@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=59&articleId=103663&docType=1
  */
-class LegacyAppPurchaseRequest extends AbstractLegacyRequest
+class LegacyAppPurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     protected $service = 'mobile.securitypay.pay';
     protected $privateKey;
@@ -24,7 +24,7 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
     {
         $this->validateParams();
         $params = $this->getParamsToSign();
-        $signer = new Signer($params);
+        $signer = new \Omnipay\Alipay\Common\Signer($params);
         $sign = $signer->signWithRSA($this->privateKey);
         $resp['order_string'] = sprintf('%s&sign="%s"&sign_type="RSA"', $signer->getContentToSign(), urlencode($sign));
         return $resp;
@@ -52,7 +52,7 @@ class LegacyAppPurchaseRequest extends AbstractLegacyRequest
      */
     public function sendData($data)
     {
-        return $this->response = new LegacyAppPurchaseResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyAppPurchaseResponse($this, $data);
     }
     /**
      * @return mixed

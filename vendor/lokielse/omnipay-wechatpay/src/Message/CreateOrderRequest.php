@@ -10,7 +10,7 @@ use Omnipay\WechatPay\Helper;
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_1
  * @method CreateOrderResponse send()
  */
-class CreateOrderRequest extends BaseAbstractRequest
+class CreateOrderRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
     protected $endpoint = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     /**
@@ -28,7 +28,7 @@ class CreateOrderRequest extends BaseAbstractRequest
         }
         $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'device_info' => $this->getDeviceInfo(), 'body' => $this->getBody(), 'detail' => $this->getDetail(), 'attach' => $this->getAttach(), 'out_trade_no' => $this->getOutTradeNo(), 'fee_type' => $this->getFeeType(), 'total_fee' => $this->getTotalFee(), 'spbill_create_ip' => $this->getSpbillCreateIp(), 'time_start' => $this->getTimeStart(), 'time_expire' => $this->getTimeExpire(), 'goods_tag' => $this->getGoodsTag(), 'notify_url' => $this->getNotifyUrl(), 'trade_type' => $this->getTradeType(), 'limit_pay' => $this->getLimitPay(), 'openid' => $this->getOpenId(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-        $data['sign'] = Helper::sign($data, $this->getApiKey());
+        $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         return $data;
     }
     /**
@@ -247,9 +247,9 @@ class CreateOrderRequest extends BaseAbstractRequest
      */
     public function sendData($data)
     {
-        $request = $this->httpClient->post($this->endpoint)->setBody(Helper::array2xml($data));
+        $request = $this->httpClient->post($this->endpoint)->setBody(\Omnipay\WechatPay\Helper::array2xml($data));
         $response = $request->send()->getBody();
-        $responseData = Helper::xml2array($response);
-        return $this->response = new CreateOrderResponse($this, $responseData);
+        $responseData = \Omnipay\WechatPay\Helper::xml2array($response);
+        return $this->response = new \Omnipay\WechatPay\Message\CreateOrderResponse($this, $responseData);
     }
 }

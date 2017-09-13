@@ -10,7 +10,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/doc2/apiDetail.htm?apiId=866&docType=4
  */
-class AopTradeCancelRequest extends AbstractAopRequest
+class AopTradeCancelRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $method = 'alipay.trade.cancel';
     /**
@@ -24,7 +24,7 @@ class AopTradeCancelRequest extends AbstractAopRequest
     public function sendData($data)
     {
         $data = parent::sendData($data);
-        return $this->response = new AopTradeCancelResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\AopTradeCancelResponse($this, $data);
     }
     public function validateParams()
     {

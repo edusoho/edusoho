@@ -12,7 +12,7 @@ use Omnipay\WechatPay\Helper;
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_4&index=6
  * @method RefundOrderResponse send()
  */
-class RefundOrderRequest extends BaseAbstractRequest
+class RefundOrderRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
     protected $endpoint = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
     /**
@@ -26,7 +26,7 @@ class RefundOrderRequest extends BaseAbstractRequest
         $this->validate('app_id', 'mch_id', 'out_trade_no', 'cert_path', 'key_path');
         $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'device_info' => $this->getDeviceInfo(), 'transaction_id' => $this->getTransactionId(), 'out_trade_no' => $this->getOutTradeNo(), 'out_refund_no' => $this->getOutRefundNo(), 'total_fee' => $this->getTotalFee(), 'refund_fee' => $this->getRefundFee(), 'refund_fee_type' => $this->getRefundFee(), 'op_user_id' => $this->getOpUserId() ?: $this->getMchId(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-        $data['sign'] = Helper::sign($data, $this->getApiKey());
+        $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         return $data;
     }
     /**
@@ -176,11 +176,11 @@ class RefundOrderRequest extends BaseAbstractRequest
     public function sendData($data)
     {
         $options = array(CURLOPT_SSL_VERIFYPEER => true, CURLOPT_SSL_VERIFYHOST => 2, CURLOPT_SSLCERTTYPE => 'PEM', CURLOPT_SSLKEYTYPE => 'PEM', CURLOPT_SSLCERT => $this->getCertPath(), CURLOPT_SSLKEY => $this->getKeyPath());
-        $body = Helper::array2xml($data);
+        $body = \Omnipay\WechatPay\Helper::array2xml($data);
         $request = $this->httpClient->post($this->endpoint, null, $data)->setBody($body);
         $request->getCurlOptions()->overwriteWith($options);
         $response = $request->send()->getBody();
-        $responseData = Helper::xml2array($response);
-        return $this->response = new CloseOrderResponse($this, $responseData);
+        $responseData = \Omnipay\WechatPay\Helper::xml2array($response);
+        return $this->response = new \Omnipay\WechatPay\Message\CloseOrderResponse($this, $responseData);
     }
 }

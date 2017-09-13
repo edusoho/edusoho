@@ -3,7 +3,7 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\LegacyCompletePurchaseRequest;
-class LegacyCompletePurchaseResponse extends AbstractLegacyResponse
+class LegacyCompletePurchaseResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
     /**
      * @var LegacyCompletePurchaseRequest

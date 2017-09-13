@@ -2,7 +2,7 @@
 
 namespace Omnipay\Alipay\Responses;
 
-abstract class AbstractAopResponse extends AbstractResponse
+abstract class AbstractAopResponse extends \Omnipay\Alipay\Responses\AbstractResponse
 {
     protected $key;
     /**

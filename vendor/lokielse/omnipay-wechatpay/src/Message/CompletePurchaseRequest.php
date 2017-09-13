@@ -11,7 +11,7 @@ use Omnipay\WechatPay\Helper;
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_7&index=3
  * @method CompletePurchaseResponse send()
  */
-class CompletePurchaseRequest extends BaseAbstractRequest
+class CompletePurchaseRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
     public function setRequestParams($requestParams)
     {
@@ -27,7 +27,7 @@ class CompletePurchaseRequest extends BaseAbstractRequest
     public function sendData($data)
     {
         $data = $this->getData();
-        $sign = Helper::sign($data, $this->getApiKey());
+        $sign = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         $responseData = array();
         if (isset($data['sign']) && $data['sign'] && $sign === $data['sign']) {
             $responseData['sign_match'] = true;
@@ -39,7 +39,7 @@ class CompletePurchaseRequest extends BaseAbstractRequest
         } else {
             $responseData['paid'] = false;
         }
-        return $this->response = new CompletePurchaseResponse($this, $responseData);
+        return $this->response = new \Omnipay\WechatPay\Message\CompletePurchaseResponse($this, $responseData);
     }
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
@@ -51,7 +51,7 @@ class CompletePurchaseRequest extends BaseAbstractRequest
     {
         $data = $this->getRequestParams();
         if (is_string($data)) {
-            $data = Helper::xml2array($data);
+            $data = \Omnipay\WechatPay\Helper::xml2array($data);
         }
         return $data;
     }

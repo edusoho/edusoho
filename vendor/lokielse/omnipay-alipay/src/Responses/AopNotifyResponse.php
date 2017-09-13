@@ -3,7 +3,7 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopNotifyRequest;
-class AopNotifyResponse extends AbstractResponse
+class AopNotifyResponse extends \Omnipay\Alipay\Responses\AbstractResponse
 {
     /**
      * @var AopNotifyRequest

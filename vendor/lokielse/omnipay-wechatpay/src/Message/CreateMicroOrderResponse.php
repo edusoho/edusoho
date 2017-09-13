@@ -8,7 +8,7 @@ use Omnipay\WechatPay\Helper;
  * @package Omnipay\WechatPay\Message
  * @link    https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=9_10&index=1
  */
-class CreateMicroOrderResponse extends BaseAbstractResponse
+class CreateMicroOrderResponse extends \Omnipay\WechatPay\Message\BaseAbstractResponse
 {
     /**
      * @var CreateOrderRequest
@@ -18,7 +18,7 @@ class CreateMicroOrderResponse extends BaseAbstractResponse
     {
         if ($this->isSuccessful()) {
             $data = array('app_id' => $this->request->getAppId(), 'mch_id' => $this->request->getMchId(), 'prepay_id' => $this->getPrepayId(), 'package' => 'Sign=WXPay', 'nonce' => md5(uniqid()), 'timestamp' => time() . '');
-            $data['sign'] = Helper::sign($data, $this->request->getApiKey());
+            $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->request->getApiKey());
         } else {
             $data = null;
         }

@@ -8,7 +8,7 @@ use Omnipay\Alipay\Responses\VerifyNotifyIdResponse;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-class LegacyNotifyRequest extends AbstractLegacyRequest
+class LegacyNotifyRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     /**
      * @var ParameterBag
@@ -37,7 +37,7 @@ class LegacyNotifyRequest extends AbstractLegacyRequest
         if (!$params) {
             $params = array_merge($_GET, $_POST);
         }
-        $this->params = new ParameterBag($params);
+        $this->params = new \Symfony\Component\HttpFoundation\ParameterBag($params);
         return $params;
     }
     /**
@@ -59,13 +59,13 @@ class LegacyNotifyRequest extends AbstractLegacyRequest
     public function validateParams()
     {
         if (empty($this->params->all())) {
-            throw new InvalidRequestException('The `params` or $_REQUEST is empty');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `params` or $_REQUEST is empty');
         }
         if (!$this->params->has('sign_type')) {
-            throw new InvalidRequestException('The sign_type is required');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The sign_type is required');
         }
         if (!$this->params->has('sign')) {
-            throw new InvalidRequestException('The sign is required');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The sign is required');
         }
     }
     /**
@@ -84,35 +84,35 @@ class LegacyNotifyRequest extends AbstractLegacyRequest
                 $this->verifyNotifyId();
             }
         }
-        return $this->response = new LegacyNotifyResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyNotifyResponse($this, $data);
     }
     protected function verifySignature()
     {
-        $signer = new Signer($this->params->all());
+        $signer = new \Omnipay\Alipay\Common\Signer($this->params->all());
         $signer->setSort($this->sort);
         $content = $signer->getContentToSign();
         $sign = $this->params->get('sign');
         $signType = strtoupper($this->params->get('sign_type'));
         if ($signType == 'MD5') {
             if (!$this->getKey()) {
-                throw new InvalidRequestException('The `key` is required for `MD5` sign_type');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The `key` is required for `MD5` sign_type');
             }
-            $match = ($tmp = new Signer()) ? $tmp->verifyWithMD5($content, $sign, $this->getKey()) : $tmp->verifyWithMD5($content, $sign, $this->getKey());
+            $match = ($tmp = new \Omnipay\Alipay\Common\Signer()) ? $tmp->verifyWithMD5($content, $sign, $this->getKey()) : $tmp->verifyWithMD5($content, $sign, $this->getKey());
         } elseif ($signType == 'RSA') {
             if (!$this->getAlipayPublicKey()) {
-                throw new InvalidRequestException('The `alipay_public_key` is required for `RSA` sign_type');
+                throw new \Omnipay\Common\Exception\InvalidRequestException('The `alipay_public_key` is required for `RSA` sign_type');
             }
-            $match = ($tmp = new Signer()) ? $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey()) : $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey());
+            $match = ($tmp = new \Omnipay\Alipay\Common\Signer()) ? $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey()) : $tmp->verifyWithRSA($content, $sign, $this->getAlipayPublicKey());
         } else {
-            throw new InvalidRequestException('The `sign_type` is invalid');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `sign_type` is invalid');
         }
         if (!$match) {
-            throw new InvalidRequestException('The signature is not match');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The signature is not match');
         }
     }
     protected function verifyNotifyId()
     {
-        $request = new LegacyVerifyNotifyIdRequest($this->httpClient, $this->httpRequest);
+        $request = new \Omnipay\Alipay\Requests\LegacyVerifyNotifyIdRequest($this->httpClient, $this->httpRequest);
         $request->initialize($this->parameters->all());
         $request->setPartner($this->getPartner());
         $request->setNotifyId($this->params->get('notify_id'));
@@ -121,7 +121,7 @@ class LegacyNotifyRequest extends AbstractLegacyRequest
          */
         $response = $request->send();
         if (!$response->isSuccessful()) {
-            throw new InvalidRequestException('The `notify_id` verify failed, which TTL is 60s');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The `notify_id` verify failed, which TTL is 60s');
         }
     }
     /**

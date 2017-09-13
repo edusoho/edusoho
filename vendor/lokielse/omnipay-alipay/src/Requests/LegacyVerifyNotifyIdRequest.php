@@ -9,7 +9,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * Class LegacyVerifyNotifyIdRequest
  * @package Omnipay\Alipay\Requests
  */
-class LegacyVerifyNotifyIdRequest extends AbstractLegacyRequest
+class LegacyVerifyNotifyIdRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
     protected $service = 'notify_verify';
     /**
@@ -37,7 +37,7 @@ class LegacyVerifyNotifyIdRequest extends AbstractLegacyRequest
         $url = sprintf('%s?%s', $this->getEndpoint(), http_build_query($data));
         $response = $this->httpClient->get($url)->send()->getBody();
         $data = array('result' => $response);
-        return $this->response = new VerifyNotifyIdResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\VerifyNotifyIdResponse($this, $data);
     }
     /**
      * @return mixed

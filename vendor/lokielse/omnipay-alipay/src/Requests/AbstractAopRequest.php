@@ -5,7 +5,7 @@ namespace Omnipay\Alipay\Requests;
 use Omnipay\Alipay\Common\Signer;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
-abstract class AbstractAopRequest extends AbstractRequest
+abstract class AbstractAopRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     protected $method;
     protected $privateKey;
@@ -67,7 +67,7 @@ abstract class AbstractAopRequest extends AbstractRequest
     }
     protected function sign($params, $signType)
     {
-        $signer = new Signer($params);
+        $signer = new \Omnipay\Alipay\Common\Signer($params);
         $signer->setIgnores(array('sign'));
         $signType = strtoupper($signType);
         if ($signType == 'RSA') {
@@ -75,7 +75,7 @@ abstract class AbstractAopRequest extends AbstractRequest
         } elseif ($signType == 'RSA2') {
             $sign = $signer->signWithRSA($this->getPrivateKey(), OPENSSL_ALGO_SHA256);
         } else {
-            throw new InvalidRequestException('The signType is invalid');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The signType is invalid');
         }
         return $sign;
     }
@@ -352,7 +352,7 @@ abstract class AbstractAopRequest extends AbstractRequest
         }
         foreach (func_get_args() as $key) {
             if (!array_has($data, $key)) {
-                throw new InvalidRequestException("The biz_content {$key} parameter is required");
+                throw new \Omnipay\Common\Exception\InvalidRequestException("The biz_content {$key} parameter is required");
             }
         }
     }
@@ -371,7 +371,7 @@ abstract class AbstractAopRequest extends AbstractRequest
             }
         }
         if ($allEmpty) {
-            throw new InvalidRequestException(sprintf('The biz_content (%s) parameter must provide one at least', implode(',', $keys)));
+            throw new \Omnipay\Common\Exception\InvalidRequestException(sprintf('The biz_content (%s) parameter must provide one at least', implode(',', $keys)));
         }
     }
     protected function filter($data)
@@ -398,7 +398,7 @@ abstract class AbstractAopRequest extends AbstractRequest
             }
         }
         if ($allEmpty) {
-            throw new InvalidRequestException(sprintf('The parameters (%s) must provide one at least', implode(',', $keys)));
+            throw new \Omnipay\Common\Exception\InvalidRequestException(sprintf('The parameters (%s) must provide one at least', implode(',', $keys)));
         }
     }
 }

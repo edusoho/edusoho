@@ -7,7 +7,7 @@ namespace Omnipay\WechatPay\Message;
  * @package Omnipay\WechatPay\Message
  * @link    https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=9_13&index=9
  */
-class QueryOpenIdByAuthCodeResponse extends BaseAbstractResponse
+class QueryOpenIdByAuthCodeResponse extends \Omnipay\WechatPay\Message\BaseAbstractResponse
 {
     public function getOpenId()
     {

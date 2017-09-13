@@ -7,7 +7,7 @@ use Omnipay\Alipay\Requests\LegacyCompleteRefundRequest;
 use Omnipay\Alipay\Requests\LegacyQueryRequest;
 use Omnipay\Alipay\Requests\LegacyRefundRequest;
 use Omnipay\Common\AbstractGateway;
-abstract class AbstractLegacyGateway extends AbstractGateway
+abstract class AbstractLegacyGateway extends \Omnipay\Common\AbstractGateway
 {
     public function getDefaultParameters()
     {
@@ -244,7 +244,7 @@ abstract class AbstractLegacyGateway extends AbstractGateway
      */
     public function completePurchase(array $parameters = array())
     {
-        return $this->createRequest(LegacyCompletePurchaseRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyCompletePurchaseRequest', $parameters);
     }
     /**
      * @param array $parameters
@@ -253,7 +253,7 @@ abstract class AbstractLegacyGateway extends AbstractGateway
      */
     public function refund(array $parameters = array())
     {
-        return $this->createRequest(LegacyRefundRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyRefundRequest', $parameters);
     }
     /**
      * @param array $parameters
@@ -262,7 +262,7 @@ abstract class AbstractLegacyGateway extends AbstractGateway
      */
     public function completeRefund(array $parameters = array())
     {
-        return $this->createRequest(LegacyCompleteRefundRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyCompleteRefundRequest', $parameters);
     }
     /**
      * @param array $parameters
@@ -271,6 +271,6 @@ abstract class AbstractLegacyGateway extends AbstractGateway
      */
     public function query(array $parameters = array())
     {
-        return $this->createRequest(LegacyQueryRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyQueryRequest', $parameters);
     }
 }

@@ -11,7 +11,7 @@ use Omnipay\Common\Message\ResponseInterface;
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=193&articleId=105302&docType=1
  */
-class AopVerifyAppPayReturnRequest extends AbstractAopRequest
+class AopVerifyAppPayReturnRequest extends \Omnipay\Alipay\Requests\AbstractAopRequest
 {
     protected $key = 'alipay_trade_app_pay_response';
     /**
@@ -41,17 +41,17 @@ class AopVerifyAppPayReturnRequest extends AbstractAopRequest
         parent::validate('result');
         $result = $this->getResult();
         if (!is_string($result)) {
-            throw new InvalidRequestException('The result should be string');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The result should be string');
         }
         if (substr($result, 0, 3) == '{\\"') {
             $result = stripslashes($result);
         }
         $data = json_decode($result, true);
         if (json_last_error() != JSON_ERROR_NONE) {
-            throw new InvalidRequestException('The result should be a valid json string');
+            throw new \Omnipay\Common\Exception\InvalidRequestException('The result should be a valid json string');
         }
         if (!isset($data[$this->key])) {
-            throw new InvalidRequestException("The result decode data should contain {$this->key}");
+            throw new \Omnipay\Common\Exception\InvalidRequestException("The result decode data should contain {$this->key}");
         }
     }
     /**
@@ -112,12 +112,12 @@ class AopVerifyAppPayReturnRequest extends AbstractAopRequest
      */
     public function sendData($data)
     {
-        $request = new AopNotifyRequest($this->httpClient, $this->httpRequest);
+        $request = new \Omnipay\Alipay\Requests\AopNotifyRequest($this->httpClient, $this->httpRequest);
         $request->initialize($this->parameters->all());
         $request->setEndpoint($this->getEndpoint());
         $request->setParams($data);
         $request->setSort(false);
-        $request->setEncodePolicy(Signer::ENCODE_POLICY_JSON);
+        $request->setEncodePolicy(\Omnipay\Alipay\Common\Signer::ENCODE_POLICY_JSON);
         $request->setAlipayPublicKey($this->getAlipayPublicKey());
         /**
          * @var AopNotifyResponse $response

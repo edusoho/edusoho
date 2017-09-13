@@ -11,7 +11,7 @@ use Omnipay\WechatPay\Helper;
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_5&index=7
  * @method QueryRefundResponse send()
  */
-class QueryRefundRequest extends BaseAbstractRequest
+class QueryRefundRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
     protected $endpoint = 'https://api.mch.weixin.qq.com/pay/refundquery';
     /**
@@ -27,11 +27,11 @@ class QueryRefundRequest extends BaseAbstractRequest
         $queryIdEmpty = $queryIdEmpty && !$this->getOutRefundNo() && !$this->getRefundId();
         if ($queryIdEmpty) {
             $message = 'The \'transaction_id\' or \'out_trade_no\' or \'out_refund_no\' or \'refund_id\' parameter is required';
-            throw new InvalidRequestException($message);
+            throw new \Omnipay\Common\Exception\InvalidRequestException($message);
         }
         $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'device_info' => $this->getDeviceInfo(), 'transaction_id' => $this->getTransactionId(), 'out_trade_no' => $this->getOutTradeNo(), 'out_refund_no' => $this->getOutRefundNo(), 'refund_id' => $this->getRefundId(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-        $data['sign'] = Helper::sign($data, $this->getApiKey());
+        $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         return $data;
     }
     /**
@@ -110,9 +110,9 @@ class QueryRefundRequest extends BaseAbstractRequest
      */
     public function sendData($data)
     {
-        $request = $this->httpClient->post($this->endpoint)->setBody(Helper::array2xml($data));
+        $request = $this->httpClient->post($this->endpoint)->setBody(\Omnipay\WechatPay\Helper::array2xml($data));
         $response = $request->send()->getBody();
-        $responseData = Helper::xml2array($response);
-        return $this->response = new QueryRefundResponse($this, $responseData);
+        $responseData = \Omnipay\WechatPay\Helper::xml2array($response);
+        return $this->response = new \Omnipay\WechatPay\Message\QueryRefundResponse($this, $responseData);
     }
 }

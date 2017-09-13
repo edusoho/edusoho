@@ -4,7 +4,7 @@ namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopTradeWapPayRequest;
 use Omnipay\Common\Message\RedirectResponseInterface;
-class AopTradeWapPayResponse extends AbstractResponse implements RedirectResponseInterface
+class AopTradeWapPayResponse extends \Omnipay\Alipay\Responses\AbstractResponse implements \Omnipay\Common\Message\RedirectResponseInterface
 {
     /**
      * @var AopTradeWapPayRequest

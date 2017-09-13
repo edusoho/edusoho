@@ -8,7 +8,7 @@ use Omnipay\WechatPay\Helper;
  * @package Omnipay\WechatPay\Message
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_1
  */
-class CreateOrderResponse extends BaseAbstractResponse
+class CreateOrderResponse extends \Omnipay\WechatPay\Message\BaseAbstractResponse
 {
     /**
      * @var CreateOrderRequest
@@ -18,7 +18,7 @@ class CreateOrderResponse extends BaseAbstractResponse
     {
         if ($this->isSuccessful()) {
             $data = array('appid' => $this->request->getAppId(), 'partnerid' => $this->request->getMchId(), 'prepayid' => $this->getPrepayId(), 'package' => 'Sign=WXPay', 'noncestr' => md5(uniqid()), 'timestamp' => time());
-            $data['sign'] = Helper::sign($data, $this->request->getApiKey());
+            $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->request->getApiKey());
         } else {
             $data = null;
         }
@@ -38,7 +38,7 @@ class CreateOrderResponse extends BaseAbstractResponse
         if ($this->isSuccessful()) {
             $data = array('appId' => $this->request->getAppId(), 'package' => 'prepay_id=' . $this->getPrepayId(), 'nonceStr' => md5(uniqid()), 'timeStamp' => time() . '');
             $data['signType'] = 'MD5';
-            $data['paySign'] = Helper::sign($data, $this->request->getApiKey());
+            $data['paySign'] = \Omnipay\WechatPay\Helper::sign($data, $this->request->getApiKey());
         } else {
             $data = null;
         }

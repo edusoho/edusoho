@@ -3,7 +3,7 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopCompletePurchaseRequest;
-class AopCompletePurchaseResponse extends AbstractResponse
+class AopCompletePurchaseResponse extends \Omnipay\Alipay\Responses\AbstractResponse
 {
     /**
      * @var AopCompletePurchaseRequest
