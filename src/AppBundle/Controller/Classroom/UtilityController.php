@@ -36,7 +36,7 @@ class UtilityController extends BaseController
     {
         $likeString = $request->query->get('q');
 
-        $users = $this->getUserService()->searchUsers(array('nickname' => $likeString), 
+        $users = $this->getUserService()->searchUsers(array('nickname' => $likeString),
             array(), 0, 10);
         $userIds = empty($users) ? array(-1) : ArrayToolkit::column($users, 'id');
 
@@ -45,12 +45,12 @@ class UtilityController extends BaseController
             'classroomId' => $classroomId,
             'role' => 'student',
             'userIds' => $userIds,
-            'excludeUserIds' => $excludeUserIds
+            'excludeUserIds' => $excludeUserIds,
         );
         $students = $this->getClassroomService()->searchMembers(
-            $conditions, 
-            array('createdTime' => 'DESC'), 
-            0, 
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
             PHP_INT_MAX
         );
 

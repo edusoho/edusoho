@@ -1091,7 +1091,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateAssistants($classroomId, $userIds)
     {
         $assistantIds = $this->findAssistants($classroomId);
-        
+
         $this->addAssistants($classroomId, $userIds, $assistantIds);
         $this->deleteAssistants($classroomId, $userIds, $assistantIds);
 
@@ -1114,7 +1114,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if ($existMember && in_array('student', $existMember['role'])) {
                 $fields = array(
-                    'role' => $existMember['role']
+                    'role' => $existMember['role'],
                 );
                 $fields['role'][] = 'assistant';
                 $this->getClassroomMemberDao()->update($addMembers[$userId]['id'], $fields);
@@ -1140,9 +1140,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
 
             $fields = array(
-                'role' => $deleteMembers[$userId]['role']
+                'role' => $deleteMembers[$userId]['role'],
             );
-            
+
             $key = array_search('assistant', $fields['role']);
             array_splice($fields['role'], $key, 1);
 

@@ -73,8 +73,8 @@ class ClassroomController extends BaseController
         ), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
         $assistants = $this->getClassroomService()->searchMembers(array(
-            'role'   => 'assistant',
-            'userId' => $user->id
+            'role' => 'assistant',
+            'userId' => $user->id,
         ), null, 0, PHP_INT_MAX);
 
         $members = array_merge($members, $assistants);

@@ -1230,7 +1230,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($classroom['id']);
 
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher2['id']);
-        
+
         $this->getClassroomService()->becomeStudent($classroom['id'], $teacher1['id']);
         $this->getClassroomService()->becomeStudent($classroom['id'], $teacher3['id']);
         $this->getClassroomService()->becomeStudent($classroom['id'], $teacher4['id']);
