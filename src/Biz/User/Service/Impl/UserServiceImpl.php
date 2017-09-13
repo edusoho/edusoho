@@ -1097,6 +1097,14 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['isQQPublic'] = 1;
         }
 
+        $fields = array_filter($fields, function ($value) {
+            if ($value === 0) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         $userProfile = $this->getProfileDao()->update($id, $fields);
 
         $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
