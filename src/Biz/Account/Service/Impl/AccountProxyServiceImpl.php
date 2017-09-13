@@ -19,6 +19,18 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         return parent::searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit);
     }
 
+    public function countUserCashflows($conditions)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+        return parent::countUserCashflows($conditions);
+    }
+
+    public function searchUserCashflows($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+        return parent::searchUserCashflows($conditions, $orderBy, $start, $limit);
+    }
+
     protected function _prepareConditions($conditions)
     {
         if (isset($conditions['timeType'])) {
@@ -26,8 +38,14 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
                 case 'oneWeek':
                     $conditions['created_time_GTE'] = time() - 7 * 3600 * 24;
                     break;
+                case 'twoWeeks':
+                    $conditions['created_time_GTE'] = time() - 14 * 24 * 3600;
+                    break;
                 case 'oneMonth':
                     $conditions['created_time_GTE'] = time() - 30 * 3600 * 24;
+                    break;
+                case 'twoMonths':
+                    $conditions['created_time_GTE'] = time() - 60 * 24 * 3600;
                     break;
                 case 'threeMonths':
                     $conditions['created_time_GTE'] = time() - 90 * 3600 * 24;
