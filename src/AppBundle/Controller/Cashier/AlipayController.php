@@ -47,11 +47,11 @@ class AlipayController extends BaseController
 
         try {
             $this->getPayService()->notifyPaid('alipay', $data);
+
             return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?1';</script>");
         } catch (\Exception $e) {
             return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?0';</script>");
         }
-
     }
 
     /**
