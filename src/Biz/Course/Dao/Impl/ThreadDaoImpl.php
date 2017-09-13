@@ -31,6 +31,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE type = ? ORDER BY createdTime DESC";
         $sql = $this->sql($sql, array(), $start, $limit);
+
         return $this->db()->fetchAll($sql, array($type)) ?: array();
     }
 
@@ -38,6 +39,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE type = ? AND isElite = ? ORDER BY createdTime";
         $sql = $this->sql($sql, array(), $start, $limit);
+
         return $this->db()->fetchAll($sql, array($type, $status)) ?: array();
     }
 
@@ -45,6 +47,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
         $sql = $this->sql($sql, $orderBy, $start, $limit);
+
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
@@ -52,6 +55,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ?";
         $sql = $this->sql($sql, $orderBy, $start, $limit);
+
         return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
     }
 

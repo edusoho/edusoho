@@ -38,6 +38,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE parentId = ?";
         $sql = $this->sql($sql, $orderBy, $start, $limit);
+
         return $this->db()->fetchAll($sql, array($parentId)) ?: array();
     }
 

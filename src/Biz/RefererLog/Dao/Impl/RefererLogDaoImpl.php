@@ -46,7 +46,8 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
             $parameters[] = $endTime;
         }
         $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC";
-        $sql = $this->sql($sql, array(), $start, $limit );
+        $sql = $this->sql($sql, array(), $start, $limit);
+
         return $this->db()->fetchAll($sql, $parameters);
     }
 
