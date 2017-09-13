@@ -615,10 +615,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $member = $this->addMember($fields);
+        $member = $this->addMember($fields, $order);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
-        $this->createOperateRecord($member, 'join', $order);
 
         $this->dispatchEvent(
             'course.join',
@@ -1113,7 +1112,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberOperationService()->createRecord($record);
     }
 
-    private function addMember($member)
+    private function addMember($member, $data = array())
     {
         $member = $this->getMemberDao()->create($fields);
         $this->createOperateRecord($member, 'join', $data);
@@ -1121,7 +1120,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    private function removeMember($member)
+    private function removeMember($member, $data = array())
     {
         $result = $this->getMemberDao()->delete($member['id']);
         $this->createOperateRecord($member, 'exit', $data);
