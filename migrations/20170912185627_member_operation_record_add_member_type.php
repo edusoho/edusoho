@@ -30,6 +30,5 @@ class MemberOperationRecordAddMemberType extends Migration
         $db->exec('ALTER TABLE `member_operation_record` DROP COLUMN `member_type`;');
         $db->exec('ALTER TABLE `member_operation_record` DROP COLUMN `reason`;');
         $db->exec('ALTER TABLE `member_operation_record` DROP COLUMN `refunded`;');
-
     }
 }

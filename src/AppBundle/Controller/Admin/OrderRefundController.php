@@ -68,6 +68,7 @@ class OrderRefundController extends BaseController
             $conditions['order_ids'] = !empty($orderItems) ? ArrayToolkit::column($orderItems, 'id') : array(0);
             unset($conditions['titleLike']);
         }
+
         return $conditions;
     }
 

@@ -98,7 +98,7 @@ class CourseProduct extends Product implements Owner, OrderStatusCallback
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->removeStudent(
-            $this->targetId, 
+            $this->targetId,
             $user->getId(),
             array('reason' => $data['reason']['note'])
         );
