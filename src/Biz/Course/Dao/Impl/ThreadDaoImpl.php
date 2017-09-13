@@ -29,31 +29,29 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 
     public function findLatestThreadsByType($type, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE type = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        $sql = "SELECT * FROM {$this->table()} WHERE type = ? ORDER BY createdTime DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, array($type)) ?: array();
     }
 
     public function findEliteThreadsByType($type, $status, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE type = ? AND isElite = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        $sql = "SELECT * FROM {$this->table()} WHERE type = ? AND isElite = ? ORDER BY createdTime";
+        $sql = $this->sql($sql, array(), $start, $limit);
         return $this->db()->fetchAll($sql, array($type, $status)) ?: array();
     }
 
     public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
     {
-        $orderBy = implode(' ', $orderBy);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
-
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
+        $sql = $this->sql($sql, $orderBy, $start, $limit);
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
     public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
     {
-        $orderBy = implode(' ', $orderBy);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
-
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ?";
+        $sql = $this->sql($sql, $orderBy, $start, $limit);
         return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
     }
 

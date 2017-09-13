@@ -221,6 +221,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByTime($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit( $start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select("from_unixtime(paidTime,'%Y-%m-%d') date, sum(amount) as count")
             ->groupBy("from_unixtime(`paidTime`,'%Y-%m-%d')")
@@ -233,6 +234,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByTitle($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit( $start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount) as count, userId, title, targetType, targetId')
             ->groupBy('title')
@@ -245,6 +247,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByUserId($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit( $start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount) as count, userId, title, targetType, targetId')
             ->groupBy('userId')
@@ -258,7 +261,6 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function analysisExitCourseOrderDataByTime($startTime, $endTime)
     {
         $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} AND `createdTime`<={$endTime} AND `status`<>'paid' AND `status`<>'created' AND targetType='course' GROUP BY from_unixtime(`createdTime`,'%Y-%m-%d') ORDER BY date ASC ";
-
         return $this->db()->fetchAll($sql);
     }
 
@@ -283,9 +285,8 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (!isset($conditions['startTime'])) {
             $conditions['startTime'] = 0;
         }
-        // @TODO SQL Inject
-        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>= ? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
-
+        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>= ? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid'";
+        $sql = $this->sql($sql, $orderBy, $start, $limit);
         return $this->db()->fetchAll($sql, array(
             $conditions['startTime'],
             $conditions['endTime'],

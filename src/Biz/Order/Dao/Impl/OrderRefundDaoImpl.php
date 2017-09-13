@@ -39,7 +39,7 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
     public function findByUserId($userId, $start, $limit)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        $sql = $this
         return $this->db()->fetchAll($sql, array($userId)) ?: array();
     }
 

@@ -222,7 +222,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         }
 
         $sql .= ' ORDER BY createdTime DESC';
-        $sql = $this->sql($sql, $start, $limit);
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
