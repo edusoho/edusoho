@@ -24,7 +24,6 @@ class PayCenter extends AbstractResource
 
         $trade = $this->getPayService()->getTradeByTradeSn($params['orderId']);
         $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
-        var_dump($platformCreatedResult);exit;
         if ($trade['status'] === 'paid') {
             $trade['paymentForm'] = array();
             $trade['paymentHtml'] = '';

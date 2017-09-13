@@ -24,7 +24,7 @@ class WechatController extends BaseController
 
     public function qrcodeAction($trade)
     {
-        $trade['pay_type'] = 'Native';
+        $trade['platform_type'] = 'Native';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
         $result = $this->getPayService()->createTrade($trade);
 
@@ -79,7 +79,7 @@ class WechatController extends BaseController
         }
 
         $trade['open_id'] = $openid;
-        $trade['pay_type'] = 'Js';
+        $trade['platform_type'] = 'Js';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
         $result = $this->getPayService()->createTrade($trade);
 
