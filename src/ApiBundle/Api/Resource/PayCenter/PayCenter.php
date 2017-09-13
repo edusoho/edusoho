@@ -15,20 +15,17 @@ class PayCenter extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (empty($params['orderId'])
-            || empty($params['targetType'])
-            || empty($params['payment'])
-            ||!in_array($params['payment'], array('alipay', 'coin')) ) {
+        if (empty($params['orderId'])) {
             throw new BadRequestHttpException('Missing params', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $trade = $this->getPayService()->getTradeByTradeSn($params['orderId']);
-        $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
 
         if ($trade['status'] === 'paid') {
             $trade['paymentForm'] = array();
             $trade['paymentHtml'] = '';
         } else {
+            $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
             $form = $this->makePayForm($platformCreatedResult);
             $trade['paymentForm'] = $form;
             $trade['paymentHtml'] = $this->renderView('pay-center/submit-pay-request.html.twig',

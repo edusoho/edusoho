@@ -16,7 +16,7 @@ class CoinCheckCommand extends OrderPayCheckCommand
         }
 
         if (empty($params['payPassword'])) {
-            throw new OrderPayCheckException('Missing payPassword', 2000);
+            throw new OrderPayCheckException('order.pay_check_msg.missing_pay_password', 2000);
         }
 
         $user = $this->biz['user'];
@@ -24,13 +24,13 @@ class CoinCheckCommand extends OrderPayCheckCommand
         $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
 
         if ($balance['amount'] < $params['coinAmount']) {
-            throw new OrderPayCheckException('Your balance is insufficient', 2001);
+            throw new OrderPayCheckException('order.pay_check_msg.balance_not_enough', 2001);
         }
 
         $isCorrect = $this->getAccountService()->validatePayPassword($user->getId(), $params['payPassword']);
 
         if (!$isCorrect) {
-            throw new OrderPayCheckException('Incorrect payPassword', 2002);
+            throw new OrderPayCheckException('order.pay_check_msg.incorrect_pay_password', 2002);
         }
     }
 

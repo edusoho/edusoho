@@ -468,10 +468,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
             $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
             $trade = $this->getPayService()->getTradeByTradeSn($result['sn']);
-            $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
             if ($trade['status'] === 'paid') {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             } else {
+                $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
         } catch (\Exception $exception) {

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
@@ -23,22 +24,26 @@ class Order extends AbstractResource
 
         $this->filterParams($params);
 
-        /* @var $product Product */
-        $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
-        $product->setPickedDeduct($params);
-        $order = $this->getOrderFacadeService()->create($product);
-        $params['clientIp'] = $this->getClientIp();
-        $params['payment'] = 'alipay.in_time';
-        $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
-        $trade['pay_type'] = 'Wap';
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-        $result = $this->getPayService()->createTrade($trade);
+        try {
+            /* @var $product Product */
+            $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
+            $product->setPickedDeduct($params);
+            $order = $this->getOrderFacadeService()->create($product);
+            $params['clientIp'] = $this->getClientIp();
+            $params['payment'] = 'alipay.in_time';
+            $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
+            $trade['pay_type'] = 'Wap';
+            $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
+            $trade['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $result = $this->getPayService()->createTrade($trade);
 
-        return array(
-            'id' => $result['trade_sn'],
-            'sn' => $result['trade_sn']
-        );
+            return array(
+                'id' => $result['trade_sn'],
+                'sn' => $result['trade_sn']
+            );
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
+        }
     }
 
     public function filterParams(&$params)
