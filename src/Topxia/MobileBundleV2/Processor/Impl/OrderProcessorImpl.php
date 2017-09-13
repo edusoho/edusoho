@@ -5,6 +5,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\ResourceKernel;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
@@ -433,7 +434,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $fields;
     }
 
-    public function createOrder2()
+    public function createOrder()
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
@@ -465,17 +466,26 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 array()
             );
 
-            $trade = $newApiResourceKernel->handleApiRequest($apiRequest, false);
-
+            $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
+            $trade = $this->getPayService()->getTradeByTradeSn($result['sn']);
+            $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
             if ($trade['status'] === 'paid') {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             } else {
-                return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
+                return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
         } catch (\Exception $exception) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
+    }
+
+    /**
+     * @return PayService
+     */
+    private function getPayService()
+    {
+        return $this->controller->getService('Pay:PayService');
     }
 
     private function getUseCoinAmount()
@@ -508,7 +518,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $coinPayAmount;
     }
 
-    public function createOrder()
+    public function createOrderBack()
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
