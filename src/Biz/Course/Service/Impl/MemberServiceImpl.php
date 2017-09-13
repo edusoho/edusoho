@@ -128,8 +128,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($member['role'] !== 'student') {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
-        $result = $this->getMemberDao()->delete($member['id']);
-
+        $result = $this->removeMember($member);
+                
         $course = $this->getCourseService()->getCourse($courseId);
 
         $this->getLogService()->info(
@@ -413,7 +413,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $existTeacherMembers = $this->findCourseTeachers($courseId);
 
         foreach ($existTeacherMembers as $member) {
-            $this->getMemberDao()->delete($member['id']);
+            $this->removeMember($member);
         }
 
         // 逐个插入新的教师的学员数据
@@ -424,10 +424,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
 
             if ($existMember) {
-                $this->getMemberDao()->delete($existMember['id']);
+                $this->removeMember($existMember);
             }
 
-            $member = $this->getMemberDao()->create($member);
+            $member = $this->addMember($member);
 
             if ($member['isVisible']) {
                 $visibleTeacherIds[] = $member['userId'];
@@ -460,7 +460,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
 
-            $this->getMemberDao()->delete($member['id']);
+            $this->removeMember($member);
 
             $fields = array(
                 'teacherIds' => array_diff($course['teacherIds'], array($member['userId'])),
@@ -533,7 +533,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         }
 
-        $this->getMemberDao()->delete($member['id']);
+        $this->removeMember($member);
+
         $this->dispatchEvent(
             'course.quit',
             $course,
@@ -614,7 +615,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $member = $this->getMemberDao()->create($fields);
+        $member = $this->addMember($fields);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
         $this->createOperateRecord($member, 'join', $order);
@@ -746,7 +747,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
-        $this->getMemberDao()->delete($member['id']);
+        $this->removeMember($member);
 
         $this->getCourseDao()->update(
             $courseId,
@@ -845,7 +846,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return array();
         }
 
-        $member = $this->getMemberDao()->create($fields);
+        $member = $this->addMember($fields);
         $fields = array(
             'studentNum' => $this->getCourseStudentCount($courseId),
         );
@@ -1100,6 +1101,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $record = array(
             'member_id' => $member['userId'],
+            'member_type' => $member['role'],
             'target_id' => $member['courseId'],
             'target_type' => 'course',
             'operate_type' => $operateType,
@@ -1109,6 +1111,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         return $this->getMemberOperationService()->createRecord($record);
+    }
+
+    private function addMember($member)
+    {
+        $member = $this->getMemberDao()->create($fields);
+        $this->createOperateRecord($member, 'join', $data);
+
+        return $member;
+    }
+
+    private function removeMember($member)
+    {
+        $result = $this->getMemberDao()->delete($member['id']);
+        $this->createOperateRecord($member, 'exit', $data);
+
+        return $result;
     }
 
     /**
