@@ -1030,6 +1030,10 @@ cashier_pay_notify:
     defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
+cashier_pay_return_for_app:
+    path: /callback/{payment}/return_for_app
+    defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
+
 cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Wechat:roll }

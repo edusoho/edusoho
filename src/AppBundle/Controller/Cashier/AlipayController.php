@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AlipayController extends BaseController
 {
@@ -36,6 +37,11 @@ class AlipayController extends BaseController
         $this->getPayService()->notifyPaid('alipay.in_time', $data);
 
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['out_trade_no']), true));
+    }
+
+    public function returnForAppAction(Request $request)
+    {
+        return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?1';</script>");
     }
 
     /**

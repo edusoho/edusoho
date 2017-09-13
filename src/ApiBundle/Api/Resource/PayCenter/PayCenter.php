@@ -7,6 +7,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Component\Payment\Payment;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PayCenter extends AbstractResource
@@ -21,23 +22,19 @@ class PayCenter extends AbstractResource
             throw new BadRequestHttpException('Missing params', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        list($checkResult, $order) = $this->service('PayCenter:GatewayService')
-            ->beforePayOrder($params['orderId'], $params['targetType'], $params['payment']);
+        $trade = $this->getPayService()->getTradeByTradeSn($params['orderId']);
+        $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
 
-        if ($checkResult) {
-            throw new BadRequestHttpException($checkResult['error'], null, $checkResult['code']);
-        }
-
-        if ($order['status'] == 'paid') {
-            $order['paymentForm'] = array();
-            $order['paymentHtml'] = '';
+        if ($trade['status'] === 'paid') {
+            $trade['paymentForm'] = array();
+            $trade['paymentHtml'] = '';
         } else {
-            $order['paymentForm'] = $this->generatePaymentForm($order, $request);
-            $order['paymentHtml'] = $this->renderView('pay-center/submit-pay-request.html.twig',
-                array('form' => $order['paymentForm']));
+            $trade['paymentForm'] = $platformCreatedResult['data'];
+            $trade['paymentHtml'] = $this->renderView('pay-center/submit-pay-request.html.twig',
+                array('form' => $platformCreatedResult['data']));
         }
 
-        return $order;
+        return $trade;
     }
 
     private function generatePaymentForm($order, $request)
@@ -86,5 +83,13 @@ class PayCenter extends AbstractResource
         ));
 
         return $request->setParams($requestParams);
+    }
+
+    /**
+     * @return PayService
+     */
+    private function getPayService()
+    {
+        return $this->service('Pay:PayService');
     }
 }

@@ -18,11 +18,12 @@ class PaymentExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'wechat' => array(
-                'notifyController' => 'AppBundle:Cashier/Wechat:notify',
+                'notify' => 'AppBundle:Cashier/Wechat:notify',
             ),
 
             'alipay' => array(
-                'notifyController' => 'AppBundle:Cashier/Alipay:notify',
+                'notify' => 'AppBundle:Cashier/Alipay:notify',
+                'returnForApp' => 'AppBundle:Cashier/Alipay:returnForApp',
             ),
         );
     }

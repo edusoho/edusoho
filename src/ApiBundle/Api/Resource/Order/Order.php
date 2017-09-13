@@ -30,14 +30,14 @@ class Order extends AbstractResource
         $params['clientIp'] = $this->getClientIp();
         $params['payment'] = 'alipay.in_time';
         $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
-        $trade['pay_type'] = 'Native';
+        $trade['pay_type'] = 'wap';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_alipay_return', array(), true);
+        $trade['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         $result = $this->getPayService()->createTrade($trade);
 
         return array(
             'id' => $result['id'],
-            'sn' => $result['order_sn']
+            'sn' => $result['trade_sn']
         );
     }
 

@@ -11,7 +11,17 @@ class CallbackController extends BaseController
     {
         $targetCallback = $this->getTargetCallback($payment);
 
-        return $this->forward($targetCallback['notifyController'], array(
+        return $this->forward($targetCallback['notify'], array(
+            'request' => $request,
+            'payment' => $payment,
+        ));
+    }
+
+    public function returnForAppAction(Request $request, $payment)
+    {
+        $targetCallback = $this->getTargetCallback($payment);
+
+        return $this->forward($targetCallback['returnForApp'], array(
             'request' => $request,
             'payment' => $payment,
         ));
