@@ -128,7 +128,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($member['role'] !== 'student') {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
-        $result = $this->removeMember($member);
+        $result = $this->removeMember($member, 'course.member.operation.remove_course_student');
                 
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -413,7 +413,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $existTeacherMembers = $this->findCourseTeachers($courseId);
 
         foreach ($existTeacherMembers as $member) {
-            $this->removeMember($member);
+            $this->removeMember($member, 'course.member.operation.reason.remove_teachers');
         }
 
         // 逐个插入新的教师的学员数据
@@ -424,10 +424,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
 
             if ($existMember) {
-                $this->removeMember($existMember);
+                $this->removeMember($existMember, 'course.member.operation.reason.remove_teachers');
             }
 
-            $member = $this->addMember($member);
+            $member = $this->addMember($member, 'course.member.operation.reason.become_teachers');
 
             if ($member['isVisible']) {
                 $visibleTeacherIds[] = $member['userId'];
@@ -460,7 +460,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
 
-            $this->removeMember($member);
+            $this->removeMember($member, 'course.member.operation.reason.cancle_teacher');
 
             $fields = array(
                 'teacherIds' => array_diff($course['teacherIds'], array($member['userId'])),
@@ -533,7 +533,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         }
 
-        $this->removeMember($member);
+        $this->removeMember($member, 'course.member.operation.quit_deadline_reach');
 
         $this->dispatchEvent(
             'course.quit',
@@ -615,7 +615,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $member = $this->addMember($fields, $order);
+        $member = $this->addMember($fields, 'course.member.operation.reason.buy', $order);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
 
@@ -746,7 +746,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
-        $this->removeMember($member);
+        $this->removeMember($member, 'course.member.operation.remove');
 
         $this->getCourseDao()->update(
             $courseId,
@@ -845,7 +845,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return array();
         }
 
-        $member = $this->addMember($fields);
+        $member = $this->addMember($fields, 'course.member.operation.reason.join_classroom');
         $fields = array(
             'studentNum' => $this->getCourseStudentCount($courseId),
         );
@@ -1093,7 +1093,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
-    protected function createOperateRecord($member, $operateType, $data = array())
+    protected function createOperateRecord($member, $operateType, $reason = '', $data = array())
     {
         $currentUser = $this->getCurrentUser();
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
@@ -1101,6 +1101,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $record = array(
             'member_id' => $member['userId'],
             'member_type' => $member['role'],
+            'reason' => $reason,
             'target_id' => $member['courseId'],
             'target_type' => 'course',
             'operate_type' => $operateType,
@@ -1109,21 +1110,25 @@ class MemberServiceImpl extends BaseService implements MemberService
             'data' => $data,
         );
 
+        if ($operateType == 'exit') {
+
+        }
+
         return $this->getMemberOperationService()->createRecord($record);
     }
 
-    private function addMember($member, $data = array())
+    private function addMember($member, $reason, $data = array())
     {
         $member = $this->getMemberDao()->create($fields);
-        $this->createOperateRecord($member, 'join', $data);
+        $this->createOperateRecord($member, 'join', $reason, $data);
 
         return $member;
     }
 
-    private function removeMember($member, $data = array())
+    private function removeMember($member, $reason, $data = array())
     {
         $result = $this->getMemberDao()->delete($member['id']);
-        $this->createOperateRecord($member, 'exit', $data);
+        $this->createOperateRecord($member, 'exit', $reason, $data);
 
         return $result;
     }
