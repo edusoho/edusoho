@@ -27,6 +27,10 @@ class CoinCheckCommand extends OrderPayCheckCommand
             throw new OrderPayCheckException('order.pay_check_msg.balance_not_enough', 2001);
         }
 
+        if ($this->getAccountService()->isSecurityAnswersSetted($user->getId())) {
+            throw new OrderPayCheckException('order.pay_check_msg.pay_password_not_set', 2008);
+        }
+
         $isCorrect = $this->getAccountService()->validatePayPassword($user->getId(), $params['payPassword']);
 
         if (!$isCorrect) {

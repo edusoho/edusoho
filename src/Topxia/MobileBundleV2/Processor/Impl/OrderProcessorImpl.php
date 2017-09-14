@@ -65,7 +65,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
     }
 
-    public function checkCoupon()
+    private function del_checkCoupon()
     {
         $code = $this->getParam('code');
         $type = $this->getParam('targetType');
@@ -367,7 +367,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     }
 
     //payType is enum (none, alipay)
-    public function buyCoin()
+    public function del_buyCoin()
     {
         $user = $this->controller->getUserByToken($this->request);
 
@@ -475,7 +475,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
         } catch (\Exception $exception) {
-            return $this->createErrorResponse('error', $exception->getMessage());
+            return $this->createErrorResponse('error', $this->controller->get('translator')->trans($exception->getMessage()));
         }
 
     }
@@ -634,7 +634,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
     }
 
-    public function payClassRoom()
+    public function del_payClassRoom()
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
@@ -754,7 +754,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $cash;
     }
 
-    public function payVip()
+    private function del_payVip()
     {
         $targetId = $this->getParam('targetId');
 
@@ -840,7 +840,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     /**
      * payType iap, online.
      */
-    public function payCourse()
+    private function del_payCourse()
     {
         $payType = $this->getParam('payType', 'online');
         $courseId = $this->getParam('courseId');

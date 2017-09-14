@@ -347,6 +347,7 @@ class CoinController extends BaseController
         $condition['timeType'] = 'oneWeek';
         $condition['amount_type'] = 'coin';
         $condition['orderBY'] = 'desc';
+        $condition['user_type'] = 'buyer';
 
         $fields = $request->query->all();
 
