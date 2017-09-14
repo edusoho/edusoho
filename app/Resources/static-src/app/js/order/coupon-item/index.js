@@ -22,6 +22,8 @@ class Coupon {
     if (this.$selectCoupon.length > 0) {
       this._setCoupon(this.$selectCoupon.val(), false);
     }
+
+    this._showDeductAmount();
   }
 
   couponSelect(event) {
@@ -45,7 +47,8 @@ class Coupon {
   }
 
   useCoupon() {
-    this._checkCoupon();
+    this.$couponCode
+    this._setCoupon(this.$couponCode.val());
   }
 
   _checkCoupon() {
@@ -71,6 +74,7 @@ class Coupon {
     $.post($('#use-coupon').data('url'), data, function(data){
         if(data.useable == 'no'){
           self.$couponNotify.addClass('alert-danger').text(data.message).css("display","inline-block");
+          self._showDeductAmount();
         } else {
           let text = data['type'] == 'discount' ? Translator.trans('order.create.use_discount_coupon_hint', {rate: data['rate']}) : Translator.trans('order.create.use_price_coupon_hint', {rate: data['rate']});
           self.$couponNotify.removeClass('alert-danger').addClass("alert-success").text(text).css("display","inline-block");
@@ -113,11 +117,14 @@ class Coupon {
     !value ? this.$noUseCouponCode.show() : this.$noUseCouponCode.hide();
     this._checkCoupon();
     if (triggerCaculate) {
-      $('#order-create-form').trigger('calculatePrice');
+     this._calculatePrice();
     }
     return this.$couponCode;
   }
 
+  _calculatePrice() {
+    $('#order-create-form').trigger('calculatePrice');
+  }
 }
 
 

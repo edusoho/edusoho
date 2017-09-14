@@ -447,6 +447,9 @@ order.vip_order.renew_tips: '%level.name% renew vip x %duration%'
 order.vip_order.buy_tips: 'Buy %level.name% vip x %duration%'
 order.pay: 'Pay the order'
 order.success: 'Order finished'
+#TODO trans
+order.refund.notify_admin: '用户%nickname%申请退款 <a href="%targetUrl%">%title%</a>，请审核'
+
 pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
@@ -5726,8 +5729,6 @@ admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%c
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
-admin.order_refund.title.type_course_input_placeholder: 'Course title'
-admin.order_refund.title.type_classroom_input_placeholder: 'Class title'
 admin.order_refund.title: 'Refund order'
 admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'

@@ -772,13 +772,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
+
+        $this->createOperateRecord($member, 'exit', $member);
+
         $user = $this->getUserService()->getUser($member['userId']);
+        $message = array(
+            'classroomId' => $classroom['id'],
+            'classroomTitle' => $classroom['title'],
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'type' => 'remove',
+        );
+        $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
 
         $this->getLogService()->info(
             'classroom',
             'remove_student',
             "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})"
         );
+
         $this->dispatchEvent(
             'classroom.quit',
             new Event($classroom, array('userId' => $member['userId'], 'member' => $member))
@@ -865,6 +877,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'expiryValue' => $classroom['expiryValue'],
         ));
 
+        $refundSetting = $this->getSettingService()->get('refund', array());
         $fields = array(
             'classroomId' => $classroomId,
             'userId' => $userId,
@@ -873,10 +886,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'role' => array('student'),
             'remark' => empty($info['note']) ? '' : $info['note'],
             'deadline' => $deadline,
+            'refundDeadline' => empty($refundSetting['maxRefundDays']) ? 0 : strtotime("+ {$refundSetting['maxRefundDays']}days"),
         );
 
         if (!empty($member)) {
             $member['orderId'] = $fields['orderId'];
+            $member['refundDeadline'] = $fields['refundDeadline'];
             if ($member['role'][0] != 'auditor') {
                 $member['role'][] = 'student';
                 $member['levelId'] = $fields['levelId'];
@@ -965,7 +980,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'userName' => $currentUser['nickname'],
                     'type' => 'create',
                 );
-                $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
+                $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
             }
 
             $this->getLogService()->info(
@@ -1593,6 +1608,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->updateStudentNumAndAuditorNum($classroomId);
 
+        $this->createOperateRecord($member, 'exit', $member);
+
         $this->dispatchEvent(
             'classroom.quit',
             new Event($classroom, array('userId' => $userId, 'member' => $member))
@@ -2094,5 +2111,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

@@ -3,7 +3,7 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% set script_controller = 'order/refunds' %}
-{% set menu = 'admin_'~targetType~'_refunds_manage' %}
+{% set menu = 'admin_order_refunds_manage' %}
 
 {% block main %}
   {{ web_macro.flash_messages() }}
@@ -20,7 +20,7 @@
 
     <div class="form-group">
       <input class="form-control" type="text" name="titleLike" value="{{ app.request.get('titleLike') }}" 
-      placeholder="{{titlePlaceholder|default()}}"
+      placeholder="{{'admin.order_refund.title.placeholder'|trans}}"
       >
     </div>
 
@@ -51,11 +51,8 @@
           {% set orderItem = orderItems[refund.order_id] %}
           <tr>
             <td>
-              {% if targetUrl|default() %}
-                <a href="{{ path(targetUrl, {id:orderItem.target_id}) }}" target="_blank">{{ refund.title }}</a>
-              {% else %}
-                {{ order.title }}
-              {% endif %}
+              {% set targetUrl = orderItem.target_type ~ '_show' %}
+              <a href="{{ path(targetUrl, {id:orderItem.target_id}) }}" target="_blank">{{ refund.title }}</a>
               <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }} | {{'order.paid_time'|trans}}：{{ order.created_time|date('Y-n-d H:i') }}</div>
               <div class="text-muted text-sm">
               {{'admin.order_refund.reason'|trans}}：{{ refund.reason }} 
