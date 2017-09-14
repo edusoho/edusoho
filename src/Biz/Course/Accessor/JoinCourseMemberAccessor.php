@@ -19,7 +19,7 @@ class JoinCourseMemberAccessor extends AccessorAdapter
         }
 
         if ($this->getCourseMemberService()->getCourseMember($course['id'], $user->getId())) {
-            return $this->buildResult('course.user_had_joined');
+            return $this->buildResult('member.member_exist', array('userId' => $user['id']));
         }
 
         return null;

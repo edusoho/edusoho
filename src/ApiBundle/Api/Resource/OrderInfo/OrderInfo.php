@@ -25,8 +25,6 @@ class OrderInfo extends AbstractResource
         $this->addVipParams($params);
 
         $product = $this->getProduct($params['targetType'], $params);
-        
-        $product->validate();
 
         $product->setAvailableDeduct();
         $product->setPickedDeduct(array());
