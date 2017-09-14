@@ -35,6 +35,6 @@ class BizToken extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_token`");
+        $connection->exec('DROP TABLE `biz_token`');
     }
 }

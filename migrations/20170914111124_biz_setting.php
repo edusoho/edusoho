@@ -1,4 +1,5 @@
 <?php
+
 use Phpmig\Migration\Migration;
 
 class BizSetting extends Migration
@@ -10,7 +11,7 @@ class BizSetting extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("
+        $connection->exec('
             CREATE TABLE `biz_setting` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(64) NOT NULL,
@@ -18,7 +19,7 @@ class BizSetting extends Migration
               PRIMARY KEY (`id`),
               UNIQUE KEY `name` (`name`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        ");
+        ');
     }
 
     /**
@@ -28,6 +29,6 @@ class BizSetting extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_setting`");
+        $connection->exec('DROP TABLE `biz_setting`');
     }
 }

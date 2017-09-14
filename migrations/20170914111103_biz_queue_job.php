@@ -36,6 +36,6 @@ class BizQueueJob extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_queue_job`");
+        $connection->exec('DROP TABLE `biz_queue_job`');
     }
 }

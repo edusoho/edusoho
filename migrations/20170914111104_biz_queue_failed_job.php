@@ -33,6 +33,6 @@ class BizQueueFailedJob extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_queue_failed_job`");
+        $connection->exec('DROP TABLE `biz_queue_failed_job`');
     }
 }

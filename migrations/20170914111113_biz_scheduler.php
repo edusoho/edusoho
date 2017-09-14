@@ -86,6 +86,5 @@ class BizScheduler extends Migration
      */
     public function down()
     {
-
     }
 }
