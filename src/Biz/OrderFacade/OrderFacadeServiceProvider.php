@@ -105,7 +105,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $enabledPayments = array();
 
             if (isset($paymentSetting['alipay_enabled']) && $paymentSetting['alipay_enabled']) {
-                $enabledPayments['alipay.in_time'] = array(
+                $enabledPayments['alipay'] = array(
                     'seller_email' => $paymentSetting['alipay_account'],
                     'partner' => $paymentSetting['alipay_key'],
                     'key' => $paymentSetting['alipay_secret'],
@@ -117,6 +117,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                     'appid' => $paymentSetting['wxpay_appid'],
                     'mch_id' => $paymentSetting['wxpay_account'],
                     'key' => $paymentSetting['wxpay_key'],
+                    'secret' => $paymentSetting['wxpay_secret'],
                     'cert_path' => '',
                     'key_path' => '',
                 );

@@ -22,7 +22,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
                 $refund = $this->getWorkflowService()->applyOrderRefund($order['id'], array(
                     'reason' => $fileds['reason']['note'],
                 ));
-                $product->afterApplyRefund();
                 $this->notifyStudent($product);
                 $this->notifyAdmins($product);
                 $this->commit();
@@ -44,7 +43,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         try {
             $this->beginTransaction();
             $this->getWorkflowService()->refuseRefund($orderItem['refund_id'], $data);
-            $product->afterRefuseRefund($order);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -63,8 +61,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         try {
             $this->beginTransaction();
             $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data);
-
-            $product->afterAdoptRefund($order);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -82,7 +78,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         try {
             $this->beginTransaction();
             $this->getWorkflowService()->cancelRefund($orderItem['refund_id']);
-            $product->afterCancelRefund();
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

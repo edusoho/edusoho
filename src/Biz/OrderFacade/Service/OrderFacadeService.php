@@ -8,11 +8,16 @@ interface OrderFacadeService
 {
     public function create(Product $product);
 
-    public function checkOrderBeforePay($sn, $params);
-
     public function getTradePayCashAmount($order, $coinAmount);
 
     public function createSpecialOrder(Product $product, $userId, $params = array());
 
+    /**
+     * @param $targetType
+     * @param $params
+     * @return Product
+     */
     public function getOrderProduct($targetType, $params);
+
+    public function payingOrder($orderSn, $options);
 }

@@ -42,7 +42,11 @@ export default class SmsSender {
       if (("undefined" != typeof response['ACK']) && (response['ACK'] == 'ok')) {
         $('#js-time-left').html('120');
         $('#js-fetch-btn-text').html(Translator.trans('site.data.get_sms_code_again_btn'));
-        notify('success', Translator.trans('site.data.get_sms_code_success_hint'));
+        if (response.allowance) {
+          notify('success', Translator.trans('site.data.get_sms_code_allowance_success_hint', {'allowance':response.allowance}));
+        } else {
+          notify('success', Translator.trans('site.data.get_sms_code_success_hint'));
+        }
 
         refreshTimeLeft();
       } else {
@@ -79,6 +83,3 @@ export default class SmsSender {
     return this;
   }
 }
-
-
-

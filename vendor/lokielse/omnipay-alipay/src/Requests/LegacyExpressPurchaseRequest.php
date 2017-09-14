@@ -4,18 +4,14 @@ namespace Omnipay\Alipay\Requests;
 
 use Omnipay\Alipay\Responses\LegacyExpressPurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
-
 /**
  * Class LegacyExpressPurchaseRequest
  * @package Omnipay\Alipay\Requests
  * @link    https://doc.open.alipay.com/docs/doc.htm?treeId=108&articleId=104743&docType=1
  */
-class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
+class LegacyExpressPurchaseRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
 {
-
     protected $service = 'create_direct_pay_by_user';
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -25,35 +21,17 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     public function getData()
     {
         $this->validateParams();
-
         $data = $this->filter($this->parameters->all());
-
-        $data['service']   = $this->service;
-        $data['sign']      = $this->sign($data, $this->getSignType());
+        $data['service'] = $this->service;
+        $data['sign'] = $this->sign($data, $this->getSignType());
         $data['sign_type'] = $this->getSignType();
-
         return $data;
     }
-
-
     protected function validateParams()
     {
-        $this->validate(
-            '_input_charset',
-            'out_trade_no',
-            'subject',
-            'payment_type',
-            'total_fee'
-        );
-
-        $this->validateOne(
-            'seller_id',
-            'seller_email',
-            'seller_account_name'
-        );
+        $this->validate('_input_charset', 'out_trade_no', 'subject', 'payment_type', 'total_fee');
+        $this->validateOne('seller_id', 'seller_email', 'seller_account_name');
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -63,10 +41,8 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
      */
     public function sendData($data)
     {
-        return $this->response = new LegacyExpressPurchaseResponse($this, $data);
+        return $this->response = new \Omnipay\Alipay\Responses\LegacyExpressPurchaseResponse($this, $data);
     }
-
-
     /**
      * @return mixed
      */
@@ -74,8 +50,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('out_trade_no');
     }
-
-
     /**
      * @param $value
      *
@@ -85,8 +59,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('out_trade_no', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -94,8 +66,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('subject');
     }
-
-
     /**
      * @param $value
      *
@@ -105,8 +75,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('subject', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -114,8 +82,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('payment_type');
     }
-
-
     /**
      * @param $value
      *
@@ -125,8 +91,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('payment_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -134,8 +98,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('total_fee');
     }
-
-
     /**
      * @param $value
      *
@@ -145,8 +107,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('total_fee', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -154,8 +114,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('seller_id');
     }
-
-
     /**
      * @param $value
      *
@@ -165,8 +123,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('seller_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -174,8 +130,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('seller_email');
     }
-
-
     /**
      * @param $value
      *
@@ -185,8 +139,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('seller_email', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -194,8 +146,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('seller_account_name');
     }
-
-
     /**
      * @param $value
      *
@@ -205,8 +155,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('seller_account_name', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -214,8 +162,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('buyer_id');
     }
-
-
     /**
      * @param $value
      *
@@ -225,8 +171,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('buyer_id', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -234,8 +178,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('buyer_email');
     }
-
-
     /**
      * @param $value
      *
@@ -245,8 +187,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('buyer_email', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -254,8 +194,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('buyer_account_name');
     }
-
-
     /**
      * @param $value
      *
@@ -265,8 +203,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('buyer_account_name', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -274,8 +210,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('price');
     }
-
-
     /**
      * @param $value
      *
@@ -285,8 +219,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('price', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -294,8 +226,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('quantity');
     }
-
-
     /**
      * @param $value
      *
@@ -305,8 +235,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('quantity', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -314,8 +242,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('body');
     }
-
-
     /**
      * @param $value
      *
@@ -325,8 +251,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('body', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -334,8 +258,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('show_url');
     }
-
-
     /**
      * @param $value
      *
@@ -345,8 +267,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('show_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -354,8 +274,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('paymethod');
     }
-
-
     /**
      * @param $value
      *
@@ -365,8 +283,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('paymethod', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -374,8 +290,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('enable_paymethod');
     }
-
-
     /**
      * @param $value
      *
@@ -385,8 +299,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('enable_paymethod', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -394,8 +306,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('anti_phishing_key');
     }
-
-
     /**
      * @param $value
      *
@@ -405,8 +315,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('anti_phishing_key', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -414,8 +322,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('exter_invoke_ip');
     }
-
-
     /**
      * @param $value
      *
@@ -425,8 +331,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('exter_invoke_ip', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -434,8 +338,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('extra_common_param');
     }
-
-
     /**
      * @param $value
      *
@@ -445,8 +347,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('extra_common_param', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -454,8 +354,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('it_b_pay');
     }
-
-
     /**
      * @param $value
      *
@@ -465,8 +363,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('it_b_pay', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -474,8 +370,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('token');
     }
-
-
     /**
      * @param $value
      *
@@ -485,8 +379,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('token', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -494,8 +386,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('qr_pay_mode');
     }
-
-
     /**
      * @param $value
      *
@@ -505,8 +395,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('qr_pay_mode', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -514,8 +402,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('qrcode_width');
     }
-
-
     /**
      * @param $value
      *
@@ -525,8 +411,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('qrcode_width', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -534,8 +418,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('need_buyer_realnamed');
     }
-
-
     /**
      * @param $value
      *
@@ -545,8 +427,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('need_buyer_realnamed', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -554,8 +434,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('hb_fq_param');
     }
-
-
     /**
      * @param $value
      *
@@ -565,8 +443,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('hb_fq_param', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -574,8 +450,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('goods_type');
     }
-
-
     /**
      * @param $value
      *
@@ -585,8 +459,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('goods_type', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -594,8 +466,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('return_url');
     }
-
-
     /**
      * @param $value
      *
@@ -605,8 +475,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->setParameter('return_url', $value);
     }
-
-
     /**
      * @return mixed
      */
@@ -614,8 +482,6 @@ class LegacyExpressPurchaseRequest extends AbstractLegacyRequest
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @param $value
      *

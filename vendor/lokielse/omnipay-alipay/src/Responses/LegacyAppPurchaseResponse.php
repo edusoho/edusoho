@@ -2,9 +2,8 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class LegacyAppPurchaseResponse extends AbstractLegacyResponse
+class LegacyAppPurchaseResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
-
     /**
      * Is the response successful?
      *
@@ -14,8 +13,6 @@ class LegacyAppPurchaseResponse extends AbstractLegacyResponse
     {
         return true;
     }
-
-
     public function getOrderString()
     {
         return $this->data['order_string'];

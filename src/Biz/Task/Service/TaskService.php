@@ -59,6 +59,8 @@ interface TaskService
 
     public function findTasksFetchActivityAndResultByCourseId($courseId);
 
+    public function wrapTaskResultToTasks($courseId, $tasks);
+
     /**
      * for question and testpaper ranges.
      *
@@ -103,7 +105,7 @@ interface TaskService
      */
     public function canLearnTask($taskId);
 
- // 任务是否可学
+    // 任务是否可学
 
     /**
      * return if the task has been learned.

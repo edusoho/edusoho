@@ -2,9 +2,8 @@
 
 namespace Omnipay\Alipay\Responses;
 
-class LegacyQueryResponse extends AbstractLegacyResponse
+class LegacyQueryResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
-
     /**
      * Is the response successful?
      *
@@ -14,7 +13,6 @@ class LegacyQueryResponse extends AbstractLegacyResponse
     {
         return $this->data['is_success'] === 'T';
     }
-    
     /**
      * Is the trade paid?
      *

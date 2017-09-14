@@ -355,7 +355,7 @@ cloud_search:
     defaults: { _controller: AppBundle:Search:cloudSearch }
 
 settings:
-    path:  /settings/
+    path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
 
 settings_avatar:
@@ -369,6 +369,10 @@ settings_avatar_crop:
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
     defaults: { _controller: AppBundle:Settings:avatarCropModal }
+
+settings_profile_avatar_crop_modal:
+    path:  /settings/profile/avatar/crop/modal
+    defaults: { _controller: AppBundle:Settings:profileAvatarCropModal }
 
 settings_avatar_fetch_partner:
     path:  /settings/avatar/fetch_partner
@@ -422,7 +426,7 @@ settings_password:
 settings_email:
     path:  /settings/email
     defaults: { _controller: AppBundle:Settings:email }
-
+    
 settings_email_verify:
     path:  /settings/email/verify
     defaults: { _controller: AppBundle:Settings:emailVerify }
@@ -1004,6 +1008,10 @@ cashier_pay:
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
+cashier_wechat_h5_pay:
+    path:   /pay/center/wxpay
+    defaults: { _controller: AppBundle:Cashier/Wechat:h5 }
+
 cashier_password_check:
     path:  /cashier/password/check
     defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
@@ -1022,9 +1030,17 @@ cashier_pay_notify:
     defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
+cashier_pay_return_for_app:
+    path: /callback/{payment}/return_for_app
+    defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
+
 cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Wechat:roll }
+
+cashier_wechat_h5_return:
+    path:   /cashier/wechat/h5_return
+    defaults: { _controller: AppBundle:Cashier/Wechat:h5Return }
 
 cashier_alipay_return:
     path:   /cashier/alipay/return
@@ -1070,10 +1086,6 @@ pay_result_notice:
 wxpay_roll:
     path: /pay/wxpay/roll
     defaults: {_controller: AppBundle:PayCenter:wxpayRoll }
-
-pay_center_wxpay:
-    path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:PayCenter:wxpay }
 
 order_show:
     path:  /order/show
@@ -1200,6 +1212,10 @@ password_reset_by_sms:
 settings_find_pay_password_by_sms:
     path:  /settings/find_pay_password_by_sms
     defaults: { _controller: AppBundle:Settings:findPayPasswordBySms }
+
+settings_find_pay_password_by_question:
+    path:  /settings/find_pay_password_by_question
+    defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
 
 order_pay_sms_verification:
     path:  /order/sms_verification
@@ -1681,6 +1697,10 @@ course_task_show_plugins:
 course_task_show_plugin_task_list:
   path: /course/{courseId}/task/{taskId}/plugin/task_list
   defaults: { _controller: AppBundle:TaskPlugin:taskList }
+
+course_task_show_plugin_task_list_by_paging:
+  path: /course/{courseId}/plugin/task_list/paging
+  defaults: { _controller: AppBundle:TaskPlugin:taskListByPaging }
 
 course_task_plugin_note:
   path: /course/{courseId}/task/{taskId}/plugin/note
@@ -2769,6 +2789,10 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
+global_file_document_player:
+  path: /global_file/{globalId}/player
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:globalDocumentPlayer }
+
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
@@ -2830,6 +2854,10 @@ course_order_repay:
 course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
+
+course_task_paging_show:
+  path: /course/{courseId}/tasks/paging
+  defaults: { _controller: AppBundle:Course/Course:tasksByPaging }
 
 course_set_archive:
   path: /archive/course # 学习引擎2.0版本前该页面有SEO
@@ -2961,3 +2989,7 @@ order_calculate_price:
 product_member_exit:
     path: /product/{targetId}/type/{targetType}/owner/exit
     defaults: { _controller: AppBundle:Product/Owner:exit}
+
+v2_demo_modal:
+    path: /v2/demo/modal
+    defaults: { _controller: AppBundle:V2:modal }

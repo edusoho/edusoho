@@ -216,6 +216,7 @@ admin.order.coin.basic_tab: Coin Orders
 admin.order.classroom.basic_tab: Class Orders
 
 #账务管理模块
+admin.finance.my_account: 网校账户
 admin.finance.bills_menu: Account
 admin.finance.coin_menu: Coins
 admin.finance.course_refunds_menu: Course Refunds

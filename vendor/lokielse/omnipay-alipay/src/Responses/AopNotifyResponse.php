@@ -3,16 +3,12 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopNotifyRequest;
-
-class AopNotifyResponse extends AbstractResponse
+class AopNotifyResponse extends \Omnipay\Alipay\Responses\AbstractResponse
 {
-
     /**
      * @var AopNotifyRequest
      */
     protected $request;
-
-
     public function getResponseText()
     {
         if ($this->isSuccessful()) {
@@ -21,8 +17,6 @@ class AopNotifyResponse extends AbstractResponse
             return 'fail';
         }
     }
-
-
     /**
      * Is the response successful?
      *

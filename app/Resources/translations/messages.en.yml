@@ -106,6 +106,14 @@ site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
 site.btn.detail: more
+site.setting.finished: Setting finished
+site.setting.unfinished: Setting unfinished
+site.verify.finished: Verify finished
+site.verify.unfinished: Verify unfinished
+site.bind.finished: 已绑定
+site.bind.unfinished: 未绑定
+site.setting.email_finished: Setting email finished
+site.bind.mobile_finished: Binding mobile finished
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -189,7 +197,9 @@ user.fileds.wechat: Wechat
 user.fileds.qq: QQ
 user.fields.gender.male: Male
 user.fields.gender.female: Female
-user.fields.idcard_label: 'ID'
+user.fields.idcard_label: Id card
+user.fields.idcard_front_title: Upload Id card front
+user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
@@ -231,6 +241,7 @@ form.btn.create: Add
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
+form.btn.verifying: Verifying
 form.btn.select: Select
 form.btn.modify: Edit
 form.btn.finish: Finish
@@ -242,6 +253,7 @@ form.btn.save_and_continue_add: 'Save and continue'
 form.btn.reset: Reset
 form.btn.view: View
 form.btn.bind: Bind
+form.btn.bind_account: 'Bind account'
 form.btn.search: Search
 form.btn.use: Use
 form.btn.reply: Publish
@@ -846,14 +858,10 @@ course.members_manage.quit_records.content_title: 'Students'
 course.members_manage.quit_records.name: 'Student name'
 course.members_manage.quit_records.reason: 'Quit reason'
 course.members_manage.quit_records.status: 'Refund status'
-course.members_manage.quit_records.cash_count: 'Refund amount'
 course.members_manage.quit_records.date: 'Quit time'
-course.members_manage.quit_records.tips: '<li class="mt10 mb10">only display refund records of students who paid by cash</li><li>please check the refund deatil of class teaching plan in class manage panel</li>'
 course.members_manage.quit_records.empty: 'No data'
 course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
-course.members_manage.quit_records.failed: 'Refund failed'
-course.members_manage.quit_records.cancel: 'Refund cancelled'
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
@@ -2148,6 +2156,7 @@ user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Profile'
 user.settings.basic_info_menu: 'Basic Info'
+user.settings.personal_info_menu: Personal info
 user.settings.avatar_menu: Avatar
 user.settings.verification_menu: 'Real-name authentication'
 user.settings.security_menu: Security
@@ -2158,6 +2167,9 @@ user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get mor
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
+user.settings.profile.change_avatar: Modify picture
+user.settings.profile.choose_again: Choose again
+user.settings.profile.save_avatar: Save picture
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
 user.settings.security.setup_login_password: 'Set password'
@@ -2176,27 +2188,33 @@ user.settings.security.content_title: 'Security Setting'
 user.settings.security.reset_pay_password: 'Payment password resetting'
 user.settings.security.reset_pay_password_success: 'Payment password resetting successfully'
 user.settings.security.set_pay_password_success: 'New payment password setting successfully。'
+user.settings.security.set_pay_password_success.closed_automatically: 5秒后该页面自动关闭
 user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
-user.settings.security.high_level: 'Security level: High'
-user.settings.security.middle_level: 'Security level: Medium'
-user.settings.security.low_level: 'Security level: Low'
+user.settings.security.level: Security level
+user.settings.security.high_level: 'High'
+user.settings.security.middle_level: 'Medium'
+user.settings.security.low_level: 'Low'
 user.settings.security.login_password_tips: 'The password used to login the system.'
 user.settings.security.pay_password_tips: 'The password to perform a payment.'
 user.settings.security.questions: 'Security questions'
 user.settings.security.questions_tips: 'To protect your account by setting up securtiy quesions.'
 user.settings.security.mobile_bind: 'Bound phone number'
 user.settings.security.mobile_bind_tips: 'To increasing the securtiy of loging account and buyting course, and find the log in password, payment password.'
+user.settings.security.email_setting_tips: Can be used to retrieve the login password
 user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
 user.settings.security.password_modify.current_password: 'Current Password'
+user.settings.security.password_modify.current_password_placeholder: Please input current password
 user.settings.security.password_modify.new_password: 'New Password'
+user.settings.security.password_modify.new_password_placeholder: Please input new password
 user.settings.security.password_modify.confirm_password: 'Confirm Password'
+user.settings.security.password_modify.confirm_password_placeholder: Please input new password again
 user.settings.security.password_modify.input_password_tips: 'Re-enter your password'
 user.settings.security.password_modify.incorrect_password: Incorrect password
-user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn btn-primary'>reset the password now</a></p>\n"
+user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn cd-btn cd-btn-primary'>reset the password now</a></p>\n"
 user.settings.security.password_reset: 'Reset password'
 user.settings.security.password_reset.content_title: 'Reset password'
 user.settings.security.password_reset.email: Email
@@ -2217,22 +2235,32 @@ user.settings.security.pay_password_set.content_title: 'Security setting'
 user.settings.security.pay_password_set.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security setting</a></li> <li class=\"active\">set payment password</li>\n"
 user.settings.security.pay_password_set.input_login_password: 'Please enter the login password'
 user.settings.security.pay_password_set.new_pay_password: 'New Payment Password'
+user.settings.security.pay_password_set.new_pay_password_placeholder: Please input new payment password
 user.settings.security.pay_password_set.user_login_password: 'Login Password'
 user.settings.security.pay_password_set.confirm_pay_password: 'Confirm Payment Password'
 user.settings.security.pay_password_set.old_pay_password: 'Old Payment Password'
+user.settings.security.pay_password_set.old_pay_password_placeholder: Please input old payment password
 user.settings.security.pay_password_set.input_pay_password_again: 'Please enter the payment password again'
-user.settings.security.pay_password_set.success: New pay password had set successfully, you can reset it here next time.
+user.settings.security.pay_password_set.success: New pay password had set successfully
 user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully
 user.settings.security.pay_password_set.twice_pay_password_mismatch: Your input pay password mismatch.
 user.settings.security.pay_password_find.content_title: 'Security Setting'
 user.settings.security.pay_password_find.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Find payment password</li>\n"
+user.settings.security.pay_password_find.way: 选择找回方式
+user.settings.security.pay_password.validate_info: 验证信息
 user.settings.security.pay_password_find.by_question: 'Find password by security question'
 user.settings.security.pay_password_find.by_question.answer: 'Security question answer'
+user.settings.security.pay_password_find.by_mobile.unbound: 未绑定手机？
+user.settings.security.pay_password_find.by_mobile.immediately_bind: 立即绑定
 user.settings.security.pay_password_find.by_mobile: 'Find password by phone'
+user.settings.security.pay_password_find.by_mobile_current: 当前手机
+user.settings.security.pay_password_find.by_mobile_phone: 通过手机号码找回
 user.settings.security.pay_password_find.by_mobile.change: 'Change phone number'
+user.settings.security.pay_password_find.current_empty: 未设置安全问题？
 user.settings.security.pay_password_find.empty: 'Change mobile phone number'
+user.settings.security.pay_password_find.start_set: 立即设置
 user.settings.security.pay_password_find.wrong_answer: Wrong answer
 user.settings.security.pay_password_find.correct_answer: Correct answer, you can change your pay password now.
 user.settings.security.pay_password_find.unbind_mobile: No bind mobile, please bind first.
@@ -2266,10 +2294,13 @@ user.settings.basic_info.occupation: Occupation
 user.settings.basic_info.rank: Title
 user.settings.basic_info.personal_signature: 'Personal signature'
 user.settings.basic_info.personal_space: 'Personal space'
+user.settings.basic_info.public: 微博、微信、QQ信息将会展示在您的个人主页
 user.settings.basic_info.self_introduction: 'About me'
 user.settings.basic_info.alter_description: 'You can create a course after setting till and self-introduction.'
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
+user.settings.basic_info.shange_avatar: 修改头像
+
 user.settings.verification: 'Real-name authentication'
 user.settings.verification.username_modify: 'Update username'
 user.settings.verification.content_title: 'Real-name authentication'
@@ -2277,10 +2308,20 @@ user.settings.verification.photo_require: 'Photo Requirements'
 user.settings.verification.photo_require_tips: 'Pictures must be clear and in color. The format can be jpg, gif or png. Size of each image should be no larger than 2 M.'
 user.settings.verification.idcard_front_photo: 'Front Side'
 user.settings.verification.idcard_back_photo: 'Back Side'
-user.settings.verification.approving_tips: 'Real name is being verified，administrator will reply soon'
-user.settings.verification.approved_tips: 'Congratulations, real name has been verified！'
-user.settings.verification.unapprove_tips: 'Your real name has not been verified'
-user.settings.verification.approve_failed_tips: 'Real name verification not passed, please update according to the advice and try again.'
+
+user.settings.verification.approving_title_tips: 审核中
+user.settings.verification.approving_content_tips: 申请已提交，请耐心等待审核结果
+user.settings.verification.approved_title_tips: 已实名认证
+user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
+
+user.settings.verification.unapprove_tips: 为保护您的帐号安全、获得更好的服务，请尽快完成实名认证。
+user.settings.verification.unapprove_tips: Real-name certification can boost your personal information and the security level of virtual property, but also better able to experience various services
+user.settings.verification.approve_failed_tips: Audit failed, please upload id photos again and make sure the picture is clear
+user.settings.verification.approve_failed_reason_tips: 审核未通过，原因是：%reason%。请修改信息后重新认证。
+
+user.settings.verification.notice: 认证须知
+user.settings.verification.notice_content: "<p>1、请确保身份证照片清晰可认，严禁PS，否则将由您本人承担相应的法律后果。<br> 2、实名认证成功后，将无法修改和删除实名信息，请谨慎填写。<br> 3、我们将尽快审核您提交的信息，处理完成后您将会收到系统通知。</p>"
+
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
 user.settings.avatar.reselect: 'Reselect an image'
@@ -2291,13 +2332,17 @@ user.settings.avatar.upload_hint: "you can upload the file of JPG,GIF,PNG，and 
 user.settings.avatar.upload_btn: 'Upload New Photo'
 user.settings.avatar.using_current_avatar: 'Set as avatar'
 user.settings.avatar.setup_hint: 'Please set custom profile photo。'
-user.settings.avatar.crop_hint: 'Tip:Please select an image crop area'
+user.settings.avatar.crop_hint: 'Please select an image crop area'
 user.settings.avatar.fetch_form_partner_error: Fetch your avatar from partner encountered an error.
 user.settings.email: 'Email setting'
 user.settings.email.content_title: 'Email setting'
 user.settings.email.no_change_email_tips: 'Mail server has not been set by administrator, can not change email'
 user.settings.email.current_email: 'Current Email'
 user.settings.email.verified: Verified
+user.settings.email.verifiy: 邮箱验证
+user.settings.email.verifiy_send: 验证邮件已发送
+user.settings.email.not_verifiy: 暂不验证
+user.settings.email.goto_verifiy: 前往验证
 user.settings.email.unverified_tips: 'Mail address hasn''t been verified.'
 user.settings.email.verify_btn: Verify
 user.settings.email.setup_email_tips: 'You haven''t set your email, please set your new email below.'
@@ -2359,6 +2404,9 @@ user.orders.all_orders: 'All Orders'
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
 user.orders.refunding_status: Refunding
+user.orders.closed_status: Closed
+user.orders.refunded_status: Refunded
+user.orders.no_paid_status: Unpaid
 user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
@@ -3194,6 +3242,8 @@ my.learning.course.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View
+my.learning.course.click_loading_more: 'Click to load more'
+my.learning.course.loading: 'loading...'
 my.learning.live: 'My Live'
 my.learning.live.course_updating: Updating
 my.learning.live.course_finished: Finished
@@ -5517,6 +5567,7 @@ admin.coin.datagrid.filter.oneMonth: 'This month'
 admin.coin.datagrid.filter.threeMonths: 'Three months'
 admin.coin.datagrid.filter.all_history: 'All history'
 admin.coin.datagrid.filter.default: Default
+admin.coin.datagrid.filter.balance: Balance
 admin.coin.datagrid.filter.consume: Consumption
 admin.coin.datagrid.filter.recharge: Recharge
 admin.coin.datagrid.filter.asc: 'In ascending order'
@@ -6362,6 +6413,15 @@ join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
-coupon.had_been_used: Coupon had been used.
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
+
+cashflow.title: Name
+
+order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.order_not_exist: Order not exist
+order.pay_check_msg.user_not_login: User not login
+order.pay_check_msg.not_same_user: Not your order
+order.pay_check_msg.missing_pay_password: Missing payPassword
+order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
+order.pay_check_msg.balance_not_enough: Your balance is insufficient

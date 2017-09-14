@@ -3,14 +3,12 @@
 namespace Omnipay\WechatPay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
-
 /**
  * Class BaseAbstractResponse
  * @package Omnipay\WechatPay\Message
  */
-abstract class BaseAbstractResponse extends AbstractResponse
+abstract class BaseAbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 {
-
     /**
      * Is the response successful?
      *
@@ -19,7 +17,6 @@ abstract class BaseAbstractResponse extends AbstractResponse
     public function isSuccessful()
     {
         $data = $this->getData();
-
         return isset($data['result_code']) && $data['result_code'] == 'SUCCESS';
     }
 }

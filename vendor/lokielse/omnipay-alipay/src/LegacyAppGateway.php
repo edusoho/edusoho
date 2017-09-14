@@ -3,15 +3,13 @@
 namespace Omnipay\Alipay;
 
 use Omnipay\Alipay\Requests\LegacyAppPurchaseRequest;
-
 /**
  * Class LegacyAppGateway
  * @package Omnipay\Alipay
  * @link    https://doc.open.alipay.com/doc2/detail?treeId=59&articleId=103563&docType=1
  */
-class LegacyAppGateway extends AbstractLegacyGateway
+class LegacyAppGateway extends \Omnipay\Alipay\AbstractLegacyGateway
 {
-
     /**
      * Get gateway display name
      *
@@ -21,18 +19,12 @@ class LegacyAppGateway extends AbstractLegacyGateway
     {
         return 'Alipay Legacy APP Gateway';
     }
-
-
     public function getDefaultParameters()
     {
         $data = parent::getDefaultParameters();
-
         $data['signType'] = 'RSA';
-
         return $data;
     }
-
-
     /**
      * @return mixed
      */
@@ -40,8 +32,6 @@ class LegacyAppGateway extends AbstractLegacyGateway
     {
         return $this->getParameter('rn_check');
     }
-
-
     /**
      * @param $value
      *
@@ -51,15 +41,13 @@ class LegacyAppGateway extends AbstractLegacyGateway
     {
         return $this->setParameter('rn_check', $value);
     }
-
-
     /**
      * @param array $parameters
      *
      * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function purchase(array $parameters = [])
+    public function purchase(array $parameters = array())
     {
-        return $this->createRequest(LegacyAppPurchaseRequest::class, $parameters);
+        return $this->createRequest('Omnipay\\Alipay\\Requests\\LegacyAppPurchaseRequest', $parameters);
     }
 }

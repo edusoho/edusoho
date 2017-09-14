@@ -3,10 +3,8 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Common\Message\AbstractResponse as Response;
-
-abstract class AbstractResponse extends Response
+abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 {
-
     public function data($key = null, $default = null)
     {
         if (is_null($key)) {

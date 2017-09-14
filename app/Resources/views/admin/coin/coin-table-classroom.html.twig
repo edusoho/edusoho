@@ -18,17 +18,17 @@
             </div>
           </td>
           <td>
-          <span id="rmb{{item.id}}" class="rmbPrice">{{item.price}}</span>
+          <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.price }}">{{ item.price }}</span>
           <td>
-            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
+            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{ item.id }}]" data-id="{{ item.id }}"/> <label>%</label>
           </td>
           <td>
-            <span id="deRmb{{item.id}}">
+            <span id="deRmb{{ item.id }}">
               {{ (item.maxRate * item.price / 100)|number_format(2,'.') }}
             </span>
           </td>
           <td>
-            <span id="cash{{item.id}}">
+            <span id="cash{{ item.id }}">
               {{ (item.maxRate / 100 * item.price * set.cash_rate)|number_format(2, '.') }}
             </span>
           </td>

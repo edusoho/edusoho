@@ -204,6 +204,7 @@ admin.operation.reward_point_mall.product_tab: 商品管理
 admin.operation.reward_point_mall.product_tab.create_btn: 添加商品
 
 #订单管理模块
+
 admin.order.course_menu: 课程订单
 admin.order.coin_menu: 虚拟币订单
 admin.order.classroom_menu: 班级订单
@@ -218,6 +219,7 @@ admin.order.coin.basic_tab: 虚拟币订单
 admin.order.classroom.basic_tab: 班级订单
 
 #账务管理模块
+admin.finance.my_account: 网校账户
 admin.finance.bills_menu: 账单管理
 admin.finance.coin_menu: 虚拟币管理
 admin.finance.course_refunds_menu: 课程退款管理

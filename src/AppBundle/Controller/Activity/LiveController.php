@@ -224,6 +224,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->createJsonResponse(array(
             'url' => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null,
+            'error' => $result['error'],
         ));
     }
 
@@ -293,10 +294,8 @@ class LiveController extends BaseActivityController implements ActivityActionInt
                 return !empty($replay) && !(bool) $replay['hidden'];
             });
 
-            $service = $this->getLiveReplayService();
-            $fileService = $this->getUploadFileService();
             $self = $this;
-            $replays = array_map(function ($replay) use ($service, $activity, $self, $fileService) {
+            $replays = array_map(function ($replay) use ($activity, $self) {
                 $replay['url'] = $self->generateUrl('live_activity_replay_entry', array(
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],

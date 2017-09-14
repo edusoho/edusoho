@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
@@ -53,51 +54,26 @@ class CashierController extends BaseController
     {
         $sn = $request->request->get('sn');
 
+        $payment = $request->request->get('payment');
+        $payment = preg_replace('/\.\w+/', '', $payment);
+        $payment = ucfirst($payment);
+
         try {
-            $order = $this->getOrderFacadeService()->checkOrderBeforePay($sn, $request->request->all());
-        } catch (\Exception $e) {
+            $params = $request->request->all();
+            $params['clientIp'] = $request->getClientIp();
+            $trade = $this->getOrderFacadeService()->payingOrder($sn, $request->request->all());
+        } catch (OrderPayCheckException $e) {
             return $this->createMessageResponse('error', $this->trans($e->getMessage()));
         }
 
-        $payment = $request->request->get('payment');
-        $payment = substr($payment, 0, stripos($payment, '.'));
-        $payment = ucfirst($payment);
-
-        $trade = $this->makeTrade($order, $request);
-
-        $this->getWorkflowService()->paying($order['id'], array());
-
         return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
-    }
-
-    private function makeTrade($order, Request $request)
-    {
-        $coinAmount = $request->request->get('coinAmount');
-        $trade = array(
-            'goods_title' => $order['title'],
-            'goods_detail' => '',
-            'order_sn' => $order['sn'],
-            'amount' => $order['pay_amount'],
-            'platform' => $request->request->get('payment'),
-            'user_id' => $order['user_id'],
-            'coin_amount' => $coinAmount * 100,
-            'cash_amount' => $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount) * 100,
-            'create_ip' => $request->getClientIp(),
-            'price_type' => 'money',
-            'type' => 'purchase',
-            'attach' => array(
-                'user_id' => $order['user_id'],
-            ),
-        );
-
-        return $trade;
     }
 
     public function successAction(Request $request)
     {
         $tradeSn = $request->query->get('trade_sn');
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-var_dump($tradeSn);exit();
+
         return $this->forward("AppBundle:Cashier/Cashier:{$trade['type']}Success", array(
             'trade' => $trade,
         ));

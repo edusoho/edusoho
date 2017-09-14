@@ -6,10 +6,10 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class CourseProduct extends Product implements Owner, Refund, OrderStatusCallback
+class CourseProduct extends Product implements Owner, OrderStatusCallback
 {
     const TYPE = 'course';
 
@@ -32,8 +32,8 @@ class CourseProduct extends Product implements Owner, Refund, OrderStatusCallbac
         $course = $this->getCourseService()->getCourse($this->targetId);
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
-        $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $this->title = $this->courseSet['title'].'-'.$course['title'];
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
@@ -44,7 +44,7 @@ class CourseProduct extends Product implements Owner, Refund, OrderStatusCallbac
         $access = $this->getCourseService()->canJoinCourse($this->targetId);
 
         if ($access['code'] !== AccessorInterface::SUCCESS) {
-            throw new InvalidArgumentException($access['msg']);
+            throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
     }
 
@@ -72,31 +72,38 @@ class CourseProduct extends Product implements Owner, Refund, OrderStatusCallbac
         }
     }
 
-    public function afterApplyRefund()
+    public function onOrderRefundAuditing($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->lockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function onOrderRefundCancel($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function onOrderRefundRefunded($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function onOrderRefundRefused($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function exitOwner($data)
     {
         $user = $this->biz['user'];
-        $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
-    }
-
-    public function afterCancelRefund()
-    {
-        $user = $this->biz['user'];
-        $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
-    }
-
-    public function afterRefuseRefund($order)
-    {
-        $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
-    }
-
-    public function afterAdoptRefund($order)
-    {
-        $this->exitOwner($order['user_id']);
-    }
-
-    public function exitOwner($userId)
-    {
-        $this->getCourseMemberService()->removeStudent($this->targetId, $userId);
+        $this->getCourseMemberService()->removeStudent(
+            $this->targetId,
+            $user->getId(),
+            array('reason' => $data['reason']['note'])
+        );
     }
 
     public function getOwner($userId)

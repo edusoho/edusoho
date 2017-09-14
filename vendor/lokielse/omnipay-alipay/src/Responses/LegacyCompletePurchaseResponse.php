@@ -3,16 +3,12 @@
 namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\LegacyCompletePurchaseRequest;
-
-class LegacyCompletePurchaseResponse extends AbstractLegacyResponse
+class LegacyCompletePurchaseResponse extends \Omnipay\Alipay\Responses\AbstractLegacyResponse
 {
-
     /**
      * @var LegacyCompletePurchaseRequest
      */
     protected $request;
-
-
     public function getResponseText()
     {
         if ($this->isSuccessful()) {
@@ -21,8 +17,6 @@ class LegacyCompletePurchaseResponse extends AbstractLegacyResponse
             return 'fail';
         }
     }
-
-
     /**
      * Is the response successful?
      *
@@ -32,8 +26,6 @@ class LegacyCompletePurchaseResponse extends AbstractLegacyResponse
     {
         return true;
     }
-
-
     public function isPaid()
     {
         if (array_get($this->data, 'trade_status')) {

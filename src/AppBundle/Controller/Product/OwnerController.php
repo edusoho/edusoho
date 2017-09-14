@@ -29,7 +29,7 @@ class OwnerController extends BaseController
                     'orderId' => $member['orderId'],
                 ));
             }
-            $product->exitOwner($user['id']);
+            $product->exitOwner($request->request->all());
 
             return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
         }

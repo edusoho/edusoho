@@ -4,16 +4,12 @@ namespace Omnipay\Alipay\Responses;
 
 use Omnipay\Alipay\Requests\AopTradeWapPayRequest;
 use Omnipay\Common\Message\RedirectResponseInterface;
-
-class AopTradeWapPayResponse extends AbstractResponse implements RedirectResponseInterface
+class AopTradeWapPayResponse extends \Omnipay\Alipay\Responses\AbstractResponse implements \Omnipay\Common\Message\RedirectResponseInterface
 {
-
     /**
      * @var AopTradeWapPayRequest
      */
     protected $request;
-
-
     /**
      * Is the response successful?
      *
@@ -23,14 +19,10 @@ class AopTradeWapPayResponse extends AbstractResponse implements RedirectRespons
     {
         return true;
     }
-
-
     public function isRedirect()
     {
         return true;
     }
-
-
     /**
      * Gets the redirect target url.
      */
@@ -38,8 +30,6 @@ class AopTradeWapPayResponse extends AbstractResponse implements RedirectRespons
     {
         return sprintf('%s?%s', $this->request->getEndpoint(), http_build_query($this->data));
     }
-
-
     /**
      * Get the required redirect method (either GET or POST).
      */
@@ -47,8 +37,6 @@ class AopTradeWapPayResponse extends AbstractResponse implements RedirectRespons
     {
         return 'GET';
     }
-
-
     /**
      * Gets the redirect form data array, if the redirect method is POST.
      */

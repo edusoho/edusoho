@@ -90,6 +90,8 @@ abstract class Product extends BizAware implements OrderStatusCallback
      */
     public $unit = '';
 
+    const PRODUCT_VALIDATE_FAIL = '20007';
+
     abstract public function init(array $params);
 
     abstract public function validate();
@@ -140,7 +142,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     public function getCreateExtra()
     {
-        return '';
+        return array();
     }
 
     /**
