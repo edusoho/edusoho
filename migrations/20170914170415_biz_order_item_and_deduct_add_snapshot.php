@@ -29,10 +29,9 @@ class BizOrderItemAndDeductAddSnapshot extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order_item` DROP COLUMN `snapshot`;");
+        $db->exec('ALTER TABLE `biz_order_item` DROP COLUMN `snapshot`;');
 
-        $db->exec("ALTER TABLE `biz_order_item_deduct` DROP COLUMN `snapshot`;");
-
+        $db->exec('ALTER TABLE `biz_order_item_deduct` DROP COLUMN `snapshot`;');
     }
 
     protected function isFieldExist($table, $filedName)
