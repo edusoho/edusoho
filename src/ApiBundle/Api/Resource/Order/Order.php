@@ -35,6 +35,7 @@ class Order extends AbstractResource
             $trade['platform_type'] = 'Wap';
             $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
             $trade['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $trade['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
             $result = $this->getPayService()->createTrade($trade);
 
             return array(
