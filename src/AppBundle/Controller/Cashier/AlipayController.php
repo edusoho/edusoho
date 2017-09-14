@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,13 +59,5 @@ class AlipayController extends BaseController
     private function getPayService()
     {
         return $this->createService('Pay:PayService');
-    }
-
-    /**
-     * @return OrderService
-     */
-    private function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
     }
 }
