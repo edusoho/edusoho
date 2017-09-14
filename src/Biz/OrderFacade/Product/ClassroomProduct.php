@@ -8,7 +8,7 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class ClassroomProduct extends Product implements Owner, Refund, OrderStatusCallback
+class ClassroomProduct extends Product implements Owner, OrderStatusCallback
 {
     const TYPE = 'classroom';
 
@@ -62,27 +62,28 @@ class ClassroomProduct extends Product implements Owner, Refund, OrderStatusCall
             return false;
         }
     }
-
-    public function afterApplyRefund()
+    public function onOrderRefundAuditing($orderRefundItem)
     {
-        $user = $this->biz['user'];
-        $this->getClassroomService()->lockStudent($this->targetId, $user['id']);
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->lockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function afterAdoptRefund($order)
+    public function onOrderRefundCancel($orderRefundItem)
     {
-        $this->exitOwner($order['user_id']);
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function afterCancelRefund()
+    public function onOrderRefundRefunded($orderRefundItem)
     {
-        $user = $this->biz['user'];
-        $this->getClassroomService()->unlockStudent($this->targetId, $user['id']);
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function afterRefuseRefund($order)
+    public function onOrderRefundRefused($orderRefundItem)
     {
-        $this->getClassroomService()->unlockStudent($this->targetId, $order['user_id']);
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
     public function exitOwner($userId)

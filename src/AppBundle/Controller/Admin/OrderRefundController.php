@@ -9,7 +9,7 @@ use AppBundle\Common\StringToolkit;
 
 class OrderRefundController extends BaseController
 {
-    public function refundsAction(Request $request, $targetType)
+    public function refundsAction(Request $request)
     {
         $conditions = $this->prepareRefundSearchConditions($request->query->all());
 
@@ -37,13 +37,12 @@ class OrderRefundController extends BaseController
         $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
 
-        return $this->render("admin/order-refund/refund-{$targetType}.html.twig", array(
+        return $this->render("admin/order-refund/refund-list.html.twig", array(
             'refunds' => $refunds,
             'orderItems' => $orderItems,
             'users' => $users,
             'orders' => $orders,
             'paginator' => $paginator,
-            'targetType' => $targetType,
         ));
     }
 

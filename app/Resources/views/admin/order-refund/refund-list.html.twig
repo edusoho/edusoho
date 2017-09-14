@@ -3,8 +3,9 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% set script_controller = 'order/refunds' %}
-{% set menu = 'admin_'~targetType~'_refunds_manage' %}
+{% set menu = 'admin_order_refunds_manage' %}
 
+{% set targetUrl = 'course_show' %}
 {% block main %}
   {{ web_macro.flash_messages() }}
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -20,7 +21,7 @@
 
     <div class="form-group">
       <input class="form-control" type="text" name="titleLike" value="{{ app.request.get('titleLike') }}" 
-      placeholder="{{titlePlaceholder|default()}}"
+      placeholder="{{'admin.order_refund.title.placeholder'|trans}}"
       >
     </div>
 
