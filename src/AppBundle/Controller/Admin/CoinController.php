@@ -275,13 +275,13 @@ class CoinController extends BaseController
     public function recordsAction(Request $request)
     {
         $fields = $request->query->all();
-
-        if (!empty($fields)) {
-            $conditions = $this->filterCondition($fields);
-        }
-
+        $conditions['timeType'] = 'oneWeek';
         $conditions['user_type'] = 'buyer';
         $conditions['amount_type'] = 'coin';
+
+        if (!empty($fields)) {
+            $conditions = array_merge($conditions,$this->filterCondition($fields));
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -638,17 +638,19 @@ class CoinController extends BaseController
 
         if (!empty($conditions) && $cashType == 'Coin') {
             $conditions = $this->filterCondition($conditions);
+            $conditions['amount_type'] = 'coin';
         }
 
         if (!empty($conditions) && $cashType == 'RMB') {
             $conditions = $this->filterConditionBill($conditions);
+            $conditions['amount_type'] = 'money';
         }
 
-        $conditions['cashType'] = $cashType;
+        $conditions['user_type'] = 'buyer';
 
-        $num = $this->getCashService()->searchFlowsCount($conditions);
-        $orders = $this->getCashService()->searchFlows($conditions, array('id' => 'DESC'), 0, $num);
-        $studentUserIds = ArrayToolkit::column($orders, 'userId');
+        $num = $this->getAccountProxyService()->countUserCashflows($conditions);
+        $orders = $this->getAccountProxyService()->searchUserCashflows($conditions, array('id' => 'DESC'), 0, $num);
+        $studentUserIds = ArrayToolkit::column($orders, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $users = ArrayToolkit::index($users, 'id');
@@ -662,28 +664,29 @@ class CoinController extends BaseController
 
         $results = array();
 
-        foreach ($orders as $key => $orders) {
+        foreach ($orders as $key => $order) {
+            $order = MathToolkit::multiply($order, array('amount'), 0.01);
             $member = '';
-            $member .= '流水号'.$orders['sn'].',';
-            $member .= $orders['name'].',';
-            $member .= $users[$orders['userId']]['nickname'].',';
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename'].',' : '-'.',';
+            $member .= '流水号'.$order['sn'].',';
+            $member .= $order['title'].',';
+            $member .= $users[$order['user_id']]['nickname'].',';
+            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
 
-            if ($orders['type'] == 'inflow') {
-                $member .= '+'.$orders['amount'].',';
+            if ($order['type'] == 'inflow') {
+                $member .= '+'.$order['amount'].',';
             }
 
-            if ($orders['type'] == 'outflow') {
-                $member .= '-'.$orders['amount'].',';
+            if ($order['type'] == 'outflow') {
+                $member .= '-'.$order['amount'].',';
             }
 
-            if (!empty($orders['payment'])) {
-                $member .= $payment[$orders['payment']].',';
+            if (!empty($order['platform'])) {
+                $member .= $payment[$order['platform']].',';
             } else {
                 $member .= '-'.',';
             }
 
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).',';
+            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
             $results[] = $member;
         }
 
@@ -821,7 +824,6 @@ class CoinController extends BaseController
 
             unset($conditions['createdTime']);
         }
-
         return $conditions;
     }
 
