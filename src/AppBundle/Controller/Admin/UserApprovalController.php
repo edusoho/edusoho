@@ -31,7 +31,7 @@ class UserApprovalController extends BaseController
             //根据条件从user_approval表里查找数据
             $userCount = $this->getUserService()->searchApprovalsCount($conditions);
 
-            $approvals = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
+            $approvals = $this->getUserService()->searchApprovals($conditions, array('createdTime' => 'ASC'), 0, $userCount);
             $approvals = ArrayToolkit::index($approvals, 'userId');
             $conditions['userIds'] = empty($approvals) ? array(-1) : ArrayToolkit::column($approvals, 'userId');
         }
