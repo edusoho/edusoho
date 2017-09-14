@@ -25,11 +25,11 @@
       {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
       {#</a>#}
     {#</li>#}
-    {#<li {% if app.request.query.get('diaplay_status')=='refunding' %}class="active"{% endif %}>#}
-      {#<a href="{{path('my_orders',{diaplay_status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}#}
-        {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
-      {#</a>#}
-    {#</li>#}
+    <li {% if app.request.query.get('display_status')=='refunding' %}class="active"{% endif %}>
+      <a href="{{path('my_orders',{display_status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}
+        {% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}
+      </a>
+    </li>
     {#<li {% if app.request.query.get('diaplay_status')=='closed' %}class="active"{% endif %}>#}
       {#<a href="{{path('my_orders',{diaplay_status:'closed'})}}">{{'user.orders.closed_status'|trans}}#}
         {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
