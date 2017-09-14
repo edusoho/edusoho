@@ -26,11 +26,11 @@ Unit Test With PHP 5.3:
     - redis:latest
   script:
     - bin/phpunit -c app/
-  only:
-    - tags
-    - develop
-    - master
-    - trigger
+  # only:
+  #   - tags
+  #   - develop
+  #   - master
+  #   - trigger
 
 Unit Test With PHP 5.5:
   stage: test
@@ -52,11 +52,11 @@ Unit Test With PHP 7.0:
     - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
     - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
     - bin/phpunit -c app/ --coverage-text --colors=never
-  only:
-    - tags
-    - develop
-    - master
-    - trigger
+  # only:
+  #   - tags
+  #   - develop
+  #   - master
+  #   - trigger
 
 #Functional Test With 5.5:
 #  stage: test
