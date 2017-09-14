@@ -58,7 +58,8 @@ class LegacyNotifyRequest extends \Omnipay\Alipay\Requests\AbstractLegacyRequest
     }
     public function validateParams()
     {
-        if (empty($this->params->all())) {
+        $params = $this->params->all();
+        if (empty($params)) {
             throw new \Omnipay\Common\Exception\InvalidRequestException('The `params` or $_REQUEST is empty');
         }
         if (!$this->params->has('sign_type')) {

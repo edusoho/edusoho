@@ -44,9 +44,14 @@ class AlipayController extends BaseController
     {
         $data = $request->query->all();
         $data['platform_type'] = 'Wap';
-        $this->getPayService()->notifyPaid('alipay', $data);
 
-        return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?1';</script>");
+        try {
+            $this->getPayService()->notifyPaid('alipay', $data);
+
+            return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?1';</script>");
+        } catch (\Exception $e) {
+            return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?0';</script>");
+        }
     }
 
     /**
