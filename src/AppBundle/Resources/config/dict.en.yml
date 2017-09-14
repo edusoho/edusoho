@@ -48,6 +48,14 @@ orderStatus:
     fail: Fail
     closed: Closed
 
+orderDisplayStatus:
+    orderDisplayStatus:
+    no_paid: 未支付
+    paid: 已付款
+    refunding: 退款中
+    closed: 已关闭
+    refunded: 已退款
+
 refundStatus:
     auditing: Applied
     refunded: Success

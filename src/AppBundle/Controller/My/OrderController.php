@@ -31,7 +31,7 @@ class OrderController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $status = $request->get('status');
+        $status = $request->get('display_status');
         $keyWord = $request->get('q');
         $payWays = $request->get('payWays');
 
@@ -39,7 +39,7 @@ class OrderController extends BaseController
             'user_id' => $user['id'],
         );
         if (!empty($status)) {
-            $conditions['status'] = $status;
+            $conditions['display_status'] = $status;
         }
 
         if (!empty($keyWord)) {
@@ -76,8 +76,8 @@ class OrderController extends BaseController
             20
         );
 
-        $createdOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'status' => 'created'));
-        $refundingOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'status' => 'refunding'));
+        $createdOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'display_status' => 'no_paid'));
+        $refundingOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'display_status' => 'refunding'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('created_time' => 'DESC'),
