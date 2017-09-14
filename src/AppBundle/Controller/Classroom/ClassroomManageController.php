@@ -355,7 +355,7 @@ class ClassroomManageController extends BaseController
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
         if (in_array('assistant', $member['role'])) {
-            return $this->createJsonResponse(array('code' => 'error','message' => 'classroom_manage.student_manage_remove_assistant_hint'));
+            return $this->createJsonResponse(array('code' => 'error', 'message' => 'classroom_manage.student_manage_remove_assistant_hint'));
         }
 
         $user = $this->getCurrentUser();
