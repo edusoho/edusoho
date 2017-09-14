@@ -353,6 +353,11 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
+        if (in_array('assistant', $member['role'])) {
+            return $this->createJsonResponse(array('code' => 'error', 'message' => 'classroom_manage.student_manage_remove_assistant_hint'));
+        }
+
         $user = $this->getCurrentUser();
 
         $condition = array(
@@ -382,7 +387,7 @@ class ClassroomManageController extends BaseController
         );
         $this->getNotificationService()->notify($userId, 'classroom-student', $message);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('code' => 'success', 'message' => ''));
     }
 
     public function createAction(Request $request, $id)

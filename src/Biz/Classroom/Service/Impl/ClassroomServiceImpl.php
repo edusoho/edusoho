@@ -1143,10 +1143,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'role' => $deleteMembers[$userId]['role'],
             );
 
-            $key = array_search('assistant', $fields['role']);
-            array_splice($fields['role'], $key, 1);
+            if (count($fields['role']) > 1) {
+                $key = array_search('assistant', $fields['role']);
+                array_splice($fields['role'], $key, 1);
 
-            $this->getClassroomMemberDao()->update($deleteMembers[$userId]['id'], $fields);
+                $this->getClassroomMemberDao()->update($deleteMembers[$userId]['id'], $fields);
+            } else {
+                $this->getClassroomMemberDao()->delete($deleteMembers[$userId]['id']);
+            }
         }
     }
 
