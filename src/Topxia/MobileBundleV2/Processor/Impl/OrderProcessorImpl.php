@@ -5,6 +5,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\ResourceKernel;
 use AppBundle\Common\ArrayToolkit;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
@@ -474,8 +475,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
-        } catch (\Exception $exception) {
+        } catch (OrderPayCheckException $exception) {
             return $this->createErrorResponse('error', $this->controller->get('translator')->trans($exception->getMessage()));
+        } catch (\Exception $e) {
+            return $this->createErrorResponse('error', 'UnKnow Error');
         }
 
     }
