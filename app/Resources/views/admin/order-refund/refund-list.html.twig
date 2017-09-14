@@ -5,7 +5,6 @@
 {% set script_controller = 'order/refunds' %}
 {% set menu = 'admin_order_refunds_manage' %}
 
-{% set targetUrl = 'course_show' %}
 {% block main %}
   {{ web_macro.flash_messages() }}
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -52,11 +51,8 @@
           {% set orderItem = orderItems[refund.order_id] %}
           <tr>
             <td>
-              {% if targetUrl|default() %}
-                <a href="{{ path(targetUrl, {id:orderItem.target_id}) }}" target="_blank">{{ refund.title }}</a>
-              {% else %}
-                {{ order.title }}
-              {% endif %}
+              {% set targetUrl = orderItem.target_type ~ '_show' %}
+              <a href="{{ path(targetUrl, {id:orderItem.target_id}) }}" target="_blank">{{ refund.title }}</a>
               <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }} | {{'order.paid_time'|trans}}：{{ order.created_time|date('Y-n-d H:i') }}</div>
               <div class="text-muted text-sm">
               {{'admin.order_refund.reason'|trans}}：{{ refund.reason }} 
