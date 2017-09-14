@@ -1941,11 +1941,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'truename') {
-            $conditions['truename'] = $conditions['keyword'];
+            $conditions['truename'] = trim($conditions['keyword']);
         }
 
         if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'idcard') {
-            $conditions['idcard'] = $conditions['keyword'];
+            $conditions['idcard'] = trim($conditions['keyword']);
         }
 
         unset($conditions['keywordType']);
