@@ -11,6 +11,7 @@ use Biz\User\Service\UserFieldService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
@@ -365,7 +366,7 @@ class SettingsController extends BaseController
             if (!$validatePassed) {
                 return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.incorrect_login_password'), 403);
             } else {
-                $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+                $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.success'));
             }
@@ -399,7 +400,7 @@ class SettingsController extends BaseController
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
                     return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
                 } else {
-                    $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+                    $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
 
                     return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
                 }
@@ -458,12 +459,12 @@ class SettingsController extends BaseController
         if ($request->getMethod() === 'POST') {
             $passwords = $request->request->all();
 
-            $validatePassed = $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']);
+            $validatePassed = $this->getAccountService()->validatePayPassword($user['id'], $passwords['oldPayPassword']);
 
             if (!$validatePassed) {
                 return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.incorrect_pay_password'), 403);
             } else {
-                $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
+                $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
 
                 return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.reset_success'));
             }
@@ -517,7 +518,7 @@ class SettingsController extends BaseController
                 }
 
                 if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])) {
-                    $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
+                    $this->getAccountService()->setPayPassword($token['userId'], $ $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
                     return $this->render('settings/pay-password-success.html.twig', array(
@@ -1184,6 +1185,9 @@ class SettingsController extends BaseController
         return $this->getBiz()->service('System:LogService');
     }
 
+    /**
+     * @return AccountService
+     */
     protected function getAccountService()
     {
         return $this->getBiz()->service('Pay:AccountService');
