@@ -72,24 +72,25 @@ class CourseProduct extends Product implements Owner, OrderStatusCallback
         }
     }
 
-    public function onApplyRefund()
+    public function onAuditing($orderRefundItem)
     {
-        $user = $this->biz['user'];
-        $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->lockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function onCancelRefund()
+    public function onCancel($orderRefundItem)
     {
-        $user = $this->biz['user'];
-        $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function onAdoptRefund()
+    public function onRefunded($orderRefundItem)
     {
-        $this->getCourseMemberService()->removeStudent($this->targetId, $userId);
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function onRefuseRefund($order)
+    public function onRefused($order)
     {
         $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
     }
