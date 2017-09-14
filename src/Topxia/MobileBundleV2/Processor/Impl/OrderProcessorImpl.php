@@ -475,7 +475,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
         } catch (\Exception $exception) {
-            return $this->createErrorResponse('error', $this->controller->trans($exception->getMessage()));
+            return $this->createErrorResponse('error', $this->controller->get('translator')->trans($exception->getMessage()));
         }
 
     }
