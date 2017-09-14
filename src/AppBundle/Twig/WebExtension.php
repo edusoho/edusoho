@@ -76,7 +76,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
             new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
-
         );
     }
 
@@ -1629,6 +1628,7 @@ class WebExtension extends \Twig_Extension
     public function mathFormat($number, $multiplicator)
     {
         $number *= $multiplicator;
+
         return $number;
     }
 

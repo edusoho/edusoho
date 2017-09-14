@@ -38,6 +38,7 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
     public function sumColumnByConditions($column, $conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return parent::sumColumnByConditions($column, $conditions);
     }
 
