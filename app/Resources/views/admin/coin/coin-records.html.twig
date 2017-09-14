@@ -40,9 +40,9 @@
     </form>
   
     <p class="text-muted">
-      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{amounts|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{'coin.recharge'|trans}}：<strong class="inflow-num">{{inflow|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{outflow|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{math_format(amounts, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.recharge'|trans}}：<strong class="inflow-num">{{ math_format(inflow, 0.01) |default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{ math_format(outflow, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
     </p>
     <div class="table-responsive">
       <table class="table table-striped" style="word-wrap: break-word;

@@ -38,7 +38,7 @@
             <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
           </td>
           <td><span class="color-gray text-sm">{{ order.created_time|date('Y-n-d H:i:s') }}</span></td>
-          <td>{{ dict_macro.orderStatus(order.status) }}</td>
+          <td>{{ dict_macro.orderStatus(order.display_status) }}</td>
           <td><span class="color-warning">{{ order.price_amount }}</span></td>
           <td><span class="color-warning">{{ order.price_amount - order.pay_amount }}</span></td>
           <td><span class="color-warning">{{order.pay_amount}}</span></td>

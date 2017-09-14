@@ -90,9 +90,10 @@ class CourseProduct extends Product implements Owner, OrderStatusCallback
         $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function onOrderRefundRefused($order)
+    public function onOrderRefundRefused($orderRefundItem)
     {
-        $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
     public function exitOwner($data)

@@ -50,7 +50,7 @@ orderStatus:
 
 orderDisplayStatus:
     orderDisplayStatus:
-    no_paid: 未支付
+    no_paid: 未付款
     paid: 已付款
     refunding: 退款中
     closed: 已关闭

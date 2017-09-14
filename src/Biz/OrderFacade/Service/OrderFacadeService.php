@@ -15,6 +15,7 @@ interface OrderFacadeService
     /**
      * @param $targetType
      * @param $params
+     *
      * @return Product
      */
     public function getOrderProduct($targetType, $params);

@@ -68,13 +68,15 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        foreach ($cashes as &$cash) {
+            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
+        }
+
         $conditions['type'] = 'inflow';
         $amountInflow = $this->getAccountService()->sumColumnByConditions('amount', $conditions);
-        $amountInflow = MathToolkit::multiply($amountInflow, array('amount'), 0.01);
 
         $conditions['type'] = 'outflow';
         $amountOutflow = $this->getAccountService()->sumColumnByConditions('amount', $conditions);
-        $amountOutflow = MathToolkit::multiply($amountOutflow, array('amount'), 0.01);
 
         return $this->render('coin/index.html.twig', array(
             'balance' => $balance,

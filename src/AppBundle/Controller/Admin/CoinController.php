@@ -296,6 +296,10 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        foreach ($cashes as &$cash) {
+            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
+        }
+
         if (isset($conditions['type'])) {
             switch ($conditions['type']) {
                 case 'inflow':
@@ -343,6 +347,7 @@ class CoinController extends BaseController
         $condition['timeType'] = 'oneWeek';
         $condition['amount_type'] = 'coin';
         $condition['orderBY'] = 'desc';
+        $condition['user_type'] = 'buyer';
 
         $fields = $request->query->all();
 
@@ -434,6 +439,10 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        foreach ($cashes as &$cash) {
+            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
+        }
 
         $user = $this->getUserService()->getUser($userId);
 
