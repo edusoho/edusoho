@@ -22,7 +22,7 @@
         </tr>
         {% for cash in cashes %}
            <tr>
-            <td><span class="text-sm">{{cash.name}}</span></td>
+            <td><span class="text-sm">{{cash.title}}</span></td>
 
             {% if cash.type =="inflow" %}
             <td style="color:#1bb974;">
@@ -36,7 +36,7 @@
                -&nbsp;{{cash.amount}}               
             </td>
             {% endif %}            
-            <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td> 
+            <td><span class="text-sm">{{cash.created_time|date('Y-m-d H:i:s')}}</span></td>
           </tr>
         {% endfor %}
         {% else %}
