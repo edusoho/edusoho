@@ -636,14 +636,17 @@ class CoinController extends BaseController
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $conditions = $request->query->all();
 
-        if (!empty($conditions) && $cashType == 'Coin') {
-            $conditions = $this->filterCondition($conditions);
+        if ($cashType == 'Coin') {
             $conditions['amount_type'] = 'coin';
+            if (!empty($conditions)) {
+                $conditions = $this->filterCondition($conditions);
+            }
         }
-
-        if (!empty($conditions) && $cashType == 'RMB') {
-            $conditions = $this->filterConditionBill($conditions);
+        if ($cashType == 'RMB') {
             $conditions['amount_type'] = 'money';
+            if (!empty($conditions)) {
+                $conditions = $this->filterConditionBill($conditions);
+            }
         }
 
         $conditions['user_type'] = 'buyer';
