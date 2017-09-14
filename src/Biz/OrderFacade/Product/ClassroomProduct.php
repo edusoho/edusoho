@@ -7,7 +7,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 
-class ClassroomProduct extends Product implements OrderStatusCallback
+class ClassroomProduct extends Product implements Owner, OrderStatusCallback
 {
     const TYPE = 'classroom';
 
@@ -60,6 +60,39 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
             return false;
         }
+    }
+    public function onOrderRefundAuditing($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->lockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function onOrderRefundCancel($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function onOrderRefundRefunded($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function onOrderRefundRefused($orderRefundItem)
+    {
+        $orderItem = $orderRefundItem['order_item'];
+        $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    public function exitOwner($userId)
+    {
+        $this->getClassroomService()->removeStudent($this->targetId, $userId);
+    }
+
+    public function getOwner($userId)
+    {
+        return $this->getClassroomService()->getClassroomMember($this->targetId, $userId);
     }
 
     /**

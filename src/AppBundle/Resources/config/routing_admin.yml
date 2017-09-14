@@ -566,7 +566,7 @@ admin_order_detail:
     defaults: { _controller: AppBundle:Admin/Order:detail }
 
 admin_order_refunds:
-    path: /order/refunds/{targetType}
+    path: /order/refunds
     defaults: { _controller: AppBundle:Admin/OrderRefund:refunds }
     permissions: [admin_finance]
 

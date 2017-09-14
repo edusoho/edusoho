@@ -222,8 +222,7 @@ admin.order.classroom.basic_tab: 班级订单
 admin.finance.my_account: 网校账户
 admin.finance.bills_menu: 账单管理
 admin.finance.coin_menu: 虚拟币管理
-admin.finance.course_refunds_menu: 课程退款管理
-admin.finance.classroom_refunds_menu: 班级退款管理
+admin.finance.refunds_menu: 退款管理
 
 ##账单管理模块
 admin.finance.bills.cash_records_tab: 现金账单
@@ -232,11 +231,8 @@ admin.finance.bills.coin_records_tab: 虚拟币账单
 ##虚拟币管理
 admin.finance.coin.basic_tab: 虚拟币管理
 
-##课程退款管理模块
-admin.finance.course_refunds.basic_tab: 课程退款管理
-
-##班级退款管理模块
-admin.finance.classroom_refunds.basic_tab: 班级退款管理
+##退款管理模块
+admin.finance.refunds.basic_tab: 退款管理
 
 #教育云模块
 admin.cloud.overview_menu: 概览

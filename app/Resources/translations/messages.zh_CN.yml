@@ -533,6 +533,8 @@ order.vip_order.renew_tips: %level.name% 会员续费 x %duration%
 order.vip_order.buy_tips: 购买 %level.name%会员 x %duration%
 order.pay: 订单支付
 order.success: 订单完成
+order.refund.notify_admin: >
+  用户%nickname%申请退款 <a href='%targetUrl%'>%title%</a>，请审核
 
 # 支付中心
 pay_center: 支付中心
@@ -7305,8 +7307,7 @@ admin.coin_setting.price_set_tips: 请设置正确的价格
 #退款管理
 admin.order_refund.status.default: 退款状态
 admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.type_course_input_placeholder: 课程名
-admin.order_refund.title.type_classroom_input_placeholder: 班级名
+admin.order_refund.title.placeholder: 课程或班级标题
 admin.order_refund.title: 退款订单
 admin.order_refund.order_amount: 实付金额
 admin.order_refund.refund_person: 退款人

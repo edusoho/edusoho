@@ -662,30 +662,13 @@ admin:
                             name: admin.finance.coin.basic_tab
                             disable: true
                             router_name: admin_coin_user_records
-                admin_course_refunds:
-                    name: admin.finance.course_refunds_menu
+                admin_order_refunds:
+                    name: admin.finance.refunds_menu
                     children:
-                        admin_course_refunds_manage:
-                            name: admin.finance.course_refunds.basic_tab
+                        admin_order_refunds_manage:
+                            name: admin.finance.refunds.basic_tab
                             disable: true
                             router_name: admin_order_refunds
-                            router_params:
-                                targetType: course
-                admin_classroom_refunds:
-                    name: admin.finance.classroom_refunds_menu
-                    parent: admin_finance
-                    router_name: admin_order_refunds
-                    router_params:
-                        targetType: classroom
-                        status: created
-                    after: admin_course_refunds
-                    children:
-                        admin_classroom_refunds_manage:
-                            name: admin.finance.classroom_refunds.basic_tab
-                            disable: true
-                            router_name: admin_order_refunds
-                            router_params:
-                                targetType: classroom
         admin_app:
             name: admin.nav.cloud
             visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
