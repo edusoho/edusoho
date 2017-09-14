@@ -35,6 +35,12 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         return parent::searchUserCashflows($conditions, $orderBy, $start, $limit);
     }
 
+    public function sumColumnByConditions($column, $conditions)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+        return parent::sumColumnByConditions($column, $conditions);
+    }
+
     protected function _prepareConditions($conditions)
     {
         if (isset($conditions['timeType'])) {
