@@ -52,7 +52,6 @@
                 {% endif %}
                 {% if order.status in ['created', 'paying'] %}
                   <li>
-                    <a href="">{{'user.orders.pay'|trans}}</a>
                     <a href="{{path('cashier_show', {sn:order.sn})}}">{{'user.orders.pay'|trans}}</a>
                   </li>
                   <li><a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a></li>
