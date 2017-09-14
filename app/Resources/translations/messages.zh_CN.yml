@@ -8093,3 +8093,4 @@ order.pay_check_msg.not_same_user: 不是您的订单，不能支付
 order.pay_check_msg.missing_pay_password: 没有输入支付密码，不能使用虚拟币支付
 order.pay_check_msg.incorrect_pay_password: 支付密码不正确
 order.pay_check_msg.balance_not_enough: 余额不足
+order.pay_check_msg.pay_password_not_set: 支付密码未设置
