@@ -25,7 +25,7 @@ class OrderRefundAddTitle extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order_refund` DROP COLUMN `title`;");
+        $db->exec('ALTER TABLE `biz_order_refund` DROP COLUMN `title`;');
     }
 
     protected function isFieldExist($table, $filedName)
