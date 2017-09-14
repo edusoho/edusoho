@@ -634,6 +634,12 @@ admin:
         admin_finance:
             name: admin.nav.finance
             children:
+                admin_my_account_manage:
+                  name: admin.finance.my_account
+                  children:
+                      admin_my_account:
+                          name: admin.finance.my_account
+                          disable: true
                 # admin_accounts_center:
                 #     name: 账务中心
                 #     children:
@@ -665,7 +671,6 @@ admin:
                             router_name: admin_order_refunds
                             router_params:
                                 targetType: course
-                                status: created
                 admin_classroom_refunds:
                     name: admin.finance.classroom_refunds_menu
                     parent: admin_finance
@@ -681,7 +686,6 @@ admin:
                             router_name: admin_order_refunds
                             router_params:
                                 targetType: classroom
-                                status: created
         admin_app:
             name: admin.nav.cloud
             visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
