@@ -12,6 +12,11 @@ interface OrderFacadeService
 
     public function createSpecialOrder(Product $product, $userId, $params = array());
 
+    /**
+     * @param $targetType
+     * @param $params
+     * @return Product
+     */
     public function getOrderProduct($targetType, $params);
 
     public function payingOrder($orderSn, $options);

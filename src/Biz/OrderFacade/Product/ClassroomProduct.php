@@ -4,6 +4,7 @@ namespace Biz\OrderFacade\Product;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
@@ -33,7 +34,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $access = $this->getClassroomService()->canJoinClassroom($this->targetId);
 
         if ($access['code'] !== AccessorInterface::SUCCESS) {
-            throw new InvalidArgumentException($access['msg']);
+            throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
     }
 

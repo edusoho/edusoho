@@ -6,8 +6,8 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseProduct extends Product implements Owner, OrderStatusCallback
 {
@@ -44,7 +44,7 @@ class CourseProduct extends Product implements Owner, OrderStatusCallback
         $access = $this->getCourseService()->canJoinCourse($this->targetId);
 
         if ($access['code'] !== AccessorInterface::SUCCESS) {
-            throw new InvalidArgumentException($access['msg']);
+            throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
     }
 
