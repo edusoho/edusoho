@@ -5565,6 +5565,7 @@ admin.coin.datagrid.filter.oneMonth: 'This month'
 admin.coin.datagrid.filter.threeMonths: 'Three months'
 admin.coin.datagrid.filter.all_history: 'All history'
 admin.coin.datagrid.filter.default: Default
+admin.coin.datagrid.filter.balance: Balance
 admin.coin.datagrid.filter.consume: Consumption
 admin.coin.datagrid.filter.recharge: Recharge
 admin.coin.datagrid.filter.asc: 'In ascending order'

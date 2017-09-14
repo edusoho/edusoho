@@ -39,7 +39,7 @@
       {{'type'|trans}}：
       <a type="button"
          class="btn btn-default btn-sm {% if app.request.get('flowType') != "out" and  app.request.get('flowType') != "in" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{flowType:"",timeType:app.request.get('timeType'),sort:app.request.get('sort')}) }}">{{'admin.coin.datagrid.filter.default'|trans}}</a>
+         href="{{ path('admin_coin_user_records',{flowType:"",timeType:app.request.get('timeType'),sort:app.request.get('sort')}) }}">{{'admin.coin.datagrid.filter.balance'|trans}}</a>
       <a type="button" class="btn btn-default btn-sm {% if app.request.get('flowType') == "out" %}btn-info{% endif %}"
          href="{{ path('admin_coin_user_records',{flowType:"out",timeType:app.request.get('timeType'),sort:app.request.get('sort')}) }}">{{'admin.coin.datagrid.filter.consume'|trans}}</a>
       <a type="button" class="btn btn-default btn-sm {% if app.request.get('timeType') == "in" %}btn-info{% endif %}"

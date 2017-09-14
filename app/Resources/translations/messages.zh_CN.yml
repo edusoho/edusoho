@@ -7071,6 +7071,7 @@ admin.coin.datagrid.filter.threeMonths: 三个月
 admin.coin.datagrid.filter.all_history: 全部历史
 
 admin.coin.datagrid.filter.default: 默认
+admin.coin.datagrid.filter.balance: 余额
 admin.coin.datagrid.filter.consume: 消费
 admin.coin.datagrid.filter.recharge: 充值
 
