@@ -30,7 +30,6 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
                 'createTime >=:startTime',
                 'createTime <=:endTime',
                 'idcard LIKE :idcard',
-                'status = :approvalStatus',
             ),
         );
     }
