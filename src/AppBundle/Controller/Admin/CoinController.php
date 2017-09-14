@@ -280,7 +280,7 @@ class CoinController extends BaseController
         $conditions['amount_type'] = 'coin';
 
         if (!empty($fields)) {
-            $conditions = array_merge($conditions,$this->filterCondition($fields));
+            $conditions = array_merge($conditions, $this->filterCondition($fields));
         }
 
         $paginator = new Paginator(
@@ -824,6 +824,7 @@ class CoinController extends BaseController
 
             unset($conditions['createdTime']);
         }
+
         return $conditions;
     }
 
