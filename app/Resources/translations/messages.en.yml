@@ -2401,6 +2401,9 @@ user.orders.all_orders: 'All Orders'
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
 user.orders.refunding_status: Refunding
+user.orders.closed_status: Closed
+user.orders.refunded_status: Refunded
+user.orders.no_paid_status: Unpaid
 user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
