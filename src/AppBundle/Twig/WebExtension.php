@@ -157,6 +157,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
             new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
+            new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
         );
     }
 
@@ -1622,6 +1623,13 @@ class WebExtension extends \Twig_Extension
 
             return $head.'************'.$tail;
         }
+    }
+
+    public function mathFormat($number, $multiplicator)
+    {
+        $number *= $multiplicator;
+
+        return $number;
     }
 
     protected function createService($alias)
