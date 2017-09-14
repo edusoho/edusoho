@@ -61,6 +61,7 @@ class ClassroomProduct extends Product implements Owner, OrderStatusCallback
             return false;
         }
     }
+
     public function onOrderRefundAuditing($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
