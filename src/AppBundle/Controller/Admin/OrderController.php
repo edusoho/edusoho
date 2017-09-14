@@ -66,15 +66,15 @@ class OrderController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
-
-        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['created_time'] + 48 * 60 * 60) < time(
-                    )) && ($expiredOrderToBeUpdated['status'] == 'created')
-            ) {
-                //                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-//                $orders[$index]['status'] = 'cancelled';
-            }
-        }
+//
+//        foreach ($orders as $index => $expiredOrderToBeUpdated) {
+//            if ((($expiredOrderToBeUpdated['created_time'] + 48 * 60 * 60) < time(
+//                    )) && ($expiredOrderToBeUpdated['status'] == 'created')
+//            ) {
+//                //                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+////                $orders[$index]['status'] = 'cancelled';
+//            }
+//        }
 
         return $this->render(
             'admin/order/manage.html.twig',

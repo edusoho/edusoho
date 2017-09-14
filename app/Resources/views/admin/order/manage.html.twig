@@ -24,8 +24,8 @@
     <div class="mbm">
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
-        <select class="form-control" name="status">
-          {{ select_options(dict('orderStatus'), request.get('status'), 'order.status'|trans) }}
+        <select class="form-control" name="display_status">
+          {{ select_options(dict('orderDisplayStatus'), request.get('display_status'), 'order.status'|trans) }}
         </select>
 
         <select class="form-control" name="payment">
