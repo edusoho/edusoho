@@ -475,10 +475,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($result['sn']);
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => $platformCreatedResult['url']);
             }
-        } catch (OrderPayCheckException $exception) {
+        } catch (\Exception $exception) {
             return $this->createErrorResponse('error', $this->controller->get('translator')->trans($exception->getMessage()));
-        } catch (\Exception $e) {
-            return $this->createErrorResponse('error', 'UnKnow Error');
         }
 
     }
