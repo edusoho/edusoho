@@ -1752,7 +1752,7 @@ class UserServiceImpl extends BaseService implements UserService
             array(
                 'userId' => $user['id'],
                 'note' => $note,
-                //'status' => 'approved',
+                'status' => 'approved',
                 'operatorId' => $currentUser['id'],
             )
         );
