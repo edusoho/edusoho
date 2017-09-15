@@ -849,6 +849,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'question.created',
                 'threadId' => $thread['id'],
+                'threadType' => 'question',
                 'courseId' => $thread['target']['id'],
                 'lessonId' => $thread['relationId'],
                 'questionCreatedTime' => $thread['createdTime'],
@@ -958,6 +959,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'question.answered',
                 'threadId' => $threadPost['threadId'],
+                'threadType' => $threadType,
                 'courseId' => $threadPost['target']['id'],
                 'lessonId' => $threadPost['thread']['relationId'],
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
