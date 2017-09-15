@@ -66,9 +66,9 @@
       <a class="btn btn-primary btn-export-csv"
          href="{{ path('admin_order_manage_export_csv',
          {targetType:targetType,
-             startTime:request.get('startDateTime'),
-             endTime:request.get('endDateTime'),
-             status:request.get('status'),
+             start_time:request.get('startDateTime'),
+             end_time:request.get('endDateTime'),
+             display_status:request.get('display_status'),
              payment:request.get('payment'),
              keywordType:request.get('keywordType'),
              keyword:request.get('keyword')
