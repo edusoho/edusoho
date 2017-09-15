@@ -435,7 +435,7 @@ EOD;
         'developer' => array('cloud_api_failover' => 1),
         'auth' => array(
             'register_mode' => 'email',
-            'email_activation_title' => '请激活您的{{sitename}}账号',
+            'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
             'welcome_sender' => $user['nickname'],
@@ -541,7 +541,7 @@ function _initKey()
     $users = $userService->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime' => 'DESC'), 0, 1);
 
     if (empty($users) || empty($users[0])) {
-        return array('error' => '管理员账号不存在，创建Key失败');
+        return array('error' => '管理员帐号不存在，创建Key失败');
     }
 
     $keys = $applier->applyKey($users[0], 'opensource', 'install');

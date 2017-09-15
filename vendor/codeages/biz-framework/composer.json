@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Codeages\\Biz\\Framework\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -25,7 +28,8 @@
         "symfony/polyfill-php55": "~1.3",
         "mtdowling/cron-expression": "~1.2",
         "webpatser/laravel-uuid": "~2.0",
-        "monolog/monolog": "^1.20"
+        "monolog/monolog": "^1.20",
+        "codeages/symfony-lock-lite": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8|^5.7|^6.0"

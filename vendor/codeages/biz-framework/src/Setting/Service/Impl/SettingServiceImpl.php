@@ -126,6 +126,7 @@ class SettingServiceImpl extends BaseService implements SettingService
         if (!isset($storage['setting_service_cache'])) {
             return null;
         }
+
         return $storage['setting_service_cache'];
     }
 

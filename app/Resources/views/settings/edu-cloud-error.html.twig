@@ -1,15 +1,18 @@
-{% extends 'settings/layout.html.twig' %}
-{% block title %}{{ 'user.settings.security.scene_not_open'|trans }} - {{ 'user.settings.security.content_title'|trans }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'security' %}
-{% do script(['libs/jquery-validation.js','app/js/settings/bind-mobile/index.js']) %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block main %}
-	{% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-		{% block heading %}{{ 'user.settings.security.scene_not_open'|trans }}{% endblock %}
-		{% block body %}
-			<div class="text-center">
-				<h1 class="color-gray">{{ 'user.settings.security.use_scene_not_open'|trans }}</h1>
-			</div>
-		{% endblock %}
-	{% endembed %}
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% block title %}
+  {{ 'user.settings.security.scene_not_open'|trans }}
 {% endblock %}
+
+{% block body %}
+  <div class="alert cd-alert cd-alert-warning">
+    {{ 'user.settings.security.use_scene_not_open'|trans }}
+  </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+

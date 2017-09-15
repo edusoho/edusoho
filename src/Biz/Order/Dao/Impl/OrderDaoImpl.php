@@ -184,10 +184,10 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->select('sum(`totalPrice`) as totalPrice, sum(`amount`) as amount, sum(`coinAmount`) as coinAmount');
 
         $result = $builder->execute()->fetch();
-        foreach($result as $key => $value) {
-           $result[$key] = empty($value) ? 0 : $value; 
+        foreach ($result as $key => $value) {
+            $result[$key] = empty($value) ? 0 : $value;
         }
-        
+
         return $result;
     }
 

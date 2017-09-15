@@ -14,7 +14,7 @@ class TargetloggerTestCase extends IntegrationTestCase
             '@action' => 'test',
             '@user_id' => 1,
             '@ip' => '127.0.0.1',
-            'test_key' => 'test_value'
+            'test_key' => 'test_value',
         ));
     }
 
