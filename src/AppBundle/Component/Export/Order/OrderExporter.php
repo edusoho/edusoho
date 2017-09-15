@@ -2,7 +2,6 @@
 
 namespace AppBundle\Component\Export\Order;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Course\Service\CourseService;
 use Biz\User\Service\UserService;
