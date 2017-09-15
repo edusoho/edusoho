@@ -88,6 +88,7 @@ class OrderController extends BaseController
         );
     }
 
+
     protected function prepareConditions($conditions)
     {
         if ($conditions['order_item_target_type'] != 'course') {
@@ -180,17 +181,17 @@ class OrderController extends BaseController
         $conditions = $this->buildExportCondition($request, $targetType);
 
         $status = array(
-            'created' => '未付款',
+            'no_paid' => '未付款',
             'paid' => '已付款',
             'refunding' => '退款中',
             'refunded' => '已退款',
-            'cancelled' => '已关闭',
+            'closed' => '已关闭',
         );
 
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount = $this->getOrderService()->countOrders($conditions);
-        $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime' => 'DESC'), $start, $limit);
-        $studentUserIds = ArrayToolkit::column($orders, 'userId');
+        $orders = $this->getOrderService()->searchOrders($conditions, array('created_time' => 'DESC'), $start, $limit);
+        $studentUserIds = ArrayToolkit::column($orders, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $users = ArrayToolkit::index($users, 'id');
@@ -253,12 +254,14 @@ class OrderController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime'] = strtotime($conditions['endTime']);
-        }
+        $conditions['order_item_target_type'] = $targetType;
 
-        $conditions['targetType'] = $targetType;
+        $conditions = $this->prepareConditions($conditions);
+
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+            $conditions['end_time'] = strtotime($conditions['endDateTime']);
+        }
 
         return $conditions;
     }
@@ -315,16 +318,22 @@ class OrderController extends BaseController
         foreach ($orders as $key => $order) {
             $member = '';
             $member .= $order['sn'].',';
-            $member .= $status[$order['status']].',';
+            $member .= $status[$order['display_status']].',';
             $member .= $order['title'].',';
-            $member .= $users[$order['userId']]['nickname'].',';
-            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
-            $member .= $order['amount'].',';
-            $member .= $payment[$order['payment']].',';
-            $member .= date('Y-n-d H:i:s', $order['createdTime']).',';
+            $member .= $users[$order['user_id']]['nickname'].',';
+            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
+            $member .= $order['pay_amount'].',';
+            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
 
-            if ($order['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $order['paidTime']).',';
+            if (empty($payment[$orderPayment])) {
+                $member .= $payment['none'].',';
+            } else {
+                $member .= $payment[$orderPayment].',';
+            }
+            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
+
+            if ($order['pay_time'] != 0) {
+                $member .= date('Y-n-d H:i:s', $order['pay_time']).',';
             } else {
                 $member .= '-'.',';
             }
@@ -340,12 +349,12 @@ class OrderController extends BaseController
         foreach ($orders as $key => $order) {
             $member = '';
             $member .= $order['sn'].',';
-            $member .= $status[$order['status']].',';
+            $member .= $status[$order['display_status']].',';
             //CSV会将字段里的两个双引号""显示成一个
             $order['title'] = str_replace('"', '""', $order['title']);
             $member .= '"'.$order['title'].'",';
 
-            $member .= $order['totalPrice'].',';
+            $member .= $order['price_amount']/100 .',';
 
             if (!empty($order['coupon'])) {
                 $member .= $order['coupon'].',';
@@ -353,9 +362,10 @@ class OrderController extends BaseController
                 $member .= '无'.',';
             }
 
-            $member .= $order['couponDiscount'].',';
-            $member .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
-            $member .= $order['amount'].',';
+//            $member .= $order['couponDiscount'].',';
+            $member .= ($order['price_amount']-$order['pay_amount'])/100 .',';
+            $member .= !empty($order['coinRate']) ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
+            $member .= $order['pay_amount']/100 .',';
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
 
@@ -365,8 +375,8 @@ class OrderController extends BaseController
                 $member .= $payment[$orderPayment].',';
             }
 
-            $member .= $users[$order['userId']]['nickname'].',';
-            $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
+            $member .= $users[$order['user_id']]['nickname'].',';
+            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $member .= '管理员添加,';
@@ -374,10 +384,10 @@ class OrderController extends BaseController
                 $member .= '-,';
             }
 
-            $member .= date('Y-n-d H:i:s', $order['createdTime']).',';
+            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
 
-            if ($order['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $order['paidTime']);
+            if ($order['pay_time'] != 0) {
+                $member .= date('Y-n-d H:i:s', $order['pay_time']);
             } else {
                 $member .= '-';
             }
