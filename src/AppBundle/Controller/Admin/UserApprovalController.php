@@ -12,7 +12,7 @@ class UserApprovalController extends BaseController
     public function approvalsAction(Request $request, $approvalStatus)
     {
         $fields = $request->query->all();
-        $user = $this->getUser();
+
         $conditions = array(
             'roles' => '',
             'keywordType' => '',
@@ -22,45 +22,43 @@ class UserApprovalController extends BaseController
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
 
-        $conditions['startApprovalTime'] = !empty($conditions['startDateTime']) ? strtotime($conditions['startDateTime']) : '';
+        $conditions['startApprovalTime'] = !empty($fields['startDateTime']) ? strtotime($fields['startDateTime']) : '';
 
-        $conditions['endApprovalTime'] = !empty($conditions['endDateTime']) ? strtotime($conditions['endDateTime']) : '';
+        $conditions['endApprovalTime'] = !empty($fields['endDateTime']) ? strtotime($fields['endDateTime']) : '';
 
-        if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
+        $approvals = array();
+        if (!empty($fields['keywordType'])) {
             //根据条件从user_approval表里查找数据
             $userCount = $this->getUserService()->searchApprovalsCount($conditions);
-            $profiles = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
-            $userApprovingId = ArrayToolkit::column($profiles, 'userId');
-        } else {
-            $userCount = $this->getUserService()->countUsers($conditions);
-            $profiles = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $userCount);
-            $userApprovingId = ArrayToolkit::column($profiles, 'id');
+
+            $approvals = $this->getUserService()->searchApprovals($conditions, array('createdTime' => 'ASC'), 0, $userCount);
+            $approvals = ArrayToolkit::index($approvals, 'userId');
+            $conditions['userIds'] = empty($approvals) ? array(-1) : ArrayToolkit::column($approvals, 'userId');
         }
 
+        $userCount = $this->getUserService()->countUsers($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $userCount,
             20
         );
 
-        $users = array();
-        if (!empty($userApprovingId)) {
-            $users = $this->getUserService()->searchUsers(
-                $conditions,
-                array('id' => 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('id' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        //最终结果
-        $userProfiles = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
-        $userProfiles = ArrayToolkit::index($userProfiles, 'userId');
+        if (!$approvals) {
+            $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
+            $approvals = ArrayToolkit::index($approvals, 'userId');
+        }
 
         return $this->render('admin/user/approvals.html.twig', array(
             'users' => $users,
             'paginator' => $paginator,
-            'userProfiles' => $userProfiles,
+            'userProfiles' => $approvals,
             'approvalStatus' => $approvalStatus,
         ));
     }

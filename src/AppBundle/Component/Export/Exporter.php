@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Export;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 abstract class Exporter implements ExporterInterface
 {
     protected $container;
@@ -121,8 +123,13 @@ abstract class Exporter implements ExporterInterface
     private function exportFileRootPath()
     {
         $biz = $this->getBiz();
+        $filesystem = new Filesystem();
+        $rootPath = $biz['topxia.upload.private_directory'].'/';
+        if (!$filesystem->exists($rootPath)) {
+            $filesystem->mkdir($rootPath);
+        }
 
-        return $biz['topxia.upload.private_directory'].'/';
+        return  $rootPath;
     }
 
     public function getUser()
