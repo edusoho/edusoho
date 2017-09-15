@@ -518,7 +518,7 @@ class SettingsController extends BaseController
                 }
 
                 if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])) {
-                    $this->getAccountService()->setPayPassword($token['userId'], $ $data['payPassword']);
+                    $this->getAccountService()->setPayPassword($token['userId'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
                     return $this->render('settings/pay-password-success.html.twig', array(
@@ -539,7 +539,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $hasLoginPassword = strlen($user['password']) > 0;
         $hasPayPassword = strlen($user['payPassword']) > 0;
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $userSecureQuestions = $this->getAccountService()->findSecurityAnswersByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
         $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
@@ -556,11 +556,10 @@ class SettingsController extends BaseController
     protected function findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
     {
         $questionNum = mt_rand(0, 2);
-        $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
+        $questionKey = $userSecureQuestions[$questionNum]['question_key'];
 
         return $this->render('settings/find-pay-password-by-question.html.twig', array(
-            'question' => $question,
-            'questionNum' => $questionNum,
+            'questionKey' => $questionKey,
             'hasSecurityQuestions' => $hasSecurityQuestions,
             'hasVerifiedMobile' => $hasVerifiedMobile,
         ));
@@ -569,8 +568,8 @@ class SettingsController extends BaseController
     public function findPayPasswordByQuestionAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
+        $userSecureQuestions = $this->getAccountService()->findSecurityAnswersByUserId($user['id']);
+        $hasSecurityQuestions = $this->getAccountService()->isSecurityAnswersSetted($user['id']);
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
         $canSmsFind = ($hasVerifiedMobile) &&
@@ -588,13 +587,11 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $questionNum = $request->request->get('questionNum');
+            $questionKey = $request->request->get('questionKey');
             $answer = $request->request->get('answer');
 
-            $userSecureQuestion = $userSecureQuestions[$questionNum];
-
-            $isAnswerRight = $this->getUserService()->verifyInSaltOut(
-                $answer, $userSecureQuestion['securityAnswerSalt'], $userSecureQuestion['securityAnswer']);
+            $isAnswerRight = $this->getAccountService()->validateSecurityAnswer(
+                $user['id'], $questionKey, $answer);
 
             if (!$isAnswerRight) {
                 $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.wrong_answer');
@@ -620,8 +617,7 @@ class SettingsController extends BaseController
 
         $currentUser = $this->getCurrentUser();
 
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
-        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
+        $hasSecurityQuestions = $this->getAccountService()->isSecurityAnswersSetted($currentUser['id']);
         $verifiedMobile = $currentUser['verifiedMobile'];
         $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
 
@@ -664,9 +660,9 @@ class SettingsController extends BaseController
         $question3 = null;
 
         if ($hasSecurityQuestions) {
-            $question1 = $userSecureQuestions[0]['securityQuestionCode'];
-            $question2 = $userSecureQuestions[1]['securityQuestionCode'];
-            $question3 = $userSecureQuestions[2]['securityQuestionCode'];
+            $question1 = $userSecureQuestions[0]['question_key'];
+            $question2 = $userSecureQuestions[1]['question_key'];
+            $question3 = $userSecureQuestions[2]['question_key'];
         }
 
         return $this->render('settings/security-questions.html.twig', array(
@@ -680,7 +676,7 @@ class SettingsController extends BaseController
     public function securityQuestionsAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $userSecureQuestions = $this->getAccountService()->findSecurityAnswersByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
         if ($user->isLogin() && empty($user['password'])) {
@@ -702,17 +698,11 @@ class SettingsController extends BaseController
                 return $this->createJsonResponse(array('message' => 'user.settings.security.security_questions.type_duplicate_hint'), 403);
             }
 
-            $fields = array(
-                'securityQuestion1' => $request->request->get('question-1'),
-                'securityAnswer1' => $request->request->get('answer-1'),
-                'securityQuestion2' => $request->request->get('question-2'),
-                'securityAnswer2' => $request->request->get('answer-2'),
-                'securityQuestion3' => $request->request->get('question-3'),
-                'securityAnswer3' => $request->request->get('answer-3'),
-            );
-            $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
-            $hasSecurityQuestions = true;
-            $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+            $fields[$request->request->get('question-1')] = $request->request->get('answer-1');
+            $fields[$request->request->get('question-2')] = $request->request->get('answer-2');
+            $fields[$request->request->get('question-3')] = $request->request->get('answer-3');
+
+            $this->getAccountService()->setSecurityAnswers($user['id'], $fields);
 
             return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.success'));
         }

@@ -65,11 +65,6 @@ class UserServiceImpl extends BaseService implements UserService
         return UserSerialize::unserializes($users);
     }
 
-    public function getUserSecureQuestionsByUserId($userId)
-    {
-        return $this->getUserSecureQuestionDao()->findByUserId($userId);
-    }
-
     public function changeRawPassword($id, $rawPassword)
     {
         if (empty($rawPassword)) {
@@ -599,25 +594,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->dispatchEvent('mobile.change', new Event($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
-
-        return true;
-    }
-
-    public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers)
-    {
-        $encoder = $this->getPasswordEncoder();
-        $userSecureQuestionDao = $this->getUserSecureQuestionDao();
-
-        for ($questionNum = 1; $questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2); ++$questionNum) {
-            $fields = array('userId' => $userId);
-
-            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
-            $fields['securityAnswerSalt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $fields['securityAnswer'] = $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
-            $fields['createdTime'] = time();
-
-            $userSecureQuestionDao->create($fields);
-        }
 
         return true;
     }

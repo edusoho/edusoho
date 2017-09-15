@@ -73,10 +73,6 @@ interface UserService
 
     public function verifyPayPassword($id, $payPassword);
 
-    public function getUserSecureQuestionsByUserId($userId);
-
-    public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers);
-
     public function verifyInSaltOut($in, $salt, $out);
 
     public function isMobileUnique($mobile);
