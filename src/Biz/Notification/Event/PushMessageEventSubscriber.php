@@ -959,7 +959,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'question.answered',
                 'threadId' => $threadPost['threadId'],
-                'threadType' => $threadType,
+                'threadType' => $threadPost['thread']['type'],
                 'courseId' => $threadPost['target']['id'],
                 'lessonId' => $threadPost['thread']['relationId'],
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
