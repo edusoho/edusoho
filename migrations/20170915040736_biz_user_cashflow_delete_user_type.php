@@ -13,9 +13,8 @@ class BizUserCashflowDeleteUserType extends Migration
         $connection = $biz['db'];
 
         if ($this->isFieldExist('biz_user_cashflow', 'user_type')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` DROP COLUMN `user_type`");
+            $connection->exec('ALTER TABLE `biz_user_cashflow` DROP COLUMN `user_type`');
         }
-
     }
 
     /**
