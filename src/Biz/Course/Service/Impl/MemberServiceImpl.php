@@ -181,8 +181,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userId' => $currentUser['id'],
             'role' => 'student',
             'deadlineNotified' => 0,
-            'deadlineGreaterThan' => 0,
-            'deadlineLessThen' => time(),
+            'deadlineGreaterThan' => time(),
         );
         $courseMembers = $this->getMemberDao()->search($condition, array('createdTime' => 'ASC'), 0, 10);
         $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
