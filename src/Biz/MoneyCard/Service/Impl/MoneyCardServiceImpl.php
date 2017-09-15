@@ -7,6 +7,7 @@ use Biz\MoneyCard\Dao\MoneyCardBatchDao;
 use Biz\MoneyCard\Dao\MoneyCardDao;
 use Biz\MoneyCard\Service\MoneyCardService;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 
 class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 {
@@ -443,16 +444,16 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             $batch = $this->getBatch((int) $moneyCard['batchId']);
 
-            $flow = array(
-                'userId' => $fields['rechargeUserId'],
-                'amount' => $batch['coin'],
-                'name' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
-                'orderSn' => '',
-                'category' => 'inflow',
-                'note' => '',
+            $recharge = array(
+                'to_user_id' => $fields['rechargeUserId'],
+                'from_user_id' => 0,
+                'amount' => $batch['coin'] * 100,
+                'amount_type' => 'coin',
+                'title' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin']
             );
 
-            $this->getCashService()->inflowByCoin($flow);
+            $this->getAccountService()->coinTransfer($recharge);
+
             $batch['rechargedNumber'] += 1;
             $this->updateBatch($batch['id'], $batch);
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
@@ -636,5 +637,13 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     private function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    private function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 }
