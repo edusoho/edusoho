@@ -64,13 +64,13 @@
       <div class="form-group cd-form-group">
         <label>{{'user.fields.gender_label'|trans}}</label>
         <div class="cd-radio-group">
-          <label class="cd-radio {% if profile.gender == 'male' %}checked{% endif %}" for="profile_gender_0" data-toggle="radio">
-            <input type="radio" id="profile_gender_0" name="profile[gender]" value="male" {% if profile.gender == 'male' %}checked{% endif %}>
+          <label class="cd-radio {% if profile.gender == 'male' %}checked{% endif %}" for="profile_gender_0">
+            <input type="radio" id="profile_gender_0" name="profile[gender]" value="male" {% if profile.gender == 'male' %}checked{% endif %} data-toggle="cd-radio">
             {{'user.fields.gender.male'|trans}}
           </label>
 
-          <label class="cd-radio {% if profile.gender == 'female' %}checked{% endif %}" for="profile_gender_1" data-toggle="radio">
-            <input type="radio" id="profile_gender_1" name="profile[gender]" value="female" {% if profile.gender == 'female' %}checked{% endif %}>
+          <label class="cd-radio {% if profile.gender == 'female' %}checked{% endif %}" for="profile_gender_1" >
+            <input type="radio" id="profile_gender_1" name="profile[gender]" value="female" {% if profile.gender == 'female' %}checked{% endif %} data-toggle="cd-radio">
             {{'user.fields.gender.female'|trans}}
           </label>
         </div>
