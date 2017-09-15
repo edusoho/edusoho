@@ -88,7 +88,6 @@ class OrderController extends BaseController
         );
     }
 
-
     protected function prepareConditions($conditions)
     {
         if ($conditions['order_item_target_type'] != 'course') {
@@ -354,7 +353,7 @@ class OrderController extends BaseController
             $order['title'] = str_replace('"', '""', $order['title']);
             $member .= '"'.$order['title'].'",';
 
-            $member .= $order['price_amount']/100 .',';
+            $member .= $order['price_amount'] / 100 .',';
 
             if (!empty($order['coupon'])) {
                 $member .= $order['coupon'].',';
@@ -363,9 +362,9 @@ class OrderController extends BaseController
             }
 
 //            $member .= $order['couponDiscount'].',';
-            $member .= ($order['price_amount']-$order['pay_amount'])/100 .',';
+            $member .= ($order['price_amount'] - $order['pay_amount']) / 100 .',';
             $member .= !empty($order['coinRate']) ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
-            $member .= $order['pay_amount']/100 .',';
+            $member .= $order['pay_amount'] / 100 .',';
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
 
