@@ -1,21 +1,32 @@
 {% extends 'my/learning/course/layout.html.twig' %}
 
+{# {% set bodyClass = 'cd-design' %} #}
+
 {% set mobile = is_show_mobile_page() %}
 {% set tab_nav = 'learning' %}
 
 {% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}
 
 {% block main %}
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{ 'my.learning.course'|trans }}</div>
-    <div class="panel-body">
+  <div class="cd-main ml0">
+    <div class="cd-main__heading">
+      <div class="cd-main__title">{{ 'my.learning.course'|trans }}</div>
+    </div>
+    <div class="cd-main__body">
       {% include 'my/learning/course/nav-pill.html.twig' %}
-      {% if courses %}
-        {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
-        {{ web_macro.paginator(paginator) }}
-      {% else %}
-        <div class="empty">{{ 'my.learning.course.learning_empty'|trans }}</div>
-      {% endif %}
+
+      {% for courseSet in courseSets %}
+        {# {{ dump(courseSet) }} #}
+        {% set currentCourses = courses[courseSet.id] %}
+        {% set course = courses[courseSet.id] %}
+        {# {{ dump(course) }} #}
+        {% if course %}
+          {% include 'my/learning/course/courses-block-item.html.twig' %}
+          {{ web_macro.paginator(paginator) }}
+        {% else %}
+          <div class="empty">{{ 'my.learning.course.learning_empty'|trans }}</div>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 

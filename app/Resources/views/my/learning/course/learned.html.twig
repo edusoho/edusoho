@@ -5,9 +5,11 @@
 {% set tab_nav = 'learned' %}
 
 {% block main %}
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{ 'my.learning.course'|trans }}</div>
-    <div class="panel-body">
+  <div class="cd-main ml0">
+    <div class="cd-main__heading">
+      <div class="cd-main__title">{{ 'my.learning.course'|trans }}</div>
+    </div>
+    <div class="cd-main__body">
       {% include 'my/learning/course/nav-pill.html.twig' %}
       {% if courses %}
         {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
@@ -15,7 +17,6 @@
       {% else %}
         <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
       {% endif %}
-
     </div>
   </div>
 {% endblock %}
