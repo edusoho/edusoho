@@ -33,21 +33,32 @@
           targetImg: '#profile-avatar'
         }%}
       </div>
-      <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
+      <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="nickname-form-group">
+
         <label for="nickname">{{'user.fields.username_label'|trans}}</label>
-          <div class="static-text" data-target="form-static-text">
-          <span>{{app.user.nickname}}</span>
+
+        <div class="static-text cd-input-edit__static-dom">
+          <span class="cd-input-edit__static-text">{{app.user.nickname}}</span>
           {% if setting('user_partner.nickname_enabled') %}
-            <i class="cd-icon cd-icon-edit cd-text cd-icon-hover" data-toggle="form-editable"></i>
+            <i class="cd-icon cd-icon-edit cd-icon-hover cd-input-edit__edit-btn"></i>
           {% endif %}
-        </div> 
-        <div data-target="form-editable" style="display:none">
-          <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}" data-save-value="{{app.user.nickname}}">
+        </div>
+
+        <div class="cd-input-edit__edit-dom" style="display:none">
+          <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control cd-input-edit__input" value="{{app.user.nickname}}">
+
           <div class="action-button">
-            <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">{{'form.btn.save'|trans}}</div>
-            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-cancel">{{'form.btn.cancel'|trans}}</div>
+            <div class="btn cd-btn cd-btn-primary cd-input-edit__save-btn"
+              data-url="{{ path('setting_nickname') }}" 
+              data-loading-text="{{'form.btn.save.submiting'|trans}}">
+              {{'form.btn.save'|trans}}
+            </div>
+            <div class="btn cd-btn cd-btn-flat-default cd-input-edit__cancel-btn">
+              {{'form.btn.cancel'|trans}}
+            </div>
           </div>
         </div> 
+
       </div>
     </div>
     <div class="col-md-5">
