@@ -57,7 +57,6 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
-                'type' => 'learning',
             )
         );
     }
@@ -96,7 +95,6 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
-                'type' => 'learned',
             )
         );
     }
