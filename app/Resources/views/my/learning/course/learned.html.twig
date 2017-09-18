@@ -11,12 +11,19 @@
     </div>
     <div class="cd-main__body">
       {% include 'my/learning/course/nav-pill.html.twig' %}
-      {% if courses %}
-        {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
-        {{ web_macro.paginator(paginator) }}
+
+      {% for courseSet in courseSets if courseSet %}
+        {% set currentCourses = courses[courseSet.id]|default(null) %}
+        {% set classroom = courseSet['classroom']|default(null) %}
+
+        {% if currentCourses %}
+          {% include 'my/learning/course/courses-block-item.html.twig' %}
+        {% endif %}
       {% else %}
-        <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
-      {% endif %}
+        {% set transText = 'my.learning.course.' ~ type ~ '_empty' %}
+        <div class="empty">{{ transText|trans }}</div>
+      {% endfor %}
+      {{ web_macro.paginator(paginator) }}
     </div>
   </div>
 {% endblock %}
