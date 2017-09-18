@@ -73,7 +73,6 @@ class EduCloudController extends BaseController
 
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($key);
 
-
         return $this->createJsonResponse(array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance));
     }
 
@@ -364,7 +363,6 @@ class EduCloudController extends BaseController
         } else {
             $key = $to.$request->getClientIp();
         }
-
 
         // send 6 times in an hour
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($key);
