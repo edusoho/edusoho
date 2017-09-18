@@ -5,7 +5,6 @@
 
 {% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}
 
-
 {% block page_title %}
   {{ 'my.learning.course'|trans }}
 {% endblock %}
@@ -16,17 +15,14 @@
   {% include 'my/learning/course/nav-pill.html.twig' %}
 
   {% for courseSet in courseSets %}
-    {# {{ dump(courseSet) }} #}
     {% set currentCourses = courses[courseSet.id] %}
-    {% set course = courses[courseSet.id] %}
-    {# {{ dump(course) }} #}
-    {% if course %}
+
+    {% if currentCourses %}
       {% include 'my/learning/course/courses-block-item.html.twig' %}
     {% else %}
       <div class="empty">{{ 'my.learning.course.learning_empty'|trans }}</div>
     {% endif %}
   {% endfor %}
-
   {{ web_macro.paginator(paginator) }}
 
 {% endblock %}
