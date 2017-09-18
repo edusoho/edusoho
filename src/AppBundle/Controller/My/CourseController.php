@@ -37,7 +37,7 @@ class CourseController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $courses = ArrayToolkit::group($courses,'courseSetId');
+        $courses = ArrayToolkit::group($courses, 'courseSetId');
 
         $setIds = array_keys($courses);
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
