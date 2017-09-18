@@ -449,7 +449,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 'from_user_id' => 0,
                 'amount' => $batch['coin'] * 100,
                 'amount_type' => 'coin',
-                'title' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin']
+                'title' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
             );
 
             $this->getAccountService()->transferCoin($recharge);
