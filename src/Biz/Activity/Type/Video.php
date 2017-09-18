@@ -23,9 +23,12 @@ class Video extends Activity
         }
 
         $videoActivity = json_decode($fields['media'], true);
+        $videoActivity['finishType'] = empty($fields['finishType']) ? 'end' : $fields['finishType'];
+        $videoActivity['finishDetail'] = empty($fields['finishDetail']) ? '0' : $fields['finishDetail'];
         $videoActivity['mediaId'] = empty($videoActivity['id']) ? 0 : $videoActivity['id'];
         $videoActivity['mediaSource'] = empty($videoActivity['source']) ? '' : $videoActivity['source'];
-        $videoActivity = ArrayToolkit::parts($videoActivity, array('mediaId', 'mediaUrl', 'mediaSource'));
+        $videoActivity['mediaUri'] = empty($videoActivity['uri']) ? '' : $videoActivity['uri'];
+        $videoActivity = ArrayToolkit::parts($videoActivity, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
 
         return $videoActivity;
@@ -60,9 +63,20 @@ class Video extends Activity
 
     public function update($activityId, &$fields, $activity)
     {
-        $video = $fields['ext'];
-        if ($video['finishType'] == 'time') {
-            if (empty($video['finishDetail'])) {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+
+        $videoInfo = json_decode($fields['media'], true);
+        $video['mediaSource'] = empty($videoInfo['source']) ? '' : $videoInfo['source'];
+        $video['mediaUri'] = empty($videoInfo['uri']) ? '' : $videoInfo['uri'];
+        $video['mediaId'] = empty($videoInfo['id']) ? 0 : $videoInfo['id'];
+
+        $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
+        $video = array_merge($video, $finishInfo);
+
+        if ($fields['finishType'] == 'time') {
+            if (empty($fields['finishDetail'])) {
                 throw $this->createAccessDeniedException('finish time can not be emtpy');
             }
         }
