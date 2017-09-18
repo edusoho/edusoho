@@ -29,7 +29,7 @@
       <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('my_course_show', {id:course.id}) }}" class="dropdown-toggle" data-toggle="dropdown">{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
       <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
         {% for course in courses %}
-          <li><a href="{{ path('my_course_show', {id:course.id}) }}"><span class="cd-mr24">{{ course.title }}</span><span class="cd-ml32">{{ course.memberLearnedNum }}/{{ course.compulsoryTaskNum }}</span></a></li>
+          <li><a class="link-item" href="{{ path('my_course_show', {id:course.id}) }}"><span>{{ course.title }}</span><span>{{ course.memberLearnedNum }}/{{ course.compulsoryTaskNum }}</span></a></li>
         {% endfor %}
       </ul>
     {% endif %}
