@@ -1,0 +1,41 @@
+.cd-progress {
+  width: 200px;
+  background-color: rgba(0, 0, 0, .08);;
+  color: #fff;
+  text-align: right;
+  font-weight: bold;
+  font-size: 14px;
+  vertical-align: middle;
+  .box-shadow(none);
+  .border-radius(0);
+  &.cd-progress-xs {
+    height: 4px;
+  }
+  &.cd-progress-sm {
+    height: 10px;
+  }
+  &.cd-progress-md {
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 15px;
+    .cd-progress-bar {
+      line-height: 30px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+  &.cd-progress-radius {
+    .border-radius(100px);
+  }
+}
+
+.cd-progress-bar {
+  .border-radius(100px);
+}
+.cd-progress-bar-left {
+  text-align: left;
+  padding-left: 15px;
+}
+
+
+
