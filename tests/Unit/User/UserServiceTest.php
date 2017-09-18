@@ -658,50 +658,6 @@ class UserServiceTest extends BaseTestCase
         $result = $this->getUserService()->changeMobile($registeredUser['id'], '');
     }
 
-    public function testGetUserSecureQuestionsByUserId()
-    {
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email' => 'test_email@email.com',
-            'verifiedMobile' => '13777868634',
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $fields = array(
-            'securityQuestion1' => 'question-1',
-            'securityAnswer1' => 'answer-1',
-            'securityQuestion2' => 'question-2',
-            'securityAnswer2' => 'answer-2',
-            'securityQuestion3' => 'question-3',
-            'securityAnswer3' => 'answer-3',
-        );
-        $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
-        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
-        $this->assertEquals(3, count($result));
-    }
-
-    public function testAddUserSecureQuestionsWithUnHashedAnswers()
-    {
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email' => 'test_email@email.com',
-            'verifiedMobile' => '13777868634',
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $fields = array(
-            'securityQuestion1' => 'question-1',
-            'securityAnswer1' => 'answer-1',
-            'securityQuestion2' => 'question-2',
-            'securityAnswer2' => 'answer-2',
-            'securityQuestion3' => 'question-3',
-            'securityAnswer3' => 'answer-3',
-        );
-        $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
-        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
-        $this->assertEquals(3, count($result));
-    }
-
     public function testVerifyInSaltOut()
     {
         $in = 'test';
