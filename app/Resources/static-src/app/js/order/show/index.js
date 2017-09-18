@@ -3,25 +3,28 @@ class Order {
        this.$element = props.element;
        this.$priceShow = this.$element.find('#price-show');
        this.initEvent();
-
-       this.$element.submit( event => {
-         $('#order-create-btn').button('loading');
-         return true;
-       });
     }
 
     initEvent() {
       this.$element.on('calculatePrice', event => this.calculatePrice(event));
       this.$element.trigger('calculatePrice');
+      this.validate();
     }
 
     calculatePrice() {
       let self = this;
-      $.get(this.$element.data('priceCalculate'), this.$element.serialize(), function(data){
+      let formData = this.$element.serializeArray();
+      $.get(this.$element.data('priceCalculate'), formData, function(data){
           self.$priceShow.text(data);
       })
     }
 
+    validate() {
+       this.$element.submit( event => {
+         $('#order-create-btn').button('loading');
+         return true;
+       });
+    }
     
 }
 
