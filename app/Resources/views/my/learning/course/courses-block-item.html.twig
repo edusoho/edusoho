@@ -11,7 +11,7 @@
     {% if classroom|default(null) %}
       <span>来自班级：<a href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
     {% endif %}
-    
+
     <div class="cd-course-progress">
       <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
       <div class="cd-progress cd-progress-xs cd-progress-radius">
@@ -22,10 +22,10 @@
   </div>
 
   <div class="pull-right course-btn-group dropdown">
-     
     {% if currentCourses|length > 1 %}
       <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
       <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
+
         {% for course in currentCourses %}
           <li><a href="{{ path('my_course_show', {id:course.id}) }}"><span class="cd-mr24">{{ course.title }}</span><span class="cd-ml32">{{ course.memberLearnedNum }}/{{ course.compulsoryTaskNum }}</span></a></li>
         {% endfor %}

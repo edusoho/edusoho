@@ -4,26 +4,20 @@
 
 {% set tab_nav = 'learned' %}
 
-{% block main %}
-  <div class="cd-main ml0">
-    <div class="cd-main__heading">
-      <div class="cd-main__title">{{ 'my.learning.course'|trans }}</div>
-    </div>
-    <div class="cd-main__body">
-      {% include 'my/learning/course/nav-pill.html.twig' %}
+{% block main_body %}
 
-      {% for courseSet in courseSets if courseSet %}
-        {% set currentCourses = courses[courseSet.id]|default(null) %}
-        {% set classroom = courseSet['classroom']|default(null) %}
+  {% include 'my/learning/course/nav-pill.html.twig' %}
 
-        {% if currentCourses %}
-          {% include 'my/learning/course/courses-block-item.html.twig' %}
-        {% endif %}
-      {% else %}
-        {% set transText = 'my.learning.course.' ~ type ~ '_empty' %}
-        <div class="empty">{{ transText|trans }}</div>
-      {% endfor %}
-      {{ web_macro.paginator(paginator) }}
-    </div>
-  </div>
+  {% for courseSet in courseSets if courseSet %}
+    {% set currentCourses = courses[courseSet.id]|default(null) %}
+    {% set classroom = courseSet['classroom']|default(null) %}
+
+    {% if currentCourses %}
+      {% include 'my/learning/course/courses-block-item.html.twig' %}
+    {% endif %}
+  {% else %}
+    <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
+  {% endfor %}
+  {{ web_macro.paginator(paginator) }}
+
 {% endblock %}

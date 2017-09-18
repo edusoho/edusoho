@@ -1,10 +1,20 @@
 {% extends 'my/layout.html.twig' %}
 
-{% set bodyClass = 'my-course' %}
+{% set bodyClass = 'my-course cd-design' %}
 {% set side_nav = 'my-learning' %}
 
 {% block title %}{{'my.learning.course'|trans}} - {{ parent() }}{% endblock %}
 
 {% block main %}
-
+  <div class="cd-main ml0">
+    <div class="cd-main__heading">
+      {% block main_heading %}
+        <div class="cd-main__title">{% block page_title %}{% endblock %}</div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
+    </div>
+  </div>
 {% endblock %}
