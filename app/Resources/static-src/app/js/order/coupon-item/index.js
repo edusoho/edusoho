@@ -6,6 +6,7 @@ class Coupon {
     this.$couponCode = this.$element.find("input[name='couponCode']");
     this.$selectCoupon = this.$element.find('#coupon-select');
     this.$couponNotify =  this.$element.find('#code-notify');
+    this.$form = $('#order-create-form');
     this.initEvent();
     this.init();
   }
@@ -16,6 +17,7 @@ class Coupon {
     $element.on('click', '#change-coupon-code', event => this.showChangeCoupon(event));
     $element.on('click', '#cancel-coupon', event => this.cancelCoupon(event));
     $element.on('click', '#use-coupon', event => this.useCoupon(event));
+    this.$form.on('submit',event => this.formSubmit(event));
   }
 
   init() {
@@ -47,7 +49,6 @@ class Coupon {
   }
 
   useCoupon() {
-    this.$couponCode
     this._setCoupon(this.$couponCode.val());
   }
 
@@ -62,6 +63,7 @@ class Coupon {
     }
     if (!code) {
         self.$couponNotify.css("display","none");
+        self._formValidatePass();
         return;
     }
     let data = {
@@ -71,21 +73,41 @@ class Coupon {
       'price': $("input[name='price']").val()
     }
 
-    $.post($('#use-coupon').data('url'), data, function(data){
+    $.ajax({
+      url: $('#use-coupon').data('url'), 
+      async: false,
+      type: 'POST',
+      data: data,
+      success: function(data){
         if(data.useable == 'no'){
           self.$couponNotify.addClass('alert-danger').text(data.message).css("display","inline-block");
           self._showDeductAmount();
+          self._formValidateReject()
         } else {
           let text = data['type'] == 'discount' ? Translator.trans('order.create.use_discount_coupon_hint', {rate: data['rate']}) : Translator.trans('order.create.use_price_coupon_hint', {rate: data['rate']});
           self.$couponNotify.removeClass('alert-danger').addClass("alert-success").text(text).css("display","inline-block");
           self._showDeductAmount(data.deduct_amount_format);
+          self._formValidatePass()
         }
+      }
     })
   }
 
   cancelCoupon(event) {
     this._hideCouponCode();
-    this.$selectCoupon.trigger('change');
+    if(this.$selectCoupon.length) {
+      this.$selectCoupon.trigger('change');
+    } else {
+      this._setCoupon();
+    }
+  }
+
+  formSubmit() {
+    this._checkCoupon();
+    if (this.formValidate === false) {
+      this.$form.find('#order-create-btn').button('reset');
+      return false;
+    }
   }
 
   _showDeductAmount(amount = this.$showDeductAmount.data('placeholder')) {
@@ -122,8 +144,21 @@ class Coupon {
     return this.$couponCode;
   }
 
+  _formValidatePass() {
+    this.formValidate = true;
+  }
+
+  _formValidateReject() {
+    this.formValidate = false;
+  }
+
   _calculatePrice() {
-    $('#order-create-form').trigger('calculatePrice');
+    if (this.formValidate === false) {
+      this.$couponCode.attr('disabled', 'disabled');
+    }
+
+    this.$form.trigger('calculatePrice');
+    this.$couponCode.removeAttr('disabled');
   }
 }
 
