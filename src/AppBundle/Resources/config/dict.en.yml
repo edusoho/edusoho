@@ -65,6 +65,7 @@ refundStatus:
 payment:
     none: --
     alipay: Alipay
+    alipay.in_time: Alipay
     wxpay: Wxpay
     wechat: wechat
     heepay: Heepay
