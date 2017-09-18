@@ -20,9 +20,6 @@ class LianlianpayController extends BaseController
             return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
         }
 
-        var_dump($result['platform_created_result']);
-        exit;
-
         return $this->redirect($result['platform_created_result']['url']);
     }
 
