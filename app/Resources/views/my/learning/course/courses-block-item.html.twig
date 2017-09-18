@@ -1,0 +1,37 @@
+<div class="cd-course-line cd-mb40 clearfix">
+  <a class="pull-left" href="{{ path('my_course_show', {id:course.id}) }}" class="grid-body">
+    <div class="cd-course-img">
+      <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive thumb">
+    </div>
+  </a>
+  <div class="pull-left cd-course-info">
+    <div class="cd-course-title cd-mb24">
+      <a class="cd-link-gray-dark" href="{{ path('my_course_show', {id:course.id}) }}">{{ courseSet.title }}</a>
+    </div>
+
+    {% if course.memberIsLearned %}
+    {% else %}
+      <div class="cd-course-progress">
+        <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
+        <div class="cd-progress cd-progress-xs cd-progress-radius">
+          <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.compulsoryTaskNum) }};"></div>
+        </div>
+        <span>{{ percent(course.memberLearnedNum, course.compulsoryTaskNum) }}</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="pull-right course-btn-group dropdown">
+    {# {{ dump(courseSet) }} #}
+    {% if courses|length == 0 %}
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('my_course_show', {id:course.id}) }}" >{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
+    {% else %}
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('my_course_show', {id:course.id}) }}" class="dropdown-toggle" data-toggle="dropdown">{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
+      <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
+        {% for course in courses %}
+          <li><a href="{{ path('my_course_show', {id:course.id}) }}"><span class="cd-mr24">{{ course.title }}</span><span class="cd-ml32">{{ course.memberLearnedNum }}/{{ course.compulsoryTaskNum }}</span></a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>
