@@ -25,7 +25,7 @@ class BizOrderAddDevice extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order` DROP COLUMN `device`;");
+        $db->exec('ALTER TABLE `biz_order` DROP COLUMN `device`;');
     }
 
     protected function isFieldExist($table, $filedName)
