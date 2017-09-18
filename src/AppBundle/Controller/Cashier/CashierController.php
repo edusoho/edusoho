@@ -28,7 +28,7 @@ class CashierController extends BaseController
             0.01
         );
 
-        if (!$order) {
+        if (!$order || $this->getUser()->getId() !== $order['user_id']) {
             throw new NotFoundHttpException();
         }
 
