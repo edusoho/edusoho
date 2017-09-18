@@ -37,11 +37,13 @@ class CourseController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $courses = ArrayToolkit::index($courses,'courseSetId');
+        $courses = ArrayToolkit::group($courses,'courseSetId');
 
-        $setIds = ArrayToolkit::column($courses, 'courseSetId');
+        $setIds = array_keys($courses);
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
+
+        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
 
         return $this->render(
             'my/learning/course/learning.html.twig',
@@ -223,10 +225,33 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
     }
 
+    protected function calculateCourseSetprogress($courseSets, $courses)
+    {
+        if (empty($courseSets)) {
+            return array();
+        }
+
+        foreach ($courseSets as $courseSetId => $courseSet) {
+            $currentCourses = $courses[$courseSet['id']];
+
+            $totalUserLearned = 0;
+            $totalTaskNum = 0;
+            array_map(function ($course) use (&$totalUserLearned, &$totalTaskNum) {
+                $totalUserLearned += $course['memberLearnedNum'];
+                $totalTaskNum += $course['compulsoryTaskNum'];
+            }, $currentCourses);
+
+            $courseSets[$courseSetId]['totalUserLearned'] = $totalUserLearned;
+            $courseSets[$courseSetId]['totalTaskNum'] = $totalTaskNum;
+        }
+
+        return $courseSets;
+    }
+
     /**
      * @return TaskResultService
      */
-    public function getTaskResultService()
+    protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
     }
