@@ -45,7 +45,7 @@ class CourseController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
@@ -57,7 +57,7 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
-                'type' => 'learning'
+                'type' => 'learning',
             )
         );
     }
@@ -72,7 +72,7 @@ class CourseController extends CourseBaseController
         $courseSetIds = $this->checkLearnedCourseSetIds($courses);
 
         $conditions = array(
-            'ids' => $courseSetIds
+            'ids' => $courseSetIds,
         );
         $paginator = new Paginator(
             $request,
@@ -96,7 +96,7 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
-                'type' => 'learned'
+                'type' => 'learned',
             )
         );
     }
@@ -281,7 +281,7 @@ class CourseController extends CourseBaseController
                 $classroom = $classrooms[$classroomCourse['classroomId']];
                 $courseSets[$courseSetId]['classroom'] = array(
                     'id' => $classroom['id'],
-                    'title' => $classroom['title']
+                    'title' => $classroom['title'],
                 );
             }
         }
