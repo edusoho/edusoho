@@ -27,6 +27,16 @@ class CallbackController extends BaseController
         ));
     }
 
+    public function returnAction(Request $request, $payment)
+    {
+        $targetCallback = $this->getTargetCallback($payment);
+
+        return $this->forward($targetCallback['return'], array(
+            'request' => $request,
+            'payment' => $payment,
+        ));
+    }
+
     protected function getTargetCallback($payment)
     {
         $payments = $this->get('extension.manager')->getPayments();
