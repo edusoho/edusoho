@@ -17,52 +17,52 @@
   </div>
 
   <div class="panel-body">
-       <ul class="course-wide-list">
-            {% if classrooms %}
-            {% for classroom in classrooms %}
-            <li class="course-item clearfix">
-              <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
-                <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
-              </a>
-              <div class="course-body">
-                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
-                {% if classroom.status == "draft" %}
-                  <span class="label label-warning ">{{'my.learning.classroom.unpublish'|trans}}</span>
-                  {% elseif classroom.status == "closed" %}
-                  <span class="label label-danger ">{{'my.learning.classroom.closed'|trans}}</span>
-                {% endif %}
-              </h4>
-                {% if "student" in members[classroom.id].role %}
+    <ul class="course-wide-list">
+      {% for classroom in classrooms if classroom %}
+        <li class="course-item clearfix">
+          <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+            <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+          </a>
+          <div class="course-body">
+            <h4 class="mbl">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
+              {% if classroom.status == "draft" %}
+                <span class="label label-warning ">{{'my.learning.classroom.unpublish'|trans}}</span>
+                {% elseif classroom.status == "closed" %}
+                <span class="label label-danger ">{{'my.learning.classroom.closed'|trans}}</span>
+              {% endif %}
+            </h4>
 
-                <div class="pull-right">
+            <div class="pull-right">
+              {% if 'assistant' in members[classroom.id].role %}
+                <span class="color-gray">{{'my.learning.classroom.study_days'|trans({'%day%':classroom.day})}}</span><br>
+                <a href="{{ path('classroom_manage_testpaper',{id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{ 'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
+              {% elseif "student" in members[classroom.id].role %}
                 <span class="color-gray">{{'my.learning.classroom.study_days'|trans({'%day%':classroom.day})}}</span><br>
                 <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{'my.learning.classroom.contiune_study'|trans}}</a>
-                </div>
-                {% else %}
-                <div class="pull-right">
+              {% else %}
                 <span class="color-gray">{{'my.learning.classroom.auditor'|trans}}</span><br>
                 <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-info btn-sm mts">{{'my.learning.classroom.join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</a>
-                </div>
-                {% endif %}
-
-                <div class="classroom-footer clearfix">
-
-                {% if "student" in members[classroom.id].role %}
+              {% endif %}
+            </div>
+            
+            <div class="classroom-footer clearfix">
+              {% if "student" in members[classroom.id].role %}
                 <div class="col-md-7">
                   <div class="progress">
                     <div class="progress-bar" style="width: {{ classroom.learningProgressPercent }}%">
                     </div>
                   </div>
                 </div>
-                {% endif %}
-                </div>
-              </div>
-            </li>
-            {% endfor %}
-            {% else %}
-            <div class="empty">{{'my.learning.classroom.not_join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
-            {% endif %}
-          </ul>
+              {% endif %}
+            </div>
+
+          </div>
+        </li>
+      {% else %}
+        <div class="empty">{{'my.learning.classroom.not_join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 

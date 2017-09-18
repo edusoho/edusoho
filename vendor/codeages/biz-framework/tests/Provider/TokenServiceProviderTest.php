@@ -17,7 +17,6 @@ class TokenServiceProviderTest extends TestCase
 
         $service = $biz->service('Token:TokenService');
         $this->assertInstanceOf('Codeages\Biz\Framework\Token\Service\Impl\DatabaseTokenServiceImpl', $service);
-        $this->assertCount(1, $biz['migration.directories']);
     }
 
     public function testRegister_Redis()

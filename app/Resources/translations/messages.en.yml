@@ -2048,6 +2048,9 @@ classroom.manage_btn: Config
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Class title was not unique, please change it.'
+#TODO trans
+classroom.set_assistant_tip: 仅能添加本班级学员
+
 form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'

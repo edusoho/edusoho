@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Queue;
 
 use Tests\IntegrationTestCase;
@@ -16,16 +17,22 @@ class QueueBaseTestCase extends IntegrationTestCase
         );
     }
 
-    protected function createExampleFinishedJob()
+    protected function createExampleFinishedJob(array $metadata = array())
     {
         $body = array('name' => 'example job');
-        return new ExampleFinishedJob($body, array(), self::TEST_QUEUE);
+
+        return new ExampleFinishedJob($body, $metadata);
     }
 
-    protected function createExampleFailedJob()
+    protected function createExampleFailedJob(array $metadata = array())
     {
         $body = array('name' => 'example job');
-        return new ExampleFailedJob($body, array(), self::TEST_QUEUE);
+
+        return new ExampleFailedJob($body, $metadata);
     }
 
+    protected function createLock()
+    {
+        return $this->biz['lock.factory']->createLock('queue-for-phpunit');
+    }
 }
