@@ -36,7 +36,6 @@
           <th><span class="text-sm">{{'user.fields.username_label'|trans}}</span></th>             
           <th><span class="text-sm">{{'order.paid_time'|trans}}</span></th>
           <th class="text-right prl"><span class="text-sm">{{'finance.income_expense'|trans}}</span></th>
-          
           <th><span class="text-sm">{{'order.payment_pattern'|trans}}</span></th>
         </tr>
          {% if cashes %}
@@ -67,9 +66,7 @@
             </tr>
           {% endfor %}
         {% else %}
-          <div class="empty">
-            <th>{{'site.datagrid.empty'|trans}}</th>
-          </div>
+            <th colspan="6"><div class="empty">{{'site.datagrid.empty'|trans}}</div></th>
         {% endif %}
       </table>
     </div>

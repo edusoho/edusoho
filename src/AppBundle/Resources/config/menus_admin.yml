@@ -634,12 +634,6 @@ admin:
         admin_finance:
             name: admin.nav.finance
             children:
-                admin_my_account_manage:
-                  name: admin.finance.my_account
-                  children:
-                      admin_my_account:
-                          name: admin.finance.my_account
-                          disable: true
                 # admin_accounts_center:
                 #     name: 账务中心
                 #     children:
