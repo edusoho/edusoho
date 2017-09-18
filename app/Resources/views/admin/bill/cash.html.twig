@@ -26,6 +26,7 @@
 
     <p class="text-muted">
       <span class="mrl">{{'finance.balance'|trans}}：<strong class="inflow-num">{{account.cash_amount|round(2)}}</strong> {{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{'finance.expense'|trans}}：<strong class="outflow-num">{{ math_format(amountOutflow, 0.01) }}</strong> {{ 'site.currency.CNY'|trans }}</span>
     </p>
 
     <div class="table-responsive">

@@ -618,13 +618,17 @@ class CoinController extends BaseController
         }
         list($users, $orders) = $this->getBuyersByCashFlows($cashes);
 
+        $conditions['type'] = 'outflow';
+        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
+
         return $this->render('admin/bill/cash.html.twig', array(
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users' => $users,
             'orders' => $orders,
             'cashType' => 'RMB',
-            'account' => $account
+            'account' => $account,
+            'amountOutflow' => $amountOutflow
         ));
     }
 
