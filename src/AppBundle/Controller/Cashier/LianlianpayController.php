@@ -23,7 +23,7 @@ class LianlianpayController extends BaseController
         var_dump($result['platform_created_result']);
         exit;
 
-        return $this->redirect($result['platform_created_result']);
+        return $this->redirect($result['platform_created_result']['url']);
     }
 
     public function notifyAction(Request $request, $payment)
