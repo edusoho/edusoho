@@ -19,7 +19,7 @@ class LianlianpayController extends BaseController
         if ($result['status'] == 'paid') {
             return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
         }
-        
+
         var_dump($result['platform_created_result']);
         exit;
 
@@ -29,6 +29,7 @@ class LianlianpayController extends BaseController
     public function notifyAction(Request $request, $payment)
     {
         $result = $this->getPayService()->notifyPaid($payment, $request->request->all());
+
         return $this->createJsonResponse($result);
     }
 
