@@ -16,6 +16,8 @@ class LianlianpayController extends BaseController
         $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
         $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
+        $trade['show_url'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => '1234'), true);
+
         $result = $this->getPayService()->createTrade($trade);
 
         if ($result['status'] == 'paid') {
