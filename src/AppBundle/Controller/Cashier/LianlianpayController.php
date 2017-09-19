@@ -38,6 +38,7 @@ class LianlianpayController extends BaseController
     public function returnAction(Request $request, $payment)
     {
         $data = $request->request->all();
+        $data = json_decode($data['res_data'], true);
         $this->getPayService()->notifyPaid($payment, $data);
 
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));
