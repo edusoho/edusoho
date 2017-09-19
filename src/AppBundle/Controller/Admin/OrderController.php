@@ -32,7 +32,6 @@ class OrderController extends BaseController
         }
         $conditions = $this->prepareConditions($conditions);
 
-
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
@@ -77,7 +76,6 @@ class OrderController extends BaseController
 
     protected function prepareConditions($conditions)
     {
-
         if (!empty($conditions['startDateTime'])) {
             $conditions['start_time'] = strtotime($conditions['startDateTime']);
         }

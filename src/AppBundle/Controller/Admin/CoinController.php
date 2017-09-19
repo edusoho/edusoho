@@ -591,7 +591,7 @@ class CoinController extends BaseController
             'user_type' => 'seller',
             'amount_type' => 'money',
             'timeType' => $request->get('lastHowManyMonths'),
-            'user_id' => 0
+            'user_id' => 0,
         );
 
         if (!empty($request->get('nickname'))) {
@@ -627,22 +627,21 @@ class CoinController extends BaseController
             'orders' => $orders,
             'cashType' => 'RMB',
             'account' => $account,
-            'amountOutflow' => $amountOutflow
+            'amountOutflow' => $amountOutflow,
         ));
     }
 
     protected function getBuyersByCashFlows($cashFlows)
     {
-        $orderSns = ArrayToolkit::column($cashFlows,'order_sn');
+        $orderSns = ArrayToolkit::column($cashFlows, 'order_sn');
         $orders = $this->getOrderService()->findOrdersBySns($orderSns);
 
-        $orders = ArrayToolkit::index($orders,'sn');
-        $userIds = ArrayToolkit::column($orders,'user_id');
+        $orders = ArrayToolkit::index($orders, 'sn');
+        $userIds = ArrayToolkit::column($orders, 'user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return array($users, $orders);
     }
-
 
     /**
      * @param [type] $cashType RMB | Coin
