@@ -20,26 +20,12 @@
         {% if createdOrderCount > 0 %}<span class="number">{{createdOrderCount}}</span>{% endif %}
       </a>
     </li>
-    {#<li {% if app.request.query.get('diaplay_status')=='paid' %}class="active"{% endif %}>#}
-      {#<a href="{{path('my_orders',{display_status:'paid'})}}">{{'user.orders.paid_status'|trans}}#}
-      {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
-      {#</a>#}
-    {#</li>#}
     <li {% if app.request.query.get('display_status')=='refunding' %}class="active"{% endif %}>
       <a href="{{path('my_orders',{display_status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}
         {% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}
       </a>
     </li>
-    {#<li {% if app.request.query.get('diaplay_status')=='closed' %}class="active"{% endif %}>#}
-      {#<a href="{{path('my_orders',{display_status:'closed'})}}">{{'user.orders.closed_status'|trans}}#}
-        {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
-      {#</a>#}
-    {#</li>#}
-    {#<li {% if app.request.query.get('diaplay_status')=='refunded' %}class="active"{% endif %}>#}
-      {#<a href="{{path('my_orders',{display_status:'refunded'})}}">{{'user.orders.refunded_status'|trans}}#}
-        {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
-      {#</a>#}
-    {#</li>#}
+
   </ul>
   <form class="form-inline cd-form-inline" action="" method="get">
     <div class="form-group cd-form-group cd-form-group-button">
