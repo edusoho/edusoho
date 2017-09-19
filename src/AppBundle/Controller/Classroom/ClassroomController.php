@@ -489,8 +489,9 @@ class ClassroomController extends BaseController
         if (($access['code'] == AccessorInterface::SUCCESS && $classroom['price'] == 0)
             || $this->canFreeJoinByBuyAllCourses($classroom)) {
             $this->getClassroomService()->becomeStudent($id, $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
+
             return $this->createJsonResponse(array('message' => 'join success', 'data' => array(
-                'redirectUrl' => $this->generateUrl('classroom_courses', array('classroomId' => $id))
+                'redirectUrl' => $this->generateUrl('classroom_courses', array('classroomId' => $id)),
             )));
         } else {
             return $this->createJsonResponse(array('message' => 'can not free join'), 403);
@@ -500,6 +501,7 @@ class ClassroomController extends BaseController
     private function canFreeJoinByBuyAllCourses($classroom)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+
         return $this->canFreeJoin($classroom, $this->getCurrentUser(), $courses);
     }
 
