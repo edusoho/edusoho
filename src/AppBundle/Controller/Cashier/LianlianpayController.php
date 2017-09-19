@@ -11,7 +11,7 @@ class LianlianpayController extends BaseController
     public function payAction($trade)
     {
         $user = $this->getUser();
-        $trade['platform_type'] = $this->isMobileClient()? 'Wap' : 'Web';
+        $trade['platform_type'] = $this->isMobileClient() ? 'Wap' : 'Web';
         $trade['attach']['user_created_time'] = $user['createdTime'];
         $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
