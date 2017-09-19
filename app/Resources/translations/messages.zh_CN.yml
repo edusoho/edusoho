@@ -4327,6 +4327,7 @@ course.block_grid.equal: 等
 course.block_grid.learn_time: 学习总时长：%learnTime%
 course.block_grid.live_finish: 直播结束
 course.block_grid.live_back: 回放
+course.block_grid.from_classroom: 来自班级：
 
 # course/header
 course.header.vip: 会员
