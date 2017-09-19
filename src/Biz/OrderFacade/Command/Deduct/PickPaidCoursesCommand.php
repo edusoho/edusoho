@@ -48,16 +48,6 @@ class PickPaidCoursesCommand extends Command
         return $this->biz->service('System:SettingService');
     }
 
-    private function getOrderService()
-    {
-        return $this->biz->service('Order:OrderService');
-    }
-
-    private function getCourseMemberService()
-    {
-        return $this->biz->service('Course:MemberService');
-    }
-
     protected function getUser()
     {
         $biz = $this->biz;
