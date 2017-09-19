@@ -7,12 +7,14 @@ use AppBundle\Common\ConvertIpToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
+use Biz\Account\Service\AccountProxyService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -122,6 +124,7 @@ class WebExtension extends \Twig_Extension
             //todo covertIP 要删除
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
             new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
+            new \Twig_SimpleFunction('user_balance', array($this, 'getBalance')),
 
             new \Twig_SimpleFunction('blur_user_name', array($this, 'blurUserName')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
@@ -493,28 +496,46 @@ class WebExtension extends \Twig_Extension
 
     public function getOutCash($userId, $timeType = 'oneWeek')
     {
-        $time = $this->filterTime($timeType);
         $condition = array(
-            'userId' => $userId,
+            'user_id' => $userId,
             'type' => 'outflow',
-            'cashType' => 'Coin',
-            'startTime' => $time,
+            'amount_type' => 'coin',
+            'timeType' => $timeType,
         );
+        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
+        $amount = MathToolkit::simple($amount, 0.01);
 
-        return $this->createService('Cash:CashService')->analysisAmount($condition);
+        return $amount;
     }
 
     public function getInCash($userId, $timeType = 'oneWeek')
     {
-        $time = $this->filterTime($timeType);
         $condition = array(
-            'userId' => $userId,
+            'user_id' => $userId,
             'type' => 'inflow',
-            'cashType' => 'Coin',
-            'startTime' => $time,
+            'amount_type' => 'coin',
+            'timeType' => $timeType,
         );
+        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
+        $amount = MathToolkit::simple($amount, 0.01);
 
-        return $this->createService('Cash:CashService')->analysisAmount($condition);
+        return $amount;
+    }
+
+    public function getBalance($userId)
+    {
+        $balance = $this->getAccountProxyService()->getUserBalanceByUserId($userId);
+        $balance = MathToolkit::multiply($balance, array('amount', 'cash_amount', 'locked_amount'), 0.01);
+
+        return $balance;
+    }
+
+    /**
+     * @return AccountProxyService
+     */
+    protected function getAccountProxyService()
+    {
+        return $this->createService('Account:AccountProxyService');
     }
 
     private function getUserService()

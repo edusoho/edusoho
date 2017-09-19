@@ -23,7 +23,13 @@ class PaymentExtension extends Extension implements ServiceProviderInterface
 
             'alipay' => array(
                 'notify' => 'AppBundle:Cashier/Alipay:notify',
+                'return' => 'AppBundle:Cashier/Alipay:return',
                 'returnForApp' => 'AppBundle:Cashier/Alipay:returnForApp',
+            ),
+
+            'lianlianpay' => array(
+                'notify' => 'AppBundle:Cashier/Lianlianpay:notify',
+                'return' => 'AppBundle:Cashier/Lianlianpay:return',
             ),
         );
     }

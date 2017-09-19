@@ -60,8 +60,6 @@ interface ClassroomService
 
     public function deleteClassroom($id);
 
-    public function exitClassroom($classroomId, $userId);
-
     public function searchClassrooms($conditions, $orderBy, $start, $limit);
 
     public function countClassrooms($condtions);

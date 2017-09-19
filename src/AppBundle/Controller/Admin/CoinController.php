@@ -276,7 +276,7 @@ class CoinController extends BaseController
     {
         $fields = $request->query->all();
         $conditions['timeType'] = 'oneWeek';
-        $conditions['user_type'] = 'buyer';
+        $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
 
         if (!empty($fields)) {
@@ -347,7 +347,7 @@ class CoinController extends BaseController
         $condition['timeType'] = 'oneWeek';
         $condition['amount_type'] = 'coin';
         $condition['orderBY'] = 'desc';
-        $condition['user_type'] = 'buyer';
+        $condition['except_user_id'] = 0;
 
         $fields = $request->query->all();
 
@@ -423,7 +423,7 @@ class CoinController extends BaseController
         }
 
         $condition['timeType'] = $timeType;
-        $conditions['user_type'] = 'buyer';
+        $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $userId;
 
@@ -587,7 +587,6 @@ class CoinController extends BaseController
     public function cashBillAction(Request $request)
     {
         $account = $this->getAccountService()->getUserBalanceByUserId(0);
-
         $conditions = array(
             'user_type' => 'seller',
             'amount_type' => 'money',
@@ -666,7 +665,7 @@ class CoinController extends BaseController
             }
         }
 
-        $conditions['user_type'] = 'buyer';
+        $conditions['except_user_id'] = 0;
 
         $num = $this->getAccountProxyService()->countUserCashflows($conditions);
         $orders = $this->getAccountProxyService()->searchUserCashflows($conditions, array('id' => 'DESC'), 0, $num);

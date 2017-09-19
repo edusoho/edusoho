@@ -86,9 +86,15 @@ class ClassroomProduct extends Product implements Owner, OrderStatusCallback
         $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
 
-    public function exitOwner($userId)
+    public function exitOwner($data)
     {
-        $this->getClassroomService()->removeStudent($this->targetId, $userId);
+        $user = $this->biz['user'];
+
+        $this->getClassroomService()->removeStudent(
+            $this->targetId, 
+            $user->getId(), 
+            array('reason' => $data['reason']['note'])
+        );
     }
 
     public function getOwner($userId)
