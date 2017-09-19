@@ -504,7 +504,7 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('组合购买课程不能退出。');
         }
 
-        $this->getClassroomService()->exitClassroom($id, $user['id']);
+        $this->getClassroomService()->removeStudent($id, $user['id']);
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
