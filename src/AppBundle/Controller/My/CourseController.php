@@ -27,11 +27,17 @@ class CourseController extends CourseBaseController
     {
         $currentUser = $this->getUser();
 
-        $courses = $this->getCourseService()->findUserLearningCourses($currentUser['id'], 0, PHP_INT_MAX);
-        $courses = ArrayToolkit::group($courses, 'courseSetId');
-        $courseSetIds = array_keys($courses);
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'courseId');
 
-        $conditions = array('ids' => $courseSetIds);
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $courses = ArrayToolkit::group($courses, 'courseSetId');
+
+        list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
+
+        $conditions = array('ids' => $learningCourseSetIds);
 
         $paginator = new Paginator(
             $request,
@@ -48,7 +54,7 @@ class CourseController extends CourseBaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
+        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses, $members);
         $courseSets = $this->getClassrooms($courseSets);
 
         return $this->render(
@@ -57,21 +63,26 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
+                'members' => $members
             )
         );
     }
 
     public function learnedAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUser();
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'courseId');
 
-        $courses = $this->getCourseService()->findUserLearnedCourses($currentUser['id'], 0, PHP_INT_MAX);
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $courses = ArrayToolkit::group($courses, 'courseSetId');
 
-        $courseSetIds = $this->checkLearnedCourseSetIds($courses);
+        list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
 
         $conditions = array(
-            'ids' => $courseSetIds,
+            'ids' => $learnedCourseSetIds,
         );
         $paginator = new Paginator(
             $request,
@@ -86,7 +97,7 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
+        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses, $members);
         $courseSets = $this->getClassrooms($courseSets);
 
         return $this->render(
@@ -95,6 +106,7 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
+                'members' => $members
             )
         );
     }
@@ -237,7 +249,7 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
     }
 
-    protected function calculateCourseSetprogress($courseSets, $courses)
+    protected function calculateCourseSetprogress($courseSets, $courses, $members)
     {
         if (empty($courseSets)) {
             return array();
@@ -248,8 +260,9 @@ class CourseController extends CourseBaseController
 
             $totalUserLearned = 0;
             $totalTaskNum = 0;
-            array_map(function ($course) use (&$totalUserLearned, &$totalTaskNum) {
-                $totalUserLearned += $course['memberLearnedNum'];
+            array_map(function ($course) use (&$totalUserLearned, &$totalTaskNum, $members) {
+                $member = $members[$course['id']];
+                $totalUserLearned += $member['learnedNum'];
                 $totalTaskNum += $course['compulsoryTaskNum'];
             }, $currentCourses);
 
@@ -287,27 +300,31 @@ class CourseController extends CourseBaseController
         return $courseSets;
     }
 
-    protected function checkLearnedCourseSetIds($groupCourses)
+    protected function differentiateCourseSetIds($groupCourses, $members)
     {
         if (empty($groupCourses)) {
-            return array(-1);
+            return array(array(-1), array(-1));
         }
 
-        $courseSetIds = array();
+        $learnedCourseSetIds = array(-1);
+        $learningCourseSetIds = array(-1);
         foreach ($groupCourses as $courseSetId => $courses) {
             $isLearned = 1;
-            $isLearned = array_map(function ($course) {
-                if ($course['memberLearnedNum'] < $course['compulsoryTaskNum']) {
-                    return 0;
+            array_map(function ($course) use ($members, &$isLearned) {
+                $member = $members[$course['id']];
+                if ($member['learnedNum'] < $course['compulsoryTaskNum'] or $course['compulsoryTaskNum'] == 0) {
+                    $isLearned = 0;
                 }
             }, $courses);
 
             if ($isLearned) {
-                array_push($courseSetIds, $courseSetId);
+                array_push($learnedCourseSetIds, $courseSetId);
+            } else {
+                array_push($learningCourseSetIds, $courseSetId);
             }
         }
 
-        return empty($courseSetIds) ? array(-1) : $courseSetIds;
+        return array($learnedCourseSetIds, $learningCourseSetIds);
     }
 
     /**
@@ -356,5 +373,10 @@ class CourseController extends CourseBaseController
     private function getLearningDataAnalysisService()
     {
         return $this->createService('Course:LearningDataAnalysisService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

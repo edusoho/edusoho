@@ -27,7 +27,8 @@
       <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
 
         {% for course in currentCourses %}
-          <li><a href="{{ path('my_course_show', {id:course.id}) }}"><span class="cd-mr24">{{ course.title }}</span><span class="cd-ml32">{{ course.memberLearnedNum }}/{{ course.compulsoryTaskNum }}</span></a></li>
+          {% set member = members[course.id]|default(null) %}
+          <li><a href="{{ path('my_course_show', {id:course.id}) }}"><span class="cd-mr24">{{ course.title }}</span><span class="cd-ml32">{{ member.learnedNum|default(0) }}/{{ course.compulsoryTaskNum }}</span></a></li>
         {% endfor %}
       </ul>
     {% else %}
