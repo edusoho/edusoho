@@ -8,14 +8,6 @@
       <label for="media" class="style control-label-required">{{ 'course.plan_task.activity_manage.video'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      {% set selectedFile = activity.ext.file|default(null) %}
-      <input type="hidden" name="" id="selected-file"
-          data-id="{{ file.id }}"
-          data-name="{{ file.filename }}"
-          data-status="{{ file.convertStatus }}"
-          data-source="self"
-          data-length="{{ file.length }}"
-          data-size="{{ file.fileSize }}">
       {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null) } %}
       {#<input type="hidden" id="ext_mediaSource" name="ext[mediaSource]"#}
              {#value="{{ activity.ext.mediaSource|default(null) }}">#}
