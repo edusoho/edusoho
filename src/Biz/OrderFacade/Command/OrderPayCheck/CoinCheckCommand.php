@@ -2,8 +2,6 @@
 
 namespace Biz\OrderFacade\Command\OrderPayCheck;
 
-use Biz\Coupon\Service\CouponService;
-use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
@@ -39,10 +37,9 @@ class CoinCheckCommand extends OrderPayCheckCommand
             throw new OrderPayCheckException('order.pay_check_msg.incorrect_pay_password', 2002);
         }
 
-
         $products = $this->orderPayChecker->getProducts($order);
         foreach ($products as $product) {
-             /** @var $product Product */
+            /** @var $product Product */
             if ($params['coinAmount'] > $product->getMaxCoinAmount()) {
                 throw new OrderPayCheckException('order.pay_check_msg.out_of_max_coin', 2009);
             }
