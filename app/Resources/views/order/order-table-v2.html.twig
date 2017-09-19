@@ -7,7 +7,6 @@
     <th width="25%">{{'order.name'|trans}}</th>
     <th>{{'order.id'|trans}}</th>
     <th class="text-right">{{'order.price_amount'|trans }}</th>
-    <th class="text-right">{{'order.discount_amount'|trans }}</th>
     <th class="text-right">{{'order.real_pay'|trans}}</th>
     <th>{{'order.createdTime'|trans}}</th>
     <th>{{'order.status'|trans}}</th>
@@ -31,7 +30,6 @@
       </td>
       <td>{{order.sn}}</td>
       <td class="text-right">{{ order.price_amount  }}</td>
-      <td class="text-right">{{ order.price_amount - order.pay_amount  }}</td>
       <td class="text-right">{{ order.pay_amount }}</td>
       <td>{{ order.created_time|date('Y-n-d H:i:s') }}</td>
       <td>{{ dict_macro.orderStatusV2(order.display_status) }}</td>

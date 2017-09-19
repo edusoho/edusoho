@@ -50,7 +50,7 @@ class CoinController extends BaseController
 
         $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $user->id;
-        $conditions['user_type'] = 'buyer';
+        $conditions['except_user_id'] = 0;
 
         $conditions['created_time_GTE'] = 0;
         $conditions['created_time_LTE'] = time();

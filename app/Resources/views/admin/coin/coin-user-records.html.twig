@@ -69,9 +69,9 @@
             <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
             <td style="color:#1bb974;"> {{ userInCash(userId,app.request.get('timeType'))|default("0.00") }}</td>
             <td style="color:#ff7b0e;"> {{ userOutCash(userId,app.request.get('timeType'))|default("0.00") }}</td>
-            <td style="color:blue;"> {{ user_account(userId).cash|default(0) }}</td>
+            <td style="color:blue;"> {{ user_balance(userId).amount|default(0) }}</td>
             <td>
-              <a class= {% if user_account(userId) %} "btn btn-default" {% else %} "btn btn-default disabled"  {% endif %}
+              <a class= {% if user_balance(userId).amount %} "btn btn-default" {% else %} "btn btn-default disabled"  {% endif %}
               data-toggle="modal" data-target="#modal"
               data-url="{{ path('admin_coin_flow_detail',{userId:userId,timeType:app.request.get('timeType')}) }}"
               href="javascript:;">{{'form.btn.view'|trans}}</a>

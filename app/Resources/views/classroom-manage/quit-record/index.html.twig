@@ -22,21 +22,11 @@
         <th width="30%">{{ 'classroom.student_exit_reason'|trans }} </th>
         <th>{{ 'classroom.student_exit_date'|trans }}</th>
         <th>{{ 'classroom.refund_status'|trans }}</th>
-        <th>{{ 'classroom.refund_money'|trans }}
-          <span class="glyphicon glyphicon-question-sign color-gray" id="refund-coin-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
-          <div id="refund-coin-tips-html" style="display:none;">
-            <div style="width:150px;">
-              <span>{{ 'classroom.refund_record_tips'|trans }}</span><br>
-            </div>
-          </div>
-        </th>
-		
       </tr>
     </thead>
     <tbody>
-      {% for refund in refunds %}
-        
-        {% include ('classroom-manage/quit-record-tr.html.twig') %}
+      {% for record in records %}
+        {% include ('classroom-manage/quit-record/list.html.twig') %}
       {% else %}
         <tr class="empty"><td colspan="20">{{ 'classroom,student_empty'|trans }}</td></tr>
       {% endfor %}

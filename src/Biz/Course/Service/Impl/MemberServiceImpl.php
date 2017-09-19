@@ -523,18 +523,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($isNonExpired) {
             throw $this->createServiceException("用户(#{$userId})还未达到有效期，不能退出教学计划。");
         }
-
-        //查询出订单
-        $order = $this->getOrderService()->getOrder($member['orderId']);
         $user = $this->getUserService()->getUser($userId);
-        if (!empty($order)) {
-            $reason = array(
-                'type' => 'other',
-                'note' => '达到有效期，用户自己退出',
-                'operator' => $user['id'],
-            );
-            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
-        }
 
         $this->removeMember($member, 'course.member.operation.quit_deadline_reach');
 
