@@ -26,7 +26,8 @@ class LianlianpayController extends BaseController
 
     public function notifyAction(Request $request, $payment)
     {
-        $result = $this->getPayService()->notifyPaid($payment, $request->request->all());
+        $returnArray = json_decode(file_get_contents('php://input'), true);
+        $result = $this->getPayService()->notifyPaid($payment, $returnArray);
 
         return $this->createJsonResponse($result);
     }
