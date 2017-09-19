@@ -85,17 +85,17 @@ class StudentManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $fields = $request->query->all();
-        $condition = array();
+        $condition = array(
+            'targetId' => $courseId,
+            'targetType' => 'course',
+            'status' => 'success',
+            'operate_type' => 'exit'
+        );
 
+        $fields = $request->query->all();
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
-
-        $condition['targetId'] = $courseId;
-        $condition['targetType'] = 'course';
-        $condition['status'] = 'success';
-        $condition['operate_type'] = 'exit';
 
         $paginator = new Paginator(
             $request,

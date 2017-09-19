@@ -743,7 +743,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
 
-    public function removeStudent($classroomId, $userId)
+    public function removeStudent($classroomId, $userId, $info = array())
     {
         $classroom = $this->getClassroom($classroomId);
 
@@ -773,7 +773,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
 
-        $this->createOperateRecord($member, 'exit', $member);
+        $this->createOperateRecord($member, 'exit', array_merge($member, $info));
 
         $user = $this->getUserService()->getUser($member['userId']);
         $message = array(
@@ -1965,6 +1965,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
+            'reason' => empty($data['reason']) ? '' : $data['reason']
         );
 
         return $this->getMemberOperationService()->createRecord($record);
