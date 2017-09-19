@@ -4,19 +4,36 @@
 
 {% set tab_nav = 'learned' %}
 
-{% block main %}
-  <div class="cd-main ml0">
-    <div class="cd-main__heading">
-      <div class="cd-main__title">{{ 'my.learning.course'|trans }}</div>
-    </div>
-    <div class="cd-main__body">
-      {% include 'my/learning/course/nav-pill.html.twig' %}
-      {% if courses %}
-        {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
-        {{ web_macro.paginator(paginator) }}
-      {% else %}
-        <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
-      {% endif %}
-    </div>
-  </div>
+{% block page_title %}
+  {{ 'my.learning.course'|trans }}
 {% endblock %}
+
+
+{% block main_body %}
+  {% include 'my/learning/course/nav-pill.html.twig' %}
+  {% if courses %}
+    {# {{ dump(courses) }} #}
+    {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
+    {{ web_macro.paginator(paginator) }}
+  {% else %}
+    <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
+  {% endif %}
+{% endblock %}
+
+
+{# {% block main_body %}
+
+  {% include 'my/learning/course/nav-pill.html.twig' %}
+
+  {% for courseSet in courseSets %}
+    {% set currentCourses = courses[courseSet.id] %}
+
+    {% if currentCourses %}
+      {% include 'my/learning/course/courses-block-item.html.twig' %}
+    {% else %}
+      <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
+    {% endif %}
+  {% endfor %}
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %} #}
