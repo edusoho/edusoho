@@ -13,6 +13,7 @@ class LianlianpayController extends BaseController
         $user = $this->getUser();
         $trade['platform_type'] = 'Web';
         $trade['attach']['user_created_time'] = $user['createdTime'];
+        $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
         $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
         $result = $this->getPayService()->createTrade($trade);
@@ -40,11 +41,27 @@ class LianlianpayController extends BaseController
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));
     }
 
+    protected function getIdentify()
+    {
+        $identify = $this->getSettingService()->get('llpay_identify');
+        if (empty($identify)) {
+            $identify = substr(md5(uniqid()), 0, 12);
+            $this->getSettingService()->set('llpay_identify', $identify);
+        }
+
+        return $identify;
+    }
+
     /**
      * @return PayService
      */
     private function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
