@@ -87,7 +87,7 @@ class StudentManageController extends BaseController
 
         $condition = array(
             'targetId' => $courseId,
-            'targetType' => 'course',
+            'target_type' => 'course',
             'status' => 'success',
             'operate_type' => 'exit'
         );
