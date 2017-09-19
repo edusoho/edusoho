@@ -280,14 +280,14 @@ class DefaultController extends BaseController
             'pay_time_GT' => $startTime,
             'order_item_target_type' => 'course',
             'price_amount_GT' => 0,
-            'status' => 'paid',
+            'display_status' => 'paid',
         ));
 
         $classroomOrdersCount = $this->getOrderService()->countOrders(array(
             'pay_time_GT' => $startTime,
             'order_item_target_type' => 'classroom',
             'price_amount_GT' => 0,
-            'status' => 'paid',
+            'display_status' => 'paid',
         ));
 
         if (!$this->isPluginInstalled('vip')) {
@@ -295,7 +295,7 @@ class DefaultController extends BaseController
                 'pay_time_GT' => $startTime,
                 'order_item_target_type' => 'vip',
                 'price_amount_GT' => 0,
-                'status' => 'paid',
+                'display_status' => 'paid',
             ));
         }
 
