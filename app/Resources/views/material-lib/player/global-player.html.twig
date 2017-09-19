@@ -6,7 +6,7 @@
     {% else %}
         {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
     {% endif %}
-    <script src="{{ cdnUrl }}/js-sdk/sdk-v1.js"></script>
+    <script src="{{ cdnUrl }}/js-sdk/sdk-v1.js?{{(date().timestamp / 100)|round }}"></script>
     {% do script(['app/js/material-lib/global-player/index.js']) %}
     <div class="iframe-parent-content" id="global-player"
          data-res-no="{{ file.globalId }}"
