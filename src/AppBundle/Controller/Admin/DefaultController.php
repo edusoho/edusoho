@@ -257,11 +257,11 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
 
-        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'status' => 'paid');
+        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'display_status' => 'paid');
         $newOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newOrderCount'] = $newOrders;
 
-        $conditions['price_amiunt_GT'] = 0;
+        $conditions['price_amount_GT'] = 0;
         $newPaidOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newPaidOrderCount'] = $newPaidOrders;
 
@@ -280,14 +280,14 @@ class DefaultController extends BaseController
             'pay_time_GT' => $startTime,
             'order_item_target_type' => 'course',
             'price_amount_GT' => 0,
-            'status' => 'paid',
+            'display_status' => 'paid',
         ));
 
         $classroomOrdersCount = $this->getOrderService()->countOrders(array(
             'pay_time_GT' => $startTime,
             'order_item_target_type' => 'classroom',
             'price_amount_GT' => 0,
-            'status' => 'paid',
+            'display_status' => 'paid',
         ));
 
         if (!$this->isPluginInstalled('vip')) {
@@ -295,7 +295,7 @@ class DefaultController extends BaseController
                 'pay_time_GT' => $startTime,
                 'order_item_target_type' => 'vip',
                 'price_amount_GT' => 0,
-                'status' => 'paid',
+                'display_status' => 'paid',
             ));
         }
 

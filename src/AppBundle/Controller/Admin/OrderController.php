@@ -32,11 +32,6 @@ class OrderController extends BaseController
         }
         $conditions = $this->prepareConditions($conditions);
 
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['start_time'] = strtotime($conditions['startDateTime']);
-            $conditions['end_time'] = strtotime($conditions['endDateTime']);
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
@@ -66,15 +61,6 @@ class OrderController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
-        //
-//        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-//            if ((($expiredOrderToBeUpdated['created_time'] + 48 * 60 * 60) < time(
-//                    )) && ($expiredOrderToBeUpdated['status'] == 'created')
-//            ) {
-//                //                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-        ////                $orders[$index]['status'] = 'cancelled';
-//            }
-//        }
 
         return $this->render(
             'admin/order/manage.html.twig',
@@ -90,6 +76,14 @@ class OrderController extends BaseController
 
     protected function prepareConditions($conditions)
     {
+        if (!empty($conditions['startDateTime'])) {
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+            $conditions['end_time'] = strtotime($conditions['endDateTime']);
+        }
+
         if ($conditions['order_item_target_type'] != 'course') {
             return $conditions;
         }
@@ -256,11 +250,6 @@ class OrderController extends BaseController
         $conditions['order_item_target_type'] = $targetType;
 
         $conditions = $this->prepareConditions($conditions);
-
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['start_time'] = strtotime($conditions['startDateTime']);
-            $conditions['end_time'] = strtotime($conditions['endDateTime']);
-        }
 
         return $conditions;
     }

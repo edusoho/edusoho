@@ -591,11 +591,12 @@ class CoinController extends BaseController
             'user_type' => 'seller',
             'amount_type' => 'money',
             'timeType' => $request->get('lastHowManyMonths'),
-            'user_id' => 0
+            'user_id' => 0,
         );
 
-        if (!empty($request->get('nickname'))) {
-            $user = $this->getUserService()->getUserByNickname($request->get('nickname'));
+        $nickname = $request->get('nickname');
+        if (!empty($nickname)) {
+            $user = $this->getUserService()->getUserByNickname($nickname);
             $conditions['user_id'] = empty($user) ? -1 : $user['id'];
         }
 
@@ -627,22 +628,21 @@ class CoinController extends BaseController
             'orders' => $orders,
             'cashType' => 'RMB',
             'account' => $account,
-            'amountOutflow' => $amountOutflow
+            'amountOutflow' => $amountOutflow,
         ));
     }
 
     protected function getBuyersByCashFlows($cashFlows)
     {
-        $orderSns = ArrayToolkit::column($cashFlows,'order_sn');
+        $orderSns = ArrayToolkit::column($cashFlows, 'order_sn');
         $orders = $this->getOrderService()->findOrdersBySns($orderSns);
 
-        $orders = ArrayToolkit::index($orders,'sn');
-        $userIds = ArrayToolkit::column($orders,'user_id');
+        $orders = ArrayToolkit::index($orders, 'sn');
+        $userIds = ArrayToolkit::column($orders, 'user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return array($users, $orders);
     }
-
 
     /**
      * @param [type] $cashType RMB | Coin
@@ -700,7 +700,7 @@ class CoinController extends BaseController
             }
 
             if (!empty($order['platform'])) {
-                $member .= $payment[$order['platform']].',';
+                $member .= (empty($payment[$order['platform']]) ? '--' : $payment[$order['platform']]).',';
             } else {
                 $member .= '-'.',';
             }
