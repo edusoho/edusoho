@@ -16,7 +16,6 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Codeages\Biz\Framework\Context\Biz;
-use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
@@ -503,7 +502,7 @@ class WebExtension extends \Twig_Extension
             'amount_type' => 'coin',
             'timeType' => $timeType,
         );
-        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount' ,$condition);
+        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
         $amount = MathToolkit::simple($amount, 0.01);
 
         return $amount;
@@ -517,17 +516,17 @@ class WebExtension extends \Twig_Extension
             'amount_type' => 'coin',
             'timeType' => $timeType,
         );
-        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount' ,$condition);
+        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
         $amount = MathToolkit::simple($amount, 0.01);
 
         return $amount;
-
     }
 
     public function getBalance($userId)
     {
         $balance = $this->getAccountProxyService()->getUserBalanceByUserId($userId);
         $balance = MathToolkit::multiply($balance, array('amount', 'cash_amount', 'locked_amount'), 0.01);
+
         return $balance;
     }
 
