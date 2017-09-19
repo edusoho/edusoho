@@ -9,11 +9,12 @@ $env = getAppEvn($argv);
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel = new AppKernel($env, true);
+
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel->setRequest($request);
 $kernel->boot();
 
 $options = $kernel->getContainer()->getParameter('biz_config');
-
 
 $biz = new Codeages\Biz\Framework\Context\Biz($options);
 $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
