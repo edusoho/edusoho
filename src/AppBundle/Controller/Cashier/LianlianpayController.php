@@ -43,7 +43,7 @@ class LianlianpayController extends BaseController
 
     protected function getIdentify()
     {
-        $identify = $this->getSettingService()->set('llpay_identify');
+        $identify = $this->getSettingService()->get('llpay_identify');
         if (empty($identify)) {
             $identify = substr(md5(uniqid()), 0, 12);
             $this->getSettingService()->set('llpay_identify', $identify);
