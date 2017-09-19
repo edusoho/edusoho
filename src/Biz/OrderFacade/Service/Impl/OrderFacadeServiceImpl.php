@@ -119,6 +119,23 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         }
     }
 
+    public function getOrderProductByOrderItem($orderItem)
+    {
+        if (!empty($this->biz['order.product.'.$orderItem['target_type']])) {
+            /* @var $product Product */
+            $product = $this->biz['order.product.'.$orderItem['target_type']];
+            $product->init(array(
+                'targetId' => $orderItem['target_id'],
+                'num' => $orderItem['num'],
+                'unit' => $orderItem['unit'],
+            ));
+
+            return $product;
+        } else {
+            throw $this->createServiceException("The {$orderItem['target_type']} product not found");
+        }
+    }
+
     public function payingOrder($orderSn, $params)
     {
         $order = $this->checkOrderBeforePay($orderSn, $params);

@@ -5,6 +5,7 @@ namespace Biz\OrderFacade\Product;
 use AppBundle\Common\StringToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
+use Biz\OrderFacade\Currency;
 use Biz\Sms\Service\SmsService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
@@ -122,6 +123,11 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return $payablePrice > 0 ? $payablePrice : 0;
     }
 
+    public function getMaxCoinAmount()
+    {
+        return round(($this->maxRate / 100) * $this->getCurrency()->convertToCoin($this->originPrice), 2);
+    }
+
     protected function smsCallback($orderItem)
     {
         $smsType = 'sms_'.$this->targetType.'_buy_notify';
@@ -143,6 +149,14 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public function getCreateExtra()
     {
         return array();
+    }
+
+    /**
+     * @return Currency
+     */
+    protected function getCurrency()
+    {
+        return $this->biz['currency'];
     }
 
     /**

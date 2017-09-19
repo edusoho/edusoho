@@ -8095,3 +8095,4 @@ order.pay_check_msg.missing_pay_password: 没有输入支付密码，不能使�
 order.pay_check_msg.incorrect_pay_password: 支付密码不正确
 order.pay_check_msg.balance_not_enough: 余额不足
 order.pay_check_msg.pay_password_not_set: 支付密码未设置
+order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度

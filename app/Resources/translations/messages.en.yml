@@ -6424,3 +6424,4 @@ order.pay_check_msg.missing_pay_password: Missing payPassword
 order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
 order.pay_check_msg.balance_not_enough: Your balance is insufficient
 order.pay_check_msg.pay_password_not_set: Pay password not set
+order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount

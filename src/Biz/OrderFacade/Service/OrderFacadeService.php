@@ -20,5 +20,7 @@ interface OrderFacadeService
      */
     public function getOrderProduct($targetType, $params);
 
+    public function getOrderProductByOrderItem($orderItem);
+
     public function payingOrder($orderSn, $options);
 }
