@@ -8,6 +8,9 @@
     <div class="cd-course-title cd-mb24 text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
     </div>
+    {% if classroom|default(null) %}
+      <span>来自班级：<a href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
+    {% endif %}
 
    <div class="cd-belong-classroom">
     来自班级:
