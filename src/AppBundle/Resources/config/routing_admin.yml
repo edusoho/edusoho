@@ -2289,7 +2289,3 @@ admin_queue_failed_logs:
 admin_queue_failed_log_modal:
     path: /queue/failed_log/{id}
     defaults: { _controller: AppBundle:Admin/Queue:failedJob }
-
-admin_my_account:
-    path: /my/account
-    defaults: { _controller: AppBundle:Admin/Account:myAccount }

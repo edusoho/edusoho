@@ -586,20 +586,18 @@ class CoinController extends BaseController
 
     public function cashBillAction(Request $request)
     {
-        if ($request->get('nickname')) {
+        $account = $this->getAccountService()->getUserBalanceByUserId(0);
+        $conditions = array(
+            'user_type' => 'seller',
+            'amount_type' => 'money',
+            'timeType' => $request->get('lastHowManyMonths'),
+            'user_id' => 0
+        );
+
+        if (!empty($request->get('nickname'))) {
             $user = $this->getUserService()->getUserByNickname($request->get('nickname'));
-
-            if ($user) {
-                $conditions['user_id'] = $user['id'];
-            } else {
-                $conditions['user_id'] = -1;
-            }
+            $conditions['user_id'] = empty($user) ? -1 : $user['id'];
         }
-
-        $conditions['except_user_id'] = 0;
-        $conditions['amount_type'] = 'money';
-
-        $conditions['timeType'] = $request->get('lastHowManyMonths');
 
         $paginator = new Paginator(
             $request,
@@ -617,25 +615,34 @@ class CoinController extends BaseController
         foreach ($cashes as &$cash) {
             $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
         }
-
-        $userIds = ArrayToolkit::column($cashes, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $conditions['type'] = 'inflow';
-        $amountInflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
+        list($users, $orders) = $this->getBuyersByCashFlows($cashes);
 
         $conditions['type'] = 'outflow';
         $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
 
-        return $this->render('admin/coin/cash-bill.html.twig', array(
+        return $this->render('admin/bill/cash.html.twig', array(
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users' => $users,
-            'amountInflow' => $amountInflow ?: 0,
-            'amountOutflow' => $amountOutflow ?: 0,
+            'orders' => $orders,
             'cashType' => 'RMB',
+            'account' => $account,
+            'amountOutflow' => $amountOutflow
         ));
     }
+
+    protected function getBuyersByCashFlows($cashFlows)
+    {
+        $orderSns = ArrayToolkit::column($cashFlows,'order_sn');
+        $orders = $this->getOrderService()->findOrdersBySns($orderSns);
+
+        $orders = ArrayToolkit::index($orders,'sn');
+        $userIds = ArrayToolkit::column($orders,'user_id');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return array($users, $orders);
+    }
+
 
     /**
      * @param [type] $cashType RMB | Coin
@@ -875,6 +882,11 @@ class CoinController extends BaseController
         return $this->createService('Cash:CashOrdersService');
     }
 
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
+    }
+
     protected function getLogService()
     {
         return $this->createService('System:LogService');
@@ -896,5 +908,10 @@ class CoinController extends BaseController
     protected function getAccountProxyService()
     {
         return $this->createService('Account:AccountProxyService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 }
