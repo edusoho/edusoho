@@ -3434,6 +3434,10 @@ course.member.classroom.tips: 'Your purchased class was expired and you have no 
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.operation.quit_deadline_reach: 达到有效期，用户自己退出
+course.member.operation.admin_remove_course_student: 管理员手动移除
+course.member.operation.reason.remove_teachers: 删除老师角色时，退出课程
+
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
 course.widgets.classroom_price.not_free: "Price : %price% CNY \n"
