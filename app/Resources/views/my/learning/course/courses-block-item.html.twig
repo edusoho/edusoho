@@ -1,7 +1,7 @@
 <div class="cd-course-line cd-mb40 clearfix">
   <a class="pull-left" href="{{ path('course_set_show', {id:courseSet.id}) }}">
     <div class="cd-course-img">
-      <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive thumb">
+      <img class="img-responsive thumb" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" >
     </div>
   </a>
   <div class="pull-left cd-course-info">
@@ -15,27 +15,29 @@
       </div>
     {% endif %}
 
+    {% set percent = percent(courseSet.totalUserLearned, courseSet.totalTaskNum) %}
     <div class="cd-course-progress cd-mt24">
       <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
       <div class="cd-progress cd-progress-xs cd-progress-radius">
-        <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent(courseSet.totalUserLearned, courseSet.totalTaskNum) }};"></div>
+        <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent }};"></div>
       </div>
-      <span>{{ percent(courseSet.totalUserLearned, courseSet.totalTaskNum) }}</span>
+      <span>{{ percent }}</span>
     </div>
   </div>
 
   {% if currentCourses|length > 1 %}
     <div class="pull-right course-btn-item dropdown">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{% if percent == "100%" %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
       <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
         {% for course in currentCourses %}
-          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{ course.memberLearnedNum }} /{{ course.compulsoryTaskNum }}</span></a></li>
+          {% set member = members[course.id]|default(null) %}
+          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{  member.learnedNum|default(0) }}&nbsp;/{{ course.compulsoryTaskNum }}</span></a></li>
         {% endfor %}
       </ul>
     </div>
   {% else %}
     <div class="pull-right course-btn-item">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}" >{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}" >{% if percent == "100%" %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
     </div>
   {% endif %}
 </div>

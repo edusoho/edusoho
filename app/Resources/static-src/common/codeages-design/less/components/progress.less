@@ -1,5 +1,8 @@
 .cd-progress {
-  width: 200px;
+  width: 63%;
+  @media (max-width: @screen-md-max) {
+    width: 50%;
+  }
   background-color: rgba(0, 0, 0, .08);;
   color: #fff;
   text-align: right;
@@ -32,10 +35,7 @@
 .cd-progress-bar {
   .border-radius(100px);
 }
-.cd-progress-bar-left {
-  text-align: left;
-  padding-left: 15px;
-}
+
 
 
 
