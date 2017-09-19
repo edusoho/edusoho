@@ -24,7 +24,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $user['id'],
-            'created_reason' => 1,
+            'created_reason' => 'site.join_by_purchase',
             'price_type' => $currency->isoCode,
             'currency_exchange_rate' => $currency->exchangeRate,
         );

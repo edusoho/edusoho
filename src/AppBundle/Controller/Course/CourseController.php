@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Accessor\AccessorInterface;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
@@ -664,6 +665,21 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function freeJoinAction($courseId)
+    {
+        $access = $this->getCourseService()->canJoinCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if ($access['code'] == AccessorInterface::SUCCESS && $course['originPrice'] == 0) {
+            $this->getMemberService()->becomeStudent($courseId, $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
+            return $this->createJsonResponse(array('message' => 'join success', 'data' => array(
+                'redirectUrl' => $this->generateUrl('my_course_show', array('id' => $courseId))
+            )));
+        } else {
+            return $this->createJsonResponse(array('message' => 'can not free join'), 403);
+        }
     }
 
     public function renderCourseChoiceAction()

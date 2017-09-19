@@ -20,8 +20,10 @@
               href="#modal"
               data-toggle="modal"
               data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-            {% else %}
+            {% elseif course.originPrice > 0  %}
               href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+            {% else %}
+              href="javascript:" data-role="free-join-btn" data-url="{{ path('course_free_join', {'courseId':course.id}) }}"
             {% endif %}
           >
             {% if course.originPrice > 0 %}

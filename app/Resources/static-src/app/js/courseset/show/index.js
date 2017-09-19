@@ -17,6 +17,12 @@ if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));
 }
 
+$('[data-role=free-join-btn]').on('click', event => {
+    $.post($(event.currentTarget).data('url'), resp => {
+        location.href = resp.data.redirectUrl;
+    });
+});
+
 function initTaskLearnChart() {
   let colorPrimary = $('.color-primary').css('color');
   let colorWarning = $('.color-warning').css('color');
