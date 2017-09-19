@@ -63,7 +63,7 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
-                'members' => $members
+                'members' => $members,
             )
         );
     }
@@ -106,7 +106,7 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
-                'members' => $members
+                'members' => $members,
             )
         );
     }
