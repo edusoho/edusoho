@@ -4,16 +4,21 @@ require_once __DIR__ . '/app/autoload.php';
 require_once __DIR__ . '/app/bootstrap.php.cache';
 require_once __DIR__ . '/app/AppKernel.php';
 
+<<<<<<< HEAD
 
 $env = getAppEvn($argv);
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel = new AppKernel($env, true);
+=======
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
+$kernel = new AppKernel('test', true);
+>>>>>>> 110584b86ee93a85349307a3ae04c25170c9c1bb
 $kernel->setRequest($request);
 $kernel->boot();
 
 $options = $kernel->getContainer()->getParameter('biz_config');
-
 
 $biz = new Codeages\Biz\Framework\Context\Biz($options);
 $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
@@ -22,6 +27,7 @@ $biz->register(new \Codeages\Biz\Framework\Provider\TokenServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\SettingServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
+<<<<<<< HEAD
 $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), array('monolog.logfile' => $biz['log_directory'] . '/biz.log',));
 $biz->boot();
 
@@ -47,3 +53,9 @@ function getAppEvn($arguments)
     $variables = explode("=", $env);
     return $env = array_pop($variables);
 }
+=======
+$biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), array('monolog.logfile' => $biz['log_directory'].'/biz.log'));
+$biz->boot();
+
+return $biz;
+>>>>>>> 110584b86ee93a85349307a3ae04c25170c9c1bb

@@ -30,6 +30,8 @@ Unit Test With PHP 5.3:
     - bin/biz --env=test setting:table  migrations
     - bin/biz --env=test targetlog:table  migrations
     - bin/biz --env=test token:table  migrations
+    - echo '<?php return array();' >>  /tmp/evn
+    - bin/biz env:write  /tmp/evn  evn test
     - bin/phpunit -c app/
   only:
     - tags
@@ -45,11 +47,16 @@ Unit Test With PHP 5.5:
     - redis:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+<<<<<<< HEAD
     - bin/biz --env=test queue:table  migrations
     - bin/biz --env=test scheduler:table  migrations
     - bin/biz --env=test setting:table  migrations
     - bin/biz --env=test targetlog:table  migrations
     - bin/biz --env=test token:table  migrations
+=======
+    - echo '<?php return array();' >>  /tmp/evn
+    - bin/biz env:write  /tmp/evn  evn test
+>>>>>>> 110584b86ee93a85349307a3ae04c25170c9c1bb
     - bin/phpunit -c app/
 
 Unit Test With PHP 7.0:
@@ -61,11 +68,16 @@ Unit Test With PHP 7.0:
   script:
     - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
     - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
+<<<<<<< HEAD
     - bin/biz --env=test queue:table  migrations
     - bin/biz --env=test scheduler:table  migrations
     - bin/biz --env=test setting:table  migrations
     - bin/biz --env=test targetlog:table  migrations
     - bin/biz --env=test token:table  migrations
+=======
+    - echo '<?php return array();' >>  /tmp/evn
+    - bin/biz env:write  /tmp/evn  evn test
+>>>>>>> 110584b86ee93a85349307a3ae04c25170c9c1bb
     - bin/phpunit -c app/ --coverage-text --colors=never
   only:
     - tags
