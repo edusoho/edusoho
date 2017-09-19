@@ -594,8 +594,9 @@ class CoinController extends BaseController
             'user_id' => 0,
         );
 
-        if (!empty($request->get('nickname'))) {
-            $user = $this->getUserService()->getUserByNickname($request->get('nickname'));
+        $nickname = $request->get('nickname');
+        if (!empty($nickname)) {
+            $user = $this->getUserService()->getUserByNickname($nickname);
             $conditions['user_id'] = empty($user) ? -1 : $user['id'];
         }
 
