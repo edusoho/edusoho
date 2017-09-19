@@ -2526,7 +2526,6 @@ classroom.student_username: 学员名称
 classroom.student_exit_reason: 退出原因
 classroom.student_exit_date: 退出日期
 classroom.refund_status: 退款状态
-classroom.refund_money: 退款金额
 classroom.refund_record_tips: 仅显示通过现金购买加入的学员退款记录
 classroom.join_time: 加入班级时间
 classroom.refund_success: 退款成功

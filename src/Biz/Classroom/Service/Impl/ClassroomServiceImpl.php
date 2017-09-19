@@ -743,7 +743,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
 
-    public function removeStudent($classroomId, $userId)
+    public function removeStudent($classroomId, $userId, $info = array())
     {
         $classroom = $this->getClassroom($classroomId);
 
@@ -755,6 +755,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (empty($member) || !(array_intersect($member['role'], array('student', 'auditor')))) {
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
+        }
+
+        if (in_array('teacher', $member['role'])) {
+            throw $this->createAccessDeniedException('教师无法退出班级！');
         }
 
         $this->removeStudentsFromClasroomCourses($classroomId, $userId);
@@ -773,7 +777,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
 
-        $this->createOperateRecord($member, 'exit', $member);
+        $this->createOperateRecord($member, 'exit', array_merge($member, $info));
 
         $user = $this->getUserService()->getUser($member['userId']);
         $message = array(
@@ -1573,49 +1577,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array_intersect($member['role'], array('teacher', 'headTeacher', 'assistant'));
     }
 
-    // @todo 写逻辑条件的注释
-    public function exitClassroom($classroomId, $userId)
-    {
-        $classroom = $this->getClassroom($classroomId);
-
-        if (empty($classroom)) {
-            throw $this->createNotFoundException();
-        }
-
-        $member = $this->getClassroomMember($classroomId, $userId);
-
-        if (!$member) {
-            throw $this->createAccessDeniedException('您不是班级学员，无法退出班级！');
-        }
-
-        if (!array_intersect($member['role'], array('student', 'auditor'))) {
-            throw $this->createAccessDeniedException('教师无法退出班级！');
-        }
-
-        $this->removeStudentsFromClasroomCourses($classroomId, $userId);
-
-        if (count($member['role']) == 1) {
-            $this->getClassroomMemberDao()->deleteByClassroomIdAndUserId($classroomId, $userId);
-        } else {
-            foreach ($member['role'] as $key => $value) {
-                if ($value == 'student') {
-                    unset($member['role'][$key]);
-                }
-            }
-
-            $this->getClassroomMemberDao()->update($member['id'], $member);
-        }
-
-        $this->updateStudentNumAndAuditorNum($classroomId);
-
-        $this->createOperateRecord($member, 'exit', $member);
-
-        $this->dispatchEvent(
-            'classroom.quit',
-            new Event($classroom, array('userId' => $userId, 'member' => $member))
-        );
-    }
-
     private function removeStudentsFromClasroomCourses($classroomId, $userId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
@@ -1965,6 +1926,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
+            'reason' => empty($data['reason']) ? '' : $data['reason']
         );
 
         return $this->getMemberOperationService()->createRecord($record);

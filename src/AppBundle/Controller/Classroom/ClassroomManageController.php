@@ -270,55 +270,42 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
+        $condition = array(
+            'targetId' => $id,
+            'target_type' => 'classroom',
+            'status' => 'success',
+            'operate_type' => 'exit'
+        );
+
         $fields = $request->query->all();
-
-        $condition = array();
-
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition['targetId'] = $id;
-        $condition['targetType'] = 'classroom';
-        $condition['status'] = 'success';
-
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->countRefunds($condition),
+            $this->getMemberOperationService()->countRecords($condition),
             20
         );
 
-        $refunds = $this->getOrderService()->searchRefunds(
+        $records = $this->getMemberOperationService()->searchRecords(
             $condition,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($refunds, 'userId');
+
+        $userIds = ArrayToolkit::column($records, 'member_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $orderIds = ArrayToolkit::column($refunds, 'orderId');
-        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
-        $orders = ArrayToolkit::index($orders, 'id');
-
-        foreach ($refunds as $key => $refund) {
-            if (isset($users[$refund['userId']])) {
-                $refunds[$key]['user'] = $users[$refund['userId']];
-            }
-
-            if (isset($orders[$refund['orderId']])) {
-                $refunds[$key]['order'] = $orders[$refund['orderId']];
-            }
-        }
 
         return $this->render(
-            'classroom-manage/quit-record.html.twig',
+            'classroom-manage/quit-record/index.html.twig',
             array(
                 'classroom' => $classroom,
                 'paginator' => $paginator,
-                'refunds' => $refunds,
+                'records' => $records,
+                'users' => $users,
             )
         );
     }
@@ -1331,5 +1318,10 @@ class ClassroomManageController extends BaseController
     protected function getLearningDataAnalysisService()
     {
         return $this->createService('Classroom:LearningDataAnalysisService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 }
