@@ -1,0 +1,105 @@
+.my-course {
+  .course-item {
+    padding: 40px;
+    @media (max-width: @screen-xs-min) {
+      padding: 12px;
+    }
+    .cd-box-shadow;
+
+    .course-picture-link {
+      margin-right: 40px;
+      float: left;
+      .course-picture {
+        width: 192px;
+      }
+      @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+        margin-right: 12px;
+      }
+      @media (max-width: @screen-xs-max) {
+        margin-right: 0;
+        width: 100%;
+        .course-picture {
+          width: 100%;
+        }
+      }
+    }
+
+    .course-info {
+      margin-top: 16px;
+      float: left;
+      width: 45%;
+      @media (max-width: @screen-xs-max) {
+        margin-top: 24px;
+        width: 100%;
+      }
+    }
+
+    .course-title {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .course-status {
+      margin-top: 16px;
+      span {
+        font-size: 24px;
+        line-height: 1;
+        font-weight: 500;
+      }
+    }
+
+    .course-belong-classroom {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1;
+      color: @cd-gray;
+    }
+
+    .course-learn-progress {
+      font-size: 12px;
+      line-height: 1;
+      color: @cd-gray;
+      .cd-progress {
+        margin-left: 16px;
+        margin-right: 12px;
+        display: inline-block;
+        @media (max-width: @screen-xs-min) {
+          margin-left: 4px;
+          margin-right: 4px;
+          width: 58%;
+        }
+      }
+    }
+
+    .course-btn-item {
+      margin-top: 34px;
+      float: right;
+      @media (max-width: @screen-xs-max) {
+        margin-top: 24px;
+        width: 100%;
+        .course-btn {
+          width: 100%;
+        }
+      }
+      .cd-dropdown-menu {
+        li {
+          min-width: 200px;
+        }
+        @media (max-width: @screen-xs-max) {
+          top: auto;
+          bottom: 100%;
+          margin-bottom: 4px;
+
+          &.cd-dropdown-menu-right {
+            left: 0;
+            li {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
