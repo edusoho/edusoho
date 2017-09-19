@@ -700,7 +700,7 @@ class CoinController extends BaseController
             }
 
             if (!empty($order['platform'])) {
-                $member .= $payment[$order['platform']].',';
+                $member .= (empty($payment[$order['platform']]) ? '--' : $payment[$order['platform']]).',';
             } else {
                 $member .= '-'.',';
             }
