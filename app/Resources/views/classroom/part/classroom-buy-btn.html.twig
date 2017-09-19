@@ -52,7 +52,7 @@
 
       {% else %}
         {% if classroom.buyable == 1 %}
-          <a class="btn btn-primary btn-lg" href="{{ path('order_show',{targetId:classroom.id,targetType:'classroom'}) }}"
+          <a class="btn btn-primary btn-lg js-free-join-btn" href="javascript:" data-url="{{ path('classroom_free_join',{id:classroom.id}) }}"
             {% if canFreeJoin and app.user and classroom.price > 0 %}
               data-toggle="tooltip"
               data-placement="top"

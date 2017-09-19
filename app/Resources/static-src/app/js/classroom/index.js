@@ -26,3 +26,9 @@ if ($('.icon-vip').length > 0) {
     }, 100);
   });
 }
+
+$('.js-free-join-btn').on('click', event => {
+  $.post($(event.currentTarget).data('url'), resp => {
+    location.href = resp.data.redirectUrl;
+  });
+});
