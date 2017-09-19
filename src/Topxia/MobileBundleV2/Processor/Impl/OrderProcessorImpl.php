@@ -63,7 +63,19 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $amount = $this->getParam('amount', 0);
         $transactionId = $this->getParam('transaction_id', false);
 
-        return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
+
+        $data = array(
+            'receipt' => $receipt,
+            'amount' => $amount,
+            'transaction_id' => $transactionId
+        );
+        $trade = $this->getPayService()->rechargeByIap($data);
+
+        return array(
+            'status' => $trade,
+        );
+
+//        return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
     }
 
     private function del_checkCoupon()
