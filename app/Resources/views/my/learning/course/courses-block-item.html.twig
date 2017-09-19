@@ -5,32 +5,17 @@
     </div>
   </a>
   <div class="pull-left cd-course-info">
-    <div class="cd-course-title cd-mb24 text-overflow">
+    <div class="cd-course-title text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
     </div>
+
     {% if classroom|default(null) %}
-      <span>来自班级：<a href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
-    {% endif %}
-
-   <div class="cd-belong-classroom">
-    来自班级:
-        {# {{ classroom.title|sub_text(10) }} #}
-        厉害了我哦的歌
-        {{ 'course.block_grid.equal'|trans }}
-
-    </div>
-
-   {#  {% if courseSet.classroomCount > 0 %}
-      {% set classroom = courseSet.classroom %}
-      <div class="course-label belong-classroom">
-        {{ classroom.title|sub_text(10) }}
-        {% if courseSet.classroomCount > 1 %}
-          {{ 'course.block_grid.equal'|trans }}
-        {% endif %}
+      <div class="cd-belong-classroom">
+        <span >来自班级：<a class="cd-link-gray" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
       </div>
     {% endif %}
- #}
-    <div class="cd-course-progress">
+
+    <div class="cd-course-progress cd-mt24">
       <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
       <div class="cd-progress cd-progress-xs cd-progress-radius">
         <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent(courseSet.totalUserLearned, courseSet.totalTaskNum) }};"></div>
@@ -39,17 +24,18 @@
     </div>
   </div>
 
-  <div class="pull-right course-btn-group dropdown">
-    {% if currentCourses|length > 1 %}
+  {% if currentCourses|length > 1 %}
+    <div class="pull-right course-btn-item dropdown">
       <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
       <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
-
         {% for course in currentCourses %}
           <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{ course.memberLearnedNum }} /{{ course.compulsoryTaskNum }}</span></a></li>
         {% endfor %}
       </ul>
-    {% else %}
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}" >{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
-    {% endif %}
-  </div>
+    </div>
+  {% else %}
+    <div class="pull-right course-btn-item">
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}" >{{ 'course.block_grid.countinue_learn_btn'|trans }}</a>
+    </div>
+  {% endif %}
 </div>
