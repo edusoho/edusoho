@@ -296,7 +296,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             );
         }
 
-        if (!($coupon['targetType'] == 'all' or ($coupon['targetType'] == $type && ($coupon['targetId'] == $id || $coupon['targetId'] == 0)))) {
+        if ($this->isAvailableForTarget($coupon, $type, $id)) {
             return array(
                 'useable' => 'no',
                 'message' => '该优惠券不能被该商品使用',
@@ -308,6 +308,16 @@ class CouponServiceImpl extends BaseService implements CouponService
         }
 
         return $coupon;
+    }
+
+    private function isAvailableForTarget($coupon, $targetType, $targetId)
+    {
+        if ($targetType == 'course') {
+            $course = $this->getCourseService()->getCourse($targetId);
+            $targetId = $course ? $course['courseSetId'] : null;
+        }
+
+        return !($coupon['targetType'] == 'all' or ($coupon['targetType'] == $targetType && ($coupon['targetId'] == $targetId || $coupon['targetId'] == 0)));
     }
 
     public function getCouponByCode($code)
