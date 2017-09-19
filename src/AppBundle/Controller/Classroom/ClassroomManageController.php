@@ -274,7 +274,7 @@ class ClassroomManageController extends BaseController
             'targetId' => $id,
             'target_type' => 'classroom',
             'status' => 'success',
-            'operate_type' => 'exit'
+            'operate_type' => 'exit',
         );
 
         $fields = $request->query->all();
@@ -294,7 +294,6 @@ class ClassroomManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
 
         $userIds = ArrayToolkit::column($records, 'member_id');
         $users = $this->getUserService()->findUsersByIds($userIds);

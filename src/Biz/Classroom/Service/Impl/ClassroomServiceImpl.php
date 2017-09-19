@@ -1930,7 +1930,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
-            'reason' => empty($data['reason']) ? '' : $data['reason']
+            'reason' => empty($data['reason']) ? '' : $data['reason'],
         );
 
         return $this->getMemberOperationService()->createRecord($record);

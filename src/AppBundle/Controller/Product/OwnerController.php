@@ -43,7 +43,7 @@ class OwnerController extends BaseController
             'maxRefundDays' => $maxRefundDays,
         ));
     }
-    
+
     /**
      * @return OrderService
      */

@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Product\Product;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
@@ -37,14 +39,10 @@ class CoinController extends BaseController
 
         $item = reset($orderItems);
 
-        $params = array(
-            'targetId' => $item['target_id'],
-            'num' => $item['num'],
-            'unit' => $item['unit'],
-        );
-        $product = $this->getOrderFacadeService()->getOrderProduct($item['target_type'], $params);
+        /* @var $product Product */
+        $product = $this->getOrderFacadeService()->getOrderProductByOrderItem($item);
 
-        return $this->getCurrency()->convertToCoin($order['pay_amount'] * $product->maxRate / 100);
+        return $product->getMaxCoinAmount();
     }
 
     /**
@@ -89,6 +87,9 @@ class CoinController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
     private function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');

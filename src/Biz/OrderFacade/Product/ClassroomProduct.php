@@ -91,8 +91,8 @@ class ClassroomProduct extends Product implements Owner, OrderStatusCallback
         $user = $this->biz['user'];
 
         $this->getClassroomService()->removeStudent(
-            $this->targetId, 
-            $user->getId(), 
+            $this->targetId,
+            $user->getId(),
             array('reason' => $data['reason']['note'])
         );
     }

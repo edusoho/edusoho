@@ -89,7 +89,7 @@ class StudentManageController extends BaseController
             'targetId' => $courseId,
             'target_type' => 'course',
             'status' => 'success',
-            'operate_type' => 'exit'
+            'operate_type' => 'exit',
         );
 
         $fields = $request->query->all();
