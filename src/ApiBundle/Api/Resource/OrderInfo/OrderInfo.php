@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\Money;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
@@ -43,6 +44,9 @@ class OrderInfo extends AbstractResource
             'duration' => $product->num,
             'totalPrice' => $product->getPayablePrice(),
         );
+
+        $totalPriceMoney = Money::convert($orderInfo['totalPrice']);
+        $orderInfo['totalPrice'] = $totalPriceMoney['amount'];
 
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];
