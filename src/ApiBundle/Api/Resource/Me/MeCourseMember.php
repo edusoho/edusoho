@@ -33,16 +33,18 @@ class MeCourseMember extends AbstractResource
     public function remove(ApiRequest $request, $courseId)
     {
         $reason = $request->request->get('reason', '从App退出课程');
-        $processor = OrderRefundProcessorFactory::create('course');
 
         $user = $this->getCurrentUser();
-        $member = $processor->getTargetMember($courseId, $user['id']);
+
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user->getId());
 
         if (empty($member)) {
             throw new BadRequestHttpException('您不是学员或尚未购买，不能退学。', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        $this->getCourseMemberService()->remarkStudent($courseId, $user->getId(), array(
+        $this->getCourseMemberService()->removeStudent($courseId, $user->getId(), array(
            'reason' => $reason
         ));
 

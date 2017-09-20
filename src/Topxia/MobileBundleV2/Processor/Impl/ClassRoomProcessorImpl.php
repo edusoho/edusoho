@@ -218,14 +218,16 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         if (!in_array($targetType, array('course', 'classroom'))) {
             return $this->createErrorResponse('error', '退出学习失败');
         }
-        $processor = OrderRefundProcessorFactory::create($targetType);
 
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '您尚未登录，不能学习班级！');
         }
 
-        $member = $processor->getTargetMember($classRoomId, $user['id']);
+        $this->getClassroomService()->tryTakeClassroom($classRoomId);
+
+        $member = $this->getClassroomService()->getClassroomMember($classRoomId, $user['id']);
+
         if (empty($member)) {
             return $this->createErrorResponse('error', '您不是班级的学员。');
         }
