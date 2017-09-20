@@ -7,7 +7,7 @@
   {% if lesson %}{{'my.teaching.open_course.lesson.modal.edit'|trans}}{{ lesson.number }}{% else %}{{'my.teaching.open_course.lesson.modal.add'|trans}}{% endif %}
 {% endblock %}
 
-{% do script([get_upload_sdk(), 'libs/jquery-validation.js', 'app/js/open-course-manage/lesson-modal/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'libs/jquery-validation.js', 'app/js/open-course-manage/lesson-modal/index.js']) %}
 
 {% block body %}
   <form class="form-horizontal" id="lesson-create-form"

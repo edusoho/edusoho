@@ -44,12 +44,7 @@
       </div>
 
       {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
-      {% if setting("developer.cloud_sdk_cdn") %}
-          {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
-      {% else %}
-          {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
-      {% endif %}
-      <script src="{{ cdnUrl }}/js-sdk/video-player/sdk-v1.js?{{(date().timestamp / 100)|round }}"></script>
+      <script src="{{ cloud_sdk_url('player') }}"></script>
       {% do script(['app/js/player/index.js']) %}
     {% else %}
       <div class="">

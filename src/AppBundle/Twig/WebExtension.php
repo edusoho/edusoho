@@ -17,6 +17,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class WebExtension extends \Twig_Extension
 {
@@ -32,6 +33,8 @@ class WebExtension extends \Twig_Extension
     protected $pageScripts;
 
     protected $locale;
+
+    protected $defaultCloudSdkHost;
 
     public function __construct($container, Biz $biz)
     {
@@ -156,7 +159,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
-            new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
+            new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
         );
     }
 
@@ -1705,8 +1708,31 @@ class WebExtension extends \Twig_Extension
         return 'http://mail.'.$dress;
     }
 
-    public function getUploadSdk()
+    public function getCloudSdkUrl($type)
     {
-        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v2.js';
+        if (!$this->defaultCloudSdkHost) {
+            $api = CloudAPIFactory::create('root');
+            $this->defaultCloudSdkHost = $api->getCloudSdkHost();
+        }
+
+        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ? : $this->defaultCloudSdkHost;
+        
+        $paths = array(
+            'player' => 'js-sdk/sdk-v1.js',
+            'video' => 'js-sdk/video-player/sdk-v1.js',
+            'uploader' => 'js-sdk/uploader/sdk-v2.js',
+            'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
+            'old_document' => 'js-sdk/document-player/v7/viewer.html',
+        );
+
+        if (isset($paths[$type])) {
+            $path = $paths[$type];
+        } else {
+            $path = $type;
+        }
+
+        $timestamp = round(time() / 100);
+
+        return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
     }
 }

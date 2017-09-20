@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script([get_upload_sdk(), 'app/js/activity-manage/ppt/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/activity-manage/ppt/index.js']) %}
 {% set mediaType = 'ppt' %}
 {% block activity_content %}
   <div class="form-group">

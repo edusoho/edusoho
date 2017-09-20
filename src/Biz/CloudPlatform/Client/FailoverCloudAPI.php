@@ -226,6 +226,11 @@ class FailoverCloudAPI extends AbstractCloudAPI
         return $servers;
     }
 
+    public function getCloudSdkHost()
+    {
+        return empty($this->servers['cloud_sdk_host']) ? 'service-cdn.qiqiuyun.net' : $this->servers['cloud_sdk_host'];
+    }
+
     protected function getServerListFromCdn()
     {
         $curl = curl_init();

@@ -15,12 +15,7 @@
         data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>
     </div>
-    {% if setting("developer.cloud_sdk_cdn") %}
-      {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
-    {% else %}
-      {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
-    {% endif %}
-    <input type="hidden" class="js-cloud-url" data-url="{{ cdnUrl }}/js-sdk/sdk-v1.js">
+    <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
     {% do script(['libs/base.js','app/js/common.js','app/js/main.js','app/js/activity/new-doc/index.js'], 1000) %}
   {% endif %}
 {% endblock %}

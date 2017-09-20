@@ -205,7 +205,7 @@ define(function(require, exports, module) {
         initPDFJSViewer: function($thiz) {
             self=this;
             $("html").attr('dir','ltr');
-            var jsPath = __URL_PROTOCOL + '://service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'+self.attrs.pdfFileUrl.value;
+            var jsPath = __URL_PROTOCOL + ':' + app.cloudOldDocumentSdkUrl + '#' + self.attrs.pdfFileUrl.value;
             if(app.lessonCopyEnabled==0){
                 jsPath = jsPath+'#false';
             }
