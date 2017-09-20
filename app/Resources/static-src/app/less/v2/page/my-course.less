@@ -6,6 +6,7 @@
   .cd-box-shadow;
 
   .my-course-item__link {
+    position: relative;
     margin-right: 40px;
     float: left;
     @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
@@ -16,6 +17,14 @@
       width: 100%;
     }
   }
+
+  .my-course-item__label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+  }
+
 
   .my-course-item__picture {
     width: 192px;
