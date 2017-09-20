@@ -139,57 +139,6 @@ class SettingsController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function avatarAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $form = $this->createFormBuilder()
-            ->add('avatar', 'file')
-            ->getForm();
-
-        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
-
-        if ($hasPartnerAuth) {
-            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
-        } else {
-            $partnerAvatar = null;
-        }
-
-        $fromCourse = $request->query->get('fromCourse');
-        $goto = $request->query->get('goto');
-
-        return $this->render('settings/avatar.html.twig', array(
-            'form' => $form->createView(),
-            'user' => $this->getUserService()->getUser($user['id']),
-            'partnerAvatar' => $partnerAvatar,
-            'fromCourse' => $fromCourse,
-            'goto' => $goto,
-        ));
-    }
-
-    public function avatarCropAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        if ($request->getMethod() === 'POST') {
-            $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
-
-            return $this->redirect($this->generateUrl('settings_avatar'));
-        }
-
-        $fileId = $request->getSession()->get('fileId');
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-        $goto = $request->query->get('goto');
-
-        return $this->render('settings/avatar-crop.html.twig', array(
-            'pictureUrl' => $pictureUrl,
-            'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
-            'goto' => $goto,
-        ));
-    }
-
     public function avatarCropModalAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();

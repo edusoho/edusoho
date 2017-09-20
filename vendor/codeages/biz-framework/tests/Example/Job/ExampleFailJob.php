@@ -10,7 +10,7 @@ class ExampleFailJob extends AbstractJob
     {
         $i = 0;
         ++$i;
+
         return static::FAILURE;
     }
 }
-

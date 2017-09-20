@@ -2514,7 +2514,7 @@ classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
 classroom.student_export: 导出学生
 classroom.add_student_btn: 添加学员
-classroom.add_student.already_exists: 该用户已是本班级的学员了
+classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
@@ -2555,6 +2555,7 @@ classroom.manage_btn: 管理
 classroom.remove: 移除
 classroom.create.congratulation_message: 恭喜！创建班级成功！
 classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
+classroom.set_assistant_tip: 仅能添加本班级学员
 
 # 表单通用
 form.field.filter: 筛选
