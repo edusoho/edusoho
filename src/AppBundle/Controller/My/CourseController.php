@@ -286,7 +286,7 @@ class CourseController extends CourseBaseController
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($courseSets as $courseSetId => $courseSet) {
-            if ($courseSet['parentId'] == 0 || empty($courseSet['parentId'])) {
+            if ($courseSet['parentId'] == 0 || empty($classroomCourses[$courseSet['id']])) {
                 continue;
             }
 
