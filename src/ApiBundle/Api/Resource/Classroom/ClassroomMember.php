@@ -66,20 +66,8 @@ class ClassroomMember extends AbstractResource
     private function freeJoin($classroom)
     {
         if ($classroom['price'] == 0) {
-            $orderInfo = array();
-            $orderInfo['userId'] = $this->getCurrentUser()->getId();
-            $orderInfo['targetId'] = $classroom['id'];
-            $orderInfo['targetType'] = 'classroom';
-            $orderInfo['amount'] = 0;
-            $orderInfo['totalPrice'] = 0;
-            $coinSetting = $this->getSettingService()->get('coin');
-            $orderInfo['priceType'] = empty($coinSetting['priceType']) ? 'RMB' : $coinSetting['priceType'];
-            $orderInfo['coinRate'] = empty($coinSetting['coinRate']) ? 1 : $coinSetting['coinRate'];
-            $orderInfo['coinAmount'] = 0;
-            $orderInfo['payment'] = 'alipay';
-            $this->getClassroomOrderService()->createOrder($orderInfo);
 
-            return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
+            return $this->getClassroomService()->becomeStudent($classroom['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
         } else {
             return null;
         }
@@ -99,13 +87,6 @@ class ClassroomMember extends AbstractResource
         }
     }
 
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->service('System:SettingService');
-    }
 
     /**
      * @return VipFacadeService
@@ -121,13 +102,5 @@ class ClassroomMember extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ClassroomOrderService
-     */
-    private function getClassroomOrderService()
-    {
-        return $this->service('Classroom:ClassroomOrderService');
     }
 }
