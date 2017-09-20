@@ -22,13 +22,7 @@ class Video extends Activity
             throw $this->createInvalidArgumentException('参数不正确');
         }
 
-        $videoActivity = json_decode($fields['media'], true);
-        $videoActivity['finishType'] = empty($fields['finishType']) ? 'end' : $fields['finishType'];
-        $videoActivity['finishDetail'] = empty($fields['finishDetail']) ? '0' : $fields['finishDetail'];
-        $videoActivity['mediaId'] = empty($videoActivity['id']) ? 0 : $videoActivity['id'];
-        $videoActivity['mediaSource'] = empty($videoActivity['source']) ? '' : $videoActivity['source'];
-        $videoActivity['mediaUri'] = empty($videoActivity['uri']) ? '' : $videoActivity['uri'];
-        $videoActivity = ArrayToolkit::parts($videoActivity, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
+        $videoActivity = $this->handleFields($fields);
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
 
         return $videoActivity;
@@ -67,13 +61,7 @@ class Video extends Activity
             throw $this->createInvalidArgumentException('参数不正确');
         }
 
-        $videoInfo = json_decode($fields['media'], true);
-        $video['mediaSource'] = empty($videoInfo['source']) ? '' : $videoInfo['source'];
-        $video['mediaUri'] = empty($videoInfo['uri']) ? '' : $videoInfo['uri'];
-        $video['mediaId'] = empty($videoInfo['id']) ? 0 : $videoInfo['id'];
-
-        $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
-        $video = array_merge($video, $finishInfo);
+        $video = $this->handleFields($fields);
 
         if ($fields['finishType'] == 'time') {
             if (empty($fields['finishDetail'])) {
@@ -161,6 +149,18 @@ class Video extends Activity
         return true;
     }
 
+    private function handleFields($fields)
+    {
+        $result = json_decode($fields['media'], true);
+        $result['mediaId'] = empty($result['id']) ? 0 : $result['id'];
+        $result['mediaSource'] = empty($result['source']) ? '' : $result['source'];
+        $result['mediaUri'] = empty($result['uri']) ? '' : $result['uri'];
+
+        $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
+        $result = array_merge($result, $finishInfo);
+        $result = ArrayToolkit::parts($result, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
+        return $result;
+    }
     /**
      * @return VideoActivityDao
      */

@@ -1,14 +1,8 @@
 {% do script(['app/js/file-chooser/index.js']) %}
 {% if file is not empty %}
-  <input type="hidden" name="" id="selected-file"
-         data-id="{{ file.id }}"
-         data-name="{{ file.filename }}"
-         data-status="{{ file.convertStatus }}"
-         data-source="self"
-         data-length="{{ file.length }}"
-         data-size="{{ file.fileSize }}">
+  {% set selectedFile = {'id': file.id, 'name': file.filename, 'status': file.convertStatus, 'source': 'self', 'length': file.length, 'size': file.fileSize} %}
 {% endif %}
-<input type="hidden" name="media" id="media">
+<input type="hidden" name="media" id="media" value="{{ selectedFile|default(null)|json_encode }}">
 <div class="file-chooser-bar {% if not file|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ file.filename|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button">
