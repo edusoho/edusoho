@@ -1,28 +1,7 @@
 <div class="my-course-item cd-mb40 clearfix">
   <a class="my-course-item__link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
     <img class="my-course-item__picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
-    <span class="my-course-item__label">
-      {% if courseSet.status == constant('Biz\\Course\\Service\\CourseSetService::DRAFT_STATUS') %}
-        <span class="label  label-warning">{{'course.block_grid.DRAFT_STATUS'|trans}}</span>
-      {% elseif courseSet.status == constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
-        <span class="label label-danger">{{'course.block_grid.CLOSE_STATUS'|trans}}</span>
-      {% endif %}
-      {% if courseSet.status != constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
-        {% if courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::SERIALIZE_SERIALIZE_MODE') %}
-          <span class="label label-success">{{'course.block_grid.SERIALIZE_SERIALIZE_MODE'|trans}}</span>
-        {% elseif courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::FINISH_SERIALIZE_MODE') %}
-          <span class="label label-warning">{{'course.block_grid.FINISH_SERIALIZE_MODE'|trans}}</span>
-        {% endif %}
-      {% endif %}
-      {% if courseSet.type == 'live' %}
-        {% set task = course['task']|default(null) %}
-        {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
-          <span class="label label-warning">{{'course.block_grid.onlive'|trans}}</span>
-        {% else %}
-          <span class="label label-success">{{'course.block_grid.live'|trans}}</span>
-        {% endif %}
-      {% endif %}
-    </span>
+    {% include 'my/learning/course/courses-block-label.html.twig' %}
   </a>
 
   <div class="my-course-item__info">
