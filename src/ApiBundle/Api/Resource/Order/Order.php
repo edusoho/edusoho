@@ -39,7 +39,7 @@ class Order extends AbstractResource
             $result = $this->getPayService()->createTrade($trade);
 
             return array(
-                'id' => intval($result['trade_sn']),
+                'id' => $result['trade_sn'],
                 'sn' => $result['trade_sn']
             );
         } catch (OrderPayCheckException $payCheckException) {
