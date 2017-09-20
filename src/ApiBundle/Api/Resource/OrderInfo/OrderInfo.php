@@ -66,8 +66,9 @@ class OrderInfo extends AbstractResource
             ),
         );
 
-        $totalPriceMoney = Money::convert($orderInfo['totalPrice']);
-        $orderInfo['totalPrice'] = $totalPriceMoney['amount'];
+        if ($orderInfo['priceType'] == 'Coin') {
+            $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
+        }
 
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];

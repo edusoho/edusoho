@@ -99,25 +99,7 @@ class CourseMember extends AbstractResource
     private function freeJoin($course)
     {
         if ($course['isFree'] == 1 || $course['price'] == 0) {
-            $member = $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->id);
-
-            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-            $systemOrder = array(
-                'userId' => $this->getCurrentUser()->id,
-                'title' => "购买课程《{$courseSet['title']}》- {$course['title']}",
-                'targetType' => OrderService::TARGETTYPE_COURSE,
-                'targetId' => $course['id'],
-                'amount' => 0,
-                'totalPrice' => $course['price'],
-                'snPrefix' => OrderService::SNPREFIX_C,
-                'payment' => '',
-            );
-
-            $order = $this->getOrderService()->createSystemOrder($systemOrder);
-            $this->getMemberService()->updateMember($member['id'], array(
-                'orderId' => $order['id']
-            ));
+            $member = $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
 
             return $member;
         } else {

@@ -38,21 +38,13 @@ class MeCourseMember extends AbstractResource
         $user = $this->getCurrentUser();
         $member = $processor->getTargetMember($courseId, $user['id']);
 
-        if (empty($member) || empty($member['orderId'])) {
+        if (empty($member)) {
             throw new BadRequestHttpException('您不是学员或尚未购买，不能退学。', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        $order = $this->getOrderService()->getOrder($member['orderId']);
-
-        if (empty($order)) {
-            throw new NotFoundHttpException('', null, ErrorCode::RESOURCE_NOT_FOUND);
-        }
-
-        if ($order['targetType'] == 'groupSell') {
-            throw new BadRequestHttpException('组合购买课程不能退出。', null, ErrorCode::INVALID_ARGUMENT);
-        }
-
-        $processor->applyRefundOrder($member['orderId'], 0, array('note' => $reason), null);
+        $this->getCourseMemberService()->remarkStudent($courseId, $user->getId(), array(
+           'reason' => $reason
+        ));
 
         return array('success' => true);
     }
@@ -63,14 +55,6 @@ class MeCourseMember extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
-    }
-
-    /**
-     * @return OrderService
-     */
-    private function getOrderService()
-    {
-        return $this->service('Order:OrderService');
     }
 
     /**

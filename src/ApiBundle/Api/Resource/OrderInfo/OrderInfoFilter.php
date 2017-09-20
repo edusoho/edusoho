@@ -16,7 +16,7 @@ class OrderInfoFilter extends Filter
         $orderInfo = array(
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
-            'totalPrice' => $data['totalPrice'],
+            'totalPrice' => strval($data['totalPrice']),
             'title' => $data['title'],
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],
             'hasPayPassword' => empty($data['hasPayPassword']) ? 0 : 1,
