@@ -66,7 +66,7 @@ class CourseController extends CourseBaseController
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
                 'members' => $members,
-                'learningCourses' => $learningCourses
+                'learningCourses' => $learningCourses,
             )
         );
     }
