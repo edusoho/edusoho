@@ -709,6 +709,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
 
             $this->commit();
+
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
