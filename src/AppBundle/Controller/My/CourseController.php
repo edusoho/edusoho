@@ -54,7 +54,7 @@ class CourseController extends CourseBaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses, $members);
+        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
         $courseSets = $this->getClassrooms($courseSets);
 
         $learningCourses = $this->getCourseService()->findUserLearningCourses($currentUser['id'], 0, PHP_INT_MAX);
@@ -100,7 +100,7 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses, $members);
+        $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
         $courseSets = $this->getClassrooms($courseSets);
 
         return $this->render(
@@ -252,25 +252,21 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
     }
 
-    protected function calculateCourseSetprogress($courseSets, $courses, $members)
+    protected function calculateCourseSetprogress($courseSets, $courses)
     {
         if (empty($courseSets)) {
             return array();
         }
 
+        $user = $this->getCurrentUser();
+
         foreach ($courseSets as $courseSetId => $courseSet) {
             $currentCourses = $courses[$courseSet['id']];
+            $courseIds = ArrayToolkit::column($currentCourses, 'id');
 
-            $totalUserLearned = 0;
-            $totalTaskNum = 0;
-            array_map(function ($course) use (&$totalUserLearned, &$totalTaskNum, $members) {
-                $member = $members[$course['id']];
-                $totalUserLearned += $member['learnedNum'];
-                $totalTaskNum += $course['compulsoryTaskNum'];
-            }, $currentCourses);
+            $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($courseIds, $user['id']);
 
-            $courseSets[$courseSetId]['totalUserLearned'] = $totalUserLearned;
-            $courseSets[$courseSetId]['totalTaskNum'] = $totalTaskNum;
+            $courseSets[$courseSetId]['percent'] = $learnProgress['percent'];
         }
 
         return $courseSets;

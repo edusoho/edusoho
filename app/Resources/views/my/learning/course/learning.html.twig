@@ -13,6 +13,7 @@
 
     <div class="panel-body">
       {% include 'my/learning/course/nav-pill.html.twig' %}
+      {% set type = 'learning' %}
 
       {% for courseSet in courseSets if courseSet %}
         {% set currentCourses = courses[courseSet.id] %}
