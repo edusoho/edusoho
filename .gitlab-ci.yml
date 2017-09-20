@@ -50,8 +50,8 @@ Unit Test With PHP 7.0:
     - redis:latest
   script:
     - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
-    - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
-    - bin/phpunit -c app/ --coverage-text --colors=never
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never
+
   only:
     - tags
     - develop
