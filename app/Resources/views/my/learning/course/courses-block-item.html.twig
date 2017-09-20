@@ -1,6 +1,6 @@
 <div class="course-item cd-mb40 clearfix">
   <a class="course-picture-link" href="{{ path('course_set_show', {id:courseSet.id}) }}">
-    <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" >
+    <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
   </a>
   <div class="course-info">
     <div class="title text-overflow">
@@ -9,7 +9,7 @@
 
     {% if classroom|default(null) %}
       <div class="belong-classroom">
-        <span >{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-gray" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
+        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-gray" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
       </div>
     {% endif %}
 
@@ -35,7 +35,7 @@
     </div>
   {% else %}
     <div class="course-btn-item">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}" >{% if percent == "100%" %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('my_course_show', {id:currentCourses[0].id}) }}">{% if percent == "100%" %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
     </div>
   {% endif %}
 </div>
