@@ -1,4 +1,3 @@
-{% do script(['app/js/file-chooser/index.js']) %}
 {% if file is not empty %}
   {% set selectedFile = {'id': file.id, 'name': file.filename, 'status': file.convertStatus, 'source': 'self', 'length': file.length, 'size': file.fileSize} %}
 {% endif %}
