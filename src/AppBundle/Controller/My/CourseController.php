@@ -289,7 +289,7 @@ class CourseController extends CourseBaseController
             if ($courseSet['parentId'] == 0 || empty($courseSet['parentId'])) {
                 continue;
             }
-            
+
             $classroomCourse = $classroomCourses[$courseSet['id']];
             $classroom = $classrooms[$classroomCourse['classroomId']];
             $courseSets[$courseSetId]['classroom'] = array(
