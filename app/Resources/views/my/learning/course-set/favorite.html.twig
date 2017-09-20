@@ -8,31 +8,35 @@
   {{ 'my.learning.course'|trans }}
 {% endblock %}
 
-{% block main_body %}
+{% block main %}
 
-  {% include 'my/learning/course/nav-pill.html.twig' %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'my.learning.course'|trans}}</span></div>
+    <div class="panel-body">
+      {% include 'my/learning/course/nav-pill.html.twig' %}
 
-  {% for courseFavorite in courseFavorites if courseFavorite %}
+      {% for courseFavorite in courseFavorites if courseFavorite %}
 
+        {% if courseFavorite.type == 'course' %}
+          {% set course = data('Course',{courseId:courseFavorite.courseId}) %}
+          {% set courseSet =  data('CourseSet',{id:courseFavorite.courseSetId}) %}
+          {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
+          {% include 'my/learning/my-course-set-grid.html.twig' %}
 
-    {% if courseFavorite.type == 'course' %}
-      {% set course = data('Course',{courseId:courseFavorite.courseId}) %}
-      {% set courseSet =  data('CourseSet',{id:courseFavorite.courseSetId}) %}
-      {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
-      {% include 'my/learning/my-course-set-grid.html.twig' %}
+        {% elseif courseFavorite.type == 'openCourse' %}
+          {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
+          {% set coursePath = path('open_course_show', {courseId:course.id}) %}
+          {% set openCourse = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null)%}
+          {% if course %}
+            {% include 'open-course/widget/my-open-course-grid.html.twig' %}
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <div class="cd-empty">{{'my.learning.course.favorite_empty'|trans}}</div>
+      {% endfor %}
 
-    {% elseif courseFavorite.type == 'openCourse' %}
-      {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
-      {% set coursePath = path('open_course_show', {courseId:course.id}) %}
-      {% set openCourse = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null)%}
-      {% if course %}
-        {% include 'open-course/widget/my-open-course-grid.html.twig' %}
-      {% endif %}
-    {% endif %}
-  {% else %}
-    <div class="empty">{{'my.learning.course.favorite_empty'|trans}}</div>
-  {% endfor %}
-
-  {{ web_macro.paginator(paginator) }}
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
 
 {% endblock %}

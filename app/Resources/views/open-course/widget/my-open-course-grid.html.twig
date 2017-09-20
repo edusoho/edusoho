@@ -1,18 +1,18 @@
-<div class="course-item cd-mb40 clearfix">
-  <a class="course-picture-link" href="{{ path('open_course_show', {courseId:course.id}) }}">
-    <img class="course-picture" src="{{ filepath(course.largePicture, 'course.png') }}">
+<div class="my-course-item cd-mb40 clearfix">
+  <a class="my-course-item__link" href="{{ path('open_course_show', {courseId:course.id}) }}">
+    <img class="my-course-item__picture" src="{{ filepath(course.largePicture, 'course.png') }}">
   </a>
-  <div class="course-info">
-    <div class="title cd-mb24 text-overflow">
+  <div class="my-course-item__info">
+    <div class="my-course-item__title cd-mb24 text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     </div>
 
-    <div class="status">
+    <div class="my-course-item__status">
       <span class="color-success">{{ 'open_course'|trans }}</span>
     </div>
   </div>
 
-  <div class="course-btn-item">
-    <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
   </div>
 </div>

@@ -1,20 +1,20 @@
-<div class="course-item cd-mb40 clearfix">
-  <a class="course-picture-link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
-    <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
+<div class="my-course-item cd-mb40 clearfix">
+  <a class="my-course-item__link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
+    <img class="my-course-item__picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
   </a>
 
-  <div class="course-info">
-    <div class="title text-overflow">
+  <div class="my-course-item__info">
+    <div class="my-course-item__title text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
     </div>
 
-    <div class="status">
+    <div class="my-course-item__status">
       {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
     </div>
   </div>
 
-  <div class="course-btn-item">
-    <a class="btn cd-btn cd-btn-primary cd-btn-lg course-btn" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
   </div>
 
 </div>
