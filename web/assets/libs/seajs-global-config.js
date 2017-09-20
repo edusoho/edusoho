@@ -131,15 +131,6 @@ seajs.on('fetch', function(data) {
         return ;
     }
 
-    if (data.uri.indexOf('js-sdk/video-player') > 0) {
-        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
-        return ;
-    }
-
-    if (data.uri.indexOf('js-sdk/uploader') > 0) {
-        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
-        return ;
-    }
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 });
 
