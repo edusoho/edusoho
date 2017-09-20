@@ -66,7 +66,7 @@
       <label>{{ 'course.plan_task.activity_manage.ppt.lear_at_least_time'|trans }}</label>
     </div>
     <div class="col-sm-4 controls">
-      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{{ activity.ext.finishDetail|default(1) }}">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{% if activity.ext.finishDetail|default(1) != 0  %}{{ activity.ext.finishDetail|default(1) }}{% else %}1{% endif %}">
     </div>
     <div class="col-sm-4 controls">
       <p class="form-control-static">{{'site.date.minute'|trans}}</p>
