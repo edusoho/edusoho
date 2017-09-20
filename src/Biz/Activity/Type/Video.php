@@ -159,8 +159,10 @@ class Video extends Activity
         $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
         $result = array_merge($result, $finishInfo);
         $result = ArrayToolkit::parts($result, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
+
         return $result;
     }
+
     /**
      * @return VideoActivityDao
      */
