@@ -23,7 +23,7 @@
           {% include 'my/learning/course/courses-block-item.html.twig' %}
         {% endif %}
       {% else %}
-        <div class="empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
+        <div class="cd-empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
       {% endfor %}
       {{ web_macro.paginator(paginator) }}
     </div>
