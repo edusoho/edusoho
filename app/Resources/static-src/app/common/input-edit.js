@@ -7,9 +7,9 @@ class InputEdit {
 
     this.data = props.data;
 
-    this.editBtn = props.editBtn || '.cd-input-edit__edit-btn';
-    this.saveBtn = props.saveBtn || '.cd-input-edit__save-btn';
-    this.cancelBtn = props.cancelBtn || '.cd-input-edit__cancel-btn';
+    this.editBtn = props.editBtn || '.input-edit__edit-btn';
+    this.saveBtn = props.saveBtn || '.input-edit__save-btn';
+    this.cancelBtn = props.cancelBtn || '.input-edit__cancel-btn';
 
     this.success = props.success || this.success;
     this.fail = props.fail || this.fail;
@@ -36,19 +36,19 @@ class InputEdit {
 
     $this.parent().hide();
 
-    this.$el.find('.cd-input-edit__edit-dom').show()
-      .find('.cd-input-edit__input').focus().select();
+    this.$el.find('.input-edit__edit-dom').show()
+      .find('.input-edit__input').focus().select();
   }
 
   cancel(event) {
     let $this = $(event.currentTarget);
 
-    this.$el.find('.cd-input-edit__edit-dom').hide();
+    this.$el.find('.input-edit__edit-dom').hide();
 
-    let text = this.$el.find('.cd-input-edit__static-text').text();
-    this.$el.find('.cd-input-edit__input').val(text);
+    let text = this.$el.find('.input-edit__static-text').text();
+    this.$el.find('.input-edit__input').val(text);
 
-    this.$el.find('.cd-input-edit__static-dom').show();
+    this.$el.find('.input-edit__static-dom').show();
   }
 
   save(event) {
@@ -62,13 +62,13 @@ class InputEdit {
         $this.button('reset');
       })
       .done((data) => {
-        let $input = this.$el.find('.cd-input-edit__input');
+        let $input = this.$el.find('.input-edit__input');
 
-        this.$el.find('.cd-input-edit__static-text').text($input.val());
+        this.$el.find('.input-edit__static-text').text($input.val());
 
-        this.$el.find('.cd-input-edit__edit-dom').hide();
+        this.$el.find('.input-edit__edit-dom').hide();
         
-        this.$el.find('.cd-input-edit__static-dom').show();
+        this.$el.find('.input-edit__static-dom').show();
 
         this.success(data);
       })
