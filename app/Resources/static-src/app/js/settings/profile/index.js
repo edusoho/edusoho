@@ -59,9 +59,6 @@ $("#user-profile-form").validate({
 
 new InputEdit({
   el: '#nickname-form-group',
-  data: {
-    nickname: $('#nickname').val()
-  },
   success(data) {
     notify('success', Translator.trans(data.message));
   },

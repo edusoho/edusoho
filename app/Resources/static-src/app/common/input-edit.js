@@ -5,8 +5,6 @@ class InputEdit {
 
     this.$el = $(this.el);
 
-    this.data = props.data;
-
     this.editBtn = props.editBtn || '.input-edit__edit-btn';
     this.saveBtn = props.saveBtn || '.input-edit__save-btn';
     this.cancelBtn = props.cancelBtn || '.input-edit__cancel-btn';
@@ -54,10 +52,14 @@ class InputEdit {
   save(event) {
     let $this = $(event.currentTarget);
     let url = $this.data('url');
+    let inputName = $this.data('input-name');
+
+    let data = {};
+    data[inputName] = $(`input[name=${inputName}]`).val();
 
     $this.button('loading');
 
-    $.post(url, this.data)
+    $.post(url, data)
       .always(() => {
         $this.button('reset');
       })

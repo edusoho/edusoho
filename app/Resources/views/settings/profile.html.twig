@@ -48,14 +48,15 @@
           <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control input-edit__input" value="{{app.user.nickname}}">
 
           <div class="action-button">
-            <div class="btn cd-btn cd-btn-primary input-edit__save-btn"
+            <button type="button" class="btn cd-btn cd-btn-primary input-edit__save-btn"
+              data-input-name="nickname"
               data-url="{{ path('setting_nickname') }}" 
               data-loading-text="{{'form.btn.save.submiting'|trans}}">
               {{'form.btn.save'|trans}}
-            </div>
-            <div class="btn cd-btn cd-btn-flat-default input-edit__cancel-btn">
+            </button>
+            <button type="button" class="btn cd-btn cd-btn-flat-default input-edit__cancel-btn">
               {{'form.btn.cancel'|trans}}
-            </div>
+            </button>
           </div>
         </div> 
 
