@@ -57,6 +57,8 @@ class CourseController extends CourseBaseController
         $courseSets = $this->calculateCourseSetprogress($courseSets, $courses, $members);
         $courseSets = $this->getClassrooms($courseSets);
 
+        $learningCourses = $this->getCourseService()->findUserLearningCourses($currentUser['id'], 0, PHP_INT_MAX);
+
         return $this->render(
             'my/learning/course/learning.html.twig',
             array(
@@ -64,6 +66,7 @@ class CourseController extends CourseBaseController
                 'paginator' => $paginator,
                 'courseSets' => $courseSets,
                 'members' => $members,
+                'learningCourses' => $learningCourses
             )
         );
     }

@@ -30,7 +30,7 @@
 
 {% block main_mobile %}
   {% if mobile %}
-    {% include 'my/learning/course/learning-mobile.html.twig' %}
+    {% include 'my/learning/course/learning-mobile.html.twig' with {'courses':learningCourses} %}
   {% endif %}
 {% endblock %}
 
