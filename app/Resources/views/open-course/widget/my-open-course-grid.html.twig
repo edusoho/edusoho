@@ -3,11 +3,11 @@
     <img class="course-picture" src="{{ filepath(course.largePicture, 'course.png') }}">
   </a>
   <div class="course-info">
-    <div class="course-title cd-mb24 text-overflow">
+    <div class="title cd-mb24 text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     </div>
 
-    <div class="course-status">
+    <div class="status">
       <span class="color-success">{{ 'open_course'|trans }}</span>
     </div>
   </div>

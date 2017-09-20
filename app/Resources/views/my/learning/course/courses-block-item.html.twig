@@ -3,18 +3,18 @@
     <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" >
   </a>
   <div class="course-info">
-    <div class="course-title text-overflow">
+    <div class="title text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
     </div>
 
     {% if classroom|default(null) %}
-      <div class="course-belong-classroom">
+      <div class="belong-classroom">
         <span >{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-gray" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
       </div>
     {% endif %}
 
     {% set percent = percent(courseSet.totalUserLearned, courseSet.totalTaskNum) %}
-    <div class="course-learn-progress cd-mt24">
+    <div class="learn-progress cd-mt24">
       <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
       <div class="cd-progress cd-progress-xs cd-progress-radius">
         <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent }};"></div>

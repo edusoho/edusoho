@@ -4,11 +4,11 @@
   </a>
 
   <div class="course-info">
-    <div class="course-title text-overflow">
+    <div class="title text-overflow">
       <a class="cd-link-gray-dark" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
     </div>
 
-    <div class="course-status">
+    <div class="status">
       {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
     </div>
   </div>
