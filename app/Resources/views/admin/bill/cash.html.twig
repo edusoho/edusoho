@@ -41,18 +41,28 @@
         </tr>
          {% if cashes %}
           {% for cash in cashes %}
-            {% set order = orders[cash['order_sn']] %}
+            {% if cash['order_sn']|default(false) %}
+                {% set order = orders[cash['order_sn']] %}
+            {% endif %}
             <tr class="text-sm">
               <td><span >{{ cash.sn }}</span></td>
               <td><span>{{ cash.title }}</span><br>
-                  <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn }}</span></td>
+                  {% if order|default(false) %}
+                    <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn }}</span></td>
+                  {% else %}
+                      <span class="text-muted">{{ 'order.id'|trans }}：--</span></td>
+                  {% endif %}
               <td>
-                <span><a href="{{ path('user_show', {id:cash.user_id}) }}">
-              {{ users[order.user_id].nickname }}</a></span> 
+                  {% if order|default(false) %}
+                    <span><a href="{{ path('user_show', {id:cash.user_id}) }}">
+                    {{ users[order.user_id].nickname }}</a></span>
+                  {% else %}
+                      --
+                  {% endif %}
               </td>
               <td><span>{{ cash.created_time|date('Y-m-d H:i:s') }}</span></td>
               <td class="text-right prl {% if cash.type =="inflow" %}text-success{% else %}warning-state{% endif %}">
-                {{ cash.amount }} 
+                {{ cash.amount }}
               </td>
               <td>
                 <span>
@@ -63,7 +73,7 @@
                     {{ 'order.payment_pattern.school'|trans }}
                   {% endif %}
                 </span>
-              </td> 
+              </td>
             </tr>
           {% endfor %}
         {% else %}
