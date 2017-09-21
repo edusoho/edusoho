@@ -38,10 +38,11 @@ class PayCenter extends AbstractResource
     private function makePayForm($platformCreatedResult)
     {
         $form = array();
-        $form['action'] = $platformCreatedResult['url'];
+        $urlParts = explode('?', $platformCreatedResult['url']);
+        $form['action'] = $urlParts[0].'?_input_charset=UTF-8';
         $form['method'] = 'post';
-        $form['params'] = array();
-
+        $form['params'] = $platformCreatedResult['data'];
+        unset($form['params']['_input_charset']);
         return $form;
     }
 
