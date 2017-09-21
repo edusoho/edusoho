@@ -29,8 +29,8 @@ class OrderAddPaidAmount extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order` DROP COLUMN `paid_cash_amount`;");
-        $db->exec("ALTER TABLE `biz_order` DROP COLUMN `paid_coin_amount`;");
+        $db->exec('ALTER TABLE `biz_order` DROP COLUMN `paid_cash_amount`;');
+        $db->exec('ALTER TABLE `biz_order` DROP COLUMN `paid_coin_amount`;');
     }
 
     protected function isFieldExist($table, $filedName)

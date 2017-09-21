@@ -29,8 +29,8 @@ class OrderRefundAddRefundAmount extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order_refund` DROP COLUMN `refund_coin_amount`;");
-        $db->exec("ALTER TABLE `biz_order_refund` DROP COLUMN `refund_cash_amount`;");
+        $db->exec('ALTER TABLE `biz_order_refund` DROP COLUMN `refund_coin_amount`;');
+        $db->exec('ALTER TABLE `biz_order_refund` DROP COLUMN `refund_cash_amount`;');
     }
 
     protected function isFieldExist($table, $filedName)
