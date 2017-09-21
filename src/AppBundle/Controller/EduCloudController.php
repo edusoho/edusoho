@@ -340,7 +340,7 @@ class EduCloudController extends BaseController
 
                 return  $errorMsg;
 
-//                return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
+                //                return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
             }
 
             if ($user['verifiedMobile'] != $request->request->get('to')) {

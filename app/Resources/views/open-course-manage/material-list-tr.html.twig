@@ -1,12 +1,8 @@
 {% import "macro.html.twig" as web_macro %}
 {% set quality = "" %}
-{% if courseSet.type in ['open','liveOpen'] %}
-  {% set fileShowUrl = path('open_course_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
-  {% set convertUrl = path('open_course_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
-{% else %}
-  {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
-  {% set convertUrl = path('course_set_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
-{% endif %}
+
+{% set fileShowUrl = path('open_course_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+{% set convertUrl = path('open_course_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
 
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
@@ -45,10 +41,10 @@
     {% endif %} #}
 
     {# 暂时只需要区分使用和未使用 #}
-    {% if uploadFile.targetType == 'coursematerial' and uploadFile.usedCount <= 1 or uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1 %}
-      <span class="label label-default tip">{{'course.course_files.use_status.unused'|trans}}</span>
-    {% else %}
+    {% if fileQuotes %}
       <span class="label label-success tip">{{'course.course_files.use_status.using'|trans}}</span>
+    {% else %}
+      <span class="label label-default tip">{{'course.course_files.use_status.unused'|trans}}</span>
     {% endif %}
   </td>
   <td>
@@ -64,12 +60,9 @@
   </td>
   <td>
     {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
-      {% if courseSet.type == 'open' %}
-        {% set goto = path('open_course_manage_files', {id:courseSet.id}) %}
-      {% else %}
-        {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
-      {% endif %}
-    <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">{{'course.course_files.subtitle_manage_btn'|trans}}</a>
+      {% set goto = path('open_course_manage_files', {id:courseSet.id}) %}
+      
+      <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">{{'course.course_files.subtitle_manage_btn'|trans}}</a>
     {% endif %}
   </td>
 
