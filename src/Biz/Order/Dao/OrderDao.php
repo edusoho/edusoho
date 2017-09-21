@@ -48,10 +48,12 @@ interface OrderDao extends GeneralDaoInterface
 
     /**
      * @deprecated  即将废弃，不建议使用
+     *
      * @param $conditions
      * @param $orderBy
      * @param $start
      * @param $limit
+     *
      * @return mixed
      */
     public function searchBill($conditions, $orderBy, $start, $limit);

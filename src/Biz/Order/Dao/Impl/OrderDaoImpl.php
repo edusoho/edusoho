@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\Dao\Impl;
 
 use Biz\Order\Dao\OrderDao;
@@ -92,7 +93,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseId) - 1) . '?';
+        $marks = str_repeat('?,', count($courseId) - 1).'?';
 
         $sql = "SELECT  targetId,sum(amount) as  amount from {$this->table} WHERE  createdTime > ? AND createdTime < ? AND targetId IN ({$marks}) AND targetType = 'course' AND status = 'paid' GROUP BY targetId";
 
@@ -102,7 +103,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
-            $conditions['title'] = '%' . $conditions['title'] . '%';
+            $conditions['title'] = '%'.$conditions['title'].'%';
         }
 
         return parent::createQueryBuilder($conditions);
@@ -114,10 +115,10 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($statuses) - 1) . '?';
+        $marks = str_repeat('?,', count($statuses) - 1).'?';
         $sql = "SELECT sum(amount) FROM {$this->table} WHERE targetType =? AND targetId = ? AND status in ({$marks})";
 
-        return $this->db()->fetchColumn($sql, array_merge(array($targetType, $targetId), $statuses)) ? : 0;
+        return $this->db()->fetchColumn($sql, array_merge(array($targetType, $targetId), $statuses)) ?: 0;
     }
 
     public function sumCouponDiscountByOrderIds($orderIds)
@@ -126,7 +127,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($orderIds) - 1) . '?';
+        $marks = str_repeat('?,', count($orderIds) - 1).'?';
         $sql = "SELECT sum(couponDiscount) FROM {$this->table} WHERE id in ({$marks})";
 
         return $this->db()->fetchColumn($sql, $orderIds);
@@ -158,7 +159,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount)');
 
-        return $builder->execute()->fetchColumn(0) ? : 0;
+        return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
     public function analysisCoinAmount($conditions)
@@ -166,7 +167,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(coinAmount)');
 
-        return $builder->execute()->fetchColumn(0) ? : 0;
+        return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
     public function analysisTotalPrice($conditions)
@@ -174,7 +175,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(totalPrice)');
 
-        return $builder->execute()->fetchColumn(0) ? : 0;
+        return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
     public function analysis($conditions)
@@ -228,7 +229,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll(0) ? : array();
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function analysisAmountsDataByTitle($conditions, $orderBy, $start, $limit)
@@ -241,7 +242,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll(0) ? : array();
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function analysisAmountsDataByUserId($conditions, $orderBy, $start, $limit)
@@ -254,7 +255,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll(0) ? : array();
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function analysisExitCourseOrderDataByTime($startTime, $endTime)
@@ -277,7 +278,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->select("count(id) as count ,from_unixtime(paidTime,'%Y-%m-%d') date")
             ->groupBy('date');
 
-        return $builder->execute()->fetchAll(0) ? : array();
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function searchBill($conditions, $orderBy, $start, $limit)
