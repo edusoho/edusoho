@@ -134,6 +134,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
+        $sql = $this->sql($sql);
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -154,6 +155,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$groupBy}, COUNT(id) AS count")
             ->groupBy($groupBy)
@@ -219,13 +221,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             $sql .= " AND c.status = 'published' ";
         }
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
     public function searchMemberIds($conditions, $orderBys, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions);
         $declares = $this->declares();
         foreach ($orderBys ?: array() as $order => $sort) {
@@ -330,7 +334,9 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role, $isLearned));
     }
@@ -351,14 +357,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
     }
 
-    public function findMembersNotInClassroomByUserIdAndRoleAndType(
-        $userId,
-        $role,
-        $type,
-        $start,
-        $limit,
-        $onlyPublished = true
-    ) {
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true)
+    {
         $sql = "SELECT m.* FROM {$this->table} m ";
 
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
@@ -368,7 +368,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             $sql .= " AND c.status = 'published' ";
         }
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role, $type));
     }
