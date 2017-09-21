@@ -369,10 +369,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (!empty($user['password'])) {
-            throw new \RuntimeException('登录密码已设置，请勿重复设置');
-        }
-
         $form = $this->createFormBuilder()
             ->add('newPassword', 'password')
             ->add('confirmPassword', 'password')
@@ -491,7 +487,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $hasLoginPassword = strlen($user['password']) > 0;
-        $hasPayPassword = strlen($user['payPassword']) > 0;
+        $hasPayPassword = $this->getAccountService()->isPayPasswordSetted($user['id']);
         $userSecureQuestions = $this->getAccountService()->findSecurityAnswersByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
