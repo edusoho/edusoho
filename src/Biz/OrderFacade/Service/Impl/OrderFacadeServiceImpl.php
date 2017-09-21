@@ -42,6 +42,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $refundSetting = $this->getSettingService()->get('refund');
         $timeInterval = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'] * 24 * 60 * 60;
+
         return time() + $timeInterval;
     }
 
