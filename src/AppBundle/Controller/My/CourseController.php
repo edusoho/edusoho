@@ -264,7 +264,7 @@ class CourseController extends CourseBaseController
             if (!empty($sort[$member['courseSetId']])) {
                 continue;
             }
-            
+
             $sort[$member['courseSetId']] = $courseSets[$member['courseSetId']];
         }
 
