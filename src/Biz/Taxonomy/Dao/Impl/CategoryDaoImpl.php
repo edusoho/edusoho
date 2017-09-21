@@ -36,8 +36,8 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
 
     public function findByParentId($parentId, $orderBy, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE parentId = ?";
-        $sql = $this->sql($sql, $orderBy, $start, $limit);
+        $sql = "SELECT * FROM {$this->table()} WHERE parentId = ? {$orderBy} ";
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($parentId)) ?: array();
     }
