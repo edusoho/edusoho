@@ -306,6 +306,7 @@ classroom_manage.student_create_add_failed_hint: 添加失败!
 classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
 classroom_manage.student_manage_remove_success_hint: 移除%username%成功！
 classroom_manage.student_manage_remove_failed_hint: 移除%username%失败，请重试！
+classroom_manage.student_manage_remove_assistant_hint: '%username%是班级的助教，请先取消Ta的助教权限'
 
 classroom.member_signed: 已签到
 classroom.sign_keep_days: 连续%keepDays%天

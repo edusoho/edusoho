@@ -120,7 +120,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
+
+        $sql = $this->sql($sql, array('createdTime' => 'DESC'), $start, $limit);
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
@@ -129,7 +130,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
         $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= ' WHERE ';
+        $sql .= ' WHERE c.compulsoryTaskNum > 0 AND ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
@@ -141,11 +142,12 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
         $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= ' WHERE ';
+        $sql .= ' WHERE c.compulsoryTaskNum > 0 AND ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
+
+        $sql = $this->sql($sql, array('createdTime' => 'DESC'), $start, $limit);
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
@@ -464,6 +466,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNumLT',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
+                'deadline <= :deadlineLessThen',
                 'deadline >= :deadlineGreaterThan',
                 'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
@@ -472,6 +475,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
                 'lastLearnTime <= :lastLearnTime_LE',
+                'deadlineNotified = :deadlineNotified',
             ),
         );
     }

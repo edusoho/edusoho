@@ -1097,6 +1097,14 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['isQQPublic'] = 1;
         }
 
+        $fields = array_filter($fields, function ($value) {
+            if ($value === 0) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         $userProfile = $this->getProfileDao()->update($id, $fields);
 
         $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
@@ -1744,7 +1752,7 @@ class UserServiceImpl extends BaseService implements UserService
             array(
                 'userId' => $user['id'],
                 'note' => $note,
-                //'status' => 'approved',
+                'status' => 'approved',
                 'operatorId' => $currentUser['id'],
             )
         );
@@ -1933,11 +1941,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'truename') {
-            $conditions['truename'] = $conditions['keyword'];
+            $conditions['truename'] = trim($conditions['keyword']);
         }
 
         if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'idcard') {
-            $conditions['idcard'] = $conditions['keyword'];
+            $conditions['idcard'] = trim($conditions['keyword']);
         }
 
         unset($conditions['keywordType']);
