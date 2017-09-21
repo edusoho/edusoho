@@ -4,11 +4,11 @@ namespace AppBundle\Common;
 
 class MathToolkit
 {
-    public static function multiply($data, $files, $multiplicator)
+    public static function multiply($data, $fields, $multiplicator)
     {
-        foreach ($files as $file) {
-            if (isset($data[$file])) {
-                $data[$file] *= $multiplicator;
+        foreach ($fields as $field) {
+            if (isset($data[$field])) {
+                $data[$field] *= $multiplicator;
             }
         }
 

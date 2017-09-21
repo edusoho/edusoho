@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Cashier;
 
+use AppBundle\Common\MathToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
@@ -27,7 +28,7 @@ class CoinController extends BaseController
 
         return $this->render('cashier/coin/show.html.twig', array(
             'coinSetting' => $coinSetting,
-            'balance' => $balance,
+            'balance' => MathToolkit::multiply($balance, array('amount'), 0.01),
             'maxCoin' => $this->getMaxCoin($order),
             'isPasswordSet' => $this->getAccountService()->isPayPasswordSetted($user->getId()),
         ));
