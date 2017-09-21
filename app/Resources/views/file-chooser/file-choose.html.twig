@@ -1,6 +1,8 @@
 {% if file is not empty %}
   {% set selectedFile = {'id': file.id, 'name': file.filename, 'status': file.convertStatus, 'source': 'self', 'length': file.length, 'size': file.fileSize} %}
 {% endif %}
+{% set courseType = courseType|default('course') %}
+
 <input type="hidden" name="media" id="media" value="{{ selectedFile|default('')|json_encode }}">
 <div class="file-chooser-bar {% if not file|default(null) %}hidden {% endif %}">
   <span data-role="placeholder">{{ file.filename|default(null) }}</span>
