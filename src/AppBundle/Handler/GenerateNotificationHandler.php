@@ -59,7 +59,7 @@ class GenerateNotificationHandler
 
         foreach ((array) $courses as $key => $course) {
             if ($course['parentId'] != 0) {
-               continue;
+                continue;
             }
             $message = array(
                 'courseId' => $course['id'],
@@ -159,7 +159,6 @@ class GenerateNotificationHandler
 
     private function vipOverduePush($user, $message)
     {
-
         $levelId = $message['levelId'];
 
         $level = $this->getLevelService()->getLevel($levelId);

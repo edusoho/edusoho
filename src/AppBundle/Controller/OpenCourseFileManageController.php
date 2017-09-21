@@ -39,7 +39,7 @@ class OpenCourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        return $this->render('courseset-manage/file/index.html.twig', array(
+        return $this->render('open-course-manage/material-list.html.twig', array(
             'courseSet' => $course,
             'course' => $course,
             'files' => $files,

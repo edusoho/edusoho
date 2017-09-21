@@ -197,7 +197,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($courses as $key => $course) {
             $courseMember = $courseMembers[$course['id']];
 
-            /**
+            /*
              * 去掉了$course['expiryDays'] > 0 &&
              */
             if ($currentTime < $courseMember['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember['deadline']) {
