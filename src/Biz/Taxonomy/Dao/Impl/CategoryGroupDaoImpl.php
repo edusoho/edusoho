@@ -20,7 +20,7 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
     {
         $sql = "SELECT * FROM {$this->table()}";
 
-        $this->sql($sql, array(), $start, $limit);
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array()) ?: array();
     }
@@ -34,7 +34,6 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
 
     public function declares()
     {
-        return array(
-        );
+        return array();
     }
 }
