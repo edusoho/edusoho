@@ -25,7 +25,7 @@ class OrderAddRefundDeadline extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order` DROP COLUMN `refund_deadline`;");
+        $db->exec('ALTER TABLE `biz_order` DROP COLUMN `refund_deadline`;');
     }
 
     protected function isFieldExist($table, $filedName)
