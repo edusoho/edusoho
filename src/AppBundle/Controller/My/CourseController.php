@@ -53,6 +53,7 @@ class CourseController extends CourseBaseController
         );
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courseSets = $this->sortCourseSets($courseSets, $members);
 
         $courseSets = $this->calculateCourseSetprogress($courseSets, $courses);
         $courseSets = $this->getClassrooms($courseSets);
@@ -250,6 +251,20 @@ class CourseController extends CourseBaseController
         );
 
         $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
+    }
+
+    protected function sortCourseSets($courseSets, $members)
+    {
+        $sort = array();
+        foreach ($members as $member) {
+            if (empty($courseSets[$member['courseSetId']])) {
+                continue;
+            }
+
+            $sort[] = $courseSets[$member['courseSetId']];
+        }
+
+        return $sort;
     }
 
     protected function calculateCourseSetprogress($courseSets, $courses)
