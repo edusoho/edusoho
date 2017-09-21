@@ -132,6 +132,13 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
 
             return $enabledPayments;
         };
+
+        $biz['payment.options'] = $biz->extend('payment.options', function($options, $biz) {
+            /* @var $currency Currency */
+            $currency = $biz['currency'];
+            $options['coin_rate'] =  $currency->exchangeRate;
+           return  $options;
+        });
     }
 
     private function registerCurrency(Container $biz)
