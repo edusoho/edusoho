@@ -348,16 +348,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $hasPayPassword = strlen($user['payPassword']) > 0;
-
-        if ($hasPayPassword) {
-            return $this->redirect($this->generateUrl('settings_reset_pay_password'));
-        }
-
-        if ($user->isLogin() && empty($user['password'])) {
-            return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_pay_password')));
-        }
-
         if ($request->getMethod() === 'POST') {
             $passwords = $request->request->all();
 
@@ -375,50 +365,9 @@ class SettingsController extends BaseController
         return $this->render('settings/pay-password.html.twig');
     }
 
-    public function setPayPasswordAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
-
-        if ($hasPayPassword) {
-            return $this->createJsonResponse('不能直接设置新支付密码。');
-        }
-
-        $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
-        if ($request->getMethod() === 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $passwords = $form->getData();
-
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
-                } else {
-                    $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
-
-                    return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
-                }
-            }
-        }
-
-        return $this->render('settings/pay-password-modal.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
     public function setPasswordAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
-        if (!empty($user['password'])) {
-            throw new \RuntimeException('登录密码已设置，请勿重复设置');
-        }
 
         $form = $this->createFormBuilder()
             ->add('newPassword', 'password')
@@ -538,7 +487,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $hasLoginPassword = strlen($user['password']) > 0;
-        $hasPayPassword = strlen($user['payPassword']) > 0;
+        $hasPayPassword = $this->getAccountService()->isPayPasswordSetted($user['id']);
         $userSecureQuestions = $this->getAccountService()->findSecurityAnswersByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));

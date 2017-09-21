@@ -66,10 +66,6 @@ class OrderInfo extends AbstractResource
             ),
         );
 
-        if ($orderInfo['priceType'] == 'Coin') {
-            $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
-        }
-
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];
         }
@@ -91,6 +87,10 @@ class OrderInfo extends AbstractResource
             $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
         }
 
+        if ($orderInfo['priceType'] == 'Coin') {
+            $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
+        }
+        
         return $orderInfo;
     }
 
