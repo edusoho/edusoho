@@ -286,14 +286,16 @@ class CourseController extends CourseBaseController
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($courseSets as $courseSetId => $courseSet) {
-            if ($courseSet['parentId'] > 0) {
-                $classroomCourse = $classroomCourses[$courseSet['id']];
-                $classroom = $classrooms[$classroomCourse['classroomId']];
-                $courseSets[$courseSetId]['classroom'] = array(
-                    'id' => $classroom['id'],
-                    'title' => $classroom['title'],
-                );
+            if ($courseSet['parentId'] == 0 || empty($classroomCourses[$courseSet['id']])) {
+                continue;
             }
+
+            $classroomCourse = $classroomCourses[$courseSet['id']];
+            $classroom = $classrooms[$classroomCourse['classroomId']];
+            $courseSets[$courseSetId]['classroom'] = array(
+                'id' => $classroom['id'],
+                'title' => $classroom['title'],
+            );
         }
 
         return $courseSets;
