@@ -347,7 +347,7 @@ class SettingsController extends BaseController
     public function payPasswordAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        
+
         if ($request->getMethod() === 'POST') {
             $passwords = $request->request->all();
 
