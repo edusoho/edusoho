@@ -9,6 +9,7 @@ use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -161,13 +162,21 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', '网校虚拟币未开启！');
         }
 
-        $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user['id']);
 
-        if (empty($account)) {
-            $account = $this->getCashAccountService()->createAccount($user->id);
-        }
+        return array(
+            'id' => $balance['id'],
+            'userId' => $balance['user_id'],
+            'cash' => $balance['amount']
+        );
+    }
 
-        return $account;
+    /**
+     * @return AccountService
+     */
+    private function getAccountService()
+    {
+        return $this->controller->getService('Pay:AccountService');
     }
 
     public function sendMessage()
