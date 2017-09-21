@@ -103,13 +103,12 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             'invite.reward' => 'onInviteReward',
             'batch_notification.publish' => 'onBatchNotificationPublish',
-
         );
     }
 
     //========= Article Module Start==========
+
     /**
-     *
      * @PushService
      * @SearchService
      */
@@ -259,7 +258,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'user.follow',
                 'fromId' => $user['id'],
                 'toId' => $followedUser['id'],
-                'title' => "收到一个用户关注",
+                'title' => '收到一个用户关注',
                 'message' => "{$user['nickname']}已经关注了你！",
             );
 
@@ -293,7 +292,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'user.unfollow',
                 'fromId' => $user['id'],
                 'toId' => $unFollowedUser['id'],
-                'title' => "用户取消关注",
+                'title' => '用户取消关注',
                 'message' => "{$user['nickname']}对你已经取消了关注！",
             );
 
@@ -302,7 +301,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     }
 
     //======== User Module End =========
-
 
     //======== Classroom Module Start ========
 
@@ -382,7 +380,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     //========= Classroom Module End ===========
 
-
     public function onCourseThreadPostAt(Event $event)
     {
         $threadPost = $event->getSubject();
@@ -398,11 +395,10 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             }
 
             if (empty($users)) {
-                return ;
+                return;
             }
 
             foreach ($users as $user) {
-
                 $from = array(
                     'type' => $threadPost['target']['type'],
                     'id' => $threadPost['target']['id'],
@@ -550,7 +546,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         if ($this->isIMEnabled()) {
             if (!$user->isAdmin()) {
-                return ;
+                return;
             }
 
             $from = array(
@@ -577,7 +573,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onInviteReward(Event $event)
@@ -854,7 +849,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'lessonId' => $thread['relationId'],
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
-                'title' => "课程提问",
+                'title' => '课程提问',
                 'message' => "您的课程有新的提问《{$thread['title']}》",
             );
 
@@ -927,21 +922,21 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         $user = $this->getBiz()->offsetGet('user');
         if ($this->isIMEnabled()) {
-//            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-//                return;
-//            }
-//
-//            if ($threadPost['thread']['type'] != 'question') {
-//                return;
-//            }
+            //            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+            //                return;
+            //            }
+            //
+            //            if ($threadPost['thread']['type'] != 'question') {
+            //                return;
+            //            }
             if ($user['id'] == $threadPost['thread']['userId']) {
-                return ;
+                return;
             }
 
-//            foreach ($threadPost['target']['teacherIds'] as $teacherId) {
-//                if ($teacherId != $threadPost['userId']) {
-//                    continue;
-//                }
+            //            foreach ($threadPost['target']['teacherIds'] as $teacherId) {
+            //                if ($teacherId != $threadPost['userId']) {
+            //                    continue;
+            //                }
             $postUser = $this->getUserService()->getUser($threadPost['userId']);
             $from = array(
                 'type' => $threadPost['target']['type'],
@@ -970,7 +965,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             $this->createPushJob($from, $to, $body);
-//            }
+            //            }
         }
     }
 
@@ -1205,8 +1200,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         }
     }
 
-
-
     protected function pushCloud($eventName, array $data, $level = 'normal')
     {
         return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
@@ -1221,7 +1214,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         if ($this->isIMEnabled()) {
             $from = array(
                 'type' => 'coupon',
-                'id' => $coupon['id']
+                'id' => $coupon['id'],
             );
 
             $to = array(
@@ -1231,28 +1224,21 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
 
             if ($coupon['type'] == 'minus') {
-                $message = "您有一张价值".$coupon['rate']."元的优惠券领取成功";
+                $message = '您有一张价值'.$coupon['rate'].'元的优惠券领取成功';
             } else {
-                $message = "您有一张抵扣为".$coupon['rate']."折的优惠券领取成功";
+                $message = '您有一张抵扣为'.$coupon['rate'].'折的优惠券领取成功';
             }
 
             $body = array(
                 'type' => 'coupon.receive',
                 'couponId' => $coupon['id'],
-                'title' => "获得新的优惠券",
+                'title' => '获得新的优惠券',
                 'message' => $message,
             );
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
-
-
-
-
-
-
 
     protected function convertUser($user, $profile = array())
     {
@@ -1412,8 +1398,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         }
     }
 
-
-
     protected function convertClassroom($classroom)
     {
         $classroom['smallPicture'] = $this->getFileUrl($classroom['smallPicture']);
@@ -1472,9 +1456,9 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $user = $this->getBiz()->offsetGet('user');
 
         if ($this->isIMEnabled()) {
-//            if (!$user->isAdmin() || $user['id'] == $thread['userId']) {
-//                return;
-//            }
+            //            if (!$user->isAdmin() || $user['id'] == $thread['userId']) {
+            //                return;
+            //            }
             if ($user['id'] == $thread['userId']) {
                 return;
             }
@@ -1545,7 +1529,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $thread = $this->convertThread($thread, 'course.thread.delete');
 
         if ($this->isIMEnabled()) {
-
             $user = $this->getBiz()->offsetGet('user');
             $from = array(
                 'type' => $thread['target']['type'],
@@ -1649,14 +1632,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             if ($threadPost['target']['type'] != 'course') {
                 return;
             }
-//
-//            if ($threadPost['thread']['type'] != 'question') {
-//                return;
-//            }
+            //
+            //            if ($threadPost['thread']['type'] != 'question') {
+            //                return;
+            //            }
 
-//            if (!$user->isAdmin()) {
-//                return;
-//            }
+            //            if (!$user->isAdmin()) {
+            //                return;
+            //            }
 
             $from = array(
                 'type' => $threadPost['target']['type'],
@@ -1700,16 +1683,16 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.delete');
 
         if ($this->isIMEnabled()) {
-//            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-//                return;
-//            }
+            //            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+            //                return;
+            //            }
             if ($threadPost['target']['type'] != 'course') {
                 return;
             }
-//
-//            if ($threadPost['thread']['type'] != 'question') {
-//                return;
-//            }
+            //
+            //            if ($threadPost['thread']['type'] != 'question') {
+            //                return;
+            //            }
             $user = $this->getBiz()->offsetGet('user');
 
             $from = array(
@@ -1853,7 +1836,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     protected function getTarget($type, $id)
@@ -1949,19 +1931,18 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     protected function createJob($lesson)
     {
-//        if ($lesson['startTime'] >= (time() + 60 * 60)) {
-//            $startJob = array(
-//                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
-//                'expression' => $lesson['startTime'] - 60 * 60,
-//                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
-//                'args' => array(
-//                    'targetType' => 'lesson',
-//                    'targetId' => $lesson['id'],
-//                ),
-//            );
-//            $this->getSchedulerService()->register($startJob);
-//        }
-
+        //        if ($lesson['startTime'] >= (time() + 60 * 60)) {
+        //            $startJob = array(
+        //                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
+        //                'expression' => $lesson['startTime'] - 60 * 60,
+        //                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
+        //                'args' => array(
+        //                    'targetType' => 'lesson',
+        //                    'targetId' => $lesson['id'],
+        //                ),
+        //            );
+        //            $this->getSchedulerService()->register($startJob);
+        //        }
 
         if ($lesson['type'] == 'live') {
             $startJob = array(
@@ -2206,7 +2187,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         );
 
         return empty($types[$type]) ? '' : $types[$type];
-        
     }
 
     protected function pushIM($from, $to, $body)
