@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\Money;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
@@ -34,6 +35,13 @@ class OrderInfo extends AbstractResource
 
     private function getOrderInfoFromProduct(Product $product)
     {
+        $biz = $this->getBiz();
+        /** @var  $currency  Currency */
+        $currency = $biz['currency'];
+
+        $user = $this->getCurrentUser();
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
+
         $orderInfo = array(
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
@@ -42,7 +50,25 @@ class OrderInfo extends AbstractResource
             'unitType' => $product->unit,
             'duration' => $product->num,
             'totalPrice' => $product->getPayablePrice(),
+            'availableCoupons' => array(),
+            'coinName' => '',
+            'cashRate' => 1,
+            'buyType' => '',
+            'priceType' => $currency->isoCode == 'CNY' ? 'RMB' : 'Coin',
+            'coinPayAmount' => 0,
+            'fullCoinPayable' => 0,
+            'verifiedMobile' => (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
+            'hasPayPassword' => $this->getAccountService()->isPayPasswordSetted($user['id']),
+            'account' => array(
+                'id' => $balance['id'],
+                'userId' => $balance['user_id'],
+                'cash' => $balance['amount']
+            ),
         );
+
+        if ($orderInfo['priceType'] == 'Coin') {
+            $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
+        }
 
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];
@@ -50,20 +76,7 @@ class OrderInfo extends AbstractResource
 
         if ($product->availableDeducts && isset($product->availableDeducts['coupon'])) {
             $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
-        } else {
-            $orderInfo['availableCoupons'] = array();
         }
-
-        $user = $this->getCurrentUser();
-        $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
-        $orderInfo['account'] = array(
-            'id' => $balance['id'],
-            'userId' => $balance['user_id'],
-            'cash' => $balance['amount']
-        );
-
-        $orderInfo['verifiedMobile'] = (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '';
-        $orderInfo['hasPayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']);
 
         $coinSetting = $this->service('System:SettingService')->get('coin');
         if (!empty($coinSetting['coin_name'])) {
@@ -72,10 +85,6 @@ class OrderInfo extends AbstractResource
             $orderInfo['coinName'] = '虚拟币';
         }
 
-        $biz = $this->getBiz();
-        /** @var  $currency  Currency */
-        $currency = $biz['currency'];
-        $orderInfo['priceType'] = $currency->isoCode == 'CNY' ? 'RMB' : 'Coin';
         if (!empty($coinSetting['coin_enabled'])) {
             $orderInfo['cashRate'] = $currency->exchangeRate;
             $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
