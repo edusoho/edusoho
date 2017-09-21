@@ -135,7 +135,7 @@ class FileChooserController extends BaseController
     protected function findCourseMaterials($request, $courseId)
     {
         $courseType = $request->query->get('courseType', 'course');
-        
+
         $conditions = array('type' => $courseType);
         if ($courseType == 'openCourse') {
             $conditions['courseId'] = $courseId;
