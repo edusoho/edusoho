@@ -42,7 +42,7 @@ class PayCenter extends AbstractResource
         $form['action'] = $urlParts[0].'?_input_charset=UTF-8';
         $form['method'] = 'post';
         $form['params'] = $platformCreatedResult['data'];
-        unset($form['params']['_input_charset']);
+        
         return $form;
     }
 
