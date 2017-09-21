@@ -193,7 +193,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'platform' => $params['payment'],
             'user_id' => $order['user_id'],
             'coin_amount' => MathToolkit::simple($coinAmount, 100),
-            'cash_amount' => MathToolkit::simple($this->getTradePayCashAmount($order, $coinAmount),100),
+            'cash_amount' => MathToolkit::simple($this->getTradePayCashAmount($order, $coinAmount), 100),
             'create_ip' => isset($params['clientIp']) ? $params['clientIp'] : '127.0.0.1',
             'price_type' => 'money',
             'type' => 'purchase',
