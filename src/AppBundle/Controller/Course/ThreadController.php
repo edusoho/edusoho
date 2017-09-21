@@ -428,6 +428,9 @@ class ThreadController extends CourseBaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
+                //notify不应该在这里做的，应该在Service里面做
+                $this->getThreadService()->postAtNotifyEvent($post, $users);
+
                 if ($thread['userId'] != $currentUser->id) {
                     $message = array(
                         'userId' => $currentUser['id'],

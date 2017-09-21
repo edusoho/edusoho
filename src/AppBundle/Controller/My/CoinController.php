@@ -160,7 +160,7 @@ class CoinController extends BaseController
 
         $registerUrl = $this->generateUrl('register', array('inviteCode' => $user['inviteCode']), true);
 
-        if ($inviteSetting['inviteInfomation_template']) {
+        if (isset($inviteSetting['inviteInfomation_template'])) {
             $variables = array(
                 'siteName' => $site['name'],
                 'registerUrl' => $registerUrl,

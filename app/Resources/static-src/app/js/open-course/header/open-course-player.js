@@ -44,7 +44,7 @@ class OpenCoursePlayer {
         'self': this.onVideo
       };
 
-      let caller = mediaSourceActionsMap[lesson.mediaSource].bind(this);
+      let caller = mediaSourceActionsMap[lesson.mediaSource] ? mediaSourceActionsMap[lesson.mediaSource].bind(this) : undefined;
 
       if (caller === undefined && (lesson.type == 'video' || lesson.type == 'audio')) {
         caller = this.onSWF.bind(this);

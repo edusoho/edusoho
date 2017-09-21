@@ -38,12 +38,11 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         $result = false;
         if ($members) {
+            $this->classroomAnnouncementPush($targetId);
             $message = array('title' => $targetObject['title'],
                 'url' => $targetObjectShowUrl,
                 'type' => 'classroom', );
             foreach ($members as $member) {
-                //@todo 等移动端开放之后再放开
-                //                $this->classroomAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }
@@ -51,29 +50,32 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         return $result;
     }
 
-    private function classroomAnnouncementPush($member)
+    private function classroomAnnouncementPush($targetId)
     {
         if (!$this->isIMEnabled()) {
             return;
         }
 
-        $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        $conv = $this->getConversationService()->getConversationByTarget($classroom['id'], 'classroom-push');
 
         $from = array(
             'id' => $classroom['id'],
-            'type' => 'course',
+            'type' => 'classroom',
         );
 
         $to = array(
             'type' => 'classroom',
             'id' => 'all',
-            'convNo' => $this->getConvNo(),
+            'convNo' => $conv['no'],
         );
 
         $body = array(
-            'type' => 'course_announcement.create',
+            'type' => 'classroom.announcement.create',
             'classroomId' => $classroom['id'],
-            'title' => "[班级公告] 你正在学习的班级《{$classroom['title']}》有一个新的公告，快去看看吧",
+            'title' => "《{$classroom['title']}》",
+            'message' => "[班级公告] 你正在学习的班级《{$classroom['title']}》有一个新的公告，快去看看吧",
         );
 
         $this->createPushJob($from, $to, $body);
@@ -163,5 +165,10 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    protected function getConversationService()
+    {
+        return ServiceKernel::instance()->createService('IM:ConversationService');
     }
 }
