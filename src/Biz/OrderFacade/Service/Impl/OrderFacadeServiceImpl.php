@@ -9,6 +9,7 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use AppBundle\Common\MathToolkit;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Service\WorkflowService;
 
@@ -27,6 +28,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'created_reason' => 'site.join_by_purchase',
             'price_type' => $currency->isoCode,
             'currency_exchange_rate' => $currency->exchangeRate,
+            'refund_deadline' => $this->getRefundDeadline(),
         );
 
         $orderItems = $this->makeOrderItems($product);
@@ -34,6 +36,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
         return $order;
+    }
+
+    private function getRefundDeadline()
+    {
+        $refundSetting = $this->getSettingService()->get('refund');
+        $timeInterval = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'] * 24 * 60 * 60;
+        return time() + $timeInterval;
     }
 
     private function makeOrderItems(Product $product)
@@ -217,5 +226,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
