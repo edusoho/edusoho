@@ -14,7 +14,7 @@ use AppBundle\System;
 
 /**
  *  use belong commond
- *  app/console   build:install-package  192.168.9.221  root  root   exam.edusoho.cn  /var/www/exam.edusoho.cn
+ *  app/console   build:install-package  192.168.4.200  root  root   exam.edusoho.cn  /var/www/exam.edusoho.cn
  */
 class BuildCommand extends BaseCommand
 {
@@ -46,8 +46,7 @@ class BuildCommand extends BaseCommand
             ->addArgument('user', InputArgument::REQUIRED, '演示站点数据库用户')
             ->addArgument('password', InputArgument::REQUIRED, '数据库密码')
             ->addArgument('database', InputArgument::REQUIRED, '演示站数据库')
-            ->addArgument('projectPath', InputArgument::OPTIONAL, '演示站项目路径')
-        ;
+            ->addArgument('projectPath', InputArgument::OPTIONAL, '演示站项目路径');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -56,9 +55,8 @@ class BuildCommand extends BaseCommand
         $output->writeln('<info>Start build.</info>');
         $this->initBuild($input, $output);
 
-        $this->buildDatabase();
+        // $this->buildDatabase();
 
-        $this->buildRootDirectory();
         $this->buildApiDirectory();
         $this->buildAppDirectory();
         $this->buildBootstrapDirectory();
@@ -69,7 +67,7 @@ class BuildCommand extends BaseCommand
         $this->buildPluginsDirectory();
         $this->buildDefaultBlocks();
 
-        $this->cleanMacosDirectory();
+        $this->cleanMacOsDirectory();
         $this->clean();
 
         $this->copyInstallFiles();
@@ -83,14 +81,14 @@ class BuildCommand extends BaseCommand
         $this->output = $output;
 
         $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir'));
-        $this->buildDirectory = $this->rootDirectory.'/build';
+        $this->buildDirectory = $this->rootDirectory . '/build';
         $this->filesystem = new Filesystem();
 
         if ($this->filesystem->exists($this->buildDirectory)) {
             $this->filesystem->remove($this->buildDirectory);
         }
 
-        $this->distDirectory = $this->buildDirectory.DIRECTORY_SEPARATOR.'edusoho';
+        $this->distDirectory = $this->buildDirectory . DIRECTORY_SEPARATOR . 'edusoho';
         $this->filesystem->mkdir($this->distDirectory);
     }
 
@@ -149,11 +147,11 @@ class BuildCommand extends BaseCommand
 
     private function package()
     {
-        $this->output->writeln('packaging...');
+        $this->output->writeln("build installation package  use: tar zcf edusoho-" . System::VERSION . "tar.gz edusoho/");
 
         chdir($this->buildDirectory);
 
-        $command = 'tar zcf edusoho-'.System::VERSION.'.tar.gz edusoho/';
+        $command = 'tar zcf edusoho-' . System::VERSION . '.tar.gz edusoho/';
         exec($command);
     }
 
@@ -166,12 +164,6 @@ class BuildCommand extends BaseCommand
         exec($command);
         $command = "rm -rf {$this->rootDirectory}/web/install/edusoho_init_*.sql";
         exec($command);
-    }
-
-    private function buildRootDirectory()
-    {
-        $this->output->writeln('build / .');
-        $this->filesystem->copy("{$this->rootDirectory}/README.html", "{$this->distDirectory}/README.html");
     }
 
     private function buildApiDirectory()
@@ -245,8 +237,8 @@ class BuildCommand extends BaseCommand
         $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Command");
         $this->filesystem->mkdir("{$this->distDirectory}/src/AppBundle/Command");
 
-        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/theme-tpl", "{$this->distDirectory}/src/AppBundle/Command/theme-tpl");
         $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/Templates", "{$this->distDirectory}/src/AppBundle/Command/Templates");
+        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/ThemeTemplate", "{$this->distDirectory}/src/AppBundle/Command/ThemeTemplate");
 
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BaseCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php");
@@ -257,6 +249,9 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/SchedulerCommand.php", "{$this->distDirectory}/src/AppBundle/Command/SchedulerCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CloseCdnCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CloseCdnCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CountOnlineCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CountOnlineCommand.php");
+
 
         $finder = new Finder();
         $finder->directories()->in("{$this->distDirectory}/src/");
@@ -277,11 +272,9 @@ class BuildCommand extends BaseCommand
     public function buildVendorDirectory()
     {
         $this->output->writeln('build vendor/ .');
-        $buildVendorApps = $this->getApplication()->find('build:vendor');
-        $input = new ArrayInput(array(
-            'command' => 'build:vendor',
-        ));
-        $buildVendorApps->run($input, $this->output);
+
+        $this->filesystem->mirror("{$this->rootDirectory}/vendor", "{$this->distDirectory}/vendor");
+        $this->cleanDevelopVendorFiles();
     }
 
     public function buildVendorUserDirectory()
@@ -349,14 +342,14 @@ class BuildCommand extends BaseCommand
     {
         $this->output->writeln('build default blocks .');
 
-        $themeDir = dirname(__DIR__.'/../../../../web/themes/');
+        $themeDir = dirname(__DIR__ . '/../../../../web/themes/');
         BlockToolkit::init("{$themeDir}/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/default/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/autumn/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/jianmo/block.json", $this->getContainer());
     }
 
-    public function cleanMacosDirectory()
+    public function cleanMacOsDirectory()
     {
         $finder = new Finder();
         $finder->files()->in($this->distDirectory)->ignoreDotFiles(false);
@@ -367,4 +360,52 @@ class BuildCommand extends BaseCommand
             }
         }
     }
+
+    protected function ignoreVendorFiles()
+    {
+        return array(
+            'appveyor.yml',
+            'CONTRIBUTING.md',
+            'CONTRIBUTORS.md',
+            'phpunit',
+            'CHANGELOG.md',
+            'composer.json',
+            'phpunit.xml.dist',
+            'Gemfile',
+            'README.md',
+            'UPGRADE.md',
+            'VERSION',
+            'CHANGES',
+            'CHANGELOG',
+            'changelog.txt',
+            'README',
+            'README_zh_CN.md',
+        );
+    }
+
+    /**
+     * remove test file and document
+     */
+    protected function cleanDevelopVendorFiles()
+    {
+        $finder = new Finder();
+        $dir = $this->distDirectory . '/vendor/';
+        $finder->in($dir)->depth('<= 3')->ignoreUnreadableDirs(true)->ignoreDotFiles(false);
+        foreach ($finder as $folder) {
+            if (in_array($folder->getFilename(), array('tests', 'Tests', 'test', 'testing'))) {
+                $this->output->writeln('\\r    - remove  Test folder : ' . $folder->getRelativePath() . '/' . $folder->getFilename());
+                $this->filesystem->remove($folder->getRealPath());
+            }
+
+            if (!$folder->isFile()) {
+                continue;
+            }
+
+            if (in_array($folder->getFilename(), $this->ignoreVendorFiles()) || strrpos($folder->getFilename(), '.') === 0 || strrpos($folder->getFilename(), '.md') !== false) {
+                $this->output->writeln('    - remove  File : ' . $folder->getRelativePath() . '/' . $folder->getFilename());
+                $this->filesystem->remove($folder->getRealPath());
+            }
+        }
+    }
+
 }
