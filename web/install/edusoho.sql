@@ -856,26 +856,6 @@ CREATE TABLE `course_chapter` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `course_chapter_8_0_19_backup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `course_chapter_8_0_19_backup` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程章节ID',
-  `courseId` int(10) unsigned NOT NULL COMMENT '章节所属课程ID',
-  `type` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。',
-  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'parentId大于０时为单元',
-  `number` int(10) unsigned NOT NULL COMMENT '章节编号',
-  `seq` int(10) unsigned NOT NULL COMMENT '章节序号',
-  `title` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '章节名称',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '章节创建时间',
-  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id',
-  `migrateLessonId` int(10) DEFAULT '0',
-  `migrateCopyCourseId` int(10) DEFAULT '0',
-  `migrateRefTaskId` int(10) DEFAULT '0',
-  `mgrateCopyTaskId` int(10) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_draft`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1231,36 +1211,6 @@ CREATE TABLE `course_task` (
   KEY `migrateLessonIdAndType` (`migrateLessonId`,`type`),
   KEY `migrateLessonIdAndActivityId` (`migrateLessonId`,`activityId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `course_task_8_0_22_backup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `course_task_8_0_22_backup` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属课程的id',
-  `fromCourseSetId` int(10) unsigned NOT NULL DEFAULT '0',
-  `seq` int(10) unsigned NOT NULL,
-  `categoryId` int(10) DEFAULT NULL,
-  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '引用的教学活动',
-  `title` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '标题',
-  `isFree` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否免费',
-  `isOptional` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否必修',
-  `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
-  `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
-  `status` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT 'create' COMMENT '发布状态 create|publish|unpublish',
-  `createdUserId` int(10) unsigned NOT NULL COMMENT '创建者',
-  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-  `mode` varchar(60) CHARACTER SET utf8 DEFAULT NULL COMMENT '任务模式',
-  `number` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '任务编号',
-  `type` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '任务类型',
-  `mediaSource` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
-  `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义',
-  `maxOnlineNum` int(11) unsigned DEFAULT '0' COMMENT '任务最大可同时进行的人数，0为不限制',
-  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源task的id',
-  `migrateLessonId` int(10) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_task_result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2242,35 +2192,6 @@ CREATE TABLE `question` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题表';
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `question_8_0_18_backup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `question_8_0_18_backup` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目ID',
-  `type` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '题目类型',
-  `stem` text CHARACTER SET utf8 COMMENT '题干',
-  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分数',
-  `answer` text CHARACTER SET utf8 COMMENT '参考答案',
-  `analysis` text CHARACTER SET utf8 COMMENT '解析',
-  `metas` text CHARACTER SET utf8 COMMENT '题目元信息',
-  `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类别',
-  `difficulty` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT 'normal' COMMENT '难度',
-  `target` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '从属于',
-  `courseSetId` int(10) NOT NULL DEFAULT '0',
-  `courseId` int(10) unsigned NOT NULL DEFAULT '0',
-  `lessonId` int(10) unsigned NOT NULL DEFAULT '0',
-  `parentId` int(10) unsigned DEFAULT '0' COMMENT '材料父ID',
-  `subCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子题数量',
-  `finishedTimes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成次数',
-  `passedTimes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功次数',
-  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0',
-  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `question_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -2849,34 +2770,6 @@ CREATE TABLE `testpaper_v8` (
   PRIMARY KEY (`id`),
   KEY `courseSetId` (`courseSetId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `testpaper_v8_8_0_18_backup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `testpaper_v8_8_0_18_backup` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '试卷名称',
-  `description` text CHARACTER SET utf8 COMMENT '试卷说明',
-  `courseId` int(10) NOT NULL DEFAULT '0',
-  `lessonId` int(10) NOT NULL DEFAULT '0',
-  `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '限时(单位：秒)',
-  `pattern` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '试卷生成/显示模式',
-  `target` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `status` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT 'draft' COMMENT '试卷状态：draft,open,closed',
-  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '总分',
-  `passedCondition` text CHARACTER SET utf8,
-  `itemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
-  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
-  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改人',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-  `metas` text CHARACTER SET utf8 COMMENT '题型排序',
-  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
-  `type` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
-  `courseSetId` int(11) unsigned NOT NULL DEFAULT '0',
-  `migrateTestId` int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `theme_config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
