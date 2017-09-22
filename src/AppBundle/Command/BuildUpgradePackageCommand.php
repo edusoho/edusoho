@@ -2,12 +2,12 @@
 
 namespace AppBundle\Command;
 
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 class BuildUpgradePackageCommand extends BaseCommand
 {
@@ -45,7 +45,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $fromVersion = $input->getArgument('fromVersion');
         $version = $input->getArgument('version');
 
-        $diffFile = 'build/diff-'.$version;
+        $diffFile = 'build/diff-' . $version;
 
         $this->filesystem = new Filesystem();
         $this->output = $output;
@@ -63,7 +63,8 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $this->copyUpgradeScript($packageDirectory);
 
-        $this->cleanDevelopVendorFiles($packageDirectory);
+        $this->buildVendor($packageDirectory);
+
         $this->zipPackage($packageDirectory);
 
         $this->printChangeLog();
@@ -73,9 +74,9 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function generateFiles($diffFile, $packageDirectory)
     {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
 
-        $diffFile = $rootDir.$diffFile;
+        $diffFile = $rootDir . $diffFile;
 
         if (!$this->filesystem->exists($diffFile)) {
             $this->output->writeln("<error>差异文件 {$diffFile}, 不存在,无法制作升级包</error>");
@@ -191,14 +192,14 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function copyFileAndDir($opFile, $packageDirectory)
     {
-        $distPath = $packageDirectory.'/source/'.$opFile;
+        $distPath = $packageDirectory . '/source/' . $opFile;
 
         if (@mkdir(dirname($distPath), 0777, true) && !is_dir(dirname($distPath))) {
             $this->output->writeln("创建升级包目录{$distPath} 失败");
             exit(1);
         }
 
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
 
         if (!is_file("{$root}/{$opFile}")) {
             return;
@@ -209,7 +210,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function createDirectory()
     {
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
         $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
@@ -263,18 +264,18 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln("\n\n");
         $this->output->write('<info>拷贝升级脚本：</info>');
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
-        $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../')."/scripts/{$this->version}";
+        $path = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../') . '/scripts/upgrade-' . $this->version . '.php';
+        $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../') . "/scripts/{$this->version}";
 
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');
         } else {
-            $targetPath = realpath($dir).'/Upgrade.php';
-            $this->output->writeln($path." -> {$targetPath}");
+            $targetPath = realpath($dir) . '/Upgrade.php';
+            $this->output->writeln($path . " -> {$targetPath}");
             $this->filesystem->copy($path, $targetPath, true);
 
             if (is_dir($upgradesDir)) {
-                $this->filesystem->mirror($upgradesDir, realpath($dir).'/source/scripts/'.$this->version, null, array(
+                $this->filesystem->mirror($upgradesDir, realpath($dir) . '/source/scripts/' . $this->version, null, array(
                     'override' => true,
                     'copy_on_windows' => true,
                 ));
@@ -299,12 +300,12 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $zipPath = "{$buildDir}/{$filename}.zip";
 
-        $this->output->writeln('<comment>ZIP包大小：'.$this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
+        $this->output->writeln('<comment>ZIP包大小：' . $this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
     }
 
     private function printChangeLog()
     {
-        $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
+        $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir') . '/../CHANGELOG';
         if (!$this->filesystem->exists($changeLogPath)) {
             $this->output->writeln('<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>');
 
@@ -312,7 +313,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->output->writeln('<info>输出changelog,请确认changelog是否正确</info>');
-        $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', 'r');
+        $file = @fopen($this->getContainer()->getParameter('kernel.root_dir') . '/../CHANGELOG', 'r');
         $print = false;
         $askPrint = false;
         while (!feof($file)) {
@@ -340,10 +341,10 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function generateDiffFile()
     {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . '/../';
 
-        if (!$this->filesystem->exists($rootDir.'build')) {
-            $this->filesystem->mkdir($rootDir.'build');
+        if (!$this->filesystem->exists($rootDir . 'build')) {
+            $this->filesystem->mkdir($rootDir . 'build');
         }
 
         $gitTag = exec("git tag | grep v{$this->fromVersion}");
@@ -368,10 +369,10 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function diffFilePrompt($diffFile)
     {
         $askDiffFile = false;
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
         $this->output->writeln("<info>确认build/diff-{$this->version}差异文件</info>");
 
-        $file = @fopen($rootDir.$diffFile, 'r');
+        $file = @fopen($rootDir . $diffFile, 'r');
         while (!feof($file)) {
             $line = fgets($file);
             $opFile = trim(substr($line, 1));
@@ -391,7 +392,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $askAssetsLibs = false;
         $this->output->writeln('<info>确认web/assets/libs目录文件</info>');
-        $file = @fopen($rootDir.$diffFile, 'r');
+        $file = @fopen($rootDir . $diffFile, 'r');
         while (!feof($file)) {
             $line = fgets($file);
             $opFile = trim(substr($line, 1));
@@ -409,7 +410,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         fclose($file);
 
         $askSqlUpgrade = false;
-        $file = @fopen($rootDir.$diffFile, 'r');
+        $file = @fopen($rootDir . $diffFile, 'r');
         while (!feof($file)) {
             $line = fgets($file);
             $opFile = trim(substr($line, 1));
@@ -437,57 +438,20 @@ class BuildUpgradePackageCommand extends BaseCommand
         return $this->getHelper('question')->ask($this->input, $this->output, new ConfirmationQuestion($question));
     }
 
-    protected function ignoreVendorFiles()
-    {
-        return array(
-            'appveyor.yml',
-            'CONTRIBUTING.md',
-            'CONTRIBUTORS.md',
-            'phpunit',
-            'CHANGELOG.md',
-            'composer.json',
-            'phpunit.xml.dist',
-            'Gemfile',
-            'README.md',
-            'UPGRADE.md',
-            'VERSION',
-            'CHANGES',
-            'CHANGELOG',
-            'changelog.txt',
-            'README',
-            'README_zh_CN.md',
-        );
-    }
-
     /**
-     * remove test file and document
-     *
      * @param $packageDirectory
      */
-    protected function cleanDevelopVendorFiles($packageDirectory)
+    protected function buildVendor($packageDirectory)
     {
         $this->output->writeln("\n\n");
-        $this->output->write('<info>清理vendor：</info>'."\n");
-        $finder = new Finder();
-        $dir = $packageDirectory.'source/vendor/';
-        if (!is_dir($dir)) {
-            return false;
-        }
-        $finder->in($dir)->depth('<= 3')->ignoreUnreadableDirs(true)->ignoreDotFiles(false);
-        foreach ($finder as $folder) {
-            if (in_array($folder->getFilename(), array('tests', 'Tests', 'test', 'testing'))) {
-                $this->output->writeln('    - remove  Test folder : '.$folder->getRelativePath().'/'.$folder->getFilename());
-                $this->filesystem->remove($folder->getRealPath());
-            }
+        $this->output->write('<info>清理vendor：</info>' . "\n");
+        $dir = $packageDirectory . 'source/vendor/';
 
-            if (!$folder->isFile()) {
-                continue;
-            }
-
-            if (in_array($folder->getFilename(), $this->ignoreVendorFiles()) || strrpos($folder->getFilename(), '.') === 0 || strrpos($folder->getFilename(), '.md') !== false) {
-                $this->output->writeln('    - remove  File : '.$folder->getRelativePath().'/'.$folder->getFilename());
-                $this->filesystem->remove($folder->getRealPath());
-            }
-        }
+        $command = $this->getApplication()->find('build:vendor');
+        $input = new ArrayInput(array(
+            'command' => 'build:vendor',
+            'folder' => $dir
+        ));
+        $command->run($input, $this->output);
     }
 }
