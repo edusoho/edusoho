@@ -24,6 +24,7 @@ class WebExtension extends \Twig_Extension
      * @var ContainerInterface
      */
     protected $container;
+
     /**
      * @var Biz
      */

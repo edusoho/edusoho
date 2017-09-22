@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\ArrayToolkit;
 
 class UtilityController extends BaseController
 {
@@ -34,11 +35,27 @@ class UtilityController extends BaseController
     public function assistantsMatchAction(Request $request, $classroomId)
     {
         $likeString = $request->query->get('q');
-        $users = $this->getUserService()->searchUsers(array(
-            'nickname' => $likeString,
-            'excludeIds' => $this->_getExcludeIds($classroomId),
-        ), array('createdTime' => 'DESC'), 0, 10
+
+        $users = $this->getUserService()->searchUsers(array('nickname' => $likeString),
+            array(), 0, 10);
+        $userIds = empty($users) ? array(-1) : ArrayToolkit::column($users, 'id');
+
+        $excludeUserIds = $this->_getExcludeIds($classroomId);
+        $conditions = array(
+            'classroomId' => $classroomId,
+            'role' => 'student',
+            'userIds' => $userIds,
+            'excludeUserIds' => $excludeUserIds,
         );
+        $students = $this->getClassroomService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        $userIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $newUsers = array();
         foreach ($users as $user) {
@@ -54,11 +71,7 @@ class UtilityController extends BaseController
 
     private function _getExcludeIds($classroomId)
     {
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $assistantIds = $this->getClassroomService()->findAssistants($classroom['id']);
-        $excludeIds = $assistantIds;
-
-        return $excludeIds;
+        return $this->getClassroomService()->findAssistants($classroomId);
     }
 
     /**

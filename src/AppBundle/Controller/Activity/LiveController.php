@@ -224,7 +224,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->createJsonResponse(array(
             'url' => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null,
-            'error' => $result['error'],
+            'error' => isset($result['error']) ? $result['error'] : null,
         ));
     }
 

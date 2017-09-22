@@ -98,6 +98,8 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchApprovalsCount(array $conditions)
     {
+        $conditions = $this->_prepareApprovalConditions($conditions);
+
         return $this->getUserApprovalDao()->count($conditions);
     }
 
@@ -284,6 +286,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareApprovalConditions($conditions);
         $approvals = $this->getUserApprovalDao()->search($conditions, $orderBy, $start, $limit);
 
         return $approvals;
@@ -1094,6 +1097,14 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['isQQPublic'] = 1;
         }
 
+        $fields = array_filter($fields, function ($value) {
+            if ($value === 0) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         $userProfile = $this->getProfileDao()->update($id, $fields);
 
         $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
@@ -1741,7 +1752,7 @@ class UserServiceImpl extends BaseService implements UserService
             array(
                 'userId' => $user['id'],
                 'note' => $note,
-                //'status' => 'approved',
+                'status' => 'approved',
                 'operatorId' => $currentUser['id'],
             )
         );
@@ -1925,6 +1936,22 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserPayAgreements($id)
     {
         return $this->getUserPayAgreementDao()->delete($id);
+    }
+
+    protected function _prepareApprovalConditions($conditions)
+    {
+        if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'truename') {
+            $conditions['truename'] = trim($conditions['keyword']);
+        }
+
+        if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'idcard') {
+            $conditions['idcard'] = trim($conditions['keyword']);
+        }
+
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
+        return $conditions;
     }
 
     /**
