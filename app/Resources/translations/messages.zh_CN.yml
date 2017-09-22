@@ -6707,7 +6707,7 @@ admin.user_fields.Formart_verifcation.hide: 收起
 admin.user_fields.Require_personal_information: 登录后填写个人资料
 admin.user_fields.Require_personal_information.help_block: 开启后，学员登录后需填写个人资料
 admin.user_fields.other_setting: 其它设置
-admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
+admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
 admin.user_fields.verified_mobile_tip: 带短信校检
 

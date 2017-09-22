@@ -2,11 +2,10 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use AppBundle\Controller\BaseController;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
-class LianlianpayController extends BaseController
+class LianlianpayController extends PaymentController
 {
     public function payAction($trade)
     {
