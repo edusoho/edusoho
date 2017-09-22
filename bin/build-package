@@ -15,13 +15,21 @@ version=$2;
 upgradefile="scripts/upgrade-${version}.php";
 
 if [ ! -f "$upgradefile" ]; then
-    echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile}, 输入y创建${upgradefile}, 输入n忽略脚本 y|n";
+    echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile}, 如需处理${upgradefile} 输入n，继续输入y  y|n";
     read LINE; 
     if [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
         echo "升级包制作中止，请创建升级脚本 ${upgradefile}"; 
         exit 1
     fi
 fi
+
+ echo "是否执行 composer install --no-dev  y|n";
+ read LINE;
+ if [ "$LINE" == "y" ] || [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
+     echo "请执行 composer install --no-dev ";
+     exit 1
+ fi
+
 # pull the last version of repository
 echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
 git pull
