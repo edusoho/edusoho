@@ -55,7 +55,7 @@ class BuildCommand extends BaseCommand
         $output->writeln('<info>Start build.</info>');
         $this->initBuild($input, $output);
 
-        // $this->buildDatabase();
+        $this->buildDatabase();
 
         $this->buildApiDirectory();
         $this->buildAppDirectory();
@@ -392,7 +392,7 @@ class BuildCommand extends BaseCommand
         $finder->in($dir)->depth('<= 3')->ignoreUnreadableDirs(true)->ignoreDotFiles(false);
         foreach ($finder as $folder) {
             if (in_array($folder->getFilename(), array('tests', 'Tests', 'test', 'testing'))) {
-                $this->output->writeln('\\r    - remove  Test folder : '.$folder->getRelativePath().'/'.$folder->getFilename());
+                $this->output->writeln('    - remove  folder : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $this->filesystem->remove($folder->getRealPath());
             }
 
