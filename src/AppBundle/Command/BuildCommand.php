@@ -81,14 +81,14 @@ class BuildCommand extends BaseCommand
         $this->output = $output;
 
         $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir'));
-        $this->buildDirectory = $this->rootDirectory . '/build';
+        $this->buildDirectory = $this->rootDirectory.'/build';
         $this->filesystem = new Filesystem();
 
         if ($this->filesystem->exists($this->buildDirectory)) {
             $this->filesystem->remove($this->buildDirectory);
         }
 
-        $this->distDirectory = $this->buildDirectory . DIRECTORY_SEPARATOR . 'edusoho';
+        $this->distDirectory = $this->buildDirectory.DIRECTORY_SEPARATOR.'edusoho';
         $this->filesystem->mkdir($this->distDirectory);
     }
 
@@ -147,11 +147,11 @@ class BuildCommand extends BaseCommand
 
     private function package()
     {
-        $this->output->writeln('build installation package  use: tar zcf edusoho-' . System::VERSION . 'tar.gz edusoho/');
+        $this->output->writeln('build installation package  use: tar zcf edusoho-'.System::VERSION.'tar.gz edusoho/');
 
         chdir($this->buildDirectory);
 
-        $command = 'tar zcf edusoho-' . System::VERSION . '.tar.gz edusoho/';
+        $command = 'tar zcf edusoho-'.System::VERSION.'.tar.gz edusoho/';
         exec($command);
     }
 
@@ -277,7 +277,7 @@ class BuildCommand extends BaseCommand
         $command = $this->getApplication()->find('build:vendor');
         $input = new ArrayInput(array(
             'command' => 'build:vendor',
-            'folder' => "{$this->distDirectory}/vendor"
+            'folder' => "{$this->distDirectory}/vendor",
         ));
         $command->run($input, $this->output);
     }
@@ -347,7 +347,7 @@ class BuildCommand extends BaseCommand
     {
         $this->output->writeln('build default blocks .');
 
-        $themeDir = dirname(__DIR__ . '/../../../../web/themes/');
+        $themeDir = dirname(__DIR__.'/../../../../web/themes/');
         BlockToolkit::init("{$themeDir}/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/default/block.json", $this->getContainer());
         BlockToolkit::init("{$themeDir}/autumn/block.json", $this->getContainer());

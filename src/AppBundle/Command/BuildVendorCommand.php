@@ -7,9 +7,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Finder\Finder;
+
 class BuildVendorCommand extends BaseCommand
 {
-
     protected function configure()
     {
         $this
@@ -21,10 +21,9 @@ class BuildVendorCommand extends BaseCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $folder = $input->getArgument('folder');
-        var_dump( $folder );
-        $this->cleanDevelopVendorFiles($folder ,$output);
+        var_dump($folder);
+        $this->cleanDevelopVendorFiles($folder, $output);
     }
-
 
     protected function ignoreVendorFiles()
     {
@@ -45,29 +44,31 @@ class BuildVendorCommand extends BaseCommand
             'changelog.txt',
             'README',
             'README_zh_CN.md',
-            '.travis.yml'
+            '.travis.yml',
         );
     }
 
     /**
      * remove test file and document
+     *
      * @param $folder
      * @param $output
+     *
      * @return bool
      */
-    protected function cleanDevelopVendorFiles($folder,$output)
+    protected function cleanDevelopVendorFiles($folder, $output)
     {
         if (!file_exists($folder)) {
             return false;
         }
         $finder = new Finder();
         $filesystem = new Filesystem();
-        
+
         $finder->in($folder)->depth('<= 3')->ignoreUnreadableDirs(true)->ignoreDotFiles(false);
 
         foreach ($finder as $folder) {
             if (in_array($folder->getFilename(), array('tests', 'Tests', 'test', 'testing'))) {
-               $output->writeln('    - remove  folder : ' . $folder->getRelativePath() . '/' . $folder->getFilename());
+                $output->writeln('    - remove  folder : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $filesystem->remove($folder->getRealPath());
             }
 
@@ -76,10 +77,9 @@ class BuildVendorCommand extends BaseCommand
             }
 
             if (in_array($folder->getFilename(), $this->ignoreVendorFiles()) || strrpos($folder->getFilename(), '.') === 0 || strrpos($folder->getFilename(), '.md') !== false) {
-               $output->writeln('    - remove  File : ' . $folder->getRelativePath() . '/' . $folder->getFilename());
+                $output->writeln('    - remove  File : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $filesystem->remove($folder->getRealPath());
             }
         }
     }
-
 }
