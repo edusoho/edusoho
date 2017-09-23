@@ -1061,7 +1061,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about']);
+            $currentUser = $this->biz['user'];
+            $trusted = $currentUser->isAdmin();
+            $fields['about'] = $this->purifyHtml($fields['about'], $trusted);
         }
 
         if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {
@@ -1768,7 +1770,7 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime' => time(),
         ));
 
-        $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approved');
+        $lastestApproval = $this->getUserApprovalDao()->getLastestByUserIdAndStatus($user['id'], 'approving');
         $currentUser = $this->getCurrentUser();
         $this->getUserApprovalDao()->update(
             $lastestApproval['id'],

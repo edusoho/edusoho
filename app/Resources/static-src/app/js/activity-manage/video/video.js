@@ -133,14 +133,29 @@ export default class Video {
     const onSelectFile = file => {
       this.displayFinishCondition(file.source);
       FileChooser.closeUI();
-      if (file.length && file.length > 0) {
-        let minute = parseInt(file.length / 60);
-        let second = Math.round(file.length % 60);
-        $("#minute").val(minute);
-        $("#second").val(second);
-        $("#length").val(minute * 60 + second);
-      }
+
+      let placeMediaAttr = (file) => {
+        if (file.length !== 0 && file.length !== undefined) {
+          let $minute = $('#minute');
+          let $second = $('#second');
+          let $length = $('#length');
+          
+          let length = parseInt(file.length);
+          let minute = parseInt(length / 60);
+          let second = length % 60;
+          $minute.val(minute);
+          $second.val(second);
+          $length.val(length);
+          file.minute = minute;
+          file.second = second;
+        }
+        $('[name="media"]').val(JSON.stringify(file));
+
+      };
+      placeMediaAttr(file);
+
       $('[name="ext[mediaSource]"]').val(file.source);
+      $("#step2-form").valid();
       if (file.source == 'self') {
         $("#ext_mediaId").val(file.id);
         $("#ext_mediaUri").val('');

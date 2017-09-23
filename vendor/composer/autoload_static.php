@@ -4,23 +4,25 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
+class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
 {
     public static $files = array (
-        '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
+        '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
-        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
-        'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
+        '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
+        'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
+        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
@@ -50,6 +52,7 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
             'Symfony\\Polyfill\\Php54\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Security\\Acl\\' => 31,
+            'Symfony\\Component\\Lock\\' => 23,
             'Symfony\\Component\\' => 18,
             'Symfony\\Bundle\\SwiftmailerBundle\\' => 33,
             'Symfony\\Bundle\\MonologBundle\\' => 29,
@@ -65,6 +68,10 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
             'Sensio\\Bundle\\GeneratorBundle\\' => 30,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
+        ),
+        'Q' => 
+        array (
+            'QiQiuYun\\SDK\\' => 13,
         ),
         'P' => 
         array (
@@ -160,6 +167,10 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         array (
             0 => __DIR__ . '/..' . '/symfony/security-acl',
         ),
+        'Symfony\\Component\\Lock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/symfony-lock-lite',
+        ),
         'Symfony\\Component\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component',
@@ -219,6 +230,10 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         'Sensio\\Bundle\\DistributionBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/sensio/distribution-bundle',
+        ),
+        'QiQiuYun\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src',
         ),
         'Psr\\Log\\' => 
         array (
@@ -528,9 +543,12 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         'Locale' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
         'NumberFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
+        'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
+        'PHPUnit\\Framework\\Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Test.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
         'PHPUnit\\Framework\\TestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestListener.php',
+        'PHPUnit\\Framework\\TestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestSuite.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
         'PHPUnit_Extensions_PhptTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
@@ -984,12 +1002,12 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$classMap;
 
         }, null, ClassLoader::class);
     }

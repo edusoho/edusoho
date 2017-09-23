@@ -21,4 +21,6 @@ interface ThemeService
     public function resetConfig();
 
     public function resetCurrentConfig();
+
+    public function changeTheme($theme);
 }

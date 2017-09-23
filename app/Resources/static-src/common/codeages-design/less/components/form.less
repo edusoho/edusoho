@@ -17,7 +17,7 @@
 // }
 
 .cd-form-inline {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .cd-form-group {
@@ -25,11 +25,19 @@
   line-height: 1;
   &.has-error {
     margin-bottom: 32px;
-  }
-  &.has-error .form-control {
-    .cd-box-shadow-general(inset 0 -1px 0 0 @brand-danger);
-    &:focus {
-      .cd-box-shadow-general(inset 0 -2px 0 0 @brand-danger);
+    .form-control {
+      .cd-box-shadow-general(inset 0 -1px 0 0 @brand-danger);
+      &:focus {
+        .cd-box-shadow-general(inset 0 -2px 0 0 @brand-danger);
+      }
+    }
+    textarea.form-control {
+      .cd-box-shadow-general(none);
+      border-color: @brand-danger;
+      &:focus {
+        .cd-box-shadow-general(none);
+        border-color: @brand-danger;
+      }
     }
   }
   .form-error-message {
@@ -64,6 +72,9 @@
       }
     }
   }
+  .cke {
+    margin-top: 8px;
+  }
 }
 
 .cd-form-group {
@@ -75,6 +86,9 @@
     line-height: 20px;
     height: 30px;
     color: @cd-gray-dark;
+    // fix: ios没有下投影的问题
+    -webkit-appearance: none;
+    appearance: none;
     &:focus {
       .cd-box-shadow-general(inset 0 -2px 0 0 rgba(0,0,0,0.32));
     }
@@ -105,12 +119,29 @@
       .cd-box-shadow-general(inset 0 -1px 0 0 rgba(0,0,0,0.08));
     }
   }
+  textarea.form-control {
+    padding: 8px;
+    margin-top: 8px;
+    height: auto;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 4px;
+    .cd-box-shadow-general(none);
+    &:focus {
+      padding: 7px;
+      border: 2px solid rgba(0,0,0,0.32);
+      .cd-box-shadow-general(none);
+    }
+  }
+}
+
+.cd-form-group-inline {
+  display: inline-block;
 }
 
 .cd-form-group-button {
   position: relative;
-  .cd-form-control {
-    padding-right: 20px;
+  .form-control {
+    padding-right: 16px !important;
   }
   button {
     position: absolute;
@@ -121,6 +152,26 @@
     padding: 0;
     > i {
       font-size: 14px;
+    }
+  }
+}
+
+.cd-form-group-action {
+  position: relative;
+  padding-right: 160px;
+  .captcha-img, // 需删除
+  .action-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 152px;
+  }
+  .static-text {
+    margin-top: 8px;
+    line-height: 1;
+    color: @cd-gray-dark;
+    i {
+      font-size: 12px;
     }
   }
 }
@@ -167,5 +218,21 @@
     > input {
       display: none;
     }
+  }
+}
+
+.cd-select {
+  position: relative;
+  .form-control {
+    -webkit-appearance: none;
+    border: none;
+  }
+  &:after {
+    position: absolute;
+    top: 8px;
+    right: -4px;
+    content: '\e979';
+    font-family: 'codeages-icon';
+    font-size: 14px;
   }
 }

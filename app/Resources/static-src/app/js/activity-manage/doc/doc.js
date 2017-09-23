@@ -29,7 +29,7 @@ export default class Document {
       },
       messages: {
         mediaId: {
-          required: Translator.trans('activity.audio_manage.media_error_hint')
+          required: Translator.trans('activity.document_manage.media_error_hint')
         }
       }
     });
@@ -67,6 +67,9 @@ export default class Document {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
+      $("#step2-form").valid();
+     
+      $('[name="media"]').val(JSON.stringify(file));
     });
 
     $('#condition-select').on('change', event => {

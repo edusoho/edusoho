@@ -2,6 +2,8 @@
 
 {% do script(['app/js/v2/demo/index.js']) %}
 
+{% set side_nav = '' %}
+
 {% block page_title %}
   DEMO
 {% endblock %}
@@ -60,7 +62,7 @@
         <div class="card-body">
           <p>可提现金额</p>
           <p><span  class="card-money">1799.02</span>元 冻结金额 13.00 元 <i class="cd-icon cd-icon-help cd-text-xs" data-toggle="popover" data-placement="top" data-content="冻结金额的说明" data-trigger="hover"></i></p>
-          <p>未设置收款账号前无法提现 <a href="">设置收款账号</a></p>
+          <p>未设置收款帐号前无法提现 <a href="">设置收款帐号</a></p>
         </div>
         <div class="card-action">
           <a href="" class="btn cd-btn btn-card-warning">立即提现</a>
@@ -216,7 +218,7 @@
       </div>
     </div>
   </form>
-  <div class="mb24">
+  <div class="cd-mb24">
     <button class="btn cd-btn cd-btn-primary">主色调按钮</button>
     <button class="btn cd-btn cd-btn-primary cd-btn-sm">主色小按钮</button>
     <button class="btn cd-btn cd-btn-primary cd-btn-lg">主色大按钮</button>
@@ -225,5 +227,25 @@
     <button class="btn cd-btn cd-btn-default">default按钮</button>
     <button class="btn cd-btn cd-btn-flat-default">flat-default按钮</button>
     <button class="btn cd-btn cd-btn-danger" data-toggle="notify">notify</button>
+  </div>
+  <div class="cd-mb24">
+    <div class="cd-security cd-security-warning">
+      <div class="security-icon">
+        <i class="cd-icon cd-icon-warning"></i>
+      </div>
+      <div class="security-title">{{ 'user.settings.security.level'|trans }}</div>
+      <div class="security-progress done"></div>
+      <div class="security-progress done"></div>
+      <div class="security-progress"></div>
+      <div class="security-level">中</div>
+    </div>
+  </div>
+
+  <div class="cd-loading cd-mb24">
+    <div class="loading-content">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 {% endblock %}

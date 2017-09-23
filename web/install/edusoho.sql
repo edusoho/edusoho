@@ -387,7 +387,7 @@ DROP TABLE IF EXISTS `cash_flow`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cash_flow` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
+  `userId` int(10) unsigned NOT NULL COMMENT '帐号ID，即用户ID',
   `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
   `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
   `amount` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '金额',

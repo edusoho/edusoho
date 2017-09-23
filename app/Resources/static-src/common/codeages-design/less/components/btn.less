@@ -3,19 +3,24 @@
 .btn.cd-btn {
   font-size: 14px;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 9px 12px;
   line-height: 1;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   background: none;
   &.cd-btn-sm {
     font-size: 12px;
-    padding: 6px 10px;
+    padding: 7px 10px;
     border-radius: 4px;
   }
   &.cd-btn-lg {
     font-size: 14px;
-    padding: 11px 18px;
+    padding: 12px 18px;
     border-radius: 4px;
+  }
+  &.disabled, 
+  &[disabled] {
+    opacity: 0.32;
+    pointer-events: none;
   }
 }
 
@@ -26,8 +31,8 @@
   &.cd-btn-ghost-info {
     .cd-btn-ghost(@brand-info);
   }
-  &.cd-btn-ghost-primary {
-    .cd-btn-ghost(@brand-primary);
+  &.cd-btn-ghost-danger {
+    .cd-btn-ghost(@brand-danger);
   }
   &.cd-btn-ghost-success {
     .cd-btn-ghost(@brand-success);
@@ -44,8 +49,8 @@
   &.cd-btn-flat-info {
     .cd-btn-flat(@brand-info);
   }
-  &.cd-btn-flat-primary {
-    .cd-btn-flat(@brand-primary);
+  &.cd-btn-flat-danger {
+    .cd-btn-flat(@brand-danger);
   }
   &.cd-btn-flat-success {
     .cd-btn-flat(@brand-success);
@@ -69,14 +74,14 @@
 }
 
 .btn.cd-btn {
-  &.cd-btn-danger {
-    .cd-btn-raised(@brand-danger);
+  &.cd-btn-primary {
+    .cd-btn-raised(@brand-primary);
   }
   &.cd-btn-info {
     .cd-btn-raised(@brand-info);
   }
-  &.cd-btn-primary {
-    .cd-btn-raised(@brand-primary);
+  &.cd-btn-danger {
+    .cd-btn-raised(@brand-danger);
   }
   &.cd-btn-success {
     .cd-btn-raised(@brand-success);
@@ -100,4 +105,3 @@
     }
   }
 }
-

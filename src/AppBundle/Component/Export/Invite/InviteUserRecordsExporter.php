@@ -32,23 +32,18 @@ class InviteUserRecordsExporter extends Exporter
 
     public function getCount()
     {
-        return $count = $this->getUserService()->countUsers($this->conditions);
+        return $this->getInviteRecordService()->countInviteUser($this->conditions);
     }
 
     public function getContent($start, $limit)
     {
-        $conditions = $this->conditions;
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('id' => 'ASC'),
+        $records = $this->getInviteRecordService()->searchRecordGroupByInviteUserId(
+            $this->conditions,
             $start,
             $limit
         );
 
-        $userRecordData = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
-        $userRecordData = $this->getUserRecordContent($userRecordData);
-
-        return $userRecordData;
+        return $this->getUserRecordContent($records);
     }
 
     protected function getUserRecordContent($records)
@@ -56,12 +51,12 @@ class InviteUserRecordsExporter extends Exporter
         $data = array();
         foreach ($records as $userRecordData) {
             $content = array();
-            $content[] = $userRecordData['nickname'];
-            $content[] = $userRecordData['count'];
-            $content[] = $userRecordData['payingUserCount'];
-            $content[] = $userRecordData['payingUserTotalPrice'];
-            $content[] = $userRecordData['coinAmountPrice'];
-            $content[] = $userRecordData['amountPrice'];
+            $content[] = $userRecordData['invitedUserNickname'];
+            $content[] = $userRecordData['countInvitedUserId'];
+            $content[] = $userRecordData['premiumUserCounts'];
+            $content[] = $userRecordData['amount'];
+            $content[] = $userRecordData['coinAmount'];
+            $content[] = $userRecordData['cashAmount'];
             $data[] = $content;
         }
 
@@ -70,7 +65,12 @@ class InviteUserRecordsExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return ArrayToolkit::parts($conditions, array('nickname'));
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['inviteUserId'] = $user['id'];
+        }
+
+        return ArrayToolkit::parts($conditions, array('inviteUserId'));
     }
 
     protected function getUserService()

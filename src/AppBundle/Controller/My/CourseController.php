@@ -178,6 +178,25 @@ class CourseController extends CourseBaseController
         );
     }
 
+    public function tasksAction($course, $member = array())
+    {
+        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
+
+        $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
+
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('offsetTaskId' => $offsetTaskId));
+
+        return $this->render(
+            'course/tabs/tasks.html.twig',
+            array(
+                'course' => $course,
+                'courseItems' => $courseItems,
+                'nextOffsetSeq' => $nextOffsetSeq,
+                'member' => $member,
+            )
+        );
+    }
+
     /**
      * 当用户是班级学员却不在课程学员中时，将学员添加到课程学员中.
      *

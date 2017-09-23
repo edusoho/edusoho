@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ 'message.send'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/jquery-validation.js', 'libs/autocomplete.js', 'app/js/message/create/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/message/create/index.js']) %}
 
 {% block content %}
   <div class="row row-8">

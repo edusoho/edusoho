@@ -9,7 +9,8 @@ use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Visitor\SortCourseItemVisitor;
+use Biz\Task\Visitor\CourseItemPagingVisitor;
+use Biz\Task\Visitor\CourseItemSortingVisitor;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
@@ -494,6 +495,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException('Deleting published Course is not allowed');
         }
+
         $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             throw $this->createAccessDeniedException('该教学计划被班级引用，请先移除班级计划');
@@ -619,6 +621,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+    }
+
+    public function findCourseItemsByPaging($courseId, $paging = array())
+    {
+        $course = $this->getCourse($courseId);
+        if (empty($course)) {
+            throw $this->createNotFoundException("Course#{$courseId} Not Found");
+        }
+
+        return $this->createCourseStrategy($course)->accept(new CourseItemPagingVisitor($this->biz, $courseId, $paging));
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -804,7 +816,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->tryManageCourse($courseId);
         try {
             $this->beginTransaction();
-            $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
+            $this->createCourseStrategy($course)->accept(new CourseItemSortingVisitor($this->biz, $courseId, $ids));
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
