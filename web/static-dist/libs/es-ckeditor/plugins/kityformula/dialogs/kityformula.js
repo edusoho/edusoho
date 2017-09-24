@@ -58,15 +58,16 @@
             $("#editorContainer_"+editor.name).remove();
         }
         
-        var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="'+ iframeSrcPath("../kityformula/index.html") +'" width="780" height="300"></iframe>';
+        var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="'+ iframeSrcPath("../kityformula/index.html") +'" style="width: 100% !important; height: 300px !important"></iframe>';
         
         return {
             title: '公式编辑器',
-            minWidth: 300,
-            minHeight: 80,
+            minWidth: 780,
+            minHeight: 300,
+            resizable: CKEDITOR.DIALOG_RESIZE_NONE,
             buttons: [
-            CKEDITOR.dialog.okButton,
-            CKEDITOR.dialog.cancelButton],
+            CKEDITOR.dialog.cancelButton,
+            CKEDITOR.dialog.okButton],
             contents: [{
                 id: 'kityformula',
                 label: '公式编辑器',
@@ -130,8 +131,7 @@
             },
             onCancel: function () {
                 // alert('onCancel');
-            },
-            resizable: CKEDITOR.DIALOG_RESIZE_HEIGHT
+            }
         };
     }
  

@@ -60,11 +60,18 @@ class EduCloudController extends BaseController
         $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
         $request->getSession()->set($smsType, array(
-                'to' => $to,
-                'sms_code' => $smsCode,
-                'sms_last_time' => $currentTime,
-            ));
-        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($currentUser['email']);
+            'to' => $to,
+            'sms_code' => $smsCode,
+            'sms_last_time' => $currentTime,
+        ));
+
+        if ($currentUser->isLogin()) {
+            $key = $currentUser['email'];
+        } else {
+            $key = $to.$request->getClientIp();
+        }
+
+        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($key);
 
         return $this->createJsonResponse(array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance));
     }
@@ -245,7 +252,7 @@ class EduCloudController extends BaseController
         return $description;
     }
 
-    protected function checkErrorMsg($user, $currentTime, $smsType, $request)
+    protected function checkErrorMsg($user, $currentTime, $smsType, Request $request)
     {
         $errorMsg = '';
         $to = $request->get('to');
@@ -333,7 +340,7 @@ class EduCloudController extends BaseController
 
                 return  $errorMsg;
 
-                return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
+                //                return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
             }
 
             if ($user['verifiedMobile'] != $request->request->get('to')) {
@@ -349,8 +356,16 @@ class EduCloudController extends BaseController
             return  $errorMsg;
         }
 
+        $currentUser = $this->getCurrentUser();
+
+        if ($currentUser->isLogin()) {
+            $key = $currentUser['email'];
+        } else {
+            $key = $to.$request->getClientIp();
+        }
+
         // send 6 times in an hour
-        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($user['email']);
+        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($key);
 
         if ($maxAllowance == 0) {
             $errorMsg = '暂停发送验证码短信，请稍后再试';

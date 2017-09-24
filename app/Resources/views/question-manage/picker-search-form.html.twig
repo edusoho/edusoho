@@ -1,8 +1,7 @@
 <form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {id:courseSet.id,targetType:'testpaper',replace:replace}) }}" novalidate>
   <div class="form-group">
     <select class="form-control width-150" name="courseId" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSet.id})}}">
-      <option value="0" {% if not app.request.get('courseId',0) %}selected{% endif %}>{{'course.question_manage.filter.course
-      course.testpaper_manage.create.range.course'|trans}}</option>
+      <option value="0" {% if not app.request.get('courseId',0) %}selected{% endif %}>{{'course.testpaper_manage.create.range.course'|trans}}</option>
       {% for course in courses if course %}
         <option value="{{ course.id }}" {% if app.request.get('courseId','') == course.id %}selected{% endif %}>{{ course.title }}</option>
       {% endfor %}
