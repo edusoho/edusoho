@@ -7,8 +7,8 @@
   clearfix">
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.login_users'|trans }}</div>
-    <span class="number">{{ loginCount| default('0') }}</span>
-    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: {{ onlineCount }}</p>
+    <span class="number"><a href="{{ path('admin_online', {type:'logined'}) }}">{{ loginCount| default('0') }}</a></span>
+    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: <a href="{{ path('admin_online') }}">{{ onlineCount }}</a></p>
   </li>
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.new_registration'|trans }}</div>

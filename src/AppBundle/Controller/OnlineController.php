@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OnlineController extends BaseController
 {
@@ -21,11 +22,19 @@ class OnlineController extends BaseController
             );
             $this->getOnlineService()->sample($online);
         }
+        return new Response('true');
     }
 
     public function indexAction(Request $request)
     {
-        $conditions = array();
+        $conditions = array(
+            'lt_access_time' => 15 * 60
+        );
+
+        $type = $request->query->get('type', 'online');
+        if($type == 'logined') {
+            $conditions['gt_user_id'] = 0;
+        }
 
         $paginator = new Paginator(
             $this->get('request'),

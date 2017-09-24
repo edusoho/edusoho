@@ -1,11 +1,11 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% set menu = 'admin_jobs' %}
+{% set menu = 'admin_user_manage' %}
 
-{% block main %}
+{% block content %}
 
     <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-
+        <input type="hidden" name="type" value="{{ app.request.query.get('type') }}">
         <div class="form-group">
             <input class="form-control" type="text" placeholder="{{'用户名'|trans}}" name="name" value="{{ app.request.get('user') }}">
         </div>
@@ -23,12 +23,14 @@
             <tr>
                 <th>{{'用户名'|trans}}</th>
                 <th>{{'来源'|trans}}</th>
+                <th>{{'最后访问url'|trans}}</th>
+                <th>{{'客户端ip'|trans}}</th>
                 <th>{{'最后访问时间'|trans}}</th>
             </tr>
             </thead>
             <tbody>
             {% for online in onlines %}
-                <tr id="job-table-tr-{{ job.id }}">
+                <tr id="online-table-tr-{{ online.id }}">
                     <td>
                         {{ users[online.user_id]['nickname']|default('--') }}
                     </td>
@@ -36,7 +38,13 @@
                         {{ online.source }}
                     </td>
                     <td>
-                        {{ online.access_time }}
+                        {{ online.access_url }}
+                    </td>
+                    <td>
+                        {{ online.ip }}
+                    </td>
+                    <td>
+                        {{ online.access_time|date('Y-n-d H:i:s') }}
                     </td>
                 </tr>
             {% endfor %}

@@ -15,7 +15,7 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
             return $this->getRedis()->zCount('es3_sess:online', $retentionTime, $currentTime);
         }
 
-        return $this->getSessionDao()->countOnline($retentionTime);
+        return $this->getOnlineService()->countOnline($retentionTime);
     }
 
     public function countLogin($retentionTime)
@@ -26,12 +26,17 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
             return $this->getRedis()->zCount('es3_sess:logined', $retentionTime, $currentTime);
         }
 
-        return $this->getSessionDao()->countLogin($retentionTime);
+        return $this->getOnlineService()->countLogined($retentionTime);
     }
 
     protected function getSessionDao()
     {
         return $this->createDao('System:SessionDao');
+    }
+    
+    protected function getOnlineService()
+    {
+        return $this->biz->service('Session:OnlineService');
     }
 
     protected function getSettingService()
