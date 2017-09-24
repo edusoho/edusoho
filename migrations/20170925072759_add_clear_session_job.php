@@ -19,6 +19,5 @@ class AddClearSessionJob extends Migration
      */
     public function down()
     {
-
     }
 }
