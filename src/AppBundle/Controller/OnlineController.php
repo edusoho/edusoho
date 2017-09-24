@@ -17,7 +17,7 @@ class OnlineController extends BaseController
                 'ip' => $request->getClientIp(),
                 'user_agent' => $request->headers->get('User-Agent', ''),
                 'access_url' => $request->headers->get('Referer', ''),
-                'source' => 'web'
+                'source' => 'web',
             );
             $this->getOnlineService()->sample($online);
         }
@@ -44,7 +44,7 @@ class OnlineController extends BaseController
         return $this->render('admin/online/index.html.twig', array(
             'onlines' => $onlines,
             'paginator' => $paginator,
-            'users' => $users
+            'users' => $users,
         ));
     }
 
