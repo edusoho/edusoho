@@ -33,24 +33,48 @@ class OnlineController extends BaseController
             'gt_access_time' => time() - 15 * 60,
         );
 
+        if ($request->query->get('name', '')) {
+            $user = $this->getUserService()->getUserByNickname($request->query->get('name', ''));
+            if (empty($user)) {
+                return $this->render('admin/online/index.html.twig', array(
+                    'onlines' => array(),
+                    'paginator' => new Paginator(
+                        $this->get('request'),
+                        0,
+                        20
+                    ),
+                    'users' => array(),
+                ));
+            } else {
+                $conditions['user_id'] = $user['id'];
+            }
+        }
+
         $type = $request->query->get('type', 'online');
         if ($type == 'logined') {
             $conditions['gt_user_id'] = 0;
         }
 
+        $count = $this->getOnlineService()->countOnlines($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOnlineService()->countOnlines($conditions),
+            $count,
             20
         );
 
-        $onlines = $this->getOnlineService()->searchOnlines(
-            $conditions, array(), $paginator->getOffsetCount(), $paginator->getPerPageCount()
-        );
+        $onlines = array();
+        if ($count>0) {
+            $onlines = $this->getOnlineService()->searchOnlines(
+                $conditions, array(), $paginator->getOffsetCount(), $paginator->getPerPageCount()
+            );
+        }
 
-        $userIds = ArrayToolkit::column($onlines, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $users = ArrayToolkit::index($users, 'id');
+        $users = array();
+        if (!empty($onlines)) {
+            $userIds = ArrayToolkit::column($onlines, 'user_id');
+            $users = $this->getUserService()->findUsersByIds($userIds);
+            $users = ArrayToolkit::index($users, 'id');
+        }
 
         return $this->render('admin/online/index.html.twig', array(
             'onlines' => $onlines,
@@ -62,5 +86,10 @@ class OnlineController extends BaseController
     protected function getOnlineService()
     {
         return $this->getBiz()->service('Session:OnlineService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 }
