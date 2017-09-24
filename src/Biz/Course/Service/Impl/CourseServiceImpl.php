@@ -1830,6 +1830,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
+    public function tryFreeJoin($courseId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if ($course['isFree'] == 1 || $course['originPrice'] == 0) {
+           $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
+        }
+
+        $this->dispatch('course.try_free_join', $course);
+    }
+
     protected function hasAdminRole()
     {
         $user = $this->getCurrentUser();

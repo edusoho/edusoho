@@ -234,4 +234,6 @@ interface CourseService
      * @return mixed
      */
     public function recountLearningData($courseId, $userId);
+
+    public function tryFreeJoin($courseId);
 }

@@ -686,7 +686,7 @@ course.is_student_tips: 'You erolled this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
-course.approve_tips: 'You need to verify your id before buying this course.'
+buy.approve_tips: 'You need to verify your id before buying.'
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
@@ -6431,3 +6431,5 @@ order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
+site.join_to_learn: Join to learn
+site.fill_user_info_tip: Fill user info

@@ -2845,7 +2845,7 @@ course_member_deadline_reach:
 
 course_buy:
     path: /course/{id}/buy
-    defaults: { _controller: AppBundle:Course/CourseOrder:buy }
+    defaults: { _controller: AppBundle:Course/CourseBuy:buy }
 
 course_free_join:
     path: /course/{courseId}/free_join

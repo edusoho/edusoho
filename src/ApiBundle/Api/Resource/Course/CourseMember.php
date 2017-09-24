@@ -79,46 +79,9 @@ class CourseMember extends AbstractResource
 
     private function tryJoin($course)
     {
-        $member = null;
+        $this->getCourseService()->tryFreeJoin($course['id']);
 
-        if ($course['buyable']) {
-            $member = $this->freeJoin($course);
-        }
-
-        if ($member) {
-            return $member;
-        }
-
-        if ($course['vipLevelId'] > 0) {
-            $member = $this->vipJoin($course);
-        }
-
-        return $member;
-    }
-
-    private function freeJoin($course)
-    {
-        if ($course['isFree'] == 1 || $course['price'] == 0) {
-            $member = $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
-
-            return $member;
-        } else {
-            return null;
-        }
-    }
-
-    private function vipJoin($course)
-    {
-        if (!$this->isPluginInstalled('vip')) {
-            return null;
-        }
-
-        list($success, $message) = $this->service('VipPlugin:Vip:VipFacadeService')->joinCourse($course['id']);
-        if ($success) {
-            return $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
-        } else {
-            return null;
-        }
+        return $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
     }
 
     /**
@@ -127,22 +90,6 @@ class CourseMember extends AbstractResource
     private function getMemberService()
     {
         return $this->service('Course:MemberService');
-    }
-
-    /**
-     * @return OrderService
-     */
-    private function getOrderService()
-    {
-        return $this->service('Order:OrderService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    private function getCourseSetService()
-    {
-        return $this->service('Course:CourseSetService');
     }
 
     /**
