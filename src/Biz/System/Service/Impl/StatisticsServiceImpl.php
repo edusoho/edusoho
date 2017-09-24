@@ -10,22 +10,11 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
 {
     public function countOnline($retentionTime)
     {
-        $currentTime = time();
-        if ($this->getRedis()) {
-            return $this->getRedis()->zCount('es3_sess:online', $retentionTime, $currentTime);
-        }
-
         return $this->getOnlineService()->countOnline($retentionTime);
     }
 
     public function countLogin($retentionTime)
     {
-        $currentTime = time();
-
-        if ($this->getRedis()) {
-            return $this->getRedis()->zCount('es3_sess:logined', $retentionTime, $currentTime);
-        }
-
         return $this->getOnlineService()->countLogined($retentionTime);
     }
 
