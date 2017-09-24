@@ -19,21 +19,22 @@ class OnlineController extends BaseController
                 'user_agent' => $request->headers->get('User-Agent', ''),
                 'access_url' => $request->headers->get('Referer', ''),
                 'source' => 'web',
-                'lifetime' => 86400
+                'lifetime' => 86400,
             );
             $this->getOnlineService()->sample($online);
         }
+
         return new Response('true');
     }
 
     public function indexAction(Request $request)
     {
         $conditions = array(
-            'gt_access_time' => time() - 15 * 60
+            'gt_access_time' => time() - 15 * 60,
         );
 
         $type = $request->query->get('type', 'online');
-        if($type == 'logined') {
+        if ($type == 'logined') {
             $conditions['gt_user_id'] = 0;
         }
 

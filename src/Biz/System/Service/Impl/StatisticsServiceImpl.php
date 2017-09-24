@@ -22,7 +22,7 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
     {
         return $this->createDao('System:SessionDao');
     }
-    
+
     protected function getOnlineService()
     {
         return $this->biz->service('Session:OnlineService');
