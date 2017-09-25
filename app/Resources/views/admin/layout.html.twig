@@ -160,6 +160,18 @@
         </a>
       </div>
     {% endif %}
+
+    {% block faqSDK %}
+      <script src="http://localhost:10000/sdk-v1.js"></script>
+      <script>
+        new FaqSDK({
+          id: 'faq-sdk',
+          apiUrl: 'http://es.dev/faq/api/hotlist',
+          color: '#43bc60',
+          moreUrl: 'http://demo.edusoho.com',
+        });
+      </script>
+    {% endblock %}
   </body>
 {% endblock %}
 </html>
