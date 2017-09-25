@@ -190,4 +190,6 @@ interface ClassroomService
     public function countCourseTasksByClassroomId($classroomId);
 
     public function findUserPaidCoursesInClassroom($userId, $classroomId);
+
+    public function findMembersByMemberIds($ids);
 }

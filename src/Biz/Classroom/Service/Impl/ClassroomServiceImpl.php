@@ -777,7 +777,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
 
-        $this->createOperateRecord($member, 'exit', array_merge($member, $info));
+        $this->createOperateRecord($member, 'exit', array('reasonInfo' => $info));
 
         $user = $this->getUserService()->getUser($member['userId']);
         $message = array(
@@ -910,7 +910,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $this->createOperateRecord($member, 'join', $order);
+        $this->createOperateRecord($member, 'join', array('order' => $order));
 
         $params = array(
             'orderId' => $fields['orderId'],
@@ -1265,6 +1265,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
+        $data = array('reasonInfo' => array('reason' => 'classroom_member_join_assistant'));
+        $this->createOperateRecord($member, 'join', $data);
 
         $this->dispatchEvent(
             'classroom.become_assistant',
@@ -1921,19 +1923,29 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $currentUser = $this->getCurrentUser();
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
-
+        
+        $classroom = $this->getClassroom($member['classroomId']);
+        $data['title'] = $classroom['title'];
+        $data['member'] = $member;
         $record = array(
-            'member_id' => $member['userId'],
+            'user_id' => $member['userId'],
+            'member_id' => $member['id'],
             'target_id' => $member['classroomId'],
             'target_type' => 'classroom',
             'operate_type' => $operateType,
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
-            'reason' => empty($data['reason']) ? '' : $data['reason'],
+            'reason' => empty($data['reasonInfo']) ? '' : $data['reasonInfo']['reason'],
+            'order_id' => $member['orderId']
         );
 
         return $this->getMemberOperationService()->createRecord($record);
+    }
+
+    public function findMembersByMemberIds($ids)
+    {
+        $this->getClassroomMemberDao()->findMembersByMemberIds($ids);
     }
 
     /**
