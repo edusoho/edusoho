@@ -178,7 +178,7 @@
           </a>
         {% endif %}
         {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) and not member.locked %}
-          {% if 'headTeacher' not in member.role %}
+          {% if 'headTeacher' not in member.role and 'assistant' not in member.role %}
             <a type="button"
               {% if  'student' in member.role and member.orderId > 0 %}
                 class="btn btn-default setting hidden-xs hidden-sm"

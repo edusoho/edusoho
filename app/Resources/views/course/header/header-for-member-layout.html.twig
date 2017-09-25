@@ -12,7 +12,7 @@
 {% block course_member_exit %}
 	{% if member and not member.locked and member.role != 'teacher' and course.parentId == 0 %}
 		<li>
-		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('product_member_exit', {targetId:course.id, targetType:"course"}) }}" ><i class="es-icon es-icon-exit"></i>
+		  <a class="btn btn-default btn-xs js-exit-btn" data-url="{{ path('course_exit', {id:course.id}) }}" ><i class="es-icon es-icon-exit"></i>
 		  </a>
 		</li>
 	{% endif %}

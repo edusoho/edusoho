@@ -2054,6 +2054,9 @@ classroom.manage_btn: Config
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Class title was not unique, please change it.'
+#TODO trans
+classroom.set_assistant_tip: 仅能添加本班级学员
+
 form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
@@ -3410,6 +3413,8 @@ contetn.article_list.category: Category
 contetn.article_list.contentCategory: "<span class=\"color-gray\">published at %publishedTime%</span>, belong to <a href=\"#\" class=\"color-gray\">%contentCategoryname%</a> category</span>\n"
 course.block_grid.view_course_btn: View
 course.block_grid.countinue_learn_btn: Continue
+course.block_grid.from_classroom: 'From classroom '
+
 course.block_grid.DRAFT_STATUS: Draft
 course.block_grid.CLOSE_STATUS: Closed
 course.block_grid.SERIALIZE_SERIALIZE_MODE: Serial

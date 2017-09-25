@@ -43,11 +43,11 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
         $result = false;
         if ($members) {
+            $this->courseAnnouncementPush($targetId);
             $message = array('title' => $targetObject['title'],
                 'url' => $targetObjectShowUrl,
                 'type' => 'course', );
             foreach ($members as $member) {
-                //                $this->courseAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }
@@ -55,13 +55,15 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         return $result;
     }
 
-    private function courseAnnouncementPush($member)
+    private function courseAnnouncementPush($targetId)
     {
         if (!$this->isIMEnabled()) {
             return;
         }
 
-        $course = $this->getCourseService()->getCourse($member['courseId']);
+        $course = $this->getCourseService()->getCourse($targetId);
+
+        $conv = $this->getConversationService()->getConversationByTarget($course['id'], 'course-push');
 
         $from = array(
             'id' => $course['id'],
@@ -71,13 +73,14 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         $to = array(
             'type' => 'course',
             'id' => 'all',
-            'convNo' => $this->getConvNo(),
+            'convNo' => $conv['no'],
         );
 
         $body = array(
-            'type' => 'course_announcement.create',
+            'type' => 'course.announcement.create',
             'courseId' => $course['id'],
-            'title' => "[课程{$course['title']}公告] 你正在学习的课程有一个新的公告，快去看看吧",
+            'title' => "《{$course['title']}》",
+            'message' => "[课程公告] 你正在学习的课程《{$course['title']}》有一个新的公告，快去看看吧",
         );
 
         $this->createPushJob($from, $to, $body);
@@ -171,5 +174,10 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     protected function getQueueService()
     {
         return ServiceKernel::instance()->createService('Queue:QueueService');
+    }
+
+    protected function getConversationService()
+    {
+        return ServiceKernel::instance()->createService('IM:ConversationService');
     }
 }

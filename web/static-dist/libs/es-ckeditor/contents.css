@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
@@ -7,7 +7,7 @@ body
 {
 	/* Font */
 	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
-	font-size: 14px;
+	font-size: 12px;
 
 	/* Text color */
 	color: #333;
@@ -20,8 +20,15 @@ body
 
 .cke_editable
 {
-	font-size: 14px;
+	font-size: 13px;
 	line-height: 1.6;
+
+	/* Fix for missing scrollbars with RTL texts. (#10488) */
+	word-wrap: break-word;
+}
+
+.cke_editable img {
+	max-width: 100%;
 }
 
 blockquote
@@ -73,10 +80,6 @@ hr
 	border-top: 1px solid #ccc;
 }
 
-img {
-    max-width: 100%;
-}
-
 img.right
 {
 	border: 1px solid #ccc;
@@ -98,8 +101,6 @@ pre
 	white-space: pre-wrap; /* CSS 2.1 */
 	word-wrap: break-word; /* IE7 */
 	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	-webkit-tab-size: 4;
 	tab-size: 4;
 }
 
@@ -137,47 +138,75 @@ a > img {
 	outline: 1px solid #0782C1;
 }
 
-
-code,
-kdb,
-pre,
-samp {
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+/* Widget Styles */
+.code-featured
+{
+	border: 5px solid red;
 }
 
-code {
-  padding: 2px 4px;
-  font-size: 90%;
-  color: #c7254e;
-  white-space: nowrap;
-  background-color: #f9f2f4;
-  border-radius: 4px;
+.math-featured
+{
+	padding: 20px;
+	box-shadow: 0 0 2px rgba(200, 0, 0, 1);
+	background-color: rgba(255, 0, 0, 0.05);
+	margin: 10px;
 }
 
-pre {
-  display: block;
-  padding: 9.5px;
-  margin: 0 0 10px;
-  font-size: 13px;
-  line-height: 1.428571429;
-  color: #333333;
-  word-break: break-all;
-  word-wrap: break-word;
-  background-color: #f5f5f5;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
+.image-clean
+{
+	border: 0;
+	background: none;
+	padding: 0;
 }
 
-pre code {
-  padding: 0;
-  font-size: inherit;
-  color: inherit;
-  white-space: pre-wrap;
-  background-color: transparent;
-  border-radius: 0;
+.image-clean > figcaption
+{
+	font-size: .9em;
+	text-align: right;
 }
 
-.pre-scrollable {
-  max-height: 340px;
-  overflow-y: scroll;
+.image-grayscale
+{
+	background-color: white;
+	color: #666;
+}
+
+.image-grayscale img, img.image-grayscale
+{
+	filter: grayscale(100%);
+}
+
+.embed-240p
+{
+	max-width: 426px;
+	max-height: 240px;
+	margin:0 auto;
+}
+
+.embed-360p
+{
+	max-width: 640px;
+	max-height: 360px;
+	margin:0 auto;
+}
+
+.embed-480p
+{
+	max-width: 854px;
+	max-height: 480px;
+	margin:0 auto;
+}
+
+.embed-720p
+{
+	max-width: 1280px;
+	max-height: 720px;
+	margin:0 auto;
+}
+
+.embed-1080p
+{
+	max-width: 1920px;
+	max-height: 1080px;
+	margin:0 auto;
 }
