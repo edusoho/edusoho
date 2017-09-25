@@ -29,8 +29,7 @@
           {% if classroom.price > 0 %}
             {{ 'classroom.not_vip_member_and_become_vip_tips'|trans({'%vipUrl%': path('vip')})|raw }}
           {% else %}
-            <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}"
-              data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
+            <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
           {% endif %}！
         {% elseif vipChecked == 'member_expired' %}
           {{ 'classroom.vip_member_expired_tips'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans), '%vipRenewUrl%': path('vip_renew')})|raw }}
@@ -38,9 +37,7 @@
           {{ 'classroom.vip_member_level_low_tips'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans), '%vipUpgrade%': path('vip_upgrade')})|raw }}
         {% else %}
           {{ 'classroom.vip_checked_fail_tips'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans)})|raw }}
-          <a class="alert-link js-exit" href="javascript:;"
-          data-url="{{ path('classroom_exit', { id:classroom.id }) }}"
-          data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
+          <a class="alert-link js-exit" href="javascript:" data-url="{{ path('classroom_exit', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
         {% endif %}
       </div>
     {% endif %}
@@ -186,8 +183,7 @@
                 data-toggle="modal"
                 data-url="{{ path('product_member_exit', {targetId: classroom.id, targetType:'classroom'}) }}"
               {% else %}
-                class="btn btn-default setting hidden-xs hidden-sm"
-                href="{{ path('classroom_exit', {id:classroom.id}) }}" id="quit"
+                class="btn btn-default setting hidden-xs hidden-sm js-exit-btn" data-url="{{ path('classroom_exit', {id:classroom.id}) }}"
               {% endif %}
             >
               <i class="es-icon es-icon-exit"></i>
@@ -198,9 +194,3 @@
     </div>
   </div>
 </section>
-
-
-{# {% if is_plugin_installed('ClassroomPlan') %}
-  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
-{% endif %}
- #}

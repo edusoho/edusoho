@@ -16,7 +16,7 @@ class ClassroomBuyController extends BuyFlowController
 
     protected function getSuccessUrl($id)
     {
-        return $this->generateUrl('classroom_courses', array('id' => $id));
+        return $this->generateUrl('classroom_courses', array('classroomId' => $id));
     }
 
     protected function isJoined($id)

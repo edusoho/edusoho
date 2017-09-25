@@ -519,19 +519,9 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
-        if (!empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
-        }
-
-        $order = $this->getOrderService()->getOrder($member['orderId']);
-
-        if ($order['targetType'] == 'groupSell') {
-            throw $this->createAccessDeniedException('组合购买课程不能退出。');
-        }
-
         $this->getClassroomService()->removeStudent($id, $user['id']);
 
-        return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
+        return $this->createJsonResponse(array('url' => $this->generateUrl('classroom_show', array('id' => $id))));
     }
 
     public function becomeAuditorAction($id)
