@@ -26,10 +26,9 @@ class BizOnlineAddFields extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("ALTER TABLE `biz_online` DROP COLUMN `device`;");
-        $connection->exec("ALTER TABLE `biz_online` DROP COLUMN `os`;");
-        $connection->exec("ALTER TABLE `biz_online` DROP COLUMN `client`;");
-        $connection->exec("ALTER TABLE `biz_online` DROP COLUMN `device_brand`;");
-
+        $connection->exec('ALTER TABLE `biz_online` DROP COLUMN `device`;');
+        $connection->exec('ALTER TABLE `biz_online` DROP COLUMN `os`;');
+        $connection->exec('ALTER TABLE `biz_online` DROP COLUMN `client`;');
+        $connection->exec('ALTER TABLE `biz_online` DROP COLUMN `device_brand`;');
     }
 }
