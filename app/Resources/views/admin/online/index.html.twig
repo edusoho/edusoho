@@ -18,8 +18,6 @@
             <thead>
             <tr>
                 <th>{{'用户名'|trans}}</th>
-                <th>{{'设备'|trans}}</th>
-                <th>{{'品牌名称'|trans}}</th>
                 <th>{{'操作系统'|trans}}</th>
                 <th>{{'客户端'|trans}}</th>
                 <th>{{'来源'|trans}}</th>
@@ -32,12 +30,6 @@
                 <tr id="online-table-tr-{{ online.id }}">
                     <td>
                         {{ users[online.user_id]['nickname']|default('--') }}
-                    </td>
-                    <td>
-                        {{ online.device }}
-                    </td>
-                    <td>
-                        {{ online.device_brand }}
                     </td>
                     <td>
                         {% if online.os|default(false) %}
