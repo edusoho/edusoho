@@ -162,8 +162,8 @@
     {% endif %}
 
     {% block faqSDK %}
-      <script src="http://localhost:10000/sdk-v1.js"></script>
-      <script>
+      <script aysnc="aysnc" src="{{ 'http://localhost:10000/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
+      <script aysnc="aysnc">
         new FaqSDK({
           id: 'faq-sdk',
           apiUrl: 'http://es.dev/faq/api/hotlist',
