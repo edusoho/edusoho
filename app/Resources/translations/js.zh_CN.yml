@@ -728,3 +728,6 @@ notify.course_set_clone_start.message: 开始复制课程，复制成功后请�
 notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制
 notify.course_set_copy_error.hint: 复制课程发生了错误
 progress.copy_course_set.message: 复制完成!
+
+confirm.warn: 警告
+confirm.exit.tip: 您确定要退出学习吗？

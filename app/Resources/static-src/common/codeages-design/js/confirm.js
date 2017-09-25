@@ -2,8 +2,8 @@ class Confirm {
   constructor(props) {
     this.title = props.title || '';
     this.content = props.content || '';
-    this.confirmText = props.confirmText || 'confirm';
-    this.cancelText = props.cancelText || 'cancel';
+    this.confirmText = props.confirmText || Translator.trans('site.confirm');
+    this.cancelText = props.cancelText || Translator.trans('site.close');
     
 
     this.confirmClass = props.confirmClass || 'btn cd-btn cd-btn-flat-danger cd-btn-lg';
