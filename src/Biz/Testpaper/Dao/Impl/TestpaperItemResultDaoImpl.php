@@ -138,8 +138,8 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
 
     public function findWrongResultByUserId($id, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong') LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($id)) ?: array();
     }

@@ -27,7 +27,7 @@ define(function (require, exports, module) {
 
     $modal.on('hidden.bs.modal', function (e) {
       if (!$('#choose-course-input').val()) {
-        $('.radio').button('reset');
+        $('.js-course-radios').button('reset');
       }
       ;
     })
