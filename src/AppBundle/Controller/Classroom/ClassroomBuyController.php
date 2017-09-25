@@ -19,7 +19,6 @@ class ClassroomBuyController extends BuyFlowController
         return $this->generateUrl('classroom_courses', array('id' => $id));
     }
 
-
     protected function isJoined($id)
     {
         $user = $this->getUser();
