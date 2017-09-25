@@ -221,6 +221,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByTime($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select("from_unixtime(paidTime,'%Y-%m-%d') date, sum(amount) as count")
             ->groupBy("from_unixtime(`paidTime`,'%Y-%m-%d')")
@@ -233,6 +234,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByTitle($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount) as count, userId, title, targetType, targetId')
             ->groupBy('title')
@@ -245,6 +247,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountsDataByUserId($conditions, $orderBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount) as count, userId, title, targetType, targetId')
             ->groupBy('userId')
@@ -283,8 +286,8 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (!isset($conditions['startTime'])) {
             $conditions['startTime'] = 0;
         }
-        // @TODO SQL Inject
-        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>= ? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>= ? AND `createdTime`< ? AND `userId` = ? AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}";
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array(
             $conditions['startTime'],

@@ -364,6 +364,8 @@ classroom_manage.student_create_add_failed_hint: Add failed!
 classroom_manage.student_manage_remove_hint: Do you really want to remove the %username%?
 classroom_manage.student_manage_remove_success_hint: Remove %username% successful!
 classroom_manage.student_manage_remove_failed_hint: Remove %username% failed, please try again!
+#TODO trans
+classroom_manage.student_manage_remove_assistant_hint: '%username%是班级的助教，请先取消Ta的助教权限'
 
 classroom.member_signed: Checked in
 classroom.sign_keep_days: Continuous %keepDays% day

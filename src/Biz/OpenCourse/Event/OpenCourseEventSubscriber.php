@@ -86,7 +86,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
     {
         $material = $event->getSubject();
 
-        if ($material && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
+        if ($material && $material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
             $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
         }
     }

@@ -515,60 +515,6 @@ class CoinController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function avatarAction(Request $request)
-    {
-        $user = $this->getUser();
-
-        $form = $this->createFormBuilder()
-            ->add('avatar', 'file')
-            ->getForm();
-
-        if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $file = $data['avatar'];
-
-                if (!FileToolkit::isImageFile($file)) {
-                    return $this->createMessageResponse('error', 'message_response.upload_pic_format_error.message');
-                }
-
-                $filenamePrefix = "user_{$user['id']}_";
-                $hash = substr(md5($filenamePrefix.time()), -8);
-                $ext = $file->getClientOriginalExtension();
-                $filename = $filenamePrefix.$hash.'.'.$ext;
-
-                $directory = $this->container->getParameter('topxia.upload.public_directory').'/tmp';
-                $file = $file->move($directory, $filename);
-
-                $fileName = str_replace('.', '!', $file->getFilename());
-
-                return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-                    'file' => $fileName,
-                )
-                ));
-            }
-        }
-
-        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
-
-        if ($hasPartnerAuth) {
-            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
-        } else {
-            $partnerAvatar = null;
-        }
-
-        $fromCourse = $request->query->get('fromCourse');
-
-        return $this->render('settings/avatar.html.twig', array(
-            'form' => $form->createView(),
-            'user' => $this->getUserService()->getUser($user['id']),
-            'partnerAvatar' => $partnerAvatar,
-            'fromCourse' => $fromCourse,
-        ));
-    }
-
     public function cashBillAction(Request $request)
     {
         if ($request->get('nickname')) {
