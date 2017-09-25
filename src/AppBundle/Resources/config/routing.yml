@@ -1978,6 +1978,7 @@ course_set_unfavorite:
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
+  methods: [POST]
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
@@ -2573,6 +2574,7 @@ classroom_introductions:
 classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
+    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2838,6 +2840,7 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseBuy:buy }
+    methods: [POST]
 
 course_free_join:
     path: /course/{courseId}/free_join

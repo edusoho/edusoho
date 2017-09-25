@@ -653,18 +653,14 @@ class CourseController extends CourseBaseController
     public function exitAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是课程的学员。');
+            throw $this->createAccessDeniedException('');
         }
 
-        if ($member['joinedType'] == 'course' && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
-        }
-
+        $user = $this->getCurrentUser();
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('url' => $this->generateUrl('course_show', array('id' => $id)), 'message' => 'success'));
     }
 
     public function freeJoinAction($courseId)

@@ -7,6 +7,13 @@ bindOperation($favorite, $unfavorite);
 discountCountdown();
 ancelRefund();
 
+$('.js-exit-btn').on('click', event => {
+  if (comfirm('Sure?')) {
+    $.post($(event.currentTarget).data('url'), resp => {
+      window.location.href = resp.url;
+    });
+  }
+});
 
 function ancelRefund() {
 	$(".cancel-refund").on('click', function () {
