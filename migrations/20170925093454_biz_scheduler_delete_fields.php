@@ -12,8 +12,8 @@ class BizSchedulerDeleteFields extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted`;");
-        $connection->exec("ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;");
+        $connection->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted`;');
+        $connection->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;');
     }
 
     /**

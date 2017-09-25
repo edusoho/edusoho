@@ -11,10 +11,10 @@ class BizSchedulerRenameTable extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("RENAME TABLE job_pool TO biz_scheduler_job_pool");
-        $connection->exec("RENAME TABLE job TO biz_scheduler_job");
-        $connection->exec("RENAME TABLE job_fired TO biz_scheduler_job_fired");
-        $connection->exec("RENAME TABLE job_log TO biz_scheduler_job_log");
+        $connection->exec('RENAME TABLE job_pool TO biz_scheduler_job_pool');
+        $connection->exec('RENAME TABLE job TO biz_scheduler_job');
+        $connection->exec('RENAME TABLE job_fired TO biz_scheduler_job_fired');
+        $connection->exec('RENAME TABLE job_log TO biz_scheduler_job_log');
     }
 
     /**
@@ -24,9 +24,9 @@ class BizSchedulerRenameTable extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("RENAME TABLE biz_scheduler_job_pool TO job_pool");
-        $connection->exec("RENAME TABLE biz_scheduler_job TO job");
-        $connection->exec("RENAME TABLE biz_scheduler_job_fired TO job_fired");
-        $connection->exec("RENAME TABLE biz_scheduler_job_log TO job_log");
+        $connection->exec('RENAME TABLE biz_scheduler_job_pool TO job_pool');
+        $connection->exec('RENAME TABLE biz_scheduler_job TO job');
+        $connection->exec('RENAME TABLE biz_scheduler_job_fired TO job_fired');
+        $connection->exec('RENAME TABLE biz_scheduler_job_log TO job_log');
     }
 }

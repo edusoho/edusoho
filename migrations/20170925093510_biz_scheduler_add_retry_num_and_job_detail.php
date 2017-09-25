@@ -24,7 +24,7 @@ class BizSchedulerAddRetryNumAndJobDetail extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("ALTER TABLE `biz_scheduler_job_fired` DROP COLUMN `retry_num`;");
-        $connection->exec("ALTER TABLE `biz_scheduler_job_fired` DROP COLUMN `job_detail`;");
+        $connection->exec('ALTER TABLE `biz_scheduler_job_fired` DROP COLUMN `retry_num`;');
+        $connection->exec('ALTER TABLE `biz_scheduler_job_fired` DROP COLUMN `job_detail`;');
     }
 }
