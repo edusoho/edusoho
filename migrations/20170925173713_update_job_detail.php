@@ -13,7 +13,7 @@ class UpdateJobDetail extends Migration
         $connection = $biz['db'];
 
         // long transcation
-        $jobFireds = $connection->fetchAll("select * from biz_scheduler_job_fired");
+        $jobFireds = $connection->fetchAll('select * from biz_scheduler_job_fired');
         foreach ($jobFireds as $jobFired) {
             $job = $connection->fetchAssoc("select * from biz_scheduler_job where id={$jobFired['job_id']}");
             $jobDetail = '';
@@ -53,7 +53,6 @@ class UpdateJobDetail extends Migration
               '{$currentTime}', 
               '{$currentTime}'
         )");
-
     }
 
     /**
@@ -61,6 +60,5 @@ class UpdateJobDetail extends Migration
      */
     public function down()
     {
-
     }
 }
