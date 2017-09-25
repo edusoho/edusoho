@@ -23,7 +23,7 @@ abstract class BuyFlowController extends BaseController
             return $this->render('buy-flow/no-remain-modal.html.twig');
         }
 
-        if (AvatarAlert::alertJoinCourse($this->getUser())) {
+        if ($this->needUploadAvatar()) {
             return $this->render('buy-flow/avatar-alert-modal.html.twig');
         }
 
@@ -41,10 +41,15 @@ abstract class BuyFlowController extends BaseController
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
-            return $this->redirect($this->getSuccessUrl($id));
+            return $this->createJsonResponse(array('url' => $this->getSuccessUrl($id)));
         }
 
-        return $this->redirect($this->generateUrl('order_show', array('targetId' => $id, 'targetType' => $this->targetType)));
+        return $this->createJsonResponse(array('url' => $this->generateUrl('order_show', array('targetId' => $id, 'targetType' => $this->targetType))));
+    }
+
+    private function needUploadAvatar()
+    {
+        return AvatarAlert::alertJoinCourse($this->getUser());
     }
 
     protected function needFillUserInfo()

@@ -2,6 +2,7 @@ import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import ESInfiniteScroll from 'common/es-infinite-scroll';
+import { buyFlow } from 'app/common/widget/buy-flow';
 
 let infiniteScroll = new ESInfiniteScroll();
 infiniteScroll.on('up-infinite.loaded', function () {
@@ -17,11 +18,7 @@ if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));
 }
 
-$('[data-role=free-join-btn]').on('click', event => {
-    $.post($(event.currentTarget).data('url'), resp => {
-        location.href = resp.data.redirectUrl;
-    });
-});
+buyFlow($('.js-buy-btn'));
 
 function initTaskLearnChart() {
   let colorPrimary = $('.color-primary').css('color');
