@@ -2,11 +2,13 @@
 
 namespace Biz\Course\Service\Impl;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Exception\UnableJoinException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Visitor\CourseItemPagingVisitor;
@@ -1832,6 +1834,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function tryFreeJoin($courseId)
     {
+        $access = $this->canJoinCourse($courseId);
+
+        if ($access['code'] != AccessorInterface::SUCCESS) {
+            throw new UnableJoinException($access['code'], $access['msg']);
+        }
+
         $course = $this->getCourse($courseId);
 
         if ($course['isFree'] == 1 || $course['originPrice'] == 0) {

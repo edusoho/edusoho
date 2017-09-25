@@ -7,9 +7,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
+use Biz\Exception\UnableJoinException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -57,12 +56,6 @@ class CourseMember extends AbstractResource
             throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
-        $access = $this->getCourseService()->canJoinCourse($courseId);
-
-        if ($access['code'] != 'success') {
-            throw new BadRequestHttpException($access['msg']);
-        }
-
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
 
         if (!$member) {
@@ -79,7 +72,11 @@ class CourseMember extends AbstractResource
 
     private function tryJoin($course)
     {
-        $this->getCourseService()->tryFreeJoin($course['id']);
+        try {
+            $this->getCourseService()->tryFreeJoin($course['id']);
+        } catch (UnableJoinException $e) {
+            throw new BadRequestHttpException($e->getMessage(), $e);
+        }
 
         return $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
     }

@@ -2,8 +2,10 @@
 
 namespace Biz\Classroom\Service\Impl;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseNoteDao;
+use Biz\Exception\UnableJoinException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -1855,6 +1857,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function tryFreeJoin($classroomId)
     {
+        $access = $this->canJoinClassroom($classroomId);
+        if ($access['code'] != AccessorInterface::SUCCESS) {
+            throw new UnableJoinException($access['code'], $access['msg']);
+        }
+
         $classroom = $this->getClassroom($classroomId);
 
         if ($classroom['price'] == 0) {
