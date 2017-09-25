@@ -659,7 +659,7 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
         $req = $request->request->all();
         $this->getMemberService()->removeStudent($course['id'], $user['id'], array(
-            'reason' => $req['reason']['note']
+            'reason' => $req['reason']['note'],
         ));
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
@@ -668,8 +668,9 @@ class CourseController extends CourseBaseController
     public function exitModalAction(Request $request)
     {
         $action = $request->query->get('action');
+
         return $this->render('course/exit-modal.html.twig', array(
-            'action' => $action
+            'action' => $action,
         ));
     }
 

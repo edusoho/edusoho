@@ -2981,10 +2981,6 @@ order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
-product_member_exit:
-    path: /product/{targetId}/type/{targetType}/owner/exit
-    defaults: { _controller: AppBundle:Product/Owner:exit}
-
 v2_demo_modal:
     path: /v2/demo/modal
     defaults: { _controller: AppBundle:V2:modal }
