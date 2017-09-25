@@ -19,6 +19,7 @@ if ($('.js-attachment-list').length > 0) {
 }
 
 buyFlow($('.js-buy-btn'));
+buyFlow($('.js-task-buy-btn'));
 
 function initTaskLearnChart() {
   let colorPrimary = $('.color-primary').css('color');

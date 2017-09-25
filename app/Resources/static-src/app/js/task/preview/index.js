@@ -1,3 +1,7 @@
+import { buyFlow } from 'app/common/widget/buy-flow';
+
+buyFlow($('.js-task-preview-buy-btn'));
+
 $('#modal').on('hidden.bs.modal', function () {
     $("#viewerIframe").attr('src', '');
 });
