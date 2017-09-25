@@ -18,6 +18,10 @@
             <thead>
             <tr>
                 <th>{{'用户名'|trans}}</th>
+                <th>{{'设备'|trans}}</th>
+                <th>{{'品牌名称'|trans}}</th>
+                <th>{{'操作系统'|trans}}</th>
+                <th>{{'客户端'|trans}}</th>
                 <th>{{'来源'|trans}}</th>
                 <th>{{'客户端ip'|trans}}</th>
                 <th>{{'最后访问时间'|trans}}</th>
@@ -28,6 +32,26 @@
                 <tr id="online-table-tr-{{ online.id }}">
                     <td>
                         {{ users[online.user_id]['nickname']|default('--') }}
+                    </td>
+                    <td>
+                        {{ online.device }}
+                    </td>
+                    <td>
+                        {{ online.device_brand }}
+                    </td>
+                    <td>
+                        {% if online.os|default(false) %}
+                            {{ online.os.name|default('') }} {{ online.os.version|default('') }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if online.client|default(false) %}
+                            {{ online.client.type|default('') }}: {{ online.client.name|default('') }} {{ online.client.version|default('') }}
+                        {% else %}
+                            --
+                        {% endif %}
                     </td>
                     <td>
                         {{ online.source }}

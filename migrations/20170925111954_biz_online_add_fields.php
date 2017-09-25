@@ -13,8 +13,8 @@ class BizOnlineAddFields extends Migration
         $connection = $biz['db'];
 
         $connection->exec("ALTER TABLE `biz_online` ADD COLUMN `device` varchar(1024) COMMENT '设备';");
-        $connection->exec("ALTER TABLE `biz_online` ADD COLUMN `os` varchar(1024) COMMENT '操作系统';");
-        $connection->exec("ALTER TABLE `biz_online` ADD COLUMN `client` varchar(1024) COMMENT '客户端信息';");
+        $connection->exec("ALTER TABLE `biz_online` ADD COLUMN `os` text COMMENT '操作系统';");
+        $connection->exec("ALTER TABLE `biz_online` ADD COLUMN `client` text COMMENT '客户端信息';");
         $connection->exec("ALTER TABLE `biz_online` ADD COLUMN `device_brand` varchar(1024) COMMENT '品牌名称';");
     }
 
