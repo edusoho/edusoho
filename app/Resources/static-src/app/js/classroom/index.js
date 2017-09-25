@@ -1,6 +1,9 @@
 import Sign from 'app/common/widget/sign';
 import 'app/common/widget/qrcode';
 import 'app/common/widget/cancel-refund';
+import { buyFlow } from 'app/common/widget/buy-flow';
+
+buyFlow($('.js-classroom-buy-btn'));
 
 if ($('#classroom-sign').length > 0) {
   let userSign = new Sign($('#classroom-sign'));

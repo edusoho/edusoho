@@ -1824,6 +1824,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array($paidCourses, $orderItems);
     }
 
+    public function tryFreeJoin($classroomId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+
+        if ($classroom['price'] == 0) {
+            $this->becomeStudent($classroom['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
+        }
+
+        $this->dispatch('classroom.try_free_join', $classroom);
+    }
+
     private function updateStudentNumAndAuditorNum($classroomId)
     {
         $fields = array(

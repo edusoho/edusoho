@@ -46,54 +46,9 @@ class ClassroomMember extends AbstractResource
 
     private function tryJoin($classroom)
     {
-        $member = null;
+        $this->getClassroomService()->tryFreeJoin($classroom['id']);
 
-        if ($classroom['buyable']) {
-            $member = $this->freeJoin($classroom);
-        }
-
-        if ($member) {
-            return $member;
-        }
-
-        if ($classroom['vipLevelId'] > 0) {
-            $member = $this->vipJoin($classroom);
-        }
-
-        return $member;
-    }
-
-    private function freeJoin($classroom)
-    {
-        if ($classroom['price'] == 0) {
-
-            return $this->getClassroomService()->becomeStudent($classroom['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
-        } else {
-            return null;
-        }
-    }
-
-    private function vipJoin($classroom)
-    {
-        if (!$this->isPluginInstalled('vip')) {
-            return null;
-        }
-
-        list($success, $message) = $this->getVipFacadeService()->joinClassroom($classroom['id']);
-        if ($success) {
-            return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
-        } else {
-            return null;
-        }
-    }
-
-
-    /**
-     * @return VipFacadeService
-     */
-    private function getVipFacadeService()
-    {
-        return $this->service('VipPlugin:Vip:VipFacadeService');
+        return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
     }
 
     /**

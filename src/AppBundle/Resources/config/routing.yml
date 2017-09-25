@@ -2580,7 +2580,7 @@ classroom_introductions:
 
 classroom_buy:
     path: /classroom/{id}/buy
-    defaults: { _controller: AppBundle:Classroom/Classroom:buy }
+    defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
 
 classroom_sign:
     path:  classroom/sign/{classroomId}

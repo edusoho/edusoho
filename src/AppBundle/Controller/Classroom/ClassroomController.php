@@ -594,51 +594,6 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function buyAction(Request $request, $id)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $previewAs = $request->query->get('previewAs');
-
-        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-        $member = $this->previewAsMember($previewAs, $member, $classroom);
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        $userInfo = $this->getUserService()->getUserProfile($user['id']);
-        $userInfo['approvalStatus'] = $user['approvalStatus'];
-
-        $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
-
-        if (empty($account)) {
-            $this->getCashAccountService()->createAccount($user['id']);
-        }
-
-        if (isset($account['cash'])) {
-            $account['cash'] = intval($account['cash']);
-        }
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        return $this->render('classroom/buy-modal.html.twig', array(
-            'classroom' => $classroom,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
-            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
-            'courseSetting' => $courseSetting,
-            'member' => $member,
-            'userFields' => $userFields,
-            'account' => $account,
-        ));
-    }
-
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
