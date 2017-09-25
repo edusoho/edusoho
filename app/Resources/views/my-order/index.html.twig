@@ -13,18 +13,18 @@
 {% block main_body %}
   <ul class="cd-tabs">
     <li {% if app.request.query.get('display_status')=='' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{display_status:''})}}">{{'user.orders.all_orders'|trans}}</a>
+      <a href="{{path('my_orders',{display_status:''})}}">{{'user.order.order_list'|trans}}</a>
     </li>
     <li {% if app.request.query.get('display_status')=='no_paid' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{display_status:'no_paid'})}}">{{'user.orders.no_paid_status'|trans}}
+      <a href="{{path('my_orders',{display_status:'no_paid'})}}">{{'user.order.refund_list'|trans}}
         {% if createdOrderCount > 0 %}<span class="number">{{createdOrderCount}}</span>{% endif %}
       </a>
     </li>
-    <li {% if app.request.query.get('display_status')=='refunding' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{display_status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}
-        {% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}
-      </a>
-    </li>
+    {#<li {% if app.request.query.get('display_status')=='refunding' %}class="active"{% endif %}>#}
+      {#<a href="{{path('my_orders',{display_status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}#}
+        {#{% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}#}
+      {#</a>#}
+    {#</li>#}
 
   </ul>
   <form class="form-inline cd-form-inline" action="" method="get">
