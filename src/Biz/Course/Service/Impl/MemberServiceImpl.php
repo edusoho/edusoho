@@ -1109,7 +1109,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
-            'order_id' => $member['orderId']
+            'order_id' => $member['orderId'],
         );
 
         $orderItem = $this->getOrderService()->getOrderItemByOrderIdAndTargetIdAndTargetType($member['orderId'], $member['courseId'], 'course');
@@ -1119,7 +1119,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $record['refun_id'] = $orderRefund['id'];
         }
         $record['data']['title'] = $orderItem['title'];
-        
+
         return $this->getMemberOperationService()->createRecord($record);
     }
 

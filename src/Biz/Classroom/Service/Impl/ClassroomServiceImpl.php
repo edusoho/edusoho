@@ -1923,7 +1923,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $currentUser = $this->getCurrentUser();
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
-        
+
         $classroom = $this->getClassroom($member['classroomId']);
         $data['title'] = $classroom['title'];
         $data['member'] = $member;
@@ -1937,7 +1937,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operator_id' => $operatorId,
             'data' => $data,
             'reason' => empty($data['reasonInfo']) ? '' : $data['reasonInfo']['reason'],
-            'order_id' => $member['orderId']
+            'order_id' => $member['orderId'],
         );
 
         return $this->getMemberOperationService()->createRecord($record);
