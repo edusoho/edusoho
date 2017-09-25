@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Accessor\AccessorInterface;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\ArrayToolkit;
