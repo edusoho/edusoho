@@ -481,30 +481,6 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
 
-    public function freeJoinAction($id)
-    {
-        $access = $this->getClassroomService()->canJoinClassroom($id);
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        if (($access['code'] == AccessorInterface::SUCCESS && $classroom['price'] == 0)
-            || $this->canFreeJoinByBuyAllCourses($classroom)) {
-            $this->getClassroomService()->becomeStudent($id, $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
-
-            return $this->createJsonResponse(array('message' => 'join success', 'data' => array(
-                'redirectUrl' => $this->generateUrl('classroom_courses', array('classroomId' => $id)),
-            )));
-        } else {
-            return $this->createJsonResponse(array('message' => 'can not free join'), 403);
-        }
-    }
-
-    private function canFreeJoinByBuyAllCourses($classroom)
-    {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-
-        return $this->canFreeJoin($classroom, $this->getCurrentUser(), $courses);
-    }
-
     public function exitAction($id)
     {
         $user = $this->getCurrentUser();

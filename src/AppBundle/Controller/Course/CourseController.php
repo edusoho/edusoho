@@ -663,21 +663,6 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse(array('url' => $this->generateUrl('course_show', array('id' => $id)), 'message' => 'success'));
     }
 
-    public function freeJoinAction($courseId)
-    {
-        $access = $this->getCourseService()->canJoinCourse($courseId);
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        if ($access['code'] == AccessorInterface::SUCCESS && $course['originPrice'] == 0) {
-            $this->getMemberService()->becomeStudent($courseId, $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
-            return $this->createJsonResponse(array('message' => 'join success', 'data' => array(
-                'redirectUrl' => $this->generateUrl('my_course_show', array('id' => $courseId))
-            )));
-        } else {
-            return $this->createJsonResponse(array('message' => 'can not free join'), 403);
-        }
-    }
-
     public function renderCourseChoiceAction()
     {
         $masterRequest = $this->get('request_stack')->getMasterRequest();

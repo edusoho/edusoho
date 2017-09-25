@@ -2538,11 +2538,6 @@ classroom_show:
     path:  /classroom/{id}
     defaults: { _controller: AppBundle:Classroom/Classroom:show }
 
-classroom_free_join:
-    path:  /classroom/{id}/free_join
-    defaults: { _controller: AppBundle:Classroom/Classroom:freeJoin }
-    methods: [POST]
-
 classroom_qrcode:
     path:  /classroom/{id}/qrcode
     defaults: { _controller: AppBundle:Classroom/Classroom:qrcode }
@@ -2840,11 +2835,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseBuy:buy }
-    methods: [POST]
-
-course_free_join:
-    path: /course/{courseId}/free_join
-    defaults: { _controller: AppBundle:Course/Course:freeJoin }
     methods: [POST]
 
 course_order_repay:
