@@ -649,7 +649,7 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exitAction($id)
+    public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         if (empty($member)) {
@@ -657,9 +657,20 @@ class CourseController extends CourseBaseController
         }
 
         $user = $this->getCurrentUser();
-        $this->getMemberService()->removeStudent($course['id'], $user['id']);
+        $req = $request->request->all();
+        $this->getMemberService()->removeStudent($course['id'], $user['id'], array(
+            'reason' => $req['reason']['note']
+        ));
 
-        return $this->createJsonResponse(array('url' => $this->generateUrl('course_show', array('id' => $id)), 'message' => 'success'));
+        return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+    }
+
+    public function exitModalAction(Request $request)
+    {
+        $action = $request->query->get('action');
+        return $this->render('course/exit-modal.html.twig', array(
+            'action' => $action
+        ));
     }
 
     public function renderCourseChoiceAction()

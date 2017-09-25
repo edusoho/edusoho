@@ -1980,6 +1980,10 @@ course_exit:
   defaults: {_controller: AppBundle:Course/Course:exit}
   methods: [POST]
 
+course_exit_modal:
+  path: /course/show_exit_modal
+  defaults: {_controller: AppBundle:Course/Course:exitModal}
+
 course_thread_create:
    path:  /course/{courseId}/thread/create
    defaults: { _controller: AppBundle:Course/Thread:create }

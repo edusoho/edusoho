@@ -496,7 +496,7 @@ class ClassroomController extends BaseController
 
         $this->getClassroomService()->removeStudent($id, $user['id']);
 
-        return $this->createJsonResponse(array('url' => $this->generateUrl('classroom_show', array('id' => $id))));
+        return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
 
     public function becomeAuditorAction($id)

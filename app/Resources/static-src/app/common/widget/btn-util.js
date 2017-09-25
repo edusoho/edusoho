@@ -10,19 +10,3 @@ export const buyBtn  = ($element) => {
     });
   });
 };
-
-
-export const exitBtn = ($element) => {
- $element.on('click', event => {
-   cd.confirm({
-     title:Translator.trans('confirm.warn'),
-     content: Translator.trans('confirm.exit.tip'),
-     confirm() {
-       $.post($(event.currentTarget).data('url'), resp => {
-         window.location.href = resp.url;
-       });
-     }
-   });
- });
-
-};
