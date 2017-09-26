@@ -1798,7 +1798,7 @@ admin_bill_export_csv:
     permissions: [admin_bill,admin_coin_records]
 
 admin_order_manage_export_csv:
-    path: /order/manage/export/{targetType}
+    path: /order/manage/export
     defaults: { _controller: AppBundle:Admin/Order:exportCsv }
 
 admin_order_manage_export_coin_csv:

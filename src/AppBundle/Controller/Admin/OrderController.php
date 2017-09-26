@@ -20,12 +20,6 @@ class OrderController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $targetType = 'course';
-        $conditions['order_item_target_type'] = $targetType;
-
-        if (isset($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
-        }
         $conditions = $this->prepareConditions($conditions);
 
         $paginator = new Paginator(
@@ -62,7 +56,6 @@ class OrderController extends BaseController
             'admin/order/manage.html.twig',
             array(
                 'request' => $request,
-                'targetType' => $targetType,
                 'orders' => $orders,
                 'users' => $users,
                 'paginator' => $paginator,
@@ -72,6 +65,14 @@ class OrderController extends BaseController
 
     protected function prepareConditions($conditions)
     {
+        if (!empty($conditions['orderItemType'])) {
+            $conditions['order_item_target_type'] = $conditions['orderItemType'];
+        }
+
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+
         if (!empty($conditions['startDateTime'])) {
             $conditions['start_time'] = strtotime($conditions['startDateTime']);
         }
@@ -80,30 +81,13 @@ class OrderController extends BaseController
             $conditions['end_time'] = strtotime($conditions['endDateTime']);
         }
 
-        if ($conditions['order_item_target_type'] != 'course') {
-            return $conditions;
-        }
-        if (isset($conditions['courseSetTitle'])) {
-            $conditions['order_item_title'] = $conditions['courseSetTitle'];
-        }
-
-        if (!empty($conditions['courseSetId'])) {
-            $courses = $this->getCourseService()->findCoursesByCourseSetId($conditions['courseSetId']);
-            $courseIds = ArrayToolkit::column($courses, 'courseSetId');
-            $conditions['order_item_target_ids'] = empty($courseIds) ? array(-1) : $courseIds;
-            unset($conditions['targetId']);
-        }
         if (isset($conditions['buyer'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['user_id'] = $user ? $user['id'] : -1;
         }
-        if (isset($conditions['mobile'])) {
-            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
-            $conditions['user_id'] = $user ? $user['id'] : -1;
-        }
-        if (isset($conditions['email'])) {
-            $user = $this->getUserService()->getUserByEmail($conditions['email']);
-            $conditions['user_id'] = $user ? $user['id'] : -1;
+
+        if (!empty($conditions['displayStatus'])) {
+            $conditions['in_status'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
         }
 
         return $conditions;
@@ -119,58 +103,22 @@ class OrderController extends BaseController
         );
     }
 
-    public function cancelRefundAction(Request $request, $id)
-    {
-        $this->getClassroomOrderService()->cancelRefundOrder($id);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function auditRefundAction(Request $request, $id)
-    {
-        $order = $this->getOrderService()->getOrder($id);
-
-        if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-
-            $pass = $data['result'] == 'pass' ? true : false;
-            $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
-
-            if ($pass) {
-                if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
-                    $this->getClassroomService()->removeStudent($order['targetId'], $order['userId']);
-                }
-            }
-
-            $this->sendAuditRefundNotification($order, $pass, $data['amount'], $data['note']);
-
-            return $this->createJsonResponse(true);
-        }
-
-        return $this->render(
-            'admin/course-order/refund-confirm-modal.html.twig',
-            array(
-                'order' => $order,
-            )
-        );
-    }
-
     /**
      *  导出订单.
      *
      * @param string $targetType classroom | course | vip
      */
-    public function exportCsvAction(Request $request, $targetType)
+    public function exportCsvAction(Request $request)
     {
         $start = $request->query->get('start', 0);
 
         $magic = $this->setting('magic');
         $limit = $magic['export_limit'];
 
-        $conditions = $this->buildExportCondition($request, $targetType);
+        $conditions = $this->buildExportCondition($request);
 
         $status = array(
-            'no_paid' => '未付款',
+            'notPaid' => '未付款',
             'paid' => '已付款',
             'refunding' => '退款中',
             'refunded' => '已退款',
@@ -188,28 +136,20 @@ class OrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        if ($targetType == 'vip') {
-            $str = '订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间';
-        } else {
-            $str = '订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间';
-        }
+        $str = '订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间';
 
         $str .= "\r\n";
 
         $results = array();
 
-        if ($targetType == 'vip') {
-            $results = $this->generateVipExportData($orders, $status, $users, $profiles, $payment, $results);
-        } else {
-            $results = $this->generateExportData($orders, $status, $payment, $users, $profiles, $results);
-        }
+        $results = $this->generateExportData($orders, $status, $payment, $users, $profiles, $results);
 
         $loop = $request->query->get('loop', 0);
         ++$loop;
 
         $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
         $readTempDate = $start;
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
 
         if ($enableRedirect) {
             $content = implode("\r\n", $results);
@@ -218,7 +158,7 @@ class OrderController extends BaseController
             return $this->redirect(
                 $this->generateUrl(
                     'admin_order_manage_export_csv',
-                    array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)
+                    array('loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)
                 )
             );
         } elseif ($readTempDate) {
@@ -228,7 +168,7 @@ class OrderController extends BaseController
 
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
-        $filename = sprintf('%s-order-(%s).csv', $targetType, date('Y-n-d'));
+        $filename = sprintf('order-(%s).csv', date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -239,23 +179,21 @@ class OrderController extends BaseController
         return $response;
     }
 
-    private function buildExportCondition($request, $targetType)
+    private function buildExportCondition($request)
     {
         $conditions = $request->query->all();
-
-        $conditions['order_item_target_type'] = $targetType;
 
         $conditions = $this->prepareConditions($conditions);
 
         return $conditions;
     }
 
-    private function genereateExportCsvFileName($targetType)
+    private function genereateExportCsvFileName()
     {
         $rootPath = $this->getParameter('topxia.upload.private_directory');
         $user = $this->getUser();
 
-        return $rootPath.'/export_content'.$targetType.$user['id'].time().'.txt';
+        return $rootPath.'/export_content_order'.$user['id'].time().'.txt';
     }
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)

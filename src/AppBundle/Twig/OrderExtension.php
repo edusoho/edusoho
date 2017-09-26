@@ -76,6 +76,20 @@ class OrderExtension extends \Twig_Extension
         return $isAdmin ? $this->displayAdminStatus($displayStatus) : $this->displayWebStatus($displayStatus);
     }
 
+    public function getOrderStatusFromDisplayStatus($displayStatus, $isAdmin = 0)
+    {
+        $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
+
+        $result = array();
+        foreach ($map as $orderStatus => $disStatus) {
+            if ($displayStatus == $disStatus) {
+                $result[] = $orderStatus;
+            }
+        }
+
+        return $result;
+    }
+
     private function getDisplayStatus($orderStatus, $isAdmin)
     {
         $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;

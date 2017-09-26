@@ -20,12 +20,12 @@
     <div class="mbm">
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
-        <select class="form-control" name="payment">
+        <select class="form-control" name="orderItemType">
           {{ select_options(dict('orderItemType'), request.get('orderItemType'), 'order.item_type'|trans) }}
         </select>
 
-        <select class="form-control" name="display_status">
-          {{ select_options(dict('orderDisplayStatus'), request.get('display_status'), 'order.status'|trans) }}
+        <select class="form-control" name="displayStatus">
+          {{ select_options(dict('orderDisplayStatus'), request.get('displayStatus'), 'order.status'|trans) }}
         </select>
 
         <select class="form-control" name="payment">
@@ -55,13 +55,14 @@
 
       <a class="btn btn-primary btn-export-csv"
          href="{{ path('admin_order_manage_export_csv',
-         {targetType:targetType,
-             start_time:request.get('startDateTime'),
-             end_time:request.get('endDateTime'),
-             display_status:request.get('display_status'),
-             payment:request.get('payment'),
-             keywordType:request.get('keywordType'),
-             keyword:request.get('keyword')
+         {
+           orderItemType:request.get('orderItemType'),
+           start_time:request.get('startDateTime'),
+           end_time:request.get('endDateTime'),
+           displayStatus:request.get('displayStatus'),
+           payment:request.get('payment'),
+           keywordType:request.get('keywordType'),
+           keyword:request.get('keyword')
          }) }}"
          data-export-count="{{ paginator.getItemCount() }}"
          data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
@@ -69,7 +70,6 @@
          data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
       >{{ 'form.btn.export_result'|trans }}</a>
 
-      {#{% include 'export/export-btn.html.twig' with {targetFormId: 'user-search-form' ,'exportFileName': targetType~'-order'}  %}#}
     </div>
   </form>
 
