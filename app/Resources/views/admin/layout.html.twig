@@ -166,7 +166,7 @@
       <script aysnc="aysnc">
         new FaqSDK({
           id: 'faq-sdk',
-          apiUrl: 'http://es.dev/faq/api/hotlist',
+          apiUrl: 'http://www.esdev.com/faq/api/hotlist?version={{ asset_version('/') }}&accesskey={{ base64_encode(setting("storage.cloud_access_key")) }}&url={{ app.request.getRequestUri() }}',
           color: '#43bc60',
         });
       </script>
