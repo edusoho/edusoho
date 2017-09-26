@@ -105,17 +105,14 @@ services:
     session.handler.pdo:
         class:     Codeages\Biz\Framework\Session\Handler\BizSessionHandler
         arguments:
-             - '@service_container'
-             - '@security.token_storage'
+             - '@biz'
              - 'max_life_time': 7200
 
     session.handler.redis:
-        class:     AppBundle\Handler\RedisSessionHandler
-        arguments: ['@session.handler.redis.factory', '@security.token_storage']
-
-    session.handler.redis.factory:
-        class:     AppBundle\Handler\RedisSessionFactory
-        arguments: ['@service_container']
+        class:     Codeages\Biz\Framework\Session\Handler\RedisSessionHandler
+        arguments:
+            - '@biz'
+            - 'max_life_time': 7200
 
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache
