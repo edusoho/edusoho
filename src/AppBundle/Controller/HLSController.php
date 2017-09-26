@@ -48,7 +48,7 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data' => array(
-                        'id' => $file['id'].$level,
+                        'id' => $file['id'] . $level,
                         'fromApi' => $fromApi,
                     ),
                     'times' => $inWhiteList ? 0 : 1,
@@ -136,7 +136,7 @@ class HLSController extends BaseController
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
-        if ($dataId != ($id.$level)) {
+        if ($dataId != ($id . $level)) {
             throw $this->createNotFoundException();
         }
 
@@ -226,23 +226,13 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
+
+        $isMobileUserAgent = $this->agentInWhiteList($request->headers->get('user-agent'));
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        $enabledRatePlayback = $this->setting('storage.enable_playback_rates');
-        if (!$inWhiteList && !$enabledRatePlayback) {
-            $needValidateUser = !empty($token['userId']) ? true : false;
-            if ($needValidateUser && !$this->getCurrentUser()->isLogin()) {
-                return $this->makeFakeTokenString();
-            }
-
-            if ($needValidateUser && ($this->getCurrentUser()->getId() != $token['userId'])) {
-                return $this->makeFakeTokenString();
-            }
-        }
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
@@ -264,7 +254,7 @@ class HLSController extends BaseController
             return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
         }
 
-        if ($this->isHlsEncryptionPlusEnabled() || !$inWhiteList) {
+        if ($this->isHlsEncryptionPlusEnabled() || !$isMobileUserAgent) {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get("/hls/clef_plus/{$file['metas2'][$token['data']['level']]['hlsKey']}");
 
