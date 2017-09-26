@@ -162,7 +162,7 @@
     {% endif %}
 
     {% block faqSDK %}
-      <script aysnc="aysnc" src="{{ 'http://localhost:10000/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
+      <script aysnc="aysnc" src="{{ 'http://service-cdn.qiqiuyun.net/js-sdk/faq/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
       <script aysnc="aysnc">
         new FaqSDK({
           id: 'faq-sdk',
