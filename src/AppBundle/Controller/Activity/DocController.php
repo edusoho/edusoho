@@ -26,7 +26,6 @@ class DocController extends BaseActivityController implements ActivityActionInte
             'error' => $error,
             'docMedia' => $result,
         ));
-
     }
 
     public function previewAction(Request $request, $task)
@@ -46,7 +45,6 @@ class DocController extends BaseActivityController implements ActivityActionInte
             'error' => $error,
             'docMedia' => $result,
         ));
-
     }
 
     public function editAction(Request $request, $id, $courseId)
