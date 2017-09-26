@@ -5,7 +5,8 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\MathToolkit;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
+use Biz\OrderRefund\Service\OrderRefundProxyService;
 use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,11 +74,13 @@ class OrderController extends BaseController
         $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
 
-        $orderRefunds = $this->
+        $orderRefunds = $this->getOrderRefundProxyService()->findRefundsByOrderIds($orderIds);
+        $orderRefunds = ArrayToolkit::index($orderRefunds, 'order_id');
 
         foreach ($orders as &$order) {
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
+            $order['refund'] = empty($orderRefunds[$order['id']]) ? array() : $orderRefunds[$order['id']];
             $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
@@ -149,7 +152,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     * @return OrderService
      */
     protected function getOrderService()
     {
@@ -178,5 +181,13 @@ class OrderController extends BaseController
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    /**
+     * @return OrderRefundProxyService
+     */
+    protected function getOrderRefundProxyService()
+    {
+        return $this->createService('OrderRefund:OrderRefundProxyService');
     }
 }
