@@ -69,14 +69,14 @@ class OrderExtension extends \Twig_Extension
         return false;
     }
 
-    public function displayOrderStatus($orderStatus, $isAdmin = 0)
+    public function displayOrderStatus($orderStatus, $isAdmin = 1)
     {
         $displayStatus = $this->getDisplayStatus($orderStatus, $isAdmin);
 
         return $isAdmin ? $this->displayAdminStatus($displayStatus) : $this->displayWebStatus($displayStatus);
     }
 
-    public function getOrderStatusFromDisplayStatus($displayStatus, $isAdmin = 0)
+    public function getOrderStatusFromDisplayStatus($displayStatus, $isAdmin = 1)
     {
         $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
 
@@ -88,6 +88,18 @@ class OrderExtension extends \Twig_Extension
         }
 
         return $result;
+    }
+
+    public function getAllDisplayStatus($isAdmin = 1)
+    {
+        $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
+
+        return array_unique($map);
+    }
+
+    public function getStatusMap($isAdmin = 1)
+    {
+        return $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
     }
 
     private function getDisplayStatus($orderStatus, $isAdmin)

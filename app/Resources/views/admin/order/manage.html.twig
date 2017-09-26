@@ -54,16 +54,7 @@
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
 
       <a class="btn btn-primary btn-export-csv"
-         href="{{ path('admin_order_manage_export_csv',
-         {
-           orderItemType:request.get('orderItemType'),
-           start_time:request.get('startDateTime'),
-           end_time:request.get('endDateTime'),
-           displayStatus:request.get('displayStatus'),
-           payment:request.get('payment'),
-           keywordType:request.get('keywordType'),
-           keyword:request.get('keyword')
-         }) }}"
+         href="{{ path('admin_order_manage_export_csv', request.query.all) }}"
          data-export-count="{{ paginator.getItemCount() }}"
          data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
          data-export-allow-count="{{ setting('magic.export_allow_count') }}"

@@ -16,6 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
+    private $statusMap = null;
+
+    private $displayStatusDict = null;
+
+    private $paymentDict = null;
+
     public function manageAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -117,17 +123,9 @@ class OrderController extends BaseController
 
         $conditions = $this->buildExportCondition($request);
 
-        $status = array(
-            'notPaid' => '未付款',
-            'paid' => '已付款',
-            'refunding' => '退款中',
-            'refunded' => '已退款',
-            'closed' => '已关闭',
-        );
-
-        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount = $this->getOrderService()->countOrders($conditions);
         $orders = $this->getOrderService()->searchOrders($conditions, array('created_time' => 'DESC'), $start, $limit);
+
         $studentUserIds = ArrayToolkit::column($orders, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -136,20 +134,20 @@ class OrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = '订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间';
+        $str = '订单号,订单状态,订单名称,总价,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
 
         $str .= "\r\n";
 
         $results = array();
 
-        $results = $this->generateExportData($orders, $status, $payment, $users, $profiles, $results);
+        $results = $this->generateExportData($orders, $users, $profiles, $results);
 
         $loop = $request->query->get('loop', 0);
         ++$loop;
 
         $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
         $readTempDate = $start;
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
+        $file = $this->getExportFile($request);
 
         if ($enableRedirect) {
             $content = implode("\r\n", $results);
@@ -188,43 +186,13 @@ class OrderController extends BaseController
         return $conditions;
     }
 
-    private function genereateExportCsvFileName()
+    private function getExportFile($request)
     {
-        $rootPath = $this->getParameter('topxia.upload.private_directory');
         $user = $this->getUser();
+        $fileName = $request->query->get('fileName', 'export_content_order'.$user['id'].time().'.txt');
+        $rootPath = $this->getParameter('topxia.upload.private_directory');
 
-        return $rootPath.'/export_content_order'.$user['id'].time().'.txt';
-    }
-
-    protected function sendAuditRefundNotification($order, $pass, $amount, $note)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
-
-        if (empty($course)) {
-            return false;
-        }
-
-        if ($pass) {
-            $message = $this->setting('refund.successNotification', '');
-        } else {
-            $message = $this->setting('refund.failedNotification', '');
-        }
-
-        if (empty($message)) {
-            return false;
-        }
-
-        $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
-        $variables = array(
-            'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
-            'amount' => $amount,
-            'note' => $note,
-        );
-
-        $message = StringToolkit::template($message, $variables);
-        $this->getNotificationService()->notify($order['userId'], 'default', $message);
-
-        return true;
+        return $rootPath.DIRECTORY_SEPARATOR.$fileName;
     }
 
     /**
@@ -235,79 +203,45 @@ class OrderController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
-    private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
+    private function generateExportData($orders, $users, $profiles, $results)
     {
+        $str = '订单号,订单状态,订单名称,总价,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
         foreach ($orders as $key => $order) {
             $member = '';
+
+            # 订单号
             $member .= $order['sn'].',';
-            $member .= $status[$order['display_status']].',';
-            $member .= $order['title'].',';
-            $member .= $users[$order['user_id']]['nickname'].',';
-            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-            $member .= $order['pay_amount'].',';
-            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
+            # 订单状态
+            $member .= $this->getExportStatus($order['status']).',';
 
-            if (empty($payment[$orderPayment])) {
-                $member .= $payment['none'].',';
-            } else {
-                $member .= $payment[$orderPayment].',';
-            }
-            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-
-            if ($order['pay_time'] != 0) {
-                $member .= date('Y-n-d H:i:s', $order['pay_time']).',';
-            } else {
-                $member .= '-'.',';
-            }
-
-            $results[] = $member;
-        }
-
-        return $results;
-    }
-
-    private function generateExportData($orders, $status, $payment, $users, $profiles, $results)
-    {
-        foreach ($orders as $key => $order) {
-            $member = '';
-            $member .= $order['sn'].',';
-            $member .= $status[$order['display_status']].',';
             //CSV会将字段里的两个双引号""显示成一个
             $order['title'] = str_replace('"', '""', $order['title']);
+            # 订单名称
             $member .= '"'.$order['title'].'",';
+            # 总价
+            $member .= MathToolkit::simple($order['price_amount'], 0.01).',';
+            # 优惠金额
+            $member .= MathToolkit::simple($order['price_amount'] - $order['pay_amount'], 0.01).',';
+            # 实付总额
+            $member .= MathToolkit::simple($order['pay_amount'], 0.01).',';
+            # 虚拟币支付
+            $member .= MathToolkit::simple($order['paid_coin_amount'], 0.01).',';
+            # 现金支付
+            $member .= MathToolkit::simple($order['paid_cash_amount'], 0.01).',';
+            # 支付方式
+            $member .= $this->getExportPayment($order['payment']).',';
 
-            $member .= $order['price_amount'] / 100 .',';
-
-            if (!empty($order['coupon'])) {
-                $member .= $order['coupon'].',';
-            } else {
-                $member .= '无'.',';
-            }
-
-//            $member .= $order['couponDiscount'].',';
-            $member .= ($order['price_amount'] - $order['pay_amount']) / 100 .',';
-            $member .= !empty($order['coinRate']) ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
-            $member .= $order['pay_amount'] / 100 .',';
-
-            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-
-            if (empty($payment[$orderPayment])) {
-                $member .= $payment['none'].',';
-            } else {
-                $member .= $payment[$orderPayment].',';
-            }
-
+            #用户名
             $member .= $users[$order['user_id']]['nickname'].',';
+            #真实姓名
             $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-
-            if (preg_match('/管理员添加/', $order['title'])) {
-                $member .= '管理员添加,';
-            } else {
-                $member .= '-,';
-            }
-
+            #邮箱
+            $member .= $users[$order['user_id']]['email'].',';
+            #联系电话
+            $member .= $users[$order['user_id']]['verifiedMobile'].',';
+            #创建时间
             $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-
+            #付款时间
             if ($order['pay_time'] != 0) {
                 $member .= date('Y-n-d H:i:s', $order['pay_time']);
             } else {
@@ -318,6 +252,28 @@ class OrderController extends BaseController
         }
 
         return $results;
+    }
+
+    private function getExportStatus($orderStatus)
+    {
+        if (!$this->statusMap) {
+            $this->statusMap = $this->container->get('web.twig.order_extension')->getStatusMap();
+        }
+
+        if (!$this->displayStatusDict) {
+            $this->displayStatusDict = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('orderDisplayStatus');
+        }
+
+        return isset($this->statusMap[$orderStatus]) && isset($this->displayStatusDict[$this->statusMap[$orderStatus]]) ? $this->displayStatusDict[$this->statusMap[$orderStatus]] : $orderStatus;
+    }
+
+    private function getExportPayment($payment)
+    {
+        if (!$this->paymentDict) {
+            $this->paymentDict = $this->get('codeages_plugin.dict_twig_extension')->getDict('newPayment');
+        }
+
+        return isset($this->paymentDict[$payment]) ? $this->paymentDict[$payment] : $payment;
     }
 
     protected function getUserFieldService()
