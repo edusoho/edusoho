@@ -13,42 +13,35 @@ class BizSessionAndOnline extends Migration
         $connection = $biz['db'];
         $connection->exec("
             CREATE TABLE `biz_session` (
-              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
               `sess_id` varbinary(128) NOT NULL,
-              `sess_user_id` int(10) unsigned NOT NULL DEFAULT '0',
               `sess_data` blob NOT NULL,
               `sess_time` int(10) unsigned NOT NULL,
-              `created_time` int(10) unsigned NOT NULL,
-              `sess_lifetime` mediumint(9) NOT NULL,
-              `source` VARCHAR(32) NOT NULL,
+              `sess_deadline` int(10) unsigned NOT NULL,
+              `created_time` int(10) NOT NULL,
               PRIMARY KEY (`id`),
-              UNIQUE KEY `sess_id` (`sess_id`)
+              UNIQUE KEY `sess_id` (`sess_id`),
+              INDEX sess_deadline (`sess_deadline`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
         ");
 
         $connection->exec("
             CREATE TABLE `biz_online` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-              `sess_id` varchar(128) NOT NULL DEFAULT '',
+              `sess_id` varbinary(128) NOT NULL DEFAULT '',
+              `sess_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '最后访问时间',
+              `sess_deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '存活时间',
+              `is_login` tinyint(1) NOT NULL DEFAULT '0',
               `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '在线用户的id, 0代表游客',
-              `lifetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '生命周期',
-              `access_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '最后访问时间',
-              `access_url` VARCHAR(1024) NOT NULL DEFAULT '',
               `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '客户端ip',
               `user_agent` varchar(1024) NOT NULL DEFAULT '',
-              `device` varchar(1024) COMMENT '设备',
-              `os` text COMMENT '操作系统',
-              `client` text COMMENT '客户端信息',
-              `device_brand` varchar(1024) COMMENT '品牌名称',
-              `source` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '当前在线用户的来源，例如：app,web,mobile',
+              `source` VARCHAR(64) NOT NULL DEFAULT 'unknown' COMMENT '当前在线用户的来源，例如：app, pc, mobile',
               `created_time` int(10) NOT NULL,
               PRIMARY KEY (`id`),
-              UNIQUE KEY `sess_id` (`sess_id`)
+              UNIQUE KEY `sess_id` (`sess_id`),
+              INDEX sess_deadline (`sess_deadline`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
         ");
-
-        $connection->exec('ALTER TABLE `biz_session` ADD INDEX sess_time (`sess_time`); ');
-        $connection->exec('ALTER TABLE `biz_online` ADD INDEX access_time (`access_time`); ');
     }
 
     /**
@@ -56,5 +49,9 @@ class BizSessionAndOnline extends Migration
      */
     public function down()
     {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+        $connection->exec("drop table `biz_session`");
+        $connection->exec("drop table `biz_online`");
     }
 }

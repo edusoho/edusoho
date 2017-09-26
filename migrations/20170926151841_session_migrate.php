@@ -16,20 +16,16 @@ class SessionMigrate extends Migration
         $connection->exec("
             INSERT INTO `biz_session` (
                 sess_id, 
-                sess_user_id, 
                 sess_data,
                 sess_time,
-                sess_lifetime,
-                created_time,
-                source
+                sess_deadline,
+                created_time
             ) select 
                 sess_id, 
-                sess_user_id, 
                 sess_data,
                 sess_time,
-                sess_lifetime,
-                '{$currentTime}',
-                'web'
+                sess_lifetime + sess_time,
+                '{$currentTime}'
             from sessions;
         ");
     }
