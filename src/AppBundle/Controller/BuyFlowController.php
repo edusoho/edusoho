@@ -32,6 +32,7 @@ abstract class BuyFlowController extends BaseController
             $user = $this->getUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
             $userInfo['approvalStatus'] = $user['approvalStatus'];
+
             return $this->render('buy-flow/fill-user-info-modal.html.twig', array(
                 'userFields' => $userFields,
                 'user' => $userInfo,
