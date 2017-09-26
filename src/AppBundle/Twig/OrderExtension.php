@@ -67,6 +67,7 @@ class OrderExtension extends \Twig_Extension
     public function fenToYuan($price, $displayPrefix = 1)
     {
         $price = MathToolkit::simple($price, 0.01);
+
         return $this->majorCurrency($price, $displayPrefix);
     }
 
