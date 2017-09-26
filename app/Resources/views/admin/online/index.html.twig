@@ -18,8 +18,6 @@
             <thead>
             <tr>
                 <th>{{'用户名'|trans}}</th>
-                <th>{{'操作系统'|trans}}</th>
-                <th>{{'客户端'|trans}}</th>
                 <th>{{'来源'|trans}}</th>
                 <th>{{'客户端ip'|trans}}</th>
                 <th>{{'最后访问时间'|trans}}</th>
@@ -32,27 +30,13 @@
                         {{ users[online.user_id]['nickname']|default('--') }}
                     </td>
                     <td>
-                        {% if online.os|default(false) %}
-                            {{ online.os.name|default('') }} {{ online.os.version|default('') }}
-                        {% else %}
-                            --
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if online.client|default(false) %}
-                            {{ online.client.type|default('') }}: {{ online.client.name|default('') }} {{ online.client.version|default('') }}
-                        {% else %}
-                            --
-                        {% endif %}
-                    </td>
-                    <td>
                         {{ online.source }}
                     </td>
                     <td>
                         {{ online.ip }}
                     </td>
                     <td>
-                        {{ online.access_time|date('Y-n-d H:i:s') }}
+                        {{ online.sess_time|date('Y-n-d H:i:s') }}
                     </td>
                 </tr>
             {% endfor %}

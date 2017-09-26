@@ -14,14 +14,11 @@ class OnlineController extends BaseController
         if (!empty($request->getSession()->getId())) {
             $online = array(
                 'sess_id' => $request->getSession()->getId(),
-                'user_id' => $this->getUser()->getId(),
                 'ip' => $request->getClientIp(),
                 'user_agent' => $request->headers->get('User-Agent', ''),
-                'access_url' => $request->headers->get('Referer', ''),
-                'source' => 'web',
-                'lifetime' => 86400,
+                'source' => 'pc',
             );
-            $this->getOnlineService()->sample($online);
+            $this->getOnlineService()->saveOnline($online);
         }
 
         return new Response('true');
