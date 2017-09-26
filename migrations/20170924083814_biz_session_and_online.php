@@ -36,6 +36,10 @@ class BizSessionAndOnline extends Migration
               `access_url` VARCHAR(1024) NOT NULL DEFAULT '',
               `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '客户端ip',
               `user_agent` varchar(1024) NOT NULL DEFAULT '',
+              `device` varchar(1024) COMMENT '设备',
+              `os` text COMMENT '操作系统',
+              `client` text COMMENT '客户端信息',
+              `device_brand` varchar(1024) COMMENT '品牌名称',
               `source` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '当前在线用户的来源，例如：app,web,mobile',
               `created_time` int(10) NOT NULL,
               PRIMARY KEY (`id`),
@@ -49,5 +53,6 @@ class BizSessionAndOnline extends Migration
      */
     public function down()
     {
+
     }
 }

@@ -11,7 +11,7 @@ class AddClearSessionJob extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("update biz_job set class='Codeages\Biz\Framework\Session\Job\DeleteSessionJob' where name='DeleteSessionJob';");
+        $connection->exec("update biz_job set class='Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\DeleteSessionJob' where name='DeleteSessionJob';");
     }
 
     /**
