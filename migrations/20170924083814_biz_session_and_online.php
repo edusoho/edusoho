@@ -47,8 +47,8 @@ class BizSessionAndOnline extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
         ");
 
-        $connection->exec("ALTER TABLE `biz_session` ADD INDEX sess_time (`sess_time`); ");
-        $connection->exec("ALTER TABLE `biz_online` ADD INDEX access_time (`access_time`); ");
+        $connection->exec('ALTER TABLE `biz_session` ADD INDEX sess_time (`sess_time`); ');
+        $connection->exec('ALTER TABLE `biz_online` ADD INDEX access_time (`access_time`); ');
     }
 
     /**
