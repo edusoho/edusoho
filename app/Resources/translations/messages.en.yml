@@ -370,6 +370,7 @@ order.name: 'Order name'
 order.createdTime: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
+order.item_type: Order type
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
@@ -5544,6 +5545,7 @@ admin.cdn.input_placeholder: 'If leave empty, then it will be default URL'
 admin.order.paid_time_range.input_placeholder: 'Payment time'
 admin.order.keyword: Keywords
 admin.order.buyer: 'Buyer''s user name'
+admin.order.title: Order title
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name
 admin.order.buyer_mobile: 'Buyer''s phone number'

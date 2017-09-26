@@ -16,10 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
-    public function manageAction(Request $request, $targetType)
+    public function manageAction(Request $request)
     {
         $conditions = $request->query->all();
 
+        $targetType = 'course';
         $conditions['order_item_target_type'] = $targetType;
 
         if (isset($conditions['keywordType'])) {

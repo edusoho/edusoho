@@ -1,6 +1,6 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% set menu = 'admin_' ~ targetType ~ '_order' %}
+{% set menu = 'admin_order_manage' %}
 
 {% set script_controller = 'manage/list' %}
 
@@ -20,6 +20,10 @@
     <div class="mbm">
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
+        <select class="form-control" name="payment">
+          {{ select_options(dict('orderItemType'), request.get('orderItemType'), 'order.item_type'|trans) }}
+        </select>
+
         <select class="form-control" name="display_status">
           {{ select_options(dict('orderDisplayStatus'), request.get('display_status'), 'order.status'|trans) }}
         </select>
@@ -36,21 +40,11 @@
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.keyword'|trans }}</label>
         <select class="form-control" name="keywordType">
-          {% set targetName = dict_text('targetName', targetType) %}
-          {% if targetType == 'vip' %}
-            {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, title: targetName ~ 'admin.order.target_name'|trans} %}
-          {% elseif targetType == 'course' %}
-            {% set options = {
+          {% set options = {
             sn: 'order.id'|trans,
             buyer:'admin.order.buyer'|trans,
-            courseSetTitle:'course.name'|trans,
-            courseSetId:'course.id'|trans,
-            title: targetName ~ 'admin.order.target_name'|trans,
-            mobile:'admin.order.buyer_mobile'|trans,
-            email:'admin.order.buyer_email'|trans} %}
-          {% else %}
-            {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, targetId: targetName ~ 'admin.order.target_id'|trans, title: 'classroom.name'|trans, mobile:'admin.order.buyer_mobile'|trans, email:'admin.order.buyer_email'|trans} %}
-          {% endif %}
+            title: 'admin.order.title'|trans}
+          %}
           {{ select_options(options, request.get('keywordType')) }}
         </select>
 

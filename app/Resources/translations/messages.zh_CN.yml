@@ -456,6 +456,7 @@ order.name: 订单名称
 order.createdTime: 创建时间
 order.pay_time: 付款时间
 order.status: 订单状态
+order.item_type: 订单类型
 order.status.created: 未完成
 order.status.paid: 已付款
 order.status.cancel: 已关闭
@@ -7030,6 +7031,7 @@ admin.cdn.input_placeholder: 不填将默认是URL
 admin.order.paid_time_range.input_placeholder: 付款时间段
 admin.order.keyword: 关键词:
 admin.order.buyer: 购买者用户名
+admin.order.title: 订单名称
 admin.order.screen_condition: 筛选条件:
 admin.order.target_name: 名
 admin.order.buyer_mobile: 购买者绑定手机号
