@@ -3,9 +3,7 @@
       admin:该模式下详情无下拉菜单
       course:该模式下详情无下拉菜单
 #}
-{% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% import "macro.html.twig" as web_macro %}
-{% set mode = mode|default(['my']) %}
   <thead>
     <tr>
       <th width="25%">{{'order.name'|trans}}</th>
@@ -14,9 +12,7 @@
       <th>{{'order.price_amount'|trans }}</th>
       <th>{{'order.discount_amount'|trans }}</th>
       <th>{{'order.real_pay'|trans}}</th>
-      {% if mode in ['course', 'admin'] %}
-        <th width="10%">{{'order.buyers'|trans}}</th>
-      {% endif %}
+      <th width="10%">{{'order.buyers'|trans}}</th>
       <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
     </tr>
   </thead>
@@ -38,22 +34,15 @@
             <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
           </td>
           <td><span class="color-gray text-sm">{{ order.created_time|date('Y-n-d H:i:s') }}</span></td>
-          <td>{{ dict_macro.orderStatus(order.display_status) }}</td>
+          <td>{{ display_order_status(order.status, 1) }}</td>
           <td><span class="color-warning">{{ order.price_amount }}</span></td>
           <td><span class="color-warning">{{ order.price_amount - order.pay_amount }}</span></td>
           <td><span class="color-warning">{{order.pay_amount}}</span></td>
-          {% if mode in ['admin', 'course'] %}
-            <td>
-              {{ web_macro.user_link(buyer) }}
-            </td>
-          {% endif %}
           <td>
-            {% if 'admin' == mode  %}
-                <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-              {% endif %}
-            {% if 'course' == mode %}
-            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('course_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-            {% endif %}
+            {{ web_macro.user_link(buyer) }}
+          </td>
+          <td>
+            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('order_Detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
           </td>
         </tr>
     {% else %}

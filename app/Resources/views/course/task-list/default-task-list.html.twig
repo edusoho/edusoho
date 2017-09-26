@@ -58,19 +58,10 @@
                   style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
               {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
                 {% if course.isFree %}
-                  <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
-                    {% if is_buy_course_from_modal(course.id) %}
-                    href="#modal"
-                    data-toggle="modal"
-                    data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-                  {% else %}
-                    href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-                    {% endif %}>{{ 'course.catalogue.task.join_btn'|trans }}
-                    </a>
-                  {% else %}
-                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
-                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-                    style="margin-top:-8px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
+                  <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.join_btn'|trans }}
+                  </a>
+                {% else %}
+                  <a class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
                 {% endif %}
               {% endif %}
 

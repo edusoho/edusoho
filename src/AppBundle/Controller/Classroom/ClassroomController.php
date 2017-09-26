@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Accessor\AccessorInterface;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\ArrayToolkit;
@@ -481,30 +480,6 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
 
-    public function freeJoinAction($id)
-    {
-        $access = $this->getClassroomService()->canJoinClassroom($id);
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        if (($access['code'] == AccessorInterface::SUCCESS && $classroom['price'] == 0)
-            || $this->canFreeJoinByBuyAllCourses($classroom)) {
-            $this->getClassroomService()->becomeStudent($id, $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
-
-            return $this->createJsonResponse(array('message' => 'join success', 'data' => array(
-                'redirectUrl' => $this->generateUrl('classroom_courses', array('classroomId' => $id)),
-            )));
-        } else {
-            return $this->createJsonResponse(array('message' => 'can not free join'), 403);
-        }
-    }
-
-    private function canFreeJoinByBuyAllCourses($classroom)
-    {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-
-        return $this->canFreeJoin($classroom, $this->getCurrentUser(), $courses);
-    }
-
     public function exitAction($id)
     {
         $user = $this->getCurrentUser();
@@ -517,16 +492,6 @@ class ClassroomController extends BaseController
 
         if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
-        }
-
-        if (!empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
-        }
-
-        $order = $this->getOrderService()->getOrder($member['orderId']);
-
-        if ($order['targetType'] == 'groupSell') {
-            throw $this->createAccessDeniedException('组合购买课程不能退出。');
         }
 
         $this->getClassroomService()->removeStudent($id, $user['id']);
@@ -591,51 +556,6 @@ class ClassroomController extends BaseController
 
         return $this->render('classroom/classroom-block.html.twig', array(
             'classroom' => $classroom,
-        ));
-    }
-
-    public function buyAction(Request $request, $id)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $previewAs = $request->query->get('previewAs');
-
-        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-        $member = $this->previewAsMember($previewAs, $member, $classroom);
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        $userInfo = $this->getUserService()->getUserProfile($user['id']);
-        $userInfo['approvalStatus'] = $user['approvalStatus'];
-
-        $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
-
-        if (empty($account)) {
-            $this->getCashAccountService()->createAccount($user['id']);
-        }
-
-        if (isset($account['cash'])) {
-            $account['cash'] = intval($account['cash']);
-        }
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        return $this->render('classroom/buy-modal.html.twig', array(
-            'classroom' => $classroom,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
-            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
-            'courseSetting' => $courseSetting,
-            'member' => $member,
-            'userFields' => $userFields,
-            'account' => $account,
         ));
     }
 

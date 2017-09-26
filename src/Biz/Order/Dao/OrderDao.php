@@ -46,6 +46,16 @@ interface OrderDao extends GeneralDaoInterface
 
     public function analysisOrderDate($conditions);
 
+    /**
+     * @deprecated  即将废弃，不建议使用
+     *
+     * @param $conditions
+     * @param $orderBy
+     * @param $start
+     * @param $limit
+     *
+     * @return mixed
+     */
     public function searchBill($conditions, $orderBy, $start, $limit);
 
     public function countUserBill($conditions);

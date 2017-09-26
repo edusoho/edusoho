@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
-use Biz\Accessor\AccessorInterface;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
@@ -650,36 +649,29 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exitAction($id)
+    public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是课程的学员。');
+            throw $this->createAccessDeniedException('');
         }
 
-        if ($member['joinedType'] == 'course' && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
-        }
+        $user = $this->getCurrentUser();
+        $req = $request->request->all();
+        $this->getMemberService()->removeStudent($course['id'], $user['id'], array(
+            'reason' => $req['reason']['note'],
+        ));
 
-        $this->getMemberService()->removeStudent($course['id'], $user['id']);
-
-        return $this->createJsonResponse(true);
+        return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
     }
 
-    public function freeJoinAction($courseId)
+    public function exitModalAction(Request $request)
     {
-        $access = $this->getCourseService()->canJoinCourse($courseId);
-        $course = $this->getCourseService()->getCourse($courseId);
+        $action = $request->query->get('action');
 
-        if ($access['code'] == AccessorInterface::SUCCESS && $course['originPrice'] == 0) {
-            $this->getMemberService()->becomeStudent($courseId, $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
-            return $this->createJsonResponse(array('message' => 'join success', 'data' => array(
-                'redirectUrl' => $this->generateUrl('my_course_show', array('id' => $courseId))
-            )));
-        } else {
-            return $this->createJsonResponse(array('message' => 'can not free join'), 403);
-        }
+        return $this->render('course/exit-modal.html.twig', array(
+            'action' => $action,
+        ));
     }
 
     public function renderCourseChoiceAction()

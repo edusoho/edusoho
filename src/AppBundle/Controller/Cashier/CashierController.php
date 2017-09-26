@@ -115,7 +115,7 @@ class CashierController extends BaseController
         );
 
         return $this->createJsonResponse(array(
-            'data' => $this->get('web.twig.app_extension')->majorCurrency($priceAmount),
+            'data' => $this->get('web.twig.order_extension')->majorCurrency($priceAmount),
         ));
     }
 

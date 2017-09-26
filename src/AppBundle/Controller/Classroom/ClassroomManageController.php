@@ -708,13 +708,8 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $userIds = empty($data['ids']) ? array() : $data['ids'];
+
             $this->getClassroomService()->updateAssistants($id, $userIds);
-
-            if ($userIds) {
-                $fields = array('assistantIds' => $userIds);
-
-                $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
-            }
 
             $this->setFlashMessage('success', 'site.save.success');
         }

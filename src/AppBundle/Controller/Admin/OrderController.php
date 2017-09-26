@@ -6,30 +6,23 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\StringToolkit;
 use Biz\Order\Service\OrderService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        return $this->render('admin/order/index.html.twig', array());
-    }
+    private $statusMap = null;
 
-    public function manageAction(Request $request, $targetType)
+    private $displayStatusDict = null;
+
+    private $paymentDict = null;
+
+    public function manageAction(Request $request)
     {
         $conditions = $request->query->all();
 
-        $conditions['order_item_target_type'] = $targetType;
-
-        if (isset($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
-        }
         $conditions = $this->prepareConditions($conditions);
 
         $paginator = new Paginator(
@@ -57,16 +50,14 @@ class OrderController extends BaseController
         foreach ($orders as &$order) {
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
-            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
 
         return $this->render(
-            'admin/order/manage.html.twig',
+            'admin/order/list.html.twig',
             array(
                 'request' => $request,
-                'targetType' => $targetType,
                 'orders' => $orders,
                 'users' => $users,
                 'paginator' => $paginator,
@@ -76,6 +67,14 @@ class OrderController extends BaseController
 
     protected function prepareConditions($conditions)
     {
+        if (!empty($conditions['orderItemType'])) {
+            $conditions['order_item_target_type'] = $conditions['orderItemType'];
+        }
+
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+
         if (!empty($conditions['startDateTime'])) {
             $conditions['start_time'] = strtotime($conditions['startDateTime']);
         }
@@ -84,106 +83,60 @@ class OrderController extends BaseController
             $conditions['end_time'] = strtotime($conditions['endDateTime']);
         }
 
-        if ($conditions['order_item_target_type'] != 'course') {
-            return $conditions;
-        }
-        if (isset($conditions['courseSetTitle'])) {
-            $conditions['order_item_title'] = $conditions['courseSetTitle'];
-        }
-
-        if (!empty($conditions['courseSetId'])) {
-            $courses = $this->getCourseService()->findCoursesByCourseSetId($conditions['courseSetId']);
-            $courseIds = ArrayToolkit::column($courses, 'courseSetId');
-            $conditions['order_item_target_ids'] = empty($courseIds) ? array(-1) : $courseIds;
-            unset($conditions['targetId']);
-        }
         if (isset($conditions['buyer'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['user_id'] = $user ? $user['id'] : -1;
         }
-        if (isset($conditions['mobile'])) {
-            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
-            $conditions['user_id'] = $user ? $user['id'] : -1;
-        }
-        if (isset($conditions['email'])) {
-            $user = $this->getUserService()->getUserByEmail($conditions['email']);
-            $conditions['user_id'] = $user ? $user['id'] : -1;
+
+        if (!empty($conditions['displayStatus'])) {
+            $conditions['in_status'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
         }
 
         return $conditions;
     }
 
-    public function detailAction(Request $request, $id)
-    {
-        return $this->forward(
-            'AppBundle:Order:detail',
-            array(
-                'id' => $id,
-            )
-        );
-    }
-
-    public function cancelRefundAction(Request $request, $id)
-    {
-        $this->getClassroomOrderService()->cancelRefundOrder($id);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function auditRefundAction(Request $request, $id)
+    public function detailAction($id)
     {
         $order = $this->getOrderService()->getOrder($id);
 
-        if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+        $user = $this->getUserService()->getUser($order['user_id']);
 
-            $pass = $data['result'] == 'pass' ? true : false;
-            $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
+        $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($order['id']);
 
-            if ($pass) {
-                if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
-                    $this->getClassroomService()->removeStudent($order['targetId'], $order['userId']);
-                }
-            }
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
-            $this->sendAuditRefundNotification($order, $pass, $data['amount'], $data['note']);
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
-            return $this->createJsonResponse(true);
-        }
+        $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
 
-        return $this->render(
-            'admin/course-order/refund-confirm-modal.html.twig',
-            array(
-                'order' => $order,
-            )
-        );
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
+
+        return $this->render('admin/order/detail.html.twig', array(
+            'order' => $order,
+            'user' => $user,
+            'orderLogs' => $orderLogs,
+            'orderItems' => $orderItems,
+            'paymentTrade' => $paymentTrade,
+            'orderDeducts' => $orderDeducts,
+            'users' => $users,
+        ));
     }
 
     /**
      *  导出订单.
-     *
-     * @param string $targetType classroom | course | vip
      */
-    public function exportCsvAction(Request $request, $targetType)
+    public function exportCsvAction(Request $request)
     {
         $start = $request->query->get('start', 0);
 
         $magic = $this->setting('magic');
         $limit = $magic['export_limit'];
 
-        $conditions = $this->buildExportCondition($request, $targetType);
+        $conditions = $this->buildExportCondition($request);
 
-        $status = array(
-            'no_paid' => '未付款',
-            'paid' => '已付款',
-            'refunding' => '退款中',
-            'refunded' => '已退款',
-            'closed' => '已关闭',
-        );
-
-        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $orderCount = $this->getOrderService()->countOrders($conditions);
         $orders = $this->getOrderService()->searchOrders($conditions, array('created_time' => 'DESC'), $start, $limit);
+
         $studentUserIds = ArrayToolkit::column($orders, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -192,28 +145,20 @@ class OrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        if ($targetType == 'vip') {
-            $str = '订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间';
-        } else {
-            $str = '订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间';
-        }
+        $str = '订单号,订单状态,订单名称,订单金额,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
 
         $str .= "\r\n";
 
         $results = array();
 
-        if ($targetType == 'vip') {
-            $results = $this->generateVipExportData($orders, $status, $users, $profiles, $payment, $results);
-        } else {
-            $results = $this->generateExportData($orders, $status, $payment, $users, $profiles, $results);
-        }
+        $results = $this->generateExportData($orders, $users, $profiles, $results);
 
         $loop = $request->query->get('loop', 0);
         ++$loop;
 
         $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
         $readTempDate = $start;
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
+        $file = $this->getExportFile($request);
 
         if ($enableRedirect) {
             $content = implode("\r\n", $results);
@@ -222,7 +167,7 @@ class OrderController extends BaseController
             return $this->redirect(
                 $this->generateUrl(
                     'admin_order_manage_export_csv',
-                    array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)
+                    array('loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)
                 )
             );
         } elseif ($readTempDate) {
@@ -232,7 +177,7 @@ class OrderController extends BaseController
 
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
-        $filename = sprintf('%s-order-(%s).csv', $targetType, date('Y-n-d'));
+        $filename = sprintf('order-(%s).csv', date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -243,137 +188,63 @@ class OrderController extends BaseController
         return $response;
     }
 
-    private function buildExportCondition($request, $targetType)
+    private function buildExportCondition($request)
     {
         $conditions = $request->query->all();
-
-        $conditions['order_item_target_type'] = $targetType;
 
         $conditions = $this->prepareConditions($conditions);
 
         return $conditions;
     }
 
-    private function genereateExportCsvFileName($targetType)
+    private function getExportFile($request)
     {
-        $rootPath = $this->getParameter('topxia.upload.private_directory');
         $user = $this->getUser();
+        $fileName = $request->query->get('fileName', 'export_content_order'.$user['id'].time().'.txt');
+        $rootPath = $this->getParameter('topxia.upload.private_directory');
 
-        return $rootPath.'/export_content'.$targetType.$user['id'].time().'.txt';
+        return $rootPath.DIRECTORY_SEPARATOR.$fileName;
     }
 
-    protected function sendAuditRefundNotification($order, $pass, $amount, $note)
+    private function generateExportData($orders, $users, $profiles, $results)
     {
-        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
-
-        if (empty($course)) {
-            return false;
-        }
-
-        if ($pass) {
-            $message = $this->setting('refund.successNotification', '');
-        } else {
-            $message = $this->setting('refund.failedNotification', '');
-        }
-
-        if (empty($message)) {
-            return false;
-        }
-
-        $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
-        $variables = array(
-            'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
-            'amount' => $amount,
-            'note' => $note,
-        );
-
-        $message = StringToolkit::template($message, $variables);
-        $this->getNotificationService()->notify($order['userId'], 'default', $message);
-
-        return true;
-    }
-
-    /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
-     */
-    protected function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
-    }
-
-    private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
-    {
+        $str = '订单号,订单状态,订单名称,总价,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
         foreach ($orders as $key => $order) {
             $member = '';
+
+            // 订单号
             $member .= $order['sn'].',';
-            $member .= $status[$order['display_status']].',';
-            $member .= $order['title'].',';
-            $member .= $users[$order['user_id']]['nickname'].',';
-            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-            $member .= $order['pay_amount'].',';
-            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
+            // 订单状态
+            $member .= $this->getExportStatus($order['status']).',';
 
-            if (empty($payment[$orderPayment])) {
-                $member .= $payment['none'].',';
-            } else {
-                $member .= $payment[$orderPayment].',';
-            }
-            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-
-            if ($order['pay_time'] != 0) {
-                $member .= date('Y-n-d H:i:s', $order['pay_time']).',';
-            } else {
-                $member .= '-'.',';
-            }
-
-            $results[] = $member;
-        }
-
-        return $results;
-    }
-
-    private function generateExportData($orders, $status, $payment, $users, $profiles, $results)
-    {
-        foreach ($orders as $key => $order) {
-            $member = '';
-            $member .= $order['sn'].',';
-            $member .= $status[$order['display_status']].',';
             //CSV会将字段里的两个双引号""显示成一个
             $order['title'] = str_replace('"', '""', $order['title']);
+            // 订单名称
             $member .= '"'.$order['title'].'",';
+            // 总价
+            $member .= MathToolkit::simple($order['price_amount'], 0.01).',';
+            // 优惠金额
+            $member .= MathToolkit::simple($order['price_amount'] - $order['pay_amount'], 0.01).',';
+            // 实付总额
+            $member .= MathToolkit::simple($order['pay_amount'], 0.01).',';
+            // 虚拟币支付
+            $member .= MathToolkit::simple($order['paid_coin_amount'], 0.01).',';
+            // 现金支付
+            $member .= MathToolkit::simple($order['paid_cash_amount'], 0.01).',';
+            // 支付方式
+            $member .= $this->getExportPayment($order['payment']).',';
 
-            $member .= $order['price_amount'] / 100 .',';
-
-            if (!empty($order['coupon'])) {
-                $member .= $order['coupon'].',';
-            } else {
-                $member .= '无'.',';
-            }
-
-//            $member .= $order['couponDiscount'].',';
-            $member .= ($order['price_amount'] - $order['pay_amount']) / 100 .',';
-            $member .= !empty($order['coinRate']) ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
-            $member .= $order['pay_amount'] / 100 .',';
-
-            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-
-            if (empty($payment[$orderPayment])) {
-                $member .= $payment['none'].',';
-            } else {
-                $member .= $payment[$orderPayment].',';
-            }
-
+            //用户名
             $member .= $users[$order['user_id']]['nickname'].',';
+            //真实姓名
             $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-
-            if (preg_match('/管理员添加/', $order['title'])) {
-                $member .= '管理员添加,';
-            } else {
-                $member .= '-,';
-            }
-
+            //邮箱
+            $member .= $users[$order['user_id']]['email'].',';
+            //联系电话
+            $member .= $users[$order['user_id']]['verifiedMobile'].',';
+            //创建时间
             $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-
+            //付款时间
             if ($order['pay_time'] != 0) {
                 $member .= date('Y-n-d H:i:s', $order['pay_time']);
             } else {
@@ -386,40 +257,26 @@ class OrderController extends BaseController
         return $results;
     }
 
-    protected function getUserFieldService()
+    private function getExportStatus($orderStatus)
     {
-        return $this->createService('User:UserFieldService');
+        if (!$this->statusMap) {
+            $this->statusMap = $this->container->get('web.twig.order_extension')->getStatusMap();
+        }
+
+        if (!$this->displayStatusDict) {
+            $this->displayStatusDict = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('orderDisplayStatus');
+        }
+
+        return isset($this->statusMap[$orderStatus]) && isset($this->displayStatusDict[$this->statusMap[$orderStatus]]) ? $this->displayStatusDict[$this->statusMap[$orderStatus]] : $orderStatus;
     }
 
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
+    private function getExportPayment($payment)
     {
-        return $this->createService('Course:CourseService');
-    }
+        if (!$this->paymentDict) {
+            $this->paymentDict = $this->get('codeages_plugin.dict_twig_extension')->getDict('newPayment');
+        }
 
-    /**
-     * @return \Biz\Course\Service\CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    protected function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
-    }
-
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
+        return isset($this->paymentDict[$payment]) ? $this->paymentDict[$payment] : $payment;
     }
 
     /**
@@ -428,5 +285,13 @@ class OrderController extends BaseController
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

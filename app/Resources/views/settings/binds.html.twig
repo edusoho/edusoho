@@ -6,7 +6,7 @@
 
 {% set settings = setting('login_bind', []) %}
 
-{% do script(['libs/jquery-confirm.js', 'app/js/settings/binds/index.js']) %}
+{% do script(['app/js/settings/binds/index.js']) %}
 
 {% block page_title %}
   {{ 'user.settings.oauth.content_title'|trans }}

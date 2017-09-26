@@ -493,7 +493,7 @@ class UserController extends BaseController
 
         $this->saveUserInfo($request, $user);
 
-        return $this->redirect($request->get('targetUrl'));
+        return $this->createJsonResponse(array());
     }
 
     protected function saveUserInfo($request, $user)

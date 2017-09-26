@@ -358,14 +358,6 @@ settings:
     path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
 
-settings_avatar:
-    path:  /settings/avatar
-    defaults: { _controller: AppBundle:Settings:avatar }
-
-settings_avatar_crop:
-    path:  /settings/avatar/crop
-    defaults: { _controller: AppBundle:Settings:avatarCrop }
-
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
     defaults: { _controller: AppBundle:Settings:avatarCropModal }
@@ -1990,6 +1982,11 @@ course_set_unfavorite:
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
+  methods: [POST]
+
+course_exit_modal:
+  path: /course/show_exit_modal
+  defaults: {_controller: AppBundle:Course/Course:exitModal}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
@@ -2549,11 +2546,6 @@ classroom_show:
     path:  /classroom/{id}
     defaults: { _controller: AppBundle:Classroom/Classroom:show }
 
-classroom_free_join:
-    path:  /classroom/{id}/free_join
-    defaults: { _controller: AppBundle:Classroom/Classroom:freeJoin }
-    methods: [POST]
-
 classroom_qrcode:
     path:  /classroom/{id}/qrcode
     defaults: { _controller: AppBundle:Classroom/Classroom:qrcode }
@@ -2584,7 +2576,8 @@ classroom_introductions:
 
 classroom_buy:
     path: /classroom/{id}/buy
-    defaults: { _controller: AppBundle:Classroom/Classroom:buy }
+    defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
+    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2849,11 +2842,7 @@ course_member_deadline_reach:
 
 course_buy:
     path: /course/{id}/buy
-    defaults: { _controller: AppBundle:Course/CourseOrder:buy }
-
-course_free_join:
-    path: /course/{courseId}/free_join
-    defaults: { _controller: AppBundle:Course/Course:freeJoin }
+    defaults: { _controller: AppBundle:Course/CourseBuy:buy }
     methods: [POST]
 
 course_order_repay:
@@ -2995,10 +2984,6 @@ try_export:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
-
-product_member_exit:
-    path: /product/{targetId}/type/{targetType}/owner/exit
-    defaults: { _controller: AppBundle:Product/Owner:exit}
 
 v2_demo_modal:
     path: /v2/demo/modal
