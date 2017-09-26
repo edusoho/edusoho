@@ -4,7 +4,6 @@ namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\Service\StatisticsService;
-use Topxia\Service\Common\ServiceKernel;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
 {
