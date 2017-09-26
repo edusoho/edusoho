@@ -6,7 +6,7 @@
   <div class="container cd-container">
     <div class="cd-content">
       {% block sidebar %}
-        {% include 'v2/sidebar.html.twig' %}
+        {% include 'v2/sidebar.html.twig' with { side_nav: side_nav|default('') } %}
       {% endblock %}
 
       {% block main %}
