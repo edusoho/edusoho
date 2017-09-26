@@ -7,8 +7,6 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -110,7 +108,6 @@ class OrderController extends BaseController
 
     /**
      *  导出订单.
-     *
      */
     public function exportCsvAction(Request $request)
     {
