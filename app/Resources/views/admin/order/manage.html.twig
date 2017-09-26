@@ -1,9 +1,5 @@
 {% extends 'admin/layout.html.twig' %}
 
-{#
-    {% set script_controller = 'trade/index' %}
-#}
-
 {% set menu = 'admin_' ~ targetType ~ '_order' %}
 
 {% set script_controller = 'manage/list' %}
@@ -29,7 +25,7 @@
         </select>
 
         <select class="form-control" name="payment">
-          {{ select_options(dict('payment'), request.get('payment'), 'order.payment_pattern'|trans) }}
+          {{ select_options(dict('newPayment'), request.get('payment'), 'order.payment_pattern'|trans) }}
         </select>
       </div>
       <div class="form-group" style="display:none;">

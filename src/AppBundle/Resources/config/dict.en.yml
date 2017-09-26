@@ -49,12 +49,10 @@ orderStatus:
     closed: Closed
 
 orderDisplayStatus:
-    orderDisplayStatus:
-    no_paid: 未付款
-    paid: 已付款
-    refunding: 退款中
-    closed: 已关闭
-    refunded: 已退款
+    notPaid: notPaid
+    paid: paid
+    closed: closed
+    refunded: refunded
 
 refundStatus:
     auditing: Applied

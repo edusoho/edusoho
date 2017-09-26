@@ -22,34 +22,6 @@
     {% endif %}
 {% endmacro %}
 
-{% macro orderStatus(status) %}
-    {% if status == 'no_paid' %}
-        <span class="label label-warning">{{ dict_text('orderDisplayStatus', 'no_paid') }}</span>
-    {% elseif status == 'paid' %}
-        <span class="label label-success">{{ dict_text('orderDisplayStatus', 'paid') }}</span>
-    {% elseif status == 'refunding' %}
-        <span class="label label-info">{{ dict_text('orderDisplayStatus', 'refunding') }}</span>
-    {% elseif status == 'refunded' %}
-        <span class="label label-danger">{{ dict_text('orderDisplayStatus', 'refunded') }}</span>
-    {% elseif status == 'closed' %}
-        <span class="label label-default">{{ dict_text('orderDisplayStatus', 'closed') }}</span>
-    {% endif %}
-{% endmacro %}
-
-{% macro orderStatusV2(status) %}
-    {% if status == 'no_paid' %}
-        <span class="cd-status cd-status-warning">{{ dict_text('orderDisplayStatus', 'no_paid') }}</span>
-    {% elseif status == 'paid' %}
-        <span class="cd-status cd-status-success">{{ dict_text('orderDisplayStatus', 'paid') }}</span>
-    {% elseif status == 'refunding' %}
-        <span class="cd-status cd-status-info">{{ dict_text('orderDisplayStatus', 'refunding') }}</span>
-    {% elseif status == 'refunded' %}
-        <span class="cd-status cd-status-danger">{{ dict_text('orderDisplayStatus', 'refunded') }}</span>
-    {% elseif status == 'closed' %}
-        <span class="cd-status cd-status-disabled">{{ dict_text('orderDisplayStatus', 'closed') }}</span>
-    {% endif %}
-{% endmacro %}
-
 {% macro refundStatus(status) %}
     {% if status == 'created' %}
         <span class="cd-status cd-status-info">{{ 'common.orderStatus.created'|trans }}</span>

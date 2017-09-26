@@ -16,11 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        return $this->render('admin/order/index.html.twig', array());
-    }
-
     public function manageAction(Request $request, $targetType)
     {
         $conditions = $request->query->all();

@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\JoinPointToolkit;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class OrderExtension extends \Twig_Extension
 {
@@ -15,6 +16,28 @@ class OrderExtension extends \Twig_Extension
      * @var Biz
      */
     protected $biz;
+
+    protected $webStatusMap = array(
+        'created' => 'notPaid',
+        'paying' => 'notPaid',
+        'closed' => 'closed',
+        'refunded' => 'closed',
+        'fail' => 'paid',
+        'paid' => 'paid',
+        'refunding' => 'paid',
+        'success' => 'paid',
+    );
+
+    protected $adminStatusMap = array(
+        'created' => 'notPaid',
+        'paying' => 'notPaid',
+        'closed' => 'closed',
+        'refunded' => 'refunded',
+        'fail' => 'paid',
+        'paid' => 'paid',
+        'refunding' => 'paid',
+        'success' => 'paid',
+    );
 
     public function __construct($container, Biz $biz)
     {
@@ -32,6 +55,7 @@ class OrderExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('check_order_type', array($this, 'checkOrderType')),
+            new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
         );
     }
 
@@ -43,6 +67,66 @@ class OrderExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    public function displayOrderStatus($orderStatus, $isAdmin = 0)
+    {
+        $displayStatus = $this->getDisplayStatus($orderStatus, $isAdmin);
+
+        return $isAdmin ? $this->displayAdminStatus($displayStatus) : $this->displayWebStatus($displayStatus);
+    }
+
+    private function getDisplayStatus($orderStatus, $isAdmin)
+    {
+        $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
+
+        return isset($map[$orderStatus]) ? $map[$orderStatus] : $orderStatus;
+    }
+
+    private function displayAdminStatus($displayStatus)
+    {
+        $text = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('orderDisplayStatus', $displayStatus);
+        switch ($displayStatus) {
+            case 'notPaid':
+                $majorClass = 'label-warning';
+                break;
+            case 'paid':
+                $majorClass = 'label-success';
+                break;
+            case 'refunded':
+                $majorClass = 'label-danger';
+                break;
+            case 'closed':
+                $majorClass = 'label-default';
+                break;
+            default:
+                $majorClass = 'label-default';
+        }
+
+        return sprintf('<span class="label %s">%s</span>', $majorClass, $text);
+    }
+
+    private function displayWebStatus($displayStatus)
+    {
+        $text = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('orderDisplayStatus', $displayStatus);
+        switch ($displayStatus) {
+            case 'notPaid':
+                $majorClass = 'cd-status-warning';
+                break;
+            case 'paid':
+                $majorClass = 'cd-status-success';
+                break;
+            case 'refunded':
+                $majorClass = 'cd-status-danger';
+                break;
+            case 'closed':
+                $majorClass = 'cd-status-disabled';
+                break;
+            default:
+                $majorClass = 'cd-status-disabled';
+        }
+
+        return sprintf('<span class="cd-status %s">%s</span>', $majorClass, $text);
     }
 
     public function getName()
