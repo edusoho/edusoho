@@ -59,6 +59,18 @@ orderDisplayStatus:
     closed: 已关闭
     refunded: 已退款
 
+orderLogStatus:
+    order.created: 未付款
+    order.paying: 付款中
+    order.paid: 已付款
+    order.refunding: 退款中
+    order.refunded: 已退款
+    order.success: 交易成功
+    order.fail: 交易失败
+    order.closed: 已关闭
+    order_refund.auditing: 退款审核中
+    order_refund.cancel: 退款被拒绝
+
 refundStatus:
     auditing: 已申请
     refunded: 退款成功
@@ -78,7 +90,12 @@ payment:
     coin: 虚拟币
     llpay: 连连支付
     marketing: 营销平台
-   
+
+orderDeductType:
+    discount: 打折
+    coupon: 优惠码
+    paidCourse: 班级课程抵扣
+
 newPayment:
     none: --
     alipay.in_time: 支付宝

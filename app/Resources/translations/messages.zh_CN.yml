@@ -428,7 +428,7 @@ plugin.coupon.use_btn: 使用优惠券
 plugin.coupon.choose_btn: 输入优惠券
 plugin.coupon.use.input_placeholder: 请输入优惠券
 plugin.coupon.code: 优惠码
-plugin.coupon.amount: 优惠金额
+plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用
 coin.online_school_balance: 网校余额
@@ -456,6 +456,7 @@ order.name: 订单名称
 order.createdTime: 创建时间
 order.pay_time: 付款时间
 order.status: 订单状态
+order.deduct: 优惠抵扣
 order.item_type: 订单类型
 order.status.created: 未完成
 order.status.paid: 已付款
@@ -463,13 +464,14 @@ order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
 order.due_pay: 应付(元)
-order.price_amount: 总价
+order.price_amount: 订单金额
 order.discount_amount: 优惠
-order.real_pay: 实付
+order.real_pay: 实付金额
 order.buyers: 购买者
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
+order.platform_sn: 商户订单号
 order.price: 订单价格
 order.paid_time: 成交时间
 order.bank_code: 银行编号

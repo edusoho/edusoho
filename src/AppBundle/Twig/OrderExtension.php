@@ -2,6 +2,8 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Common\MathToolkit;
+use Biz\OrderFacade\Currency;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -48,6 +50,9 @@ class OrderExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
+            new \Twig_SimpleFilter('fen_to_yuan', array($this, 'fenToYuan')),
+            new \Twig_SimpleFilter('price_format', array($this, 'priceFormat')),
+            new \Twig_SimpleFilter('major_currency', array($this, 'majorCurrency')),
         );
     }
 
@@ -57,6 +62,49 @@ class OrderExtension extends \Twig_Extension
             new \Twig_SimpleFunction('check_order_type', array($this, 'checkOrderType')),
             new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
         );
+    }
+
+    public function fenToYuan($price, $displayPrefix = 1)
+    {
+        $price = MathToolkit::simple($price, 0.01);
+        return $this->majorCurrency($price, $displayPrefix);
+    }
+
+    /**
+     * 价格格式化
+     *
+     * @param $price
+     *
+     * @return string
+     */
+    public function priceFormat($price, $displayPrefix = 1)
+    {
+        $priceParts = $this->getCurrency()->formatParts($price);
+        if (!$displayPrefix) {
+            unset($priceParts['prefix']);
+            unset($priceParts['suffix']);
+        }
+
+        return implode($priceParts);
+    }
+
+    public function majorCurrency($price, $displayPrefix = 1)
+    {
+        $priceParts = $this->getCurrency()->formatToMajorCurrency($price);
+        if (!$displayPrefix) {
+            unset($priceParts['prefix']);
+            unset($priceParts['suffix']);
+        }
+
+        return implode($priceParts);
+    }
+
+    /**
+     * @return Currency
+     */
+    private function getCurrency()
+    {
+        return $this->biz['currency'];
     }
 
     public function checkOrderType($type)

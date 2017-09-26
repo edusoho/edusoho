@@ -1,0 +1,45 @@
+{% import "macro.html.twig" as web_macro %}
+
+<thead>
+<tr>
+  <th width="25%">{{ 'order.name'|trans }}</th>
+  <th>{{ 'order.createdTime'|trans }}</th>
+  <th>{{ 'order.status'|trans }}</th>
+  <th>{{ 'order.price_amount'|trans }}</th>
+  <th>{{ 'order.real_pay'|trans }}</th>
+  <th width="10%">{{'order.buyers'|trans }}</th>
+  <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
+</tr>
+</thead>
+<tbody>
+{% for order in orders %}
+  {% set buyer = users[order.user_id]|default(null) %}
+  <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
+    <td>
+      {% if order.item.target_type|default('') == 'course' %}
+        <a  class="link-primary" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+      {% elseif order.item.target_type|default('') == 'vip' %}
+        <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+      {% elseif order.item.target_type|default('') == 'classroom' %}
+        <a class="link-primary" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+      {% else %}
+        <strong>{{order.title}}</strong>
+      {% endif %}
+      <br>
+      <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
+    </td>
+    <td><span class="color-gray text-sm">{{ order.created_time|date('Y-n-d H:i:s') }}</span></td>
+    <td>{{ display_order_status(order.status, 1) }}</td>
+    <td><span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span></td>
+    <td><span class="color-warning">{{order.pay_amount|fen_to_yuan(0) }}</span></td>
+    <td>
+      {{ web_macro.user_link(buyer) }}
+    </td>
+    <td>
+      <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
+    </td>
+  </tr>
+{% else %}
+  <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+{% endfor %}
+</tbody>

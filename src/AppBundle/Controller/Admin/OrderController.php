@@ -50,13 +50,12 @@ class OrderController extends BaseController
         foreach ($orders as &$order) {
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
-            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
 
         return $this->render(
-            'admin/order/manage.html.twig',
+            'admin/order/list.html.twig',
             array(
                 'request' => $request,
                 'orders' => $orders,
@@ -96,14 +95,31 @@ class OrderController extends BaseController
         return $conditions;
     }
 
-    public function detailAction(Request $request, $id)
+    public function detailAction($id)
     {
-        return $this->forward(
-            'AppBundle:Order:detail',
-            array(
-                'id' => $id,
-            )
-        );
+        $order = $this->getOrderService()->getOrder($id);
+
+        $user = $this->getUserService()->getUser($order['user_id']);
+
+        $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($order['id']);
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
+        $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
+
+        return $this->render('admin/order/detail.html.twig', array(
+            'order' => $order,
+            'user' => $user,
+            'orderLogs' => $orderLogs,
+            'orderItems' => $orderItems,
+            'paymentTrade' => $paymentTrade,
+            'orderDeducts' => $orderDeducts,
+            'users' => $users,
+        ));
     }
 
     /**
@@ -129,7 +145,7 @@ class OrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = '订单号,订单状态,订单名称,总价,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
+        $str = '订单号,订单状态,订单名称,订单金额,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
 
         $str .= "\r\n";
 

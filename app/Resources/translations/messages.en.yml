@@ -370,6 +370,7 @@ order.name: 'Order name'
 order.createdTime: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
+order.deduct: Order deduct
 order.item_type: Order type
 order.status.created: Unfishined
 order.status.paid: Piad
