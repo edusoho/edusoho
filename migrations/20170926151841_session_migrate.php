@@ -39,6 +39,5 @@ class SessionMigrate extends Migration
      */
     public function down()
     {
-
     }
 }
