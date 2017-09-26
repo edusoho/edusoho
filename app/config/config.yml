@@ -103,8 +103,11 @@ services:
             password: "%database_password%"
 
     session.handler.pdo:
-        class:     AppBundle\Handler\BizSessionHandler
-        arguments: ['@service_container', '@security.token_storage']
+        class:     Codeages\Biz\Framework\Session\Handler\BizSessionHandler
+        arguments:
+             - '@service_container'
+             - '@security.token_storage'
+             - 'max_life_time': 7200
 
     session.handler.redis:
         class:     AppBundle\Handler\RedisSessionHandler
