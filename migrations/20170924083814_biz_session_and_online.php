@@ -35,7 +35,7 @@ class BizSessionAndOnline extends Migration
               `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '在线用户的id, 0代表游客',
               `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '客户端ip',
               `user_agent` varchar(1024) NOT NULL DEFAULT '',
-              `source` VARCHAR(64) NOT NULL DEFAULT 'unknown' COMMENT '当前在线用户的来源，例如：app, pc, mobile',
+              `source` VARCHAR(32) NOT NULL DEFAULT 'unknown' COMMENT '当前在线用户的来源，例如：app, pc, mobile',
               `created_time` int(10) NOT NULL,
               PRIMARY KEY (`id`),
               UNIQUE KEY `sess_id` (`sess_id`),
