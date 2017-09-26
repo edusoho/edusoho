@@ -62,7 +62,8 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         $sql = "SELECT f.* FROM {$this->table} f ";
         $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course'";
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId));
     }
@@ -75,7 +76,8 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         $sql = 'select id from '.CourseDao::TABLE_NAME." where courseSetId in (SELECT c.id FROM {$this->table} f ";
         $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $courseType));
     }
