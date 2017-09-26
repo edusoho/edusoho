@@ -634,12 +634,12 @@ admin:
         admin_finance:
             name: admin.nav.finance
             children:
-                # admin_accounts_center:
-                #     name: 账务中心
-                #     children:
-                #         admin_account_center:
-                #             name: 账务中心
-                #             disable: true
+                admin_orders:
+                     name: admin.finance.order_menu
+                     children:
+                        admin_order_manage:
+                            name: admin.finance.order_menu
+
                 admin_bills:
                     name: admin.finance.bills_menu
                     children:

@@ -537,6 +537,10 @@ admin_course_order_manage:
     path: /course/order/manage
     defaults: { _controller: AppBundle:Admin/CourseOrder:manage }
 
+admin_order_manage:
+    path: /order/manage
+    defaults: { _controller: AppBundle:Admin/Order:manage }
+
 admin_course_search:
     path: /course/search
     defaults: { _controller: AppBundle:Admin/Course:search }
