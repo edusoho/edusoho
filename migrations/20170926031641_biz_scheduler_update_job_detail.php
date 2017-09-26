@@ -63,7 +63,7 @@ class BizSchedulerUpdateJobDetail extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("update biz_scheduler_job_fired set job_detail = null");
+        $connection->exec('update biz_scheduler_job_fired set job_detail = null');
         $connection->exec("delete from biz_scheduler_job_fired where name = 'Scheduler_MarkExecutingTimeoutJob'");
     }
 }
