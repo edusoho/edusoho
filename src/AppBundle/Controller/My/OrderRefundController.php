@@ -38,18 +38,17 @@ class OrderRefundController extends BaseController
 
         $orderIds = ArrayToolkit::column($orderRefunds, 'order_id');
         $orders = ArrayToolkit::index($this->getOrderService()->findOrdersByIds($orderIds), 'id');
+
         return $this->render('my-order/order-refund/index.html.twig', array(
             'paginator' => $paginator,
             'orders' => $orders,
             'orderRefunds' => $orderRefunds,
         ));
-
     }
 
     public function applyRefundAction(Request $request)
     {
         return $this->render('', array(
-
         ));
     }
 
