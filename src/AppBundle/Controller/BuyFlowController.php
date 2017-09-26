@@ -55,12 +55,12 @@ abstract class BuyFlowController extends BaseController
     protected function needFillUserInfo()
     {
         $setting = $this->getSettingService()->get('course');
-        $buyFields = $setting['userinfoFields'];
 
         if (!empty($setting['buy_fill_userinfo'])) {
             $user = $this->getUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
             $user = array_merge($userInfo, $user->toArray());
+            $buyFields = $setting['userinfoFields'];
             foreach ($buyFields as $buyField) {
                 if (empty($user[$buyField])) {
                     return true;
