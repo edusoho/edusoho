@@ -6,7 +6,6 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\StringToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -112,7 +111,6 @@ class OrderController extends BaseController
     /**
      *  导出订单.
      *
-     * @param string $targetType classroom | course | vip
      */
     public function exportCsvAction(Request $request)
     {
@@ -195,53 +193,45 @@ class OrderController extends BaseController
         return $rootPath.DIRECTORY_SEPARATOR.$fileName;
     }
 
-    /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
-     */
-    protected function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
-    }
-
     private function generateExportData($orders, $users, $profiles, $results)
     {
         $str = '订单号,订单状态,订单名称,总价,优惠金额,实付总额,虚拟币支付,现金支付,支付方式,用户名,真实姓名,邮箱,联系电话,创建时间,付款时间';
         foreach ($orders as $key => $order) {
             $member = '';
 
-            # 订单号
+            // 订单号
             $member .= $order['sn'].',';
-            # 订单状态
+            // 订单状态
             $member .= $this->getExportStatus($order['status']).',';
 
             //CSV会将字段里的两个双引号""显示成一个
             $order['title'] = str_replace('"', '""', $order['title']);
-            # 订单名称
+            // 订单名称
             $member .= '"'.$order['title'].'",';
-            # 总价
+            // 总价
             $member .= MathToolkit::simple($order['price_amount'], 0.01).',';
-            # 优惠金额
+            // 优惠金额
             $member .= MathToolkit::simple($order['price_amount'] - $order['pay_amount'], 0.01).',';
-            # 实付总额
+            // 实付总额
             $member .= MathToolkit::simple($order['pay_amount'], 0.01).',';
-            # 虚拟币支付
+            // 虚拟币支付
             $member .= MathToolkit::simple($order['paid_coin_amount'], 0.01).',';
-            # 现金支付
+            // 现金支付
             $member .= MathToolkit::simple($order['paid_cash_amount'], 0.01).',';
-            # 支付方式
+            // 支付方式
             $member .= $this->getExportPayment($order['payment']).',';
 
-            #用户名
+            //用户名
             $member .= $users[$order['user_id']]['nickname'].',';
-            #真实姓名
+            //真实姓名
             $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-            #邮箱
+            //邮箱
             $member .= $users[$order['user_id']]['email'].',';
-            #联系电话
+            //联系电话
             $member .= $users[$order['user_id']]['verifiedMobile'].',';
-            #创建时间
+            //创建时间
             $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-            #付款时间
+            //付款时间
             if ($order['pay_time'] != 0) {
                 $member .= date('Y-n-d H:i:s', $order['pay_time']);
             } else {
@@ -276,47 +266,19 @@ class OrderController extends BaseController
         return isset($this->paymentDict[$payment]) ? $this->paymentDict[$payment] : $payment;
     }
 
-    protected function getUserFieldService()
-    {
-        return $this->createService('User:UserFieldService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return \Biz\Course\Service\CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    protected function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
-    }
-
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
-    }
-
     /**
      * @return PayService
      */
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }
