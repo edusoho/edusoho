@@ -2,10 +2,11 @@
 
 namespace Biz\OrderRefund\Service\Impl;
 
-use Biz\BaseService;
-use Biz\OrderRefund\Service\OrderRefundService;
+use Codeages\Biz\Framework\Order\Service\Impl\OrderRefundServiceImpl;
+use Biz\OrderRefund\Service\OrderRefundProxyService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 
-class OrderRefundServiceImpl extends BaseService implements OrderRefundService
+class OrderRefundProxyServiceImpl extends OrderRefundServiceImpl implements OrderRefundProxyService
 {
     public function applyOrderRefund($orderId, $fileds)
     {

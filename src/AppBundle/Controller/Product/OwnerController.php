@@ -3,7 +3,8 @@
 namespace AppBundle\Controller\Product;
 
 use AppBundle\Controller\BaseController;
-use Biz\OrderFacade\Product\Product;
+use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OwnerController extends BaseController
@@ -52,6 +53,9 @@ class OwnerController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
     protected function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');

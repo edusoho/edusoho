@@ -2,7 +2,9 @@
 
 namespace Biz\OrderRefund\Service;
 
-interface OrderRefundService
+use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+
+interface OrderRefundProxyService extends OrderRefundService
 {
     public function applyOrderRefund($orderId, $fileds);
 

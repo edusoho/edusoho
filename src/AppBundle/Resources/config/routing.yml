@@ -581,6 +581,10 @@ my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
 
+my_order_refunds:
+    path: /my/order_refunds
+    defaults: { _controller: AppBundle:My/OrderRefund:index }
+
 my_order_cancel:
     path: /my/order/{id}/cancel
     defaults: { _controller: AppBundle:My/Order:cancel }

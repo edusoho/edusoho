@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\OrderRefund\Service\OrderRefundProxyService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -15,11 +16,11 @@ class OrderRefundController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getBizOrderRefundService()->countRefunds($conditions),
+            $this->getOrderRefundProxyService()->countRefunds($conditions),
             20
         );
 
-        $refunds = $this->getBizOrderRefundService()->searchRefunds(
+        $refunds = $this->getOrderRefundProxyService()->searchRefunds(
             $conditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -67,7 +68,7 @@ class OrderRefundController extends BaseController
 
     public function auditRefundAction(Request $request, $refundId)
     {
-        $refund = $this->getBizOrderRefundService()->getOrderRefundById($refundId);
+        $refund = $this->getOrderRefundProxyService()->getOrderRefundById($refundId);
         $order = $this->getOrderService()->getOrder($refund['order_id']);
 
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
@@ -78,9 +79,9 @@ class OrderRefundController extends BaseController
             $refundData = array('deal_reason' => $request->request->get('note'));
 
             if ('pass' === $pass) {
-                $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
+                $product = $this->getOrderRefundProxyService()->adoptRefund($refund['order_id'], $refundData);
             } else {
-                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], $refundData);
+                $product = $this->getOrderRefundProxyService()->refuseRefund($refund['order_id'], $refundData);
             }
             $this->sendAuditRefundNotification($product, $order, $fileds);
             $this->setFlashMessage('success', 'admin.order_refund_handle.success');
@@ -122,14 +123,12 @@ class OrderRefundController extends BaseController
         return $this->createService('Order:OrderService');
     }
 
-    protected function getOrderRefundService()
+    /**
+     * @return OrderRefundProxyService
+     */
+    protected function getOrderRefundProxyService()
     {
-        return $this->createService('OrderRefund:OrderRefundService');
-    }
-
-    protected function getBizOrderRefundService()
-    {
-        return $this->createService('Order:OrderRefundService');
+        return $this->createService('OrderRefund:OrderRefundProxyService');
     }
 
     protected function getNotificationService()
