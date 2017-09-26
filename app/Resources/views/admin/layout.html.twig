@@ -160,6 +160,17 @@
         </a>
       </div>
     {% endif %}
+
+    {% block faqSDK %}
+      <script aysnc="aysnc" src="{{ 'http://service-cdn.qiqiuyun.net/js-sdk/faq/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
+      <script aysnc="aysnc">
+        new FaqSDK({
+          id: 'faq-sdk',
+          apiUrl: 'http://es.dev/faq/api/hotlist',
+          color: '#43bc60',
+        });
+      </script>
+    {% endblock %}
   </body>
 {% endblock %}
 </html>
