@@ -48,7 +48,7 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data' => array(
-                        'id' => $file['id'] . $level,
+                        'id' => $file['id'].$level,
                         'fromApi' => $fromApi,
                     ),
                     'times' => $inWhiteList ? 0 : 1,
@@ -136,7 +136,7 @@ class HLSController extends BaseController
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
-        if ($dataId != ($id . $level)) {
+        if ($dataId != ($id.$level)) {
             throw $this->createNotFoundException();
         }
 
@@ -226,13 +226,11 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-
         $isMobileUserAgent = $this->agentInWhiteList($request->headers->get('user-agent'));
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
-
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
