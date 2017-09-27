@@ -39,6 +39,8 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
                 ));
                 $this->notifyStudent($product);
                 $this->notifyAdmins($product);
+
+                $this->dispatchEvent('order.apply_refund', $order, array('orderItem' => $orderItem));
                 $this->commit();
             } catch (\Exception $exception) {
                 $this->rollback();
