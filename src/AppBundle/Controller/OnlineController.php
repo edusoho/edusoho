@@ -62,7 +62,7 @@ class OnlineController extends BaseController
         $onlines = array();
         if ($count > 0) {
             $onlines = $this->getOnlineService()->searchOnlines(
-                $conditions, array(), $paginator->getOffsetCount(), $paginator->getPerPageCount()
+                $conditions, array('active_time' => 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount()
             );
         }
 
