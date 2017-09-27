@@ -1,12 +1,28 @@
 <?php
 
-namespace Biz\OrderRefund\Service\Impl;
+namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
-use Biz\OrderRefund\Service\OrderRefundService;
+use Biz\OrderFacade\Service\OrderRefundService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
+    public function searchRefunds($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getOrderRedoundService()->searchRefunds($conditions, $orderBy, $start, $limit);
+    }
+
+    public function countRefunds($conditions)
+    {
+        return $this->getOrderRedoundService()->countRefunds($conditions);
+    }
+
+    public function getOrderRefundById($id)
+    {
+        return $this->getOrderRedoundService()->getOrderRefundById($id);
+    }
+
     public function applyOrderRefund($orderId, $fileds)
     {
         $order = $this->getOrderService()->getOrder($orderId);
@@ -155,6 +171,14 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         foreach ($admins as $key => $admin) {
             $this->getNotificationService()->notify($admin['id'], 'order-refund', $message);
         }
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Order\Service\OrderRefundService
+     */
+    protected function getOrderRedoundService()
+    {
+        return $this->createService('Order:OrderRefundService');
     }
 
     /**

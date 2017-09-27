@@ -20,7 +20,7 @@
 
     <div class="form-group">
       <input class="form-control" type="text" name="titleLike" value="{{ app.request.get('titleLike') }}" 
-      placeholder="{{'admin.order_refund.title.placeholder'|trans}}"
+      placeholder="{{ 'admin.order_refund.title.placeholder'|trans }}"
       >
     </div>
 
@@ -48,18 +48,16 @@
         {% for refund in refunds %}
           {% set order = orders[refund.order_id] %}
           {% set user = users[refund.created_user_id] %}
-          {% set orderItem = orderItems[refund.order_id] %}
           <tr>
             <td>
-              {% set targetUrl = orderItem.target_type ~ '_show' %}
-              <a href="{{ path(targetUrl, {id:orderItem.target_id}) }}" target="_blank">{{ refund.title }}</a>
+              <a href="javascript:" data-url="{{ path('admin_order_detail', {id:refund.order_id}) }}" data-toggle="modal" data-target="#modal">{{ refund.title }}</a>
               <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }} | {{'order.paid_time'|trans}}：{{ order.created_time|date('Y-n-d H:i') }}</div>
               <div class="text-muted text-sm">
               {{'admin.order_refund.reason'|trans}}：{{ refund.reason }} 
               | 
               {{'admin.order_refund.time'|trans}}：{{ refund.created_time|date('Y-n-d H:i') }}</div> 
             </td>
-            <td>{{ order.pay_amount/100 }}{{'site.currency.CNY'|trans}}</td>
+            <td>{{ refund.amount|fen_to_yuan(0) }}</td>
             <td>
               {{ admin_macro.user_link(user) }}
             </td>
