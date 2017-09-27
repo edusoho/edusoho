@@ -83,7 +83,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function search($conditions, $orderBys, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
@@ -277,12 +276,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     protected function getQueryBuilder($conditions)
     {
         return new DynamicQueryBuilder($this->db(), $conditions);
-    }
-
-    protected function filterStartLimit(&$start, &$limit)
-    {
-        $start = (int) $start;
-        $limit = (int) $limit;
     }
 
     private function getTimestampField($mode = null)

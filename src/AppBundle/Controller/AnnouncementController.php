@@ -96,7 +96,6 @@ class AnnouncementController extends BaseController
 
             return $this->createJsonResponse(true);
         }
-
         return $this->forward($controller, array(
             'request' => $request,
             'targetId' => $targetId,
