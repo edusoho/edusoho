@@ -27,7 +27,7 @@ class OnlineController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = array(
-            'gt_sess_time' => time() - 15 * 60,
+            'active_time_GT' => time() - 15 * 60,
         );
 
         if ($request->query->get('name', '')) {

@@ -28,9 +28,9 @@ class BizSessionAndOnline extends Migration
         $connection->exec("
             CREATE TABLE `biz_online` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-              `sess_id` varbinary(128) NOT NULL DEFAULT '',
-              `sess_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '最后访问时间',
-              `sess_deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '存活时间',
+              `sess_id` varbinary(128) NOT NULL,
+              `active_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '最后活跃时间',
+              `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '离线时间',
               `is_login` tinyint(1) NOT NULL DEFAULT '0',
               `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '在线用户的id, 0代表游客',
               `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '客户端ip',
@@ -38,8 +38,9 @@ class BizSessionAndOnline extends Migration
               `source` VARCHAR(32) NOT NULL DEFAULT 'unknown' COMMENT '当前在线用户的来源，例如：app, pc, mobile',
               `created_time` int(10) NOT NULL,
               PRIMARY KEY (`id`),
-              UNIQUE KEY `sess_id` (`sess_id`),
-              INDEX sess_deadline (`sess_deadline`)
+              INDEX deadline (`deadline`),
+              INDEX is_login (`is_login`),
+              INDEX active_time (`active_time`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
         ");
     }
@@ -51,7 +52,7 @@ class BizSessionAndOnline extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec('drop table `biz_session`');
-        $connection->exec('drop table `biz_online`');
+        $connection->exec("drop table `biz_session`");
+        $connection->exec("drop table `biz_online`");
     }
 }
