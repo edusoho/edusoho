@@ -7,7 +7,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 
-class ClassroomProduct extends Product implements Owner, OrderStatusCallback
+class ClassroomProduct extends Product implements OrderStatusCallback
 {
     const TYPE = 'classroom';
 
@@ -84,17 +84,6 @@ class ClassroomProduct extends Product implements Owner, OrderStatusCallback
     {
         $orderItem = $orderRefundItem['order_item'];
         $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
-    }
-
-    public function exitOwner($data)
-    {
-        $user = $this->biz['user'];
-
-        $this->getClassroomService()->removeStudent(
-            $this->targetId,
-            $user->getId(),
-            array('reason' => $data['reason']['note'])
-        );
     }
 
     public function getOwner($userId)
