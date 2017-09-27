@@ -16,6 +16,7 @@ class Factory
     /**
      * @param $name
      * @param $conditions
+     *
      * @return Exporter
      */
     public function create($name, $conditions)
