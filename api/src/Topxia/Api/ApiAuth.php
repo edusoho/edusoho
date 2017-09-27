@@ -85,7 +85,7 @@ class ApiAuth
             'user_agent' => $request->headers->get('User-Agent', ''),
             'source' => 'app',
         );
-        $this->getOnlineService()->sample($online);
+        $this->getOnlineService()->saveOnline($online);
     }
 
     public function decodeKeysign($token)
