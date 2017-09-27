@@ -2,14 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
@@ -130,7 +127,7 @@ class OrderController extends BaseController
                 )
             );
         }
-        
+
         $exportPath = $this->getParameter('topxia.upload.private_directory').DIRECTORY_SEPARATOR.basename($result['fileName']);
         if (!file_exists($exportPath)) {
             return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));

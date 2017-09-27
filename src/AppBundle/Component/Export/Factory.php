@@ -31,7 +31,6 @@ class Factory
             'invite-records' => 'AppBundle\Component\Export\Invite\InviteRecordsExporter',
             'user-invite-records' => 'AppBundle\Component\Export\Invite\InviteUserRecordsExporter',
             'order' => 'AppBundle\Component\Export\Order\OrderExporter',
-            'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
             'course-overview-student-list' => 'AppBundle\Component\Export\Course\OverviewStudentExporter',
             'course-overview-task-list' => 'AppBundle\Component\Export\Course\OverviewTaskExporter',
             'course-overview-normal-task-detail' => 'AppBundle\Component\Export\Course\OverviewNormalTaskDetailExporter',

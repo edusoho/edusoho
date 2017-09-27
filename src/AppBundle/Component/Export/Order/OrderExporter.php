@@ -82,7 +82,6 @@ class OrderExporter extends Exporter
         $ordersContent = array();
 
         foreach ($orders as $key => $order) {
-
             $member = array();
             // 订单号
             $member[] = $order['sn'];
