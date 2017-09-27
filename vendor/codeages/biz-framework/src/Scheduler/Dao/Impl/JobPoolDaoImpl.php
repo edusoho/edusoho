@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Scheduler\Dao\JobPoolDao;
 
 class JobPoolDaoImpl extends GeneralDaoImpl implements JobPoolDao
 {
-    protected $table = 'job_pool';
+    protected $table = 'biz_scheduler_job_pool';
 
     public function getByName($name = 'default')
     {

@@ -165,6 +165,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $this->registerCacheServiceProvider($biz);
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
+        $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
 
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
 
