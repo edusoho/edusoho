@@ -26,6 +26,7 @@ if(watermarkUrl) {
 function initDocPlayer(contents) {
   let doc = new QiQiuYun.Player({
     id: 'document-content',
+    playServer: app.cloudPlayServer,
     resNo: $element.data('resNo'),
     token: $element.data('token'),
     user: {
