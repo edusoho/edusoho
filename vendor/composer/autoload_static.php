@@ -25,10 +25,19 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
+        '5500a79e13a6ff0c087268676dcb4c2f' => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'p' => 
+        array (
+            'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'W' => 
+        array (
+            'Webmozart\\Assert\\' => 17,
+        ),
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
@@ -70,6 +79,12 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
         ),
+        'O' => 
+        array (
+            'Omnipay\\WechatPay\\' => 18,
+            'Omnipay\\Alipay\\Tests\\' => 21,
+            'Omnipay\\Alipay\\' => 15,
+        ),
         'M' => 
         array (
             'Monolog\\' => 8,
@@ -89,6 +104,7 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Bundle\\DoctrineCacheBundle\\' => 36,
             'Doctrine\\Bundle\\DoctrineBundle\\' => 31,
@@ -109,6 +125,15 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
     );
 
     public static $prefixDirsPsr4 = array (
+        'phpDocumentor\\Reflection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'Webmozart\\Assert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
@@ -225,6 +250,18 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Omnipay\\WechatPay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wenqinruan/omnipay-wechatpay/src',
+        ),
+        'Omnipay\\Alipay\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/tests',
+        ),
+        'Omnipay\\Alipay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -244,6 +281,10 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Doctrine\\Common\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (
@@ -364,6 +405,10 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
         ),
         'O' => 
         array (
+            'Omnipay\\Common\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/omnipay/common/src',
+            ),
             'OAuth2\\ServerBundle' => 
             array (
                 0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-bundle',
@@ -398,6 +443,17 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
             ),
         ),
+        'G' => 
+        array (
+            'Guzzle\\Tests' => 
+            array (
+                0 => __DIR__ . '/..' . '/guzzle/guzzle/tests',
+            ),
+            'Guzzle' => 
+            array (
+                0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
+            ),
+        ),
         'D' => 
         array (
             'Doctrine\\ORM\\' => 
@@ -411,10 +467,6 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
             'Doctrine\\Common\\Lexer\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
-            ),
-            'Doctrine\\Common\\Inflector\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
             ),
             'Doctrine\\Common\\Collections\\' => 
             array (
@@ -531,6 +583,7 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
         'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
         'Locale' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
         'NumberFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
+        'Omnipay\\Omnipay' => __DIR__ . '/..' . '/omnipay/common/src/Omnipay/Omnipay.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',

@@ -8,7 +8,7 @@
     <div class="form-group">
       <label class="col-md-3 control-label">{{'admin.order_refund.order_amount'|trans}}</label>
       <div class="col-md-8 controls">
-        <span class="control-text">{{ refund.amount/100 }}{{'site.currency.CNY'|trans}}</span>
+        <span class="control-text">{{ refund.amount|fen_to_yuan(0) }}</span>
       </div>
     </div>
 
@@ -16,20 +16,18 @@
       <label class="col-md-3 control-label">{{ 'order.payment_pattern.cash'|trans }}</label>
       <div class="col-md-8 controls">
         <span class="control-text">
-        {{ trade.cash_amount/100 }}{{'site.currency.CNY'|trans}}
-        ({{dict_text('payment', trade.platform)}})
+        {{ refund.refund_cash_amount|fen_to_yuan(0) }}
         （{{ 'admin.order_cash.refund.success.tips'|trans }}）
         </span>
       </div>
     </div>
 
-    {% if trade.coin_amount|default(0) > 0 %}
+    {% if refund.refund_coin_amount %}
       <div class="form-group">
         <label class="col-md-3 control-label">{{ 'order.payment_pattern.coin'|trans({'%coin_name%': coinSetting.coin_name}) }}</label>
         <div class="col-md-8 controls">
           <span class="control-text">
-          {{ trade.coin_amount * trade.rate }}{{'site.currency.CNY'|trans}} 
-          (={{trade.coin_amount ~ coinSetting.coin_name}})
+          {{ refund.refund_coin_amount|fen_to_yuan(0) }}
           （{{ 'admin.order_coin.refund.success.tips'|trans }}）
           </span>
         </div>
@@ -51,7 +49,7 @@
     </div>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      {% if trade.coin_amount|default(0) > 0 %}
+      {% if refund.refund_coin_amount %}
          <div class="alert alert-danger">
           <strong>
             {{ 'admin.order_cash_coin_refund.audit.tips'|trans }}

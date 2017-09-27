@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Order;
 
 use AppBundle\Controller\BaseController;
+use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\OrderRefund\Service\OrderRefundProxyService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,7 @@ class OrderRefundController extends BaseController
     {
         $fields = $request->request->all();
         $fields['reason'] = $fields['reason']['note'];
-        $product = $this->getOrderRefundProxyService()->applyOrderRefund($orderId, $fields);
+        $product = $this->getOrderRefundService()->applyOrderRefund($orderId, $fields);
 
         return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
     }
@@ -21,7 +22,7 @@ class OrderRefundController extends BaseController
     public function cancelRefundAction(Request $request, $orderId)
     {
         $user = $this->getCurrentUser();
-        $this->getOrderRefundProxyService()->cancelRefund($orderId);
+        $this->getOrderRefundService()->cancelRefund($orderId);
 
         return $this->createJsonResponse(true);
     }
@@ -40,10 +41,10 @@ class OrderRefundController extends BaseController
     }
 
     /**
-     * @return OrderRefundProxyService
+     * @return OrderRefundService
      */
-    protected function getOrderRefundProxyService()
+    protected function getOrderRefundService()
     {
-        return $this->getBiz()->service('OrderRefund:OrderRefundProxyService');
+        return $this->getBiz()->service('OrderFacade:OrderRefundService');
     }
 }

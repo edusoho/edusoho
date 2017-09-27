@@ -66,18 +66,24 @@
         </tr>
 
         {% if order.paid_cash_amount %}
-          <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('newPayment', order.payment) }}</td>
-          <td width="75%">
-            <span class="text-muted">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span>
-            {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: order.platform_sn|trans ~ paymentTrade.platform_sn, placement: 'right'} %}
-          </td>
+          <tr>
+            <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('newPayment', order.payment) }}</td>
+            <td width="75%">
+              <span class="text-muted">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span>
+              <span class="text-muted text-sm pull-right">{{ 'order.platform_sn'|trans ~ order.trade_sn }}</span>
+            </td>
+          </tr>
+
         {% endif %}
 
         {% if order.paid_coin_amount %}
-          <td width="25%" class="text-muted" style="text-align: right">{{ setting('coin.name', 'finance.coin'|trans) }}</td>
-          <td width="75%">
-            <span class="text-muted">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
-          </td>
+          <tr>
+            <td width="25%" class="text-muted" style="text-align: right">{{ setting('coin.name', 'finance.coin'|trans) }}</td>
+            <td width="75%">
+              <span class="text-muted">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
+            </td>
+          </tr>
+
         {% endif %}
 
         <tr>
