@@ -1116,9 +1116,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($orderItem['refund_id'] !== 0 && $orderItem['refund_status'] == 'refunded') {
             $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
             $record['reason'] = $orderRefund['reason'];
-            $record['refun_id'] = $orderRefund['id'];
+            $record['refund_id'] = $orderRefund['id'];
         }
-        $record['data']['title'] = $orderItem['title'];
+        $record['title'] = $orderItem['title'];
 
         return $this->getMemberOperationService()->createRecord($record);
     }

@@ -1925,9 +1925,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
 
         $classroom = $this->getClassroom($member['classroomId']);
-        $data['title'] = $classroom['title'];
+
         $data['member'] = $member;
         $record = array(
+            'title' => $classroom['title'],
             'user_id' => $member['userId'],
             'member_id' => $member['id'],
             'target_id' => $member['classroomId'],
