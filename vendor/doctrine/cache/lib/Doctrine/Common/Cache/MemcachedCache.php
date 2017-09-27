@@ -113,6 +113,15 @@ class MemcachedCache extends CacheProvider
     /**
      * {@inheritdoc}
      */
+    protected function doDeleteMultiple(array $keys)
+    {
+        return $this->memcached->deleteMulti($keys)
+            || $this->memcached->getResultCode() === Memcached::RES_NOTFOUND;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doDelete($id)
     {
         return $this->memcached->delete($id)
@@ -136,12 +145,12 @@ class MemcachedCache extends CacheProvider
         $servers = $this->memcached->getServerList();
         $key     = $servers[0]['host'] . ':' . $servers[0]['port'];
         $stats   = $stats[$key];
-        return array(
+        return [
             Cache::STATS_HITS   => $stats['get_hits'],
             Cache::STATS_MISSES => $stats['get_misses'],
             Cache::STATS_UPTIME => $stats['uptime'],
             Cache::STATS_MEMORY_USAGE     => $stats['bytes'],
             Cache::STATS_MEMORY_AVAILABLE => $stats['limit_maxbytes'],
-        );
+        ];
     }
 }
