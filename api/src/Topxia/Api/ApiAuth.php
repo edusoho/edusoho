@@ -83,9 +83,7 @@ class ApiAuth
             'user_id' => $userId,
             'ip' => $request->getClientIp(),
             'user_agent' => $request->headers->get('User-Agent', ''),
-            'access_url' => '',
             'source' => 'app',
-            'lifetime' => 86400,
         );
         $this->getOnlineService()->sample($online);
     }
