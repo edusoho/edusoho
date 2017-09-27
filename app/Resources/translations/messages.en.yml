@@ -6451,3 +6451,5 @@ site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
 site.join_to_learn: Join to learn
 site.fill_user_info_tip: Fill user info
+
+site.avatar.set_before_learning: Please set avatar first

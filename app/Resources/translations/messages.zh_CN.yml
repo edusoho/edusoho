@@ -8116,4 +8116,6 @@ order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
 site.join_by_free: 免费加入
 site.join_by_purchase: 购买加入
 site.join_to_learn: 加入学习
-site.fill_user_info_tip: 补全用户信息
+site.fill_user_info_tip: 信息补全
+
+site.avatar.set_before_learning: 请先设置头像
