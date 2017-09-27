@@ -168,9 +168,10 @@ class WebExtension extends \Twig_Extension
     {
         $deviceDetector = new DeviceDetector($userAgent);
         $deviceDetector->parse();
+
         return array(
             'client' => $deviceDetector->getClient(),
-            'os' => $deviceDetector->getOs()
+            'os' => $deviceDetector->getOs(),
         );
     }
 
