@@ -97,11 +97,14 @@ class Setting extends BaseResource
         return $default;
     }
 
-    protected function filterFingerprint()
+    protected function filterCloud_video()
     {
         $storageSetting = $this->getSettingService()->get('storage');
         $fingerPrintSetting = array(
             'video_fingerprint' => '0'
+        );
+        $watermarkSetting = array(
+            'video_watermark' => '0'
         );
 
         if (!empty($storageSetting)) {
@@ -109,19 +112,7 @@ class Setting extends BaseResource
                 'video_fingerprint',
                 'video_fingerprint_time'
             ));
-        }
 
-        return $fingerPrintSetting;
-    }
-
-    protected function filterWatermark()
-    {
-        $storageSetting = $this->getSettingService()->get('storage');
-        $watermarkSetting = array(
-            'video_watermark' => '0'
-        );
-
-        if (!empty($storageSetting)) {
             $watermarkSetting = ArrayToolkit::parts($storageSetting, array(
                 'video_watermark',
                 'video_watermark_image',
@@ -136,8 +127,10 @@ class Setting extends BaseResource
             }
         }
 
-        return $watermarkSetting;
-
+        return array(
+            'watermarkSetting' => $watermarkSetting,
+            'fingerPrintSetting' => $fingerPrintSetting,
+        );
     }
 
     protected function filterKeys(array $input, array $notAllowed)
@@ -164,11 +157,8 @@ class Setting extends BaseResource
             'user' => array(
                 'needToken' => false,
             ),
-            'watermark' => array(
-                'needToken' => true,
-            ),
-            'fingerprint' => array(
-                'needToken' => true,
+            'cloud_video' => array(
+                'needToken' => false,
             ),
         );
     }
