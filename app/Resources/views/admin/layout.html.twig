@@ -164,9 +164,10 @@
     {% block faqSDK %}
       <script aysnc="aysnc" src="{{ 'http://service-cdn.qiqiuyun.net/js-sdk/faq/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
       <script aysnc="aysnc">
+        {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : 'http://www.qiqiuyu.com' %}
         new FaqSDK({
           id: 'faq-sdk',
-          apiUrl: 'http://www.esdev.com/faq/api/hotlist?version={{ asset_version('/') }}&accesskey={{ base64_encode(setting("storage.cloud_access_key")) }}&url={{ app.request.getRequestUri() }}',
+          apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&accesskey={{ base64_encode(setting("storage.cloud_access_key")) }}&url={{ app.request.getRequestUri() }}',
           color: '#43bc60',
         });
       </script>
