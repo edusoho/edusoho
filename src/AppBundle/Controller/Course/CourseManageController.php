@@ -857,6 +857,10 @@ class CourseManageController extends BaseController
             $conditions['user_id'] = $user ? $user['id'] : -1;
         }
 
+        if (!empty($conditions['displayStatus'])) {
+            $conditions['statuses'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
