@@ -63,8 +63,8 @@ class OrderRefundController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $product = $this->getLocalOrderRefundService()->applyOrderRefund($order['id'], $fields);
-            return $this->redirect($this->generateUrl('my_order_refunds'));
 
+            return $this->redirect($this->generateUrl('my_order_refunds'));
         }
 
         return $this->render('my-order/order-refund/apply-refund-modal.html.twig', array(
