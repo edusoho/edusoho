@@ -97,6 +97,49 @@ class Setting extends BaseResource
         return $default;
     }
 
+    protected function filterFingerprint()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        $fingerPrintSetting = array(
+            'video_fingerprint' => '0'
+        );
+
+        if (!empty($storageSetting)) {
+            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
+                'video_fingerprint',
+                'video_fingerprint_time'
+            ));
+        }
+
+        return $fingerPrintSetting;
+    }
+
+    protected function filterWatermark()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        $watermarkSetting = array(
+            'video_watermark' => '0'
+        );
+
+        if (!empty($storageSetting)) {
+            $watermarkSetting = ArrayToolkit::parts($storageSetting, array(
+                'video_watermark',
+                'video_watermark_image',
+                'video_embed_watermark_image',
+                'video_watermark_position',
+            ));
+
+            foreach ($watermarkSetting as $key => &$value) {
+                if (in_array($key, array('video_watermark_image', 'video_embed_watermark_image'))) {
+                    $value = $this->getFileUrl($value);
+                }
+            }
+        }
+
+        return $watermarkSetting;
+
+    }
+
     protected function filterKeys(array $input, array $notAllowed)
     {
         return array_diff_key($input, array_flip($notAllowed));
@@ -120,7 +163,13 @@ class Setting extends BaseResource
             ),
             'user' => array(
                 'needToken' => false,
-            )
+            ),
+            'watermark' => array(
+                'needToken' => true,
+            ),
+            'fingerprint' => array(
+                'needToken' => true,
+            ),
         );
     }
 
@@ -130,5 +179,10 @@ class Setting extends BaseResource
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->getBiz()->offsetGet('web.twig.extension');
     }
 }
