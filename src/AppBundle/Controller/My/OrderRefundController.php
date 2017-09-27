@@ -46,9 +46,19 @@ class OrderRefundController extends BaseController
         ));
     }
 
-    public function applyRefundAction(Request $request)
+    public function detailAction(Request $request, $id)
     {
-        return $this->render('', array(
+        $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
+        return $this->render('my-order/order-refund/detail-modal.html.twig', array(
+            'orderRefund' => $orderRefund
+        ));
+    }
+
+    public function applyRefundAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        return $this->render('my-order/order-refund/apply-refund-modal.html.twig', array(
+            'order' => $order,
         ));
     }
 

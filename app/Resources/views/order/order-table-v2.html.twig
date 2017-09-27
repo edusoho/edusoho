@@ -62,17 +62,16 @@
             {% if order.status in ['paid'] %}
               <br>
               <div class="table-action__item">
-                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'申请退款'|trans}}</a>
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'申请退款'|trans}}</a>
               </div>
             {% endif %}
             {% if order.status in ['refunded'] %}
               <br>
               <div class="table-action__item">
-                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'查看退款'|trans}}</a>
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'查看退款'|trans}}</a>
               </div>
             {% endif %}
           {% endif %}
-          {#{% if order.status in  %}#}
         </div>
         {#<div class="table-action">#}
           {#{% if order.status not in ['created'] %}#}

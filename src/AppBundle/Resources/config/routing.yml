@@ -577,6 +577,14 @@ my_order_refunds:
     path: /my/order_refunds
     defaults: { _controller: AppBundle:My/OrderRefund:index }
 
+my_order_refund_detail:
+    path: /my/order_refund/{id}/detail
+    defaults: { _controller: AppBundle:My/OrderRefund:detail }
+
+my_order_refund_apply:
+    path: /my/order_refund/{id}/apply
+    defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
+
 my_order_cancel:
     path: /my/order/{id}/cancel
     defaults: { _controller: AppBundle:My/Order:cancel }
