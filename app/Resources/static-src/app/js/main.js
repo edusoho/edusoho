@@ -135,3 +135,4 @@ $('body').on('event-report', function(e, name){
     eventPost($obj);
 })
 
+$.ajax('/online/sample');
