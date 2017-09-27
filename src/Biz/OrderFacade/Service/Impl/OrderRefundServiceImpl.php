@@ -23,7 +23,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $this->getOrderRedoundService()->getOrderRefundById($id);
     }
 
-    public function applyOrderRefund($orderId, $fileds)
+    public function applyOrderRefund($orderId, $fields)
     {
         $order = $this->getOrderService()->getOrder($orderId);
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
@@ -36,7 +36,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             try {
                 $this->beginTransaction();
                 $refund = $this->getWorkflowService()->applyOrderRefund($order['id'], array(
-                    'reason' => $fileds['reason']['note'],
+                    'reason' => $fields['reason'],
                 ));
                 $this->notifyStudent($product);
                 $this->notifyAdmins($product);
