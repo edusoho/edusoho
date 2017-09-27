@@ -2,8 +2,10 @@
 
 namespace Biz\Classroom\Service\Impl;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseNoteDao;
+use Biz\Exception\UnableJoinException;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -455,7 +457,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($classrooms as $classroom) {
             $member = $members[$classroom['id']];
 
-            if ($classroom['expiryValue'] > 0 && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
+            if ($classroom['expiryValue'] > 0 && $member['deadlineNotified'] == 0 && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
                 $shouldNotifyClassrooms[] = $classroom;
                 $shouldNotifyClassroomMembers[] = $member;
             }
@@ -1161,36 +1163,65 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateAssistants($classroomId, $userIds)
     {
         $assistantIds = $this->findAssistants($classroomId);
-        $deleteAssistantIds = array_diff($assistantIds, $userIds);
-        $addAssistantIds = array_diff($userIds, $assistantIds);
-        $addMembers = $this->findMembersByClassroomIdAndUserIds($classroomId, $addAssistantIds);
-        $deleteMembers = $this->findMembersByClassroomIdAndUserIds($classroomId, $deleteAssistantIds);
 
-        foreach ($addAssistantIds as $userId) {
-            if (!empty($addMembers[$userId])) {
-                if ($addMembers[$userId]['role'][0] == 'auditor') {
-                    $addMembers[$userId]['role'][0] = 'assistant';
-                } else {
-                    $addMembers[$userId]['role'][] = 'assistant';
-                }
+        $this->addAssistants($classroomId, $userIds, $assistantIds);
+        $this->deleteAssistants($classroomId, $userIds, $assistantIds);
 
-                $this->getClassroomMemberDao()->update($addMembers[$userId]['id'], $addMembers[$userId]);
-            } else {
-                $this->becomeAssistant($classroomId, $userId);
-            }
+        $fields = array('assistantIds' => $userIds);
+        $this->getClassroomDao()->update($classroomId, $fields);
+    }
+
+    protected function addAssistants($classroomId, $userIds, $existAssistanstIds)
+    {
+        $addAssistantIds = array_diff($userIds, $existAssistanstIds);
+
+        if (empty($addAssistantIds)) {
+            return null;
         }
 
-        foreach ($deleteAssistantIds as $userId) {
-            if (count($deleteMembers[$userId]['role']) == 1) {
-                $this->getClassroomMemberDao()->delete($deleteMembers[$userId]['id']);
-            } else {
-                foreach ($deleteMembers[$userId]['role'] as $key => $value) {
-                    if ($value == 'assistant') {
-                        unset($deleteMembers[$userId]['role'][$key]);
-                    }
-                }
+        $addMembers = $this->findMembersByClassroomIdAndUserIds($classroomId, $addAssistantIds);
 
-                $this->getClassroomMemberDao()->update($deleteMembers[$userId]['id'], $deleteMembers[$userId]);
+        foreach ($addAssistantIds as $userId) {
+            $existMember = empty($addMembers[$userId]) ? array() : $addMembers[$userId];
+
+            if ($existMember && in_array('student', $existMember['role'])) {
+                $fields = array(
+                    'role' => $existMember['role'],
+                );
+                $fields['role'][] = 'assistant';
+                $this->getClassroomMemberDao()->update($addMembers[$userId]['id'], $fields);
+            } else {
+                throw $this->createServiceException("User(#{$userId}) is not classroom student");
+            }
+        }
+    }
+
+    protected function deleteAssistants($classroomId, $userIds, $existAssistanstIds)
+    {
+        $deleteAssistantIds = array_diff($existAssistanstIds, $userIds);
+
+        if (empty($deleteAssistantIds)) {
+            return null;
+        }
+
+        $deleteMembers = $this->findMembersByClassroomIdAndUserIds($classroomId, $deleteAssistantIds);
+
+        foreach ($deleteAssistantIds as $userId) {
+            if (!in_array('assistant', $deleteMembers[$userId]['role'])) {
+                continue;
+            }
+
+            $fields = array(
+                'role' => $deleteMembers[$userId]['role'],
+            );
+
+            if (count($fields['role']) > 1) {
+                $key = array_search('assistant', $fields['role']);
+                array_splice($fields['role'], $key, 1);
+
+                $this->getClassroomMemberDao()->update($deleteMembers[$userId]['id'], $fields);
+            } else {
+                $this->getClassroomMemberDao()->delete($deleteMembers[$userId]['id']);
             }
         }
     }
@@ -1824,6 +1855,22 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
 
         return array($paidCourses, $orderItems);
+    }
+
+    public function tryFreeJoin($classroomId)
+    {
+        $access = $this->canJoinClassroom($classroomId);
+        if ($access['code'] != AccessorInterface::SUCCESS) {
+            throw new UnableJoinException($access['code'], $access['msg']);
+        }
+
+        $classroom = $this->getClassroom($classroomId);
+
+        if ($classroom['price'] == 0) {
+            $this->becomeStudent($classroom['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
+        }
+
+        $this->dispatch('classroom.try_free_join', $classroom);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)

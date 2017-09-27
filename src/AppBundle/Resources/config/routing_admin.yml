@@ -537,6 +537,10 @@ admin_course_order_manage:
     path: /course/order/manage
     defaults: { _controller: AppBundle:Admin/CourseOrder:manage }
 
+admin_order_manage:
+    path: /order/manage
+    defaults: { _controller: AppBundle:Admin/Order:manage }
+
 admin_course_search:
     path: /course/search
     defaults: { _controller: AppBundle:Admin/Course:search }
@@ -562,7 +566,7 @@ admin_live_get_max_online:
     permissions: [admin_live_course_manage]
 
 admin_order_detail:
-    path: /order/{id}/detail_admin
+    path: /order/{id}/detail
     defaults: { _controller: AppBundle:Admin/Order:detail }
 
 admin_order_refunds:
@@ -1794,7 +1798,7 @@ admin_bill_export_csv:
     permissions: [admin_bill,admin_coin_records]
 
 admin_order_manage_export_csv:
-    path: /order/manage/export/{targetType}
+    path: /order/manage/export
     defaults: { _controller: AppBundle:Admin/Order:exportCsv }
 
 admin_order_manage_export_coin_csv:
@@ -2289,3 +2293,7 @@ admin_queue_failed_logs:
 admin_queue_failed_log_modal:
     path: /queue/failed_log/{id}
     defaults: { _controller: AppBundle:Admin/Queue:failedJob }
+
+admin_online:
+    path: /online
+    defaults: { _controller: AppBundle:Online:index }

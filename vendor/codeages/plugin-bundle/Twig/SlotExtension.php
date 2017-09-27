@@ -17,8 +17,7 @@ class SlotExtension extends \Twig_Extension
             new \Twig_SimpleFunction('slot', array($this, 'slot'), array('is_safe' => array('html'))),
         );
     }
-
-    public function slot($name, $args = array())
+    public function slot($name, $args= array())
     {
         return $this->manager->fire($name, $args);
     }

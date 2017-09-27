@@ -1,0 +1,37 @@
+
+<thead>
+<tr>
+  <th width="25%">{{'order.name'|trans}}</th>
+  <th>{{'order.id'|trans}}/{{ '退款单号'|trans }}</th>
+  <th>{{ '退款金额'|trans }}</th>
+  <th>{{ '申请时间'|trans}}</th>
+  <th>{{'状态'|trans}}</th>
+  <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
+</tr>
+</thead>
+
+<tbody>
+{% for orderRefund in orderRefunds %}
+  <tr id="order_refund-table-{{orderRefund.id}}">
+    <td>{{ orderRefund.title }}</td>
+    <td>{{ orderRefund.sn }}<br>{{ orders[orderRefund.order_id].sn }}</td>
+    <td>{{ math_format(orders[orderRefund.order_id].pay_amount, 0.01) }}</td>
+    <td>{{ orderRefund.created_time|date('Y-n-d H:i:s') }}</td>
+    <td>{{ dict_text('refundStatus', orderRefund.status) }}</td>
+    <td>
+      <div class="table-action">
+        <div class="table-action__item">
+          <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:orderRefund.id}) }}">{{'form.btn.detail'|trans}}</a>
+        </div>
+        {% if orderRefund.status in ['refunding', 'auditing'] %}
+          <div class="table-action__item">
+            <a href="javascript:;" class="js-cancel-refund" data-url="{{ path('order_cancel_refund', {orderId:orderRefund.order_id}) }}">{{'user.orders.cancel_refund'|trans}}</a>
+          </div>
+        {% endif %}
+      </div>
+    </td>
+  </tr>
+{% else %}
+  <tr><td colspan="20"><div class="cd-empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+{% endfor %}
+</tbody>

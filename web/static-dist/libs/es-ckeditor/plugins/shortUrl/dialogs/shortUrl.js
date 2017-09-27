@@ -7,15 +7,12 @@ CKEDITOR.dialog.add('shortUrl', function(editor) {
         diff = $editorSource.data('shortDiff');
         var shortUrlLength = $editorSource.data('shortUrlLength');
         var url = shortUrlModal.find('.js-transfer-link').data('url');
-        var formGroup = shortUrlModal.find('.form-group');
-        var helpBlock = shortUrlModal.find('.help-block');
+        var helpBlock = shortUrlModal.find('.js-help-block');
 
         showError = function(message){
-            formGroup.addClass('has-error');
             helpBlock.show().text(message);
         }
         showNormal = function(){
-            formGroup.removeClass('has-error');
             helpBlock.hide();
         }
         shortUrlModal.on('click','.js-transfer-link',function(){
@@ -50,7 +47,7 @@ CKEDITOR.dialog.add('shortUrl', function(editor) {
                 isShortUrl = false
             });
         })
-        shortUrlModal.on('focus','#message-url',function(){
+        shortUrlModal.on('focus', '#message-url', function() {
             showNormal();
         });
     };
@@ -59,8 +56,8 @@ CKEDITOR.dialog.add('shortUrl', function(editor) {
         title: editor.lang.shortUrl.title,
         minWidth: 500,
         minHeight: 200,
-        resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
-        buttons: [CKEDITOR.dialog.okButton],
+        resizable: CKEDITOR.DIALOG_RESIZE_NONE,
+        buttons: [CKEDITOR.dialog.cancelButton, CKEDITOR.dialog.okButton],
         contents: [{
             id: 'shortUrl',
             label: editor.lang.shortUrl.title,

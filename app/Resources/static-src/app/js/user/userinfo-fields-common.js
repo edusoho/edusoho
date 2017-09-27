@@ -1,4 +1,5 @@
 import SmsSender from 'app/common/widget/sms-sender';
+import notify from 'common/notify';
 
 export default class UserInfoFieldsItemValidate {
   constructor(options) {
@@ -98,6 +99,14 @@ export default class UserInfoFieldsItemValidate {
         },
         mobile: {
           phone: Translator.trans('validate.phone.message'),
+        }
+      },
+      submitHandler: form => {
+        if ($(form).valid()) {
+          $.post($(form).attr('action'), $(form).serialize(), resp => {
+            notify('success', Translator.trans('site.save_success_hint'));
+            $('#modal').modal('hide');
+          });
         }
       }
       });

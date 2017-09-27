@@ -23,14 +23,17 @@ class OrderInfo extends AbstractResource
             throw new BadRequestHttpException('缺少参数', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        $this->addVipParams($params);
+        try {
+            $this->addVipParams($params);
+            $product = $this->getProduct($params['targetType'], $params);
+            $product->validate();
+            $product->setAvailableDeduct();
+            $product->setPickedDeduct(array());
 
-        $product = $this->getProduct($params['targetType'], $params);
-
-        $product->setAvailableDeduct();
-        $product->setPickedDeduct(array());
-
-        return $this->getOrderInfoFromProduct($product);
+            return $this->getOrderInfoFromProduct($product);
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
+        }
     }
 
     private function getOrderInfoFromProduct(Product $product)

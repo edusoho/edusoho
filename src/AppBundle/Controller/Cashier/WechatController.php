@@ -3,14 +3,12 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
-use AppBundle\Controller\BaseController;
-use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Omnipay\WechatPay\Helper;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\MathToolkit;
 
-class WechatController extends BaseController
+class WechatController extends PaymentController
 {
     public function payAction($trade)
     {
@@ -140,13 +138,5 @@ class WechatController extends BaseController
     private function getPayService()
     {
         return $this->createService('Pay:PayService');
-    }
-
-    /**
-     * @return OrderService
-     */
-    private function getOrderService()
-    {
-        return $this->createService('Order:OrderService');
     }
 }

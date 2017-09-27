@@ -192,4 +192,6 @@ interface ClassroomService
     public function findUserPaidCoursesInClassroom($userId, $classroomId);
 
     public function findMembersByMemberIds($ids);
+
+    public function tryFreeJoin($classroomId);
 }

@@ -6,9 +6,8 @@
   <tr>
     <th width="25%">{{'order.name'|trans}}</th>
     <th>{{'order.id'|trans}}</th>
-    <th class="text-right">{{'order.price_amount'|trans }}</th>
-    <th class="text-right">{{'order.real_pay'|trans}}</th>
-    <th>{{'order.createdTime'|trans}}</th>
+    <th class="text-right">{{'order.price_amount'|trans }}/{{'order.real_pay'|trans}}</th>
+    <th>{{'order.created_time'|trans}}</th>
     <th>{{'order.status'|trans}}</th>
     <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
   </tr>
@@ -29,33 +28,49 @@
         {% endif %}
       </td>
       <td>{{order.sn}}</td>
-      <td class="text-right">{{ order.price_amount  }}</td>
-      <td class="text-right">{{ order.pay_amount }}</td>
+      <td class="text-right">{{ order.price_amount  }}/{{ order.pay_amount }}</td>
       <td>{{ order.created_time|date('Y-n-d H:i:s') }}</td>
-      <td>{{ dict_macro.orderStatusV2(order.display_status) }}</td>
+      <td>
+        {{ display_order_status(order.status, 0) }}
+
+      </td>
       <td>
         <div class="table-action">
-          <div class="table-action__item">
-            <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-          </div>
-          {% if order.status in ['refunding', 'created', 'paying'] %}
+          {% if order.status in ['created', 'paying'] %}
+            <div class="table-action__item">
+              <a href="{{path('cashier_show', {sn:order.sn})}}" class="cd-link-primary">{{'支付订单'|trans}}</a>
+            </div>
             <div class="table-action__item dropdown">
               <a href="javascript:;" class="cd-link-primary" data-toggle="dropdown">
                 更多<i class="cd-text-xs cd-icon cd-icon-arrow-down"></i>
               </a>
-
               <ul class="dropdown-menu cd-dropdown-menu">
-                {% if order.status == 'refunding' %}
-                  <li><a href="javascript:;" class="js-cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.orders.cancel_refund'|trans}}</a></li>
-                {% endif %}
-                {% if order.status in ['created', 'paying'] %}
-                  <li>
-                    <a href="{{path('cashier_show', {sn:order.sn})}}">{{'user.orders.pay'|trans}}</a>
-                  </li>
-                  <li><a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a></li>
-                {% endif %}
+                <li>
+                  <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'订单详情'|trans}}</a>
+                </li>
+                <li>
+                  <a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a>
+                </li>
               </ul>
             </div>
+          {% endif %}
+          {% if order.status in ['paid', 'refunding', 'refunded', 'closed', 'success'] %}
+            <div class="table-action__item">
+              <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'订单详情'|trans}}</a>
+            </div>
+
+            {% if order.status in ['paid', 'success'] %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'申请退款'|trans}}</a>
+              </div>
+            {% endif %}
+            {% if order.status in ['refunded'] %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'查看退款'|trans}}</a>
+              </div>
+            {% endif %}
           {% endif %}
         </div>
       </td>

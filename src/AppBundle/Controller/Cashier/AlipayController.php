@@ -2,12 +2,11 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use AppBundle\Controller\BaseController;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AlipayController extends BaseController
+class AlipayController extends PaymentController
 {
     public function payAction($trade)
     {

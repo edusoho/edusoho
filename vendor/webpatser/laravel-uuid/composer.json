@@ -35,7 +35,7 @@
     "extra": {
         "laravel": {
             "aliases": {
-                "Uuid": "Webpatser\\Uuid\\UuidFacade"
+                "Uuid": "Webpatser\\Uuid\\Uuid"
             }
         }
     }

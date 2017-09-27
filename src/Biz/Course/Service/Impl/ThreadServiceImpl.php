@@ -225,7 +225,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
-        $this->getThreadDao()->update($thread['id'], array('isStick' => 1));
+        $thread = $this->getThreadDao()->update($thread['id'], array('isStick' => 1));
+
+        $this->dispatchEvent('course.thread.stick', new Event($thread));
     }
 
     public function unstickThread($courseId, $threadId)
@@ -238,7 +240,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
-        $this->getThreadDao()->update($thread['id'], array('isStick' => 0));
+        $thread = $this->getThreadDao()->update($thread['id'], array('isStick' => 0));
+
+        $this->dispatchEvent('course.thread.unstick', new Event($thread));
     }
 
     public function eliteThread($courseId, $threadId)
@@ -251,7 +255,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
-        $this->getThreadDao()->update($thread['id'], array('isElite' => 1));
+        $thread = $this->getThreadDao()->update($thread['id'], array('isElite' => 1));
 
         $this->dispatchEvent('course.thread.elite', new Event($thread));
     }
@@ -266,7 +270,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createNotFoundException("Thread #{$threadId} Not Found");
         }
 
-        $this->getThreadDao()->update($thread['id'], array('isElite' => 0));
+        $thread = $this->getThreadDao()->update($thread['id'], array('isElite' => 0));
+
+        $this->dispatchEvent('course.thread.unelite', new Event($thread));
     }
 
     public function hitThread($courseId, $threadId)
@@ -335,6 +341,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function getPost($courseId, $id)
     {
         return $this->getThreadPostDao()->get($id);
+    }
+
+    public function postAtNotifyEvent($post, $users)
+    {
+        $this->dispatchEvent('course.thread.post.at', $post, array('users' => $users));
     }
 
     public function createPost($post)

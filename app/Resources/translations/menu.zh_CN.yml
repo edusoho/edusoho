@@ -219,6 +219,7 @@ admin.order.coin.basic_tab: 虚拟币订单
 admin.order.classroom.basic_tab: 班级订单
 
 #账务管理模块
+admin.finance.order_menu: 用户订单
 admin.finance.my_account: 网校账户
 admin.finance.bills_menu: 账单管理
 admin.finance.coin_menu: 虚拟币管理

@@ -278,8 +278,8 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-course_order_detail:
-   path:  /order/{id}/detail_course
+order_detail:
+   path:  /order/{id}/detail
    defaults: { _controller: AppBundle:Order:detail }
 
 order_cancel_refund:
@@ -357,14 +357,6 @@ cloud_search:
 settings:
     path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
-
-settings_avatar:
-    path:  /settings/avatar
-    defaults: { _controller: AppBundle:Settings:avatar }
-
-settings_avatar_crop:
-    path:  /settings/avatar/crop
-    defaults: { _controller: AppBundle:Settings:avatarCrop }
 
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
@@ -580,6 +572,18 @@ my_homework_list:
 my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
+
+my_order_refunds:
+    path: /my/order_refunds
+    defaults: { _controller: AppBundle:My/OrderRefund:index }
+
+my_order_refund_detail:
+    path: /my/order_refund/{id}/detail
+    defaults: { _controller: AppBundle:My/OrderRefund:detail }
+
+my_order_refund_apply:
+    path: /my/order_refund/{id}/apply
+    defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
 
 my_order_cancel:
     path: /my/order/{id}/cancel
@@ -1986,6 +1990,11 @@ course_set_unfavorite:
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
+  methods: [POST]
+
+course_exit_modal:
+  path: /course/show_exit_modal
+  defaults: {_controller: AppBundle:Course/Course:exitModal}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
@@ -2545,11 +2554,6 @@ classroom_show:
     path:  /classroom/{id}
     defaults: { _controller: AppBundle:Classroom/Classroom:show }
 
-classroom_free_join:
-    path:  /classroom/{id}/free_join
-    defaults: { _controller: AppBundle:Classroom/Classroom:freeJoin }
-    methods: [POST]
-
 classroom_qrcode:
     path:  /classroom/{id}/qrcode
     defaults: { _controller: AppBundle:Classroom/Classroom:qrcode }
@@ -2580,7 +2584,8 @@ classroom_introductions:
 
 classroom_buy:
     path: /classroom/{id}/buy
-    defaults: { _controller: AppBundle:Classroom/Classroom:buy }
+    defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
+    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2845,11 +2850,7 @@ course_member_deadline_reach:
 
 course_buy:
     path: /course/{id}/buy
-    defaults: { _controller: AppBundle:Course/CourseOrder:buy }
-
-course_free_join:
-    path: /course/{courseId}/free_join
-    defaults: { _controller: AppBundle:Course/Course:freeJoin }
+    defaults: { _controller: AppBundle:Course/CourseBuy:buy }
     methods: [POST]
 
 course_order_repay:
@@ -2971,6 +2972,10 @@ export:
     path: /export/{name}/{type}
     defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
+online_sample:
+    path: /online/sample
+    defaults: { _controller: AppBundle:Online:sample}
+
 pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
@@ -2979,7 +2984,7 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
-#
+
 #v2_demo:
 #    path: /v2/demo
 #    defaults: { _controller: AppBundle:V2:demo }
@@ -2991,10 +2996,6 @@ try_export:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
-
-product_member_exit:
-    path: /product/{targetId}/type/{targetType}/owner/exit
-    defaults: { _controller: AppBundle:Product/Owner:exit}
 
 v2_demo_modal:
     path: /v2/demo/modal

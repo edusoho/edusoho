@@ -177,8 +177,7 @@ $container['phpmig.migrations_path'] = __DIR__ . DIRECTORY_SEPARATOR . 'migratio
 return $container;
 ```
 
-Unfortunately Zend Framework does not have a Database Abstraction Layer and
-setting up migrations requires couple additional steps. You first need to prepare
+Setting up migrations with Zend Framework  requires a couple additional steps. You first need to prepare
 the configuration. It might be in any format supported by Zend_Config. Here is an
 example in YAML for MySQL:
 

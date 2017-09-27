@@ -19,6 +19,7 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Framework\Order\Service\OrderRefundService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -182,7 +183,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userId' => $currentUser['id'],
             'role' => 'student',
             'deadlineNotified' => 0,
-            'deadlineGreaterThan' => 0,
+            'deadlineGreaterThan' => time(),
         );
         $courseMembers = $this->getMemberDao()->search($condition, array('createdTime' => 'ASC'), 0, 10);
         $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
@@ -198,7 +199,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($courses as $key => $course) {
             $courseMember = $courseMembers[$course['id']];
 
-            if ($course['expiryDays'] > 0 && $currentTime < $courseMember['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember['deadline']) {
+            /*
+             * 去掉了$course['expiryDays'] > 0 &&
+             */
+            if ($currentTime < $courseMember['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $courseMember['deadline']) {
                 $shouldNotifyCourses[] = $course;
                 $shouldNotifyCourseMembers[] = $courseMember;
             }

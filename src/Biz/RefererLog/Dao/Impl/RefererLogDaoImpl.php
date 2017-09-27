@@ -45,8 +45,8 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
             $sql .= 'and createdTime <= ?';
             $parameters[] = $endTime;
         }
-        // @TODO SQL Inject
-        $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
+        $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC";
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, $parameters);
     }
@@ -63,8 +63,9 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions, $groupBy)
-            ->select("{$groupBy}, count(id) as count , sum(orderCount) as orderCount") //refererHost,
+            ->select("{$groupBy}, count(id) as count , sum(orderCount) as orderCount")
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->addOrderBy('count', 'DESC');

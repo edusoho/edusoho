@@ -41,7 +41,7 @@ class OrderController extends BaseController
         $product = $this->getProduct($targetType, $fields);
         $product->setPickedDeduct($fields);
 
-        $price = $this->get('web.twig.app_extension')->priceFormat($product->getPayablePrice());
+        $price = $this->get('web.twig.order_extension')->priceFormat($product->getPayablePrice());
 
         return $this->createJsonResponse($price);
     }
@@ -72,7 +72,7 @@ class OrderController extends BaseController
             }
 
             $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $price);
-            $coupon['deduct_amount_format'] = $this->get('web.twig.app_extension')->priceFormat($coupon['deduct_amount']);
+            $coupon['deduct_amount_format'] = $this->get('web.twig.order_extension')->priceFormat($coupon['deduct_amount']);
 
             return $this->createJsonResponse($coupon);
         }

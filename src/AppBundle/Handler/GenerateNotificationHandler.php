@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
+use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -57,13 +58,15 @@ class GenerateNotificationHandler
         $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 
         foreach ((array) $courses as $key => $course) {
+            if ($course['parentId'] != 0) {
+                continue;
+            }
             $message = array(
                 'courseId' => $course['id'],
                 'courseTitle' => $course['title'],
                 'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']),
             );
-            //@TODO 等移动端OK在开始推送
-            //            $this->courseOverduePush($user, $message);
+            $this->courseOverduePush($user, $message);
             $this->getNotificationService()->notify($user['id'], 'course-deadline', $message);
             $courseMemberId = $courseMembers[$course['id']]['id'];
             $this->getCourseMemberService()->updateMember($courseMemberId, array('deadlineNotified' => 1));
@@ -86,7 +89,7 @@ class GenerateNotificationHandler
         $body = array(
             'type' => 'course.deadline',
             'courseId' => $message['courseId'],
-            'title' => '课程到期',
+            'title' => "《{$message['courseTitle']}》",
             'message' => "您加入的课程《{$message['courseTitle']}》将在{$message['endtime']}到期",
         );
 
@@ -104,7 +107,7 @@ class GenerateNotificationHandler
                 'classroomTitle' => $classroom['title'],
                 'endtime' => date('Y-m-d', $classroomMembers[$classroom['id']]['deadline']),
             );
-            //            $this->classroomOverduePush($user, $message);
+            $this->classroomOverduePush($user, $message);
             $this->getNotificationService()->notify($user['id'], 'classroom-deadline', $message);
             $classroomMemberId = $classroomMembers[$classroom['id']]['id'];
             $this->getClassroomService()->updateMember($classroomMemberId, array('deadlineNotified' => 1));
@@ -126,8 +129,8 @@ class GenerateNotificationHandler
 
         $body = array(
             'type' => 'classroom.deadline',
-            'classroomId' => $message['courseId'],
-            'title' => '班级到期',
+            'classroomId' => $message['classroomId'],
+            'title' => "《{$message['classroomTitle']}》",
             'message' => "您加入的班级《{$message['classroomTitle']}》将在{$message['endtime']}到期",
         );
 
@@ -146,8 +149,8 @@ class GenerateNotificationHandler
             if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
-                $message = array('endtime' => date('Y-m-d', $vip['deadline']));
-                //                $this->vipOverduePush($user, $message);
+                $message = array('endtime' => date('Y-m-d', $vip['deadline']), 'levelId' => $vip['levelId']);
+                $this->vipOverduePush($user, $message);
                 $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
                 $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
             }
@@ -156,6 +159,10 @@ class GenerateNotificationHandler
 
     private function vipOverduePush($user, $message)
     {
+        $levelId = $message['levelId'];
+
+        $level = $this->getLevelService()->getLevel($levelId);
+
         $from = array(
             'id' => 0,
             'type' => 'vip',
@@ -169,7 +176,7 @@ class GenerateNotificationHandler
 
         $body = array(
             'type' => 'vip.deadline',
-            'title' => '会员到期',
+            'title' => $level['name'],
             'message' => "您购买的会员将在{$message['endtime']}到期",
         );
 
@@ -249,6 +256,14 @@ class GenerateNotificationHandler
     protected function getVipService()
     {
         return $this->biz->service('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
     }
 
     /**

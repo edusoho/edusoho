@@ -428,7 +428,7 @@ plugin.coupon.use_btn: 使用优惠券
 plugin.coupon.choose_btn: 输入优惠券
 plugin.coupon.use.input_placeholder: 请输入优惠券
 plugin.coupon.code: 优惠码
-plugin.coupon.amount: 优惠金额
+plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用
 coin.online_school_balance: 网校余额
@@ -453,24 +453,34 @@ coin.pay.submit.request: 正在跳转到支付网关
 #订单通用
 order.charge: 收费
 order.name: 订单名称
-order.createdTime: 创建时间
+order.created_time: 创建时间
 order.pay_time: 付款时间
 order.status: 订单状态
+order.deduct: 优惠抵扣
+order.item_type: 订单类型
 order.status.created: 未完成
 order.status.paid: 已付款
 order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
 order.due_pay: 应付(元)
-order.price_amount: 总价
+order.price_amount: 订单金额
 order.discount_amount: 优惠
-order.real_pay: 实付
+order.real_pay: 实付金额
 order.buyers: 购买者
+order.deduct_amount: 优惠金额
+order.coin_amount: 虚拟币支付
+order.cash_amount: 现金支付
+order.buyer.username: 用户名
+order.buyer.true_name: 真实姓名
+order.buyer.email: 邮箱
+order.buyer.contact: 联系电话
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
+order.platform_sn: 商户订单号
 order.price: 订单价格
-order.paid_time: 成交时间
+order.paid_time: 付款时间
 order.bank_code: 银行编号
 order.payment_pattern: 支付方式
 order.payment_pattern.coin: %coin_name%支付
@@ -801,7 +811,7 @@ course.payments_disabled_tips: 尚未开启支付模块，无法购买课程。
 course.delete_from_classroom_tips: 课程已从%classroomName%中移除
 course.not_member_in_classroom_tips: >
   还不是%classroomName%成员,请先<a href="%classroomUrl%">加入%classroomName%</a>
-course.approve_tips: 购买该课程需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
+buy.approve_tips: 购买需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
@@ -2512,7 +2522,7 @@ classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
 classroom.student_export: 导出学生
 classroom.add_student_btn: 添加学员
-classroom.add_student.already_exists: 该用户已是本班级的学员了
+classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
@@ -2552,6 +2562,7 @@ classroom.manage_btn: 管理
 classroom.remove: 移除
 classroom.create.congratulation_message: 恭喜！创建班级成功！
 classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
+classroom.set_assistant_tip: 仅能添加本班级学员
 
 # 表单通用
 form.field.filter: 筛选
@@ -3052,6 +3063,8 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
+user.order.order_list: 订单列表
+user.order.refund_list: 退款管理
 user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.refunding_status: 退款中
@@ -4326,6 +4339,7 @@ course.block_grid.equal: 等
 course.block_grid.learn_time: 学习总时长：%learnTime%
 course.block_grid.live_finish: 直播结束
 course.block_grid.live_back: 回放
+course.block_grid.from_classroom: 来自班级：
 
 # course/header
 course.header.vip: 会员
@@ -6707,7 +6721,7 @@ admin.user_fields.Formart_verifcation.hide: 收起
 admin.user_fields.Require_personal_information: 登录后填写个人资料
 admin.user_fields.Require_personal_information.help_block: 开启后，学员登录后需填写个人资料
 admin.user_fields.other_setting: 其它设置
-admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
+admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
 admin.user_fields.verified_mobile_tip: 带短信校检
 
@@ -7028,6 +7042,7 @@ admin.cdn.input_placeholder: 不填将默认是URL
 admin.order.paid_time_range.input_placeholder: 付款时间段
 admin.order.keyword: 关键词:
 admin.order.buyer: 购买者用户名
+admin.order.title: 订单名称
 admin.order.screen_condition: 筛选条件:
 admin.order.target_name: 名
 admin.order.buyer_mobile: 购买者绑定手机号
@@ -7308,9 +7323,9 @@ admin.coin_setting.price_set_tips: 请设置正确的价格
 #退款管理
 admin.order_refund.status.default: 退款状态
 admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.placeholder: 课程或班级标题
+admin.order_refund.title.placeholder: 订单标题
 admin.order_refund.title: 退款订单
-admin.order_refund.order_amount: 实付金额
+admin.order_refund.order_amount: 退款金额
 admin.order_refund.refund_person: 退款人
 admin.order_refund.refund_status: 退款状态
 admin.order_refund.operator: 操作人
@@ -8100,3 +8115,5 @@ order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
 
 site.join_by_free: 免费加入
 site.join_by_purchase: 购买加入
+site.join_to_learn: 加入学习
+site.fill_user_info_tip: 补全用户信息

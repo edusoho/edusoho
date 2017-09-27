@@ -1,37 +1,21 @@
-{#收藏的课程，显示逻辑和首页课程一样，html结构不一样#}
-<li class="course-grid">
-    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank" class="grid-body">
-            {% if courseSet.discountId > 0 %}
-                {% if courseSet.discount == 0 %}
-                    <!-- 限免 -->
-                    <span class="tag-discount free"></span>
-                {% else %}
-                    <!-- 折扣 -->
-                    <span class="tag-discount"></span>
-                {% endif %}
-            {% endif %}
-            {% if courseSet.serializeMode == 'serialized' %}
-                <span class="tags"><span class="tag-serialing"></span></span>
-            {% elseif courseSet.serializeMode == 'finished' %}
-                <span class="tags"><span class="tag-finished"></span></span>
-            {% endif %}
-            {% if courseSet.type|default() == 'live' %}
-                <span class="tags">
-          <span class="tag-live"></span>
-        </span>
-            {% endif %}
-        <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
-    <div class="course-info">
-        <div class="title">
-            {{ courseSet.title }}
-        </div>
-        <div class="metas clearfix">
-            {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
-            {% endif %}
-            <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-            {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
-        </div>
+<div class="my-course-item cd-mb40 clearfix">
+  <a class="my-course-item__link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
+    <img class="my-course-item__picture" src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}">
+    {% include 'my/learning/course/courses-block-label.html.twig' %}
+  </a>
+
+  <div class="my-course-item__info">
+    <div class="my-course-item__title text-overflow">
+      <a class="cd-link-gray-dark" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
     </div>
-    </a>
-</li>
+
+    <div class="my-course-item__status">
+      {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+    </div>
+  </div>
+
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+  </div>
+
+</div>

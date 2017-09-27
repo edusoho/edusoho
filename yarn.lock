@@ -1830,9 +1830,9 @@ es-abstract@^1.7.0:
     is-callable "^1.1.3"
     is-regex "^1.0.4"
 
-es-ckeditor@latest:
-  version "1.1.12"
-  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.1.12.tgz#adb90e476159426d85a3515d0ff005ed9d132020"
+es-ckeditor@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.2.1.tgz#faee8df4fe98d5be31bb9d3f7bf3e4de05713880"
 
 es-extract-text-webpack-plugin@latest:
   version "1.0.0"

@@ -93,7 +93,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['endTime'] = $activity['endTime'];
 
         if ($activity['mediaType'] === 'video') {
-            $fields['mediaSource'] = $fields['ext']['mediaSource'];
+            $media = json_decode($fields['media'], true);
+            $fields['mediaSource'] = $media['source'];
         }
 
         return $fields;
@@ -133,7 +134,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
 
             if ($activity['mediaType'] === 'video') {
-                $fields['mediaSource'] = $fields['ext']['mediaSource'];
+                $media = json_decode($fields['media'], true);
+                $fields['mediaSource'] = $media['source'];
             }
 
             $fields['endTime'] = $activity['endTime'];

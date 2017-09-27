@@ -91,13 +91,35 @@ class SystemCrontabInitializer
             ));
         }
 
-        $count = self::getSchedulerService()->countJobs(array('name' => 'DeleteSessionJob', 'source' => self::SOURCE_SYSTEM));
+        $count = self::getSchedulerService()->countJobs(array('name' => 'SessionGcJob', 'source' => self::SOURCE_SYSTEM));
         if ($count == 0) {
             self::getSchedulerService()->register(array(
-                'name' => 'DeleteSessionJob',
+                'name' => 'SessionGcJob',
                 'source' => self::SOURCE_SYSTEM,
                 'expression' => '0 * * * *',
-                'class' => 'Biz\User\Job\DeleteSessionJob',
+                'class' => 'Codeages\Biz\Framework\Session\Job\SessionGcJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'OnlineGcJob', 'source' => self::SOURCE_SYSTEM));
+        if ($count == 0) {
+            self::getSchedulerService()->register(array(
+                'name' => 'OnlineGcJob',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '0 * * * *',
+                'class' => 'Codeages\Biz\Framework\Session\Job\OnlineGcJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'MarkExecutingTimeoutJob', 'source' => self::SOURCE_SYSTEM));
+        if ($count == 0) {
+            self::getSchedulerService()->register(array(
+                'name' => 'MarkExecutingTimeoutJob',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '0 * * * *',
+                'class' => 'Codeages\Biz\Framework\Scheduler\Job\MarkExecutingTimeoutJob',
                 'args' => array(),
             ));
         }

@@ -367,9 +367,11 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.createdTime: 'Create time'
+order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
+order.deduct: Order deduct
+order.item_type: Order type
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
@@ -380,6 +382,13 @@ order.price_amount: PriceAmount
 order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
+order.deduct_amount: Deduct Amount
+order.coin_amount: Coin Amount
+order.cash_amount: Cash Amount
+order.buyer.username: Username
+order.buyer.true_name: True name
+order.buyer.email: Email
+order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
@@ -686,7 +695,7 @@ course.is_student_tips: 'You erolled this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
-course.approve_tips: 'You need to verify your id before buying this course.'
+buy.approve_tips: 'You need to verify your id before buying.'
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
@@ -2054,6 +2063,9 @@ classroom.manage_btn: Config
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Class title was not unique, please change it.'
+#TODO trans
+classroom.set_assistant_tip: 仅能添加本班级学员
+
 form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
@@ -2400,6 +2412,8 @@ user.account.my_invite_code.close: 'Invitation code feature is off'
 user.orders: 'My Order'
 user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
+user.order.order_list: Order List
+user.order.refund_list: Refund Manage
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
 user.orders.refunding_status: Refunding
@@ -3410,6 +3424,8 @@ contetn.article_list.category: Category
 contetn.article_list.contentCategory: "<span class=\"color-gray\">published at %publishedTime%</span>, belong to <a href=\"#\" class=\"color-gray\">%contentCategoryname%</a> category</span>\n"
 course.block_grid.view_course_btn: View
 course.block_grid.countinue_learn_btn: Continue
+course.block_grid.from_classroom: 'From classroom '
+
 course.block_grid.DRAFT_STATUS: Draft
 course.block_grid.CLOSE_STATUS: Closed
 course.block_grid.SERIALIZE_SERIALIZE_MODE: Serial
@@ -5539,6 +5555,7 @@ admin.cdn.input_placeholder: 'If leave empty, then it will be default URL'
 admin.order.paid_time_range.input_placeholder: 'Payment time'
 admin.order.keyword: Keywords
 admin.order.buyer: 'Buyer''s user name'
+admin.order.title: Order title
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name
 admin.order.buyer_mobile: 'Buyer''s phone number'
@@ -5731,6 +5748,7 @@ admin.coin_model.currency_tips: "1, Could not manually update the user's virtual
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
+admin.order_refund.title.placeholder: title
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
 admin.order_refund.title: 'Refund order'
 admin.order_refund.order_amount: 'Order price'
@@ -6431,3 +6449,5 @@ order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
+site.join_to_learn: Join to learn
+site.fill_user_info_tip: Fill user info

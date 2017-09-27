@@ -9,7 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 
-class CourseProduct extends Product implements Owner, OrderStatusCallback
+class CourseProduct extends Product implements OrderStatusCallback
 {
     const TYPE = 'course';
 
@@ -94,16 +94,6 @@ class CourseProduct extends Product implements Owner, OrderStatusCallback
     {
         $orderItem = $orderRefundItem['order_item'];
         $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
-    }
-
-    public function exitOwner($data)
-    {
-        $user = $this->biz['user'];
-        $this->getCourseMemberService()->removeStudent(
-            $this->targetId,
-            $user->getId(),
-            array('reason' => $data['reason']['note'])
-        );
     }
 
     public function getOwner($userId)
