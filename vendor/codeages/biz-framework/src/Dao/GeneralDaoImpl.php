@@ -311,4 +311,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
     }
+
+    protected function filterStartLimit(&$start, &$limit)
+    {
+        $start = (int) $start;
+        $limit = (int) $limit;
+    }
+
 }

@@ -21,16 +21,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
         $ssl = $request->isSecure() ? true : false;
         list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
 
-        //新文档播放器
-        if (isset($result['token'])) {
-            return $this->render('activity/new-doc/show.html.twig', array(
-                'doc' => $doc,
-                'error' => $error,
-                'docMedia' => $result,
-            ));
-        }
-
-        return $this->render('activity/doc/show.html.twig', array(
+        return $this->render('activity/new-doc/show.html.twig', array(
             'doc' => $doc,
             'error' => $error,
             'docMedia' => $result,
@@ -49,16 +40,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
         $ssl = $request->isSecure() ? true : false;
         list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
 
-        //新文档播放器
-        if (isset($result['token'])) {
-            return $this->render('activity/new-doc/preview.html.twig', array(
-                'doc' => $doc,
-                'error' => $error,
-                'docMedia' => $result,
-            ));
-        }
-
-        return $this->render('activity/doc/preview.html.twig', array(
+        return $this->render('activity/new-doc/preview.html.twig', array(
             'doc' => $doc,
             'error' => $error,
             'docMedia' => $result,
