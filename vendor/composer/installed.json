@@ -2062,59 +2062,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.8.3",
-        "version_normalized": "0.8.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "8991451a259b1a7bcf53a94d0bef02d0cbdeef94"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/8991451a259b1a7bcf53a94d0bef02d0cbdeef94",
-            "reference": "8991451a259b1a7bcf53a94d0bef02d0cbdeef94",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/symfony-lock-lite": "^1.0",
-            "davedevelopment/phpmig": "~1.2",
-            "doctrine/annotations": "~1.2",
-            "doctrine/dbal": "~2.4",
-            "monolog/monolog": "^1.20",
-            "mtdowling/cron-expression": "~1.2",
-            "php": "^5.3|^7.0",
-            "pimple/pimple": "~3.2",
-            "symfony/console": "~2.8|~3.0",
-            "symfony/event-dispatcher": "~2.8|~3.0",
-            "symfony/finder": "~2.8|~3.0",
-            "symfony/polyfill-php55": "~1.3",
-            "webpatser/laravel-uuid": "~2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8|^5.7|^6.0"
-        },
-        "time": "2017-09-07T07:45:54+00:00",
-        "bin": [
-            "bin/biz"
-        ],
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            },
-            "files": [
-                "src/functions.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "codeages/biz-rate-limiter",
         "version": "v0.1.8",
         "version_normalized": "0.1.8.0",
@@ -3064,11 +3011,6 @@
         ]
     },
     {
-<<<<<<< HEAD
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.19",
-        "version_normalized": "0.1.19.0",
-=======
         "name": "piwik/device-detector",
         "version": "3.7.7",
         "version_normalized": "3.7.7.0",
@@ -3125,7 +3067,6 @@
         "name": "composer/ca-bundle",
         "version": "1.0.8",
         "version_normalized": "1.0.8.0",
->>>>>>> beta/8.1.6
         "source": {
             "type": "git",
             "url": "https://github.com/composer/ca-bundle.git",
@@ -5169,7 +5110,6 @@
                 "homepage": "https://symfony.com/contributors"
             }
         ],
-<<<<<<< HEAD
         "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
         "homepage": "https://github.com/doctrine/instantiator",
         "keywords": [
