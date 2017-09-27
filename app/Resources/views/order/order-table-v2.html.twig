@@ -31,19 +31,7 @@
       <td class="text-right">{{ order.price_amount  }}/{{ order.pay_amount }}</td>
       <td>{{ order.created_time|date('Y-n-d H:i:s') }}</td>
       <td>
-        {{ dict_macro.orderStatusV2(order.display_status) }}
-        {% if order.display_status in ['paid'] %}
-          {% if order.refund_deadline == 0 or order.refund_deadline > date().timestamp  %}
-            <div class="table-action__item">
-              <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'申请退款'|trans}}</a>
-            </div>
-          {% endif %}
-        {% endif %}
-        {% if order.display_status in ['refunding'] %}
-          <div class="table-action__item">
-            <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'退款详情'|trans}}</a>
-          </div>
-        {% endif %}
+        {{ display_order_status(order.status, 0) }}
 
       </td>
       <td>
@@ -66,14 +54,23 @@
               </ul>
             </div>
           {% endif %}
-          {% if order.status in ['paid', 'refunding', 'refunded'] %}
+          {% if order.status in ['paid', 'refunding', 'refunded', 'closed'] %}
             <div class="table-action__item">
               <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'订单详情'|trans}}</a>
             </div>
-            <br>
-            <div class="table-action__item">
-              <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'申请退款'|trans}}</a>
-            </div>
+
+            {% if order.status in ['paid'] %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'申请退款'|trans}}</a>
+              </div>
+            {% endif %}
+            {% if order.status in ['refunded'] %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'查看退款'|trans}}</a>
+              </div>
+            {% endif %}
           {% endif %}
           {#{% if order.status in  %}#}
         </div>
