@@ -29,16 +29,18 @@ class ChainCache extends CacheProvider
     /**
      * @var CacheProvider[]
      */
-    private $cacheProviders = array();
+    private $cacheProviders = [];
 
     /**
      * Constructor
      *
      * @param CacheProvider[] $cacheProviders
      */
-    public function __construct($cacheProviders = array())
+    public function __construct($cacheProviders = [])
     {
-        $this->cacheProviders = $cacheProviders;
+        $this->cacheProviders = $cacheProviders instanceof \Traversable
+            ? iterator_to_array($cacheProviders, false)
+            : array_values($cacheProviders);
     }
 
     /**
@@ -75,6 +77,34 @@ class ChainCache extends CacheProvider
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function doFetchMultiple(array $keys)
+    {
+        /* @var $traversedProviders CacheProvider[] */
+        $traversedProviders = [];
+        $keysCount          = count($keys);
+        $fetchedValues      = [];
+
+        foreach ($this->cacheProviders as $key => $cacheProvider) {
+            $fetchedValues = $cacheProvider->doFetchMultiple($keys);
+
+            // We populate all the previous cache layers (that are assumed to be faster)
+            if (count($fetchedValues) === $keysCount) {
+                foreach ($traversedProviders as $previousCacheProvider) {
+                    $previousCacheProvider->doSaveMultiple($fetchedValues);
+                }
+
+                return $fetchedValues;
+            }
+
+            $traversedProviders[] = $cacheProvider;
+        }
+
+        return $fetchedValues;
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function doContains($id)
@@ -103,6 +133,20 @@ class ChainCache extends CacheProvider
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function doSaveMultiple(array $keysAndValues, $lifetime = 0)
+    {
+        $stored = true;
+
+        foreach ($this->cacheProviders as $cacheProvider) {
+            $stored = $cacheProvider->doSaveMultiple($keysAndValues, $lifetime) && $stored;
+        }
+
+        return $stored;
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function doDelete($id)
@@ -111,6 +155,20 @@ class ChainCache extends CacheProvider
 
         foreach ($this->cacheProviders as $cacheProvider) {
             $deleted = $cacheProvider->doDelete($id) && $deleted;
+        }
+
+        return $deleted;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doDeleteMultiple(array $keys)
+    {
+        $deleted = true;
+
+        foreach ($this->cacheProviders as $cacheProvider) {
+            $deleted = $cacheProvider->doDeleteMultiple($keys) && $deleted;
         }
 
         return $deleted;
@@ -136,7 +194,7 @@ class ChainCache extends CacheProvider
     protected function doGetStats()
     {
         // We return all the stats from all adapters
-        $stats = array();
+        $stats = [];
 
         foreach ($this->cacheProviders as $cacheProvider) {
             $stats[] = $cacheProvider->doGetStats();
