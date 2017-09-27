@@ -1,0 +1,24 @@
+<table class="table cd-table table-striped order-detail-table">
+  <tr>
+    <td width="25%">{{'退款订单号'|trans}}</td>
+    <td width="75%">{{ orderRefund.sn }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '订单名称'|trans }}</td>
+    <td width="75">{{ orderRefund.title }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '订单金额'|trans }}</td>
+    <td wigth="75%" class="color-warning">{{ math_format(orderRefund.amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '虚拟币金额'|trans }}</td>
+    <td width="75" class="color-warning">{{ math_format(orderRefund.refund_coin_amount, 0.01) }}</td>
+  </tr>
+
+  <tr>
+    <td width="25%">{{ '现金金额'|trans }}</td>
+    <td width="75%" class="color-warning">{{ math_format(orderRefund.refund_cash_amount, 0.01) }}</td>
+  </tr>
+
+</table>
