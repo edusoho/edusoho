@@ -15,7 +15,6 @@ class BizOrderDropDisplayStatus extends Migration
         if ($this->isFieldExist('biz_order', 'display_status')) {
             $db->exec('ALTER TABLE `biz_order` DROP COLUMN `display_status`');
         }
-
     }
 
     protected function isFieldExist($table, $filedName)
@@ -34,6 +33,5 @@ class BizOrderDropDisplayStatus extends Migration
      */
     public function down()
     {
-
     }
 }
