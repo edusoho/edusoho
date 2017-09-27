@@ -38,7 +38,7 @@ class CompositeExpression implements Expression
     /**
      * @var Expression[]
      */
-    private $expressions = [];
+    private $expressions = array();
 
     /**
      * @param string $type
