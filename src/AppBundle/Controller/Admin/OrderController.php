@@ -105,8 +105,6 @@ class OrderController extends BaseController
 
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
-        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
-
         $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
@@ -116,7 +114,6 @@ class OrderController extends BaseController
             'user' => $user,
             'orderLogs' => $orderLogs,
             'orderItems' => $orderItems,
-            'paymentTrade' => $paymentTrade,
             'orderDeducts' => $orderDeducts,
             'users' => $users,
         ));

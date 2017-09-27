@@ -69,7 +69,7 @@
           <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('newPayment', order.payment) }}</td>
           <td width="75%">
             <span class="text-muted">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span>
-            {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: order.platform_sn|trans ~ paymentTrade.platform_sn, placement: 'right'} %}
+            <span class="text-muted text-sm pull-right">{{ 'order.platform_sn'|trans ~ order.trade_sn }}</span>
           </td>
         {% endif %}
 

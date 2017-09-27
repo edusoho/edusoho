@@ -74,7 +74,13 @@ payment:
     llpay: LLpay
     marketing: marketing
    
-    
+newPayment:
+    none: --
+    alipay: Alipay
+    wechat: Wechat
+    heepay: Heepay
+    quickpay: Quickpay
+    llpay: LLpay
 
 moneyRecordType:
     income: Income
