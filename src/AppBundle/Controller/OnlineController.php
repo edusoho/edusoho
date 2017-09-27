@@ -27,7 +27,7 @@ class OnlineController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = array(
-            'gt_access_time' => time() - 15 * 60,
+            'gt_sess_time' => time() - 15 * 60,
         );
 
         if ($request->query->get('name', '')) {
@@ -49,7 +49,7 @@ class OnlineController extends BaseController
 
         $type = $request->query->get('type', 'online');
         if ($type == 'logined') {
-            $conditions['gt_user_id'] = 0;
+            $conditions['is_login'] = 1;
         }
 
         $count = $this->getOnlineService()->countOnlines($conditions);
