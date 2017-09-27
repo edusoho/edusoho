@@ -888,7 +888,7 @@ class CourseManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
 
         return $this->render(
-            'course-manage/orders.html.twig',
+            'course-manage/order/list.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
