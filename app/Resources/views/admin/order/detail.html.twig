@@ -87,7 +87,7 @@
         {% endif %}
 
         <tr>
-          <td width="25%">{{'order.createdTime'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td>
+          <td width="25%">{{'order.created_time'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td>
         </tr>
 
         {% if order.status == 'paid' %}

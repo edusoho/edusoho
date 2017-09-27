@@ -10,14 +10,16 @@
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
     <div class="panel-body">
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+        <input type="hidden" name="orderItemType" value="course">
+        <input type="hidden" name="order_item_target_ids[]" value="{{ course.id }}">
         <div class="mbm">
           {{'course.order.create_time'|trans}} :
           <div class="form-group">
-              <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'course.order.start_time'|trans}}">
+            <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'course.order.start_time'|trans}}">
           </div>
           <div class="form-group">-</div>
           <div class="form-group">
-              <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'course.order.end_time'|trans}}">
+            <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'course.order.end_time'|trans}}">
           </div>
         </div>
         <div>
@@ -37,23 +39,23 @@
 
           <span class="divider"></span>
 
-            <div class="form-group">
-                <select class="form-control" name="keywordType">
-                  {% set options = {sn: 'coin.order_sn'|trans, buyer:'admin.order.buyer'|trans} %}
-                  {{ select_options(options, request.get('keywordType')) }}
-                </select>
-            </div>
+          <div class="form-group">
+            <select class="form-control" name="keywordType">
+              {% set options = {sn: 'coin.order_sn'|trans, buyer:'admin.order.buyer'|trans} %}
+              {{ select_options(options, request.get('keywordType')) }}
+            </select>
+          </div>
 
-            <div class="form-group">
-                <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
-            </div>
+          <div class="form-group">
+            <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
+          </div>
 
           <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
         </div>
         <input type="hidden" name="courseId" value="{{ course.id }}">
       </form>
       <table class="table table-striped table-hover" id="order-table">
-          {% include 'order/order-table.html.twig' with {mode:'course'} %}
+        {% include 'order/order-table.html.twig' with {mode:'course'} %}
       </table>
       {{ web_macro.paginator(paginator) }}
     </div>

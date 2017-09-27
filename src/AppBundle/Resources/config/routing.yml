@@ -278,8 +278,8 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-course_order_detail:
-   path:  /order/{id}/detail_course
+order_detail:
+   path:  /order/{id}/detail
    defaults: { _controller: AppBundle:Order:detail }
 
 order_cancel_refund:
