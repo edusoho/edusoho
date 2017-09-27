@@ -27,7 +27,7 @@ class SessionMigrate extends Migration
                 sess_time,
                 sess_lifetime + sess_time,
                 '{$currentTime}'
-            from sessions where user_id > 0 and sess_time > '{$deadlineTime}' ;
+            from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' ;
         ");
     }
 
