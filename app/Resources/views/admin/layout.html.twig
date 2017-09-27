@@ -167,7 +167,7 @@
         {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : 'http://www.qiqiuyu.com' %}
         new FaqSDK({
           id: 'faq-sdk',
-          apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&accesskey={{ base64_encode(setting("storage.cloud_access_key")) }}&url={{ app.request.getRequestUri() }}',
+          apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&host={{ app.request.getHost() }}&url={{ app.request.getRequestUri() }}',
           color: '#43bc60',
         });
       </script>
