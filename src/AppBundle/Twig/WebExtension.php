@@ -1710,12 +1710,7 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
-        if (!$this->defaultCloudSdkHost) {
-            $api = CloudAPIFactory::create('root');
-            $this->defaultCloudSdkHost = $api->getCloudSdkHost();
-        }
-
-        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ? : $this->defaultCloudSdkHost;
+        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ? : 'service-cdn.qiqiuyun.net';
         
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
