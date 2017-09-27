@@ -209,32 +209,10 @@ class Lesson extends BaseResource
         if ($mediaSource == 'self') {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
-            $storage = $this->getSettingService()->get('storage');
-
-            $watermarkSetting = array(
-                'video_watermark' => '0'
-            );
-            $fingerPrintSetting = array(
-                'video_fingerprint' => '0'
-            );
-
-            if (!empty($storage)) {
-                $watermarkSetting = ArrayToolkit::parts($storage, array(
-                    'video_watermark',
-                    'video_watermark_image',
-                    'video_embed_watermark_image',
-                    'video_watermark_position',
-                ));
-
-                $fingerPrintSetting = ArrayToolkit::parts($storage, array(
-                    'video_fingerprint',
-                    'video_fingerprint_time'
-                ));
-            }
-
+            list($watermarkSetting, $fingerPrintSetting) = $this->getVideoPlayerParams();
             $lesson['watermarkSetting'] = $watermarkSetting;
             $lesson['fingerPrintSetting'] = $fingerPrintSetting;
-
+            
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {
@@ -334,6 +312,34 @@ class Lesson extends BaseResource
         }
 
         return $lesson;
+    }
+
+    protected function getVideoPlayerParams()
+    {
+        $storage = $this->getSettingService()->get('storage');
+
+        $watermarkSetting = array(
+            'video_watermark' => '0'
+        );
+        $fingerPrintSetting = array(
+            'video_fingerprint' => '0'
+        );
+
+        if (!empty($storage)) {
+            $watermarkSetting = ArrayToolkit::parts($storage, array(
+                'video_watermark',
+                'video_watermark_image',
+                'video_embed_watermark_image',
+                'video_watermark_position',
+            ));
+
+            $fingerPrintSetting = ArrayToolkit::parts($storage, array(
+                'video_fingerprint',
+                'video_fingerprint_time'
+            ));
+        }
+
+        return array($watermarkSetting, $fingerPrintSetting);
     }
 
     protected function getHeadLeaderInfo()
