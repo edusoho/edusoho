@@ -56,6 +56,7 @@ orderDisplayStatus:
 
 refundStatus:
     auditing: Applied
+    refunding: Refunding
     refunded: Success
     refused: Failed
     cancel: Cancelled

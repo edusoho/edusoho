@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\OrderRefund\Service\OrderRefundProxyService;
 use Codeages\Biz\Framework\Order\Service\OrderRefundService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,6 +60,13 @@ class OrderRefundController extends BaseController
     {
         $order = $this->getOrderService()->getOrder($id);
 
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $product = $this->getOrderRefundProxyService()->applyOrderRefund($order['id'], $fields);
+            return $this->redirect($this->generateUrl('my_order_refunds'));
+
+        }
+
         return $this->render('my-order/order-refund/apply-refund-modal.html.twig', array(
             'order' => $order,
         ));
@@ -78,5 +86,13 @@ class OrderRefundController extends BaseController
     protected function getOrderRefundService()
     {
         return $this->createService('Order:OrderRefundService');
+    }
+
+    /**
+     * @return OrderRefundProxyService
+     */
+    protected function getOrderRefundProxyService()
+    {
+        return $this->createService('OrderRefund:OrderRefundProxyService');
     }
 }

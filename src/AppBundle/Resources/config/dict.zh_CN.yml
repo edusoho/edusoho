@@ -73,6 +73,7 @@ orderLogStatus:
 
 refundStatus:
     auditing: 已申请
+    refunding: 退款中
     refunded: 退款成功
     refused: 退款失败
     cancel: 已取消
