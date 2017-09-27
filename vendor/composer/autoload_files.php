@@ -6,8 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    '1d1b89d124cc9cb8219922c9d5569199' => $vendorDir . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
     '92c8763cd6170fce6fcfe7e26b4e8c10' => $vendorDir . '/symfony/phpunit-bridge/bootstrap.php',
+    '1d1b89d124cc9cb8219922c9d5569199' => $vendorDir . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
     '2c102faa651ef8ea5874edb585946bce' => $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
     '5255c38a0faeba867671b61dfda6d864' => $vendorDir . '/paragonie/random_compat/lib/random.php',
     '023d27dca8066ef29e6739335ea73bad' => $vendorDir . '/symfony/polyfill-php70/bootstrap.php',
@@ -24,5 +24,6 @@ return array(
     '2cffec82183ee1cea088009cef9a6fc3' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     '2a404a48a0596622a2af787408f2be5e' => $vendorDir . '/xxtea/xxtea/xxtea.php',
     '0b994ed09d88003af15ffbb9ef2e73ce' => $vendorDir . '/codeages/qiqiuyun-php-sdk/src/functions.php',
+    '5500a79e13a6ff0c087268676dcb4c2f' => $vendorDir . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
     '1aa6994384dc421cb384ab1d1a3c3b61' => $baseDir . '/app/AppKernel.php',
 );

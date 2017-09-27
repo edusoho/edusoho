@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
+    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'Topxia\\Api\\' => array($baseDir . '/api/src/Topxia/Api'),
     'TiBeN\\' => array($vendorDir . '/tiben/crontab-manager/src'),
@@ -37,6 +37,9 @@ return array(
     'QiQiuYun\\SDK\\' => array($vendorDir . '/codeages/qiqiuyun-php-sdk/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
+    'Omnipay\\WechatPay\\' => array($vendorDir . '/wenqinruan/omnipay-wechatpay/src'),
+    'Omnipay\\Alipay\\Tests\\' => array($vendorDir . '/wenqinruan/omnipay-alipay/tests'),
+    'Omnipay\\Alipay\\' => array($vendorDir . '/wenqinruan/omnipay-alipay/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Incenteev\\ParameterHandler\\' => array($vendorDir . '/incenteev/composer-parameter-handler'),
     'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
