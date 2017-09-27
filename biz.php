@@ -1,12 +1,16 @@
 <?php
 
-require_once __DIR__.'/app/autoload.php';
-require_once __DIR__.'/app/bootstrap.php.cache';
-require_once __DIR__.'/app/AppKernel.php';
+require_once __DIR__ . '/app/autoload.php';
+require_once __DIR__ . '/app/bootstrap.php.cache';
+require_once __DIR__ . '/app/AppKernel.php';
+
+
+$env = getAppEvn($argv);
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$kernel = new AppKernel($env, true);
 
-$kernel = new AppKernel('test', true);
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel->setRequest($request);
 $kernel->boot();
 
@@ -19,7 +23,28 @@ $biz->register(new \Codeages\Biz\Framework\Provider\TokenServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\SettingServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
-$biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), array('monolog.logfile' => $biz['log_directory'].'/biz.log'));
+$biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), array('monolog.logfile' => $biz['log_directory'] . '/biz.log',));
 $biz->boot();
 
 return $biz;
+
+/**
+ * @param $arguments
+ * @return mixed|string
+ */
+function getAppEvn($arguments)
+{
+    //check if set variable environment
+    $variables = array_filter($arguments, function ($arg) {
+        return strpos($arg, '-e=') === 0 || strpos($arg, '--env=') === 0;
+    });
+
+    if (empty($variables)) {
+        return $env = 'dev';
+    }
+    //get first environment
+    $env = array_shift($variables);
+    // get environment value
+    $variables = explode("=", $env);
+    return $env = array_pop($variables);
+}

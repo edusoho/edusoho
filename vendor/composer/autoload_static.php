@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
+class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
 {
     public static $files = array (
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
@@ -29,14 +29,6 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
     );
 
     public static $prefixLengthsPsr4 = array (
-        'p' => 
-        array (
-            'phpDocumentor\\Reflection\\' => 25,
-        ),
-        'W' => 
-        array (
-            'Webmozart\\Assert\\' => 17,
-        ),
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
@@ -117,15 +109,6 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
     );
 
     public static $prefixDirsPsr4 = array (
-        'phpDocumentor\\Reflection\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-        ),
-        'Webmozart\\Assert\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
@@ -1008,12 +991,12 @@ class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit68093f1a9756d047f749afafb6a650b9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit68093f1a9756d047f749afafb6a650b9::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit68093f1a9756d047f749afafb6a650b9::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit68093f1a9756d047f749afafb6a650b9::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit68093f1a9756d047f749afafb6a650b9::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit68093f1a9756d047f749afafb6a650b9::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -20,19 +20,19 @@ class FileToolkit
 
         $whitelist = array_unique(explode(' ', trim($extensions)));
 
-// Split the filename up by periods. The first part becomes the basename
+        // Split the filename up by periods. The first part becomes the basename
         // the last part the final extension.
         $fileNameParts = explode('.', $fileName);
         $newFilename = array_shift($fileNameParts); // Remove file basename.
         $finalExtension = array_pop($fileNameParts);
 
-// Remove final extension.
+        // Remove final extension.
 
-// Loop through the middle parts of the name and add an underscore to the
+        // Loop through the middle parts of the name and add an underscore to the
 
-// end of each section that could be a file extension but isn't in the list
+        // end of each section that could be a file extension but isn't in the list
 
-// of allowed extensions.
+        // of allowed extensions.
         foreach ($fileNameParts as $fileNamePart) {
             $newFilename .= '.'.$fileNamePart;
             if (!in_array($fileNamePart, $whitelist) && preg_match("/^[a-zA-Z]{2,5}\d?$/", $fileNamePart)) {
