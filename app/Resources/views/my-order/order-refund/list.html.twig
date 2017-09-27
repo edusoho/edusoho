@@ -25,9 +25,9 @@
         <div class="table-action__item">
           <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:orderRefund.order_id}) }}">{{'form.btn.detail'|trans}}</a>
         </div>
-        {% if orderRefund.status in ['created'] %}
+        {% if orderRefund.status in ['refunding'] %}
           <div class="table-action__item">
-            <a href="javascript:;" class="js-cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:orderRefund.order_id}) }}">{{'user.orders.cancel_refund'|trans}}</a>
+            <a href="javascript:;" class="js-cancel-refund" data-url="{{ path('order_cancel_refund', {orderId:orderRefund.order_id}) }}">{{'user.orders.cancel_refund'|trans}}</a>
           </div>
         {% endif %}
       </div>

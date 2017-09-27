@@ -163,12 +163,12 @@ class OrderRefundProxyServiceImpl extends OrderRefundServiceImpl implements Orde
      */
     protected function getOrderService()
     {
-        return $this->createService('Order:OrderService');
+        return $this->biz->service('Order:OrderService');
     }
 
     protected function getOrderFacadeService()
     {
-        return $this->createService('OrderFacade:OrderFacadeService');
+        return $this->biz->service('OrderFacade:OrderFacadeService');
     }
 
     protected function getWorkflowService()
@@ -178,16 +178,16 @@ class OrderRefundProxyServiceImpl extends OrderRefundServiceImpl implements Orde
 
     protected function getNotificationService()
     {
-        return $this->createService('User:NotificationService');
+        return $this->biz->service('User:NotificationService');
     }
 
     protected function getSettingService()
     {
-        return $this->createService('System:SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return $this->biz->service('User:UserService');
     }
 }
