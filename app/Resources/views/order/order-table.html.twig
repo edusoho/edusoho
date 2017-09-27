@@ -7,7 +7,7 @@
   <thead>
     <tr>
       <th width="25%">{{'order.name'|trans}}</th>
-      <th>{{'order.createdTime'|trans}}</th>
+      <th>{{'order.created_time'|trans}}</th>
       <th>{{'order.status'|trans}}</th>
       <th>{{'order.price_amount'|trans }}</th>
       <th>{{'order.discount_amount'|trans }}</th>
@@ -42,7 +42,7 @@
             {{ web_macro.user_link(buyer) }}
           </td>
           <td>
-            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('order_Detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
+            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
           </td>
         </tr>
     {% else %}

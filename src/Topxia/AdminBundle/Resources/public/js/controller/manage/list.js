@@ -41,7 +41,7 @@ define(function(require, exports, module) {
                 return false;
             }
             Notify.success(Translator.trans('正在导出数据，请稍候...'));
-        })
+        });
 
         $('.js-pay-way-popover').popover({
             html: true,

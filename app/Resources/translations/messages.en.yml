@@ -367,7 +367,7 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.createdTime: 'Create time'
+order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
 order.deduct: Order deduct
@@ -382,6 +382,13 @@ order.price_amount: PriceAmount
 order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
+order.deduct_amount: Deduct Amount
+order.coin_amount: Coin Amount
+order.cash_amount: Cash Amount
+order.buyer.username: Username
+order.buyer.true_name: True name
+order.buyer.email: Email
+order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'

@@ -2,15 +2,22 @@
 
 namespace AppBundle\Component\Export;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class Factory
 {
     protected $container;
 
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param $name
+     * @param $conditions
+     * @return Exporter
+     */
     public function create($name, $conditions)
     {
         $export = $this->exportMap($name);
@@ -23,8 +30,7 @@ class Factory
         $map = array(
             'invite-records' => 'AppBundle\Component\Export\Invite\InviteRecordsExporter',
             'user-invite-records' => 'AppBundle\Component\Export\Invite\InviteUserRecordsExporter',
-            'course-order' => 'AppBundle\Component\Export\Order\CourseOrderExporter',
-            'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExporter',
+            'order' => 'AppBundle\Component\Export\Order\OrderExporter',
             'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
             'course-overview-student-list' => 'AppBundle\Component\Export\Course\OverviewStudentExporter',
             'course-overview-task-list' => 'AppBundle\Component\Export\Course\OverviewTaskExporter',

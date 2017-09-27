@@ -9,7 +9,6 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
@@ -887,15 +886,6 @@ class CourseManageController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
-        //
-//        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-//            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
-//                && ($expiredOrderToBeUpdated['status'] == 'created')
-//            ) {
-//                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-//                $orders[$index]['status'] = 'cancelled';
-//            }
-//        }
 
         return $this->render(
             'course-manage/orders.html.twig',

@@ -10,6 +10,8 @@
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
     <div class="panel-body">
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+        <input type="hidden" name="orderItemType" value="course">
+        <input type="hidden" name="order_item_target_ids[]" value="{{ course.id }}">
         <div class="mbm">
           {{'course.order.create_time'|trans}} :
           <div class="form-group">
