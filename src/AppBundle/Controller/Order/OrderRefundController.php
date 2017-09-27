@@ -3,14 +3,17 @@
 namespace AppBundle\Controller\Order;
 
 use AppBundle\Controller\BaseController;
+use Biz\OrderFacade\Service\OrderRefundService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderRefundController extends BaseController
 {
     public function refundAction(Request $request, $orderId)
     {
-        $fileds = $request->request->all();
-        $product = $this->getOrderRefundService()->applyOrderRefund($orderId, $fileds);
+        $fields = $request->request->all();
+        $fields['reason'] = $fields['reason']['note'];
+        $product = $this->getOrderRefundService()->applyOrderRefund($orderId, $fields);
 
         return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
     }
@@ -41,6 +44,6 @@ class OrderRefundController extends BaseController
      */
     protected function getOrderRefundService()
     {
-        return $this->getBiz()->service('OrderRefund:OrderRefundService');
+        return $this->getBiz()->service('OrderFacade:OrderRefundService');
     }
 }

@@ -573,6 +573,18 @@ my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
 
+my_order_refunds:
+    path: /my/order_refunds
+    defaults: { _controller: AppBundle:My/OrderRefund:index }
+
+my_order_refund_detail:
+    path: /my/order_refund/{id}/detail
+    defaults: { _controller: AppBundle:My/OrderRefund:detail }
+
+my_order_refund_apply:
+    path: /my/order_refund/{id}/apply
+    defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
+
 my_order_cancel:
     path: /my/order/{id}/cancel
     defaults: { _controller: AppBundle:My/Order:cancel }
@@ -2968,7 +2980,7 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
-#
+
 #v2_demo:
 #    path: /v2/demo
 #    defaults: { _controller: AppBundle:V2:demo }

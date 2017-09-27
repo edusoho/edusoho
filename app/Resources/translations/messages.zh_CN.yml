@@ -3063,6 +3063,8 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
+user.order.order_list: 订单列表
+user.order.refund_list: 退款管理
 user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.refunding_status: 退款中
