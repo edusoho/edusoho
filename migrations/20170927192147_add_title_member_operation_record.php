@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddMemberOperationRecord extends Migration
+class AddTitleMemberOperationRecord extends Migration
 {
     /**
      * Do the migration
