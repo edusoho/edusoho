@@ -19,14 +19,18 @@ class AuthenticateListener
     public function onAuthenticate(TokenInterface $token)
     {
         $request = $this->container->get('request');
-        $this->onlineSample($request, $token);
+        $authToken = $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER);
+        if (!empty($authToken)) {
+            $this->onlineSample($request, $token);
+        }
     }
 
     protected function onlineSample($request, $token)
     {
+        $user = $token->getUser();
         $online = array(
             'sess_id' => $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER),
-            'user_id' => $token->getUser()->getId(),
+            'user_id' => $user['id'],
             'ip' => $request->getClientIp(),
             'user_agent' => $request->headers->get('User-Agent', ''),
             'source' => 'App',
