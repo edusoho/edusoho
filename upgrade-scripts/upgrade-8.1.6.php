@@ -9,7 +9,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $result = $this->updateScheme($index);
+            try {
+                $result = $this->updateScheme($index);
+            } catch (\Exception $e) {
+                var_dump($e->getTraceAsString());
+            }
 
             $this->getConnection()->commit();
 
@@ -204,10 +208,10 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             return 1;
         }
-        
+
         $questionIds = ArrayToolkit::column($questions, 'id');
         $questionIds = implode(',', $questionIds);
-        
+
         $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('question.stem', 'question.analysis') AND targetId IN ({$questionIds});";
         $attachments = $this->getConnection()->fetchAll($sql);
 
@@ -219,7 +223,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $copyQuestions = $this->findCopyQuestions($questions);
-        
+
         $copyQuestions = ArrayToolkit::group($copyQuestions, 'copyId');
 
         $newAttachments = array();
@@ -231,7 +235,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             $copyQuestionIds = ArrayToolkit::column($copies, 'id');
-            $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('{$attachment['targetType']}') AND targetId IN (".implode(',', $copyQuestionIds).");";
+            $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('{$attachment['targetType']}') AND targetId IN (" . implode(',', $copyQuestionIds) . ");";
             $copyAttachments = $this->getConnection()->fetchAll($sql);
             $copyAttachments = ArrayToolkit::index($copyAttachments, 'targetId');
 
@@ -250,7 +254,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getFileUsedDao()->batchCreate($newAttachments);
 
-        $this->logger("题目附件复制成功（影响：".count($newAttachments)."）（page-{$page}）", 'info');
+        $this->logger("题目附件复制成功（影响：" . count($newAttachments) . "）（page-{$page}）", 'info');
 
         if ($page < $maxPage) {
             return ++$page;
@@ -281,7 +285,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $parentIds = ArrayToolkit::column($questions, 'parentId');
         $ids = array_merge($copyIds, $parentIds);
 
-        $sql = "SELECT id,copyId,courseSetId,lessonId,parentId FROM question WHERE copyId in (".implode(',', $ids).")";
+        $sql = "SELECT id,copyId,courseSetId,lessonId,parentId FROM question WHERE copyId in (" . implode(',', $ids) . ")";
         $copys = $this->getConnection()->fetchAll($sql);
 
         return $copys;
@@ -289,7 +293,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function bizSchedulerUpdateJobDetail($page)
     {
-        $count = $this->getConnection()->fetchColumn("select count(id) from biz_scheduler_job_fired where status in ('executing', 'acquired')");
+        $count = $this->getConnection()->fetchColumn("select count(id) from biz_scheduler_job_fired where status in ('executing', 'acquired')  and job_detail= ''");
 
         if ($page == 1) {
             $currentTime = time();
@@ -324,21 +328,19 @@ class EduSohoUpgrade extends AbstractUpdater
             )");
         }
 
-        $pageSize = 5000;
-        $start = ($page - 1) * $pageSize;
-        $end = $pageSize;
+        $pageSize = 200;
 
-        $jobFireds = $this->getConnection()->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired') limit $start, $end");
+        $jobFireds = $this->getConnection()->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired') and job_detail= '' limit 0 , $pageSize");
         foreach ($jobFireds as $jobFired) {
             $job = $this->getConnection()->fetchAssoc("select * from biz_scheduler_job where id={$jobFired['job_id']}");
-            $jobDetail = '';
+            $jobDetail = time();
             if (!empty($job)) {
                 $jobDetail = json_encode($job);
             }
             $this->getConnection()->exec("update biz_scheduler_job_fired set job_detail='{$jobDetail}' where id={$jobFired['id']}");
         }
 
-        return ($page * $pageSize >= $count) ? 1 : $page + 1;
+        return ($count > 0) ? 1 : $page + 1;
     }
 
     protected function sessionMigrate($page)
