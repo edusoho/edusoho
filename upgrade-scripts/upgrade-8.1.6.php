@@ -75,14 +75,17 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
 
-        //20170924083814_biz_session_and_online.php
-        /*$this->bizSessionAndOnline();
-        //20170925093439_biz_scheduler_rename_table.php
-        $this->bizSchedulerRenameTable();
-        //20170925093454_biz_scheduler_delete_fields.php
-        $this->bizSchedulerDeleteFields();
-        //20170925093510_biz_scheduler_add_retry_num_and_job_detail.php
-        $this->bizSchedulerAddRetryNumAndJobDetail();*/
+
+        /*$this->bizSchedulerAddRetryNumAndJobDetail();
+        //20170926031641_biz_scheduler_update_job_detail.php
+        $this->bizSchedulerUpdateJobDetail();
+        //20170926151841_session_migrate.php
+        $this->sessionMigrate();
+        //20170927165412_add_clear_session_job.php
+        $this->addClearSessionJob();
+        //20170927165423_add_online_gc_job.php
+        $this->addOnlineGcJob();*/
+
     }
 
 
@@ -308,6 +311,115 @@ class EduSohoUpgrade extends AbstractUpdater
         $copys = $this->getConnection()->fetchAll($sql);
 
         return $copys;
+    }
+
+    protected function bizSchedulerUpdateJobDetail()
+    {
+
+        // long transcation
+        $jobFireds = $this->getConnection()->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired');");
+        foreach ($jobFireds as $jobFired) {
+            $job = $this->getConnection()->fetchAssoc("select * from biz_scheduler_job where id={$jobFired['job_id']}");
+            $jobDetail = '';
+            if (!empty($job)) {
+                $jobDetail = json_encode($job);
+            }
+            $this->getConnection()->exec("update biz_scheduler_job_fired set job_detail='{$jobDetail}' where id={$jobFired['id']}");
+        }
+
+        $currentTime = time();
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'Scheduler_MarkExecutingTimeoutJob',
+              '10 * * * *',
+              'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\MarkExecutingTimeoutJob',
+              '',
+              '100',
+              '0',
+              '{$currentTime}',
+              '300',
+              'missed',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+    }
+
+
+    protected function sessionMigrate()
+    {
+        $currentTime = time();
+        $deadlineTime = $currentTime - 7200;
+
+        $this->getConnection()->exec("
+            INSERT INTO `biz_session` (
+                sess_id, 
+                sess_data,
+                sess_time,
+                sess_deadline,
+                created_time
+            ) select 
+                sess_id, 
+                sess_data,
+                sess_time,
+                sess_lifetime + sess_time,
+                '{$currentTime}'
+            from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' ;
+        ");
+    }
+
+    protected function addClearSessionJob()
+    {
+        $this->getConnection()->exec("update biz_scheduler_job set class='Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\SessionGcJob', name='SessionGcJob' where name='DeleteSessionJob';");
+
+    }
+
+    protected function addOnlineGcJob()
+    {
+        $currentTime = time();
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'OnlineGcJob',
+              '30 * * * *',
+              'Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\OnlineGcJob',
+              '',
+              '100',
+              '0',
+              '{$currentTime}',
+              '300',
+              'missed',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
     }
 
     protected function isFieldExist($table, $filedName)
