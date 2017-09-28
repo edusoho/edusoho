@@ -313,36 +313,38 @@ class EduSohoUpgrade extends AbstractUpdater
 
 
         if ($page == 1) {
-            $currentTime = time();
-            $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-                  `name`,
-                  `expression`,
-                  `class`,
-                  `args`,
-                  `priority`,
-                  `pre_fire_time`,
-                  `next_fire_time`,
-                  `misfire_threshold`,
-                  `misfire_policy`,
-                  `enabled`,
-                  `creator_id`,
-                  `updated_time`,
-                  `created_time`
-            ) VALUES (
-                  'Scheduler_MarkExecutingTimeoutJob',
-                  '10 * * * *',
-                  'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\MarkExecutingTimeoutJob',
-                  '',
-                  '100',
-                  '0',
-                  '{$currentTime}',
-                  '300',
-                  'missed',
-                  '1',
-                  '0',
-                  '{$currentTime}',
-                  '{$currentTime}'
-            )");
+            if (!$this->isJobExist('Scheduler_MarkExecutingTimeoutJob')) {
+                $currentTime = time();
+                $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+                      `name`,
+                      `expression`,
+                      `class`,
+                      `args`,
+                      `priority`,
+                      `pre_fire_time`,
+                      `next_fire_time`,
+                      `misfire_threshold`,
+                      `misfire_policy`,
+                      `enabled`,
+                      `creator_id`,
+                      `updated_time`,
+                      `created_time`
+                ) VALUES (
+                      'Scheduler_MarkExecutingTimeoutJob',
+                      '10 * * * *',
+                      'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\MarkExecutingTimeoutJob',
+                      '',
+                      '100',
+                      '0',
+                      '{$currentTime}',
+                      '300',
+                      'missed',
+                      '1',
+                      '0',
+                      '{$currentTime}',
+                      '{$currentTime}'
+                )");
+            }
         }
 
         $pageSize = 200;
@@ -405,6 +407,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function addOnlineGcJob($page)
     {
+        if ($this->isJobExist('OnlineGcJob')) {
+            return $page;
+        }
+
         $this->logger(sprintf("当前page %s,  新增 biz_scheduler_job %s", $page, 'Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\OnlineGcJob'));
 
         $currentTime = time();
@@ -500,9 +506,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
-    protected function isCrontabJobExist($code)
+    protected function isJobExist($code)
     {
-        $sql = "select * from crontab_job where name='{$code}'";
+        $sql = "select * from biz_scheduler_job where name='{$code}'";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
