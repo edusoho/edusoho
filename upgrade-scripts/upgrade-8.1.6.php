@@ -157,6 +157,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
+
+        if(!$this->isFieldExist('biz_session', 'id')){
+            $this->getConnection()->exec("ALTER TABLE `biz_session` ADD COLUMN `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键';");
+        }
+
         return 1;
     }
 
