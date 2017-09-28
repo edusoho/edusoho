@@ -1101,6 +1101,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $currentUser = $this->getCurrentUser();
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
         $data['member'] = $member;
+        $course = $this->getCourseService()->getCourse($member['courseId']);
 
         $record = array(
             'user_id' => $member['userId'],
@@ -1122,7 +1123,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $record['reason'] = $orderRefund['reason'];
             $record['refund_id'] = $orderRefund['id'];
         }
-        $record['title'] = $orderItem['title'];
+        $record['title'] = $course['title'];
 
         return $this->getMemberOperationService()->createRecord($record);
     }
