@@ -14,6 +14,7 @@ class OrderEventSubscriber extends EventSubscriber
     {
         return array(
             'order.paid' => 'onOrderPaid',
+            'order.apply_refund' => 'onOrderApplyRefund'
         );
     }
 
@@ -21,6 +22,12 @@ class OrderEventSubscriber extends EventSubscriber
     {
         $order = $event->getSubject();
         $this->inviteReward($order);
+    }
+
+    public function onOrderApplyRefund(Event $event)
+    {
+        $order = $event->getSubject();
+        $
     }
 
     private function inviteReward($order)
