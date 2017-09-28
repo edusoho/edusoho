@@ -40,6 +40,8 @@ class CourseSetCoursesCopy extends AbstractCopy
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
         }
+        $this->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
+
         $this->updateQuestionsCourseId($newCourseSet['id']);
         $this->updateQuestionsLessonId($newCourseSet['id']);
         $this->updateExerciseRange($newCourseSet['id']);
@@ -177,7 +179,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             'goals',
             'audiences',
             'maxStudentNum',
-            'isFree',
+            //'isFree',
             'price',
             // 'vipLevelId',
             'buyable',
@@ -264,5 +266,10 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getTestpaperDao()
     {
         return $this->biz->dao('Testpaper:TestpaperDao');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->biz->dao('Course:CourseSetService');
     }
 }
