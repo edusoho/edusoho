@@ -41,55 +41,50 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme($index = 0)
+    private function updateScheme($index)
     {
-        $funcNames = array(
+        $funcs = array(
             1 => 'bizSessionAndOnline',
             2 => 'bizSchedulerRenameTable',
             3 => 'bizSchedulerDeleteFields',
             4 => 'bizSchedulerAddRetryNumAndJobDetail',
-            5 => 'copyAttachment'
+            5 => 'bizSchedulerUpdateJobDetail',
+            6 => 'sessionMigrate',
+            7 => 'addClearSessionJob',
+            8 => 'addOnlineGcJob',
+            9 => 'copyAttachment'
         );
 
         if ($index == 0) {
+            $this->logger('info', '开始执行升级脚本');
+
             return array(
                 'index' => $this->generateIndex(1, 1),
-                'message' => '正在升级数据...',
-                'progress' => 0
+                'message' => '升级数据...',
+                'progress' => 0,
             );
         }
 
         list($step, $page) = $this->getStepAndPage($index);
-        $method = $funcNames[$step];
+
+        $method = $funcs[$step];
         $page = $this->$method($page);
 
         if ($page == 1) {
-            $step ++;
+            ++$step;
         }
-
-        if ($step <= count($funcNames)) {
+        if ($step <= count($funcs)) {
             return array(
                 'index' => $this->generateIndex($step, $page),
-                'message' => '正在升级数据...',
-                'progress' => 0
+                'message' => '升级数据...',
+                'progress' => 0,
             );
         }
-
-
-        /*$this->bizSchedulerAddRetryNumAndJobDetail();
-        //20170926031641_biz_scheduler_update_job_detail.php
-        $this->bizSchedulerUpdateJobDetail();
-        //20170926151841_session_migrate.php
-        $this->sessionMigrate();
-        //20170927165412_add_clear_session_job.php
-        $this->addClearSessionJob();
-        //20170927165423_add_online_gc_job.php
-        $this->addOnlineGcJob();*/
 
     }
 
 
-    protected function bizSchedulerRenameTable($page = 1)
+    protected function bizSchedulerRenameTable($page)
     {
         if (!$this->isTableExist('biz_scheduler_job_pool')) {
             $this->getConnection()->exec('RENAME TABLE job_pool TO biz_scheduler_job_pool');
@@ -109,12 +104,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec('RENAME TABLE job_log TO biz_scheduler_job_log');
         }
 
-        $this->logger('bizSchedulerRenameTable', 'info');
-
         return 1;
     }
 
-    protected function bizSessionAndOnline($page = 1)
+    protected function bizSessionAndOnline($page)
     {
         if (!$this->isTableExist('biz_session')) {
             $this->getConnection()->exec("
@@ -152,14 +145,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
-
-        $this->logger('bizSessionAndOnline', 'info');
-
         return 1;
     }
 
-
-    protected function bizSchedulerDeleteFields($page = 1)
+    protected function bizSchedulerDeleteFields($page)
     {
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted')) {
@@ -170,12 +159,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;');
         }
 
-        $this->logger('info', "bizSchedulerDeleteFields（page-{$page}）");
-
         return 1;
     }
 
-    protected function bizSchedulerAddRetryNumAndJobDetail($page = 1)
+    protected function bizSchedulerAddRetryNumAndJobDetail($page)
     {
 
         if (!$this->isFieldExist('biz_scheduler_job_fired', 'retry_num')) {
@@ -186,7 +173,6 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_detail` text NOT NULL COMMENT 'job的详细信息，是biz_job表中冗余数据';");
         }
 
-        $this->logger('bizSchedulerAddRetryNumAndJobDetail', 'info');
 
         return 1;
     }
@@ -273,18 +259,6 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function generateIndex($step, $page)
-    {
-        return $step * 1000000 + $page;
-    }
-
-    protected function getStepAndPage($index)
-    {
-        $step = intval($index / 1000000);
-        $page = $index % 1000000;
-        return array($step, $page);
-    }
-
     private function findCopyCourseSets()
     {
         $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1";
@@ -313,11 +287,48 @@ class EduSohoUpgrade extends AbstractUpdater
         return $copys;
     }
 
-    protected function bizSchedulerUpdateJobDetail()
+    protected function bizSchedulerUpdateJobDetail($page)
     {
+        $count = $this->getConnection()->fetchColumn("select count(id) from biz_scheduler_job_fired where status in ('executing', 'acquired')");
 
-        // long transcation
-        $jobFireds = $this->getConnection()->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired');");
+        if ($page == 1) {
+            $currentTime = time();
+            $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+                  `name`,
+                  `expression`,
+                  `class`,
+                  `args`,
+                  `priority`,
+                  `pre_fire_time`,
+                  `next_fire_time`,
+                  `misfire_threshold`,
+                  `misfire_policy`,
+                  `enabled`,
+                  `creator_id`,
+                  `updated_time`,
+                  `created_time`
+            ) VALUES (
+                  'Scheduler_MarkExecutingTimeoutJob',
+                  '10 * * * *',
+                  'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\MarkExecutingTimeoutJob',
+                  '',
+                  '100',
+                  '0',
+                  '{$currentTime}',
+                  '300',
+                  'missed',
+                  '1',
+                  '0',
+                  '{$currentTime}',
+                  '{$currentTime}'
+            )");
+        }
+
+        $pageSize = 5000;
+        $start = ($page - 1) * $pageSize;
+        $end = $pageSize;
+
+        $jobFireds = $this->getConnection()->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired') limit $start, $end");
         foreach ($jobFireds as $jobFired) {
             $job = $this->getConnection()->fetchAssoc("select * from biz_scheduler_job where id={$jobFired['job_id']}");
             $jobDetail = '';
@@ -327,43 +338,19 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("update biz_scheduler_job_fired set job_detail='{$jobDetail}' where id={$jobFired['id']}");
         }
 
-        $currentTime = time();
-        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-              `name`,
-              `expression`,
-              `class`,
-              `args`,
-              `priority`,
-              `pre_fire_time`,
-              `next_fire_time`,
-              `misfire_threshold`,
-              `misfire_policy`,
-              `enabled`,
-              `creator_id`,
-              `updated_time`,
-              `created_time`
-        ) VALUES (
-              'Scheduler_MarkExecutingTimeoutJob',
-              '10 * * * *',
-              'Codeages\\\\Biz\\\\Framework\\\\Scheduler\\\\Job\\\\MarkExecutingTimeoutJob',
-              '',
-              '100',
-              '0',
-              '{$currentTime}',
-              '300',
-              'missed',
-              '1',
-              '0',
-              '{$currentTime}',
-              '{$currentTime}'
-        )");
+        return ($page * $pageSize >= $count) ? 1 : $page + 1;
     }
 
-
-    protected function sessionMigrate()
+    protected function sessionMigrate($page)
     {
         $currentTime = time();
         $deadlineTime = $currentTime - 7200;
+
+        $count = $this->getConnection()->fetchColumn("select  count(sess_id) from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}';");
+
+        $pageSize = 5000;
+        $start = ($page - 1) * $pageSize;
+        $end = $pageSize;
 
         $this->getConnection()->exec("
             INSERT INTO `biz_session` (
@@ -378,17 +365,19 @@ class EduSohoUpgrade extends AbstractUpdater
                 sess_time,
                 sess_lifetime + sess_time,
                 '{$currentTime}'
-            from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' ;
+            from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' limit  $start , $end ;
         ");
+
+        return ($page * $pageSize >= $count) ? 1 : $page + 1;
     }
 
-    protected function addClearSessionJob()
+    protected function addClearSessionJob($page)
     {
         $this->getConnection()->exec("update biz_scheduler_job set class='Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\SessionGcJob', name='SessionGcJob' where name='DeleteSessionJob';");
-
+        return $page;
     }
 
-    protected function addOnlineGcJob()
+    protected function addOnlineGcJob($page)
     {
         $currentTime = time();
         $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
@@ -420,7 +409,22 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}',
               '{$currentTime}'
         )");
+        return $page;
     }
+
+    protected function generateIndex($step, $page)
+    {
+        return $step * 1000000 + $page;
+    }
+
+    protected function getStepAndPage($index)
+    {
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
+
+        return array($step, $page);
+    }
+
 
     protected function isFieldExist($table, $filedName)
     {
