@@ -25,8 +25,6 @@ namespace Doctrine\Common\Cache;
  * @link   www.doctrine-project.org
  * @since  1.6
  * @author Daniel Gorgan <danut007ro@gmail.com>
- *
- * @deprecated
  */
 interface MultiPutCache
 {

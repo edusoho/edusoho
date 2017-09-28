@@ -13,16 +13,12 @@
         {"name": "Johannes Schmitt", "email": "schmittjoh@gmail.com"}
     ],
     "require": {
-        "php": "~7.1"
+        "php": "~5.5|~7.0"
     },
     "require-dev": {
-        "alcaeus/mongo-php-adapter": "^1.1",
-        "mongodb/mongodb": "^1.1",
-        "phpunit/phpunit": "^5.7",
-        "predis/predis":   "~1.0"
-    },
-    "suggest": {
-        "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
+        "phpunit/phpunit":         "~4.8|~5.0",
+        "satooshi/php-coveralls":  "~0.6",
+        "predis/predis":           "~1.0"
     },
     "conflict": {
         "doctrine/common": ">2.2,<2.4"
@@ -35,7 +31,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.7.x-dev"
+            "dev-master": "1.6.x-dev"
         }
     }
 }
