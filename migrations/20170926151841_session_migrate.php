@@ -12,6 +12,7 @@ class SessionMigrate extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $currentTime = time();
+        $deadlineTime = $currentTime - 7200;
 
         $connection->exec("
             INSERT INTO `biz_session` (
@@ -26,7 +27,7 @@ class SessionMigrate extends Migration
                 sess_time,
                 sess_lifetime + sess_time,
                 '{$currentTime}'
-            from sessions;
+            from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' ;
         ");
     }
 

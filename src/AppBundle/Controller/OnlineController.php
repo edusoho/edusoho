@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,14 +12,17 @@ class OnlineController extends BaseController
 {
     public function sampleAction(Request $request)
     {
-        if (!empty($request->getSession()->getId())) {
+        $sessionId = $request->getSession()->getId();
+        $lastFlushTime = $request->getSession()->get('online_flush_time', 0);
+        if (!empty($sessionId) && (time() - $lastFlushTime) > 1 * 10) {
             $online = array(
-                'sess_id' => $request->getSession()->getId(),
+                'sess_id' => $sessionId,
                 'ip' => $request->getClientIp(),
                 'user_agent' => $request->headers->get('User-Agent', ''),
-                'source' => 'pc',
+                'source' => DeviceToolkit::isMobileClient() ? '手机浏览器' : 'PC',
             );
             $this->getOnlineService()->saveOnline($online);
+            $request->getSession()->set('online_flush_time', time());
         }
 
         return new Response('true');

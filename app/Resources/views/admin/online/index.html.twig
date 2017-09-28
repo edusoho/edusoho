@@ -1,8 +1,8 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% set menu = 'admin_user_manage' %}
+{% set menu = 'admin_online' %}
 
-{% block content %}
+{% block main %}
 
     <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="type" value="{{ app.request.query.get('type') }}">
@@ -21,7 +21,7 @@
                 <th>{{'操作系统'|trans}}</th>
                 <th>{{'终端'|trans}}</th>
                 <th>{{'来源'|trans}}</th>
-                <th>{{'客户端ip'|trans}}</th>
+                <th>{{'客户端IP'|trans}}</th>
                 <th>{{'最后访问时间'|trans}}</th>
             </tr>
             </thead>
