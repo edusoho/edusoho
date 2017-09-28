@@ -4,11 +4,18 @@
 {% block esBar %}{% endblock %}
 
 {% block content %}
-  <div class="order-pay">
-    <div class="es-section">
-      {% include 'order/order-step-status.html.twig' %}
-      {% block order_body %}
-      {% endblock %}
+  <div class="row cd-row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="cd-panel">
+        <div class="cd-panel-heading">
+          {% include 'order/order-step-status.html.twig' %}
+        </div>
+        <div class="cd-panel-body">
+          {% block order_body %}
+          {% endblock %}
+        </div>  
+      </div>
     </div>
   </div>
+  
 {% endblock %}

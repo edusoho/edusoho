@@ -1,16 +1,23 @@
 {% set step = step|default(1) %}
 {% set steps = {1:'order.confirm'|trans, 2:'order.pay'|trans,3:'order.success'|trans } %}
-<ul class="es-step es-step-3 clearfix">
+<ul class="cd-steps cd-steps-3">
   {% for value in [1,2,3] %}
-    <li {% if step == value%}class="doing" {% elseif step > value %}class="done"{% endif %}>
-      <span class="number">
-        {% if step > value %}
-          <i class="es-icon es-icon-done"></i>  
-        {% else %}
-          {{value}}
-        {% endif %}
-      </span>
-      {{steps[value]}}
+    <li class="cd-steps-item {% if step == value %} doing {% elseif step > value %} done hidden-xs {% endif %}">
+      <div class="cd-steps-tail"><i></i></div>
+      <div class="cd-steps-step">
+        <div class="step-wrap">
+          {% if step > value %}
+            <div class="step-number step-icon">
+              <i class="cd-icon cd-icon-check"></i>
+            </div>
+          {% else %}
+            <div class="step-number">{{value}}</div>
+          {% endif %}
+        </div>
+        <div class="step-wrap">
+          <span class="step-info">{{steps[value]}}</span>
+        </div>
+      </div>
     </li>
   {% endfor %}
 </ul>
