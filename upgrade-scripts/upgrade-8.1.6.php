@@ -391,8 +391,10 @@ class EduSohoUpgrade extends AbstractUpdater
             from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' limit  $start , $end ;
         ");
 
-        $this->exec("delete from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' limit  $start , $end ;");
 
+        if ($page * $pageSize >= $count) {
+            $this->getConnection()->exec("delete from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}';");
+        }
         return ($page * $pageSize >= $count) ? 1 : $page + 1;
     }
 
