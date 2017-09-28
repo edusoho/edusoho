@@ -13,7 +13,7 @@ class OnlineController extends BaseController
     {
         $sessionId = $request->getSession()->getId();
         $lastFlushTime = $request->getSession()->get('online_flush_time', 0);
-        if (!empty($sessionId) && (time() - $lastFlushTime) > 5*60) {
+        if (!empty($sessionId) && (time() - $lastFlushTime) > 5 * 60) {
             $online = array(
                 'sess_id' => $sessionId,
                 'ip' => $request->getClientIp(),
