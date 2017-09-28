@@ -391,10 +391,6 @@ class EduSohoUpgrade extends AbstractUpdater
             from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' limit  $start , $end ;
         ");
 
-
-        if ($page * $pageSize >= $count) {
-            $this->getConnection()->exec("delete from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}';");
-        }
         return ($page * $pageSize >= $count) ? 1 : $page + 1;
     }
 
@@ -460,6 +456,11 @@ class EduSohoUpgrade extends AbstractUpdater
             $filesystem->copy($tmpFile, $originFile);
             $filesystem->remove($tmpFile);
         }
+
+        $currentTime = time();
+        $deadlineTime = $currentTime - 7200;
+
+        $this->getConnection()->exec("delete from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}';");
 
         return $page;
     }
