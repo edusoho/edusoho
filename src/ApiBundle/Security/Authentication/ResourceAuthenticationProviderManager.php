@@ -3,7 +3,7 @@
 namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Resource\ResourceProxy;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class ResourceAuthenticationProviderManager implements ResourceAuthenticationInterface
