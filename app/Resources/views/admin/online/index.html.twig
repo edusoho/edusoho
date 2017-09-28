@@ -9,7 +9,7 @@
         <div class="form-group">
             <select class="form-control" name="type">
                 <option value="">--搜索范围--</option>
-                <option value="logined" {% if app.request.query.get('type') == 'logined' %}selected="selected"{% endif %}>登入用户</option>
+                <option value="logined" {% if app.request.query.get('type') == 'logined' %}selected="selected"{% endif %}>登录用户</option>
                 <option value="online" {% if app.request.query.get('type') == 'online' %}selected="selected"{% endif %}>在线用户</option>
             </select>
         </div>
