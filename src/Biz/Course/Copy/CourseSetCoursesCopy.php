@@ -30,6 +30,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse['courseSetId'] = $newCourseSet['id'];
             $newCourse['creator'] = $user['id'];
             $newCourse['parentId'] = $originCourse['id'];
+            $newCourse['price'] = $originCourse['originPrice'];
             $newCourse = $this->getCourseDao()->create($newCourse);
             if ($newCourse['courseType'] == 'default') {
                 $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));

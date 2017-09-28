@@ -511,9 +511,9 @@ order.confirm.use_tips: 本次使用
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
 order.confirm.setup_pay_password_tips: >
-  为了保障账户资金安全，请先<a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">设置支付密码</a>
+  为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
-  为了保障账户资金安全，请先<a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">设置登录密码</a>
+  为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
 order.confirm.forget_password_btn: 忘记密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
