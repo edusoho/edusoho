@@ -12,7 +12,8 @@ class OnlineController extends BaseController
     public function sampleAction(Request $request)
     {
         $sessionId = $request->getSession()->getId();
-        if (!empty($sessionId)) {
+        $lastFlushTime = $request->getSession()->get('online_flush_time', 0);
+        if (!empty($sessionId) && (time() - $lastFlushTime) > 5*60) {
             $online = array(
                 'sess_id' => $sessionId,
                 'ip' => $request->getClientIp(),
@@ -20,6 +21,7 @@ class OnlineController extends BaseController
                 'source' => 'pc',
             );
             $this->getOnlineService()->saveOnline($online);
+            $request->getSession()->set('online_flush_time', time());
         }
 
         return new Response('true');
