@@ -7,8 +7,9 @@ class TreeToolkit
     /**
      * @param array $data 需要排序的数组,本身要支持层级关系
      * @param $sort
-     * @param int $parentId
+     * @param int    $parentId
      * @param string $parentKey
+     *
      * @return array
      */
     public static function makeTree(array $data, $sort, $parentId = 0, $parentKey = 'parentId')
