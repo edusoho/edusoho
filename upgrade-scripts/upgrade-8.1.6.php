@@ -340,7 +340,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("update biz_scheduler_job_fired set job_detail='{$jobDetail}' where id={$jobFired['id']}");
         }
 
-        return ($count > 0) ? 1 : $page + 1;
+        return ($count <= 0) ? 1 : $page + 1;
     }
 
     protected function sessionMigrate($page)
