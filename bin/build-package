@@ -23,13 +23,6 @@ if [ ! -f "$upgradefile" ]; then
     fi
 fi
 
- echo "是否执行 composer install --no-dev  y|n";
- read LINE;
- if [ "$LINE" == "y" ] || [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
-     echo "请执行 composer install --no-dev ";
-     exit 1
- fi
-
 # pull the last version of repository
 echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
 git pull
