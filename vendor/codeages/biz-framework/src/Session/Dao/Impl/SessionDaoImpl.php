@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Session\Dao\SessionDao;
 
 class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 {
-    protected $table = 'biz_session';
+    protected $table = 'sessions';
 
     public function declares()
     {

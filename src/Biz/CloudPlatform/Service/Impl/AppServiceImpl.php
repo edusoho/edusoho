@@ -538,7 +538,7 @@ class AppServiceImpl extends BaseService implements AppService
             }
 
             try {
-                $this->deleteCache();
+               // $this->deleteCache();
             } catch (\Exception $e) {
                 $errors[] = sprintf('删除缓存时时发生了错误：%s', $e->getMessage());
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
