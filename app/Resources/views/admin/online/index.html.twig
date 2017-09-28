@@ -1,11 +1,18 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% set menu = 'admin_user_manage' %}
+{% set menu = 'admin_online' %}
 
-{% block content %}
+{% block main %}
 
     <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="type" value="{{ app.request.query.get('type') }}">
+        <div class="form-group">
+            <select class="form-control" name="type">
+                <option value="">--搜索范围--</option>
+                <option value="logined" {% if app.request.query.get('type') == 'logined' %}selected="selected"{% endif %}>登录用户</option>
+                <option value="online" {% if app.request.query.get('type') == 'online' %}selected="selected"{% endif %}>在线用户</option>
+            </select>
+        </div>
         <div class="form-group">
             <input class="form-control" type="text" placeholder="{{'用户名'|trans}}" name="name" value="{{ app.request.query.get('name') }}">
         </div>
@@ -21,7 +28,7 @@
                 <th>{{'操作系统'|trans}}</th>
                 <th>{{'终端'|trans}}</th>
                 <th>{{'来源'|trans}}</th>
-                <th>{{'客户端ip'|trans}}</th>
+                <th>{{'客户端IP'|trans}}</th>
                 <th>{{'最后访问时间'|trans}}</th>
             </tr>
             </thead>
