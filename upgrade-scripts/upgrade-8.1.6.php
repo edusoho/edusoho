@@ -1,17 +1,24 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $result = $this->updateScheme($index);
+
             $this->getConnection()->commit();
+
+            if (!empty($result)) {
+                return $result;
+            }
+
         } catch (\Exception $e) {
-            $this->logger(self::VERSION, 'error', $e->getMessage());
+            $this->logger('error', $e->getMessage());
             $this->getConnection()->rollback();
             throw $e;
         }
@@ -24,7 +31,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $filesystem->remove($dir);
             }
         } catch (\Exception $e) {
-            $this->logger(self::VERSION, 'error', $e->getMessage());
+            $this->logger('error', $e->getMessage());
         }
 
         $developerSetting = $this->getSettingService()->get('developer', array());
@@ -34,20 +41,52 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    private function updateScheme($index = 0)
     {
+        $funcNames = array(
+            1 => 'bizSessionAndOnline',
+            2 => 'bizSchedulerRenameTable',
+            3 => 'bizSchedulerDeleteFields',
+            4 => 'bizSchedulerAddRetryNumAndJobDetail',
+            5 => 'copyAttachment'
+        );
+
+        if ($index == 0) {
+            return array(
+                'index' => $this->generateIndex(1, 1),
+                'message' => '正在升级数据...',
+                'progress' => 0
+            );
+        }
+
+        list($step, $page) = $this->getStepAndPage($index);
+        $method = $funcNames[$step];
+        $page = $this->$method($page);
+
+        if ($page == 1) {
+            $step ++;
+        }
+
+        if ($step <= count($funcNames)) {
+            return array(
+                'index' => $this->generateIndex($step, $page),
+                'message' => '正在升级数据...',
+                'progress' => 0
+            );
+        }
+
         //20170924083814_biz_session_and_online.php
-        $this->bizSessionAndOnline();
+        /*$this->bizSessionAndOnline();
         //20170925093439_biz_scheduler_rename_table.php
         $this->bizSchedulerRenameTable();
         //20170925093454_biz_scheduler_delete_fields.php
         $this->bizSchedulerDeleteFields();
         //20170925093510_biz_scheduler_add_retry_num_and_job_detail.php
-        $this->bizSchedulerAddRetryNumAndJobDetail();
+        $this->bizSchedulerAddRetryNumAndJobDetail();*/
     }
 
 
-    protected function bizSchedulerRenameTable()
+    protected function bizSchedulerRenameTable($page = 1)
     {
         if (!$this->isTableExist('biz_scheduler_job_pool')) {
             $this->getConnection()->exec('RENAME TABLE job_pool TO biz_scheduler_job_pool');
@@ -67,9 +106,12 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec('RENAME TABLE job_log TO biz_scheduler_job_log');
         }
 
+        $this->logger('bizSchedulerRenameTable', 'info');
+
+        return 1;
     }
 
-    protected function bizSessionAndOnline()
+    protected function bizSessionAndOnline($page = 1)
     {
         if (!$this->isTableExist('biz_session')) {
             $this->getConnection()->exec("
@@ -107,10 +149,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
+
+        $this->logger('bizSessionAndOnline', 'info');
+
+        return 1;
     }
 
 
-    protected function bizSchedulerDeleteFields()
+    protected function bizSchedulerDeleteFields($page = 1)
     {
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted')) {
@@ -120,9 +166,13 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($this->isFieldExist('biz_scheduler_job', 'deleted_time')) {
             $this->getConnection()->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;');
         }
+
+        $this->logger('info', "bizSchedulerDeleteFields（page-{$page}）");
+
+        return 1;
     }
 
-    protected function bizSchedulerAddRetryNumAndJobDetail()
+    protected function bizSchedulerAddRetryNumAndJobDetail($page = 1)
     {
 
         if (!$this->isFieldExist('biz_scheduler_job_fired', 'retry_num')) {
@@ -132,6 +182,132 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('biz_scheduler_job_fired', 'job_detail')) {
             $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_detail` text NOT NULL COMMENT 'job的详细信息，是biz_job表中冗余数据';");
         }
+
+        $this->logger('bizSchedulerAddRetryNumAndJobDetail', 'info');
+
+        return 1;
+    }
+
+    private function copyAttachment($page = 1)
+    {
+        $copyCourseSets = $this->findCopyCourseSets();
+
+        if (empty($copyCourseSets)) {
+            return 1;
+        }
+
+        $courseSetIds = ArrayToolkit::column($copyCourseSets, 'parentId');
+        $courseSetIds = implode(',', array_unique($courseSetIds));
+
+        $sql = "SELECT count(id) FROM question WHERE courseSetId IN ({$courseSetIds});";
+        $count = $this->getConnection()->fetchColumn($sql);
+
+        $pageSize = 200;
+        $start = ($page - 1) * $pageSize;
+        $maxPage = ceil($count / $pageSize);
+
+        $sql = "SELECT id FROM question WHERE courseSetId IN ({$courseSetIds}) LIMIT {$start}, {$pageSize}";
+        $questions = $this->getConnection()->fetchAll($sql);
+
+        if (empty($questions)) {
+            if ($page < $maxPage) {
+                return ++$page;
+            }
+            return 1;
+        }
+        
+        $questionIds = ArrayToolkit::column($questions, 'id');
+        $questionIds = implode(',', $questionIds);
+        
+        $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('question.stem', 'question.analysis') AND targetId IN ({$questionIds});";
+        $attachments = $this->getConnection()->fetchAll($sql);
+
+        if (empty($attachments)) {
+            if ($page < $maxPage) {
+                return ++$page;
+            }
+            return 1;
+        }
+
+        $copyQuestions = $this->findCopyQuestions($questions);
+        
+        $copyQuestions = ArrayToolkit::group($copyQuestions, 'copyId');
+
+        $newAttachments = array();
+        foreach ($attachments as $attachment) {
+            $copies = empty($copyQuestions[$attachment['targetId']]) ? array() : $copyQuestions[$attachment['targetId']];
+
+            if (empty($copies)) {
+                continue;
+            }
+
+            $copyQuestionIds = ArrayToolkit::column($copies, 'id');
+            $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('{$attachment['targetType']}') AND targetId IN (".implode(',', $copyQuestionIds).");";
+            $copyAttachments = $this->getConnection()->fetchAll($sql);
+            $copyAttachments = ArrayToolkit::index($copyAttachments, 'targetId');
+
+            foreach ($copies as $copy) {
+                if (!empty($copyAttachments[$copy['id']])) {
+                    continue;
+                }
+
+                $newAttachment = $attachment;
+                unset($newAttachment['id']);
+                $newAttachment['targetId'] = $copy['id'];
+
+                $newAttachments[] = $newAttachment;
+            }
+        }
+
+        $this->getFileUsedDao()->batchCreate($newAttachments);
+
+        $this->logger("题目附件复制成功（影响：".count($newAttachments)."）（page-{$page}）", 'info');
+
+        if ($page < $maxPage) {
+            return ++$page;
+        }
+
+        return 1;
+    }
+
+    protected function generateIndex($step, $page)
+    {
+        return $step * 1000000 + $page;
+    }
+
+    protected function getStepAndPage($index)
+    {
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
+        return array($step, $page);
+    }
+
+    private function findCopyCourseSets()
+    {
+        $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1";
+        $copyCourseSets = $this->getConnection()->fetchAll($sql);
+
+        if (empty($copyCourseSets)) {
+            return array();
+        }
+
+        return ArrayToolkit::index($copyCourseSets, 'parentId');
+    }
+
+    private function findCopyQuestions($questions)
+    {
+        if (empty($questions)) {
+            return array();
+        }
+
+        $copyIds = ArrayToolkit::column($questions, 'id');
+        $parentIds = ArrayToolkit::column($questions, 'parentId');
+        $ids = array_merge($copyIds, $parentIds);
+
+        $sql = "SELECT id,copyId,courseSetId,lessonId,parentId FROM question WHERE copyId in (".implode(',', $ids).")";
+        $copys = $this->getConnection()->fetchAll($sql);
+
+        return $copys;
     }
 
     protected function isFieldExist($table, $filedName)
@@ -166,6 +342,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getFileUsedDao()
+    {
+        return $this->createDao('File:FileUsedDao');
     }
 }
 
