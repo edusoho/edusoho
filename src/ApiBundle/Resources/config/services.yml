@@ -26,7 +26,7 @@ services:
     api_authentication_manager:
         class: ApiBundle\Security\Authentication\ResourceAuthenticationProviderManager
         arguments:
-            - ['@service_container']
+            - '@service_container'
             - ['@api_default_authentication']
 
     api_firewall:
