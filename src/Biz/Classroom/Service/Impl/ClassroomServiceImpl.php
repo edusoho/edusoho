@@ -779,7 +779,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
 
-        $this->createOperateRecord($member, 'exit', array('reasonInfo' => $info));
+        $this->createOperateRecord($member, 'exit', $info);
 
         $user = $this->getUserService()->getUser($member['userId']);
         $message = array(
@@ -1296,7 +1296,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
-        $data = array('reasonInfo' => array('reason' => 'classroom_member_join_assistant'));
+        $data = array('reason' => 'classroom.join_as_assistant');
         $this->createOperateRecord($member, 'join', $data);
 
         $this->dispatchEvent(
@@ -1984,7 +1984,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
-            'reason' => empty($data['reasonInfo']) ? '' : $data['reasonInfo']['reason'],
+            'reason' => empty($data['reason']) ? '' : $data['reason'],
             'order_id' => $member['orderId'],
         );
 

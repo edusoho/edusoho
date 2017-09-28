@@ -338,7 +338,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
-        $this->getClassroomService()->removeStudent($classroomId, $userId);
+        $this->getClassroomService()->removeStudent($classroomId, $userId, array('reason' => 'classroom.admin_remove_student'));
 
         return $this->createJsonResponse(true);
     }
