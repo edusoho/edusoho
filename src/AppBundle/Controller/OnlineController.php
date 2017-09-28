@@ -11,9 +11,10 @@ class OnlineController extends BaseController
 {
     public function sampleAction(Request $request)
     {
-        if (!empty($request->getSession()->getId())) {
+        $sessionId = $request->getSession()->getId();
+        if (!empty($sessionId)) {
             $online = array(
-                'sess_id' => $request->getSession()->getId(),
+                'sess_id' => $sessionId,
                 'ip' => $request->getClientIp(),
                 'user_agent' => $request->headers->get('User-Agent', ''),
                 'source' => 'pc',
