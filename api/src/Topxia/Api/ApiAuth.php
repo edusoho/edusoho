@@ -72,7 +72,7 @@ class ApiAuth
             }
 
             $this->setCurrentUser($user);
-            $this->onlineSample($request, $token, $user['id']);
+            $this->onlineSample($request, $token['token'], $user['id']);
         }
     }
 
