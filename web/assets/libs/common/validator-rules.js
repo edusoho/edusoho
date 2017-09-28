@@ -15,6 +15,11 @@ define(function(require, exports, module) {
 
     var rules = [
         [
+            'es_version',
+            /^\d+\.\d+\.\d+$/,
+            Translator.trans('validate_old.es_version.message', {display:'{{display}}'})
+        ],
+        [
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             Translator.trans('validate_old.not_all_digital.message', {display:'{{display}}'})
