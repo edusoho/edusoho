@@ -27,7 +27,6 @@
     <input type="password" style="display:none">{# Prevent autocompleting #}
     {% if not hasPayPassword %}
     <div  class="alert cd-alert cd-alert-warning">
-        {{'order.confirm.safety_tips'|trans}}
         {% if hasPassword %}
           {{'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_set_pay_password')})|raw}}
         {% else %}
