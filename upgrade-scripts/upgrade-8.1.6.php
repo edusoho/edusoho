@@ -60,7 +60,7 @@ class EduSohoUpgrade extends AbstractUpdater
         );
 
         if ($index == 0) {
-            $this->logger('info', '开始执行升级脚本');
+            $this->logger("开始执行升级脚本");
 
             return array(
                 'index' => $this->generateIndex(1, 1),
@@ -78,6 +78,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ++$step;
         }
         if ($step <= count($funcs)) {
+            $this->logger( sprintf("当前执行第%s 步， %s()", $index, $method));
             return array(
                 'index' => $this->generateIndex($step, $page),
                 'message' => '升级数据...',
@@ -92,20 +93,24 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if (!$this->isTableExist('biz_scheduler_job_pool')) {
             $this->getConnection()->exec('RENAME TABLE job_pool TO biz_scheduler_job_pool');
+            $this->logger(' RENAME TABLE job_pool TO biz_scheduler_job_pool');
         }
 
         if (!$this->isTableExist('biz_scheduler_job')) {
             $this->getConnection()->exec('RENAME TABLE job TO biz_scheduler_job');
+            $this->logger(' RENAME TABLE job TO biz_scheduler_job');
 
         }
 
         if (!$this->isTableExist('biz_scheduler_job_fired')) {
             $this->getConnection()->exec('RENAME TABLE job_fired TO biz_scheduler_job_fired');
+            $this->logger('RENAME TABLE job_fired TO biz_scheduler_job_fired');
 
         }
 
         if (!$this->isTableExist('biz_scheduler_job_log')) {
             $this->getConnection()->exec('RENAME TABLE job_log TO biz_scheduler_job_log');
+            $this->logger('RENAME TABLE job_log TO biz_scheduler_job_log');
         }
 
         return 1;
@@ -114,6 +119,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function bizSessionAndOnline($page)
     {
         if (!$this->isTableExist('biz_session')) {
+            $this->logger(sprintf("当前page %s,  正在创建%s",$page, 'biz_session'));
             $this->getConnection()->exec("
                 CREATE TABLE `biz_session` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -129,7 +135,8 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isTableExist('biz_session')) {
+        if (!$this->isTableExist('biz_online')) {
+            $this->logger(sprintf("当前page %s,  正在创建%s",$page, 'biz_online'));
             $this->getConnection()->exec("
                 CREATE TABLE `biz_online` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -156,10 +163,12 @@ class EduSohoUpgrade extends AbstractUpdater
     {
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted')) {
+            $this->logger(sprintf("当前page %s,  正在删除%s",$page, 'ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted` '));
             $this->getConnection()->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted`;');
         }
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted_time')) {
+            $this->logger(sprintf("当前page %s,  正在删除%s",$page, 'ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`'));
             $this->getConnection()->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;');
         }
 
@@ -170,10 +179,12 @@ class EduSohoUpgrade extends AbstractUpdater
     {
 
         if (!$this->isFieldExist('biz_scheduler_job_fired', 'retry_num')) {
+            $this->logger(sprintf("当前page %s,  正在添加%s",$page, 'ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `retry_num` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT \'重试次数\';'));
             $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `retry_num` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '重试次数';");
         }
 
         if (!$this->isFieldExist('biz_scheduler_job_fired', 'job_detail')) {
+            $this->logger(sprintf("当前page %s,  正在添加%s",$page, 'ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_detail` text DEFAULT NULL COMMENT \'job的详细信息，是biz_job表中冗余数据\';'));
             $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_detail` text DEFAULT NULL COMMENT 'job的详细信息，是biz_job表中冗余数据';");
         }
 
@@ -181,7 +192,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    private function copyAttachment($page = 1)
+    protected function copyAttachment($page = 1)
     {
         $copyCourseSets = $this->findCopyCourseSets();
 
@@ -295,6 +306,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $count = $this->getConnection()->fetchColumn("select count(id) from biz_scheduler_job_fired where status in ('executing', 'acquired')  and job_detail= ''");
 
+
+        $this->logger(sprintf("当前page %s,  总biz_scheduler_job_fired数 %s",$page, $count));
+
+
         if ($page == 1) {
             $currentTime = time();
             $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
@@ -331,6 +346,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $pageSize = 200;
 
         $jobFireds = $this->getConnection()->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired') and job_detail= '' limit 0 , $pageSize");
+
+        $this->logger(sprintf("当前page %s,  获取 biz_scheduler_job_fired数 %s",$page, count($jobFireds)));
         foreach ($jobFireds as $jobFired) {
             $job = $this->getConnection()->fetchAssoc("select * from biz_scheduler_job where id={$jobFired['job_id']}");
             $jobDetail = time();
@@ -349,6 +366,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $deadlineTime = $currentTime - 7200;
 
         $count = $this->getConnection()->fetchColumn("select  count(sess_id) from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}';");
+
+        $this->logger(sprintf("当前page %s,  sessions数 %s",$page, $count));
 
         $pageSize = 5000;
         $start = ($page - 1) * $pageSize;
@@ -375,12 +394,17 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function addClearSessionJob($page)
     {
+
+        $this->logger(sprintf("当前page %s,  更新 biz_scheduler_job %s",$page, 'update biz_scheduler_job set class=\'Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\SessionGcJob\', name=\'SessionGcJob\' where name=\'DeleteSessionJob\''));
+
         $this->getConnection()->exec("update biz_scheduler_job set class='Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\SessionGcJob', name='SessionGcJob' where name='DeleteSessionJob';");
         return $page;
     }
 
     protected function addOnlineGcJob($page)
     {
+        $this->logger(sprintf("当前page %s,  新增 biz_scheduler_job %s",$page, 'Codeages\\\\Biz\\\\Framework\\\\Session\\\\Job\\\\OnlineGcJob'));
+
         $currentTime = time();
         $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
               `name`,
