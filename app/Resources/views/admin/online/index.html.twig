@@ -1,8 +1,8 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% set menu = 'admin_user_manage' %}
+{% set menu = 'admin_online' %}
 
-{% block content %}
+{% block main %}
 
     <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="type" value="{{ app.request.query.get('type') }}">
