@@ -13,7 +13,7 @@ class BizSchedulerUpdateJobDetail extends Migration
         $connection = $biz['db'];
 
         // long transcation
-        $jobFireds = $connection->fetchAll('select * from biz_scheduler_job_fired');
+        $jobFireds = $connection->fetchAll("select * from biz_scheduler_job_fired where status in ('executing', 'acquired');");
         foreach ($jobFireds as $jobFired) {
             $job = $connection->fetchAssoc("select * from biz_scheduler_job where id={$jobFired['job_id']}");
             $jobDetail = '';

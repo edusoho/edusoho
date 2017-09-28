@@ -13,8 +13,8 @@ class OnlineController extends BaseController
     public function sampleAction(Request $request)
     {
         $sessionId = $request->getSession()->getId();
-        $lastFlushTime = $request->getSession()->get('online_flush_time', 0);
-        if (!empty($sessionId) && (time() - $lastFlushTime) > 1 * 10) {
+        //        $lastFlushTime = $request->getSession()->get('online_flush_time', 0);
+        if (!empty($sessionId)) {
             $online = array(
                 'sess_id' => $sessionId,
                 'ip' => $request->getClientIp(),
@@ -22,7 +22,7 @@ class OnlineController extends BaseController
                 'source' => DeviceToolkit::isMobileClient() ? '手机浏览器' : 'PC',
             );
             $this->getOnlineService()->saveOnline($online);
-            $request->getSession()->set('online_flush_time', time());
+            //            $request->getSession()->set('online_flush_time', time());
         }
 
         return new Response('true');
@@ -51,7 +51,7 @@ class OnlineController extends BaseController
             }
         }
 
-        $type = $request->query->get('type', 'online');
+        $type = $request->query->get('type', 'logined');
         if ($type == 'logined') {
             $conditions['is_login'] = 1;
         }
