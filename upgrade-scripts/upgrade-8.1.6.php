@@ -377,7 +377,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = ($page - 1) * $pageSize;
         $end = $pageSize;
 
-        $this->getConnection()->exec("
+        if ($page * $pageSize <  $count) {
+            $this->getConnection()->exec("
             INSERT INTO `biz_session` (
                 sess_id, 
                 sess_data,
@@ -390,8 +391,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 sess_time,
                 sess_lifetime + sess_time,
                 '{$currentTime}'
-            from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}' limit  $start , $end ;
+            from sessions where sess_user_id > 0 and  sess_id  not in ( select sess_id from `biz_session`)  and sess_time > '{$deadlineTime}' limit  $start , $end ;
         ");
+        }
 
         return ($page * $pageSize >= $count) ? 1 : $page + 1;
     }
@@ -462,11 +464,6 @@ class EduSohoUpgrade extends AbstractUpdater
             $filesystem->copy($tmpFile, $originFile);
             $filesystem->remove($tmpFile);
         }
-
-        $currentTime = time();
-        $deadlineTime = $currentTime - 7200;
-
-        $this->getConnection()->exec("delete from sessions where sess_user_id > 0 and sess_time > '{$deadlineTime}';");
 
         return $page;
     }
