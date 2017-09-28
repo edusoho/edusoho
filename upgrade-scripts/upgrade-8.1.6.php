@@ -56,7 +56,8 @@ class EduSohoUpgrade extends AbstractUpdater
             6 => 'sessionMigrate',
             7 => 'addClearSessionJob',
             8 => 'addOnlineGcJob',
-            9 => 'copyAttachment'
+            9 => 'copyAttachment',
+            10 => 'renameFile',
         );
 
         if ($index == 0) {
@@ -435,6 +436,26 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}',
               '{$currentTime}'
         )");
+        return $page;
+    }
+
+    protected function renameFile($page = 1)
+    {
+        $rootDir = realpath($this->biz['root_directory']);
+
+        $originFile = "{$rootDir}/vendor/codeages/biz-framework/src/Session/Dao/Impl/SessionDaoImpl.php";
+        $tmpFile = "{$rootDir}/vendor/codeages/biz-framework/src/Session/Dao/Impl/SessionDaoImpl.php.1";
+        if (!is_file($tmpFile) or !is_file($originFile)) {
+            return false;
+        }
+
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($originFile) && $filesystem->exists($tmpFile)) {
+            $filesystem->remove($originFile);
+            $filesystem->copy($tmpFile, $originFile);
+            $filesystem->remove($tmpFile);
+        }
+
         return $page;
     }
 
