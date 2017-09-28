@@ -7,6 +7,13 @@
     <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="type" value="{{ app.request.query.get('type') }}">
         <div class="form-group">
+            <select class="form-control" name="type">
+                <option value="">--是否登入--</option>
+                <option value="logined" {% if app.request.query.get('type') == 'logined' %}selected="selected"{% endif %}>是</option>
+                <option value="online" {% if app.request.query.get('type') == 'online' %}selected="selected"{% endif %}>否</option>
+            </select>
+        </div>
+        <div class="form-group">
             <input class="form-control" type="text" placeholder="{{'用户名'|trans}}" name="name" value="{{ app.request.query.get('name') }}">
         </div>
 
