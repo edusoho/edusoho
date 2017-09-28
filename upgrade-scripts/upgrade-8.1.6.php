@@ -174,7 +174,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('biz_scheduler_job_fired', 'job_detail')) {
-            $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_detail` text NOT NULL COMMENT 'job的详细信息，是biz_job表中冗余数据';");
+            $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` ADD COLUMN `job_detail` text DEFAULT NULL COMMENT 'job的详细信息，是biz_job表中冗余数据';");
         }
 
 

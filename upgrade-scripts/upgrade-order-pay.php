@@ -60,15 +60,21 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'createTables',
+            1 => 'createTables',    // done
             2 => 'migrateBizOrders',
-            3 => 'migrateBizOrderItems',
-            4 => 'migrateBizOrderItemDeductsByCoupon',
-            5 => 'migrateBizOrderItemDeductsByDiscount',
+            3 => 'migrateBizOrderItems', // done
+            4 => 'migrateBizOrderItemDeductsByCoupon', // done
+            5 => 'migrateBizOrderItemDeductsByDiscount', // done
             6 => 'migrateBizOrderRefund',
             7 => 'migrateBizOrderRefundItems',
             8 => 'migrateBizOrderLog',
             9 => 'migrateBizPaymentTrade',
+            10 => 'migrateBizPaymentTradeFromCashOrder',
+            11 => 'migrateBizSecurityAnswer', // done
+            12 => 'migrateBizPayAccount',   // done
+            13 => 'migrateBizUserBalance',  // done
+            14 => 'migrateBizUserCashflow',
+            15 => 'registerJobs',
         );
 
         if ($index == 0) {
@@ -168,6 +174,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `migrate_id`
             from orders where id not in (select migrate_id from `biz_order`);
         ");
+
+        // 处理source字段
+        $connection->exec("
+            
+        ");
     }
 
     protected function migrateBizOrderItems()
@@ -212,9 +223,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `unit`, -- 会员订单时的单位：按月、按年
                 `status` as `status`,
                 `refundId` as `refund_id`,
-                '' as `refund_status`, -- 当有refund_id时，冗余的退款状态
+                case when re.status = 'refunded' then 'refunded' else o.status end as `refund_status`, -- 当有refund_id时，冗余的退款状态
                 `totalPrice`*100 as `price_amount`,
-                0 as `pay_amount`, -- 应付款
+                (o.`totalPrce` - o.`couponDiscount` - o.`discount`) as `pay_amount`, -- 应付款
                 `targetId` as `target_id`,
                 `targetType` as `target_type`,
                 `paidTime` as `pay_time`,
@@ -227,8 +238,18 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from orders where id not in (select migrate_id from `biz_order_item`);
+            from orders o right join order_refund re on o.refundId = re.id where id not in (select migrate_id from `biz_order_item`);
         ");
+
+        // 处理会员订单
+        $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip';");
+        foreach ($vipOrders as $vipOrder) {
+            $data = json_decode($vipOrder['data'], true);
+            $connection->exec("update biz_order_item set num = '{$data['duration']}', unit = '{$data['unitType']}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
+        }
+
+        // 处理close_time
+        $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
     }
 
     protected function migrateBizOrderItemDeductsByCoupon()
@@ -254,24 +275,22 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             ) 
             select 
-                `id`,
-                `id` as `order_id`,
+                o.`id`,
+                o.`id` as `order_id`,
                 '' as `detail`,
-                `id` as `item_id`,
+                o.`id` as `item_id`,
                 'coupon' as `deduct_type`,
-                0 as `deduct_id`,               
-                `couponDiscount`*100 as `deduct_amount`,
-                `status` as `status`,
-                `userId` as `user_id`,
+                c.`id` as `deduct_id`,               
+                o.`couponDiscount`*100 as `deduct_amount`,
+                o.`status` as `status`,
+                o.`userId` as `user_id`,
                 0 as `seller_id`,
                 '' as `snapshot`,
-                `createdTime` as `created_time`,
-                `updatedTime` as `updated_time`,
-                `id` as `migrate_id`
-            from orders where coupon is not null and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
+                o.`createdTime` as `created_time`,
+                o.`updatedTime` as `updated_time`,
+                o.`id` as `migrate_id`
+            from orders o right join coupon c on o.coupon = c.code where coupon is not null and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
         ");
-
-        $connection->exec("update biz_order_item_deduct deduct set deduct_id = (select id from coupon where code=(select coupon from orders where id=deduct.id)) where deduct_type='coupon';");
     }
 
     protected function migrateBizOrderItemDeductsByDiscount()
@@ -301,7 +320,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `order_id`,
                 '' as `detail`,
                 `id` as `item_id`,
-                `discount` as `deduct_type`,
+                'discount' as `deduct_type`,
                 `discountId` as `deduct_id`,              
                 `discount`*100 as `deduct_amount`,
                 `status` as `status`,
@@ -409,6 +428,168 @@ class EduSohoUpgrade extends AbstractUpdater
     }
 
     protected function migrateBizPaymentTrade()
+    {
+        $this->addMigrateId('biz_payment_trade');
+
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `biz_payment_trade` (
+                `id`,
+                `title`,
+                `trade_sn`,
+                `order_sn`,
+                `platform`,
+                `platform_sn`,
+                `status`,
+                `price_type`,
+                `currency`,
+                `amount`,
+                `coin_amount`,
+                `cash_amount`,
+                `rate`,
+                `type`,
+                `pay_time`,
+                `seller_id`,
+                `user_id`,
+                `notify_data`,
+                `platform_created_result`,
+                `apply_refund_time`,
+                `refund_success_time`,
+                `platform_created_params`,
+                `platform_type`,
+                `updated_time`,
+                `created_time`,
+                `migrate_id`
+            )
+            select 
+                `id`,
+                `title`,
+                `sn` as `trade_sn`,
+                `sn` as `order_sn`,
+                `payment` as `platform`,
+                '' as `platform_sn`,
+                `status` as `status`,
+                'money' as `price_type`,
+                'CNY' as `currency`,
+                `amount`,
+                `coinAmount` as `coin_amount`,
+                `amount` as `cash_amount`,
+                `coinRate` as `rate`,
+                'purchase' as `type`,
+                `paidTime` as `pay_time`,
+                0 as `seller_id`,
+                `userId` as `user_id`,
+                '' as `notify_data`,
+                '' as `platform_created_result`,
+                0 as `apply_refund_time`,
+                0 as `refund_success_time`,
+                '' as `platform_created_params`,
+                '' as `platform_type`,
+                `updatedTime` as `updated_time`,
+                `createdTime` as `created_time`,
+                `id` as `migrate_id`
+            from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase')
+        ");
+    }
+
+    protected function migrateBizPaymentTradeFromCashOrder()
+    {
+        // TODO
+        $this->addMigrateId('biz_payment_trade');
+
+        $connection = $this->getConnection();
+        $connection->exec("
+            
+        ");
+    }
+
+    protected function migrateBizSecurityAnswer()
+    {
+        $this->addMigrateId('biz_security_answer');
+
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `biz_security_answer` (
+                `id`,
+                `user_id`,
+                `question_key`,
+                `answer`,
+                `salt`,
+                `created_time`,
+                `updated_time`,
+                `migrate_id`
+            )
+            select 
+                `id`,
+                `userId` as `user_id`,
+                `securityQuestionCode` as `question_key`,
+                `securityAnswer` as `answer`,
+                `securityAnswerSalt` as `salt`,
+                `createdTime` as `created_time`,
+                `createdTime` as `updated_time`,
+                `id` as `migrate_id`
+            from user_secure_question where id not in (select migrate_id from biz_security_answer)
+        ");
+    }
+
+    protected function migrateBizPayAccount()
+    {
+        $this->addMigrateId('biz_pay_account');
+
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `biz_pay_account` (
+              `id`,
+              `user_id`,
+              `password`,
+              `salt`,
+              `created_time`,
+              `updated_time`,
+              `migrate_id`
+            )
+            select
+              `id`,
+              `id`,
+              `payPassword`,
+              `payPasswordSalt`,
+              `createdTime`,
+              `updatedTime`,
+              `id`
+            from `user` where u.`id` not in (select `migrate_id` from `biz_pay_account`)
+        ");
+    }
+
+    protected function migrateBizUserBalance()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `biz_user_balance` (
+              `id`,
+              `user_id`,
+              `amount`,
+              `migrate_id`
+            )
+            select
+              `id`,
+              u.`id` as `user_id`,
+              ca.`cash` as `amount`,
+              u.`id` as `migrate_id`
+            from `user` u right join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`)
+        ");
+    }
+
+    protected function migrateBizUserCashflow()
+    {
+        // TODO
+        $this->addMigrateId('biz_user_cashflow');
+
+        $connection = $this->getConnection();
+        $connection->exec("
+            
+        ");
+    }
+
+    protected function registerJobs()
     {
         // TODO
     }
@@ -685,104 +866,6 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`),
                   UNIQUE (`user_id`, `question_key`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_job_pool')) {
-            $connection->exec("
-                CREATE TABLE IF NOT EXISTS `biz_job_pool` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-                  `name` varchar(128) NOT NULL DEFAULT 'default' COMMENT '组名',
-                  `max_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大数',
-                  `num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已使用的数量',
-                  `timeout` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行超时时间',
-                  `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_job')) {
-            $connection->exec("
-                CREATE TABLE IF NOT EXISTS `biz_job` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-                  `name` varchar(128) NOT NULL COMMENT '任务名称',
-                  `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
-                  `source` varchar(64) NOT NULL DEFAULT 'MAIN' COMMENT '来源',
-                  `expression` varchar(128) NOT NULL DEFAULT '' COMMENT '任务触发的表达式',
-                  `class` varchar(128) NOT NULL COMMENT '任务的Class名称',
-                  `args` text COMMENT '任务参数',
-                  `priority` int(10) unsigned NOT NULL DEFAULT 50 COMMENT '优先级',
-                  `pre_fire_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '任务下次执行的时间',
-                  `next_fire_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '任务下次执行的时间',
-                  `misfire_threshold` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '触发过期的阈值(秒)',
-                  `misfire_policy` varchar(32) NOT NULL COMMENT '触发过期策略: missed, executing',
-                  `enabled` tinyint(1) DEFAULT 1 COMMENT '是否启用',
-                  `deleted` tinyint(1) DEFAULT 0 COMMENT '是否启用',
-                  `creator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务创建人',
-                  `deleted_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
-                  `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
-                  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_job_fired')) {
-            $connection->exec("
-                CREATE TABLE IF NOT EXISTS `biz_job_fired` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-                  `job_id` int(10) NOT NULL COMMENT 'jobId',
-                  `fired_time` int(10) unsigned NOT NULL COMMENT '触发时间',
-                  `priority` int(10) unsigned NOT NULL DEFAULT 50 COMMENT '优先级',
-                  `retry_num` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '重试次数',
-                  `status` varchar(32) NOT NULL DEFAULT 'acquired' COMMENT '状态：acquired, executing, success, missed, ignore, failure',
-                  `failure_msg` text,
-                  `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
-                  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_job_log')) {
-            $connection->exec("
-                CREATE TABLE IF NOT EXISTS `biz_job_log` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-                  `job_id` int(10) unsigned NOT NULL COMMENT '任务编号',
-                  `job_fired_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '激活的任务编号',
-                  `hostname` varchar(128) NOT NULL DEFAULT '' COMMENT '执行的主机',
-                  `name` varchar(128) NOT NULL COMMENT '任务名称',
-                  `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
-                  `source` varchar(64) NOT NULL COMMENT '来源',
-                  `class` varchar(128) NOT NULL COMMENT '任务的Class名称',
-                  `args` text COMMENT '任务参数',
-                  `priority` int(10) unsigned NOT NULL DEFAULT 50 COMMENT '优先级',
-                  `status` varchar(32) NOT NULL DEFAULT 'waiting' COMMENT '任务执行状态',
-                  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_targetlog')) {
-            $connection->exec("
-                CREATE TABLE `biz_targetlog` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `target_type` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '日志对象类型',
-                  `target_id` varchar(48) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '日志对象ID',
-                  `action` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '日志行为',
-                  `level` smallint(6) NOT NULL DEFAULT '0' COMMENT '日志等级',
-                  `message` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '日志信息',
-                  `context` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '日志上下文',
-                  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作人ID',
-                  `ip` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作人IP',
-                  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-                  PRIMARY KEY (`id`),
-                  KEY `idx_target` (`target_type`(8),`target_id`(8)),
-                  KEY `idx_level` (`level`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
             ");
         }
     }
