@@ -44,6 +44,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 1024 }
 
+    api_exception_listener:
+        class: ApiBundle\EventListener\AuthenticateListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: 'api.before_authenticate', priority: 1024 }
+
     api_response_viewer:
         class: ApiBundle\Viewer
         arguments: ['@service_container']

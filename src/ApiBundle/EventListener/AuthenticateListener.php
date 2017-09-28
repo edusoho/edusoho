@@ -1,0 +1,42 @@
+<?php
+
+namespace ApiBundle\EventListener;
+
+use ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Topxia\Service\Common\ServiceKernel;
+
+class AuthenticateListener
+{
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    public function onAuthenticate(TokenInterface $token)
+    {
+        $request = $this->container->get('request');
+        $this->onlineSample($request, $token);
+    }
+
+    protected function onlineSample($request, $token)
+    {
+        $online = array(
+            'sess_id' => $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER),
+            'user_id' => $token->getUser()->getId(),
+            'ip' => $request->getClientIp(),
+            'user_agent' => $request->headers->get('User-Agent', ''),
+            'source' => 'App',
+        );
+        $this->getOnlineService()->saveOnline($online);
+    }
+
+    private function getOnlineService()
+    {
+        return ServiceKernel::instance()->createService('Session:OnlineService');
+    }
+
+}
