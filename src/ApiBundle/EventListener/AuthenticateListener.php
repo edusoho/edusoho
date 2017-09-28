@@ -4,7 +4,7 @@ namespace ApiBundle\EventListener;
 
 use ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthenticateListener
@@ -16,8 +16,9 @@ class AuthenticateListener
         $this->container = $container;
     }
 
-    public function onAuthenticate(TokenInterface $token)
+    public function onAuthenticate(AuthenticationEvent $event)
     {
+        $token = $event->getAuthenticationToken();
         $request = $this->container->get('request');
         $authToken = $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER);
         if (!empty($authToken)) {
