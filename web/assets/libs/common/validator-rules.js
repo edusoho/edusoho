@@ -16,7 +16,7 @@ define(function(require, exports, module) {
     var rules = [
         [
             'es_version',
-            /(^\d{1,2})+(\.\d{1,2})+(\.\d{1,2})+$/,
+            /(^\d{1,2}\.\d{1,2}\.\d{1,2})+$/,
             Translator.trans('validate_old.es_version.message', {display:'{{display}}'})
         ],
         [
