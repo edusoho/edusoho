@@ -21,6 +21,7 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
                 'id = :id',
                 'operate_type = :operate_type',
                 'operate_time > :operate_time_GT',
+                'operate_time >= :operate_time_GE',
                 'operate_time < :operate_time_LT',
                 'target_type = :target_type',
             ),

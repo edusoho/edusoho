@@ -1,8 +1,9 @@
 {
-  "name": "lokielse/omnipay-wechatpay",
+  "name": "wenqinruan/omnipay-wechatpay",
   "type": "library",
   "description": "Wechat gateway for Omnipay payment processing library",
   "keywords": [
+    "php53",
     "wechat",
     "gateway",
     "php",
@@ -14,12 +15,12 @@
     "purchase",
     "微信支付"
   ],
-  "homepage": "https://github.com/lokielse/omnipay-wechatpay",
+  "homepage": "https://github.com/wenqinruan/omnipay-wechatpay",
   "license": "MIT",
   "authors": [
     {
-      "name": "Loki Else",
-      "email": "lokielse@gmail.com"
+      "name": "Wenqin Ruan",
+      "email": "ruanwenqinrl@gmail.com"
     }
   ],
   "autoload": {

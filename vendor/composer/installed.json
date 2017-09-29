@@ -1885,59 +1885,6 @@
         "description": "Rate limiter with Biz Framework."
     },
     {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.19",
-        "version_normalized": "0.1.19.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "5acc4b6e61654476d4daf278996c42567658ddc3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/5acc4b6e61654476d4daf278996c42567658ddc3",
-            "reference": "5acc4b6e61654476d4daf278996c42567658ddc3",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/config": "^2.8",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.7",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.1.5"
-        },
-        "time": "2017-08-03T04:50:37+00:00",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
         "name": "codeages/qiqiuyun-php-sdk",
         "version": "v0.0.1",
         "version_normalized": "0.0.1.0",
@@ -4862,7 +4809,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/doctrine/cache/b3217d58609e9c8e661cd41357a54d926c4a2a1a.zip",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
             "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
             "shasum": ""
         },
@@ -5373,60 +5320,6 @@
         ]
     },
     {
-        "name": "wenqinruan/omnipay-wechatpay",
-        "version": "v1.0.21",
-        "version_normalized": "1.0.21.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/wenqinruan/omnipay-wechatpay.git",
-            "reference": "7b298db87602420c3343a630c950273f60573356"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-wechatpay/7b298db87602420c3343a630c950273f60573356.zip",
-            "reference": "7b298db87602420c3343a630c950273f60573356",
-            "shasum": ""
-        },
-        "require": {
-            "omnipay/common": "~2.0"
-        },
-        "require-dev": {
-            "omnipay/tests": "~2.0"
-        },
-        "time": "2017-03-30T18:54:01+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Omnipay\\WechatPay\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Loki Else",
-                "email": "lokielse@gmail.com"
-            }
-        ],
-        "description": "Wechat gateway for Omnipay payment processing library",
-        "homepage": "https://github.com/lokielse/omnipay-wechatpay",
-        "keywords": [
-            "app",
-            "gateway",
-            "omnipay",
-            "pay",
-            "payment",
-            "php",
-            "purchase",
-            "sdk",
-            "wechat",
-            "微信支付"
-        ]
-    },
-    {
         "name": "wenqinruan/omnipay-alipay",
         "version": "v2.3.5",
         "version_normalized": "2.3.5.0",
@@ -5480,6 +5373,114 @@
             "payment",
             "php53",
             "purchase"
+        ]
+    },
+    {
+        "name": "wenqinruan/omnipay-wechatpay",
+        "version": "v1.0.22",
+        "version_normalized": "1.0.22.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/wenqinruan/omnipay-wechatpay.git",
+            "reference": "07d75fb92f6caee0f62b716986ca36881cfabeee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-wechatpay/07d75fb92f6caee0f62b716986ca36881cfabeee.zip",
+            "reference": "07d75fb92f6caee0f62b716986ca36881cfabeee",
+            "shasum": ""
+        },
+        "require": {
+            "omnipay/common": "~2.0"
+        },
+        "require-dev": {
+            "omnipay/tests": "~2.0"
+        },
+        "time": "2017-09-26T12:25:50+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Omnipay\\WechatPay\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Wenqin Ruan",
+                "email": "ruanwenqinrl@gmail.com"
+            }
+        ],
+        "description": "Wechat gateway for Omnipay payment processing library",
+        "homepage": "https://github.com/wenqinruan/omnipay-wechatpay",
+        "keywords": [
+            "app",
+            "gateway",
+            "omnipay",
+            "pay",
+            "payment",
+            "php",
+            "php53",
+            "purchase",
+            "sdk",
+            "wechat",
+            "微信支付"
+        ]
+    },
+    {
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.20",
+        "version_normalized": "0.1.20.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "54ff25a4bf077082d62bca9c5c43d52a8c347043"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/54ff25a4bf077082d62bca9c5c43d52a8c347043.zip",
+            "reference": "54ff25a4bf077082d62bca9c5c43d52a8c347043",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/config": "^2.8",
+            "symfony/framework-bundle": "^2.8 || ^3.0",
+            "symfony/twig-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8 || ~5.7",
+            "symfony/browser-kit": "^2.8 || ^3.0",
+            "symfony/phpunit-bridge": "~3.1.5"
+        },
+        "time": "2017-09-28T03:12:31+00:00",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "extension",
+            "plugin",
+            "theme"
         ]
     }
 ]

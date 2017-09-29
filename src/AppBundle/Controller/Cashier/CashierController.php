@@ -44,10 +44,44 @@ class CashierController extends BaseController
 
         $payments = $this->getPayService()->findEnabledPayments();
 
-        return $this->render('cashier/show.html.twig', array(
-            'order' => $order,
-            'payments' => $payments,
+        if ($this->isMobileClient()) {
+            return $this->render('cashier/mobile-show.html.twig', array(
+                'order' => $order,
+                'payments' => $payments,
+            ));
+        } else {
+            return $this->render('cashier/pc-show.html.twig', array(
+                'order' => $order,
+                'payments' => $payments,
+            ));
+        }
+    }
+
+    public function confirmModalAction(Request $request)
+    {
+        return $this->render('cashier/confirm-modal.html.twig', array(
+            'orderSn' => $request->query->get('orderSn'),
         ));
+    }
+
+    public function isPaidCheckAction(Request $request)
+    {
+        $orderSn = $request->query->get('orderSn');
+        $order = $this->getOrderService()->getOrderBySn($orderSn);
+        $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+        return $this->createJsonResponse(array(
+            'isPaid' => $trade['status'] == 'paid',
+            'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']))
+        ));
+    }
+
+    public function createTradeAction(Request $request)
+    {
+        $payment = $request->request->get('payment');
+        $payment = preg_replace('/\.\w+/', '', $payment);
+        $payment = ucfirst($payment);
+
+        return $this->forward("AppBundle:Cashier/{$payment}:createTrade");
     }
 
     public function payAction(Request $request)
@@ -58,6 +92,16 @@ class CashierController extends BaseController
         $payment = preg_replace('/\.\w+/', '', $payment);
         $payment = ucfirst($payment);
 
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        if ($order['status'] == 'success'
+            || $order['status'] == 'paid'
+            || $order['status'] == 'fail') {
+            return $this->createJsonResponse(array(
+                'isPaid' => 1,
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn']))
+            ));
+        }
+
         try {
             $params = $request->request->all();
             $params['clientIp'] = $request->getClientIp();
@@ -66,7 +110,9 @@ class CashierController extends BaseController
             return $this->createMessageResponse('error', $this->trans($e->getMessage()));
         }
 
-        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
+        $action = $this->isMobileClient() ? 'mobilePay' : 'pcPay';
+
+        return $this->forward("AppBundle:Cashier/{$payment}:{$action}", array('trade' => $trade));
     }
 
     public function successAction(Request $request)

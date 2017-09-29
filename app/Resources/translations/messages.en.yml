@@ -6434,6 +6434,12 @@ register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
+cashier.confirm.title: Order payment
+cashier.confirm.success: Payment is done
+cashier.confirm.pick_again: Reissue payment method
+cashier.confirm.desc: |
+  Please re-open the page to complete the order payment.
+  If you encounter problems in the payment process, please contact the website customer service solution.
 
 cashflow.title: Name
 

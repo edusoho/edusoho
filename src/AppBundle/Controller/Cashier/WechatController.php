@@ -3,56 +3,57 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Omnipay\WechatPay\Helper;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\MathToolkit;
 
 class WechatController extends PaymentController
 {
-    public function payAction($trade)
-    {
-        if ($this->getWebExtension()->isMicroMessenger()) {
-            $this->get('session')->set('trade_info', $trade);
-
-            return $this->redirect($this->generateUrl('cashier_wechat_h5_pay'));
-        } else {
-            return $this->forward('AppBundle:Cashier/Wechat:qrcode', array('trade' => $trade));
-        }
-    }
-
-    public function qrcodeAction($trade)
+    public function pcPayAction($trade)
     {
         $trade['platform_type'] = 'Native';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
         $result = $this->getPayService()->createTrade($trade);
 
         if ($result['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
-        }
-
-        if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
-            $result = MathToolkit::multiply(
-                $result,
-                array('cash_amount'),
-                0.01
-            );
-
-            return $this->render(
-                'cashier/wechat/qrcode.html.twig', array(
-                'trade' => $result,
+            return $this->createJsonResponse(array(
+                'isPaid' => 1,
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
             ));
         }
 
-        return $this->createMessageResponse('warning', $result['platform_created_result']['return_msg'], '微信支付设置错误');
+        if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
+            return $this->createJsonResponse(array(
+                'isPaid' => 0,
+                'showQrcode' => 1,
+                'redirectUrl' => $this->generateUrl('cashier_wechat_qrcode', array('tradeSn' => $result['trade_sn'])),
+            ));
+        }
+
+        return $this->createJsonResponse(array('error' => $result['platform_created_result']['return_msg']), 500);
     }
 
-    public function h5Action()
+    public function qrcodeAction(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        return $this->render('cashier/wechat/qrcode.html.twig', array(
+            'trade' => $trade,
+        ));
+    }
+
+    public function mobilePayAction($trade)
     {
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
+        }
+
+        $request = $this->get('request_stack')->getMasterRequest();
+        if ($tradeSn = $request->query->get('tradeSn')) {
+            $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
         }
 
         $biz = $this->getBiz();
@@ -65,13 +66,11 @@ class WechatController extends PaymentController
             'account' => $options['mch_id'],
             'key' => $options['key'],
             'secret' => $options['secret'],
-            'redirect_uri' => $this->generateUrl('cashier_wechat_h5_pay', array(), true),
+            'redirect_uri' => $this->generateUrl('cashier_wechat_mobile_pay', array('tradeSn' => $trade['sn']), true),
             'isMicroMessenger' => true,
         ), $request);
 
         $openid = $jsApi->getOpenid();
-
-        $trade = $this->get('session')->get('trade_info');
 
         if ($user['id'] != $trade['user_id']) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -119,9 +118,14 @@ class WechatController extends PaymentController
         if ($trade['trade_state'] === 'SUCCESS') {
             $this->getPayService()->notifyPaid('wechat', Helper::array2xml($trade));
 
-            return $this->createJsonResponse(true);
+            return $this->createJsonResponse(array(
+                'isPaid' => 1,
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
+            ));
         } else {
-            return $this->createJsonResponse(false);
+            return $this->createJsonResponse(array(
+                'isPaid' => 0,
+            ));
         }
     }
 
@@ -130,13 +134,5 @@ class WechatController extends PaymentController
         $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
 
         return $this->createJsonResponse($result);
-    }
-
-    /**
-     * @return PayService
-     */
-    private function getPayService()
-    {
-        return $this->createService('Pay:PayService');
     }
 }

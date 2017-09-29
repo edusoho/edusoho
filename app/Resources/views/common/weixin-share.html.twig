@@ -1,17 +1,17 @@
 {% set wxconfig = wx_js_sdk_config() %}
 {% if wxconfig|default(null) %}
-	{% do load_script('common/weixin-share') %}
-	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-		<div class="hidden jweixin-data" 
-			data-config="{{wxconfig}}"
-			data-title="{{title}}" 
-			data-desc='{{desc}}'
-			data-link="{{link}}" 
-			data-img-url="{{imgUrl}}" 
-			data-type="{{type|default('')}}" 
-			data-data-url="{{dataUrl|default('')}}">
-		</div>
+  {% do script(['app/js/weixin-share/index.js']) %}
+  <div class="hidden jweixin-data" 
+    data-config="{{wxconfig}}"
+    data-title="{{title}}" 
+    data-desc='{{desc}}'
+    data-link="{{link}}" 
+    data-img-url="{{imgUrl}}" 
+    data-type="{{type|default('')}}" 
+    data-data-url="{{dataUrl|default('')}}">
+  </div>
 {% endif %}
+
 {# 	
 	title: '', // 分享标题
 	desc: '', // 分享描述

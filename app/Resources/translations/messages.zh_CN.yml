@@ -8100,6 +8100,12 @@ order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
 
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+cashier.confirm.title: 订单支付中
+cashier.confirm.success: 支付完成
+cashier.confirm.pick_again: 重选支付方式
+cashier.confirm.desc: |
+  请再新开页面中完成订单支付。
+  如在支付过程中遇到问题，请联系网站客服解决。
 
 cashflow.title: 名称
 

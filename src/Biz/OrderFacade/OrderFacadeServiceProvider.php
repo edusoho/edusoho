@@ -133,13 +133,14 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             return $enabledPayments;
         };
 
-        $biz['payment.options'] = function($biz) {
+        $biz['payment.options'] = function ($biz) {
             $setting = $biz->service('System:SettingService')->get('coin');
             if (!empty($setting['coin_enabled'])) {
                 return array(
-                    'coin_rate' => $setting['cash_rate']
+                    'coin_rate' => $setting['cash_rate'],
                 );
             }
+
             return array();
         };
     }

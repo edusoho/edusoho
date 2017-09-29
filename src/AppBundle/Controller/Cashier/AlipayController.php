@@ -8,7 +8,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AlipayController extends PaymentController
 {
-    public function payAction($trade)
+    public function pcPayAction($trade)
+    {
+        $trade['platform_type'] = 'Web';
+        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
+        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'alipay'), true);
+        $result = $this->getPayService()->createTrade($trade);
+
+        if ($result['status'] == 'paid') {
+            return $this->createJsonResponse(array(
+                'isPaid' => 1,
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn']))
+            ));
+        }
+
+        return $this->createJsonResponse(array(
+            'isPaid' => 0,
+            'redirectUrl' =>  $result['platform_created_result']['url']
+        ));
+    }
+
+    public function mobilePayAction($trade)
     {
         $trade['platform_type'] = 'Web';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
@@ -50,13 +70,5 @@ class AlipayController extends PaymentController
         } catch (\Exception $e) {
             return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?0';</script>");
         }
-    }
-
-    /**
-     * @return PayService
-     */
-    private function getPayService()
-    {
-        return $this->createService('Pay:PayService');
     }
 }

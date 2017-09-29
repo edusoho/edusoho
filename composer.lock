@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a3b1771d28b6186f9218028c228b6b7",
+    "content-hash": "73201acf6d0d3a46b816c194f45887ac",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -328,16 +328,16 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.19",
+            "version": "v0.1.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "5acc4b6e61654476d4daf278996c42567658ddc3"
+                "reference": "54ff25a4bf077082d62bca9c5c43d52a8c347043"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/5acc4b6e61654476d4daf278996c42567658ddc3",
-                "reference": "5acc4b6e61654476d4daf278996c42567658ddc3",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/54ff25a4bf077082d62bca9c5c43d52a8c347043.zip",
+                "reference": "54ff25a4bf077082d62bca9c5c43d52a8c347043",
                 "shasum": ""
             },
             "require": {
@@ -364,7 +364,7 @@
             ],
             "authors": [
                 {
-                    "name": "Codeages Team",
+                    "name": "codeages team",
                     "email": "team@codeages.com"
                 }
             ],
@@ -375,7 +375,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-08-03T04:50:37+00:00"
+            "time": "2017-09-28T03:12:31+00:00"
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
@@ -799,7 +799,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/cache/b3217d58609e9c8e661cd41357a54d926c4a2a1a.zip",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "shasum": ""
             },
@@ -4061,16 +4061,16 @@
         },
         {
             "name": "wenqinruan/omnipay-wechatpay",
-            "version": "v1.0.21",
+            "version": "v1.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wenqinruan/omnipay-wechatpay.git",
-                "reference": "7b298db87602420c3343a630c950273f60573356"
+                "reference": "07d75fb92f6caee0f62b716986ca36881cfabeee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-wechatpay/7b298db87602420c3343a630c950273f60573356.zip",
-                "reference": "7b298db87602420c3343a630c950273f60573356",
+                "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-wechatpay/07d75fb92f6caee0f62b716986ca36881cfabeee.zip",
+                "reference": "07d75fb92f6caee0f62b716986ca36881cfabeee",
                 "shasum": ""
             },
             "require": {
@@ -4091,12 +4091,12 @@
             ],
             "authors": [
                 {
-                    "name": "Loki Else",
-                    "email": "lokielse@gmail.com"
+                    "name": "Wenqin Ruan",
+                    "email": "ruanwenqinrl@gmail.com"
                 }
             ],
             "description": "Wechat gateway for Omnipay payment processing library",
-            "homepage": "https://github.com/lokielse/omnipay-wechatpay",
+            "homepage": "https://github.com/wenqinruan/omnipay-wechatpay",
             "keywords": [
                 "app",
                 "gateway",
@@ -4104,12 +4104,13 @@
                 "pay",
                 "payment",
                 "php",
+                "php53",
                 "purchase",
                 "sdk",
                 "wechat",
                 "微信支付"
             ],
-            "time": "2017-03-30T18:54:01+00:00"
+            "time": "2017-09-26T12:25:50+00:00"
         },
         {
             "name": "willdurand/js-translation-bundle",

@@ -5,6 +5,7 @@ namespace Biz\Course\Copy;
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Service\CourseSetService;
 use Biz\Question\Dao\QuestionDao;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
@@ -40,6 +41,8 @@ class CourseSetCoursesCopy extends AbstractCopy
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
         }
+        $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
+
         $this->updateQuestionsCourseId($newCourseSet['id']);
         $this->updateQuestionsLessonId($newCourseSet['id']);
         $this->updateExerciseRange($newCourseSet['id']);
@@ -177,7 +180,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             'goals',
             'audiences',
             'maxStudentNum',
-            'isFree',
+            //'isFree',
             'price',
             // 'vipLevelId',
             'buyable',
@@ -264,5 +267,13 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getTestpaperDao()
     {
         return $this->biz->dao('Testpaper:TestpaperDao');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->biz->dao('Course:CourseSetService');
     }
 }

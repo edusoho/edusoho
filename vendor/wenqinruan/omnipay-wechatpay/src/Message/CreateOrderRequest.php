@@ -4,19 +4,15 @@ namespace Omnipay\WechatPay\Message;
 
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\WechatPay\Helper;
-
 /**
  * Class CreateOrderRequest
  * @package Omnipay\WechatPay\Message
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_1
  * @method CreateOrderResponse send()
  */
-class CreateOrderRequest extends BaseAbstractRequest
+class CreateOrderRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
-
     protected $endpoint = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -25,52 +21,16 @@ class CreateOrderRequest extends BaseAbstractRequest
      */
     public function getData()
     {
-        $this->validate(
-            'app_id',
-            'mch_id',
-            'body',
-            'out_trade_no',
-            'total_fee',
-            'notify_url',
-            'trade_type',
-            'spbill_create_ip'
-        );
-
+        $this->validate('app_id', 'mch_id', 'body', 'out_trade_no', 'total_fee', 'notify_url', 'trade_type', 'spbill_create_ip');
         $tradeType = strtoupper($this->getTradeType());
-
         if ($tradeType == 'JSAPI') {
             $this->validate('open_id');
         }
-
-        $data = array (
-            'appid'            => $this->getAppId(),//*
-            'mch_id'           => $this->getMchId(),
-            'device_info'      => $this->getDeviceInfo(),//*
-            'body'             => $this->getBody(),//*
-            'detail'           => $this->getDetail(),
-            'attach'           => $this->getAttach(),
-            'out_trade_no'     => $this->getOutTradeNo(),//*
-            'fee_type'         => $this->getFeeType(),
-            'total_fee'        => $this->getTotalFee(),//*
-            'spbill_create_ip' => $this->getSpbillCreateIp(),//*
-            'time_start'       => $this->getTimeStart(),//yyyyMMddHHmmss
-            'time_expire'      => $this->getTimeExpire(),//yyyyMMddHHmmss
-            'goods_tag'        => $this->getGoodsTag(),
-            'notify_url'       => $this->getNotifyUrl(), //*
-            'trade_type'       => $this->getTradeType(), //*
-            'limit_pay'        => $this->getLimitPay(),
-            'openid'           => $this->getOpenId(),//*(trade_type=JSAPI)
-            'nonce_str'        => md5(uniqid()),//*
-        );
-
+        $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'device_info' => $this->getDeviceInfo(), 'body' => $this->getBody(), 'detail' => $this->getDetail(), 'attach' => $this->getAttach(), 'out_trade_no' => $this->getOutTradeNo(), 'fee_type' => $this->getFeeType(), 'total_fee' => $this->getTotalFee(), 'spbill_create_ip' => $this->getSpbillCreateIp(), 'time_start' => $this->getTimeStart(), 'time_expire' => $this->getTimeExpire(), 'goods_tag' => $this->getGoodsTag(), 'notify_url' => $this->getNotifyUrl(), 'trade_type' => $this->getTradeType(), 'limit_pay' => $this->getLimitPay(), 'openid' => $this->getOpenId(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-
-        $data['sign'] = Helper::sign($data, $this->getApiKey());
-
+        $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         return $data;
     }
-
-
     /**
      * @return mixed
      */
@@ -78,8 +38,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('trade_type');
     }
-
-
     /**
      * @return mixed
      */
@@ -87,8 +45,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('device_Info');
     }
-
-
     /**
      * @return mixed
      */
@@ -96,8 +52,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('body');
     }
-
-
     /**
      * @return mixed
      */
@@ -105,8 +59,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('detail');
     }
-
-
     /**
      * @return mixed
      */
@@ -114,8 +66,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('attach');
     }
-
-
     /**
      * @return mixed
      */
@@ -123,8 +73,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('out_trade_no');
     }
-
-
     /**
      * @return mixed
      */
@@ -132,8 +80,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('fee_type');
     }
-
-
     /**
      * @return mixed
      */
@@ -141,8 +87,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('total_fee');
     }
-
-
     /**
      * @return mixed
      */
@@ -150,8 +94,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('spbill_create_ip');
     }
-
-
     /**
      * @return mixed
      */
@@ -159,8 +101,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('time_start');
     }
-
-
     /**
      * @return mixed
      */
@@ -168,8 +108,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('time_expire');
     }
-
-
     /**
      * @return mixed
      */
@@ -177,8 +115,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('goods_tag');
     }
-
-
     /**
      * @return mixed
      */
@@ -186,8 +122,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('notify_url');
     }
-
-
     /**
      * @return mixed
      */
@@ -195,8 +129,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('limit_pay');
     }
-
-
     /**
      * @return mixed
      */
@@ -204,8 +136,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         return $this->getParameter('open_id');
     }
-
-
     /**
      * @param mixed $deviceInfo
      */
@@ -213,8 +143,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('device_Info', $deviceInfo);
     }
-
-
     /**
      * @param mixed $body
      */
@@ -222,8 +150,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('body', $body);
     }
-
-
     /**
      * @param mixed $detail
      */
@@ -231,8 +157,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('detail', $detail);
     }
-
-
     /**
      * @param mixed $attach
      */
@@ -240,8 +164,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('attach', $attach);
     }
-
-
     /**
      * @param mixed $outTradeNo
      */
@@ -249,8 +171,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('out_trade_no', $outTradeNo);
     }
-
-
     /**
      * @param mixed $feeType
      */
@@ -258,8 +178,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('fee_type', $feeType);
     }
-
-
     /**
      * @param mixed $totalFee
      */
@@ -267,8 +185,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('total_fee', $totalFee);
     }
-
-
     /**
      * @param mixed $spbillCreateIp
      */
@@ -276,8 +192,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('spbill_create_ip', $spbillCreateIp);
     }
-
-
     /**
      * @param mixed $timeStart
      */
@@ -285,8 +199,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('time_start', $timeStart);
     }
-
-
     /**
      * @param mixed $timeExpire
      */
@@ -294,8 +206,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('time_expire', $timeExpire);
     }
-
-
     /**
      * @param mixed $goodsTag
      */
@@ -303,14 +213,10 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('goods_tag', $goodsTag);
     }
-
-
     public function setNotifyUrl($notifyUrl)
     {
         $this->setParameter('notify_url', $notifyUrl);
     }
-
-
     /**
      * @param mixed $tradeType
      */
@@ -318,8 +224,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('trade_type', $tradeType);
     }
-
-
     /**
      * @param mixed $limitPay
      */
@@ -327,8 +231,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('limit_pay', $limitPay);
     }
-
-
     /**
      * @param mixed $openId
      */
@@ -336,8 +238,6 @@ class CreateOrderRequest extends BaseAbstractRequest
     {
         $this->setParameter('open_id', $openId);
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -347,10 +247,9 @@ class CreateOrderRequest extends BaseAbstractRequest
      */
     public function sendData($data)
     {
-        $request      = $this->httpClient->post($this->endpoint)->setBody(Helper::array2xml($data));
-        $response     = $request->send()->getBody();
-        $responseData = Helper::xml2array($response);
-
-        return $this->response = new CreateOrderResponse($this, $responseData);
+        $request = $this->httpClient->post($this->endpoint)->setBody(\Omnipay\WechatPay\Helper::array2xml($data));
+        $response = $request->send()->getBody();
+        $responseData = \Omnipay\WechatPay\Helper::xml2array($response);
+        return $this->response = new \Omnipay\WechatPay\Message\CreateOrderResponse($this, $responseData);
     }
 }
