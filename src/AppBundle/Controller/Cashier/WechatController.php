@@ -43,18 +43,16 @@ class WechatController extends PaymentController
         ));
     }
 
-    public function mobilePayAction($trade)
+    public function mobilePayAction(Request $request, $trade)
     {
-        if (!$this->isMicroMessenger()) {
-            return $this->forward('AppBundle:Cashier/Wechat:pcPay', array(
-                'trade' => $trade
-            ));
-        }
-
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
+        }
+
+        if ($tradeSn = $request->query->get('tradeSn')) {
+            $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
         }
 
         $biz = $this->getBiz();
@@ -67,7 +65,7 @@ class WechatController extends PaymentController
             'account' => $options['mch_id'],
             'key' => $options['key'],
             'secret' => $options['secret'],
-            'redirect_uri' => $this->generateUrl('cashier_wechat_mobile_pay', array(), true),
+            'redirect_uri' => $this->generateUrl('cashier_wechat_mobile_pay', array('tradeSn' => $trade['sn']), true),
             'isMicroMessenger' => true,
         ), $request);
 
