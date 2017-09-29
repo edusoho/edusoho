@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Omnipay\WechatPay\Helper;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\MathToolkit;
@@ -19,7 +18,7 @@ class WechatController extends PaymentController
         if ($result['status'] == 'paid') {
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn']))
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
             ));
         }
 
@@ -27,7 +26,7 @@ class WechatController extends PaymentController
             return $this->createJsonResponse(array(
                 'isPaid' => 0,
                 'showQrcode' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_wechat_qrcode', array('tradeSn' => $result['trade_sn']))
+                'redirectUrl' => $this->generateUrl('cashier_wechat_qrcode', array('tradeSn' => $result['trade_sn'])),
             ));
         }
 
@@ -38,8 +37,9 @@ class WechatController extends PaymentController
     {
         $tradeSn = $request->query->get('tradeSn');
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
         return $this->render('cashier/wechat/qrcode.html.twig', array(
-            'trade' => $trade
+            'trade' => $trade,
         ));
     }
 
@@ -119,11 +119,11 @@ class WechatController extends PaymentController
 
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn))
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
             ));
         } else {
             return $this->createJsonResponse(array(
-                'isPaid' => 0
+                'isPaid' => 0,
             ));
         }
     }
