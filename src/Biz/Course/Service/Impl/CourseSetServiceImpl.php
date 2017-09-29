@@ -804,6 +804,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
             $this->commit();
 
+            $this->getLogService()->info(
+                'course',
+                'unlock_course',
+                "解除班级课程同步《{$courseSet['title']}》(#{$courseSet['id']})"
+            );
+
             return $courseSet;
         } catch (\Exception $exception) {
             $this->rollback();
