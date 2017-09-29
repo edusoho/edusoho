@@ -776,8 +776,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        if(empty($member)) {
+            return;
+        }
 
-        if (empty($member) || ($member['role'] != 'student')) {
+        if ($member['role'] != 'student') {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，封锁学员失败。");
         }
 
