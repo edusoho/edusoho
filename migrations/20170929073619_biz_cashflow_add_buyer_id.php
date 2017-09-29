@@ -15,7 +15,6 @@ class BizCashflowAddBuyerId extends Migration
         if (!$this->isFieldExist('biz_user_cashflow', 'buyer_id')) {
             $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `buyer_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家'");
         }
-
     }
 
     /**
