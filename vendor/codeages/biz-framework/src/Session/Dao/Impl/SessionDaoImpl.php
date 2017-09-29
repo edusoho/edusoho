@@ -54,7 +54,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
     protected function isTableExist($table)
     {
         $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
+        $result = $this->db()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 }
