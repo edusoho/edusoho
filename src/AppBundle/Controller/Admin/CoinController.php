@@ -533,17 +533,15 @@ class CoinController extends BaseController
     public function cashBillAction(Request $request)
     {
         $account = $this->getAccountService()->getUserBalanceByUserId(0);
-        $conditions = array(
-            'user_type' => 'seller',
-            'amount_type' => 'money',
-            'timeType' => $request->get('lastHowManyMonths'),
-            'user_id' => 0,
-        );
 
-        $nickname = $request->get('nickname');
-        if (!empty($nickname)) {
-            $user = $this->getUserService()->getUserByNickname($nickname);
-            $conditions['user_id'] = empty($user) ? -1 : $user['id'];
+        $conditions = $this->buildConditions($request->query->all());
+        $conditions['amount_type'] = 'money';
+        $conditions['user_id'] = 0;
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['buyer_id'] = empty($user) ? -1 : $user['id'];
+            unset($conditions['nickname']);
         }
 
         $paginator = new Paginator(
@@ -563,10 +561,7 @@ class CoinController extends BaseController
             $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
         }
         list($users, $orders) = $this->getBuyersByCashFlows($cashes);
-
-        $conditions['type'] = 'outflow';
-        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-
+        list($amountInflow, $amountOutflow) = $this->getInflowAndOutflow($conditions);
         return $this->render('admin/bill/cash.html.twig', array(
             'cashes' => $cashes,
             'paginator' => $paginator,
@@ -575,7 +570,18 @@ class CoinController extends BaseController
             'cashType' => 'RMB',
             'account' => $account,
             'amountOutflow' => $amountOutflow,
+            'amountInflow' => $amountInflow,
         ));
+    }
+
+    private function getInflowAndOutflow($conditions)
+    {
+        $conditions['type'] = 'outflow';
+        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
+        $conditions['type'] = 'inflow';
+        $amountInflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
+
+        return array($amountInflow, $amountOutflow);
     }
 
     protected function getBuyersByCashFlows($cashFlows)
@@ -584,7 +590,7 @@ class CoinController extends BaseController
         $orders = $this->getOrderService()->findOrdersBySns($orderSns);
 
         $orders = ArrayToolkit::index($orders, 'sn');
-        $userIds = ArrayToolkit::column($orders, 'user_id');
+        $userIds = ArrayToolkit::column($orders, 'buyer_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return array($users, $orders);
@@ -788,6 +794,26 @@ class CoinController extends BaseController
             $conditions['timeType'] = $conditions['createdTime'];
 
             unset($conditions['createdTime']);
+        }
+
+        return $conditions;
+    }
+
+    private function buildConditions($conditions)
+    {
+        if (!empty($conditions['startTime'])) {
+            $conditions['created_time_GTE'] = strtotime($conditions['startTime']);
+            unset($conditions['startTime']);
+        }
+        if (!empty($conditions['endTime'])) {
+            $conditions['created_time_LT'] = strtotime($conditions['endTime']);
+            unset($conditions['endTime']);
+        }
+
+        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
         }
 
         return $conditions;
