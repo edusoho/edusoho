@@ -7,23 +7,30 @@ use Codeages\Biz\Framework\Session\Dao\SessionDao;
 
 class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 {
-    protected $table = 'sessions';
+    protected $table = 'biz_session';
+
+    protected $table2 = 'sessions';
 
     public function declares()
     {
         return array(
             'timestamps' => array('created_time', 'sess_time'),
             'orderbys' => array(),
-            'serializes' => array(
-            ),
-            'conditions' => array(
-            ),
+            'serializes' => array(),
+            'conditions' => array(),
         );
     }
 
+
     public function getBySessId($sessId)
     {
-        return $this->getByFields(array('sess_id' => $sessId));
+        $sql = "SELECT * FROM {$this->table} WHERE sess_id = ?  LIMIT 1";
+        $session = $this->db()->fetchAssoc($sql, array($sessId));
+        if (empty($session)) {
+            $sql = "SELECT * FROM {$this->table2} WHERE sess_id = ?  LIMIT 1";
+            $session = $this->db()->fetchAssoc($sql, array($sessId));
+        }
+        return $session;
     }
 
     public function deleteBySessId($sessId)
