@@ -6,10 +6,8 @@
 [![Latest Stable Version](https://poser.pugx.org/lokielse/omnipay-wechatpay/version.png)](https://packagist.org/packages/lokielse/omnipay-wechatpay)
 [![Total Downloads](https://poser.pugx.org/lokielse/omnipay-wechatpay/d/total.png)](https://packagist.org/packages/lokielse/omnipay-wechatpay)
 
-> The WechatPay gateway can be accessed from outside of China
-
 [Omnipay](https://github.com/omnipay/omnipay) is a framework agnostic, multi-gateway payment
-processing library for PHP 5.3+. This package implements UnionPay support for Omnipay.
+processing library for PHP 5.3+. This package implements WechatPay support for Omnipay.
 
 ## Installation
 
@@ -32,13 +30,14 @@ The following gateways are provided by this package:
 * WechatPay_Native (Wechat Native Gateway) 微信原生扫码支付支付网关
 * WechatPay_Js (Wechat Js API/MP Gateway) 微信网页、公众号、小程序支付网关
 * WechatPay_Pos (Wechat Micro/POS Gateway) 微信刷卡支付网关
+* WechatPay_Mweb (Wechat H5 Gateway) 微信H5支付网关
 
 ## Usage
 
 ### Create Order [doc](https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1)
 
 ```php
-//gateways: WechatPay_App, WechatPay_Native, WechatPay_Js, WechatPay_Pos
+//gateways: WechatPay_App, WechatPay_Native, WechatPay_Js, WechatPay_Pos, WechatPay_Mweb
 $gateway    = Omnipay::create('WechatPay_App');
 $gateway->setAppId($config['app_id']);
 $gateway->setMchId($config['mch_id']);
@@ -80,7 +79,7 @@ $response = $gateway->completePurchase([
 
 if ($response->isPaid()) {
     //pay success
-    var_dump($response->getData());
+    var_dump($response->getRequestData());
 }else{
     //pay fail
 }

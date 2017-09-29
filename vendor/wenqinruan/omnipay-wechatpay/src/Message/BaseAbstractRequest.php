@@ -3,14 +3,12 @@
 namespace Omnipay\WechatPay\Message;
 
 use Omnipay\Common\Message\AbstractRequest;
-
 /**
  * Class BaseAbstractRequest
  * @package Omnipay\WechatPay\Message
  */
-abstract class BaseAbstractRequest extends AbstractRequest
+abstract class BaseAbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
-
     /**
      * @return mixed
      */
@@ -18,8 +16,6 @@ abstract class BaseAbstractRequest extends AbstractRequest
     {
         return $this->getParameter('app_id');
     }
-
-
     /**
      * @param mixed $appId
      */
@@ -27,8 +23,6 @@ abstract class BaseAbstractRequest extends AbstractRequest
     {
         $this->setParameter('app_id', $appId);
     }
-
-
     /**
      * @return mixed
      */
@@ -36,8 +30,6 @@ abstract class BaseAbstractRequest extends AbstractRequest
     {
         return $this->getParameter('api_key');
     }
-
-
     /**
      * @param mixed $apiKey
      */
@@ -45,8 +37,6 @@ abstract class BaseAbstractRequest extends AbstractRequest
     {
         $this->setParameter('api_key', $apiKey);
     }
-
-
     /**
      * @return mixed
      */
@@ -54,8 +44,6 @@ abstract class BaseAbstractRequest extends AbstractRequest
     {
         return $this->getParameter('mch_id');
     }
-
-
     /**
      * @param mixed $mchId
      */

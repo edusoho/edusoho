@@ -3,17 +3,20 @@
 namespace Omnipay\WechatPay;
 
 /**
- * Class AppGateway
+ * Class MwebGateway
  * @package Omnipay\WechatPay
  */
-class AppGateway extends \Omnipay\WechatPay\BaseAbstractGateway
+class MwebGateway extends BaseAbstractGateway
 {
+
     public function getName()
     {
-        return 'WechatPay App';
+        return 'WechatPay Mweb';
     }
+
+
     public function getTradeType()
     {
-        return 'APP';
+        return 'MWEB';
     }
 }
