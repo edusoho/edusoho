@@ -7,9 +7,9 @@ use Codeages\Biz\Framework\Session\Dao\SessionDao;
 
 class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 {
-    protected $table = 'sessions';
+    protected $table = 'biz_session';
 
-    protected $table2 = 'biz_session';
+    protected $table2 = 'sessions';
 
     public function declares()
     {
@@ -24,8 +24,12 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 
     public function getBySessId($sessId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE sess_id = ?  LIMIT 1";
-        $session = $this->db()->fetchAssoc($sql, array($sessId));
+        $session = null;
+        if ($this->isTableExist($this->table)) {
+            $sql = "SELECT * FROM {$this->table} WHERE sess_id = ?  LIMIT 1";
+            $session = $this->db()->fetchAssoc($sql, array($sessId));
+        }
+
         if (empty($session)) {
             $sql = "SELECT * FROM {$this->table2} WHERE sess_id = ?  LIMIT 1";
             $session = $this->db()->fetchAssoc($sql, array($sessId));
@@ -45,5 +49,12 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
         $sql = "DELETE FROM {$this->table} WHERE sess_deadline < ?";
 
         return $this->db()->executeUpdate($sql, array($sessDeadline));
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 }
