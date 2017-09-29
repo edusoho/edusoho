@@ -27,7 +27,7 @@ class OrderEventSubscriber extends EventSubscriber
     public function onOrderApplyRefund(Event $event)
     {
         $order = $event->getSubject();
-        $
+//        $
     }
 
     private function inviteReward($order)
