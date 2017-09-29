@@ -118,8 +118,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                     'mch_id' => $paymentSetting['wxpay_account'],
                     'key' => $paymentSetting['wxpay_key'],
                     'secret' => $paymentSetting['wxpay_secret'],
-                    'cert_path' => '',
-                    'key_path' => '',
+                    'cert_path' => '/Users/fengni/edusoho/www/ssl/cert/apiclient_cert.pem',
+                    'key_path' => '/Users/fengni/edusoho/www/ssl/cert/apiclient_key.pem',
                 );
             }
 
