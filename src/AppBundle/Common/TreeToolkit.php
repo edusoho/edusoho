@@ -5,64 +5,49 @@ namespace AppBundle\Common;
 class TreeToolkit
 {
     /**
-     * @param array $flat
-     * @param $sortKey
-     * @param int    $parentId
-     * @param string $parentKey
+     * [maketree description].
      *
-     * @return array
+     * @param array    $data     需要排序的数组,本身要支持层级关系
+     * @param [string] $parentId
+     * @param string   $sort     排序的字段
+     *
+     * @return [array] tree data
      */
-    public static function makeTree(array $flat, $parentId = 0, $parentKey = 'parentId')
+    public static function makeTree(array $data, $sort, $parentId = 0)
     {
-        $tree = self::makeParentTree($flat, $parentId, $parentKey);
+        $tree = self::makeParentTree($data, $sort, $parentId);
 
         foreach ($tree as $key => $value) {
-            $tree[$key]['children'] = self::maketree($flat, $value['id'], $parentKey);
+            $tree[$key]['children'] = self::maketree($data, $sort, $value['id']);
         }
 
         return $tree;
     }
 
-    public static function makeSortTree(array $flat, $parentId = 0, $parentKey = 'parentId', $sortKey)
-    {
-        if (empty($sortKey)) {
-            throw new \Exception('sort key can not be empty');
-        }
-
-        $tree = self::makeParentTree($flat, $parentId, $parentKey, $sortKey);
-
-        foreach ($tree as $key => $value) {
-            $tree[$key]['children'] = self::makeSortTree($flat, $value['id'], $parentKey, $sortKey);
-        }
-
-        return $tree;
-    }
-
-    private static function makeParentTree(array $flat, $parentId, $parentKey, $sortKey = '')
+    private static function makeParentTree(array $data, $sort, $parentId)
     {
         $filtered = array();
 
         if (empty($parentId)) {
-            $parentId = self::generateParentId($flat, $parentKey);
+            $parentIds = self::generateParentId($data);
         }
 
-        foreach ($flat as $value) {
-            if ($value[$parentKey] == $parentId) {
+        foreach ($data as $value) {
+            if ($value['parentId'] == $parentId) {
                 $filtered[] = $value;
             }
         }
 
-        if (!empty($sortKey)) {
-            $sortArray = ArrayToolkit::column($filtered, $sortKey);
-            array_multisort($sortArray, $filtered);
-        }
+        $sortArray = ArrayToolkit::column($filtered, $sort);
+
+        array_multisort($sortArray, $filtered);
 
         return $filtered;
     }
 
-    private static function generateParentId($flat, $parentKey)
+    private static function generateParentId($data)
     {
-        $parentIds = ArrayToolkit::column($flat, $parentKey);
+        $parentIds = ArrayToolkit::column($data, 'parentId');
         sort($parentIds);
 
         return array_shift($parentIds);
