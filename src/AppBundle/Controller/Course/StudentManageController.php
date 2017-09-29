@@ -13,13 +13,14 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -162,24 +163,7 @@ class StudentManageController extends BaseController
     public function removeCourseStudentAction($courseSetId, $courseId, $userId)
     {
         $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $user = $this->getCurrentUser();
 
-        $condition = array(
-            'targetType' => 'course',
-            'targetId' => $courseId,
-            'userId' => $userId,
-            'status' => 'paid',
-        );
-        $orders = $this->getOrderService()->searchOrders($condition, array('createdTime' => 'DESC'), 0, 1);
-        if (!empty($orders)) {
-            $order = array_shift($orders);
-            $reason = array(
-                'type' => 'other',
-                'note' => '"'.$user['nickname'].'"'.' 手动移除',
-                'operator' => $user['id'],
-            );
-            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
-        }
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
 
         return $this->createJsonResponse(array('success' => true));
@@ -777,6 +761,9 @@ class StudentManageController extends BaseController
         return $this->createService('Course:LearningDataAnalysisService');
     }
 
+    /**
+     * @return MemberOperationService
+     */
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');

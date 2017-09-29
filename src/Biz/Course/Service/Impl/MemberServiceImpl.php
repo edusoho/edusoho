@@ -8,7 +8,6 @@ use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
-use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
@@ -20,6 +19,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -130,7 +130,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($member['role'] !== 'student') {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
-        $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student');
+
+        $data = $this->getRemoveData('course', $courseId, $userId);
+
+        $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student', $data);
 
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -155,6 +158,28 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $result;
+    }
+
+    protected function getRemoveData($targetType, $targetId, $userId)
+    {
+        $condition = array(
+            'order_item_target_type' => $targetType,
+            'order_item_target_id' => $targetId,
+            'user_id' => $userId,
+            'status' => 'success',
+        );
+
+        $orders = $this->getOrderService()->searchOrders($condition, array('created_time' => 'DESC'), 0, 1);
+
+        $data = array();
+        if (!empty($orders)) {
+            $order = array_shift($orders);
+            $data = array(
+                'order' => $order,
+            );
+        }
+
+        return $data;
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
