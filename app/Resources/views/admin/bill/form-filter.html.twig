@@ -11,7 +11,7 @@
   </div>
   <div class="form-group">
     <select class="form-control" name="keywordType">
-      {% set options = {'': '--选择类型--', 'nickname': '用户名','sn': '流水号','order_sn': '订单号','title': '名称','trade_sn': '支付平台流水号','payment': '支付方式'} %}
+      {% set options = {'': '--选择类型--', 'buyerNickname': '用户名','sn': '流水号','order_sn': '订单号','title': '名称','trade_sn': '支付平台流水号'} %}
       {{ select_options(options, app.request.query.get('keywordType')) }}
     </select>
   </div>
@@ -20,10 +20,15 @@
 </div>
 <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
 
-<a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+{% include 'export/export-btn.html.twig' with 
+  {'exportFileName': 'bill-cash-flow', 
+  'targetFormId': 'user-search-form'} 
+%}
+
+{# <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
 lastHowManyMonths:app.request.get('lastHowManyMonths'),
 cashType:cashType,
 nickname:app.request.query.get('nickname'),
-})}}">{{ 'form.btn.export_result'|trans }}</a>
+})}}">{{ 'form.btn.export_result'|trans }}</a> #}
 
 </form>

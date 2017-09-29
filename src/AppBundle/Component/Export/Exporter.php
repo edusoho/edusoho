@@ -22,14 +22,19 @@ abstract class Exporter implements ExporterInterface
         $this->conditions = $this->buildCondition($conditions);
     }
 
+    //定义标题
     abstract public function getTitles();
 
+    //获得内容
     abstract public function getContent($start, $limit);
 
+    //权限判断
     abstract public function canExport();
 
+    //获得总数
     abstract public function getCount();
 
+    //构建查询
     abstract public function buildCondition($conditions);
 
     public function export($name = '')

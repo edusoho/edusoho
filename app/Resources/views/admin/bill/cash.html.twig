@@ -7,39 +7,29 @@
 {% block main %}
     {% include 'admin/bill/form-filter.html.twig' %}
     <p class="text-muted">
-      <span class="mrl">{{ 'finance.balance'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01)|price_format }}</strong></span>
-      <span class="mrl">{{ '收入'|trans }}：<strong class="inflow-num">{{ math_format(amountInflow, 0.01)|price_format }}</strong></span>
-      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ math_format(amountOutflow, 0.01)|price_format }}</strong></span>
+      <span class="mrl">{{ 'finance.balance'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01) }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ '收入'|trans }}：<strong class="inflow-num">{{ amountInflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ amountOutflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
     </p>
 
     <div class="table-responsive">
       <table class="table table-striped">
-        <tr class="text-sm">
-          <th>{{ 'order.sn'|trans }}</th>
-          <th>{{ 'name'|trans }}</th>  
-          <th>{{ 'user.fields.username_label'|trans }}</th>             
-          <th>{{ '成交时间'|trans }}</th>
-          <th class="text-right prl"><span>{{ '金额'|trans }}</th>
-          <th>{{ 'order.payment_pattern'|trans }}</th>
-          <th>{{ '支付平台流水号'|trans }}</th>
-        </tr>
+          {% include 'admin/bill/table-header.html.twig' %}
          {% if cashes %}
           {% for cash in cashes %}
-            {% if cash['order_sn']|default(false) %}
-                {% set order = orders[cash['order_sn']] %}
-            {% endif %}
+          {% set user = users[cash['buyer_id']]|default() %}
             <tr class="text-sm">
               <td><span >{{ cash.sn }}</span></td>
               <td><span>{{ cash.title }}</span><br>
-                  {% if order|default(false) %}
+                  {% if cash.order_sn %}
                     <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn }}</span></td>
                   {% else %}
                       <span class="text-muted">{{ 'order.id'|trans }}：--</span></td>
                   {% endif %}
               <td>
-                  {% if order|default(false) %}
-                    <span><a href="{{ path('user_show', {id:cash.buyer_id}) }}">
-                    {{ users[order.buyer_id].nickname }}</a></span>
+                  {% if user %}
+                    <span><a href="{{ path('user_show', {id: user.id}) }}">
+                    {{ user.nickname }}</a></span>
                   {% else %}
                       --
                   {% endif %}
@@ -50,8 +40,7 @@
               </td>
               <td>
                 <span>
-                  {% if cash.type =="inflow" %}
-                    {#platform 字典#}
+                  {% if cash.type == "inflow" %}
                     {{ dict_text('payment', cash.platform) }}
                   {% else %}
                     {{ 'order.payment_pattern.school'|trans }}
@@ -62,7 +51,7 @@
             </tr>
           {% endfor %}
         {% else %}
-            <th colspan="6"><div class="empty">{{ 'site.datagrid.empty'|trans }}</div></th>
+            <th colspan="10"><div class="empty">{{ 'site.datagrid.empty'|trans }}</div></th>
         {% endif %}
       </table>
     </div>
