@@ -43,7 +43,7 @@ class WechatController extends PaymentController
         ));
     }
 
-    public function mobilePayAction(Request $request, $trade)
+    public function mobilePayAction($trade)
     {
         $user = $this->getUser();
 
@@ -51,6 +51,7 @@ class WechatController extends PaymentController
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
+        $request = $this->get('request_stack')->getMasterRequest();
         if ($tradeSn = $request->query->get('tradeSn')) {
             $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
         }
