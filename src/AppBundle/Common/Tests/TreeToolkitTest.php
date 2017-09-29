@@ -8,13 +8,11 @@
 
 namespace AppBundle\Common\Tests;
 
-
 use AppBundle\Common\TreeToolkit;
 use Biz\BaseTestCase;
 
 class TreeToolkitTest extends BaseTestCase
 {
-
     public function testMakeTree()
     {
         $trees = TreeToolkit::makeTree($this->mockArray(), 0, 'parentID');
@@ -23,7 +21,6 @@ class TreeToolkitTest extends BaseTestCase
         $this->assertEquals(1, count($rootTree['children']));
         $this->assertEquals(100, $rootTree['id']);
     }
-
 
     public function testMakeSortTree()
     {
@@ -35,14 +32,13 @@ class TreeToolkitTest extends BaseTestCase
         var_dump(json_encode($trees));
     }
 
-
     protected function mockArray()
     {
         return array(
             array('id' => 100, 'parentID' => 0, 'name' => 'a'),
             array('id' => 101, 'parentID' => 100, 'name' => 'a'),
             array('id' => 102, 'parentID' => 101, 'name' => 'a'),
-            array('id' => 103, 'parentID' => 101, 'name' => 'a')
+            array('id' => 103, 'parentID' => 101, 'name' => 'a'),
         );
     }
 
@@ -54,8 +50,7 @@ class TreeToolkitTest extends BaseTestCase
             array('id' => 101, 'parentID' => 100, 'name' => 'a', 'seq' => 5),
             array('id' => 102, 'parentID' => 101, 'name' => 'a', 'seq' => '2'),
             array('id' => 103, 'parentID' => 101, 'name' => 'a', 'seq' => '3'),
-            array('id' => 103, 'parentID' => 101, 'name' => 'a', 'seq' => '1')
+            array('id' => 103, 'parentID' => 101, 'name' => 'a', 'seq' => '1'),
         );
     }
-
 }

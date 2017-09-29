@@ -4,13 +4,12 @@ namespace AppBundle\Common;
 
 class TreeToolkit
 {
-
     /**
-     *
      * @param array $flat
      * @param $sortKey
-     * @param int $parentId
+     * @param int    $parentId
      * @param string $parentKey
+     *
      * @return array
      */
     public static function makeTree(array $flat, $parentId = 0, $parentKey = 'parentId')
@@ -30,7 +29,7 @@ class TreeToolkit
             throw new \Exception('sort key can not be empty');
         }
 
-        $tree = self::makeParentTree($flat, $parentId, $parentKey ,$sortKey);
+        $tree = self::makeParentTree($flat, $parentId, $parentKey, $sortKey);
 
         foreach ($tree as $key => $value) {
             $tree[$key]['children'] = self::makeSortTree($flat, $value['id'], $parentKey, $sortKey);
