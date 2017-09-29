@@ -1,4 +1,4 @@
-import Coin from './coin';
+import Coin from 'app/js/cashier/coin';
 import notify from 'common/notify';
 
 class CashierForm {
@@ -30,20 +30,23 @@ class CashierForm {
 
   }
 
-
   initEvent() {
-
-
     // 支付方式切换
-    this.$container.on('click', '.check', function () {
-      let $this = $(this);
+    this.$container.on('click', '.check', event => {
+      let $this = $(event.currentTarget);
       if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
         $this.addClass('active').siblings().removeClass('active');
         $("input[name='payment']").val($this.attr("id"));
       }
-
     });
 
+    let $form = this.$container;
+    $form.on('click', '.js-pay-btn', event => {
+      if ($form.valid()) {
+        $form.submit();
+      }
+
+    });
   }
 }
 
