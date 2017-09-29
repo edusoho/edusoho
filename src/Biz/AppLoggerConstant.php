@@ -187,7 +187,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'sync_when_task_update',
                 'sync_when_task_delete',
                 'clone_course_set',
-                'unlock_course'
+                'unlock_course',
             ),
 
             self::USER => array(
