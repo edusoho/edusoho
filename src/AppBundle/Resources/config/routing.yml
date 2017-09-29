@@ -1003,14 +1003,22 @@ cashier_show:
     path:   /cashier/standard
     defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
+cashier_confirm_modal:
+    path:   /cashier/confirm_modal
+    defaults: { _controller: AppBundle:Cashier/Cashier:confirmModal }
+
+cashier_order_is_paid_check:
+    path:   /cashier/order/is_paid_check
+    defaults: { _controller: AppBundle:Cashier/Cashier:isPaidCheck }
+
 cashier_pay:
     path:   /cashier/pay
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
-cashier_wechat_h5_pay:
+cashier_wechat_mobile_pay:
     path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:Cashier/Wechat:h5 }
+    defaults: { _controller: AppBundle:Cashier/Wechat:mobilePay }
 
 cashier_password_check:
     path:  /cashier/password/check
@@ -1041,6 +1049,10 @@ cashier_pay_return_for_app:
 cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Wechat:roll }
+
+cashier_wechat_qrcode:
+    path:   /cashier/wechat/qrcode
+    defaults: { _controller: AppBundle:Cashier/Wechat:qrcode }
 
 cashier_wechat_h5_return:
     path:   /cashier/wechat/h5_return

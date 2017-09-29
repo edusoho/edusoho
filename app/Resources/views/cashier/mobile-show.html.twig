@@ -1,6 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block title %} {{ 'pay_center'|trans }} - {{ parent() }}{% endblock %}
-{% do script(['app/js/pay/select/index.js']) %}
+
+{% do script(['libs/jquery-validation.js' ,'app/js/cashier/mobile/index.js']) %}
 
 {% block esBar %}
 {% endblock %}
@@ -9,11 +10,7 @@
   <div class="order-pay">
 
     <div class="es-section">
-      <ul class="es-step es-step-3 clearfix">
-        <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>{{ 'pay_center.confirm'|trans }}</li>
-        <li class="doing"><span class="number">2</span>{{ 'pay_center.pay'|trans }}</li>
-        <li><span class="number">3</span>{{ 'pay_center.finish'|trans }}</li>
-      </ul>
+      {% include 'order/order-step-status.html.twig' with {step: 2} %}
       <div class="order-pay-body">
         <div class="alert alert-success alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -38,7 +35,7 @@
           <div class="piece-header">{{ 'pay_center.pay.submit_tips'|trans }}</div>
         </div>
 
-        <form class="form-paytype" method="post" action="{{ path('pay_center_pay') }}">
+        <form class="form-paytype" id="cashier-form" method="post" action="{{ path('cashier_pay') }}" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
 
           <input type="hidden" name="sn" value="{{ order.sn }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -59,14 +56,16 @@
             {% endfor %}
           </div>
 
+          {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
+
           <div class="form-group">
             <div class="total-price">
               {{ 'order.confirm.pay_rmb'|trans }}
-              <span role="pay-rmb" class="pay-rmb">{{ order.pay_amount|price_format }}</span>
+              <span class="js-pay-price pay-rmb">{{ order.pay_amount|major_currency }}</span>
             </div>
           </div>
           <div class="form-group text-right">
-            <button class="pay-button btn btn-primary" {% if payments %} type="submit" {% else %} disabled="disabled" {% endif %} >{{ 'pay_center.pay.confirm_pay_btn'|trans }}</button>
+            <a class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" data-url="{{ path('cashier_confirm_modal', {orderSn:order.sn}) }}">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</a>
           </div>
 
         </form>

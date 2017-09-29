@@ -793,3 +793,6 @@ progress.copy_course_set.message: Copy done!
 
 confirm.warn: 警告
 confirm.exit.tip: 您确定要退出学习吗？
+
+cashier.confirm.fail_message: Payment unsuccessful, please check or repay
+cashier.pay.error_message: Payment has been abnormal, please contact the administrator
