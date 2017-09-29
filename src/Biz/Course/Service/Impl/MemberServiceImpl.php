@@ -776,7 +776,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-        if(empty($member)) {
+        if (empty($member)) {
             return;
         }
 
