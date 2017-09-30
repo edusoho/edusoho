@@ -1,6 +1,5 @@
-import Coin from 'app/js/cashier/coin';
-import notify from 'common/notify';
-import PaySDK from 'app/js/cashier/pay/sdk';
+import Coin from './coin';
+import PaySDK from './pay/sdk';
 
 class CashierForm {
 
@@ -46,30 +45,27 @@ class CashierForm {
     let $form = this.$container;
     let self = this;
     $form.on('click', '.js-pay-btn', event => {
-      self.paySdk.pay();
-      // if ($form.valid()) {
-      //
-      //   let $modal = $('#modal');
-      //   $.post($form.attr('action'), $form.serialize(), resp => {
-      //     $modal.html('');
-      //     if (resp.showQrcode) {
-      //       $modal.load(resp.redirectUrl).modal('show');
-      //
-      //     } else if (resp.isPaid) {
-      //       location.href = resp.redirectUrl;
-      //     } else {
-      //       //display modal
-      //       let url = $form.find('.js-pay-btn').data('url');
-      //       $modal.load(url).modal('show');
-      //       window.open(resp.redirectUrl);
-      //     }
-      //
-      //   }).fail(resp => {
-      //     notify('danger', Translator.trans('cashier.pay.error_message'));
-      //   });
-      // }
+
+      if ($form.valid()) {
+
+        let params = self.formDataToObject($form);
+
+        params.payAmount = self.$container.find('.js-pay-price').text();
+        self.paySdk.pay(params);
+      }
 
     });
+  }
+
+  formDataToObject($form) {
+
+    let params = {},
+      formArr = $form.serializeArray();
+    for (let index in formArr) {
+      params[formArr[index].name] = formArr[index].value;
+    }
+
+    return params;
   }
 }
 

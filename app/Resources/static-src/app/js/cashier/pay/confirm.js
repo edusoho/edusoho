@@ -35,7 +35,7 @@ class ConfirmModal {
       </div>
     `;
 
-    if (this.$container.find('#cashier-confirm-modal').length === 0) {
+    if (this.$container.find('#'+this.modalID).length === 0) {
       this.$container.append(template);
     }
 

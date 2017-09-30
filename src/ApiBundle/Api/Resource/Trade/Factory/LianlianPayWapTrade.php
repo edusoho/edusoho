@@ -1,8 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Cashier\Trade;
-
-use ApiBundle\Api\Resource\Cashier\BaseTrade;
+namespace ApiBundle\Api\Resource\Trade\Factory;
 
 class LianlianPayWapTrade extends BaseTrade
 {

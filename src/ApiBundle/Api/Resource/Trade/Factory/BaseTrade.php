@@ -1,13 +1,12 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Cashier;
+namespace ApiBundle\Api\Resource\Trade\Factory;
 
 use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
 
@@ -51,18 +50,17 @@ abstract class BaseTrade
             'user_id' => $params['userId'],
             'create_ip' => $params['clientIp'],
             'attach' => array(
-                'user_id' => $params['user_id'],
+                'user_id' => $params['userId'],
             ),
             'platform' => $this->payment,
             'platform_type' => $this->platformType,
             'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => $this->payment), true)
         );
 
-
-
-        if ($params['type'] == '' && !empty($params['orderSn'])) {
+        if ($params['type'] == 'purchase' && !empty($params['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
             $tradeFields['amount'] = $order['pay_amount'];
+            $tradeFields['order_sn'] = $order['sn'];
             $coinAmount = isset($params['coinAmount']) ? $params['coinAmount'] : 0;
             $tradeFields['coin_amount'] = MathToolkit::simple($coinAmount, 100);
             $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount);
@@ -84,6 +82,11 @@ abstract class BaseTrade
 
 
     public function getCustomFields($params)
+    {
+        return array();
+    }
+
+    public function createResponse($trade)
     {
         return array();
     }

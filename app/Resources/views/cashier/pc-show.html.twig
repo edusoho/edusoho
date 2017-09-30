@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block title %} {{ 'pay_center'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/jquery-validation.js' ,'app/js/cashier/pc/index.js']) %}
+{% do script(['libs/jquery-validation.js' ,'app/js/cashier/index.js']) %}
 
 {% block esBar %}
 {% endblock %}
@@ -37,8 +37,11 @@
 
         <form class="form-paytype" id="cashier-form" method="post" action="{{ path('cashier_pay') }}" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
 
-          <input type="hidden" name="sn" value="{{ order.sn }}"/>
+          <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
+          <input type="hidden" name="isWechat" value="{{ is_micro_messenger() }}">
+          <input type="hidden" name="type" value="purchase">
 
           <div class="form-group order-detail-bg">
             {% for type,payment in payments %}

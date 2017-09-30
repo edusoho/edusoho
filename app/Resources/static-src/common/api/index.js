@@ -17,7 +17,7 @@
 
 import courseModule from './modules/course';
 import classroomModule from './modules/classroom';
-import cashierTradeModule from './modules/cashier_trade';
+import tradeModule from './modules/trade';
 
 const API_URL_PREFIX = '/api';
 
@@ -26,7 +26,7 @@ const Api = {
   course: courseModule(API_URL_PREFIX),
   // 班级模块
   classroom: classroomModule(API_URL_PREFIX),
-  cashier_trade: cashierTradeModule(API_URL_PREFIX),
+  trade: tradeModule(API_URL_PREFIX),
 };
 
 export default Api;

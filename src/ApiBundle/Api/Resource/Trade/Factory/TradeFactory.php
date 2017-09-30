@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Cashier\Trade;
+namespace ApiBundle\Api\Resource\Trade\Factory;
 
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 

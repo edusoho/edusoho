@@ -1,21 +1,26 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Cashier;
+namespace ApiBundle\Api\Resource\Trade;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\Cashier\Trade\TradeFactory;
+use ApiBundle\Api\Resource\Trade\Factory\BaseTrade;
+use ApiBundle\Api\Resource\Trade\Factory\TradeFactory;
 use Biz\Cashier\Service\CashierService;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class CashierTrade extends AbstractResource
+class Trade extends AbstractResource
 {
     public function get(ApiRequest $request, $tradeSn)
     {
-        return $this->getPayService()->getTradeByTradeSn($tradeSn);
+        $result = $this->getPayService()->queryTradeFromPlatform($tradeSn);
+        return array(
+            'isPaid' => $result['trade_state'] === 'SUCCESS',
+            'successUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
+        );
     }
 
     public function add(ApiRequest $request)
@@ -40,7 +45,7 @@ class CashierTrade extends AbstractResource
             $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
         }
 
-        return $trade;
+        return $tradeIns->createResponse($trade);
     }
 
     /**
@@ -52,10 +57,11 @@ class CashierTrade extends AbstractResource
         $factory = new TradeFactory();
         $tradeIns = $factory->create($gateway);
         $tradeIns->setRouter($this->container->get('router'));
+        $tradeIns->setBiz($this->biz);
         return $tradeIns;
     }
 
-    private function fillParams($params)
+    private function fillParams(&$params)
     {
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
@@ -75,13 +81,5 @@ class CashierTrade extends AbstractResource
     private function getOrderFacadeService()
     {
         return $this->service('OrderFacade:OrderFacadeService');
-    }
-
-    /**
-     * @return CashierService
-     */
-    private function getCashierService()
-    {
-        return $this->service('Cashier:CashierService');
     }
 }

@@ -1,16 +1,16 @@
 import ajax from '../ajax';
 
-const cashierTradeModule = (api) => {
+const tradeModule = (api) => {
   return {
     get(options) {
       return ajax(Object.assign({
-        url: `${api}/cashier/trades/${options.params.tradeSn}`,
+        url: `${api}/trades/${options.params.tradeSn}`,
       }, options));
     },
 
-    create() {
+    create(options) {
       return ajax(Object.assign({
-        url: `${api}/cashier/trades`,
+        url: `${api}/trades`,
         type: 'POST',
       }, options));
 
@@ -18,4 +18,4 @@ const cashierTradeModule = (api) => {
   }
 };
 
-export default cashierTradeModule;
+export default tradeModule;
