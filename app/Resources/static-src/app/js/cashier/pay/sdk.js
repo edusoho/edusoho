@@ -1,5 +1,6 @@
 import WechatPayNative from './wechatpay_native';
 import AlipayLegacyExpress from './alipay_legacy_express';
+import AlipayLegacyWap from './alipay_legacy_wap';
 
 export default class PaySDK {
 
@@ -16,7 +17,7 @@ export default class PaySDK {
         paySdk = this.ale ? this.ale : this.ale = new AlipayLegacyExpress();
         break;
       case 'Alipay_LegacyWap':
-        paySdk = this.ale ? this.ale : this.ale = new AlipayLegacyExpress();
+        paySdk = this.alw ? this.alw : this.alw = new AlipayLegacyWap();
         break;
     }
 

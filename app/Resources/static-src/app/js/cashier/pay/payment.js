@@ -16,7 +16,7 @@ export default class BasePayment {
     BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
   }
 
-  afterTradeCreated() {
+  afterTradeCreated(res) {
 
   }
 

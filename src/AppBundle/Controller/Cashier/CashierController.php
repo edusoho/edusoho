@@ -74,15 +74,6 @@ class CashierController extends BaseController
         ));
     }
 
-    public function createTradeAction(Request $request)
-    {
-        $payment = $request->request->get('payment');
-        $payment = preg_replace('/\.\w+/', '', $payment);
-        $payment = ucfirst($payment);
-
-        return $this->forward("AppBundle:Cashier/{$payment}:createTrade");
-    }
-
     public function payAction(Request $request)
     {
         $sn = $request->request->get('sn');

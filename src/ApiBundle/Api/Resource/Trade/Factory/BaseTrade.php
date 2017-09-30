@@ -56,7 +56,7 @@ abstract class BaseTrade
             'platform_type' => $this->platformType,
             'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => $this->payment), true),
             'return_url' => isset($params['return_url']) ? $params['return_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
-            'show_url' => isset($params['show_url']) ? $params['show_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
+            'show_url' => isset($params['show_url']) ? $params['show_url'] : '',
         );
 
         if ($params['type'] == 'purchase' && !empty($params['orderSn'])) {
@@ -90,7 +90,10 @@ abstract class BaseTrade
 
     public function createResponse($trade)
     {
-        return array();
+        return array(
+            'tradeSn' => $trade['trade_sn'],
+            'redirectUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
+        );
     }
 
     /**
