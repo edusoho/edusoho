@@ -131,9 +131,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
 
-        $data = $this->getRemoveData('course', $courseId, $userId);
-
-        $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student', $data);
+        $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student');
 
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -158,28 +156,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $result;
-    }
-
-    protected function getRemoveData($targetType, $targetId, $userId)
-    {
-        $condition = array(
-            'order_item_target_type' => $targetType,
-            'order_item_target_id' => $targetId,
-            'user_id' => $userId,
-            'status' => 'success',
-        );
-
-        $orders = $this->getOrderService()->searchOrders($condition, array('created_time' => 'DESC'), 0, 1);
-
-        $data = array();
-        if (!empty($orders)) {
-            $order = array_shift($orders);
-            $data = array(
-                'order' => $order,
-            );
-        }
-
-        return $data;
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
