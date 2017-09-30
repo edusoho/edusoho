@@ -16,7 +16,7 @@ class OrderEventSubscriber extends EventSubscriber
     {
         return array(
             'order.paid' => 'onOrderPaid',
-            'order.apply_refund' => 'onOrderApplyRefund'
+            'order.apply_refund' => 'onOrderApplyRefund',
         );
     }
 
