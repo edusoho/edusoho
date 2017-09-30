@@ -692,7 +692,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $newItems = $fields['questions'];
         $newItems = ArrayToolkit::index($newItems, 'id');
-        
+
         if (!$newItems) {
             return false;
         }
@@ -779,9 +779,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 if (!in_array($item['questionType'], $type) && $item['parentId'] != 0) {
                     $type[] = $item['questionType'];
                 }
-                
+
                 if (isset($typesCount[$item['questionType']]) && $item['parentId'] == 0) {
-                    $typesCount[$item['questionType']]++;
+                    ++$typesCount[$item['questionType']];
                 } elseif ($item['parentId'] == 0) {
                     $typesCount[$item['questionType']] = 1;
                 }
