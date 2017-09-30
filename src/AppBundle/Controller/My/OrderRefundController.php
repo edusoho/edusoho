@@ -50,9 +50,13 @@ class OrderRefundController extends BaseController
     public function detailAction(Request $request, $id)
     {
         $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
+        $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
+        $item = $this->getOrderService()->getOrderItem($orderRefund['order_item_id']);
 
         return $this->render('my-order/order-refund/detail-modal.html.twig', array(
             'orderRefund' => $orderRefund,
+            'order' => $order,
+            'item' => $item
         ));
     }
 
