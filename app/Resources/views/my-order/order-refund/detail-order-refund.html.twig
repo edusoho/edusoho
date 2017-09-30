@@ -17,7 +17,7 @@
   </tr>
   <tr>
     <td width="25%">{{ '商品名称'|trans }}</td>
-    <td width="75%">{{ item.title }}</td>
+    <td width="75%">{{ order.title }}</td>
   </tr>
   <tr>
     <td width="25%">{{ '实付价格'|trans }}</td>
@@ -25,11 +25,11 @@
   </tr>
   <tr>
     <td width="25%" class="color-gray" style="text-align: right">{{ '实付虚拟币'|trans }}</td>
-    <td width="75%">{{ math_format(order.pay_coin_amount, 0.01) }}</td>
+    <td width="75%">{{ math_format(order.paid_coin_amount, 0.01) }}</td>
   </tr>
   <tr>
     <td width="25%" class="color-gray" style="text-align: right">{{ '实付现金'|trans }}</td>
-    <td width="75%">{{ math_format(order.pay_cash_amount, 0.01) }}</td>
+    <td width="75%">{{ math_format(order.paid_cash_amount, 0.01) }}</td>
   </tr>
   <tr>
     <td width="25%">{{ '付款时间'|trans }}</td>
