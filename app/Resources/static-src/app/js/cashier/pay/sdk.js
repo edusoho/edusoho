@@ -1,6 +1,8 @@
 import WechatPayNative from './wechatpay_native';
 import AlipayLegacyExpress from './alipay_legacy_express';
 import AlipayLegacyWap from './alipay_legacy_wap';
+import LianlianpayWap from './lianlianpay_wap';
+import LianlianpayWeb from './lianlianpay_web';
 
 export default class PaySDK {
 
@@ -18,6 +20,12 @@ export default class PaySDK {
         break;
       case 'Alipay_LegacyWap':
         paySdk = this.alw ? this.alw : this.alw = new AlipayLegacyWap();
+        break;
+      case 'Lianlian_Wap':
+        paySdk = this.llwp ? this.llwp : this.llwp = new AlipayLegacyWap();
+        break;
+      case 'Lianlian_Web':
+        paySdk = this.llwb ? this.llwb : this.llwb = new AlipayLegacyWap();
         break;
     }
 

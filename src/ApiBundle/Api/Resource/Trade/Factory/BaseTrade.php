@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Trade\Factory;
 
 use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
@@ -94,6 +95,14 @@ abstract class BaseTrade
             'tradeSn' => $trade['trade_sn'],
             'redirectUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
         );
+    }
+
+    /**
+     * @return CurrentUser
+     */
+    protected function getUser()
+    {
+        return $this->biz['user'];
     }
 
     /**

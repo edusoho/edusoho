@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-class LianlianPayWapTrade extends BaseTrade
+class LianlianPayWapTrade extends LianlianPayWebTrade
 {
     protected $payment = 'lianlianpay';
 
