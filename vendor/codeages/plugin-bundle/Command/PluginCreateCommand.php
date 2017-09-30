@@ -2,18 +2,12 @@
 
 namespace Codeages\PluginBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Codeages\PluginBundle\System\PluginRegister;
-use AppBundle\Common\BlockToolkit;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml\Yaml;
 use Sensio\Bundle\GeneratorBundle\Model\Bundle;
 use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand;
 use Sensio\Bundle\GeneratorBundle\Generator\BundleGenerator;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 class PluginCreateCommand extends GeneratorCommand
 {
@@ -39,7 +33,7 @@ class PluginCreateCommand extends GeneratorCommand
         }
 
         $name = ucfirst($code);
-        $pluginName = $name.'Plugin';
+        $pluginName = $name . 'Plugin';
         $rootDir = dirname($this->getContainer()->getParameter('kernel.root_dir'));
 
         $output->writeln(sprintf('Create plugin <comment>%s</comment> :', $name));
@@ -54,11 +48,11 @@ class PluginCreateCommand extends GeneratorCommand
         $dir = $bundleObject->getTargetDirectory();
 
         //write jspn
-        $filename = $dir.'/plugin.json';
+        $filename = $dir . '/plugin.json';
 
         $data = '{
-            "code": "'.$name.'",
-            "name": "'.$name.'",
+            "code": "' . $name . '",
+            "name": "' . $name . '",
             "description": "",
             "author": "EduSoho官方",
             "version": "1.0.0",
@@ -70,49 +64,49 @@ class PluginCreateCommand extends GeneratorCommand
         //mkdir script
         $this->filesystem = new Filesystem();
 
-        $this->filesystem->mkdir($dir.'/Scripts');
-        $this->filesystem->mkdir($dir.'/Migrations');
-        $this->filesystem->mkdir($dir.'/Biz');
-        $this->filesystem->mkdir($dir.'/Slot');
+        $this->filesystem->mkdir($dir . '/Scripts');
+        $this->filesystem->mkdir($dir . '/Migrations');
+        $this->filesystem->mkdir($dir . '/Biz');
+        $this->filesystem->mkdir($dir . '/Slot');
 
-        $this->filesystem->mkdir($dir.'/Biz/'.$name.'');
-        $this->filesystem->mkdir($dir.'/Biz/'.$name.'/Service');
-        $this->filesystem->mkdir($dir.'/Biz/'.$name.'/Service/Impl');
-        $this->filesystem->mkdir($dir.'/Biz/'.$name.'/Dao');
-        $this->filesystem->mkdir($dir.'/Biz/'.$name.'/Dao/Impl');
+        $this->filesystem->mkdir($dir . '/Biz/' . $name . '');
+        $this->filesystem->mkdir($dir . '/Biz/' . $name . '/Service');
+        $this->filesystem->mkdir($dir . '/Biz/' . $name . '/Service/Impl');
+        $this->filesystem->mkdir($dir . '/Biz/' . $name . '/Dao');
+        $this->filesystem->mkdir($dir . '/Biz/' . $name . '/Dao/Impl');
 
-        $this->filesystem->mkdir($dir.'/Resources/static-src');
-        $this->filesystem->mkdir($dir.'/Resources/static-src/js');
-        $this->filesystem->mkdir($dir.'/Resources/static-src/img');
-        $this->filesystem->touch($dir.'/Resources/config/slots.yml');
+        $this->filesystem->mkdir($dir . '/Resources/static-src');
+        $this->filesystem->mkdir($dir . '/Resources/static-src/js');
+        $this->filesystem->mkdir($dir . '/Resources/static-src/img');
+        $this->filesystem->touch($dir . '/Resources/config/slots.yml');
 
         $tplDir = dirname(__FILE__);
 
         $data = $this->getBaseInstallScript($tplDir);
-        file_put_contents($dir.'/Scripts/BaseInstallScript.php', $data);
+        file_put_contents($dir . '/Scripts/BaseInstallScript.php', $data);
 
         $data = $this->getInstallScript($tplDir);
-        file_put_contents($dir.'/Scripts/InstallScript.php', $data);
+        file_put_contents($dir . '/Scripts/InstallScript.php', $data);
 
         $data = $this->getService($tplDir, $name);
-        file_put_contents($dir.'/Biz/'.$name.'/Service/'.$name.'Service.php', $data);
+        file_put_contents($dir . '/Biz/' . $name . '/Service/' . $name . 'Service.php', $data);
 
         $data = $this->getServiceImpl($tplDir, $name);
-        file_put_contents($dir.'/Biz/'.$name.'/Service/Impl/'.$name.'ServiceImpl.php', $data);
+        file_put_contents($dir . '/Biz/' . $name . '/Service/Impl/' . $name . 'ServiceImpl.php', $data);
 
         $data = $this->getDao($tplDir, $name);
-        file_put_contents($dir.'/Biz/'.$name.'/Dao/'.$name.'Dao.php', $data);
+        file_put_contents($dir . '/Biz/' . $name . '/Dao/' . $name . 'Dao.php', $data);
 
         $data = $this->getDaoImpl($tplDir, $name);
-        file_put_contents($dir.'/Biz/'.$name.'/Dao/Impl/'.$name.'DaoImpl.php', $data);
+        file_put_contents($dir . '/Biz/' . $name . '/Dao/Impl/' . $name . 'DaoImpl.php', $data);
 
         $data = $this->getPlugin($tplDir, $name);
-        file_put_contents($dir.'/'.$name.'Plugin.php', $data);
+        file_put_contents($dir . '/' . $name . 'Plugin.php', $data);
 
-        if (file_exists($dir.'/DependencyInjection/'.$name.'Extension.php')) {
-            $this->filesystem->remove($dir.'/DependencyInjection/'.$name.'Extension.php');
+        if (file_exists($dir . '/DependencyInjection/' . $name . 'Extension.php')) {
+            $this->filesystem->remove($dir . '/DependencyInjection/' . $name . 'Extension.php');
             $data = $this->getPluginExtension($tplDir, $name);
-            file_put_contents($dir.'/DependencyInjection/'.$name.'PluginExtension.php', $data);
+            file_put_contents($dir . '/DependencyInjection/' . $name . 'PluginExtension.php', $data);
         }
 
         $output->writeln("<info>Finished!</info>\n");
@@ -125,11 +119,11 @@ class PluginCreateCommand extends GeneratorCommand
      */
     protected function createBundleObject($name)
     {
-        $bundle = $name.'Plugin';
-        $namespace = $name.'Plugin';
+        $bundle = $name . 'Plugin';
+        $namespace = $name . 'Plugin';
 
         $dir = dirname($this->getContainer()->getParameter('kernel.root_dir'));
-        $dir = $dir.'/plugins';
+        $dir = $dir . '/plugins';
         $format = 'yml';
 
         return new Bundle(
@@ -153,56 +147,56 @@ class PluginCreateCommand extends GeneratorCommand
 
     public function getDaoImpl($tplDir, $pluginName)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/DaoImpl.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/DaoImpl.twig');
 
         return $this->getData($data, $pluginName);
     }
 
     public function getDao($tplDir, $pluginName)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/Dao.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/Dao.twig');
 
         return $this->getData($data, $pluginName);
     }
 
     public function getServiceImpl($tplDir, $pluginName)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/ServiceImpl.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/ServiceImpl.twig');
 
         return $this->getData($data, $pluginName);
     }
 
     public function getService($tplDir, $pluginName)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/Service.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/Service.twig');
 
         return $this->getData($data, $pluginName);
     }
 
     private function getInstallScript($tplDir)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/InstallScript.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/InstallScript.twig');
 
         return $this->getData($data, '');
     }
 
     private function getBaseInstallScript($tplDir)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/BaseInstallScript.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/BaseInstallScript.twig');
 
         return $this->getData($data, '');
     }
 
     public function getPlugin($tplDir, $pluginName)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/Plugin.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/Plugin.twig');
 
         return $this->getData($data, $pluginName);
     }
 
     public function getPluginExtension($tplDir, $pluginName)
     {
-        $data = file_get_contents($tplDir.'/plugins-tpl/PluginExtension.twig');
+        $data = file_get_contents($tplDir . '/plugins-tpl/PluginExtension.twig');
 
         return $this->getData($data, $pluginName);
     }
