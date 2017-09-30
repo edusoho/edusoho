@@ -44,17 +44,11 @@ class CashierController extends BaseController
 
         $payments = $this->getPayService()->findEnabledPayments();
 
-        if ($this->isMobileClient()) {
-            return $this->render('cashier/mobile-show.html.twig', array(
-                'order' => $order,
-                'payments' => $payments,
-            ));
-        } else {
-            return $this->render('cashier/pc-show.html.twig', array(
-                'order' => $order,
-                'payments' => $payments,
-            ));
-        }
+        return $this->render(
+            'cashier/show.html.twig', array(
+            'order' => $order,
+            'payments' => $payments,
+        ));
     }
 
     public function redirectAction(Request $request)
@@ -67,13 +61,6 @@ class CashierController extends BaseController
         }
 
         return $this->redirect($trade['platform_created_result']['url']);
-    }
-
-    public function confirmModalAction(Request $request)
-    {
-        return $this->render('cashier/confirm-modal.html.twig', array(
-            'orderSn' => $request->query->get('orderSn'),
-        ));
     }
 
     public function isPaidCheckAction(Request $request)

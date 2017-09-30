@@ -17,7 +17,7 @@ export default class BasePayment {
   }
 
   afterTradeCreated() {
-    
+
   }
 
   static createTrade(postParams, callback) {

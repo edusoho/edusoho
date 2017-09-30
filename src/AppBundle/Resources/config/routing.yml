@@ -1007,10 +1007,6 @@ cashier_redirect:
     path:   /cashier/redirect
     defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
 
-cashier_confirm_modal:
-    path:   /cashier/confirm_modal
-    defaults: { _controller: AppBundle:Cashier/Cashier:confirmModal }
-
 cashier_order_is_paid_check:
     path:   /cashier/order/is_paid_check
     defaults: { _controller: AppBundle:Cashier/Cashier:isPaidCheck }

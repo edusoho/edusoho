@@ -55,7 +55,8 @@ abstract class BaseTrade
             'platform' => $this->payment,
             'platform_type' => $this->platformType,
             'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => $this->payment), true),
-            'return_url' => $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
+            'return_url' => isset($params['return_url']) ? $params['return_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
+            'show_url' => isset($params['show_url']) ? $params['show_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), true),
         );
 
         if ($params['type'] == 'purchase' && !empty($params['orderSn'])) {
