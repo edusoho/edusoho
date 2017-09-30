@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LianlianpayController extends PaymentController
@@ -14,13 +13,13 @@ class LianlianpayController extends PaymentController
         if ($result['status'] == 'paid') {
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn']))
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
             ));
         }
 
         return $this->createJsonResponse(array(
             'isPaid' => 0,
-            'redirectUrl' =>  $result['platform_created_result']['url']
+            'redirectUrl' => $result['platform_created_result']['url'],
         ));
     }
 
