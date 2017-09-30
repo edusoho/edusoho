@@ -56,7 +56,7 @@ class OrderRefundController extends BaseController
         return $this->render('my-order/order-refund/detail-modal.html.twig', array(
             'orderRefund' => $orderRefund,
             'order' => $order,
-            'item' => $item
+            'item' => $item,
         ));
     }
 
