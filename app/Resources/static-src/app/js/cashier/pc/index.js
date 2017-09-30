@@ -1,5 +1,6 @@
 import Coin from 'app/js/cashier/coin';
 import notify from 'common/notify';
+import PaySDK from 'app/js/cashier/pay/sdk';
 
 class CashierForm {
 
@@ -10,6 +11,8 @@ class CashierForm {
 
     this.initEvent();
     this.initCoin();
+
+    this.paySdk = new PaySDK();
   }
 
   initCoin() {
@@ -43,27 +46,28 @@ class CashierForm {
     let $form = this.$container;
     let self = this;
     $form.on('click', '.js-pay-btn', event => {
-      if ($form.valid()) {
-
-        let $modal = $('#modal');
-        $.post($form.attr('action'), $form.serialize(), resp => {
-          $modal.html('');
-          if (resp.showQrcode) {
-            $modal.load(resp.redirectUrl).modal('show');
-
-          } else if (resp.isPaid) {
-            location.href = resp.redirectUrl;
-          } else {
-            //display modal
-            let url = $form.find('.js-pay-btn').data('url');
-            $modal.load(url).modal('show');
-            window.open(resp.redirectUrl);
-          }
-
-        }).fail(resp => {
-          notify('danger', Translator.trans('cashier.pay.error_message'));
-        });
-      }
+      self.paySdk.pay();
+      // if ($form.valid()) {
+      //
+      //   let $modal = $('#modal');
+      //   $.post($form.attr('action'), $form.serialize(), resp => {
+      //     $modal.html('');
+      //     if (resp.showQrcode) {
+      //       $modal.load(resp.redirectUrl).modal('show');
+      //
+      //     } else if (resp.isPaid) {
+      //       location.href = resp.redirectUrl;
+      //     } else {
+      //       //display modal
+      //       let url = $form.find('.js-pay-btn').data('url');
+      //       $modal.load(url).modal('show');
+      //       window.open(resp.redirectUrl);
+      //     }
+      //
+      //   }).fail(resp => {
+      //     notify('danger', Translator.trans('cashier.pay.error_message'));
+      //   });
+      // }
 
     });
   }
