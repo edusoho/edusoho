@@ -16,7 +16,6 @@ class OrderEventSubscriber extends EventSubscriber
     {
         return array(
             'order.paid' => 'onOrderPaid',
-            'order.apply_refund' => 'onOrderApplyRefund',
         );
     }
 
@@ -24,17 +23,6 @@ class OrderEventSubscriber extends EventSubscriber
     {
         $order = $event->getSubject();
         $this->inviteReward($order);
-    }
-
-    public function onOrderApplyRefund(Event $event)
-    {
-        $order = $event->getSubject();
-        $user = $this->getBiz()->offsetGet('user');
-        $item = $event->getArgument('orderItem');
-        if ($item['target_type'] == 'course') {
-            $course = $this->getCourseService()->getCourse($item['target_id']);
-            $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
-        }
     }
 
     private function inviteReward($order)
