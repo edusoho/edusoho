@@ -56,11 +56,11 @@ class LianlianpayController extends PaymentController
         return $this->createJsonResponse($result);
     }
 
-    public function mobileReturnAction(Request $request, $payment)
+    public function mobileReturnAction(Request $request)
     {
         $data = $request->request->all();
         $data = json_decode($data['res_data'], true);
-        $this->getPayService()->notifyPaid($payment, $data);
+        $this->getPayService()->notifyPaid('lianlianpay', $data);
 
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));
     }
@@ -68,7 +68,7 @@ class LianlianpayController extends PaymentController
     public function returnAction(Request $request, $payment)
     {
         if (DeviceToolkit::isMobileClient()) {
-            return $this->forward('AppBundle:Cashier/Lianlianpay:mobileReturn', $request, $payment);
+            return $this->forward('AppBundle:Cashier/Lianlianpay:mobileReturn');
         }
 
         $data = $request->request->all();
