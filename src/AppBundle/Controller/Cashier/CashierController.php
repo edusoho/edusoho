@@ -68,9 +68,10 @@ class CashierController extends BaseController
         $orderSn = $request->query->get('orderSn');
         $order = $this->getOrderService()->getOrderBySn($orderSn);
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
         return $this->createJsonResponse(array(
             'isPaid' => $trade['status'] == 'paid',
-            'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']))
+            'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn'])),
         ));
     }
 
@@ -88,7 +89,7 @@ class CashierController extends BaseController
             || $order['status'] == 'fail') {
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn']))
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
             ));
         }
 
