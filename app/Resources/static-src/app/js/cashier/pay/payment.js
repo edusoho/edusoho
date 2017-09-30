@@ -16,6 +16,10 @@ export default class BasePayment {
     BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
   }
 
+  afterTradeCreated() {
+    
+  }
+
   static createTrade(postParams, callback) {
 
     let params = {
