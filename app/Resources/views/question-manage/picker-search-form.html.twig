@@ -7,7 +7,8 @@
       {% endfor %}
     </select>
     <select class="form-control width-150" {% if not courseTasks|default(null) %}style="display:none;"{% endif %} name="lessonId">
-      <option value="0" {% if not app.request.get('lessonId',0) %}selected{% endif %}>{{'course.question_manage.filter.select'|trans}}</option>
+      <option value="0" {% if not app.request.get('lessonId',0) %}selected{% endif %}>{{'course.question_manage.filter.keywor
+      course.testpaper_manage.create.range.choose'|trans}}</option>
       {% for task in courseTasks|default([]) if task %}
         <option value="{{ task.id }}" {% if app.request.get('lessonId','') == task.id %}selected{% endif %}>{{ task.title }}</option>
       {% endfor %}
