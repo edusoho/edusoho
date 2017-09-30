@@ -18,7 +18,7 @@ option. Example:
                     namespace: query_cache_ns
                     apc: ~
 
-    .. code-block:: yaml
+    .. code-block:: xml
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -42,8 +42,8 @@ option. Example:
 Then, use the newly created ``doctrine_cache.providers.{provider_name}`` container
 services anywhere in your application::
 
-    $apcCache = $this->container->get('doctrine_cache.providers.my_apc_cache');
-    $arrayCache = $this->container->get('doctrine_cache.providers.my_array_cache');
+    $metadataCache = $this->container->get('doctrine_cache.providers.my_apc_metadata_cache');
+    $queryCache = $this->container->get('doctrine_cache.providers.my_apc_query_cache');
 
 Service Aliases
 ---------------
@@ -58,7 +58,7 @@ thanks to the ``aliases`` configuration option. Example:
         # app/config/config.yml
         doctrine_cache:
             aliases:
-                cache_apc: my_apc_cache
+                apc_cache: my_apc_cache
 
             providers:
                 my_apc_cache:
@@ -79,7 +79,7 @@ thanks to the ``aliases`` configuration option. Example:
 
         <srv:container>
             <doctrine-cache>
-                <alias key="cache_apc">my_apc_cache</alias>
+                <alias key="apc_cache">my_apc_cache</alias>
 
                 <provider name="my_apc_cache">
                     <type>apc</type>

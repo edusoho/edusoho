@@ -73,7 +73,7 @@ class Setting extends BaseResource
             'enabled' => '0',
             'convNo' => null
         );
-        
+
         $res = array_merge($default, $res);
 
         return ArrayToolkit::filter($res, $default);
@@ -133,6 +133,10 @@ class Setting extends BaseResource
         );
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     protected function filterKeys(array $input, array $notAllowed)
     {
         return array_diff_key($input, array_flip($notAllowed));

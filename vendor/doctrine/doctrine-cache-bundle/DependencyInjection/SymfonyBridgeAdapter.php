@@ -102,9 +102,15 @@ class SymfonyBridgeAdapter
 
         if ( ! isset($cacheDriver['namespace'])) {
             // generate a unique namespace for the given application
-            $environment = $container->getParameter('kernel.root_dir').$container->getParameter('kernel.environment');
-            $hash        = hash('sha256', $environment);
-            $namespace   = 'sf2' . $this->mappingResourceName .'_' . $objectManagerName . '_' . $hash;
+            $seed = '_'.$container->getParameter('kernel.root_dir');
+
+            if ($container->hasParameter('cache.prefix.seed')) {
+                $seed = '.'.$container->getParameterBag()->resolveValue($container->getParameter('cache.prefix.seed'));
+            }
+
+            $seed .= '.'.$container->getParameter('kernel.name').'.'.$container->getParameter('kernel.environment');
+            $hash      = hash('sha256', $seed);
+            $namespace = 'sf_' . $this->mappingResourceName .'_' . $objectManagerName . '_' . $hash;
 
             $cacheDriver['namespace'] = $namespace;
         }
@@ -125,6 +131,17 @@ class SymfonyBridgeAdapter
                 'port' => !empty($port) ? $port : 6379,
                 'password' => !empty($password) ? $password : null,
                 'database' => !empty($database) ? $database : 0
+            );
+        }
+
+        if ($type === 'predis') {
+            $config[$type] = array(
+                'scheme' => 'tcp',
+                'host' => !empty($host) ? $host : 'localhost',
+                'port' => !empty($port) ? $port : 6379,
+                'password' => !empty($password) ? $password : null,
+                'database' => !empty($database) ? $database : 0,
+                'timeout' => null,
             );
         }
 
