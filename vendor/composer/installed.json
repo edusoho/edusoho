@@ -3262,59 +3262,6 @@
         "description": "A service layer framework."
     },
     {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.19",
-        "version_normalized": "0.1.19.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "5acc4b6e61654476d4daf278996c42567658ddc3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/5acc4b6e61654476d4daf278996c42567658ddc3",
-            "reference": "5acc4b6e61654476d4daf278996c42567658ddc3",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/config": "^2.8",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.7",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.1.5"
-        },
-        "time": "2017-08-03T04:50:37+00:00",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
         "name": "codeages/rest-api-client",
         "version": "v0.2.2",
         "version_normalized": "0.2.2.0",
@@ -4911,7 +4858,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/doctrine/cache/eb152c5100571c7a45470ff2a35095ab3f3b900b.zip",
+            "url": "https://api.github.com/repos/doctrine/cache/zipball/eb152c5100571c7a45470ff2a35095ab3f3b900b",
             "reference": "eb152c5100571c7a45470ff2a35095ab3f3b900b",
             "shasum": ""
         },
@@ -4983,7 +4930,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/doctrine/collections/1a4fb7e902202c33cce8c55989b945612943c2ba.zip",
+            "url": "https://api.github.com/repos/doctrine/collections/zipball/1a4fb7e902202c33cce8c55989b945612943c2ba",
             "reference": "1a4fb7e902202c33cce8c55989b945612943c2ba",
             "shasum": ""
         },
@@ -5052,7 +4999,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/doctrine/inflector/90b2128806bfde671b6952ab8bea493942c1fdae.zip",
+            "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
             "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
             "shasum": ""
         },
@@ -5121,7 +5068,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/doctrine/instantiator/8e884e78f9f0eb1329e445619e04456e64d8051d.zip",
+            "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
             "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
             "shasum": ""
         },
@@ -5164,6 +5111,59 @@
         "keywords": [
             "constructor",
             "instantiate"
+        ]
+    },
+    {
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.21",
+        "version_normalized": "0.1.21.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "8793be694fe785615a5dd37d5712724f1de4adb8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/8793be694fe785615a5dd37d5712724f1de4adb8",
+            "reference": "8793be694fe785615a5dd37d5712724f1de4adb8",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/config": "^2.8",
+            "symfony/framework-bundle": "^2.8 || ^3.0",
+            "symfony/twig-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8 || ~5.7",
+            "symfony/browser-kit": "^2.8 || ^3.0",
+            "symfony/phpunit-bridge": "~3.1.5"
+        },
+        "time": "2017-09-29T07:00:41+00:00",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "extension",
+            "plugin",
+            "theme"
         ]
     }
 ]
