@@ -16,9 +16,9 @@ class Trade extends AbstractResource
 {
     public function get(ApiRequest $request, $tradeSn)
     {
-        $result = $this->getPayService()->queryTradeFromPlatform($tradeSn);
+        $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
         return array(
-            'isPaid' => $result['trade_state'] === 'SUCCESS',
+            'isPaid' => $trade['status'] === 'paid',
             'successUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
         );
     }

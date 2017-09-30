@@ -1,19 +1,7 @@
 import WechatPayNative from './wechatpay_native';
+import AlipayLegacyExpress from './alipay_legacyExpress';
 
 export default class PaySDK {
-
-  paymentMap = {};
-
-  constructor() {
-    this.paymentMap = {
-      wechat0: 'WechatPay_Native',
-      wechat1: 'WechatPay_Native',
-      wechat2: 'WechatPay_Js',
-      alipay0: 'Alipay_LegacyExpress',
-      lianlian0: 'Lianlian_Web',
-      lianlian1: 'Lianlian_Wap',
-    };
-  }
 
   pay(params) {
     console.log(params);
@@ -23,6 +11,9 @@ export default class PaySDK {
     switch (gateway) {
       case 'WechatPay_Native':
         paySdk = this.wpn ? this.wpn : this.wpn = new WechatPayNative();
+        break;
+      case 'Alipay_LegacyExpress':
+        paySdk = this.ale ? this.ale : this.ale = new AlipayLegacyExpress();
         break;
     }
 

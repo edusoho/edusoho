@@ -3,10 +3,6 @@ import notify from 'common/notify';
 
 export default class BasePayment {
 
-  constructor() {
-
-  }
-
   static createTrade(postParams, callback) {
 
     let params = {
