@@ -44,8 +44,7 @@ class AlipayController extends PaymentController
 
     public function notifyAction(Request $request, $payment)
     {
-        $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
-
+        $result = $this->getPayService()->notifyPaid($payment, $request->request->all());
         return $this->createJsonResponse($result);
     }
 
