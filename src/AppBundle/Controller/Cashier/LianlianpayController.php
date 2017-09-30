@@ -2,37 +2,40 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use AppBundle\Common\DeviceToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class LianlianpayController extends PaymentController
 {
     public function pcPayAction($trade)
     {
-        $user = $this->getUser();
-        $trade['platform_type'] = $this->isMobileClient() ? 'Wap' : 'Web';
-        $trade['attach']['user_created_time'] = $user['createdTime'];
-        $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
-        $trade['show_url'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => '1234'), true);
-
-        $result = $this->getPayService()->createTrade($trade);
+        $result = $this->createTrade($trade);
 
         if ($result['status'] == 'paid') {
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn']))
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
             ));
         }
 
         return $this->createJsonResponse(array(
             'isPaid' => 0,
-            'redirectUrl' =>  $result['platform_created_result']['url']
+            'redirectUrl' => $result['platform_created_result']['url'],
         ));
     }
 
     public function mobilePayAction($trade)
+    {
+        $result = $this->createTrade($trade);
+
+        if ($result['status'] == 'paid') {
+            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
+        }
+
+        return $this->redirect($result['platform_created_result']['url']);
+    }
+
+    protected function createTrade($trade)
     {
         $user = $this->getUser();
         $trade['platform_type'] = $this->isMobileClient() ? 'Wap' : 'Web';
@@ -40,15 +43,9 @@ class LianlianpayController extends PaymentController
         $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
         $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
-        $trade['show_url'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => '1234'), true);
+        $trade['show_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
 
-        $result = $this->getPayService()->createTrade($trade);
-
-        if ($result['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
-        }
-
-        return $this->redirect($result['platform_created_result']['url']);
+        return $this->getPayService()->createTrade($trade);
     }
 
     public function notifyAction(Request $request, $payment)
@@ -59,10 +56,23 @@ class LianlianpayController extends PaymentController
         return $this->createJsonResponse($result);
     }
 
-    public function returnAction(Request $request, $payment)
+    public function mobileReturnAction(Request $request)
     {
         $data = $request->request->all();
         $data = json_decode($data['res_data'], true);
+        $this->getPayService()->notifyPaid('lianlianpay', $data);
+
+        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));
+    }
+
+    public function returnAction(Request $request, $payment)
+    {
+        if (DeviceToolkit::isMobileClient()) {
+            return $this->forward('AppBundle:Cashier/Lianlianpay:mobileReturn');
+        }
+
+        $data = $request->request->all();
+
         $this->getPayService()->notifyPaid($payment, $data);
 
         return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $data['no_order']), true));

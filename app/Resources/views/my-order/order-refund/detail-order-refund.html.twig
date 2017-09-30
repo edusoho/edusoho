@@ -1,24 +1,62 @@
 <table class="table cd-table table-striped order-detail-table">
   <tr>
-    <td width="25%">{{'退款订单号'|trans}}</td>
+    <td width="25%">{{'退款号'|trans}}</td>
     <td width="75%">{{ orderRefund.sn }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '订单名称'|trans }}</td>
-    <td width="75">{{ orderRefund.title }}</td>
+    <td width="25%">{{ '退款申请时间'|trans }}</td>
+    <td width="75%">{{ orderRefund.created_time|date('Y-n-d H:i:s') }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '订单金额'|trans }}</td>
-    <td wigth="75%" class="color-warning">{{ math_format(orderRefund.amount, 0.01) }}</td>
+    <td width="25%">{{ '退款理由'|trans }}</td>
+    <td width="75%">{{ orderRefund.reason|trans }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '虚拟币金额'|trans }}</td>
-    <td width="75" class="color-warning">{{ math_format(orderRefund.refund_coin_amount, 0.01) }}</td>
+    <td width="25%">{{ '订单号'|trans }}</td>
+    <td width="75%">{{ order.sn }}</td>
   </tr>
-
   <tr>
-    <td width="25%">{{ '现金金额'|trans }}</td>
-    <td width="75%" class="color-warning">{{ math_format(orderRefund.refund_cash_amount, 0.01) }}</td>
+    <td width="25%">{{ '商品名称'|trans }}</td>
+    <td width="75%">{{ order.title }}</td>
   </tr>
-
+  <tr>
+    <td width="25%">{{ '实付价格'|trans }}</td>
+    <td width="75%">{{ math_format(order.pay_amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%" class="color-gray" style="text-align: right">{{ '实付虚拟币'|trans }}</td>
+    <td width="75%">{{ math_format(order.paid_coin_amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%" class="color-gray" style="text-align: right">{{ '实付现金'|trans }}</td>
+    <td width="75%">{{ math_format(order.paid_cash_amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '付款时间'|trans }}</td>
+    <td width="75%">{{ order.pay_time|date('Y-n-d H:i:s') }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '处理状态'|trans }}</td>
+    <td width="75%">{{ dict_text('refundStatus', orderRefund.status) }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '处理时间'|trans }}</td>
+    <td width="75%">{{ orderRefund.deal_time|date('Y-n-d H:i:s') }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '退款总额'|trans }}</td>
+    <td width="75%">{{ math_format(orderRefund.amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%" class="color-gray" style="text-align: right">{{ '已退虚拟币'|trans }}</td>
+    <td width="75%">{{ math_format(orderRefund.refund_coin_amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%" class="color-gray" style="text-align: right">{{ '已退现金'|trans }}</td>
+    <td width="75%">{{ math_format(orderRefund.refund_cash_amount, 0.01) }}</td>
+  </tr>
+  <tr>
+    <td width="25%">{{ '反馈信息'|trans }}</td>
+    <td width="75">{{ orderRefund.deal_reason }}</td>
+  </tr>
 </table>
