@@ -344,7 +344,6 @@ class CoinController extends BaseController
 
     public function userRecordsAction(Request $request)
     {
-
         $sort = $request->query->get('sort', 'balance');
         $direction = $request->query->get('direction', 'DESC');
         $condition['timeType'] = 'oneWeek';
