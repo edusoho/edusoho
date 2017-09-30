@@ -3,8 +3,6 @@
 namespace Biz\OrderFacade\Event;
 
 use Biz\Coupon\Service\CouponService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\InviteRecordService;
 use Codeages\Biz\Framework\Event\Event;
@@ -66,21 +64,5 @@ class OrderEventSubscriber extends EventSubscriber
     protected function getInviteRecordService()
     {
         return $this->getBiz()->service('User:InviteRecordService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getCourseMemberService()
-    {
-        return $this->getBiz()->service('Course:MemberService');
     }
 }
