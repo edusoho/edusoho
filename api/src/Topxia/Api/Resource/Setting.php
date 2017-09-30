@@ -133,10 +133,6 @@ class Setting extends BaseResource
         );
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     protected function filterKeys(array $input, array $notAllowed)
     {
         return array_diff_key($input, array_flip($notAllowed));
