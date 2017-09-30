@@ -57,6 +57,18 @@ class CashierController extends BaseController
         }
     }
 
+    public function redirectAction(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        if ($trade['user_id'] !== $this->getCurrentUser()->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->redirect($trade['platform_created_result']['url']);
+    }
+
     public function confirmModalAction(Request $request)
     {
         return $this->render('cashier/confirm-modal.html.twig', array(

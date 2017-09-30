@@ -1,12 +1,10 @@
-import BasePayment from './BasePayment';
+import BasePayment from './payment';
 
 export default class AlipayLegacyExpress extends BasePayment {
 
-  pay(params) {
-    BasePayment.createTrade(params, this.callback.bind(this));
+  afterTradeCreated(res) {
+    window.open(res.redirectUrl);
+    this.showConfirmModal(res.tradeSn);
   }
 
-  callback(res) {
-
-  }
 }

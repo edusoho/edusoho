@@ -1,7 +1,20 @@
 import Api from 'common/api';
 import notify from 'common/notify';
+import ConfirmModal from './confirm';
 
 export default class BasePayment {
+
+  showConfirmModal(tradeSn) {
+    if (!this.confirmModal) {
+      this.confirmModal = new ConfirmModal();
+    }
+
+    this.confirmModal.show(tradeSn);
+  }
+
+  pay(params) {
+    BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
+  }
 
   static createTrade(postParams, callback) {
 
@@ -21,13 +34,13 @@ export default class BasePayment {
     });
   }
 
-  static getTrade(tradeSn, callback) {
+  static getTrade(tradeSn) {
     let params = {
       tradeSn: tradeSn
     };
 
-    Api.trade.get({
+    return Api.trade.get({
       params: params
-    }).then(callback);
+    });
   }
 }

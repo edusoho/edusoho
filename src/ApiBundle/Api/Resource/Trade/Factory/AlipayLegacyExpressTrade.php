@@ -8,4 +8,11 @@ class AlipayLegacyExpressTrade extends BaseTrade
 
     protected $platformType = 'Web';
 
+    public function createResponse($trade)
+    {
+        return array(
+            'tradeSn' => $trade['trade_sn'],
+            'redirectUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
+        );
+    }
 }

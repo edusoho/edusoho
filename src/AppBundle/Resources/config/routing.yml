@@ -1003,6 +1003,10 @@ cashier_show:
     path:   /cashier/standard
     defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
+cashier_redirect:
+    path:   /cashier/redirect
+    defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
+
 cashier_confirm_modal:
     path:   /cashier/confirm_modal
     defaults: { _controller: AppBundle:Cashier/Cashier:confirmModal }

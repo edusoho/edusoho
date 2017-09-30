@@ -1,5 +1,5 @@
 import notify from 'common/notify';
-import Api from 'common/api';
+import BasePayment from './payment';
 
 class ConfirmModal {
 
@@ -39,23 +39,18 @@ class ConfirmModal {
       this.$container.append(template);
     }
 
-    $('body').on('click', '.js-confirm-btn', this.checkIsPaid);
+    $('body').on('click', '.js-confirm-btn', this.checkIsPaid.bind(this));
   }
 
   checkIsPaid() {
-
-    Api.cashier_trade.get({
-      tradeSn: this.tradeSn
-    }).then(res => {
+    BasePayment.getTrade(this.tradeSn).then(res => {
       if (res.isPaid) {
         location.href = resp.successUrl;
       } else {
         notify('danger', Translator.trans('cashier.confirm.fail_message'));
-        $('#'+this.modalID).modal('hide');
+        $('#' + this.modalID).modal('hide');
       }
     });
-
-
   }
 
   show(tradeSn) {
