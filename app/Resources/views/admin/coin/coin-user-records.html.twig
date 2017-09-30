@@ -2,13 +2,27 @@
 
 {% set menu = 'admin_coin_user_records' %}
 
+{% set script_controller = 'coin/records' %}
+
 {% block main %}
 
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
+    <div class="mbm">
+      <div class="form-group">
+        <label class="ptm">{{ 'order.created_time'|trans }}:</label>
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{ app.request.get('startDateTime') }}"
+               placeholder="{{ 'form.placeholder.start_date'|trans }}">
+        -
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{ app.request.get('endDateTime') }}"
+               placeholder="{{ 'form.placeholder.end_date'|trans }}">
+      </div>
+    </div>
+
     <input value="{{ app.request.get('flowType') }}" name="flowType" type="hidden"/>
     <input value="{{ app.request.get('timeType') }}" name="timeType" type="hidden"/>
     <div class="form-group">
+      <label class="ptm">{{ '筛选条件:'|trans }}</label>
       <select class="form-control" name="searchType">
         {% set options = {'nickname':'admin.coin.search_type_option.nickname'|trans,'email':'admin.coin.search_type_option.email'|trans} %}
         {{ select_options(options, app.request.get('searchType')) }}
@@ -55,11 +69,13 @@
 
   <div class="table-responsive">
     <table class="table table-striped">
+      {% set querySort = app.request.query.get('sort', 'balance') %}
+      {% set direction = app.request.query.get('direction', 'desc') %}
       <tr>
         <th width="30%">{{'user'|trans}}</th>
-        <th>{{'coin.recharge'|trans}}</th>
-        <th>{{'coin.consume'|trans}}</th>
-        <th>{{'finance.balance'|trans}}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'consume', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'balance', path: 'admin_coin_user_records'} %}</th>
         <th>{{'admin.coin.operation'|trans}}</th>
       </tr>
 

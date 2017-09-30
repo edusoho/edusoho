@@ -344,9 +344,11 @@ class CoinController extends BaseController
 
     public function userRecordsAction(Request $request)
     {
+
+        $sort = $request->query->get('sort', 'balance');
+        $direction = $request->query->get('direction', 'DESC');
         $condition['timeType'] = 'oneWeek';
         $condition['amount_type'] = 'coin';
-        $condition['orderBY'] = 'desc';
         $condition['except_user_id'] = 0;
 
         $fields = $request->query->all();
@@ -383,22 +385,18 @@ class CoinController extends BaseController
             20
         );
 
-        $sort = $condition['orderBY'];
-
-        unset($condition['orderBY']);
-
-        if (isset($condition['type'])) {
+        if (in_array($sort, array('recharge', 'consume'))) {
             $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderBySumColumn(
                 'amount',
                 $condition,
-                $sort,
+                $direction,
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         } else {
             $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderByBalance(
                 $condition,
-                $sort,
+                $direction,
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -671,7 +669,6 @@ class CoinController extends BaseController
 
     protected function convertFiltersToCondition($condition)
     {
-        $condition['orderBY'] = 'desc';
         $keyword = '';
 
         if (isset($condition['searchType'])) {
@@ -697,33 +694,16 @@ class CoinController extends BaseController
             unset($condition['keyword']);
         }
 
-        if (isset($condition['sort'])) {
-            switch ($condition['sort']) {
-                case 'up':
-                    $condition['orderBY'] = 'ASC';
-                    break;
-                case 'down':
-                    $condition['orderBY'] = 'DESC';
-                    break;
-                default:
-                    break;
-            }
-
-            unset($condition['sort']);
+        if (isset($condition['endDateTime']) && !empty($condition['endDateTime'])) {
+            $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
         }
 
-        if (isset($condition['flowType'])) {
-            switch ($condition['flowType']) {
-                case 'in':
-                    $condition['type'] = 'inflow';
-                    break;
-                case 'out':
-                    $condition['type'] = 'outflow';
-                    break;
-                default:
-                    break;
-            }
-            unset($condition['flowType']);
+        if (isset($condition['startDateTime']) && !empty($condition['startDateTime'])) {
+            $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
+        }
+
+        if (empty($condition['created_time_GTE']) && empty($condition['created_time_LTE'])) {
+            $condition['created_time_GTE'] = time() - 7 * 24 * 60 * 60;
         }
 
         return $condition;
