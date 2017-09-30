@@ -22,10 +22,10 @@ export default class PaySDK {
         paySdk = this.alw ? this.alw : this.alw = new AlipayLegacyWap();
         break;
       case 'Lianlian_Wap':
-        paySdk = this.llwp ? this.llwp : this.llwp = new AlipayLegacyWap();
+        paySdk = this.llwp ? this.llwp : this.llwp = new LianlianpayWap();
         break;
       case 'Lianlian_Web':
-        paySdk = this.llwb ? this.llwb : this.llwb = new AlipayLegacyWap();
+        paySdk = this.llwb ? this.llwb : this.llwb = new LianlianpayWeb();
         break;
     }
 
