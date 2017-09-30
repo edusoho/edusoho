@@ -98,7 +98,6 @@ class OrderController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $order = $this->tryManageOrder($id);
-        $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
 
         $user = $this->getUserService()->getUser($order['user_id']);
 

@@ -61,6 +61,7 @@ class OrderExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('check_order_type', array($this, 'checkOrderType')),
             new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('get_display_status', array($this, 'getDisplayStatus')),
         );
     }
 
@@ -151,7 +152,7 @@ class OrderExtension extends \Twig_Extension
         return $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
     }
 
-    private function getDisplayStatus($orderStatus, $isAdmin)
+    public function getDisplayStatus($orderStatus, $isAdmin)
     {
         $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
 
