@@ -9,15 +9,7 @@ class LianlianpayController extends PaymentController
 {
     public function pcPayAction($trade)
     {
-        $user = $this->getUser();
-        $trade['platform_type'] = $this->isMobileClient() ? 'Wap' : 'Web';
-        $trade['attach']['user_created_time'] = $user['createdTime'];
-        $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
-        $trade['show_url'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => '1234'), true);
-
-        $result = $this->getPayService()->createTrade($trade);
+        $result = $this->createTrade($trade);
 
         if ($result['status'] == 'paid') {
             return $this->createJsonResponse(array(
@@ -34,21 +26,26 @@ class LianlianpayController extends PaymentController
 
     public function mobilePayAction($trade)
     {
-        $user = $this->getUser();
-        $trade['platform_type'] = $this->isMobileClient() ? 'Wap' : 'Web';
-        $trade['attach']['user_created_time'] = $user['createdTime'];
-        $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
-        $trade['show_url'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => '1234'), true);
-
-        $result = $this->getPayService()->createTrade($trade);
+        $result = $this->createTrade($trade);
 
         if ($result['status'] == 'paid') {
             return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
         }
 
         return $this->redirect($result['platform_created_result']['url']);
+    }
+
+    protected function createTrade($trade)
+    {
+        $user = $this->getUser();
+        $trade['platform_type'] = $this->isMobileClient() ? 'Wap' : 'Web';
+        $trade['attach']['user_created_time'] = $user['createdTime'];
+        $trade['attach']['identify_user_id'] = $this->getIdentify().'_'.$user['id'];
+        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'lianlianpay'), true);
+        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
+        $trade['show_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'lianlianpay'), true);
+
+        return $this->getPayService()->createTrade($trade);
     }
 
     public function notifyAction(Request $request, $payment)
