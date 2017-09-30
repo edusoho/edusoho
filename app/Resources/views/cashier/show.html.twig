@@ -35,7 +35,7 @@
           <div class="piece-header">{{ 'pay_center.pay.submit_tips'|trans }}</div>
         </div>
 
-        <form class="form-paytype" id="cashier-form" method="post" action="{{ path('cashier_pay') }}" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
+        <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
 
           <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

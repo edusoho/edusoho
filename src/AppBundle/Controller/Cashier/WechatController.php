@@ -9,40 +9,6 @@ use AppBundle\Common\MathToolkit;
 
 class WechatController extends PaymentController
 {
-    public function pcPayAction($trade)
-    {
-        $trade['platform_type'] = 'Native';
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
-        $result = $this->getPayService()->createTrade($trade);
-
-        if ($result['status'] == 'paid') {
-            return $this->createJsonResponse(array(
-                'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
-            ));
-        }
-
-        if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
-            return $this->createJsonResponse(array(
-                'isPaid' => 0,
-                'showQrcode' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_wechat_qrcode', array('tradeSn' => $result['trade_sn'])),
-            ));
-        }
-
-        return $this->createJsonResponse(array('error' => $result['platform_created_result']['return_msg']), 500);
-    }
-
-    public function qrcodeAction(Request $request)
-    {
-        $tradeSn = $request->query->get('tradeSn');
-        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-
-        return $this->render('cashier/wechat/qrcode.html.twig', array(
-            'trade' => $trade,
-        ));
-    }
-
     public function mobilePayAction($trade)
     {
         $user = $this->getUser();
