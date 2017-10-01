@@ -346,7 +346,6 @@ class CoinController extends BaseController
     {
         $sort = $request->query->get('sort', 'balance');
         $direction = $request->query->get('direction', 'DESC');
-        $condition['timeType'] = 'oneWeek';
         $condition['amount_type'] = 'coin';
         $condition['except_user_id'] = 0;
 
@@ -377,6 +376,9 @@ class CoinController extends BaseController
                 'users' => $users,
             ));
         }
+
+        var_dump($condition);
+
 
         $paginator = new Paginator(
             $this->get('request'),
