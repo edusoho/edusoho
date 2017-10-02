@@ -1007,11 +1007,6 @@ cashier_redirect:
     path:   /cashier/redirect
     defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
 
-cashier_pay:
-    path:   /cashier/pay
-    defaults: { _controller: AppBundle:Cashier/Cashier:pay }
-    methods: [POST]
-
 cashier_wechat_mobile_pay:
     path:   /pay/center/wxpay
     defaults: { _controller: AppBundle:Cashier/Wechat:mobilePay }
@@ -1041,14 +1036,6 @@ cashier_pay_return_for_app:
 cashier_pay_return:
     path: /callback/{payment}/return
     defaults: { _controller: AppBundle:Cashier/Callback:return}
-
-cashier_wechat_roll:
-    path:   /cashier/wechat/roll
-    defaults: { _controller: AppBundle:Cashier/Wechat:roll }
-
-cashier_wechat_qrcode:
-    path:   /cashier/wechat/qrcode
-    defaults: { _controller: AppBundle:Cashier/Wechat:qrcode }
 
 cashier_wechat_h5_return:
     path:   /cashier/wechat/h5_return
