@@ -379,7 +379,6 @@ class CoinController extends BaseController
 
         var_dump($condition);
 
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getAccountProxyService()->countUsersByConditions($condition),
