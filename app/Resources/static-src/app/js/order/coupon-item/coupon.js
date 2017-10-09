@@ -50,13 +50,24 @@ class Coupon {
     }
 
     $this.button('loading');
-    
+
     this.validate(event, (data) => {
       $this.button('reset');
       if (data.useable == 'no') {
         this.errorMessage(data.message);
       } else {
+        const priceType = this.$form.data('price-type');
+        const coinRate = this.$form.data('coin-rate');
+        const coinName = this.$form.data('coin-name');
+
         let deductAmount = (data['type'] == 'discount') ? this.$price.val() * data['rate'] : data['rate'];
+        
+        if (priceType === 'coin') {
+          deductAmount = parseFloat(parseFloat(deductAmount) * parseFloat(coinRate)).toFixed(2) + coinName
+        } else {
+          deductAmount = '￥' + deductAmount;
+        }
+
         this.$deductAmount.text(deductAmount);
 
         this.$form.find('#coupon-code').text(code);

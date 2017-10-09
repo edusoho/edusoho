@@ -2,10 +2,18 @@
 {% do script(['libs/jquery-validation.js', 'app/js/order/show/index.js']) %}
 
 {% block order_body %}
+  {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+
   <div class="order-center">
-    <form id="order-create-form" method="post" action="{{path('order_create')}}" data-price-calculate="{{ path('order_calculate_price') }}">
+    <form id="order-create-form" method="post" action="{{path('order_create')}}" 
+    data-price-calculate="{{ path('order_calculate_price') }}"
+    data-price-type="{{ currency }}"
+    data-coin-rate="{{ setting('coin.cash_rate') }}"
+    data-coin-name="{{ setting('coin.coin_name', '虚拟币') }}">
       {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
       {% include product.showTemplate %}
+
+      {# {{ dump(product.showTemplate ) }} #}
 
       {{ slot('order.show.deducts', {'product': product}) }}
       {% include 'order/show/coupon-item.html.twig' %}
