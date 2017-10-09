@@ -40,7 +40,7 @@
           <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
-          <input type="hidden" name="openid" value="{{ 'owjjFjmdLpas8Ric6lN5uWxzj6BA' }}">
+          <input type="hidden" name="openid" value="{{ get_wechat_openid() }}">
           <input type="hidden" name="type" value="purchase">
 
           <div class="form-group order-detail-bg">
