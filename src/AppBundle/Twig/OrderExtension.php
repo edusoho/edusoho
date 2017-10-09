@@ -72,11 +72,11 @@ class OrderExtension extends \Twig_Extension
         $hasOauthToken = $this->container->get('session')->has('oauth_token');
         if ($isMicroAgent && $hasOauthToken) {
             $oauthToken = $this->container->get('session')->get('oauth_token');
+
             return empty($oauthToken['openid']) ? 0 : $oauthToken['openid'];
         } else {
             return 0;
         }
-
     }
 
     public function fenToYuan($price, $displayPrefix = 1)
