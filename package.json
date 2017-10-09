@@ -73,7 +73,8 @@
     "swiper": "2.7.6",
     "typeahead.js": "0.11.1",
     "video.js": "4.10.2",
-    "waypoints": "4.0.1"
+    "waypoints": "4.0.1",
+    "weixin-js-sdk": "^1.2.0"
   },
   "babel": {
     "presets": [

@@ -28,6 +28,7 @@ admin.user.message_menu: Messages
 
 ##用户管理模块
 admin.user.basic.basic_tab: Users
+admin.user.basic.online: Online
 admin.user.basic.login_record_tab: System Log
 
 admin.user.basic.basic_tab.create_btn: 'Add'

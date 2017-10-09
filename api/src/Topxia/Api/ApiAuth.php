@@ -72,7 +72,7 @@ class ApiAuth
             }
 
             $this->setCurrentUser($user);
-            $this->onlineSample($request, $token, $user['id']);
+            $this->onlineSample($request, $token['token'], $user['id']);
         }
     }
 
@@ -83,7 +83,7 @@ class ApiAuth
             'user_id' => $userId,
             'ip' => $request->getClientIp(),
             'user_agent' => $request->headers->get('User-Agent', ''),
-            'source' => 'app',
+            'source' => 'App',
         );
         $this->getOnlineService()->saveOnline($online);
     }
