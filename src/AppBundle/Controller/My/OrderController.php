@@ -58,8 +58,6 @@ class OrderController extends BaseController
             20
         );
 
-        $createdOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'display_status' => 'no_paid'));
-        $refundingOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'display_status' => 'refunding'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('created_time' => 'DESC'),
@@ -89,8 +87,6 @@ class OrderController extends BaseController
             'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
-            'createdOrderCount' => $createdOrderCount,
-            'refundingOrderCount' => $refundingOrderCount,
         ));
     }
 
