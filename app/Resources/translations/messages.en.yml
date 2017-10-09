@@ -322,6 +322,7 @@ form.input_mobile: Input mobile
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
+finance.recover: Recorvey
 finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'

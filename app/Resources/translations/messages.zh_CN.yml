@@ -402,6 +402,7 @@ form.input_mobile: 输入手机号码
 finance.income: 收入
 finance.total_income: 总计收入
 finance.expense: 支出
+finance.recover: 回收
 finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币

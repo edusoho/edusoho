@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="ptm">{{ '筛选条件:'|trans }}</label>
+      <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
       <select class="form-control" name="searchType">
         {% set options = {'nickname':'admin.coin.search_type_option.nickname'|trans,'email':'admin.coin.search_type_option.email'|trans} %}
         {{ select_options(options, app.request.get('searchType')) }}
@@ -34,9 +34,9 @@
     <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>
   <p class="text-muted">
-    <span class="mrl">{{ '网校余额'|trans }}：<strong class="inflow-num">{{ math_format(schoolAccount.amount, 0.01) }}</strong></span>
-    <span class="mrl">{{ '支出'|trans }}：<strong class="outflow-num">{{ math_format(inflowAmount, 0.01) }}</strong></span>
-    <span class="mrl">{{ '回收'|trans }}：<strong class="outflow-num">{{ math_format(outflowAmount, 0.01) }}</strong></span>
+    <span class="mrl">{{ 'coin.online_school_balance'|trans }}：<strong class="inflow-num">{{ math_format(schoolAccount.amount, 0.01) }}</strong></span>
+    <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ math_format(inflowAmount, 0.01) }}</strong></span>
+    <span class="mrl">{{ 'finance.recover'|trans }}：<strong class="outflow-num">{{ math_format(outflowAmount, 0.01) }}</strong></span>
   </p>
   <div class="table-responsive">
     <table class="table table-striped">
