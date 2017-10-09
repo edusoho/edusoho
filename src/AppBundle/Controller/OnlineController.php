@@ -78,7 +78,7 @@ class OnlineController extends BaseController
             }
         }
 
-        $type = $request->query->get('type', 'logined');
+        $type = $request->query->get('type', 'online');
         if ($type == 'logined') {
             $conditions['is_login'] = 1;
         } elseif ($type == 'anonymous') {
