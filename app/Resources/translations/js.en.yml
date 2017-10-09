@@ -794,5 +794,13 @@ progress.copy_course_set.message: Copy done!
 confirm.warn: 警告
 confirm.exit.tip: 您确定要退出学习吗？
 
+cashier.wechat_pay: Wechat pay
+cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat <br>scan the QR code to pay
 cashier.confirm.fail_message: Payment unsuccessful, please check or repay
 cashier.pay.error_message: Payment has been abnormal, please contact the administrator
+cashier.confirm.title: Order payment
+cashier.confirm.success: Payment is done
+cashier.confirm.pick_again: Reissue payment method
+cashier.confirm.desc: |
+  Please re-open the page to complete the order payment.<br>
+  If you encounter problems in the payment process, please contact the website customer service solution.<br>

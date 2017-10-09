@@ -157,7 +157,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $trade;
     }
 
-    private function checkOrderBeforePay($sn, $params)
+    public function checkOrderBeforePay($sn, $params)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
 

@@ -322,6 +322,7 @@ form.input_mobile: Input mobile
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
+finance.recover: Recorvey
 finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
@@ -6434,13 +6435,6 @@ register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
-cashier.confirm.title: Order payment
-cashier.confirm.success: Payment is done
-cashier.confirm.pick_again: Reissue payment method
-cashier.confirm.desc: |
-  Please re-open the page to complete the order payment.
-  If you encounter problems in the payment process, please contact the website customer service solution.
-
 cashflow.title: Name
 cashflow.sn: sn
 cashflow.user_name: username
@@ -6466,6 +6460,7 @@ order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
+site.remove_by_manual: Manual remove
 site.join_to_learn: Join to learn
 site.fill_user_info_tip: Fill user info
 

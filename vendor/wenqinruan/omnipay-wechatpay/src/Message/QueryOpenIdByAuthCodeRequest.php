@@ -5,19 +5,15 @@ namespace Omnipay\WechatPay\Message;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\WechatPay\Helper;
-
 /**
  * Class QueryOpenIdByAuthCodeRequest
  * @package Omnipay\WechatPay\Message
  * @link    https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=9_13&index=9
  * @method QueryOpenIdByAuthCodeResponse send()
  */
-class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
+class QueryOpenIdByAuthCodeRequest extends \Omnipay\WechatPay\Message\BaseAbstractRequest
 {
-
     protected $endpoint = 'https://api.mch.weixin.qq.com/tools/authcodetoopenid';
-
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -26,24 +22,12 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
      */
     public function getData()
     {
-
         $this->validate('app_id', 'mch_id', 'auth_code');
-
-        $data = array (
-            'appid'     => $this->getAppId(),
-            'mch_id'    => $this->getMchId(),
-            'auth_code' => $this->getAuthCode(),
-            'nonce_str' => md5(uniqid()),
-        );
-
+        $data = array('appid' => $this->getAppId(), 'mch_id' => $this->getMchId(), 'auth_code' => $this->getAuthCode(), 'nonce_str' => md5(uniqid()));
         $data = array_filter($data);
-
-        $data['sign'] = Helper::sign($data, $this->getApiKey());
-
+        $data['sign'] = \Omnipay\WechatPay\Helper::sign($data, $this->getApiKey());
         return $data;
     }
-
-
     /**
      * @return mixed
      */
@@ -51,8 +35,6 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
     {
         return $this->getParameter('auth_code');
     }
-
-
     /**
      * @param mixed $authCode
      */
@@ -60,8 +42,6 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
     {
         $this->setParameter('auth_code', $authCode);
     }
-
-
     /**
      * Send the request with specified data
      *
@@ -71,10 +51,9 @@ class QueryOpenIdByAuthCodeRequest extends BaseAbstractRequest
      */
     public function sendData($data)
     {
-        $request      = $this->httpClient->post($this->endpoint)->setBody(Helper::array2xml($data));
-        $response     = $request->send()->getBody();
-        $responseData = Helper::xml2array($response);
-
-        return $this->response = new CloseOrderResponse($this, $responseData);
+        $request = $this->httpClient->post($this->endpoint)->setBody(\Omnipay\WechatPay\Helper::array2xml($data));
+        $response = $request->send()->getBody();
+        $responseData = \Omnipay\WechatPay\Helper::xml2array($response);
+        return $this->response = new \Omnipay\WechatPay\Message\CloseOrderResponse($this, $responseData);
     }
 }

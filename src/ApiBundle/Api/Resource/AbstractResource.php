@@ -20,9 +20,9 @@ abstract class AbstractResource
     /**
      * @var Biz
      */
-    private $biz;
+    protected $biz;
 
-    private $container;
+    protected $container;
 
     const METHOD_SEARCH = 'search';
     const METHOD_GET = 'get';

@@ -318,9 +318,9 @@ class CoinController extends BaseController
 
     public function userRecordsAction(Request $request)
     {
-        $condition['timeType'] = 'oneWeek';
+        $sort = $request->query->get('sort', 'balance');
+        $direction = $request->query->get('direction', 'DESC');
         $condition['amount_type'] = 'coin';
-        $condition['orderBY'] = 'desc';
         $condition['except_user_id'] = 0;
 
         $fields = $request->query->all();
@@ -329,6 +329,18 @@ class CoinController extends BaseController
             $convertCondition = $this->convertFiltersToCondition($fields);
             $condition = array_merge($condition, $convertCondition);
         }
+
+        $schoolAccount = $this->getAccountProxyService()->getUserBalanceByUserId(0);
+        $outflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
+            'user_id' => 0,
+            'amount_type' => 'coin',
+            'type' => 'outflow',
+        ));
+        $inflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
+            'user_id' => 0,
+            'amount_type' => 'coin',
+            'type' => 'inflow',
+        ));
 
         if (isset($condition['userId'])) {
             if ($condition['userId'] == 0) {
@@ -345,6 +357,9 @@ class CoinController extends BaseController
             response:
 
             return $this->render('admin/coin/coin-user-records.html.twig', array(
+                'schoolAccount' => $schoolAccount,
+                'outflowAmount' => $outflowAmount,
+                'inflowAmount' => $inflowAmount,
                 'condition' => $condition,
                 'userIds' => $userIds,
                 'users' => $users,
@@ -357,22 +372,18 @@ class CoinController extends BaseController
             20
         );
 
-        $sort = $condition['orderBY'];
-
-        unset($condition['orderBY']);
-
-        if (isset($condition['type'])) {
+        if (in_array($sort, array('recharge', 'consume'))) {
             $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderBySumColumn(
                 'amount',
                 $condition,
-                $sort,
+                $direction,
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         } else {
             $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderByBalance(
                 $condition,
-                $sort,
+                $direction,
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -381,6 +392,9 @@ class CoinController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/coin/coin-user-records.html.twig', array(
+            'schoolAccount' => $schoolAccount,
+            'outflowAmount' => $outflowAmount,
+            'inflowAmount' => $inflowAmount,
             'paginator' => $paginator,
             'userIds' => $userIds,
             'users' => $users,
@@ -634,7 +648,6 @@ class CoinController extends BaseController
 
     protected function convertFiltersToCondition($condition)
     {
-        $condition['orderBY'] = 'desc';
         $keyword = '';
 
         if (isset($condition['searchType'])) {
@@ -660,33 +673,12 @@ class CoinController extends BaseController
             unset($condition['keyword']);
         }
 
-        if (isset($condition['sort'])) {
-            switch ($condition['sort']) {
-                case 'up':
-                    $condition['orderBY'] = 'ASC';
-                    break;
-                case 'down':
-                    $condition['orderBY'] = 'DESC';
-                    break;
-                default:
-                    break;
-            }
-
-            unset($condition['sort']);
+        if (isset($condition['endDateTime']) && !empty($condition['endDateTime'])) {
+            $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
         }
 
-        if (isset($condition['flowType'])) {
-            switch ($condition['flowType']) {
-                case 'in':
-                    $condition['type'] = 'inflow';
-                    break;
-                case 'out':
-                    $condition['type'] = 'outflow';
-                    break;
-                default:
-                    break;
-            }
-            unset($condition['flowType']);
+        if (isset($condition['startDateTime']) && !empty($condition['startDateTime'])) {
+            $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
         }
 
         return $condition;

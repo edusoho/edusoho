@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,19 +17,19 @@ class AlipayController extends PaymentController
         if ($result['status'] == 'paid') {
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn']))
+                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
             ));
         }
 
         return $this->createJsonResponse(array(
             'isPaid' => 0,
-            'redirectUrl' =>  $result['platform_created_result']['url']
+            'redirectUrl' => $result['platform_created_result']['url'],
         ));
     }
 
     public function mobilePayAction($trade)
     {
-        $trade['platform_type'] = 'Web';
+        $trade['platform_type'] = 'Wap';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
         $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'alipay'), true);
         $result = $this->getPayService()->createTrade($trade);
@@ -44,7 +43,9 @@ class AlipayController extends PaymentController
 
     public function notifyAction(Request $request, $payment)
     {
-        $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
+        $data = $request->request->all();
+        $data['platform_type'] = 'Web';
+        $result = $this->getPayService()->notifyPaid($payment, $data);
 
         return $this->createJsonResponse($result);
     }

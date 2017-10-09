@@ -402,6 +402,7 @@ form.input_mobile: 输入手机号码
 finance.income: 收入
 finance.total_income: 总计收入
 finance.expense: 支出
+finance.recover: 回收
 finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
@@ -8100,12 +8101,6 @@ order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
 
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
-cashier.confirm.title: 订单支付中
-cashier.confirm.success: 支付完成
-cashier.confirm.pick_again: 重选支付方式
-cashier.confirm.desc: |
-  请再新开页面中完成订单支付。
-  如在支付过程中遇到问题，请联系网站客服解决。
 
 cashflow.title: 名称
 cashflow.sn: 流水号
@@ -8134,6 +8129,7 @@ order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
 
 site.join_by_free: 免费加入
 site.join_by_purchase: 购买加入
+site.remove_by_manual: 手动移除
 site.join_to_learn: 加入学习
 site.fill_user_info_tip: 信息补全
 

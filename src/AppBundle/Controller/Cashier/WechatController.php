@@ -115,9 +115,7 @@ class WechatController extends PaymentController
         $tradeSn = $request->query->get('tradeSn');
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
-        if ($trade['trade_state'] === 'SUCCESS') {
-            $this->getPayService()->notifyPaid('wechat', Helper::array2xml($trade));
-
+        if ($trade['status'] === 'paid') {
             return $this->createJsonResponse(array(
                 'isPaid' => 1,
                 'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),

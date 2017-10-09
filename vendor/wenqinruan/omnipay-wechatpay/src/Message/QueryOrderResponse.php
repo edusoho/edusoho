@@ -7,7 +7,6 @@ namespace Omnipay\WechatPay\Message;
  * @package Omnipay\WechatPay\Message
  * @link    https://pay.weixin.qq.com/wiki/doc/api/app.php?chapter=9_1
  */
-class QueryOrderResponse extends BaseAbstractResponse
+class QueryOrderResponse extends \Omnipay\WechatPay\Message\BaseAbstractResponse
 {
-
 }
