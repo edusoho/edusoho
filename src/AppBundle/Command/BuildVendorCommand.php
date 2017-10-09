@@ -21,7 +21,6 @@ class BuildVendorCommand extends BaseCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $folder = $input->getArgument('folder');
-        var_dump($folder);
         $this->cleanDevelopVendorFiles($folder, $output);
     }
 
