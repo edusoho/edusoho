@@ -9,32 +9,21 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 {
     protected $table = 'biz_session';
 
-    protected $table2 = 'sessions';
-
     public function declares()
     {
         return array(
             'timestamps' => array('created_time', 'sess_time'),
             'orderbys' => array(),
-            'serializes' => array(),
-            'conditions' => array(),
+            'serializes' => array(
+            ),
+            'conditions' => array(
+            ),
         );
     }
 
-
     public function getBySessId($sessId)
     {
-        $session = null;
-        if ($this->isTableExist($this->table)) {
-            $sql = "SELECT * FROM {$this->table} WHERE sess_id = ?  LIMIT 1";
-            $session = $this->db()->fetchAssoc($sql, array($sessId));
-        }
-
-        if (empty($session)) {
-            $sql = "SELECT * FROM {$this->table2} WHERE sess_id = ?  LIMIT 1";
-            $session = $this->db()->fetchAssoc($sql, array($sessId));
-        }
-        return $session;
+        return $this->getByFields(array('sess_id' => $sessId));
     }
 
     public function deleteBySessId($sessId)
@@ -49,12 +38,5 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
         $sql = "DELETE FROM {$this->table} WHERE sess_deadline < ?";
 
         return $this->db()->executeUpdate($sql, array($sessDeadline));
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->db()->fetchAssoc($sql);
-        return empty($result) ? false : true;
     }
 }
