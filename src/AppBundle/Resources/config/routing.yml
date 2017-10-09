@@ -2997,7 +2997,6 @@ try_export:
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
 
-<<<<<<< HEAD
 v2_demo:
    path: /v2/demo
    defaults: { _controller: AppBundle:V2:demo }
@@ -3005,15 +3004,6 @@ v2_demo:
 v2_demo_modal:
    path: /v2/demo/modal
    defaults: { _controller: AppBundle:V2:modal }
-=======
-#v2_demo:
-#    path: /v2/demo
-#    defaults: { _controller: AppBundle:V2:demo }
-#
-#v2_demo_modal:
-#    path: /v2/demo/modal
-#    defaults: { _controller: AppBundle:V2:modal }
->>>>>>> feature/order-pay
 
 order_calculate_price:
     path: /order/price/calculate
