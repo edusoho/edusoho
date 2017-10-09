@@ -360,12 +360,12 @@ class CoinController extends BaseController
         $outflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
             'user_id' => 0,
             'amount_type' => 'coin',
-            'type' => 'outflow'
+            'type' => 'outflow',
         ));
         $inflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
             'user_id' => 0,
             'amount_type' => 'coin',
-            'type' => 'inflow'
+            'type' => 'inflow',
         ));
 
         if (isset($condition['userId'])) {
