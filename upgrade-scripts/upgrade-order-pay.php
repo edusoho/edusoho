@@ -74,7 +74,7 @@ class EduSohoUpgrade extends AbstractUpdater
             12 => 'migrateBizPayAccount',   // done
             13 => 'migrateBizUserBalance',  // done
             14 => 'migrateBizUserCashflow',
-            15 => 'registerJobs',
+            15 => 'registerJobs', // done
         );
 
         if ($index == 0) {
@@ -134,7 +134,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 `created_user_id`,
                 `create_extra`,
                 `device`,
-                `display_status`,
                 `paid_cash_amount`,
                 `paid_coin_amount`,
                 `refund_deadline`,
@@ -165,7 +164,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 `created_user_id`, -- 创建订单者
                 `data` as `create_extra`,
                 '' as `device`,
-                `status` as `display_status`
                 `amount`*100 as `paid_cash_amount`,
                 `coinAmount`*100 as `paid_coin_amount`,
                 `refundEndTime` as `refund_deadline`,
@@ -567,15 +565,26 @@ class EduSohoUpgrade extends AbstractUpdater
               `id`,
               `user_id`,
               `amount`,
+              `created_time`,
+              `updated_time`,
               `migrate_id`
             )
             select
               `id`,
               u.`id` as `user_id`,
               ca.`cash` as `amount`,
+              u.`createdTime` as `created_time`,
+              u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
             from `user` u right join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`)
         ");
+
+        $sql = "select * from `biz_user_balance` where user_id = 0;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        if (empty($result)) {
+            $currentTime = time();
+            $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values (0, {$currentTime}, {$currentTime});");
+        }
     }
 
     protected function migrateBizUserCashflow()
@@ -591,7 +600,38 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function registerJobs()
     {
-        // TODO
+        if (!$this->isJobExist('Order_CloseOrdersJob')) {
+            $currentTime = time();
+            $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+                      `name`,
+                      `expression`,
+                      `class`,
+                      `args`,
+                      `priority`,
+                      `pre_fire_time`,
+                      `next_fire_time`,
+                      `misfire_threshold`,
+                      `misfire_policy`,
+                      `enabled`,
+                      `creator_id`,
+                      `updated_time`,
+                      `created_time`
+                ) VALUES (
+                      'Order_CloseOrdersJob',
+                      '20 * * * *',
+                      'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseOrdersJob',
+                      '',
+                      '100',
+                      '0',
+                      '{$currentTime}',
+                      '300',
+                      'missed',
+                      '1',
+                      '0',
+                      '{$currentTime}',
+                      '{$currentTime}'
+                )");
+        }
     }
 
     protected function createTables()
@@ -623,7 +663,6 @@ class EduSohoUpgrade extends AbstractUpdater
                   `created_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的创建者',
                   `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
                   `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
-                  `display_status` varchar(32) NOT NULL DEFAULT 'no_paid' COMMENT '订单显示状态(no_paid,paid,refunding,closed,refunded)',
                   `paid_cash_amount` int(10) unsigned NOT NULL DEFAULT '0',
                   `paid_coin_amount` int(10) unsigned NOT NULL DEFAULT '0',
                   `refund_deadline` int(10) unsigned NOT NULL DEFAULT '0',
@@ -757,6 +796,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
                   `parent_sn` VARCHAR(64) COMMENT '本次交易的上一个账单的流水号',
                   `user_id` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
+                  `buyer_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家',
                   `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
                   `amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '金额',
                   `currency` VARCHAR(32) NOT NULL COMMENT '支付的货币: coin, CNY...',
@@ -911,9 +951,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
-    protected function isCrontabJobExist($code)
+    protected function isJobExist($code)
     {
-        $sql = "select * from crontab_job where name='{$code}'";
+        $sql = "select * from biz_scheduler_job where name='{$code}'";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
