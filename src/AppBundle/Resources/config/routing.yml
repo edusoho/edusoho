@@ -988,9 +988,6 @@ receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
-coin_pay:
-    path:     /my/coin/pay
-    defaults: { _controller: AppBundle:My/Coin:pay }
 coin_show:
     path:     /my/coin/show
     defaults: { _controller: AppBundle:My/Coin:show }

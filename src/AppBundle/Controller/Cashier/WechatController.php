@@ -36,7 +36,7 @@ class WechatController extends PaymentController
 
         return $this->forward('AppBundle:Cashier/Wechat:payInWechat', array(
             'openId' => $openid,
-            'params' => $request->getSession()->get('wechat_pay_params')
+            'params' => $request->getSession()->get('wechat_pay_params'),
         ));
     }
 
@@ -62,7 +62,7 @@ class WechatController extends PaymentController
 
         return $this->render(
             'cashier/wechat/h5.html.twig', array(
-            'trade' => $result
+            'trade' => $result,
         ));
     }
 

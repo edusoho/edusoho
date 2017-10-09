@@ -73,8 +73,9 @@ abstract class BaseTrade
 
         if ($params['type'] == 'recharge') {
             $tradeFields['goods_title'] = '虚拟币充值';
-            $tradeFields['amount'] = $params['amount'];
-            $tradeFields['cash_amount'] = $params['amount'];
+            $tradeFields['order_sn'] = '';
+            $tradeFields['amount'] = MathToolkit::simple($params['amount'], 100);
+            $tradeFields['cash_amount'] = MathToolkit::simple($params['amount'], 100);
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
