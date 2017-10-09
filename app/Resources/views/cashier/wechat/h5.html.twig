@@ -1,24 +1,38 @@
-{% extends 'layout.html.twig' %}
-{% block title %}{{ 'pay_center.pay.weixin_pay'|trans }} - {{ parent() }}{% endblock %}
-{% block esBar %}{% endblock %}
-{% do script(['app/js/pay/wxpay-h5/index.js'])%}
+<html>
+  <script type="text/javascript">
+    var goto = {{ trade.successUrl }};
+    var jsApiParams = {{ trade.jsApiParams }};
+    if (typeof WeixinJSBridge == "undefined") {
+      if (document.addEventListener) {
+        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+      } else if (document.attachEvent) {
+        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+      }
+    } else {
+      jsApiCall();
+    }
 
-{% block content %}
-  <div class="panel panel-default panel-wxpay ">
-    <div class="panel-heading">
-      {{'pay_center.pay.weixin_pay.content_title'|trans}}
-    </div>
-    <div class="panel-body">
-      <p>{{'pay_center.order.id'|trans({'%sn%':trade.order_sn})}}</p>
-      <p>{{'pay_center.order.detail'|trans({'%title%':trade.title})}}</p>
-      <p>{{'pay_center.order.price'|trans}}<span class="text-danger text-lg">{{ (trade.cash_amount)|major_currency }}</span></p>
-      <div class="pull-right mtm">
-        <button class="btn btn-primary js-wxpay">{{'pay_center.pay.weixin_pay.pay_btn'|trans}}</button>
-      </div>
-      <div id="jsApiParameters" data-value="{{ jsApiParameters }}"
-           data-goto="{{ path('cashier_wechat_h5_return', {'tradeSn':trade.trade_sn}) }}">
-      </div>
-    </div>
-  </div>
+    //调用微信JS api 支付
+    function jsApiCall() {
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest',
+        jsApiParams,
+        function (res) {
+          if (res.err_msg == 'get_brand_wcpay_request:ok') {
+            window.location.href = goto;
+          } else {
+            if (res.err_msg == 'get_brand_wcpay_request:fail') {
+              alert('error');
+            } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+              // alert('取消')
+            }
+          }
 
-{% endblock %}
+        }
+      );
+    }
+  </script>
+</html>
+
+

@@ -10,8 +10,8 @@ class WechatController extends PaymentController
 {
     public function getOpenIdAction(Request $request)
     {
-        if ($request->getMethod() === 'POST') {
-            $request->getSession()->set('wechat_pay_params', $request->request->all());
+        if ($request->query->get('s')) {
+            $request->getSession()->set('wechat_pay_params', $request->query->all());
         }
 
         $user = $this->getUser();
@@ -62,8 +62,7 @@ class WechatController extends PaymentController
 
         return $this->render(
             'cashier/wechat/h5.html.twig', array(
-            'trade' => $result,
-            'jsApiParameters' => json_encode($result['platform_created_result']),
+            'trade' => $result
         ));
     }
 

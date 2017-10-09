@@ -8,7 +8,6 @@ import WechatPayJs from './wechatpay_js';
 export default class PaySDK {
 
   pay(params) {
-    console.log(params);
     let gateway = this.getGateway(params['payment'], params['isMobile'], params['isWechat']);
     params.gateway = gateway;
     let paySdk = null;
@@ -18,6 +17,7 @@ export default class PaySDK {
         break;
       case 'WechatPay_Js':
         paySdk = this.wpj ? this.wpj : this.wpj = new WechatPayJs();
+        break;
       case 'Alipay_LegacyExpress':
         paySdk = this.ale ? this.ale : this.ale = new AlipayLegacyExpress();
         break;
@@ -43,7 +43,7 @@ export default class PaySDK {
         if (isWechat) {
           gateway = 'WechatPay_Js';
         } else {
-          gateway = 'WechatPay_Native';
+          gateway = 'WechatPay_Js';
         }
         break;
 

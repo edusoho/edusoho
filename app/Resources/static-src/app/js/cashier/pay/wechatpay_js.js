@@ -5,7 +5,13 @@ export default class WechatPayJs extends BasePayment {
   successUrl = '';
   jsApiParams = null;
 
-  afterTradeCreated(res) {
+  pay(params) {
+    params = BasePayment.filterParams(params);
+    params.s = 1;
+    location.href = '/pay/center/wxpay?' + $.param(params);
+  }
+
+  callback(res) {
     this.successUrl = res.successUrl;
     this.jsApiParams = res.jsApiParams;
 

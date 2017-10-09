@@ -19,9 +19,7 @@ export default class BasePayment {
   afterTradeCreated(res) {
 
   }
-
-  static createTrade(postParams, callback) {
-
+  static filterParams(postParams) {
     let params = {
       gateway: postParams.gateway,
       type: postParams.type,
@@ -31,6 +29,13 @@ export default class BasePayment {
     };
 
     Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
+
+    return params;
+  }
+
+  static createTrade(postParams, callback) {
+
+    let params = this.filterParams(postParams);
 
     Api.trade.create({data:params}).then(callback).catch(res => {
       console.log(res);

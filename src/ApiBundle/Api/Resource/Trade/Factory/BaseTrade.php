@@ -64,7 +64,7 @@ abstract class BaseTrade
             $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
             $tradeFields['amount'] = $order['pay_amount'];
             $tradeFields['order_sn'] = $order['sn'];
-            $coinAmount = isset($params['coinAmount']) ? $params['coinAmount'] : 0;
+            $coinAmount = empty($params['coinAmount']) ? 0 : $params['coinAmount'];
             $tradeFields['coin_amount'] = MathToolkit::simple($coinAmount, 100);
             $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount);
             $tradeFields['cash_amount'] = MathToolkit::simple($cashAmount, 100);
