@@ -34,7 +34,7 @@
                       --
                   {% endif %}
               </td>
-              <td><span>{{ cash.created_time|date('Y-m-d H:i:s') }}</span></td>
+              <td><span>{{ cash.created_time|date('Y-m-d H:i') }}</span></td>
               <td class="text-right prl {% if cash.type =="inflow" %}text-success{% else %}warning-state{% endif %}">
                 {{ cash.amount }}
               </td>
@@ -45,10 +45,9 @@
                   {% else %}
                     {{ 'order.payment_pattern.school'|trans }}
                   {% endif %}
-                  <br/>
-                   <span class="text-muted">{{'cashflow.trade_sn'|trans}}: {{ cash.trade_sn }}</span>
                 </span>
               </td>
+              <td>{{ cash.trade_sn }}</td>
             </tr>
           {% endfor %}
         {% else %}

@@ -10,13 +10,13 @@
       <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{ math_format(outflow, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
     </p>
     <div class="table-responsive">
-      <table class="table table-striped">
+      <table class="table table-striped text-sm">
       {% include 'admin/bill/table-title.html.twig' %}
         {% for cash in cashes %}
           <tr>
             <td>{{cash.sn}}</td>
             <td>{{cash.title}}<br>
-                <span class="text-muted text-sm">{{'coin.order_sn'|trans}}：{{cash.order_sn}}</span></td>
+                <span class="text-muted">{{'coin.order_sn'|trans}}：{{cash.order_sn}}</span></td>
             <td>   <a target="_blank" href="{{ path('user_show', {id:cash.user_id}) }}">
             {{users[cash.user_id].nickname}}</a></td>
             <td>{{cash.created_time|date('Y-m-d H:i:s')}}</td>
