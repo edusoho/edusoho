@@ -48,7 +48,14 @@ export default class BasePayment {
 
     let params = this.filterParams(postParams);
 
-    Api.trade.create({data:params}).then(callback).catch(res => {
+    Api.trade.create({data:params}).then(res => {
+      if (res.paidSuccessUrl) {
+        location.href = res.paidSuccessUrl;
+      } else {
+        callback(res)
+      }
+
+    }).catch(res => {
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
   }
