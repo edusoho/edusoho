@@ -7,25 +7,30 @@
       {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
       {% include product.showTemplate %}
 
-      {% if product|default() %}
-        {{ slot('order.show.deducts', {'product': product}) }}
-        {% include 'order/show/coupon-item.html.twig' %}
-      {% endif %}
+      {{ slot('order.show.deducts', {'product': product}) }}
+      {% include 'order/show/coupon-item.html.twig' %}
 
-      <div class="form-group">
-        <div class="total-price">
-          {{'order.confirm.pay_rmb'|trans}}
-            <span class="pay-rmb" id="price-show">
-             {{ product.originPrice|price_format }}
-            </span>
+      <div class="cd-pv24" id="order-center-price-list">
+        <div class="order-center-price">
+          <div class="order-center-price__title">课程价格</div>
+          <div class="order-center-price__content">{{ product.originPrice|price_format }}</div>
+        </div>
+      </div>
+      <div class="order-center-line"></div>
+
+      <div class="cd-pt16 cd-pb24">
+        <div class="order-center-price">
+          <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
+          <div class="order-center-price__content">
+            <span class="cd-text-danger" id="realpay-price" style="font-size: 16px">{{ product.originPrice|price_format }}</span>
+          </div>
         </div>
       </div>
 
-      <div class="form-group text-right">
-        <a
-          href="{{ path(product.backUrl.routing, product.backUrl.params) }}"
-          class="btn btn-link">{{'form.btn.cancel'|trans}}</a> 
-          <button class="btn btn-primary" id="order-create-btn" type="submit" data-loading-text="{{ 'order.confirm.submit_btn_loading'|trans }}">{{'order.confirm.submit_btn'|trans}}</button>
+      <div class="text-right">
+        <button class="btn cd-btn cd-btn-primary" id="order-create-btn" type="submit" data-loading-text="{{ 'order.confirm.submit_btn_loading'|trans }}">
+          {{'order.confirm.submit_btn'|trans}}
+        </button>
       </div>
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -1,11 +1,11 @@
 .order-center {
-  margin-bottom: 24px;
+  // margin-bottom: 24px;
   &-card {
     position: relative;
     background: #fafafa;
     .border-radius(4px);
     height: 108px;
-    margin-bottom: 24px;
+    // margin-bottom: 24px;
     &__img {
       float: left;
       height: 100%;
@@ -28,7 +28,6 @@
       .cd-text-overflow;
     }
     &__price {
-      padding-left: 24px;
       line-height: 1;
       font-size: 12px;
       color: @brand-danger;
@@ -38,6 +37,7 @@
   &-deduction {
     vertical-align: middle;
     margin-bottom: 24px;
+    margin-top: 24px;
     line-height: 14px;
     &__title {
       font-size: 14px;
@@ -71,6 +71,19 @@
     }
     .action-button {
       width: 70px;
+    }
+  }
+  &-price {
+    text-align: right;
+    font-size: 12px;
+    &__title {
+      color: @cd-gray;
+      display: inline-block;
+    }
+    &__content {
+      width: 116px;
+      color: @cd-gray-dark;
+      display: inline-block;
     }
   }
 }

@@ -420,6 +420,7 @@ plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
+plugin.discount: 打折
 plugin.coupon.minus: 抵扣
 plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
 plugin.coupon.discount_tips: 优惠券 抵价%rate%折
@@ -501,7 +502,7 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 order.confirm: 订单确认
-order.confirm.pay_rmb: 应付金额：
+order.confirm.pay_rmb: 实付金额
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...

@@ -49,7 +49,10 @@ class Coupon {
       return;
     }
 
+    $this.button('loading');
+    
     this.validate(event, (data) => {
+      $this.button('reset');
       if (data.useable == 'no') {
         this.errorMessage(data.message);
       } else {
@@ -58,16 +61,18 @@ class Coupon {
 
         this.$form.find('#coupon-code').text(code);
         this.toggleShow('use');
+
+        this.$form.trigger('calculatePrice');
+        this.$form.trigger('addPriceItem', ['coupon-price', '优惠码抵扣', deductAmount]);
       }
     })
   }
 
   cancelCoupon(event) {
+    this.$couponCode.val('');
+    this.$form.trigger('calculatePrice');
+    this.$form.trigger('addPriceItem', ['coupon-price']);
     this.toggleShow('cancel');
-  }
-
-  removeValidate() {
-    this.$couponCode.rules('remove');
   }
 
   errorMessage(text) {
@@ -97,7 +102,7 @@ class Coupon {
       type: 'POST',
       data,
     }).done((data) => {
-      if (typeof callback == 'function') {
+      if (typeof callback === 'function') {
         callback(data);
       }
     });

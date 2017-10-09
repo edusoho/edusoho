@@ -12,10 +12,10 @@
 <div class="order-center-coupon" id="order-coupon">
   <div class="order-center-coupon__select" id="order-center-coupon__select">
     <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="coupon-form-group">
-      <input type="text" class="form-control" name="couponCode" value="{{product.availableDeducts.coupon[0].code|default('')}}"  
+      <input type="text" class="form-control" name="couponCode" value=""  
         data-display="{{'plugin.coupon.use.input_placeholder'|trans}}"  placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}">
       <div class="action-button">
-        <button type="button" class="btn cd-btn cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
+        <button type="button" data-loading-text="使用中" class="btn cd-btn cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
       </div>
       <div id="coupon-error-message" class="form-error-message" style="display:none"></div>
     </div>
@@ -31,7 +31,9 @@
     {% endif %}
   </div>
   <div class="order-center-coupon__selected cd-mb32" style="display:none"  id="order-center-coupon__selected">
-    <span class="cd-text-gray-dark">已使用优惠券 <span id="coupon-code">es41828194</span> 抵扣 <span id="deduct-amount" data-placeholder = "{{ 0|price_format }}"></span></span> 
+    <span class="cd-text-gray-dark">
+      已使用优惠券 <span id="coupon-code"></span> 抵扣 <span id="deduct-amount"></span>
+    </span> 
     <a href="javascript:;" class="cd-link-primary" id="cancel-use-coupon-btn">取消</a>
   </div>
 </div>
