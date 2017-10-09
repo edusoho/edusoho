@@ -12,11 +12,8 @@ class WechatPayJsTrade extends BaseTrade
 
     public function getCustomFields($params)
     {
-        $user = $this->getUser();
-        $bind = $this->getUserService()->getUserBindByTypeAndUserId('weixinmob', $user['id']);
-        file_put_contents('log.text', json_encode($bind));
         return array(
-            'open_id' => $bind['fromId'],
+            'open_id' => $params['openId'],
         );
     }
 

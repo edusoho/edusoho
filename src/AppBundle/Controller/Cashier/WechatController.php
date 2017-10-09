@@ -2,29 +2,25 @@
 
 namespace AppBundle\Controller\Cashier;
 
+use ApiBundle\Api\ApiRequest;
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
-use Omnipay\WechatPay\Helper;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\MathToolkit;
 
 class WechatController extends PaymentController
 {
-    public function mobilePayAction($trade)
+    public function getOpenIdAction(Request $request)
     {
+        if ($request->getMethod() === 'POST') {
+            $request->getSession()->set('wechat_pay_params', $request->request->all());
+        }
+
         $user = $this->getUser();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
-        $request = $this->get('request_stack')->getMasterRequest();
-        if ($tradeSn = $request->query->get('tradeSn')) {
-            $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-        }
-
         $biz = $this->getBiz();
-
-        $request = $this->get('request_stack')->getMasterRequest();
 
         $options = $biz['payment.platforms.options']['wechat'];
         $jsApi = new JsApiPay(array(
@@ -32,30 +28,37 @@ class WechatController extends PaymentController
             'account' => $options['mch_id'],
             'key' => $options['key'],
             'secret' => $options['secret'],
-            'redirect_uri' => $this->generateUrl('cashier_wechat_mobile_pay', array('tradeSn' => $trade['sn']), true),
+            'redirect_uri' => $this->generateUrl('cashier_wechat_pay_get_openid', array(), true),
             'isMicroMessenger' => true,
         ), $request);
 
         $openid = $jsApi->getOpenid();
 
-        if ($user['id'] != $trade['user_id']) {
-            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
-        }
+        return $this->forward('AppBundle:Cashier/Wechat:payInWechat', array(
+            'openId' => $openid,
+            'params' => $request->getSession()->get('wechat_pay_params')
+        ));
+    }
 
-        $trade['open_id'] = $openid;
-        $trade['platform_type'] = 'Js';
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'), true);
-        $result = $this->getPayService()->createTrade($trade);
-
-        if ($result['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
-        }
-
-        $result = MathToolkit::multiply(
-            $result,
-            array('cash_amount'),
-            0.01
+    public function payInWechatAction($openId, $params)
+    {
+        file_put_contents('log.text', $openId);
+        $apiKernel = $this->get('api_resource_kernel');
+        $apiRequest = new ApiRequest(
+            '/api/trades',
+            'POST',
+            array(),
+            array(
+                'gateway' => 'WechatPay_Js',
+                'type' => 'purchase',
+                'openId' => $openId,
+                'orderSn' => $params['orderSn'],
+                'coinAmount' => $params['coinAmount'],
+            ),
+            array()
         );
+
+        $result = $apiKernel->handleApiRequest($apiRequest);
 
         return $this->render(
             'cashier/wechat/h5.html.twig', array(
