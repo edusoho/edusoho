@@ -65,11 +65,11 @@ class EduSohoUpgrade extends AbstractUpdater
             3 => 'migrateBizOrderItems', // done
             4 => 'migrateBizOrderItemDeductsByCoupon', // done
             5 => 'migrateBizOrderItemDeductsByDiscount', // done
-            6 => 'migrateBizOrderRefund',
-            7 => 'migrateBizOrderRefundItems',
+            6 => 'migrateBizOrderRefund', // done
+            7 => 'migrateBizOrderRefundItems', // done
             8 => 'migrateBizOrderLog',
-            9 => 'migrateBizPaymentTrade',
-            10 => 'migrateBizPaymentTradeFromCashOrder',
+            9 => 'migrateBizPaymentTrade', // done
+            10 => 'migrateBizPaymentTradeFromCashOrder', // done
             11 => 'migrateBizSecurityAnswer', // done
             12 => 'migrateBizPayAccount',   // done
             13 => 'migrateBizUserBalance',  // done
@@ -161,7 +161,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `close_data`, -- 当订单关闭状态时的数据
                 0 as `close_user_id`, -- 当订单关闭状态时的操作人
                 0 as `seller_id`,
-                `created_user_id`, -- 创建订单者
+                `userId` as `created_user_id`, -- 创建订单者
                 `data` as `create_extra`,
                 '' as `device`,
                 `amount`*100 as `paid_cash_amount`,
@@ -173,10 +173,12 @@ class EduSohoUpgrade extends AbstractUpdater
             from orders where id not in (select migrate_id from `biz_order`);
         ");
 
-        // 处理source字段
-        $connection->exec("
-            
-        ");
+        // TODO
+        // 处理source字段, 来源：self, 营销平台（marketing\self\outside，在原表中的payment字段）
+        // 处理device字段, 下单设备：app, pc, 手机
+        // 处理created_user_id字段, 区分创建订单时是老师导入还是自己创建的
+
+        return 1;
     }
 
     protected function migrateBizOrderItems()
@@ -212,31 +214,31 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             ) 
             select 
-                `id`,
-                `id` as `order_id`,
-                `sn` as `sn`,
-                `title` as `title`,
+                `o`.`id`,
+                `o`.`id` as `order_id`,
+                `o`.`sn` as `sn`,
+                `o`.`title` as `title`,
                 '' as `detail`,
                 1 as `num`,
                 '' as `unit`, -- 会员订单时的单位：按月、按年
-                `status` as `status`,
-                `refundId` as `refund_id`,
+                `o`.`status` as `status`,
+                `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else o.status end as `refund_status`, -- 当有refund_id时，冗余的退款状态
-                `totalPrice`*100 as `price_amount`,
-                (o.`totalPrce` - o.`couponDiscount` - o.`discount`) as `pay_amount`, -- 应付款
-                `targetId` as `target_id`,
-                `targetType` as `target_type`,
-                `paidTime` as `pay_time`,
-                `paidTime` as `finish_time`,
+                `o`.`totalPrice`*100 as `price_amount`,
+                case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
+                `o`.`targetId` as `target_id`,
+                `o`.`targetType` as `target_type`,
+                `o`.`paidTime` as `pay_time`,
+                `o`.`paidTime` as `finish_time`,
                 0 as `close_time`, -- 关闭时间
-                `userId` as `user_id`,
+                `o`.`userId` as `user_id`,
                 0 as `seller_id`,
                 '' as `create_extra`,
                 '' as `snapshot`,
-                `createdTime` as `created_time`,
-                `updatedTime` as `updated_time`,
-                `id` as `migrate_id`
-            from orders o right join order_refund re on o.refundId = re.id where id not in (select migrate_id from `biz_order_item`);
+                `o`.`createdTime` as `created_time`,
+                `o`.`updatedTime` as `updated_time`,
+                `o`.`id` as `migrate_id`
+            from orders o left join order_refund re on o.refundId = re.id where `o`.`id` not in (select migrate_id from `biz_order_item`);
         ");
 
         // 处理会员订单
@@ -248,6 +250,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         // 处理close_time
         $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
+
+        return 1;
     }
 
     protected function migrateBizOrderItemDeductsByCoupon()
@@ -287,8 +291,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`createdTime` as `created_time`,
                 o.`updatedTime` as `updated_time`,
                 o.`id` as `migrate_id`
-            from orders o right join coupon c on o.coupon = c.code where coupon is not null and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
+            from orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
         ");
+
+        return 1;
     }
 
     protected function migrateBizOrderItemDeductsByDiscount()
@@ -298,7 +304,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
         $connection->exec("
             insert into `biz_order_item_deduct` (
-                `id`,
                 `order_id`,
                 `detail`,
                 `item_id`,
@@ -314,7 +319,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             ) 
             select 
-                `id`,
                 `id` as `order_id`,
                 '' as `detail`,
                 `id` as `item_id`,
@@ -330,6 +334,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `migrate_id`
             from orders where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount');
         ");
+
+        return 1;
     }
 
     protected function migrateBizOrderRefund()
@@ -364,7 +370,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `title`,
                 `orderId` as `order_id`,
                 `orderId` as `order_item_id`,
-                '' as `sn`,
+                concat(`createdTime`, FLOOR(RAND() * 10000)) as `sn`,
                 `userId` as `user_id`,
                 `reasonNote` as `reason`,
                 `expectedAmount` as `amount`,
@@ -381,15 +387,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `migrate_id`
             from `order_refund` where `id` not in (select migrate_id from `biz_order_refund`)
         ");
+
+        return 1;
     }
 
     protected function migrateBizOrderRefundItems()
     {
-        $this->addMigrateId('biz_order_refund_item');
+        $this->addMigrateId('biz_order_item_refund');
 
         $connection = $this->getConnection();
         $connection->exec("
-            insert into `biz_order_refund_item` (
+            insert into `biz_order_item_refund` (
                 `id`,
                 `order_refund_id`,
                 `order_id`,
@@ -406,8 +414,8 @@ class EduSohoUpgrade extends AbstractUpdater
             select 
                 `id`,
                 `id` as `order_refund_id`,
-                `ordeId` as `order_id`,
-                `ordeId` as `order_item_id`,
+                `orderId` as `order_id`,
+                `orderId` as `order_item_id`,
                 `userId` as `user_id`,
                 `expectedAmount` as `amount`,
                 0 as `coin_amount`,
@@ -416,13 +424,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from `order_refund` where `id` not in (select migrate_id from `biz_order_refund_item`)
+            from `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`)
         ");
+
+        return 1;
     }
 
     protected function migrateBizOrderLog()
     {
         // TODO
+
+        return 1;
     }
 
     protected function migrateBizPaymentTrade()
@@ -488,17 +500,73 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `migrate_id`
             from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase')
         ");
+
+        return 1;
     }
 
     protected function migrateBizPaymentTradeFromCashOrder()
     {
-        // TODO
         $this->addMigrateId('biz_payment_trade');
 
         $connection = $this->getConnection();
         $connection->exec("
-            
+            insert into `biz_payment_trade` (
+                `title`,
+                `trade_sn`,
+                `order_sn`,
+                `platform`,
+                `platform_sn`,
+                `status`,
+                `price_type`,
+                `currency`,
+                `amount`,
+                `coin_amount`,
+                `cash_amount`,
+                `rate`,
+                `type`,
+                `pay_time`,
+                `seller_id`,
+                `user_id`,
+                `notify_data`,
+                `platform_created_result`,
+                `apply_refund_time`,
+                `refund_success_time`,
+                `platform_created_params`,
+                `platform_type`,
+                `updated_time`,
+                `created_time`,
+                `migrate_id`
+            )
+            select 
+                `title`,
+                `sn` as `trade_sn`,
+                '' as `order_sn`,
+                `payment` as `platform`,
+                '' as `platform_sn`,
+                `status` as `status`,
+                'money' as `price_type`,
+                'CNY' as `currency`,
+                `amount`,
+                '0' as `coin_amount`,
+                `amount` as `cash_amount`,
+                '1' as `rate`,
+                'recharge' as `type`,
+                `paidTime` as `pay_time`,
+                0 as `seller_id`,
+                `userId` as `user_id`,
+                '' as `notify_data`,
+                '' as `platform_created_result`,
+                0 as `apply_refund_time`,
+                0 as `refund_success_time`,
+                '' as `platform_created_params`,
+                '' as `platform_type`,
+                `paidTime` as `updated_time`,
+                `createdTime` as `created_time`,
+                `id` as `migrate_id`
+            from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge')
         ");
+
+        return 1;
     }
 
     protected function migrateBizSecurityAnswer()
@@ -528,6 +596,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `migrate_id`
             from user_secure_question where id not in (select migrate_id from biz_security_answer)
         ");
+
+        return 1;
     }
 
     protected function migrateBizPayAccount()
@@ -553,12 +623,16 @@ class EduSohoUpgrade extends AbstractUpdater
               `createdTime`,
               `updatedTime`,
               `id`
-            from `user` where u.`id` not in (select `migrate_id` from `biz_pay_account`)
+            from `user` u where u.`id` not in (select `migrate_id` from `biz_pay_account`)
         ");
+
+        return 1;
     }
 
     protected function migrateBizUserBalance()
     {
+        $this->addMigrateId('biz_user_balance');
+
         $connection = $this->getConnection();
         $connection->exec("
             insert into `biz_user_balance` (
@@ -570,13 +644,13 @@ class EduSohoUpgrade extends AbstractUpdater
               `migrate_id`
             )
             select
-              `id`,
+              u.`id`,
               u.`id` as `user_id`,
-              ca.`cash` as `amount`,
+              case when ca.`cash` is null then 0 else ca.`cash` end as `amount`,
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
-            from `user` u right join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`)
+            from `user` u left join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`)
         ");
 
         $sql = "select * from `biz_user_balance` where user_id = 0;";
@@ -585,6 +659,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $currentTime = time();
             $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values (0, {$currentTime}, {$currentTime});");
         }
+
+        return 1;
     }
 
     protected function migrateBizUserCashflow()
@@ -593,9 +669,30 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->addMigrateId('biz_user_cashflow');
 
         $connection = $this->getConnection();
-        $connection->exec("
-            
-        ");
+//        $connection->exec("
+//            insert into `biz_user_cashflow` (
+//                `id`,
+//                `title`,
+//                `sn`,
+//                `parent_sn`,
+//                `user_id`,
+//                `buyer_id`,
+//                `type`,
+//                `amount`,
+//                `currency`,
+//                `user_balance`,
+//                `order_sn`,
+//                `trade_sn`,
+//                `platform`,
+//                `amount_type`,
+//                `created_time`,
+//                `migrate_id`
+//            )
+//            select
+//            from `user_flow` uf
+//        ");
+
+        return 1;
     }
 
     protected function registerJobs()
@@ -632,6 +729,8 @@ class EduSohoUpgrade extends AbstractUpdater
                       '{$currentTime}'
                 )");
         }
+
+        return 1;
     }
 
     protected function createTables()
@@ -908,6 +1007,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
+        return 1;
     }
 
     protected function addMigrateId($table)
