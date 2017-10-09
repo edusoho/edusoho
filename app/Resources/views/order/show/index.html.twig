@@ -13,8 +13,6 @@
       {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
       {% include product.showTemplate %}
 
-      {# {{ dump(product.showTemplate ) }} #}
-
       {{ slot('order.show.deducts', {'product': product}) }}
       {% include 'order/show/coupon-item.html.twig' %}
 
