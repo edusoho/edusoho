@@ -356,6 +356,18 @@ class CoinController extends BaseController
             $condition = array_merge($condition, $convertCondition);
         }
 
+        $schoolAccount = $this->getAccountProxyService()->getUserBalanceByUserId(0);
+        $outflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
+            'user_id' => 0,
+            'amount_type' => 'coin',
+            'type' => 'outflow'
+        ));
+        $inflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
+            'user_id' => 0,
+            'amount_type' => 'coin',
+            'type' => 'inflow'
+        ));
+
         if (isset($condition['userId'])) {
             if ($condition['userId'] == 0) {
                 $userIds = array();
@@ -371,13 +383,14 @@ class CoinController extends BaseController
             response:
 
             return $this->render('admin/coin/coin-user-records.html.twig', array(
+                'schoolAccount' => $schoolAccount,
+                'outflowAmount' => $outflowAmount,
+                'inflowAmount' => $inflowAmount,
                 'condition' => $condition,
                 'userIds' => $userIds,
                 'users' => $users,
             ));
         }
-
-        var_dump($condition);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -405,6 +418,9 @@ class CoinController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/coin/coin-user-records.html.twig', array(
+            'schoolAccount' => $schoolAccount,
+            'outflowAmount' => $outflowAmount,
+            'inflowAmount' => $inflowAmount,
             'paginator' => $paginator,
             'userIds' => $userIds,
             'users' => $users,
@@ -700,10 +716,6 @@ class CoinController extends BaseController
 
         if (isset($condition['startDateTime']) && !empty($condition['startDateTime'])) {
             $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
-        }
-
-        if (empty($condition['created_time_GTE']) && empty($condition['created_time_LTE'])) {
-            $condition['created_time_GTE'] = time() - 7 * 24 * 60 * 60;
         }
 
         return $condition;

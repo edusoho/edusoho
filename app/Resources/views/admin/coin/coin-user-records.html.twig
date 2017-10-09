@@ -33,37 +33,11 @@
 
     <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>
-
-  {#<div class="well">#}
-    {#<div>#}
-      {#{{'time'|trans}}：#}
-      {#<a type="button"#}
-         {#class="btn btn-default btn-sm {% if app.request.get('timeType') != "threeMonths" and app.request.get('timeType') != "oneMonth" and  app.request.get('timeType') != "all" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{timeType:"oneWeek",searchType:app.request.get('searchType'),keyword:app.request.get('keyword')}) }}">{{'admin.coin.datagrid.filter.oneWeek'|trans}}</a>#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('timeType') == "oneMonth" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{timeType:"oneMonth",searchType:app.request.get('searchType'),keyword:app.request.get('keyword')}) }}">{{'admin.coin.datagrid.filter.oneMonth'|trans}}</a>#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('timeType') == "threeMonths" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{timeType:"threeMonths",searchType:app.request.get('searchType'),keyword:app.request.get('keyword')}) }}">{{'admin.coin.datagrid.filter.threeMonths'|trans}}</a>#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('timeType') == "all" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{timeType:"all",searchType:app.request.get('searchType'),keyword:app.request.get('keyword')}) }}">{{'admin.coin.datagrid.filter.all_history'|trans}}</a>#}
-      {#<span class="mll"></span>#}
-      {#{{'type'|trans}}：#}
-      {#<a type="button"#}
-         {#class="btn btn-default btn-sm {% if app.request.get('flowType') != "out" and  app.request.get('flowType') != "in" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{flowType:"",timeType:app.request.get('timeType'),sort:app.request.get('sort')}) }}">{{'admin.coin.datagrid.filter.balance'|trans}}</a>#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('flowType') == "out" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{flowType:"out",timeType:app.request.get('timeType'),sort:app.request.get('sort')}) }}">{{'admin.coin.datagrid.filter.consume'|trans}}</a>#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('timeType') == "in" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{flowType:"in",timeType:app.request.get('timeType'),sort:app.request.get('sort')}) }}">{{'admin.coin.datagrid.filter.recharge'|trans}}</a>#}
-      {#<span class="mll"></span>#}
-      {#{{'admin.coin.sort'|trans}}：#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('sort') == "up" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{flowType:app.request.get('flowType'),timeType:app.request.get('timeType'),sort:"up"}) }}">{{'admin.coin.datagrid.filter.asc'|trans}}</a>#}
-      {#<a type="button" class="btn btn-default btn-sm {% if app.request.get('sort') == "down" %}btn-info{% endif %}"#}
-         {#href="{{ path('admin_coin_user_records',{flowType:app.request.get('flowType'),timeType:app.request.get('timeType'),sort:"down"}) }}">{{'admin.coin.datagrid.filter.desc'|trans}}</a>#}
-    {#</div>#}
-  {#</div>#}
-
+  <p class="text-muted">
+    <span class="mrl">{{ '网校余额'|trans }}：<strong class="inflow-num">{{ math_format(schoolAccount.amount, 0.01) }}</strong></span>
+    <span class="mrl">{{ '支出'|trans }}：<strong class="outflow-num">{{ math_format(inflowAmount, 0.01) }}</strong></span>
+    <span class="mrl">{{ '回收'|trans }}：<strong class="outflow-num">{{ math_format(outflowAmount, 0.01) }}</strong></span>
+  </p>
   <div class="table-responsive">
     <table class="table table-striped">
       {% set querySort = app.request.query.get('sort', 'balance') %}
