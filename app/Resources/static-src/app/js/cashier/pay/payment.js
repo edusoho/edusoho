@@ -36,6 +36,7 @@ export default class BasePayment {
       coinAmount: postParams.coinAmount,
       amount: postParams.amount,
       openid: postParams.openid,
+      payPassword: postParams.payPassword
     };
 
     Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
