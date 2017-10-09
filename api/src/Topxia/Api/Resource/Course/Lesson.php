@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Silex\Application;
@@ -207,7 +208,7 @@ class Lesson extends BaseResource
 
         if ($mediaSource == 'self') {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
-
+            
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {

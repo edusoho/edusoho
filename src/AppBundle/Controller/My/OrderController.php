@@ -5,7 +5,9 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\MathToolkit;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,26 +52,6 @@ class OrderController extends BaseController
             $conditions['payment'] = $payWays;
         }
 
-//        $conditions['start_time'] = 0;
-//        $conditions['end_time'] = time();
-//        switch ($request->get('lastHowManyMonths')) {
-//            case 'oneWeek':
-//                $conditions['start_time'] = $conditions['end_time'] - 7 * 24 * 3600;
-//                break;
-//            case 'twoWeeks':
-//                $conditions['start_time'] = $conditions['end_time'] - 14 * 24 * 3600;
-//                break;
-//            case 'oneMonth':
-//                $conditions['start_time'] = $conditions['end_time'] - 30 * 24 * 3600;
-//                break;
-//            case 'twoMonths':
-//                $conditions['start_time'] = $conditions['end_time'] - 60 * 24 * 3600;
-//                break;
-//            case 'threeMonths':
-//                $conditions['start_time'] = $conditions['end_time'] - 90 * 24 * 3600;
-//                break;
-//        }
-
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
@@ -93,24 +75,17 @@ class OrderController extends BaseController
         $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
 
+        $orderRefunds = $this->getOrderRefundService()->findRefundsByOrderIds($orderIds);
+        $orderRefunds = ArrayToolkit::index($orderRefunds, 'order_id');
+
         foreach ($orders as &$order) {
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
+            $order['refund'] = empty($orderRefunds[$order['id']]) ? array() : $orderRefunds[$order['id']];
             $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
-        $waitToBePaidCountConditions = array('userId' => $user['id'], 'status' => 'created');
-//        $waitToBePaidCount = $this->getOrderService()->countOrders($waitToBePaidCountConditions);
-        //
-//        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-//            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
-//                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-//                $orders[$index]['status'] = 'cancelled';
-//                $waitToBePaidCount -= 1;
-//            }
-//        }
-
-        return $this->render('my-order/index.html.twig', array(
+        return $this->render('my-order/order/index.html.twig', array(
             'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
@@ -123,7 +98,6 @@ class OrderController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $order = $this->tryManageOrder($id);
-        $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
 
         $user = $this->getUserService()->getUser($order['user_id']);
 
@@ -178,7 +152,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     * @return OrderService
      */
     protected function getOrderService()
     {
@@ -207,5 +181,21 @@ class OrderController extends BaseController
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    /**
+     * @return OrderRefundService
+     */
+    protected function getOrderRefundService()
+    {
+        return $this->createService('Order:OrderRefundService');
+    }
+
+    /**
+     * @return LocalOrderRefundService
+     */
+    protected function getLocalOrderRefundService()
+    {
+        return $this->createService('OrderFacade:OrderRefundService');
     }
 }

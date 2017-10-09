@@ -9,7 +9,7 @@
 <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet" />
 <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
 
-{#{{ slot('stylesheet.webpack.extension') }}#}
+{{ slot('stylesheet.webpack.extension',{}) }}
 
 {% if maincolor != 'default' %}
 	<link href="{{ asset('static-dist/app/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />

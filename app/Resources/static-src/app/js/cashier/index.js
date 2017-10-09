@@ -1,7 +1,8 @@
 import Coin from './coin';
-import notify from 'common/notify';
+import PaySDK from './pay/sdk';
 
 class CashierForm {
+
   constructor($form) {
     this.$container = $form;
 
@@ -9,6 +10,8 @@ class CashierForm {
 
     this.initEvent();
     this.initCoin();
+
+    this.paySdk = new PaySDK();
   }
 
   initCoin() {
@@ -27,23 +30,42 @@ class CashierForm {
       self.$container.find('.js-pay-price').text(resp.data);
     });
 
-
   }
 
-
   initEvent() {
-
-
     // 支付方式切换
-    this.$container.on('click', '.check', function () {
-      let $this = $(this);
+    this.$container.on('click', '.check', event => {
+      let $this = $(event.currentTarget);
       if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
         $this.addClass('active').siblings().removeClass('active');
         $("input[name='payment']").val($this.attr("id"));
       }
-
     });
 
+    let $form = this.$container;
+    let self = this;
+    $form.on('click', '.js-pay-btn', event => {
+
+      if ($form.valid()) {
+
+        let params = self.formDataToObject($form);
+
+        params.payAmount = self.$container.find('.js-pay-price').text();
+        self.paySdk.pay(params);
+      }
+
+    });
+  }
+
+  formDataToObject($form) {
+
+    let params = {},
+      formArr = $form.serializeArray();
+    for (let index in formArr) {
+      params[formArr[index].name] = formArr[index].value;
+    }
+
+    return params;
   }
 }
 

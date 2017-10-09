@@ -4,17 +4,8 @@
       <tr> <td width="25%">{{'order.id'|trans}}</td> <td width="75%">{{ order.sn }}</td> </tr>
       <tr> <td width="25%">{{'order.status'|trans}}</td>
            <td width="75%">
-             {{ dict_text('orderStatus', order.status) }}
+             {{ display_order_status( order.status, 0) }}
            </td>
-      </tr>
-      <tr>
-        <td width="25%">{{'order.name'|trans}}</td>
-        <td width="75%">
-          {% for item in orderItems  %}
-            《{{ item.title }}》
-          {% endfor %}
-
-        </td>
       </tr>
       <tr> <td width="25%">{{'order.buyers'|trans}}</td>
         <td width="75%">
@@ -23,9 +14,15 @@
           </strong>
         </td>
       </tr>
+      <tr>
+        <td width="25%">{{'order.name'|trans}}</td>
+        <td width="75%">
+          {{ order.title }}
+        </td>
+      </tr>
       <tr> <td width="25%">{{'order.price'|trans}}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.price_amount }}</span>
+          <span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span>
           {% if paymentTrade.currency|default('') == "RMB" %}
           {{'site.currency.CNY'|trans}}
           {% elseif paymentTrade.currency|default('') == "Coin" %}
@@ -33,57 +30,41 @@
           {% endif %}
         </td>
       </tr>
-      {#<tr> <td width="25%">{{'plugin.coupon.code'|trans}}</td>#}
-        {#<td width="75%">#}
-          {#{% if order.coupon %}{{ order.coupon }}{% else %}{{'site.data.empty'|trans}}{% endif %}#}
-        {#</td>#}
-      {#</tr>#}
-      <tr> <td width="25%">{{'plugin.coupon.amount'|trans}}</td>
-        <td width="75%">
-          <span class="color-warning">{{ order.price_amount - order.pay_amount }}</span>
-          {% if paymentTrade.currency|default('') == "RMB" %}
-          {{'site.currency.CNY'|trans}}
-          {% elseif paymentTrade.currency|default('') == "Coin" %}
-          {{setting("coin.coin_name")}}
-          {% endif %}
-        </td>
-      </tr>
-      {#<tr> <td width="25%">{{'order.real_pay'|trans}}</td>
-        <td width="75%">
-          <span class="color-warning">{{ order.totalPrice }}</span>
-          {% if order.priceType == "RMB" %}
-          {{'site.currency.CNY'|trans}}
-          {% elseif order.priceType == "Coin" %}
-          {{setting("coin.coin_name")}}
-          {% endif %}
-        </td>
-      </tr>#}
-      {% if setting("coin.coin_enabled")|default(0) == 1 %}
+
+      {% if orderDeducts %}
+        <tr>
+          <td width="25%">{{ 'order.deduct'|trans}}</td>
+          <td width="75%"><span class="color-warning">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
+        </tr>
+        {% for orderDeduct in orderDeducts %}
+          <tr>
+            <td width="25%" class="color-gray" style="text-align: right">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
+            <td width="75%"><span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span></td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+
       <tr>
-        <td width="25%">
+        <td width="25%" class="color-gray" style="text-align:right;">
           {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
         </td>
         <td width="75%">
-          <span class="color-warning">{{ paymentTrade.coin_amount|default(0) }}</span> {{setting("coin.coin_name")}}
+          <span class="color-warning">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
         </td>
       </tr>
-      {% endif %}
-      <tr> <td width="25%">{{'order.payment_pattern.cash'|trans}}</td>
+      <tr>
+        <td width="25%" class="color-gray" style="text-align:right;">
+          {% if order.payment == 'none' %}
+            现金
+          {% else %}
+            {{ dict_text('payment', order.payment, '现金') }}
+          {% endif %}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.pay_amount }}</span> {{'site.currency.CNY'|trans}}
+          <span class="color-warning">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span>
         </td>
       </tr>
-      <tr> <td width="25%">{{'order.payment_pattern'|trans}}</td>
-           <td width="75%">
-             {% if order.payment == 'none' %}
-               --
-             {% else %}
-               {{ dict_text('payment', order.payment, '--') }}
-             {% endif %}
-           </td>
-      </tr>
-      <tr> <td width="25%">{{'order.createdTime'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td> </tr>
-      {% if order.status == 'paid' %}
+      <tr> <td width="25%">{{'order.created_time'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td> </tr>
+      {% if get_display_status(order.status, 0) == 'paid' %}
         <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
         {% if order.sn %}
           <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.sn}}</td> </tr>
@@ -112,7 +93,7 @@
             {% set logUser = users[orderLog.user_id]|default(null) %}
             <tr>
               <td>
-                {{ orderLog.deal_data.message|default('')|plain_text(50) }}
+                {{ dict_text('orderLogStatus', orderLog.status) }}
                 <br>
                 <span class="color-gray text-sm">{{ orderLog.status }}</span>
               </td>

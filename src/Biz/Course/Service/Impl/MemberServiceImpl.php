@@ -8,7 +8,6 @@ use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
-use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
@@ -19,6 +18,8 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -129,6 +130,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if ($member['role'] !== 'student') {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
+
         $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student');
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -611,7 +613,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $reason = empty($info['note']) ? 'course.member.operation.reason.buy' : $info['note'];
-        $member = $this->addMember($fields, $reason, $order);
+        $member = $this->addMember($fields, $reason, array('order' => $order));
 
         $this->refreshMemberNoteNumber($courseId, $userId);
 
@@ -775,8 +777,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        if (empty($member)) {
+            return;
+        }
 
-        if (empty($member) || ($member['role'] != 'student')) {
+        if ($member['role'] != 'student') {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，封锁学员失败。");
         }
 
@@ -1077,6 +1082,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
     }
 
+    public function findMembersByIds($ids)
+    {
+        return $this->getMemberDao()->findByIds($ids);
+    }
+
     protected function createOrder($courseId, $userId, $price, $source, $remark)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
@@ -1094,9 +1104,12 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $currentUser = $this->getCurrentUser();
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
+        $data['member'] = $member;
+        $course = $this->getCourseService()->getCourse($member['courseId']);
 
         $record = array(
-            'member_id' => $member['userId'],
+            'user_id' => $member['userId'],
+            'member_id' => $member['id'],
             'member_type' => $member['role'],
             'reason' => $reason,
             'target_id' => $member['courseId'],
@@ -1105,14 +1118,16 @@ class MemberServiceImpl extends BaseService implements MemberService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
+            'order_id' => $member['orderId'],
         );
 
         $orderItem = $this->getOrderService()->getOrderItemByOrderIdAndTargetIdAndTargetType($member['orderId'], $member['courseId'], 'course');
         if ($orderItem['refund_id'] !== 0 && $orderItem['refund_status'] == 'refunded') {
             $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
             $record['reason'] = $orderRefund['reason'];
-            $record['refunded'] = 1;
+            $record['refund_id'] = $orderRefund['id'];
         }
+        $record['title'] = $course['title'];
 
         return $this->getMemberOperationService()->createRecord($record);
     }

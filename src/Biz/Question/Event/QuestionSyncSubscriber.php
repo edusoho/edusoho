@@ -14,9 +14,9 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'question.create' => 'onQuestionCreate',
-            'question.update' => 'onQuestionUpdate',
-            'question.delete' => 'onQuestionDelete',
+            'question.create' => array('onQuestionCreate', 1),
+            'question.update' => array('onQuestionUpdate', 1),
+            'question.delete' => array('onQuestionDelete', 1),
         );
     }
 

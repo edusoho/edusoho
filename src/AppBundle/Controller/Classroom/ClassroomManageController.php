@@ -338,7 +338,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
-        $this->getClassroomService()->removeStudent($classroomId, $userId);
+        $this->getClassroomService()->removeStudent($classroomId, $userId, array('reason' => 'classroom.admin_remove_student'));
 
         return $this->createJsonResponse(true);
     }
@@ -1022,7 +1022,7 @@ class ClassroomManageController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array(
-            'courseIds' => $courseIds,
+            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
             'mediaType' => 'testpaper',
         );
         $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);

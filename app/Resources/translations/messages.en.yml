@@ -322,6 +322,7 @@ form.input_mobile: Input mobile
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
+finance.recover: Recorvey
 finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
@@ -367,7 +368,7 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.createdTime: 'Create time'
+order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
 order.deduct: Order deduct
@@ -382,6 +383,13 @@ order.price_amount: PriceAmount
 order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
+order.deduct_amount: Deduct Amount
+order.coin_amount: Coin Amount
+order.cash_amount: Cash Amount
+order.buyer.username: Username
+order.buyer.true_name: True name
+order.buyer.email: Email
+order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
@@ -416,8 +424,8 @@ order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
-order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your payment password</a>'
-order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your login password</a>'
+order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
+order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
 order.confirm.forget_password_btn: 'Forget password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
@@ -2405,6 +2413,8 @@ user.account.my_invite_code.close: 'Invitation code feature is off'
 user.orders: 'My Order'
 user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
+user.order.order_list: Order List
+user.order.refund_list: Refund Manage
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
 user.orders.refunding_status: Refunding
@@ -5739,6 +5749,7 @@ admin.coin_model.currency_tips: "1, Could not manually update the user's virtual
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
+admin.order_refund.title.placeholder: title
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
 admin.order_refund.title: 'Refund order'
 admin.order_refund.order_amount: 'Order price'
@@ -6424,7 +6435,6 @@ register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
-
 cashflow.title: Name
 
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
@@ -6439,5 +6449,8 @@ order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
 
 site.join_by_free: Join by free
 site.join_by_purchase: Join by purchase
+site.remove_by_manual: Manual remove
 site.join_to_learn: Join to learn
 site.fill_user_info_tip: Fill user info
+
+site.avatar.set_before_learning: Please set avatar first

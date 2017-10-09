@@ -2,6 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\OrderFacade\Service\OrderRefundService;
+use Biz\User\Service\NotificationService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -15,11 +19,11 @@ class OrderRefundController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getBizOrderRefundService()->countRefunds($conditions),
+            $this->getOrderRefundService()->countRefunds($conditions),
             20
         );
 
-        $refunds = $this->getBizOrderRefundService()->searchRefunds(
+        $refunds = $this->getOrderRefundService()->searchRefunds(
             $conditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -34,12 +38,9 @@ class OrderRefundController extends BaseController
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
 
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
-        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
-
-        return $this->render('admin/order-refund/refund-list.html.twig', array(
+        return $this->render(
+            'admin/order-refund/list.html.twig', array(
             'refunds' => $refunds,
-            'orderItems' => $orderItems,
             'users' => $users,
             'orders' => $orders,
             'paginator' => $paginator,
@@ -67,7 +68,7 @@ class OrderRefundController extends BaseController
 
     public function auditRefundAction(Request $request, $refundId)
     {
-        $refund = $this->getBizOrderRefundService()->getOrderRefundById($refundId);
+        $refund = $this->getOrderRefundService()->getOrderRefundById($refundId);
         $order = $this->getOrderService()->getOrder($refund['order_id']);
 
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
@@ -90,7 +91,6 @@ class OrderRefundController extends BaseController
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
             'refund' => $refund,
-            'trade' => $trade,
         ));
     }
 
@@ -117,26 +117,33 @@ class OrderRefundController extends BaseController
         $this->getNotificationService()->notify($order['created_user_id'], 'default', $message);
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return OrderRefundService
+     */
     protected function getOrderRefundService()
     {
-        return $this->createService('OrderRefund:OrderRefundService');
+        return $this->createService('OrderFacade:OrderRefundService');
     }
 
-    protected function getBizOrderRefundService()
-    {
-        return $this->createService('Order:OrderRefundService');
-    }
-
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return PayService
+     */
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');

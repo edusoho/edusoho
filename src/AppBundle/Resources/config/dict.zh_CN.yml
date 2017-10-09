@@ -73,6 +73,7 @@ orderLogStatus:
 
 refundStatus:
     auditing: 已申请
+    refunding: 退款中
     refunded: 退款成功
     refused: 退款失败
     cancel: 已取消
@@ -98,7 +99,7 @@ orderDeductType:
 
 newPayment:
     none: --
-    alipay.in_time: 支付宝
+    alipay: 支付宝
     wechat: 微信
     heepay: 网银支付
     quickpay: 快捷支付

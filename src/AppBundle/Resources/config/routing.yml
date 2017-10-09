@@ -278,8 +278,8 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-course_order_detail:
-   path:  /order/{id}/detail_course
+order_detail:
+   path:  /order/{id}/detail
    defaults: { _controller: AppBundle:Order:detail }
 
 order_cancel_refund:
@@ -572,6 +572,18 @@ my_homework_list:
 my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
+
+my_order_refunds:
+    path: /my/order_refunds
+    defaults: { _controller: AppBundle:My/OrderRefund:index }
+
+my_order_refund_detail:
+    path: /my/order_refund/{id}/detail
+    defaults: { _controller: AppBundle:My/OrderRefund:detail }
+
+my_order_refund_apply:
+    path: /my/order_refund/{id}/apply
+    defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
 
 my_order_cancel:
     path: /my/order/{id}/cancel
@@ -991,14 +1003,22 @@ cashier_show:
     path:   /cashier/standard
     defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
+cashier_redirect:
+    path:   /cashier/redirect
+    defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
+
+cashier_order_is_paid_check:
+    path:   /cashier/order/is_paid_check
+    defaults: { _controller: AppBundle:Cashier/Cashier:isPaidCheck }
+
 cashier_pay:
     path:   /cashier/pay
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
-cashier_wechat_h5_pay:
+cashier_wechat_mobile_pay:
     path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:Cashier/Wechat:h5 }
+    defaults: { _controller: AppBundle:Cashier/Wechat:mobilePay }
 
 cashier_password_check:
     path:  /cashier/password/check
@@ -1018,17 +1038,21 @@ cashier_pay_notify:
     defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
-cashier_pay_return:
-    path: /callback/{payment}/return
-    defaults: { _controller: AppBundle:Cashier/Callback:return}
-
 cashier_pay_return_for_app:
     path: /callback/{payment}/return_for_app
     defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
 
+cashier_pay_return:
+    path: /callback/{payment}/return
+    defaults: { _controller: AppBundle:Cashier/Callback:return}
+
 cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Wechat:roll }
+
+cashier_wechat_qrcode:
+    path:   /cashier/wechat/qrcode
+    defaults: { _controller: AppBundle:Cashier/Wechat:qrcode }
 
 cashier_wechat_h5_return:
     path:   /cashier/wechat/h5_return
@@ -2960,6 +2984,10 @@ export:
     path: /export/{name}/{type}
     defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
+online_sample:
+    path: /online/sample
+    defaults: { _controller: AppBundle:Online:sample}
+
 pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
@@ -2969,6 +2997,7 @@ try_export:
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
 
+<<<<<<< HEAD
 v2_demo:
    path: /v2/demo
    defaults: { _controller: AppBundle:V2:demo }
@@ -2976,6 +3005,15 @@ v2_demo:
 v2_demo_modal:
    path: /v2/demo/modal
    defaults: { _controller: AppBundle:V2:modal }
+=======
+#v2_demo:
+#    path: /v2/demo
+#    defaults: { _controller: AppBundle:V2:demo }
+#
+#v2_demo_modal:
+#    path: /v2/demo/modal
+#    defaults: { _controller: AppBundle:V2:modal }
+>>>>>>> feature/order-pay
 
 order_calculate_price:
     path: /order/price/calculate

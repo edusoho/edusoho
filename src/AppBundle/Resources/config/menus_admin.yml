@@ -105,6 +105,8 @@ admin:
                                     router_params:
                                         id: (user.id)
                                     disable: true
+                        admin_online:
+                            name: admin.user.basic.online
                         admin_login_record:
                             name: admin.user.basic.login_record_tab
                 admin_teacher:

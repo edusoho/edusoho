@@ -494,7 +494,7 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
-        $this->getClassroomService()->removeStudent($id, $user['id']);
+        $this->getClassroomService()->removeStudent($id, $user['id'], array('reason' => 'classroom.user_exit'));
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }

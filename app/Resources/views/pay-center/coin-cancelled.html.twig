@@ -1,3 +1,0 @@
-{% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') %}
-<a href="javascript:;"  class="js-order-cancel btn btn-link" data-goto="{{ path('my_coin') }}" data-url="{{ path('my_coin_cancel', {id:order.id}) }}" >{{'form.btn.cancel'|trans}}</a>
-{% endif %}

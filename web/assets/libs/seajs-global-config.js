@@ -90,7 +90,6 @@ seajs.config({
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
         'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
-        'jweixin':'edusoho/wxrs/1.2.0/jweixin.js',
         'g2':'g2/1.2.4/index.js'
     },
 
