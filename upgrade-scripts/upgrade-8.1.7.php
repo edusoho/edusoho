@@ -1,5 +1,4 @@
 <?php
-
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 
@@ -160,9 +159,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `sessions` ADD COLUMN `id` int(10) unsigned  COMMENT '主键';");
         }
 
-
-        $this->getConnection()->exec("ALTER TABLE `sessions` ADD COLUMN  `sess_deadline` int(10) unsigned NOT NULL");
-
+        if (!$this->isFieldExist('sessions', 'sess_deadline')) {
+            $this->getConnection()->exec("ALTER TABLE `sessions` ADD COLUMN  `sess_deadline` int(10) unsigned NOT NULL");
+        }
         return 1;
     }
 
@@ -382,7 +381,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = ($page - 1) * $pageSize;
         $end = $pageSize;
 
-        if ($page * $pageSize <  $count) {
+        if ($page * $pageSize < $count) {
             $this->getConnection()->exec("
             INSERT INTO `biz_session` (
                 sess_id, 
@@ -459,7 +458,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $originFile = "{$rootDir}/vendor/codeages/biz-framework/src/Session/Dao/Impl/SessionDaoImpl.php";
         $tmpFile = "{$rootDir}/vendor/codeages/biz-framework/src/Session/Dao/Impl/SessionDaoImpl.php.1";
-        if (!is_file($tmpFile) or !is_file($originFile)) {
+        if (!file_exists($tmpFile) or !file_exists($originFile)) {
             return false;
         }
 
