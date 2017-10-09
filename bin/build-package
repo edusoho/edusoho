@@ -11,6 +11,16 @@ echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
 SKIP=$3
 fi
 
+# pull the last version of repository
+echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
+git pull
+
+# pull the last version of repository from scripts
+echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)
+cd scripts
+git pull
+cd ..
+
 version=$2;
 upgradefile="scripts/upgrade-${version}.php";
 
@@ -22,18 +32,6 @@ if [ ! -f "$upgradefile" ]; then
         exit 1
     fi
 fi
-
-# pull the last version of repository
-echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
-git pull
-
-# pull the last version of repository from scripts
-echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)
-cd scripts
-git pull
-cd ..
-
-
 
 if [ "$SKIP" = 'n' ]; then
 #compile static resource file with webpack
