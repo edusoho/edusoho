@@ -1004,9 +1004,9 @@ cashier_redirect:
     path:   /cashier/redirect
     defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
 
-cashier_wechat_pay_get_openid:
+cashier_wechat_js_pay:
     path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:Cashier/Wechat:getOpenId }
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
 
 cashier_password_check:
     path:  /cashier/password/check

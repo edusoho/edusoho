@@ -13,7 +13,7 @@ class WechatPayJsTrade extends BaseTrade
     public function getCustomFields($params)
     {
         return array(
-            'open_id' => $params['openId'],
+            'open_id' => $params['openid'],
         );
     }
 
@@ -21,7 +21,7 @@ class WechatPayJsTrade extends BaseTrade
     {
         return array(
             'tradeSn' => $trade['trade_sn'],
-            'jsApiParams' => json_encode($trade['platform_created_result']),
+            'jsApiParams' => $trade['platform_created_result'],
             'successUrl' => $this->generateUrl('cashier_pay_return', array('payment' => $this->payment, 'tradeSn' => $trade['trade_sn']), true),
         );
 

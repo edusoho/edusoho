@@ -18,6 +18,8 @@ abstract class BaseTrade
      */
     protected $router;
 
+    protected $session;
+
     /**
      * @var Biz
      */

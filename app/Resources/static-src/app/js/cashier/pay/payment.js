@@ -27,6 +27,7 @@ export default class BasePayment {
   afterTradeCreated(res) {
 
   }
+
   static filterParams(postParams) {
     let params = {
       gateway: postParams.gateway,
@@ -34,6 +35,7 @@ export default class BasePayment {
       orderSn: postParams.orderSn,
       coinAmount: postParams.coinAmount,
       amount: postParams.amount,
+      openid: postParams.openid,
     };
 
     Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);

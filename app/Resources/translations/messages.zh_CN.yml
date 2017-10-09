@@ -560,6 +560,7 @@ pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其
 pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
 pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
 pay_center.pay.confirm_pay_btn: 确认支付
+pay_center.pay.confirm_pay_btn_loading: 正在支付
 pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
 pay_center.pay.weixin_pay.pay_btn: 立即支付

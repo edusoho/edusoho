@@ -40,7 +40,7 @@
           <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
-          <input type="hidden" name="isWechat" value="{{ is_micro_messenger() }}">
+          <input type="hidden" name="openid" value="{{ 'owjjFjmdLpas8Ric6lN5uWxzj6BA' }}">
           <input type="hidden" name="type" value="purchase">
 
           <div class="form-group order-detail-bg">
@@ -68,7 +68,7 @@
             </div>
           </div>
           <div class="form-group text-right">
-            <a class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</a>
+            <a class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</a>
           </div>
 
         </form>
