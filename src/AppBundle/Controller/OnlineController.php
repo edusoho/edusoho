@@ -19,7 +19,7 @@ class OnlineController extends BaseController
         $cookieName = 'online-uuid';
 
         $uuid = $request->cookies->get($cookieName, $this->generateGuid());
-        var_dump($uuid);
+
         if (!empty($sessionId)) {
             $online = array(
                 'sess_id' => $uuid,
