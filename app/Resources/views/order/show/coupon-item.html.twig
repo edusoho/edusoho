@@ -1,5 +1,45 @@
 {% do script(['app/js/order/coupon-item/index.js']) %}
 
+<div class="order-center-deduction">
+  <span class="order-center-deduction__title">
+    {{'order.confirm.coupon'|trans}}
+  </span>
+  <span class="order-center-deduction__content">
+    通过优惠券抵扣金额
+  </span>
+</div>
+
+<div class="order-center-coupon">
+  <div class="order-center-coupon__select">
+    <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
+      <input type="text" class="form-control" placeholder="输入优惠券码">
+      <div class="action-button">
+        <button type="button" class="btn cd-btn cd-btn-ghost-primary">使用</button>
+      </div>
+    </div>
+    <a href="javascript:;" class="cd-link-gray" data-container="body"  data-toggle="popover" placement="left" data-html="html" data-content='
+      <label for="radio_1" class="cd-radio cd-mb16">
+        <input id="radio_1" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
+      </label>
+      <label for="radio_2" class="cd-radio cd-mb16">
+        <input id="radio_2" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
+      </label>
+      <label for="radio_3" class="cd-radio cd-mb16">
+        <input id="radio_3" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
+      </label>
+      <label for="radio_4" class="cd-radio cd-mb16">
+        <input id="radio_4" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
+      </label>
+    '>选择已有优惠券</a>
+  </div>
+  <div class="order-center-coupon__selected cd-mb32">
+    <span class="cd-text-gray-dark">已使用优惠券 es41828194 抵扣 66.00 虚拟币</span> <a href="javascript:;" class="cd-link-primary">取消</a>
+  </div>
+</div>
+
+<div class="order-center-line"></div>
+
+
 <div class="order-item clearfix" id="coupon-deducts">
   <div class="order-item-title">
     <i class="es-icon es-icon-localplay">

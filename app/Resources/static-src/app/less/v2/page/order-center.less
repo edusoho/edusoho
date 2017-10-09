@@ -1,0 +1,76 @@
+.order-center {
+  margin-bottom: 24px;
+  &-card {
+    position: relative;
+    background: #fafafa;
+    .border-radius(4px);
+    height: 108px;
+    margin-bottom: 24px;
+    &__img {
+      float: left;
+      height: 100%;
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
+    &__info {
+      overflow: hidden;
+      padding: 24px;
+    }
+    &__title {
+      font-size: 16px;
+      color: @cd-gray-dark;
+      margin-top: -4px;
+      margin-bottom: 12px;
+      line-height: 24px;
+      font-weight: 500;
+      .cd-text-overflow;
+    }
+    &__price {
+      padding-left: 24px;
+      line-height: 1;
+      font-size: 12px;
+      color: @brand-danger;
+    }
+  }
+  
+  &-deduction {
+    vertical-align: middle;
+    margin-bottom: 24px;
+    line-height: 14px;
+    &__title {
+      font-size: 14px;
+      color: @cd-gray-dark;
+      float: left;
+      width: 88px;
+    }
+    &__content {
+      font-size: 12px;
+      color: @cd-gray;
+      font-weight: 500;
+    }
+    &__discount {
+      color: @cd-gray;
+      line-height: 20px;
+    }
+    &__action {
+      float: right;
+    }
+  }
+  &-line {
+    height: 1px;
+    .cd-box-shadow-inset(0 -1px 0 0);
+  }
+  &-coupon {
+    .form-control {
+      width: 176px;
+    }
+    .cd-form-group-action {
+      padding-right: 78px;
+    }
+    .action-button {
+      width: 70px;
+    }
+  }
+}
