@@ -5,17 +5,17 @@
 {% set menu = 'admin_bill' %}
 
 {% block main %}
-    {% include 'admin/bill/form-filter.html.twig' %}
+    {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-cash-flow'} %}
     <p class="text-muted">
       <span class="mrl">{{ 'finance.balance'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01) }}</strong>{{ 'site.currency.CNY'|trans }}</span>
-      <span class="mrl">{{ '收入'|trans }}：<strong class="inflow-num">{{ amountInflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ amountInflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
       <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ amountOutflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
     </p>
 
     <div class="table-responsive">
       <table class="table table-striped">
-          {% include 'admin/bill/table-header.html.twig' %}
-         {% if cashes %}
+        {% include 'admin/bill/table-title.html.twig' %}
+        {% if cashes %}
           {% for cash in cashes %}
           {% set user = users[cash['buyer_id']]|default() %}
             <tr class="text-sm">
@@ -45,9 +45,10 @@
                   {% else %}
                     {{ 'order.payment_pattern.school'|trans }}
                   {% endif %}
+                  <br/>
+                   <span class="text-muted">{{'cashflow.trade_sn'|trans}}: {{ cash.trade_sn }}</span>
                 </span>
               </td>
-              <td>{{ cash.trade_sn }}</td>
             </tr>
           {% endfor %}
         {% else %}

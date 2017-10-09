@@ -3,18 +3,17 @@
 {% set menu = 'admin_coin_records' %}
 
 {% block main %}  
-    {% include 'admin/bill/form-filter.html.twig' %}
+    {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
     <p class="text-muted">
-      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{math_format(amounts, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{math_format(account.amount, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
       <span class="mrl">{{'coin.recharge'|trans}}：<strong class="inflow-num">{{ math_format(inflow, 0.01) |default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
       <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{ math_format(outflow, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
     </p>
     <div class="table-responsive">
-      <table class="table table-striped" style="word-wrap: break-word;
-word-break: break-all;">
-      {% include 'admin/bill/table-header.html.twig' %}
-       {% for cash in cashes %}
-       <tr>
+      <table class="table table-striped">
+      {% include 'admin/bill/table-title.html.twig' %}
+        {% for cash in cashes %}
+          <tr>
             <td>{{cash.sn}}</td>
             <td>{{cash.title}}<br>
                 <span class="text-muted text-sm">{{'coin.order_sn'|trans}}：{{cash.order_sn}}</span></td>
@@ -31,8 +30,8 @@ word-break: break-all;">
                -&nbsp;{{cash.amount}}               
             </td>
             {% endif %}
-       </tr>
-       {% endfor %}
+          </tr>
+        {% endfor %}
       </table>
     </div>
  {{ admin_macro.paginator(paginator) }}

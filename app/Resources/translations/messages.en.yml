@@ -6442,6 +6442,17 @@ cashier.confirm.desc: |
   If you encounter problems in the payment process, please contact the website customer service solution.
 
 cashflow.title: Name
+cashflow.sn: sn
+cashflow.user_name: username
+cashflow.created_time: createdTime
+cashflow.amount: amount
+cashflow.platform: platform
+cashflow.trade_sn: tradeSn
+cashflow.user_truename: truename
+cashflow.user_email: emial
+cashflow.user_mobile: mobile
+
+admin.cashflow.keyword: keyword
 
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
 order.pay_check_msg.order_not_exist: Order not exist

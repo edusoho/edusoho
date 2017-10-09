@@ -275,13 +275,9 @@ class CoinController extends BaseController
     public function recordsAction(Request $request)
     {
         $fields = $request->query->all();
-
+        $conditions = $this->buildConditions($fields);
         $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
-
-        if (!empty($fields)) {
-            $conditions = array_merge($conditions, $this->buildConditions($fields));
-        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -300,45 +296,23 @@ class CoinController extends BaseController
             $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
         }
 
-        if (isset($conditions['type'])) {
-            switch ($conditions['type']) {
-                case 'inflow':
-                    $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $outflow = 0;
-                    break;
-                case 'outflow':
-                    $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $inflow = 0;
-                    break;
-                default:
-                    $conditions['type'] = 'outflow';
-                    $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $conditions['type'] = 'inflow';
-                    $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    break;
-            }
-        } else {
-            $conditions['type'] = 'outflow';
-            $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-            $conditions['type'] = 'inflow';
-            $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-        }
+        $conditions['type'] = 'outflow';
+        $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
+        $conditions['type'] = 'inflow';
+        $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
 
-        $in = $this->getAccountProxyService()->sumColumnByConditions('amount', array('type' => 'inflow', 'amount_type' => 'coin'));
-        $out = $this->getAccountProxyService()->sumColumnByConditions('amount', array('type' => 'outflow', 'amount_type' => 'coin'));
-        $amounts = $in - $out;
+        $account = $this->getAccountService()->getUserBalanceByUserId(0);
 
         $userIds = ArrayToolkit::column($cashes, 'user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('admin/coin/coin-records.html.twig', array(
+        return $this->render('admin/bill/coin.html.twig', array(
             'users' => $users,
             'cashes' => $cashes,
             'outflow' => $outflow,
             'inflow' => $inflow,
-            'amounts' => $amounts,
+            'account' => $account,
             'paginator' => $paginator,
-            'cashType' => 'Coin',
         ));
     }
 
@@ -581,6 +555,7 @@ class CoinController extends BaseController
     /**
      * @param [type] $cashType RMB | Coin
      */
+    //todo remove
     public function exportCsvAction(Request $request, $cashType)
     {
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');

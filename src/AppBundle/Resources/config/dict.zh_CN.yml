@@ -81,7 +81,6 @@ refundStatus:
 payment:
     none: --
     alipay: 支付宝
-    alipay.in_time: 支付宝
     wxpay: 微信支付
     wechat: 微信
     heepay: 网银支付
