@@ -11,6 +11,16 @@ echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
 SKIP=$3
 fi
 
+# pull the last version of repository
+echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
+git pull
+
+# pull the last version of repository from scripts
+echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)
+cd scripts
+git pull
+cd ..
+
 version=$2;
 upgradefile="scripts/upgrade-${version}.php";
 
@@ -23,20 +33,8 @@ if [ ! -f "$upgradefile" ]; then
     fi
 fi
 
-# pull the last version of repository
-echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
-git pull
-
-# pull the last version of repository from scripts
-echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)
-cd scripts
-git pull
-cd ..
-
-
-
 if [ "$SKIP" = 'n' ]; then
-#compile static resource file with webpack
+# remove node modules folder and caches folder 
 echo $(tput setaf 2)remove old node_modules and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
 rm -rf app/caches node_modules
 yarn
@@ -45,9 +43,6 @@ yarn
 echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
 npm run compile
 
-#compile static resource file with webpack
-echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
-npm run compile
 fi
 #commit static file
 git add web/static-dist
