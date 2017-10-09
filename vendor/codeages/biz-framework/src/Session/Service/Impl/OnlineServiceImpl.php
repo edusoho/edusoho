@@ -18,6 +18,9 @@ class OnlineServiceImpl extends BaseService implements OnlineService
         if (!empty($user['id'])) {
             $online['user_id'] = $user['id'];
             $online['is_login'] = 1;
+        } else {
+            $online['user_id'] = 0;
+            $online['is_login'] = 0;
         }
 
         $bizOptions = $this->biz['session.options'];

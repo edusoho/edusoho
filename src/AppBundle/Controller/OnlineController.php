@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Paginator;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,9 +15,14 @@ class OnlineController extends BaseController
     {
         $sessionId = $request->getSession()->getId();
         //        $lastFlushTime = $request->getSession()->get('online_flush_time', 0);
+
+        $cookieName = 'online-uuid';
+
+        $uuid = $request->cookies->get($cookieName, $this->generateGuid());
+        var_dump($uuid);
         if (!empty($sessionId)) {
             $online = array(
-                'sess_id' => $sessionId,
+                'sess_id' => $uuid,
                 'ip' => $request->getClientIp(),
                 'user_agent' => $request->headers->get('User-Agent', ''),
                 'source' => DeviceToolkit::isMobileClient() ? '手机浏览器' : 'PC',
@@ -25,7 +31,28 @@ class OnlineController extends BaseController
             //            $request->getSession()->set('online_flush_time', time());
         }
 
-        return new Response('true');
+        $response = new Response('true');
+        $response->headers->setCookie(new Cookie($cookieName, $uuid));
+
+        return $response;
+    }
+
+    protected function generateGuid()
+    {
+        if (function_exists('com_create_guid')) {
+            return com_create_guid();
+        } else {
+            mt_srand((float) microtime() * 10000);
+            $charid = strtoupper(md5(uniqid(rand(), true)));
+            $hyphen = chr(45);
+            $uuid = substr($charid, 0, 8).$hyphen
+                .substr($charid, 8, 4).$hyphen
+                .substr($charid, 12, 4).$hyphen
+                .substr($charid, 16, 4).$hyphen
+                .substr($charid, 20, 12);
+
+            return $uuid;
+        }
     }
 
     public function indexAction(Request $request)
@@ -54,6 +81,8 @@ class OnlineController extends BaseController
         $type = $request->query->get('type', 'logined');
         if ($type == 'logined') {
             $conditions['is_login'] = 1;
+        } elseif ($type == 'anonymous') {
+            $conditions['is_login'] = 0;
         }
 
         $count = $this->getOnlineService()->countOnlines($conditions);
