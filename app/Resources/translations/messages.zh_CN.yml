@@ -425,10 +425,10 @@ plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
 plugin.coupon.discount_tips: 优惠券 抵价%rate%折
 plugin.coupon.no_use_option: 不使用优惠券
 plugin.coupon.change_btn: 更换优惠券
-plugin.coupon.use_btn: 使用优惠券
+plugin.coupon.input_hint: 优惠券
 plugin.coupon.choose_btn: 输入优惠券
-plugin.coupon.use.input_placeholder: 请输入优惠券
-plugin.coupon.code: 优惠码
+plugin.coupon.use.input_placeholder: 输入优惠券码
+plugin.coupon.code: 优惠券码
 plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用

@@ -9,82 +9,32 @@
   </span>
 </div>
 
-<div class="order-center-coupon">
-  <div class="order-center-coupon__select">
-    <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
-      <input type="text" class="form-control" placeholder="输入优惠券码">
+<div class="order-center-coupon" id="order-coupon">
+  <div class="order-center-coupon__select" id="order-center-coupon__select">
+    <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="coupon-form-group">
+      <input type="text" class="form-control" name="couponCode" value="{{product.availableDeducts.coupon[0].code|default('')}}"  
+        data-display="{{'plugin.coupon.use.input_placeholder'|trans}}"  placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}">
       <div class="action-button">
-        <button type="button" class="btn cd-btn cd-btn-ghost-primary">使用</button>
+        <button type="button" class="btn cd-btn cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
       </div>
+      <div id="coupon-error-message" class="form-error-message" style="display:none"></div>
     </div>
-    <a href="javascript:;" class="cd-link-gray" data-container="body"  data-toggle="popover" placement="left" data-html="html" data-content='
-      <label for="radio_1" class="cd-radio cd-mb16">
-        <input id="radio_1" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
-      </label>
-      <label for="radio_2" class="cd-radio cd-mb16">
-        <input id="radio_2" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
-      </label>
-      <label for="radio_3" class="cd-radio cd-mb16">
-        <input id="radio_3" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
-      </label>
-      <label for="radio_4" class="cd-radio cd-mb16">
-        <input id="radio_4" type="radio" data-toggle="cd-radio"> <span class="cd-text-gray-dark">5.00虚拟币</span> 有效期至2017-09-22
-      </label>
-    '>选择已有优惠券</a>
+    {% if product.availableDeducts.coupon|default() %}
+      <a href="javascript:;" id="select-coupon-btn" class="cd-link-gray" data-container="body"  data-toggle="popover" placement="left" data-html="html" data-content='
+        {% for deduct in product.availableDeducts.coupon %}
+          <label for="radio_1" class="cd-radio cd-mb16" >
+            <input id="radio_1" type="radio" class="js-existing-coupon" data-code="{{ deduct.code }}">
+            <span class="cd-text-gray-dark">{{ deduct.deduct_amount|price_format }}</span> 有效期至{{deduct.deadline|date("Y-m-d")}}
+          </label>
+        {% endfor %}
+      '>选择已有优惠券</a>
+    {% endif %}
   </div>
-  <div class="order-center-coupon__selected cd-mb32">
-    <span class="cd-text-gray-dark">已使用优惠券 es41828194 抵扣 66.00 虚拟币</span> <a href="javascript:;" class="cd-link-primary">取消</a>
+  <div class="order-center-coupon__selected cd-mb32" style="display:none"  id="order-center-coupon__selected">
+    <span class="cd-text-gray-dark">已使用优惠券 <span id="coupon-code">es41828194</span> 抵扣 <span id="deduct-amount" data-placeholder = "{{ 0|price_format }}"></span></span> 
+    <a href="javascript:;" class="cd-link-primary" id="cancel-use-coupon-btn">取消</a>
   </div>
 </div>
 
 <div class="order-center-line"></div>
-
-
-<div class="order-item clearfix" id="coupon-deducts">
-  <div class="order-item-title">
-    <i class="es-icon es-icon-localplay">
-    </i>
-    <span class="title">
-      {{'order.confirm.coupon'|trans}}
-    </span>
-    <span id="no-use-coupon-code">
-    （{{'order.confirm.coupon.empty'|trans}}）
-    </span>
-  </div>
-
-  <div class="order-item-detail  coupon-detail">
-    <div id="select-coupon-box">
-      {% if product.availableDeducts.coupon|default() %}  
-        <select class="form-control width-input width-input-large" id="coupon-select">
-           {% for deduct in product.availableDeducts.coupon %}
-              <option value="{{ deduct.code }}" data-deduct-amount="{{ deduct.deduct_amount|price_format }}">
-              {% if deduct.type == 'minus' %}
-                {{'plugin.coupon.minus_tips'|trans({'%rate%':deduct.rate})}}
-              {% else %}
-                {{'plugin.coupon.discount_tips'|trans({'%rate%':deduct.rate})}}
-              {% endif %}
-              </option>
-          {% endfor %}
-          <option value="">{{'plugin.coupon.no_use_option'|trans}}</option>
-        </select>
-        <a id="change-coupon-code" class="btn btn-primary" href="javascript:;">{{'plugin.coupon.change_btn'|trans}}</a>
-      {% else %}
-        <a id="change-coupon-code" class="btn btn-primary" href="javascript:;">{{'plugin.coupon.use_btn'|trans}}</a>
-      {% endif %}
-    </div>
-
-    <div id="coupon-code" class="input-group" style="display: none;">
-      <input style="width:150px;" value="{{product.availableDeducts.coupon[0].code|default('')}}" id="coupon-code-input" type="text" name="couponCode"  class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" />
-      <button class="btn btn-primary" type="button" id="use-coupon" data-url="{{ path('coupon_check') }}">{{'form.btn.use'|trans}}</button>
-      <a href="javascript:;" class="btn btn-link" id="cancel-coupon">{{'form.btn.cancel'|trans}}</a>
-    </div>
-
-    <div id="code-notify" class="alert alert-success alert-xs mtm" style="display:none;line-height:20px;"></div>
-  </div>
-  <div class="order-item-price" role="coupon-price">
-    <span class="mrs">{{'plugin.coupon.minus'|trans}}</span>
-    <span id="show-deduct-amount" data-placeholder = "{{ 0|price_format }}">
-    </span>
-  </div>
-</div>
 
