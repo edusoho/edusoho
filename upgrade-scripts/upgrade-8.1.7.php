@@ -110,6 +110,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('RENAME TABLE job_log TO biz_scheduler_job_log');
         }
 
+        $this->getConnection()->exec("alter table `cloud_app` MODIFY `type` varchar(64) NOT NULL DEFAULT 'plugin' COMMENT '应用类型(core系统，plugin插件应用, theme主题应用)'");
+
         return 1;
     }
 
@@ -157,6 +159,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('sessions', 'id')) {
             $this->getConnection()->exec("ALTER TABLE `sessions` ADD COLUMN `id` int(10) unsigned  COMMENT '主键';");
         }
+
+
+        $this->getConnection()->exec("ALTER TABLE `sessions` ADD COLUMN  `sess_deadline` int(10) unsigned NOT NULL");
 
         return 1;
     }
