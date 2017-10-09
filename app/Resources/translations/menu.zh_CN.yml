@@ -28,6 +28,7 @@ admin.user.message_menu: 私信管理
 
 ##用户管理模块
 admin.user.basic.basic_tab: 用户管理
+admin.user.basic.online: 在线用户
 admin.user.basic.login_record_tab: 登录日志
 
 admin.user.basic.basic_tab.create_btn: '添加新用户'

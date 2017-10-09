@@ -26,7 +26,10 @@ class DocPlayer {
   }
 
   onFullScreen(docPlayer) {
-     window.onmessage=function(e){  
+    alert(1)
+     window.onmessage=function(e){
+	     alert(2)
+       console.log(e.data)
         if(e == null || e == undefined ){
             return;
         }

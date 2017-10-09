@@ -3,13 +3,18 @@
 namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Resource\ResourceProxy;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class ResourceAuthenticationProviderManager implements ResourceAuthenticationInterface
 {
     private $providers;
 
-    public function __construct(array $providers)
+    private $container;
+
+    public function __construct(ContainerInterface $container, array $providers)
     {
+        $this->container = $container;
         $this->providers = $providers;
     }
 
@@ -23,6 +28,8 @@ class ResourceAuthenticationProviderManager implements ResourceAuthenticationInt
      */
     public function authenticate(ResourceProxy $resourceProxy, $method)
     {
+        $this->container->get('event_dispatcher')->dispatch(AuthenticationEvents::BEFORE_AUTHENTICATE, new AuthenticationEvent($this->container->get('security.token_storage')->getToken()));
+
         $lastException = null;
         $result = null;
 

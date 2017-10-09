@@ -19,7 +19,7 @@
         </div>
         {% if setting('coin.coin_enabled') %}
           <div class="card-action">
-            {{ slot('my.coin.card_action') }}
+            {{ slot('my.coin.card_action', {}) }}
           </div>
         {% endif %}
       </div>
