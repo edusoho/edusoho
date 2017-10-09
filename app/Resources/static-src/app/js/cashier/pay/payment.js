@@ -4,6 +4,14 @@ import ConfirmModal from './confirm';
 
 export default class BasePayment {
 
+  setOptions(options) {
+    this.options = options;
+  }
+
+  getOptions() {
+    return this.options;
+  }
+
   showConfirmModal(tradeSn) {
     if (!this.confirmModal) {
       this.confirmModal = new ConfirmModal();
@@ -38,7 +46,6 @@ export default class BasePayment {
     let params = this.filterParams(postParams);
 
     Api.trade.create({data:params}).then(callback).catch(res => {
-      console.log(res);
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
   }

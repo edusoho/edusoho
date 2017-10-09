@@ -7,7 +7,7 @@ import WechatPayJs from './wechatpay_js';
 
 export default class PaySDK {
 
-  pay(params) {
+  pay(params, options = {}) {
     let gateway = this.getGateway(params['payment'], params['isMobile'], params['isWechat']);
     params.gateway = gateway;
     let paySdk = null;
@@ -32,6 +32,10 @@ export default class PaySDK {
         break;
     }
 
+    paySdk.options = Object.assign({
+      'showConfirmModal': 1
+    }, options);
+
     paySdk.pay(params);
   }
 
@@ -43,7 +47,7 @@ export default class PaySDK {
         if (isWechat) {
           gateway = 'WechatPay_Js';
         } else {
-          gateway = 'WechatPay_Js';
+          gateway = 'WechatPay_Native';
         }
         break;
 
