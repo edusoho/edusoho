@@ -3034,6 +3034,7 @@ user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
 user.account.my_coin: %coin_name%账户
 user.account.my_coin.pay_coin: 实付%coin_name%
+user.account.my_coin.refunded_coin: 已退%coin_name%
 user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值
