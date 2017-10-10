@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
