@@ -4,6 +4,7 @@ import AlipayLegacyWap from './alipay_legacy_wap';
 import LianlianpayWap from './lianlianpay_wap';
 import LianlianpayWeb from './lianlianpay_web';
 import WechatPayJs from './wechatpay_js';
+import WechatPayMweb from './wechatpay_mweb';
 
 export default class PaySDK {
 
@@ -15,6 +16,8 @@ export default class PaySDK {
       case 'WechatPay_Native':
         paySdk = this.wpn ? this.wpn : this.wpn = new WechatPayNative();
         break;
+	    case 'WechatPay_MWeb':
+		    paySdk = this.wpm ? this.wpm : this.wpm = new WechatPayMweb();
       case 'WechatPay_Js':
         paySdk = this.wpj ? this.wpj : this.wpj = new WechatPayJs();
         break;
@@ -46,7 +49,9 @@ export default class PaySDK {
       case 'wechat':
         if (openid > 0) {
           gateway = 'WechatPay_Js';
-        } else {
+        } else if(isMobile){
+	        gateway = 'WechatPay_MWeb';
+        }else {
           gateway = 'WechatPay_Native';
         }
         break;
