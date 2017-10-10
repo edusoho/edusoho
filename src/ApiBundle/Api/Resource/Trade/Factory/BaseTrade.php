@@ -102,8 +102,11 @@ abstract class BaseTrade
         $defaultResponse = array(
             'tradeSn' => $trade['trade_sn'],
             'status' => $trade['status'],
-            'redirectUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
         );
+
+        if (!empty($trade['platform_created_result']['url'])) {
+            $defaultResponse['payUrl'] = $trade['platform_created_result']['url'];
+        }
 
         if ($trade['status'] == 'paid') {
             $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
