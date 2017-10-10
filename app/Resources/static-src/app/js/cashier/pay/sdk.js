@@ -44,7 +44,7 @@ export default class PaySDK {
     let gateway = '';
     switch (payment) {
       case 'wechat':
-        if (openid) {
+        if (openid > 0) {
           gateway = 'WechatPay_Js';
         } else {
           gateway = 'WechatPay_Native';

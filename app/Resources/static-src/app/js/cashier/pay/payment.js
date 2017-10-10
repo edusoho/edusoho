@@ -36,6 +36,7 @@ export default class BasePayment {
       coinAmount: postParams.coinAmount,
       amount: postParams.amount,
       openid: postParams.openid,
+      payPassword: postParams.payPassword
     };
 
     Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
@@ -47,7 +48,14 @@ export default class BasePayment {
 
     let params = this.filterParams(postParams);
 
-    Api.trade.create({data:params}).then(callback).catch(res => {
+    Api.trade.create({data:params}).then(res => {
+      if (res.paidSuccessUrl) {
+        location.href = res.paidSuccessUrl;
+      } else {
+        callback(res)
+      }
+
+    }).catch(res => {
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
   }

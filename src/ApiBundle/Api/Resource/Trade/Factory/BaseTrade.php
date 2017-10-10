@@ -92,12 +92,24 @@ abstract class BaseTrade
         return array();
     }
 
+    public function getCustomResponse($trade)
+    {
+        return array();
+    }
+
     public function createResponse($trade)
     {
-        return array(
+        $defaultResponse = array(
             'tradeSn' => $trade['trade_sn'],
+            'status' => $trade['status'],
             'redirectUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
         );
+
+        if ($trade['status'] == 'paid') {
+            $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
+        }
+
+        return array_merge($defaultResponse, $this->getCustomResponse($trade));
     }
 
     /**
