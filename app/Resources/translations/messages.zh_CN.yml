@@ -509,6 +509,7 @@ order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.account_cash: 账户余额：
@@ -517,7 +518,7 @@ order.confirm.setup_pay_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
-order.confirm.forget_password_btn: 忘记密码？
+order.confirm.forget_password_btn: 忘记支付密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
 order.confirm.top_use_tips: 本订单最高可以使用
@@ -561,7 +562,7 @@ pay_center.pay.use_new_card: 使用新的银行卡
 pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其他支付方式
 pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
 pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
-pay_center.pay.confirm_pay_btn: 确认支付
+pay_center.pay.confirm_pay_btn: 支付订单
 pay_center.pay.confirm_pay_btn_loading: 正在支付
 pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
@@ -3034,6 +3035,7 @@ user.account.empty: 暂无记录
 user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
 user.account.my_coin: %coin_name%账户
+user.account.my_coin.pay_coin: 实付%coin_name%
 user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值

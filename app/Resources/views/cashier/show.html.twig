@@ -1,78 +1,112 @@
-{% extends 'layout.html.twig' %}
-{% block title %} {{ 'pay_center'|trans }} - {{ parent() }}{% endblock %}
+{% extends 'order/layout.html.twig' %}
+{% block title %} {{ 'pay_center.pay'|trans }} - {{ parent() }}{% endblock %}
 
 {% do script(['libs/jquery-validation.js' ,'app/js/cashier/index.js']) %}
 
-{% block esBar %}
-{% endblock %}
+{% set step = '2' %}
 
-{% block content %}
-  <div class="order-pay">
+{% block order_body %}
+  <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
+    {{ 'pay_center.pay.submit_tips'|trans }}
+  </div>
 
-    <div class="es-section">
-      {% include 'order/order-step-status.html.twig' with {step: 2} %}
-      <div class="order-pay-body">
-        <div class="alert alert-success alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-          {{ 'pay_center.pay.submit_tips'|trans }}
+  <div class="order-center-card clearfix">
+    <div class="order-center-card__img">
+      {# 需替换 #}
+      <img src="/files/default/2017/09-11/2025426c024a428660.png" alt="{{ order.title }}">
+    </div>
+    <div class="order-center-card__info">
+      <div class="order-center-product-info">
+        <div class="order-center-product-info__title">
+          {{'order.id'|trans}}
         </div>
-
-        <div class="order-detail-bg  checkout" style="border:none">
-          <div class="order-detail  clearfix">
-            <div class="order-info">
-              <p>{{'order.name'|trans}}: {{ order.title }}</p>
-              <p>{{'order.id'|trans}}: {{ order.sn }}</p>
-              <p>
-                {{'order.price'|trans}}: <span class="pay-rmb">{{ order.pay_amount|price_format }}</span>
-              </p>
-            </div>
-          </div>
+        <div class="order-center-product-info__content">
+          {{ order.sn }}
         </div>
-
-        <div class="es-piece" style="margin-bottom:20px;">
-          <div class="piece-header">{{ 'pay_center.pay.submit_tips'|trans }}</div>
+      </div>
+      <div class="order-center-product-info">
+        <div class="order-center-product-info__title">
+          {{'order.name'|trans}}
         </div>
-
-        <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
-
-          <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
-          <input type="hidden" name="openid" value="{{ get_wechat_openid() }}">
-          <input type="hidden" name="type" value="purchase">
-
-          <div class="form-group order-detail-bg">
-            {% for type,payment in payments %}
-              <div class="check {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
-                <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"/>
-                <span class="icon"></span>
-              </div>
-
-              {% if loop.index == 1 %}
-                <input type="hidden" name="payment" value="{{ type }}">
-              {% endif %}
-
-            {% else %}
-              <div class="pay-type-label text-warning ">{{ 'payment.useless_tips'|trans }}</div>
-            {% endfor %}
-          </div>
-
-          {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
-
-          <div class="form-group">
-            <div class="total-price">
-              {{ 'order.confirm.pay_rmb'|trans }}
-              <span class="js-pay-price pay-rmb">{{ order.pay_amount|major_currency }}</span>
-            </div>
-          </div>
-          <div class="form-group text-right">
-            <a class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</a>
-          </div>
-
-        </form>
+        <div class="order-center-product-info__content">
+          {{ order.title }}
+        </div>
+      </div>
+      <div class="order-center-product-info">
+        <div class="order-center-product-info__title">
+          {{'order.price'|trans}}
+        </div>
+        <div class="order-center-product-info__content">
+          <span class="cd-text-danger">{{ order.pay_amount|price_format }}</span>
+        </div>
       </div>
     </div>
   </div>
+
+  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
+
+    <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
+    <input type="hidden" name="openid" value="{{ get_wechat_openid() }}">
+    <input type="hidden" name="type" value="purchase">
+
+    {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
+
+    <div class="order-center-deduction">
+      <span class="order-center-deduction__title">
+        支付方式
+      </span>
+      <span class="order-center-deduction__content">
+        {% if payments %}
+          选择合适的现金支付方式
+        {% else %}
+          {{ 'payment.useless_tips'|trans }}
+        {% endif %}
+      </span>
+    </div>
+
+    {% if payments %}
+      <div class="order-center-pay-list">
+        {% for type, payment in payments %}
+          <div class="order-center-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
+            <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"
+              srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>
+          </div>
+
+          {% if loop.index == 1 %}
+            <input type="hidden" name="payment" value="{{ type }}">
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="order-center-line"></div>
+
+    <div class="cd-pv24" id="order-center-price-list">
+      <div class="order-center-price">
+        <div class="order-center-price__title">订单价格</div>
+        <div class="order-center-price__content">{{ order.pay_amount|major_currency }}</div>
+      </div>
+    </div>
+
+    <div class="order-center-line"></div>
+
+    <div class="cd-pt16 cd-pb24">
+      <div class="order-center-price">
+        <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
+        <div class="order-center-price__content">
+          <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|major_currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    {% if payments %}
+      <div class="text-right">
+        <button class="btn cd-btn cd-btn-primary js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</button>
+      </div>
+    {% endif %}
+
+  </form>
+ 
 {% endblock %}

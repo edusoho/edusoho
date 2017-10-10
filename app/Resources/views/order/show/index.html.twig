@@ -1,4 +1,7 @@
 {% extends 'order/layout.html.twig' %}
+
+{% block title %} {{'order.confirm'|trans}} - {{ parent() }}{% endblock %}
+
 {% do script(['libs/jquery-validation.js', 'app/js/order/show/index.js']) %}
 
 {% block order_body %}
@@ -12,8 +15,6 @@
     data-coin-name="{{ setting('coin.coin_name', '虚拟币') }}">
       {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
       {% include product.showTemplate %}
-
-      {# {{ dump(product.showTemplate ) }} #}
 
       {{ slot('order.show.deducts', {'product': product}) }}
       {% include 'order/show/coupon-item.html.twig' %}
