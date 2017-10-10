@@ -48,15 +48,18 @@
       </tr>
 
       {% if order.pay_amount != 0 %}
-        <tr>
-          <td width="25%" class="color-gray cd-pl32">
-            {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
-          </td>
-          <td width="75%">
-            <span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
-            (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }})
-          </td>
-        </tr>
+        {% if order.paid_coin_amount != 0 %}
+          <tr>
+            <td width="25%" class="color-gray cd-pl32">
+              {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
+            </td>
+            <td width="75%">
+              <span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
+              (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }})
+            </td>
+          </tr>
+        {% endif %}
+
         {% if order.paid_cash_amount != 0 %}
           <tr>
             <td width="25%" class="color-gray cd-pl32">
