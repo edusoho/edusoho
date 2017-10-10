@@ -80,7 +80,6 @@ class OrderController extends BaseController
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
             $order['refund'] = empty($orderRefunds[$order['id']]) ? array() : $orderRefunds[$order['id']];
-            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         return $this->render('my-order/order/index.html.twig', array(
