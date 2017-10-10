@@ -61,20 +61,21 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'createTables',    // done
-            2 => 'migrateBizOrders',
+            2 => 'migrateBizOrders', // done
             3 => 'migrateBizOrderItems', // done
             4 => 'migrateBizOrderItemDeductsByCoupon', // done
             5 => 'migrateBizOrderItemDeductsByDiscount', // done
-            6 => 'migrateBizOrderRefund', // done
-            7 => 'migrateBizOrderRefundItems', // done
-            8 => 'migrateBizOrderLog',
-            9 => 'migrateBizPaymentTrade', // done
-            10 => 'migrateBizPaymentTradeFromCashOrder', // done
-            11 => 'migrateBizSecurityAnswer', // done
-            12 => 'migrateBizPayAccount',   // done
-            13 => 'migrateBizUserBalance',  // done
-            14 => 'migrateBizUserCashflow',
-            15 => 'registerJobs', // done
+            6 => 'migrateBizOrderItemDeductsStatus', // done
+            7 => 'migrateBizOrderRefund', // done
+            8 => 'migrateBizOrderRefundItems', // done
+            9 => 'migrateBizOrderLog',
+            10 => 'migrateBizPaymentTrade', // done
+            11 => 'migrateBizPaymentTradeFromCashOrder', // done
+            12 => 'migrateBizSecurityAnswer', // done
+            13 => 'migrateBizPayAccount',   // done
+            14 => 'migrateBizUserBalance',  // done
+            15 => 'migrateBizUserCashflow',
+            16 => 'registerJobs', // done
         );
 
         if ($index == 0) {
@@ -145,25 +146,25 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id`,
                 `title`,
                 `sn`,
-                '' as `source`,
+                'self' as `source`,
                 '' as `created_reason`,
                 `totalPrice`*100 as `price_amount`,
                 `priceType` as `price_type`,
-                0 as `pay_amount`,  -- 统计amount和coinAmount的总和
+                floor((`amount` + `coinAmount`/coinRate)*100) as `pay_amount`,
                 `userId` as `user_id`,
                 '' as `callback`,
-                `cashSn` as `trade_sn`,
-                `status`,
+                `sn` as `trade_sn`,
+                case when `status` in ('paid', 'refunding') then 'success' when `status` = 'cancelled' then 'closed' else `status` end as `status`,
                 `paidTime` as `pay_time`,
-                `payment`,
+                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then `payment` else 'none' end as `payment`,
                 `paidTime` as `finish_time`,
-                0 as `close_time`, -- 当订单关闭状态时的时间
-                '' as `close_data`, -- 当订单关闭状态时的数据
-                0 as `close_user_id`, -- 当订单关闭状态时的操作人
+                0 as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
+                '' as `close_data`, -- TODO 当订单关闭状态时的数据, 从日志中取得
+                0 as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
                 0 as `seller_id`,
-                `userId` as `created_user_id`, -- 创建订单者
+                `userId` as `created_user_id`, -- TODO 创建订单者
                 `data` as `create_extra`,
-                '' as `device`,
+                '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
                 `amount`*100 as `paid_cash_amount`,
                 `coinAmount`*100 as `paid_coin_amount`,
                 `refundEndTime` as `refund_deadline`,
@@ -173,10 +174,11 @@ class EduSohoUpgrade extends AbstractUpdater
             from orders where id not in (select migrate_id from `biz_order`);
         ");
 
-        // TODO
-        // 处理source字段, 来源：self, 营销平台（marketing\self\outside，在原表中的payment字段）
-        // 处理device字段, 下单设备：app, pc, 手机
-        // 处理created_user_id字段, 区分创建订单时是老师导入还是自己创建的
+        $connection->exec("update biz_order set source = 'marketing' where migrate_id in (select id from orders where payment='marketing');");
+        $connection->exec("update biz_order set source = 'outside' where migrate_id in (select id from orders where payment='outside');");
+
+        $connection->exec("update biz_order set payment = 'lianlianpay' where payment = 'llpay';");
+        $connection->exec("update biz_order set payment = 'wechat' where payment = 'wxpay';");
 
         return 1;
     }
@@ -219,18 +221,18 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`sn` as `sn`,
                 `o`.`title` as `title`,
                 '' as `detail`,
-                1 as `num`,
-                '' as `unit`, -- 会员订单时的单位：按月、按年
-                `o`.`status` as `status`,
+                1 as `num`,    -- 处理会员的数据
+                '' as `unit`,  -- 处理会员的数据
+                `o`.`status` as `status`, -- 保持和biz_order一样
                 `o`.`refundId` as `refund_id`,
-                case when re.status = 'refunded' then 'refunded' else o.status end as `refund_status`, -- 当有refund_id时，冗余的退款状态
+                case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
                 `o`.`totalPrice`*100 as `price_amount`,
                 case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
                 `o`.`targetId` as `target_id`,
                 `o`.`targetType` as `target_type`,
                 `o`.`paidTime` as `pay_time`,
                 `o`.`paidTime` as `finish_time`,
-                0 as `close_time`, -- 关闭时间
+                0 as `close_time`, -- 关闭时间,保持和biz_order
                 `o`.`userId` as `user_id`,
                 0 as `seller_id`,
                 '' as `create_extra`,
@@ -242,11 +244,14 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         // 处理会员订单
-        $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip';");
+        $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip');");
         foreach ($vipOrders as $vipOrder) {
             $data = json_decode($vipOrder['data'], true);
             $connection->exec("update biz_order_item set num = '{$data['duration']}', unit = '{$data['unitType']}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
         }
+
+        // 处理status
+        $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
 
         // 处理close_time
         $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
@@ -261,7 +266,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
         $connection->exec("
             insert into `biz_order_item_deduct` (
-                `id`,
                 `order_id`,
                 `detail`,
                 `item_id`,
@@ -277,7 +281,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             ) 
             select 
-                o.`id`,
                 o.`id` as `order_id`,
                 '' as `detail`,
                 o.`id` as `item_id`,
@@ -293,6 +296,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`id` as `migrate_id`
             from orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
         ");
+
+        // 处理status
+        $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
 
         return 1;
     }
@@ -336,6 +342,12 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         return 1;
+    }
+
+    protected function migrateBizOrderItemDeductsStatus()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("update biz_order_item_deduct oi set status = (select status from biz_order where id = oi.order_id);");
     }
 
     protected function migrateBizOrderRefund()
