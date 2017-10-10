@@ -17,15 +17,6 @@ class WechatPayJsTrade extends BaseTrade
         );
     }
 
-    public function getCustomResponse($trade)
-    {
-        return array(
-            'jsApiParams' => $trade['platform_created_result'],
-            'successUrl' => $this->generateUrl('cashier_pay_return', array('payment' => $this->payment, 'tradeSn' => $trade['trade_sn']), true),
-        );
-
-    }
-
     /**
      * @return UserService
      */

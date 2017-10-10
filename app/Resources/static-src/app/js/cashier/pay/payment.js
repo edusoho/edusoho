@@ -66,10 +66,16 @@ export default class BasePayment {
     return trade;
   }
 
-  static getTrade(tradeSn) {
-    let params = {
-      tradeSn: tradeSn
-    };
+  static getTrade(tradeSn, orderSn = '') {
+    let params = {};
+
+    if (tradeSn) {
+      params.tradeSn = tradeSn;
+    }
+
+    if (orderSn) {
+      params.orderSn = orderSn;
+    }
 
     return Api.trade.get({
       params: params

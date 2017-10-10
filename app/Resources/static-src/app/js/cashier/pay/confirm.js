@@ -45,7 +45,7 @@ class ConfirmModal {
   checkIsPaid() {
     BasePayment.getTrade(this.tradeSn).then(res => {
       if (res.isPaid) {
-        location.href = res.successUrl;
+        location.href = res.paidSuccessUrl;
       } else {
         notify('danger', Translator.trans('cashier.confirm.fail_message'));
         $('#' + this.modalID).modal('hide');

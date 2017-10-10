@@ -60,7 +60,7 @@ export default class WechatPayNative extends BasePayment {
  checkIsPaid(tradeSn) {
    BasePayment.getTrade(tradeSn).then(res => {
      if (res.isPaid) {
-       location.href = res.successUrl;
+       location.href = res.paidSuccessUrl;
      }
 
    });
