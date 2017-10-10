@@ -988,9 +988,6 @@ receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
-coin_pay:
-    path:     /my/coin/pay
-    defaults: { _controller: AppBundle:My/Coin:pay }
 coin_show:
     path:     /my/coin/show
     defaults: { _controller: AppBundle:My/Coin:show }
@@ -1007,18 +1004,9 @@ cashier_redirect:
     path:   /cashier/redirect
     defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
 
-cashier_order_is_paid_check:
-    path:   /cashier/order/is_paid_check
-    defaults: { _controller: AppBundle:Cashier/Cashier:isPaidCheck }
-
-cashier_pay:
-    path:   /cashier/pay
-    defaults: { _controller: AppBundle:Cashier/Cashier:pay }
-    methods: [POST]
-
-cashier_wechat_mobile_pay:
+cashier_wechat_js_pay:
     path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:Cashier/Wechat:mobilePay }
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
 
 cashier_password_check:
     path:  /cashier/password/check
@@ -1045,18 +1033,6 @@ cashier_pay_return_for_app:
 cashier_pay_return:
     path: /callback/{payment}/return
     defaults: { _controller: AppBundle:Cashier/Callback:return}
-
-cashier_wechat_roll:
-    path:   /cashier/wechat/roll
-    defaults: { _controller: AppBundle:Cashier/Wechat:roll }
-
-cashier_wechat_qrcode:
-    path:   /cashier/wechat/qrcode
-    defaults: { _controller: AppBundle:Cashier/Wechat:qrcode }
-
-cashier_wechat_h5_return:
-    path:   /cashier/wechat/h5_return
-    defaults: { _controller: AppBundle:Cashier/Wechat:h5Return }
 
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind

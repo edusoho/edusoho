@@ -14,7 +14,7 @@
 {% for orderRefund in orderRefunds %}
   <tr id="order_refund-table-{{orderRefund.id}}">
     <td>{{ orderRefund.title }}</td>
-    <td>{{ orderRefund.sn }}<br>{{ orders[orderRefund.order_id].sn }}</td>
+    <td>{{ orders[orderRefund.order_id].sn }}<br>{{ orderRefund.sn }}</td>
     <td>{{ math_format(orders[orderRefund.order_id].pay_amount, 0.01) }}</td>
     <td>{{ orderRefund.created_time|date('Y-n-d H:i:s') }}</td>
     <td>{{ dict_text('refundStatus', orderRefund.status) }}</td>

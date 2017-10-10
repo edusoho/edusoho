@@ -1,11 +1,15 @@
 language: php
 sudo: false
+dist: precise
 
 php:
     - 5.3
     - 5.4
     - 5.5
     - 5.6
+    - 7.0
+    - 7.1
+    - nightly
     - hhvm
 
 services:
@@ -29,6 +33,7 @@ after_script:
 
 matrix:
     allow_failures:
+        - php: nightly
         - php: hhvm
     include:
         - php: 5.6

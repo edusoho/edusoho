@@ -7,20 +7,23 @@
              {{ display_order_status( order.status, 0) }}
            </td>
       </tr>
-      <tr> <td width="25%">{{'order.buyers'|trans}}</td>
-        <td width="75%">
-          <strong>
-            {{ web_macro.user_link(user) }}
-          </strong>
-        </td>
-      </tr>
+      {% if modalType in ['course'] %}
+        <tr>
+          <td width="25%">{{'order.buyers'|trans}}</td>
+          <td width="75%">
+            <strong>
+              {{ web_macro.user_link(user) }}
+            </strong>
+          </td>
+        </tr>
+      {% endif %}
       <tr>
-        <td width="25%">{{'order.name'|trans}}</td>
+        <td width="25%">{{'商品名称'|trans}}</td>
         <td width="75%">
           {{ order.title }}
         </td>
       </tr>
-      <tr> <td width="25%">{{'order.price'|trans}}</td>
+      <tr> <td width="25%">{{'商品价格'|trans}}</td>
         <td width="75%">
           <span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span>
           {% if paymentTrade.currency|default('') == "RMB" %}
@@ -43,6 +46,11 @@
           </tr>
         {% endfor %}
       {% endif %}
+
+      <tr>
+        <td width="25%">{{ '实付价格'|trans }}</td>
+        <td width="75%"><span class="color-warning">{{ order.pay_amount|fen_to_yuan(0) }}</span></td>
+      </tr>
 
       <tr>
         <td width="25%" class="color-gray" style="text-align:right;">

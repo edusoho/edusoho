@@ -63,49 +63,6 @@ class CashierController extends BaseController
         return $this->redirect($trade['platform_created_result']['url']);
     }
 
-    public function isPaidCheckAction(Request $request)
-    {
-        $orderSn = $request->query->get('orderSn');
-        $order = $this->getOrderService()->getOrderBySn($orderSn);
-        $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
-
-        return $this->createJsonResponse(array(
-            'isPaid' => $trade['status'] == 'paid',
-            'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn'])),
-        ));
-    }
-
-    public function payAction(Request $request)
-    {
-        $sn = $request->request->get('sn');
-
-        $payment = $request->request->get('payment');
-        $payment = preg_replace('/\.\w+/', '', $payment);
-        $payment = ucfirst($payment);
-
-        $order = $this->getOrderService()->getOrderBySn($sn);
-        if ($order['status'] == 'success'
-            || $order['status'] == 'paid'
-            || $order['status'] == 'fail') {
-            return $this->createJsonResponse(array(
-                'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
-            ));
-        }
-
-        try {
-            $params = $request->request->all();
-            $params['clientIp'] = $request->getClientIp();
-            $trade = $this->getOrderFacadeService()->payingOrder($sn, $request->request->all());
-        } catch (OrderPayCheckException $e) {
-            return $this->createMessageResponse('error', $this->trans($e->getMessage()));
-        }
-
-        $action = $this->isMobileClient() ? 'mobilePay' : 'pcPay';
-
-        return $this->forward("AppBundle:Cashier/{$payment}:{$action}", array('trade' => $trade));
-    }
-
     public function successAction(Request $request)
     {
         $tradeSn = $request->query->get('trade_sn');
