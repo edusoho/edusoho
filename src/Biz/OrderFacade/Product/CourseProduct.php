@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
 
 class CourseProduct extends Product implements OrderStatusCallback
@@ -37,10 +38,7 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
-
-        $this->snapshot = array(
-            'cover' => $this->courseSet['cover']
-        );
+        $this->cover = $this->courseSet['cover'];
     }
 
     public function validate()

@@ -91,7 +91,11 @@ abstract class Product extends BizAware implements OrderStatusCallback
      */
     public $unit = '';
 
-    public $snapshot = array();
+    /**
+     * 封面
+     * @var array
+     */
+    public $cover = array();
 
     const PRODUCT_VALIDATE_FAIL = '20007';
 
