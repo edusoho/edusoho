@@ -25,7 +25,7 @@
       </tr>
       <tr> <td width="25%">{{'商品价格'|trans}}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span>
+          <span class="color-danger">{{ order.price_amount|fen_to_yuan(0) }}</span>
           {% if paymentTrade.currency|default('') == "RMB" %}
           {{'site.currency.CNY'|trans}}
           {% elseif paymentTrade.currency|default('') == "Coin" %}
@@ -37,19 +37,19 @@
       {% if orderDeducts %}
         <tr>
           <td width="25%">{{ 'order.deduct'|trans}}</td>
-          <td width="75%"><span class="color-warning">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
+          <td width="75%"><span class="color-danger">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
         </tr>
         {% for orderDeduct in orderDeducts %}
           <tr>
             <td width="25%" class="color-gray cd-pl32">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
-            <td width="75%"><span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span></td>
+            <td width="75%"><span class="color-danger">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span></td>
           </tr>
         {% endfor %}
       {% endif %}
 
       <tr>
         <td width="25%">{{ '实付价格'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.pay_amount|fen_to_yuan(0) }}</span></td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
 
       <tr>
@@ -57,7 +57,7 @@
           {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
         </td>
         <td width="75%">
-          <span class="color-warning">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
+          <span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
         </td>
       </tr>
       <tr>
@@ -68,7 +68,7 @@
             {{ dict_text('payment', order.payment, '现金') }}
           {% endif %}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span>
+          <span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
         </td>
       </tr>
       <tr> <td width="25%">{{'order.created_time'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td> </tr>
