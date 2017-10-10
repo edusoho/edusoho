@@ -92,9 +92,14 @@ payment:
     llpay: 连连支付
     marketing: 营销平台
 
+orderSource:
+    self: 站内支付
+    marketing: 营销平台支付
+    outside: 站外支付
+
 orderDeductType:
     discount: 打折
-    coupon: 优惠卷
+    coupon: 优惠券
     paidCourse: 班级课程抵扣
 
 newPayment:

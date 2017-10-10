@@ -2389,7 +2389,8 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
-user.account.my_coin.pay_coin: %coin_name% pay
+user.account.my_coin.pay_coin: %coin_name% paid
+user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
 user.account.my_coin.outflow: 'Payment Records'
 user.account.my_coin.recharge: 'Learning card recharge'

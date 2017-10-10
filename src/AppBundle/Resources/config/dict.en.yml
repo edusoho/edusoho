@@ -74,6 +74,11 @@ payment:
     coin: Coin
     llpay: LLpay
     marketing: marketing
+
+orderSource:
+    self: Self
+    marketing: Marketing
+    outside: Outside
    
 newPayment:
     none: --
