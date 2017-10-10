@@ -26,13 +26,8 @@ export default class BasePayment {
     if (trade.paidSuccessUrl) {
       location.href = trade.paidSuccessUrl;
     } else {
-      this.beforeTradeCreated();
       this.afterTradeCreated(trade)
     }
-
-  }
-
-  beforeTradeCreated() {
 
   }
 
@@ -63,10 +58,8 @@ export default class BasePayment {
     let trade = null;
 
     Api.trade.create({data:params, async: false, promise: false}).done( res => {
-      console.log(res);
       trade = res;
     }).error( res => {
-      console.log(res);
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
 
