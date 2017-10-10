@@ -47,8 +47,17 @@ class CashierController extends BaseController
         return $this->render(
             'cashier/show.html.twig', array(
             'order' => $order,
+            'product' => $this->getProduct($order['id']),
             'payments' => $payments,
         ));
+    }
+
+    private function getProduct($orderId)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
+        $orderItem = reset($orderItems);
+
+        return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
     public function redirectAction(Request $request)
