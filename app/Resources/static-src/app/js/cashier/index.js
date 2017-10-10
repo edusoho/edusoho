@@ -33,7 +33,7 @@ class CashierForm {
     $form.on('addPriceItem', (event, id, title, price) => this.addPriceItem(event, id, title, price));
   }
 
-  payOrder() {
+  payOrder(event) {
     let $form = this.$form;
 
     if ($form.valid()) {

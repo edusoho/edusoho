@@ -10,13 +10,12 @@ export default class Coin {
   }
 
   initEvent() {
-    this.$container.on('blur', '.js-coin-amount', event => this.changeAmount(event));
+    this.$form.on('change', '.js-coin-amount', event => this.changeAmount(event));
   }
 
   changeAmount(event) {
     let $this = $(event.currentTarget);
     let inputCoinNum = $this.val();
-
     if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
       $this.val(0);
       this.removePasswordValidate();
