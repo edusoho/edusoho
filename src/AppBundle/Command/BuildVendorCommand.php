@@ -65,10 +65,12 @@ class BuildVendorCommand extends BaseCommand
 
         $finder->in($folder)->depth('<= 3')->ignoreUnreadableDirs(true)->ignoreDotFiles(false);
 
+        $removedFolders = array();
+        $removedFiles = array();
         foreach ($finder as $folder) {
             if (in_array($folder->getFilename(), array('tests', 'Tests', 'test', 'testing'))) {
-                $output->writeln('    - remove  folder : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $filesystem->remove($folder->getRealPath());
+                array_push($removedFolders, $folder->getRelativePath() . '/' . $folder->getFilename());
             }
 
             if (!$folder->isFile()) {
@@ -76,9 +78,17 @@ class BuildVendorCommand extends BaseCommand
             }
 
             if (in_array($folder->getFilename(), $this->ignoreVendorFiles()) || strrpos($folder->getFilename(), '.') === 0 || strrpos($folder->getFilename(), '.md') !== false) {
-                $output->writeln('    - remove  File : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $filesystem->remove($folder->getRealPath());
+                array_push($removedFiles, $folder->getRelativePath() . '/' . $folder->getFilename());
             }
+        }
+        foreach ($removedFiles as $file) {
+            $output->writeln('    - remove  File : ' . $file);
+        }
+
+        foreach ($removedFolders as $folder) {
+            $output->writeln('    - remove  folder : ' . $folder);
+
         }
     }
 }

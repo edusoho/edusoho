@@ -324,9 +324,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  本次升级将重命名以下文件</info>');
         $invalidFiles = array();
         foreach ($fileLines as $key => $line) {
-            $splitLine = preg_split('/\s+/', $line);
-
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             if (empty($opFile) || !in_array($op, array('M', 'A', 'D', 'R'))) {
                 array_push($invalidFiles, $line);
@@ -335,8 +333,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->printLog($invalidFiles, 'invalid');
-        //$this->style->success('invalid files has been processed');
-        return $invalidFiles;
     }
 
     private function ingoredFiles($fileLines)
@@ -344,11 +340,9 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  本次升级将忽略以下文件</info>');
         $ignoreFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
-            list($op, $opFile, $newFile) = $splitLine;
             if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
-                // $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                 array_push($ignoreFiles, $opFile);
                 continue;
             }
@@ -385,7 +379,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->printLog($ignoreFiles, 'ignore');
-        //  $this->style->success('invalid files has been processed');
     }
 
     private function renamedFiles($fileLines)
@@ -393,8 +386,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  本次升级将重命名以下文件</info>');
         $renamedFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             if (strpos($op, 'R') === 0) {
                 $this->insertDelete($opFile, $this->packageDir);
@@ -404,8 +396,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->printLog($renamedFiles, 'rename');
-        // $this->style->success('rename  files has been processed');
-        return $renamedFiles;
     }
 
     private function addedFiles($fileLines)
@@ -413,8 +403,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  本次升级将增加以下文件</info>');
         $addedFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             $opBundleFile = $this->getBundleFile($opFile);
             $newBundleFile = $this->getBundleFile($newFile);
@@ -437,8 +426,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->printLog($addedFiles, 'add');
-        //   $this->style->success('add  files has been processed');
-        return $addedFiles;
     }
 
     private function updatedFiles($fileLines)
@@ -446,8 +433,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  本次升级将更新以下文件</info>');
         $updatedFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             $opBundleFile = $this->getBundleFile($opFile);
 
@@ -462,8 +448,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->printLog($updatedFiles, 'update');
-        //  $this->style->success('update  files has been processed');
-        return $updatedFiles;
     }
 
     private function deletedFiles($fileLines)
@@ -471,8 +455,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  本次升级将删除以下文件</info>');
         $deletedFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             $opBundleFile = $this->getBundleFile($opFile);
 
@@ -494,8 +477,6 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->printLog($deletedFiles, 'delete');
-        // $this->style->success('delete  files has been processed');
-        return $deletedFiles;
     }
 
     private function migrationFiles($fileLines)
@@ -503,8 +484,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->output->writeln('<info>  正在检测migrations目录文件</info>');
         $migrationFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
                 array_push($migrationFiles, $opFile);
@@ -518,8 +498,6 @@ class BuildUpgradePackageCommand extends BaseCommand
                 exit;
             }
         }
-
-        return $migrationFiles;
     }
 
     private function webAssetsFiles($fileLines)
@@ -528,14 +506,13 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $webAssetsFiles = array();
         foreach ($fileLines as $line) {
-            $splitLine = preg_split('/\s+/', $line);
-            list($op, $opFile, $newFile) = $splitLine;
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
             if (strpos($opFile, 'web/assets/libs') === 0) {
-                array_push($webAssetsFiles, $opFile);
+                array_push($webAssetsFiles, $op ." ".$opFile);
             }
         }
 
-        $this->printLog($webAssetsFiles, 'web/assets/libs file');
+        $this->printLog($webAssetsFiles, 'web/assets/libs');
 
         if (count($webAssetsFiles)) {
             if ($this->input->isInteractive() && !$this->askConfirmation('<comment> web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)</comment>')) {
@@ -554,5 +531,17 @@ class BuildUpgradePackageCommand extends BaseCommand
         foreach ($migrationFiles as $file) {
             $this->output->writeln("    - {$operation} file: {$file}");
         }
+    }
+
+    /**
+     * format:  file mode  | file name
+     * @param $line
+     * @return array
+     */
+    private function parseFileLine($line)
+    {
+        $splitLine = preg_split('/\s+/', $line);
+        list($op, $opFile, $newFile) = $splitLine;
+        return array($op, $opFile, $newFile);
     }
 }
