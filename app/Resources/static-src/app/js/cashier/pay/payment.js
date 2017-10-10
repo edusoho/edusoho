@@ -22,12 +22,12 @@ export default class BasePayment {
 
   pay(params) {
 
-    this.beforeCreateTrade();
-
-    BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
-  }
-
-  beforeCreateTrade() {
+    let trade = BasePayment.createTrade(params);
+    if (trade.paidSuccessUrl) {
+      location.href = trade.paidSuccessUrl;
+    } else {
+      this.afterTradeCreated(trade)
+    }
 
   }
 
@@ -51,21 +51,19 @@ export default class BasePayment {
     return params;
   }
 
-  static createTrade(postParams, callback) {
+  static createTrade(postParams) {
 
     let params = this.filterParams(postParams);
 
-    Api.trade.create({data:params}).then(res => {
-      if (res.paidSuccessUrl) {
-        location.href = res.paidSuccessUrl;
-      } else {
-        callback(res)
-      }
+    let trade = null;
 
-    }).catch(res => {
-      console.log(res);
+    Api.trade.create({data:params, async: false, promise: false}).done( res => {
+      trade = res;
+    }).error( res => {
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
+
+    return trade;
   }
 
   static getTrade(tradeSn) {

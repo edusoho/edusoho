@@ -420,15 +420,16 @@ plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
+plugin.discount: 打折
 plugin.coupon.minus: 抵扣
 plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
 plugin.coupon.discount_tips: 优惠券 抵价%rate%折
 plugin.coupon.no_use_option: 不使用优惠券
 plugin.coupon.change_btn: 更换优惠券
-plugin.coupon.use_btn: 使用优惠券
+plugin.coupon.input_hint: 优惠券
 plugin.coupon.choose_btn: 输入优惠券
-plugin.coupon.use.input_placeholder: 请输入优惠券
-plugin.coupon.code: 优惠码
+plugin.coupon.use.input_placeholder: 输入优惠券码
+plugin.coupon.code: 优惠券码
 plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用
@@ -502,12 +503,13 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 order.confirm: 订单确认
-order.confirm.pay_rmb: 应付金额：
+order.confirm.pay_rmb: 实付金额
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.account_cash: 账户余额：
@@ -516,7 +518,7 @@ order.confirm.setup_pay_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
-order.confirm.forget_password_btn: 忘记密码？
+order.confirm.forget_password_btn: 忘记支付密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
 order.confirm.top_use_tips: 本订单最高可以使用
@@ -560,7 +562,7 @@ pay_center.pay.use_new_card: 使用新的银行卡
 pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其他支付方式
 pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
 pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
-pay_center.pay.confirm_pay_btn: 确认支付
+pay_center.pay.confirm_pay_btn: 支付订单
 pay_center.pay.confirm_pay_btn_loading: 正在支付
 pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
@@ -571,8 +573,9 @@ pay_center.pay.weixin_pay.press_qcode_pay_tips: 请长按二维码支付
 pay_center.pay.choose_other_way_btn: 选择其他支付方式
 pay_center.finish: 订单完成
 pay_center.finish.jump_tips: 正在跳转到支付网关...
+pay_center.finish_title: 订单支付完成
 pay_center.finish_tips: >
-  订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
+  将在 <span class="js-countdown">5</span> 秒后跳转
 pay_center.fee: 收费
 pay_center.remind: 支付提醒
 pay_center.remind.content_title: 支付提醒

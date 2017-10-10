@@ -428,6 +428,7 @@ $.validator.addMethod('smsCode', function (value, element) {
 }, Translator.trans('validate.sms_code.message'));
 
 $.validator.addMethod('es_remote', function (value, element, params) {
+  console.log('es_remotees_remote')
 	let $element = $(element);
 	let url = $(element).data('url') ? $(element).data('url') : null;
 	let type = params.type ? params.type : 'GET';

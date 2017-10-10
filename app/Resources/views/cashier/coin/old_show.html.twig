@@ -1,0 +1,44 @@
+<div class="order-item clearfix" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}">
+
+  <div class="order-item-title" style="width:30%">
+    <i class="es-icon es-icon-money"></i>
+    <span class="title">{{ coinSetting.coin_name }}</span>
+    <span>{{ 'order.confirm.exchange_rate'|trans({'%cashRate%':coinSetting.cash_rate,'%coin_name%':coinSetting.coin_name}) }}</span>
+  </div>
+
+  <div class="order-item-detail">
+
+    {% if isPasswordSet %}
+      {{ 'order.confirm.use_tips'|trans }}
+      <input class="form-control text-center inline-block width-input-small mhm js-coin-amount" type="text" name="coinAmount" value="0">
+      {{ setting("coin.coin_name") }}
+    {% endif %}
+
+    <span class="coin-detail hidden-xs hidden-sm">
+      （{{ 'order.confirm.account_cash'|trans }}<span class="color-danger">{{ balance.amount }}</span> {{ coinSetting.coin_name }}）
+      </span>
+
+    {% if isPasswordSet %}
+      <div class="controls mtm" style="display:none">
+        <input class="form-control width-input-large inline-block js-pay-password"
+               name="payPassword" type="password" placeholder="{{ 'order.confirm.input_pay_password_tips'|trans }}"
+               data-url="{{ path('cashier_password_check') }}" autocomplete="off" data-type="get"
+               data-display="{{ 'order.confirm.forget_password_tips'|trans }}" />
+        <a href="{{ path('settings_find_pay_password') }}" target='_blank' class="btn-link">{{ 'order.confirm.forget_password_btn'|trans }}</a>
+        <br>
+      </div>
+
+    {% else %}
+      <div  class="alert alert-warning alert-xs mtm inline-block" style="line-height:20px">
+        {{ 'order.confirm.safety_tips'|trans }}
+        {{ 'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_pay_password')})|raw }}
+      </div>
+    {% endif %}
+
+  </div>
+
+  <div class="order-item-price" style="width:25%">
+    <span class="color-danger" style="font-size: 24px" data-default-value="0.00"></span>
+  </div>
+
+</div>

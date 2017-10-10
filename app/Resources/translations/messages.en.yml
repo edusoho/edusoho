@@ -337,6 +337,7 @@ vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
+plugin.discount: Discount
 plugin.coupon: Coupon
 plugin.coupon.minus: Deduction
 plugin.coupon.minus_tips: 'Coupon for deduct %rate% CNY'
@@ -416,19 +417,20 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_rmb: 'Price:'
+order.confirm.pay_rmb: 'Price'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.submit_btn_loading: Submiting...
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
 order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
 order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
-order.confirm.forget_password_btn: 'Forget password？'
+order.confirm.forget_password_btn: 'Forget pay password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
 order.confirm.top_use_tips: 'The order can use up to '
@@ -483,8 +485,9 @@ pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat <br>scan 
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Scan the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
+pay_center.finish_title: 'Order paid finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
-pay_center.finish_tips: 'Order paid successfully,redirecting in <span class="js-countdown">3</span> seconds</p>'
+pay_center.finish_tips: Redirecting in <span class="js-countdown">3</span> seconds
 pay_center.fee: Fee
 pay_center.remind: 'Click to enter alipay'
 pay_center.remind.content_title: 'Payment notification'
