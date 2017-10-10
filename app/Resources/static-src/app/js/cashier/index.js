@@ -2,11 +2,11 @@ import Coin from './coin';
 import PaySDK from './pay/sdk';
 
 class CashierForm {
+  constructor(props) {
+    this.$form = $(props.element);
+    this.$priceList = this.$form.find('#order-center-price-list');
 
-  constructor($form) {
-    this.$container = $form;
-
-    this.validator = this.$container.validate();
+    this.validator = this.$form.validate();
 
     this.initEvent();
     this.initCoin();
@@ -17,48 +17,50 @@ class CashierForm {
   initCoin() {
     let $coin = $('#coin-use-section');
     if ($coin.length > 0) {
-      this.coin = new Coin($coin, this);
+      this.coin = new Coin({
+        $coinContainer: $coin,
+        cashierForm: this,
+        $form: this.$form
+      });
+    }
+  }
+
+  initEvent() {
+    let $form = this.$form;
+
+    $form.on('click', '.js-pay-type', event => this.switchPayType(event));
+    $form.on('click', '.js-pay-btn', event => this.payOrder(event));
+    $form.on('addPriceItem', (event, id, title, price) => this.addPriceItem(event, id, title, price));
+  }
+
+  payOrder() {
+    let $form = this.$form;
+
+    if ($form.valid()) {
+      let params = this.formDataToObject($form);
+
+      params.payAmount = $form.find('.js-pay-price').text();
+      this.paySdk.pay(params);
+    }
+  }
+
+  switchPayType(event) {
+    let $this = $(event.currentTarget);
+    if (!$this.hasClass('active')) {
+      $this.addClass('active').siblings().removeClass('active');
+      $("input[name='payment']").val($this.attr("id"));
     }
   }
 
   calcPayPrice(coinAmount) {
-
-    let self = this;
-    $.post(this.$container.data('priceUrl'), {
-      coinAmount: coinAmount
-    }, resp => {
-      self.$container.find('.js-pay-price').text(resp.data);
-    });
-
-  }
-
-  initEvent() {
-    // 支付方式切换
-    this.$container.on('click', '.check', event => {
-      let $this = $(event.currentTarget);
-      if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
-        $this.addClass('active').siblings().removeClass('active');
-        $("input[name='payment']").val($this.attr("id"));
-      }
-    });
-
-    let $form = this.$container;
-    let self = this;
-    $form.on('click', '.js-pay-btn', event => {
-
-      if ($form.valid()) {
-
-        let params = self.formDataToObject($form);
-
-        params.payAmount = self.$container.find('.js-pay-price').text();
-        self.paySdk.pay(params);
-      }
-
+    $.post(this.$form.data('priceUrl'), {
+      coinAmount
+    }).done((res) => {
+      this.$form.find('.js-pay-price').text(res.data);
     });
   }
 
   formDataToObject($form) {
-
     let params = {},
       formArr = $form.serializeArray();
     for (let index in formArr) {
@@ -67,10 +69,31 @@ class CashierForm {
 
     return params;
   }
+
+  addPriceItem(event, id, title, price) {
+    let html = `
+      <div class="order-center-price" id="${id}">
+        <div class="order-center-price__title">${title}</div>
+        <div class="order-center-price__content">-${price}</div>
+      </div>
+    `;
+
+    let $priceItem = $(`#${id}`);
+    if ($priceItem.length) {
+      $priceItem.remove();
+      if (!price) {
+        return;
+      }
+    }
+
+    this.$priceList.append(html);
+  }
 }
 
 
-new CashierForm($('#cashier-form'));
+new CashierForm({
+  element: '#cashier-form'
+});
 
 
 

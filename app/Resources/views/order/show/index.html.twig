@@ -1,4 +1,7 @@
 {% extends 'order/layout.html.twig' %}
+
+{% block title %} {{'order.confirm'|trans}} - {{ parent() }}{% endblock %}
+
 {% do script(['libs/jquery-validation.js', 'app/js/order/show/index.js']) %}
 
 {% block order_body %}

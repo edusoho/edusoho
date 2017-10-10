@@ -1,44 +1,30 @@
-<div class="order-item clearfix" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}">
-
-  <div class="order-item-title" style="width:30%">
-    <i class="es-icon es-icon-money"></i>
-    <span class="title">{{ coinSetting.coin_name }}</span>
-    <span>{{ 'order.confirm.exchange_rate'|trans({'%cashRate%':coinSetting.cash_rate,'%coin_name%':coinSetting.coin_name}) }}</span>
-  </div>
-
-  <div class="order-item-detail">
-
+<div class="order-center-deduction">
+  <span class="order-center-deduction__title">
+    {{ coinSetting.coin_name }}
+  </span>
+  <span class="order-center-deduction__content">
     {% if isPasswordSet %}
-      {{ 'order.confirm.use_tips'|trans }}
-      <input class="form-control text-center inline-block width-input-small mhm js-coin-amount" type="text" name="coinAmount" value="0">
-      {{ setting("coin.coin_name") }}
-    {% endif %}
-
-    <span class="coin-detail hidden-xs hidden-sm">
-      （{{ 'order.confirm.account_cash'|trans }}<span class="color-danger">{{ balance.amount }}</span> {{ coinSetting.coin_name }}）
-      </span>
-
-    {% if isPasswordSet %}
-      <div class="controls mtm" style="display:none">
-        <input class="form-control width-input-large inline-block js-pay-password"
-               name="payPassword" type="password" placeholder="{{ 'order.confirm.input_pay_password_tips'|trans }}"
-               data-url="{{ path('cashier_password_check') }}" autocomplete="off" data-type="get"
-               data-display="{{ 'order.confirm.forget_password_tips'|trans }}" />
-        <a href="{{ path('settings_find_pay_password') }}" target='_blank' class="btn-link">{{ 'order.confirm.forget_password_btn'|trans }}</a>
-        <br>
-      </div>
-
+      {{ 'order.confirm.current_account_cash'|trans({
+        '%amount%':balance.amount, '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
+      }) }}
     {% else %}
-      <div  class="alert alert-warning alert-xs mtm inline-block" style="line-height:20px">
-        {{ 'order.confirm.safety_tips'|trans }}
-        {{ 'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_pay_password')})|raw }}
-      </div>
+      未设置支付密码前，不能使用虚拟币抵扣 <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">设置支付密码</a>
     {% endif %}
-
-  </div>
-
-  <div class="order-item-price" style="width:25%">
-    <span class="color-danger" style="font-size: 24px" data-default-value="0.00"></span>
-  </div>
-
+  </span>
 </div>
+
+<div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}" data-coin-rate="{{ setting('coin.cash_rate') }}">
+  <div class="form-group cd-form-group">
+    <label for="">本次使用</label>
+    <input type="text" class="form-control js-coin-amount" autocomplete="off" name="coinAmount" value="0">
+  </div>
+  <div class="form-group cd-form-group">
+    <label>支付密码</label>
+    <input type="password" class="form-control js-pay-password" name="payPassword" autocomplete="off"
+          data-url="{{ path('cashier_password_check') }}" data-type="get"
+          data-display="{{ 'order.confirm.forget_password_tips'|trans }}">
+  </div>
+  <a href="{{path('settings_find_pay_password')}}" target='_blank' class="cd-link-gray cd-ml16">{{ 'order.confirm.forget_password_btn'|trans }}</a>
+</div>
+
+<div class="order-center-line"></div>
