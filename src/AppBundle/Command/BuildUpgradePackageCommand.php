@@ -508,7 +508,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
             if (strpos($opFile, 'web/assets/libs') === 0) {
-                array_push($webAssetsFiles, $op ." ".$opFile);
+                array_push($webAssetsFiles, $op.' '.$opFile);
             }
         }
 
@@ -535,13 +535,16 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     /**
      * format:  file mode  | file name
+     *
      * @param $line
+     *
      * @return array
      */
     private function parseFileLine($line)
     {
         $splitLine = preg_split('/\s+/', $line);
         list($op, $opFile, $newFile) = $splitLine;
+
         return array($op, $opFile, $newFile);
     }
 }

@@ -70,7 +70,7 @@ class BuildVendorCommand extends BaseCommand
         foreach ($finder as $folder) {
             if (in_array($folder->getFilename(), array('tests', 'Tests', 'test', 'testing'))) {
                 $filesystem->remove($folder->getRealPath());
-                array_push($removedFolders, $folder->getRelativePath() . '/' . $folder->getFilename());
+                array_push($removedFolders, $folder->getRelativePath().'/'.$folder->getFilename());
             }
 
             if (!$folder->isFile()) {
@@ -79,16 +79,15 @@ class BuildVendorCommand extends BaseCommand
 
             if (in_array($folder->getFilename(), $this->ignoreVendorFiles()) || strrpos($folder->getFilename(), '.') === 0 || strrpos($folder->getFilename(), '.md') !== false) {
                 $filesystem->remove($folder->getRealPath());
-                array_push($removedFiles, $folder->getRelativePath() . '/' . $folder->getFilename());
+                array_push($removedFiles, $folder->getRelativePath().'/'.$folder->getFilename());
             }
         }
         foreach ($removedFiles as $file) {
-            $output->writeln('    - remove  File : ' . $file);
+            $output->writeln('    - remove  File : '.$file);
         }
 
         foreach ($removedFolders as $folder) {
-            $output->writeln('    - remove  folder : ' . $folder);
-
+            $output->writeln('    - remove  folder : '.$folder);
         }
     }
 }
