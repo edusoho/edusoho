@@ -12,7 +12,7 @@
 
   <div class="order-center-card clearfix">
     <div class="order-center-card__img">
-      {% if product.cover.middle starts with '/assets' %}
+      {% if product.cover.middle|default('') starts with '/assets' %}
         <img src="{{ asset(product.cover.middle) }}" alt="{{ order.title }}">
       {% else %}
         <img src="{{ filepath(product.cover.middle, product.targetType ~ '.png') }}" alt="{{ order.title }}">
