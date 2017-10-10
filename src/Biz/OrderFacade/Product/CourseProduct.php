@@ -37,6 +37,10 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
+
+        $this->snapshot = array(
+            'cover' => $this->courseSet['cover']
+        );
     }
 
     public function validate()

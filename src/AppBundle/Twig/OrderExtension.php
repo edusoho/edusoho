@@ -62,7 +62,21 @@ class OrderExtension extends \Twig_Extension
             new \Twig_SimpleFunction('check_order_type', array($this, 'checkOrderType')),
             new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('get_display_status', array($this, 'getDisplayStatus')),
+            new \Twig_SimpleFunction('get_wechat_openid', array($this, 'getWechatOpenid')),
         );
+    }
+
+    public function getWechatOpenid()
+    {
+        $isMicroAgent = strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
+        $hasOauthToken = $this->container->get('session')->has('oauth_token');
+        if ($isMicroAgent && $hasOauthToken) {
+            $oauthToken = $this->container->get('session')->get('oauth_token');
+
+            return empty($oauthToken['openid']) ? 0 : $oauthToken['openid'];
+        } else {
+            return 0;
+        }
     }
 
     public function fenToYuan($price, $displayPrefix = 1)

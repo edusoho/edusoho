@@ -53,7 +53,12 @@
           {% for orderDeduct in orderDeducts %}
             <tr>
               <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
-              <td width="75%"><span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span></td>
+              <td width="75%">
+                <span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span>
+                {% if orderDeduct.snapshot.couponCode|default('') %}
+                  <span class="text-muted text-sm pull-right">{{ 'order.use_coupon_tip'|trans ~ orderDeduct.snapshot.couponCode }}</span>
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
         {% endif %}

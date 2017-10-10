@@ -47,11 +47,12 @@ class CashierForm {
     $form.on('click', '.js-pay-btn', event => {
 
       if ($form.valid()) {
-
+        let $btn = $(event.currentTarget);
+        $btn.button('loading');
         let params = self.formDataToObject($form);
-
         params.payAmount = self.$container.find('.js-pay-price').text();
         self.paySdk.pay(params);
+        $btn.button('reset');
       }
 
     });

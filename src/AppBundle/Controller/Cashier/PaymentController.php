@@ -33,9 +33,5 @@ abstract class PaymentController extends BaseController
         return $this->createService('Pay:PayService');
     }
 
-    abstract public function pcPayAction($trade);
-
-    abstract public function mobilePayAction($trade);
-
     abstract public function notifyAction(Request $request, $payment);
 }

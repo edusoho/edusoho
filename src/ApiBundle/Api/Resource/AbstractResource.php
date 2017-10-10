@@ -153,6 +153,10 @@ abstract class AbstractResource
     {
         return $this->container->get('request')->getClientIp();
     }
+
+    public function invokeResource(ApiRequest $apiRequest) {
+        return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
+    }
     
     protected function makePagingObject($objects, $total, $offset, $limit)
     {

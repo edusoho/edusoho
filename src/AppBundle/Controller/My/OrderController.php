@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\My;
 
-use AppBundle\Common\MathToolkit;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Codeages\Biz\Framework\Order\Service\OrderRefundService;
@@ -58,8 +57,6 @@ class OrderController extends BaseController
             20
         );
 
-        $createdOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'display_status' => 'no_paid'));
-        $refundingOrderCount = $this->getOrderService()->countOrders(array('user_id' => $user['id'], 'display_status' => 'refunding'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('created_time' => 'DESC'),
@@ -82,15 +79,12 @@ class OrderController extends BaseController
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
             $order['refund'] = empty($orderRefunds[$order['id']]) ? array() : $orderRefunds[$order['id']];
-            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         return $this->render('my-order/order/index.html.twig', array(
             'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
-            'createdOrderCount' => $createdOrderCount,
-            'refundingOrderCount' => $refundingOrderCount,
         ));
     }
 

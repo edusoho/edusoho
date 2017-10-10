@@ -7,40 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AlipayController extends PaymentController
 {
-    public function pcPayAction($trade)
-    {
-        $trade['platform_type'] = 'Web';
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'alipay'), true);
-        $result = $this->getPayService()->createTrade($trade);
-
-        if ($result['status'] == 'paid') {
-            return $this->createJsonResponse(array(
-                'isPaid' => 1,
-                'redirectUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])),
-            ));
-        }
-
-        return $this->createJsonResponse(array(
-            'isPaid' => 0,
-            'redirectUrl' => $result['platform_created_result']['url'],
-        ));
-    }
-
-    public function mobilePayAction($trade)
-    {
-        $trade['platform_type'] = 'Wap';
-        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
-        $trade['return_url'] = $this->generateUrl('cashier_pay_return', array('payment' => 'alipay'), true);
-        $result = $this->getPayService()->createTrade($trade);
-
-        if ($result['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $result['trade_sn'])));
-        }
-
-        return $this->redirect($result['platform_created_result']['url']);
-    }
-
     public function notifyAction(Request $request, $payment)
     {
         $data = $request->request->all();

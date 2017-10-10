@@ -73,7 +73,7 @@ class Setting extends BaseResource
             'enabled' => '0',
             'convNo' => null
         );
-        
+
         $res = array_merge($default, $res);
 
         return ArrayToolkit::filter($res, $default);

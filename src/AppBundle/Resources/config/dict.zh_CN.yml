@@ -94,7 +94,7 @@ payment:
 
 orderDeductType:
     discount: 打折
-    coupon: 优惠码
+    coupon: 优惠卷
     paidCourse: 班级课程抵扣
 
 newPayment:
