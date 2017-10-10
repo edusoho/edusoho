@@ -276,7 +276,7 @@ class CoinController extends BaseController
     {
         $fields = $request->query->all();
         $conditions = $this->buildConditions($fields);
-        $conditions['except_user_id'] = 0;
+        $conditions['user_id'] = 0;
         $conditions['amount_type'] = 'coin';
 
         $paginator = new Paginator(
@@ -303,7 +303,7 @@ class CoinController extends BaseController
 
         $account = $this->getAccountService()->getUserBalanceByUserId(0);
 
-        $userIds = ArrayToolkit::column($cashes, 'user_id');
+        $userIds = ArrayToolkit::column($cashes, 'buyer_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/bill/coin.html.twig', array(

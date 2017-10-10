@@ -12,6 +12,7 @@ class CashBillExporter extends Exporter
         return array(
             'cashflow.sn',
             'cashflow.title',
+            'cashflow.order_sn',
             'cashflow.user_name',
             'cashflow.created_time',
             'cashflow.amount',
@@ -51,10 +52,19 @@ class CashBillExporter extends Exporter
             }
             $content[] = $cash['sn'];
             $content[] = $cash['title'];
+            $content[] = empty($cash['order_sn']) ? '--' : $cash['order_sn'];
             $content[] = $user['nickname'];
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
-            $content[] = $cash['amount'];
-            $content[] = empty($payment[$cash['platform']]) ? '--' : $payment[$cash['platform']];
+            $content[] = $cash['amount'] / 100;
+            if ($cash['type'] == 'outflow' && $cash['amount_type'] == 'money') {
+                //网校支出
+                $content[] = $this->container->get('translator')->trans('order.payment_pattern.school');
+            } elseif ($cash['type'] == 'inflow' && $cash['amount_type'] == 'coin') {
+                //用户余额支付
+                $content[] = $this->container->get('translator')->trans('order.payment_pattern.balance');
+            } else {
+                $content[] = empty($payment[$cash['platform']]) ? '--' : $payment[$cash['platform']];
+            }
             $content[] = $cash['trade_sn'];
             $content[] = $profile['truename'];
             $content[] = $user['email'];

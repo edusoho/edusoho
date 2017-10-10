@@ -8110,7 +8110,8 @@ cashflow.order_sn: 订单号
 cashflow.user_name: 用户名
 cashflow.created_time: 成交时间
 cashflow.amount: 金额
-cashflow.platform: 支付方式
+cashflow.number: 数量
+cashflow.platform: 用户支付方式
 cashflow.trade_sn: 支付平台流水号
 cashflow.user_truename: 姓名
 cashflow.user_email: 邮箱

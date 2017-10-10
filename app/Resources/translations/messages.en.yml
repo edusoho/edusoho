@@ -6442,6 +6442,7 @@ cashflow.sn: sn
 cashflow.user_name: username
 cashflow.created_time: createdTime
 cashflow.amount: amount
+cashflow.number: number
 cashflow.platform: platform
 cashflow.trade_sn: tradeSn
 cashflow.user_truename: truename

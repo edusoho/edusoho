@@ -97,7 +97,6 @@ orderDeductType:
     paidCourse: 班级课程抵扣
 
 newPayment:
-    none: --
     alipay: 支付宝
     wechat: 微信
     heepay: 网银支付
