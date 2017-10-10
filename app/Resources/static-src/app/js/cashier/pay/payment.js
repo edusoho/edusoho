@@ -21,6 +21,7 @@ export default class BasePayment {
   }
 
   pay(params) {
+    this.beforeCreateTrade();
     BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
   }
 
@@ -51,12 +52,11 @@ export default class BasePayment {
   static createTrade(postParams, callback) {
 
     let params = this.filterParams(postParams);
-    let self = this;
+    
     Api.trade.create({data:params}).then(res => {
       if (res.paidSuccessUrl) {
         location.href = res.paidSuccessUrl;
       } else {
-        self.beforeCreateTrade();
         callback(res)
       }
 

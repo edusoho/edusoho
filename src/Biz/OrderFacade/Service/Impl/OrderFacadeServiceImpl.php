@@ -26,7 +26,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'title' => $product->title,
             'user_id' => $user['id'],
             'created_reason' => 'site.join_by_purchase',
-            'price_type' => $currency->isoCode,
+            'price_type' => 'CNY',
             'currency_exchange_rate' => $currency->exchangeRate,
             'refund_deadline' => $this->getRefundDeadline(),
         );
@@ -98,7 +98,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'user_id' => $userId,
             'created_reason' => empty($params['created_reason']) ? '' : $params['created_reason'],
             'source' => empty($params['source']) ? 'self' : $params['source'],
-            'price_type' => empty($params['price_type']) ? $currency->isoCode : $params['price_type'],
+            'price_type' => 'CNY',
         );
 
         $orderItems = $this->makeOrderItems($product);
