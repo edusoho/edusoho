@@ -45,9 +45,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $funcs = array(
             1 => 'bizSessionAndOnline',
             2 => 'bizSchedulerRenameTable',
-            3 => 'bizSchedulerDeleteFields',
-            4 => 'bizSchedulerAddRetryNumAndJobDetail',
-            5 => 'bizSchedulerUpdateJobDetail',
+            3 => 'bizSchedulerAddRetryNumAndJobDetail',
+            4 => 'bizSchedulerUpdateJobDetail',
+            5 => 'bizSchedulerDeleteFields',
             6 => 'sessionMigrate',
             7 => 'addClearSessionJob',
             8 => 'addOnlineGcJob',
@@ -170,6 +170,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted')) {
             $this->logger(sprintf("当前page %s,  正在删除%s", $page, 'ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted` '));
+            $this->getConnection()->exec("delete from `biz_scheduler_job` where  deleted =1");
             $this->getConnection()->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted`;');
         }
 
