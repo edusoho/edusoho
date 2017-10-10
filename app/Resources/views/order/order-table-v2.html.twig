@@ -4,7 +4,7 @@
 
 <thead>
   <tr>
-    <th width="25%">{{'order.name'|trans}}</th>
+    <th width="25%">{{'商品名称'|trans}}</th>
     <th>{{'order.id'|trans}}</th>
     <th class="text-right">{{'order.price_amount'|trans }}/{{'order.real_pay'|trans}}</th>
     <th>{{'order.created_time'|trans}}</th>
@@ -28,7 +28,7 @@
         {% endif %}
       </td>
       <td>{{order.sn}}</td>
-      <td class="text-right">{{ order.price_amount  }}/{{ order.pay_amount }}</td>
+      <td class="text-right">{{ order.price_amount  }}<br>{{ order.pay_amount }}</td>
       <td>{{ order.created_time|date('Y-n-d H:i:s') }}</td>
       <td>
         {{ display_order_status(order.status, 0) }}
@@ -60,10 +60,12 @@
             </div>
 
             {% if order.status in ['paid', 'success'] and order.refund.status|default('') in ['cancel', ''] %}
-              <br>
-              <div class="table-action__item">
-                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'申请退款'|trans}}</a>
-              </div>
+              {% if order.refund_deadline == 0 or order.refund_deadline > date().timestamp %}
+                <br>
+                <div class="table-action__item">
+                  <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'申请退款'|trans}}</a>
+                </div>
+              {% endif %}
             {% endif %}
             {% if order.status in ['refunded'] %}
               <br>
