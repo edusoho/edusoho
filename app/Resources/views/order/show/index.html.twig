@@ -24,6 +24,20 @@
           <div class="order-center-price__title">课程价格</div>
           <div class="order-center-price__content">{{ product.originPrice|price_format }}</div>
         </div>
+        
+        {% if product.availableDeducts.paidCourses|default(null) %}
+          {% set paidCourses = product.availableDeducts.paidCourses %}
+          {% set totolPaidPrice = 0 %}
+          {% for paidCourse in paidCourses %}
+            {% set totolPaidPrice = totolPaidPrice + paidCourse.paidPrice %}
+          {% endfor %}
+          <div class="order-center-price">
+            <div class="order-center-price__title">已购课程抵扣</div>
+            <div class="order-center-price__content">
+              -{{ totolPaidPrice|price_format }}
+            </div>
+          </div>
+        {% endif %}
       </div>
       <div class="order-center-line"></div>
 

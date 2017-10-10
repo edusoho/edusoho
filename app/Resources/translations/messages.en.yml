@@ -441,7 +441,7 @@ order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
 order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
 order.confirm.sms_code.bind_btn: 'Bind'
-order.paid_course.content_title: 'You already bought:'
+order.paid_course.content_title: 已购买课程
 order.paid_course.minus: 'Deduct:'
 order.refund: 'Quit the course'
 order.refund.reason: 'Quit reason'

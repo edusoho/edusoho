@@ -529,7 +529,7 @@ order.confirm.sms_code.input_placeholder: 输入短信验证码
 order.confirm.sms_code.get_code_btn: 获取短信验证码
 order.confirm.sms_code.not_bind_mobile_tips: 您还未绑定手机号
 order.confirm.sms_code.bind_btn: 去绑定
-order.paid_course.content_title: 您已购买过：
+order.paid_course.content_title: 已购买课程
 order.paid_course.minus: 抵扣：
 order.refund: 退出学习
 order.refund.reason: 退出原因
