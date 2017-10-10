@@ -8,6 +8,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Trade\Factory\BaseTrade;
 use ApiBundle\Api\Resource\Trade\Factory\TradeFactory;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Status\Order\PaidOrderStatus;
+use Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -18,7 +21,7 @@ class Trade extends AbstractResource
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
         return array(
             'isPaid' => $trade['status'] === 'paid',
-            'successUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
+            'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
         );
     }
 
@@ -33,8 +36,17 @@ class Trade extends AbstractResource
 
         $this->fillParams($params);
 
-        if (!empty($params['orderSn'])) {
-            $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
+        if (!empty($params['orderSn']) && $order = $this->getOrderService()->getOrderBySn($params['orderSn'])) {
+
+            if ($this->isOrderPaid($order)) {
+                return array(
+                    'tradeSn' => $order['trade_sn'],
+                    'isPaid' => true,
+                    'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
+                );
+            } else {
+                $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
+            }
         }
 
         $tradeIns = $this->getTradeIns($params['gateway']);
@@ -45,6 +57,17 @@ class Trade extends AbstractResource
         }
 
         return $tradeIns->createResponse($trade);
+    }
+
+    private function isOrderPaid($order)
+    {
+        if ($order['trade_sn']) {
+            $trade = $this->getPayService()->queryTradeFromPlatform($order['trade_sn']);
+
+            return $trade['status'] === 'paid';
+        }
+
+        return false;
     }
 
     /**
@@ -64,6 +87,14 @@ class Trade extends AbstractResource
     {
         $params['userId'] = $this->getCurrentUser()->getId();
         $params['clientIp'] = $this->getClientIp();
+    }
+
+    /**
+     * @return OrderService
+     */
+    private function getOrderService()
+    {
+        return $this->service('Order:OrderService');
     }
 
     /**
