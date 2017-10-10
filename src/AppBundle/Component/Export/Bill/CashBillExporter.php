@@ -40,12 +40,12 @@ class CashBillExporter extends Exporter
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         $datas = array();
-        
-        foreach($cashes as $cash) {
+
+        foreach ($cashes as $cash) {
             $content = array();
             $user = empty($users[$cash['buyer_id']]) ? array('nickname' => '--', 'email' => '--', 'verifiedMobile' => '--') : $users[$cash['buyer_id']];
             $profile = empty($profiles[$cash['buyer_id']]) ? array('truename' => '--') : $profiles[$cash['buyer_id']];
-            
+
             //系统生成的邮箱不显示
             if (strpos($user['email'], '@edusoho.net') !== false) {
                 $user['email'] = '--';

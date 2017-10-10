@@ -546,6 +546,7 @@ class CoinController extends BaseController
         $users = $this->getUserService()->findUsersByIds($buyerIds);
 
         list($amountInflow, $amountOutflow) = $this->getInflowAndOutflow($conditions);
+
         return $this->render('admin/bill/cash.html.twig', array(
             'cashes' => $cashes,
             'paginator' => $paginator,

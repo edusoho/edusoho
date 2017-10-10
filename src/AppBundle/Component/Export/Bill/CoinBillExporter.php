@@ -2,9 +2,6 @@
 
 namespace AppBundle\Component\Export\Bill;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Component\Export\Bill\CashBillExporter;
-
 class CoinBillExporter extends CashBillExporter
 {
     public function getTitles()
