@@ -27,8 +27,8 @@ class PickCouponCommand extends Command
                 'deduct_type' => 'coupon',
                 'deduct_id' => $coupon['id'],
                 'snapshot' => array(
-                    'couponCode' => $coupon['code']
-                )
+                    'couponCode' => $coupon['code'],
+                ),
             );
             $product->pickedDeducts[] = $deduct;
         }
