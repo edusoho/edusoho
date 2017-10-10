@@ -1,13 +1,13 @@
 {% extends 'admin/layout.html.twig' %}
 {% set script_controller = 'topxiaadminbundle/controller/bill/index' %}
-{% set menu = 'admin_coin_records' %}
+{% set menu = 'admin_bill_coin' %}
 
 {% block main %}  
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
     <p class="text-muted">
-      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{math_format(account.amount, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ math_format(inflow, 0.01) |default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ math_format(outflow, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{ math_format(account.amount, 0.01)|default(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow|default(0) }}</strong> {{ setting('coin.coin_name') }}</span>
     </p>
     <div class="table-responsive">
       <table class="table table-striped text-sm">

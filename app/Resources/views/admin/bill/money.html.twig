@@ -1,13 +1,13 @@
 {% extends 'admin/layout.html.twig' %}
 {% set script_controller = 'topxiaadminbundle/controller/bill/cash/index' %}
-{% set menu = 'admin_bill' %}
+{% set menu = 'admin_bill_cash' %}
 
 {% block main %}
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-cash-flow'} %}
     <p class="text-muted">
       <span class="mrl">{{ 'finance.balance'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01) }}</strong>{{ 'site.currency.CNY'|trans }}</span>
-      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ amountInflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
-      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ amountOutflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
     </p>
 
     <div class="table-responsive">
