@@ -99,7 +99,7 @@ orderSource:
 
 orderDeductType:
     discount: 打折
-    coupon: 优惠卷
+    coupon: 优惠券
     paidCourse: 班级课程抵扣
 
 newPayment:
