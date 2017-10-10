@@ -12,6 +12,7 @@ use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Codeages\Biz\Framework\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;
 
@@ -53,14 +54,7 @@ class CashierController extends BaseController
 
     public function redirectAction(Request $request)
     {
-        $tradeSn = $request->query->get('tradeSn');
-        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
-
-        if ($trade['user_id'] !== $this->getCurrentUser()->getId()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        return $this->redirect($trade['platform_created_result']['url']);
+        return new Response();
     }
 
     public function successAction(Request $request)

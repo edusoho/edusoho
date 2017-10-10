@@ -21,7 +21,14 @@ export default class BasePayment {
   }
 
   pay(params) {
+
+    this.beforeCreateTrade();
+
     BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
+  }
+
+  beforeCreateTrade() {
+
   }
 
   afterTradeCreated(res) {
@@ -56,6 +63,7 @@ export default class BasePayment {
       }
 
     }).catch(res => {
+      console.log(res);
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
   }
