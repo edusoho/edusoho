@@ -18,6 +18,8 @@ abstract class BaseTrade
      */
     protected $router;
 
+    protected $session;
+
     /**
      * @var Biz
      */
@@ -64,7 +66,7 @@ abstract class BaseTrade
             $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
             $tradeFields['amount'] = $order['pay_amount'];
             $tradeFields['order_sn'] = $order['sn'];
-            $coinAmount = isset($params['coinAmount']) ? $params['coinAmount'] : 0;
+            $coinAmount = empty($params['coinAmount']) ? 0 : $params['coinAmount'];
             $tradeFields['coin_amount'] = MathToolkit::simple($coinAmount, 100);
             $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount);
             $tradeFields['cash_amount'] = MathToolkit::simple($cashAmount, 100);
@@ -73,8 +75,9 @@ abstract class BaseTrade
 
         if ($params['type'] == 'recharge') {
             $tradeFields['goods_title'] = '虚拟币充值';
-            $tradeFields['amount'] = $params['amount'];
-            $tradeFields['cash_amount'] = $params['amount'];
+            $tradeFields['order_sn'] = '';
+            $tradeFields['amount'] = MathToolkit::simple($params['amount'], 100);
+            $tradeFields['cash_amount'] = MathToolkit::simple($params['amount'], 100);
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
@@ -89,12 +92,27 @@ abstract class BaseTrade
         return array();
     }
 
+    public function getCustomResponse($trade)
+    {
+        return array();
+    }
+
     public function createResponse($trade)
     {
-        return array(
+        $defaultResponse = array(
             'tradeSn' => $trade['trade_sn'],
-            'redirectUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
+            'status' => $trade['status'],
         );
+
+        if (!empty($trade['platform_created_result']['url'])) {
+            $defaultResponse['payUrl'] = $trade['platform_created_result']['url'];
+        }
+
+        if ($trade['status'] == 'paid') {
+            $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
+        }
+
+        return array_merge($defaultResponse, $this->getCustomResponse($trade));
     }
 
     /**

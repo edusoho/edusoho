@@ -1,10 +1,5 @@
-import BasePayment from './payment';
+import AlipayLegacyExpress from './alipay_legacy_express';
 
-export default class LianlianpayWeb extends BasePayment {
-
-  afterTradeCreated(res) {
-    window.open(res.redirectUrl);
-    this.showConfirmModal(res.tradeSn);
-  }
+export default class LianlianpayWeb extends AlipayLegacyExpress {
 
 }

@@ -394,6 +394,8 @@ order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
+order.platform_sn: Platform SN
+order.use_coupon_tip: Use Coupon
 order.price: 'Price'
 order.paid_time: 'Paid time'
 order.bank_code: 'Bank code'
@@ -475,6 +477,7 @@ pay_center.pay.online_banking_tips: 'If you want to pay through online banking s
 pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile browser, wechat pay is not supported.'
 pay_center.pay.pay_CNY: Price：q
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
+pay_center.pay.confirm_pay_btn_loading: 'Paying'
 pay_center.pay.weixin_pay: 'Wechat pay'
 pay_center.pay.weixin_pay.content_title: 'Payment info'
 pay_center.pay.weixin_pay.pay_btn: 'Pay now'
@@ -2385,6 +2388,7 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin.pay_coin: %coin_name% pay
 user.account.my_coin.inflow: 'Recharge Records'
 user.account.my_coin.outflow: 'Payment Records'
 user.account.my_coin.recharge: 'Learning card recharge'
@@ -2443,6 +2447,7 @@ user.orders.refund_status: 'Refund Status'
 user.orders.refund_id: 'Refund number：%sn%'
 user.orders.refund_empty: 'No refund record'
 user.orders.placeholder_order_name: 'Input order name'
+user.orders.placeholder_product_name: 'Input product name'
 user.cards: 'My Wallet'
 user.cards.content_title: 'My Wallet'
 user.cards.all: All

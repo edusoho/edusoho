@@ -1,9 +1,5 @@
-import BasePayment from './payment';
+import AlipayLegacyWap from './alipay_legacy_wap';
 
-export default class LianlianpayWap extends BasePayment {
-
-  afterTradeCreated(res) {
-    location.href = res.redirectUrl;
-  }
+export default class LianlianpayWap extends AlipayLegacyWap {
 
 }

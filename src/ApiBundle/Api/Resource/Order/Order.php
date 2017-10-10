@@ -29,19 +29,19 @@ class Order extends AbstractResource
             $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
             $product->setPickedDeduct($params);
             $order = $this->getOrderFacadeService()->create($product);
-            $params['clientIp'] = $this->getClientIp();
-            $params['payment'] = 'alipay';
-            $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
-            $trade['platform_type'] = 'Wap';
-            $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
-            $trade['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $trade['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $result = $this->getPayService()->createTrade($trade);
+            $params['gateway'] = 'Alipay_LegacyWap';
+            $params['type'] = 'purchase';
+            $params['orderSn'] = $order['sn'];
+            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
+            $trade = $this->invokeResource($apiRequest);
 
             return array(
-                'id' => $result['trade_sn'],
-                'sn' => $result['trade_sn']
+                'id' => $trade['tradeSn'],
+                'sn' => $trade['tradeSn']
             );
+
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }

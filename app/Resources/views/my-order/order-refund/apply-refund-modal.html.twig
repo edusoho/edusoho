@@ -8,10 +8,29 @@
 
 {% block body %}
   <form method="post" id="refund-apply-form" action="{{path('my_order_refund_apply', {id: order.id })}}">
-    <div class="form-group cd-form-group cd-form-group-action">
-      <label for="reason">退款原因</label>
-      <input type="text" id="reason" name="reason" required="required" class="form-control" placeholder="请输入退款原因">
-    </div>
+
+    <table class="table cd-table table-striped order-detail-table">
+      <tr>
+        <td width="25%">{{'商品名称'|trans}}</td>
+        <td width="75%">{{ order.title }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ '实付价格'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td width="25%" class="color-gray cd-pl32">{{ '实付虚拟币'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span></td>
+      </tr>
+      <tr>
+        <td width="25%" class="color-gray cd-pl32">{{ '实付现金'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td class="25%">{{ '退款原因'|trans }}</td>
+        <td class="75%"><textarea class="form-control" name="reason" id="" rows="5"></textarea></td>
+      </tr>
+    </table>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>

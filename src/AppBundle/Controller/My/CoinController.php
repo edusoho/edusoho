@@ -267,38 +267,6 @@ class CoinController extends BaseController
         return array($canUseAmount, $canChange, $data);
     }
 
-    public function payAction(Request $request)
-    {
-        $user = $this->getUser();
-        $coinSetting = $this->setting('coin', array());
-        $amount = $request->request->get('amount', 0);
-        $payment = $request->request->get('payment');
-
-        $trade = array(
-            'goods_title' => '虚拟币充值',
-            'goods_detail' => '',
-            'order_sn' => '',
-            'amount' => $amount,
-            'user_id' => $user['id'],
-            'price_type' => 'money',
-            'type' => 'recharge',
-            'platform' => $payment,
-            'create_ip' => $request->getClientIp(),
-            'attach' => array('user_id' => $user['id']),
-        );
-
-        $trade = MathToolkit::multiply(
-            $trade,
-            array('amount'),
-            100
-        );
-
-        $payment = $request->request->get('payment');
-        $payment = ucfirst($payment);
-
-        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
-    }
-
     public function resultNoticeAction(Request $request)
     {
         return $this->render('coin/retrun-notice.html.twig');

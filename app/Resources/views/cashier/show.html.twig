@@ -43,11 +43,12 @@
     </div>
   </div>
 
-  <form class="form-paytype" id="cashier-form" method="post" action="{{ path('cashier_pay') }}" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
+  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
+
     <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
-    <input type="hidden" name="isWechat" value="{{ is_micro_messenger() }}">
+    <input type="hidden" name="openid" value="{{ get_wechat_openid() }}">
     <input type="hidden" name="type" value="purchase">
 
     {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
@@ -85,7 +86,7 @@
     <div class="cd-pv24" id="order-center-price-list">
       <div class="order-center-price">
         <div class="order-center-price__title">订单价格</div>
-        <div class="order-center-price__content">{{ order.pay_amount|price_format }}</div>
+        <div class="order-center-price__content">{{ order.pay_amount|major_currency }}</div>
       </div>
     </div>
 
@@ -95,14 +96,14 @@
       <div class="order-center-price">
         <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
         <div class="order-center-price__content">
-          <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|price_format }}</span>
+          <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|major_currency }}</span>
         </div>
       </div>
     </div>
 
     {% if payments %}
       <div class="text-right">
-        <button class="btn cd-btn cd-btn-primary js-pay-btn" type="button" data-loading-text="支付订单中">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</button>
+        <button class="btn cd-btn cd-btn-primary js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">{{ 'pay_center.pay.confirm_pay_btn'|trans }}</button>
       </div>
     {% endif %}
 
