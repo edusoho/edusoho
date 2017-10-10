@@ -51,7 +51,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $fromVersion = $input->getArgument('fromVersion');
         $version = $input->getArgument('version');
 
-        $diffFile = 'build/diff-'.$version;
+        $diffFile = 'build/diff-' . $version;
 
         $this->filesystem = new Filesystem();
         $this->output = $output;
@@ -78,9 +78,9 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function generateFiles($diffFile)
     {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
 
-        $diffFile = $rootDir.$diffFile;
+        $diffFile = $rootDir . $diffFile;
 
         if (!$this->filesystem->exists($diffFile)) {
             $this->output->writeln("<error>差异文件 {$diffFile}, 不存在,无法制作升级包</error>");
@@ -105,14 +105,14 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function copyFileAndDir($opFile, $packageDirectory)
     {
-        $distPath = $packageDirectory.'/source/'.$opFile;
+        $distPath = $packageDirectory . '/source/' . $opFile;
 
         if (@mkdir(dirname($distPath), 0777, true) && !is_dir(dirname($distPath))) {
             $this->output->writeln("创建升级包目录{$distPath} 失败");
             exit(1);
         }
 
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
 
         if (!is_file("{$root}/{$opFile}")) {
             return;
@@ -123,7 +123,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function createDirectory()
     {
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
         $path = "{$root}/build/EduSoho_{$this->version}/";
 
         if ($this->filesystem->exists($path)) {
@@ -176,18 +176,18 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $this->output->writeln('<info>  拷贝升级脚本：</info>');
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
-        $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../')."/scripts/{$this->version}";
+        $path = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../') . '/scripts/upgrade-' . $this->version . '.php';
+        $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../') . "/scripts/{$this->version}";
 
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');
         } else {
-            $targetPath = realpath($this->packageDir).'/Upgrade.php';
+            $targetPath = realpath($this->packageDir) . '/Upgrade.php';
             $this->output->writeln("    - $path .  -> {$targetPath}");
             $this->filesystem->copy($path, $targetPath, true);
 
             if (is_dir($upgradesDir)) {
-                $this->filesystem->mirror($upgradesDir, realpath($this->packageDir).'/source/scripts/'.$this->version, null, array(
+                $this->filesystem->mirror($upgradesDir, realpath($this->packageDir) . '/source/scripts/' . $this->version, null, array(
                     'override' => true,
                     'copy_on_windows' => true,
                 ));
@@ -212,12 +212,12 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $zipPath = "{$buildDir}/{$filename}.zip";
 
-        $this->output->writeln('    - ZIP包大小：'.$this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
+        $this->output->writeln('    - ZIP包大小：' . $this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
     }
 
     private function printChangeLog()
     {
-        $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
+        $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir') . '/../CHANGELOG';
         if (!$this->filesystem->exists($changeLogPath)) {
             $this->output->writeln('<error> CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>');
 
@@ -225,7 +225,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $this->output->writeln('<info>  输出changelog,请确认changelog是否正确</info>');
-        $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', 'r');
+        $file = @fopen($this->getContainer()->getParameter('kernel.root_dir') . '/../CHANGELOG', 'r');
         $print = false;
         $askPrint = false;
         while (!feof($file)) {
@@ -254,10 +254,10 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function generateDiffFile()
     {
         $this->output->writeln('<info>  生成git 差异文件 </info>  ');
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . '/../';
 
-        if (!$this->filesystem->exists($rootDir.'build')) {
-            $this->filesystem->mkdir($rootDir.'build');
+        if (!$this->filesystem->exists($rootDir . 'build')) {
+            $this->filesystem->mkdir($rootDir . 'build');
         }
 
         $gitTag = exec("git tag | grep v{$this->fromVersion}");
@@ -292,7 +292,7 @@ class BuildUpgradePackageCommand extends BaseCommand
     protected function buildVendor()
     {
         $this->output->writeln('<info>  清理vendor：</info>');
-        $dir = $this->packageDir.'source/vendor/';
+        $dir = $this->packageDir . 'source/vendor/';
 
         $command = $this->getApplication()->find('build:vendor');
         $input = new ArrayInput(array(
@@ -321,13 +321,13 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function invalidFiles($fileLines)
     {
-        $this->output->writeln('<info>  本次升级将重命名以下文件</info>');
+        $this->output->writeln('<comment>  本次升级需要注意一下文件</comment>');
         $invalidFiles = array();
         foreach ($fileLines as $key => $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
 
             if (empty($opFile) || !in_array($op, array('M', 'A', 'D', 'R'))) {
-                array_push($invalidFiles, $line);
+                array_push($invalidFiles, $op . " " . $opFile . " -> " . $newFile);
                 continue;
             }
         }
@@ -391,7 +391,7 @@ class BuildUpgradePackageCommand extends BaseCommand
             if (strpos($op, 'R') === 0) {
                 $this->insertDelete($opFile, $this->packageDir);
                 $this->copyFileAndDir($newFile, $this->packageDir);
-                array_push($renamedFiles, "{$opFile} -> {$newFile}");
+                array_push($renamedFiles, "{$op}  : {$opFile} -> {$newFile}");
             }
         }
 
@@ -508,7 +508,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         foreach ($fileLines as $line) {
             list($op, $opFile, $newFile) = $this->parseFileLine($line);
             if (strpos($opFile, 'web/assets/libs') === 0) {
-                array_push($webAssetsFiles, $op.' '.$opFile);
+                array_push($webAssetsFiles, $op . ' ' . $opFile);
             }
         }
 
