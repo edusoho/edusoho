@@ -26,11 +26,6 @@
       <tr> <td width="25%">{{'商品价格'|trans}}</td>
         <td width="75%">
           <span class="color-danger">{{ order.price_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
-          {% if paymentTrade.currency|default('') == "RMB" %}
-          {{'site.currency.CNY'|trans}}
-          {% elseif paymentTrade.currency|default('') == "Coin" %}
-          {{setting("coin.coin_name")}}
-          {% endif %}
         </td>
       </tr>
 
