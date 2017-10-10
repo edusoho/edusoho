@@ -40,6 +40,7 @@ class Trade extends AbstractResource
 
             if ($this->isOrderPaid($order)) {
                 return array(
+                    'tradeSn' => $order['trade_sn'],
                     'isPaid' => true,
                     'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
                 );
