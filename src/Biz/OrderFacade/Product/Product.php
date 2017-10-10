@@ -93,6 +93,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     /**
      * 封面
+     *
      * @var array
      */
     public $cover = array();

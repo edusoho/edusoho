@@ -56,6 +56,7 @@ class CashierController extends BaseController
     {
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
         $orderItem = reset($orderItems);
+
         return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
