@@ -62,7 +62,14 @@ class CashierController extends BaseController
 
     public function redirectAction(Request $request)
     {
-        return new Response();
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        if ($trade['user_id'] !== $this->getCurrentUser()->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->redirect($trade['platform_created_result']['url']);
     }
 
     public function successAction(Request $request)
