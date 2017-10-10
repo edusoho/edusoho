@@ -460,7 +460,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $originFile = "{$rootDir}/vendor/codeages/biz-framework/src/Session/Dao/Impl/SessionDaoImpl.php";
         $tmpFile = "{$rootDir}/vendor/codeages/biz-framework/src/Session/Dao/Impl/SessionDaoImpl.php.1";
         if (!file_exists($tmpFile) or !file_exists($originFile)) {
-            return false;
+            return $page;
         }
 
         $filesystem = new Filesystem();
