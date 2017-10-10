@@ -1,3 +1,4 @@
+{% do script(['app/js/my/order-detail/index.js']) %}
 <div class="tab-content">
   <div class="tab-pane fade active in" id="detail">
     <table class="table cd-table table-striped order-detail-table">
@@ -37,13 +38,23 @@
         {% for orderDeduct in orderDeducts %}
           <tr>
             <td width="25%" class="color-gray cd-pl32">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
-            <td width="75%"><span class="color-danger">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span></td>
+            <td width="75%">
+              <span class="color-danger">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span>
+              {% if orderDeduct.snapshot.couponCode is defined %}
+                <span class="pull-right">
+                  <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
+                     data-toggle="popover" data-trigger="hover"
+                     data-placement="top"
+                     data-content="{{ '使用优惠券'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>
+                </span>
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
       {% endif %}
 
       <tr>
-        <td width="25%">{{ '实付价格'|trans }}</td>
+        <td width="25%">{{ '应付价格'|trans }}</td>
         <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
 
@@ -70,6 +81,14 @@
               {% endif %}
             <td width="75%">
               <span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
+              {% if paymentTrade.platform_sn is defined %}
+                <span class="pull-right">
+                  <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
+                     data-toggle="popover" data-trigger="hover"
+                     data-placement="top"
+                     data-content="{{ '支付流水号'|trans }} {{ paymentTrade.platform_sn }}"></a>
+                </span>
+              {% endif %}
             </td>
           </tr>
         {% endif %}
