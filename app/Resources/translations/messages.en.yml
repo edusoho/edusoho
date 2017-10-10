@@ -2442,6 +2442,7 @@ user.orders.refund_status: 'Refund Status'
 user.orders.refund_id: 'Refund number：%sn%'
 user.orders.refund_empty: 'No refund record'
 user.orders.placeholder_order_name: 'Input order name'
+user.orders.placeholder_product_name: 'Input product name'
 user.cards: 'My Wallet'
 user.cards.content_title: 'My Wallet'
 user.cards.all: All

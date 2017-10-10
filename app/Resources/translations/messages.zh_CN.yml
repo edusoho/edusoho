@@ -3093,6 +3093,7 @@ user.orders.refund_status: 退款状态
 user.orders.refund_id: 订单号：%sn%
 user.orders.refund_empty: 没有退款记录
 user.orders.placeholder_order_name: 输入订单名称搜索
+user.orders.placeholder_product_name: 输入商品名称搜索
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包
