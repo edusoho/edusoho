@@ -1,7 +1,7 @@
 
 <thead>
 <tr>
-  <th width="25%">{{'order.name'|trans}}</th>
+  <th width="25%">{{'商品名称'|trans}}</th>
   <th>{{'order.id'|trans}}/{{ '退款单号'|trans }}</th>
   <th>{{ '退款金额'|trans }}</th>
   <th>{{ '申请时间'|trans}}</th>
@@ -15,7 +15,7 @@
   <tr id="order_refund-table-{{orderRefund.id}}">
     <td>{{ orderRefund.title }}</td>
     <td>{{ orders[orderRefund.order_id].sn }}<br>{{ orderRefund.sn }}</td>
-    <td>{{ math_format(orders[orderRefund.order_id].pay_amount, 0.01) }}</td>
+    <td>{{ orders[orderRefund.order_id].pay_amount|fen_to_yuan(0) }}</td>
     <td>{{ orderRefund.created_time|date('Y-n-d H:i:s') }}</td>
     <td>{{ dict_text('refundStatus', orderRefund.status) }}</td>
     <td>
