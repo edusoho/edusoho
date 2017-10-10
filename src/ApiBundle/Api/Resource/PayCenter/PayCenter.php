@@ -20,7 +20,7 @@ class PayCenter extends AbstractResource
         }
 
         $trade = $this->getPayService()->getTradeByTradeSn($params['orderId']);
-
+        
         if ($trade['status'] === 'paid') {
             $trade['paymentForm'] = array();
             $trade['paymentHtml'] = '';
@@ -28,7 +28,7 @@ class PayCenter extends AbstractResource
             $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
             $form = $this->makePayForm($platformCreatedResult);
             $trade['paymentForm'] = $form;
-            $trade['paymentHtml'] = $this->renderView('pay-center/submit-pay-request.html.twig',
+            $trade['paymentHtml'] = $this->renderView('ApiBundle:cashier:submit-pay.html.twig',
                 array('form' => $form));
         }
 
