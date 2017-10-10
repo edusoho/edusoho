@@ -59,7 +59,7 @@
               <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'订单详情'|trans}}</a>
             </div>
 
-            {% if order.status in ['paid', 'success'] and order.refund.status|default('') in ['cancel', ''] %}
+            {% if order.pay_amount != 0 and order.status in ['paid', 'success'] and order.refund.status|default('') in ['cancel', ''] %}
               {% if order.refund_deadline == 0 or order.refund_deadline > date().timestamp %}
                 <br>
                 <div class="table-action__item">
