@@ -485,8 +485,9 @@ pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat <br>scan 
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Scan the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
+pay_center.finish_title: 'Order paid finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
-pay_center.finish_tips: 'Order paid successfully,redirecting in <span class="js-countdown">3</span> seconds</p>'
+pay_center.finish_tips: Redirecting in <span class="js-countdown">3</span> seconds
 pay_center.fee: Fee
 pay_center.remind: 'Click to enter alipay'
 pay_center.remind.content_title: 'Payment notification'
