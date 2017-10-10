@@ -56,6 +56,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'title' => $product->title,
             'num' => $product->num,
             'unit' => $product->unit,
+            'snapshot' => $product->snapshot,
             'create_extra' => $product->getCreateExtra(),
         );
 
