@@ -2,6 +2,7 @@ Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
+site.trade.title: %name%订单
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO

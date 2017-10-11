@@ -79,6 +79,7 @@ class Trade extends AbstractResource
         $factory = new TradeFactory();
         $tradeIns = $factory->create($gateway);
         $tradeIns->setRouter($this->container->get('router'));
+        $tradeIns->setTranslator($this->container->get('translator'));
         $tradeIns->setBiz($this->biz);
         return $tradeIns;
     }
