@@ -83,6 +83,11 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->db()->fetchAssoc($sql, array($seq, $courseId));
     }
 
+    public function getByCopyId($copyId)
+    {
+        return $this->getByFields(array('copyId' => $copyId));
+    }
+
     public function findByChapterId($chapterId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE categoryId = ? ORDER BY seq ASC ";
@@ -130,7 +135,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     {
         $time = time();
         $sql
-        = "SELECT fromCourseSetId, max(startTime) as startTime
+            = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()}
                  WHERE endTime < {$time} AND status='published' AND type = 'live'
                  GROUP BY fromCourseSetId
@@ -156,7 +161,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
 
         $parmaters = array_merge(array($copyId), $courseIds);
 
@@ -171,8 +176,8 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
             return array();
         }
 
-        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
-        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1) . '?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1) . '?';
 
         $parmaters = array_merge($copyIds, $courseIds);
 
