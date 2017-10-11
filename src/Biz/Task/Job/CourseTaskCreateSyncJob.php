@@ -27,7 +27,7 @@ class CourseTaskCreateSyncJob extends AbstractJob
 
             $taskHelper = new BatchCreateHelper($this->getTaskDao());
             foreach ($copiedCourses as $cc) {
-                $copiedTask = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($cc['id'], task['id']);
+                $copiedTask = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($cc['id'], $task['id']);
                 if (!empty($copiedTask)) {
                     continue;
                 }
