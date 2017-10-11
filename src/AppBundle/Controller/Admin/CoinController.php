@@ -710,8 +710,6 @@ class CoinController extends BaseController
             unset($condition['keyword']);
         }
 
-
-
         if (!empty($condition['endDateTime'])) {
             $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
         }
