@@ -32,6 +32,9 @@
     &__info {
       overflow: hidden;
       padding: 24px;
+      @media(max-width: @screen-xs-max) {
+        padding: 16px;
+      }
     }
     &__title {
       font-size: 16px;
@@ -41,6 +44,7 @@
       line-height: 24px;
       font-weight: 500;
       .cd-text-overflow;
+      
     }
     &__price {
       line-height: 1;
@@ -51,16 +55,22 @@
 
   &-product-info {
     font-size: 12px;
+    height: 22px;
     &__title {
       width: 54px;
       text-align: right;
       display: inline-block;
       color: @cd-gray;
+      vertical-align: top;
     }
     &__content {
       margin-left: 4px;
-      display: inline-block;
       color: @cd-gray-dark;
+      max-width: 300px;
+      .cd-text-overflow(inline-block);
+      @media(max-width: @screen-xs-max) {
+        max-width: 160px;
+      }
     }
     + &-product-info {
       margin-top: 16px;
