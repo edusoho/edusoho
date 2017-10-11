@@ -531,8 +531,8 @@ class BuildUpgradePackageCommand extends BaseCommand
         foreach ($migrationFiles as $file) {
             $this->output->writeln("    - {$operation} file: {$file}");
         }
-        if(!count($migrationFiles)){
-            $this->output->writeln("    - --");
+        if (!count($migrationFiles)) {
+            $this->output->writeln('    - --');
         }
     }
 
