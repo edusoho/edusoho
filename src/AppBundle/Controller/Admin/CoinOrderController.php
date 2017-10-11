@@ -9,66 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CoinOrderController extends BaseController
 {
-    public function ordersAction(Request $request)
-    {
-        $fields = $request->query->all();
-        $conditions = array();
-
-        if (!empty($fields)) {
-            $conditions = $fields;
-        }
-
-        if (isset($conditions['keywordType'])) {
-            if ($conditions['keywordType'] == 'userName') {
-                $conditions['keywordType'] = 'userId';
-                $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
-                $conditions['keyword'] = $userFindbyNickName ? $userFindbyNickName['id'] : -1;
-            }
-        }
-
-        if (isset($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-        }
-
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-
-            $conditions['endTime'] = strtotime($conditions['endDateTime']);
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCashOrdersService()->searchOrdersCount($conditions),
-            20
-        );
-
-        $orders = $this->getCashOrdersService()->searchOrders(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
-                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-                $orders[$index]['status'] = 'cancelled';
-            }
-        }
-
-        $userIds = ArrayToolkit::column($orders, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('admin/coin/coin-orders.html.twig', array(
-            'request' => $request,
-            'users' => $users,
-            'orders' => $orders,
-            'paginator' => $paginator,
-        ));
-    }
-
     public function logsAction($id)
     {
         $order = $this->getCashOrdersService()->getOrder($id);

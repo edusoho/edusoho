@@ -533,10 +533,6 @@ admin_courses_data:
     defaults: { _controller: AppBundle:Admin/Course:coursesData }
     permissions: [admin_course_set_data]
 
-admin_course_order_manage:
-    path: /course/order/manage
-    defaults: { _controller: AppBundle:Admin/CourseOrder:manage }
-
 admin_order_manage:
     path: /order/manage
     defaults: { _controller: AppBundle:Admin/Order:manage }
@@ -1764,10 +1760,6 @@ admin_coin_records:
     path:     /coin/records
     defaults: { _controller: AppBundle:Admin/Coin:records }
 
-admin_coin_orders:
-    path:     /coin/orders
-    defaults: { _controller: AppBundle:Admin/CoinOrder:orders }
-
 admin_coin_orders_log:
     path:     /coin/orders/log/{id}
     defaults: { _controller: AppBundle:Admin/CoinOrder:logs }
@@ -2095,11 +2087,7 @@ admin_classroom_delete:
 admin_classroom_category:
     path: /classroom/category
     defaults: { _controller: AppBundle:Admin/ClassroomCategory:index }
-
-admin_classroom_order:
-    path:     /classroom/order
-    defaults: { _controller: AppBundle:Admin/ClassroomOrderAdmin:manage }
-
+    
 admin_classroom_thread:
     path:     /classroom/thread
     defaults: { _controller: AppBundle:Admin/ClassroomThreadAdmin:index }

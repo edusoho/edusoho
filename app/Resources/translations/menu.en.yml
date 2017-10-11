@@ -15,8 +15,7 @@ admin.tab.setting_tab: Setting
 admin.nav.user: User
 admin.nav.course: Course
 admin.nav.operation: Operation
-admin.nav.order: Order
-admin.nav.finance: Account
+admin.nav.finance: 交易
 admin.nav.cloud:  ES Cloud
 admin.nav.system: System
 
@@ -201,20 +200,6 @@ admin.operation.reward_point_mall.exchange_tab: Exchange Manage
 admin.operation.reward_point_mall.product_tab: Product Manage
 
 admin.operation.reward_point_mall.product_tab.create_btn: Add Product
-
-#订单管理模块
-admin.order.course_menu: Course Orders
-admin.order.coin_menu: Coin Orders
-admin.order.classroom_menu: Class Orders
-
-##课程订单模块
-admin.order.course.basic_tab: Course Orders
-
-##虚拟币订单模块
-admin.order.coin.basic_tab: Coin Orders
-
-##班级订单模板
-admin.order.classroom.basic_tab: Class Orders
 
 #账务管理模块
 admin.finance.order_menu: Order

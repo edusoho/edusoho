@@ -466,9 +466,9 @@ order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
 order.due_pay: 应付(元)
-order.price_amount: 订单金额
+order.price_amount: 总价
 order.discount_amount: 优惠
-order.real_pay: 实付金额
+order.real_pay: 实付
 order.buyers: 购买者
 order.deduct_amount: 优惠金额
 order.coin_amount: 虚拟币支付
