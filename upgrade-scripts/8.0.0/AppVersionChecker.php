@@ -1,5 +1,4 @@
 <?php
-
 use Topxia\Service\Common\ServiceKernel;
 
 class AppVersionChecker extends AbstractMigrate
@@ -8,7 +7,7 @@ class AppVersionChecker extends AbstractMigrate
     {
         $crm = $this->getAppService()->getAppByCode('Crm');
 
-        if(!empty($crm)){
+        if (!empty($crm)) {
             $storage = $this->getSettingService()->get('storage', array());
 
             $openApi = new AppVersionCheckerEduSohoAppClient(array(
@@ -18,23 +17,30 @@ class AppVersionChecker extends AbstractMigrate
 
             $crmResult = $openApi->getAppStatusByCode('Crm');
 
-            if(!empty($crmResult['status']) && $crmResult['status'] == 'expired'){
+            if (!empty($crmResult['status']) && $crmResult['status'] == 'expired') {
                 $this->removeCrmPlugin();
             }
         }
 
-    	$apps = $this->getApps();
+        $apps = $this->getApps();
         $localApps = $this->getAppService()->findApps(0, 1000);
 
         $errors = array();
-
+        $mainApp = array();
         foreach ($localApps as $key => $localApp) {
             if (!empty($apps[strtolower($localApp['code'])]) && version_compare($localApp['version'], $apps[strtolower($localApp['code'])], '<')) {
                 $errors[] = $localApp['name'];
             }
+            if ($localApp['code'] == 'MAIN') {
+                $mainApp = $localApp;
+            }
         }
-
-        if(!empty($errors)){
+        if ($localApp && isset($mainApp['version'])) {
+            if (version_compare('8.0.0', $mainApp['version'], '<=')) {
+                throw new Exception(sprintf('当前版本(%s)依赖不匹配，或页面请求已过期，请刷新后重试', $mainApp['version']));
+            }
+        }
+        if (!empty($errors)) {
             $names = implode('、', $errors);
             throw new Exception("当前以下插件{$names}版本过低，请先升级以上插件", 1);
         }
@@ -44,7 +50,7 @@ class AppVersionChecker extends AbstractMigrate
     {
         $this->getConnection()->exec("DELETE FROM cloud_app WHERE code = 'Crm'");
 
-        $pluginConfig = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/plugin.php';
+        $pluginConfig = ServiceKernel::instance()->getParameter('kernel.root_dir') . '/../app/config/plugin.php';
 
         $config = require $pluginConfig;
 
@@ -59,7 +65,7 @@ class AppVersionChecker extends AbstractMigrate
         $content = "<?php \n return " . var_export($config, true) . ";";
         $saved = file_put_contents($pluginConfig, $content);
 
-        $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugins.yml';
+        $file = ServiceKernel::instance()->getParameter('kernel.root_dir') . '/../app/config/routing_plugins.yml';
         $pluginRoutes = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($file));
         unset($pluginRoutes['_plugin_Crm_admin']);
         $pluginRouteString = \Symfony\Component\Yaml\Yaml::dump($pluginRoutes);
@@ -69,27 +75,27 @@ class AppVersionChecker extends AbstractMigrate
     protected function getApps()
     {
         return array(
-            'vip'=>'1.6.5',
-            'coupon'=>'2.1.5',
-            'questionplus'=>'1.2.1',
-            'gracefultheme'=>'1.4.23',
-            'userimporter'=>'2.1.5',
-            'homework'=>'1.5.5',
-            'chargecoin'=>'1.2.5',
-            'moneycard'=>'2.0.4',
-            'anywhereserver'=>'1.0.4',
-            'desire'=>'1.1.6',
-            'discount'=>'1.1.7',
-            'language'=>'1.0.8',
-            'turing'=>'1.1.11',
-            'fileshare'=>'1.0.4',
-            'groupsell'=>'1.0.2',
-            'exam'=>'1.2.3',
-            'lighttheme'=>'2.2.0',
-            'crm'=>'1.0.1',
-            'favoritereward'=>'1.0.2',
-            'rainbowtree'=>'1.0.0',
-            'zero'=>'1.0.0',
+            'vip' => '1.6.5',
+            'coupon' => '2.1.5',
+            'questionplus' => '1.2.1',
+            'gracefultheme' => '1.4.23',
+            'userimporter' => '2.1.5',
+            'homework' => '1.5.5',
+            'chargecoin' => '1.2.5',
+            'moneycard' => '2.0.4',
+            'anywhereserver' => '1.0.4',
+            'desire' => '1.1.6',
+            'discount' => '1.1.7',
+            'language' => '1.0.8',
+            'turing' => '1.1.11',
+            'fileshare' => '1.0.4',
+            'groupsell' => '1.0.2',
+            'exam' => '1.2.3',
+            'lighttheme' => '2.2.0',
+            'crm' => '1.0.1',
+            'favoritereward' => '1.0.2',
+            'rainbowtree' => '1.0.0',
+            'zero' => '1.0.0',
         );
     }
 
@@ -201,9 +207,10 @@ class AppVersionCheckerEduSohoAppClient
             curl_setopt($curl, CURLOPT_POST, 1);
             $params = http_build_query($params);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        } else {
+        }
+        else {
             if (!empty($params)) {
-                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
+                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
             }
         }
 
