@@ -590,7 +590,7 @@ pay_center.finish: 订单完成
 pay_center.finish.jump_tips: 正在跳转到支付网关...
 pay_center.finish_title: 订单支付完成
 pay_center.finish_tips: >
-  将在 <span class="js-countdown">5</span> 秒后跳转
+  将在 <span class="js-countdown">3</span> 秒后跳转
 pay_center.fee: 收费
 pay_center.remind: 支付提醒
 pay_center.remind.content_title: 支付提醒
