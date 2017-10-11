@@ -33,7 +33,7 @@
       {% if orderDeducts %}
         <tr>
           <td width="25%">{{ 'order.deduct'|trans}}</td>
-          <td width="75%"><span class="color-danger">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
+          <td width="75%"><span class="color-danger">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
         </tr>
         {% for orderDeduct in orderDeducts %}
           <tr>
