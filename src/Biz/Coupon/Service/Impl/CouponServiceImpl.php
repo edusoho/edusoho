@@ -337,11 +337,11 @@ class CouponServiceImpl extends BaseService implements CouponService
 
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
-            'cardId'   => $coupon['id'],
+            'cardId' => $coupon['id'],
             'deadline' => $coupon['deadline'],
-            'userId'   => $useId
+            'userId' => $useId,
         ));
-        
+
         $this->getLogService()->info(
             'coupon',
             'receive',
