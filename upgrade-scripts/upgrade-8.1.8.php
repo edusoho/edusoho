@@ -106,10 +106,43 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $table = '';
             switch ($activity['type']) {
-                case 'video':
-                    $table = 'video_activity';
-                case ''
-                    ;
+                case 'Audio':
+                    $table = 'activity_audio';
+                    break;
+                case 'Discuss':
+                    $table = '';
+                    break;
+                case 'Doc':
+                    $table = 'activity_doc';
+                    break;
+                case 'Download':
+                    $table = 'activity_download';
+                    break;
+                case 'Flash':
+                    $table = 'activity_flash';
+                    break;
+                case 'Exercise':
+                    $table = '';
+                    break;
+                case 'Homework':
+                    $table = '';
+                    break;
+                case 'Live':
+                    $table = 'activity_live';
+                    break;
+                case 'Ppt':
+                    $table = 'activity_ppt';
+                    break;
+                case 'Testpaper':
+                    $table = 'activity_testpaper';
+                    break;
+                case 'Text':
+                    $table = 'activity_text';
+                    break;
+                case 'Video':
+                    $table = 'activity_video';
+                    break;
+                ;
             }
 
             if (!empty($table)) {
