@@ -161,7 +161,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
 
         $parmaters = array_merge(array($copyId), $courseIds);
 
@@ -176,8 +176,8 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
             return array();
         }
 
-        $copyIdMarks = str_repeat('?,', count($copyIds) - 1) . '?';
-        $courseIdMarks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
 
         $parmaters = array_merge($copyIds, $courseIds);
 

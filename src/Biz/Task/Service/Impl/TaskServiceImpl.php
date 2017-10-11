@@ -44,7 +44,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
-
     public function preCreateTaskCheck($task)
     {
         $this->getActivityService()->preCreateCheck($task['mediaType'], $task);
@@ -55,7 +54,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string)$value)) {
+                if (is_array($value) || ctype_digit((string) $value)) {
                     return true;
                 }
 
@@ -644,7 +643,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $condition = array(
             'startTime_GT' => time(),
-            'endTime_LT' => strtotime(date('Y-m-d') . ' 23:59:59'),
+            'endTime_LT' => strtotime(date('Y-m-d').' 23:59:59'),
             'type' => 'live',
             'status' => 'published',
         );
