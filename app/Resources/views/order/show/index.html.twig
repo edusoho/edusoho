@@ -12,7 +12,7 @@
     data-price-calculate="{{ path('order_calculate_price') }}"
     data-price-type="{{ currency }}"
     data-coin-rate="{{ setting('coin.cash_rate') }}"
-    data-coin-name="{{ setting('coin.coin_name', '虚拟币') }}">
+    data-coin-name="{{ setting('coin.coin_name') }}">
       {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
       {% include product.showTemplate %}
 
@@ -21,10 +21,9 @@
 
       <div class="cd-pv24" id="order-center-price-list">
         <div class="order-center-price">
-          <div class="order-center-price__title">课程价格</div>
+          <div class="order-center-price__title">{{'order.confirm.price'|trans}}</div>
           <div class="order-center-price__content">{{ product.originPrice|price_format }}</div>
         </div>
-        
         {% if product.availableDeducts.paidCourses|default(null) %}
           {% set paidCourses = product.availableDeducts.paidCourses %}
           {% set totolPaidPrice = 0 %}
@@ -32,7 +31,9 @@
             {% set totolPaidPrice = totolPaidPrice + paidCourse.paidPrice %}
           {% endfor %}
           <div class="order-center-price">
-            <div class="order-center-price__title">已购课程抵扣</div>
+            <div class="order-center-price__title">
+              {{ 'order.confirm.bought_course_deduction'|trans }}
+            </div>
             <div class="order-center-price__content">
               -{{ totolPaidPrice|price_format }}
             </div>
@@ -45,7 +46,9 @@
         <div class="order-center-price">
           <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
           <div class="order-center-price__content">
-            <span class="cd-text-danger" id="realpay-price" style="font-size: 16px">{{ product.originPrice|price_format }}</span>
+            <span class="cd-text-danger" id="realpay-price" style="font-size: 16px">
+              {{ product.originPrice|price_format }}
+            </span>
           </div>
         </div>
       </div>

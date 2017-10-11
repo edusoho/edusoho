@@ -433,6 +433,9 @@ order.confirm.coupon.deduction: 抵扣
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
+order.confirm.price: 订单价格
+order.confirm.bought_course_deduction: 已购课程抵扣
+
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
 order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
