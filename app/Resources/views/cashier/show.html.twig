@@ -70,9 +70,9 @@
     </div>
 
     {% if payments %}
-      <div class="order-center-pay-list">
+      <div class="order-pay-list">
         {% for type, payment in payments %}
-          <div class="order-center-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
+          <div class="order-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
             <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"
               srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>
           </div>
