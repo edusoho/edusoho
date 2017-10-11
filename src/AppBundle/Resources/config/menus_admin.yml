@@ -645,11 +645,17 @@ admin:
                 admin_bills:
                     name: admin.finance.bills_menu
                     children:
-                        admin_bill:
+                        admin_bill_cash:
                             name: admin.finance.bills.cash_records_tab
+                            router_name: admin_bill
+                            router_params:
+                                type: money
                             disable: true
-                        admin_coin_records:
+                        admin_bill_coin:
                             name: admin.finance.bills.coin_records_tab
+                            router_name: admin_bill
+                            router_params:
+                                type: coin
                             disable: true
                 admin_coin_user:
                     name: admin.finance.coin_menu

@@ -36,6 +36,8 @@ class Factory
             'course-overview-task-list' => 'AppBundle\Component\Export\Course\OverviewTaskExporter',
             'course-overview-normal-task-detail' => 'AppBundle\Component\Export\Course\OverviewNormalTaskDetailExporter',
             'course-overview-testpaper-task-detail' => 'AppBundle\Component\Export\Course\OverviewTestpaperTaskDetailExporter',
+            'bill-cash-flow' => 'AppBundle\Component\Export\Bill\CashBillExporter',
+            'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
         );
 
         return $map[$name];

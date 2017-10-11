@@ -218,7 +218,6 @@ admin.order.classroom.basic_tab: Class Orders
 
 #账务管理模块
 admin.finance.order_menu: Order
-admin.finance.my_account: 网校账户
 admin.finance.bills_menu: Account
 admin.finance.coin_menu: Coins
 admin.finance.refunds_menu: Refunds

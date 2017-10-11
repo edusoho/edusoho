@@ -1760,10 +1760,6 @@ admin_coin_settings:
     path:     /setting/coin
     defaults: { _controller: AppBundle:Admin/Coin:settings }
 
-admin_coin_records:
-    path:     /coin/records
-    defaults: { _controller: AppBundle:Admin/Coin:records }
-
 admin_coin_orders:
     path:     /coin/orders
     defaults: { _controller: AppBundle:Admin/CoinOrder:orders }
@@ -1787,15 +1783,6 @@ admin_coin_orders_log:
 # admin_coin_give_check_nickname:
 #     path:     /coin/give/check_nickname
 #     defaults: { _controller: AppBundle:Admin/Coin:checkNickname }
-
-admin_bill:
-    path: /coin/bill
-    defaults: { _controller: AppBundle:Admin/Coin:cashBill }
-
-admin_bill_export_csv:
-    path: /coin/bill/export/{cashType}
-    defaults: { _controller: AppBundle:Admin/Coin:exportCsv}
-    permissions: [admin_bill,admin_coin_records]
 
 admin_order_manage_export_csv:
     path: /order/manage/export
@@ -2297,3 +2284,7 @@ admin_queue_failed_log_modal:
 admin_online:
     path: /online
     defaults: { _controller: AppBundle:Online:index }
+
+admin_bill:
+    path: /bill/{type}
+    defaults: { _controller: AppBundle:Admin/Bill:Bill } 

@@ -8112,6 +8112,20 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 
 cashflow.title: 名称
+cashflow.sn: 流水号
+cashflow.order_sn: 订单号
+cashflow.user_name: 用户名
+cashflow.created_time: 成交时间
+cashflow.amount: 金额
+cashflow.number: 数量
+cashflow.platform: 用户支付方式
+cashflow.trade_sn: 支付平台流水号
+cashflow.user_truename: 姓名
+cashflow.user_email: 邮箱
+cashflow.user_mobile: 联系电话
+
+admin.cashflow.keyword: 关键字
+admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
 order.pay_check_msg.order_not_exist: 订单不存在
