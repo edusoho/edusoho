@@ -76,6 +76,8 @@ class EduSohoUpgrade extends AbstractUpdater
             14 => 'migrateBizUserBalance',  // done
             15 => 'migrateBizUserCashflow',
             16 => 'registerJobs', // done
+            17 => 'migrateJoinMemberOperationRecord',
+            18 => 'migrateExitMemberOperationRecord',
         );
 
         if ($index == 0) {
@@ -745,6 +747,92 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function migrateJoinMemberOperationRecord()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `member_operation_record` (
+                `title`,
+                `member_id`,
+                `member_type`,
+                `target_id`,
+                `target_type`,
+                `operate_type`,
+                `operate_time`,
+                `operator_id`,
+                `data`,
+                `user_id`,
+                `order_id`,
+                `refund_id`,
+                `reason`,
+                `created_time`
+            )
+            select 
+                `title` as `title`,
+                0 as `member_id`,
+                'student' as `member_type`,
+                `targetId` as `target_id`,
+                `targetType` as `target_type`,
+                'join' as `operate_type`,
+                `createdTime` as `operate_time`,
+                0 as `operator_id`,
+                '' as `data`,
+                `userId` as `user_id`,
+                `id` as `order_id`,
+                0 as `refund_id`,
+                '' as `reason`,
+                `createdTime` as `created_time`
+            from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join')
+        "); 
+
+        return 1;       
+    }
+
+    protected function migrateExitMemberOperationRecord()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `member_operation_record` (
+                `title`,
+                `member_id`,
+                `member_type`,
+                `target_id`,
+                `target_type`,
+                `operate_type`,
+                `operate_time`,
+                `operator_id`,
+                `data`,
+                `user_id`,
+                `order_id`,
+                `refund_id`,
+                `reason`,
+                `created_time`
+            )
+            select 
+                '' as `title`,
+                0 as `member_id`,
+                'student' as `member_type`,
+                `targetId` as `target_id`,
+                `targetType` as `target_type`,
+                'exit' as `operate_type`,
+                `createdTime` as `operate_time`,
+                `operator` as `operator_id`,
+                '' as `data`,
+                `userId` as `user_id`,
+                `orderId` as `order_id`,
+                `id` as `refund_id`,
+                `reasonNote` as `reason`,
+                `createdTime` as `created_time`
+            from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit');
+        ");
+
+        $connection->exec(
+            "UPDATE `member_operation_record` as `mor` , `orders` SET `mor`.`title` = `orders`.`title` where `mor`.`order_id` = `orders`.`id` and `operate_type` = 'exit';"  
+        );
+
+        return 1;
+    }
+
     protected function createTables()
     {
         $connection = $this->getConnection();
@@ -1019,6 +1107,29 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
+
+        if (!$this->isTableExist('member_operation_record')) {
+            $connection->exec("
+                CREATE TABLE `member_operation_record` (
+                `id` int(11) UNSIGNED NOT NULL,
+                `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '标题',
+                `member_id` int(10) UNSIGNED NOT NULL COMMENT '成员ID',
+                `member_type` varchar(32) NOT NULL DEFAULT 'student' COMMENT '成员身份',
+                `target_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '类型ID',
+                `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型（classroom, course）',
+                `operate_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型（join, exit）',
+                `operate_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作时间',
+                `operator_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作用户ID',
+                `data` text COMMENT 'extra data',
+                `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户Id',
+                `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
+                `refund_id` int(11) NOT NULL DEFAULT '0' COMMENT '退款ID',
+                `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '加入理由或退出理由',
+                `created_time` int(10) UNSIGNED NOT NULL DEFAULT '0'
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
+            ");
+        }
+
         return 1;
     }
 
