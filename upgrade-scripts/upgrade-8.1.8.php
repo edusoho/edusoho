@@ -61,7 +61,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteRepeatCopiedTasks',
-            2 => 'deleteRepeatCopiedActivity'
+            2 => 'deleteRepeatCopiedActivity',
+            3 => 'cleanExpiredJobs'
         );
 
         if ($index == 0) {
@@ -91,6 +92,42 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
     }
+
+    protected function cleanExpiredJobs()
+    {
+        $jobInvalidTime = time() - 120;
+        $expiredFiredJobsCountSql = "SELECT COUNT(*) FROM `job_fired` WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $expiredFiredJobsCount = $this->getConnection()->fetchColumn($expiredFiredJobsCountSql);
+
+        if (empty($expiredFiredJobsCount)) {
+            return 1;
+        }
+
+        $lockName = "job_pool.default";
+        $this->biz['lock']->get($lockName, 10);
+
+        $updateExpiredFiredJobStatusSql = "UPDATE `job_fired` SET status = 'failure' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $this->getConnection()->exec($updateExpiredFiredJobStatusSql);
+
+        $poolSql = "SELECT * FROM `job_pool` WHERE name = 'default'";
+        $pool = $this->getConnection()->fetchAssoc($poolSql);
+
+        if(empty($pool)) {
+            return 1;
+        }
+
+        $num = $pool['num'] - $expiredFiredJobsCount;
+        $num = $num > 0 ? $num : 0;
+        $updatePoolSql = "UPDATE `job_pool` SET num = {$num} WHERE id = {$pool['id']}";
+
+        $this->getConnection()->exec($updatePoolSql);
+
+        $this->biz['lock']->release($lockName);
+
+        return 1;
+
+    }
+
     protected function deleteRepeatCopiedTasks()
     {
         $this->getConnection()->exec('delete from course_task where id in (select maxId from (select max(id) as maxId, count(id) as countNum,courseid, copyid from course_task where copyid<>0 group by courseId, copyId) a where a.countNum>1)');
