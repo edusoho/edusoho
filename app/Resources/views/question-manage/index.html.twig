@@ -16,7 +16,10 @@
     <div class="panel-heading">
       <div class="pull-right">
         {% if is_plugin_installed('QuestionPlus') %}
-          <button class="btn cd-btn cd-btn-default" data-url="{{ path('course_question_plumber',{ courseSetId: courseSet.id}) }}" data-toggle="modal" data-target="#modal">{{ '导入题目'|trans }}</button>
+          <a class="btn btn-info btn-sm" data-url="{{ path('course_question_plumber',{ courseSetId: courseSet.id}) }}" data-toggle="modal" data-target="#modal">
+            <span class="es-icon es-icon-anonymous-iconfont"></span>
+            {{ '导入题目'|trans }}
+          </a>
         {% endif %}
         {% for type,name in questionTypes %}
           {% if loop.index <= 3 %}

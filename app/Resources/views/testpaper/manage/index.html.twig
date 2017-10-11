@@ -16,7 +16,10 @@
          class="btn btn-info btn-sm pull-right mls"><span class="es-icon es-icon-anonymous-iconfont"></span>{{ 'course.testpaper_manage.create_btn'|trans }}</a>
       {{ 'course.testpaper_manage.content_title'|trans }}
       {% if is_plugin_installed('QuestionPlus') %}
-        <button class="btn cd-btn cd-btn-default pull-right" data-url="{{ path('course_testpaper_plumber',{ courseSetId: courseSet.id}) }}" data-toggle="modal" data-target="#modal">{{ '导入试卷'|trans }}</button>
+        <a class="btn btn-info btn-sm pull-right" data-url="{{ path('course_testpaper_plumber',{ courseSetId: courseSet.id}) }}" data-toggle="modal" data-target="#modal">
+          <span class="es-icon es-icon-anonymous-iconfont"></span>
+          {{ '导入试卷'|trans }}
+        </a>
       {% endif %}
     </div>
 
