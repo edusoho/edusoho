@@ -505,7 +505,8 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 order.confirm: 订单确认
-order.confirm.pay_rmb: 实付金额
+order.confirm.pay_total: 合计
+order.confirm.pay_rmb: 应付
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
@@ -517,6 +518,8 @@ order.confirm.coupon.expiry_date_hint: 有效期至
 order.confirm.coupon.select_existed: 选择已有优惠券
 order.confirm.coupon.used_coupon: 已使用优惠券
 order.confirm.coupon.deduction: 抵扣
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_name%
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用

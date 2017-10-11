@@ -86,18 +86,40 @@
 
     <div class="order-center-line"></div>
 
+    {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+
     <div class="cd-pv24" id="order-center-price-list">
       <div class="order-center-price">
-        <div class="order-center-price__title">{{ 'pay_center.pay.price'|trans }}</div>
-        <div class="order-center-price__content">{{ order.pay_amount|major_currency }}</div>
+        <div class="order-center-price__title">
+          {{ 'pay_center.pay.price'|trans }}
+        </div>
+        <div class="order-center-price__content">{{ order.pay_amount|price_format }}</div>
       </div>
     </div>
 
     <div class="order-center-line"></div>
 
     <div class="cd-pt16 cd-pb24">
+      {% if currency == 'coin' %}
+        <div class="order-center-price">
+          <div class="order-center-price__title">
+            {{ 'order.confirm.pay_total'|trans }}
+          </div>
+          <div class="order-center-price__content">
+            <span class="js-pay-coin">{{ order.pay_amount|price_format }}</span>
+          </div>
+        </div>
+      {% endif %}
+
       <div class="order-center-price">
-        <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
+        <div class="order-center-price__title">
+          {{'order.confirm.pay_rmb'|trans}}
+          {% if currency == 'coin' %}
+            <i class="cd-icon cd-icon-help cd-text-xs" data-toggle="tooltip" data-placement="top" 
+              title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
+            </i>
+          {% endif %}
+        </div>
         <div class="order-center-price__content">
           <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|major_currency }}</span>
         </div>

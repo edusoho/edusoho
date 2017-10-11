@@ -1,12 +1,18 @@
+{% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+
 <div class="order-center-deduction">
   <span class="order-center-deduction__title">
     {{ coinSetting.coin_name }}
   </span>
   <span class="order-center-deduction__content">
     {% if isPasswordSet %}
-      {{ 'order.confirm.current_account_cash'|trans({
-        '%amount%':balance.amount, '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
-      }) }}
+      {% if currency == 'coin' %}
+        {{ 'order.confirm.current_account_cash_simple'|trans({ '%amount%':balance.amount|fen_to_yuan(0), '%coin_name%':coinSetting.coin_name }) }}
+      {% else %}
+         {{ 'order.confirm.current_account_cash'|trans({
+          '%amount%':balance.amount|fen_to_yuan(0), '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount|fen_to_yuan(0) / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
+        }) }}
+      {% endif %}
     {% else %}
       {{ 'pay_center.pay.coin.password_not_set.tips'|trans }} 
       <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">
@@ -16,7 +22,8 @@
   </span>
 </div>
 
-<div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}" data-coin-rate="{{ setting('coin.cash_rate') }}">
+<div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}" 
+  data-coin-rate="{{ setting('coin.cash_rate') }}" data-price-type="{{ currency }}">
   <div class="form-group cd-form-group">
     <label>{{ 'pay_center.pay.coin_input_tips'|trans }}</label>
     <input type="text" class="form-control js-coin-amount" autocomplete="off" name="coinAmount" value="0">

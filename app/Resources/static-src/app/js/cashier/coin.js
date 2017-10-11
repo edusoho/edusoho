@@ -3,8 +3,8 @@ export default class Coin {
     this.$container = props.$coinContainer;
     this.cashierForm = props.cashierForm;
     this.$form = props.$form;
-
-    this.coinRate = this.$container.data('coin-rate');
+    this.priceType = this.$container.data('priceType');
+    this.coinRate = this.$container.data('coinRate');
     this.maxCoinInput = parseFloat(this.$container.data('maxAllowCoin')) > parseFloat(this.$container.data('coinBalance')) ? parseFloat(this.$container.data('coinBalance')) : parseFloat(this.$container.data('maxAllowCoin'));
     this.initEvent();
   }
@@ -33,7 +33,17 @@ export default class Coin {
     if (inputCoinNum > 0) {
       this.addPasswordValidate();
       let coinName = this.$form.data('coin-name');
-      this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2) ]);
+      let price = 0;
+      if (this.priceType === 'coin') {
+        price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
+
+        let originalPirce = parseFloat(this.$container.data('maxAllowCoin'));
+        let coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;;
+        this.$form.trigger('changeCoinPrice', [coinPrice]);
+      } else {
+        price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
+      }
+      this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price ]);
       this.cashierForm.calcPayPrice(inputCoinNum);
     }
   }
