@@ -82,7 +82,7 @@ class Coupon {
   cancelCoupon(event) {
     this.$couponCode.val('');
     this.$form.trigger('calculatePrice');
-    this.$form.trigger('addPriceItem', ['coupon-price']);
+    this.$form.trigger('removePriceItem', ['coupon-price']);
     this.toggleShow('cancel');
   }
 

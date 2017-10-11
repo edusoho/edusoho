@@ -31,6 +31,7 @@ class CashierForm {
     $form.on('click', '.js-pay-type', event => this.switchPayType(event));
     $form.on('click', '.js-pay-btn', event => this.payOrder(event));
     $form.on('addPriceItem', (event, id, title, price) => this.addPriceItem(event, id, title, price));
+    $form.on('removePriceItem', (event, id) => this.removePriceItem(event, id));
   }
 
   payOrder(event) {
@@ -73,7 +74,22 @@ class CashierForm {
     return params;
   }
 
+  hasPriceItem(event, id) {
+    let $priceItem = $(`#${id}`);
+    if ($priceItem.length) {
+      return true;
+    }
+
+    return false;
+  }
+
   addPriceItem(event, id, title, price) {
+    let $priceItem = $(`#${id}`);
+
+    if (this.hasPriceItem(event, id)) {
+      $priceItem.remove();
+    }
+
     let html = `
       <div class="order-center-price" id="${id}">
         <div class="order-center-price__title">${title}</div>
@@ -81,15 +97,15 @@ class CashierForm {
       </div>
     `;
 
-    let $priceItem = $(`#${id}`);
-    if ($priceItem.length) {
-      $priceItem.remove();
-      if (!price) {
-        return;
-      }
-    }
-
     this.$priceList.append(html);
+  }
+
+  removePriceItem(event, id) {
+    let $priceItem = $(`#${id}`);
+    
+    if (this.hasPriceItem(event, id)) {
+      $priceItem.remove();
+    }
   }
 }
 

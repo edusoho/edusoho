@@ -14,6 +14,7 @@ class Order {
   initEvent() {
     this.$element.on('calculatePrice', event => this.calculatePrice(event));
     this.$element.on('addPriceItem', (event, id, title, price) => this.addPriceItem(event, id, title, price));
+    this.$element.on('removePriceItem', (event, id) => this.removePriceItem(event, id));
 
     this.$element.trigger('calculatePrice');
     this.validate();
@@ -26,7 +27,22 @@ class Order {
     })
   }
 
+  hasPriceItem(event, id) {
+    let $priceItem = $(`#${id}`);
+    if ($priceItem.length) {
+      return true;
+    }
+
+    return false;
+  }
+
   addPriceItem(event, id, title, price) {
+    let $priceItem = $(`#${id}`);
+
+    if (this.hasPriceItem(event, id)) {
+      $priceItem.remove();
+    }
+
     let html = `
       <div class="order-center-price" id="${id}">
         <div class="order-center-price__title">${title}</div>
@@ -34,15 +50,15 @@ class Order {
       </div>
     `;
 
-    let $priceItem = $(`#${id}`);
-    if ($priceItem.length) {
-      $priceItem.remove();
-      if (!price) {
-        return;
-      }
-    }
-
     this.$priceList.append(html);
+  }
+
+  removePriceItem(event, id) {
+    let $priceItem = $(`#${id}`);
+    
+    if (this.hasPriceItem(event, id)) {
+      $priceItem.remove();
+    }
   }
 
   validate() {
