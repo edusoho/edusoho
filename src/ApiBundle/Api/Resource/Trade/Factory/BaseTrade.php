@@ -11,7 +11,6 @@ use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
-use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class BaseTrade
 {
@@ -19,11 +18,6 @@ abstract class BaseTrade
      * @var Router
      */
     protected $router;
-
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
 
     /**
      * @var Biz
@@ -44,11 +38,6 @@ abstract class BaseTrade
         $this->biz = $biz;
     }
 
-    public function setTranslator(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->router->generate($route, $parameters, $referenceType);
@@ -58,7 +47,6 @@ abstract class BaseTrade
     {
         $tradeFields = array(
             'type' => $params['type'],
-            'goods_title' => $this->getTradeTitle(),
             'goods_detail' => '',
             'price_type' => 'money',
             'user_id' => $params['userId'],
@@ -81,9 +69,11 @@ abstract class BaseTrade
             $tradeFields['coin_amount'] = MathToolkit::simple($coinAmount, 100);
             $cashAmount = $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount);
             $tradeFields['cash_amount'] = MathToolkit::simple($cashAmount, 100);
+            $tradeFields['goods_title'] = $order['title'];
         }
 
         if ($params['type'] == 'recharge') {
+            $tradeFields['goods_title'] = '现金充值';
             $tradeFields['order_sn'] = '';
             $tradeFields['amount'] = MathToolkit::simple($params['amount'], 100);
             $tradeFields['cash_amount'] = MathToolkit::simple($params['amount'], 100);
@@ -93,15 +83,6 @@ abstract class BaseTrade
         $trade = $this->getPayService()->createTrade($tradeFields);
 
         return $trade;
-    }
-
-    private function getTradeTitle()
-    {
-        $site = $this->getSettingService()->get('site', array());
-
-        $siteName = empty($site['title']) ? 'EduSoho' : $site['title'];
-
-        return $this->translator->trans('site.trade.title', array('%name%' => $siteName));
     }
 
     public function getCustomFields($params)
