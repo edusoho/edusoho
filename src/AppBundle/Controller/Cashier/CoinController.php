@@ -43,7 +43,11 @@ class CoinController extends BaseController
         /* @var $product Product */
         $product = $this->getOrderFacadeService()->getOrderProductByOrderItem($item);
 
-        return $product->getMaxCoinAmount();
+        $maxProductCoin = $product->getMaxCoinAmount();
+
+        $maxOrderCoin = $this->getCurrency()->convertToCoin($order['pay_amount']);
+
+        return min($maxProductCoin, $maxOrderCoin);
     }
 
     /**
