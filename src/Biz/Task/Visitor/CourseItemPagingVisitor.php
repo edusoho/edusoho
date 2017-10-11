@@ -22,7 +22,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
 
     private $paging = array(
         'direction' => 'down',
-        'limit' => 25,
+        'limit' => 24,
         'offsetSeq' => 1,
         'offsetTaskId' => 0,
     );
