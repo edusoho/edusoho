@@ -186,7 +186,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                         'reserved' => $this->getContainer()->getParameter('redis_reserved'),
                         'redis_interval' => $this->getContainer()->getParameter('redis_retry_interval'),
                     ),
-                    'dao.cache.second.enabled' => true,
+                    'dao.cache.enabled' => true,
                 )
             );
         }
