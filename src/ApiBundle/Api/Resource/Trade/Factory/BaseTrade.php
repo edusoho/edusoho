@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Trade\Factory;
 
 use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Order\Service\OrderService;
@@ -17,8 +18,6 @@ abstract class BaseTrade
      * @var Router
      */
     protected $router;
-
-    protected $session;
 
     /**
      * @var Biz
@@ -74,7 +73,7 @@ abstract class BaseTrade
         }
 
         if ($params['type'] == 'recharge') {
-            $tradeFields['goods_title'] = '虚拟币充值';
+            $tradeFields['goods_title'] = '现金充值';
             $tradeFields['order_sn'] = '';
             $tradeFields['amount'] = MathToolkit::simple($params['amount'], 100);
             $tradeFields['cash_amount'] = MathToolkit::simple($params['amount'], 100);
@@ -85,7 +84,6 @@ abstract class BaseTrade
 
         return $trade;
     }
-
 
     public function getCustomFields($params)
     {
@@ -110,6 +108,14 @@ abstract class BaseTrade
         }
 
         return array_merge($defaultResponse, $this->getCustomResponse($trade));
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     /**
