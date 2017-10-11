@@ -69,6 +69,8 @@ class EduSohoUpgrade extends AbstractUpdater
             7 => 'migrateBizOrderRefundItems',
             8 => 'migrateBizOrderLog',
             9 => 'migrateBizPaymentTrade',
+            10 => 'migrateJoinMemberOperationRecord',
+            11 => 'migrateExitMemberOperationRecord',
         );
 
         if ($index == 0) {
@@ -411,6 +413,50 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizPaymentTrade()
     {
         // TODO
+    }
+
+    protected function migrateJoinMemberOperationRecord()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            insert into `member_operation_record` (
+                `title`,
+                `member_id`,
+                `member_type`,
+                `target_id`,
+                `target_type`,
+                `operate_type`,
+                `operate_time`,
+                `operator_id`,
+                `data`,
+                `user_id`,
+                `order_id`,
+                `refund_id`,
+                `reason`,
+                `created_time`
+            )
+            select 
+                `title` as `title`,
+                0 as `member_id`,
+                'student' as `member_type`,
+                `targetId` as `target_id`,
+                `targetType` as `target_type`,
+                'join' as `operate_type`,
+                `createdTime` as `operate_time`,
+                0 as `operator_id`,
+                '' as `data`,
+                `userId` as `user_id`,
+                `id` as `order_id`,
+                0 as `refund_id`,
+                '' as `reason`,
+                `createdTime` as `created_time`
+            from `orders` where `id` not in (select `order_id` from `member_operation_record` where status = 'paid' and `operate_type` = 'join') and status = 'paid'
+        ");        
+    }
+
+    protected function migrateExitMemberOperationRecord()
+    {
+
     }
 
     protected function createTables()
