@@ -10,7 +10,7 @@ export default class WechatPayNative extends BasePayment {
 
     let template = `
       <div id="${this.modalID}" class="modal">
-        <div class="modal-dialog cd-modal-dialog">
+        <div class="modal-dialog cd-modal-dialog cd-modal-dialog-sm">
           <div class="modal-content">
           
             <div class="modal-header">
@@ -21,12 +21,12 @@ export default class WechatPayNative extends BasePayment {
             </div>
             
             <div class="modal-body">
-              <div class="qrcode-img">
-                <img class = 'img-responsive js-qrcode-img' src="">
-                  <div class="text-qrcode hidden-xs">
-                    ${Translator.trans('cashier.wechat_pay.scan_qcode_pay_tips')}
-                  </div>
-                <span class="pay-rmb js-pay-amount"></span>
+              <div class="text-center">
+                <img class="cd-mb16 js-qrcode-img" src="">
+                <div class="cd-mb16">
+                  ${Translator.trans('cashier.wechat_pay.scan_qcode_pay_tips')}
+                </div>
+                <div class="cd-text-danger cd-mb32 js-pay-amount" style="font-size:16px;"></div>
               </div>
             </div>
             
@@ -48,7 +48,7 @@ export default class WechatPayNative extends BasePayment {
   afterTradeCreated(res) {
    let $modal = this.$container.find('#'+this.modalID);
    $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
-   $modal.find('.js-pay-amount').text(res.cash_amount);
+   $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
    $modal.modal('show');
    this.startInterval(res.tradeSn);
  }
