@@ -61,7 +61,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteRepeatCopiedTasks',
-            2 => 'deleteRepeatCopiedActivity'
+            2 => 'deleteRepeatCopiedActivity',
+            3 => 'cleanExpiredJobs'
         );
 
         if ($index == 0) {
@@ -91,6 +92,42 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
     }
+
+    protected function cleanExpiredJobs()
+    {
+        $jobInvalidTime = time() - 120;
+        $expiredFiredJobsCountSql = "SELECT COUNT(*) FROM `biz_scheduler_job_fired` WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $expiredFiredJobsCount = $this->getConnection()->fetchColumn($expiredFiredJobsCountSql);
+
+        if (empty($expiredFiredJobsCount)) {
+            return 1;
+        }
+
+        $lockName = "job_pool.default";
+        $this->biz['lock']->get($lockName, 10);
+
+        $updateExpiredFiredJobStatusSql = "UPDATE `biz_scheduler_job_fired` SET status = 'failure' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $this->getConnection()->exec($updateExpiredFiredJobStatusSql);
+
+        $poolSql = "SELECT * FROM `biz_scheduler_job_pool` WHERE name = 'default'";
+        $pool = $this->getConnection()->fetchAssoc($poolSql);
+
+        if(empty($pool)) {
+            return 1;
+        }
+
+        $num = $pool['num'] - $expiredFiredJobsCount;
+        $num = $num > 0 ? $num : 0;
+        $updatePoolSql = "UPDATE `job_pool` SET num = {$num} WHERE id = {$pool['id']}";
+
+        $this->getConnection()->exec($updatePoolSql);
+
+        $this->biz['lock']->release($lockName);
+
+        return 1;
+
+    }
+
     protected function deleteRepeatCopiedTasks()
     {
         $this->getConnection()->exec('delete from course_task where id in (select maxId from (select max(id) as maxId, count(id) as countNum,courseid, copyid from course_task where copyid<>0 group by courseId, copyId) a where a.countNum>1)');
@@ -105,7 +142,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $activity = $this->getConnection()->fetchAssoc('select * from activity where id= ? ', array($result['maxId']));
 
             $table = '';
-            switch ($activity['type']) {
+            switch ($activity['mediaType']) {
                 case 'Audio':
                     $table = 'activity_audio';
                     break;
@@ -146,10 +183,11 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             if (!empty($table)) {
-                $this->getConnection()->exec("delete from {$table} where id= ? ", array($activity['mediaId']));
+                $this->getConnection()->exec("delete from {$table} where id = {$activity['mediaId']} ");
             }
+            $this->logger('info', json_encode($activity));
 
-            $this->getConnection()->exec("delete from activity where id= ? ", array($activity['id']));
+            $this->getConnection()->exec("delete from `activity` where id = {$activity['id']} ");
         }
 
         return 1;
