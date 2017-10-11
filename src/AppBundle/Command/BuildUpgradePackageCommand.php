@@ -532,7 +532,7 @@ class BuildUpgradePackageCommand extends BaseCommand
             $this->output->writeln("    - {$operation} file: {$file}");
         }
         if(!count($migrationFiles)){
-            $this->output->writeln("    - {$operation} file: on file need to be dealed");
+            $this->output->writeln("    - --");
         }
     }
 
