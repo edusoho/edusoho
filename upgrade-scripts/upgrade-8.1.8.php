@@ -183,10 +183,10 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             if (!empty($table)) {
-                $this->getConnection()->exec("delete from {$table} where id= ? ", array($activity['mediaId']));
+                $this->getConnection()->exec("delete from {$table} where id = ? ", array($activity['mediaId']));
             }
 
-            $this->getConnection()->exec("delete from activity where id= ? ", array($activity['id']));
+            $this->getConnection()->exec("delete from `activity` where id = ? ", array($activity['id']));
         }
 
         return 1;
