@@ -83,7 +83,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function search($conditions, $orderBys, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)

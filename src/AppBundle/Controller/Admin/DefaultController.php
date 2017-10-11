@@ -165,8 +165,8 @@ class DefaultController extends BaseController
         $todayTimeStart = strtotime(date('Y-m-d', time()));
         $todayTimeEnd = strtotime(date('Y-m-d', time() + 24 * 3600));
 
-        $onlineCount = $this->getStatisticsService()->countOnline(15 * 60);
-        $loginCount = $this->getStatisticsService()->countLogin(15 * 60);
+        $onlineCount = $this->getStatisticsService()->countOnline(time() - 15 * 60);
+        $loginCount = $this->getStatisticsService()->countLogin(time() - 15 * 60);
 
         $todayRegisterNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->countUsers(array());
