@@ -105,7 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $activity = $this->getConnection()->fetchAssoc('select * from activity where id= ? ', array($result['maxId']));
 
             $table = '';
-            switch ($activity['type']) {
+            switch ($activity['mediaType']) {
                 case 'Audio':
                     $table = 'activity_audio';
                     break;
