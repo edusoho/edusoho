@@ -33,7 +33,6 @@ export default class WechatPayNative extends BasePayment {
           </div>
         </div>
       </div>
-     
     `;
 
     if (this.$container.find('#'+this.modalID).length === 0) {
@@ -62,7 +61,6 @@ export default class WechatPayNative extends BasePayment {
      if (res.isPaid) {
        location.href = res.successUrl;
      }
-
    });
  }
 }
