@@ -96,7 +96,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function cleanExpiredJobs()
     {
         $jobInvalidTime = time() - 120;
-        $expiredFiredJobsCountSql = "SELECT COUNT(*) FROM `job_fired` WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $expiredFiredJobsCountSql = "SELECT COUNT(*) FROM `biz_scheduler_job_fired` WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
         $expiredFiredJobsCount = $this->getConnection()->fetchColumn($expiredFiredJobsCountSql);
 
         if (empty($expiredFiredJobsCount)) {
@@ -106,10 +106,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $lockName = "job_pool.default";
         $this->biz['lock']->get($lockName, 10);
 
-        $updateExpiredFiredJobStatusSql = "UPDATE `job_fired` SET status = 'failure' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $updateExpiredFiredJobStatusSql = "UPDATE `biz_scheduler_job_fired` SET status = 'failure' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
         $this->getConnection()->exec($updateExpiredFiredJobStatusSql);
 
-        $poolSql = "SELECT * FROM `job_pool` WHERE name = 'default'";
+        $poolSql = "SELECT * FROM `biz_scheduler_job_pool` WHERE name = 'default'";
         $pool = $this->getConnection()->fetchAssoc($poolSql);
 
         if(empty($pool)) {
@@ -183,10 +183,11 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             if (!empty($table)) {
-                $this->getConnection()->exec("delete from {$table} where id = ? ", array($activity['mediaId']));
+                $this->getConnection()->exec("delete from {$table} where id = {$activity['mediaId']} ");
             }
+            $this->logger('info', json_encode($activity));
 
-            $this->getConnection()->exec("delete from `activity` where id = ? ", array($activity['id']));
+            $this->getConnection()->exec("delete from `activity` where id = {$activity['id']} ");
         }
 
         return 1;
