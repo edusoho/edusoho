@@ -1,7 +1,7 @@
-$form = $('#refund-apply-form');
+let $form = $('#refund-apply-form');
 let validator = $form.validate({
   rules: {
-    'form[reason]': {
+    reason : {
       required: true,
     }
   }
