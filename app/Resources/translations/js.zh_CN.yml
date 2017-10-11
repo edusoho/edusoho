@@ -520,6 +520,8 @@ open_course.unpublish_success_hint: 课时已取消发布!
 
 open_course.lesson_delete_success_hint: 课时已删除!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
 order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: 优惠券不可用
 order.create.use_discount_coupon_hint: 优惠券可用，您当前使用的是打%rate%折的优惠券

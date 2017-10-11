@@ -30,7 +30,8 @@ export default class Coin {
 
     if ($this.val() > 0) {
       this.addPasswordValidate();
-      this.$form.trigger('addPriceItem', ['coin-price', '虚拟币抵扣', '￥' + parseFloat($this.val() / this.coinRate).toFixed(2) ]);
+      let coinName = this.$form.data('coin-name');
+      this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), '￥' + parseFloat($this.val() / this.coinRate).toFixed(2) ]);
       this.cashierForm.calcPayPrice($this.val());
     }
   }

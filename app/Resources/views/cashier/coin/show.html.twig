@@ -8,23 +8,28 @@
         '%amount%':balance.amount, '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
       }) }}
     {% else %}
-      未设置支付密码前，不能使用虚拟币抵扣 <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">设置支付密码</a>
+      {{ 'pay_center.pay.coin.password_not_set.tips'|trans }} 
+      <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">
+        {{ 'pay_center.pay.set_pay_password'|trans }}
+      </a>
     {% endif %}
   </span>
 </div>
 
 <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}" data-coin-rate="{{ setting('coin.cash_rate') }}">
   <div class="form-group cd-form-group">
-    <label for="">本次使用</label>
+    <label>{{ 'pay_center.pay.coin_input_tips'|trans }}</label>
     <input type="text" class="form-control js-coin-amount" autocomplete="off" name="coinAmount" value="0">
   </div>
   <div class="form-group cd-form-group">
-    <label>支付密码</label>
+    <label>{{ 'user.fields.pay_password'|trans }}</label>
     <input type="password" class="form-control js-pay-password" name="payPassword" autocomplete="off"
           data-url="{{ path('cashier_password_check') }}" data-type="get"
           data-display="{{ 'order.confirm.forget_password_tips'|trans }}">
   </div>
-  <a href="{{path('settings_find_pay_password')}}" target='_blank' class="cd-link-gray cd-ml16">{{ 'order.confirm.forget_password_btn'|trans }}</a>
+  <a href="{{path('settings_find_pay_password')}}" target='_blank' class="cd-link-gray cd-ml16">
+    {{ 'order.confirm.forget_password_btn'|trans }}
+  </a>
 </div>
 
 <div class="order-center-line"></div>

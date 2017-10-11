@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
+  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}"  data-coin-name="{{ setting('coin.coin_name') }}">
 
     <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -58,11 +58,11 @@
 
     <div class="order-center-deduction">
       <span class="order-center-deduction__title">
-        支付方式
+        {{ 'pay_center.pay.mode'|trans }}
       </span>
       <span class="order-center-deduction__content">
         {% if payments %}
-          选择合适的现金支付方式
+          {{ 'pay_center.pay.mode.tips'|trans }}
         {% else %}
           {{ 'payment.useless_tips'|trans }}
         {% endif %}
@@ -88,7 +88,7 @@
 
     <div class="cd-pv24" id="order-center-price-list">
       <div class="order-center-price">
-        <div class="order-center-price__title">订单价格</div>
+        <div class="order-center-price__title">{{ 'pay_center.pay.price'|trans }}</div>
         <div class="order-center-price__content">{{ order.pay_amount|major_currency }}</div>
       </div>
     </div>

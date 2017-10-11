@@ -477,8 +477,13 @@ order.refund.notify_admin: '用户%nickname%申请退款 <a href="%targetUrl%">%
 pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
+pay_center.pay.price: 订单价格
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用虚拟币抵扣
+pay_center.pay.set_pay_password: 设置支付密码
+pay_center.pay.coin_input_tips: 本次使用
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
 pay_center.pay.mode: 'Payment methods'
+pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 'Deposit card'
 pay_center.pay.credit_card: 'Credit card'
 pay_center.pay.use_new_card: 'Use new bank card'
