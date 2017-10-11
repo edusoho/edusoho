@@ -7331,12 +7331,14 @@ admin.coin_setting.price_set_tips: 请设置正确的价格
 
 #退款管理
 admin.order_refund.status.default: 退款状态
+admin.order_refund.sn: 退款单号
 admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.placeholder: 订单标题
+admin.order_refund.title.placeholder: 标题
 admin.order_refund.title: 退款订单
 admin.order_refund.order_amount: 退款金额
 admin.order_refund.refund_person: 退款人
 admin.order_refund.refund_status: 退款状态
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: 操作人
 admin.order_refund.operation: 操作
 admin.order_refund.reason: 退款理由

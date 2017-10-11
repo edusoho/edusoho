@@ -5761,9 +5761,11 @@ admin.order_refund.status.default: 'Refund status'
 admin.order_refund.title.placeholder: title
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
 admin.order_refund.title: 'Refund order'
+admin.order_refund.sn: sn
 admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'
 admin.order_refund.refund_status: 'Refund status'
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: Operator
 admin.order_refund.operation: Action
 admin.order_refund.reason: 'Refund reason'
