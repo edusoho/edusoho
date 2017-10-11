@@ -280,7 +280,7 @@ live_auth:
 
 order_detail:
    path:  /order/{id}/detail
-   defaults: { _controller: AppBundle:Order:detail }
+   defaults: { _controller: AppBundle:Order/Order:detail }
 
 order_cancel_refund:
     path:  /order/{orderId}/cancel_refund
@@ -1204,10 +1204,6 @@ settings_find_pay_password_by_sms:
 settings_find_pay_password_by_question:
     path:  /settings/find_pay_password_by_question
     defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
-
-order_pay_sms_verification:
-    path:  /order/sms_verification
-    defaults: { _controller: AppBundle:Order:smsVerification }
 
 edu_cloud_sms_callback:
     path:  /edu_cloud/sms_callback
