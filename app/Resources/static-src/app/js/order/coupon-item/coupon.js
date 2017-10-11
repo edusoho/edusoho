@@ -63,7 +63,7 @@ class Coupon {
         let deductAmount = (data['type'] == 'discount') ? this.$price.val() * data['rate'] : data['rate'];
         
         if (priceType === 'coin') {
-          deductAmount = parseFloat(parseFloat(deductAmount) * parseFloat(coinRate)).toFixed(2) + coinName
+          deductAmount = parseFloat(parseFloat(deductAmount) * parseFloat(coinRate)).toFixed(2) + ' ' + coinName;
         } else {
           deductAmount = '￥' + deductAmount;
         }
@@ -74,7 +74,7 @@ class Coupon {
         this.toggleShow('use');
 
         this.$form.trigger('calculatePrice');
-        this.$form.trigger('addPriceItem', ['coupon-price', '优惠码抵扣', deductAmount]);
+        this.$form.trigger('addPriceItem', ['coupon-price', Translator.trans('order.create.coupon_deduction'), deductAmount]);
       }
     })
   }
@@ -135,6 +135,7 @@ class Coupon {
   selectCoupon() {
     const $couponCode = this.$element.find("input[name='couponCode']");
     const $selectCouponBtn = this.$element.find("#select-coupon-btn");
+    const $useCouponBtn = this.$element.find('#use-coupon-btn')
     
     cd.radio({
       el: '.js-existing-coupon',
@@ -144,6 +145,7 @@ class Coupon {
         $couponCode.val(code);
 
         $selectCouponBtn.trigger('click');
+        $useCouponBtn.trigger('click');
       }
     });
   }

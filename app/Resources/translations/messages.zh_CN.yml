@@ -429,6 +429,7 @@ plugin.coupon.change_btn: 更换优惠券
 plugin.coupon.input_hint: 优惠券
 plugin.coupon.choose_btn: 输入优惠券
 plugin.coupon.use.input_placeholder: 输入优惠券码
+plugin.coupon.use.input_display: 请输入优惠券码
 plugin.coupon.code: 优惠券码
 plugin.coupon.amount: 优惠抵扣
 
@@ -509,9 +510,16 @@ order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
+order.confirm.coupon.hint: 通过优惠券抵扣金额
+order.confirm.coupon.use_loading: 使用中
+order.confirm.coupon.expiry_date_hint: 有效期至
+order.confirm.coupon.select_existed: 选择已有优惠券
+order.confirm.coupon.used_coupon: 已使用优惠券
+order.confirm.coupon.deduction: 抵扣
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
+
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
 order.confirm.setup_pay_password_tips: >
