@@ -73,6 +73,8 @@ class OrderRefundController extends BaseController
 
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
+        $user = $this->getUserService()->getUser($refund['user_id']);
+
         if ($request->getMethod() == 'POST') {
             $pass = $request->request->get('result');
             $fileds = $request->request->all();
@@ -90,7 +92,9 @@ class OrderRefundController extends BaseController
         }
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
+            'order' => $order,
             'refund' => $refund,
+            'user' => $user,
         ));
     }
 
