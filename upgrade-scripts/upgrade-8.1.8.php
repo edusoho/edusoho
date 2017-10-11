@@ -53,7 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         clearstatcache(true);
 
-        $this->logger( 'info', '删除缓存');
+        $this->logger('info', '删除缓存');
         return 1;
     }
 
@@ -66,7 +66,7 @@ class EduSohoUpgrade extends AbstractUpdater
         );
 
         if ($index == 0) {
-            $this->logger( 'info', '开始执行升级脚本');
+            $this->logger('info', '开始执行升级脚本');
             $this->deleteCache();
 
             return array(
@@ -112,7 +112,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $poolSql = "SELECT * FROM `biz_scheduler_job_pool` WHERE name = 'default'";
         $pool = $this->getConnection()->fetchAssoc($poolSql);
 
-        if(empty($pool)) {
+        if (empty($pool)) {
             return 1;
         }
 
@@ -130,7 +130,20 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function deleteRepeatCopiedTasks()
     {
-        $this->getConnection()->exec('delete from course_task where id in (select maxId from (select max(id) as maxId, count(id) as countNum,courseid, copyid from course_task where copyid<>0 group by courseId, copyId) a where a.countNum>1)');
+
+        $duplicateTasks = $this->getConnection()->fetchAll("select max(id) as maxId, count(id) as countNum,courseid, copyid from course_task where copyid<>0 group by courseId, copyId having countNum > 1");
+
+        if (empty($duplicateTasks)) {
+            return 1;
+        }
+        $copyTaskIds = \AppBundle\Common\ArrayToolkit::column($duplicateTasks, 'maxId');
+
+        $chunkCopyTaskIds = array_chunk($copyTaskIds, 100);
+
+        foreach ($chunkCopyTaskIds as $taskIds){
+            $this->getConnection()->exec("delete from course_task where id in ({$taskIds})");
+        }
+
 
         return 1;
     }
@@ -178,8 +191,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     break;
                 case 'Video':
                     $table = 'activity_video';
-                    break;
-                ;
+                    break;;
             }
 
             if (!empty($table)) {
@@ -283,6 +295,9 @@ abstract class AbstractUpdater
         $this->biz = $biz;
     }
 
+    /**
+     * @return \Codeages\Biz\Framework\Dao\Connection
+     */
     public function getConnection()
     {
         return $this->biz['db'];
