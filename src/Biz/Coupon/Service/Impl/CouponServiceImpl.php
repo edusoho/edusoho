@@ -386,7 +386,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             case 'receive':
                 return new ReceiveCoupon($this->biz, $coupon);
             default:
-                throw new InvalidArgumentException('Invalid coupon status given');
+                throw new InvalidArgumentException(sprintf('Invalid coupon status %s given', $coupon['status']));
                 break;
         }
     }
