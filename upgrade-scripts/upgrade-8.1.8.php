@@ -118,7 +118,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $num = $pool['num'] - $expiredFiredJobsCount;
         $num = $num > 0 ? $num : 0;
-        $updatePoolSql = "UPDATE `job_pool` SET num = {$num} WHERE id = {$pool['id']}";
+        $updatePoolSql = "UPDATE `biz_scheduler_job_pool` SET num = {$num} WHERE id = {$pool['id']}";
 
         $this->getConnection()->exec($updatePoolSql);
 
