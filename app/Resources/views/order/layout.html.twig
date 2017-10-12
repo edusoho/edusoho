@@ -1,23 +1,24 @@
 {% extends 'layout.html.twig' %}
 
-{% set bodyClass="cd-design" %}
+{% set bodyClass = "cd-design" %}
 {% block esBar %}{% endblock %}
 
 {% set step = step|default('1') %}
 
-{% block content %}
-  <div class="row cd-row">
-    <div class="col-md-8 col-md-offset-2">
-      <div class="cd-panel">
-        <div class="cd-panel-heading-with-steps">
-          {% include 'order/order-step-status.html.twig' with {step: step} %}
+{% block full_content %}
+  <div class="container cd-container">
+    <div class="row cd-row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="cd-panel">
+          <div class="cd-panel-heading-with-steps">
+            {% include 'order/order-step-status.html.twig' with {step: step} %}
+          </div>
+          <div class="cd-panel-body">
+            {% block order_body %}
+            {% endblock %}
+          </div>  
         </div>
-        <div class="cd-panel-body">
-          {% block order_body %}
-          {% endblock %}
-        </div>  
       </div>
     </div>
   </div>
-  
 {% endblock %}
