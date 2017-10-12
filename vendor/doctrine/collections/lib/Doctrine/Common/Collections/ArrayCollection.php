@@ -50,7 +50,7 @@ class ArrayCollection implements Collection, Selectable
      *
      * @param array $elements
      */
-    public function __construct(array $elements = [])
+    public function __construct(array $elements = array())
     {
         $this->elements = $elements;
     }
@@ -177,8 +177,7 @@ class ArrayCollection implements Collection, Selectable
     public function offsetSet($offset, $value)
     {
         if ( ! isset($offset)) {
-            $this->add($value);
-            return;
+            return $this->add($value);
         }
 
         $this->set($offset, $value);
@@ -191,7 +190,7 @@ class ArrayCollection implements Collection, Selectable
      */
     public function offsetUnset($offset)
     {
-        $this->remove($offset);
+        return $this->remove($offset);
     }
 
     /**
@@ -237,7 +236,7 @@ class ArrayCollection implements Collection, Selectable
      */
     public function get($key)
     {
-        return $this->elements[$key] ?? null;
+        return isset($this->elements[$key]) ? $this->elements[$key] : null;
     }
 
     /**
@@ -302,8 +301,6 @@ class ArrayCollection implements Collection, Selectable
 
     /**
      * {@inheritDoc}
-     *
-     * @return static
      */
     public function map(Closure $func)
     {
@@ -312,8 +309,6 @@ class ArrayCollection implements Collection, Selectable
 
     /**
      * {@inheritDoc}
-     *
-     * @return static
      */
     public function filter(Closure $p)
     {
@@ -339,7 +334,7 @@ class ArrayCollection implements Collection, Selectable
      */
     public function partition(Closure $p)
     {
-        $matches = $noMatches = [];
+        $matches = $noMatches = array();
 
         foreach ($this->elements as $key => $element) {
             if ($p($key, $element)) {
@@ -349,7 +344,7 @@ class ArrayCollection implements Collection, Selectable
             }
         }
 
-        return [$this->createFrom($matches), $this->createFrom($noMatches)];
+        return array($this->createFrom($matches), $this->createFrom($noMatches));
     }
 
     /**
@@ -367,7 +362,7 @@ class ArrayCollection implements Collection, Selectable
      */
     public function clear()
     {
-        $this->elements = [];
+        $this->elements = array();
     }
 
     /**

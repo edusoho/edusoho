@@ -17,15 +17,22 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Common\Cache;
+namespace DoctrineTest\InstantiatorTestAsset;
+
+use ArrayObject;
 
 /**
- * Interface for cache drivers that supports multiple items manipulation.
+ * A simple asset for an abstract class
  *
- * @link   www.doctrine-project.org
- * @since  1.7
- * @author Luís Cobucci <lcobucci@gmail.com>
+ * @author Marco Pivetta <ocramius@gmail.com>
  */
-interface MultiOperationCache extends MultiGetCache, MultiDeleteCache, MultiPutCache
+class WakeUpNoticesAsset extends ArrayObject
 {
+    /**
+     * Wakeup method called after un-serialization
+     */
+    public function __wakeup()
+    {
+        trigger_error('Something went bananas while un-serializing this instance');
+    }
 }

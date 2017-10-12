@@ -25,8 +25,6 @@ namespace Doctrine\Common\Cache;
  * @link   www.doctrine-project.org
  * @since  1.4
  * @author Asmir Mustafic <goetas@gmail.com>
- *
- * @deprecated
  */
 interface MultiGetCache
 {

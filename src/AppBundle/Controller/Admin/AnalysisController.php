@@ -684,7 +684,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'pay_amount_GT' => '0',
                     'order_item_target_type' => 'course',
                 )
@@ -696,7 +696,7 @@ class AnalysisController extends BaseController
             array(
                 'pay_time_GT' => $timeRange['startTime'],
                 'pay_time_LT' => $timeRange['endTime'],
-                'status' => 'paid',
+                'status' => 'success',
                 'pay_amount_GT' => '0',
                 'order_item_target_type' => 'course',
             ),
@@ -726,7 +726,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'course',
                 ),
                 'ASC'
@@ -748,7 +748,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidCourseStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'pay_amount_GT' => '0'),
+            array('status' => 'success', 'pay_amount_GT' => '0'),
             array('created_time' => 'ASC'),
             0,
             1
@@ -793,7 +793,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pai_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'pay_amount_GT' => '0',
                     'order_item_target_type' => 'classroom',
                 )
@@ -804,7 +804,7 @@ class AnalysisController extends BaseController
             array(
                 'pay_time_GT' => $timeRange['startTime'],
                 'pai_time_LT' => $timeRange['endTime'],
-                'status' => 'paid',
+                'status' => 'success',
                 'pay_amount_GT' => '0.00',
                 'order_item_target_type' => 'classroom',
             ),
@@ -835,7 +835,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'classroom',
                 ),
                 'ASC'
@@ -853,7 +853,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidClassroomStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'pay_amount_GT' => '0'),
+            array('status' => 'success', 'pay_amount_GT' => '0'),
             array('created_time' => 'ASC'),
             0,
             1
@@ -1347,7 +1347,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'course',
                     'pay_amount_GT' => 0,
                 )
@@ -1359,7 +1359,7 @@ class AnalysisController extends BaseController
             array(
                 'pay_time_GT' => $timeRange['startTime'],
                 'pay_time_LT' => $timeRange['endTime'],
-                'status' => 'paid',
+                'status' => 'success',
                 'order_item_target_type' => 'course',
                 'pay_amount_GT' => 0,
             ),
@@ -1391,7 +1391,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'course',
                 ),
                 'ASC'
@@ -1411,14 +1411,14 @@ class AnalysisController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $courseIncomeStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'pay_amount_GT' => 0, 'order_item_target_type' => 'course'),
+        $courseIncomeStartDate = $this->getOrderService()->searchOrders(
+            array('status' => 'success', 'pay_amount_GT' => 0, 'order_item_target_type' => 'course'),
             array('created_time' => 'ASC'),
             0,
             1
         );
 
-        foreach ($courseIncomeStartData as $key) {
+        foreach ($courseIncomeStartDate as $key) {
             $courseIncomeStartDate = date('Y-m-d', $key['created_time']);
         }
 
@@ -1455,7 +1455,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'classroom',
                     'pay_amount_GT' => 0,
                 )
@@ -1467,7 +1467,7 @@ class AnalysisController extends BaseController
             array(
                 'pay_time_GT' => $timeRange['startTime'],
                 'pay_time_LT' => $timeRange['endTime'],
-                'status' => 'paid',
+                'status' => 'success',
                 'order_item_target_type' => 'classroom',
                 'pay_amount_GT' => '0.00',
             ),
@@ -1500,7 +1500,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'classroom',
                 ),
                 'ASC'
@@ -1522,7 +1522,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $classroomIncomeStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'pay_amount_GT' => 0, 'order_item_target_type' => 'classroom'),
+            array('status' => 'success', 'pay_amount_GT' => 0, 'order_item_target_type' => 'classroom'),
             array('created_time' => 'ASC'),
             0,
             1
@@ -1565,7 +1565,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'vip',
                     'pay_amount_GT' => 0,
                 )
@@ -1577,7 +1577,7 @@ class AnalysisController extends BaseController
             array(
                 'pay_time_GT' => $timeRange['startTime'],
                 'pay_time_LT' => $timeRange['endTime'],
-                'status' => 'paid',
+                'status' => 'success',
                 'order_item_target_type' => 'vip',
                 'pay_amount_GT' => '0.00',
             ),
@@ -1610,7 +1610,7 @@ class AnalysisController extends BaseController
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
                     'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'paid',
+                    'status' => 'success',
                     'order_item_target_type' => 'vip',
                 ),
                 'ASC'
@@ -1628,7 +1628,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $vipIncomeStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'pay_amount_GT' => '0.00', 'order_item_target_type' => 'vip'),
+            array('status' => 'success', 'pay_amount_GT' => '0.00', 'order_item_target_type' => 'vip'),
             array('created_time' => 'ASC'),
             0,
             1
