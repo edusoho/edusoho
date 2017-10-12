@@ -87,7 +87,7 @@
             </td>
             <td>
               {% if refund.status == 'auditing' %}
-                <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
+                <button class="btn btn-sm btn-primary confirm-refund" aria-hidden="true" data-backdrop="static" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
               {% else %}
                 --
               {% endif %}
