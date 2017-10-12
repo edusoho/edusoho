@@ -1,9 +1,9 @@
 <div class="order-center-deduction">
   <span class="order-center-deduction__title">
-    {{'order.paid_course.content_title'|trans}}
+    {{ 'order.paid_course.content_title'|trans }}
   </span>
   <span class="order-center-deduction__content">
-    之前购买过的课程能够抵扣对应金额
+    {{ 'order.paid_course.content'|trans }}
   </span>
 </div>
 
@@ -19,7 +19,7 @@
       {{ paidCourse.title }}
     </div>
     <div class="order-center-paid-course__price">
-      抵扣 {{ paidCourse.paidPrice|price_format }}
+      {{ 'order.paid_course.minus'|trans }} {{ paidCourse.paidPrice|price_format }}
     </div>
   </div>
 {% endfor %}

@@ -455,8 +455,9 @@ order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
 order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
 order.confirm.sms_code.bind_btn: 'Bind'
-order.paid_course.content_title: 已购买课程
-order.paid_course.minus: 'Deduct:'
+order.paid_course.title: 已购买课程
+order.paid_course.content: 之前购买过的课程能够抵扣对应金额
+order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
