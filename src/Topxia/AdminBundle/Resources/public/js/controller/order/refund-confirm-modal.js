@@ -78,7 +78,8 @@ define(function(require, exports, module) {
         function coinToRmb() {
             var coinDisplay = $('#coin-to-rmb');
             var coinAmount = $('#refund-coin-amount-field');
-            coinDisplay.text((coinAmount.val() / coinAmount.data('rate')).toFixed(2));
+            var coinToRmb = (coinAmount.val()*100 / coinAmount.data('rate'))/100;
+            coinDisplay.text(coinToRmb.toFixed(2));
         }
 
     };
