@@ -37,6 +37,12 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     {
         $access = $this->getClassroomService()->canJoinClassroom($this->targetId);
 
+        $classroom = $this->getClassroomService()->getClassroom($this->targetId);
+
+        if (!$classroom['buyable']) {
+            throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
+        }
+
         if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }

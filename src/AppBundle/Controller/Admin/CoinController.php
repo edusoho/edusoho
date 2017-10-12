@@ -501,11 +501,11 @@ class CoinController extends BaseController
             unset($condition['keyword']);
         }
 
-        if (isset($condition['endDateTime']) && !empty($condition['endDateTime'])) {
+        if (!empty($condition['endDateTime'])) {
             $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
         }
 
-        if (isset($condition['startDateTime']) && !empty($condition['startDateTime'])) {
+        if (!empty($condition['startDateTime'])) {
             $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
         }
 

@@ -520,6 +520,9 @@ open_course.unpublish_success_hint: 课时已取消发布!
 
 open_course.lesson_delete_success_hint: 课时已删除!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
+order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: 优惠券不可用
 order.create.use_discount_coupon_hint: 优惠券可用，您当前使用的是打%rate%折的优惠券
 order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵价%rate%元的优惠券
@@ -734,7 +737,7 @@ confirm.warn: 警告
 confirm.exit.tip: 您确定要退出学习吗？
 
 cashier.wechat_pay: 微信支付
-cashier.wechat_pay.scan_qcode_pay_tips: 请使用微信扫一扫<br>扫描二维码支付
+cashier.wechat_pay.scan_qcode_pay_tips: 请使用微信扫描二维码支付
 cashier.confirm.fail_message: 支付未成功，请检查或重新支付
 cashier.pay.error_message: 支付发生异常，请联系管理员
 cashier.confirm.title: 订单支付中

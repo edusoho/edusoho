@@ -2,7 +2,7 @@
 {% set steps = {1:'order.confirm'|trans, 2:'order.pay'|trans,3:'order.success'|trans } %}
 <ul class="cd-steps cd-steps-3">
   {% for value in [1,2,3] %}
-    <li class="cd-steps-item {% if step == value %} doing {% elseif step > value %} done hidden-xs {% endif %}">
+    <li class="cd-steps-item {% if step == value %} doing {% elseif step > value %} done hidden-xs {% else %} hidden-xs {% endif %}">
       <div class="cd-steps-tail"><i></i></div>
       <div class="cd-steps-step">
         <div class="step-wrap">

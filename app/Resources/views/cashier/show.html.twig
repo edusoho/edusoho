@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
+  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}"  data-coin-name="{{ setting('coin.coin_name') }}">
 
     <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -58,11 +58,11 @@
 
     <div class="order-center-deduction">
       <span class="order-center-deduction__title">
-        支付方式
+        {{ 'pay_center.pay.mode'|trans }}
       </span>
       <span class="order-center-deduction__content">
         {% if payments %}
-          选择合适的现金支付方式
+          {{ 'pay_center.pay.mode.tips'|trans }}
         {% else %}
           {{ 'payment.useless_tips'|trans }}
         {% endif %}
@@ -70,9 +70,9 @@
     </div>
 
     {% if payments %}
-      <div class="order-center-pay-list">
+      <div class="order-pay-list">
         {% for type, payment in payments %}
-          <div class="order-center-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
+          <div class="order-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
             <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"
               srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>
           </div>
@@ -86,18 +86,40 @@
 
     <div class="order-center-line"></div>
 
+    {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+
     <div class="cd-pv24" id="order-center-price-list">
       <div class="order-center-price">
-        <div class="order-center-price__title">订单价格</div>
-        <div class="order-center-price__content">{{ order.pay_amount|major_currency }}</div>
+        <div class="order-center-price__title">
+          {{ 'pay_center.pay.price'|trans }}
+        </div>
+        <div class="order-center-price__content">{{ order.pay_amount|price_format }}</div>
       </div>
     </div>
 
     <div class="order-center-line"></div>
 
     <div class="cd-pt16 cd-pb24">
+      {% if currency == 'coin' %}
+        <div class="order-center-price">
+          <div class="order-center-price__title">
+            {{ 'order.confirm.pay_total'|trans }}
+          </div>
+          <div class="order-center-price__content">
+            <span class="js-pay-coin">{{ order.pay_amount|price_format }}</span>
+          </div>
+        </div>
+      {% endif %}
+
       <div class="order-center-price">
-        <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
+        <div class="order-center-price__title">
+          {{'order.confirm.pay_rmb'|trans}}
+          {% if currency == 'coin' %}
+            <i class="cd-icon cd-icon-help cd-text-xs" data-toggle="tooltip" data-placement="top" 
+              title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
+            </i>
+          {% endif %}
+        </div>
         <div class="order-center-price__content">
           <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|major_currency }}</span>
         </div>
@@ -106,12 +128,11 @@
 
     {% if payments %}
       <div class="text-right">
-        <button class="btn cd-btn cd-btn-primary js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
+        <button class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
           {{ 'pay_center.pay.confirm_pay_btn'|trans }}
         </button>
       </div>
     {% endif %}
 
   </form>
- 
 {% endblock %}

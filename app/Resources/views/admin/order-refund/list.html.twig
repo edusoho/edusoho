@@ -13,7 +13,11 @@
         {{ select_options(dict('refundStatus'), app.request.get('status'), 'admin.order_refund.status.default'|trans) }}
       </select>
     </div>
-
+    {# <div class="form-group">
+      <select class="form-control" name="orderType">
+        {{ select_options(dict('orderItemType'), app.request.get('orderItemType'), 'order.item_type'|trans) }}
+      </select>
+    </div> #}
     <div class="form-group">
       <input class="form-control" type="text" name="nickname" value="{{ app.request.get('nickname') }}" placeholder="{{'admin.order_refund.nickname.input_placeholder'|trans}}">
     </div>
@@ -35,9 +39,11 @@
   <table class="table table-striped table-hover" id="refunds-table">
     <thead>
       <tr>
-        <th width="40%">{{'admin.order_refund.title'|trans}}</th>
+        <th width="200">{{'admin.order_refund.title'|trans}}</th>
+        <th width="175">{{ 'admin.order_refund.sn'|trans }}</th>
         <th>{{'admin.order_refund.order_amount'|trans}}</th>
         <th>{{'admin.order_refund.refund_person'|trans}}</th>
+        <th>{{'admin.order_refund.refund_created_time'|trans}}</th>
         <th>{{'admin.order_refund.refund_status'|trans}}</th>
         <th>{{'admin.order_refund.operator'|trans}}</th>
         <th>{{'admin.order_refund.operation'|trans}}</th>
@@ -51,15 +57,20 @@
           <tr>
             <td>
               <a href="javascript:" data-url="{{ path('admin_order_detail', {id:refund.order_id}) }}" data-toggle="modal" data-target="#modal">{{ refund.title }}</a>
-              <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }} | {{'order.paid_time'|trans}}：{{ order.created_time|date('Y-n-d H:i') }}</div>
+              <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }}</div>
               <div class="text-muted text-sm">
               {{'admin.order_refund.reason'|trans}}：{{ refund.reason }} 
-              | 
-              {{'admin.order_refund.time'|trans}}：{{ refund.created_time|date('Y-n-d H:i') }}</div> 
+              </div> 
+            </td>
+            <td>
+              {{ refund.sn }}
             </td>
             <td>{{ refund.amount|fen_to_yuan(0) }}</td>
             <td>
               {{ admin_macro.user_link(user) }}
+            </td>
+            <td>
+              {{ refund.created_time|date('Y-n-d H:i') }}
             </td>
             <td>
               {{ dict_macro.refundStatus(refund.status) }}
@@ -76,7 +87,7 @@
             </td>
             <td>
               {% if refund.status == 'auditing' %}
-                <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
+                <button class="btn btn-sm btn-primary confirm-refund" aria-hidden="true" data-backdrop="static" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
               {% else %}
                 --
               {% endif %}

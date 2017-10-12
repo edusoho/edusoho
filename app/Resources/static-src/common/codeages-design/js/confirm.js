@@ -8,7 +8,7 @@ class Confirm {
 
     this.confirmClass = props.confirmClass || 'btn cd-btn cd-btn-flat-danger cd-btn-lg';
     this.cancelClass = props.cancelClass || 'btn cd-btn cd-btn-flat-default cd-btn-lg';
-    this.dialogClass = props.dialogClass || 'cd-modal-dialog cd-modal-sm';
+    this.dialogClass = props.dialogClass || 'cd-modal-dialog cd-modal-dialog-sm';
 
     this.confirm = props.confirm || this.confirm;
 
