@@ -5114,7 +5114,7 @@ admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
-    <div class="popover-item">`
+    <div class="popover-item">
       <div class="title">新增订单</div>
       <div class="content">平台当日产生的所有订单，包括免费和付费</div>
     </div>
