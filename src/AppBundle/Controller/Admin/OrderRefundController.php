@@ -82,8 +82,8 @@ class OrderRefundController extends BaseController
             if ('pass' === $pass) {
                 $refundData = array(
                     'deal_reason' => $request->request->get('note'),
-                    'refund_coin_amount' => intval($request->request->get('refund_coin_amount', 0)*100),
-                    'refund_cash_amount' => intval($request->request->get('refund_cash_amount', 0)*100)
+                    'refund_coin_amount' => intval($request->request->get('refund_coin_amount', 0) * 100),
+                    'refund_cash_amount' => intval($request->request->get('refund_cash_amount', 0) * 100),
                 );
                 $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
             } else {
