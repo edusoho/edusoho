@@ -27,7 +27,7 @@ class ConfirmModal {
               </p>
             </div>
             <div class="modal-footer">
-              <a class="btn cd-btn cd-btn-flat-default" data-dismiss="modal">${Translator.trans('cashier.confirm.pick_again')}</a>
+              <a class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">${Translator.trans('cashier.confirm.pick_again')}</a>
               <a class="btn cd-btn cd-btn-primary cd-btn-lg js-confirm-btn">${Translator.trans('cashier.confirm.success')}</a>
             </div>
           </div>
