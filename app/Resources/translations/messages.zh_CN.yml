@@ -506,7 +506,7 @@ order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 order.confirm: 订单确认
 order.confirm.pay_total: 合计
-order.confirm.pay_rmb: 应付现金
+order.confirm.pay_rmb: 应付
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
