@@ -93,27 +93,17 @@ class WinCacheCache extends CacheProvider
     /**
      * {@inheritdoc}
      */
-    protected function doDeleteMultiple(array $keys)
-    {
-        $result = wincache_ucache_delete($keys);
-
-        return is_array($result) && count($result) !== count($keys);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function doGetStats()
     {
         $info    = wincache_ucache_info();
         $meminfo = wincache_ucache_meminfo();
 
-        return [
+        return array(
             Cache::STATS_HITS             => $info['total_hit_count'],
             Cache::STATS_MISSES           => $info['total_miss_count'],
             Cache::STATS_UPTIME           => $info['total_cache_uptime'],
             Cache::STATS_MEMORY_USAGE     => $meminfo['memory_total'],
             Cache::STATS_MEMORY_AVAILABLE => $meminfo['memory_free'],
-        ];
+        );
     }
 }

@@ -202,13 +202,13 @@ abstract class FileCache extends CacheProvider
 
         $free = disk_free_space($this->directory);
 
-        return [
+        return array(
             Cache::STATS_HITS               => null,
             Cache::STATS_MISSES             => null,
             Cache::STATS_UPTIME             => null,
             Cache::STATS_MEMORY_USAGE       => $usage,
             Cache::STATS_MEMORY_AVAILABLE   => $free,
-        ];
+        );
     }
 
     /**
@@ -217,7 +217,7 @@ abstract class FileCache extends CacheProvider
      * @param string $path
      * @return bool TRUE on success or if path already exists, FALSE if path cannot be created.
      */
-    private function createPathIfNeeded(string $path) : bool
+    private function createPathIfNeeded($path)
     {
         if ( ! is_dir($path)) {
             if (false === @mkdir($path, 0777 & (~$this->umask), true) && !is_dir($path)) {
@@ -236,7 +236,7 @@ abstract class FileCache extends CacheProvider
      *
      * @return bool TRUE on success, FALSE if path cannot be created, if path is not writable or an any other error.
      */
-    protected function writeFile(string $filename, string $content) : bool
+    protected function writeFile($filename, $content)
     {
         $filepath = pathinfo($filename, PATHINFO_DIRNAME);
 
@@ -252,7 +252,6 @@ abstract class FileCache extends CacheProvider
         @chmod($tmpFile, 0666 & (~$this->umask));
 
         if (file_put_contents($tmpFile, $content) !== false) {
-            @chmod($tmpFile, 0666 & (~$this->umask));
             if (@rename($tmpFile, $filename)) {
                 return true;
             }
@@ -266,7 +265,7 @@ abstract class FileCache extends CacheProvider
     /**
      * @return \Iterator
      */
-    private function getIterator() : \Iterator
+    private function getIterator()
     {
         return new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($this->directory, \FilesystemIterator::SKIP_DOTS),
@@ -279,7 +278,7 @@ abstract class FileCache extends CacheProvider
      *
      * @return bool
      */
-    private function isFilenameEndingWithExtension(string $name) : bool
+    private function isFilenameEndingWithExtension($name)
     {
         return '' === $this->extension
             || strrpos($name, $this->extension) === (strlen($name) - $this->extensionStringLength);
