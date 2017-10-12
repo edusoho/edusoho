@@ -23,7 +23,7 @@
 </div>
 
 {% if isPasswordSet %}
-  <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}" 
+  <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount|fen_to_yuan(0) }}" 
     data-coin-rate="{{ setting('coin.cash_rate') }}" data-price-type="{{ currency }}">
     <div class="form-group cd-form-group">
       <label>{{ 'pay_center.pay.coin_input_tips'|trans }}</label>
