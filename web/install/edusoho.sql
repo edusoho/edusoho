@@ -266,6 +266,26 @@ CREATE TABLE `batch_notification` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群发通知表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_online`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_online` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `sess_id` varbinary(128) NOT NULL,
+  `active_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后活跃时间',
+  `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '离线时间',
+  `is_login` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '在线用户的id, 0代表游客',
+  `ip` varchar(32) NOT NULL DEFAULT '' COMMENT '客户端ip',
+  `user_agent` varchar(1024) NOT NULL DEFAULT '',
+  `source` varchar(32) NOT NULL DEFAULT 'unknown' COMMENT '当前在线用户的来源，例如：app, pc, mobile',
+  `created_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `deadline` (`deadline`),
+  KEY `is_login` (`is_login`),
+  KEY `active_time` (`active_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_queue_failed_job`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -298,6 +318,94 @@ CREATE TABLE `biz_queue_job` (
   PRIMARY KEY (`id`),
   KEY `idx_queue_reserved_time` (`queue`,`reserved_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_scheduler_job`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_scheduler_job` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `name` varchar(128) NOT NULL COMMENT '任务名称',
+  `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
+  `source` varchar(64) NOT NULL DEFAULT 'MAIN' COMMENT '来源',
+  `expression` varchar(128) NOT NULL DEFAULT '' COMMENT '任务触发的表达式',
+  `class` varchar(128) NOT NULL COMMENT '任务的Class名称',
+  `args` text COMMENT '任务参数',
+  `priority` int(10) unsigned NOT NULL DEFAULT '50' COMMENT '优先级',
+  `pre_fire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务下次执行的时间',
+  `next_fire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务下次执行的时间',
+  `misfire_threshold` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '触发过期的阈值(秒)',
+  `misfire_policy` varchar(32) NOT NULL COMMENT '触发过期策略: missed, executing',
+  `enabled` tinyint(1) DEFAULT '1' COMMENT '是否启用',
+  `creator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务创建人',
+  `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
+  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_scheduler_job_fired`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_scheduler_job_fired` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `job_id` int(10) NOT NULL COMMENT 'jobId',
+  `fired_time` int(10) unsigned NOT NULL COMMENT '触发时间',
+  `priority` int(10) unsigned NOT NULL DEFAULT '50' COMMENT '优先级',
+  `status` varchar(32) NOT NULL DEFAULT 'acquired' COMMENT '状态：acquired, executing, success, missed, ignore, failure',
+  `failure_msg` text,
+  `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
+  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
+  `retry_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '重试次数',
+  `job_detail` text COMMENT 'job的详细信息，是biz_job表中冗余数据',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_scheduler_job_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_scheduler_job_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `job_id` int(10) unsigned NOT NULL COMMENT '任务编号',
+  `job_fired_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '激活的任务编号',
+  `hostname` varchar(128) NOT NULL DEFAULT '' COMMENT '执行的主机',
+  `name` varchar(128) NOT NULL COMMENT '任务名称',
+  `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
+  `source` varchar(64) NOT NULL COMMENT '来源',
+  `class` varchar(128) NOT NULL COMMENT '任务的Class名称',
+  `args` text COMMENT '任务参数',
+  `priority` int(10) unsigned NOT NULL DEFAULT '50' COMMENT '优先级',
+  `status` varchar(32) NOT NULL DEFAULT 'waiting' COMMENT '任务执行状态',
+  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_scheduler_job_pool`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_scheduler_job_pool` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(128) NOT NULL DEFAULT 'default' COMMENT '组名',
+  `max_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大数',
+  `num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已使用的数量',
+  `timeout` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行超时时间',
+  `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
+  `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_session` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `sess_id` varbinary(128) NOT NULL,
+  `sess_data` blob NOT NULL,
+  `sess_time` int(10) unsigned NOT NULL,
+  `sess_deadline` int(10) unsigned NOT NULL,
+  `created_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sess_id` (`sess_id`),
+  KEY `sess_deadline` (`sess_deadline`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_targetlog`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -648,7 +756,7 @@ CREATE TABLE `cloud_app` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '云应用ID',
   `name` varchar(255) NOT NULL COMMENT '云应用名称',
   `code` varchar(64) NOT NULL COMMENT '云应用编码',
-  `type` enum('plugin','theme') NOT NULL DEFAULT 'plugin' COMMENT '应用类型(plugin插件应用, theme主题应用)',
+  `type` varchar(64) NOT NULL DEFAULT 'plugin' COMMENT '应用类型(core系统，plugin插件应用, theme主题应用)',
   `protocol` tinyint(3) unsigned NOT NULL DEFAULT '2',
   `description` text NOT NULL COMMENT '云应用描述',
   `icon` varchar(255) NOT NULL COMMENT '云应用图标',
@@ -1687,79 +1795,6 @@ CREATE TABLE `ip_blacklist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `job`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `job` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `name` varchar(128) NOT NULL COMMENT '任务名称',
-  `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
-  `source` varchar(64) NOT NULL DEFAULT 'MAIN' COMMENT '来源',
-  `expression` varchar(128) NOT NULL DEFAULT '' COMMENT '任务触发的表达式',
-  `class` varchar(128) NOT NULL COMMENT '任务的Class名称',
-  `args` text COMMENT '任务参数',
-  `priority` int(10) unsigned NOT NULL DEFAULT '50' COMMENT '优先级',
-  `pre_fire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务下次执行的时间',
-  `next_fire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务下次执行的时间',
-  `misfire_threshold` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '触发过期的阈值(秒)',
-  `misfire_policy` varchar(32) NOT NULL COMMENT '触发过期策略: missed, executing',
-  `enabled` tinyint(1) DEFAULT '1' COMMENT '是否启用',
-  `deleted` tinyint(1) DEFAULT '0' COMMENT '是否启用',
-  `creator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务创建人',
-  `deleted_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
-  `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
-  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `job_fired`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `job_fired` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `job_id` int(10) NOT NULL COMMENT 'jobId',
-  `fired_time` int(10) unsigned NOT NULL COMMENT '触发时间',
-  `priority` int(10) unsigned NOT NULL DEFAULT '50' COMMENT '优先级',
-  `status` varchar(32) NOT NULL DEFAULT 'acquired' COMMENT '状态：acquired, executing, success, missed, ignore, failure',
-  `failure_msg` text,
-  `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
-  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `job_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `job_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `job_id` int(10) unsigned NOT NULL COMMENT '任务编号',
-  `job_fired_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '激活的任务编号',
-  `hostname` varchar(128) NOT NULL DEFAULT '' COMMENT '执行的主机',
-  `name` varchar(128) NOT NULL COMMENT '任务名称',
-  `pool` varchar(64) NOT NULL DEFAULT 'default' COMMENT '所属组',
-  `source` varchar(64) NOT NULL COMMENT '来源',
-  `class` varchar(128) NOT NULL COMMENT '任务的Class名称',
-  `args` text COMMENT '任务参数',
-  `priority` int(10) unsigned NOT NULL DEFAULT '50' COMMENT '优先级',
-  `status` varchar(32) NOT NULL DEFAULT 'waiting' COMMENT '任务执行状态',
-  `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `job_pool`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `job_pool` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(128) NOT NULL DEFAULT 'default' COMMENT '组名',
-  `max_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大数',
-  `num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已使用的数量',
-  `timeout` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行超时时间',
-  `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
-  `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `keyword`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -2398,6 +2433,8 @@ CREATE TABLE `sessions` (
   `sess_data` blob NOT NULL,
   `sess_time` int(10) unsigned NOT NULL,
   `sess_lifetime` mediumint(9) NOT NULL,
+  `id` int(10) unsigned DEFAULT NULL COMMENT '主键',
+  `sess_deadline` int(10) unsigned NOT NULL,
   PRIMARY KEY (`sess_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
