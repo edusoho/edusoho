@@ -10,7 +10,7 @@ export default class PaySDK {
 
   pay(params, options = {}) {
     let gateway = this.getGateway(params['payment'], params['isMobile'], params['openid']);
-    params.gateway = gateway;
+	  params.gateway = gateway;
     let paySdk = null;
     switch (gateway) {
       case 'WechatPay_Native':
@@ -18,6 +18,7 @@ export default class PaySDK {
         break;
 	    case 'WechatPay_MWeb':
 		    paySdk = this.wpm ? this.wpm : this.wpm = new WechatPayMweb();
+		    break;
       case 'WechatPay_Js':
         paySdk = this.wpj ? this.wpj : this.wpj = new WechatPayJs();
         break;
@@ -43,7 +44,6 @@ export default class PaySDK {
   }
 
   getGateway(payment, isMobile, openid) {
-
     let gateway = '';
     switch (payment) {
       case 'wechat':
