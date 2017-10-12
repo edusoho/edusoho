@@ -482,7 +482,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 array()
             );
 
-            $result = $newApiResourceKernel->handleApiRequest($apiRequest, false);
+            $this->controller->getContainer()->get('api_firewall')->handle($this->request);
+            $result = $newApiResourceKernel->handleApiRequest($apiRequest);
             $trade = $this->getPayService()->getTradeByTradeSn($result['sn']);
             if ($trade['status'] === 'paid') {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
