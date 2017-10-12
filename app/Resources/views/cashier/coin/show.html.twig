@@ -14,7 +14,7 @@
         }) }}
       {% endif %}
     {% else %}
-      {{ 'pay_center.pay.coin.password_not_set.tips'|trans }} 
+      {{ 'pay_center.pay.coin.password_not_set.tips'|trans({ '%coin_name%':coinSetting.coin_name }) }} 
       <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">
         {{ 'pay_center.pay.set_pay_password'|trans }}
       </a>
