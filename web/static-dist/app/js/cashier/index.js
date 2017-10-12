@@ -14,51 +14,73 @@ webpackJsonp(["app/js/cashier/index"],{
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var Coin = function () {
-	  function Coin($coinContainer, cashierForm) {
+	  function Coin(props) {
 	    _classCallCheck(this, Coin);
 	
-	    this.$container = $coinContainer;
-	    this.cashierFrom = cashierForm;
+	    this.$container = props.$coinContainer;
+	    this.cashierForm = props.cashierForm;
+	    this.$form = props.$form;
+	    this.priceType = this.$container.data('priceType');
+	    this.coinRate = this.$container.data('coinRate');
 	    this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ? this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
 	    this.initEvent();
 	  }
 	
 	  _createClass(Coin, [{
-	    key: 'validate',
-	    value: function validate() {}
-	  }, {
 	    key: 'initEvent',
 	    value: function initEvent() {
-	      var self = this;
-	      this.$container.on('blur', '.js-coin-amount', function (event) {
-	        var $this = $(event.currentTarget);
-	        var inputCoinNum = $this.val();
-	        if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
-	          $this.val(0);
-	          self.hidePasswordInput();
-	        }
+	      var _this = this;
 	
-	        if ($this.val() > self.maxCoinInput) {
-	          $this.val(self.maxCoinInput);
-	        }
-	
-	        if ($this.val() > 0) {
-	          self.showPasswordInput();
-	          self.cashierFrom.calcPayPrice($this.val());
-	        }
+	      this.$form.on('change', '.js-coin-amount', function (event) {
+	        return _this.changeAmount(event);
 	      });
 	    }
 	  }, {
-	    key: 'showPasswordInput',
-	    value: function showPasswordInput() {
-	      this.$container.find('[name="payPassword"]').rules('add', { required: true, passwordCheck: true });
-	      this.$container.find('.js-pay-password').closest('div').show();
+	    key: 'changeAmount',
+	    value: function changeAmount(event) {
+	      var $this = $(event.currentTarget);
+	      var inputCoinNum = $this.val();
+	      $this.val(parseFloat(inputCoinNum).toFixed(2));
+	
+	      if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
+	        inputCoinNum = 0;
+	        $this.val(parseFloat(inputCoinNum).toFixed(2));
+	        this.removePasswordValidate();
+	
+	        this.$form.trigger('removePriceItem', ['coin-price']);
+	        this.cashierForm.calcPayPrice(inputCoinNum);
+	      }
+	      if (inputCoinNum > this.maxCoinInput) {
+	        inputCoinNum = this.maxCoinInput;
+	        $this.val(parseFloat(inputCoinNum).toFixed(2));
+	      }
+	
+	      if (inputCoinNum > 0) {
+	        this.addPasswordValidate();
+	        var coinName = this.$form.data('coin-name');
+	        var price = 0.00;
+	        if (this.priceType === 'coin') {
+	          price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
+	
+	          var originalPirce = parseFloat(this.$container.data('maxAllowCoin'));
+	          var coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;;
+	          this.$form.trigger('changeCoinPrice', [coinPrice]);
+	        } else {
+	          price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
+	        }
+	        this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price]);
+	        this.cashierForm.calcPayPrice(inputCoinNum);
+	      }
 	    }
 	  }, {
-	    key: 'hidePasswordInput',
-	    value: function hidePasswordInput() {
+	    key: 'addPasswordValidate',
+	    value: function addPasswordValidate() {
+	      this.$container.find('[name="payPassword"]').rules('add', 'required passwordCheck');
+	    }
+	  }, {
+	    key: 'removePasswordValidate',
+	    value: function removePasswordValidate() {
 	      this.$container.find('[name="payPassword"]').rules('remove', 'required passwordCheck');
-	      this.$container.find('.js-pay-password').closest('div').hide();
 	    }
 	  }]);
 	
@@ -104,6 +126,23 @@ webpackJsonp(["app/js/cashier/index"],{
 
 /***/ }),
 
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _form = __webpack_require__("d2551c5247eab259ba5a");
+	
+	var _form2 = _interopRequireDefault(_form);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	new _form2["default"]({
+	  element: '#cashier-form'
+	});
+
+/***/ }),
+
 /***/ "8d6b1145d2f0f7c079ac":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -141,10 +180,10 @@ webpackJsonp(["app/js/cashier/index"],{
 	    value: function afterTradeCreated(res) {
 	      var options = this.getOptions();
 	      if (options.showConfirmModal) {
-	        window.open(res.redirectUrl);
+	        window.open(res.payUrl, '_blank');
 	        this.showConfirmModal(res.tradeSn);
 	      } else {
-	        location.href = res.redirectUrl;
+	        location.href = res.payUrl;
 	      }
 	    }
 	  }]);
@@ -191,7 +230,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	  _createClass(AlipayLegacyWap, [{
 	    key: 'afterTradeCreated',
 	    value: function afterTradeCreated(res) {
-	      location.href = res.redirectUrl;
+	      location.href = res.payUrl;
 	    }
 	  }]);
 	
@@ -234,7 +273,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	    this.tradeSn = '';
 	
 	
-	    var template = '\n      <div id="' + this.modalID + '" class="modal">\n        <div class="modal-dialog cd-modal-dialog">\n          <div class="modal-content">\n            <div class="modal-header">\n              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">\n                <i class="cd-icon cd-icon-close"></i>\n              </button>\n              <h4 class="modal-title">' + Translator.trans('cashier.confirm.title') + '</h4>\n            </div>\n            <div class="modal-body">\n              <p>\n              ' + Translator.trans('cashier.confirm.desc') + '\n              </p>\n            </div>\n            <div class="modal-footer">\n              <a class="btn cd-btn cd-btn-flat-default" data-dismiss="modal">' + Translator.trans('cashier.confirm.pick_again') + '</a>\n              <a class="btn cd-btn cd-btn-primary cd-btn-lg js-confirm-btn">' + Translator.trans('cashier.confirm.success') + '</a>\n            </div>\n          </div>\n        <div>  \n      </div>\n    ';
+	    var template = '\n      <div id="' + this.modalID + '" class="modal">\n        <div class="modal-dialog cd-modal-dialog">\n          <div class="modal-content">\n            <div class="modal-header">\n              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">\n                <i class="cd-icon cd-icon-close"></i>\n              </button>\n              <h4 class="modal-title">' + Translator.trans('cashier.confirm.title') + '</h4>\n            </div>\n            <div class="modal-body">\n              <p>\n              ' + Translator.trans('cashier.confirm.desc') + '\n              </p>\n            </div>\n            <div class="modal-footer">\n              <a class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">' + Translator.trans('cashier.confirm.pick_again') + '</a>\n              <a class="btn cd-btn cd-btn-primary cd-btn-lg js-confirm-btn">' + Translator.trans('cashier.confirm.success') + '</a>\n            </div>\n          </div>\n        <div>  \n      </div>\n    ';
 	
 	    if (this.$container.find('#' + this.modalID).length === 0) {
 	      this.$container.append(template);
@@ -250,7 +289,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	
 	      _payment2["default"].getTrade(this.tradeSn).then(function (res) {
 	        if (res.isPaid) {
-	          location.href = res.successUrl;
+	          location.href = res.paidSuccessUrl;
 	        } else {
 	          (0, _notify2["default"])('danger', Translator.trans('cashier.confirm.fail_message'));
 	          $('#' + _this.modalID).modal('hide');
@@ -281,11 +320,9 @@ webpackJsonp(["app/js/cashier/index"],{
 	  value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _alipay_legacy_wap = __webpack_require__("e2fcc42cde2f41b58be2");
 	
-	var _payment = __webpack_require__("4d4dc8c99e38b826f59e");
-	
-	var _payment2 = _interopRequireDefault(_payment);
+	var _alipay_legacy_wap2 = _interopRequireDefault(_alipay_legacy_wap);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
@@ -295,8 +332,8 @@ webpackJsonp(["app/js/cashier/index"],{
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var LianlianpayWap = function (_BasePayment) {
-	  _inherits(LianlianpayWap, _BasePayment);
+	var LianlianpayWap = function (_AlipayLegacyWap) {
+	  _inherits(LianlianpayWap, _AlipayLegacyWap);
 	
 	  function LianlianpayWap() {
 	    _classCallCheck(this, LianlianpayWap);
@@ -304,15 +341,8 @@ webpackJsonp(["app/js/cashier/index"],{
 	    return _possibleConstructorReturn(this, (LianlianpayWap.__proto__ || Object.getPrototypeOf(LianlianpayWap)).apply(this, arguments));
 	  }
 	
-	  _createClass(LianlianpayWap, [{
-	    key: 'afterTradeCreated',
-	    value: function afterTradeCreated(res) {
-	      location.href = res.redirectUrl;
-	    }
-	  }]);
-	
 	  return LianlianpayWap;
-	}(_payment2["default"]);
+	}(_alipay_legacy_wap2["default"]);
 	
 	exports["default"] = LianlianpayWap;
 
@@ -326,10 +356,6 @@ webpackJsonp(["app/js/cashier/index"],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _payment = __webpack_require__("4d4dc8c99e38b826f59e");
-	
-	var _payment2 = _interopRequireDefault(_payment);
 	
 	var _alipay_legacy_express = __webpack_require__("8d6b1145d2f0f7c079ac");
 	
@@ -413,7 +439,13 @@ webpackJsonp(["app/js/cashier/index"],{
 	  }, {
 	    key: 'pay',
 	    value: function pay(params) {
-	      BasePayment.createTrade(params, this.afterTradeCreated.bind(this));
+	
+	      var trade = BasePayment.createTrade(params);
+	      if (trade.paidSuccessUrl) {
+	        location.href = trade.paidSuccessUrl;
+	      } else {
+	        this.afterTradeCreated(trade);
+	      }
 	    }
 	  }, {
 	    key: 'afterTradeCreated',
@@ -439,26 +471,34 @@ webpackJsonp(["app/js/cashier/index"],{
 	    }
 	  }, {
 	    key: 'createTrade',
-	    value: function createTrade(postParams, callback) {
+	    value: function createTrade(postParams) {
 	
 	      var params = this.filterParams(postParams);
 	
-	      _api2["default"].trade.create({ data: params }).then(function (res) {
-	        if (res.paidSuccessUrl) {
-	          location.href = res.paidSuccessUrl;
-	        } else {
-	          callback(res);
-	        }
-	      })["catch"](function (res) {
+	      var trade = null;
+	
+	      _api2["default"].trade.create({ data: params, async: false, promise: false }).done(function (res) {
+	        trade = res;
+	      }).error(function (res) {
 	        (0, _notify2["default"])('danger', Translator.trans('cashier.pay.error_message'));
 	      });
+	
+	      return trade;
 	    }
 	  }, {
 	    key: 'getTrade',
 	    value: function getTrade(tradeSn) {
-	      var params = {
-	        tradeSn: tradeSn
-	      };
+	      var orderSn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	
+	      var params = {};
+	
+	      if (tradeSn) {
+	        params.tradeSn = tradeSn;
+	      }
+	
+	      if (orderSn) {
+	        params.orderSn = orderSn;
+	      }
 	
 	      return _api2["default"].trade.get({
 	        params: params
@@ -473,10 +513,14 @@ webpackJsonp(["app/js/cashier/index"],{
 
 /***/ }),
 
-/***/ 0:
+/***/ "d2551c5247eab259ba5a":
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -493,12 +537,13 @@ webpackJsonp(["app/js/cashier/index"],{
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var CashierForm = function () {
-	  function CashierForm($form) {
+	  function CashierForm(props) {
 	    _classCallCheck(this, CashierForm);
 	
-	    this.$container = $form;
+	    this.$form = $(props.element);
+	    this.$priceList = this.$form.find('#order-center-price-list');
 	
-	    this.validator = this.$container.validate();
+	    this.validator = this.$form.validate();
 	
 	    this.initEvent();
 	    this.initCoin();
@@ -511,50 +556,74 @@ webpackJsonp(["app/js/cashier/index"],{
 	    value: function initCoin() {
 	      var $coin = $('#coin-use-section');
 	      if ($coin.length > 0) {
-	        this.coin = new _coin2["default"]($coin, this);
+	        this.coin = new _coin2["default"]({
+	          $coinContainer: $coin,
+	          cashierForm: this,
+	          $form: this.$form
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'initEvent',
+	    value: function initEvent() {
+	      var _this = this;
+	
+	      var $form = this.$form;
+	
+	      $form.on('click', '.js-pay-type', function (event) {
+	        return _this.switchPayType(event);
+	      });
+	      $form.on('click', '.js-pay-btn', function (event) {
+	        return _this.payOrder(event);
+	      });
+	      $form.on('addPriceItem', function (event, id, title, price) {
+	        return _this.addPriceItem(event, id, title, price);
+	      });
+	      $form.on('removePriceItem', function (event, id) {
+	        return _this.removePriceItem(event, id);
+	      });
+	      $form.on('changeCoinPrice', function (event, price) {
+	        return _this.changeCoinPrice(event, price);
+	      });
+	    }
+	  }, {
+	    key: 'payOrder',
+	    value: function payOrder(event) {
+	      var $form = this.$form;
+	
+	      if ($form.valid()) {
+	        var $btn = $(event.currentTarget);
+	        $btn.button('loading');
+	        var params = this.formDataToObject($form);
+	
+	        params.payAmount = $form.find('.js-pay-price').text();
+	        this.paySdk.pay(params);
+	        $btn.button('reset');
+	      }
+	    }
+	  }, {
+	    key: 'switchPayType',
+	    value: function switchPayType(event) {
+	      var $this = $(event.currentTarget);
+	      if (!$this.hasClass('active')) {
+	        $this.addClass('active').siblings().removeClass('active');
+	        $("input[name='payment']").val($this.attr("id"));
 	      }
 	    }
 	  }, {
 	    key: 'calcPayPrice',
 	    value: function calcPayPrice(coinAmount) {
+	      var _this2 = this;
 	
-	      var self = this;
-	      $.post(this.$container.data('priceUrl'), {
+	      $.post(this.$form.data('priceUrl'), {
 	        coinAmount: coinAmount
-	      }, function (resp) {
-	        self.$container.find('.js-pay-price').text(resp.data);
-	      });
-	    }
-	  }, {
-	    key: 'initEvent',
-	    value: function initEvent() {
-	      // 支付方式切换
-	      this.$container.on('click', '.check', function (event) {
-	        var $this = $(event.currentTarget);
-	        if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
-	          $this.addClass('active').siblings().removeClass('active');
-	          $("input[name='payment']").val($this.attr("id"));
-	        }
-	      });
-	
-	      var $form = this.$container;
-	      var self = this;
-	      $form.on('click', '.js-pay-btn', function (event) {
-	
-	        if ($form.valid()) {
-	          var $btn = $(event.currentTarget);
-	          $btn.button('loading');
-	          var params = self.formDataToObject($form);
-	          params.payAmount = self.$container.find('.js-pay-price').text();
-	          self.paySdk.pay(params);
-	          $btn.button('reset');
-	        }
+	      }).done(function (res) {
+	        _this2.$form.find('.js-pay-price').text(res.data);
 	      });
 	    }
 	  }, {
 	    key: 'formDataToObject',
 	    value: function formDataToObject($form) {
-	
 	      var params = {},
 	          formArr = $form.serializeArray();
 	      for (var index in formArr) {
@@ -563,12 +632,50 @@ webpackJsonp(["app/js/cashier/index"],{
 	
 	      return params;
 	    }
+	  }, {
+	    key: 'hasPriceItem',
+	    value: function hasPriceItem(event, id) {
+	      var $priceItem = $('#' + id);
+	      if ($priceItem.length) {
+	        return true;
+	      }
+	
+	      return false;
+	    }
+	  }, {
+	    key: 'addPriceItem',
+	    value: function addPriceItem(event, id, title, price) {
+	      var $priceItem = $('#' + id);
+	
+	      if (this.hasPriceItem(event, id)) {
+	        $priceItem.remove();
+	      }
+	
+	      var html = '\n      <div class="order-center-price" id="' + id + '">\n        <div class="order-center-price__title">' + title + '</div>\n        <div class="order-center-price__content">-' + price + '</div>\n      </div>\n    ';
+	
+	      this.$priceList.append(html);
+	    }
+	  }, {
+	    key: 'removePriceItem',
+	    value: function removePriceItem(event, id) {
+	      var $priceItem = $('#' + id);
+	
+	      if (this.hasPriceItem(event, id)) {
+	        $priceItem.remove();
+	      }
+	    }
+	  }, {
+	    key: 'changeCoinPrice',
+	    value: function changeCoinPrice(event, price) {
+	      var $payCoin = this.$form.find('.js-pay-coin');
+	      $payCoin.text(price);
+	    }
 	  }]);
 	
 	  return CashierForm;
 	}();
 	
-	new CashierForm($('#cashier-form'));
+	exports["default"] = CashierForm;
 
 /***/ }),
 
@@ -699,7 +806,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	    _this.modalID = 'wechat-qrcode-modal';
 	
 	
-	    var template = '\n      <div id="' + _this.modalID + '" class="modal">\n        <div class="modal-dialog cd-modal-dialog">\n          <div class="modal-content">\n          \n            <div class="modal-header">\n              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">\n                <i class="cd-icon cd-icon-close"></i>\n              </button>\n              <h4 class="modal-title">' + Translator.trans('cashier.wechat_pay') + '</h4>\n            </div>\n            \n            <div class="modal-body">\n              <div class="qrcode-img">\n                <img class = \'img-responsive js-qrcode-img\' src="">\n                  <div class="text-qrcode hidden-xs">\n                    ' + Translator.trans('cashier.wechat_pay.scan_qcode_pay_tips') + '\n                  </div>\n                <span class="pay-rmb js-pay-amount"></span>\n              </div>\n            </div>\n            \n          </div>\n        </div>\n      </div>\n     \n    ';
+	    var template = '\n      <div id="' + _this.modalID + '" class="modal">\n        <div class="modal-dialog cd-modal-dialog cd-modal-dialog-sm">\n          <div class="modal-content">\n          \n            <div class="modal-header">\n              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">\n                <i class="cd-icon cd-icon-close"></i>\n              </button>\n              <h4 class="modal-title">' + Translator.trans('cashier.wechat_pay') + '</h4>\n            </div>\n            \n            <div class="modal-body">\n              <div class="text-center">\n                <img class="cd-mb16 js-qrcode-img" src="">\n                <div class="cd-mb16">\n                  ' + Translator.trans('cashier.wechat_pay.scan_qcode_pay_tips') + '\n                </div>\n                <div class="cd-text-danger cd-mb32 js-pay-amount" style="font-size:16px;"></div>\n              </div>\n            </div>\n            \n          </div>\n        </div>\n      </div>\n    ';
 	
 	    if (_this.$container.find('#' + _this.modalID).length === 0) {
 	      _this.$container.append(template);
@@ -716,7 +823,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	    value: function afterTradeCreated(res) {
 	      var $modal = this.$container.find('#' + this.modalID);
 	      $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
-	      $modal.find('.js-pay-amount').text(res.cash_amount);
+	      $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
 	      $modal.modal('show');
 	      this.startInterval(res.tradeSn);
 	    }
@@ -730,7 +837,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	    value: function checkIsPaid(tradeSn) {
 	      _payment2["default"].getTrade(tradeSn).then(function (res) {
 	        if (res.isPaid) {
-	          location.href = res.successUrl;
+	          location.href = res.paidSuccessUrl;
 	        }
 	      });
 	    }
@@ -752,10 +859,19 @@ webpackJsonp(["app/js/cashier/index"],{
 	  value: true
 	});
 	var ajax = function ajax(options) {
+	
+	  var defaultOptions = {
+	    async: true,
+	    promise: true
+	  };
+	
+	  options = Object.assign(defaultOptions, options);
+	
 	  var parameter = {
 	    type: options.type || 'GET',
 	    url: options.url || '',
 	    dataType: options.dataType || 'json',
+	    async: options.async,
 	    beforeSend: function beforeSend(request) {
 	      request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
 	      request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
@@ -768,7 +884,11 @@ webpackJsonp(["app/js/cashier/index"],{
 	    });
 	  }
 	
-	  return Promise.resolve($.ajax(parameter));
+	  if (options.promise) {
+	    return Promise.resolve($.ajax(parameter));
+	  } else {
+	    return $.ajax(parameter);
+	  }
 	};
 	
 	exports["default"] = ajax;

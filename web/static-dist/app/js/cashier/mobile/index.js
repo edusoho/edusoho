@@ -14,51 +14,73 @@ webpackJsonp(["app/js/cashier/mobile/index"],{
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var Coin = function () {
-	  function Coin($coinContainer, cashierForm) {
+	  function Coin(props) {
 	    _classCallCheck(this, Coin);
 	
-	    this.$container = $coinContainer;
-	    this.cashierFrom = cashierForm;
+	    this.$container = props.$coinContainer;
+	    this.cashierForm = props.cashierForm;
+	    this.$form = props.$form;
+	    this.priceType = this.$container.data('priceType');
+	    this.coinRate = this.$container.data('coinRate');
 	    this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ? this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
 	    this.initEvent();
 	  }
 	
 	  _createClass(Coin, [{
-	    key: 'validate',
-	    value: function validate() {}
-	  }, {
 	    key: 'initEvent',
 	    value: function initEvent() {
-	      var self = this;
-	      this.$container.on('blur', '.js-coin-amount', function (event) {
-	        var $this = $(event.currentTarget);
-	        var inputCoinNum = $this.val();
-	        if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
-	          $this.val(0);
-	          self.hidePasswordInput();
-	        }
+	      var _this = this;
 	
-	        if ($this.val() > self.maxCoinInput) {
-	          $this.val(self.maxCoinInput);
-	        }
-	
-	        if ($this.val() > 0) {
-	          self.showPasswordInput();
-	          self.cashierFrom.calcPayPrice($this.val());
-	        }
+	      this.$form.on('change', '.js-coin-amount', function (event) {
+	        return _this.changeAmount(event);
 	      });
 	    }
 	  }, {
-	    key: 'showPasswordInput',
-	    value: function showPasswordInput() {
-	      this.$container.find('[name="payPassword"]').rules('add', { required: true, passwordCheck: true });
-	      this.$container.find('.js-pay-password').closest('div').show();
+	    key: 'changeAmount',
+	    value: function changeAmount(event) {
+	      var $this = $(event.currentTarget);
+	      var inputCoinNum = $this.val();
+	      $this.val(parseFloat(inputCoinNum).toFixed(2));
+	
+	      if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
+	        inputCoinNum = 0;
+	        $this.val(parseFloat(inputCoinNum).toFixed(2));
+	        this.removePasswordValidate();
+	
+	        this.$form.trigger('removePriceItem', ['coin-price']);
+	        this.cashierForm.calcPayPrice(inputCoinNum);
+	      }
+	      if (inputCoinNum > this.maxCoinInput) {
+	        inputCoinNum = this.maxCoinInput;
+	        $this.val(parseFloat(inputCoinNum).toFixed(2));
+	      }
+	
+	      if (inputCoinNum > 0) {
+	        this.addPasswordValidate();
+	        var coinName = this.$form.data('coin-name');
+	        var price = 0.00;
+	        if (this.priceType === 'coin') {
+	          price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
+	
+	          var originalPirce = parseFloat(this.$container.data('maxAllowCoin'));
+	          var coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;;
+	          this.$form.trigger('changeCoinPrice', [coinPrice]);
+	        } else {
+	          price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
+	        }
+	        this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price]);
+	        this.cashierForm.calcPayPrice(inputCoinNum);
+	      }
 	    }
 	  }, {
-	    key: 'hidePasswordInput',
-	    value: function hidePasswordInput() {
+	    key: 'addPasswordValidate',
+	    value: function addPasswordValidate() {
+	      this.$container.find('[name="payPassword"]').rules('add', 'required passwordCheck');
+	    }
+	  }, {
+	    key: 'removePasswordValidate',
+	    value: function removePasswordValidate() {
 	      this.$container.find('[name="payPassword"]').rules('remove', 'required passwordCheck');
-	      this.$container.find('.js-pay-password').closest('div').hide();
 	    }
 	  }]);
 	

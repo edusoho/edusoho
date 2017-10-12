@@ -291,46 +291,55 @@ a:hover {
 .cd-text-info {
   color: #278bf5;
 }
+.cd-text-danger {
+  color: #ed3e3e;
+}
+.cd-text-success {
+  color: #43bc60;
+}
+.cd-text-warning {
+  color: #ffa51f;
+}
 .cd-text-xs {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .cd-text-sm {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 @media (max-width: 1199px) {
   .cd-text-sm {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }
 .cd-text-md {
-  font-size: 18px;
+  font-size: 18px !important;
 }
 @media (max-width: 1199px) {
   .cd-text-md {
-    font-size: 14px;
+    font-size: 14px !important;
   }
 }
 .cd-text-lg {
-  font-size: 24px;
+  font-size: 24px !important;
 }
 @media (max-width: 1199px) {
   .cd-text-lg {
-    font-size: 18px;
+    font-size: 18px !important;
   }
 }
 .cd-text-xlg {
-  font-size: 32px;
+  font-size: 32px !important;
 }
 @media (max-width: 1199px) {
   .cd-text-xlg {
-    font-size: 24px;
+    font-size: 24px !important;
   }
 }
 .cd-line-height-sm {
-  line-height: 20px;
+  line-height: 20px !important;
 }
 .cd-text-medium {
-  font-weight: 500;
+  font-weight: 500 !important;
 }
 .cd-link-dark {
   color: #000;
@@ -419,6 +428,9 @@ a:hover {
 .cd-mr24 {
   margin-right: 24px !important;
 }
+.cd-ml16 {
+  margin-left: 16px !important;
+}
 .cd-mt16 {
   margin-top: 16px !important;
 }
@@ -428,14 +440,14 @@ a:hover {
 .cd-mb24 {
   margin-bottom: 24px !important;
 }
+.cd-mb32 {
+  margin-bottom: 32px !important;
+}
 .cd-mt24 {
   margin-top: 24px !important;
 }
 .cd-mt32 {
   margin-top: 32px !important;
-}
-.cd-mb32 {
-  margin-bottom: 32px !important;
 }
 .cd-mt40 {
   margin-top: 40px !important;
@@ -443,7 +455,18 @@ a:hover {
 .cd-mb40 {
   margin-bottom: 40px !important;
 }
+.cd-mv8 {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+.cd-pt16 {
+  padding-top: 16px !important;
+}
 .cd-pb24 {
+  padding-bottom: 24px !important;
+}
+.cd-pv24 {
+  padding-top: 24px !important;
   padding-bottom: 24px !important;
 }
 .cd-pl32 {
@@ -526,10 +549,10 @@ a:hover {
   border-color: #6725ea;
   background: #6725ea;
 }
-.cd-radio-group .cd-radio.checked:before {
+.cd-radio.checked:before {
   border-color: #773cec;
 }
-.cd-radio-group .cd-radio.checked:after {
+.cd-radio.checked:after {
   background: #773cec;
 }
 .cd-tabs .table-sort > i.active {
@@ -911,6 +934,196 @@ a:hover {
 }
 .c-reward-point-item__point span {
   color: #773cec;
+}
+.order-center-card {
+  position: relative;
+  background: #fafafa;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  height: 108px;
+}
+@media (max-width: 767px) {
+  .order-center-card {
+    height: auto;
+  }
+}
+.order-center-card__img {
+  float: left;
+  height: 100%;
+}
+@media (max-width: 767px) {
+  .order-center-card__img {
+    height: auto;
+    width: 100%;
+  }
+}
+.order-center-card__img img {
+  height: 100%;
+  width: auto;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+@media (max-width: 767px) {
+  .order-center-card__img img {
+    width: 100%;
+    height: auto;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 4px;
+  }
+}
+.order-center-card__info {
+  overflow: hidden;
+  padding: 24px;
+}
+@media (max-width: 767px) {
+  .order-center-card__info {
+    padding: 16px;
+  }
+}
+.order-center-card__title {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.88);
+  margin-top: -4px;
+  margin-bottom: 12px;
+  line-height: 24px;
+  font-weight: 500;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.order-center-card__price {
+  line-height: 1;
+  font-size: 12px;
+  color: #ed3e3e;
+}
+.order-center-product-info {
+  font-size: 12px;
+  height: 22px;
+}
+.order-center-product-info__title {
+  width: 54px;
+  text-align: right;
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.56);
+  vertical-align: top;
+}
+.order-center-product-info__content {
+  margin-left: 4px;
+  color: rgba(0, 0, 0, 0.88);
+  max-width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+@media (max-width: 767px) {
+  .order-center-product-info__content {
+    max-width: 160px;
+  }
+}
+ + .order-center-product-info-product-info {
+  margin-top: 16px;
+}
+.order-center-deduction {
+  vertical-align: middle;
+  margin-bottom: 24px;
+  margin-top: 24px;
+  line-height: 14px;
+}
+.order-center-deduction__title {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.88);
+  float: left;
+  width: 88px;
+  font-weight: 500;
+}
+.order-center-deduction__content {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.56);
+  font-weight: 500;
+}
+.order-center-deduction__discount {
+  color: rgba(0, 0, 0, 0.56);
+  line-height: 20px;
+}
+.order-center-deduction__action {
+  float: right;
+}
+.order-center-line {
+  height: 1px;
+  -webkit-box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+}
+.order-center-coupon .cd-form-group-action {
+  padding-right: 78px;
+}
+@media (max-width: 767px) {
+  .order-center-coupon .cd-form-group-action {
+    width: 100%;
+  }
+}
+.order-center-coupon .form-control {
+  width: 176px;
+}
+.order-center-coupon .action-button {
+  width: 70px;
+}
+.order-center-price {
+  text-align: right;
+  font-size: 12px;
+}
+.order-center-price__title {
+  color: rgba(0, 0, 0, 0.56);
+  display: inline-block;
+}
+.order-center-price__content {
+  width: 116px;
+  color: rgba(0, 0, 0, 0.88);
+  display: inline-block;
+}
+.order-center-coin-use .form-group {
+  width: 176px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+@media (max-width: 767px) {
+  .order-center-coin-use .form-group {
+    width: 49%;
+  }
+}
+.order-center-coin-use .form-group + .form-group {
+  margin-left: 40px;
+}
+@media (max-width: 767px) {
+  .order-center-coin-use .form-group + .form-group {
+    margin-left: 0;
+  }
+}
+.order-center-paid-course {
+  vertical-align: middle;
+  margin-bottom: 24px;
+  line-height: 54px;
+}
+.order-center-paid-course__img {
+  float: left;
+  width: 96px;
+}
+.order-center-paid-course__title {
+  float: left;
+  margin-left: 16px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.88);
+  width: 60%;
+}
+.order-center-paid-course__price {
+  float: right;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.56);
 }
 
 /*# sourceMappingURL=main-purple.css.map*/
