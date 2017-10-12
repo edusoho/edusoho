@@ -25,7 +25,7 @@
           </td>
         </tr>
         <tr>
-          <td width="25%">{{ 'order.name'|trans }}</td>
+          <td width="25%">{{ '商品名称'|trans }}</td>
           <td width="75%">
             {{ order.title }}
           </td>
@@ -39,22 +39,22 @@
           </td>
         </tr>
         <tr>
-          <td width="25%">{{ 'order.price_amount'|trans }}</td>
+          <td width="25%">{{ '商品价格'|trans }}</td>
           <td width="75%">
-            <span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span>
+            <span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
           </td>
         </tr>
 
         {% if orderDeducts %}
           <tr>
             <td width="25%">{{ 'order.deduct'|trans}}</td>
-            <td width="75%"><span class="color-warning">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
+            <td width="75%"><span class="color-warning">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span>  {{ 'site.currency.CNY'|trans }}</td>
           </tr>
           {% for orderDeduct in orderDeducts %}
             <tr>
               <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
               <td width="75%">
-                <span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span>
+                <span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }} {{ 'site.currency.CNY'|trans }}</span>
                 {#{% if orderDeduct.snapshot.couponCode|default('') %}#}
                   {#<span class="text-muted text-sm pull-right">{{ 'order.use_coupon_tip'|trans ~ orderDeduct.snapshot.couponCode }}</span>#}
                 {#{% endif %}#}
@@ -75,7 +75,7 @@
         <tr>
           <td width="25%">{{ 'order.real_pay'|trans }}</td>
           <td width="75%">
-            <span class="color-warning">{{ order.pay_amount|fen_to_yuan(0) }}</span>
+            <span class="color-warning">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
           </td>
         </tr>
 
@@ -103,6 +103,7 @@
             <td width="25%" class="text-muted" style="text-align: right">{{ setting('coin.name', 'finance.coin'|trans) }}</td>
             <td width="75%">
               <span class="text-muted">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
+              (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }})
             </td>
           </tr>
 
