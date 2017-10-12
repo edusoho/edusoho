@@ -55,7 +55,7 @@ class OrderInfo extends AbstractResource
             'totalPrice' => $product->getPayablePrice(),
             'availableCoupons' => array(),
             'coinName' => '',
-            'cashRate' => 1,
+            'cashRate' => $currency->exchangeRate,
             'buyType' => '',
             'priceType' => $currency->isoCode == 'CNY' ? 'RMB' : 'Coin',
             'coinPayAmount' => 0,
@@ -85,7 +85,6 @@ class OrderInfo extends AbstractResource
         }
 
         if (!empty($coinSetting['coin_enabled'])) {
-            $orderInfo['cashRate'] = $currency->exchangeRate;
             $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
             $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
         }

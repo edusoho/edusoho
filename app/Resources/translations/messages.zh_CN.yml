@@ -8147,6 +8147,7 @@ admin.cashflow.keyword: 关键字
 admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
 order.pay_check_msg.user_not_login: 用户未登录，不能支付
 order.pay_check_msg.not_same_user: 不是您的订单，不能支付

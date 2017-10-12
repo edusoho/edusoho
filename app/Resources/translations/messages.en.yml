@@ -6479,6 +6479,7 @@ cashflow.user_mobile: mobile
 admin.cashflow.keyword: keyword
 
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.unpurchasable_product: Unpurchasable Product
 order.pay_check_msg.order_not_exist: Order not exist
 order.pay_check_msg.user_not_login: User not login
 order.pay_check_msg.not_same_user: Not your order
