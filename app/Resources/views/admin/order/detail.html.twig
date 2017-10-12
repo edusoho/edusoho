@@ -61,7 +61,7 @@
 
                 {% if orderDeduct.snapshot.couponCode is defined %}
                   <span class="pull-right">
-                  <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
+                  <a class="es-icon es-icon-help text-normal link-gray"
                      data-toggle="popover" data-trigger="hover"
                      data-placement="top"
                      data-content="{{ '使用优惠券'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>
@@ -86,7 +86,7 @@
               <span class="text-muted">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span>
               {% if paymentTrade.platform_sn is not null %}
                 <span class="pull-right">
-                  <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
+                  <a class="es-icon es-icon-help text-normal link-gray"
                      data-toggle="popover" data-trigger="hover"
                      data-placement="top"
                      data-content="{{ '支付流水号'|trans }} {{ paymentTrade.platform_sn }}"></a>
