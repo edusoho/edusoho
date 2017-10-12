@@ -6,15 +6,19 @@ class Coupon {
       
     }, props);
 
-    this.$element = $(this.element);
     this.$form = $(this.form);
 
-    this.$couponCode = this.$element.find('input[name="couponCode"]');
+    this.$couponCode = this.$form.find('input[name="couponCode"]');
     this.$productType = this.$form.find('input[name="targetType"]');
     this.$productId = this.$form.find('input[name="targetId"]');
     this.$price = this.$form.find('input[name="price"]');
+
     this.$errorMessage = this.$form.find('#coupon-error-message');
-    this.$deductAmount = this.$form.find('#deduct-amount');
+
+    this.$deductAmountLabel = this.$form.find('#deduct-amount-label');
+    this.$couponCodeLabel = this.$form.find('#coupon-code-label');
+
+    this.$selectCouponBtn = this.$form.find("#select-coupon-btn");
 
     this.init();
   }
@@ -24,11 +28,11 @@ class Coupon {
   }
 
   initEvent() {
-    const $element = this.$element;
+    const $form = this.$form;
 
-    $element.on('click', '#use-coupon-btn', event => this.useCoupon(event));
-    $element.on('click', '#cancel-use-coupon-btn', event => this.cancelCoupon(event));
-    $element.on('change', 'input[name="couponCode"]', event => this.inputCode(event));
+    $form.on('click', '#use-coupon-btn', event => this.useCoupon(event));
+    $form.on('click', '#cancel-use-coupon-btn', event => this.cancelCoupon(event));
+    $form.on('change', 'input[name="couponCode"]', event => this.inputCode(event));
 
     this.selectCoupon();
   }
@@ -68,15 +72,19 @@ class Coupon {
           deductAmount = '￥' + deductAmount;
         }
 
-        this.$deductAmount.text(deductAmount);
-
-        this.$form.find('#coupon-code').text(code);
-        this.toggleShow('use');
-
-        this.$form.trigger('calculatePrice');
-        this.$form.trigger('addPriceItem', ['coupon-price', Translator.trans('order.create.coupon_deduction'), deductAmount]);
+        this.useCouponAfter(deductAmount, code);
       }
     })
+  }
+
+  useCouponAfter(deductAmount, code) {
+    this.$deductAmountLabel.text(deductAmount);
+    this.$couponCodeLabel.text(code);
+
+    this.toggleShow('use');
+
+    this.$form.trigger('calculatePrice');
+    this.$form.trigger('addPriceItem', ['coupon-price', Translator.trans('order.create.coupon_deduction'), deductAmount]);
   }
 
   cancelCoupon(event) {
@@ -120,8 +128,8 @@ class Coupon {
   }
 
   toggleShow(type) {
-    const $selectCoupon = this.$element.find('#order-center-coupon__select');
-    const $selectedCoupon = this.$element.find('#order-center-coupon__selected');
+    const $selectCoupon = this.$form.find('#order-center-coupon__select');
+    const $selectedCoupon = this.$form.find('#order-center-coupon__selected');
 
     if (type === 'use') {
       $selectCoupon.hide();
@@ -133,19 +141,17 @@ class Coupon {
   }
 
   selectCoupon() {
-    const $couponCode = this.$element.find("input[name='couponCode']");
-    const $selectCouponBtn = this.$element.find("#select-coupon-btn");
-    const $useCouponBtn = this.$element.find('#use-coupon-btn')
-    
     cd.radio({
       el: '.js-existing-coupon',
-      cb(event) {
+      cb: (event) => {
         const $this = $(event.currentTarget);
         const code = $this.data('code');
-        $couponCode.val(code);
+        const deductAmount = $this.data('deductAmount');
+        this.$couponCode.val(code);
 
-        $selectCouponBtn.trigger('click');
-        $useCouponBtn.trigger('click');
+        this.$selectCouponBtn.trigger('click');
+
+        this.useCouponAfter(deductAmount, code);
       }
     });
   }
