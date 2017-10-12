@@ -5,18 +5,36 @@
     background: #fafafa;
     .border-radius(4px);
     height: 108px;
+    @media(max-width: @screen-xs-max) {
+      height: auto;
+    }
     // margin-bottom: 24px;
     &__img {
       float: left;
       height: 100%;
+      @media(max-width: @screen-xs-max) {
+        height: auto;
+        width: 100%;
+      }
       img {
         height: 100%;
         width: auto;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        @media(max-width: @screen-xs-max) {
+          width: 100%;
+          height: auto;
+          border-bottom-left-radius: 0;
+          border-top-right-radius: 4px;
+        }
       }
     }
     &__info {
       overflow: hidden;
       padding: 24px;
+      @media(max-width: @screen-xs-max) {
+        padding: 16px;
+      }
     }
     &__title {
       font-size: 16px;
@@ -36,16 +54,22 @@
 
   &-product-info {
     font-size: 12px;
+    height: 22px;
     &__title {
       width: 54px;
       text-align: right;
       display: inline-block;
       color: @cd-gray;
+      vertical-align: top;
     }
     &__content {
       margin-left: 4px;
-      display: inline-block;
       color: @cd-gray-dark;
+      max-width: 300px;
+      .cd-text-overflow(inline-block);
+      @media(max-width: @screen-xs-max) {
+        max-width: 160px;
+      }
     }
     + &-product-info {
       margin-top: 16px;
@@ -62,11 +86,13 @@
       color: @cd-gray-dark;
       float: left;
       width: 88px;
+      font-weight: 500;
     }
     &__content {
       font-size: 12px;
       color: @cd-gray;
       font-weight: 500;
+      // .cd-text-overflow;
     }
     &__discount {
       color: @cd-gray;
@@ -81,11 +107,14 @@
     .cd-box-shadow-inset(0 -1px 0 0);
   }
   &-coupon {
-    .form-control {
-      width: 176px;
-    }
     .cd-form-group-action {
       padding-right: 78px;
+      @media(max-width: @screen-xs-max) {
+        width: 100%;
+      }
+    }
+    .form-control {
+      width: 176px;
     }
     .action-button {
       width: 70px;
@@ -104,38 +133,41 @@
       display: inline-block;
     }
   }
-  &-pay-list {
-    margin-bottom: 24px;
-  }
-  &-pay-type {
-    cursor: pointer;
-    width: 140px;
-    height: 40px;
-    border: 2px solid #f5f5f5;
-    position: relative;
-    text-align: center;
-    display: inline-block;
-    margin-right: 16px;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    img {
-      height: 40px;
-      width: auto;
-    }
-    &.active {
-      border-color: @brand-primary;
-    }
-  }
   &-coin-use {
     .form-group {
       width: 176px;
       display: inline-block;
       margin-bottom: 24px;
+      @media(max-width: @screen-xs-max) {
+        width: 49%;
+      }
       + .form-group {
         margin-left: 40px;
+        @media(max-width: @screen-xs-max) {
+          margin-left: 0;
+        }
       }
+    }
+  }
+  &-paid-course {
+    vertical-align: middle;
+    margin-bottom: 24px;
+    line-height: 54px;
+    &__img {
+      float: left;
+      width: 96px;
+    }
+    &__title {
+      float: left;
+      margin-left: 16px;
+      font-size: 12px;
+      color: @cd-gray-dark;
+      width: 60%;
+    }
+    &__price {
+      float: right;
+      font-size: 12px;
+      color: @cd-gray;
     }
   }
 }
