@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'Webpatser\\Uuid' => array($vendorDir . '/webpatser/laravel-uuid/src'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'Sentry\\SentryBundle\\' => array($vendorDir . '/sentry/sentry-symfony/src'),
