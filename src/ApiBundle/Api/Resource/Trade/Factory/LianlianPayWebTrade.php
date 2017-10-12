@@ -2,8 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-use Biz\System\Service\SettingService;
-
 class LianlianPayWebTrade extends BaseTrade
 {
     protected $payment = 'lianlianpay';
@@ -32,13 +30,4 @@ class LianlianPayWebTrade extends BaseTrade
 
         return $identify;
     }
-
-    /**
-     * @return SettingService
-     */
-    private function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
-
 }
