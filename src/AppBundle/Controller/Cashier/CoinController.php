@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use AppBundle\Common\MathToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;

@@ -9,8 +9,6 @@ use ApiBundle\Api\Resource\Trade\Factory\BaseTrade;
 use ApiBundle\Api\Resource\Trade\Factory\TradeFactory;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Status\Order\PaidOrderStatus;
-use Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
