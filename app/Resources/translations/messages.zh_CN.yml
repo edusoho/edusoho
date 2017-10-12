@@ -573,6 +573,8 @@ pay_center.pay.price: 订单价格
 pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用%coin_name%抵扣
 pay_center.pay.set_pay_password: 设置支付密码
 pay_center.pay.coin_input_tips: 本次使用
+pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
+pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
 pay_center.pay.mode: 支付方式
 pay_center.pay.mode.tips: 选择合适的现金支付方式

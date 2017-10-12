@@ -12,15 +12,15 @@
 <div class="order-center-coupon" id="order-coupon">
   <div class="order-center-coupon__select" id="order-center-coupon__select">
     <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="coupon-form-group">
-      <input type="text" class="form-control" name="couponCode" value=""  
+      <input type="text" class="form-control form-control-sm" name="couponCode" value=""  
         data-display="{{'plugin.coupon.use.input_display'|trans}}"  placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}">
       <div class="action-button">
-        <button type="button" data-loading-text="{{'order.confirm.coupon.use_loading'|trans}}" class="btn cd-btn cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
+        <button type="button" data-loading-text="{{'order.confirm.coupon.use_loading'|trans}}" class="btn cd-btn cd-btn-sm cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
       </div>
       <div id="coupon-error-message" class="form-error-message" style="display:none"></div>
     </div>
     {% if product.availableDeducts.coupon|default() %}
-      <a href="javascript:;" id="select-coupon-btn" class="cd-link-gray hidden-xs" data-toggle="popover" placement="left" data-html="html" data-content='
+      <a href="javascript:;" id="select-coupon-btn" class="cd-link-gray hidden-xs cd-text-xs" data-toggle="popover" placement="left" data-html="html" data-content='
         {% for deduct in product.availableDeducts.coupon %}
           <label for="existing-coupon-{{ loop.index }}" class="cd-radio cd-radio-sm cd-mv8">
             <input id="existing-coupon-{{ loop.index }}" type="radio" class="js-existing-coupon" data-code="{{ deduct.code }}" data-deduct-amount="{{ deduct.deduct_amount|price_format }}">
