@@ -1,1 +1,120 @@
-webpackJsonp(["app/js/settings/profile-avatar-crop-modal/index"],{"52b19b3eb1faf0ddf85d":function(t,a,e){"use strict";function n(t){return t&&t.__esModule?t:{default:t}}function r(t,a){if(!(t instanceof a))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(a,"__esModule",{value:!0});var i=function(){function t(t,a){for(var e=0;e<a.length;e++){var n=a[e];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(a,e,n){return e&&t(a.prototype,e),n&&t(a,n),a}}(),o=e("12695715cd021610570e"),u=n(o),s=function(){function t(a){r(this,t),this.avatarCrop=a.avatarCrop,this.saveBtn=a.saveBtn,this.$uploadInput=$(".js-upload-image.active"),this.init()}return i(t,[{key:"init",value:function(){this.imageInit();var t=this.imageCrop();this.initEvent(t)}},{key:"initEvent",value:function(t){$(this.saveBtn).on("click",function(a){a.stopPropagation();var e=$(a.currentTarget);t.crop({imgs:{large:[200,200],medium:[120,120],small:[48,48]},post:!1}),e.button("loading")})}},{key:"imageInit",value:function(){var t=$(".upload-source-img.active");$(this.avatarCrop).attr({src:t.attr("src"),width:t.attr("width"),height:t.attr("height"),"data-natural-width":t.data("natural-width"),"data-natural-height":t.data("natural-height")}),t.remove()}},{key:"imageCrop",value:function t(){var a=this,t=new u.default({element:this.avatarCrop,cropedWidth:200,cropedHeight:200,group:"user"});return t.afterCrop=function(t){a.$uploadInput.trigger("upload-image",t)},t}}]),t}();a.default=s},0:function(t,a,e){"use strict";function n(t){return t&&t.__esModule?t:{default:t}}var r=e("52b19b3eb1faf0ddf85d"),i=n(r);new i.default({avatarCrop:"#avatar-crop",saveBtn:"#save-btn"})}});
+webpackJsonp(["app/js/settings/profile-avatar-crop-modal/index"],{
+
+/***/ "52b19b3eb1faf0ddf85d":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _esImageCrop = __webpack_require__("12695715cd021610570e");
+	
+	var _esImageCrop2 = _interopRequireDefault(_esImageCrop);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var CoverCrop = function () {
+	  function CoverCrop(props) {
+	    _classCallCheck(this, CoverCrop);
+	
+	    this.avatarCrop = props.avatarCrop;
+	    this.saveBtn = props.saveBtn;
+	    this.$uploadInput = $('.js-upload-image.active');
+	    this.init();
+	  }
+	
+	  _createClass(CoverCrop, [{
+	    key: 'init',
+	    value: function init() {
+	      this.imageInit();
+	      var imageCrop = this.imageCrop();
+	      this.initEvent(imageCrop);
+	    }
+	  }, {
+	    key: 'initEvent',
+	    value: function initEvent(imageCrop) {
+	      $(this.saveBtn).on('click', function (event) {
+	        event.stopPropagation();
+	        var $this = $(event.currentTarget);
+	        console.log('start crop');
+	        imageCrop.crop({
+	          imgs: {
+	            large: [200, 200],
+	            medium: [120, 120],
+	            small: [48, 48]
+	          },
+	          post: false
+	        });
+	
+	        $this.button('loading');
+	      });
+	    }
+	  }, {
+	    key: 'imageInit',
+	    value: function imageInit() {
+	      var sourceImg = $('.upload-source-img.active');
+	
+	      $(this.avatarCrop).attr({
+	        'src': sourceImg.attr('src'),
+	        'width': sourceImg.attr('width'),
+	        'height': sourceImg.attr('height'),
+	        'data-natural-width': sourceImg.data('natural-width'),
+	        'data-natural-height': sourceImg.data('natural-height')
+	      });
+	
+	      sourceImg.remove();
+	    }
+	  }, {
+	    key: 'imageCrop',
+	    value: function imageCrop() {
+	      var _this = this;
+	
+	      console.log('init');
+	      var imageCrop = new _esImageCrop2["default"]({
+	        element: this.avatarCrop,
+	        cropedWidth: 200,
+	        cropedHeight: 200,
+	        group: 'user'
+	      });
+	
+	      imageCrop.afterCrop = function (res) {
+	        _this.$uploadInput.trigger('upload-image', res);
+	      };
+	
+	      return imageCrop;
+	    }
+	  }]);
+	
+	  return CoverCrop;
+	}();
+	
+	exports["default"] = CoverCrop;
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _coverCrop = __webpack_require__("52b19b3eb1faf0ddf85d");
+	
+	var _coverCrop2 = _interopRequireDefault(_coverCrop);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	new _coverCrop2["default"]({
+	  avatarCrop: '#avatar-crop',
+	  saveBtn: '#save-btn'
+	});
+
+/***/ })
+
+});
+//# sourceMappingURL=index.js.map

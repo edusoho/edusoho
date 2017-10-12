@@ -1,1 +1,28 @@
-webpackJsonp(["app/js/card/card-receive/index"],[function(a,e,r){"use strict";function c(a){return a&&a.__esModule?a:{default:a}}var n=r("b334fd7e4c5a19234db2"),t=c(n);if($("a").hasClass("money-card-use")){var s=$(".money-card-use").data("url"),d=$(".money-card-use").data("target-url"),o=$(".card-coin-val").val();$.post(s,function(a){(0,t.default)("success",Translator.trans("card.card_receive_success_hint",{coin:o})),setTimeout("window.location.href = '"+d+"'",2e3)}).error(function(){(0,t.default)("danger",Translator.trans("card.card_receive_failed_hint"))})}}]);
+webpackJsonp(["app/js/card/card-receive/index"],[
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _notify = __webpack_require__("b334fd7e4c5a19234db2");
+	
+	var _notify2 = _interopRequireDefault(_notify);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	if ($('a').hasClass('money-card-use')) {
+	  var url = $('.money-card-use').data('url');
+	  var target_url = $('.money-card-use').data('target-url');
+	  var coin = $('.card-coin-val').val();
+	
+	  $.post(url, function (response) {
+	    (0, _notify2["default"])('success', Translator.trans('card.card_receive_success_hint', { coin: coin }));
+	    setTimeout("window.location.href = '" + target_url + "'", 2000);
+	  }).error(function () {
+	    (0, _notify2["default"])('danger', Translator.trans('card.card_receive_failed_hint'));
+	  });
+	}
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

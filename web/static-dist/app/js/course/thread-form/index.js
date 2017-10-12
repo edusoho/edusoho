@@ -1,1 +1,51 @@
-webpackJsonp(["app/js/course/thread-form/index"],[function(e,t,a){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}var n=a("d5fb0e67d2d4c1ebaaed"),o=r(n),d=$("#thread-form"),c=d.validate({rules:{title:{required:!0,trim:!0},content:{required:!0}}});$(".js-btn-thread-save").click(function(e){c.form()&&($(e.currentTarget).button("loading"),d.submit())});var l=CKEDITOR.replace("thread_content",{toolbar:"Thread",filebrowserImageUploadUrl:$("#thread_content").data("imageUploadUrl")});l.on("change",function(){$("#thread_content").val(l.getData()),c.form()}),l.on("blur",function(){$("#thread_content").val(l.getData()),c.form()}),new o.default(d)}]);
+webpackJsonp(["app/js/course/thread-form/index"],[
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _attachmentActions = __webpack_require__("d5fb0e67d2d4c1ebaaed");
+	
+	var _attachmentActions2 = _interopRequireDefault(_attachmentActions);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var $form = $('#thread-form');
+	var validator = $form.validate({
+	  rules: {
+	    'title': {
+	      required: true,
+	      trim: true
+	    },
+	    'content': {
+	      required: true
+	    }
+	  }
+	});
+	
+	$('.js-btn-thread-save').click(function (event) {
+	  if (validator.form()) {
+	    $(event.currentTarget).button('loading');
+	    $form.submit();
+	  }
+	});
+	
+	var editor = CKEDITOR.replace('thread_content', {
+	  toolbar: 'Thread',
+	  filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
+	});
+	
+	editor.on('change', function () {
+	  $('#thread_content').val(editor.getData());
+	  validator.form();
+	});
+	editor.on('blur', function () {
+	  $('#thread_content').val(editor.getData());
+	  validator.form();
+	});
+	
+	new _attachmentActions2["default"]($form);
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

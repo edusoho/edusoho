@@ -1,1 +1,44 @@
-webpackJsonp(["app/js/group/add/index"],[function(e,r){"use strict";var o=$("#user-group-form"),a=$("#groupIntroduce"),t="#group-save-btn",n=CKEDITOR.replace("groupIntroduce",{toolbar:"Full",filebrowserImageUploadUrl:a.data("imageUploadUrl"),allowedContent:!0,height:300});n.on("change",function(){a.val(n.getData())}),n.on("blur",function(){a.val(n.getData())});var u=o.validate({currentDom:t,rules:{"group[grouptitle]":{required:!0,minlength:2,maxlength:100}}});$(t).click(function(){u.form()&&o.submit()})}]);
+webpackJsonp(["app/js/group/add/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var $userGroupForm = $('#user-group-form');
+	var $groupIntroduce = $('#groupIntroduce');
+	var btn = '#group-save-btn';
+	
+	var editor = CKEDITOR.replace('groupIntroduce', {
+		toolbar: 'Full',
+		filebrowserImageUploadUrl: $groupIntroduce.data('imageUploadUrl'),
+		allowedContent: true,
+		height: 300
+	});
+	
+	editor.on('change', function () {
+		$groupIntroduce.val(editor.getData());
+	});
+	editor.on('blur', function () {
+		$groupIntroduce.val(editor.getData());
+	});
+	
+	var $groupCreateValidator = $userGroupForm.validate({
+		currentDom: btn,
+		rules: {
+			'group[grouptitle]': {
+				required: true,
+				minlength: 2,
+				maxlength: 100
+			}
+		}
+	});
+	
+	$(btn).click(function () {
+		if ($groupCreateValidator.form()) {
+			$userGroupForm.submit();
+		}
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

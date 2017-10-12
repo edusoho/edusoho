@@ -1,1 +1,188 @@
-webpackJsonp(["app/js/activity-manage/live/index"],{"6ff75de42f89cafb6c75":function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.initEditor=function(e,t){var a=CKEDITOR.replace("text-content-field",{toolbar:"Task",filebrowserImageUploadUrl:$("#text-content-field").data("imageUploadUrl"),filebrowserFlashUploadUrl:$("#text-content-field").data("flashUploadUrl"),allowedContent:!0,height:280});return a.on("change",function(){e.val(a.getData()),t&&t.form()}),a.on("blur",function(){e.val(a.getData()),t&&t.form()}),a}},0:function(e,t,a){"use strict";function i(e){return e&&e.__esModule?e:{default:e}}var n=a("6fc36d688eaf991f2202"),r=i(n);new r.default},"6fc36d688eaf991f2202":function(e,t,a){"use strict";function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var n=function(){function e(e,t){for(var a=0;a<t.length;a++){var i=t[a];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,a,i){return a&&e(t.prototype,a),i&&e(t,i),t}}(),r=a("6ff75de42f89cafb6c75"),o=function(){function e(t){i(this,e),this.$startTime=$("#startTime"),this._init()}return n(e,[{key:"_init",value:function(){this.initStep2Form(),this._timePickerHide()}},{key:"initStep2Form",value:function(){jQuery.validator.addMethod("show_overlap_time_error",function(e,t){return this.optional(t)||!$(t).data("showError")},"所选时间已经有直播了，请换个时间");var e=$("#step2-form");this.validator2=e.validate({onkeyup:!1,rules:{title:{required:!0,maxlength:50,trim:!0,open_live_course_title:!0},startTime:{required:!0,DateAndTime:!0,after_now:!0},length:{required:!0,digits:!0,max:300,min:1,show_overlap_time_error:!0},remark:{maxlength:1e3}}}),(0,r.initEditor)($('[name="remark"]'),this.validator2),e.data("validator",this.validator2),this.dateTimePicker(this.validator2);var t=this;e.find("#startTime").change(function(){t.checkOverlapTime(e)}),e.find("#length").change(function(){t.checkOverlapTime(e)})}},{key:"checkOverlapTime",value:function(e){if(e.find("#startTime").val()&&e.find("#length").val()){var t=1,a={startTime:e.find("#startTime").val(),length:e.find("#length").val(),mediaType:"live"};$.ajax({url:e.find("#length").data("url"),async:!1,type:"POST",data:a,dataType:"json",success:function(e){t=0===e.success}}),e.find("#length").data("showError",t)}}},{key:"dateTimePicker",value:function(e){var t=this.$startTime;t.datetimepicker({format:"yyyy-mm-dd hh:ii",language:document.documentElement.lang,autoclose:!0,endDate:new Date(Date.now()+31536e7)}).on("hide",function(){e.form()}),t.datetimepicker("setStartDate",new Date)}},{key:"_timePickerHide",value:function(){var e=this.$startTime;parent.$("#modal",window.parent.document).on("afterNext",function(){e.datetimepicker("hide")})}}]),e}();t.default=o}});
+webpackJsonp(["app/js/activity-manage/live/index"],{
+
+/***/ "6ff75de42f89cafb6c75":
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var initEditor = exports.initEditor = function initEditor($item, validator) {
+	
+	  var editor = CKEDITOR.replace('text-content-field', {
+	    toolbar: 'Task',
+	    filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
+	    filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
+	    allowedContent: true,
+	    height: 280
+	  });
+	
+	  editor.on('change', function () {
+	    console.log('change');
+	    $item.val(editor.getData());
+	    if (validator) {
+	      validator.form();
+	    }
+	  });
+	
+	  //fix ie11 中文输入
+	  editor.on('blur', function () {
+	    console.log('blur');
+	    $item.val(editor.getData());
+	    if (validator) {
+	      validator.form();
+	    }
+	  });
+	
+	  return editor;
+	};
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _live = __webpack_require__("6fc36d688eaf991f2202");
+	
+	var _live2 = _interopRequireDefault(_live);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	new _live2["default"]();
+
+/***/ }),
+
+/***/ "6fc36d688eaf991f2202":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _editor = __webpack_require__("6ff75de42f89cafb6c75");
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Live = function () {
+	  function Live(props) {
+	    _classCallCheck(this, Live);
+	
+	    this.$startTime = $('#startTime');
+	    this._init();
+	  }
+	
+	  _createClass(Live, [{
+	    key: '_init',
+	    value: function _init() {
+	      this.initStep2Form();
+	      this._timePickerHide();
+	    }
+	  }, {
+	    key: 'initStep2Form',
+	    value: function initStep2Form() {
+	      jQuery.validator.addMethod('show_overlap_time_error', function (value, element) {
+	        return this.optional(element) || !$(element).data('showError');
+	      }, '所选时间已经有直播了，请换个时间');
+	      var $step2_form = $("#step2-form");
+	      this.validator2 = $step2_form.validate({
+	        onkeyup: false,
+	        rules: {
+	          title: {
+	            required: true,
+	            maxlength: 50,
+	            trim: true,
+	            open_live_course_title: true
+	          },
+	          startTime: {
+	            required: true,
+	            DateAndTime: true,
+	            after_now: true
+	          },
+	          length: {
+	            required: true,
+	            digits: true,
+	            max: 300,
+	            min: 1,
+	            show_overlap_time_error: true
+	          },
+	          remark: {
+	            maxlength: 1000
+	          }
+	        }
+	      });
+	      (0, _editor.initEditor)($('[name="remark"]'), this.validator2);
+	      $step2_form.data('validator', this.validator2);
+	      this.dateTimePicker(this.validator2);
+	      var that = this;
+	      $step2_form.find('#startTime').change(function () {
+	        that.checkOverlapTime($step2_form);
+	      });
+	
+	      $step2_form.find('#length').change(function () {
+	        that.checkOverlapTime($step2_form);
+	      });
+	    }
+	  }, {
+	    key: 'checkOverlapTime',
+	    value: function checkOverlapTime($step2_form) {
+	      if ($step2_form.find('#startTime').val() && $step2_form.find('#length').val()) {
+	        var showError = 1;
+	        var params = {
+	          startTime: $step2_form.find('#startTime').val(),
+	          length: $step2_form.find('#length').val(),
+	          mediaType: 'live'
+	        };
+	        $.ajax({
+	          url: $step2_form.find('#length').data('url'),
+	          async: false,
+	          type: 'POST',
+	          data: params,
+	          dataType: 'json',
+	          success: function success(resp) {
+	            showError = resp.success === 0;
+	          }
+	        });
+	
+	        $step2_form.find('#length').data('showError', showError);
+	      }
+	    }
+	  }, {
+	    key: 'dateTimePicker',
+	    value: function dateTimePicker(validator) {
+	      var $starttime = this.$startTime;
+	      $starttime.datetimepicker({
+	        format: 'yyyy-mm-dd hh:ii',
+	        language: document.documentElement.lang,
+	        autoclose: true,
+	        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+	      }).on('hide', function () {
+	        validator.form();
+	      });
+	      $starttime.datetimepicker('setStartDate', new Date());
+	    }
+	  }, {
+	    key: '_timePickerHide',
+	    value: function _timePickerHide() {
+	      var $starttime = this.$startTime;
+	      parent.$('#modal', window.parent.document).on('afterNext', function () {
+	        $starttime.datetimepicker('hide');
+	      });
+	    }
+	  }]);
+	
+	  return Live;
+	}();
+	
+	exports["default"] = Live;
+
+/***/ })
+
+});
+//# sourceMappingURL=index.js.map

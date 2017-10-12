@@ -1,1 +1,17 @@
-webpackJsonp(["app/js/auth/email-verify/index"],[function(t,e){"use strict";$.post($("[name=verifyUrl]").val(),function(t){1==t&&setTimeout(function(){window.location.href=$("#jump-btn").attr("href")},2e3)})}]);
+webpackJsonp(["app/js/auth/email-verify/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	$.post($('[name=verifyUrl]').val(), function (response) {
+	  if (true == response) {
+	    setTimeout(function () {
+	      window.location.href = $("#jump-btn").attr('href');
+	    }, 2000);
+	  }
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

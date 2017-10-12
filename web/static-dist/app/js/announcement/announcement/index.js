@@ -1,1 +1,58 @@
-webpackJsonp(["app/js/announcement/announcement/index"],[function(a,e){"use strict";if($('a[data-role="announcement-modal"]').click(function(){var a=$("#modal");a.html("").load($(this).data("url"))}),$(".announcement-list").on("click","[data-role=delete]",function(){return confirm(Translator.trans("announcement.delete_hint"))&&$.post($(this).data("url"),function(){window.location.reload()}),!1}),$(".alert-edit").height()){var n=$(".alert-edit .alert-header"),t=n.find(".icon-click");t.hasClass("es-icon-chevronright")?t.data("toggle",!0):t.data("toggle",!1),n.click(function(){$(this).siblings(".details").animate({visibility:"toggle",opacity:"toggle",easing:"linear"});var a=$(this).find(".icon-click");a.data("toggle")&&a.parents(".alert-header").siblings(".details").height()?(a.addClass("es-icon-keyboardarrowdown").removeClass("es-icon-chevronright"),a.data("toggle",!1)):(a.addClass("es-icon-chevronright").removeClass("es-icon-keyboardarrowdown"),a.data("toggle",!0))})}$(".annoucement-add-btn, .es-icon-edit").click(function(){$("#modal").modal("hide")})}]);
+webpackJsonp(["app/js/announcement/announcement/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	$('a[data-role="announcement-modal"]').click(function () {
+	  var $modal = $("#modal");
+	  $modal.html("").load($(this).data('url'));
+	});
+	
+	$('.announcement-list').on('click', '[data-role=delete]', function () {
+	  if (confirm(Translator.trans('announcement.delete_hint'))) {
+	    $.post($(this).data('url'), function () {
+	      window.location.reload();
+	    });
+	  }
+	  return false;
+	});
+	
+	if ($(".alert-edit").height()) {
+	  var alertHeader = $(".alert-edit .alert-header");
+	  var alertIcon = alertHeader.find(".icon-click");
+	
+	  if (alertIcon.hasClass('es-icon-chevronright')) {
+	    alertIcon.data('toggle', true);
+	  } else {
+	    alertIcon.data('toggle', false);
+	  }
+	
+	  alertHeader.click(function () {
+	    $(this).siblings(".details").animate({
+	      // height:'toggle',
+	      visibility: 'toggle',
+	      opacity: 'toggle',
+	      // speed: 'fast',
+	      easing: 'linear'
+	    });
+	
+	    var btn = $(this).find(".icon-click");
+	
+	    if (btn.data('toggle') && btn.parents(".alert-header").siblings(".details").height()) {
+	      btn.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-chevronright');
+	      btn.data('toggle', false);
+	    } else {
+	      btn.addClass('es-icon-chevronright').removeClass('es-icon-keyboardarrowdown');
+	      btn.data('toggle', true);
+	    }
+	  });
+	};
+	
+	$('.annoucement-add-btn, .es-icon-edit').click(function () {
+	  $('#modal').modal('hide');
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

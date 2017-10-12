@@ -1,1 +1,50 @@
-webpackJsonp(["app/js/courseset-manage/unlock/index"],[function(n,e,t){"use strict";function a(n){return n&&n.__esModule?n:{default:n}}function r(n,e){if(!(n instanceof e))throw new TypeError("Cannot call a class as a function")}var o=function(){function n(n,e){for(var t=0;t<e.length;t++){var a=e[t];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(n,a.key,a)}}return function(e,t,a){return t&&n(e.prototype,t),a&&n(e,a),e}}(),c=t("b334fd7e4c5a19234db2"),u=a(c),s=function(){function n(){r(this,n),this.init()}return o(n,[{key:"init",value:function(){$("#courseSync-btn").click(function(){var n=$("#courseSync-form");$.post(n.attr("action"),n.serialize(),function(n){n.success?((0,u.default)("success",Translator.trans("course_set.manage.unlock_success_hint")),$("#modal").modal("hide"),location.reload()):(0,u.default)("danger",Translator.trans("course_set.manage.unlock_failure_hint")+n.message)})})}}]),n}();new s}]);
+webpackJsonp(["app/js/courseset-manage/unlock/index"],[
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _notify = __webpack_require__("b334fd7e4c5a19234db2");
+	
+	var _notify2 = _interopRequireDefault(_notify);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Unlock = function () {
+		function Unlock() {
+			_classCallCheck(this, Unlock);
+	
+			this.init();
+		}
+	
+		_createClass(Unlock, [{
+			key: 'init',
+			value: function init() {
+				$('#courseSync-btn').click(function () {
+					var $form = $("#courseSync-form");
+					$.post($form.attr('action'), $form.serialize(), function (resp) {
+						console.log(resp);
+						if (resp.success) {
+							(0, _notify2["default"])('success', Translator.trans('course_set.manage.unlock_success_hint'));
+							$('#modal').modal('hide');
+							location.reload();
+						} else {
+							(0, _notify2["default"])('danger', Translator.trans('course_set.manage.unlock_failure_hint') + resp.message);
+						}
+					});
+				});
+			}
+		}]);
+	
+		return Unlock;
+	}();
+	
+	new Unlock();
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

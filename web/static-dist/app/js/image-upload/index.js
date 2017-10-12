@@ -1,1 +1,9 @@
-webpackJsonp(["app/js/image-upload/index"],[function(p,a){"use strict"}]);
+webpackJsonp(["app/js/image-upload/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

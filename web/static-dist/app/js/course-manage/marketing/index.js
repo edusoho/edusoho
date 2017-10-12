@@ -1,1 +1,362 @@
-webpackJsonp(["app/js/course-manage/marketing/index"],[function(e,a){"use strict";function i(e,a){if(!(e instanceof a))throw new TypeError("Cannot call a class as a function")}var t=function(){function e(e,a){for(var i=0;i<a.length;i++){var t=a[i];t.enumerable=t.enumerable||!1,t.configurable=!0,"value"in t&&(t.writable=!0),Object.defineProperty(e,t.key,t)}}return function(a,i,t){return i&&e(a.prototype,i),t&&e(a,t),a}}(),n=function(){function e(){i(this,e),this.validator=null,this.init()}return t(e,[{key:"init",value:function(){this.initDatePicker("#expiryStartDate"),this.initDatePicker("#expiryEndDate"),this.initDatePicker("#deadline"),this.initValidator(),this.initExpiryMode(),this.initenableBuyExpiry(),this.taskPriceSetting(),this.checkBoxChange(),this.initDatetimepicker(),this.setService()}},{key:"setService",value:function(){$(".js-service-item").click(function(e){var a=$(e.currentTarget),i=$("#course_services").val(),t=void 0;t=i?JSON.parse(i):[],a.hasClass("label-primary")?(a.removeClass("label-primary").addClass("label-default"),t.splice(t.indexOf(a.data("code")),1)):(a.removeClass("label-default").addClass("label-primary"),t.push(a.data("code"))),$("#course_services").val(JSON.stringify(t))})}},{key:"initDatetimepicker",value:function(){var e=this;$('input[name="buyExpiryTime"]').datetimepicker({format:"yyyy-mm-dd",language:document.documentElement.lang,minView:2,autoclose:!0}).on("hide",function(){e.validator&&e.validator.form()}),this.updateDatetimepicker()}},{key:"initValidator",value:function(){var e=this,a=$("#course-marketing-form");$(".js-task-price-setting").perfectScrollbar(),this.validator=a.validate({groups:{date:"expiryStartDate expiryEndDate"},rules:{originPrice:{required:function(){return 0==$("[name=isFree]:checked").val()},positive_currency:function(){return 0==$("[name=isFree]:checked").val()}},watchLimit:{digits:!0},rewardPoint:{required:!0,max:1e5,unsigned_integer:!0},taskRewardPoint:{required:!0,max:1e5,unsigned_integer:!0}},messages:{buyExpiryTime:{required:Translator.trans("course.manage.buy_expiry_time_error_hint"),date:Translator.trans("course.manage.buy_expiry_time_error_hint")},rewardPoint:{required:Translator.trans("请输入教学计划奖励积分"),max:Translator.trans("请输入0-100000的整数")},taskRewardPoint:{required:Translator.trans("请输入计划任务奖励积分"),max:Translator.trans("请输入0-100000的整数")}}}),$("#course-submit").click(function(i){e.validator&&e.validator.form()&&($(i.currentTarget).button("loading"),a.submit())})}},{key:"updateDatetimepicker",value:function(){$('input[name="buyExpiryTime"]').datetimepicker("setStartDate",new Date(Date.now())),$('input[name="buyExpiryTime"]').datetimepicker("setEndDate",new Date(Date.now()+31536e7))}},{key:"checkBoxChange",value:function(){var e=this;$('input[name="buyable"]').on("change",function(a){0==$('input[name="buyable"]:checked').val()?($(".js-course-add-close-show").removeClass("hidden"),$(".js-course-add-open-show").addClass("hidden")):($(".js-course-add-close-show").addClass("hidden"),$(".js-course-add-open-show").removeClass("hidden")),e.initenableBuyExpiry()}),$('input[name="enableBuyExpiryTime"]').on("change",function(a){0==$('input[name="enableBuyExpiryTime"]:checked').val()?$("#buyExpiryTime").addClass("hidden"):($("#buyExpiryTime").removeClass("hidden"),e.updateDatetimepicker()),e.initenableBuyExpiry()}),$('input[name="deadlineType"]').on("change",function(a){"end_date"==$('input[name="deadlineType"]:checked').val()?($("#deadlineType-date").removeClass("hidden"),$("#deadlineType-days").addClass("hidden")):($("#deadlineType-date").addClass("hidden"),$("#deadlineType-days").removeClass("hidden")),e.initExpiryMode()}),$('input[name="expiryMode"]').on("change",function(a){"date"==$('input[name="expiryMode"]:checked').val()?($("#expiry-days").removeClass("hidden").addClass("hidden"),$("#expiry-date").removeClass("hidden")):"days"==$('input[name="expiryMode"]:checked').val()?($("#expiry-date").removeClass("hidden").addClass("hidden"),$("#expiry-days").removeClass("hidden")):($("#expiry-date").removeClass("hidden").addClass("hidden"),$("#expiry-days").removeClass("hidden").addClass("hidden")),e.initExpiryMode()}),$('input[name="isFree"]').on("change",function(e){0==$('input[name="isFree"]:checked').val()?$(".js-is-free").removeClass("hidden"):$(".js-is-free").addClass("hidden")}),$('input[name="tryLookable"]').on("change",function(e){1==$('input[name="tryLookable"]:checked').val()?$(".js-enable-try-look").removeClass("hidden"):$(".js-enable-try-look").addClass("hidden")}),$('input[name="showServices"]').on("change",function(e){1==$('input[name="showServices"]:checked').val()?$(".js-services").removeClass("hidden"):$(".js-services").addClass("hidden")})}},{key:"taskPriceSetting",value:function(){$(".js-task-price-setting").on("click","li",function(e){var a=$(this).toggleClass("open"),i=a.find("input");i.prop("checked",!i.is(":checked"))}),$(".js-task-price-setting").on("click","input",function(e){e.stopPropagation();var a=$(this);a.closest("li").toggleClass("open")})}},{key:"initDatePicker",value:function(e){var a=this,i=$(e);i.datetimepicker({format:"yyyy-mm-dd",language:"zh",minView:2,autoclose:!0,endDate:new Date(Date.now()+31536e7)}).on("hide",function(){a.validator.form()}),i.datetimepicker("setStartDate",new Date)}},{key:"initenableBuyExpiry",value:function(){var e=$('[name="enableBuyExpiryTime"]:checked'),a=$('[name="buyable"]:checked'),i=$('[name="buyExpiryTime"]');1==a.val()&&1==e.val()?this.elementAddRules(i,this.getBuyExpiryTimeRules()):this.elementRemoveRules(i),this.validator.form()}},{key:"initExpiryMode",value:function(){var e=$('[name="deadline"]'),a=$('[name="expiryDays"]'),i=$('[name="expiryStartDate"]'),t=$('[name="expiryEndDate"]'),n=$('[name="expiryMode"]:checked').val();switch(this.elementRemoveRules(e),this.elementRemoveRules(a),this.elementRemoveRules(i),this.elementRemoveRules(t),n){case"days":var r=$('[name="deadlineType"]:checked');if("end_date"===r.val())return this.elementAddRules(e,this.getDeadlineEndDateRules()),void this.validator.form();this.elementAddRules(a,this.getExpiryDaysRules()),this.validator.form();break;case"date":this.elementAddRules(i,this.getExpiryStartDateRules()),this.elementAddRules(t,this.getExpiryEndDateRules()),this.validator.form();break;default:this.validator.form()}}},{key:"getBuyExpiryTimeRules",value:function(){return{required:!0,messages:{required:Translator.trans("course.manage.buy_expiry_time_required_error_hint")}}}},{key:"getExpiryEndDateRules",value:function(){return{required:!0,date:!0,after_date:"#expiryStartDate",messages:{required:Translator.trans("course.manage.expiry_end_date_error_hint")}}}},{key:"getExpiryStartDateRules",value:function(){return{required:!0,date:!0,before_date:"#expiryEndDate",messages:{required:Translator.trans("course.manage.expiry_start_date_error_hint")}}}},{key:"getExpiryDaysRules",value:function(){return{required:!0,positive_integer:!0,max_year:!0,messages:{required:Translator.trans(Translator.trans("course.manage.expiry_days_error_hint"))}}}},{key:"getDeadlineEndDateRules",value:function(){return{required:!0,date:!0,messages:{required:Translator.trans("course.manage.deadline_end_date_error_hint")}}}},{key:"elementAddRules",value:function(e,a){e.rules("add",a)}},{key:"elementRemoveRules",value:function(e){e.rules("remove")}}]),e}();new n}]);
+webpackJsonp(["app/js/course-manage/marketing/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Marketing = function () {
+	  function Marketing() {
+	    _classCallCheck(this, Marketing);
+	
+	    this.validator = null;
+	    this.init();
+	  }
+	
+	  _createClass(Marketing, [{
+	    key: 'init',
+	    value: function init() {
+	      this.initDatePicker('#expiryStartDate');
+	      this.initDatePicker('#expiryEndDate');
+	      this.initDatePicker('#deadline');
+	      this.initValidator();
+	      this.initExpiryMode();
+	      this.initenableBuyExpiry();
+	      this.taskPriceSetting();
+	      this.checkBoxChange();
+	      this.initDatetimepicker();
+	      this.setService();
+	    }
+	  }, {
+	    key: 'setService',
+	    value: function setService() {
+	      $('.js-service-item').click(function (event) {
+	        var $item = $(event.currentTarget);
+	        var $values = $('#course_services').val();
+	        var values = void 0;
+	        if (!$values) {
+	          values = [];
+	        } else {
+	          values = JSON.parse($values);
+	        }
+	
+	        if ($item.hasClass('label-primary')) {
+	          $item.removeClass('label-primary').addClass('label-default');
+	          values.splice(values.indexOf($item.data('code')), 1);
+	        } else {
+	          $item.removeClass('label-default').addClass('label-primary');
+	          values.push($item.data('code'));
+	        }
+	
+	        $('#course_services').val(JSON.stringify(values));
+	      });
+	    }
+	  }, {
+	    key: 'initDatetimepicker',
+	    value: function initDatetimepicker() {
+	      var _this = this;
+	
+	      $('input[name="buyExpiryTime"]').datetimepicker({
+	        format: 'yyyy-mm-dd',
+	        language: document.documentElement.lang,
+	        minView: 2, //month
+	        autoclose: true
+	      }).on('hide', function () {
+	        _this.validator && _this.validator.form();
+	      });
+	      this.updateDatetimepicker();
+	    }
+	  }, {
+	    key: 'initValidator',
+	    value: function initValidator() {
+	      var _this2 = this;
+	
+	      var $form = $('#course-marketing-form');
+	      $('.js-task-price-setting').perfectScrollbar();
+	      this.validator = $form.validate({
+	        groups: {
+	          date: 'expiryStartDate expiryEndDate'
+	        },
+	        rules: {
+	          originPrice: {
+	            required: function required() {
+	              return $("[name=isFree]:checked").val() == 0;
+	            },
+	            positive_currency: function positive_currency() {
+	              return $("[name=isFree]:checked").val() == 0;
+	            }
+	          },
+	          watchLimit: {
+	            digits: true
+	          },
+	          rewardPoint: {
+	            required: true,
+	            max: 100000,
+	            unsigned_integer: true
+	          },
+	          taskRewardPoint: {
+	            required: true,
+	            max: 100000,
+	            unsigned_integer: true
+	          }
+	        },
+	        messages: {
+	          buyExpiryTime: {
+	            required: Translator.trans('course.manage.buy_expiry_time_error_hint'),
+	            date: Translator.trans('course.manage.buy_expiry_time_error_hint')
+	          },
+	          rewardPoint: {
+	            required: Translator.trans('请输入教学计划奖励积分'),
+	            max: Translator.trans('请输入0-100000的整数')
+	          },
+	          taskRewardPoint: {
+	            required: Translator.trans('请输入计划任务奖励积分'),
+	            max: Translator.trans('请输入0-100000的整数')
+	          }
+	        }
+	      });
+	      $('#course-submit').click(function (event) {
+	        if (_this2.validator && _this2.validator.form()) {
+	          $(event.currentTarget).button('loading');
+	          $form.submit();
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'updateDatetimepicker',
+	    value: function updateDatetimepicker() {
+	      $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date(Date.now()));
+	      $('input[name="buyExpiryTime"]').datetimepicker('setEndDate', new Date(Date.now() + 86400 * 365 * 10 * 1000));
+	    }
+	  }, {
+	    key: 'checkBoxChange',
+	    value: function checkBoxChange() {
+	      var _this3 = this;
+	
+	      $('input[name="buyable"]').on('change', function (event) {
+	        if ($('input[name="buyable"]:checked').val() == 0) {
+	          $('.js-course-add-close-show').removeClass('hidden');
+	          $('.js-course-add-open-show').addClass('hidden');
+	        } else {
+	          $('.js-course-add-close-show').addClass('hidden');
+	          $('.js-course-add-open-show').removeClass('hidden');
+	        }
+	        _this3.initenableBuyExpiry();
+	      });
+	      $('input[name="enableBuyExpiryTime"]').on('change', function (event) {
+	        if ($('input[name="enableBuyExpiryTime"]:checked').val() == 0) {
+	          $('#buyExpiryTime').addClass('hidden');
+	        } else {
+	          $('#buyExpiryTime').removeClass('hidden');
+	          _this3.updateDatetimepicker();
+	        }
+	        _this3.initenableBuyExpiry();
+	      });
+	
+	      $('input[name="deadlineType"]').on('change', function (event) {
+	        if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+	          $('#deadlineType-date').removeClass('hidden');
+	          $('#deadlineType-days').addClass('hidden');
+	        } else {
+	          $('#deadlineType-date').addClass('hidden');
+	          $('#deadlineType-days').removeClass('hidden');
+	        }
+	        _this3.initExpiryMode();
+	      });
+	
+	      $('input[name="expiryMode"]').on('change', function (event) {
+	        if ($('input[name="expiryMode"]:checked').val() == 'date') {
+	          $('#expiry-days').removeClass('hidden').addClass('hidden');
+	          $('#expiry-date').removeClass('hidden');
+	        } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
+	          $('#expiry-date').removeClass('hidden').addClass('hidden');
+	          $('#expiry-days').removeClass('hidden');
+	        } else {
+	          $('#expiry-date').removeClass('hidden').addClass('hidden');
+	          $('#expiry-days').removeClass('hidden').addClass('hidden');
+	        }
+	        _this3.initExpiryMode();
+	      });
+	
+	      $('input[name="isFree"]').on('change', function (event) {
+	        if ($('input[name="isFree"]:checked').val() == 0) {
+	          $('.js-is-free').removeClass('hidden');
+	        } else {
+	          $('.js-is-free').addClass('hidden');
+	        }
+	      });
+	      $('input[name="tryLookable"]').on('change', function (event) {
+	        if ($('input[name="tryLookable"]:checked').val() == 1) {
+	          $('.js-enable-try-look').removeClass('hidden');
+	        } else {
+	          $('.js-enable-try-look').addClass('hidden');
+	        }
+	      });
+	
+	      $('input[name="showServices"]').on('change', function (event) {
+	        if ($('input[name="showServices"]:checked').val() == 1) {
+	          $('.js-services').removeClass('hidden');
+	        } else {
+	          $('.js-services').addClass('hidden');
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'taskPriceSetting',
+	    value: function taskPriceSetting() {
+	      $('.js-task-price-setting').on('click', 'li', function (event) {
+	        var $li = $(this).toggleClass('open');
+	        var $input = $li.find('input');
+	        $input.prop("checked", !$input.is(":checked"));
+	      });
+	
+	      $('.js-task-price-setting').on('click', 'input', function (event) {
+	        event.stopPropagation();
+	        var $input = $(this);
+	        $input.closest('li').toggleClass('open');
+	      });
+	    }
+	  }, {
+	    key: 'initDatePicker',
+	    value: function initDatePicker($id) {
+	      var _this4 = this;
+	
+	      var $picker = $($id);
+	      $picker.datetimepicker({
+	        format: 'yyyy-mm-dd',
+	        language: "zh",
+	        minView: 2, //month
+	        autoclose: true,
+	        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+	      }).on('hide', function () {
+	        _this4.validator.form();
+	      });
+	      $picker.datetimepicker('setStartDate', new Date());
+	    }
+	  }, {
+	    key: 'initenableBuyExpiry',
+	    value: function initenableBuyExpiry() {
+	      var $enableBuyExpiryTime = $('[name="enableBuyExpiryTime"]:checked');
+	      var $buyable = $('[name="buyable"]:checked');
+	      var $buyExpiryTime = $('[name="buyExpiryTime"]');
+	      if ($buyable.val() == 1 && $enableBuyExpiryTime.val() == 1) {
+	        this.elementAddRules($buyExpiryTime, this.getBuyExpiryTimeRules());
+	      } else {
+	        this.elementRemoveRules($buyExpiryTime);
+	      }
+	      this.validator.form();
+	    }
+	  }, {
+	    key: 'initExpiryMode',
+	    value: function initExpiryMode() {
+	      var $deadline = $('[name="deadline"]');
+	      var $expiryDays = $('[name="expiryDays"]');
+	      var $expiryStartDate = $('[name="expiryStartDate"]');
+	      var $expiryEndDate = $('[name="expiryEndDate"]');
+	      var expiryMode = $('[name="expiryMode"]:checked').val();
+	      this.elementRemoveRules($deadline);
+	      this.elementRemoveRules($expiryDays);
+	      this.elementRemoveRules($expiryStartDate);
+	      this.elementRemoveRules($expiryEndDate);
+	
+	      switch (expiryMode) {
+	        case 'days':
+	          var $deadlineType = $('[name="deadlineType"]:checked');
+	          if ($deadlineType.val() === 'end_date') {
+	            this.elementAddRules($deadline, this.getDeadlineEndDateRules());
+	            this.validator.form();
+	            return;
+	          }
+	          this.elementAddRules($expiryDays, this.getExpiryDaysRules());
+	          this.validator.form();
+	          break;
+	        case 'date':
+	          this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
+	          this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
+	          this.validator.form();
+	          break;
+	        default:
+	          this.validator.form();
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'getBuyExpiryTimeRules',
+	    value: function getBuyExpiryTimeRules() {
+	      return {
+	        required: true,
+	        messages: {
+	          required: Translator.trans('course.manage.buy_expiry_time_required_error_hint')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getExpiryEndDateRules',
+	    value: function getExpiryEndDateRules() {
+	      return {
+	        required: true,
+	        date: true,
+	        after_date: '#expiryStartDate',
+	        messages: {
+	          required: Translator.trans('course.manage.expiry_end_date_error_hint')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getExpiryStartDateRules',
+	    value: function getExpiryStartDateRules() {
+	      return {
+	        required: true,
+	        date: true,
+	        before_date: '#expiryEndDate',
+	        messages: {
+	          required: Translator.trans('course.manage.expiry_start_date_error_hint')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getExpiryDaysRules',
+	    value: function getExpiryDaysRules() {
+	      return {
+	        required: true,
+	        positive_integer: true,
+	        max_year: true,
+	        messages: {
+	          required: Translator.trans(Translator.trans('course.manage.expiry_days_error_hint'))
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getDeadlineEndDateRules',
+	    value: function getDeadlineEndDateRules() {
+	      return {
+	        required: true,
+	        date: true,
+	        messages: {
+	          required: Translator.trans('course.manage.deadline_end_date_error_hint')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'elementAddRules',
+	    value: function elementAddRules($element, options) {
+	      $element.rules("add", options);
+	    }
+	  }, {
+	    key: 'elementRemoveRules',
+	    value: function elementRemoveRules($element) {
+	      $element.rules('remove');
+	    }
+	  }]);
+	
+	  return Marketing;
+	}();
+	
+	new Marketing();
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

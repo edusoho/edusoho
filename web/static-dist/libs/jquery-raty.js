@@ -1,1 +1,488 @@
-!function(t){function e(o){if(a[o])return a[o].exports;var i=a[o]={exports:{},id:o,loaded:!1};return t[o].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports}var a={};return e.m=t,e.c=a,e.p="/static-dist/",e(0)}({"5706838824cfad411df8":function(t,e){"use strict";var a="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};!function(t){var e={init:function(a){return this.each(function(){e.destroy.call(this),this.opt=t.extend(!0,{},t.fn.raty.defaults,a);var o=t(this),i=["number","readOnly","score","scoreName"];e._callback.call(this,i),this.opt.precision&&e._adjustPrecision.call(this),this.opt.number=e._between(this.opt.number,0,this.opt.numberMax),this.opt.path=this.opt.path||"",this.opt.path&&"/"!==this.opt.path.charAt(this.opt.path.length-1)&&(this.opt.path+="/"),this.stars=e._createStars.call(this),this.score=e._createScore.call(this),e._apply.call(this,this.opt.score);var r=this.opt.space?4:0,s=this.opt.width||this.opt.number*this.opt.size+this.opt.number*r;this.opt.cancel&&(this.cancel=e._createCancel.call(this),s+=this.opt.size+r),this.opt.readOnly?e._lock.call(this):(o.css("cursor","pointer"),e._binds.call(this)),this.opt.width!==!1&&o.css("width",s),e._target.call(this,this.opt.score),o.data({settings:this.opt,raty:!0})})},_adjustPrecision:function(){this.opt.targetType="score",this.opt.half=!0},_apply:function(t){t&&t>0&&(t=e._between(t,0,this.opt.number),this.score.val(t)),e._fill.call(this,t),t&&e._roundStars.call(this,t)},_between:function(t,e,a){return Math.min(Math.max(parseFloat(t),e),a)},_binds:function(){this.cancel&&e._bindCancel.call(this),e._bindClick.call(this),e._bindOut.call(this),e._bindOver.call(this)},_bindCancel:function(){e._bindClickCancel.call(this),e._bindOutCancel.call(this),e._bindOverCancel.call(this)},_bindClick:function(){var e=this,a=t(e);e.stars.on("click.raty",function(t){e.score.val(e.opt.half||e.opt.precision?a.data("score"):this.alt),e.opt.click&&e.opt.click.call(e,parseFloat(e.score.val()),t)})},_bindClickCancel:function(){var t=this;t.cancel.on("click.raty",function(e){t.score.removeAttr("value"),t.opt.click&&t.opt.click.call(t,null,e)})},_bindOut:function(){var a=this;t(this).on("mouseleave.raty",function(t){var o=parseFloat(a.score.val())||void 0;e._apply.call(a,o),e._target.call(a,o,t),a.opt.mouseout&&a.opt.mouseout.call(a,o,t)})},_bindOutCancel:function(){var e=this;e.cancel.on("mouseleave.raty",function(a){t(this).attr("src",e.opt.path+e.opt.cancelOff),e.opt.mouseout&&e.opt.mouseout.call(e,e.score.val()||null,a)})},_bindOverCancel:function(){var a=this;a.cancel.on("mouseover.raty",function(o){t(this).attr("src",a.opt.path+a.opt.cancelOn),a.stars.attr("src",a.opt.path+a.opt.starOff),e._target.call(a,null,o),a.opt.mouseover&&a.opt.mouseover.call(a,null)})},_bindOver:function(){var a=this,o=t(a),i=a.opt.half?"mousemove.raty":"mouseover.raty";a.stars.on(i,function(i){var r=parseInt(this.alt,10);if(a.opt.half){var s=parseFloat((i.pageX-t(this).offset().left)/a.opt.size),n=s>.5?1:.5;r=r-1+n,e._fill.call(a,r),a.opt.precision&&(r=r-n+s),e._roundStars.call(a,r),o.data("score",r)}else e._fill.call(a,r);e._target.call(a,r,i),a.opt.mouseover&&a.opt.mouseover.call(a,r,i)})},_callback:function(t){for(var e in t)"function"==typeof this.opt[t[e]]&&(this.opt[t[e]]=this.opt[t[e]].call(this))},_createCancel:function(){var e=t(this),a=this.opt.path+this.opt.cancelOff,o=t("<img />",{src:a,alt:"x",title:this.opt.cancelHint,class:"raty-cancel"});return"left"==this.opt.cancelPlace?e.prepend("&#160;").prepend(o):e.append("&#160;").append(o),o},_createScore:function(){return t("<input />",{type:"hidden",name:this.opt.scoreName}).appendTo(this)},_createStars:function(){for(var a=t(this),o=1;o<=this.opt.number;o++){var i=e._getHint.call(this,o),r=this.opt.score&&this.opt.score>=o?"starOn":"starOff";r=this.opt.path+this.opt[r],t("<img />",{src:r,alt:o,title:i}).appendTo(this),this.opt.space&&a.append(o<this.opt.number?"&#160;":"")}return a.children("img")},_error:function(e){t(this).html(e),t.error(e)},_fill:function(t){for(var e=this,a=0,o=1;o<=e.stars.length;o++){var i=e.stars.eq(o-1),r=e.opt.single?o==t:o<=t;if(e.opt.iconRange&&e.opt.iconRange.length>a){var s=e.opt.iconRange[a],n=s.on||e.opt.starOn,c=s.off||e.opt.starOff,l=r?n:c;o<=s.range&&i.attr("src",e.opt.path+l),o==s.range&&a++}else{var l=r?"starOn":"starOff";i.attr("src",this.opt.path+this.opt[l])}}},_getHint:function(t){var e=this.opt.hints[t-1];return""===e?"":e||t},_lock:function(){var a=parseInt(this.score.val(),10),o=a?e._getHint.call(this,a):this.opt.noRatedMsg;t(this).data("readonly",!0).css("cursor","").attr("title",o),this.score.attr("readonly","readonly"),this.stars.attr("title",o),this.cancel&&this.cancel.hide()},_roundStars:function(t){var e=(t-Math.floor(t)).toFixed(2);if(e>this.opt.round.down){var a="starOn";this.opt.halfShow&&e<this.opt.round.up?a="starHalf":e<this.opt.round.full&&(a="starOff"),this.stars.eq(Math.ceil(t)-1).attr("src",this.opt.path+this.opt[a])}},_target:function(a,o){if(this.opt.target){var i=t(this.opt.target);0===i.length&&e._error.call(this,"Target selector invalid or missing!"),this.opt.targetFormat.indexOf("{score}")<0&&e._error.call(this,'Template "{score}" missing!');var r=o&&"mouseover"==o.type;void 0===a?a=this.opt.targetText:null===a?a=r?this.opt.cancelHint:this.opt.targetText:("hint"==this.opt.targetType?a=e._getHint.call(this,Math.ceil(a)):this.opt.precision&&(a=parseFloat(a).toFixed(1)),r||this.opt.targetKeep||(a=this.opt.targetText)),a&&(a=this.opt.targetFormat.toString().replace("{score}",a)),i.is(":input")?i.val(a):i.html(a)}},_unlock:function(){t(this).data("readonly",!1).css("cursor","pointer").removeAttr("title"),this.score.removeAttr("readonly","readonly");for(var a=0;a<this.opt.number;a++)this.stars.eq(a).attr("title",e._getHint.call(this,a+1));this.cancel&&this.cancel.css("display","")},cancel:function(a){return this.each(function(){t(this).data("readonly")!==!0&&(e[a?"click":"score"].call(this,null),this.score.removeAttr("value"))})},click:function(a){return t(this).each(function(){t(this).data("readonly")!==!0&&(e._apply.call(this,a),this.opt.click||e._error.call(this,'You must add the "click: function(score, evt) { }" callback.'),this.opt.click.call(this,a,t.Event("click")),e._target.call(this,a))})},destroy:function(){return t(this).each(function(){var e=t(this),a=e.data("raw");a?e.off(".raty").empty().css({cursor:a.style.cursor,width:a.style.width}).removeData("readonly"):e.data("raw",e.clone()[0])})},getScore:function(){var e,a=[];return t(this).each(function(){e=this.score.val(),a.push(e?parseFloat(e):void 0)}),a.length>1?a:a[0]},readOnly:function(a){return this.each(function(){var o=t(this);o.data("readonly")!==a&&(a?(o.off(".raty").children("img").off(".raty"),e._lock.call(this)):(e._binds.call(this),e._unlock.call(this)),o.data("readonly",a))})},reload:function(){return e.set.call(this,{})},score:function(){return arguments.length?e.setScore.apply(this,arguments):e.getScore.call(this)},set:function(e){return this.each(function(){var a=t(this),o=a.data("settings"),i=t.extend({},o,e);a.raty(i)})},setScore:function(a){return t(this).each(function(){t(this).data("readonly")!==!0&&(e._apply.call(this,a),e._target.call(this,a))})}};t.fn.raty=function(o){return e[o]?e[o].apply(this,Array.prototype.slice.call(arguments,1)):"object"!==("undefined"==typeof o?"undefined":a(o))&&o?void t.error("Method "+o+" does not exist!"):e.init.apply(this,arguments)},t.fn.raty.defaults={cancel:!1,cancelHint:"Cancel this rating!",cancelOff:"cancel-off.png",cancelOn:"cancel-on.png",cancelPlace:"left",click:void 0,half:!1,halfShow:!0,hints:["bad","poor","regular","good","gorgeous"],iconRange:void 0,mouseout:void 0,mouseover:void 0,noRatedMsg:"Not rated yet!",number:5,numberMax:20,path:"",precision:!1,readOnly:!1,round:{down:.25,full:.6,up:.76},score:void 0,scoreName:"score",single:!1,size:16,space:!0,starHalf:"star-half.png",starOff:"star-off.png",starOn:"star-on.png",target:void 0,targetFormat:"{score}",targetKeep:!1,targetText:"",targetType:"hint",width:void 0}}(jQuery)},0:function(t,e,a){t.exports=a("5706838824cfad411df8")}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/static-dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "5706838824cfad411df8":
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	(function ($) {
+	  var methods = {
+	    init: function init(settings) {
+	      return this.each(function () {
+	        methods.destroy.call(this);
+	        this.opt = $.extend(true, {}, $.fn.raty.defaults, settings);
+	        var that = $(this),
+	            inits = ["number", "readOnly", "score", "scoreName"];
+	        methods._callback.call(this, inits);
+	        if (this.opt.precision) {
+	          methods._adjustPrecision.call(this);
+	        }
+	        this.opt.number = methods._between(this.opt.number, 0, this.opt.numberMax);
+	        this.opt.path = this.opt.path || "";
+	        if (this.opt.path && this.opt.path.charAt(this.opt.path.length - 1) !== "/") {
+	          this.opt.path += "/";
+	        }
+	        this.stars = methods._createStars.call(this);
+	        this.score = methods._createScore.call(this);
+	        methods._apply.call(this, this.opt.score);
+	        var space = this.opt.space ? 4 : 0,
+	            width = this.opt.width || this.opt.number * this.opt.size + this.opt.number * space;
+	        if (this.opt.cancel) {
+	          this.cancel = methods._createCancel.call(this);
+	          width += this.opt.size + space;
+	        }
+	        if (this.opt.readOnly) {
+	          methods._lock.call(this);
+	        } else {
+	          that.css("cursor", "pointer");
+	          methods._binds.call(this);
+	        }
+	        if (this.opt.width !== false) {
+	          that.css("width", width);
+	        }
+	        methods._target.call(this, this.opt.score);
+	        that.data({
+	          settings: this.opt,
+	          raty: true
+	        });
+	      });
+	    },
+	    _adjustPrecision: function _adjustPrecision() {
+	      this.opt.targetType = "score";
+	      this.opt.half = true;
+	    },
+	    _apply: function _apply(score) {
+	      if (score && score > 0) {
+	        score = methods._between(score, 0, this.opt.number);
+	        this.score.val(score);
+	      }
+	      methods._fill.call(this, score);
+	      if (score) {
+	        methods._roundStars.call(this, score);
+	      }
+	    },
+	    _between: function _between(value, min, max) {
+	      return Math.min(Math.max(parseFloat(value), min), max);
+	    },
+	    _binds: function _binds() {
+	      if (this.cancel) {
+	        methods._bindCancel.call(this);
+	      }
+	      methods._bindClick.call(this);
+	      methods._bindOut.call(this);
+	      methods._bindOver.call(this);
+	    },
+	    _bindCancel: function _bindCancel() {
+	      methods._bindClickCancel.call(this);
+	      methods._bindOutCancel.call(this);
+	      methods._bindOverCancel.call(this);
+	    },
+	    _bindClick: function _bindClick() {
+	      var self = this,
+	          that = $(self);
+	      self.stars.on("click.raty", function (evt) {
+	        self.score.val(self.opt.half || self.opt.precision ? that.data("score") : this.alt);
+	        if (self.opt.click) {
+	          self.opt.click.call(self, parseFloat(self.score.val()), evt);
+	        }
+	      });
+	    },
+	    _bindClickCancel: function _bindClickCancel() {
+	      var self = this;
+	      self.cancel.on("click.raty", function (evt) {
+	        self.score.removeAttr("value");
+	        if (self.opt.click) {
+	          self.opt.click.call(self, null, evt);
+	        }
+	      });
+	    },
+	    _bindOut: function _bindOut() {
+	      var self = this;
+	      $(this).on("mouseleave.raty", function (evt) {
+	        var score = parseFloat(self.score.val()) || undefined;
+	        methods._apply.call(self, score);
+	        methods._target.call(self, score, evt);
+	        if (self.opt.mouseout) {
+	          self.opt.mouseout.call(self, score, evt);
+	        }
+	      });
+	    },
+	    _bindOutCancel: function _bindOutCancel() {
+	      var self = this;
+	      self.cancel.on("mouseleave.raty", function (evt) {
+	        $(this).attr("src", self.opt.path + self.opt.cancelOff);
+	        if (self.opt.mouseout) {
+	          self.opt.mouseout.call(self, self.score.val() || null, evt);
+	        }
+	      });
+	    },
+	    _bindOverCancel: function _bindOverCancel() {
+	      var self = this;
+	      self.cancel.on("mouseover.raty", function (evt) {
+	        $(this).attr("src", self.opt.path + self.opt.cancelOn);
+	        self.stars.attr("src", self.opt.path + self.opt.starOff);
+	        methods._target.call(self, null, evt);
+	        if (self.opt.mouseover) {
+	          self.opt.mouseover.call(self, null);
+	        }
+	      });
+	    },
+	    _bindOver: function _bindOver() {
+	      var self = this,
+	          that = $(self),
+	          action = self.opt.half ? "mousemove.raty" : "mouseover.raty";
+	      self.stars.on(action, function (evt) {
+	        var score = parseInt(this.alt, 10);
+	        if (self.opt.half) {
+	          var position = parseFloat((evt.pageX - $(this).offset().left) / self.opt.size),
+	              plus = position > .5 ? 1 : .5;
+	          score = score - 1 + plus;
+	          methods._fill.call(self, score);
+	          if (self.opt.precision) {
+	            score = score - plus + position;
+	          }
+	          methods._roundStars.call(self, score);
+	          that.data("score", score);
+	        } else {
+	          methods._fill.call(self, score);
+	        }
+	        methods._target.call(self, score, evt);
+	        if (self.opt.mouseover) {
+	          self.opt.mouseover.call(self, score, evt);
+	        }
+	      });
+	    },
+	    _callback: function _callback(options) {
+	      for (var i in options) {
+	        if (typeof this.opt[options[i]] === "function") {
+	          this.opt[options[i]] = this.opt[options[i]].call(this);
+	        }
+	      }
+	    },
+	    _createCancel: function _createCancel() {
+	      var that = $(this),
+	          icon = this.opt.path + this.opt.cancelOff,
+	          cancel = $("<img />", {
+	        src: icon,
+	        alt: "x",
+	        title: this.opt.cancelHint,
+	        "class": "raty-cancel"
+	      });
+	      if (this.opt.cancelPlace == "left") {
+	        that.prepend("&#160;").prepend(cancel);
+	      } else {
+	        that.append("&#160;").append(cancel);
+	      }
+	      return cancel;
+	    },
+	    _createScore: function _createScore() {
+	      return $("<input />", {
+	        type: "hidden",
+	        name: this.opt.scoreName
+	      }).appendTo(this);
+	    },
+	    _createStars: function _createStars() {
+	      var that = $(this);
+	      for (var i = 1; i <= this.opt.number; i++) {
+	        var title = methods._getHint.call(this, i),
+	            icon = this.opt.score && this.opt.score >= i ? "starOn" : "starOff";
+	        icon = this.opt.path + this.opt[icon];
+	        $("<img />", {
+	          src: icon,
+	          alt: i,
+	          title: title
+	        }).appendTo(this);
+	        if (this.opt.space) {
+	          that.append(i < this.opt.number ? "&#160;" : "");
+	        }
+	      }
+	      return that.children("img");
+	    },
+	    _error: function _error(message) {
+	      $(this).html(message);
+	      $.error(message);
+	    },
+	    _fill: function _fill(score) {
+	      var self = this,
+	          hash = 0;
+	      for (var i = 1; i <= self.stars.length; i++) {
+	        var star = self.stars.eq(i - 1),
+	            select = self.opt.single ? i == score : i <= score;
+	        if (self.opt.iconRange && self.opt.iconRange.length > hash) {
+	          var irange = self.opt.iconRange[hash],
+	              on = irange.on || self.opt.starOn,
+	              off = irange.off || self.opt.starOff,
+	              icon = select ? on : off;
+	          if (i <= irange.range) {
+	            star.attr("src", self.opt.path + icon);
+	          }
+	          if (i == irange.range) {
+	            hash++;
+	          }
+	        } else {
+	          var icon = select ? "starOn" : "starOff";
+	          star.attr("src", this.opt.path + this.opt[icon]);
+	        }
+	      }
+	    },
+	    _getHint: function _getHint(score) {
+	      var hint = this.opt.hints[score - 1];
+	      return hint === "" ? "" : hint || score;
+	    },
+	    _lock: function _lock() {
+	      var score = parseInt(this.score.val(), 10),
+	          // TODO: 3.1 >> [['1'], ['2'], ['3', '.1', '.2']]
+	      hint = score ? methods._getHint.call(this, score) : this.opt.noRatedMsg;
+	      $(this).data("readonly", true).css("cursor", "").attr("title", hint);
+	      this.score.attr("readonly", "readonly");
+	      this.stars.attr("title", hint);
+	      if (this.cancel) {
+	        this.cancel.hide();
+	      }
+	    },
+	    _roundStars: function _roundStars(score) {
+	      var rest = (score - Math.floor(score)).toFixed(2);
+	      if (rest > this.opt.round.down) {
+	        var icon = "starOn";
+	        // Up:   [x.76 .. x.99]
+	        if (this.opt.halfShow && rest < this.opt.round.up) {
+	          // Half: [x.26 .. x.75]
+	          icon = "starHalf";
+	        } else if (rest < this.opt.round.full) {
+	          // Down: [x.00 .. x.5]
+	          icon = "starOff";
+	        }
+	        this.stars.eq(Math.ceil(score) - 1).attr("src", this.opt.path + this.opt[icon]);
+	      }
+	    },
+	    _target: function _target(score, evt) {
+	      if (this.opt.target) {
+	        var target = $(this.opt.target);
+	        if (target.length === 0) {
+	          methods._error.call(this, "Target selector invalid or missing!");
+	        }
+	        if (this.opt.targetFormat.indexOf("{score}") < 0) {
+	          methods._error.call(this, 'Template "{score}" missing!');
+	        }
+	        var mouseover = evt && evt.type == "mouseover";
+	        if (score === undefined) {
+	          score = this.opt.targetText;
+	        } else if (score === null) {
+	          score = mouseover ? this.opt.cancelHint : this.opt.targetText;
+	        } else {
+	          if (this.opt.targetType == "hint") {
+	            score = methods._getHint.call(this, Math.ceil(score));
+	          } else if (this.opt.precision) {
+	            score = parseFloat(score).toFixed(1);
+	          }
+	          if (!mouseover && !this.opt.targetKeep) {
+	            score = this.opt.targetText;
+	          }
+	        }
+	        if (score) {
+	          score = this.opt.targetFormat.toString().replace("{score}", score);
+	        }
+	        if (target.is(":input")) {
+	          target.val(score);
+	        } else {
+	          target.html(score);
+	        }
+	      }
+	    },
+	    _unlock: function _unlock() {
+	      $(this).data("readonly", false).css("cursor", "pointer").removeAttr("title");
+	      this.score.removeAttr("readonly", "readonly");
+	      for (var i = 0; i < this.opt.number; i++) {
+	        this.stars.eq(i).attr("title", methods._getHint.call(this, i + 1));
+	      }
+	      if (this.cancel) {
+	        this.cancel.css("display", "");
+	      }
+	    },
+	    cancel: function cancel(click) {
+	      return this.each(function () {
+	        if ($(this).data("readonly") !== true) {
+	          methods[click ? "click" : "score"].call(this, null);
+	          this.score.removeAttr("value");
+	        }
+	      });
+	    },
+	    click: function click(score) {
+	      return $(this).each(function () {
+	        if ($(this).data("readonly") !== true) {
+	          methods._apply.call(this, score);
+	          if (!this.opt.click) {
+	            methods._error.call(this, 'You must add the "click: function(score, evt) { }" callback.');
+	          }
+	          this.opt.click.call(this, score, $.Event("click"));
+	          methods._target.call(this, score);
+	        }
+	      });
+	    },
+	    destroy: function destroy() {
+	      return $(this).each(function () {
+	        var that = $(this),
+	            raw = that.data("raw");
+	        if (raw) {
+	          that.off(".raty").empty().css({
+	            cursor: raw.style.cursor,
+	            width: raw.style.width
+	          }).removeData("readonly");
+	        } else {
+	          that.data("raw", that.clone()[0]);
+	        }
+	      });
+	    },
+	    getScore: function getScore() {
+	      var score = [],
+	          value;
+	      $(this).each(function () {
+	        value = this.score.val();
+	        score.push(value ? parseFloat(value) : undefined);
+	      });
+	      return score.length > 1 ? score : score[0];
+	    },
+	    readOnly: function readOnly(readonly) {
+	      return this.each(function () {
+	        var that = $(this);
+	        if (that.data("readonly") !== readonly) {
+	          if (readonly) {
+	            that.off(".raty").children("img").off(".raty");
+	            methods._lock.call(this);
+	          } else {
+	            methods._binds.call(this);
+	            methods._unlock.call(this);
+	          }
+	          that.data("readonly", readonly);
+	        }
+	      });
+	    },
+	    reload: function reload() {
+	      return methods.set.call(this, {});
+	    },
+	    score: function score() {
+	      return arguments.length ? methods.setScore.apply(this, arguments) : methods.getScore.call(this);
+	    },
+	    set: function set(settings) {
+	      return this.each(function () {
+	        var that = $(this),
+	            actual = that.data("settings"),
+	            news = $.extend({}, actual, settings);
+	        that.raty(news);
+	      });
+	    },
+	    setScore: function setScore(score) {
+	      return $(this).each(function () {
+	        if ($(this).data("readonly") !== true) {
+	          methods._apply.call(this, score);
+	          methods._target.call(this, score);
+	        }
+	      });
+	    }
+	  };
+	  $.fn.raty = function (method) {
+	    if (methods[method]) {
+	      return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+	    } else if ((typeof method === "undefined" ? "undefined" : _typeof(method)) === "object" || !method) {
+	      return methods.init.apply(this, arguments);
+	    } else {
+	      $.error("Method " + method + " does not exist!");
+	    }
+	  };
+	  $.fn.raty.defaults = {
+	    cancel: false,
+	    cancelHint: "Cancel this rating!",
+	    cancelOff: "cancel-off.png",
+	    cancelOn: "cancel-on.png",
+	    cancelPlace: "left",
+	    click: undefined,
+	    half: false,
+	    halfShow: true,
+	    hints: ["bad", "poor", "regular", "good", "gorgeous"],
+	    iconRange: undefined,
+	    mouseout: undefined,
+	    mouseover: undefined,
+	    noRatedMsg: "Not rated yet!",
+	    number: 5,
+	    numberMax: 20,
+	    path: "",
+	    precision: false,
+	    readOnly: false,
+	    round: {
+	      down: .25,
+	      full: .6,
+	      up: .76
+	    },
+	    score: undefined,
+	    scoreName: "score",
+	    single: false,
+	    size: 16,
+	    space: true,
+	    starHalf: "star-half.png",
+	    starOff: "star-off.png",
+	    starOn: "star-on.png",
+	    target: undefined,
+	    targetFormat: "{score}",
+	    targetKeep: false,
+	    targetText: "",
+	    targetType: "hint",
+	    width: undefined
+	  };
+	})(jQuery);
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__("5706838824cfad411df8");
+
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=jquery-raty.js.map

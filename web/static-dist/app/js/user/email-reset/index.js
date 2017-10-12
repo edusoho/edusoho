@@ -1,1 +1,35 @@
-webpackJsonp(["app/js/user/email-reset/index"],[function(e,t){"use strict";var i=$("#reset-email-form"),r=$("#next-btn"),n=i.validate({rules:{email:{required:!0,es_email:!0,es_remote:{type:"get"}},password:{required:!0,minlength:5,maxlength:20}}});r.click(function(){n.form()&&(r.button("loadding"),i.submit())})}]);
+webpackJsonp(["app/js/user/email-reset/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var $form = $('#reset-email-form');
+	var $btn = $('#next-btn');
+	var validator = $form.validate({
+	  rules: {
+	    email: {
+	      required: true,
+	      es_email: true,
+	      es_remote: {
+	        type: 'get'
+	      }
+	    },
+	    password: {
+	      required: true,
+	      minlength: 5,
+	      maxlength: 20
+	    }
+	  }
+	});
+	
+	$btn.click(function () {
+	  if (validator.form()) {
+	    $btn.button('loadding');
+	    $form.submit();
+	  }
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

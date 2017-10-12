@@ -1,1 +1,181 @@
-!function(t){function e(i){if(a[i])return a[i].exports;var r=a[i]={exports:{},id:i,loaded:!1};return t[i].call(r.exports,r,r.exports,e),r.loaded=!0,r.exports}var a={};return e.m=t,e.c=a,e.p="/static-dist/",e(0)}({"9181c6995ae8c5c94b7a":function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var a={},i=navigator.userAgent.toLowerCase(),r=void 0;(r=i.match(/msie ([\d.]+)/))?a.ie=r[1]:(r=i.match(/firefox\/([\d.]+)/))?a.firefox=r[1]:(r=i.match(/chrome\/([\d.]+)/))?a.chrome=r[1]:(r=i.match(/opera.([\d.]+)/))?a.opera=r[1]:(r=i.match(/version\/([\d.]+).*safari/))?a.safari=r[1]:0,a.ie10=/MSIE\s+10.0/i.test(navigator.userAgent),a.ie11=/Trident\/7\./.test(navigator.userAgent),a.edge=/Edge\/13./i.test(navigator.userAgent);var n=function(){return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)},o=function(t){return t.replace(/<[^>]+>/g,"").replace(/&nbsp;/gi,"")},s=function(){$('[data-toggle="tooltip"]').tooltip({html:!0})},c=function(){$('[data-toggle="popover"]').popover({html:!0})},l=function(t){var e="",a=parseInt(t%86400/3600),i=parseInt(t%3600/60),r=t%60;return a>0&&(e+=a+":"),e+=i.toString().length<2?"0"+i+":":i+":",e+=r.toString().length<2?"0"+r:r},v=function(t){for(var e=t.split(":"),a=0,i=0;i<e.length;i++)e.length>2&&(0==i&&(a+=3600*e[i]),1==i&&(a+=60*e[i]),2==i&&(a+=parseInt(e[i]))),e.length<=2&&(0==i&&(a+=60*e[i]),1==i&&(a+=parseInt(e[i])));return a},d=function(){return 1==$("meta[name='is-login']").attr("content")}();e.Browser=a,e.isLogin=d,e.isMobileDevice=n,e.delHtmlTag=o,e.initTooltips=s,e.initPopover=c,e.sec2Time=l,e.time2Sec=v},0:function(t,e,a){"use strict";var i=a("9181c6995ae8c5c94b7a"),r=i.isMobileDevice?"touchstart":"click",n=function(){$(".nav-mobile,.html-mask").removeClass("active"),$("html,.es-wrap").removeClass("nav-active")};$(".js-navbar-more").click(function(t){var e=$(".nav-mobile");if(e.hasClass("active"))n();else{var a=$(window).height();e.addClass("active").css("height",a),$(".html-mask").addClass("active"),$("html,.es-wrap").addClass("nav-active")}}),$("body").on(r,".html-mask.active",function(t){n()})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/static-dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "9181c6995ae8c5c94b7a":
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var Browser = {};
+	var userAgent = navigator.userAgent.toLowerCase();
+	var s = void 0;
+	
+	(s = userAgent.match(/msie ([\d.]+)/)) ? Browser.ie = s[1] : (s = userAgent.match(/firefox\/([\d.]+)/)) ? Browser.firefox = s[1] : (s = userAgent.match(/chrome\/([\d.]+)/)) ? Browser.chrome = s[1] : (s = userAgent.match(/opera.([\d.]+)/)) ? Browser.opera = s[1] : (s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
+	
+	Browser.ie10 = /MSIE\s+10.0/i.test(navigator.userAgent);
+	Browser.ie11 = /Trident\/7\./.test(navigator.userAgent);
+	Browser.edge = /Edge\/13./i.test(navigator.userAgent);
+	
+	var isMobileDevice = function isMobileDevice() {
+	  return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
+	};
+	
+	var delHtmlTag = function delHtmlTag(str) {
+	  return str.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, '');
+	};
+	
+	var initTooltips = function initTooltips() {
+	  $('[data-toggle="tooltip"]').tooltip({
+	    html: true
+	  });
+	};
+	
+	var initPopover = function initPopover() {
+	  $('[data-toggle="popover"]').popover({
+	    html: true
+	  });
+	};
+	
+	var sec2Time = function sec2Time(sec) {
+	  var time = '';
+	  var h = parseInt(sec % 86400 / 3600);
+	  var s = parseInt(sec % 3600 / 60);
+	  var m = sec % 60;
+	  if (h > 0) {
+	    time += h + ':';
+	  }
+	  if (s.toString().length < 2) {
+	    time += '0' + s + ':';
+	  } else {
+	    time += s + ':';
+	  }
+	  if (m.toString().length < 2) {
+	    time += '0' + m;
+	  } else {
+	    time += m;
+	  }
+	  return time;
+	};
+	
+	var time2Sec = function time2Sec(time) {
+	  var arry = time.split(':');
+	  var sec = 0;
+	  for (var i = 0; i < arry.length; i++) {
+	    if (arry.length > 2) {
+	      if (i == 0) {
+	        sec += arry[i] * 3600;
+	      }
+	      if (i == 1) {
+	        sec += arry[i] * 60;
+	      }
+	      if (i == 2) {
+	        sec += parseInt(arry[i]);
+	      }
+	    }
+	    if (arry.length <= 2) {
+	      if (i == 0) {
+	        sec += arry[i] * 60;
+	      }
+	      if (i == 1) {
+	        sec += parseInt(arry[i]);
+	      }
+	    }
+	  }
+	  return sec;
+	};
+	
+	var isLogin = function () {
+	  return $("meta[name='is-login']").attr("content") == 1;
+	}();
+	
+	exports.Browser = Browser;
+	exports.isLogin = isLogin;
+	exports.isMobileDevice = isMobileDevice;
+	exports.delHtmlTag = delHtmlTag;
+	exports.initTooltips = initTooltips;
+	exports.initPopover = initPopover;
+	exports.sec2Time = sec2Time;
+	exports.time2Sec = time2Sec;
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _utils = __webpack_require__("9181c6995ae8c5c94b7a");
+	
+	var eventtype = _utils.isMobileDevice ? 'touchstart' : 'click';
+	
+	var removeNavMobile = function removeNavMobile() {
+	  $(".nav-mobile,.html-mask").removeClass("active");
+	  $("html,.es-wrap").removeClass("nav-active");
+	};
+	
+	$(".js-navbar-more").click(function (e) {
+	  var $nav = $(".nav-mobile");
+	
+	  if ($nav.hasClass("active")) {
+	    removeNavMobile();
+	  } else {
+	    var height = $(window).height();
+	    $nav.addClass("active").css("height", height);
+	
+	    $(".html-mask").addClass("active");
+	    $("html,.es-wrap").addClass("nav-active");
+	  }
+	});
+	
+	$("body").on(eventtype, '.html-mask.active', function (e) {
+	  removeNavMobile();
+	});
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=main.js.map

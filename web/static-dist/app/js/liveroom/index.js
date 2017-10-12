@@ -1,1 +1,86 @@
-webpackJsonp(["app/js/liveroom/index"],[function(e,r){"use strict";function t(e,r){if(!(e instanceof r))throw new TypeError("Cannot call a class as a function")}var n=function(){function e(e,r){for(var t=0;t<r.length;t++){var n=r[t];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(r,t,n){return t&&e(r.prototype,t),n&&e(r,n),r}}(),o=function(){function e(){t(this,e),this.init()}return n(e,[{key:"init",value:function(){var e=this;this.isLiveRoomOpened=!1;var r=0,t=1;r=setInterval(function(){return t>10?(clearInterval(r),void $("#entry").html(Translator.trans("course_set.live_room.entry_error_hint"))):void $.ajax({url:$("#entry").data("url"),success:function(n){if(n.error)return clearInterval(r),void $("#entry").html(Translator.trans("course_set.live_room.entry_error_with_message",{message:n.error}));if(n.roomUrl){clearInterval(r),e.isLiveRoomOpened=!0;var o='<iframe name="classroom" src="'+n.roomUrl+'" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';$("body").html(o)}t++},error:function(){$("#entry").html(Translator.trans("course_set.live_room.entry_error_hint"))}})},3e3),this.triggerLiveEvent()}},{key:"triggerLiveEvent",value:function(){var e=this,r=null,t=setInterval(function(){e.isLiveRoomOpened&&0!=$('meta[name="trigger_url"]').length&&(r=r?"doing":"start",$.ajax({url:$('meta[name="trigger_url"]').attr("content"),type:"GET",data:{eventName:r},success:function(e){e.live_end&&clearInterval(t)}}))},6e4)}}]),e}();new o}]);
+webpackJsonp(["app/js/liveroom/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Live = function () {
+	  function Live() {
+	    _classCallCheck(this, Live);
+	
+	    this.init();
+	  }
+	
+	  _createClass(Live, [{
+	    key: "init",
+	    value: function init() {
+	      var self = this;
+	      this.isLiveRoomOpened = false;
+	      var intervalId = 0;
+	      var tryCount = 1;
+	      intervalId = setInterval(function () {
+	        if (tryCount > 10) {
+	          clearInterval(intervalId);
+	          $("#entry").html(Translator.trans('course_set.live_room.entry_error_hint'));
+	          return;
+	        }
+	        $.ajax({
+	          url: $("#entry").data("url"),
+	          success: function success(data) {
+	            if (data.error) {
+	              clearInterval(intervalId);
+	              $("#entry").html(Translator.trans('course_set.live_room.entry_error_with_message', { message: data.error }));
+	              return;
+	            }
+	
+	            if (data.roomUrl) {
+	              clearInterval(intervalId);
+	              self.isLiveRoomOpened = true;
+	              var html = '<iframe name="classroom" src="' + data.roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
+	              $("body").html(html);
+	            }
+	            tryCount++;
+	          },
+	          error: function error() {
+	            $("#entry").html(Translator.trans('course_set.live_room.entry_error_hint'));
+	          }
+	        });
+	      }, 3000);
+	
+	      this.triggerLiveEvent();
+	    }
+	  }, {
+	    key: "triggerLiveEvent",
+	    value: function triggerLiveEvent() {
+	      var self = this;
+	
+	      var eventName = null;
+	      var eventTrigger = setInterval(function () {
+	        if (!self.isLiveRoomOpened || $('meta[name="trigger_url"]').length == 0) return;
+	        eventName = eventName ? 'doing' : 'start';
+	        $.ajax({
+	          url: $('meta[name="trigger_url"]').attr('content'),
+	          type: 'GET',
+	          data: { eventName: eventName },
+	          success: function success(response) {
+	            if (response.live_end) {
+	              clearInterval(eventTrigger);
+	            }
+	          }
+	        });
+	      }, 60000);
+	    }
+	  }]);
+	
+	  return Live;
+	}();
+	
+	new Live();
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

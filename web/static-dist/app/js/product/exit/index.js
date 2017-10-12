@@ -1,1 +1,51 @@
-webpackJsonp(["app/js/product/exit/index"],[function(n,e){"use strict";var t=$("#refund-form"),r=t.parents(".modal"),a=t.find("#reasonNote"),o=t.find(".warnning");t.find('[name="reason[type]"]').on("change",function(){var n=$(this),e=n.find("option:selected");"other"==e.val()?a.val("").removeClass("hide"):a.addClass("hide").val(e.text()),o.text("")}).change(),a.on("change",function(){var n=$(this);n.val().length>120?o.text(Translator.trans("order.refund.reason_limit_hint")):0==n.val().length?o.text(Translator.trans("order.refund.reason_required_hint")):o.text("")}).change(),t.on("submit",function(){return"reason"==t.find("#reasonType").val()?(o.text(Translator.trans("order.refund.reason_choose_hint")),!1):a.val().length>120?(o.text(Translator.trans("order.refund.reason_limit_hint")),!1):0==a.val().length?(o.text(Translator.trans("order.refund.reason_required_hint")),!1):void r.find("[type=submit]").button("loading").attr("disabled",!0)})}]);
+webpackJsonp(["app/js/product/exit/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var $form = $('#refund-form');
+	var $modal = $form.parents('.modal');
+	var $reasonNote = $form.find('#reasonNote');
+	var $warnning = $form.find('.warnning');
+	
+	$form.find('[name="reason[type]"]').on('change', function () {
+	  var $this = $(this),
+	      $selected = $this.find('option:selected');
+	  if ($selected.val() == 'other') {
+	    $reasonNote.val('').removeClass('hide');
+	  } else {
+	    $reasonNote.addClass('hide').val($selected.text());
+	  }
+	  $warnning.text('');
+	}).change();
+	
+	$reasonNote.on('change', function () {
+	  var $this = $(this);
+	  if ($this.val().length > 120) {
+	    $warnning.text(Translator.trans('order.refund.reason_limit_hint'));
+	  } else if ($this.val().length == 0) {
+	    $warnning.text(Translator.trans('order.refund.reason_required_hint'));
+	  } else {
+	    $warnning.text('');
+	  }
+	}).change();
+	
+	$form.on('submit', function () {
+	  if ($form.find('#reasonType').val() == 'reason') {
+	    $warnning.text(Translator.trans('order.refund.reason_choose_hint'));
+	    return false;
+	  } else if ($reasonNote.val().length > 120) {
+	    $warnning.text(Translator.trans('order.refund.reason_limit_hint'));
+	    return false;
+	  } else if ($reasonNote.val().length == 0) {
+	    $warnning.text(Translator.trans('order.refund.reason_required_hint'));
+	    return false;
+	  }
+	
+	  $modal.find('[type=submit]').button('loading').attr("disabled", true);
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

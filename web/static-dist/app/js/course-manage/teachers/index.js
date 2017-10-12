@@ -1,1 +1,328 @@
-webpackJsonp(["app/js/course-manage/teachers/index"],{"55e73d7afebf9c74b73e":function(e,t,a){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function s(e,t,a){return t in e?Object.defineProperty(e,t,{value:a,enumerable:!0,configurable:!0,writable:!0}):e[t]=a,e}function c(e,t,a,r){var n,o={itemId:Math.random(),nickname:t[r.nickname],isVisible:1==t[r.isVisible],avatar:t[r.avatar],seq:a,id:t[r.id],outputValue:(n={},s(n,r.id,t[r.id]),s(n,r.isVisible,t[r.isVisible]),n)};e.push(o)}function l(e,t){e.map(function(a,r){a.itemId==t&&(e[r].isVisible=!e[r].isVisible,e[r].outputValue.isVisible=e[r].isVisible?1:0)})}Object.defineProperty(t,"__esModule",{value:!0});var u=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var a=arguments[t];for(var r in a)Object.prototype.hasOwnProperty.call(a,r)&&(e[r]=a[r])}return e},f=function(){function e(e,t){for(var a=0;a<t.length;a++){var r=t[a];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,a,r){return a&&e(t.prototype,a),r&&e(t,r),t}}(),d=a("33a776824bec073629e5"),p=r(d),b=a("26fa658edb0135ccf5db"),h=r(b),m=a("d0399763e3c229c64154"),y=r(m),v=function(e){function t(e){n(this,t);var a=o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return a.onChecked=function(e){var t=e.currentTarget.value;l(a.state.dataSourceUi,t),a.setState({dataSourceUi:a.state.dataSourceUi})},a.addItem=function(e,t){t&&(a.props.replaceItem&&(a.state.dataSourceUi=[]),c(a.state.dataSourceUi,t,a.state.dataSourceUi.length+1,a.props),a.setState({dataSourceUi:a.state.dataSourceUi}))},a}return i(t,e),f(t,[{key:"componentWillMount",value:function(){var e=this;this.state={dataSourceUi:[]},this.props.dataSource.map(function(t,a){c(e.state.dataSourceUi,t,a+1,e.props)})}},{key:"getChildContext",value:function(){return{addable:this.props.addable,searchable:this.props.searchable,sortable:this.props.sortable,listClassName:this.props.listClassName,inputName:this.props.inputName,showCheckbox:this.props.showCheckbox,showDeleteBtn:this.props.showDeleteBtn,checkBoxName:this.props.checkBoxName,onChecked:this.onChecked,removeItem:this.removeItem,sortItem:this.sortItem,addItem:this.addItem,dataSourceUi:this.state.dataSourceUi}}},{key:"getList",value:function(){return p.default.createElement(y.default,null)}}]),t}(h.default);t.default=v,v.propTypes=u({},h.default.propTypes,{id:p.default.PropTypes.string,nickname:p.default.PropTypes.string,avatar:p.default.PropTypes.string,isVisible:p.default.PropTypes.string,replaceItem:p.default.PropTypes.bool,showCheckbox:p.default.PropTypes.bool,showDeleteBtn:p.default.PropTypes.bool}),v.defaultProps=u({},h.default.defaultProps,{id:"id",nickname:"nickname",avatar:"avatar",isVisible:"isVisible",replaceItem:!1,showCheckbox:!0,showDeleteBtn:!0}),v.childContextTypes=u({},h.default.childContextTypes,{showCheckbox:p.default.PropTypes.bool,showDeleteBtn:p.default.PropTypes.bool,checkBoxName:p.default.PropTypes.string,onChecked:p.default.PropTypes.func})},d0399763e3c229c64154:function(e,t,a){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var a=arguments[t];for(var r in a)Object.prototype.hasOwnProperty.call(a,r)&&(e[r]=a[r])}return e},c=function(){function e(e,t){for(var a=0;a<t.length;a++){var r=t[a];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,a,r){return a&&e(t.prototype,a),r&&e(t,r),t}}(),l=a("33a776824bec073629e5"),u=r(l),f=a("8f840897d9471c8c1fbd"),d=(r(f),a("3fb32ce3bf28bfad7e02"),a("fdfc24440b4845bd47af")),p=r(d),b=function(e){function t(e){return n(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e))}return i(t,e),c(t,[{key:"render",value:function(){var e=this,t=this.context,a=t.dataSourceUi,r=t.listClassName,n=t.sortable,o=t.showCheckbox,i=t.showDeleteBtn,s=t.checkBoxName,c=t.inputName,l="";return a.length>0&&(l="list-group"),u.default.createElement("ul",{id:this.listId,className:"multi-list sortable-list "+l+" "+r},a.map(function(t,a){return u.default.createElement("li",{className:"list-group-item",id:t.itemId,key:a,"data-seq":t.seq},n&&u.default.createElement("i",{className:"es-icon es-icon-yidong mrl color-gray inline-block vertical-middle"}),u.default.createElement("img",{className:"avatar-sm avatar-sm-square mrm",src:t.avatar}),u.default.createElement("span",{className:"label-name text-overflow inline-block vertical-middle"},t.nickname),u.default.createElement("label",{className:o?"":"hidden"},u.default.createElement("input",{type:"checkbox",name:s+t.id,checked:t.isVisible,onChange:function(t){return e.context.onChecked(t)},value:t.itemId}),Translator.trans("course.manage.teacher_display_label")),u.default.createElement("a",{className:i?"pull-right link-gray mtm":"hidden",onClick:function(t){return e.context.removeItem(t)},"data-item-id":t.itemId},u.default.createElement("i",{className:"es-icon es-icon-close01 text-12"})),u.default.createElement("input",{type:"hidden",name:c,value:t.id}))}))}}]),t}(p.default);t.default=b,b.contextTypes=s({},p.default.contextTypes,{showCheckbox:u.default.PropTypes.bool,showDeleteBtn:u.default.PropTypes.bool,checkBoxName:u.default.PropTypes.string,onChecked:u.default.PropTypes.func})},0:function(e,t,a){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}var n=a("5fdcf1aea784583ca083"),o=r(n),i=a("33a776824bec073629e5"),s=r(i),c=a("55e73d7afebf9c74b73e"),l=r(c),u=a("8f840897d9471c8c1fbd"),f=(r(u),a("b334fd7e4c5a19234db2")),d=r(f);o.default.render(s.default.createElement(l.default,{addable:!0,dataSource:$("#course-teachers").data("init-value"),outputDataElement:"teachers",inputName:"ids[]",searchable:{enable:!0,url:$("#course-teachers").data("query-url")+"?q="}}),document.getElementById("course-teachers")),$(".js-btn-save").on("click",function(e){"[]"!==$("input[name=teachers]").val()?$("#teachers-form").submit():(0,d.default)("warning",Translator.trans("course.manage.min_teacher_num_error_hint"))})}});
+webpackJsonp(["app/js/course-manage/teachers/index"],{
+
+/***/ "55e73d7afebf9c74b73e":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__("33a776824bec073629e5");
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _multiInput = __webpack_require__("26fa658edb0135ccf5db");
+	
+	var _multiInput2 = _interopRequireDefault(_multiInput);
+	
+	var _list = __webpack_require__("d0399763e3c229c64154");
+	
+	var _list2 = _interopRequireDefault(_list);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function initItem(dataSourceUi, data, index, props) {
+	  var _outputValue;
+	
+	  var obj = {
+	    itemId: Math.random(),
+	    nickname: data[props.nickname],
+	    isVisible: data[props.isVisible] == 1 ? true : false,
+	    avatar: data[props.avatar],
+	    seq: index,
+	    id: data[props.id],
+	    outputValue: (_outputValue = {}, _defineProperty(_outputValue, props.id, data[props.id]), _defineProperty(_outputValue, props.isVisible, data[props.isVisible]), _outputValue)
+	  };
+	  dataSourceUi.push(obj);
+	}
+	
+	function updateChecked(dataSourceUi, id) {
+	  dataSourceUi.map(function (item, index) {
+	    if (item.itemId == id) {
+	      dataSourceUi[index].isVisible = !dataSourceUi[index].isVisible;
+	      dataSourceUi[index].outputValue.isVisible = dataSourceUi[index].isVisible ? 1 : 0;
+	    }
+	  });
+	}
+	
+	var PersonaMultiInput = function (_MultiInput) {
+	  _inherits(PersonaMultiInput, _MultiInput);
+	
+	  function PersonaMultiInput(props) {
+	    _classCallCheck(this, PersonaMultiInput);
+	
+	    var _this = _possibleConstructorReturn(this, (PersonaMultiInput.__proto__ || Object.getPrototypeOf(PersonaMultiInput)).call(this, props));
+	
+	    _this.onChecked = function (event) {
+	      var id = event.currentTarget.value;
+	      updateChecked(_this.state.dataSourceUi, id);
+	      _this.setState({
+	        dataSourceUi: _this.state.dataSourceUi
+	      });
+	    };
+	
+	    _this.addItem = function (value, data) {
+	      if (!data) {
+	        return;
+	      }
+	      //@TODO重复添加提示
+	      if (_this.props.replaceItem) {
+	        _this.state.dataSourceUi = [];
+	      }
+	      initItem(_this.state.dataSourceUi, data, _this.state.dataSourceUi.length + 1, _this.props);
+	
+	      _this.setState({
+	        dataSourceUi: _this.state.dataSourceUi
+	      });
+	    };
+	
+	    return _this;
+	  }
+	
+	  _createClass(PersonaMultiInput, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var _this2 = this;
+	
+	      this.state = {
+	        dataSourceUi: []
+	      };
+	      this.props.dataSource.map(function (item, index) {
+	        initItem(_this2.state.dataSourceUi, item, index + 1, _this2.props);
+	      });
+	    }
+	  }, {
+	    key: 'getChildContext',
+	    value: function getChildContext() {
+	      return {
+	        addable: this.props.addable,
+	        searchable: this.props.searchable,
+	        sortable: this.props.sortable,
+	        listClassName: this.props.listClassName,
+	        inputName: this.props.inputName,
+	        showCheckbox: this.props.showCheckbox,
+	        showDeleteBtn: this.props.showDeleteBtn,
+	        checkBoxName: this.props.checkBoxName,
+	        onChecked: this.onChecked,
+	        removeItem: this.removeItem,
+	        sortItem: this.sortItem,
+	        addItem: this.addItem,
+	        dataSourceUi: this.state.dataSourceUi
+	      };
+	    }
+	  }, {
+	    key: 'getList',
+	    value: function getList() {
+	      return _react2["default"].createElement(_list2["default"], null);
+	    }
+	  }]);
+	
+	  return PersonaMultiInput;
+	}(_multiInput2["default"]);
+	
+	exports["default"] = PersonaMultiInput;
+	
+	
+	PersonaMultiInput.propTypes = _extends({}, _multiInput2["default"].propTypes, {
+	  id: _react2["default"].PropTypes.string,
+	  nickname: _react2["default"].PropTypes.string,
+	  avatar: _react2["default"].PropTypes.string,
+	  isVisible: _react2["default"].PropTypes.string,
+	  replaceItem: _react2["default"].PropTypes.bool,
+	  showCheckbox: _react2["default"].PropTypes.bool,
+	  showDeleteBtn: _react2["default"].PropTypes.bool
+	});
+	
+	PersonaMultiInput.defaultProps = _extends({}, _multiInput2["default"].defaultProps, {
+	  id: 'id',
+	  nickname: 'nickname',
+	  avatar: 'avatar',
+	  isVisible: 'isVisible',
+	  replaceItem: false,
+	  showCheckbox: true,
+	  showDeleteBtn: true
+	});
+	
+	PersonaMultiInput.childContextTypes = _extends({}, _multiInput2["default"].childContextTypes, {
+	  showCheckbox: _react2["default"].PropTypes.bool,
+	  showDeleteBtn: _react2["default"].PropTypes.bool,
+	  checkBoxName: _react2["default"].PropTypes.string,
+	  onChecked: _react2["default"].PropTypes.func
+	});
+
+/***/ }),
+
+/***/ "d0399763e3c229c64154":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__("33a776824bec073629e5");
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _sortable = __webpack_require__("8f840897d9471c8c1fbd");
+	
+	var _sortable2 = _interopRequireDefault(_sortable);
+	
+	var _part = __webpack_require__("3fb32ce3bf28bfad7e02");
+	
+	var _list = __webpack_require__("fdfc24440b4845bd47af");
+	
+	var _list2 = _interopRequireDefault(_list);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var List = function (_MultiInputList) {
+	  _inherits(List, _MultiInputList);
+	
+	  function List(props) {
+	    _classCallCheck(this, List);
+	
+	    return _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
+	  }
+	
+	  _createClass(List, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var _context = this.context,
+	          dataSourceUi = _context.dataSourceUi,
+	          listClassName = _context.listClassName,
+	          sortable = _context.sortable,
+	          showCheckbox = _context.showCheckbox,
+	          showDeleteBtn = _context.showDeleteBtn,
+	          checkBoxName = _context.checkBoxName,
+	          inputName = _context.inputName;
+	
+	      var name = '';
+	      if (dataSourceUi.length > 0) {
+	        name = 'list-group';
+	      }
+	      return _react2["default"].createElement(
+	        'ul',
+	        { id: this.listId, className: 'multi-list sortable-list ' + name + ' ' + listClassName },
+	        dataSourceUi.map(function (item, i) {
+	          return _react2["default"].createElement(
+	            'li',
+	            { className: 'list-group-item', id: item.itemId, key: i, 'data-seq': item.seq },
+	            sortable && _react2["default"].createElement('i', { className: 'es-icon es-icon-yidong mrl color-gray inline-block vertical-middle' }),
+	            _react2["default"].createElement('img', { className: 'avatar-sm avatar-sm-square mrm', src: item.avatar }),
+	            _react2["default"].createElement(
+	              'span',
+	              { className: 'label-name text-overflow inline-block vertical-middle' },
+	              item.nickname
+	            ),
+	            _react2["default"].createElement(
+	              'label',
+	              { className: showCheckbox ? '' : 'hidden' },
+	              _react2["default"].createElement('input', { type: 'checkbox', name: checkBoxName + item.id, checked: item.isVisible, onChange: function onChange(event) {
+	                  return _this2.context.onChecked(event);
+	                }, value: item.itemId }),
+	              Translator.trans('course.manage.teacher_display_label')
+	            ),
+	            _react2["default"].createElement(
+	              'a',
+	              { className: showDeleteBtn ? 'pull-right link-gray mtm' : 'hidden', onClick: function onClick(event) {
+	                  return _this2.context.removeItem(event);
+	                }, 'data-item-id': item.itemId },
+	              _react2["default"].createElement('i', { className: 'es-icon es-icon-close01 text-12' })
+	            ),
+	            _react2["default"].createElement('input', { type: 'hidden', name: inputName, value: item.id })
+	          );
+	        })
+	      );
+	    }
+	  }]);
+	
+	  return List;
+	}(_list2["default"]);
+	
+	exports["default"] = List;
+	;
+	
+	List.contextTypes = _extends({}, _list2["default"].contextTypes, {
+	  showCheckbox: _react2["default"].PropTypes.bool,
+	  showDeleteBtn: _react2["default"].PropTypes.bool,
+	  checkBoxName: _react2["default"].PropTypes.string,
+	  onChecked: _react2["default"].PropTypes.func
+	});
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _reactDom = __webpack_require__("5fdcf1aea784583ca083");
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _react = __webpack_require__("33a776824bec073629e5");
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _personaMultiInput = __webpack_require__("55e73d7afebf9c74b73e");
+	
+	var _personaMultiInput2 = _interopRequireDefault(_personaMultiInput);
+	
+	var _sortable = __webpack_require__("8f840897d9471c8c1fbd");
+	
+	var _sortable2 = _interopRequireDefault(_sortable);
+	
+	var _notify = __webpack_require__("b334fd7e4c5a19234db2");
+	
+	var _notify2 = _interopRequireDefault(_notify);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	_reactDom2["default"].render(_react2["default"].createElement(_personaMultiInput2["default"], {
+	  addable: true,
+	  dataSource: $('#course-teachers').data('init-value'),
+	  outputDataElement: 'teachers',
+	  inputName: 'ids[]',
+	  searchable: { enable: true, url: $('#course-teachers').data('query-url') + "?q=" }
+	}), document.getElementById('course-teachers'));
+	
+	$('.js-btn-save').on('click', function (event) {
+	  if ($("input[name=teachers]").val() !== '[]') {
+	    $('#teachers-form').submit();
+	  } else {
+	    (0, _notify2["default"])('warning', Translator.trans('course.manage.min_teacher_num_error_hint'));
+	  }
+	});
+
+/***/ })
+
+});
+//# sourceMappingURL=index.js.map

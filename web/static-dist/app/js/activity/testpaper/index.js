@@ -1,1 +1,14 @@
-webpackJsonp(["app/js/activity/testpaper/index"],[function(t,a){"use strict";$("#testpaper-modal").modal({backdrop:"static",keyboard:!1})}]);
+webpackJsonp(["app/js/activity/testpaper/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	$('#testpaper-modal').modal({
+	  backdrop: 'static',
+	  keyboard: false
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

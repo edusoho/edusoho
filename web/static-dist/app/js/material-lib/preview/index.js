@@ -1,1 +1,25 @@
-webpackJsonp(["app/js/material-lib/preview/index"],[function(e,l){"use strict";var a=$("#material-preview-player"),r=a.data("url");if(a.length>0){var i="<iframe src='"+r+"' id='viewerIframe' width='100%'allowfullscreen webkitallowfullscreen height='100%' style='border:0px'></iframe>";a.html(i)}var t=$("#modal");t.on("hidden.bs.modal",function(){a.length>0&&a.html("")})}]);
+webpackJsonp(["app/js/material-lib/preview/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	var playerDiv = $('#material-preview-player');
+	var url = playerDiv.data('url');
+	
+	if (playerDiv.length > 0) {
+	  var html = '<iframe src=\'' + url + '\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+	
+	  playerDiv.html(html);
+	}
+	
+	var $modal = $('#modal');
+	$modal.on('hidden.bs.modal', function () {
+	  if (playerDiv.length > 0) {
+	    playerDiv.html('');
+	  }
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

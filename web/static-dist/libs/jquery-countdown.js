@@ -1,1 +1,316 @@
-!function(t){function e(n){if(s[n])return s[n].exports;var o=s[n]={exports:{},id:n,loaded:!1};return t[n].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var s={};return e.m=t,e.c=s,e.p="/static-dist/",e(0)}({bb4ea8938542cb619753:function(t,e){"use strict";!function(t){t($)}(function(t){function e(t){if(t instanceof Date)return t;if(String(t).match(a))return String(t).match(/^[0-9]*$/)&&(t=Number(t)),String(t).match(/\-/)&&(t=String(t).replace(/\-/g,"/")),new Date(t);throw new Error("Couldn't cast `"+t+"` to a date object.")}function s(t){var e=t.toString().replace(/([.?*+^$[\]\\(){}|-])/g,"\\$1");return new RegExp(e)}function n(t){return function(e){var n=e.match(/%(-|!)?[A-Z]{1}(:[^;]+;)?/gi);if(n)for(var i=0,a=n.length;i<a;++i){var r=n[i].match(/%(-|!)?([a-zA-Z]{1})(:[^;]+;)?/),h=s(r[0]),c=r[1]||"",u=r[3]||"",f=null;r=r[2],l.hasOwnProperty(r)&&(f=l[r],f=Number(t[f])),null!==f&&("!"===c&&(f=o(u,f)),""===c&&f<10&&(f="0"+f.toString()),e=e.replace(h,f.toString()))}return e=e.replace(/%%/,"%")}}function o(t,e){var s="s",n="";return t&&(t=t.replace(/(:|;|\s)/gi,"").split(/\,/),1===t.length?s=t[0]:(n=t[0],s=t[1])),Math.abs(e)>1?s:n}var i=[],a=[],r={precision:100,elapse:!1,defer:!1};a.push(/^[0-9]*$/.source),a.push(/([0-9]{1,2}\/){2}[0-9]{4}( [0-9]{1,2}(:[0-9]{2}){2})?/.source),a.push(/[0-9]{4}([\/\-][0-9]{1,2}){2}( [0-9]{1,2}(:[0-9]{2}){2})?/.source),a=new RegExp(a.join("|"));var l={Y:"years",m:"months",n:"daysToMonth",d:"daysToWeek",w:"weeks",W:"weeksToMonth",H:"hours",M:"minutes",S:"seconds",D:"totalDays",I:"totalHours",N:"totalMinutes",T:"totalSeconds"},h=function(e,s,n){this.el=e,this.$el=t(e),this.interval=null,this.offset={},this.options=t.extend({},r),this.instanceNumber=i.length,i.push(this),this.$el.data("countdown-instance",this.instanceNumber),n&&("function"==typeof n?(this.$el.on("update.countdown",n),this.$el.on("stoped.countdown",n),this.$el.on("finish.countdown",n)):this.options=t.extend({},r,n)),this.setFinalDate(s),this.options.defer===!1&&this.start()};t.extend(h.prototype,{start:function(){null!==this.interval&&clearInterval(this.interval);var t=this;this.update(),this.interval=setInterval(function(){t.update.call(t)},this.options.precision)},stop:function(){clearInterval(this.interval),this.interval=null,this.dispatchEvent("stoped")},toggle:function(){this.interval?this.stop():this.start()},pause:function(){this.stop()},resume:function(){this.start()},remove:function(){this.stop.call(this),i[this.instanceNumber]=null,delete this.$el.data().countdownInstance},setFinalDate:function(t){this.finalDate=e(t)},update:function(){if(0===this.$el.closest("html").length)return void this.remove();var e,s=void 0!==t._data(this.el,"events"),n=new Date;e=this.finalDate.getTime()-n.getTime(),e=Math.ceil(e/1e3),e=!this.options.elapse&&e<0?0:Math.abs(e),this.totalSecsLeft!==e&&s&&(this.totalSecsLeft=e,this.elapsed=n>=this.finalDate,this.offset={seconds:this.totalSecsLeft%60,minutes:Math.floor(this.totalSecsLeft/60)%60,hours:Math.floor(this.totalSecsLeft/60/60)%24,days:Math.floor(this.totalSecsLeft/60/60/24)%7,daysToWeek:Math.floor(this.totalSecsLeft/60/60/24)%7,daysToMonth:Math.floor(this.totalSecsLeft/60/60/24%30.4368),weeks:Math.floor(this.totalSecsLeft/60/60/24/7),weeksToMonth:Math.floor(this.totalSecsLeft/60/60/24/7)%4,months:Math.floor(this.totalSecsLeft/60/60/24/30.4368),years:Math.abs(this.finalDate.getFullYear()-n.getFullYear()),totalDays:Math.floor(this.totalSecsLeft/60/60/24),totalHours:Math.floor(this.totalSecsLeft/60/60),totalMinutes:Math.floor(this.totalSecsLeft/60),totalSeconds:this.totalSecsLeft},this.options.elapse||0!==this.totalSecsLeft?this.dispatchEvent("update"):(this.stop(),this.dispatchEvent("finish")))},dispatchEvent:function(e){var s=t.Event(e+".countdown");s.finalDate=this.finalDate,s.elapsed=this.elapsed,s.offset=t.extend({},this.offset),s.strftime=n(this.offset),this.$el.trigger(s)}}),t.fn.countdown=function(){var e=Array.prototype.slice.call(arguments,0);return this.each(function(){var s=t(this).data("countdown-instance");if(void 0!==s){var n=i[s],o=e[0];h.prototype.hasOwnProperty(o)?n[o].apply(n,e.slice(1)):null===String(o).match(/^[$A-Z_][0-9A-Z_$]*$/i)?(n.setFinalDate.call(n,o),n.start()):t.error("Method %s does not exist on jQuery.countdown".replace(/\%s/gi,o))}else new h(this,e[0],e[1])})}})},0:function(t,e,s){t.exports=s("bb4ea8938542cb619753")}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/static-dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "bb4ea8938542cb619753":
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	/*!
+	 * The Final Countdown for jQuery v2.2.0 (http://hilios.github.io/jQuery.countdown/)
+	 * Copyright (c) 2016 Edson Hilios
+	 * 
+	 * Permission is hereby granted, free of charge, to any person obtaining a copy of
+	 * this software and associated documentation files (the "Software"), to deal in
+	 * the Software without restriction, including without limitation the rights to
+	 * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+	 * the Software, and to permit persons to whom the Software is furnished to do so,
+	 * subject to the following conditions:
+	 * 
+	 * The above copyright notice and this permission notice shall be included in all
+	 * copies or substantial portions of the Software.
+	 * 
+	 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+	 * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+	 * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+	 * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+	 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	 */
+	(function (factory) {
+	    "use strict";
+	
+	    factory($);
+	})(function ($) {
+	    "use strict";
+	
+	    var instances = [],
+	        matchers = [],
+	        defaultOptions = {
+	        precision: 100,
+	        elapse: false,
+	        defer: false
+	    };
+	    matchers.push(/^[0-9]*$/.source);
+	    matchers.push(/([0-9]{1,2}\/){2}[0-9]{4}( [0-9]{1,2}(:[0-9]{2}){2})?/.source);
+	    matchers.push(/[0-9]{4}([\/\-][0-9]{1,2}){2}( [0-9]{1,2}(:[0-9]{2}){2})?/.source);
+	    matchers = new RegExp(matchers.join("|"));
+	    function parseDateString(dateString) {
+	        if (dateString instanceof Date) {
+	            return dateString;
+	        }
+	        if (String(dateString).match(matchers)) {
+	            if (String(dateString).match(/^[0-9]*$/)) {
+	                dateString = Number(dateString);
+	            }
+	            if (String(dateString).match(/\-/)) {
+	                dateString = String(dateString).replace(/\-/g, "/");
+	            }
+	            return new Date(dateString);
+	        } else {
+	            throw new Error("Couldn't cast `" + dateString + "` to a date object.");
+	        }
+	    }
+	    var DIRECTIVE_KEY_MAP = {
+	        Y: "years",
+	        m: "months",
+	        n: "daysToMonth",
+	        d: "daysToWeek",
+	        w: "weeks",
+	        W: "weeksToMonth",
+	        H: "hours",
+	        M: "minutes",
+	        S: "seconds",
+	        D: "totalDays",
+	        I: "totalHours",
+	        N: "totalMinutes",
+	        T: "totalSeconds"
+	    };
+	    function escapedRegExp(str) {
+	        var sanitize = str.toString().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+	        return new RegExp(sanitize);
+	    }
+	    function strftime(offsetObject) {
+	        return function (format) {
+	            var directives = format.match(/%(-|!)?[A-Z]{1}(:[^;]+;)?/gi);
+	            if (directives) {
+	                for (var i = 0, len = directives.length; i < len; ++i) {
+	                    var directive = directives[i].match(/%(-|!)?([a-zA-Z]{1})(:[^;]+;)?/),
+	                        regexp = escapedRegExp(directive[0]),
+	                        modifier = directive[1] || "",
+	                        plural = directive[3] || "",
+	                        value = null;
+	                    directive = directive[2];
+	                    if (DIRECTIVE_KEY_MAP.hasOwnProperty(directive)) {
+	                        value = DIRECTIVE_KEY_MAP[directive];
+	                        value = Number(offsetObject[value]);
+	                    }
+	                    if (value !== null) {
+	                        if (modifier === "!") {
+	                            value = pluralize(plural, value);
+	                        }
+	                        if (modifier === "") {
+	                            if (value < 10) {
+	                                value = "0" + value.toString();
+	                            }
+	                        }
+	                        format = format.replace(regexp, value.toString());
+	                    }
+	                }
+	            }
+	            format = format.replace(/%%/, "%");
+	            return format;
+	        };
+	    }
+	    function pluralize(format, count) {
+	        var plural = "s",
+	            singular = "";
+	        if (format) {
+	            format = format.replace(/(:|;|\s)/gi, "").split(/\,/);
+	            if (format.length === 1) {
+	                plural = format[0];
+	            } else {
+	                singular = format[0];
+	                plural = format[1];
+	            }
+	        }
+	        if (Math.abs(count) > 1) {
+	            return plural;
+	        } else {
+	            return singular;
+	        }
+	    }
+	    var Countdown = function Countdown(el, finalDate, options) {
+	        this.el = el;
+	        this.$el = $(el);
+	        this.interval = null;
+	        this.offset = {};
+	        this.options = $.extend({}, defaultOptions);
+	        this.instanceNumber = instances.length;
+	        instances.push(this);
+	        this.$el.data("countdown-instance", this.instanceNumber);
+	        if (options) {
+	            if (typeof options === "function") {
+	                this.$el.on("update.countdown", options);
+	                this.$el.on("stoped.countdown", options);
+	                this.$el.on("finish.countdown", options);
+	            } else {
+	                this.options = $.extend({}, defaultOptions, options);
+	            }
+	        }
+	        this.setFinalDate(finalDate);
+	        if (this.options.defer === false) {
+	            this.start();
+	        }
+	    };
+	    $.extend(Countdown.prototype, {
+	        start: function start() {
+	            if (this.interval !== null) {
+	                clearInterval(this.interval);
+	            }
+	            var self = this;
+	            this.update();
+	            this.interval = setInterval(function () {
+	                self.update.call(self);
+	            }, this.options.precision);
+	        },
+	        stop: function stop() {
+	            clearInterval(this.interval);
+	            this.interval = null;
+	            this.dispatchEvent("stoped");
+	        },
+	        toggle: function toggle() {
+	            if (this.interval) {
+	                this.stop();
+	            } else {
+	                this.start();
+	            }
+	        },
+	        pause: function pause() {
+	            this.stop();
+	        },
+	        resume: function resume() {
+	            this.start();
+	        },
+	        remove: function remove() {
+	            this.stop.call(this);
+	            instances[this.instanceNumber] = null;
+	            delete this.$el.data().countdownInstance;
+	        },
+	        setFinalDate: function setFinalDate(value) {
+	            this.finalDate = parseDateString(value);
+	        },
+	        update: function update() {
+	            if (this.$el.closest("html").length === 0) {
+	                this.remove();
+	                return;
+	            }
+	            var hasEventsAttached = $._data(this.el, "events") !== undefined,
+	                now = new Date(),
+	                newTotalSecsLeft;
+	            newTotalSecsLeft = this.finalDate.getTime() - now.getTime();
+	            newTotalSecsLeft = Math.ceil(newTotalSecsLeft / 1e3);
+	            newTotalSecsLeft = !this.options.elapse && newTotalSecsLeft < 0 ? 0 : Math.abs(newTotalSecsLeft);
+	            if (this.totalSecsLeft === newTotalSecsLeft || !hasEventsAttached) {
+	                return;
+	            } else {
+	                this.totalSecsLeft = newTotalSecsLeft;
+	            }
+	            this.elapsed = now >= this.finalDate;
+	            this.offset = {
+	                seconds: this.totalSecsLeft % 60,
+	                minutes: Math.floor(this.totalSecsLeft / 60) % 60,
+	                hours: Math.floor(this.totalSecsLeft / 60 / 60) % 24,
+	                days: Math.floor(this.totalSecsLeft / 60 / 60 / 24) % 7,
+	                daysToWeek: Math.floor(this.totalSecsLeft / 60 / 60 / 24) % 7,
+	                daysToMonth: Math.floor(this.totalSecsLeft / 60 / 60 / 24 % 30.4368),
+	                weeks: Math.floor(this.totalSecsLeft / 60 / 60 / 24 / 7),
+	                weeksToMonth: Math.floor(this.totalSecsLeft / 60 / 60 / 24 / 7) % 4,
+	                months: Math.floor(this.totalSecsLeft / 60 / 60 / 24 / 30.4368),
+	                years: Math.abs(this.finalDate.getFullYear() - now.getFullYear()),
+	                totalDays: Math.floor(this.totalSecsLeft / 60 / 60 / 24),
+	                totalHours: Math.floor(this.totalSecsLeft / 60 / 60),
+	                totalMinutes: Math.floor(this.totalSecsLeft / 60),
+	                totalSeconds: this.totalSecsLeft
+	            };
+	            if (!this.options.elapse && this.totalSecsLeft === 0) {
+	                this.stop();
+	                this.dispatchEvent("finish");
+	            } else {
+	                this.dispatchEvent("update");
+	            }
+	        },
+	        dispatchEvent: function dispatchEvent(eventName) {
+	            var event = $.Event(eventName + ".countdown");
+	            event.finalDate = this.finalDate;
+	            event.elapsed = this.elapsed;
+	            event.offset = $.extend({}, this.offset);
+	            event.strftime = strftime(this.offset);
+	            this.$el.trigger(event);
+	        }
+	    });
+	    $.fn.countdown = function () {
+	        var argumentsArray = Array.prototype.slice.call(arguments, 0);
+	        return this.each(function () {
+	            var instanceNumber = $(this).data("countdown-instance");
+	            if (instanceNumber !== undefined) {
+	                var instance = instances[instanceNumber],
+	                    method = argumentsArray[0];
+	                if (Countdown.prototype.hasOwnProperty(method)) {
+	                    instance[method].apply(instance, argumentsArray.slice(1));
+	                } else if (String(method).match(/^[$A-Z_][0-9A-Z_$]*$/i) === null) {
+	                    instance.setFinalDate.call(instance, method);
+	                    instance.start();
+	                } else {
+	                    $.error("Method %s does not exist on jQuery.countdown".replace(/\%s/gi, method));
+	                }
+	            } else {
+	                new Countdown(this, argumentsArray[0], argumentsArray[1]);
+	            }
+	        });
+	    };
+	});
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__("bb4ea8938542cb619753");
+
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=jquery-countdown.js.map

@@ -1,1 +1,169 @@
-webpackJsonp(["app/js/material-lib/document-player/index"],{e3591734a7ec9a6a6c56:function(e,t,a){"use strict";function i(e){return e&&e.__esModule?e:{default:e}}function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var a=0;a<t.length;a++){var i=t[a];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,a,i){return a&&e(t.prototype,a),i&&e(t,i),t}}(),l=a("c04c1b91e3806f24595a"),s=i(l);a("9a5c59a43068776403d1");var o=function(){function e(t){var a=t.element,i=t.swfUrl,r=t.pdfUrl,l=t.watermarkOptions,s=t.canCopy;n(this,e),this.element=$(a),this.swfUrl=i||"",this.pdfUrl=r||"",this.swfPlayerWidth="100%",this.swfPlayerHeight="100%",this.swfPlayerUrl="",this.watermarkOptions=l||"",this.canCopy=s||!1,this.init()}return r(e,[{key:"init",value:function(){this.isSupportHtml5()&&!this.isIE9()?this.initPDFJSViewer():this.initSwfViewer(),this.onFullScreen()}},{key:"onFullScreen",value:function(e){alert(1),window.onmessage=function(e){if(alert(2),null!=e&&void 0!=e){var t=e.data;if("boolean"==typeof t){var a=$("#task-content-iframe",window.parent.document);t?(a.removeClass("screen-full"),a.width("100%")):(a.addClass("screen-full"),a.width(window.document.body.offsetWidth+"px"))}}}}},{key:"isIE9",value:function(){return navigator.appVersion.indexOf("MSIE 9.")!=-1}},{key:"isSupportHtml5",value:function(){return $.support.leadingWhitespace}},{key:"initPDFJSViewer",value:function(){$("html").attr("dir","ltr");var e="//service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#"+this.pdfUrl;this.canCopy||(e+="#false");var t='<iframe id="doc-pdf-player" class="task-content-iframe" \n     src="'+e+'" style="width:100%;height:100%;border:0px" \n     allowfullscreen="" webkitallowfullscreen="">\n      </iframe>';this.element.append(t),this.addWatermark()}},{key:"initSwfViewer",value:function(){$.html('<div id="website"><p align="center" class="style1">'+Translator.trans("site.flash_not_install_hint")+"</p></div>");var e={doc_url:decodeURI(this.swfUrl.value)},t={bgcolor:"#efefef",allowFullScreen:!0,wmode:"window",allowNetworking:"all",allowscriptaccess:"always",autoPlay:!1},a={id:"website"};s.default.embedSWF(this.swfPlayerUrl,"website",this.swfPlayerWidth,this.swfPlayerHeight,"9.0.45",null,e,t,a),this.addWatermark()}},{key:"addWatermark",value:function(){this.watermarkOptions&&this.element.WaterMark(this.watermarkOptions)}}]),e}();t.default=o},0:function(e,t,a){"use strict";function i(e){return e&&e.__esModule?e:{default:e}}var n=a("e3591734a7ec9a6a6c56"),r=i(n),l=$("#document-player"),s=l.data("params");new r.default({element:"#document-player",swfUrl:s.swf,pdfUrl:s.pdf})}});
+webpackJsonp(["app/js/material-lib/document-player/index"],{
+
+/***/ "e3591734a7ec9a6a6c56":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _esSwfobject = __webpack_require__("c04c1b91e3806f24595a");
+	
+	var _esSwfobject2 = _interopRequireDefault(_esSwfobject);
+	
+	__webpack_require__("9a5c59a43068776403d1");
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var DocPlayer = function () {
+	  function DocPlayer(_ref) {
+	    var element = _ref.element,
+	        swfUrl = _ref.swfUrl,
+	        pdfUrl = _ref.pdfUrl,
+	        watermarkOptions = _ref.watermarkOptions,
+	        canCopy = _ref.canCopy;
+	
+	    _classCallCheck(this, DocPlayer);
+	
+	    this.element = $(element);
+	    this.swfUrl = swfUrl || '';
+	    this.pdfUrl = pdfUrl || '';
+	    this.swfPlayerWidth = '100%';
+	    this.swfPlayerHeight = '100%';
+	    this.swfPlayerUrl = '';
+	    this.watermarkOptions = watermarkOptions || '';
+	    this.canCopy = canCopy || false;
+	    this.init();
+	
+	    console.log(watermarkOptions);
+	  }
+	
+	  _createClass(DocPlayer, [{
+	    key: 'init',
+	    value: function init() {
+	      if (this.isSupportHtml5() && !this.isIE9()) {
+	        this.initPDFJSViewer();
+	      } else {
+	        this.initSwfViewer();
+	      }
+	      this.onFullScreen();
+	    }
+	  }, {
+	    key: 'onFullScreen',
+	    value: function onFullScreen(docPlayer) {
+	      alert(1);
+	      window.onmessage = function (e) {
+	        alert(2);
+	        console.log(e.data);
+	        if (e == null || e == undefined) {
+	          return;
+	        }
+	        var isPageFullScreen = e.data;
+	        if (typeof isPageFullScreen != "boolean") {
+	          return;
+	        }
+	        var docContent = $('#task-content-iframe', window.parent.document);
+	        if (isPageFullScreen) {
+	          docContent.removeClass('screen-full');
+	          docContent.width('100%');
+	        } else {
+	          docContent.addClass('screen-full');
+	          docContent.width(window.document.body.offsetWidth + "px");
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'isIE9',
+	    value: function isIE9() {
+	      return navigator.appVersion.indexOf("MSIE 9.") != -1;
+	    }
+	  }, {
+	    key: 'isSupportHtml5',
+	    value: function isSupportHtml5() {
+	      return $.support.leadingWhitespace;
+	    }
+	  }, {
+	    key: 'initPDFJSViewer',
+	    value: function initPDFJSViewer() {
+	      $("html").attr('dir', 'ltr');
+	
+	      var src = '//service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#' + this.pdfUrl;
+	
+	      if (!this.canCopy) {
+	        src += '#false';
+	      }
+	
+	      var $iframe = '<iframe id="doc-pdf-player" class="task-content-iframe" \n     src="' + src + '" style="width:100%;height:100%;border:0px" \n     allowfullscreen="" webkitallowfullscreen="">\n      </iframe>';
+	      this.element.append($iframe);
+	
+	      this.addWatermark();
+	    }
+	  }, {
+	    key: 'initSwfViewer',
+	    value: function initSwfViewer() {
+	      $.html('<div id="website"><p align="center" class="style1">' + Translator.trans('site.flash_not_install_hint') + '</p></div>');
+	
+	      var flashVars = {
+	        doc_url: decodeURI(this.swfUrl.value)
+	      };
+	
+	      var params = {
+	        bgcolor: '#efefef',
+	        allowFullScreen: true,
+	        wmode: 'window',
+	        allowNetworking: 'all',
+	        allowscriptaccess: 'always',
+	        autoPlay: false
+	      };
+	
+	      var attributes = {
+	        id: 'website'
+	      };
+	
+	      _esSwfobject2["default"].embedSWF(this.swfPlayerUrl, 'website', this.swfPlayerWidth, this.swfPlayerHeight, "9.0.45", null, flashVars, params, attributes);
+	
+	      this.addWatermark();
+	    }
+	  }, {
+	    key: 'addWatermark',
+	    value: function addWatermark() {
+	      this.watermarkOptions && this.element.WaterMark(this.watermarkOptions);
+	    }
+	  }]);
+	
+	  return DocPlayer;
+	}();
+	
+	exports["default"] = DocPlayer;
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _docPlayer = __webpack_require__("e3591734a7ec9a6a6c56");
+	
+	var _docPlayer2 = _interopRequireDefault(_docPlayer);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var $player = $("#document-player");
+	var params = $player.data('params');
+	new _docPlayer2["default"]({
+	  element: '#document-player',
+	  swfUrl: params.swf,
+	  pdfUrl: params.pdf
+	});
+
+/***/ })
+
+});
+//# sourceMappingURL=index.js.map

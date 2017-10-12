@@ -1,1 +1,29 @@
-webpackJsonp(["app/js/article/list/index"],[function(e,i,a){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var l=a("370d3340744bf261df0e"),t=n(l);if($(".aricle-carousel .swiper-slide").length>1){new t.default(".aricle-carousel .swiper-container",{pagination:".swiper-pager",calculateHeight:!0,paginationClickable:!0,autoplay:5e3,autoplayDisableOnInteraction:!1,loop:!0,onInit:function(e){$(".swiper-slide").removeClass("swiper-hidden")}})}}]);
+webpackJsonp(["app/js/article/list/index"],[
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _swiper = __webpack_require__("370d3340744bf261df0e");
+	
+	var _swiper2 = _interopRequireDefault(_swiper);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	if ($(".aricle-carousel .swiper-slide").length > 1) {
+	    var swiper = new _swiper2["default"]('.aricle-carousel .swiper-container', {
+	        pagination: '.swiper-pager',
+	        calculateHeight: true,
+	        paginationClickable: true,
+	        autoplay: 5000,
+	        autoplayDisableOnInteraction: false,
+	        loop: true,
+	        onInit: function onInit(swiper) {
+	            $(".swiper-slide").removeClass('swiper-hidden');
+	        }
+	    });
+	}
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

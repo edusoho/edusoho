@@ -1,1 +1,37 @@
-webpackJsonp(["app/js/pay/wxpay-h5/index"],[function(e,a){"use strict";function n(){WeixinJSBridge.invoke("getBrandWCPayRequest",$("#jsApiParameters").data("value"),function(e){"get_brand_wcpay_request:ok"==e.err_msg?window.location.href=$("#jsApiParameters").data("goto"):"get_brand_wcpay_request:fail"==e.err_msg?alert(Translator.trans("notify.pay_failed.message")):"get_brand_wcpay_request:cancel"==e.err_msg})}$(".panel-wxpay").on("click",".js-wxpay",function(){"undefined"==typeof WeixinJSBridge?document.addEventListener?document.addEventListener("WeixinJSBridgeReady",n,!1):document.attachEvent&&(document.attachEvent("WeixinJSBridgeReady",n),document.attachEvent("onWeixinJSBridgeReady",n)):n()})}]);
+webpackJsonp(["app/js/pay/wxpay-h5/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	$('.panel-wxpay').on('click', '.js-wxpay', function () {
+	    if (typeof WeixinJSBridge == "undefined") {
+	        if (document.addEventListener) {
+	            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+	        } else if (document.attachEvent) {
+	            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+	            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+	        }
+	    } else {
+	        jsApiCall();
+	    }
+	});
+	
+	//调用微信JS api 支付
+	function jsApiCall() {
+	    WeixinJSBridge.invoke('getBrandWCPayRequest', $("#jsApiParameters").data('value'), function (res) {
+	        if (res.err_msg == 'get_brand_wcpay_request:ok') {
+	            window.location.href = $("#jsApiParameters").data('goto');
+	        } else {
+	            if (res.err_msg == 'get_brand_wcpay_request:fail') {
+	                alert(Translator.trans('notify.pay_failed.message'));
+	            } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+	                // alert('取消')
+	            }
+	        }
+	    });
+	}
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map

@@ -1,1 +1,50 @@
-webpackJsonp(["app/js/settings/find_pay_password_by_sms/index"],[function(s,e,n){"use strict";function t(s){return s&&s.__esModule?s:{default:s}}var r=n("0282bb17fb83bfbfed9b"),d=t(r),i=".js-sms-send",a=$(i),u=$("#settings-find-pay-password-form"),o=u.validate({rules:{sms_code:{required:!0,unsigned_integer:!0,smsCode:!0}},messages:{sms_code:{required:Translator.trans("site.captcha_code.required")}}});$("#submit-btn").click(function(){o.form()&&u.submit()}),a.on("click",function(){new d.default({element:i,url:a.data("smsUrl"),smsType:a.data("smsType"),preSmsSend:function(){return!0}})})}]);
+webpackJsonp(["app/js/settings/find_pay_password_by_sms/index"],[
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _smsSender = __webpack_require__("0282bb17fb83bfbfed9b");
+	
+	var _smsSender2 = _interopRequireDefault(_smsSender);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var smsSend = '.js-sms-send';
+	var $smsCode = $(smsSend);
+	var $form = $('#settings-find-pay-password-form');
+	var validator = $form.validate({
+	  rules: {
+	    sms_code: {
+	      required: true,
+	      unsigned_integer: true,
+	      smsCode: true
+	    }
+	  },
+	  messages: {
+	    sms_code: {
+	      required: Translator.trans('site.captcha_code.required')
+	    }
+	  }
+	});
+	
+	$('#submit-btn').click(function () {
+	  if (validator.form()) {
+	    $form.submit();
+	  }
+	});
+	
+	$smsCode.on('click', function () {
+	  new _smsSender2["default"]({
+	    element: smsSend,
+	    url: $smsCode.data('smsUrl'),
+	    smsType: $smsCode.data('smsType'),
+	    preSmsSend: function preSmsSend() {
+	      return true;
+	    }
+	  });
+	});
+
+/***/ })
+]);
+//# sourceMappingURL=index.js.map
