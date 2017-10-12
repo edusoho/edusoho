@@ -205,8 +205,7 @@ admin.operation.reward_point_mall.product_tab.create_btn: 添加商品
 
 #账务管理模块
 admin.finance.order_menu: 用户订单
-admin.finance.my_account: 网校账户
-admin.finance.bills_menu: 账单管理
+admin.finance.bills_menu: 网校账单
 admin.finance.coin_menu: 虚拟币管理
 admin.finance.refunds_menu: 退款管理
 

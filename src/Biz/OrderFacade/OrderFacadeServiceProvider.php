@@ -135,13 +135,13 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
 
         $biz['payment.options'] = function ($biz) {
             $setting = $biz->service('System:SettingService')->get('coin');
-            if (!empty($setting['coin_enabled'])) {
-                return array(
-                    'coin_rate' => $setting['cash_rate'],
-                );
-            }
 
-            return array();
+            $site = $biz->service('System:SettingService')->get('site', array());
+
+            return array(
+                'coin_rate' => empty($setting['coin_enabled']) ? 1 : $setting['cash_rate'],
+                'goods_title' => empty($site['name']) ? 'EduSoho订单' : $site['name'].'订单',
+            );
         };
     }
 

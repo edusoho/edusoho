@@ -1,4 +1,5 @@
 site.alipay: Alipay
+site.trade.title: %name%Order
 site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
@@ -6447,6 +6448,18 @@ register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
 cashflow.title: Name
+cashflow.sn: sn
+cashflow.user_name: username
+cashflow.created_time: createdTime
+cashflow.amount: amount
+cashflow.number: number
+cashflow.platform: platform
+cashflow.trade_sn: tradeSn
+cashflow.user_truename: truename
+cashflow.user_email: emial
+cashflow.user_mobile: mobile
+
+admin.cashflow.keyword: keyword
 
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
 order.pay_check_msg.order_not_exist: Order not exist
