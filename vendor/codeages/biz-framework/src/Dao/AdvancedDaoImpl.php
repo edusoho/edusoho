@@ -112,7 +112,8 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
             foreach ($identifies as $identifyIndex => $identify) {
                 $params[] = $updateColumnsList[$identifyIndex][$updateColumn];
-                $caseWhenSql .= " WHEN {$identify} THEN ? ";
+                $caseWhenSql .= " WHEN ? THEN ? ";
+                $params[] = $identify;
                 if ($identifyIndex === count($identifies) - 1) {
                     $caseWhenSql .= " ELSE {$updateColumn} END";
                 }
@@ -123,8 +124,9 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
         $sql .= implode(',', $updateSql);
 
-        $identifiesStr = implode(',', $identifies);
-        $sql .= " WHERE {$identifyColumn} IN ({$identifiesStr})";
+        $marks = str_repeat('?,', count($identifies) - 1).'?';
+        $sql .= " WHERE {$identifyColumn} IN ({$marks})";
+        $params = array_merge($params, $identifies);
 
         return $this->db()->executeUpdate($sql, $params);
     }
