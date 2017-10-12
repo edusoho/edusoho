@@ -6,14 +6,10 @@
 {% block body %}
   {% set coinSetting = setting('coin') %}
   <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">
+    <div align="center">
+      {{ radios('result', {pass:'form.radio_btn.pass'|trans, unpass:'form.radio_btn.unpass'|trans}) }}
+    </div>
     <table class="table cd-table table-striped order-detail-table">
-      <tr>
-        <td width="25%">
-        </td>
-        <td width="75%">
-          {{ radios('result', {pass:'form.radio_btn.pass'|trans, unpass:'form.radio_btn.unpass'|trans}) }}
-        </td>
-      </tr>
       <tr>
         <td width="25%">{{ '退款人'|trans }}</td>
         <td width="75%">{{ admin_macro.user_link(user) }}</td>
