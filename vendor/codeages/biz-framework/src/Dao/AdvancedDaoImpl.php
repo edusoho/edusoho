@@ -111,9 +111,9 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
             $caseWhenSql = "{$updateColumn} = CASE {$identifyColumn} ";
 
             foreach ($identifies as $identifyIndex => $identify) {
-                $params[] = $updateColumnsList[$identifyIndex][$updateColumn];
                 $caseWhenSql .= " WHEN ? THEN ? ";
                 $params[] = $identify;
+                $params[] = $updateColumnsList[$identifyIndex][$updateColumn];
                 if ($identifyIndex === count($identifies) - 1) {
                     $caseWhenSql .= " ELSE {$updateColumn} END";
                 }
