@@ -28,7 +28,7 @@ class CoinController extends BaseController
 
         return $this->render('cashier/coin/show.html.twig', array(
             'coinSetting' => $coinSetting,
-            'balance' => MathToolkit::multiply($balance, array('amount'), 0.01),
+            'balance' => $balance,
             'maxCoin' => $this->getMaxCoin($order),
             'isPasswordSet' => $this->getAccountService()->isPayPasswordSetted($user->getId()),
         ));
@@ -43,7 +43,11 @@ class CoinController extends BaseController
         /* @var $product Product */
         $product = $this->getOrderFacadeService()->getOrderProductByOrderItem($item);
 
-        return $product->getMaxCoinAmount();
+        $maxProductCoin = $product->getMaxCoinAmount();
+
+        $maxOrderCoin = $this->getCurrency()->convertToCoin($order['pay_amount']);
+
+        return min($maxProductCoin, $maxOrderCoin);
     }
 
     /**

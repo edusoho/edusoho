@@ -5,8 +5,14 @@
   .cd-panel-heading {
     padding: 24px 32px;
     .cd-box-shadow-inset(0 -1px 0 0);
+    @media(max-width: @screen-xs-max) {
+      padding: 16px;
+    }
   }
   .cd-panel-body {
     padding: 32px;
+    @media(max-width: @screen-xs-max) {
+      padding: 16px;
+    }
   }
 }

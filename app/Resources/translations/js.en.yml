@@ -577,6 +577,9 @@ open_course.unpublish_success_hint: Lesson unpublished!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
+order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: Coupon is not available
 order.create.use_discount_coupon_hint: Coupon is available, and you are currently using coupons with %rate% discount.
 order.create.use_price_coupon_hint: Coupon is available, and you are currently using coupons with %rate% yuan deduction.
@@ -795,7 +798,7 @@ confirm.warn: 警告
 confirm.exit.tip: 您确定要退出学习吗？
 
 cashier.wechat_pay: Wechat pay
-cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat <br>scan the QR code to pay
+cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat, scan the QR code to pay
 cashier.confirm.fail_message: Payment unsuccessful, please check or repay
 cashier.pay.error_message: Payment has been abnormal, please contact the administrator
 cashier.confirm.title: Order payment
