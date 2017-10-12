@@ -5,7 +5,8 @@ export default class Coin {
     this.$form = props.$form;
     this.priceType = this.$container.data('priceType');
     this.coinRate = this.$container.data('coinRate');
-    this.maxCoinInput = parseFloat(this.$container.data('maxAllowCoin')) > parseFloat(this.$container.data('coinBalance')) ? parseFloat(this.$container.data('coinBalance')) : parseFloat(this.$container.data('maxAllowCoin'));
+    this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ? 
+                        this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
     this.initEvent();
   }
 
@@ -15,25 +16,26 @@ export default class Coin {
 
   changeAmount(event) {
     let $this = $(event.currentTarget);
-    let inputCoinNum = parseFloat($this.val());
+    let inputCoinNum = $this.val();
+    $this.val(parseFloat(inputCoinNum).toFixed(2));
+
     if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
       inputCoinNum = 0;
-      $this.val(inputCoinNum);
+      $this.val(parseFloat(inputCoinNum).toFixed(2));
       this.removePasswordValidate();
       
       this.$form.trigger('removePriceItem', ['coin-price']);
       this.cashierForm.calcPayPrice(inputCoinNum);
     }
-
     if (inputCoinNum > this.maxCoinInput) {
       inputCoinNum = this.maxCoinInput;
-      $this.val(inputCoinNum);
+      $this.val(parseFloat(inputCoinNum).toFixed(2));
     }
 
     if (inputCoinNum > 0) {
       this.addPasswordValidate();
       let coinName = this.$form.data('coin-name');
-      let price = 0;
+      let price = 0.00;
       if (this.priceType === 'coin') {
         price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
 
@@ -43,7 +45,7 @@ export default class Coin {
       } else {
         price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
       }
-      this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price ]);
+      this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price]);
       this.cashierForm.calcPayPrice(inputCoinNum);
     }
   }
