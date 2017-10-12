@@ -81,7 +81,6 @@ refundStatus:
 payment:
     none: --
     alipay: 支付宝
-    alipay.in_time: 支付宝
     wxpay: 微信支付
     wechat: 微信
     heepay: 网银支付
@@ -92,13 +91,17 @@ payment:
     llpay: 连连支付
     marketing: 营销平台
 
+orderSource:
+    self: 站内支付
+    marketing: 营销平台支付
+    outside: 站外支付
+
 orderDeductType:
     discount: 打折
-    coupon: 优惠码
+    coupon: 优惠券
     paidCourse: 班级课程抵扣
 
 newPayment:
-    none: --
     alipay: 支付宝
     wechat: 微信
     heepay: 网银支付

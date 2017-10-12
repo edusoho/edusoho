@@ -26,7 +26,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'title' => $product->title,
             'user_id' => $user['id'],
             'created_reason' => 'site.join_by_purchase',
-            'price_type' => $currency->isoCode,
+            'price_type' => 'CNY',
             'currency_exchange_rate' => $currency->exchangeRate,
             'refund_deadline' => $this->getRefundDeadline(),
         );
@@ -72,6 +72,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 'deduct_id' => $deduct['deduct_id'],
                 'deduct_type' => $deduct['deduct_type'],
                 'deduct_amount' => $deduct['deduct_amount'],
+                'snapshot' => empty($deduct['snapshot']) ? null : $deduct['snapshot'],
             );
         }
 
@@ -97,7 +98,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'user_id' => $userId,
             'created_reason' => empty($params['created_reason']) ? '' : $params['created_reason'],
             'source' => empty($params['source']) ? 'self' : $params['source'],
-            'price_type' => empty($params['price_type']) ? $currency->isoCode : $params['price_type'],
+            'price_type' => 'CNY',
         );
 
         $orderItems = $this->makeOrderItems($product);
@@ -146,17 +147,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         }
     }
 
-    public function payingOrder($orderSn, $params)
-    {
-        $order = $this->checkOrderBeforePay($orderSn, $params);
-
-        $trade = $this->makeTrade($order, $params);
-
-        $this->getWorkflowService()->paying($order['id'], array());
-
-        return $trade;
-    }
-
     public function checkOrderBeforePay($sn, $params)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
@@ -180,29 +170,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $orderPayChecker->check($order, $params);
 
         return $order;
-    }
-
-    private function makeTrade($order, $params)
-    {
-        $coinAmount = isset($params['coinAmount']) ? $params['coinAmount'] : 0;
-        $trade = array(
-            'goods_title' => $order['title'],
-            'goods_detail' => '',
-            'order_sn' => $order['sn'],
-            'amount' => $order['pay_amount'],
-            'platform' => $params['payment'],
-            'user_id' => $order['user_id'],
-            'coin_amount' => MathToolkit::simple($coinAmount, 100),
-            'cash_amount' => MathToolkit::simple($this->getTradePayCashAmount($order, $coinAmount), 100),
-            'create_ip' => isset($params['clientIp']) ? $params['clientIp'] : '127.0.0.1',
-            'price_type' => 'money',
-            'type' => 'purchase',
-            'attach' => array(
-                'user_id' => $order['user_id'],
-            ),
-        );
-
-        return $trade;
     }
 
     /**

@@ -47,7 +47,7 @@ class Currency
             $this->isoCode = 'COIN';
             $this->symbol = $coinSetting['coin_name'];
             $this->prefix = '';
-            $this->suffix = $coinSetting['coin_name'];
+            $this->suffix = ' '.$coinSetting['coin_name'];
             $this->exchangeRate = $coinSetting['cash_rate'];
         }
 

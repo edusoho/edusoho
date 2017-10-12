@@ -98,6 +98,8 @@ class OrderController extends BaseController
 
         $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
 
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'user_id'));
 
         return $this->render('admin/order/detail.html.twig', array(
@@ -106,6 +108,7 @@ class OrderController extends BaseController
             'orderLogs' => $orderLogs,
             'orderItems' => $orderItems,
             'orderDeducts' => $orderDeducts,
+            'paymentTrade' => $paymentTrade,
             'users' => $users,
         ));
     }

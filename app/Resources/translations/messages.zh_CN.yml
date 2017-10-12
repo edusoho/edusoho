@@ -2,6 +2,7 @@ Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
+site.trade.title: %name%订单
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
@@ -420,15 +421,17 @@ plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
+plugin.discount: 打折
 plugin.coupon.minus: 抵扣
 plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
 plugin.coupon.discount_tips: 优惠券 抵价%rate%折
 plugin.coupon.no_use_option: 不使用优惠券
 plugin.coupon.change_btn: 更换优惠券
-plugin.coupon.use_btn: 使用优惠券
+plugin.coupon.input_hint: 优惠券
 plugin.coupon.choose_btn: 输入优惠券
-plugin.coupon.use.input_placeholder: 请输入优惠券
-plugin.coupon.code: 优惠码
+plugin.coupon.use.input_placeholder: 输入优惠券码
+plugin.coupon.use.input_display: 请输入优惠券码
+plugin.coupon.code: 优惠券码
 plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用
@@ -465,9 +468,9 @@ order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
 order.due_pay: 应付(元)
-order.price_amount: 订单金额
+order.price_amount: 总价
 order.discount_amount: 优惠
-order.real_pay: 实付金额
+order.real_pay: 实付
 order.buyers: 购买者
 order.deduct_amount: 优惠金额
 order.coin_amount: 虚拟币支付
@@ -479,7 +482,8 @@ order.buyer.contact: 联系电话
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
-order.platform_sn: 商户订单号
+order.platform_sn: 支付流水号
+order.use_coupon_tip: 使用优惠劵
 order.price: 订单价格
 order.paid_time: 付款时间
 order.bank_code: 银行编号
@@ -501,21 +505,34 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 order.confirm: 订单确认
-order.confirm.pay_rmb: 应付金额：
+order.confirm.pay_total: 合计
+order.confirm.pay_rmb: 应付
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.submit_btn_loading: 正在提交...
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
+order.confirm.coupon.hint: 通过优惠券抵扣金额
+order.confirm.coupon.use_loading: 使用中
+order.confirm.coupon.expiry_date_hint: 有效期至
+order.confirm.coupon.select_existed: 选择已有优惠券
+order.confirm.coupon.used_coupon: 已使用优惠券
+order.confirm.coupon.deduction: 抵扣
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_name%
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
+order.confirm.price: 订单价格
+order.confirm.bought_course_deduction: 已购课程抵扣
+
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
 order.confirm.setup_pay_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
-order.confirm.forget_password_btn: 忘记密码？
+order.confirm.forget_password_btn: 忘记支付密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
 order.confirm.top_use_tips: 本订单最高可以使用
@@ -526,8 +543,9 @@ order.confirm.sms_code.input_placeholder: 输入短信验证码
 order.confirm.sms_code.get_code_btn: 获取短信验证码
 order.confirm.sms_code.not_bind_mobile_tips: 您还未绑定手机号
 order.confirm.sms_code.bind_btn: 去绑定
-order.paid_course.content_title: 您已购买过：
-order.paid_course.minus: 抵扣：
+order.paid_course.title: 已购买课程
+order.paid_course.content: 之前购买过的课程能够抵扣对应金额
+order.paid_course.minus: 抵扣
 order.refund: 退出学习
 order.refund.reason: 退出原因
 order.refund.reason_tips: 请输入您的退学原因
@@ -551,15 +569,20 @@ order.refund.notify_admin: >
 pay_center: 支付中心
 pay_center.confirm: 订单确认
 pay_center.pay: 订单支付
+pay_center.pay.price: 订单价格
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用虚拟币抵扣
+pay_center.pay.set_pay_password: 设置支付密码
+pay_center.pay.coin_input_tips: 本次使用
 pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
 pay_center.pay.mode: 支付方式
+pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 储蓄卡
 pay_center.pay.credit_card: 信用卡
 pay_center.pay.use_new_card: 使用新的银行卡
 pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其他支付方式
 pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
 pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
-pay_center.pay.confirm_pay_btn: 确认支付
+pay_center.pay.confirm_pay_btn: 支付订单
 pay_center.pay.confirm_pay_btn_loading: 正在支付
 pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
@@ -570,8 +593,9 @@ pay_center.pay.weixin_pay.press_qcode_pay_tips: 请长按二维码支付
 pay_center.pay.choose_other_way_btn: 选择其他支付方式
 pay_center.finish: 订单完成
 pay_center.finish.jump_tips: 正在跳转到支付网关...
+pay_center.finish_title: 订单支付完成
 pay_center.finish_tips: >
-  订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
+  将在 <span class="js-countdown">3</span> 秒后跳转
 pay_center.fee: 收费
 pay_center.remind: 支付提醒
 pay_center.remind.content_title: 支付提醒
@@ -3032,6 +3056,8 @@ user.account.empty: 暂无记录
 user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
 user.account.my_coin: %coin_name%账户
+user.account.my_coin.pay_coin: 实付%coin_name%
+user.account.my_coin.refunded_coin: 已退%coin_name%
 user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值
@@ -5088,7 +5114,7 @@ admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
-    <div class="popover-item">`
+    <div class="popover-item">
       <div class="title">新增订单</div>
       <div class="content">平台当日产生的所有订单，包括免费和付费</div>
     </div>
@@ -7325,12 +7351,14 @@ admin.coin_setting.price_set_tips: 请设置正确的价格
 
 #退款管理
 admin.order_refund.status.default: 退款状态
+admin.order_refund.sn: 退款单号
 admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.placeholder: 订单标题
+admin.order_refund.title.placeholder: 标题
 admin.order_refund.title: 退款订单
 admin.order_refund.order_amount: 退款金额
 admin.order_refund.refund_person: 退款人
 admin.order_refund.refund_status: 退款状态
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: 操作人
 admin.order_refund.operation: 操作
 admin.order_refund.reason: 退款理由
@@ -8105,8 +8133,23 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 
 cashflow.title: 名称
+cashflow.sn: 流水号
+cashflow.order_sn: 订单号
+cashflow.user_name: 用户名
+cashflow.created_time: 成交时间
+cashflow.amount: 金额
+cashflow.number: 数量
+cashflow.platform: 用户支付方式
+cashflow.trade_sn: 支付平台流水号
+cashflow.user_truename: 姓名
+cashflow.user_email: 邮箱
+cashflow.user_mobile: 联系电话
+
+admin.cashflow.keyword: 关键字
+admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
 order.pay_check_msg.user_not_login: 用户未登录，不能支付
 order.pay_check_msg.not_same_user: 不是您的订单，不能支付

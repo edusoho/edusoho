@@ -1,4 +1,5 @@
 site.alipay: Alipay
+site.trade.title: %name%Order
 site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
@@ -337,6 +338,7 @@ vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
+plugin.discount: Discount
 plugin.coupon: Coupon
 plugin.coupon.minus: Deduction
 plugin.coupon.minus_tips: 'Coupon for deduct %rate% CNY'
@@ -346,6 +348,7 @@ plugin.coupon.change_btn: 'Change coupon'
 plugin.coupon.use_btn: 'Use coupon'
 plugin.coupon.choose_btn: 'Fill in coupon'
 plugin.coupon.use.input_placeholder: 'Please fill in the coupon code'
+plugin.coupon.use.input_display: 请输入优惠券码
 plugin.coupon.code: 'Coupon code'
 plugin.coupon.amount: 'Coupon price amount'
 coin.online_school_balance: Balance
@@ -393,6 +396,8 @@ order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
+order.platform_sn: Platform SN
+order.use_coupon_tip: Use Coupon
 order.price: 'Price'
 order.paid_time: 'Paid time'
 order.bank_code: 'Bank code'
@@ -414,19 +419,32 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_rmb: 'Price:'
+order.confirm.pay_total: Total
+order.confirm.pay_rmb: 'Price'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.submit_btn_loading: Submiting...
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
+order.confirm.coupon.hint: 通过优惠券抵扣金额
+order.confirm.coupon.use_loading: 使用中
+order.confirm.coupon.expiry_date_hint: 有效期至
+order.confirm.coupon.select_existed: 选择已有优惠券
+order.confirm.coupon.used_coupon: 已使用优惠券
+order.confirm.coupon.deduction: 抵扣
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_name%
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
+order.confirm.price: 订单价格
+order.confirm.bought_course_deduction: 已购课程抵扣
+
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
 order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
 order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
-order.confirm.forget_password_btn: 'Forget password？'
+order.confirm.forget_password_btn: 'Forget pay password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
 order.confirm.top_use_tips: 'The order can use up to '
@@ -437,8 +455,9 @@ order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
 order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
 order.confirm.sms_code.bind_btn: 'Bind'
-order.paid_course.content_title: 'You already bought:'
-order.paid_course.minus: 'Deduct:'
+order.paid_course.title: 已购买课程
+order.paid_course.content: 之前购买过的课程能够抵扣对应金额
+order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
@@ -463,8 +482,13 @@ order.refund.notify_admin: '用户%nickname%申请退款 <a href="%targetUrl%">%
 pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
+pay_center.pay.price: 订单价格
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用虚拟币抵扣
+pay_center.pay.set_pay_password: 设置支付密码
+pay_center.pay.coin_input_tips: 本次使用
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
 pay_center.pay.mode: 'Payment methods'
+pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 'Deposit card'
 pay_center.pay.credit_card: 'Credit card'
 pay_center.pay.use_new_card: 'Use new bank card'
@@ -481,8 +505,9 @@ pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat <br>scan 
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Scan the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
+pay_center.finish_title: 'Order paid finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
-pay_center.finish_tips: 'Order paid successfully,redirecting in <span class="js-countdown">3</span> seconds</p>'
+pay_center.finish_tips: Redirecting in <span class="js-countdown">3</span> seconds
 pay_center.fee: Fee
 pay_center.remind: 'Click to enter alipay'
 pay_center.remind.content_title: 'Payment notification'
@@ -2384,6 +2409,8 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin.pay_coin: %coin_name% paid
+user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
 user.account.my_coin.outflow: 'Payment Records'
 user.account.my_coin.recharge: 'Learning card recharge'
@@ -5754,9 +5781,11 @@ admin.order_refund.status.default: 'Refund status'
 admin.order_refund.title.placeholder: title
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
 admin.order_refund.title: 'Refund order'
+admin.order_refund.sn: sn
 admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'
 admin.order_refund.refund_status: 'Refund status'
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: Operator
 admin.order_refund.operation: Action
 admin.order_refund.reason: 'Refund reason'
@@ -6438,8 +6467,21 @@ register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
 cashier.order.status.changed_tips: The order status has been changed, please reorder.
 cashflow.title: Name
+cashflow.sn: sn
+cashflow.user_name: username
+cashflow.created_time: createdTime
+cashflow.amount: amount
+cashflow.number: number
+cashflow.platform: platform
+cashflow.trade_sn: tradeSn
+cashflow.user_truename: truename
+cashflow.user_email: emial
+cashflow.user_mobile: mobile
+
+admin.cashflow.keyword: keyword
 
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.unpurchasable_product: Unpurchasable Product
 order.pay_check_msg.order_not_exist: Order not exist
 order.pay_check_msg.user_not_login: User not login
 order.pay_check_msg.not_same_user: Not your order

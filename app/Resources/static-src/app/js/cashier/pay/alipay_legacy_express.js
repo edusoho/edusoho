@@ -5,10 +5,10 @@ export default class AlipayLegacyExpress extends BasePayment {
   afterTradeCreated(res) {
     let options = this.getOptions();
     if (options.showConfirmModal) {
-      window.open(res.redirectUrl);
+      window.open(res.payUrl, '_blank');
       this.showConfirmModal(res.tradeSn);
     } else {
-      location.href = res.redirectUrl;
+      location.href = res.payUrl;
     }
 
   }

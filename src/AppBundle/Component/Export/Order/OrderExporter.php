@@ -31,7 +31,7 @@ class OrderExporter extends Exporter
 
     public function getTitles()
     {
-        return array('order.id', 'order.status', 'order.name', 'order.price_amount', 'order.deduct_amount', 'order.real_pay', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
+        return array('order.id', 'order.name', 'order.status', 'order.price_amount', 'order.deduct_amount', 'order.real_pay', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
     }
 
     public function buildCondition($conditions)
@@ -85,10 +85,10 @@ class OrderExporter extends Exporter
             $member = array();
             // 订单号
             $member[] = $order['sn'];
-            // 订单状态
-            $member[] = $this->getExportStatus($order['status']);
             // 订单名称
             $member[] = $order['title'];
+            // 订单状态
+            $member[] = $this->getExportStatus($order['status']);
             // 总价
             $member[] = MathToolkit::simple($order['price_amount'], 0.01);
             // 优惠金额

@@ -68,10 +68,6 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
-        }
-
         $conditions['type'] = 'inflow';
         $amountInflow = $this->getAccountService()->sumColumnByConditions('amount', $conditions);
 

@@ -26,11 +26,22 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $this->originPrice = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
         $this->maxRate = $classroom['maxRate'];
+        $this->cover = array(
+            'small' => $classroom['smallPicture'],
+            'middle' => $classroom['middlePicture'],
+            'large' => $classroom['largePicture'],
+        );
     }
 
     public function validate()
     {
         $access = $this->getClassroomService()->canJoinClassroom($this->targetId);
+
+        $classroom = $this->getClassroomService()->getClassroom($this->targetId);
+
+        if (!$classroom['buyable']) {
+            throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
+        }
 
         if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
@@ -77,18 +88,17 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getClassroomService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+        $member = $this->getClassroomService()->getClassroomMember($orderItem['target_id'], $orderItem['user_id']);
+
+        if (!empty($member)) {
+            $this->getClassroomService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+        }
     }
 
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
         $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
-    }
-
-    public function getOwner($userId)
-    {
-        return $this->getClassroomService()->getClassroomMember($this->targetId, $userId);
     }
 
     /**

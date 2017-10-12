@@ -27,7 +27,7 @@ class ConfirmModal {
               </p>
             </div>
             <div class="modal-footer">
-              <a class="btn cd-btn cd-btn-flat-default" data-dismiss="modal">${Translator.trans('cashier.confirm.pick_again')}</a>
+              <a class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">${Translator.trans('cashier.confirm.pick_again')}</a>
               <a class="btn cd-btn cd-btn-primary cd-btn-lg js-confirm-btn">${Translator.trans('cashier.confirm.success')}</a>
             </div>
           </div>
@@ -45,7 +45,7 @@ class ConfirmModal {
   checkIsPaid() {
     BasePayment.getTrade(this.tradeSn).then(res => {
       if (res.isPaid) {
-        location.href = res.successUrl;
+        location.href = res.paidSuccessUrl;
       } else {
         notify('danger', Translator.trans('cashier.confirm.fail_message'));
         $('#' + this.modalID).modal('hide');

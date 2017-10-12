@@ -5,7 +5,6 @@ namespace AppBundle\Twig;
 use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Currency;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class OrderExtension extends \Twig_Extension
@@ -59,7 +58,6 @@ class OrderExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('check_order_type', array($this, 'checkOrderType')),
             new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('get_display_status', array($this, 'getDisplayStatus')),
             new \Twig_SimpleFunction('get_wechat_openid', array($this, 'getWechatOpenid')),
@@ -121,16 +119,6 @@ class OrderExtension extends \Twig_Extension
     private function getCurrency()
     {
         return $this->biz['currency'];
-    }
-
-    public function checkOrderType($type)
-    {
-        $orderType = JoinPointToolkit::load('order');
-        if (in_array($type, array_keys($orderType))) {
-            return $orderType[$type]['order_show_template'];
-        }
-
-        return false;
     }
 
     public function displayOrderStatus($orderStatus, $isAdmin = 1)

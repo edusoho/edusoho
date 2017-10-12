@@ -272,76 +272,6 @@ class CoinController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function recordsAction(Request $request)
-    {
-        $fields = $request->query->all();
-        $conditions['timeType'] = 'oneWeek';
-        $conditions['except_user_id'] = 0;
-        $conditions['amount_type'] = 'coin';
-
-        if (!empty($fields)) {
-            $conditions = array_merge($conditions, $this->filterCondition($fields));
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getAccountProxyService()->countUserCashflows($conditions),
-            20
-        );
-
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
-            $conditions,
-            array('created_time' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
-        }
-
-        if (isset($conditions['type'])) {
-            switch ($conditions['type']) {
-                case 'inflow':
-                    $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $outflow = 0;
-                    break;
-                case 'outflow':
-                    $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $inflow = 0;
-                    break;
-                default:
-                    $conditions['type'] = 'outflow';
-                    $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $conditions['type'] = 'inflow';
-                    $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    break;
-            }
-        } else {
-            $conditions['type'] = 'outflow';
-            $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-            $conditions['type'] = 'inflow';
-            $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-        }
-
-        $in = $this->getAccountProxyService()->sumColumnByConditions('amount', array('type' => 'inflow', 'amount_type' => 'coin'));
-        $out = $this->getAccountProxyService()->sumColumnByConditions('amount', array('type' => 'outflow', 'amount_type' => 'coin'));
-        $amounts = $in - $out;
-
-        $userIds = ArrayToolkit::column($cashes, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('admin/coin/coin-records.html.twig', array(
-            'users' => $users,
-            'cashes' => $cashes,
-            'outflow' => $outflow,
-            'inflow' => $inflow,
-            'amounts' => $amounts,
-            'paginator' => $paginator,
-            'cashType' => 'Coin',
-        ));
-    }
-
     public function userRecordsAction(Request $request)
     {
         $sort = $request->query->get('sort', 'balance');
@@ -544,145 +474,6 @@ class CoinController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function cashBillAction(Request $request)
-    {
-        $account = $this->getAccountService()->getUserBalanceByUserId(0);
-        $conditions = array(
-            'user_type' => 'seller',
-            'amount_type' => 'money',
-            'timeType' => $request->get('lastHowManyMonths'),
-            'user_id' => 0,
-        );
-
-        $nickname = $request->get('nickname');
-        if (!empty($nickname)) {
-            $user = $this->getUserService()->getUserByNickname($nickname);
-            $conditions['user_id'] = empty($user) ? -1 : $user['id'];
-        }
-
-        $paginator = new Paginator(
-            $request,
-            $this->getAccountProxyService()->countUserCashflows($conditions),
-            20
-        );
-
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
-            $conditions,
-            array('id' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
-        }
-        list($users, $orders) = $this->getBuyersByCashFlows($cashes);
-
-        $conditions['type'] = 'outflow';
-        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-
-        return $this->render('admin/bill/cash.html.twig', array(
-            'cashes' => $cashes,
-            'paginator' => $paginator,
-            'users' => $users,
-            'orders' => $orders,
-            'cashType' => 'RMB',
-            'account' => $account,
-            'amountOutflow' => $amountOutflow,
-        ));
-    }
-
-    protected function getBuyersByCashFlows($cashFlows)
-    {
-        $orderSns = ArrayToolkit::column($cashFlows, 'order_sn');
-        $orders = $this->getOrderService()->findOrdersBySns($orderSns);
-
-        $orders = ArrayToolkit::index($orders, 'sn');
-        $userIds = ArrayToolkit::column($orders, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return array($users, $orders);
-    }
-
-    /**
-     * @param [type] $cashType RMB | Coin
-     */
-    public function exportCsvAction(Request $request, $cashType)
-    {
-        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $conditions = $request->query->all();
-
-        if ($cashType == 'Coin') {
-            $conditions['amount_type'] = 'coin';
-            if (!empty($conditions)) {
-                $conditions = $this->filterCondition($conditions);
-            }
-        }
-        if ($cashType == 'RMB') {
-            $conditions['amount_type'] = 'money';
-            if (!empty($conditions)) {
-                $conditions = $this->filterConditionBill($conditions);
-            }
-        }
-
-        $conditions['except_user_id'] = 0;
-
-        $num = $this->getAccountProxyService()->countUserCashflows($conditions);
-        $orders = $this->getAccountProxyService()->searchUserCashflows($conditions, array('id' => 'DESC'), 0, $num);
-        $studentUserIds = ArrayToolkit::column($orders, 'user_id');
-
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');
-
-        $str = '流水号,账目名称,购买者,姓名,收支,支付方式,创建时间';
-
-        $str .= "\r\n";
-
-        $results = array();
-
-        foreach ($orders as $key => $order) {
-            $order = MathToolkit::multiply($order, array('amount'), 0.01);
-            $member = '';
-            $member .= '流水号'.$order['sn'].',';
-            $member .= $order['title'].',';
-            $member .= $users[$order['user_id']]['nickname'].',';
-            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-
-            if ($order['type'] == 'inflow') {
-                $member .= '+'.$order['amount'].',';
-            }
-
-            if ($order['type'] == 'outflow') {
-                $member .= '-'.$order['amount'].',';
-            }
-
-            if (!empty($order['platform'])) {
-                $member .= (empty($payment[$order['platform']]) ? '--' : $payment[$order['platform']]).',';
-            } else {
-                $member .= '-'.',';
-            }
-
-            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-            $results[] = $member;
-        }
-
-        $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf('%s-order-(%s).csv', $cashType, date('Y-n-d'));
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
-    }
-
     protected function convertFiltersToCondition($condition)
     {
         $keyword = '';
@@ -710,11 +501,11 @@ class CoinController extends BaseController
             unset($condition['keyword']);
         }
 
-        if (isset($condition['endDateTime']) && !empty($condition['endDateTime'])) {
+        if (!empty($condition['endDateTime'])) {
             $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
         }
 
-        if (isset($condition['startDateTime']) && !empty($condition['startDateTime'])) {
+        if (!empty($condition['startDateTime'])) {
             $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
         }
 

@@ -2,6 +2,8 @@
 
 {% set modal_class = 'cd-modal-dialog' %}
 
+{% do script(['libs/jquery-validation.js','app/js/my/order-refund-apply/index.js']) %}
+
 {% block title %}
   {{'申请退款'|trans}}
 {% endblock %}
@@ -16,19 +18,19 @@
       </tr>
       <tr>
         <td width="25%">{{ '实付价格'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.pay_amount|fen_to_yuan(0) }}</span></td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
       <tr>
         <td width="25%" class="color-gray cd-pl32">{{ '实付虚拟币'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span></td>
+        <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span></td>
       </tr>
       <tr>
         <td width="25%" class="color-gray cd-pl32">{{ '实付现金'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span></td>
+        <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
       <tr>
         <td class="25%">{{ '退款原因'|trans }}</td>
-        <td class="75%"><textarea class="form-control" name="reason" id="" rows="5"></textarea></td>
+        <td class="75%"><textarea data-display="{{ '退款原因'|trans }}" class="form-control" name="reason" id="" rows="5"></textarea></td>
       </tr>
     </table>
 

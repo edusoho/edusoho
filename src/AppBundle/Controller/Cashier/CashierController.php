@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
@@ -47,8 +46,17 @@ class CashierController extends BaseController
         return $this->render(
             'cashier/show.html.twig', array(
             'order' => $order,
+            'product' => $this->getProduct($order['id']),
             'payments' => $payments,
         ));
+    }
+
+    private function getProduct($orderId)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
+        $orderItem = reset($orderItems);
+
+        return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
     public function redirectAction(Request $request)

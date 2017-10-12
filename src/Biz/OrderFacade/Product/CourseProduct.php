@@ -37,11 +37,18 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
+        $this->cover = $this->courseSet['cover'];
     }
 
     public function validate()
     {
         $access = $this->getCourseService()->canJoinCourse($this->targetId);
+
+        $course = $this->getCourseService()->getCourse($this->targetId);
+
+        if (!$course['buyable']) {
+            throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
+        }
 
         if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
@@ -87,18 +94,16 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+        $member = $this->getCourseMemberService()->getCourseMember($orderItem['target_id'], $orderItem['user_id']);
+        if (!empty($member)) {
+            $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
+        }
     }
 
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
         $this->getCourseMemberService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
-    }
-
-    public function getOwner($userId)
-    {
-        return $this->getCourseMemberService()->getCourseMember($this->targetId, $userId);
     }
 
     /**

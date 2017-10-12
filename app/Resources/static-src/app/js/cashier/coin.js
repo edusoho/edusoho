@@ -1,46 +1,60 @@
 export default class Coin {
-  constructor($coinContainer, cashierForm) {
-    this.$container = $coinContainer;
-    this.cashierFrom = cashierForm;
-    this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ? this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
+  constructor(props) {
+    this.$container = props.$coinContainer;
+    this.cashierForm = props.cashierForm;
+    this.$form = props.$form;
+    this.priceType = this.$container.data('priceType');
+    this.coinRate = this.$container.data('coinRate');
+    this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ? 
+                        this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
     this.initEvent();
   }
 
-  validate() {
-
-  }
-
   initEvent() {
-    let self = this;
-    this.$container.on('blur', '.js-coin-amount', event => {
-      let $this = $(event.currentTarget);
-      let inputCoinNum = $this.val();
-      if(isNaN(inputCoinNum) || inputCoinNum <= 0){
-        $this.val(0);
-        self.hidePasswordInput();
-      }
-
-      if ($this.val() > self.maxCoinInput) {
-        $this.val(self.maxCoinInput);
-      }
-
-      if ($this.val() > 0) {
-        self.showPasswordInput();
-        self.cashierFrom.calcPayPrice($this.val());
-      }
-
-    });
-
+    this.$form.on('change', '.js-coin-amount', event => this.changeAmount(event));
   }
 
-  showPasswordInput() {
-    this.$container.find('[name="payPassword"]').rules('add', { required: true, passwordCheck: true});
-    this.$container.find('.js-pay-password').closest('div').show();
+  changeAmount(event) {
+    let $this = $(event.currentTarget);
+    let inputCoinNum = $this.val();
+    $this.val(parseFloat(inputCoinNum).toFixed(2));
+
+    if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
+      inputCoinNum = 0;
+      $this.val(parseFloat(inputCoinNum).toFixed(2));
+      this.removePasswordValidate();
+      
+      this.$form.trigger('removePriceItem', ['coin-price']);
+      this.cashierForm.calcPayPrice(inputCoinNum);
+    }
+    if (inputCoinNum > this.maxCoinInput) {
+      inputCoinNum = this.maxCoinInput;
+      $this.val(parseFloat(inputCoinNum).toFixed(2));
+    }
+
+    if (inputCoinNum > 0) {
+      this.addPasswordValidate();
+      let coinName = this.$form.data('coin-name');
+      let price = 0.00;
+      if (this.priceType === 'coin') {
+        price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
+
+        let originalPirce = parseFloat(this.$container.data('maxAllowCoin'));
+        let coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;;
+        this.$form.trigger('changeCoinPrice', [coinPrice]);
+      } else {
+        price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
+      }
+      this.$form.trigger('addPriceItem', ['coin-price', coinName + Translator.trans('order.create.minus'), price]);
+      this.cashierForm.calcPayPrice(inputCoinNum);
+    }
   }
 
-  hidePasswordInput() {
-    this.$container.find('[name="payPassword"]').rules('remove','required passwordCheck');
-    this.$container.find('.js-pay-password').closest('div').hide();
+  addPasswordValidate() {
+    this.$container.find('[name="payPassword"]').rules('add', 'required passwordCheck');
   }
 
+  removePasswordValidate() {
+    this.$container.find('[name="payPassword"]').rules('remove', 'required passwordCheck');
+  }
 }
