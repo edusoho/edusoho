@@ -21,7 +21,7 @@ export default class Coin {
 
     if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
       inputCoinNum = 0;
-      $this.val(parseFloat(inputCoinNum).toFixed(2));
+      $this.val(inputCoinNum);
       this.removePasswordValidate();
       
       this.$form.trigger('removePriceItem', ['coin-price']);

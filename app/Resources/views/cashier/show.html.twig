@@ -113,12 +113,12 @@
 
       <div class="order-center-price">
         <div class="order-center-price__title">
-          {{'order.confirm.pay_rmb'|trans}}
           {% if currency == 'coin' %}
             <i class="cd-icon cd-icon-help cd-text-xs" data-toggle="tooltip" data-placement="top" 
               title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
             </i>
           {% endif %}
+          {{'order.confirm.pay_rmb'|trans}}
         </div>
         <div class="order-center-price__content">
           <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|major_currency }}</span>
