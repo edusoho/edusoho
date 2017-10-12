@@ -1411,14 +1411,14 @@ class AnalysisController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $courseIncomeStartData = $this->getOrderService()->searchOrders(
+        $courseIncomeStartDate = $this->getOrderService()->searchOrders(
             array('status' => 'paid', 'pay_amount_GT' => 0, 'order_item_target_type' => 'course'),
             array('created_time' => 'ASC'),
             0,
             1
         );
 
-        foreach ($courseIncomeStartData as $key) {
+        foreach ($courseIncomeStartDate as $key) {
             $courseIncomeStartDate = date('Y-m-d', $key['created_time']);
         }
 
