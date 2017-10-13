@@ -17,16 +17,17 @@ export default class Coin {
   changeAmount(event) {
     let $this = $(event.currentTarget);
     let inputCoinNum = $this.val();
-    $this.val(parseFloat(inputCoinNum).toFixed(2));
 
     if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
-      inputCoinNum = 0;
-      $this.val(parseFloat(inputCoinNum).toFixed(2));
+      $this.val('');
       this.removePasswordValidate();
       
       this.$form.trigger('removePriceItem', ['coin-price']);
       this.cashierForm.calcPayPrice(inputCoinNum);
+    } else {
+      $this.val(parseFloat(inputCoinNum).toFixed(2));
     }
+    
     if (inputCoinNum > this.maxCoinInput) {
       inputCoinNum = this.maxCoinInput;
       $this.val(parseFloat(inputCoinNum).toFixed(2));

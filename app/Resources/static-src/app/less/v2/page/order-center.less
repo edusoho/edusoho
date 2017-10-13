@@ -31,7 +31,7 @@
     }
     &__info {
       overflow: hidden;
-      padding: 24px;
+      padding: 16px 24px;
       @media(max-width: @screen-xs-max) {
         padding: 16px;
       }
@@ -39,7 +39,7 @@
     &__title {
       font-size: 16px;
       color: @cd-gray-dark;
-      margin-top: -4px;
+      margin-top: 4px;
       margin-bottom: 12px;
       line-height: 24px;
       font-weight: 500;
@@ -49,12 +49,14 @@
       line-height: 1;
       font-size: 12px;
       color: @brand-danger;
+      margin-bottom: 8px;
     }
   }
 
   &-product-info {
     font-size: 12px;
     height: 22px;
+    margin-bottom: 4px;
     &__title {
       width: 54px;
       text-align: right;
@@ -81,25 +83,21 @@
     margin-bottom: 24px;
     margin-top: 24px;
     line-height: 14px;
+    font-size: 14px;
     &__title {
-      font-size: 14px;
       color: @cd-gray-dark;
       float: left;
       width: 88px;
       font-weight: 500;
     }
     &__content {
-      font-size: 12px;
       color: @cd-gray;
       font-weight: 500;
-      // .cd-text-overflow;
-    }
-    &__discount {
-      color: @cd-gray;
-      line-height: 20px;
+      font-size: 12px;
     }
     &__action {
       float: right;
+      font-size: 12px;
     }
   }
   &-line {
@@ -109,9 +107,6 @@
   &-coupon {
     .cd-form-group-action {
       padding-right: 78px;
-      @media(max-width: @screen-xs-max) {
-        width: 100%;
-      }
     }
     .form-control {
       width: 176px;
@@ -153,9 +148,15 @@
     vertical-align: middle;
     margin-bottom: 24px;
     line-height: 54px;
+    @media(max-width: @screen-xs-max) {
+      line-height: 22px;
+    }
     &__img {
       float: left;
       width: 96px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 8px;
+      }
     }
     &__title {
       float: left;
@@ -163,11 +164,17 @@
       font-size: 12px;
       color: @cd-gray-dark;
       width: 60%;
+      @media(max-width: @screen-xs-max) {
+        margin-left: 0;
+      }
     }
     &__price {
       float: right;
       font-size: 12px;
       color: @cd-gray;
+      @media(max-width: @screen-xs-max) {
+        float: left;
+      }
     }
   }
 }
