@@ -94,7 +94,14 @@ define(function(require, exports, module) {
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
             Translator.trans('validate_old.date_check.message', {display: '{{display}}'})
-        ],      
+        ],
+        [
+            'positive_currency',
+            /^[0-9]{0,8}(\.\d{0,2})?$/i,
+            Translator.trans('validate.positive_currency.message')
+
+        ],
+
         [
             'byte_maxlength',
             function(options) {
