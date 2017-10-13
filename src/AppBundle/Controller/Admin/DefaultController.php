@@ -275,33 +275,27 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
 
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
-
-        $courseOrdersCount = $this->getOrderService()->countOrders(array(
+        $conditions = array(
             'pay_time_GT' => $startTime,
             'order_item_target_type' => 'course',
             'price_amount_GT' => 0,
-            'display_status' => 'paid',
-        ));
+            'status' => 'success',
+        );
+        
+        $conditions['order_item_target_type'] = 'course';
+        $courseOrdersCount = $this->getOrderService()->countOrders($conditions);
 
-        $classroomOrdersCount = $this->getOrderService()->countOrders(array(
-            'pay_time_GT' => $startTime,
-            'order_item_target_type' => 'classroom',
-            'price_amount_GT' => 0,
-            'display_status' => 'paid',
-        ));
+        $conditions['order_item_target_type'] = 'classroom';
+        $classroomOrdersCount = $this->getOrderService()->countOrders($conditions);
 
-        if (!$this->isPluginInstalled('vip')) {
-            $vipOrdersCount = $this->getOrderService()->countOrders(array(
-                'pay_time_GT' => $startTime,
-                'order_item_target_type' => 'vip',
-                'price_amount_GT' => 0,
-                'display_status' => 'paid',
-            ));
+        if ($this->isPluginInstalled('vip')) {
+            $conditions['order_item_target_type'] = 'vip';
+            $vipOrdersCount = $this->getOrderService()->countOrders($conditions);
         }
 
         $orderDatas = array(
             'course' => array('targetType' => 'course', 'value' => $courseOrdersCount),
-            'vip' => array('targetType' => 'vip', 'value' => isset($vipOrdersCount) ?: 0),
+            'vip' => array('targetType' => 'vip', 'value' => isset($vipOrdersCount) ? $vipOrdersCount : 0),
             'classroom' => array('targetType' => 'classroom', 'value' => $classroomOrdersCount),
         );
 
