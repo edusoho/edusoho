@@ -120,8 +120,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('convert_ip', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
-            new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
-            new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
+            new \Twig_SimpleFunction('user_coin_amount', array($this, 'userCoinAmount')),
 
             //todo covertIP 要删除
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
@@ -508,28 +507,22 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId)
+    public function userCoinAmount($type, $userId, $startDateTime = null, $endDateTime = null)
     {
+        if (!empty($endDateTime)) {
+            $condition['created_time_LTE'] = strtotime($endDateTime);
+        }
+
+        if (!empty($startDateTime)) {
+            $condition['created_time_GTE'] = strtotime($startDateTime);
+        }
+
         $condition = array(
             'user_id' => $userId,
-            'type' => 'outflow',
+            'type' => $type,
             'amount_type' => 'coin',
         );
         $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
-        $amount = MathToolkit::simple($amount, 0.01);
-
-        return $amount;
-    }
-
-    public function getInCash($userId)
-    {
-        $condition = array(
-            'user_id' => $userId,
-            'type' => 'inflow',
-            'amount_type' => 'coin',
-        );
-        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
-        $amount = MathToolkit::simple($amount, 0.01);
 
         return $amount;
     }
