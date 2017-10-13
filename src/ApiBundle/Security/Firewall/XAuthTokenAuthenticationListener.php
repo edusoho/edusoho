@@ -26,7 +26,7 @@ class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
         }
 
         $tokenInHeader = $request->headers->get(self::TOKEN_HEADER) ? : $request->headers->get(self::OLD_TOKEN_HEADER);
-        
+
         if (null === $rawToken = $this->getUserService()->getToken('mobile_login', $tokenInHeader)) {
             throw new UnauthorizedHttpException('X-Auth-Token', 'Token is not exist or token is expired', null, ErrorCode::EXPIRED_CREDENTIAL);
         }
