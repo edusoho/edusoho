@@ -508,13 +508,12 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId, $timeType = 'oneWeek')
+    public function getOutCash($userId)
     {
         $condition = array(
             'user_id' => $userId,
             'type' => 'outflow',
             'amount_type' => 'coin',
-            'timeType' => $timeType,
         );
         $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
         $amount = MathToolkit::simple($amount, 0.01);
@@ -522,13 +521,12 @@ class WebExtension extends \Twig_Extension
         return $amount;
     }
 
-    public function getInCash($userId, $timeType = 'oneWeek')
+    public function getInCash($userId)
     {
         $condition = array(
             'user_id' => $userId,
             'type' => 'inflow',
             'amount_type' => 'coin',
-            'timeType' => $timeType,
         );
         $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
         $amount = MathToolkit::simple($amount, 0.01);
