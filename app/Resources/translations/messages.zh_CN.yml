@@ -457,11 +457,14 @@ coin.pay.submit.request: 正在跳转到支付网关
 #订单通用
 order.charge: 收费
 order.name: 订单名称
+order.product_name: 商品名称
 order.created_time: 创建时间
 order.pay_time: 付款时间
 order.status: 订单状态
 order.deduct: 优惠抵扣
 order.item_type: 订单类型
+order.product_type: 商品类型
+order.source:  渠道
 order.status.created: 未完成
 order.status.paid: 已付款
 order.status.cancel: 已关闭

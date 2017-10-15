@@ -81,12 +81,12 @@ orderSource:
     outside: Outside
    
 newPayment:
-    none: --
     alipay: Alipay
     wechat: Wechat
     heepay: Heepay
     quickpay: Quickpay
     llpay: LLpay
+    coin: coin
 
 moneyRecordType:
     income: Income
