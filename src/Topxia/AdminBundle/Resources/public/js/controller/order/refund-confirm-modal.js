@@ -44,13 +44,13 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '#refund-coin-amount-field',
                     required: true,
-                    rule: 'number min{min: 0} max{max: '+ $('#refund-coin-amount-field').data('maxCoinAmount') +'}'
+                    rule: 'positive_currency min{min: 0} max{max: '+ $('#refund-coin-amount-field').data('maxCoinAmount') +'}'
                 });
 
                 validator.addItem({
                     element: '#refund-cash-amount-field',
                     required: true,
-                    rule: 'min{min: 0} max{max: '+ $('#refund-cash-amount-field').data('maxCashAmount') +'}'
+                    rule: 'positive_currency min{min: 0} max{max: '+ $('#refund-cash-amount-field').data('maxCashAmount') +'}'
                 });
                 $form.find('input[name=refund_coin_amount]').on('change', function() {
                     calculateAmount();

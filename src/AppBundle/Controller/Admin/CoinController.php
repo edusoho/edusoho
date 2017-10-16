@@ -360,13 +360,17 @@ class CoinController extends BaseController
     public function flowDetailAction(Request $request)
     {
         $userId = $request->query->get('userId');
-        $timeType = $request->query->get('timeType');
+        $startDateTime = $request->query->get('startDateTime');
+        $endDateTime = $request->query->get('endDateTime');
 
-        if (empty($timeType)) {
-            $timeType = 'oneWeek';
+        if (!empty($endDateTime)) {
+            $conditions['created_time_LTE'] = strtotime($endDateTime);
         }
 
-        $condition['timeType'] = $timeType;
+        if (!empty($startDateTime)) {
+            $conditions['created_time_GTE'] = strtotime($startDateTime);
+        }
+
         $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $userId;
@@ -394,7 +398,8 @@ class CoinController extends BaseController
             'user' => $user,
             'cashes' => $cashes,
             'paginator' => $paginator,
-            'timeType' => $timeType,
+            'startDateTime' => $startDateTime,
+            'endDateTime' => $endDateTime,
         ));
     }
 

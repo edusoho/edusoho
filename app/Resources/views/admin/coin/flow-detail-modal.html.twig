@@ -7,8 +7,8 @@
 
   <p>
     <span>{{'finance.balance'|trans}}: <strong class="amount-num">{{user_balance(user.id).amount}}</strong> {{ setting('coin.coin_name') }}</span>
-    <span class="mll">{{'coin.recharge'|trans}}: <strong class="inflow-num">{{userInCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
-    <span class="mll">{{'coin.consume'|trans}}: <strong class="outflow-num">{{userOutCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'coin.recharge'|trans}}: <strong class="inflow-num">{{user_coin_amount('inflow', user.id, startDateTime, endDateTime)|default(0)|fen_to_yuan(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'coin.consume'|trans}}: <strong class="outflow-num">{{user_coin_amount('outflow', user.id, startDateTime, endDateTime)|default(0)|fen_to_yuan(0) }}</strong> {{ setting('coin.coin_name') }}</span>
   </p>
 
     <div class="table-responsive">

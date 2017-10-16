@@ -42,13 +42,13 @@
         {% for userId in userIds %}
           <tr>
             <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
-            <td style="color:#1bb974;"> {{ userInCash(userId,app.request.get('timeType'))|default("0.00")|number_format(2) }}</td>
-            <td style="color:#ff7b0e;"> {{ userOutCash(userId,app.request.get('timeType'))|default("0.00")|number_format(2) }}</td>
+            <td style="color:#1bb974;"> {{ user_coin_amount('inflow', userId, app.request.get('startDateTime'), app.request.get('endDateTime'))|default(0)|number_format(2) }}</td>
+            <td style="color:#ff7b0e;"> {{ user_coin_amount('outflow', userId, app.request.get('startDateTime'), app.request.get('endDateTime'))|default(0)|number_format(2) }}</td>
             <td style="color:blue;"> {{ user_balance(userId).amount|default(0)|number_format(2) }}</td>
             <td>
               <a {% if user_balance(userId).amount <= 0 %}class="disabled"{% endif %}
               data-toggle="modal" data-target="#modal"
-              data-url="{{ path('admin_coin_flow_detail',{userId:userId,timeType:app.request.get('timeType')}) }}"
+              data-url="{{ path('admin_coin_flow_detail',{userId:userId,startDateTime:app.request.get('startDateTime'), endDateTime: app.request.get('endDateTime')}) }}"
               href="javascript:;">{{'form.btn.view'|trans}}</a>
             </td>
           </tr>
