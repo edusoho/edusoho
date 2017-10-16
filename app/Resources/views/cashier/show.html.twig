@@ -88,7 +88,7 @@
 
     {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
 
-    <div class="cd-pv24" id="order-center-price-list">
+    <div class="cd-pv16" id="order-center-price-list">
       <div class="order-center-price">
         <div class="order-center-price__title">
           {{ 'pay_center.pay.price'|trans }}
@@ -99,7 +99,7 @@
 
     <div class="order-center-line"></div>
 
-    <div class="cd-pt16 cd-pb24">
+    <div class="cd-pv16">
       {% if currency == 'coin' %}
         <div class="order-center-price">
           <div class="order-center-price__title">

@@ -481,28 +481,9 @@ class CoinController extends BaseController
 
     protected function convertFiltersToCondition($condition)
     {
-        $keyword = '';
-
-        if (isset($condition['searchType'])) {
-            if (isset($condition['keyword'])) {
-                $keyword = $condition['keyword'];
-            }
-
-            if ($keyword != '') {
-                switch ($condition['searchType']) {
-                    case 'nickname':
-                        $user = $this->getUserService()->getUserByNickname($keyword);
-                        $condition['userId'] = $user ? $user['id'] : 0;
-                        break;
-                    case 'email':
-                        $user = $this->getUserService()->getUserByEmail($keyword);
-                        $condition['userId'] = $user ? $user['id'] : 0;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            unset($condition['searchType']);
+        if (!empty($condition['keyword'])) {
+            $user = $this->getUserService()->getUserByNickname($condition['keyword']);
+            $condition['userId'] = $user ? $user['id'] : 0;
             unset($condition['keyword']);
         }
 
