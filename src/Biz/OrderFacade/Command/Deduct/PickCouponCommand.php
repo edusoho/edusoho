@@ -5,7 +5,6 @@ namespace Biz\OrderFacade\Command\Deduct;
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class PickCouponCommand extends Command
 {
