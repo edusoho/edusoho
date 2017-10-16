@@ -106,7 +106,6 @@ class TokenServiceImpl extends BaseService implements TokenService
         $chars = str_replace('-', '', Uuid::generate(4));
 
         $value = substr($chars, 0, $length);
-        file_put_contents('1.txt', $value.PHP_EOL, FILE_APPEND);
 
         return $value;
     }
