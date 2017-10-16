@@ -26,14 +26,14 @@
 
             {% if cash.type =="inflow" %}
             <td style="color:#1bb974;">
-               {{cash.amount}} 
+               {{ cash.amount|number_format(2) }} 
             </td>
             <td></td>
             {% endif %}
             {% if cash.type =="outflow" %}
             <td></td>
             <td style="color:#ff7b0e;">
-               -&nbsp;{{cash.amount}}               
+               -{{ cash.amount|number_format(2) }}               
             </td>
             {% endif %}            
             <td><span class="text-sm">{{cash.created_time|date('Y-m-d H:i:s')}}</span></td>
