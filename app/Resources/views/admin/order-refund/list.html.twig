@@ -76,9 +76,6 @@
             </td>
             <td>
               {{ dict_macro.adminRefundStatus(refund.status) }}
-              {% if refund.status == 'success' %}
-                <div class="text-sm text-muted">{{'admin.order_refund.refund_actual_amount'|trans({'%actualAmount%': refund.actualAmount })}}</div>
-              {% endif %}
             </td>
             <td>
               {% if refund.deal_user_id != 0 %}
