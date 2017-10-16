@@ -79,6 +79,7 @@
               {% elseif order.source in ['self'] %}
                 {{ dict_text('newPayment', order.payment, '--') }}
               {% endif %}
+            </td>
             <td width="75%">
               <span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
               {% if paymentTrade.platform_sn is not null %}
@@ -99,7 +100,7 @@
             </td>
             <td width="75%">
               {% if order.refund_deadline == 0 %}
-                {{ '--' }}
+                {{ '禁止退款' }}
               {% else %}
                 {% if order.refund_deadline > date().timestamp %}
                   可在 {{ order.refund_deadline|date('Y-n-d H:i:s') }} 前申请退款
