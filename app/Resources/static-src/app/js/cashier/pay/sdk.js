@@ -35,7 +35,7 @@ export default class PaySDK {
         paySdk = this.llwb ? this.llwb : this.llwb = new LianlianpayWeb();
         break;
     }
-  alert(gateway);
+
     paySdk.options = Object.assign({
       'showConfirmModal': 1
     }, options);

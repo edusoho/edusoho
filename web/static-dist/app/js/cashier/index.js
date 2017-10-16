@@ -201,7 +201,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -219,22 +219,28 @@ webpackJsonp(["app/js/cashier/index"],{
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var AlipayLegacyWap = function (_BasePayment) {
-	  _inherits(AlipayLegacyWap, _BasePayment);
+		_inherits(AlipayLegacyWap, _BasePayment);
 	
-	  function AlipayLegacyWap() {
-	    _classCallCheck(this, AlipayLegacyWap);
+		function AlipayLegacyWap() {
+			_classCallCheck(this, AlipayLegacyWap);
 	
-	    return _possibleConstructorReturn(this, (AlipayLegacyWap.__proto__ || Object.getPrototypeOf(AlipayLegacyWap)).apply(this, arguments));
-	  }
+			return _possibleConstructorReturn(this, (AlipayLegacyWap.__proto__ || Object.getPrototypeOf(AlipayLegacyWap)).apply(this, arguments));
+		}
 	
-	  _createClass(AlipayLegacyWap, [{
-	    key: 'afterTradeCreated',
-	    value: function afterTradeCreated(res) {
-	      location.href = res.payUrl;
-	    }
-	  }]);
+		_createClass(AlipayLegacyWap, [{
+			key: 'afterTradeCreated',
+			value: function afterTradeCreated(res) {
+				location.href = res.payUrl;
+			}
+		}, {
+			key: 'customParams',
+			value: function customParams(params) {
+				params['app_pay'] = 'Y';
+				return params;
+			}
+		}]);
 	
-	  return AlipayLegacyWap;
+		return AlipayLegacyWap;
 	}(_payment2["default"]);
 	
 	exports["default"] = AlipayLegacyWap;
@@ -391,7 +397,7 @@ webpackJsonp(["app/js/cashier/index"],{
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -413,100 +419,108 @@ webpackJsonp(["app/js/cashier/index"],{
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var BasePayment = function () {
-	  function BasePayment() {
-	    _classCallCheck(this, BasePayment);
-	  }
+		function BasePayment() {
+			_classCallCheck(this, BasePayment);
+		}
 	
-	  _createClass(BasePayment, [{
-	    key: 'setOptions',
-	    value: function setOptions(options) {
-	      this.options = options;
-	    }
-	  }, {
-	    key: 'getOptions',
-	    value: function getOptions() {
-	      return this.options;
-	    }
-	  }, {
-	    key: 'showConfirmModal',
-	    value: function showConfirmModal(tradeSn) {
-	      if (!this.confirmModal) {
-	        this.confirmModal = new _confirm2["default"]();
-	      }
+		_createClass(BasePayment, [{
+			key: 'setOptions',
+			value: function setOptions(options) {
+				this.options = options;
+			}
+		}, {
+			key: 'getOptions',
+			value: function getOptions() {
+				return this.options;
+			}
+		}, {
+			key: 'showConfirmModal',
+			value: function showConfirmModal(tradeSn) {
+				if (!this.confirmModal) {
+					this.confirmModal = new _confirm2["default"]();
+				}
 	
-	      this.confirmModal.show(tradeSn);
-	    }
-	  }, {
-	    key: 'pay',
-	    value: function pay(params) {
+				this.confirmModal.show(tradeSn);
+			}
+		}, {
+			key: 'pay',
+			value: function pay(params) {
 	
-	      var trade = BasePayment.createTrade(params);
-	      if (trade.paidSuccessUrl) {
-	        location.href = trade.paidSuccessUrl;
-	      } else {
-	        this.afterTradeCreated(trade);
-	      }
-	    }
-	  }, {
-	    key: 'afterTradeCreated',
-	    value: function afterTradeCreated(res) {}
-	  }], [{
-	    key: 'filterParams',
-	    value: function filterParams(postParams) {
-	      var params = {
-	        gateway: postParams.gateway,
-	        type: postParams.type,
-	        orderSn: postParams.orderSn,
-	        coinAmount: postParams.coinAmount,
-	        amount: postParams.amount,
-	        openid: postParams.openid,
-	        payPassword: postParams.payPassword
-	      };
+				var trade = this.createTrade(params);
+				if (trade.paidSuccessUrl) {
+					location.href = trade.paidSuccessUrl;
+				} else {
+					this.afterTradeCreated(trade);
+				}
+			}
+		}, {
+			key: 'afterTradeCreated',
+			value: function afterTradeCreated(res) {}
+		}, {
+			key: 'customParams',
+			value: function customParams(params) {
+				return params;
+			}
+		}, {
+			key: 'filterParams',
+			value: function filterParams(postParams) {
+				var params = {
+					gateway: postParams.gateway,
+					type: postParams.type,
+					orderSn: postParams.orderSn,
+					coinAmount: postParams.coinAmount,
+					amount: postParams.amount,
+					openid: postParams.openid,
+					payPassword: postParams.payPassword
+				};
 	
-	      Object.keys(params).forEach(function (k) {
-	        return !params[k] && params[k] !== undefined && delete params[k];
-	      });
+				console.log(params);
+				params = this.customParams(params);
 	
-	      return params;
-	    }
-	  }, {
-	    key: 'createTrade',
-	    value: function createTrade(postParams) {
+				Object.keys(params).forEach(function (k) {
+					return !params[k] && params[k] !== undefined && delete params[k];
+				});
 	
-	      var params = this.filterParams(postParams);
+				return params;
+			}
+		}, {
+			key: 'createTrade',
+			value: function createTrade(postParams) {
 	
-	      var trade = null;
+				var params = this.filterParams(postParams);
 	
-	      _api2["default"].trade.create({ data: params, async: false, promise: false }).done(function (res) {
-	        trade = res;
-	      }).error(function (res) {
-	        (0, _notify2["default"])('danger', Translator.trans('cashier.pay.error_message'));
-	      });
+				var trade = null;
 	
-	      return trade;
-	    }
-	  }, {
-	    key: 'getTrade',
-	    value: function getTrade(tradeSn) {
-	      var orderSn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+				_api2["default"].trade.create({ data: params, async: false, promise: false }).done(function (res) {
+					trade = res;
+				}).error(function (res) {
+					(0, _notify2["default"])('danger', Translator.trans('cashier.pay.error_message'));
+				});
 	
-	      var params = {};
+				return trade;
+			}
+		}], [{
+			key: 'getTrade',
+			value: function getTrade(tradeSn) {
+				var orderSn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 	
-	      if (tradeSn) {
-	        params.tradeSn = tradeSn;
-	      }
+				var params = {};
 	
-	      if (orderSn) {
-	        params.orderSn = orderSn;
-	      }
+				if (tradeSn) {
+					params.tradeSn = tradeSn;
+				}
 	
-	      return _api2["default"].trade.get({
-	        params: params
-	      });
-	    }
-	  }]);
+				if (orderSn) {
+					params.orderSn = orderSn;
+				}
 	
-	  return BasePayment;
+				return _api2["default"].trade.get({
+					params: params
+				});
+			}
+		}]);
+	
+		return BasePayment;
 	}();
 	
 	exports["default"] = BasePayment;
@@ -760,7 +774,22 @@ webpackJsonp(["app/js/cashier/index"],{
 		_createClass(WechatPayMweb, [{
 			key: 'afterTradeCreated',
 			value: function afterTradeCreated(res) {
-				location.href = res.mweb_url;
+				location.href = res.mwebUrl;
+				this.startInterval(res.tradeSn);
+			}
+		}, {
+			key: 'startInterval',
+			value: function startInterval(tradeSn) {
+				window.intervalWechatId = setInterval(this.checkIsPaid.bind(this, tradeSn), 2000);
+			}
+		}, {
+			key: 'checkIsPaid',
+			value: function checkIsPaid(tradeSn) {
+				_payment2["default"].getTrade(tradeSn).then(function (res) {
+					if (res.isPaid) {
+						location.href = res.paidSuccessUrl;
+					}
+				});
 			}
 		}]);
 	

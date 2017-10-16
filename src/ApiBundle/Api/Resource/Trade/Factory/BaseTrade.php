@@ -108,7 +108,7 @@ abstract class BaseTrade
         if ($trade['status'] == 'paid') {
             $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
         }
-
+var_dump(array_merge($defaultResponse, $this->getCustomResponse($trade)));
         return array_merge($defaultResponse, $this->getCustomResponse($trade));
     }
 

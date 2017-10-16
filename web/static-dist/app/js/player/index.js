@@ -100,10 +100,6 @@ webpackJsonp(["app/js/player/index"],{
 	
 	var _componentEmitter2 = _interopRequireDefault(_componentEmitter);
 	
-	var _esSwfobject = __webpack_require__("c04c1b91e3806f24595a");
-	
-	var _esSwfobject2 = _interopRequireDefault(_esSwfobject);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -129,16 +125,6 @@ webpackJsonp(["app/js/player/index"],{
 	  _createClass(BalloonCloudVideoPlayer, [{
 	    key: 'setup',
 	    value: function setup() {
-	      var element = this.options.element;
-	      // todo delete, to move into the cloud player
-	      if (!_esSwfobject2["default"].hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-	        $(element).css({
-	          'background-color': '#313131',
-	          'position': 'relative'
-	        });
-	        $(element).html(Translator.trans('site.flash_not_install_hint'));
-	        return;
-	      }
 	
 	      var self = this;
 	
