@@ -15,7 +15,7 @@ class PickCouponCommand extends Command
             $checkData = $this->getCouponService()->checkCoupon($params['couponCode'], $product->targetId, $product->targetType);
 
             if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
-                throw new InvalidArgumentException('Bad coupon code use');
+                return;
             }
 
             $coupon = $this->getCouponService()->getCouponByCode($params['couponCode']);
