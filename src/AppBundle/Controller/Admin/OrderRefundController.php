@@ -47,6 +47,21 @@ class OrderRefundController extends BaseController
         ));
     }
 
+    public function refundDetailAction(Request $request, $id)
+    {
+        $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
+        $applyUser = $this->getUserService()->getUser($orderRefund['user_id']);
+        $dealUser = empty($orderRefund['deal_user_id']) ? null : $this->getUserService()->getUser($orderRefund['deal_user_id']);
+        $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
+
+        return $this->render('admin/order-refund/detail-modal.html.twig', array(
+            'orderRefund' => $orderRefund,
+            'order' => $order,
+            'applyUser' => $applyUser,
+            'dealUser' => $dealUser,
+        ));
+    }
+
     protected function prepareRefundSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
