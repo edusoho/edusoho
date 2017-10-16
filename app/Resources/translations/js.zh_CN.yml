@@ -745,5 +745,5 @@ cashier.confirm.title: 订单支付中
 cashier.confirm.success: 支付完成
 cashier.confirm.pick_again: 重选支付方式
 cashier.confirm.desc: |
-  请再新开页面中完成订单支付。<br>
+  请在新开页面中完成订单支付。<br>
   如在支付过程中遇到问题，请联系网站客服解决。<br>
