@@ -51,7 +51,7 @@ class BillController extends BaseController
             'account' => $account,
             'outflow' => $outflow,
             'inflow' => $inflow,
-            'trades' => $trades
+            'trades' => $trades,
         ));
     }
 
