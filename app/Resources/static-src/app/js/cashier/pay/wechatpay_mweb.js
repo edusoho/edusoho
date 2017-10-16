@@ -10,7 +10,6 @@ export default class WechatPayMweb extends BasePayment {
 		this.startInterval(res.tradeSn);
 	}
 
-
 	startInterval(tradeSn) {
 		window.intervalWechatId = setInterval(this.checkIsPaid.bind(this, tradeSn), 2000);
 	}
