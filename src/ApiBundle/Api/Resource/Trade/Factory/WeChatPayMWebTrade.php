@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-use AppBundle\Common\MathToolkit;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WeChatPayMWebTrade extends BaseTrade
 {
@@ -12,8 +12,7 @@ class WeChatPayMWebTrade extends BaseTrade
 
     public function getCustomResponse($trade)
     {
-        $redirectUrl = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
-
+        $redirectUrl = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']), UrlGeneratorInterface::ABSOLUTE_URL);
         return array(
             'mweb_url' => $trade['platform_created_result']['mweb_url'] . '&redirect_url=' . urlencode($redirectUrl),
         );
