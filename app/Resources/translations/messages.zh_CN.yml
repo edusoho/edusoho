@@ -420,7 +420,7 @@ vip: 会员
 plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
-plugin.coupon: 优惠码
+plugin.coupon: 优惠券
 plugin.discount: 打折
 plugin.coupon.minus: 抵扣
 plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
