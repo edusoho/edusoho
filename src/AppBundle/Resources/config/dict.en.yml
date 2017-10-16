@@ -88,7 +88,7 @@ payment:
     iosiap: iOSiap
     outside: Outside
     coin: Coin
-    llpay: LLpay
+    lianlianpay: lianlianpay
     marketing: marketing
 
 orderSource:
@@ -102,7 +102,7 @@ newPayment:
     wechat: Wechat
     heepay: Heepay
     quickpay: Quickpay
-    llpay: LLpay
+    lianlianpay: lianlianpay
 
 moneyRecordType:
     income: Income

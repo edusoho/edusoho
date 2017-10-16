@@ -408,6 +408,7 @@ finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
+finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
@@ -8142,8 +8143,8 @@ cashflow.user_name: 用户名
 cashflow.created_time: 成交时间
 cashflow.amount: 金额
 cashflow.number: 数量
-cashflow.platform: 用户支付方式
-cashflow.trade_sn: 支付平台流水号
+cashflow.platform: 支付方式
+cashflow.platform_sn: 支付平台流水号
 cashflow.user_truename: 姓名
 cashflow.user_email: 邮箱
 cashflow.user_mobile: 联系电话
