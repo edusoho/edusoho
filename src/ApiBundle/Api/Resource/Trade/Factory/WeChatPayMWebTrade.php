@@ -12,10 +12,10 @@ class WeChatPayMWebTrade extends BaseTrade
 
     public function getCustomResponse($trade)
     {
+        $redirectUrl = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
+
         return array(
-            'mweb_url' => $trade['platform_created_result']['mweb_url'],
-            'cash_amount' => round(MathToolkit::simple($trade['cash_amount'], 0.01), 2),
-            'successUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn'])),
+            'mweb_url' => $trade['platform_created_result']['mweb_url'] . '&redirect_url=' . urlencode($redirectUrl),
         );
     }
 
