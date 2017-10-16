@@ -16,7 +16,11 @@ class AvailableCouponCommand extends Command
 
         if ($availableCoupons) {
             foreach ($availableCoupons as $key => &$coupon) {
-                $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->originPrice);
+                if ($product->afterDiscountPrice) {
+                    $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->afterDiscountPrice);
+                } else {
+                    $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->originPrice);
+                }
             }
 
             usort($availableCoupons, function ($coupon1, $coupon2) {

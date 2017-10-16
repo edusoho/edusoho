@@ -66,6 +66,7 @@ class OrderExtension extends \Twig_Extension
 
     public function getWechatOpenid()
     {
+        return 2;
         $isMicroAgent = strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
         $hasOauthToken = $this->container->get('session')->has('oauth_token');
         if ($isMicroAgent && $hasOauthToken) {

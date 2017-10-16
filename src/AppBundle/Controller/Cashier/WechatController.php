@@ -2,15 +2,59 @@
 
 namespace AppBundle\Controller\Cashier;
 
+use ApiBundle\Api\ApiRequest;
+use AppBundle\Component\Payment\Wxpay\JsApiPay;
 use Symfony\Component\HttpFoundation\Request;
 
 class WechatController extends PaymentController
 {
     public function wechatJsPayAction(Request $request)
     {
-        $tradeSn = $request->query->get('tradeSn');
+        if ($request->query->get('orderSn')) {
+            $request->getSession()->set('wechat_pay_params', $request->query->all());
+        }
 
-        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+        $user = $this->getUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，支付失败。');
+        }
+
+        $biz = $this->getBiz();
+
+        $options = $biz['payment.platforms.options']['wechat'];
+
+        $jsApi = new JsApiPay(array(
+            'appid' => $options['appid'],
+            'account' => $options['mch_id'],
+            'key' => $options['key'],
+            'secret' => $options['secret'],
+            'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay', array(), true),
+            'isMicroMessenger' => true,
+        ), $request);
+
+        $openid = $jsApi->getOpenid();
+        $params = $request->getSession()->get('wechat_pay_params');
+
+        $apiKernel = $this->get('api_resource_kernel');
+        $apiRequest = new ApiRequest(
+            '/api/trades',
+            'POST',
+            array(),
+            array(
+                'gateway' => 'WechatPay_Js',
+                'type' => 'purchase',
+                'openid' => $openid,
+                'orderSn' => $params['orderSn'],
+                'coinAmount' => $params['coinAmount'],
+                'payPassword' => empty($params['payPassword']) ? '' : $params['payPassword'],
+            ),
+            array()
+        );
+
+        $result = $apiKernel->handleApiRequest($apiRequest);
+
+        $trade = $this->getPayService()->queryTradeFromPlatform($result['tradeSn']);
 
         return $this->render(
             'cashier/wechat/h5.html.twig', array(

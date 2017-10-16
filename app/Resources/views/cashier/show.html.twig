@@ -51,7 +51,7 @@
     <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
-    <input type="hidden" name="openid" value="{{ get_wechat_openid() }}">
+    <input type="hidden" name="isWechat" value="{{ is_micro_messenger() }}">
     <input type="hidden" name="type" value="purchase">
 
     {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
