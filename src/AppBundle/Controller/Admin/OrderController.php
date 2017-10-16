@@ -112,7 +112,7 @@ class OrderController extends BaseController
             'users' => $users,
         ));
     }
-    
+
     /**
      * @return PayService
      */
