@@ -5843,6 +5843,7 @@ admin.user.approval.approved_tab: 审核成功
 admin.user.approval.email: 邮件地址
 admin.user.approval.form.keyword_type_option.default: --查询条件--
 admin.user.approval.fields.application_date_label: 申请时间:
+admin.user.approval.fields.approval_date_label: 审核时间:
 admin.user.approval.fields.email: 邮件
 admin.user.approval.approve_submit_btn: 审核
 admin.user.approval.approved_empty_hint: 暂无已经审核成功的实名认证用户
