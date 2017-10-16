@@ -25,7 +25,7 @@
         </tr>
         {% for cash in cashes %}
         {% set user = users[cash['buyer_id']]|default() %}
-        {% set trade = trades[cash.trade_sn] %}
+        {% set trade = trades[cash.trade_sn]|default() %}
           <tr>
             <td>{{ cash.sn }}</td>
             <td><span>{{ cash.title }}</span><br>
