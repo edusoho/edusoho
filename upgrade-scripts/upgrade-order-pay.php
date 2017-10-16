@@ -4,6 +4,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    private $pageSize = 1000;
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -62,22 +64,24 @@ class EduSohoUpgrade extends AbstractUpdater
         $funcNames = array(
             1 => 'createTables',    // done
             2 => 'migrateBizOrders', // done
-            3 => 'migrateBizOrderItems', // done
-            4 => 'migrateBizOrderItemDeductsByCoupon', // done
-            5 => 'migrateBizOrderItemDeductsByDiscount', // done
-            6 => 'migrateBizOrderItemDeductsStatus', // done
-            7 => 'migrateBizOrderRefund', // done
-            8 => 'migrateBizOrderRefundItems', // done
-            9 => 'migrateBizOrderLog',
-            10 => 'migrateBizPaymentTrade', // done
-            11 => 'migrateBizPaymentTradeFromCashOrder', // done
-            12 => 'migrateBizSecurityAnswer', // done
-            13 => 'migrateBizPayAccount',   // done
-            14 => 'migrateBizUserBalance',  // done
-            15 => 'migrateBizUserCashflow',
-            16 => 'registerJobs', // done
-            17 => 'migrateJoinMemberOperationRecord',
-            18 => 'migrateExitMemberOperationRecord',
+            3 => 'updateBizOrders',
+            4 => 'migrateBizOrderItems', // done
+            5 => 'updateBizOrderItems',
+            6 => 'migrateBizOrderItemDeductsByCoupon', // done
+            7 => 'migrateBizOrderItemDeductsByDiscount', // done
+            8 => 'migrateBizOrderItemDeductsStatus', // done
+            9 => 'migrateBizOrderRefund', // done
+            10 => 'migrateBizOrderRefundItems', // done
+            11 => 'migrateBizOrderLog',
+            12 => 'migrateBizPaymentTrade', // done
+            13 => 'migrateBizPaymentTradeFromCashOrder', // done
+            14 => 'migrateBizSecurityAnswer', // done
+            15 => 'migrateBizPayAccount',   // done
+            16 => 'migrateBizUserBalance',  // done
+            17 => 'migrateBizUserCashflow',
+            18 => 'registerJobs', // done
+            19 => 'migrateJoinMemberOperationRecord',
+            20 => 'migrateExitMemberOperationRecord',
         );
 
         if ($index == 0) {
@@ -108,11 +112,17 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function migrateBizOrders()
+    protected function migrateBizOrders($page)
     {
         $this->addMigrateId('biz_order');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from orders WHERE id NOT IN (SELECT migrate_id FROM `biz_order`)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
             insert into `biz_order` (
                 `id`,
@@ -173,23 +183,39 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from orders where id not in (select migrate_id from `biz_order`);
+            from orders where id not in (select migrate_id from `biz_order`) LIMIT 0, {$this->pageSize};
         ");
 
+        $this->logger('info', "处理biz_orders数据，当前页码{$page}");
+
+        return $page + 1;
+    }
+
+    protected function updateBizOrders($page)
+    {
+        $connection = $this->getConnection();
         $connection->exec("update biz_order set source = 'marketing' where migrate_id in (select id from orders where payment='marketing');");
         $connection->exec("update biz_order set source = 'outside' where migrate_id in (select id from orders where payment='outside');");
 
         $connection->exec("update biz_order set payment = 'lianlianpay' where payment = 'llpay';");
         $connection->exec("update biz_order set payment = 'wechat' where payment = 'wxpay';");
 
+        $this->logger('info', "更新处理biz_orders数据，当前页码{$page}");
+
         return 1;
     }
 
-    protected function migrateBizOrderItems()
+    protected function migrateBizOrderItems($page)
     {
         $this->addMigrateId('biz_order_item');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) FROM orders WHERE id NOT in (select migrate_id from `biz_order_item`)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
             insert into `biz_order_item` (
                 `id`,
@@ -242,14 +268,26 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`createdTime` as `created_time`,
                 `o`.`updatedTime` as `updated_time`,
                 `o`.`id` as `migrate_id`
-            from orders o left join order_refund re on o.refundId = re.id where `o`.`id` not in (select migrate_id from `biz_order_item`);
+            from orders o left join order_refund re on o.refundId = re.id where `o`.`id` not in (select migrate_id from `biz_order_item`) LIMIT 0, {$this->pageSize};
         ");
 
+        $this->logger('info', "处理biz_order_item数据，当前页码{$page}");
+
+        return $page + 1;
+    }
+
+    protected function updateBizOrderItems($page)
+    {
+        $connection = $this->getConnection();
         // 处理会员订单
         $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip');");
+
         foreach ($vipOrders as $vipOrder) {
             $data = json_decode($vipOrder['data'], true);
-            $connection->exec("update biz_order_item set num = '{$data['duration']}', unit = '{$data['unitType']}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
+            $duration = empty($data['duration']) ? 0 : $data['duration'];
+            $unit = empty($data['unitType']) ? 0 : $data['unitType'];
+
+            $connection->exec("update biz_order_item set num = '{$duration}', unit = '{$unit}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
         }
 
         // 处理status
@@ -258,16 +296,27 @@ class EduSohoUpgrade extends AbstractUpdater
         // 处理close_time
         $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
 
+        $this->logger('info', "更新处理biz_order_item数据，当前页码{$page}");
+
         return 1;
     }
 
-    protected function migrateBizOrderItemDeductsByCoupon()
+    protected function migrateBizOrderItemDeductsByCoupon($page)
     {
         $this->addMigrateId('biz_order_item_deduct');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(o.id) FROM orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id NOT IN (SELECT migrate_id FROM `biz_order_item_deduct` WHERE `deduct_type` = 'coupon');");
+
+        if (empty($count)) {
+            // 处理status
+            $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_order_item_deduct` (
+            INSERT into `biz_order_item_deduct` (
                 `order_id`,
                 `detail`,
                 `item_id`,
@@ -296,22 +345,28 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`createdTime` as `created_time`,
                 o.`updatedTime` as `updated_time`,
                 o.`id` as `migrate_id`
-            from orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
+            from orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon') LIMIT 0, {$this->pageSize};
         ");
 
-        // 处理status
-        $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
+        $this->logger('info', "处理biz_order_item_deduct的优惠码数据，当前页码{$page}");
 
-        return 1;
+        return $page + 1;
     }
 
-    protected function migrateBizOrderItemDeductsByDiscount()
+    protected function migrateBizOrderItemDeductsByDiscount($page)
     {
         $this->addMigrateId('biz_order_item_deduct');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) FROM orders WHERE discountId > 0 and id NOT IN (SELECT migrate_id FROM `biz_order_item_deduct` WHERE `deduct_type` = 'discount');");
+
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_order_item_deduct` (
+            INSERT into `biz_order_item_deduct` (
                 `order_id`,
                 `detail`,
                 `item_id`,
@@ -340,25 +395,37 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from orders where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount');
+            from orders where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount') LIMIT 0, {$this->pageSize};
         ");
+
+        $this->logger('info', "处理biz_order_item_deduct的打折数据，当前页码{$page}");
+
+        return $page + 1;
+    }
+
+    protected function migrateBizOrderItemDeductsStatus($page)
+    {
+        $connection = $this->getConnection();
+        $connection->exec("update biz_order_item_deduct oi set status = (select status from biz_order where id = oi.order_id);");
+
+        $this->logger('info', "更新处理biz_order_item_deduct的状态，当前页码{$page}");
 
         return 1;
     }
 
-    protected function migrateBizOrderItemDeductsStatus()
-    {
-        $connection = $this->getConnection();
-        $connection->exec("update biz_order_item_deduct oi set status = (select status from biz_order where id = oi.order_id);");
-    }
-
-    protected function migrateBizOrderRefund()
+    protected function migrateBizOrderRefund($page)
     {
         $this->addMigrateId('biz_order_refund');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) FROM `order_refund` where `id` not in (select migrate_id from `biz_order_refund`)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_order_refund` (
+            INSERT into `biz_order_refund` (
                 `id`,
                 `title`,
                 `order_id`,
@@ -399,19 +466,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from `order_refund` where `id` not in (select migrate_id from `biz_order_refund`)
+            from `order_refund` where `id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理biz_order_refund的数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
-    protected function migrateBizOrderRefundItems()
+    protected function migrateBizOrderRefundItems($page)
     {
         $this->addMigrateId('biz_order_item_refund');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) FROM `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_order_item_refund` (
+            INSERT into `biz_order_item_refund` (
                 `id`,
                 `order_refund_id`,
                 `order_id`,
@@ -438,26 +513,34 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`)
+            from `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`) LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理biz_order_item_refund的数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
-    protected function migrateBizOrderLog()
+    protected function migrateBizOrderLog($page)
     {
         // TODO
 
         return 1;
     }
 
-    protected function migrateBizPaymentTrade()
+    protected function migrateBizPaymentTrade($page)
     {
         $this->addMigrateId('biz_payment_trade');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase')");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_payment_trade` (
+            INSERT into `biz_payment_trade` (
                 `id`,
                 `title`,
                 `trade_sn`,
@@ -512,19 +595,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime` as `updated_time`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
-            from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase')
+            from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase') LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理biz_payment_trade的数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
-    protected function migrateBizPaymentTradeFromCashOrder()
+    protected function migrateBizPaymentTradeFromCashOrder($page)
     {
         $this->addMigrateId('biz_payment_trade');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge')");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_payment_trade` (
+            INSERT into `biz_payment_trade` (
                 `title`,
                 `trade_sn`,
                 `order_sn`,
@@ -577,19 +668,26 @@ class EduSohoUpgrade extends AbstractUpdater
                 `paidTime` as `updated_time`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
-            from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge')
+            from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge') LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理biz_payment_trade的现金订单数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
-    protected function migrateBizSecurityAnswer()
+    protected function migrateBizSecurityAnswer($page)
     {
         $this->addMigrateId('biz_security_answer');
 
         $connection = $this->getConnection();
+        $count = $connection->fetchColumn("SELECT COUNT(id) from user_secure_question where id not in (select migrate_id from biz_security_answer)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_security_answer` (
+            INSERT into `biz_security_answer` (
                 `id`,
                 `user_id`,
                 `question_key`,
@@ -608,19 +706,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `createdTime` as `updated_time`,
                 `id` as `migrate_id`
-            from user_secure_question where id not in (select migrate_id from biz_security_answer)
+            from user_secure_question where id not in (select migrate_id from biz_security_answer) LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理biz_security_answer的数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
-    protected function migrateBizPayAccount()
+    protected function migrateBizPayAccount($page)
     {
         $this->addMigrateId('biz_pay_account');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `user` where `id` not in (select `migrate_id` from `biz_pay_account`)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_pay_account` (
+            INSERT into `biz_pay_account` (
               `id`,
               `user_id`,
               `password`,
@@ -637,19 +743,34 @@ class EduSohoUpgrade extends AbstractUpdater
               `createdTime`,
               `updatedTime`,
               `id`
-            from `user` u where u.`id` not in (select `migrate_id` from `biz_pay_account`)
+            from `user` u where u.`id` not in (select `migrate_id` from `biz_pay_account`) LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理biz_pay_account的数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
-    protected function migrateBizUserBalance()
+    protected function migrateBizUserBalance($page)
     {
         $this->addMigrateId('biz_user_balance');
 
         $connection = $this->getConnection();
+        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_user_balance`)");
+
+        if (empty($count)) {
+            $sql = "select * from `biz_user_balance` where user_id = 0;";
+            $result = $this->getConnection()->fetchAssoc($sql);
+            if (empty($result)) {
+                $currentTime = time();
+                $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values (0, {$currentTime}, {$currentTime});");
+            }
+
+            return 1;
+        }
+
         $connection->exec("
-            insert into `biz_user_balance` (
+            INSERT into `biz_user_balance` (
               `id`,
               `user_id`,
               `amount`,
@@ -664,17 +785,12 @@ class EduSohoUpgrade extends AbstractUpdater
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
-            from `user` u left join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`)
+            from `user` u left join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`) LIMIT 0, {$this->pageSize}
         ");
 
-        $sql = "select * from `biz_user_balance` where user_id = 0;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        if (empty($result)) {
-            $currentTime = time();
-            $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values (0, {$currentTime}, {$currentTime});");
-        }
+        $this->logger('info', "处理biz_user_balance的数据，当前页码{$page}");
 
-        return 1;
+        return $page + 1;
     }
 
     protected function migrateBizUserCashflow()
@@ -709,7 +825,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function registerJobs()
+    protected function registerJobs($page)
     {
         if (!$this->isJobExist('Order_CloseOrdersJob')) {
             $currentTime = time();
@@ -744,14 +860,22 @@ class EduSohoUpgrade extends AbstractUpdater
                 )");
         }
 
+        $this->logger('info', '新增CloseOrdersJob');
+
         return 1;
     }
 
-    protected function migrateJoinMemberOperationRecord()
+    protected function migrateJoinMemberOperationRecord($page)
     {
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) FROM `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join')");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
-            insert into `member_operation_record` (
+            INSERT into `member_operation_record` (
                 `title`,
                 `member_id`,
                 `member_type`,
@@ -782,17 +906,29 @@ class EduSohoUpgrade extends AbstractUpdater
                 0 as `refund_id`,
                 '' as `reason`,
                 `createdTime` as `created_time`
-            from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join')
+            from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join') LIMIT 0, {$this->pageSize}
         "); 
 
-        return 1;       
+        $this->logger('info', "处理member_operation_record的加入数据，当前页码{$page}");
+
+        return $page + 1;       
     }
 
-    protected function migrateExitMemberOperationRecord()
+    protected function migrateExitMemberOperationRecord($page)
     {
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit')");
+
+        if (empty($count)) {
+            $connection->exec(
+                "UPDATE `member_operation_record` as `mor` , `orders` SET `mor`.`title` = `orders`.`title` where `mor`.`order_id` = `orders`.`id` and `operate_type` = 'exit';"  
+            );
+            return 1;
+        }
+
         $connection->exec("
-            insert into `member_operation_record` (
+            INSERT into `member_operation_record` (
                 `title`,
                 `member_id`,
                 `member_type`,
@@ -823,14 +959,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `refund_id`,
                 `reasonNote` as `reason`,
                 `createdTime` as `created_time`
-            from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit');
+            from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, {$this->pageSize};
         ");
 
-        $connection->exec(
-            "UPDATE `member_operation_record` as `mor` , `orders` SET `mor`.`title` = `orders`.`title` where `mor`.`order_id` = `orders`.`id` and `operate_type` = 'exit';"  
-        );
+        $this->logger('info', "处理member_operation_record的退出数据，当前页码{$page}");
 
-        return 1;
+        return $page + 1;
     }
 
     protected function createTables()
@@ -1129,6 +1263,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
             ");
         }
+
+        $this->logger('info', '新建biz表');
 
         return 1;
     }
