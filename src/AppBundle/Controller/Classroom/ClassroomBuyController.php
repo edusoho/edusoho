@@ -23,7 +23,7 @@ class ClassroomBuyController extends BuyFlowController
     {
         $user = $this->getUser();
 
-        return $this->getClassroomService()->getClassroomMember($id, $user['id']);
+        return $this->getClassroomService()->isClassroomStudent($id, $user['id']);
     }
 
     /**

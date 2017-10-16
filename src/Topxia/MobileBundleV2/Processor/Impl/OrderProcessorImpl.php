@@ -66,7 +66,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $data = array(
             'receipt' => $receipt,
-            'amount' => $amount,
+            'pay_amount' => $amount,
             'transaction_id' => $transactionId,
             'is_sand_box' => false,
             'user_id' => $user['id']

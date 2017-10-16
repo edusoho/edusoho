@@ -5,18 +5,21 @@ namespace ApiBundle\Security\Firewall;
 use ApiBundle\Api\Exception\ErrorCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
-class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
+class OldTokenAuthenticationListener extends BaseAuthenticationListener
 {
-    const TOKEN_HEADER = 'X-Auth-Token';
+    const OLD_TOKEN_HEADER = 'token';
 
     public function handle(Request $request)
     {
-        if (null !== $this->getTokenStorage()->getToken()) {
+        $token = $this->getTokenStorage()->getToken();
+        if (null !== $token && !$token instanceof AnonymousToken) {
             return;
         }
 
-        if (null === $tokenInHeader = $request->headers->get(self::TOKEN_HEADER)) {
+        $tokenInHeader = $request->headers->get(self::OLD_TOKEN_HEADER);
+        if (!$tokenInHeader || strtolower($tokenInHeader) == 'null') {
             return;
         }
 
