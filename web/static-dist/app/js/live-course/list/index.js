@@ -1,17 +1,1 @@
-webpackJsonp(["app/js/live-course/list/index"],[
-/* 0 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	$('#categoryId').change(function () {
-	  $(this).closest('form').submit();
-	});
-	
-	$('#vipCategoryId').change(function () {
-	  $(this).closest('form').submit();
-	});
-
-/***/ })
-]);
-//# sourceMappingURL=index.js.map
+webpackJsonp(["app/js/live-course/list/index"],[function(s,t){"use strict";$("#categoryId").change(function(){$(this).closest("form").submit()}),$("#vipCategoryId").change(function(){$(this).closest("form").submit()})}]);

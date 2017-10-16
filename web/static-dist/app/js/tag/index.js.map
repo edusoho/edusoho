@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./app/Resources/static-src/app/js/tag/index.js"],"names":["echo","init"],"mappings":";;;;;;AAAAA,MAAKC,IAAL,G","file":"app/js/tag/index.js","sourcesContent":["echo.init();\n\n\n// WEBPACK FOOTER //\n// ./app/Resources/static-src/app/js/tag/index.js"],"sourceRoot":""}

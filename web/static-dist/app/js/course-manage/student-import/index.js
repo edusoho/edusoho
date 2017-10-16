@@ -1,9 +1,1 @@
-webpackJsonp(["app/js/course-manage/student-import/index"],[
-/* 0 */
-/***/ (function(module, exports) {
-
-	"use strict";
-
-/***/ })
-]);
-//# sourceMappingURL=index.js.map
+webpackJsonp(["app/js/course-manage/student-import/index"],[function(e,n){"use strict"}]);

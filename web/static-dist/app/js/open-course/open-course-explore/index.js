@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/open-course/open-course-explore/index"],[function(e,o){"use strict";echo.init()}]);
