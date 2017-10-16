@@ -107,6 +107,7 @@ class TokenServiceImpl extends BaseService implements TokenService
 
         $value = substr($chars, 0, $length);
         file_put_contents('1.txt', $value.EOL, FILE_APPEND);
+
         return $value;
     }
 
