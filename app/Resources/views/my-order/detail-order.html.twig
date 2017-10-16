@@ -92,6 +92,24 @@
             </td>
           </tr>
         {% endif %}
+        {% if modalType in ['user'] and order.status in ['success'] %}
+          <tr>
+            <td width="25%">
+              {{ '退款限制'|trans }}
+            </td>
+            <td width="75%">
+              {% if order.refund_deadline == 0 %}
+                {{ '--' }}
+              {% else %}
+                {% if order.refund_deadline > date().timestamp %}
+                  可在 {{ order.refund_deadline|date('Y-n-d H:i:s') }} 前申请退款
+                {% else %}
+                  已错过申请退款时间（{{ order.refund_deadline|date('Y-n-d H:i:s') }} 前）
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+        {% endif %}
       {% endif %}
 
       <tr>
