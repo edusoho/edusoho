@@ -16,7 +16,7 @@ class BillController extends BaseController
         }
 
         $account = $this->getAccountService()->getUserBalanceByUserId(0);
-        $conditions = $this->buildConditions($request->query->all());
+        $conditions = $request->query->all();
         $conditions['amount_type'] = $type;
         $conditions['user_id'] = 0;
 
@@ -63,26 +63,6 @@ class BillController extends BaseController
         $amountInflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
 
         return array($amountInflow * 0.01, $amountOutflow * 0.01);
-    }
-
-    private function buildConditions($conditions)
-    {
-        if (!empty($conditions['startTime'])) {
-            $conditions['created_time_GTE'] = strtotime($conditions['startTime']);
-            unset($conditions['startTime']);
-        }
-        if (!empty($conditions['endTime'])) {
-            $conditions['created_time_LT'] = strtotime($conditions['endTime']);
-            unset($conditions['endTime']);
-        }
-
-        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-        }
-
-        return $conditions;
     }
 
     /**

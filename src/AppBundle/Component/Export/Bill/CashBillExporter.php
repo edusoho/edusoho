@@ -73,17 +73,17 @@ class CashBillExporter extends Exporter
             if (strpos($user['email'], '@edusoho.net') !== false) {
                 $user['email'] = '--';
             }
-            $content[] = $cash['sn'];
+            $content[] = $cash['sn']."\t";
             $content[] = $cash['title'];
-            $content[] = empty($cash['order_sn']) ? '--' : $cash['order_sn'];
+            $content[] = empty($cash['order_sn']) ? '--' : $cash['order_sn']."\t";
             $content[] = $user['nickname'];
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
             $content[] = $amountMark.$cash['amount'] / 100;
             $content[] = $paymentText;
-            $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn'];
+            $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn']."\t";
             $content[] = $profile['truename'];
             $content[] = $user['email'];
-            $content[] = $user['verifiedMobile'];
+            $content[] = $profile['mobile']."\t";;
             $datas[] = $content;
         }
 

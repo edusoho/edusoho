@@ -54,7 +54,7 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         }
 
         if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
@@ -71,11 +71,22 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
             unset($conditions['buyerNickname']);
         }
 
+        if (!empty($conditions['platform_sn'])) {
+            $trade = $this->getPayService()->getTradeByPlatformSn($conditions['platform_sn']);
+            $conditions['trade_sn'] = empty($trade) ? '0' : $trade['trade_sn'];
+            unset($conditions['platform_sn']);
+        }
+
         return $conditions;
     }
 
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->biz->service('Pay:PayService');
     }
 }
