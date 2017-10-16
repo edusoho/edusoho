@@ -53,12 +53,10 @@ class OrderRefundController extends BaseController
         $applyUser = $this->getUserService()->getUser($orderRefund['user_id']);
         $dealUser = empty($orderRefund['deal_user_id']) ? null : $this->getUserService()->getUser($orderRefund['deal_user_id']);
         $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
-        $item = $this->getOrderService()->getOrderItem($orderRefund['order_item_id']);
 
         return $this->render('admin/order-refund/detail-modal.html.twig', array(
             'orderRefund' => $orderRefund,
             'order' => $order,
-            'item' => $item,
             'applyUser' => $applyUser,
             'dealUser' => $dealUser,
         ));
