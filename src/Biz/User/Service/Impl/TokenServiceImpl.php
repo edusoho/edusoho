@@ -4,6 +4,7 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
+use Webpatser\Uuid\Uuid;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
@@ -102,14 +103,10 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     protected function _makeTokenValue($length)
     {
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $chars = str_replace('-', '', Uuid::generate(4));
 
-        $value = '';
-
-        for ($i = 0; $i < $length; ++$i) {
-            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
-        }
-
+        $value = substr($chars, 0, $length);
+        file_put_contents('1.txt', $value.EOL, FILE_APPEND);
         return $value;
     }
 
