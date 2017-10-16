@@ -16,12 +16,10 @@
         <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{ request.get('endDateTime') }}"
           placeholder="{{ 'form.placeholder.end_date'|trans }}">
       </div>
-    </div>
-    <div class="mbm">
-      <div class="form-group">
+      <div class="form-group mlm">
         <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
         <select class="form-control" name="orderItemType">
-          {{ select_options(dict('orderItemType'), request.get('orderItemType'), 'order.item_type'|trans) }}
+          {{ select_options(dict('orderItemType'), request.get('orderItemType'), 'order.product_type'|trans) }}
         </select>
 
         <select class="form-control" name="displayStatus">
@@ -31,12 +29,15 @@
         <select class="form-control" name="payment">
           {{ select_options(dict('newPayment'), request.get('payment'), 'order.payment_pattern'|trans) }}
         </select>
+        <select class="form-control" name="source">
+          {{ select_options(dict('source'), request.get('source'), 'order.source'|trans) }}
+        </select>
       </div>
       <div class="form-group" style="display:none;">
         <input class="form-control" type="text" name="paidTimeRange" , placeholder="{{ 'admin.order.paid_time_range.input_placeholder'|trans }}">
       </div>
-
-
+    </div>
+    <div class="mbm">
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.keyword'|trans }}</label>
         <select class="form-control" name="keywordType">
@@ -52,15 +53,10 @@
       </div>
 
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
-
-      <a class="btn btn-primary btn-export-csv"
-         href="{{ path('admin_order_manage_export_csv', request.query.all) }}"
-         data-export-count="{{ paginator.getItemCount() }}"
-         data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
-         data-export-allow-count="{{ setting('magic.export_allow_count') }}"
-         data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
-      >{{ 'form.btn.export_result'|trans }}</a>
-
+      {% include 'export/export-btn.html.twig' with 
+      { 'exportFileName': 'order', 
+        'targetFormId': 'user-search-form'}  
+      %}
     </div>
   </form>
 

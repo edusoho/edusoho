@@ -97,12 +97,17 @@ orderSource:
     outside: Outside
    
 newPayment:
-    none: --
     alipay: Alipay
     wechat: Wechat
     heepay: Heepay
     quickpay: Quickpay
-    lianlianpay: lianlianpay
+    llpay: LLpay
+    coin: coin
+
+source:
+    self: Self
+    outside: Outside
+    marketing: Marketing
 
 moneyRecordType:
     income: Income

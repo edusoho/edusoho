@@ -44,6 +44,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     /**
      * 折后价
+     *
      * @var float
      */
     public $afterDiscountPrice = 0;
