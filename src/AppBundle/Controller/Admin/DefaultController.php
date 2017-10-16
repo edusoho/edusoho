@@ -261,7 +261,7 @@ class DefaultController extends BaseController
         $newOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newOrderCount'] = $newOrders;
 
-        $conditions['price_amount_GT'] = 0;
+        $conditions['pay_amount_GT'] = 0;
         $newPaidOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newPaidOrderCount'] = $newPaidOrders;
 

@@ -459,6 +459,7 @@ order.paid_course.title: 已购买课程
 order.paid_course.content: 之前购买过的课程能够抵扣对应金额
 order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
+order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
 order.refund.apply_for_btn: 'Apply for refund'
@@ -5780,12 +5781,14 @@ admin.coin_model.currency_tips: "1, Could not manually update the user's virtual
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
-admin.order_refund.title.placeholder: title
+admin.order_refund.title.placeholder: Product name
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
 admin.order_refund.title: 'Refund order'
+admin.order_refund.sn: sn
 admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'
 admin.order_refund.refund_status: 'Refund status'
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: Operator
 admin.order_refund.operation: Action
 admin.order_refund.reason: 'Refund reason'
@@ -6481,6 +6484,7 @@ cashflow.user_mobile: mobile
 admin.cashflow.keyword: keyword
 
 order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.unpurchasable_product: Unpurchasable Product
 order.pay_check_msg.order_not_exist: Order not exist
 order.pay_check_msg.user_not_login: User not login
 order.pay_check_msg.not_same_user: Not your order

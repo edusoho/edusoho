@@ -360,13 +360,17 @@ class CoinController extends BaseController
     public function flowDetailAction(Request $request)
     {
         $userId = $request->query->get('userId');
-        $timeType = $request->query->get('timeType');
+        $startDateTime = $request->query->get('startDateTime');
+        $endDateTime = $request->query->get('endDateTime');
 
-        if (empty($timeType)) {
-            $timeType = 'oneWeek';
+        if (!empty($endDateTime)) {
+            $conditions['created_time_LTE'] = strtotime($endDateTime);
         }
 
-        $condition['timeType'] = $timeType;
+        if (!empty($startDateTime)) {
+            $conditions['created_time_GTE'] = strtotime($startDateTime);
+        }
+
         $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $userId;
@@ -394,7 +398,8 @@ class CoinController extends BaseController
             'user' => $user,
             'cashes' => $cashes,
             'paginator' => $paginator,
-            'timeType' => $timeType,
+            'startDateTime' => $startDateTime,
+            'endDateTime' => $endDateTime,
         ));
     }
 
@@ -476,36 +481,17 @@ class CoinController extends BaseController
 
     protected function convertFiltersToCondition($condition)
     {
-        $keyword = '';
-
-        if (isset($condition['searchType'])) {
-            if (isset($condition['keyword'])) {
-                $keyword = $condition['keyword'];
-            }
-
-            if ($keyword != '') {
-                switch ($condition['searchType']) {
-                    case 'nickname':
-                        $user = $this->getUserService()->getUserByNickname($keyword);
-                        $condition['userId'] = $user ? $user['id'] : 0;
-                        break;
-                    case 'email':
-                        $user = $this->getUserService()->getUserByEmail($keyword);
-                        $condition['userId'] = $user ? $user['id'] : 0;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            unset($condition['searchType']);
+        if (!empty($condition['keyword'])) {
+            $user = $this->getUserService()->getUserByNickname($condition['keyword']);
+            $condition['userId'] = $user ? $user['id'] : 0;
             unset($condition['keyword']);
         }
 
-        if (isset($condition['endDateTime']) && !empty($condition['endDateTime'])) {
+        if (!empty($condition['endDateTime'])) {
             $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
         }
 
-        if (isset($condition['startDateTime']) && !empty($condition['startDateTime'])) {
+        if (!empty($condition['startDateTime'])) {
             $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
         }
 

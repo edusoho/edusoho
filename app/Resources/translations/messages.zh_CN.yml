@@ -420,7 +420,7 @@ vip: 会员
 plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
-plugin.coupon: 优惠码
+plugin.coupon: 优惠券
 plugin.discount: 打折
 plugin.coupon.minus: 抵扣
 plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
@@ -468,9 +468,9 @@ order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
 order.due_pay: 应付(元)
-order.price_amount: 订单金额
+order.price_amount: 总价
 order.discount_amount: 优惠
-order.real_pay: 实付金额
+order.real_pay: 实付
 order.buyers: 购买者
 order.deduct_amount: 优惠金额
 order.coin_amount: 虚拟币支付
@@ -547,6 +547,7 @@ order.paid_course.title: 已购买课程
 order.paid_course.content: 之前购买过的课程能够抵扣对应金额
 order.paid_course.minus: 抵扣
 order.refund: 退出学习
+order.refund.item_type: 商品类型
 order.refund.reason: 退出原因
 order.refund.reason_tips: 请输入您的退学原因
 order.refund.apply_for_btn: 申请退款
@@ -4319,10 +4320,10 @@ common.orderStatus.paid: 已付款
 common.orderStatus.refunding: 退款中
 common.orderStatus.refunded: 已退款
 common.orderStatus.cancelled: 已关闭
-common.refundStatus.created: 已申请
+common.refundStatus.created: 用户已申请
 common.refundStatus.success: 退款成功
-common.refundStatus.failed: 退款失败
-common.refundStatus.cancelled: 已取消
+common.refundStatus.failed: 退款拒绝
+common.refundStatus.cancelled: 用户已撤消
 common.logLevel.info: 提示
 common.logLevel.warning: 警告
 common.logLevel.error: 错误
@@ -5116,7 +5117,7 @@ admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
-    <div class="popover-item">`
+    <div class="popover-item">
       <div class="title">新增订单</div>
       <div class="content">平台当日产生的所有订单，包括免费和付费</div>
     </div>
@@ -7353,12 +7354,14 @@ admin.coin_setting.price_set_tips: 请设置正确的价格
 
 #退款管理
 admin.order_refund.status.default: 退款状态
-admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.placeholder: 订单标题
+admin.order_refund.sn: 退款单号
+admin.order_refund.nickname.input_placeholder: 退款人
+admin.order_refund.title.placeholder: 商品名称
 admin.order_refund.title: 退款订单
 admin.order_refund.order_amount: 退款金额
 admin.order_refund.refund_person: 退款人
 admin.order_refund.refund_status: 退款状态
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: 操作人
 admin.order_refund.operation: 操作
 admin.order_refund.reason: 退款理由
@@ -7374,7 +7377,7 @@ admin.order_cash_refund.audit.tips: 在线支付的款项，不支持自动退�
 admin.order_cash_coin_refund.audit.tips: 虚拟币款项，将会在点击“提交”以后自动退款。在线支付的款项，不支持自动退款。若同意退款，建议您先在线下处理完退款，再确定提交。
 admin.order_coin.refund.success.tips: 提交后自动退款
 admin.order_cash.refund.success.tips: 需线下手动退款
-admin.order_refund_handle.success: 退款申请操作成功
+admin.order_refund_handle.success: 退款已处理
 admin.order.logs.content_title: 订单详情
 admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
@@ -8149,6 +8152,7 @@ admin.cashflow.keyword: 关键字
 admin.cashflow.keyword_default: --选择类型--
 
 order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.unpurchasable_product: 未开放购买
 order.pay_check_msg.order_not_exist: 订单不存在
 order.pay_check_msg.user_not_login: 用户未登录，不能支付
 order.pay_check_msg.not_same_user: 不是您的订单，不能支付

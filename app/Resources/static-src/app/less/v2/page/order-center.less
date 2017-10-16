@@ -107,9 +107,6 @@
   &-coupon {
     .cd-form-group-action {
       padding-right: 78px;
-      @media(max-width: @screen-xs-max) {
-        width: 100%;
-      }
     }
     .form-control {
       width: 176px;
@@ -151,9 +148,15 @@
     vertical-align: middle;
     margin-bottom: 24px;
     line-height: 54px;
+    @media(max-width: @screen-xs-max) {
+      line-height: 22px;
+    }
     &__img {
       float: left;
       width: 96px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 8px;
+      }
     }
     &__title {
       float: left;
@@ -161,11 +164,17 @@
       font-size: 12px;
       color: @cd-gray-dark;
       width: 60%;
+      @media(max-width: @screen-xs-max) {
+        margin-left: 0;
+      }
     }
     &__price {
       float: right;
       font-size: 12px;
       color: @cd-gray;
+      @media(max-width: @screen-xs-max) {
+        float: left;
+      }
     }
   }
 }

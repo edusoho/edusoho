@@ -60,14 +60,12 @@
             </div>
 
             {% if order.pay_amount != 0 and order.status in ['paid', 'success'] and order.refund.status|default('') in ['cancel', ''] %}
-              {% if order.refund_deadline == 0 or order.refund_deadline > date().timestamp %}
-                <br>
-                <div class="table-action__item">
-                  <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'申请退款'|trans}}</a>
-                </div>
-              {% endif %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'申请退款'|trans}}</a>
+              </div>
             {% endif %}
-            {% if order.status in ['refunded', 'refunding'] %}
+            {% if order.status in ['refunded', 'refunding', 'closed'] and order.refund.status|default(null) is not null %}
               <br>
               <div class="table-action__item">
                 <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'查看退款'|trans}}</a>

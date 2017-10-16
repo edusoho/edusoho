@@ -5,7 +5,10 @@
   <th width="25%">{{ 'order.name'|trans }}</th>
   <th>{{ 'order.created_time'|trans }}</th>
   <th>{{ 'order.status'|trans }}</th>
-  <th>{{ 'order.price_amount'|trans }}</th>
+  <th>
+  {# {{ 'order.price_amount'|trans }} #}
+  总价</th>
+  <th>{{ 'order.discount_amount'|trans }}</th>
   <th>{{ 'order.real_pay'|trans }}</th>
   <th width="10%">{{'order.buyers'|trans }}</th>
   <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
@@ -31,6 +34,7 @@
     <td><span class="color-gray text-sm">{{ order.created_time|date('Y-n-d H:i:s') }}</span></td>
     <td>{{ display_order_status(order.status, 1) }}</td>
     <td><span class="color-warning">{{ order.price_amount|fen_to_yuan(0) }}</span></td>
+    <td><span class="color-warning">{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
     <td><span class="color-warning">{{order.pay_amount|fen_to_yuan(0) }}</span></td>
     <td>
       {{ web_macro.user_link(buyer) }}

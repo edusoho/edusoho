@@ -51,6 +51,11 @@ class OrderRefundController extends BaseController
     {
         $conditions = array_filter($conditions);
 
+        if (!empty($conditions['orderRefundSn'])) {
+            $conditions['sn'] = $conditions['orderRefundSn'];
+            unset($conditions['orderRefundSn']);
+        }
+
         if (!empty($conditions['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($conditions['orderSn']);
             $conditions['order_id'] = !empty($order) ? $order['id'] : -1;
@@ -77,15 +82,20 @@ class OrderRefundController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $pass = $request->request->get('result');
-            $fileds = $request->request->all();
-            $refundData = array('deal_reason' => $request->request->get('note'));
+            $fields = $request->request->all();
 
             if ('pass' === $pass) {
+                $refundData = array(
+                    'deal_reason' => $request->request->get('note'),
+                    'refund_coin_amount' => intval($request->request->get('refund_coin_amount', 0) * 100),
+                    'refund_cash_amount' => intval($request->request->get('refund_cash_amount', 0) * 100),
+                );
                 $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
             } else {
+                $refundData = array('deal_reason' => $request->request->get('note'));
                 $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], $refundData);
             }
-            $this->sendAuditRefundNotification($product, $order, $fileds);
+            $this->sendAuditRefundNotification($product, $order, $fields);
             $this->setFlashMessage('success', 'admin.order_refund_handle.success');
 
             return $this->redirect($this->generateUrl('admin_order_refunds', array('targetType' => $product->targetType)));
@@ -95,6 +105,7 @@ class OrderRefundController extends BaseController
             'order' => $order,
             'refund' => $refund,
             'user' => $user,
+            'trade' => $trade,
         ));
     }
 

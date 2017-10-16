@@ -54,7 +54,7 @@
     "tiben/crontab-manager": "1.2.1",
     "codeages/qiqiuyun-php-sdk": "^0.0.1",
     "phpdocumentor/reflection-docblock": "2.0.5",
-    "wenqinruan/omnipay-wechatpay": "^1.0",
+    "canuonifeng/omnipay-wechatpay": "^1.1",
     "wenqinruan/omnipay-alipay": "^2.3"
   },
   "require-dev": {

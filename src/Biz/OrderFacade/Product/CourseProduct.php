@@ -44,6 +44,12 @@ class CourseProduct extends Product implements OrderStatusCallback
     {
         $access = $this->getCourseService()->canJoinCourse($this->targetId);
 
+        $course = $this->getCourseService()->getCourse($this->targetId);
+
+        if (!$course['buyable']) {
+            throw new OrderPayCheckException('order.pay_check_msg.unpurchasable_product', Product::PRODUCT_VALIDATE_FAIL);
+        }
+
         if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new OrderPayCheckException($access['msg'], Product::PRODUCT_VALIDATE_FAIL);
         }
