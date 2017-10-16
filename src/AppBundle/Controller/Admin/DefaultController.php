@@ -281,7 +281,7 @@ class DefaultController extends BaseController
             'price_amount_GT' => 0,
             'status' => 'success',
         );
-        
+
         $conditions['order_item_target_type'] = 'course';
         $courseOrdersCount = $this->getOrderService()->countOrders($conditions);
 
