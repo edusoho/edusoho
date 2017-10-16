@@ -1,13 +1,16 @@
 {% extends 'admin/layout.html.twig' %}
 {% set script_controller = 'topxiaadminbundle/controller/bill/index' %}
 {% set menu = 'admin_bill_coin' %}
-
+{% set coinSetting = setting('coin') %}
 {% block main %}  
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
     <p class="text-muted">
-      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{ math_format(account.amount, 0.01)|default(0) }}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow|default(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{ math_format(account.amount, 0.01)|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
+      <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
+      <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
+      <span class="pull-right">
+        {{ 'coin.rate'|trans }}: 1{{ 'site.currency.CNY'|trans }} = {{ coinSetting.cash_rate ~ coinSetting.coin_name }}
+      </span>
     </p>
     <div class="table-responsive">
       <table class="table table-striped text-sm">
@@ -18,10 +21,11 @@
           <th width="115">{{ 'cashflow.created_time'|trans }}</th>
           <th class="text-right prl"><span>{{ 'cashflow.number'|trans }}</th>
           <th>{{ 'cashflow.platform'|trans }}</th>
-          <th width="150">{{ 'cashflow.trade_sn'|trans }}</th>
+          <th width="150">{{ 'cashflow.platform_sn'|trans }}</th>
         </tr>
         {% for cash in cashes %}
         {% set user = users[cash['buyer_id']]|default() %}
+        {% set trade = trades[cash.trade_sn] %}
           <tr>
             <td>{{ cash.sn }}</td>
             <td><span>{{ cash.title }}</span><br>
@@ -52,7 +56,7 @@
                 {{ 'order.payment_pattern.balance'|trans }}
               {% endif %}
             </td>
-            <td>{{ cash.trade_sn }}</td>
+            <td>{{ trade.platform_sn|default('') }}</td>
           </tr>
         {% endfor %}
       </table>

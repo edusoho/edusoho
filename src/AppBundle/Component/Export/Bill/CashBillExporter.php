@@ -17,7 +17,7 @@ class CashBillExporter extends Exporter
             'cashflow.created_time',
             'cashflow.amount',
             'cashflow.platform',
-            'cashflow.trade_sn',
+            'cashflow.platform_sn',
             'cashflow.user_truename',
             'cashflow.user_email',
             'cashflow.user_mobile',
@@ -34,6 +34,10 @@ class CashBillExporter extends Exporter
             $limit
         );
 
+        $tradeSns = ArrayToolkit::column($cashes, 'trade_sn');
+        $trades = $this->getPayService()->findTradesByTradeSn($tradeSns);
+        $trades = ArrayToolkit::index($trades, 'trade_sn');
+
         $userIds = ArrayToolkit::column($cashes, 'buyer_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -43,7 +47,7 @@ class CashBillExporter extends Exporter
 
         foreach ($cashes as $cash) {
             $content = array();
-
+            $trade = $trades[$cash['trade_sn']];
             if ($cash['type'] == 'outflow' && $cash['amount_type'] == 'money') {
                 //网校支出
                 $amountMark = '-';
@@ -76,7 +80,7 @@ class CashBillExporter extends Exporter
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
             $content[] = $amountMark.$cash['amount'] / 100;
             $content[] = $paymentText;
-            $content[] = $cash['trade_sn'];
+            $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn'];
             $content[] = $profile['truename'];
             $content[] = $user['email'];
             $content[] = $user['verifiedMobile'];
@@ -118,5 +122,10 @@ class CashBillExporter extends Exporter
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->getBiz()->service('Pay:PayService');
     }
 }

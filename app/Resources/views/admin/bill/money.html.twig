@@ -5,7 +5,7 @@
 {% block main %}
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-cash-flow'} %}
     <p class="text-muted">
-      <span class="mrl">{{ 'finance.balance'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01) }}</strong>{{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{ 'finance.net_income'|trans }}：<strong class="inflow-num">{{ math_format(account.cash_amount, 0.01) }}</strong>{{ 'site.currency.CNY'|trans }}</span>
       <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
       <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow }}</strong>{{ 'site.currency.CNY'|trans }}</span>
     </p>
@@ -19,11 +19,12 @@
           <th width="115">{{ 'cashflow.created_time'|trans }}</th>
           <th class="text-right prl"><span>{{ 'cashflow.amount'|trans }}</th>
           <th>{{ 'cashflow.platform'|trans }}</th>
-          <th width="150">{{ 'cashflow.trade_sn'|trans }}</th>
+          <th width="150">{{ 'cashflow.platform_sn'|trans }}</th>
         </tr>
         {% if cashes %}
           {% for cash in cashes %}
             {% set user = users[cash['buyer_id']]|default() %}
+            {% set trade = trades[cash.trade_sn] %}
             <tr class="text-sm">
               <td><span >{{ cash.sn }}</span></td>
               <td><span>{{ cash.title }}</span><br>
@@ -62,7 +63,7 @@
                   {% endif %}
                 </span>
               </td>
-              <td>{{ cash.trade_sn }}</td>
+              <td>{{ trade.platform_sn|default('') }}</td>
             </tr>
           {% endfor %}
         {% else %}

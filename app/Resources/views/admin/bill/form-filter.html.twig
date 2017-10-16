@@ -6,7 +6,13 @@
   </div>
   <div class="form-group">
     <select class="form-control" name="platform">
-      {{ select_options(dict('newPayment'), app.request.get('platform'), 'order.payment_pattern'|trans) }}
+      {% set newPayment = dict('newPayment') %}
+       {# {% if  menu == 'admin_bill_cash' %}
+        {% set newPayment = newPayment|merge({'ad':'网校支付'}) %}
+      {% else %}
+        {% set newPayment = newPayment|merge({'ad':'余额支付'}) %}
+      {% endif %}  #}
+      {{ select_options(newPayment, app.request.get('platform'), 'order.payment_pattern'|trans) }}
     </select>
   </div>
   <div class="form-group">

@@ -32,6 +32,9 @@ class BillController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $tradeSns = ArrayToolkit::column($cashes, 'trade_sn');
+        $trades = $this->getPayService()->findTradesByTradeSn($tradeSns);
+        $trades = ArrayToolkit::index($trades, 'trade_sn');
 
         foreach ($cashes as &$cash) {
             $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
@@ -48,6 +51,7 @@ class BillController extends BaseController
             'account' => $account,
             'outflow' => $outflow,
             'inflow' => $inflow,
+            'trades' => $trades
         ));
     }
 
@@ -92,5 +96,10 @@ class BillController extends BaseController
     protected function getAccountService()
     {
         return $this->createService('Pay:AccountService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

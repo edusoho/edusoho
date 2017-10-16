@@ -88,8 +88,8 @@ payment:
     iosiap: 苹果应用内支付
     outside: 站外支付
     coin: 虚拟币
-    llpay: 连连支付
     marketing: 营销平台
+    lianlianpay: 连连支付
 
 orderSource:
     self: 站内支付
@@ -106,8 +106,7 @@ newPayment:
     wechat: 微信
     heepay: 网银支付
     quickpay: 快捷支付
-    llpay: 连连支付
-
+    lianlianpay: 连连支付
 
 moneyRecordType:
     income: 充值
