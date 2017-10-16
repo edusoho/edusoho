@@ -2465,6 +2465,7 @@ user.orders.detail.modal_title: 'Order Details'
 user.orders.detail.special_operations: 'Special operation'
 user.orders.detail.log_info: 'Log info'
 user.orders.detail.operator: Operator
+user.orders.detail.Ip: IP
 user.orders.detail.log_createdTime: 'Created at'
 user.orders.detail.empty: 'No transaction log'
 user.orders.refund_record_title: 'Refund record'
@@ -5589,7 +5590,7 @@ admin.cdn.status.close: Close
 admin.cdn.input_placeholder: 'If leave empty, then it will be default URL'
 admin.order.paid_time_range.input_placeholder: 'Payment time'
 admin.order.keyword: Keywords
-admin.order.buyer: 'Buyer''s user name'
+admin.order.buyer: 'Buyer'
 admin.order.title: Order title
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name

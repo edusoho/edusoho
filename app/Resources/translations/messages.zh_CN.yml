@@ -3115,6 +3115,7 @@ user.orders.detail.modal_title: 订单详情
 user.orders.detail.special_operations: 特殊操作
 user.orders.detail.log_info: 日志信息
 user.orders.detail.operator: 操作人
+user.orders.detail.Ip: IP
 user.orders.detail.log_createdTime: 创建时间
 user.orders.detail.empty: 暂无交易日志
 user.orders.refund_record_title: 退款记录
@@ -7075,7 +7076,7 @@ admin.cdn.input_placeholder: 不填将默认是URL
 # 订单模块
 admin.order.paid_time_range.input_placeholder: 付款时间段
 admin.order.keyword: 关键词:
-admin.order.buyer: 购买者用户名
+admin.order.buyer: 购买者
 admin.order.title: 订单名称
 admin.order.screen_condition: 筛选条件:
 admin.order.target_name: 名

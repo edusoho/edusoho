@@ -166,22 +166,22 @@ class OrderExtension extends \Twig_Extension
         $text = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('orderDisplayStatus', $displayStatus);
         switch ($displayStatus) {
             case 'notPaid':
-                $majorClass = 'label-warning';
+                $majorClass = 'color-warning';
                 break;
             case 'paid':
-                $majorClass = 'label-success';
+                $majorClass = 'color-success';
                 break;
             case 'refunded':
-                $majorClass = 'label-danger';
+                $majorClass = 'color-danger';
                 break;
             case 'closed':
-                $majorClass = 'label-default';
+                $majorClass = 'color-default';
                 break;
             default:
-                $majorClass = 'label-default';
+                $majorClass = 'color-default';
         }
 
-        return sprintf('<span class="label %s">%s</span>', $majorClass, $text);
+        return sprintf('<span class="%s">%s</span>', $majorClass, $text);
     }
 
     private function displayWebStatus($displayStatus)

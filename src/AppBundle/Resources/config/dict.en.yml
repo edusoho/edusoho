@@ -88,6 +88,11 @@ newPayment:
     llpay: LLpay
     coin: coin
 
+source:
+    self: Self
+    outside: Outside
+    marketing: Marketing
+
 moneyRecordType:
     income: Income
     payout: Payout
