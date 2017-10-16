@@ -33,7 +33,12 @@ class WechatController extends PaymentController
             'isMicroMessenger' => true,
         ), $request);
 
-        $openid = $jsApi->getOpenid();
+        try {
+            $openid = $jsApi->getOpenid();
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', '不能使用微信支付，可能是网校未开启微信支付或配置不正确');
+        }
+
         $params = $request->getSession()->get('wechat_pay_params');
 
         $apiKernel = $this->get('api_resource_kernel');
