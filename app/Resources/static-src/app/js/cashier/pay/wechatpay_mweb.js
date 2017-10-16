@@ -4,5 +4,18 @@ export default class WechatPayMweb extends BasePayment {
 
 	afterTradeCreated(res) {
 		location.href = res.mweb_url;
+		this.startInterval(res.tradeSn);
+	}
+
+	startInterval(tradeSn) {
+		window.intervalWechatId = setInterval(this.checkIsPaid.bind(this, tradeSn), 2000);
+	}
+
+	checkIsPaid(tradeSn) {
+		BasePayment.getTrade(tradeSn).then(res => {
+			if (res.isPaid) {
+				location.href = res.paidSuccessUrl;
+			}
+		});
 	}
 }

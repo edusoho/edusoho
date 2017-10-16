@@ -4,81 +4,88 @@ import ConfirmModal from './confirm';
 
 export default class BasePayment {
 
-  setOptions(options) {
-    this.options = options;
-  }
+	setOptions(options) {
+		this.options = options;
+	}
 
-  getOptions() {
-    return this.options;
-  }
+	getOptions() {
+		return this.options;
+	}
 
-  showConfirmModal(tradeSn) {
-    if (!this.confirmModal) {
-      this.confirmModal = new ConfirmModal();
-    }
+	showConfirmModal(tradeSn) {
+		if (!this.confirmModal) {
+			this.confirmModal = new ConfirmModal();
+		}
 
-    this.confirmModal.show(tradeSn);
-  }
+		this.confirmModal.show(tradeSn);
+	}
 
-  pay(params) {
+	pay(params) {
 
-    let trade = BasePayment.createTrade(params);
-    if (trade.paidSuccessUrl) {
-      location.href = trade.paidSuccessUrl;
-    } else {
-      this.afterTradeCreated(trade)
-    }
+		let trade = this.createTrade(params);
+		if (trade.paidSuccessUrl) {
+			location.href = trade.paidSuccessUrl;
+		} else {
+			this.afterTradeCreated(trade)
+		}
 
-  }
+	}
 
-  afterTradeCreated(res) {
+	afterTradeCreated(res) {
 
-  }
+	}
 
-  static filterParams(postParams) {
-    let params = {
-      gateway: postParams.gateway,
-      type: postParams.type,
-      orderSn: postParams.orderSn,
-      coinAmount: postParams.coinAmount,
-      amount: postParams.amount,
-      openid: postParams.openid,
-      payPassword: postParams.payPassword
-    };
+	customParams(params) {
+		return params;
+	}
 
-    Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
+	filterParams(postParams) {
+		let params = {
+			gateway: postParams.gateway,
+			type: postParams.type,
+			orderSn: postParams.orderSn,
+			coinAmount: postParams.coinAmount,
+			amount: postParams.amount,
+			openid: postParams.openid,
+			payPassword: postParams.payPassword
+		};
 
-    return params;
-  }
+		console.log(params)
+		params = this.customParams(params);
 
-  static createTrade(postParams) {
+		Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
 
-    let params = this.filterParams(postParams);
+		return params;
+	}
 
-    let trade = null;
+	createTrade(postParams) {
 
-    Api.trade.create({data:params, async: false, promise: false}).done( res => {
-      trade = res;
-    }).error( res => {
-      notify('danger', Translator.trans('cashier.pay.error_message'));
-    });
+		let params = this.filterParams(postParams);
 
-    return trade;
-  }
+		let trade = null;
 
-  static getTrade(tradeSn, orderSn = '') {
-    let params = {};
+		Api.trade.create({data: params, async: false, promise: false}).done(res => {
+			trade = res;
+		}).error(res => {
+			notify('danger', Translator.trans('cashier.pay.error_message'));
+		});
 
-    if (tradeSn) {
-      params.tradeSn = tradeSn;
-    }
+		return trade;
+	}
 
-    if (orderSn) {
-      params.orderSn = orderSn;
-    }
+	static getTrade(tradeSn, orderSn = '') {
+		let params = {};
 
-    return Api.trade.get({
-      params: params
-    });
-  }
+		if (tradeSn) {
+			params.tradeSn = tradeSn;
+		}
+
+		if (orderSn) {
+			params.orderSn = orderSn;
+		}
+
+		return Api.trade.get({
+			params: params
+		});
+	}
 }

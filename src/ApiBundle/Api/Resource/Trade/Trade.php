@@ -46,7 +46,6 @@ class Trade extends AbstractResource
                 $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
             }
         }
-
         $tradeIns = $this->getTradeIns($params['gateway']);
         $trade = $tradeIns->create($params);
 
