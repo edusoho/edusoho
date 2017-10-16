@@ -5,7 +5,6 @@ namespace Biz\OrderFacade\Command\Deduct;
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class PickCouponCommand extends Command
 {
@@ -15,7 +14,7 @@ class PickCouponCommand extends Command
             $checkData = $this->getCouponService()->checkCoupon($params['couponCode'], $product->targetId, $product->targetType);
 
             if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
-                throw new InvalidArgumentException('Bad coupon code use');
+                return;
             }
 
             $coupon = $this->getCouponService()->getCouponByCode($params['couponCode']);
