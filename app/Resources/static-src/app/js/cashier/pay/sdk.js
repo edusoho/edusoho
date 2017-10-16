@@ -8,6 +8,9 @@ import WechatPayMweb from './wechatpay_mweb';
 
 export default class PaySDK {
 
+  constructor(){
+	  alert(new Date().toTimeString());
+  }
   pay(params, options = {}) {
     let gateway = this.getGateway(params['payment'], params['isMobile'], params['openid']);
 	  params.gateway = gateway;
