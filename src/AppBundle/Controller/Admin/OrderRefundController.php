@@ -51,6 +51,11 @@ class OrderRefundController extends BaseController
     {
         $conditions = array_filter($conditions);
 
+        if (!empty($conditions['orderRefundSn'])) {
+            $conditions['sn'] = $conditions['orderRefundSn'];
+            unset($conditions['orderRefundSn']);
+        }
+
         if (!empty($conditions['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($conditions['orderSn']);
             $conditions['order_id'] = !empty($order) ? $order['id'] : -1;
