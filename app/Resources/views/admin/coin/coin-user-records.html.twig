@@ -7,32 +7,20 @@
 {% block main %}
 
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-
     <div class="mbm">
       <div class="form-group">
         <label class="ptm">{{ 'order.created_time'|trans }}:</label>
-        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{ app.request.get('startDateTime') }}"
-               placeholder="{{ 'form.placeholder.start_date'|trans }}">
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{ app.request.get('startDateTime') }}" placeholder="{{ 'form.placeholder.start_date'|trans }}">
         -
-        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{ app.request.get('endDateTime') }}"
-               placeholder="{{ 'form.placeholder.end_date'|trans }}">
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{ app.request.get('endDateTime') }}" placeholder="{{ 'form.placeholder.end_date'|trans }}">
+
+        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.nickname'|trans}}">
+
+        <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
       </div>
     </div>
-    <div class="form-group">
-      <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
-      <select class="form-control" name="searchType">
-        {% set options = {'nickname':'admin.coin.search_type_option.nickname'|trans,'email':'admin.coin.search_type_option.email'|trans} %}
-        {{ select_options(options, app.request.get('searchType')) }}
-      </select>
-    </div>
-
-    <div class="form-group">
-      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
-             placeholder="{{'form.placeholder.keyword'|trans}}">
-    </div>
-
-    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>
+  
   <p class="text-muted">
     <span class="mrl">{{ 'coin.online_school_balance'|trans }}：<strong class="inflow-num">{{ math_format(schoolAccount.amount, 0.01) }}</strong></span>
     <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ math_format(inflowAmount, 0.01) }}</strong></span>
@@ -54,11 +42,11 @@
         {% for userId in userIds %}
           <tr>
             <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
-            <td style="color:#1bb974;"> {{ userInCash(userId,app.request.get('timeType'))|default("0.00") }}</td>
-            <td style="color:#ff7b0e;"> {{ userOutCash(userId,app.request.get('timeType'))|default("0.00") }}</td>
-            <td style="color:blue;"> {{ user_balance(userId).amount|default(0) }}</td>
+            <td style="color:#1bb974;"> {{ userInCash(userId,app.request.get('timeType'))|default("0.00")|number_format(2) }}</td>
+            <td style="color:#ff7b0e;"> {{ userOutCash(userId,app.request.get('timeType'))|default("0.00")|number_format(2) }}</td>
+            <td style="color:blue;"> {{ user_balance(userId).amount|default(0)|number_format(2) }}</td>
             <td>
-              <a class= {% if user_balance(userId).amount %} "btn btn-default" {% else %} "btn btn-default disabled"  {% endif %}
+              <a {% if user_balance(userId).amount <= 0 %}class="disabled"{% endif %}
               data-toggle="modal" data-target="#modal"
               data-url="{{ path('admin_coin_flow_detail',{userId:userId,timeType:app.request.get('timeType')}) }}"
               href="javascript:;">{{'form.btn.view'|trans}}</a>
