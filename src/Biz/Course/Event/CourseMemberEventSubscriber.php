@@ -120,7 +120,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $conditions = array(
             'target_id' => $course['id'],
             'target_type' => 'course',
-            'status' => 'success'
+            'status' => 'success',
         );
 
         $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
