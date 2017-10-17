@@ -1111,7 +1111,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isTableExist('member_operation_record')) {
             $connection->exec("
                 CREATE TABLE `member_operation_record` (
-                `id` int(11) UNSIGNED NOT NULL,
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '标题',
                 `member_id` int(10) UNSIGNED NOT NULL COMMENT '成员ID',
                 `member_type` varchar(32) NOT NULL DEFAULT 'student' COMMENT '成员身份',
@@ -1125,7 +1125,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
                 `refund_id` int(11) NOT NULL DEFAULT '0' COMMENT '退款ID',
                 `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '加入理由或退出理由',
-                `created_time` int(10) UNSIGNED NOT NULL DEFAULT '0'
+                `created_time` int(10) UNSIGNED NOT NULL DEFAULT '0',
+                PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
             ");
         }
