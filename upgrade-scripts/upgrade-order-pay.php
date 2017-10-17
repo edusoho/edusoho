@@ -176,7 +176,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `paidTime` as `pay_time`,
                 case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then `payment` else 'none' end as `payment`,
                 `paidTime` as `finish_time`,
-                0 as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
+                case when `status` = 'cancelled' then `updatedTime` else 0 end as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
                 '' as `close_data`, -- TODO 当订单关闭状态时的数据, 从日志中取得
                 0 as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
                 0 as `seller_id`,
@@ -197,6 +197,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    // TODO 处理时间过长
     protected function updateBizOrders($page)
     {
         $connection = $this->getConnection();
@@ -257,7 +258,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `detail`,
                 1 as `num`,    -- 处理会员的数据
                 '' as `unit`,  -- 处理会员的数据
-                `o`.`status` as `status`, -- TODO 保持和biz_order一样
+                case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
                 `o`.`totalPrice`*100 as `price_amount`,
@@ -266,7 +267,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`targetType` as `target_type`,
                 `o`.`paidTime` as `pay_time`,
                 `o`.`paidTime` as `finish_time`,
-                0 as `close_time`, -- TODO 关闭时间,保持和biz_order
+                case when o.`status` = 'cancelled' then o.`updatedTime` else 0 end as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
                 `o`.`userId` as `user_id`,
                 0 as `seller_id`,
                 '' as `create_extra`,
@@ -282,11 +283,20 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    // TODO 数据处理时间过长
     protected function updateBizOrderItems($page)
     {
         $connection = $this->getConnection();
+
+        // 有可能copon批次会删除，导致老数据不会迁移
+        $count = $connection->fetchColumn("select count(*) from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip');");
+
+        if (empty($count)) {
+            return 1;
+        }
+
         // 处理会员订单
-        $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip');");
+        $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip') LIMIT 0, {$this->pageSize};");
 
         foreach ($vipOrders as $vipOrder) {
             $data = json_decode($vipOrder['data'], true);
@@ -298,15 +308,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("update biz_order_item set create_extra = '{$buyType}', num = '{$duration}', unit = '{$unit}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
         }
 
-        // 处理status
-//        $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
-
-        // 处理close_time
-//        $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
-
         $this->logger('info', "更新处理biz_order_item数据，当前页码{$page}");
 
-        return 1;
+        return $page + 1;
     }
 
     protected function migrateBizOrderItemDeductsByCoupon($page)
@@ -347,7 +351,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'coupon' as `deduct_type`,
                 c.`id` as `deduct_id`,               
                 o.`couponDiscount`*100 as `deduct_amount`,
-                o.`status` as `status`,
+                case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 o.`userId` as `user_id`,
                 0 as `seller_id`,
                 concat('{\"couponCode\":\'', o.coupon, '\'}') as `snapshot`,
@@ -388,8 +392,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `snapshot`,
                 `created_time`,
                 `updated_time`,
-                `migrate_id`,
-                `status`
+                `migrate_id`
             ) 
             select 
                 `id` as `order_id`,
@@ -398,15 +401,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 'discount' as `deduct_type`,
                 `discountId` as `deduct_id`,              
                 `discount`*100 as `deduct_amount`,
-                `status` as `status`,
+                case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `userId` as `user_id`,
                 0 as `seller_id`,
                 '' as `snapshot`,
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
-                `status` as `status`,
                 `id` as `migrate_id`
-            from orders where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount') LIMIT 0, {$this->pageSize};
+            from orders o where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount') LIMIT 0, {$this->pageSize};
         ");
 
         $this->logger('info', "处理biz_order_item_deduct的打折数据，当前页码{$page}");
@@ -487,7 +489,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateBizOrderRefundItems($page)
     {
-        // TODO 加了手动写的退款金额
         $this->addMigrateId('biz_order_item_refund');
 
         $connection = $this->getConnection();
@@ -536,7 +537,6 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizOrderLog($page)
     {
         // TODO
-
         return 1;
     }
 
@@ -581,33 +581,33 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             )
             select 
-                `id`,
-                `title`,
-                `sn` as `trade_sn`,
-                `sn` as `order_sn`,
-                `payment` as `platform`,
+                o.`id`,
+                o.`title`,
+                o.`sn` as `trade_sn`,
+                o.`sn` as `order_sn`,
+                o.`payment` as `platform`,
                 '' as `platform_sn`,
-                `status` as `status`,
+                o.`status` as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
-                `amount`,
-                `coinAmount` as `coin_amount`,
-                `amount` as `cash_amount`,
-                `coinRate` as `rate`,
+                o.`amount`*100,
+                o.`coinAmount`*100 as `coin_amount`,
+                o.`amount`*100 as `cash_amount`,
+                o.`coinRate` as `rate`,
                 'purchase' as `type`,
-                `paidTime` as `pay_time`,
+                o.`paidTime` as `pay_time`,
                 0 as `seller_id`,
-                `userId` as `user_id`,
+                o.`userId` as `user_id`,
                 '' as `notify_data`,
                 '' as `platform_created_result`,
-                0 as `apply_refund_time`, -- TODO join refund
-                0 as `refund_success_time`, -- TODO join refund
+                case when r.createdTime is not null then r.`createdTime` else 0 end as `apply_refund_time`, -- TODO join refund
+                case when r.status = 'success' and r.updatedTime is not null then r.updatedTime else 0 end as `refund_success_time`, -- TODO join refund
                 '' as `platform_created_params`,
-                '' as `platform_type`, -- TODO
-                `updatedTime` as `updated_time`,
-                `createdTime` as `created_time`,
-                `id` as `migrate_id`
-            from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase') LIMIT 0, {$this->pageSize}
+                o.payment as `platform_type`, -- TODO
+                o.`updatedTime` as `updated_time`,
+                o.`createdTime` as `created_time`,
+                o.`id` as `migrate_id`
+            from `orders` o left join `order_refund` r on o.refundId=r.id where o.`id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase') LIMIT 0, {$this->pageSize}
         ");
 
         $this->logger('info', "处理biz_payment_trade的数据，当前页码{$page}");
@@ -775,7 +775,11 @@ class EduSohoUpgrade extends AbstractUpdater
             $result = $this->getConnection()->fetchAssoc($sql);
             if (empty($result)) {
                 $currentTime = time();
-                $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values (0, {$currentTime}, {$currentTime});");
+
+                $total = $connection->fetchColumn('select sum(cash) from cash_account');
+                $total = $total*100;
+
+                $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values ({$total}, {$currentTime}, {$currentTime});");
             }
 
             return 1;
@@ -797,7 +801,7 @@ class EduSohoUpgrade extends AbstractUpdater
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
-            from `user` u left join `cash_account` ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`) LIMIT 0, {$this->pageSize}
+            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`) LIMIT 0, {$this->pageSize}
         ");
 
         $this->logger('info', "处理biz_user_balance的数据，当前页码{$page}");
@@ -805,12 +809,17 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    protected function migrateBizUserCashflow()
+    protected function migrateBizUserCashflow($page)
     {
-        // TODO
         $this->addMigrateId('biz_user_cashflow');
 
         $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0)");
+        if (empty($count)) {
+            return 1;
+        }
+
         $connection->exec("
             insert into `biz_user_cashflow` (
                 `title`,
@@ -834,26 +843,81 @@ class EduSohoUpgrade extends AbstractUpdater
                 `sn` as `sn`,
                 `parentSn` as `parent_sn`,
                 `userId` as `user_id`,
-                '' as `buyer_id`,
+                `userId` as `buyer_id`,
                 `type` as `type`,
                 `amount`*100 as `amount`,
                 case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
-                '' as `user_balance`,
+                0 as `user_balance`, -- TODO
                 `orderSn` as `order_sn`,
                 '' as `trade_sn`,
-                `payment` as `platform`,
+                case when `payment` is not null then `payment` else '' end as `platform`,
                 `cashType` as `amount_type`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
-            from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow`)
+            from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}
         ");
 
-        return 1;
+        $this->logger('info', "处理学员的biz_user_cashflow的数据，当前页码{$page}");
+
+        return $page + 1;
+    }
+
+    protected function migrateBizUserCashflowBySite($page)
+    {
+        $this->addMigrateId('biz_user_cashflow');
+
+        $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0)");
+        if (empty($count)) {
+            return 1;
+        }
+
+        $connection->exec("
+            insert into `biz_user_cashflow` (
+                `title`,
+                `sn`,
+                `parent_sn`,
+                `user_id`,
+                `buyer_id`,
+                `type`,
+                `amount`,
+                `currency`,
+                `user_balance`,
+                `order_sn`,
+                `trade_sn`,
+                `platform`,
+                `amount_type`,
+                `created_time`,
+                `migrate_id`
+            )
+            select
+                `name` as `title`,
+                `sn` as `sn`,
+                `parentSn` as `parent_sn`,
+                0 as `user_id`,
+                `userId` as `buyer_id`,
+                case when `type` = 'inflow' then 'outflow' else 'inflow' end as `type`,
+                `amount`*100 as `amount`,
+                case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
+                0 as `user_balance`, -- TODO
+                `orderSn` as `order_sn`,
+                '' as `trade_sn`,
+                case when `payment` is not null then `payment` else '' end as `platform`,
+                `cashType` as `amount_type`,
+                `createdTime` as `created_time`,
+                `id` as `migrate_id`
+            from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id = 0) LIMIT 0, {$this->pageSize}
+        ");
+
+        $this->logger('info', "处理网校的biz_user_cashflow的数据，当前页码{$page}");
+
+        return $page + 1;
     }
 
     protected function registerJobs($page)
     {
-        $this->getConnection()->exec("DELET FROM `biz_scheduler_job` WHERE name = 'CancelOrderJob';");
+        $this->getConnection()->exec("DELETE FROM `biz_scheduler_job` WHERE name = 'CancelOrderJob';");
 
         if (!$this->isJobExist('Order_CloseOrdersJob')) {
             $currentTime = time();
