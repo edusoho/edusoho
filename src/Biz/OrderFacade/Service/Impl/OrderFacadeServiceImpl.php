@@ -147,6 +147,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         }
     }
 
+    public function sumOrderItemPayAmount($conditions)
+    {
+        return $this->getOrderService()->sumOrderItemPayAmount($conditions);
+    }
+
     public function checkOrderBeforePay($sn, $params)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);

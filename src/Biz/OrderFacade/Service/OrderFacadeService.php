@@ -23,4 +23,6 @@ interface OrderFacadeService
     public function getOrderProductByOrderItem($orderItem);
 
     public function checkOrderBeforePay($sn, $params);
+
+    public function sumOrderItemPayAmount($conditions);
 }
