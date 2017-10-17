@@ -8147,11 +8147,13 @@ cashflow.user_name: 用户名
 cashflow.created_time: 成交时间
 cashflow.amount: 金额
 cashflow.number: 数量
+cashflow.inflow: 收入
 cashflow.platform: 支付方式
 cashflow.platform_sn: 支付平台流水号
 cashflow.user_truename: 姓名
 cashflow.user_email: 邮箱
 cashflow.user_mobile: 联系电话
+cashflow.refund: 线下退款
 
 admin.cashflow.keyword: 关键字
 admin.cashflow.keyword_default: --选择类型--

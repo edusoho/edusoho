@@ -2284,4 +2284,4 @@ admin_online:
 
 admin_bill:
     path: /bill/{type}
-    defaults: { _controller: AppBundle:Admin/Bill:Bill } 
+    defaults: { _controller: AppBundle:Admin/Bill:bill } 

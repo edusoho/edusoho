@@ -80,10 +80,12 @@ class CashBillExporter extends Exporter
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
             $content[] = $amountMark.$cash['amount'] / 100;
             $content[] = $paymentText;
-            $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn']."\t";
+            if ($cash['amount_type'] == 'money') {
+                $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn']."\t";
+            }
             $content[] = $profile['truename'];
             $content[] = $user['email'];
-            $content[] = $profile['mobile']."\t";;
+            $content[] = $profile['mobile']."\t";
             $datas[] = $content;
         }
 

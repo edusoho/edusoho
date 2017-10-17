@@ -14,15 +14,7 @@
     </p>
     <div class="table-responsive">
       <table class="table table-striped text-sm">
-        <tr class="text-sm">
-          <th width="150">{{ 'order.sn'|trans }}</th>
-          <th>{{ 'name'|trans }}</th>  
-          <th>{{ 'user.fields.username_label'|trans }}</th>             
-          <th width="115">{{ 'cashflow.created_time'|trans }}</th>
-          <th width="120" class="text-right prl"><span>{{ 'cashflow.number'|trans }}</th>
-          <th>{{ 'cashflow.platform'|trans }}</th>
-          <th width="150">{{ 'cashflow.platform_sn'|trans }}</th>
-        </tr>
+        {% include 'admin/bill/table-header.html.twig' %}
         {% for cash in cashes %}
         {% set user = users[cash['buyer_id']]|default() %}
         {% set trade = trades[cash.trade_sn]|default() %}
@@ -53,10 +45,9 @@
               {% if cash.type == "outflow" %}
                 {{ dict_text('payment', cash.platform) }}
               {% else %}
-                {{ 'order.payment_pattern.balance'|trans }}
+                 {{ coinSetting.coin_name }}
               {% endif %}
             </td>
-            <td>{{ trade.platform_sn|default('') }}</td>
           </tr>
         {% endfor %}
       </table>
