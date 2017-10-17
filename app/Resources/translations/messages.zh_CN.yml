@@ -8144,6 +8144,7 @@ cashflow.title: 名称
 cashflow.sn: 流水号
 cashflow.order_sn: 订单号
 cashflow.user_name: 用户名
+cashflow.trade_sn: 交易号
 cashflow.created_time: 成交时间
 cashflow.amount: 金额
 cashflow.number: 数量

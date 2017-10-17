@@ -12,19 +12,25 @@
 
     <div class="table-responsive">
       <table class="table table-striped">
-        {% include 'admin/bill/table-header.html.twig' %}
+        <tr class="text-sm">
+          <th width="150">{{ 'order.sn'|trans }}</th>
+          <th>{{ 'name'|trans }}</th>  
+          <th>{{ 'user.fields.username_label'|trans }}</th>             
+          <th width="115">{{ 'cashflow.created_time'|trans }}</th>
+          <th width="120" class="text-right prl"><span>{{ 'cashflow.inflow'|trans }}</th>
+          <th>{{ 'cashflow.platform'|trans }}</th>
+          <th width="150">{{ 'cashflow.platform_sn'|trans }}</th>
+        </tr>
         {% if cashes %}
           {% for cash in cashes %}
             {% set user = users[cash['buyer_id']]|default() %}
             {% set trade = trades[cash.trade_sn] %}
             <tr class="text-sm">
               <td><span >{{ cash.sn }}</span></td>
-              <td><span>{{ cash.title }}</span><br>
-                  {% if cash.order_sn %}
-                    <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn }}</span>
-                  {% else %}
-                      <span class="text-muted">{{ 'order.id'|trans }}：--</span>
-                  {% endif %}
+              <td>
+                <span>{{ cash.title }}</span><br/>
+                <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span><br/>
+                <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn }}</span> 
               </td>
               <td>
                   {% if user %}
