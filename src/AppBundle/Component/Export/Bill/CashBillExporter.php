@@ -85,7 +85,7 @@ class CashBillExporter extends Exporter
             }
             $content[] = $profile['truename'];
             $content[] = $user['email'];
-            $content[] = $profile['mobile']."\t";;
+            $content[] = $profile['mobile']."\t";
             $datas[] = $content;
         }
 
