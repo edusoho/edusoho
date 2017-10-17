@@ -84,6 +84,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizPayAccount',   // done
             'migrateBizUserBalance',  // done
             'migrateBizUserCashflow',
+            'migrateBizUserCashflowBySite',
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
             'migrateExitMemberOperationRecord',
@@ -202,7 +203,6 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    // TODO 处理时间过长
     protected function updateBizOrders($page)
     {
         $connection = $this->getConnection();
@@ -317,6 +317,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    // TODO 处理时间过长
     protected function migrateBizOrderItemDeductsByCoupon($page)
     {
         $this->addMigrateId('biz_order_item_deduct');
@@ -368,6 +369,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    // TODO 处理时间过长
     protected function migrateBizOrderItemDeductsByDiscount($page)
     {
         $this->addMigrateId('biz_order_item_deduct');
@@ -779,7 +781,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $currentTime = time();
 
                 $total = $connection->fetchColumn('select sum(cash) from cash_account');
-                $total = $total*100;
+                $total = 0 - $total*100;
 
                 $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values ({$total}, {$currentTime}, {$currentTime});");
             }
