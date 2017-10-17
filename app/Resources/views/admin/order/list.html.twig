@@ -60,9 +60,6 @@
     </div>
   </form>
   {% include 'admin/order/order-table.html.twig' %}
-  <div class="paginator">
-    {{ admin_macro.paginator(paginator) }}
-  </div>
 
   <div class="alert alert-info">
     {{ 'admin.order.tips'|trans }}
