@@ -13,6 +13,7 @@ class CashBillExporter extends Exporter
             'cashflow.sn',
             'cashflow.title',
             'cashflow.order_sn',
+            'cashflow.trade_sn',
             'cashflow.user_name',
             'cashflow.created_time',
             'cashflow.amount',
@@ -76,11 +77,12 @@ class CashBillExporter extends Exporter
             $content[] = $cash['sn']."\t";
             $content[] = $cash['title'];
             $content[] = empty($cash['order_sn']) ? '--' : $cash['order_sn']."\t";
+            $content[] = $cash['trade_sn']."\t";
             $content[] = $user['nickname'];
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
             $content[] = $amountMark.$cash['amount'] / 100;
-            $content[] = $paymentText;
             if ($cash['amount_type'] == 'money') {
+                $content[] = $paymentText;
                 $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn']."\t";
             }
             $content[] = $profile['truename'];

@@ -102,7 +102,6 @@ newPayment:
     heepay: Heepay
     quickpay: Quickpay
     llpay: LLpay
-    coin: coin
 
 source:
     self: Self
