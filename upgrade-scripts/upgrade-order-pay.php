@@ -6,6 +6,8 @@ class EduSohoUpgrade extends AbstractUpdater
 {
     private $pageSize = 1000;
 
+    protected $systemUserId = 0;
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -15,6 +17,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
+            $systemUser = $this->getConnection()->fetchAssoc("select * from user where type='system';");
+            $this->systemUserId = $systemUser['id'];
+
             $result = $this->updateScheme($index);
 
             $this->getConnection()->commit();
@@ -180,7 +185,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `close_data`, -- TODO 当订单关闭状态时的数据, 从日志中取得
                 0 as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
                 0 as `seller_id`,
-                `userId` as `created_user_id`, -- TODO 创建订单者
+                case when `status` = 'cancelled' then {$this->systemUserId} else 0 end as `created_user_id`, -- TODO 创建订单者
                 '' as `create_extra`, -- 不迁移data数据
                 '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
                 `amount`*100 as `paid_cash_amount`,
@@ -283,6 +288,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    // TODO 处理时间太长
     protected function updateBizOrderItems($page)
     {
         $connection = $this->getConnection();
@@ -321,8 +327,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $count = $connection->fetchColumn("SELECT COUNT(o.id) FROM orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id NOT IN (SELECT migrate_id FROM `biz_order_item_deduct` WHERE `deduct_type` = 'coupon');");
 
         if (empty($count)) {
-            // 处理status
-            $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
             return 1;
         }
 
