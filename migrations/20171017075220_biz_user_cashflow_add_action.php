@@ -13,7 +13,7 @@ class BizUserCashflowAddAction extends Migration
         $connection = $biz['db'];
 
         if (!$this->isFieldExist('biz_user_cashflow', 'action')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purcharse, recharge'");
+            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
         }
     }
 
