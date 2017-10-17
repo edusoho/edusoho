@@ -6136,12 +6136,14 @@ admin.edu_cloud.edu_live.edu_live_enable_btn: 已启用
 admin.edu_cloud.edu_live.edu_live_close_btn: 关闭
 admin.edu_cloud.edu_live.edu_live_tips: >
   大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="%showUrl%" target="_blank">点击这里</a>了解详情。
-admin.edu_cloud.edu_live.base_setting: 基本设置
+admin.edu_cloud.edu_live.base_setting: 直播LOGO设置
 admin.edu_cloud.edu_live.live_logo: 直播LOGO
 admin.edu_cloud.edu_live.upload_btn: 上传
 admin.edu_cloud.edu_live.delete_btn: 删除
 admin.edu_cloud.edu_live.upload_tips: >
-  <b>只针对直播新方案。</b><br>请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
+  您可以上传尺寸大小为280*60，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
+admin.edu_cloud.edu_live.logo_url_tips: '以http开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: 升级
 admin.edu_cloud.edu_live.renew: 续费
 admin.edu_cloud.edu_live.renewed: 已续费
