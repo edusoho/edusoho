@@ -1317,7 +1317,6 @@ class AnalysisController extends BaseController
                 'count' => $count,
             )
         );
-
     }
 
     private function getItemsByIdsAndType($targetIds, $type)
@@ -1334,17 +1333,16 @@ class AnalysisController extends BaseController
         }
 
         return $items;
-
     }
 
     public function courseSetIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            "AppBundle:Admin/Analysis:Income",
+            'AppBundle:Admin/Analysis:Income',
             array(
                 'request' => $request,
                 'tab' => $tab,
-                'type' => 'course'
+                'type' => 'course',
             )
         );
     }
@@ -1352,11 +1350,11 @@ class AnalysisController extends BaseController
     public function classroomIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            "AppBundle:Admin/Analysis:Income",
+            'AppBundle:Admin/Analysis:Income',
             array(
                 'request' => $request,
                 'tab' => $tab,
-                'type' => 'classroom'
+                'type' => 'classroom',
             )
         );
     }
@@ -1364,11 +1362,11 @@ class AnalysisController extends BaseController
     public function vipIncomeAction(Request $request, $tab)
     {
         return $this->forward(
-            "AppBundle:Admin/Analysis:Income",
+            'AppBundle:Admin/Analysis:Income',
             array(
                 'request' => $request,
                 'tab' => $tab,
-                'type' => 'vip'
+                'type' => 'vip',
             )
         );
     }
