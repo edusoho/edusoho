@@ -118,7 +118,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $num = $pool['num'] - $expiredFiredJobsCount;
         $num = $num > 0 ? $num : 0;
-        $updatePoolSql = "UPDATE `job_pool` SET num = {$num} WHERE id = {$pool['id']}";
+        $updatePoolSql = "UPDATE `biz_scheduler_job_pool` SET num = {$num} WHERE id = {$pool['id']}";
 
         $this->getConnection()->exec($updatePoolSql);
 
@@ -130,7 +130,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function deleteRepeatCopiedTasks()
     {
-        $this->getConnection()->exec('delete from course_task where id in (select maxId from (select max(id) as maxId, count(id) as countNum,courseid, copyid from course_task where copyid<>0 group by courseId, copyId) a where a.countNum>1)');
+
+        $this->getConnection()->exec('delete ck from course_task  ck inner join (select maxId from (select max(id) as maxId, count(id) as countNum,courseid, copyid from course_task where copyid<>0 group by courseId, copyId) a where a.countNum>1)  b on  ck.id  = b.maxId;');
 
         return 1;
     }
@@ -283,6 +284,9 @@ abstract class AbstractUpdater
         $this->biz = $biz;
     }
 
+    /**
+     * @return \Codeages\Biz\Framework\Dao\Connection
+     */
     public function getConnection()
     {
         return $this->biz['db'];
