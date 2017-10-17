@@ -8148,7 +8148,7 @@ cashflow.trade_sn: 交易号
 cashflow.created_time: 成交时间
 cashflow.amount: 金额
 cashflow.number: 数量
-cashflow.inflow: 收入
+cashflow.inflow: 网校收入
 cashflow.platform: 支付方式
 cashflow.platform_sn: 支付平台流水号
 cashflow.user_truename: 姓名
