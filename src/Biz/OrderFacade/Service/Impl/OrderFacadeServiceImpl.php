@@ -41,8 +41,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
-        return empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
 
+        return empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
     }
 
     private function getRefundDeadline()
