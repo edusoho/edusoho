@@ -6482,7 +6482,7 @@ cashflow.amount: amount
 cashflow.number: number
 cashflow.inflow: 收入
 cashflow.platform: platform
-cashflow.trade_sn: tradeSn
+cashflow.trade_sn: 交易号
 cashflow.user_truename: truename
 cashflow.user_email: emial
 cashflow.user_mobile: mobile
