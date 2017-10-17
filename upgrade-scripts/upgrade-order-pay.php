@@ -59,26 +59,32 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
-        $funcNames = array(
-            1 => 'createTables',    // done
-            2 => 'migrateBizOrders', // done
-            3 => 'migrateBizOrderItems', // done
-            4 => 'migrateBizOrderItemDeductsByCoupon', // done
-            5 => 'migrateBizOrderItemDeductsByDiscount', // done
-            6 => 'migrateBizOrderItemDeductsStatus', // done
-            7 => 'migrateBizOrderRefund', // done
-            8 => 'migrateBizOrderRefundItems', // done
-            9 => 'migrateBizOrderLog',
-            10 => 'migrateBizPaymentTrade', // done
-            11 => 'migrateBizPaymentTradeFromCashOrder', // done
-            12 => 'migrateBizSecurityAnswer', // done
-            13 => 'migrateBizPayAccount',   // done
-            14 => 'migrateBizUserBalance',  // done
-            15 => 'migrateBizUserCashflow',
-            16 => 'registerJobs', // done
-            17 => 'migrateJoinMemberOperationRecord',
-            18 => 'migrateExitMemberOperationRecord',
+        $definedFuncNames = array(
+            'createTables',    // done
+            'migrateBizOrders', // done
+            'migrateBizOrderItems', // done
+            'migrateBizOrderItemDeductsByCoupon', // done
+            'migrateBizOrderItemDeductsByDiscount', // done
+//            'migrateBizOrderItemDeductsStatus', // done
+            'migrateBizOrderRefund', // done
+            'migrateBizOrderRefundItems', // done
+            'migrateBizOrderLog',
+            'migrateBizPaymentTrade', // done
+            'migrateBizPaymentTradeFromCashOrder', // done
+            'migrateBizSecurityAnswer', // done
+            'migrateBizPayAccount',   // done
+            'migrateBizUserBalance',  // done
+            'migrateBizUserCashflow',
+            'registerJobs', // done
+            'migrateJoinMemberOperationRecord',
+            'migrateExitMemberOperationRecord',
         );
+
+        $funcNames = array();
+        foreach ($definedFuncNames as $key => $funcName) {
+            $funcNames[$key+1] = $funcName;
+        }
+
 
         if ($index == 0) {
             $this->logger( 'info', '开始执行升级脚本');
@@ -165,7 +171,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 0 as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
                 0 as `seller_id`,
                 `userId` as `created_user_id`, -- TODO 创建订单者
-                `data` as `create_extra`,
+                '' as `create_extra`, -- 不迁移data数据
                 '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
                 `amount`*100 as `paid_cash_amount`,
                 `coinAmount`*100 as `paid_coin_amount`,
@@ -225,7 +231,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `detail`,
                 1 as `num`,    -- 处理会员的数据
                 '' as `unit`,  -- 处理会员的数据
-                `o`.`status` as `status`, -- 保持和biz_order一样
+                `o`.`status` as `status`, -- TODO 保持和biz_order一样
                 `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
                 `o`.`totalPrice`*100 as `price_amount`,
@@ -234,7 +240,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`targetType` as `target_type`,
                 `o`.`paidTime` as `pay_time`,
                 `o`.`paidTime` as `finish_time`,
-                0 as `close_time`, -- 关闭时间,保持和biz_order
+                0 as `close_time`, -- TODO 关闭时间,保持和biz_order
                 `o`.`userId` as `user_id`,
                 0 as `seller_id`,
                 '' as `create_extra`,
@@ -249,14 +255,17 @@ class EduSohoUpgrade extends AbstractUpdater
         $vipOrders = $connection->fetchAll("select `id`, `data` from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip');");
         foreach ($vipOrders as $vipOrder) {
             $data = json_decode($vipOrder['data'], true);
-            $connection->exec("update biz_order_item set num = '{$data['duration']}', unit = '{$data['unitType']}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
+            $buyType = empty($data['buyType'])?'new' : $data['buyType'];
+            $buyType = json_encode(array('buyType' => $buyType));
+
+            $connection->exec("update biz_order_item set create_extra = '{$buyType}', num = '{$data['duration']}', unit = '{$data['unitType']}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
         }
 
         // 处理status
-        $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
+//        $connection->exec("update biz_order_item oi set status = (select status from biz_order where id = oi.order_id);");
 
         // 处理close_time
-        $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
+//        $connection->exec("update biz_order_item boi set close_time = (select close_time from biz_order where id = boi.order_id);");
 
         return 1;
     }
@@ -266,6 +275,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->addMigrateId('biz_order_item_deduct');
 
         $connection = $this->getConnection();
+
+        // 有可能copon批次会删除，导致老数据不会迁移
         $connection->exec("
             insert into `biz_order_item_deduct` (
                 `order_id`,
@@ -292,11 +303,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`status` as `status`,
                 o.`userId` as `user_id`,
                 0 as `seller_id`,
-                '' as `snapshot`,
+                concat('{\"couponCode\":\'', o.coupon, '\'}') as `snapshot`,
                 o.`createdTime` as `created_time`,
                 o.`updatedTime` as `updated_time`,
                 o.`id` as `migrate_id`
-            from orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
+            from orders o inner join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon');
         ");
 
         // 处理status
@@ -324,7 +335,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `snapshot`,
                 `created_time`,
                 `updated_time`,
-                `migrate_id`
+                `migrate_id`,
+                `status`
             ) 
             select 
                 `id` as `order_id`,
@@ -339,7 +351,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `snapshot`,
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
-                `id` as `migrate_id`
+                `id` as `migrate_id`,
+                `status` as `status`
             from orders where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount');
         ");
 
@@ -392,7 +405,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `updatedTime` as `deal_time`,
                 `operator` as `deal_user_id`,
                 `status`,
-                '' as `deal_reason`,
+                '' as `deal_reason`, -- TODO 该信息是从日志表、消息表中获取
                 `userId` as `created_user_id`,
                 `actualAmount` as `refund_cash_amount`,
                 0 as `refund_coin_amount`,
@@ -407,6 +420,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateBizOrderRefundItems()
     {
+        // TODO 加了手动写的退款金额
         $this->addMigrateId('biz_order_item_refund');
 
         $connection = $this->getConnection();
@@ -505,10 +519,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `user_id`,
                 '' as `notify_data`,
                 '' as `platform_created_result`,
-                0 as `apply_refund_time`,
-                0 as `refund_success_time`,
+                0 as `apply_refund_time`, -- TODO join refund
+                0 as `refund_success_time`, -- TODO join refund
                 '' as `platform_created_params`,
-                '' as `platform_type`,
+                '' as `platform_type`, -- TODO
                 `updatedTime` as `updated_time`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
@@ -563,7 +577,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `amount`,
                 '0' as `coin_amount`,
                 `amount` as `cash_amount`,
-                '1' as `rate`,
+                '1' as `rate`, -- TODO 当前系统汇率
                 'recharge' as `type`,
                 `paidTime` as `pay_time`,
                 0 as `seller_id`,
@@ -660,7 +674,7 @@ class EduSohoUpgrade extends AbstractUpdater
             select
               u.`id`,
               u.`id` as `user_id`,
-              case when ca.`cash` is null then 0 else ca.`cash` end as `amount`,
+              case when ca.`cash`*100 is null then 0 else ca.`cash`*100 end as `amount`,
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
@@ -674,6 +688,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values (0, {$currentTime}, {$currentTime});");
         }
 
+        // TODO 算网校的虚拟币余额
+
         return 1;
     }
 
@@ -683,65 +699,81 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->addMigrateId('biz_user_cashflow');
 
         $connection = $this->getConnection();
-//        $connection->exec("
-//            insert into `biz_user_cashflow` (
-//                `id`,
-//                `title`,
-//                `sn`,
-//                `parent_sn`,
-//                `user_id`,
-//                `buyer_id`,
-//                `type`,
-//                `amount`,
-//                `currency`,
-//                `user_balance`,
-//                `order_sn`,
-//                `trade_sn`,
-//                `platform`,
-//                `amount_type`,
-//                `created_time`,
-//                `migrate_id`
-//            )
-//            select
-//            from `user_flow` uf
-//        ");
+        $connection->exec("
+            insert into `biz_user_cashflow` (
+                `title`,
+                `sn`,
+                `parent_sn`,
+                `user_id`,
+                `buyer_id`,
+                `type`,
+                `amount`,
+                `currency`,
+                `user_balance`,
+                `order_sn`,
+                `trade_sn`,
+                `platform`,
+                `amount_type`,
+                `created_time`,
+                `migrate_id`
+            )
+            select
+                `name` as `title`,
+                `sn` as `sn`,
+                `parentSn` as `parent_sn`,
+                `userId` as `user_id`,
+                '' as `buyer_id`,
+                `type` as `type`,
+                `amount`*100 as `amount`,
+                case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
+                '' as `user_balance`,
+                `orderSn` as `order_sn`,
+                '' as `trade_sn`,
+                `payment` as `platform`,
+                `cashType` as `amount_type`,
+                `createdTime` as `created_time`,
+                `id` as `migrate_id`
+            from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow`)
+        ");
 
         return 1;
     }
 
     protected function registerJobs()
     {
+        $this->getConnection()->exec("DELET FROM `biz_scheduler_job` WHERE name = 'CancelOrderJob';");
+
         if (!$this->isJobExist('Order_CloseOrdersJob')) {
             $currentTime = time();
             $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-                      `name`,
-                      `expression`,
-                      `class`,
-                      `args`,
-                      `priority`,
-                      `pre_fire_time`,
-                      `next_fire_time`,
-                      `misfire_threshold`,
-                      `misfire_policy`,
-                      `enabled`,
-                      `creator_id`,
-                      `updated_time`,
-                      `created_time`
-                ) VALUES (
-                      'Order_CloseOrdersJob',
-                      '20 * * * *',
-                      'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseOrdersJob',
-                      '',
-                      '100',
-                      '0',
-                      '{$currentTime}',
-                      '300',
-                      'missed',
-                      '1',
-                      '0',
-                      '{$currentTime}',
-                      '{$currentTime}'
-                )");
+                  `name`,
+                  `expression`,
+                  `class`,
+                  `args`,
+                  `priority`,
+                  `pre_fire_time`,
+                  `next_fire_time`,
+                  `misfire_threshold`,
+                  `misfire_policy`,
+                  `enabled`,
+                  `creator_id`,
+                  `updated_time`,
+                  `created_time`
+            ) VALUES (
+                  'Order_CloseOrdersJob',
+                  '20 * * * *',
+                  'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseOrdersJob',
+                  '',
+                  '100',
+                  '0',
+                  '{$currentTime}',
+                  '300',
+                  'missed',
+                  '1',
+                  '0',
+                  '{$currentTime}',
+                  '{$currentTime}'
+            )");
         }
 
         return 1;
