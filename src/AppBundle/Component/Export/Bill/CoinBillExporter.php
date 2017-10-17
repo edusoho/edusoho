@@ -10,6 +10,7 @@ class CoinBillExporter extends CashBillExporter
             'cashflow.sn',
             'cashflow.title',
             'cashflow.order_sn',
+            'cashflow.trade_sn',
             'cashflow.user_name',
             'cashflow.created_time',
             'cashflow.number',

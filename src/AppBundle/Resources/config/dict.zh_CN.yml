@@ -118,7 +118,6 @@ newPayment:
     heepay: 网银支付
     quickpay: 快捷支付
     llpay: 连连支付
-    coin: 虚拟币支付
 
 source:
     self: 本站
