@@ -283,12 +283,10 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    // TODO 数据处理时间过长
     protected function updateBizOrderItems($page)
     {
         $connection = $this->getConnection();
 
-        // 有可能copon批次会删除，导致老数据不会迁移
         $count = $connection->fetchColumn("select count(*) from orders where targetType='vip' and id not in (select migrate_id from `biz_order_item` where unit<>'' and target_type='vip');");
 
         if (empty($count)) {
