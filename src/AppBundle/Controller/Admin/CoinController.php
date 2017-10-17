@@ -286,7 +286,6 @@ class CoinController extends BaseController
             $condition = array_merge($condition, $convertCondition);
         }
 
-        $schoolAccount = $this->getAccountProxyService()->getUserBalanceByUserId(0);
         $outflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
             'user_id' => 0,
             'amount_type' => 'coin',
@@ -313,7 +312,6 @@ class CoinController extends BaseController
             response:
 
             return $this->render('admin/coin/coin-user-records.html.twig', array(
-                'schoolAccount' => $schoolAccount,
                 'outflowAmount' => $outflowAmount,
                 'inflowAmount' => $inflowAmount,
                 'condition' => $condition,
@@ -348,7 +346,6 @@ class CoinController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/coin/coin-user-records.html.twig', array(
-            'schoolAccount' => $schoolAccount,
             'outflowAmount' => $outflowAmount,
             'inflowAmount' => $inflowAmount,
             'paginator' => $paginator,
@@ -360,17 +357,6 @@ class CoinController extends BaseController
     public function flowDetailAction(Request $request)
     {
         $userId = $request->query->get('userId');
-        $startDateTime = $request->query->get('startDateTime');
-        $endDateTime = $request->query->get('endDateTime');
-
-        if (!empty($endDateTime)) {
-            $conditions['created_time_LTE'] = strtotime($endDateTime);
-        }
-
-        if (!empty($startDateTime)) {
-            $conditions['created_time_GTE'] = strtotime($startDateTime);
-        }
-
         $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $userId;
@@ -398,8 +384,6 @@ class CoinController extends BaseController
             'user' => $user,
             'cashes' => $cashes,
             'paginator' => $paginator,
-            'startDateTime' => $startDateTime,
-            'endDateTime' => $endDateTime,
         ));
     }
 
@@ -485,14 +469,6 @@ class CoinController extends BaseController
             $user = $this->getUserService()->getUserByNickname($condition['keyword']);
             $condition['userId'] = $user ? $user['id'] : 0;
             unset($condition['keyword']);
-        }
-
-        if (!empty($condition['endDateTime'])) {
-            $condition['created_time_LTE'] = strtotime($condition['endDateTime']);
-        }
-
-        if (!empty($condition['startDateTime'])) {
-            $condition['created_time_GTE'] = strtotime($condition['startDateTime']);
         }
 
         return $condition;
