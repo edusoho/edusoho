@@ -15,7 +15,6 @@ class BizOrderAddExpiredRefundDays extends Migration
         if (!$this->isFieldExist('biz_order', 'expired_refund_days')) {
             $db->exec("ALTER TABLE `biz_order` ADD COLUMN `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数'");
         }
-
     }
 
     /**
@@ -26,7 +25,7 @@ class BizOrderAddExpiredRefundDays extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order` DROP COLUMN `expired_refund_days`;");
+        $db->exec('ALTER TABLE `biz_order` DROP COLUMN `expired_refund_days`;');
     }
 
     protected function isFieldExist($table, $filedName)
