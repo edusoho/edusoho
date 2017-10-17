@@ -29,8 +29,8 @@ class BizOrderRefundItemAddTarget extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order_item_refund` DROP COLUMN `target_id`;");
-        $db->exec("ALTER TABLE `biz_order_item_refund` DROP COLUMN `target_type`;");
+        $db->exec('ALTER TABLE `biz_order_item_refund` DROP COLUMN `target_id`;');
+        $db->exec('ALTER TABLE `biz_order_item_refund` DROP COLUMN `target_type`;');
     }
 
     protected function isFieldExist($table, $filedName)
