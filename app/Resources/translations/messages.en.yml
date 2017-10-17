@@ -6480,11 +6480,13 @@ cashflow.user_name: username
 cashflow.created_time: createdTime
 cashflow.amount: amount
 cashflow.number: number
+cashflow.inflow: 收入
 cashflow.platform: platform
 cashflow.trade_sn: tradeSn
 cashflow.user_truename: truename
 cashflow.user_email: emial
 cashflow.user_mobile: mobile
+cashflow.refund: 网校退款
 
 admin.cashflow.keyword: keyword
 

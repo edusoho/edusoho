@@ -1,0 +1,11 @@
+<tr class="text-sm">
+  <th width="150">{{ 'order.sn'|trans }}</th>
+  <th>{{ 'name'|trans }}</th>  
+  <th>{{ 'user.fields.username_label'|trans }}</th>             
+  <th width="115">{{ 'cashflow.created_time'|trans }}</th>
+  <th width="120" class="text-right prl"><span>{{ 'cashflow.inflow'|trans }}</th>
+  <th>{{ 'cashflow.platform'|trans }}</th>
+  {% if menu == 'admin_bill_cash' %}
+    <th width="150">{{ 'cashflow.platform_sn'|trans }}</th>
+  {% endif %}
+</tr>

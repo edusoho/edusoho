@@ -14,7 +14,6 @@ class CoinBillExporter extends CashBillExporter
             'cashflow.created_time',
             'cashflow.number',
             'cashflow.platform',
-            'cashflow.platform_sn',
             'cashflow.user_truename',
             'cashflow.user_email',
             'cashflow.user_mobile',
