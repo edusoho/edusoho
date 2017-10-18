@@ -2,15 +2,15 @@
 
 namespace Biz\OrderFacade;
 
-class MajorCurrency
+class CoinCurrency
 {
-    const ISO_CODE = 'CNY';
+    const ISO_CODE = 'COIN';
 
-    const SYMBOL = '￥';
+    const SYMBOL = '';
 
-    const PREFIX = '￥';
+    const PREFIX = '';
 
-    const SUFFIX = '元';
+    const SUFFIX = '虚拟币';
 
     const EXCHANGE_RATE = 1;
 
