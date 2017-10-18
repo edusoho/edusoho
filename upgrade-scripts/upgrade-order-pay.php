@@ -84,6 +84,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizUserBalance',  // done
             'migrateBizUserCashflowAsUser',
             'migrateBizUserCashflowAsSite',
+            'migrateBizUserCashflowPlatform',
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
             'migrateExitMemberOperationRecord',
@@ -869,7 +870,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 0 as `user_balance`, -- TODO
                 uf.`orderSn` as `order_sn`,
                 uf.`orderSn` as `trade_sn`,
-                case when uf.`payment` is not null then uf.`payment` else '' end as `platform`,
+                case when uf.`payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then uf.`payment` else 'none' end as `platform`,
                 case when uf.`cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
                 uf.`createdTime` as `created_time`,
                 uf.`id` as `migrate_id`
@@ -881,6 +882,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "处理{$type}的biz_user_cashflow的数据，当前页码{$page}");
 
         return $page + 1;
+    }
+
+    protected function migrateBizUserCashflowPlatform($page)
+    {
+        $connection = $this->getConnection();
+        $sql = "update `biz_user_cashflow` set platform='none' where amount_type='coin';";
+        $connection->exec($sql);
+
+        return 1;
     }
 
     protected function registerJobs($page)
