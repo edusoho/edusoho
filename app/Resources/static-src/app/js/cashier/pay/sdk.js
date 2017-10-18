@@ -11,7 +11,7 @@ import 'store';
 export default class PaySDK {
 
   pay(params, options = {}) {
-    let gateway = this.getGateway(params['payment'], params['isMobile'], params['openid']);
+    let gateway = this.getGateway(params['payment'], params['isMobile'], params['isWechat']);
     params.gateway = gateway;
     let paySdk = this.initPaySdk(gateway);
 
@@ -62,11 +62,11 @@ export default class PaySDK {
     return paySdk;
   }
 
-  getGateway(payment, isMobile, openid) {
+  getGateway(payment, isMobile, isWechat) {
     let gateway = '';
     switch (payment) {
       case 'wechat':
-        if (openid > 0) {
+        if (isWechat) {
           gateway = 'WechatPay_Js';
         } else if (isMobile) {
           gateway = 'WechatPay_MWeb';
