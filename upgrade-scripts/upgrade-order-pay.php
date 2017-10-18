@@ -898,7 +898,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `buyer_id`,
                 case when `type` = 'inflow' then 'outflow' else 'inflow' end as `type`,
                 floor(`amount`*100) as `amount`,
-                case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
+                case when `cashType`='Coin' then 'coin' else 'money' end as `currency`,
                 0 as `user_balance`, -- TODO
                 `orderSn` as `order_sn`,
                 '' as `trade_sn`,
