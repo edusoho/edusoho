@@ -84,6 +84,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateExitMemberOperationRecord',
             'stopCrmJobs',
             'updateCourseIsFree',
+            'updateUserRoles',
         );
 
         $funcNames = array();
@@ -1074,6 +1075,23 @@ class EduSohoUpgrade extends AbstractUpdater
         //打折插件，限时免费会将isFree变为1，现有业务不需要设置成免费，这样显示免费会产生订单
         $connection = $this->getConnection();
         $connection->exec("UPDATE `course_v8` as c ,`course_set_v8` as cs SET c.`isFree` = 0 where c.`originPrice` > 0  and c.courseSetId = cs.id and cs.discountId > 0 and cs.discount = 0;");
+
+        return 1;
+    }
+
+    protected function updateUserRoles()
+    {
+        $connection = $this->getConnection();
+        $roles = array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN');
+
+        foreach($roles as $role) {
+            $sql = "select * from role where code='{$role}';";
+            $result = $connection->fetchAssoc($sql);
+            if ($result) {
+                $data = array_merge(json_decode($result['data']), array('admin_orders', 'admin_order_manage', 'admin_order_refunds', 'admin_order_refunds_manage'));
+                $connection->exec("update role set data='".json_encode($data)."' where code='{$role}';");
+            }       
+        }
 
         return 1;
     }
