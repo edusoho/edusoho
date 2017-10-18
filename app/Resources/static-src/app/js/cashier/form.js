@@ -12,6 +12,8 @@ class CashierForm {
     this.initCoin();
 
     this.paySdk = new PaySDK();
+
+	  this.paySdk.checkOrderStatus();
   }
 
   initCoin() {
@@ -47,6 +49,7 @@ class CashierForm {
       params.payAmount = $form.find('.js-pay-price').text();
       this.paySdk.pay(params);
       $btn.button('reset');
+	    this.paySdk.cancelCheckOrder();
     }
   }
 
