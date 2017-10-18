@@ -372,7 +372,23 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.product_name: 商品名称
+order.product_name: Product name
+order.product_price: 商品价格
+order.price_amount: 应付价格
+order.paid_amount: Paid price
+order.paid_coin_amount: 实付虚拟币
+order.paid_cash_amount: 实付现金
+order.refund.deal_status: 处理状态
+order.refund.deal_time: 处理时间
+order.refund_reason: 退款原因
+order.refund.detail: 退款详情
+order.refund_amount: 退款总额
+order.refund_limit: 退款限制
+order.show_refund_detail: 查看退款
+order.refunded_cash_amount: 已退现金
+order.use_coupon: 使用优惠券
+order.refund_feedback: 反馈信息
+order.refund.id: 退款号
 order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
