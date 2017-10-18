@@ -171,7 +171,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `sn`,
                 'self' as `source`,
                 '' as `created_reason`,
-                `totalPrice`*100 as `price_amount`,
+                floor(`totalPrice`*100) as `price_amount`,
                 `priceType` as `price_type`,
                 floor((`amount` + `coinAmount`/coinRate)*100) as `pay_amount`,
                 `userId` as `user_id`,
@@ -188,8 +188,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `created_user_id`, -- TODO 创建订单者
                 '' as `create_extra`, -- 不迁移data数据
                 '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
-                `amount`*100 as `paid_cash_amount`,
-                `coinAmount`*100 as `paid_coin_amount`,
+                floor(`amount`*100) as `paid_cash_amount`,
+                floor(`coinAmount`*100) as `paid_coin_amount`,
                 `refundEndTime` as `refund_deadline`,
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
@@ -265,8 +265,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
-                `o`.`totalPrice`*100 as `price_amount`,
-                case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
+                floor(`o`.`totalPrice`*100) as `price_amount`,
+                case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else floor(o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
                 `o`.`targetId` as `target_id`,
                 `o`.`targetType` as `target_type`,
                 `o`.`paidTime` as `pay_time`,
@@ -307,7 +307,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $buyType = json_encode(array('buyType' => $buyType));
             $duration = empty($data['duration']) ? 0 : $data['duration'];
             $unit = empty($data['unitType']) ? 0 : $data['unitType'];
-
+            if ($duration<0) {
+                $duration = abs($duration);
+            }
             $connection->exec("update biz_order_item set create_extra = '{$buyType}', num = '{$duration}', unit = '{$unit}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
         }
 
@@ -352,7 +354,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`id` as `item_id`,
                 'coupon' as `deduct_type`,
                 c.`id` as `deduct_id`,               
-                o.`couponDiscount`*100 as `deduct_amount`,
+                floor(o.`couponDiscount`*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 o.`userId` as `user_id`,
                 0 as `seller_id`,
@@ -403,7 +405,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `item_id`,
                 'discount' as `deduct_type`,
                 `discountId` as `deduct_id`,              
-                `discount`*100 as `deduct_amount`,
+                floor(`discount`*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `userId` as `user_id`,
                 0 as `seller_id`,
@@ -460,14 +462,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 concat(`createdTime`, FLOOR(RAND() * 10000)) as `sn`,
                 `userId` as `user_id`,
                 `reasonNote` as `reason`,
-                `expectedAmount` as `amount`,
+                case when expectedAmount is null then 0 else floor(`expectedAmount`*100) end as `amount`,
                 'CYN' as `currency`,
                 `updatedTime` as `deal_time`,
                 `operator` as `deal_user_id`,
                 `status`,
                 '' as `deal_reason`, -- TODO 该信息是从日志表、消息表中获取
                 `userId` as `created_user_id`,
-                `actualAmount` as `refund_cash_amount`,
+                floor(`actualAmount`*100) as `refund_cash_amount`,
                 0 as `refund_coin_amount`,
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
@@ -504,6 +506,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `created_user_id`,
                 `created_time`,
                 `updated_time`,
+                `target_id`,
+                `target_type`,
                 `migrate_id`
             )
             select 
@@ -512,12 +516,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 `orderId` as `order_id`,
                 `orderId` as `order_item_id`,
                 `userId` as `user_id`,
-                `expectedAmount` as `amount`,
+                case when `expectedAmount` is null then 0 else `expectedAmount` end as `amount`,
                 0 as `coin_amount`,
                 `status` as `status`,
                 `userId` as `created_user_id`,
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
+                `targetId` as `target_id`,
+                `targetType` as `target_type`,
                 `id` as `migrate_id`
             from `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`) LIMIT 0, {$this->pageSize}
         ");
@@ -583,9 +589,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`status` as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
-                o.`amount`*100,
-                o.`coinAmount`*100 as `coin_amount`,
-                o.`amount`*100 as `cash_amount`,
+                floor(o.`amount`*100),
+                floor(o.`coinAmount`*100) as `coin_amount`,
+                floor(o.`amount`*100) as `cash_amount`,
                 o.`coinRate` as `rate`,
                 'purchase' as `type`,
                 o.`paidTime` as `pay_time`,
@@ -656,9 +662,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 `status` as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
-                `amount`,
+                floor(`amount`*100),
                 '0' as `coin_amount`,
-                `amount` as `cash_amount`,
+                floor(`amount`*100) as `cash_amount`,
                 '1' as `rate`, -- TODO 当前系统汇率
                 'recharge' as `type`,
                 `paidTime` as `pay_time`,
@@ -772,7 +778,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $total = $connection->fetchColumn('select sum(cash) from cash_account');
                 $total = 0 - $total*100;
 
-                $connection->exec("insert into `biz_user_balance` (`user_id`, `created_time`, `updated_time`) values ({$total}, {$currentTime}, {$currentTime});");
+                $connection->exec("insert into `biz_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
             }
 
             return 1;
@@ -790,7 +796,7 @@ class EduSohoUpgrade extends AbstractUpdater
             select
               u.`id`,
               u.`id` as `user_id`,
-              case when ca.`cash`*100 is null then 0 else ca.`cash`*100 end as `amount`,
+              case when ca.`cash`*100 is null then 0 else floor(ca.`cash`*100) end as `amount`,
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
@@ -838,7 +844,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `user_id`,
                 `userId` as `buyer_id`,
                 `type` as `type`,
-                `amount`*100 as `amount`,
+                floor(`amount`*100) as `amount`,
                 case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
                 0 as `user_balance`, -- TODO
                 `orderSn` as `order_sn`,
@@ -886,12 +892,12 @@ class EduSohoUpgrade extends AbstractUpdater
             )
             select
                 `name` as `title`,
-                `sn` as `sn`,
+                concat(`sn`,'0') as `sn`,
                 `parentSn` as `parent_sn`,
                 0 as `user_id`,
                 `userId` as `buyer_id`,
                 case when `type` = 'inflow' then 'outflow' else 'inflow' end as `type`,
-                `amount`*100 as `amount`,
+                floor(`amount`*100) as `amount`,
                 case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
                 0 as `user_balance`, -- TODO
                 `orderSn` as `order_sn`,
@@ -1064,7 +1070,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `sn` VARCHAR(64) NOT NULL COMMENT '订单号',
                   `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
                   `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
-                  `price_amount` INT(10) unsigned NOT NULL COMMENT '订单总金额',
+                  `price_amount` INT(12) unsigned NOT NULL COMMENT '订单总金额',
                   `price_type` varchar(32) not null  COMMENT '标价类型，现金支付or虚拟币；money, coin',
                   `pay_amount` INT(10) unsigned NOT NULL COMMENT '应付金额',
                   `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
@@ -1332,6 +1338,110 @@ class EduSohoUpgrade extends AbstractUpdater
                 PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
             ");
+        }
+
+        if (!$this->isFieldExist('biz_order', 'expired_refund_days')) {
+            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数'");
+        }
+
+        if (!$this->isFieldExist('biz_order', 'success_data')) {
+            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `success_data` text COMMENT '当订单改变为success时的数据记录';");
+        }
+
+        if (!$this->isFieldExist('biz_order', 'fail_data')) {
+            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `fail_data` text COMMENT '当订单改变为fail时的数据记录'");
+        }
+
+        if (!$this->isFieldExist('biz_order_item_refund', 'target_id')) {
+            $connection->exec("ALTER TABLE `biz_order_item_refund` ADD COLUMN `target_id` INT(10) unsigned NOT NULL COMMENT '商品id'");
+        }
+
+        if (!$this->isFieldExist('biz_order_item_refund', 'target_type')) {
+            $connection->exec("ALTER TABLE `biz_order_item_refund` ADD COLUMN `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型'");
+        }
+
+        if ($this->isFieldExist('biz_order', 'price_amount')) {
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `price_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '订单总价';");
+        }
+
+        if ($this->isFieldExist('biz_order', 'pay_amount')) {
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `pay_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '应付价格';");
+        }
+
+        if ($this->isFieldExist('biz_order', 'paid_cash_amount')) {
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付的现金价格';");
+        }
+
+        if ($this->isFieldExist('biz_order', 'paid_coin_amount')) {
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付的虚拟币价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_item', 'price_amount')) {
+            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `price_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '订单价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_item', 'pay_amount')) {
+            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `pay_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_item_deduct', 'deduct_amount')) {
+            $connection->exec("ALTER TABLE `biz_order_item_deduct` MODIFY COLUMN `deduct_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '优惠价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_item_refund', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款现金价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_item_refund', 'coin_amount')) {
+            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_refund', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款总价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_refund', 'refund_cash_amount')) {
+            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的现金价格';");
+        }
+
+        if ($this->isFieldExist('biz_order_refund', 'refund_coin_amount')) {
+            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币';");
+        }
+
+        if ($this->isFieldExist('biz_payment_trade', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
+        }
+
+        if ($this->isFieldExist('biz_payment_trade', 'coin_amount')) {
+            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
+        }
+
+        if ($this->isFieldExist('biz_payment_trade', 'cash_amount')) {
+            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
+        }
+
+        if ($this->isFieldExist('biz_user_balance', 'cash_amount')) {
+            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
+        }
+
+        if ($this->isFieldExist('biz_user_balance', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
+        }
+
+        if ($this->isFieldExist('biz_user_balance', 'locked_amount')) {
+            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `locked_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
+        }
+
+        if ($this->isFieldExist('biz_user_cashflow', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
+        }
+
+        if ($this->isFieldExist('biz_user_cashflow', 'user_balance')) {
+            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `user_balance` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
+        }
+
+        if (!$this->isFieldExist('biz_user_cashflow', 'action')) {
+            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
         }
 
         $this->logger('info', '新建biz表');
