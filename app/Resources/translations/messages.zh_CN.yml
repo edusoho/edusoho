@@ -7085,7 +7085,7 @@ admin.order.target_name: 名
 admin.order.buyer_mobile: 购买者绑定手机号
 admin.order.buyer_email: 购买者邮箱
 admin.order.target_id: 编号
-admin.order.tips: 站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付
+admin.order.tips: 站外为该笔订单是通过导入或者手动添加的方式产生的，故为站外
 admin.order.paid: 已支付
 admin.order.created: 未付款
 admin.order.cancelled: 已关闭
