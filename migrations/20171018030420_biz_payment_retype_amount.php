@@ -52,7 +52,6 @@ class BizPaymentRetypeAmount extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-
     }
 
     protected function isFieldExist($table, $filedName)
