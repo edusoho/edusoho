@@ -4,24 +4,6 @@ import ConfirmModal from './confirm';
 
 export default class BasePayment {
 
-  static getTrade(tradeSn, orderSn = '') {
-    let params = {};
-
-    if (tradeSn == undefined || tradeSn == '') {
-      return false;
-    }
-    if (tradeSn) {
-      params.tradeSn = tradeSn;
-    }
-
-    if (orderSn) {
-      params.orderSn = orderSn;
-    }
-    return Api.trade.get({
-      params: params
-    });
-  }
-
   setOptions(options) {
     this.options = options;
   }
@@ -114,6 +96,24 @@ export default class BasePayment {
     });
 
     return trade;
+  }
+
+  static getTrade(tradeSn, orderSn = '') {
+    let params = {};
+
+    if (tradeSn == undefined || tradeSn == '') {
+      return false;
+    }
+    if (tradeSn) {
+      params.tradeSn = tradeSn;
+    }
+
+    if (orderSn) {
+      params.orderSn = orderSn;
+    }
+    return Api.trade.get({
+      params: params
+    });
   }
 
 
