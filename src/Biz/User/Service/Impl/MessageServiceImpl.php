@@ -55,7 +55,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation = $this->getRelationDao()->getByConversationIdAndMessageId($conversationId, $messageId);
         $conversation = $this->getConversationDao()->get($conversationId);
 
-        if ($relation['isRead'] == self::RELATION_ISREAD_OFF) {
+        if (self::RELATION_ISREAD_OFF == $relation['isRead']) {
             $this->safelyUpdateConversationMessageNum($conversation);
             $this->safelyUpdateConversationunreadNum($conversation);
         } else {
@@ -64,7 +64,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
         $this->getRelationDao()->deleteByConversationIdAndMessageId($conversationId, $messageId);
         $relationCount = $this->getRelationDao()->count(array('conversationId' => $conversationId));
-        if ($relationCount == 0) {
+        if (0 == $relationCount) {
             $this->getConversationDao()->delete($conversationId);
         }
     }
@@ -91,8 +91,8 @@ class MessageServiceImpl extends BaseService implements MessageService
                 );
                 $this->getConversationDao()->updateByConversationId($conversation['id'], $fields);
             }
-            
-            $content = "已删除。";
+
+            $content = '已删除。';
             $fields = array(
                 'content' => $content,
             );
