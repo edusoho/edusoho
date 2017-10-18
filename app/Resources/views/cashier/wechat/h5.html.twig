@@ -11,7 +11,7 @@
     <div class="panel-body">
       <p>{{'pay_center.order.id'|trans({'%sn%':trade.trade_sn})}}</p>
       <p>{{'pay_center.order.detail'|trans({'%title%':trade.title})}}</p>
-      <p>{{'pay_center.order.price'|trans}}<span class="text-danger text-lg">{{ (trade.cash_amount)|to_cash(0) }}</span></p>
+      <p>{{'pay_center.order.price'|trans}}<span class="text-danger text-lg">{{ (trade.cash_amount)|fen_to_yuan }}</span></p>
       <div class="pull-right mtm">
         <button class="btn btn-primary js-wxpay">{{'pay_center.pay.weixin_pay.pay_btn'|trans}}</button>
       </div>
