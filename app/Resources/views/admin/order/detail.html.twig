@@ -83,7 +83,7 @@
           <tr>
             <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('newPayment', order.payment) }}</td>
             <td width="75%">
-              <span class="text-muted">{{ order.paid_cash_amount|to_cash(0) }}</span>
+              <span class="text-muted">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
               {% if paymentTrade.platform_sn is not null %}
                 <span class="pull-right">
                   <a class="es-icon es-icon-help text-normal link-gray"
