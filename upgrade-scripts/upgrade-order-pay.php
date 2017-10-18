@@ -474,7 +474,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `r`.`createdTime` as `created_time`,
                 `r`.`updatedTime` as `updated_time`,
                 `r`.`id` as `migrate_id`
-            from `order_refund` `r` left join `orders` `o` on `r`.`orderId`=`o`.`id` where `id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, {$this->pageSize}
+            from `order_refund` `r` left join `orders` `o` on `r`.`orderId`=`o`.`id` where r.`id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, {$this->pageSize}
         ");
 
         $this->logger('info', "处理biz_order_refund的数据，当前页码{$page}");
