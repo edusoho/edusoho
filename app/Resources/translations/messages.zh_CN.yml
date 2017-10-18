@@ -5123,12 +5123,12 @@ admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
     <div class="popover-item">
-      <div class="title">新增订单</div>
-      <div class="content">平台当日产生的所有订单，包括免费和付费</div>
+      <div class="title">订单</div>
+      <div class="content">用户购买标价不为0的商品（教学计划、班级、会员等）会产生订单</div>
     </div>
     <div class="popover-item">
       <div class="title">付费订单</div>
-      <div class="content">平台当日产生的订单价格大于0元的订单</div>
+      <div class="content">产生实际支付（包括虚拟币和现金）的订单；去除通过抵扣优惠等方式减免全部费用的订单</div>
     </div>
   </div>
 admin.homepage.pay_order_statistic_title: 付费订单统计
