@@ -384,6 +384,8 @@ order.refund.deal_persion: 处理人
 order.refund_reason: 退款原因
 order.refund.detail: 退款详情
 order.refund_amount: 退款总额
+order.refund_coin_amount: 退款虚拟币
+order.refund_cash_amount: 退款现金
 order.refund_limit: 退款限制
 order.show_refund_detail: 查看退款
 order.refunded_cash_amount: 已退现金
