@@ -6,9 +6,9 @@
 {% block body %}
 
   <p>
-    <span>{{'finance.balance'|trans}}: <strong class="amount-num">{{user_balance(user.id).amount}}</strong> {{ setting('coin.coin_name') }}</span>
-    <span class="mll">{{'coin.recharge'|trans}}: <strong class="inflow-num">{{user_coin_amount('inflow', user.id)|default(0)|fen_to_yuan(0) }}</strong> {{ setting('coin.coin_name') }}</span>
-    <span class="mll">{{'coin.consume'|trans}}: <strong class="outflow-num">{{user_coin_amount('outflow', user.id)|default(0)|fen_to_yuan(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span>{{'finance.balance'|trans}}: <strong class="amount-num">{{user_balance(user.id).amount|to_coin(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'coin.recharge'|trans}}: <strong class="inflow-num">{{user_coin_amount('inflow', user.id)|default(0)|to_coin(0) }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'coin.consume'|trans}}: <strong class="outflow-num">{{user_coin_amount('outflow', user.id)|default(0)|to_coin(0) }}</strong> {{ setting('coin.coin_name') }}</span>
   </p>
 
     <div class="table-responsive">

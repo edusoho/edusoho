@@ -5,7 +5,7 @@
 {% do script(['libs/jquery-validation.js','app/js/my/order-refund-apply/index.js']) %}
 
 {% block title %}
-  {{'申请退款'|trans}}
+  {{'order.status.refunding'|trans}}
 {% endblock %}
 
 {% block body %}
@@ -13,24 +13,24 @@
 
     <table class="table cd-table table-striped order-detail-table">
       <tr>
-        <td width="25%">{{'商品名称'|trans}}</td>
+        <td width="25%">{{'order.product_name'|trans}}</td>
         <td width="75%">{{ order.title }}</td>
       </tr>
       <tr>
-        <td width="25%">{{ '实付价格'|trans }}</td>
-        <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        <td width="25%">{{ 'order.paid_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
       <tr>
-        <td width="25%" class="color-gray cd-pl32">{{ '实付虚拟币'|trans }}</td>
-        <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span></td>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_coin_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|to_coin(0) }}</span></td>
       </tr>
       <tr>
-        <td width="25%" class="color-gray cd-pl32">{{ '实付现金'|trans }}</td>
-        <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_cash_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
       <tr>
-        <td class="25%">{{ '退款原因'|trans }}</td>
-        <td class="75%"><textarea data-display="{{ '退款原因'|trans }}" class="form-control" name="reason" id="" rows="5"></textarea></td>
+        <td class="25%">{{ 'order.refund_reason'|trans }}</td>
+        <td class="75%"><textarea data-display="{{ 'order.refund_reason'|trans }}" class="form-control" name="reason" id="" rows="5"></textarea></td>
       </tr>
     </table>
 
@@ -39,6 +39,6 @@
 {% endblock %}
 
 {% block footer %}
-    <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">取消</button>
-    <button id="card-use-btn" class="btn cd-btn cd-btn-primary cd-btn-lg" type="submit" data-target="#refund-apply-form" data-toggle="form-submit" data-loading-text="{{ '正在提交' | trans }}">确定</button>
+    <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+    <button id="card-use-btn" class="btn cd-btn cd-btn-primary cd-btn-lg" type="submit" data-target="#refund-apply-form" data-toggle="form-submit" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.confirm'|trans }}</button>
 {% endblock %}
