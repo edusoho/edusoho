@@ -25,39 +25,17 @@
       </tr>
       <tr>
         <td width="25%">{{ '实付价格'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        <td width="75%"><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
       <tr>
         <td width="25%" class="text-muted" style="padding-left: 32px;">{{ '实付虚拟币'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span></td>
+        <td width="75%"><span class="color-warning">{{ order.paid_coin_amount|to_coin(0) }}</span></td>
       </tr>
       <tr>
         <td width="25%" class="text-muted" style="padding-left: 32px;">{{ '实付现金'|trans }}</td>
-        <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|to_coin(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
     </table>
-
-    {#<div class="form-group">#}
-      {#<label class="col-md-3 control-label">{{ 'order.payment_pattern.cash'|trans }}</label>#}
-      {#<div class="col-md-8 controls">#}
-        {#<span class="control-text">#}
-        {#{{ refund.refund_cash_amount|fen_to_yuan(0) }}#}
-        {#（{{ 'admin.order_cash.refund.success.tips'|trans }}）#}
-        {#</span>#}
-      {#</div>#}
-    {#</div>#}
-
-    {#{% if refund.refund_coin_amount %}#}
-      {#<div class="form-group">#}
-        {#<label class="col-md-3 control-label">{{ 'order.payment_pattern.coin'|trans({'%coin_name%': coinSetting.coin_name}) }}</label>#}
-        {#<div class="col-md-8 controls">#}
-          {#<span class="control-text">#}
-          {#{{ refund.refund_coin_amount|fen_to_yuan(0) }}#}
-          {#（{{ 'admin.order_coin.refund.success.tips'|trans }}）#}
-          {#</span>#}
-        {#</div>#}
-      {#</div>#}
-    {#{% endif %}#}
 
     <div class="form-group">
       <label class="col-md-3 control-label">{{'admin.order_refund.audit.result'|trans}}</label>
@@ -69,22 +47,22 @@
     <div class="form-group amount-form-group" style="display:none;">
       <label class="col-md-3 control-label">{{'退款总额'|trans}}</label>
       <div class="col-md-8 controls">
-        <span class="control-text" id="amount-display">{{ refund.amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}
+        <span class="control-text" id="amount-display">{{ refund.amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
       </div>
     </div>
 
     <div class="form-group amount-form-group" style="display:none;">
       <label class="col-md-3 control-label" for="refund-coin-amount-field">{{'退款虚拟币'|trans}}</label>
       <div class="col-md-8 controls">
-        <input id="refund-coin-amount-field" data-rate="{{ trade.rate }}" data-max-coin-amount="{{ order.paid_coin_amount|fen_to_yuan(0) }}" class="form-control width-input" type="text" name="refund_coin_amount" value="{{ refund.refund_coin_amount|fen_to_yuan(0) }}">
-        等于<span class="color-warning" id="coin-to-rmb">{{ (refund.refund_coin_amount/trade.rate)|fen_to_yuan(0) }}</span>元
+        <input id="refund-coin-amount-field" data-rate="{{ trade.rate }}" data-max-coin-amount="{{ order.paid_coin_amount|to_coin(0) }}" class="form-control width-input" type="text" name="refund_coin_amount" value="{{ refund.refund_coin_amount|to_coin(0) }}">
+        等于<span class="color-warning" id="coin-to-rmb">{{ (refund.refund_coin_amount/trade.rate)|to_cash(0) }}</span>{{ 'site.currency.CNY'|trans }}
       </div>
     </div>
 
     <div class="form-group amount-form-group" style="display:none;">
       <label class="col-md-3 control-label" for="refund-cash-amount-field">{{'退款现金'|trans}}</label>
       <div class="col-md-8 controls">
-        <input id="refund-cash-amount-field" data-max-cash-amount="{{ order.paid_cash_amount|fen_to_yuan(0) }}" class="form-control width-input" type="text" name="refund_cash_amount" value="{{ refund.refund_cash_amount|fen_to_yuan(0) }}">
+        <input id="refund-cash-amount-field" data-max-cash-amount="{{ order.paid_cash_amount|to_cash(0) }}" class="form-control width-input" type="text" name="refund_cash_amount" value="{{ refund.refund_cash_amount|to_cash(0) }}">
         {{ 'site.currency.CNY'|trans }}
       </div>
     </div>
@@ -102,19 +80,6 @@
         退款虚拟币会实时退回虚拟币账户，退款现仅需线下人工退款，此处只是账单数据记录
       </strong>
     </div>
-    {#{% if refund.refund_coin_amount %}#}
-       {#<div class="alert alert-danger">#}
-        {#<strong>#}
-          {#{{ 'admin.order_cash_coin_refund.audit.tips'|trans }}#}
-        {#</strong>#}
-      {#</div>#}
-    {#{% else %}#}
-       {#<div class="alert alert-info">#}
-        {#<strong>#}
-          {#{{ 'admin.order_cash_refund.audit.tips'|trans }}#}
-        {#</strong>#}
-      {#</div>#}
-    {#{% endif %}#}
   </form>
 {% endblock %}
 

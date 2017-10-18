@@ -530,7 +530,6 @@ class WebExtension extends \Twig_Extension
     public function getBalance($userId)
     {
         $balance = $this->getAccountProxyService()->getUserBalanceByUserId($userId);
-        $balance = MathToolkit::multiply($balance, array('amount', 'cash_amount', 'locked_amount'), 0.01);
 
         return $balance;
     }

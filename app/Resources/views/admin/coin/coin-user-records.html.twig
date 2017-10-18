@@ -18,9 +18,9 @@
   </form>
   
   <p class="text-muted">
-    <span class="mrl">{{ '网校总发放'|trans }}：<strong class="color-success">{{ schoolBalance.purchase_amount|fen_to_yuan(0) }}</strong></span>
-    <span class="mrl">{{ '网校总回收'|trans }}：<strong class="color-warning">{{ schoolBalance.recharge_amount|fen_to_yuan(0) }}</strong></span>
-    <span class="mrl">{{ '网校待回收'|trans }}：<strong class="color-info">{{ (schoolBalance.purchase_amount-schoolBalance.recharge_amount)|fen_to_yuan(0) }}</strong></span>
+    <span class="mrl">{{ '网校总发放'|trans }}：<strong class="color-success">{{ schoolBalance.purchase_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ '网校总回收'|trans }}：<strong class="color-warning">{{ schoolBalance.recharge_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ '网校待回收'|trans }}：<strong class="color-info">{{ (schoolBalance.purchase_amount-schoolBalance.recharge_amount)|to_coin(0) }}</strong></span>
   </p>
   <div class="table-responsive">
     <table class="table table-striped">
@@ -38,9 +38,9 @@
         {% for balance in balances %}
           <tr>
             <td> {{ web_macro.user_link(users[balance['user_id']] , 'link-muted') }}</td>
-            <td class="color-success"> {{ balance.recharge_amount|fen_to_yuan(0) }}</td>
-            <td class="color-warning"> {{ balance.purchase_amount|default(0)|fen_to_yuan(0) }}</td>
-            <td style="color:blue;"> {{ balance.amount|default(0)|fen_to_yuan(0) }}</td>
+            <td class="color-success"> {{ balance.recharge_amount|to_coin(0) }}</td>
+            <td class="color-warning"> {{ balance.purchase_amount|default(0)|to_coin(0) }}</td>
+            <td style="color:blue;"> {{ balance.amount|default(0)|to_coin(0) }}</td>
             <td>
               <a {% if balance.amount <= 0 %}class="disabled"{% endif %}
               data-toggle="modal" data-target="#modal"

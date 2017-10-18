@@ -28,7 +28,7 @@
         {% endif %}
       </td>
       <td>{{order.sn}}</td>
-      <td class="text-right">{{ order.pay_amount|fen_to_yuan(0) }}  {{ 'site.currency.CNY'|trans }}</td>
+      <td class="text-right">{{ order.pay_amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
       <td>{{ order.created_time|date('Y-n-d') }}</td>
       <td>
         {{ display_order_status(order.status, 0) }}

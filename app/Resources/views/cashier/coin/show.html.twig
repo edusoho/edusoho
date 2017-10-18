@@ -7,10 +7,10 @@
   <span class="order-center-deduction__content">
     {% if isPasswordSet %}
       {% if currency == 'coin' %}
-        {{ 'order.confirm.current_account_cash_simple'|trans({ '%amount%':balance.amount|fen_to_yuan(0), '%coin_name%':coinSetting.coin_name }) }}
+        {{ 'order.confirm.current_account_cash_simple'|trans({ '%amount%':balance.amount|to_coin(0), '%coin_name%':coinSetting.coin_name }) }}
       {% else %}
          {{ 'order.confirm.current_account_cash'|trans({
-          '%amount%':balance.amount|fen_to_yuan(0), '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount|fen_to_yuan(0) / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
+          '%amount%':balance.amount|to_coin(0), '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount|to_coin(0) / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
         }) }}
       {% endif %}
     {% else %}
@@ -23,7 +23,7 @@
 </div>
 
 {% if isPasswordSet %}
-  <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount|fen_to_yuan(0) }}" 
+  <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount|to_coin(0) }}"
     data-coin-rate="{{ setting('coin.cash_rate') }}" data-price-type="{{ currency }}">
     <div class="form-group cd-form-group">
       <input type="text" name="coinAmount" class="hidden">
