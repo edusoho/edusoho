@@ -45,6 +45,7 @@ export default class BasePayment {
 	}
 
 	cancelCheckOrder() {
+		document.querySelector('.order-center-deduction').insertAdjacentHTML('beforeend', '<div id="two">remove '+window.intervalCheckOrderId +'</div>');
 		clearInterval(window.intervalCheckOrderId)
 	}
 
@@ -54,6 +55,7 @@ export default class BasePayment {
 
 	checkIsPaid() {
 		let tradeSn = store.get('trade_' + this.getURLParameter('sn'));
+		document.querySelector('.order-center-deduction').insertAdjacentHTML('beforeend', '<div id="two">'+tradeSn +'</div>');
 		BasePayment.getTrade(tradeSn).then(res => {
 			if (res.isPaid) {
 				location.href = res.paidSuccessUrl;
@@ -111,7 +113,6 @@ export default class BasePayment {
 		if (orderSn) {
 			params.orderSn = orderSn;
 		}
-
 		return Api.trade.get({
 			params: params
 		});

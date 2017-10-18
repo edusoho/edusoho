@@ -23,7 +23,6 @@ class WechatController extends PaymentController
         $tradeSn = $request->query->get('tradeSn');
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
-        file_put_contents('pay.log', 'WechatController -> returnAction'.time().json_encode($trade).PHP_EOL."\n", FILE_APPEND);
         if ($trade['status'] == 'paid') {
             return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn'])));
         } else {
@@ -33,11 +32,7 @@ class WechatController extends PaymentController
 
     public function notifyAction(Request $request, $payment)
     {
-        file_put_contents('pay.log', 'WechatController -> notifyAction'.time().PHP_EOL."\n", FILE_APPEND);
-
         $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
-        file_put_contents('pay.log', 'WechatController -> notifyAction'.time().json_encode($result).PHP_EOL."\n", FILE_APPEND);
-
         return $this->createJsonResponse($result);
     }
 }
