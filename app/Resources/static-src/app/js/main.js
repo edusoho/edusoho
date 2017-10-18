@@ -23,7 +23,7 @@ if ($('#rewardPointNotify').length > 0) {
 };
 
 $('[data-toggle="popover"]').popover({
-  html: true,
+  html: true
 });
 
 $('[data-toggle="tooltip"]').tooltip({
