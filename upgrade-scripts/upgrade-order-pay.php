@@ -74,7 +74,6 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateBizOrderItems',
             'migrateBizOrderItemDeductsByCoupon', // done
             'migrateBizOrderItemDeductsByDiscount', // done
-//            'migrateBizOrderItemDeductsStatus', // done
             'migrateBizOrderRefund', // done
             'migrateBizOrderRefundItems', // done
             'migrateBizOrderLog',
@@ -177,16 +176,16 @@ class EduSohoUpgrade extends AbstractUpdater
                 floor((`amount` + `coinAmount`/coinRate)*100) as `pay_amount`,
                 `userId` as `user_id`,
                 '' as `callback`,
-                `sn` as `trade_sn`,
+                `sn` as `trade_sn`, -- trade_sn和sn一致
                 case when `status` in ('paid', 'refunding') then 'success' when `status` = 'cancelled' then 'closed' else `status` end as `status`,
                 `paidTime` as `pay_time`,
                 case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then `payment` else 'none' end as `payment`,
                 `paidTime` as `finish_time`,
                 case when `status` = 'cancelled' then `updatedTime` else 0 end as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
                 '' as `close_data`, -- TODO 当订单关闭状态时的数据, 从日志中取得
-                0 as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
+                case when `status` = 'cancelled' then {$this->systemUserId} else 0 end as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
                 0 as `seller_id`,
-                case when `status` = 'cancelled' then {$this->systemUserId} else 0 end as `created_user_id`, -- TODO 创建订单者
+                `userId` as `created_user_id`, -- TODO 创建订单者
                 '' as `create_extra`, -- 不迁移data数据
                 '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
                 `amount`*100 as `paid_cash_amount`,
@@ -418,16 +417,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "处理biz_order_item_deduct的打折数据，当前页码{$page}");
 
         return $page + 1;
-    }
-
-    protected function migrateBizOrderItemDeductsStatus($page)
-    {
-        $connection = $this->getConnection();
-        $connection->exec("update biz_order_item_deduct oi set status = (select status from biz_order where id = oi.order_id);");
-
-        $this->logger('info', "更新处理biz_order_item_deduct的状态，当前页码{$page}");
-
-        return 1;
     }
 
     protected function migrateBizOrderRefund($page)
@@ -1302,22 +1291,6 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`),
                   UNIQUE(`user_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_security_answer')) {
-            $connection->exec("
-                CREATE TABLE `biz_security_answer` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
-                  `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
-                  `answer` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE (`user_id`, `question_key`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
