@@ -82,8 +82,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizSecurityAnswer', // done
             'migrateBizPayAccount',   // done
             'migrateBizUserBalance',  // done
-            'migrateBizUserCashflow',
-            'migrateBizUserCashflowBySite',
+            'migrateBizUserCashflowAsUser',
+            'migrateBizUserCashflowAsSite',
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
             'migrateExitMemberOperationRecord',
@@ -808,71 +808,38 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    protected function migrateBizUserCashflow($page)
+    protected function migrateBizUserCashflowAsUser($page)
     {
-        $this->addMigrateId('biz_user_cashflow');
-
-        $connection = $this->getConnection();
-
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0)");
-        if (empty($count)) {
-            return 1;
-        }
-
-        $connection->exec("
-            insert into `biz_user_cashflow` (
-                `title`,
-                `sn`,
-                `parent_sn`,
-                `user_id`,
-                `buyer_id`,
-                `type`,
-                `amount`,
-                `currency`,
-                `user_balance`,
-                `order_sn`,
-                `trade_sn`,
-                `platform`,
-                `amount_type`,
-                `created_time`,
-                `migrate_id`
-            )
-            select
-                `name` as `title`,
-                `sn` as `sn`,
-                `parentSn` as `parent_sn`,
-                `userId` as `user_id`,
-                `userId` as `buyer_id`,
-                `type` as `type`,
-                floor(`amount`*100) as `amount`,
-                case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
-                0 as `user_balance`, -- TODO
-                `orderSn` as `order_sn`,
-                `orderSn` as `trade_sn`,
-                case when `payment` is not null then `payment` else '' end as `platform`,
-                case when `cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
-                `createdTime` as `created_time`,
-                `id` as `migrate_id`
-            from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}
-        ");
-
-        $this->logger('info', "处理学员的biz_user_cashflow的数据，当前页码{$page}");
-
-        return $page + 1;
+        return $this->migrateBizUserCashflow($page, 'user');
     }
 
-    protected function migrateBizUserCashflowBySite($page)
+    protected function migrateBizUserCashflowAsSite($page)
+    {
+        return $this->migrateBizUserCashflow($page, 'site');
+    }
+
+    protected function migrateBizUserCashflow($page, $type)
     {
         $this->addMigrateId('biz_user_cashflow');
 
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0)");
+        $whereSql = 'user_id<>0';
+        if ($type == 'site') {
+            $whereSql = 'user_id=0';
+        }
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where {$whereSql})");
         if (empty($count)) {
             return 1;
         }
 
-        $connection->exec("
+
+        $migrateUserId = $type == 'user' ? 'uf.`userId` as `user_id`,' : '0 as `user_id`,';
+        $migrateType = $type == 'user' ? "uf.`type` as `type`," : "case when `type`='inflow' then 'outflow' when `type`='outflow' then 'inflow' else `type` end as `type`,";
+        $migrateSn = $type == 'user' ? "uf.`sn` as `sn`," : "concat(uf.`sn`,'0') as `sn`,";
+
+        $sql = "
             insert into `biz_user_cashflow` (
                 `title`,
                 `sn`,
@@ -891,25 +858,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             )
             select
-                `name` as `title`,
-                concat(`sn`,'0') as `sn`,
-                `parentSn` as `parent_sn`,
-                0 as `user_id`,
-                `userId` as `buyer_id`,
-                case when `type` = 'inflow' then 'outflow' else 'inflow' end as `type`,
-                floor(`amount`*100) as `amount`,
-                case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
+                case when o.`title` is not null then o.`title` else uf.`name` end as `title`,
+                {$migrateSn}
+                uf.`parentSn` as `parent_sn`,
+                {$migrateUserId}
+                uf.`userId` as `buyer_id`,
+                {$migrateType}
+                floor(uf.`amount`*100) as `amount`,
+                case when uf.`cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
                 0 as `user_balance`, -- TODO
-                `orderSn` as `order_sn`,
-                `orderSn` as `trade_sn`,
-                case when `payment` is not null then `payment` else '' end as `platform`,
-                case when `cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
-                `createdTime` as `created_time`,
-                `id` as `migrate_id`
-            from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id = 0) LIMIT 0, {$this->pageSize}
-        ");
+                uf.`orderSn` as `order_sn`,
+                uf.`orderSn` as `trade_sn`,
+                case when uf.`payment` is not null then uf.`payment` else '' end as `platform`,
+                case when uf.`cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
+                uf.`createdTime` as `created_time`,
+                uf.`id` as `migrate_id`
+            from `cash_flow` uf left join orders o on uf.orderSn = o.sn where uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where {$whereSql}) LIMIT 0, {$this->pageSize}
+        ";
 
-        $this->logger('info', "处理网校的biz_user_cashflow的数据，当前页码{$page}");
+        $connection->exec($sql);
+
+        $this->logger('info', "处理{$type}的biz_user_cashflow的数据，当前页码{$page}");
 
         return $page + 1;
     }
