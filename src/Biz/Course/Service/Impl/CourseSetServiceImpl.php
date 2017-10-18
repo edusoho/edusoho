@@ -713,7 +713,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->rollback();
             throw $exception;
         }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
 
         $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
