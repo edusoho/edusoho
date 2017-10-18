@@ -81,7 +81,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 $fields = array(
                     'latestMessageContent' => '一条私信被删除。',
                 );
-                $this->getConversationDao()->updateByConversationId($conversation['id'], $fields);
+                $this->getConversationDao()->update($conversation['id'], $fields);
             }
 
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['toId'], $message['fromId']);
@@ -89,10 +89,10 @@ class MessageServiceImpl extends BaseService implements MessageService
                 $fields = array(
                     'latestMessageContent' => '一条私信被删除。',
                 );
-                $this->getConversationDao()->updateByConversationId($conversation['id'], $fields);
+                $this->getConversationDao()->update($conversation['id'], $fields);
             }
 
-            $content = '已删除。';
+            $content = '内容已被删除。';
             $fields = array(
                 'content' => $content,
             );
