@@ -1466,6 +1466,14 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
         }
 
+        if (!$this->isFieldExist('biz_user_balance', 'recharge_amount')) {
+            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` int(10) NOT NULL DEFAULT '0' COMMENT '充值总额'");
+        }
+
+        if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
+            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` int(10) NOT NULL DEFAULT '0' COMMENT '消费总额'");
+        }
+
         $this->logger('info', '新建biz表');
 
         return 1;
