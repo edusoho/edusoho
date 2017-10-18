@@ -13,7 +13,7 @@ class CashierForm {
 
     this.paySdk = new PaySDK();
 
-	  this.paySdk.checkOrderStatus();
+    this.paySdk.checkOrderStatus();
   }
 
   initCoin() {
@@ -35,7 +35,7 @@ class CashierForm {
     $form.on('addPriceItem', (event, id, title, price) => this.addPriceItem(event, id, title, price));
     $form.on('removePriceItem', (event, id) => this.removePriceItem(event, id));
     $form.on('changeCoinPrice', (event, price) => this.changeCoinPrice(event, price));
-    
+
   }
 
   payOrder(event) {
@@ -49,7 +49,7 @@ class CashierForm {
       params.payAmount = $form.find('.js-pay-price').text();
       this.paySdk.pay(params);
       $btn.button('reset');
-	    this.paySdk.cancelCheckOrder();
+      this.paySdk.cancelCheckOrder();
     }
   }
 
@@ -107,7 +107,7 @@ class CashierForm {
 
   removePriceItem(event, id) {
     let $priceItem = $(`#${id}`);
-    
+
     if (this.hasPriceItem(event, id)) {
       $priceItem.remove();
     }
