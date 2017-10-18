@@ -79,6 +79,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizOrderLog',
             'migrateBizPaymentTrade', // done
             'migrateBizPaymentTradeFromCashOrder', // done
+            'updateBizPaymentTradePlatforms',
             'migrateBizSecurityAnswer', // done
             'migrateBizPayAccount',   // done
             'migrateBizUserCashflowAsUser',
@@ -910,12 +911,24 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    protected function updateBizPaymentTradePlatforms($page)
+    {
+        $connection = $this->getConnection();
+        $connection->exec("update biz_payment_trade set platform=(select payment from biz_order where sn=order_sn) where type='purchase';");
+
+        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where platform = 'llpay' and type='recharge';");
+        $connection->exec("update biz_payment_trade set platform = 'wechat' where platform = 'wxpay' and type='recharge';");
+        return 1;
+    }
+
     protected function migrateBizUserCashflowPlatform($page)
     {
         $connection = $this->getConnection();
         $sql = "update `biz_user_cashflow` set platform='none' where amount_type='coin';";
         $connection->exec($sql);
 
+        $sql = "update `biz_user_cashflow` uc set uc.platform=(select platform from biz_payment_trade where trade_sn=uc.trade_sn) where amount_type='money' and trade_sn in (select trade_sn from biz_payment_trade where trade_sn=uc.trade_sn);";
+        $connection->exec($sql);
         return 1;
     }
 
