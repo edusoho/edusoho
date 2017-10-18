@@ -898,12 +898,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `buyer_id`,
                 case when `type` = 'inflow' then 'outflow' else 'inflow' end as `type`,
                 floor(`amount`*100) as `amount`,
-                case when `cashType`='Coin' then 'coin' else 'money' end as `currency`,
+                case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
                 0 as `user_balance`, -- TODO
                 `orderSn` as `order_sn`,
                 '' as `trade_sn`,
                 case when `payment` is not null then `payment` else '' end as `platform`,
-                `cashType` as `amount_type`,
+                case when `cashType`='Coin' then 'coin' else 'CNY' end as `amount_type`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
             from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where user_id = 0) LIMIT 0, {$this->pageSize}
