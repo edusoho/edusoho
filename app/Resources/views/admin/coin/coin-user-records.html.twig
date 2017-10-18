@@ -24,7 +24,7 @@
   </p>
   <div class="table-responsive">
     <table class="table table-striped">
-      {% set querySort = app.request.query.get('sort', 'balance') %}
+      {% set querySort = app.request.query.get('sort', 'amount') %}
       {% set direction = app.request.query.get('direction', 'desc') %}
       <tr>
         <th width="30%">{{'user'|trans}}</th>
