@@ -82,6 +82,7 @@ class WechatController extends PaymentController
     public function notifyAction(Request $request, $payment)
     {
         $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
+
         return $this->createJsonResponse($result);
     }
 }
