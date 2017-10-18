@@ -311,19 +311,18 @@ class CoinController extends BaseController
             $this->get('request'),
             $this->getAccountProxyService()->countBalances(
                 array(
-                    'except_user_id' => 0
+                    'except_user_id' => 0,
                 )
             ),
             20
         );
         $balances = $this->getAccountProxyService()->searchBalances(
             array(
-                'except_user_id' => 0
+                'except_user_id' => 0,
             ),
             array($sort => $direction),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-
         );
 
         $userIds = ArrayToolkit::column($balances, 'user_id');

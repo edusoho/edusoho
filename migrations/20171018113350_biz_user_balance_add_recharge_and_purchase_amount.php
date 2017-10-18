@@ -31,7 +31,6 @@ class BizUserBalanceAddRechargeAndPurchaseAmount extends Migration
 
         $connection->exec('ALTER TABLE `biz_user_balance` DROP COLUMN `recharge_amount`;');
         $connection->exec('ALTER TABLE `biz_user_balance` DROP COLUMN `purchase_amount`;');
-
     }
 
     protected function isFieldExist($table, $filedName)
