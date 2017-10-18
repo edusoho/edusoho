@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\DateToolkit;
-use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
