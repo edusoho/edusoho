@@ -4,117 +4,117 @@ import ConfirmModal from './confirm';
 
 export default class BasePayment {
 
-	setOptions(options) {
-		this.options = options;
-	}
+  static getTrade(tradeSn, orderSn = '') {
+    let params = {};
 
-	getOptions() {
-		return this.options;
-	}
+    if (tradeSn == undefined || tradeSn == '') {
+      return false;
+    }
+    if (tradeSn) {
+      params.tradeSn = tradeSn;
+    }
 
-	showConfirmModal(tradeSn) {
-		if (!this.confirmModal) {
-			this.confirmModal = new ConfirmModal();
-		}
+    if (orderSn) {
+      params.orderSn = orderSn;
+    }
+    return Api.trade.get({
+      params: params
+    });
+  }
 
-		this.confirmModal.show(tradeSn);
-	}
+  setOptions(options) {
+    this.options = options;
+  }
 
-	pay(params) {
-		let trade = this.createTrade(params);
-		if (trade.paidSuccessUrl) {
-			location.href = trade.paidSuccessUrl;
-		} else {
-			this.afterTradeCreated(trade)
-		}
+  getOptions() {
+    return this.options;
+  }
 
-	}
+  showConfirmModal(tradeSn) {
+    if (!this.confirmModal) {
+      this.confirmModal = new ConfirmModal();
+    }
 
-	afterTradeCreated(res) {
+    this.confirmModal.show(tradeSn);
+  }
 
-	}
+  pay(params) {
+    let trade = this.createTrade(params);
+    if (trade.paidSuccessUrl) {
+      location.href = trade.paidSuccessUrl;
+    } else {
+      this.afterTradeCreated(trade)
+    }
 
-	customParams(params) {
-		return params;
-	}
+  }
 
-	checkOrderStatus() {
-		if (this.startInterval()) {
-			window.intervalCheckOrderId = setInterval(this.checkIsPaid.bind(this), 2000);
-		}
-	}
+  afterTradeCreated(res) {
 
-	cancelCheckOrder() {
-		clearInterval(window.intervalCheckOrderId)
-	}
+  }
 
-	startInterval() {
-		return false;
-	}
+  customParams(params) {
+    return params;
+  }
 
-	checkIsPaid() {
-		let tradeSn = store.get('trade_' + this.getURLParameter('sn'));
-		BasePayment.getTrade(tradeSn).then(res => {
-			if (res.isPaid) {
-				location.href = res.paidSuccessUrl;
-			}
-		})
-	}
+  checkOrderStatus() {
+    if (this.startInterval()) {
+      window.intervalCheckOrderId = setInterval(this.checkIsPaid.bind(this), 2000);
+    }
+  }
 
-	getURLParameter(name) {
-		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-	}
+  cancelCheckOrder() {
+    clearInterval(window.intervalCheckOrderId)
+  }
 
-	filterParams(postParams) {
-		let params = {
-			gateway: postParams.gateway,
-			type: postParams.type,
-			orderSn: postParams.orderSn,
-			coinAmount: postParams.coinAmount,
-			amount: postParams.amount,
-			openid: postParams.openid,
-			payPassword: postParams.payPassword
-		};
+  startInterval() {
+    return false;
+  }
 
-		params = this.customParams(params);
+  checkIsPaid() {
+    let tradeSn = store.get('trade_' + this.getURLParameter('sn'));
+    BasePayment.getTrade(tradeSn).then(res => {
+      if (res.isPaid) {
+        location.href = res.paidSuccessUrl;
+      }
+    })
+  }
 
-		Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
+  getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+  }
 
-		return params;
-	}
+  filterParams(postParams) {
+    let params = {
+      gateway: postParams.gateway,
+      type: postParams.type,
+      orderSn: postParams.orderSn,
+      coinAmount: postParams.coinAmount,
+      amount: postParams.amount,
+      openid: postParams.openid,
+      payPassword: postParams.payPassword
+    };
 
-	createTrade(postParams) {
+    params = this.customParams(params);
 
-		let params = this.filterParams(postParams);
+    Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
 
-		let trade = null;
+    return params;
+  }
 
-		Api.trade.create({data: params, async: false, promise: false}).done(res => {
-			trade = res;
-		}).error(res => {
-			notify('danger', Translator.trans('cashier.pay.error_message'));
-		});
+  createTrade(postParams) {
 
-		return trade;
-	}
+    let params = this.filterParams(postParams);
 
-	static getTrade(tradeSn, orderSn = '') {
-		let params = {};
+    let trade = null;
 
-		if (tradeSn == undefined || tradeSn == '') {
-			return false;
-		}
-		if (tradeSn) {
-			params.tradeSn = tradeSn;
-		}
+    Api.trade.create({data: params, async: false, promise: false}).done(res => {
+      trade = res;
+    }).error(res => {
+      notify('danger', Translator.trans('cashier.pay.error_message'));
+    });
 
-		if (orderSn) {
-			params.orderSn = orderSn;
-		}
-		return Api.trade.get({
-			params: params
-		});
-	}
+    return trade;
+  }
 
 
 }
