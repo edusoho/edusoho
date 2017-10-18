@@ -87,6 +87,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizUserCashflowAsSiteByMoney',
             'migrateBizUserCashflowPlatform',
             'migrateBizUserBalance',  // done
+            'migrateBizUserBalanceRechargeAmountAndPurchaseAmount',  // done
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
             'migrateExitMemberOperationRecord',
@@ -811,6 +812,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "处理biz_user_balance的数据，当前页码{$page}");
 
         return $page + 1;
+    }
+
+    protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
+    {
+        $connection = $this->getConnection();
+        $connection->exec("update biz_user_balance ub set ub.purchase_amount = (select sum(amount) from biz_user_cashflow uc where ub.user_id=uc.user_id and uc.amount_type='coin' and uc.type='outflow') where ub.user_id in (select DISTINCT user_id from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow');");
+        $connection->exec("update biz_user_balance ub set ub.recharge_amount = (select sum(amount) from biz_user_cashflow uc where ub.user_id=uc.user_id and uc.amount_type='coin' and uc.type='inflow') where ub.user_id in (select DISTINCT user_id from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow');");
+
+        return 1;
     }
 
     protected function migrateBizUserCashflowAsUser($page)
