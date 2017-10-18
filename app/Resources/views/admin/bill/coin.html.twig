@@ -31,8 +31,8 @@
               <span>{{ cash.title }}</span>
             </td>
             <td>
-              <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span><br/>
-              <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn }}</span> 
+              <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span><br/>
+              <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
             </td>
             <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
             {{ user.nickname }}</a></td>
