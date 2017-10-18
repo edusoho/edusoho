@@ -53,6 +53,11 @@ orderItemType:
     classroom: 班级
     vip: VIP
 
+refundItemType:
+    course: 教学计划
+    classroom: 班级
+    vip: VIP
+
 orderDisplayStatus:
     notPaid: 未付款
     paid: 已付款
@@ -75,8 +80,14 @@ refundStatus:
     auditing: 已申请
     refunding: 退款中
     refunded: 退款成功
-    refused: 退款失败
+    refused: 退款拒绝
     cancel: 已取消
+
+refundDisplayStatus:
+    auditing: 用户已申请
+    refunded: 退款成功
+    refused: 退款拒绝
+    cancel: 用户已撤销
 
 payment:
     none: --
@@ -88,8 +99,8 @@ payment:
     iosiap: 苹果应用内支付
     outside: 站外支付
     coin: 虚拟币
-    llpay: 连连支付
     marketing: 营销平台
+    lianlianpay: 连连支付
 
 orderSource:
     self: 站内支付
@@ -108,6 +119,10 @@ newPayment:
     quickpay: 快捷支付
     llpay: 连连支付
 
+source:
+    self: 本站
+    outside: 站外
+    marketing: 营销平台
 
 moneyRecordType:
     income: 充值

@@ -52,6 +52,8 @@ class OrderExtension extends \Twig_Extension
             new \Twig_SimpleFilter('fen_to_yuan', array($this, 'fenToYuan')),
             new \Twig_SimpleFilter('price_format', array($this, 'priceFormat')),
             new \Twig_SimpleFilter('major_currency', array($this, 'majorCurrency')),
+            new \Twig_SimpleFilter('to_cash', array($this, 'toCash')),
+            new \Twig_SimpleFilter('to_coin', array($this, 'toCoin')),
         );
     }
 
@@ -64,8 +66,23 @@ class OrderExtension extends \Twig_Extension
         );
     }
 
+    public function toCash($price, $display = 0)
+    {
+        $price = MathToolkit::simple($price, 0.01);
+
+        return $this->majorCurrency($price, $display);
+    }
+
+    public function toCoin($price, $display = 0)
+    {
+        $price = MathToolkit::simple($price, 0.01);
+
+        return $this->coinCurrency($price, $display);
+    }
+
     public function getWechatOpenid()
     {
+        return 2;
         $isMicroAgent = strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
         $hasOauthToken = $this->container->get('session')->has('oauth_token');
         if ($isMicroAgent && $hasOauthToken) {
@@ -102,12 +119,45 @@ class OrderExtension extends \Twig_Extension
         return implode($priceParts);
     }
 
+    public function coinCurrency($price, $displayPrefix = 1)
+    {
+        $priceParts = $this->getCurrency()->formatToCoinCurrency($price);
+
+        switch ($displayPrefix) {
+            case 1://number with coin_name end
+                unset($priceParts['prefix']);
+                break;
+
+            case 2://number with coin_name front
+                unset($priceParts['suffix']);
+                break;
+
+            default://number only
+                unset($priceParts['prefix']);
+                unset($priceParts['suffix']);
+                break;
+        }
+
+        return implode($priceParts);
+    }
+
     public function majorCurrency($price, $displayPrefix = 1)
     {
         $priceParts = $this->getCurrency()->formatToMajorCurrency($price);
-        if (!$displayPrefix) {
-            unset($priceParts['prefix']);
-            unset($priceParts['suffix']);
+
+        switch ($displayPrefix) {
+            case 1://number with "元" end
+                unset($priceParts['prefix']);
+                break;
+
+            case 2://number with "¥" front
+                unset($priceParts['suffix']);
+                break;
+
+            default://number only
+                unset($priceParts['prefix']);
+                unset($priceParts['suffix']);
+                break;
         }
 
         return implode($priceParts);
@@ -166,22 +216,22 @@ class OrderExtension extends \Twig_Extension
         $text = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('orderDisplayStatus', $displayStatus);
         switch ($displayStatus) {
             case 'notPaid':
-                $majorClass = 'label-warning';
+                $majorClass = 'color-warning';
                 break;
             case 'paid':
-                $majorClass = 'label-success';
+                $majorClass = 'color-success';
                 break;
             case 'refunded':
-                $majorClass = 'label-danger';
+                $majorClass = 'color-danger';
                 break;
             case 'closed':
-                $majorClass = 'label-default';
+                $majorClass = 'color-default';
                 break;
             default:
-                $majorClass = 'label-default';
+                $majorClass = 'color-default';
         }
 
-        return sprintf('<span class="label %s">%s</span>', $majorClass, $text);
+        return sprintf('<span class="%s">%s</span>', $majorClass, $text);
     }
 
     private function displayWebStatus($displayStatus)

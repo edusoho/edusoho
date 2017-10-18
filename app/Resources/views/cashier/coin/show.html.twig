@@ -14,7 +14,7 @@
         }) }}
       {% endif %}
     {% else %}
-      {{ 'pay_center.pay.coin.password_not_set.tips'|trans }} 
+      {{ 'pay_center.pay.coin.password_not_set.tips'|trans({ '%coin_name%':coinSetting.coin_name }) }} 
       <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">
         {{ 'pay_center.pay.set_pay_password'|trans }}
       </a>
@@ -26,16 +26,16 @@
   <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount|fen_to_yuan(0) }}" 
     data-coin-rate="{{ setting('coin.cash_rate') }}" data-price-type="{{ currency }}">
     <div class="form-group cd-form-group">
-      <label>{{ 'pay_center.pay.coin_input_tips'|trans }}</label>
-      <input type="text" class="form-control js-coin-amount" autocomplete="off" name="coinAmount" value="0.00">
+      <input type="text" name="coinAmount" class="hidden">
+      <input type="text" class="form-control form-control-sm js-coin-amount" autocomplete="off" name="coinAmount" 
+        placeholder="{{ 'pay_center.pay.coin_input_placeholder'|trans({'%coin_name%':coinSetting.coin_name  }) }}">
     </div>
     <div class="form-group cd-form-group">
-      <label>{{ 'user.fields.pay_password'|trans }}</label>
-      <input type="password" class="form-control js-pay-password" name="payPassword" autocomplete="off"
+      <input type="password" class="form-control form-control-sm js-pay-password" name="payPassword" autocomplete="off"
             data-url="{{ path('cashier_password_check') }}" data-type="get"
-            data-display="{{ 'order.confirm.forget_password_tips'|trans }}">
+            data-display="{{ 'order.confirm.forget_password_tips'|trans }}" placeholder="{{ 'pay_center.pay.password_input_placeholder'|trans }}">
     </div>
-    <a href="{{path('settings_find_pay_password')}}" target='_blank' class="cd-link-gray cd-ml16 hidden-xs">
+    <a href="{{path('settings_find_pay_password')}}" target='_blank' class="cd-link-gray cd-ml16 hidden-xs cd-text-xs">
       {{ 'order.confirm.forget_password_btn'|trans }}
     </a>
   </div>

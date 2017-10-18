@@ -48,6 +48,16 @@ orderStatus:
     fail: Fail
     closed: Closed
 
+orderItemType:
+    course: course
+    classroom: classroom
+    vip: VIP
+
+refundItemType:
+    course: course
+    classroom: classroom
+    vip: VIP
+
 orderDisplayStatus:
     notPaid: notPaid
     paid: paid
@@ -57,6 +67,12 @@ orderDisplayStatus:
 refundStatus:
     auditing: Applied
     refunding: Refunding
+    refunded: Success
+    refused: Failed
+    cancel: Cancelled
+
+refundDisplayStatus:
+    auditing: Applied
     refunded: Success
     refused: Failed
     cancel: Cancelled
@@ -72,7 +88,7 @@ payment:
     iosiap: iOSiap
     outside: Outside
     coin: Coin
-    llpay: LLpay
+    lianlianpay: lianlianpay
     marketing: marketing
 
 orderSource:
@@ -81,12 +97,16 @@ orderSource:
     outside: Outside
    
 newPayment:
-    none: --
     alipay: Alipay
     wechat: Wechat
     heepay: Heepay
     quickpay: Quickpay
     llpay: LLpay
+
+source:
+    self: Self
+    outside: Outside
+    marketing: Marketing
 
 moneyRecordType:
     income: Income

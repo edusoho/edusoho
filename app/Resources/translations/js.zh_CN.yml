@@ -678,6 +678,7 @@ json_response.must_choose_question.message: 请先选择题目
 json_response.cannot_send_message_self.message: 不能给自己发私信哦！
 json_response.receiver_not_exist.message: 该收件人不存在
 
+validate_old.positive_currency.message: 请输入大于等于0的有效价格，最多两位小数，整数位不超过8位！
 validate_old.required.message: 请输入{{display}}
 validate_old.valid_email_input.message: %display%的格式不正确
 validate_old.valid_url_input.message: %display%的格式不正确
@@ -744,5 +745,5 @@ cashier.confirm.title: 订单支付中
 cashier.confirm.success: 支付完成
 cashier.confirm.pick_again: 重选支付方式
 cashier.confirm.desc: |
-  请再新开页面中完成订单支付。<br>
+  请在新开页面中完成订单支付。<br>
   如在支付过程中遇到问题，请联系网站客服解决。<br>

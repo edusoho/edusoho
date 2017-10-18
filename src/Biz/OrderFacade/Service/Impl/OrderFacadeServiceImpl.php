@@ -28,7 +28,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'created_reason' => 'site.join_by_purchase',
             'price_type' => 'CNY',
             'currency_exchange_rate' => $currency->exchangeRate,
-            'refund_deadline' => $this->getRefundDeadline(),
+            'expired_refund_days' => $this->getRefundDays(),
         );
 
         $orderItems = $this->makeOrderItems($product);
@@ -36,6 +36,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
         return $order;
+    }
+
+    private function getRefundDays()
+    {
+        $refundSetting = $this->getSettingService()->get('refund');
+
+        return empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
     }
 
     private function getRefundDeadline()
@@ -145,6 +152,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         } else {
             throw $this->createServiceException("The {$orderItem['target_type']} product not found");
         }
+    }
+
+    public function sumOrderItemPayAmount($conditions)
+    {
+        return $this->getOrderService()->sumOrderItemPayAmount($conditions);
     }
 
     public function checkOrderBeforePay($sn, $params)

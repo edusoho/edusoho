@@ -119,7 +119,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         }
         $orderItem = reset($orderItems);
 
-        $params = array('targetId' => $orderItem['target_id']);
+        $params = array('targetId' => $orderItem['target_id'], 'orderId' => $order['id'], 'orderItemId' => $orderItem['id']);
         $product = $this->getOrderFacadeService()->getOrderProduct($orderItem['target_type'], $params);
 
         return array($product, $orderItem);

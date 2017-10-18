@@ -328,6 +328,7 @@ finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
 finance.balance: Balance
+finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
@@ -371,11 +372,14 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
+order.product_name: 商品名称
 order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
 order.deduct: Order deduct
 order.item_type: Order type
+order.product_type: 商品类型
+order.source:  渠道
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
@@ -459,6 +463,7 @@ order.paid_course.title: 已购买课程
 order.paid_course.content: 之前购买过的课程能够抵扣对应金额
 order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
+order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
 order.refund.apply_for_btn: 'Apply for refund'
@@ -483,9 +488,11 @@ pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
 pay_center.pay.price: 订单价格
-pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用虚拟币抵扣
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用%coin_name%抵扣
 pay_center.pay.set_pay_password: 设置支付密码
 pay_center.pay.coin_input_tips: 本次使用
+pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
+pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
 pay_center.pay.mode: 'Payment methods'
 pay_center.pay.mode.tips: 选择合适的现金支付方式
@@ -2460,6 +2467,7 @@ user.orders.detail.modal_title: 'Order Details'
 user.orders.detail.special_operations: 'Special operation'
 user.orders.detail.log_info: 'Log info'
 user.orders.detail.operator: Operator
+user.orders.detail.Ip: IP
 user.orders.detail.log_createdTime: 'Created at'
 user.orders.detail.empty: 'No transaction log'
 user.orders.refund_record_title: 'Refund record'
@@ -5584,7 +5592,7 @@ admin.cdn.status.close: Close
 admin.cdn.input_placeholder: 'If leave empty, then it will be default URL'
 admin.order.paid_time_range.input_placeholder: 'Payment time'
 admin.order.keyword: Keywords
-admin.order.buyer: 'Buyer''s user name'
+admin.order.buyer: 'Buyer'
 admin.order.title: Order title
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name
@@ -5778,7 +5786,7 @@ admin.coin_model.currency_tips: "1, Could not manually update the user's virtual
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
-admin.order_refund.title.placeholder: title
+admin.order_refund.title.placeholder: Product name
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
 admin.order_refund.title: 'Refund order'
 admin.order_refund.sn: sn
@@ -6472,11 +6480,13 @@ cashflow.user_name: username
 cashflow.created_time: createdTime
 cashflow.amount: amount
 cashflow.number: number
+cashflow.inflow: 收入
 cashflow.platform: platform
-cashflow.trade_sn: tradeSn
+cashflow.trade_sn: 交易号
 cashflow.user_truename: truename
 cashflow.user_email: emial
 cashflow.user_mobile: mobile
+cashflow.refund: 网校退款
 
 admin.cashflow.keyword: keyword
 

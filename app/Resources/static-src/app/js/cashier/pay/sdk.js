@@ -28,7 +28,7 @@ export default class PaySDK {
 		paySdk.checkOrderStatus();
 	}
 
-	cancelCheckOrder(){
+	cancelCheckOrder() {
 		let gateway = store.get('payment_gateway');
 		let paySdk = this.initPaySdk(gateway);
 		paySdk.cancelCheckOrder()
@@ -62,7 +62,6 @@ export default class PaySDK {
 		return paySdk;
 	}
 
-
 	getGateway(payment, isMobile, openid) {
 		let gateway = '';
 		switch (payment) {
@@ -75,7 +74,6 @@ export default class PaySDK {
 					gateway = 'WechatPay_Native';
 				}
 				break;
-
 			case 'alipay':
 				if (isMobile) {
 					gateway = 'Alipay_LegacyWap';

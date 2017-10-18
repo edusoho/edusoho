@@ -570,6 +570,11 @@ admin_order_refunds:
     defaults: { _controller: AppBundle:Admin/OrderRefund:refunds }
     permissions: [admin_finance]
 
+admin_order_refund_detail:
+    path: /order/refund/{id}/detail
+    defaults: { _controller: AppBundle:Admin/OrderRefund:refundDetail }
+    permissions: [admin_finance]
+
 admin_order_audit_refund:
     path: /order/{refundId}/audit_refund
     defaults: { _controller: AppBundle:Admin/OrderRefund:auditRefund }
@@ -2279,4 +2284,4 @@ admin_online:
 
 admin_bill:
     path: /bill/{type}
-    defaults: { _controller: AppBundle:Admin/Bill:Bill } 
+    defaults: { _controller: AppBundle:Admin/Bill:bill } 

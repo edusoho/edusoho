@@ -5,7 +5,7 @@
   cursor: pointer;
   width: 140px;
   height: 40px;
-  border: 2px solid #f5f5f5;
+  border: 2px solid rgba(0, 0, 0, 0.08);
   position: relative;
   text-align: center;
   display: inline-block;
@@ -16,6 +16,9 @@
   transition: all 0.3s ease;
   @media(max-width: @screen-xs-max) {
     margin: 2px auto;
+  }
+  &:hover {
+    opacity: 0.8;
   }
   img {
     height: 40px;

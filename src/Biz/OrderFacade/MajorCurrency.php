@@ -10,7 +10,7 @@ class MajorCurrency
 
     const PREFIX = '￥';
 
-    const SUFFIX = '';
+    const SUFFIX = '元';
 
     const EXCHANGE_RATE = 1;
 

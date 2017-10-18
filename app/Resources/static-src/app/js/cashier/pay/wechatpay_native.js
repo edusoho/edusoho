@@ -21,14 +21,14 @@ export default class WechatPayNative extends BasePayment {
               <h4 class="modal-title">${Translator.trans('cashier.wechat_pay')}</h4>
             </div>
             
-            <div class="modal-body">
-              <div class="text-center">
+            <div class="modal-body text-center">
+              <div style="height: 270px; width: 270px; margin: 0 auto;">
                 <img class="cd-mb16 js-qrcode-img" src="">
-                <div class="cd-mb16">
-                  ${Translator.trans('cashier.wechat_pay.scan_qcode_pay_tips')}
-                </div>
-                <div class="cd-text-danger cd-mb32 js-pay-amount" style="font-size:16px;"></div>
               </div>
+              <div class="cd-mb16">
+                ${Translator.trans('cashier.wechat_pay.scan_qcode_pay_tips')}
+              </div>
+              <div class="cd-text-danger cd-mb32 js-pay-amount" style="font-size:16px;"></div>
             </div>
             
           </div>
