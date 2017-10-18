@@ -373,32 +373,32 @@ coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
 order.product_name: Product name
-order.product_price: 商品价格
-order.price_amount: 应付价格
+order.product_price: Product Price
+order.price_amount: Price payable
 order.paid_amount: Paid price
-order.paid_coin_amount: 实付虚拟币
-order.paid_cash_amount: 实付现金
-order.refund.deal_status: 处理状态
-order.refund.deal_time: 处理时间
-order.refund.deal_persion: 处理人
-order.refund_reason: 退款原因
-order.refund.detail: 退款详情
-order.refund_amount: 退款总额
-order.refund_coin_amount: 退款虚拟币
-order.refund_cash_amount: 退款现金
-order.refund_limit: 退款限制
-order.show_refund_detail: 查看退款
-order.refunded_cash_amount: 已退现金
-order.use_coupon: 使用优惠券
-order.refund_feedback: 反馈信息
-order.refund.id: 退款号
+order.paid_coin_amount: Paid coin
+order.paid_cash_amount: Paid cash
+order.refund.deal_status: Deal status
+order.refund.deal_time: Deal Time
+order.refund.deal_persion: Deal persion
+order.refund_reason: Refund reason
+order.refund.detail: Refund detail
+order.refund_amount: Refund amount
+order.refund_coin_amount: Refund coin
+order.refund_cash_amount: Refund Cash
+order.refund_limit: Refund limit
+order.show_refund_detail: Show refund
+order.refunded_cash_amount: Refunded cash
+order.use_coupon: Use coupon
+order.refund_feedback: feedback
+order.refund.id: Refund id
 order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
 order.deduct: Order deduct
 order.item_type: Order type
-order.product_type: 商品类型
-order.source:  渠道
+order.product_type: Product type
+order.source:  source
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
@@ -5632,9 +5632,9 @@ admin.bill.time_option.last_three_month: 'Last 90 days'
 admin.coin.type_option.default: 'All records'
 admin.coin.type_option.inflow: 'Recharges'
 admin.coin.type_option.outflow: 'Consumers'
-admin.coin.school_out_amount: 网校总发放
-admin.coin.school_in_amount: 网校总回收
-admin.coin.school_wait_in_amount: 网校待回收
+admin.coin.school_out_amount: School total out amount
+admin.coin.school_in_amount: School total in amount
+admin.coin.school_wait_in_amount: School total wait in amount
 admin.coin.created_time_option.all: 'All records'
 admin.coin.created_time_option.oneWeek: 'Last 7 days'
 admin.coin.created_time_option.oneMonth: 'Last 30 days'
