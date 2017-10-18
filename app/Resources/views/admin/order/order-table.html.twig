@@ -8,7 +8,10 @@
     <th>{{ 'order.discount_amount'|trans }}</th>
     <th>{{ 'order.real_pay'|trans }}</th>
     <th width="10%">{{'order.buyers'|trans }}</th>
-    <th>{{'order.source'|trans}}</th>
+    <th>
+      {{'order.source'|trans}} 
+      <span class="glyphicon glyphicon-question-sign color-gray text-sm" data-toggle="tooltip" data-placement="top"  title="{{ 'admin.order.tips'|trans }}"></span>
+    </th>
     <th width='60'>{{'user.orders.operation'|trans}}</th>
   </tr>
   </thead>
