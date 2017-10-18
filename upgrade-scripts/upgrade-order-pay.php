@@ -81,11 +81,11 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizPaymentTradeFromCashOrder', // done
             'migrateBizSecurityAnswer', // done
             'migrateBizPayAccount',   // done
-            'migrateBizUserBalance',  // done
             'migrateBizUserCashflowAsUser',
             'migrateBizUserCashflowAsSiteByCoin',
             'migrateBizUserCashflowAsSiteByMoney',
             'migrateBizUserCashflowPlatform',
+            'migrateBizUserBalance',  // done
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
             'migrateExitMemberOperationRecord',
@@ -173,9 +173,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 `sn`,
                 'self' as `source`,
                 '' as `created_reason`,
-                floor(`totalPrice`*100) as `price_amount`,
+                round(`totalPrice`*100) as `price_amount`,
                 `priceType` as `price_type`,
-                floor((`amount` + `coinAmount`/coinRate)*100) as `pay_amount`,
+                round((`amount` + `coinAmount`/coinRate)*100) as `pay_amount`,
                 `userId` as `user_id`,
                 '' as `callback`,
                 `sn` as `trade_sn`, -- trade_sn和sn一致
@@ -190,8 +190,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `created_user_id`, -- TODO 创建订单者
                 '' as `create_extra`, -- 不迁移data数据
                 '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
-                floor(`amount`*100) as `paid_cash_amount`,
-                floor(`coinAmount`*100) as `paid_coin_amount`,
+                round(`amount`*100) as `paid_cash_amount`,
+                round(`coinAmount`*100) as `paid_coin_amount`,
                 `refundEndTime` as `refund_deadline`,
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
@@ -267,8 +267,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
-                floor(`o`.`totalPrice`*100) as `price_amount`,
-                case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else floor(o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
+                round(`o`.`totalPrice`*100) as `price_amount`,
+                case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else round(o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
                 `o`.`targetId` as `target_id`,
                 `o`.`targetType` as `target_type`,
                 `o`.`paidTime` as `pay_time`,
@@ -356,7 +356,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`id` as `item_id`,
                 'coupon' as `deduct_type`,
                 c.`id` as `deduct_id`,               
-                floor(o.`couponDiscount`*100) as `deduct_amount`,
+                round(o.`couponDiscount`*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 o.`userId` as `user_id`,
                 0 as `seller_id`,
@@ -407,7 +407,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `item_id`,
                 'discount' as `deduct_type`,
                 `discountId` as `deduct_id`,              
-                floor(`discount`*100) as `deduct_amount`,
+                round(`discount`*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `userId` as `user_id`,
                 0 as `seller_id`,
@@ -461,17 +461,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`title` as `title`,
                 `r`.`orderId` as `order_id`,
                 `r`.`orderId` as `order_item_id`,
-                concat(`r`.`createdTime`, FLOOR(RAND() * 10000)) as `sn`,
+                concat(`r`.`createdTime`, round(RAND() * 10000)) as `sn`,
                 `r`.`userId` as `user_id`,
                 `r`.`reasonNote` as `reason`,
-                case when `r`.expectedAmount is null then 0 else floor(`r`.`expectedAmount`*100) end as `amount`,
+                case when `r`.expectedAmount is null then 0 else round(`r`.`expectedAmount`*100) end as `amount`,
                 'CYN' as `currency`,
                 `r`.`updatedTime` as `deal_time`,
                 `r`.`operator` as `deal_user_id`,
                 case when `r`.`status` = 'cancelled' then 'cancel' when `r`.`status` = 'created' then 'auditing' when `r`.`status` = 'success' then 'refunded' when `r`.`status` = 'failed' then 'refused' else `r`.`status` end as `status`,
                 '' as `deal_reason`, -- TODO 该信息是从日志表、消息表中获取
                 `r`.`userId` as `created_user_id`,
-                floor(`r`.`actualAmount`*100) as `refund_cash_amount`,
+                round(`r`.`actualAmount`*100) as `refund_cash_amount`,
                 0 as `refund_coin_amount`,
                 `r`.`createdTime` as `created_time`,
                 `r`.`updatedTime` as `updated_time`,
@@ -591,9 +591,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`status` as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
-                floor(o.`amount`*100),
-                floor(o.`coinAmount`*100) as `coin_amount`,
-                floor(o.`amount`*100) as `cash_amount`,
+                round(o.`amount`*100),
+                round(o.`coinAmount`*100) as `coin_amount`,
+                round(o.`amount`*100) as `cash_amount`,
                 o.`coinRate` as `rate`,
                 'purchase' as `type`,
                 o.`paidTime` as `pay_time`,
@@ -664,9 +664,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 `status` as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
-                floor(`amount`*100),
+                round(`amount`*100),
                 '0' as `coin_amount`,
-                floor(`amount`*100) as `cash_amount`,
+                round(`amount`*100) as `cash_amount`,
                 '1' as `rate`, -- TODO 当前系统汇率
                 'recharge' as `type`,
                 `paidTime` as `pay_time`,
@@ -798,7 +798,7 @@ class EduSohoUpgrade extends AbstractUpdater
             select
               u.`id`,
               u.`id` as `user_id`,
-              case when ca.`cash`*100 is null then 0 else floor(ca.`cash`*100) end as `amount`,
+              case when ca.`cash`*100 is null then 0 else round(ca.`cash`*100) end as `amount`,
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
@@ -836,7 +836,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $migrateType = "uf.`type` as `type`,";
             $migrateSn = "uf.`sn` as `sn`,";
 
-            $whereSql = "uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}";
+            $whereSql = "uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}";
         }
 
         if ($userIdType=='site') {
@@ -853,7 +853,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $whereSql = "uf.`cashType`='coin' and ";
             }
 
-            $whereSql = "{$whereSql} uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0) LIMIT 0, {$this->pageSize}";
+            $whereSql = "{$whereSql} uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0) LIMIT 0, {$this->pageSize}";
 
         }
 
@@ -878,6 +878,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `platform`,
                 `amount_type`,
                 `created_time`,
+                `action`,
                 `migrate_id`
             )
             select
@@ -887,14 +888,15 @@ class EduSohoUpgrade extends AbstractUpdater
                 {$migrateUserId}
                 uf.`userId` as `buyer_id`,
                 {$migrateType}
-                floor(uf.`amount`*100) as `amount`,
+                round(uf.`amount`*100) as `amount`,
                 case when uf.`cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
-                0 as `user_balance`, -- TODO
+                uf.`cash` as `user_balance`, -- TODO
                 uf.`orderSn` as `order_sn`,
                 uf.`orderSn` as `trade_sn`,
                 case when uf.`payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then uf.`payment` else 'none' end as `platform`,
                 case when uf.`cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
                 uf.`createdTime` as `created_time`,
+                case when uf.`category` = 'charge' then 'recharge' else 'purchase' end  as `action`,
                 uf.`id` as `migrate_id`
             from `cash_flow` uf left join orders o on uf.orderSn = o.sn where {$whereSql}
         ";
