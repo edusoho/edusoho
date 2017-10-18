@@ -848,7 +848,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 case when `cashType`='Coin' then 'coin' else 'CNY' end as `currency`,
                 0 as `user_balance`, -- TODO
                 `orderSn` as `order_sn`,
-                '' as `trade_sn`,
+                `orderSn` as `trade_sn`,
                 case when `payment` is not null then `payment` else '' end as `platform`,
                 case when `cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
                 `createdTime` as `created_time`,
