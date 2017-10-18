@@ -119,7 +119,6 @@ class Currency
 
         $parts['suffix'] = !empty($this->coinSetting['coin_name']) ? $this->coinSetting['coin_name'] : CoinCurrency::SUFFIX;
 
-
         return $parts;
     }
 

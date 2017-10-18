@@ -76,6 +76,7 @@ class OrderExtension extends \Twig_Extension
     public function toCoin($price, $display = 0)
     {
         $price = MathToolkit::simple($price, 0.01);
+
         return $this->coinCurrency($price, $display);
     }
 
