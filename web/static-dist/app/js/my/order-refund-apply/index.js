@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/my/order-refund-apply/index"],[function(e,r){"use strict";var a=$("#refund-apply-form");a.validate({rules:{reason:{required:!0}}})}]);
