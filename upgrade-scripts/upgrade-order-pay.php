@@ -455,26 +455,26 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             )
             select 
-                `id`,
-                '' as `title`,
-                `orderId` as `order_id`,
-                `orderId` as `order_item_id`,
-                concat(`createdTime`, FLOOR(RAND() * 10000)) as `sn`,
-                `userId` as `user_id`,
-                `reasonNote` as `reason`,
-                case when expectedAmount is null then 0 else floor(`expectedAmount`*100) end as `amount`,
+                `r`.`id`,
+                `o`.`title` as `title`,
+                `r`.`orderId` as `order_id`,
+                `r`.`orderId` as `order_item_id`,
+                concat(`r`.`createdTime`, FLOOR(RAND() * 10000)) as `sn`,
+                `r`.`userId` as `user_id`,
+                `r`.`reasonNote` as `reason`,
+                case when `r`.expectedAmount is null then 0 else floor(`r`.`expectedAmount`*100) end as `amount`,
                 'CYN' as `currency`,
-                `updatedTime` as `deal_time`,
-                `operator` as `deal_user_id`,
-                `status`,
+                `r`.`updatedTime` as `deal_time`,
+                `r`.`operator` as `deal_user_id`,
+                `r`.`status`,
                 '' as `deal_reason`, -- TODO 该信息是从日志表、消息表中获取
-                `userId` as `created_user_id`,
-                floor(`actualAmount`*100) as `refund_cash_amount`,
+                `r`.`userId` as `created_user_id`,
+                floor(`r`.`actualAmount`*100) as `refund_cash_amount`,
                 0 as `refund_coin_amount`,
-                `createdTime` as `created_time`,
-                `updatedTime` as `updated_time`,
-                `id` as `migrate_id`
-            from `order_refund` where `id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, {$this->pageSize}
+                `r`.`createdTime` as `created_time`,
+                `r`.`updatedTime` as `updated_time`,
+                `r`.`id` as `migrate_id`
+            from `order_refund` `r` left join `orders` `o` on `r`.`orderId`=`o`.`id` where `id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, {$this->pageSize}
         ");
 
         $this->logger('info', "处理biz_order_refund的数据，当前页码{$page}");
