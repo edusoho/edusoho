@@ -274,82 +274,66 @@ class CoinController extends BaseController
 
     public function userRecordsAction(Request $request)
     {
-        $sort = $request->query->get('sort', 'balance');
+        $sort = $request->query->get('sort', 'amount');
         $direction = $request->query->get('direction', 'DESC');
-        $condition['amount_type'] = 'coin';
-        $condition['except_user_id'] = 0;
+        $conditions['except_user_id'] = 0;
 
         $fields = $request->query->all();
 
         if (!empty($fields)) {
             $convertCondition = $this->convertFiltersToCondition($fields);
-            $condition = array_merge($condition, $convertCondition);
+            $conditions = array_merge($conditions, $convertCondition);
         }
 
-        $outflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
-            'user_id' => 0,
-            'amount_type' => 'coin',
-            'type' => 'outflow',
-        ));
-        $inflowAmount = $this->getAccountProxyService()->sumColumnByConditions('amount', array(
-            'user_id' => 0,
-            'amount_type' => 'coin',
-            'type' => 'inflow',
-        ));
+        $schoolBalance = $this->getAccountProxyService()->getUserBalanceByUserId(0);
 
-        if (isset($condition['userId'])) {
-            if ($condition['userId'] == 0) {
-                $userIds = array();
+        if (isset($conditions['user_id'])) {
+            if ($conditions['user_id'] == 0) {
                 $users = array();
-                $condition['userId'] = 'null';
+                $balances = array();
                 goto response;
             }
-
-            $userIds = array($condition['userId']);
-            $user = $this->getUserService()->getUser($condition['userId']);
-            $users = array($condition['userId'] => $user);
+            $user = $this->getUserService()->getUser($conditions['user_id']);
+            $users = array($conditions['user_id'] => $user);
+            $balances = array();
+            $balances[] = $this->getAccountProxyService()->getUserBalanceByUserId($conditions['user_id']);
 
             response:
 
             return $this->render('admin/coin/coin-user-records.html.twig', array(
-                'outflowAmount' => $outflowAmount,
-                'inflowAmount' => $inflowAmount,
-                'condition' => $condition,
-                'userIds' => $userIds,
+                'schoolBalance' => $schoolBalance,
+                'balances' => $balances,
                 'users' => $users,
             ));
         }
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getAccountProxyService()->countUsersByConditions($condition),
+            $this->getAccountProxyService()->countBalances(
+                array(
+                    'except_user_id' => 0
+                )
+            ),
             20
         );
+        $balances = $this->getAccountProxyService()->searchBalances(
+            array(
+                'except_user_id' => 0
+            ),
+            array($sort => $direction),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
 
-        if (in_array($sort, array('recharge', 'consume'))) {
-            $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderBySumColumn(
-                'amount',
-                $condition,
-                $direction,
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        } else {
-            $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderByBalance(
-                $condition,
-                $direction,
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
+        );
+
+        $userIds = ArrayToolkit::column($balances, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/coin/coin-user-records.html.twig', array(
-            'outflowAmount' => $outflowAmount,
-            'inflowAmount' => $inflowAmount,
+            'schoolBalance' => $schoolBalance,
+            'balances' => $balances,
             'paginator' => $paginator,
-            'userIds' => $userIds,
             'users' => $users,
         ));
     }
@@ -467,7 +451,7 @@ class CoinController extends BaseController
     {
         if (!empty($condition['keyword'])) {
             $user = $this->getUserService()->getUserByNickname($condition['keyword']);
-            $condition['userId'] = $user ? $user['id'] : 0;
+            $condition['user_id'] = $user ? $user['id'] : 0;
             unset($condition['keyword']);
         }
 

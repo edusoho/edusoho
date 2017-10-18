@@ -18,9 +18,9 @@
   </form>
   
   <p class="text-muted">
-    <span class="mrl">{{ '网校总发放'|trans }}：<strong class="color-success">{{ outflowAmount|fen_to_yuan(0) }}</strong></span>
-    <span class="mrl">{{ '网校总回收'|trans }}：<strong class="color-warning">{{ inflowAmount|fen_to_yuan(0) }}</strong></span>
-    <span class="mrl">{{ '网校待回收'|trans }}：<strong class="color-info">{{ (outflowAmount-inflowAmount)|fen_to_yuan(0) }}</strong></span>
+    <span class="mrl">{{ '网校总发放'|trans }}：<strong class="color-success">{{ schoolBalance.purchase_amount|fen_to_yuan(0) }}</strong></span>
+    <span class="mrl">{{ '网校总回收'|trans }}：<strong class="color-warning">{{ schoolBalance.recharge_amount|fen_to_yuan(0) }}</strong></span>
+    <span class="mrl">{{ '网校待回收'|trans }}：<strong class="color-info">{{ (schoolBalance.purchase_amount-schoolBalance.recharge_amount)|fen_to_yuan(0) }}</strong></span>
   </p>
   <div class="table-responsive">
     <table class="table table-striped">
@@ -28,23 +28,23 @@
       {% set direction = app.request.query.get('direction', 'desc') %}
       <tr>
         <th width="30%">{{'user'|trans}}</th>
-        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge', path: 'admin_coin_user_records'} %}</th>
-        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'consume', path: 'admin_coin_user_records'} %}</th>
-        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'balance', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'purchase_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'amount', path: 'admin_coin_user_records'} %}</th>
         <th>{{'admin.coin.operation'|trans}}</th>
       </tr>
 
-      {% if userIds %}
-        {% for userId in userIds %}
+      {% if balances %}
+        {% for balance in balances %}
           <tr>
-            <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
-            <td class="color-success"> {{ user_coin_amount('inflow', userId)|default(0)|fen_to_yuan(0) }}</td>
-            <td class="color-warning"> {{ user_coin_amount('outflow', userId)|default(0)|fen_to_yuan(0) }}</td>
-            <td style="color:blue;"> {{ user_balance(userId).amount|default(0)|fen_to_yuan(0) }}</td>
+            <td> {{ web_macro.user_link(users[balance['user_id']] , 'link-muted') }}</td>
+            <td class="color-success"> {{ balance.recharge_amount|fen_to_yuan(0) }}</td>
+            <td class="color-warning"> {{ balance.purchase_amount|default(0)|fen_to_yuan(0) }}</td>
+            <td style="color:blue;"> {{ balance.amount|default(0)|fen_to_yuan(0) }}</td>
             <td>
-              <a {% if user_balance(userId).amount <= 0 %}class="disabled"{% endif %}
+              <a {% if balance.amount <= 0 %}class="disabled"{% endif %}
               data-toggle="modal" data-target="#modal"
-              data-url="{{ path('admin_coin_flow_detail',{userId:userId}) }}"
+              data-url="{{ path('admin_coin_flow_detail',{userId:balance.user_id}) }}"
               href="javascript:;">{{'form.btn.view'|trans}}</a>
             </td>
           </tr>
@@ -52,7 +52,7 @@
       {% endif %}
 
     </table>
-    {% if not userIds %}
+    {% if not balances %}
       <div class="empty">{{'site.datagrid.empty'|trans}}</div>{% endif %}
     {% if paginator|default(null) %}
       {{ admin_macro.paginator(paginator) }}

@@ -14,13 +14,6 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         return parent::countUsersByConditions($conditions);
     }
 
-    public function searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit)
-    {
-        $conditions = $this->prepareConditions($conditions);
-
-        return parent::searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit);
-    }
-
     public function countUserCashflows($conditions)
     {
         $conditions = $this->prepareConditions($conditions);
