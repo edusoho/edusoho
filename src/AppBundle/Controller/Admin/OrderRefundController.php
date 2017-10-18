@@ -66,6 +66,10 @@ class OrderRefundController extends BaseController
     {
         $conditions = array_filter($conditions);
 
+        if (!empty($conditions['refundItemType'])) {
+            $conditions['order_item_refund_target_type'] = $conditions['refundItemType'];
+        }
+
         if (!empty($conditions['orderRefundSn'])) {
             $conditions['sn'] = $conditions['orderRefundSn'];
             unset($conditions['orderRefundSn']);
