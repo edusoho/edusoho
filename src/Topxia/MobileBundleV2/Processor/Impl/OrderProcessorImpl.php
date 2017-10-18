@@ -75,7 +75,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $trade = $this->getPayService()->rechargeByIap($data);
 
         return array(
-            'status' => $trade,
+            'status' => true,
         );
 
 //        return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
