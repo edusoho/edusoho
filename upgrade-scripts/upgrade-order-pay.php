@@ -83,7 +83,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizPayAccount',   // done
             'migrateBizUserBalance',  // done
             'migrateBizUserCashflowAsUser',
-            'migrateBizUserCashflowAsSite',
+            'migrateBizUserCashflowAsSiteByCoin',
+            'migrateBizUserCashflowAsSiteByMoney',
             'migrateBizUserCashflowPlatform',
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
@@ -814,31 +815,52 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->migrateBizUserCashflow($page, 'user');
     }
 
-    protected function migrateBizUserCashflowAsSite($page)
+    protected function migrateBizUserCashflowAsSiteByCoin($page)
     {
-        return $this->migrateBizUserCashflow($page, 'site');
+        return $this->migrateBizUserCashflow($page, 'site', 'coin');
     }
 
-    protected function migrateBizUserCashflow($page, $type)
+    protected function migrateBizUserCashflowAsSiteByMoney($page)
+    {
+        return $this->migrateBizUserCashflow($page, 'site', 'money');
+    }
+
+    protected function migrateBizUserCashflow($page, $userIdType, $amountType = '')
     {
         $this->addMigrateId('biz_user_cashflow');
 
         $connection = $this->getConnection();
 
-        $whereSql = 'user_id<>0';
-        if ($type == 'site') {
-            $whereSql = 'user_id=0';
+        if ($userIdType == 'user') {
+            $migrateUserId = 'uf.`userId` as `user_id`,';
+            $migrateType = "uf.`type` as `type`,";
+            $migrateSn = "uf.`sn` as `sn`,";
+
+            $whereSql = "uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}";
         }
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where `id` not in (select `migrate_id` from `biz_user_cashflow` where {$whereSql})");
+        if ($userIdType=='site') {
+            $migrateUserId = '0 as `user_id`,';
+            $migrateType = "case when `type`='inflow' then 'outflow' when `type`='outflow' then 'inflow' else `type` end as `type`,";
+            $migrateSn = "concat(uf.`sn`,'0') as `sn`,";
+
+            $whereSql = '';
+            if($amountType == 'money') {
+                $whereSql = "uf.`type` = 'outflow' and uf.`cashType`='RMB' and ";
+            }
+
+            if($amountType == 'coin') {
+                $whereSql = "uf.`cashType`='coin' and ";
+            }
+
+            $whereSql = "{$whereSql} uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0) LIMIT 0, {$this->pageSize}";
+
+        }
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_flow` uf where {$whereSql}");
         if (empty($count)) {
             return 1;
         }
-
-
-        $migrateUserId = $type == 'user' ? 'uf.`userId` as `user_id`,' : '0 as `user_id`,';
-        $migrateType = $type == 'user' ? "uf.`type` as `type`," : "case when `type`='inflow' then 'outflow' when `type`='outflow' then 'inflow' else `type` end as `type`,";
-        $migrateSn = $type == 'user' ? "uf.`sn` as `sn`," : "concat(uf.`sn`,'0') as `sn`,";
 
         $sql = "
             insert into `biz_user_cashflow` (
@@ -874,12 +896,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 case when uf.`cashType`='Coin' then 'coin' else 'money' end as `amount_type`,
                 uf.`createdTime` as `created_time`,
                 uf.`id` as `migrate_id`
-            from `cash_flow` uf left join orders o on uf.orderSn = o.sn where uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where {$whereSql}) LIMIT 0, {$this->pageSize}
+            from `cash_flow` uf left join orders o on uf.orderSn = o.sn where {$whereSql}
         ";
 
         $connection->exec($sql);
 
-        $this->logger('info', "处理{$type}的biz_user_cashflow的数据，当前页码{$page}");
+        $this->logger('info', "处理{$userIdType}的biz_user_cashflow的数据，当前页码{$page}");
 
         return $page + 1;
     }
