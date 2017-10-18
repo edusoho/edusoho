@@ -36,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function getCourseTaskByCourseIdAndCopyId($courseId, $copyId)
     {
-        $task = $this->getTaskDao()->getByCopyId($copyId);
+        $task = $this->getTaskDao()->getByCourseIdAndCopyId($courseId, $copyId);
         if (empty($task) || $task['courseId'] != $courseId) {
             return array();
         }
