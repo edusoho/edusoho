@@ -78,15 +78,25 @@ class MessageServiceImpl extends BaseService implements MessageService
             $message = $this->getMessageDao()->get($id);
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['fromId'], $message['toId']);
             if (!empty($conversation)) {
-                $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
+                $fields = array(
+                    'latestMessageContent' => '一条私信被管理员删除。',
+                );
+                $this->getConversationDao()->updateByConversationId($conversation['id'], $fields);
             }
 
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['toId'], $message['fromId']);
             if (!empty($conversation)) {
-                $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
+                $fields = array(
+                    'latestMessageContent' => '一条私信被管理员删除。',
+                );
+                $this->getConversationDao()->updateByConversationId($conversation['id'], $fields);
             }
-
-            $this->getMessageDao()->delete($id);
+            
+            $content = "已删除。";
+            $fields = array(
+                'content' => $content,
+            );
+            $this->getMessageDao()->update($id, $fields);
         }
 
         return true;

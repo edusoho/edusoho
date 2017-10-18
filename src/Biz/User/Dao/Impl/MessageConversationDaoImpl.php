@@ -14,6 +14,13 @@ class MessageConversationDaoImpl extends GeneralDaoImpl implements MessageConver
         return $this->getByFields(array('fromId' => $fromId, 'toId' => $toId));
     }
 
+    public function updateByConversationId($conversationId, array $fields)
+    {
+        return $this->db()->update($this->table, $fields, array(
+            'id' => $conversationId,
+        ));
+    }
+
     public function declares()
     {
         return array(
