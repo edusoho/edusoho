@@ -466,7 +466,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'CYN' as `currency`,
                 `r`.`updatedTime` as `deal_time`,
                 `r`.`operator` as `deal_user_id`,
-                `r`.`status`,
+                case when `r`.`status` = 'cancelled' then 'cancel' when `r`.`status` = 'created' then 'auditing' when `r`.`status` = 'success' then 'refunded' when `r`.`status` = 'failed' then 'refused' else `r`.`status` end as `status`,
                 '' as `deal_reason`, -- TODO 该信息是从日志表、消息表中获取
                 `r`.`userId` as `created_user_id`,
                 floor(`r`.`actualAmount`*100) as `refund_cash_amount`,
