@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\DateToolkit;
-use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
@@ -886,7 +885,6 @@ class CourseManageController extends BaseController
         foreach ($orders as &$order) {
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
-            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
