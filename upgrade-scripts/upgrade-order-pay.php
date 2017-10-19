@@ -815,11 +815,12 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
+    // TODO 处理时间过长
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_user_balance ub set ub.purchase_amount = (select sum(amount) from biz_user_cashflow uc where ub.user_id=uc.user_id and uc.amount_type='coin' and uc.type='outflow') where ub.user_id in (select DISTINCT user_id from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow');");
-        $connection->exec("update biz_user_balance ub set ub.recharge_amount = (select sum(amount) from biz_user_cashflow uc where ub.user_id=uc.user_id and uc.amount_type='coin' and uc.type='inflow') where ub.user_id in (select DISTINCT user_id from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow');");
+        $connection->exec("update biz_user_balance ub, (select DISTINCT user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow') a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
+        $connection->exec("update biz_user_balance ub, (select DISTINCT user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow') a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
 
         return 1;
     }
