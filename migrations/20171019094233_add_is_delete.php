@@ -20,6 +20,5 @@ class AddIsDelete extends Migration
      */
     public function down()
     {
-
     }
 }

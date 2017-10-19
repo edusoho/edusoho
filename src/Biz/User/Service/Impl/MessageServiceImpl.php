@@ -11,7 +11,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function countMessages($conditions)
     {
         $conditions = $this->filterMessageConditions($conditions);
-        
+
         return $this->getMessageDao()->count($conditions);
     }
 
