@@ -79,6 +79,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizOrderLog',
             'migrateBizPaymentTrade', // done
             'migrateBizPaymentTradeFromCashOrder', // done
+            'updateBizPaymentTrade',
             'updateBizPaymentTradePlatforms',
             'migrateBizSecurityAnswer', // done
             'migrateBizPayAccount',   // done
@@ -186,7 +187,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `sn` as `trade_sn`, -- trade_sn和sn一致
                 case when `status` in ('paid', 'refunding') then 'success' when `status` = 'cancelled' then 'closed' else `status` end as `status`,
                 `paidTime` as `pay_time`,
-                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then `payment` else 'none' end as `payment`,
+                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay', 'iosiap') then `payment` else 'none' end as `payment`,
                 `paidTime` as `finish_time`,
                 case when `status` = 'cancelled' then `updatedTime` else 0 end as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
                 '' as `close_data`, -- TODO 当订单关闭状态时的数据, 从日志中取得
@@ -216,6 +217,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection->exec("update biz_order set source = 'outside' where migrate_id in (select id from orders where payment='outside');");
 
         $connection->exec("update biz_order set payment = 'lianlianpay' where payment = 'llpay';");
+        $connection->exec("update biz_order set payment = 'iap' where payment = 'iosiap';");
         $connection->exec("update biz_order set payment = 'wechat' where payment = 'wxpay';");
 
         $this->logger('info', "更新处理biz_orders数据，当前页码{$page}");
@@ -664,7 +666,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `title`,
                 `sn` as `trade_sn`,
                 '' as `order_sn`,
-                `payment` as `platform`,
+                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay', 'iosiap') then `payment` else 'none' end as `payment`,
                 '' as `platform_sn`,
                 `status` as `status`,
                 'money' as `price_type`,
@@ -692,6 +694,19 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "处理biz_payment_trade的现金订单数据，当前页码{$page}");
 
         return $page + 1;
+    }
+
+    protected function updateBizPaymentTrade($page)
+    {
+        $connection = $this->getConnection();
+
+        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where payment = 'llpay';");
+        $connection->exec("update biz_payment_trade set platform = 'iap' where payment = 'iosiap';");
+        $connection->exec("update biz_payment_trade set platform = 'wechat' where payment = 'wxpay';");
+
+        $this->logger('info', "更新处理biz_payment_trade的platform数据，当前页码{$page}");
+
+        return 1;
     }
 
     protected function migrateBizSecurityAnswer($page)
@@ -815,7 +830,6 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    // TODO 处理时间过长
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
     {
         $connection = $this->getConnection();
