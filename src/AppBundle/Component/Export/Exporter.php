@@ -70,7 +70,7 @@ abstract class Exporter implements ExporterInterface
             'success' => '1',
         );
     }
-    
+
     //获得导出分页参数
     public function buildParameter($conditions)
     {

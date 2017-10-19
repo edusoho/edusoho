@@ -72,11 +72,15 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             'user_id' => $user['id']
         );
 
-        $trade = $this->getPayService()->rechargeByIap($data);
+        try {
+            $trade = $this->getPayService()->rechargeByIap($data);
 
-        return array(
-            'status' => $trade,
-        );
+            return array(
+                'status' => $trade,
+            );
+        } catch (\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
 
 //        return $this->requestReceiptData($user['id'], $amount, $receipt, $transactionId, false);
     }

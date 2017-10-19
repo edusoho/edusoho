@@ -66,7 +66,7 @@
                 {{ 'admin.order_refund.sn'|trans }}：{{ refund.sn }}
               </div>
             </td>
-            <td>{{ refund.amount|fen_to_yuan(0) }}</td>
+            <td>{{ refund.amount|to_cash(0) }}</td>
             <td>
               {{ admin_macro.user_link(user) }}
             </td>

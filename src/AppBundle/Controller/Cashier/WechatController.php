@@ -70,9 +70,13 @@ class WechatController extends PaymentController
     public function returnAction(Request $request)
     {
         $tradeSn = $request->query->get('tradeSn');
-        $this->getPayService()->queryTradeFromPlatform($tradeSn);
+        $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
-        return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)));
+        if ($trade['status'] == 'paid') {
+            return $this->redirect($this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn'])));
+        } else {
+            return $this->redirect($this->generateUrl('cashier_show', array('sn' => $trade['order_sn'])));
+        }
     }
 
     public function notifyAction(Request $request, $payment)

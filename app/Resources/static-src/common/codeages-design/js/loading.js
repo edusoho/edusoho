@@ -9,7 +9,6 @@ let template = (loadingClass = '') => {
 }
 
 $(document).ajaxSend(function(a, b, c) {
-  console.log(a, b, c);
 
   let url = c.url;
 

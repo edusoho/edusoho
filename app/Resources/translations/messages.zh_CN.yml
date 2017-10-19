@@ -459,6 +459,25 @@ coin.pay.submit.request: 正在跳转到支付网关
 order.charge: 收费
 order.name: 订单名称
 order.product_name: 商品名称
+order.product_price: 商品价格
+order.price_amount: 应付价格
+order.paid_amount: 实付价格
+order.paid_coin_amount: 实付虚拟币
+order.paid_cash_amount: 实付现金
+order.refund.deal_status: 处理状态
+order.refund.deal_time: 处理时间
+order.refund.deal_persion: 处理人
+order.refund_reason: 退款原因
+order.refund.detail: 退款详情
+order.refund_amount: 退款总额
+order.refund_coin_amount: 退款虚拟币
+order.refund_cash_amount: 退款现金
+order.refund_limit: 退款限制
+order.show_refund_detail: 查看退款
+order.refunded_cash_amount: 已退现金
+order.use_coupon: 使用优惠券
+order.refund_feedback: 反馈信息
+order.refund.id: 退款号
 order.created_time: 创建时间
 order.pay_time: 付款时间
 order.status: 订单状态
@@ -7104,6 +7123,9 @@ admin.coin.type_option.default: 全部记录
 admin.coin.type_option.inflow: 充值记录
 admin.coin.type_option.outflow: 消费记录
 
+admin.coin.school_out_amount: 网校总发放
+admin.coin.school_in_amount: 网校总回收
+admin.coin.school_wait_in_amount: 网校待回收
 admin.coin.created_time_option.all: 全部记录
 admin.coin.created_time_option.oneWeek: 最近一周
 admin.coin.created_time_option.oneMonth: 最近一个月

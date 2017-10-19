@@ -21,8 +21,7 @@ export default class BasePayment {
   }
 
   pay(params) {
-
-    let trade = BasePayment.createTrade(params);
+    let trade = this.createTrade(params);
     if (trade.paidSuccessUrl) {
       location.href = trade.paidSuccessUrl;
     } else {
@@ -35,7 +34,38 @@ export default class BasePayment {
 
   }
 
-  static filterParams(postParams) {
+  customParams(params) {
+    return params;
+  }
+
+  checkOrderStatus() {
+    if (this.startInterval()) {
+      window.intervalCheckOrderId = setInterval(this.checkIsPaid.bind(this), 2000);
+    }
+  }
+
+  cancelCheckOrder() {
+    clearInterval(window.intervalCheckOrderId)
+  }
+
+  startInterval() {
+    return false;
+  }
+
+  checkIsPaid() {
+    let tradeSn = store.get('trade_' + this.getURLParameter('sn'));
+    BasePayment.getTrade(tradeSn).then(res => {
+      if (res.isPaid) {
+        location.href = res.paidSuccessUrl;
+      }
+    })
+  }
+
+  getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+  }
+
+  filterParams(postParams) {
     let params = {
       gateway: postParams.gateway,
       type: postParams.type,
@@ -46,20 +76,22 @@ export default class BasePayment {
       payPassword: postParams.payPassword
     };
 
+    params = this.customParams(params);
+
     Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
 
     return params;
   }
 
-  static createTrade(postParams) {
+  createTrade(postParams) {
 
     let params = this.filterParams(postParams);
 
     let trade = null;
 
-    Api.trade.create({data:params, async: false, promise: false}).done( res => {
+    Api.trade.create({data: params, async: false, promise: false}).done(res => {
       trade = res;
-    }).error( res => {
+    }).error(res => {
       notify('danger', Translator.trans('cashier.pay.error_message'));
     });
 
@@ -69,6 +101,9 @@ export default class BasePayment {
   static getTrade(tradeSn, orderSn = '') {
     let params = {};
 
+    if (tradeSn == undefined || tradeSn == '') {
+      return false;
+    }
     if (tradeSn) {
       params.tradeSn = tradeSn;
     }
@@ -76,9 +111,10 @@ export default class BasePayment {
     if (orderSn) {
       params.orderSn = orderSn;
     }
-
     return Api.trade.get({
       params: params
     });
   }
+
+
 }
