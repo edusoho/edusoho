@@ -37,6 +37,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme()
     {
         $this->changeMainAppType();
+        $this->updateOldUserApprovals();
     }
 
     /**
