@@ -17,6 +17,6 @@
   <link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
 
-{% include 'stylesheet/stylesheet-custom.html.twig' %}
-
 {{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
+
+{% include 'stylesheet/stylesheet-custom.html.twig' %}
