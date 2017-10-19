@@ -618,7 +618,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $reason = array(
             'reason' => empty($info['note']) ? 'course.member.operation.buy' : $info['note'],
             'reason_type' => 'user_join'  
-        )
+        );
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
