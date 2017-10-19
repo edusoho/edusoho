@@ -115,7 +115,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    // 手动移除
+    // 管理员，老师手动移除学员
     public function removeCourseStudent($courseId, $userId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -532,7 +532,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->removeMember($member, array(
             'reason' => 'course.member.operation.quit_deadline_reach',
-            'reason_type' => 'exit',
+            'reason_type' => 'system',
         ));
 
         $this->dispatchEvent(
@@ -616,7 +616,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $reason = empty($info['note']) ? 'course.member.operation.reason.buy' : $info['note'];
-        $member = $this->addMember($fields, $reason, array('order' => $order));
+        $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
 
@@ -850,7 +850,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             return array();
         }
 
-        $member = $this->addMember($fields, 'course.member.operation.reason.join_classroom');
+        $member = $this->addMember(
+            $fields, 
+            array(
+                'reason' => 'course.member.operation.reason.join_classroom',
+                'reason_type' => 'classroom_join'
+            )
+        );
         $fields = array(
             'studentNum' => $this->getCourseStudentCount($courseId),
         );
@@ -1109,12 +1115,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
         $data['member'] = $member;
         $course = $this->getCourseService()->getCourse($member['courseId']);
-
         $record = array(
             'user_id' => $member['userId'],
             'member_id' => $member['id'],
             'member_type' => $member['role'],
-            'reason' => $reason,
             'target_id' => $member['courseId'],
             'target_type' => 'course',
             'operate_type' => $operateType,
@@ -1122,17 +1126,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             'operator_id' => $operatorId,
             'data' => $data,
             'order_id' => $member['orderId'],
+            'title' => $course['title'],
         );
 
-        $orderItem = $this->getOrderService()->getOrderItemByOrderIdAndTargetIdAndTargetType($member['orderId'], $member['courseId'], 'course');
-        if ($orderItem['refund_id'] !== 0 && $orderItem['refund_status'] == 'refunded') {
-            $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
-            $record['reason'] = $orderRefund['reason'];
-            $record['refund_id'] = $orderRefund['id'];
-        }
-        $record['title'] = $course['title'];
+        $record = array_merge($record, $reason);
+        $record =  $this->getMemberOperationService()->createRecord($record);
 
-        return $this->getMemberOperationService()->createRecord($record);
+        return $record;
     }
 
     private function addMember($member, $reason = array())
@@ -1140,7 +1140,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             $member = $this->getMemberDao()->create($member);
-            if (empty()) {
+            if (!empty($reason)) {
                 $this->createOperateRecord($member, 'join', $reason);
             } 
             $this->commit();

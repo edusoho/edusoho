@@ -94,10 +94,20 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+        $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
+
+        $record = array(
+            'reason' => $orderRefund['reason'],
+            'refund_id' => $orderRefund['id'],
+            'reason_type' => 'refund',
+        );
+
         $member = $this->getCourseMemberService()->getCourseMember($orderItem['target_id'], $orderItem['user_id']);
         if (!empty($member)) {
             $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
         }
+
+        $this->getMemberOperationService->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
     }
 
     public function onOrderRefundRefused($orderRefundItem)
@@ -128,5 +138,10 @@ class CourseProduct extends Product implements OrderStatusCallback
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->biz->service('MemberOperation:MemberOperationService');
     }
 }

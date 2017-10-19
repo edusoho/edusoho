@@ -30,6 +30,11 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
         );
     }
 
+    public function getRecordByOrderIdAndType($orderId, $type)
+    {
+        return $this->getByFields(array('order_id' => $orderId, 'operate_type' => $type));
+    }
+
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time')
     {
         $builder = $this->createQueryBuilder($conditions)

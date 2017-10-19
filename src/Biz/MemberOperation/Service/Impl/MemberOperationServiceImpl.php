@@ -23,6 +23,18 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->create($record);
     }
 
+    public function updateRefundInfoByOrderId($orderId, $info)
+    {
+        $record = $this->getRecordByOrderIdAndType($orderId, 'exit');
+ 
+        $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
+        if (!empty($record['reason'])) {
+            unset($field['reason']);
+        }
+
+        return $this->getRecordDao()->update($id, $field);
+    }
+
     public function countRecords($conditions)
     {
         return $this->getRecordDao()->count($conditions);
@@ -36,6 +48,11 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time')
     {
         return $this->getRecordDao()->countGroupByDate($conditions, $sort, $dateColumn);
+    }
+
+    public function getRecordByOrderIdAndType($orderId, $type)
+    {
+        return $this->getRecordDao()->getRecordByOrderIdAndType($orderId, $type);
     }
 
     /**
