@@ -195,6 +195,12 @@ class OrderCreate {
   }
 
   couponCancelEvent(event) {
+    if($('#coupon-select').val() != "") {
+      let couponDefaultSelect = $('#coupon-select').val();
+      let couponCode = $('[role="coupon-code-input"]');
+      couponCode.val(couponDefaultSelect);
+      $('button[role="coupon-use"]').trigger('click');
+    }
 
     $('[role="coupon-code"]').hide();
     // $('[role="no-use-coupon-code"]').show();
@@ -208,12 +214,6 @@ class OrderCreate {
     $('[role="coupon-code-verified"]').val("");
     $('[role="coupon-code-input"]').val("");
 
-    if($('#coupon-select').val() != "") {
-      let couponDefaultSelect = $('#coupon-select').val();
-      let couponCode = $('[role="coupon-code-input"]');
-      couponCode.val(couponDefaultSelect);
-      $('button[role="coupon-use"]').trigger('click');
-    }
     this.conculatePrice();
   }
 

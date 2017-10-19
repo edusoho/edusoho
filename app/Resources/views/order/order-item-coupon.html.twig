@@ -36,7 +36,7 @@
     {% if targetType in ['course','vip','classroom'] %}
       <div role="coupon-code" class="input-group" style="display: none;">
         <input role="coupon-code-verified" name="couponCode" type="hidden"/>
-        <input style="width:150px;" role="coupon-code-input" name="couponInput" type="text" class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
+        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
          {{ totalPrice }}
         "/>
           <button class="btn btn-primary" type="button" role="coupon-use">{{'form.btn.use'|trans}}</button>
@@ -48,7 +48,7 @@
     {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
       <div role="coupon-code" class="input-group" style="display: none;">
         <input role="coupon-code-verified" name="couponCode" type="hidden"/>
-        <input style="width:150px;" role="coupon-code-input" name="couponInput" type="text" class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
          {{ totalPrice }}
         "/>
           <button class="btn btn-primary" type="button" role="coupon-use">{{'form.btn.use'|trans}}</button>
