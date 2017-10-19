@@ -88,17 +88,24 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
-        $member = $this->getClassroomService()->getClassroomMember($orderItem['target_id'], $orderItem['user_id']);
 
+        $member = $this->getClassroomService()->getClassroomMember($orderItem['target_id'], $orderItem['user_id']);
         if (!empty($member)) {
             $this->getClassroomService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
         }
+
+        $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
     }
 
     public function onOrderRefundRefused($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
         $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+    
+    protected function getMemberOperationService()
+    {
+        return $this->biz->service('MemberOperation:MemberOperationService');
     }
 
     /**

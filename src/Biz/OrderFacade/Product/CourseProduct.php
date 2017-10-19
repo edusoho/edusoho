@@ -107,7 +107,7 @@ class CourseProduct extends Product implements OrderStatusCallback
             $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
         }
 
-        $this->getMemberOperationService->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
+        $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
     }
 
     public function onOrderRefundRefused($orderRefundItem)

@@ -912,7 +912,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $this->createOperateRecord($member, 'join', array('order' => $order));
+        $reason = array(
+            'reason' => $fields['remark'],
+            'reason_type' => 'user_join'
+        );
+        $this->createOperateRecord($member, 'join', $info);
 
         $params = array(
             'orderId' => $fields['orderId'],
@@ -1296,7 +1300,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
-        $data = array('reason' => 'classroom.join_as_assistant');
+        $data = array(
+            'reason' => 'classroom.join_as_assistant',
+            'reason_type' => 'assistant_join'
+        );
         $this->createOperateRecord($member, 'join', $data);
 
         $this->dispatchEvent(
@@ -1966,11 +1973,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
-    protected function createOperateRecord($member, $operateType, $data = array())
+    protected function createOperateRecord($member, $operateType, $reason)
     {
         $currentUser = $this->getCurrentUser();
         $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
-
         $classroom = $this->getClassroom($member['classroomId']);
 
         $data['member'] = $member;
@@ -1984,10 +1990,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'operate_time' => time(),
             'operator_id' => $operatorId,
             'data' => $data,
-            'reason' => empty($data['reason']) ? '' : $data['reason'],
             'order_id' => $member['orderId'],
         );
-
+        $record = array_merge($record, ArrayToolkit::parts($reason, array('reason', 'reason_type')));
+        
         return $this->getMemberOperationService()->createRecord($record);
     }
 
