@@ -11,7 +11,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function countMessages($conditions)
     {
         $conditions = $this->filterMessageConditions($conditions);
-
+        
         return $this->getMessageDao()->count($conditions);
     }
 
@@ -92,10 +92,9 @@ class MessageServiceImpl extends BaseService implements MessageService
                 $this->getConversationDao()->update($conversation['id'], $fields);
             }
 
-            $content = '内容已被删除。';
             $fields = array(
-                'content' => $content,
-            );
+                'isDelete' => 1,
+                );
             $this->getMessageDao()->update($id, $fields);
         }
 

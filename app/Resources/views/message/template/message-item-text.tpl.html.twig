@@ -11,7 +11,11 @@
           {% else %}
             <strong>{{ web_macro.user_link(message.createdUser) }}：</strong>
           {% endif %}
-          {{ message.content|space2nbsp|raw|nl2br}}
+          {% if message.isDelete %}
+            {{ 'message.chat.content_delete'|trans }}
+          {% else %}
+            {{ message.content|space2nbsp|raw|nl2br}}
+          {% endif %}
         </div>
         <div class="message-footer">
           <span class="color-gray">{{ message.createdTime|smart_time }}</span>
