@@ -416,6 +416,11 @@ refund_reason:
     bad_teacher_attitude: 老师服务态度不好
     other: 其他
 
+exit_reason:
+    refund: 退款
+    remove: 移除
+    exit: 用户退出
+
 exchangeType:
     nickName: 用户名
     sn: 订单号

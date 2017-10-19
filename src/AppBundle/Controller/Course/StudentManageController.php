@@ -87,7 +87,7 @@ class StudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         $condition = array(
-            'targetId' => $courseId,
+            'target_id' => $courseId,
             'target_type' => 'course',
             'status' => 'success',
             'operate_type' => 'exit',
@@ -95,7 +95,7 @@ class StudentManageController extends BaseController
 
         $fields = $request->query->all();
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+            $condition['user_ids'] = $this->getUserIds($fields['keyword']);
         }
 
         $paginator = new Paginator(

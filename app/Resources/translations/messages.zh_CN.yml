@@ -4411,7 +4411,6 @@ course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习�
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，用户自己退出
 course.member.operation.admin_remove_course_student: 管理员手动移除
-course.member.operation.reason.remove_teachers: 删除老师角色时，退出课程
 # course/widgets
 course.widgets.belong_classroom.title: 所属%name%
 course.widgets.classroom_price.price: 价格：
