@@ -4,7 +4,6 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\TokenService;
-use Webpatser\Uuid\Uuid;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
@@ -103,11 +102,8 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     protected function _makeTokenValue($length)
     {
-        $chars = str_replace('-', '', Uuid::generate(4));
-
-        $value = substr($chars, 0, $length);
-
-        return $value;
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
     }
 
     protected function getTokenDao()
