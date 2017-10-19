@@ -45,6 +45,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'kernel.bundles'     => $mappings,
             'kernel.environment' => 'test',
             'kernel.root_dir'    => __DIR__.'/../',
+            'kernel.name'        => 'test',
             'kernel.cache_dir'   => sys_get_temp_dir(),
         )));
     }
@@ -63,5 +64,4 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
         return $container;
     }
-
 }

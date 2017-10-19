@@ -7,18 +7,18 @@ class Env
     public static function get($key, $default = null)
     {
         $value = getenv($key);
-        
-            if ($value === false) {
-                return $default;
-            }
-        
-            if ($value === 'false') {
-                return false;
-            } elseif ($value === 'true') {
-                return true;
-            }
-        
-            return $value;
+
+        if ($value === false) {
+            return $default;
+        }
+
+        if ($value === 'false') {
+            return false;
+        } elseif ($value === 'true') {
+            return true;
+        }
+
+        return $value;
     }
 
     public static function load(array $env = array())

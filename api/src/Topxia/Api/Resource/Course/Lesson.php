@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Silex\Application;
@@ -56,7 +57,7 @@ class Lesson extends BaseResource
 
         $lesson = $this->filter($this->convertLessonContent($lesson, $ssl, $isTrail));
 
-        $hasRemainTime = $this->hasRemainTime($lesson);
+        $hasRemainTime = $this->hasRemainTime($lesson, $task['type']);
         if ($hasRemainTime && $currentUser->isLogin()) {
             $remainTime = $this->getRemainTime($currentUser, $lesson);
             $lesson['remainTime'] = $remainTime;
@@ -85,7 +86,7 @@ class Lesson extends BaseResource
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
             case 'document':
-                return $this->getDocumentLesson($lesson);
+                return $this->getDocumentLesson($lesson, $ssl);
             default:
                 return $this->getTextLesson($lesson);
         }
@@ -207,7 +208,7 @@ class Lesson extends BaseResource
 
         if ($mediaSource == 'self') {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
-
+            
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {
@@ -354,9 +355,9 @@ class Lesson extends BaseResource
         return $this->createService('Task:TaskService');
     }
 
-    protected function hasRemainTime($task)
+    protected function hasRemainTime($task, $taskType)
     {
-        if ('video' != $task['type']) {
+        if ('video' != $task['type'] || $taskType == 'live') {
             return false;
         }
 

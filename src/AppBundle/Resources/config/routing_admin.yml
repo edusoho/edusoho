@@ -2296,3 +2296,6 @@ admin_queue_failed_log_modal:
     path: /queue/failed_log/{id}
     defaults: { _controller: AppBundle:Admin/Queue:failedJob }
 
+admin_online:
+    path: /online
+    defaults: { _controller: AppBundle:Online:index }

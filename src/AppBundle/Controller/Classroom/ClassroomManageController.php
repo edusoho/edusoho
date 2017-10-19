@@ -537,15 +537,6 @@ class ClassroomManageController extends BaseController
         $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
 
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $courseSetting = $this->setting('course', array());
-
-        $userinfoFields = array();
-        if (isset($courseSetting['userinfoFields'])) {
-            $userinfoFields = array_diff(
-                $courseSetting['userinfoFields'],
-                array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin')
-            );
-        }
 
         $condition = array(
             'classroomId' => $classroom['id'],
@@ -571,10 +562,6 @@ class ClassroomManageController extends BaseController
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
         }
-
-        $userinfoFields = array_flip($userinfoFields);
-
-        $fields = array_intersect_key($fields, $userinfoFields);
 
         $studentUserIds = ArrayToolkit::column($classroomMembers, 'userId');
 
@@ -1123,7 +1110,7 @@ class ClassroomManageController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array(
-            'courseIds' => $courseIds,
+            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
             'mediaType' => 'testpaper',
         );
         $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);

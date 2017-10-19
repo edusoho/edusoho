@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
+use Codeages\Biz\Framework\Provider\SessionServiceProvider;
 use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
 use Codeages\Biz\Framework\Provider\TokenServiceProvider;
 use Codeages\Biz\Framework\Provider\SettingServiceProvider;
@@ -86,6 +87,7 @@ class IntegrationTestCase extends TestCase
         $biz->register(new SchedulerServiceProvider());
         $biz->register(new SettingServiceProvider());
         $biz->register(new QueueServiceProvider());
+        $biz->register(new SessionServiceProvider());
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 

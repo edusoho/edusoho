@@ -102,15 +102,9 @@ class TokenServiceImpl extends BaseService implements TokenService
 
     protected function _makeTokenValue($length)
     {
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-        $value = '';
-
-        for ($i = 0; $i < $length; ++$i) {
-            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
-        }
-
-        return $value;
+        return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
     }
 
     protected function getTokenDao()

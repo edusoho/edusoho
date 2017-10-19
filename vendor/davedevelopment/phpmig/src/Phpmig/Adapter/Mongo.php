@@ -42,7 +42,7 @@ class Mongo implements AdapterInterface
     public function fetchAll()
     {
         $cursor = $this->connection->selectCollection($this->tableName)->find();
-        $versions = array(); 
+        $versions = array();
         foreach($cursor as $version) $versions[] = $version['version'];
         return $versions;
     }
@@ -55,10 +55,8 @@ class Mongo implements AdapterInterface
      */
     public function up(Migration $migration)
     {
-        
-        $this->connection->selectCollection($this->tableName)->insert(array(
-            'version' => $migration->getVersion()
-        ));
+        $document = array('version' => $migration->getVersion());
+        $this->connection->selectCollection($this->tableName)->insert($document);
 
         return $this;
     }
@@ -71,9 +69,8 @@ class Mongo implements AdapterInterface
      */
     public function down(Migration $migration)
     {
-        $this->connection->selectCollection($this->tableName)->remove(array(
-            'version' => $migration->getVersion()
-        ));
+        $document = array('version' => $migration->getVersion());
+        $this->connection->selectCollection($this->tableName)->remove($document);
 
         return $this;
     }
@@ -89,7 +86,7 @@ class Mongo implements AdapterInterface
         $tableName = $this->tableName;
         return array_filter(
             $this->connection->getCollectionNames(),
-            function( $collection ) use ($tableName) { 
+            function( $collection ) use ($tableName) {
                 return $collection === $tableName;
         });
     }
@@ -102,10 +99,10 @@ class Mongo implements AdapterInterface
      */
     public function createSchema()
     {
-        $this->connection->selectCollection($this->tableName)->ensureIndex(
-            'version',
-            array('unique' => 1)
-        );
+        $keys = 'version';
+        $options = array('unique' => 1);
+        $this->connection->selectCollection($this->tableName)->ensureIndex($keys, $options);
+
         return $this;
     }
 }
