@@ -392,7 +392,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         ), array(), 0, 100);
 
         foreach ($jobFireds as $jobFired) {
-            if ($jobFired['job_id'] != 8) {
+            if ($jobFired['job_detail']['name'] != 'Scheduler_MarkExecutingTimeoutJob') {
                 $this->markTimout($jobFired);
             }
 
