@@ -78,30 +78,19 @@ refundDisplayStatus:
     cancel: Cancelled
 
 payment:
-    none: --
     alipay: Alipay
-    alipay.in_time: Alipay
-    wxpay: Wxpay
     wechat: wechat
-    heepay: Heepay
-    quickpay: Quickpay
-    iosiap: iOSiap
-    outside: Outside
+    heepay: Heepay（HuiFuBao）
+    quickpay: QuickPay（HuiFuBao）
+    iap: iOSiap
+    lianlianpay: LLPay
     coin: Coin
-    lianlianpay: lianlianpay
-    marketing: marketing
+    none: Others
 
 orderSource:
     self: Self
     marketing: Marketing
     outside: Outside
-   
-newPayment:
-    alipay: Alipay
-    wechat: Wechat
-    heepay: Heepay
-    quickpay: Quickpay
-    llpay: LLpay
 
 source:
     self: Self
