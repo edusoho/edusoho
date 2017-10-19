@@ -59,8 +59,6 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 });
 
 $(document).ajaxSend(function (a, b, c) {
-  if (c.notSetHeader) return;
-
   // 加载loading效果
   let url = c.url;
   let $dom = $(`[data-url="${url}"]`);
