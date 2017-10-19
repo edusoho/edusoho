@@ -11,7 +11,7 @@ class UpdateApprovalOldData extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        
+
         $connection->exec("UPDATE user_approval as ua, user as u SET ua.status = 'approved' WHERE ua.userId = u.id AND u.approvalStatus = 'approved' AND ua.status = 'approving'");
     }
 
@@ -20,6 +20,5 @@ class UpdateApprovalOldData extends Migration
      */
     public function down()
     {
-
     }
 }
