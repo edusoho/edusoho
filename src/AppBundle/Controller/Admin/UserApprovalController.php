@@ -67,12 +67,12 @@ class UserApprovalController extends BaseController
     {
         list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
-            if ($data['form_status'] == 'success') {
+            if ('success' == $data['form_status']) {
                 $this->getUserService()->passApproval($id, $data['note']);
-            } elseif ($data['form_status'] == 'fail') {
+            } elseif ('fail' == $data['form_status']) {
                 if ($this->isPluginInstalled('TeacherAudit')) {
                     $approval = $this->getTeacherAuditService()->getApprovalByUserId($user['id']);
 
@@ -127,7 +127,7 @@ class UserApprovalController extends BaseController
 
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approved');
 
-        $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+        $idcardPath = 'back' === $type ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
         $imgConverToData = new ImgConverToData();
         $imgConverToData->getImgDir($idcardPath);
         $imgConverToData->img2Data();
