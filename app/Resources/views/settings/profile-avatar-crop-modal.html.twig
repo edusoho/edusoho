@@ -17,11 +17,14 @@
 
 {% block footer %}
   <div class="text-center">
-    <button type="button" class="btn cd-btn cd-btn-default cd-btn-lg" data-dismiss="modal">{{'user.settings.profile.choose_again'|trans}}</button>
-    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" id="save-btn" dat-url="{{ path('settings_profile_avatar_crop_modal')}}"  data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
-    {% block save_text %}
+    <button type="button" class="btn cd-btn cd-btn-default cd-btn-lg" id="select-btn">
+      {{'user.settings.profile.choose_again'|trans}}
+    </button>
+
+    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" id="save-btn" 
+      dat-url="{{ path('settings_profile_avatar_crop_modal')}}"  
+      data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
       {{'user.settings.profile.save_avatar'|trans}}
-    {% endblock %}
     </button>
   </div>
 {% endblock %}

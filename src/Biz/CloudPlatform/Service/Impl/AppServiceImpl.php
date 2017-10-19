@@ -888,9 +888,11 @@ class AppServiceImpl extends BaseService implements AppService
 
         if (file_exists($packageDir.'/ThemeApp')) {
             $newApp['type'] = AppService::THEME_TYPE;
-        } else {
-            $newApp['type'] = AppService::PLUGIN_TYPE;
         }
+
+        // else {
+        //     $newApp['type'] = AppService::PLUGIN_TYPE;
+        // }
 
         $app = $this->getAppDao()->getByCode($package['product']['code']);
 
