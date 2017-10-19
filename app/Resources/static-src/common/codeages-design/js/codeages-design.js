@@ -4,7 +4,6 @@ import loading from './loading';
 import upload from './upload';
 
 import './table';
-import './form';
 
 let codeAgesDisign = {
   radio,
