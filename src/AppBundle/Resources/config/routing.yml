@@ -2968,6 +2968,9 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
+member_operation_record:
+    path: /member/record/{type}/{id}
+    defaults: { _controller: AppBundle:MemberOperationRecord:showExitRecord }
 
 v2_demo:
    path: /v2/demo
@@ -2980,3 +2983,4 @@ v2_demo_modal:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+

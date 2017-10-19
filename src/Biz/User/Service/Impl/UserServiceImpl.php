@@ -1914,6 +1914,36 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->delete($id);
     }
 
+    public function getUserIdsByKeyword($word) 
+    {
+        if (SimpleValidator::email($keyword)) {
+            $user = $this->getUserByEmail($keyword);
+
+            return $user ? array($user['id']) : array(-1);
+        }
+        if (SimpleValidator::mobile($keyword)) {
+            $mobileVerifiedUser = $this->getUserByVerifiedMobile($keyword);
+            $profileUsers = $this->searchUserProfiles(
+                array('tel' => $keyword),
+                array('id' => 'DESC'),
+                0,
+                PHP_INT_MAX
+            );
+            $mobileNameUser = $this->getUserByNickname($keyword);
+            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
+
+            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
+
+            $userIds = array_unique($userIds);
+
+            return $userIds ? $userIds : array(-1);
+        }
+        $user = $this->getUserByNickname($keyword);
+
+        return $user ? array($user['id']) : array(-1);
+    }
+
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'truename') {

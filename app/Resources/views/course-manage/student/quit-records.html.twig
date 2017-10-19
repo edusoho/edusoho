@@ -30,34 +30,7 @@
           <a href="javascript:;">{{ 'course.members_manage.quit_records'|trans }}</a>
         </li>
       </ul>
-      <form class="form-inline well well-sm " action="" method="get" novalidate>
-        <div class="form-group col-md-7">
-          <input class="form-control" style="width:45%" type="text" placeholder="{{ 'course.members_manage.official_student.input_placeholder'|trans }}" name="keyword" value="{{ app.request.get('keyword') }}">
-
-          <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
-        </div>
-        <div class="clearfix"></div>
-      </form>
-      <table class="table table-striped" id="quit-record-list">
-        <thead>
-          <tr>
-            <th>{{'course.members_manage.quit_records.name'|trans}}</th>
-            <th>{{'退出类型'|trans}}</th>
-            <th width="30%">{{'course.members_manage.quit_records.reason'|trans}}</th>
-            <th>{{'course.members_manage.quit_records.date'|trans}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in records %}
-            {% include 'course-manage/student/quit-record-tr.html.twig' %}
-          {% else %}
-            <tr class="empty"><td colspan="20">{{'course.members_manage.quit_records.empty'|trans}}</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <nav class="text-center">
-        {{ web_macro.paginator(paginator) }}
-      </nav>
+      {{ render(controller('AppBundle:MemberOperationRecord:showExitRecord', {type: 'course', id: course.id})) }}
     </div>
   </div>
 {% endblock %}
