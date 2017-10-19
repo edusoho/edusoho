@@ -700,9 +700,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where payment = 'llpay';");
-        $connection->exec("update biz_payment_trade set platform = 'iap' where payment = 'iosiap';");
-        $connection->exec("update biz_payment_trade set platform = 'wechat' where payment = 'wxpay';");
+        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where platform = 'llpay';");
+        $connection->exec("update biz_payment_trade set platform = 'iap' where platform = 'iosiap';");
+        $connection->exec("update biz_payment_trade set platform = 'wechat' where platform = 'wxpay';");
 
         $this->logger('info', "更新处理biz_payment_trade的platform数据，当前页码{$page}");
 
