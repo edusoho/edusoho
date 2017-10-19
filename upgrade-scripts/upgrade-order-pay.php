@@ -965,7 +965,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ) VALUES (
                   'Order_CloseOrdersJob',
                   '20 * * * *',
-                  'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseOrdersJob',
+                  'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseExpiredOrdersJob',
                   '',
                   '100',
                   '0',
@@ -1490,11 +1490,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('biz_user_balance', 'recharge_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` int(10) NOT NULL DEFAULT '0' COMMENT '充值总额'");
+            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
         }
 
         if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` int(10) NOT NULL DEFAULT '0' COMMENT '消费总额'");
+            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
         }
 
         $this->logger('info', '新建biz表');
@@ -1507,6 +1507,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
         if (!$this->isFieldExist($table, 'migrate_id')) {
             $connection->exec("ALTER TABLE `{$table}` ADD COLUMN `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id';");
+        }
+
+        if (!$this->isIndexExist($table, 'migrate_id', 'migrate_id')) {
+            $connection->exec("ALTER TABLE `{$table}` ADD INDEX migrate_id (migrate_id);");
         }
     }
 
