@@ -45,8 +45,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function addIsDeleteForMessage()
     {
-        $this->getConnection()->exec("ALTER TABLE `message` ADD isDelete INT(1) NOT NULL DEFAULT '0' COMMENT '是否已删除';");
-        $this->logger('ALTER TABLE `message` ADD isDelete INT(1) NOT NULL DEFAULT \'0\' COMMENT \'是否已删除\';');
+        if (!$this->isFieldExist('message', 'isDelete')) {
+            $this->getConnection()->exec("ALTER TABLE `message` ADD isDelete INT(1) NOT NULL DEFAULT '0' COMMENT '是否已删除';");
+            $this->logger('ALTER TABLE `message` ADD isDelete INT(1) NOT NULL DEFAULT \'0\' COMMENT \'是否已删除\';');
+        }
     }
 
     /**
