@@ -11,6 +11,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('begin to upgrade scripts', 'info');
             $this->updateScheme();
             $this->getConnection()->commit();
+            $this->logger('upgrade end', 'info');
         } catch (\Exception $e) {
             $this->logger($e->getMessage(), 'error');
             $this->getConnection()->rollback();
