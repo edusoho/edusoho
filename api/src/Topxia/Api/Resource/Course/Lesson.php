@@ -86,7 +86,7 @@ class Lesson extends BaseResource
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
             case 'document':
-                return $this->getDocumentLesson($lesson);
+                return $this->getDocumentLesson($lesson, $ssl);
             default:
                 return $this->getTextLesson($lesson);
         }
