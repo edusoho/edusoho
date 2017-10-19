@@ -120,7 +120,7 @@ class UserApprovalController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
         $currentUser = $this->getUser();
-        $status = $request->query->get('status','approving');
+        $status = $request->query->get('status', 'approving');
 
         if (empty($currentUser)) {
             throw $this->createAccessDeniedException();
