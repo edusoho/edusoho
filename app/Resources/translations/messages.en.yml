@@ -410,8 +410,8 @@ order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
-order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your payment password</a>'
-order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your login password</a>'
+order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
+order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
 order.confirm.forget_password_btn: 'Forget password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
@@ -3404,6 +3404,8 @@ contetn.article_list.category: Category
 contetn.article_list.contentCategory: "<span class=\"color-gray\">published at %publishedTime%</span>, belong to <a href=\"#\" class=\"color-gray\">%contentCategoryname%</a> category</span>\n"
 course.block_grid.view_course_btn: View
 course.block_grid.countinue_learn_btn: Continue
+course.block_grid.from_classroom: 'From classroom '
+
 course.block_grid.DRAFT_STATUS: Draft
 course.block_grid.CLOSE_STATUS: Closed
 course.block_grid.SERIALIZE_SERIALIZE_MODE: Serial

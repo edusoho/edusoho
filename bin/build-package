@@ -11,17 +11,6 @@ echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
 SKIP=$3
 fi
 
-version=$2;
-upgradefile="scripts/upgrade-${version}.php";
-
-if [ ! -f "$upgradefile" ]; then
-    echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile}, 输入y创建${upgradefile}, 输入n忽略脚本 y|n";
-    read LINE; 
-    if [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
-        echo "升级包制作中止，请创建升级脚本 ${upgradefile}"; 
-        exit 1
-    fi
-fi
 # pull the last version of repository
 echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
 git pull
@@ -32,10 +21,20 @@ cd scripts
 git pull
 cd ..
 
+version=$2;
+upgradefile="scripts/upgrade-${version}.php";
 
+if [ ! -f "$upgradefile" ]; then
+    echo "升级脚本不存在，请确是否需要升级脚本，确认开其他发者是否已经上传了升级脚本${upgradefile}, 如需处理${upgradefile} 输入n，继续输入y  y|n";
+    read LINE; 
+    if [ "$LINE" == "N" ] || [ "$LINE" == "n" ] || [ "$LINE" == "" ]; then
+        echo "升级包制作中止，请创建升级脚本 ${upgradefile}"; 
+        exit 1
+    fi
+fi
 
 if [ "$SKIP" = 'n' ]; then
-#compile static resource file with webpack
+# remove node modules folder and caches folder 
 echo $(tput setaf 2)remove old node_modules and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
 rm -rf app/caches node_modules
 yarn
@@ -44,9 +43,6 @@ yarn
 echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
 npm run compile
 
-#compile static resource file with webpack
-echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
-npm run compile
 fi
 #commit static file
 git add web/static-dist

@@ -362,14 +362,6 @@ settings:
     path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
 
-settings_avatar:
-    path:  /settings/avatar
-    defaults: { _controller: AppBundle:Settings:avatar }
-
-settings_avatar_crop:
-    path:  /settings/avatar/crop
-    defaults: { _controller: AppBundle:Settings:avatarCrop }
-
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
     defaults: { _controller: AppBundle:Settings:avatarCropModal }
@@ -2934,6 +2926,10 @@ marketing_user_login:
 export:
     path: /export/{name}/{type}
     defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
+
+online_sample:
+    path: /online/sample
+    defaults: { _controller: AppBundle:Online:sample}
 
 pre_export:
     path: /pre/export/{name}

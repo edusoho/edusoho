@@ -1065,7 +1065,7 @@ bootstrap-notify@3.1.3:
   version "3.1.3"
   resolved "https://registry.npmjs.org/bootstrap-notify/-/bootstrap-notify-3.1.3.tgz#7e98b3a696cf452a7b56727f0b3316a90037c10b"
 
-bootstrap@3.*, bootstrap@3.3.7:
+bootstrap@3.3.7:
   version "3.3.7"
   resolved "https://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
@@ -1830,9 +1830,9 @@ es-abstract@^1.7.0:
     is-callable "^1.1.3"
     is-regex "^1.0.4"
 
-es-ckeditor@latest:
-  version "1.1.12"
-  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.1.12.tgz#adb90e476159426d85a3515d0ff005ed9d132020"
+es-ckeditor@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.2.1.tgz#faee8df4fe98d5be31bb9d3f7bf3e4de05713880"
 
 es-extract-text-webpack-plugin@latest:
   version "1.0.0"
@@ -3057,7 +3057,7 @@ jquery@1.12.4, jquery@>=1.10, jquery@>=1.5:
   version "1.12.4"
   resolved "https://registry.npmjs.org/jquery/-/jquery-1.12.4.tgz#01e1dfba290fe73deba77ceeacb0f9ba2fec9e0c"
 
-jquery@>=1.6, jquery@>=1.7, "jquery@^1.7 || ^2.0", jquery@^2.1.2:
+jquery@>=1.7, "jquery@^1.7 || ^2.0", jquery@^2.1.2:
   version "2.2.4"
   resolved "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
 
@@ -3554,13 +3554,6 @@ ms@2.0.0:
 mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
-
-myclabs.jquery.confirm@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.npmjs.org/myclabs.jquery.confirm/-/myclabs.jquery.confirm-2.7.0.tgz#f1830647caf990748b9924395e5895ccc6084e9c"
-  dependencies:
-    bootstrap "3.*"
-    jquery ">=1.6"
 
 nan@^2.3.0:
   version "2.6.2"
@@ -5437,6 +5430,10 @@ webpack@^1.14.0:
     uglify-js "~2.7.3"
     watchpack "^0.2.1"
     webpack-core "~0.6.9"
+
+weixin-js-sdk@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/weixin-js-sdk/-/weixin-js-sdk-1.2.0.tgz#5132949eb65b3d4e5f3e052bd3b6b10abdf47d55"
 
 whatwg-fetch@>=0.10.0:
   version "2.0.3"

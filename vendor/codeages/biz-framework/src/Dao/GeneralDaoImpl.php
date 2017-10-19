@@ -278,6 +278,12 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         return new DynamicQueryBuilder($this->db(), $conditions);
     }
 
+    protected function filterStartLimit(&$start, &$limit)
+    {
+        $start = (int) $start;
+        $limit = (int) $limit;
+    }
+
     private function getTimestampField($mode = null)
     {
         if (empty($this->timestamps)) {

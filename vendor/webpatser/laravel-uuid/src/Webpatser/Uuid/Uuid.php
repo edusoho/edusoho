@@ -4,6 +4,20 @@ namespace Webpatser\Uuid;
 
 use Exception;
 
+/**
+ * Class Uuid
+ * @package Webpatser\Uuid
+ *
+ * @property string $bytes
+ * @property string $hex
+ * @property string $node
+ * @property string $string
+ * @property string $time
+ * @property string $urn
+ * @property string $variant
+ * @property string $version
+ *
+ */
 class Uuid
 {
     const MD5 = 3;
@@ -27,7 +41,7 @@ class Uuid
     const VAR_RES = 224;
 
     /**
-     * 11000000  Microsoft UUID variant
+     * 11000000  Microsoft GUID variant
      * @var int
      */
     const VAR_MS = 192;
@@ -97,17 +111,15 @@ class Uuid
     /**
      * @var string
      */
-    protected static $randomFunc = 'randomMcrypt';
-
-    protected $bytes;
-    protected $hex;
-    protected $string;
-    protected $urn;
-    protected $version;
-    protected $variant;
-    protected $node;
-    protected $time;
-
+    const NS_NIL = '00000000-0000-0000-0000-000000000000';
+    
+    /**
+     * Regular expression for validation of UUID.
+     *
+     * @var string
+     */
+    const VALID_UUID_REGEX = '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$';
+    
     /**
      * @param string $uuid
      * @throws Exception
@@ -370,9 +382,9 @@ class Uuid
     /**
      * Get the specified number of random bytes, using random_bytes().
      * Randomness is returned as a string of bytes
-     * 
+     *
      * Requires Php 7, or random_compact polyfill
-     * 
+     *
      * @param $bytes
      * @return mixed
      */
@@ -430,19 +442,19 @@ class Uuid
         switch ($var) {
             case "bytes":
                 return $this->bytes;
-            // no break
+                break;
             case "hex":
                 return bin2hex($this->bytes);
-            // no break
+                break;
             case "string":
                 return $this->__toString();
-            // no break
+                break;
             case "urn":
                 return "urn:uuid:" . $this->__toString();
-            // no break
+                break;
             case "version":
                 return ord($this->bytes[6]) >> 4;
-            // no break
+                break;
             case "variant":
                 $byte = ord($this->bytes[8]);
                 if ($byte >= static::VAR_RES) {
@@ -454,14 +466,14 @@ class Uuid
                 } else {
                     return 0;
                 }
-            // no break
+                break;
             case "node":
                 if (ord($this->bytes[6]) >> 4 == 1) {
                     return bin2hex(substr($this->bytes, 10));
                 } else {
                     return null;
                 }
-            // no break
+                break;
             case "time":
                 if (ord($this->bytes[6]) >> 4 == 1) {
                     // Restore contiguous big-endian byte order
@@ -475,10 +487,10 @@ class Uuid
                 } else {
                     return null;
                 }
-            // no break
+                break;
             default:
                 return null;
-            // no break
+                break;
         }
     }
 
@@ -490,5 +502,17 @@ class Uuid
     public function __toString()
     {
         return $this->string;
+    }
+    
+    /**
+     * Import and validate an UUID
+     *
+     * @param Uuid|string $uuid
+     *
+     * @return boolean
+     */
+    public static function validate($uuid)
+    {
+        return (boolean) preg_match('~' . static::VALID_UUID_REGEX . '~', static::import($uuid)->string);
     }
 }

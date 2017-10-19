@@ -1,9 +1,9 @@
-<li class="course-grid">
-  <a href="{{ path('open_course_show', {courseId:course.id}) }}" class="grid-body">
-    <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
-      <span class="course-label">
+<div class="my-course-item cd-mb40 clearfix">
+  <a class="my-course-item__link" href="{{ path('open_course_show', {courseId:course.id}) }}">
+    <img class="my-course-item__picture" src="{{ filepath(course.largePicture, 'course.png') }}">
+    <span class="my-course-item__label">
       {% if course.status == 'draft' %}
-        <span class="label  label-warning">{{'course.status.unpublished'|trans}}</span>
+        <span class="label label-warning">{{'course.status.unpublished'|trans}}</span>
       {% elseif course.status == 'closed' %}
         <span class="label label-danger">{{'course.status.closed'|trans}}</span>
       {% endif %}
@@ -17,39 +17,18 @@
         {% endif %}
       {% endif %}
     </span>
-    <span class="title">{{ course.title }}</span>
-    {% if mode in ['default', 'teach'] %}
-
-      {% if course.type == 'live' %}
-        {% set lesson = course['lesson']|default(null) %}
-        {% if lesson %}
-          <span class="live-course-lesson metas">
-            <span class="color-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            <span class="color-gray mrm">{{ 'open_course.lesson_num'|trans({'%num%': lesson.number}) }}</span>
-          </span>
-        {% endif %}
-      {% endif %}
-
-      <span class="metas clearfix">
-        <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum}}</span>
-        <span class="comment mlm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
-        <span class="course-price-widget">
-          <span class="price">
-            <span class="color-success">{{ 'open_course'|trans }}</span>
-          </span>
-        </span>
-      </span>
-    {% endif %}
-
-    {% if mode == 'teach' %}
-      {% if course.status == 'published' %}
-        <span class="label label-success course-status">{{'course.status.published'|trans}}</span>
-      {% elseif course.status == 'draft' %}
-        <span class="label  label-warning course-status">{{'course.status.unpublished'|trans}}</span>
-      {% elseif course.status == 'closed' %}
-        <span class="label label-danger course-status">{{'course.status.closed'|trans}}</span>
-      {% endif %}
-    {% endif %}
-
   </a>
-</li>
+  <div class="my-course-item__info">
+    <div class="my-course-item__title cd-mb24 text-overflow">
+      <a class="cd-link-gray-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+    </div>
+
+    <div class="my-course-item__status">
+      <span class="color-success">{{ 'open_course'|trans }}</span>
+    </div>
+  </div>
+
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary cd-btn-lg" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+  </div>
+</div>

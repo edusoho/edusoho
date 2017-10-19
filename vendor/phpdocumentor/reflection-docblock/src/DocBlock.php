@@ -50,7 +50,7 @@ final class DocBlock
     public function __construct(
         $summary = '',
         DocBlock\Description $description = null,
-        array $tags = [],
+        array $tags = array(),
         Types\Context $context = null,
         Location $location = null,
         $isTemplateStart = false,

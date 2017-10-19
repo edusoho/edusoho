@@ -14,6 +14,7 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Codeages\Biz\Framework\Context\Biz;
+use DeviceDetector\DeviceDetector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
@@ -24,6 +25,7 @@ class WebExtension extends \Twig_Extension
      * @var ContainerInterface
      */
     protected $container;
+
     /**
      * @var Biz
      */
@@ -157,6 +159,19 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
             new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
+
+            new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
+        );
+    }
+
+    public function parseUserAgent($userAgent)
+    {
+        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector->parse();
+
+        return array(
+            'client' => $deviceDetector->getClient(),
+            'os' => $deviceDetector->getOs(),
         );
     }
 

@@ -14,5 +14,9 @@ class SettingServiceProvider implements ServiceProviderInterface
         $biz['console.commands'][] = function () use ($biz) {
             return new \Codeages\Biz\Framework\Setting\Command\TableCommand($biz);
         };
+
+        $biz['console.commands'][] = function () use ($biz) {
+            return new \Codeages\Biz\Framework\Setting\Command\SetCommand($biz);
+        };
     }
 }

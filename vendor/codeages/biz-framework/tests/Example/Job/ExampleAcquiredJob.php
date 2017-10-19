@@ -10,6 +10,7 @@ class ExampleAcquiredJob extends AbstractJob
     {
         $i = 0;
         ++$i;
+        sleep(3);
 
         return static::RETRY;
     }
