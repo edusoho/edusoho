@@ -47,6 +47,12 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec("UPDATE cloud_app SET type ='core' WHERE code = 'MAIN';");
     }
 
+    //以前的数据认证通过之后没有改status的状态，所以需要统一修改
+    protected function updateOldUserApprovals()
+    {
+        $this->getConnection()->exec("UPDATE user_approval as ua, user as u SET ua.status = 'approved' WHERE ua.userId = u.id AND u.approvalStatus = 'approved' AND ua.status = 'approving'");
+    }
+
     protected function isFieldExist($table, $filedName)
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
