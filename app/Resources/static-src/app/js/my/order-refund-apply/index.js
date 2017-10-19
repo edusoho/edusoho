@@ -6,3 +6,8 @@ let validator = $form.validate({
     }
   }
 });
+
+$("#refund-apply-btn").on('click', function () {
+  $that = $(this);
+  $that.button('loading');
+});
