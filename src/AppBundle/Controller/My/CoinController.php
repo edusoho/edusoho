@@ -19,7 +19,6 @@ use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\MathToolkit;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class CoinController extends BaseController
