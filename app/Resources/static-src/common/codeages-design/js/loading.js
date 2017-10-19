@@ -9,5 +9,3 @@ let loading = ({loadingClass = ''}) => {
 }
 
 export default loading;
-
-
