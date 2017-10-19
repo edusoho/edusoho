@@ -381,17 +381,7 @@ class StudentManageController extends BaseController
             'secret' => $this->getServiceKernel()->trans('秘密'),
         );
 
-        $userinfoFields = array();
-
         $course = $this->getCourseService()->getCourse($id);
-        $courseSetting = $this->setting('course', array());
-
-        if (isset($courseSetting['userinfoFields'])) {
-            $userinfoFields = array_diff(
-                $courseSetting['userinfoFields'],
-                array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin')
-            );
-        }
 
         $condition = array(
             'courseId' => $course['id'],
@@ -416,14 +406,6 @@ class StudentManageController extends BaseController
 
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
-        }
-
-        $userinfoFields = array_flip($userinfoFields);
-
-        $fields = array_intersect_key($fields, $userinfoFields);
-
-        if (empty($courseSetting['buy_fill_userinfo'])) {
-            $fields = array();
         }
 
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');

@@ -16,27 +16,6 @@
       <div class="form-group clearfix">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <button class="btn btn-primary pull-right" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
-        {% if setting('reward_point.enable',0) %}
-          {% if thread.type == "question" and setting('reward_point.reply_question.enable',0) and setting('reward_point.reply_question.amount',0) > 0 %}
-            <span class="color-gray form-control-static pull-right mrm">
-              {{ 'reward_point.reply_question_get'|trans }} <span class="color-primary"> {{ setting('reward_point').reply_question['amount']|default(0) }} </span>{{setting('reward_point').name|default('admin.reward_point'|trans)}}
-              <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'reward_point.reward'
-              |trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-              {% if setting('reward_point').reply_question['daily_limit']|default() %}
-              data-content="{{'reward_point.reply_question_hint'|trans({'%daily_limit%':setting('reward_point').reply_question['daily_limit']|default('classroom.thread.create.maxUsers.placeholder'|trans),'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-              {% else %}data-content="{{'reward_point.reply_question_hint_unlimited'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"{% endif %}></i>
-            </span>
-          {% elseif thread.type == "discussion" and setting('reward_point.reply_discussion.enable',0) and setting('reward_point.reply_discussion.amount',0) > 0 %}
-            <span class="color-gray form-control-static pull-right mrm">
-              {{ 'reward_point.reply_discussion'|trans }} <span class="color-primary">{{ setting('reward_point').reply_discussion['amount']|default(0) }} </span>{{setting('reward_point').name|default('admin.reward_point'|trans)}}
-              <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'reward_point.reward'
-              |trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-              {% if setting('reward_point').reply_discussion['daily_limit']|default() %}
-              data-content="{{'reward_point.reply_discussion_hint'|trans({'%daily_limit%':setting('reward_point').reply_discussion['daily_limit']|default('classroom.thread.create.maxUsers.placeholder'|trans),'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-              {% else %}data-content="{{'reward_point.reply_discussion_hint_unlimited'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"{% endif %}></i>
-            </span>
-          {% endif %}
-        {% endif %}
       </div>  
     </form>
   {% else %}

@@ -21,14 +21,7 @@ class OrderController extends BaseController
 
     public function manageAction(Request $request, $targetType)
     {
-        $conditions = $request->query->all();
-
-        $conditions['targetType'] = $targetType;
-
-        if (isset($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
-        }
-        $conditions = $this->prepareConditions($conditions);
+        $conditions = $this->prepareConditions($request, $targetType);
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
@@ -70,8 +63,21 @@ class OrderController extends BaseController
         );
     }
 
-    protected function prepareConditions($conditions)
+    protected function prepareConditions($request, $targetType)
     {
+        $conditions = $request->query->all();
+
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+
+        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startTime']);
+            $conditions['endTime'] = strtotime($conditions['endTime']);
+        }
+
+        $conditions['targetType'] = $targetType;
+
         if ($conditions['targetType'] != 'course') {
             return $conditions;
         }
@@ -147,7 +153,7 @@ class OrderController extends BaseController
         $magic = $this->setting('magic');
         $limit = $magic['export_limit'];
 
-        $conditions = $this->buildExportCondition($request, $targetType);
+        $conditions = $this->prepareConditions($request, $targetType);
 
         $status = array(
             'created' => '未付款',
@@ -217,20 +223,6 @@ class OrderController extends BaseController
         $response->setContent($str);
 
         return $response;
-    }
-
-    private function buildExportCondition($request, $targetType)
-    {
-        $conditions = $request->query->all();
-
-        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime'] = strtotime($conditions['endTime']);
-        }
-
-        $conditions['targetType'] = $targetType;
-
-        return $conditions;
     }
 
     private function genereateExportCsvFileName($targetType)
