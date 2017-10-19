@@ -9,14 +9,14 @@
 <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet" />
 <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
 
-{% block stylesheet_footer %}
-  {% if maincolor != 'default' %}
-    <link href="{{ asset('static-dist/app/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
-  {% endif %}
+{% if maincolor != 'default' %}
+  <link href="{{ asset('static-dist/app/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
 
-  {% if navigationcolor != 'default' %}
-    <link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
-  {% endif %}
-{% endblock %}
+{% if navigationcolor != 'default' %}
+  <link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
+{% include 'stylesheet/stylesheet-custom.html.twig' %}
 
 {{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
