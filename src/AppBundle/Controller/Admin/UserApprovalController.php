@@ -111,7 +111,7 @@ class UserApprovalController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approved');
 
         return array($user, $userApprovalInfo);
     }
@@ -125,7 +125,7 @@ class UserApprovalController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approved');
 
         $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
         $imgConverToData = new ImgConverToData();
