@@ -55,7 +55,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation = $this->getRelationDao()->getByConversationIdAndMessageId($conversationId, $messageId);
         $conversation = $this->getConversationDao()->get($conversationId);
 
-        if ($relation['isRead'] == self::RELATION_ISREAD_OFF) {
+        if (self::RELATION_ISREAD_OFF == $relation['isRead']) {
             $this->safelyUpdateConversationMessageNum($conversation);
             $this->safelyUpdateConversationunreadNum($conversation);
         } else {
@@ -64,7 +64,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
         $this->getRelationDao()->deleteByConversationIdAndMessageId($conversationId, $messageId);
         $relationCount = $this->getRelationDao()->count(array('conversationId' => $conversationId));
-        if ($relationCount == 0) {
+        if (0 == $relationCount) {
             $this->getConversationDao()->delete($conversationId);
         }
     }
@@ -78,15 +78,24 @@ class MessageServiceImpl extends BaseService implements MessageService
             $message = $this->getMessageDao()->get($id);
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['fromId'], $message['toId']);
             if (!empty($conversation)) {
-                $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
+                $fields = array(
+                    'latestMessageContent' => '一条私信被删除。',
+                );
+                $this->getConversationDao()->update($conversation['id'], $fields);
             }
 
             $conversation = $this->getConversationDao()->getByFromIdAndToId($message['toId'], $message['fromId']);
             if (!empty($conversation)) {
-                $this->getRelationDao()->deleteByConversationIdAndMessageId($conversation['id'], $message['id']);
+                $fields = array(
+                    'latestMessageContent' => '一条私信被删除。',
+                );
+                $this->getConversationDao()->update($conversation['id'], $fields);
             }
 
-            $this->getMessageDao()->delete($id);
+            $fields = array(
+                'isDelete' => 1,
+                );
+            $this->getMessageDao()->update($id, $fields);
         }
 
         return true;
