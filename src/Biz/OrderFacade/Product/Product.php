@@ -36,18 +36,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $title;
 
     /**
-     * 商品价格
+     * 商品原价
      *
      * @var float
      */
     public $originPrice;
 
     /**
-     * 折后价
+     * 促销价格
      *
      * @var float
      */
-    public $afterDiscountPrice = 0;
+    public $promotionPrice = 0;
 
     /**
      * 可使用的折扣
