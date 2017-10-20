@@ -25,7 +25,7 @@ class BizOrderLogAddIp extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `biz_order_log` DROP COLUMN `ip`;");
+        $db->exec('ALTER TABLE `biz_order_log` DROP COLUMN `ip`;');
     }
 
     protected function isFieldExist($table, $filedName)
