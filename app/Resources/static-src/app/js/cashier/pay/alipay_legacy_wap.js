@@ -6,4 +6,8 @@ export default class AlipayLegacyWap extends BasePayment {
     location.href = res.payUrl;
   }
 
+  customParams(params) {
+    params['app_pay'] = 'Y';
+    return params;
+  }
 }

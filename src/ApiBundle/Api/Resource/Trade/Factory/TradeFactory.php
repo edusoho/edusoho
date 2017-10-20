@@ -13,6 +13,9 @@ class TradeFactory
             case 'WechatPay_Native':
                 $tradeInstance = new WechatPayNativeTrade();
                 break;
+            case 'WechatPay_MWeb':
+                $tradeInstance = new WeChatPayMWebTrade();
+                break;
             case 'WechatPay_Js':
                 $tradeInstance = new WechatPayJsTrade();
                 break;

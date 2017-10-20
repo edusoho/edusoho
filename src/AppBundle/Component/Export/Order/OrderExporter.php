@@ -145,7 +145,7 @@ class OrderExporter extends Exporter
     private function getExportPayment($payment)
     {
         if (!$this->paymentDict) {
-            $this->paymentDict = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('newPayment');
+            $this->paymentDict = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         }
 
         return isset($this->paymentDict[$payment]) ? $this->paymentDict[$payment] : $payment;

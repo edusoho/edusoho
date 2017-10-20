@@ -81,7 +81,7 @@
 
         {% if order.paid_cash_amount %}
           <tr>
-            <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('newPayment', order.payment) }}</td>
+            <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('payment', order.payment) }}</td>
             <td width="75%">
               <span class="text-muted">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
               {% if paymentTrade.platform_sn is not null %}
@@ -146,7 +146,7 @@
                 {% endif %}
               </td>
               <td>
-                {{ orderLog.deal_data.ip|default('--')}}
+                {{ orderLog.ip|default('--')}}
               </td>
               <td>
                 {{ orderLog.created_time|date('Y-n-d H:i')}}

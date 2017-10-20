@@ -7,7 +7,6 @@ use AppBundle\Common\ConvertIpToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
-use AppBundle\Common\MathToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
 use AppBundle\Component\ShareSdk\WeixinShare;
