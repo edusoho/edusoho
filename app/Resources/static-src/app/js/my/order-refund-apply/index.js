@@ -10,9 +10,8 @@ let validator = $form.validate({
 
 $btn.click((event) => {
   if (validator.form()) {
+    $btn.button('loading');
     $.post($form.attr('action'), $form.serialize(), function (response) {
-      $btn.button('loading');
-      window.location.reload();
     }, 'json').error(function (jqxhr, textStatus, errorThrown) {
     });
   }
