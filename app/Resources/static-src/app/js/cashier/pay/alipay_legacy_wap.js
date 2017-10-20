@@ -14,7 +14,7 @@ export default class AlipayLegacyWap extends BasePayment {
   }
 
   isQQBuildInBrowser() {
-    return navigator.userAgent.match(/Mobile MQQBrowser/i) ? true : false;
+    return navigator.userAgent.match(/QQ\//i) ? true : false;
   }
 
   startInterval() {
