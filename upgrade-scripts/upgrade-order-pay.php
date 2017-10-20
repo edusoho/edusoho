@@ -1475,83 +1475,83 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if ($this->isFieldExist('biz_order', 'price_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `price_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '订单总价';");
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `price_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '订单总价';");
         }
 
         if ($this->isFieldExist('biz_order', 'pay_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `pay_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '应付价格';");
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `pay_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '应付价格';");
         }
 
         if ($this->isFieldExist('biz_order', 'paid_cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付的现金价格';");
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付的现金价格';");
         }
 
         if ($this->isFieldExist('biz_order', 'paid_coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付的虚拟币价格';");
+            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付的虚拟币价格';");
         }
 
         if ($this->isFieldExist('biz_order_item', 'price_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `price_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '订单价格';");
+            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `price_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '订单价格';");
         }
 
         if ($this->isFieldExist('biz_order_item', 'pay_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `pay_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
+            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `pay_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
         }
 
         if ($this->isFieldExist('biz_order_item_deduct', 'deduct_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_deduct` MODIFY COLUMN `deduct_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '优惠价格';");
+            $connection->exec("ALTER TABLE `biz_order_item_deduct` MODIFY COLUMN `deduct_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '优惠价格';");
         }
 
         if ($this->isFieldExist('biz_order_item_refund', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款现金价格';");
+            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款现金价格';");
         }
 
         if ($this->isFieldExist('biz_order_item_refund', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币价格';");
+            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币价格';");
         }
 
         if ($this->isFieldExist('biz_order_refund', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款总价格';");
+            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款总价格';");
         }
 
         if ($this->isFieldExist('biz_order_refund', 'refund_cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的现金价格';");
+            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的现金价格';");
         }
 
         if ($this->isFieldExist('biz_order_refund', 'refund_coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币';");
+            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币';");
         }
 
         if ($this->isFieldExist('biz_payment_trade', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
+            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
         }
 
         if ($this->isFieldExist('biz_payment_trade', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
+            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
         }
 
         if ($this->isFieldExist('biz_payment_trade', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
+            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
         }
 
         if ($this->isFieldExist('biz_user_balance', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
+            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
         }
 
         if ($this->isFieldExist('biz_user_balance', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
+            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
         }
 
         if ($this->isFieldExist('biz_user_balance', 'locked_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `locked_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
+            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `locked_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
         }
 
         if ($this->isFieldExist('biz_user_cashflow', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
+            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
         }
 
         if ($this->isFieldExist('biz_user_cashflow', 'user_balance')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `user_balance` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
+            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `user_balance` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
         }
 
         if (!$this->isFieldExist('biz_user_cashflow', 'action')) {
@@ -1559,11 +1559,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('biz_user_balance', 'recharge_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
+            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
         }
 
         if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
+            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
         }
 
         if (!$this->isFieldExist('biz_order_log', 'ip')) {
