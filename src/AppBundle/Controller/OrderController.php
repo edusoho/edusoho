@@ -24,10 +24,14 @@ class OrderController extends BaseController
         if (!$currentUser->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+        $qTargetType = $request->query->get('targetType');
+        $targetType = $request->request->get('targetType', $qTargetType);
 
-        $targetType = $request->request->get('targetType', $request->query->get('targetType'));
-        $targetId = $request->request->get('targetId', $request->query->get('targetId'));
-        $fields = empty($request->request->all()) ? $request->query->all() : $request->request->all();
+        $qTargetId = $request->query->get('targetId');
+        $targetId = $request->request->get('targetId', $qTargetId);
+
+        $fields = $request->request->all();
+        $fields = !empty($fields) ? $fields : $request->query->all();
 
         list($error, $orderInfo, $processor) = $this->getOrderFacadeService()->getOrderInfo($targetType, $targetId, $fields);
 
