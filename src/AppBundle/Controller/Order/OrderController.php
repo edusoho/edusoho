@@ -17,6 +17,7 @@ class OrderController extends BaseController
         $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
 
         $product->setAvailableDeduct();
+        $product->setPickedDeduct(array());
 
         return $this->render('order/show/index.html.twig', array(
             'product' => $product,

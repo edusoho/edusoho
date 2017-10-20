@@ -49,7 +49,6 @@ class OrderExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('fen_to_yuan', array($this, 'fenToYuan')),
             new \Twig_SimpleFilter('price_format', array($this, 'priceFormat')),
             new \Twig_SimpleFilter('major_currency', array($this, 'majorCurrency')),
             new \Twig_SimpleFilter('to_cash', array($this, 'toCash')),
@@ -62,7 +61,6 @@ class OrderExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('get_display_status', array($this, 'getDisplayStatus')),
-            new \Twig_SimpleFunction('get_wechat_openid', array($this, 'getWechatOpenid')),
         );
     }
 
@@ -70,7 +68,7 @@ class OrderExtension extends \Twig_Extension
     {
         $price = MathToolkit::simple($price, 0.01);
 
-        return $this->majorCurrency($price, $display);
+        return $this->moneyCurrency($price, $display);
     }
 
     public function toCoin($price, $display = 0)
@@ -78,27 +76,6 @@ class OrderExtension extends \Twig_Extension
         $price = MathToolkit::simple($price, 0.01);
 
         return $this->coinCurrency($price, $display);
-    }
-
-    public function getWechatOpenid()
-    {
-        return 2;
-        $isMicroAgent = strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
-        $hasOauthToken = $this->container->get('session')->has('oauth_token');
-        if ($isMicroAgent && $hasOauthToken) {
-            $oauthToken = $this->container->get('session')->get('oauth_token');
-
-            return empty($oauthToken['openid']) ? 0 : $oauthToken['openid'];
-        } else {
-            return 0;
-        }
-    }
-
-    public function fenToYuan($price, $displayPrefix = 1)
-    {
-        $price = MathToolkit::simple($price, 0.01);
-
-        return $this->majorCurrency($price, $displayPrefix);
     }
 
     /**
@@ -141,10 +118,9 @@ class OrderExtension extends \Twig_Extension
         return implode($priceParts);
     }
 
-    public function majorCurrency($price, $displayPrefix = 1)
+    protected function moneyCurrency($price, $displayPrefix = 1)
     {
-        $priceParts = $this->getCurrency()->formatToMajorCurrency($price);
-
+        $priceParts = $this->getCurrency()->formatToMoneyCurrency($price);
         switch ($displayPrefix) {
             case 1://number with "元" end
                 unset($priceParts['prefix']);
@@ -158,6 +134,18 @@ class OrderExtension extends \Twig_Extension
                 unset($priceParts['prefix']);
                 unset($priceParts['suffix']);
                 break;
+        }
+
+        return implode($priceParts);
+    }
+
+    public function majorCurrency($price, $displayPrefix = 1)
+    {
+        $priceParts = $this->getCurrency()->formatToMajorCurrency($price);
+
+        if (!$displayPrefix) {
+            unset($priceParts['prefix']);
+            unset($priceParts['suffix']);
         }
 
         return implode($priceParts);

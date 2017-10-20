@@ -7,7 +7,7 @@
   {% if  menu == 'admin_bill_cash' %}
     <div class="form-group">
       <select class="form-control" name="platform">
-        {% set newPayment = dict('payment') %}
+        {% set newPayment = dict('paymentSelect') %}
           {% set newPayment = newPayment|merge({'none':'cashflow.refund'|trans}) %}
         {{ select_options(newPayment, app.request.get('platform'), 'order.payment_pattern'|trans) }}
       </select>
