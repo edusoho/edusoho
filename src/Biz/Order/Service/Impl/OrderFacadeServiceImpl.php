@@ -117,8 +117,10 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $order = $processor->createOrder($orderFileds, $fields);
 
             return array($order, $processor);
-        } catch (\Exception $e) {
+        } catch (ServiceException $e) {
             throw $this->createServiceException($e->getMessage(), $e->getCode());
+        } catch (\Exception $e) {
+            throw new \Exception('Error');
         }
     }
 
