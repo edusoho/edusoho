@@ -11,6 +11,7 @@ use Biz\Order\Service\OrderFacadeService;
 use Biz\Order\Service\OrderService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -110,7 +111,7 @@ class OrderController extends BaseController
         }
         try {
             list($order, $processor) = $this->getOrderFacadeService()->createOrder($targetType, $targetId, $fields);
-        } catch (\Exception $e) {
+        } catch (ServiceException $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
 
