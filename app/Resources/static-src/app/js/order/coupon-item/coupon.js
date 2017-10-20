@@ -69,7 +69,7 @@ class Coupon {
         if (priceType === 'coin') {
           deductAmount = parseFloat(parseFloat(deductAmount) * parseFloat(coinRate)).toFixed(2) + ' ' + coinName;
         } else {
-          deductAmount = '￥' + deductAmount;
+          deductAmount = '￥' + parseFloat(deductAmount).toFixed(2);
         }
 
         this.useCouponAfter(deductAmount, code);
