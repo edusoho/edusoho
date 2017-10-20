@@ -57,7 +57,7 @@ class ExceptionListener
 
         $error = array('name' => 'Error');
 
-        if (!$this->container->get('kernel')->isDebug()) {
+        if ($this->container->get('kernel')->isDebug()) {
             $error['message'] = $exception->getMessage();
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         } else {
