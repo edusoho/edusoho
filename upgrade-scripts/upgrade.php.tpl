@@ -11,7 +11,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->updateScheme();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->logger(self::VERSION, 'error', $e->getMessage());
+            $this->logger($e->getMessage(),'error');
             $this->getConnection()->rollback();
             throw $e;
         }
@@ -24,7 +24,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $filesystem->remove($dir);
             }
         } catch (\Exception $e) {
-            $this->logger(self::VERSION, 'error', $e->getMessage());
+            $this->logger($e->getMessage(),'error');
         }
 
         $developerSetting = $this->getSettingService()->get('developer', array());
