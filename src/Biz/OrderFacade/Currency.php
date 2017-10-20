@@ -2,6 +2,7 @@
 
 namespace Biz\OrderFacade;
 
+use ApiBundle\Api\Util\Money;
 use Codeages\Biz\Framework\Context\Biz;
 
 class Currency
@@ -118,6 +119,42 @@ class Currency
         }
 
         $parts['suffix'] = !empty($this->coinSetting['coin_name']) ? $this->coinSetting['coin_name'] : CoinCurrency::SUFFIX;
+
+        return $parts;
+    }
+
+    public function formatToMoneyCurrency($value)
+    {
+        $value = round($value, 2);
+
+        $parts = array();
+
+        if (0 > $value) {
+            $parts['sign'] = '-';
+        }
+
+        if (MoneyCurrency::PREFIX) {
+            $parts['prefix'] = MoneyCurrency::PREFIX;
+        }
+
+        $parts['integer'] = number_format(floor(abs($value)), 0, '', MoneyCurrency::THOUSAND_DELIMITER);
+
+        if (0 < MoneyCurrency::PRECISION) {
+            $parts['decimalDelimiter'] = MoneyCurrency::DECIMAL_DELIMITER;
+            $parts['decimal'] = str_pad(
+                substr(
+                    strval(abs($value != 0 ? $value : 1) * pow(10, MoneyCurrency::PRECISION)),
+                    -1 * MoneyCurrency::PRECISION
+                ),
+                MoneyCurrency::PRECISION,
+                '0',
+                STR_PAD_LEFT
+            );
+        }
+
+        if (MoneyCurrency::SUFFIX) {
+            $parts['suffix'] = MoneyCurrency::SUFFIX;
+        }
 
         return $parts;
     }
