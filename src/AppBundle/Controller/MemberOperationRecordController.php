@@ -25,7 +25,7 @@ class MemberOperationRecordController extends BaseController
             'targetId' => $targetId,
             'target_type' => $targetType,
             'status' => 'success',
-            'operate_type' => 'exit',
+            'operate_type' => $operatType,
         );
 
         $fields = $request->query->all();

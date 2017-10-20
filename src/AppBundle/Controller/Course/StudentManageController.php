@@ -87,10 +87,11 @@ class StudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         return $this->render(
-            "course-manage/student/record/{$type}.html.twig",
+            "course-manage/student/records.html.twig",
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
+                'type' => $type
             )
         );
     }
