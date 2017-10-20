@@ -1,5 +1,4 @@
 import Emitter from 'component-emitter';
-import swfobject from 'es-swfobject';
 class BalloonCloudVideoPlayer extends Emitter {
 
   constructor(options) {
@@ -10,16 +9,7 @@ class BalloonCloudVideoPlayer extends Emitter {
   }
 
   setup() {
-	  let element = this.options.element;
-	  // todo delete, to move into the cloud player
-	  if (!swfobject.hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-		  $(element).css({
-			  'background-color': '#313131',
-			  'position': 'relative'
-		  });
-		  $(element).html(Translator.trans('site.flash_not_install_hint'));
-		  return;
-	  }
+    let element = this.options.element;
 
     var self = this;
 
@@ -62,7 +52,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       })
     }
 
-    if (self.options.enablePlaybackRates ) {
+    if (self.options.enablePlaybackRates) {
       extConfig = Object.assign(extConfig, {
         playbackRates: {
           enable: true,

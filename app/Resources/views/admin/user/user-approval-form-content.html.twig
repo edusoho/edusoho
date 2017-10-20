@@ -30,8 +30,8 @@
       <label for="faceImg">{{'admin.user.approval.fields.idcard_face_img_label'|trans}}</label>
     </div>
     <div>
-     <a href="{{ url('show_idcard', {userId: user.id, type:'face'})}}" target="_blank">
-     <img src="{{url('show_idcard', {userId: user.id, type:'face'})}}" width="400" />
+     <a href="{{ url('show_idcard', {userId: user.id, type:'face', status:status})}}" target="_blank">
+     <img src="{{url('show_idcard', {userId: user.id, type:'face', status:status})}}" width="400" />
      </a>
     </div>
   </div>
@@ -41,8 +41,8 @@
       <label for="faceImg">{{'admin.user.approval.fields.idcard_back_img_label'|trans}}</label>
     </div>
     <div>
-     <a href="{{url('show_idcard', {userId: user.id, type: 'back'})}}" target="_blank">
-          <img src="{{url('show_idcard', {userId: user.id, type: 'back'})}}" width="400" />
+     <a href="{{url('show_idcard', {userId: user.id, type: 'back', status:status})}}" target="_blank">
+          <img src="{{url('show_idcard', {userId: user.id, type: 'back', status:status})}}" width="400" />
       </a>
     </div>
   </div>
