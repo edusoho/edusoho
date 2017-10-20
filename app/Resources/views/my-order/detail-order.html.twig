@@ -77,7 +77,7 @@
               {% if order.source in ['marketing', 'outside'] %}
                 {{ dict_text('orderSource', order.source) }}
               {% elseif order.source in ['self'] %}
-                {{ dict_text('newPayment', order.payment, '--') }}
+                {{ dict_text('payment', order.payment, '--') }}
               {% endif %}
             </td>
             <td width="75%">
