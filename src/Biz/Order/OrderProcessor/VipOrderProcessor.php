@@ -10,8 +10,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = 'vip';
 
-    const MAX_DURATION = '999';
-
     public function getTarget($targetId)
     {
         return $this->getLevelService()->getLevel($targetId);
@@ -69,10 +67,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         } else {
             if (!ArrayToolkit::requireds($fields, array('unit', 'duration'))) {
                 throw new Exception('参数不正确');
-            }
-
-            if (is_float($fields['duration']) || (int) $fields['duration'] > static::MAX_DURATION || (int) $fields['duration'] <= 0) {
-                throw new Exception('参数错误!');
             }
 
             $unitType = $fields['unit'];
@@ -223,10 +217,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     public function createOrder($orderInfo, $fields)
     {
         $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
-
-        if (is_float($fields['duration']) || (int) $fields['duration'] > static::MAX_DURATION || (int) $fields['duration'] <= 0) {
-              throw new Exception('参数错误!');
-        }
 
         $unitNames = array('month' => '个月', 'year' => '年');
 
