@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Cash\Service\CashService;
@@ -24,9 +25,9 @@ class OrderController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $targetType = $request->request->get('targetType');
-        $targetId = $request->request->get('targetId');
-        $fields = $request->request->all();
+        $targetType = $request->request->get('targetType', $request->query->get('targetType'));
+        $targetId = $request->request->get('targetId', $request->query->get('targetId'));
+        $fields = empty($request->request->all()) ? $request->query->all() : $request->request->all();
 
         list($error, $orderInfo, $processor) = $this->getOrderFacadeService()->getOrderInfo($targetType, $targetId, $fields);
 
@@ -34,7 +35,7 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', $error['error']);
         }
 
-        if ( ((float)$orderInfo['totalPrice']) == 0) {
+        if (((float) $orderInfo['totalPrice']) == 0) {
             $formData = array();
             $formData['userId'] = $currentUser['id'];
             $formData['targetId'] = $targetId;
@@ -51,6 +52,7 @@ class OrderController extends BaseController
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }
         }
+
         return $this->render('order/order-create.html.twig', $orderInfo);
     }
 
@@ -59,7 +61,7 @@ class OrderController extends BaseController
         $currentUser = $this->getCurrentUser();
         $verifiedMobile = '';
 
-        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
+        if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
             $verifiedMobile = $currentUser['verifiedMobile'];
         }
 
@@ -99,8 +101,7 @@ class OrderController extends BaseController
 
         if (!isset($fields['couponCode']) || $fields['couponCode'] === '请输入优惠券') {
             $fields['couponCode'] = '';
-        }
-        else {
+        } else {
             $fields['couponCode'] = trim($fields['couponCode']);
         }
         try {
@@ -169,11 +170,10 @@ class OrderController extends BaseController
         if ($couponType == 'course') {
             if ($targetId != 0) {
                 $course = $this->getCourseService()->getCourse($targetId);
-                $couponContent = '课程:' . $course['title'];
+                $couponContent = '课程:'.$course['title'];
                 $url = $this->generateUrl('course_show', array('id' => $targetId));
                 $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
-            }
-            else {
+            } else {
                 $couponContent = '全部课程';
                 $url = $this->generateUrl('course_set_explore');
                 $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
@@ -187,11 +187,10 @@ class OrderController extends BaseController
         if ($couponType == 'classroom') {
             if ($targetId != 0) {
                 $classroom = $this->getClassroomService()->getClassroom($targetId);
-                $couponContent = '班级:' . $classroom['title'];
+                $couponContent = '班级:'.$classroom['title'];
                 $url = $this->generateUrl('classroom_introductions', array('id' => $targetId));
                 $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
-            }
-            else {
+            } else {
                 $couponContent = '全部班级';
                 $url = $this->generateUrl('classroom_explore');
                 $target = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
@@ -205,9 +204,8 @@ class OrderController extends BaseController
         if ($couponType == 'vip' && $this->isPluginInstalled('Vip')) {
             if ($targetId != 0) {
                 $level = $this->getLevelService()->getLevel($targetId);
-                $couponContent = '会员:' . $level['name'];
-            }
-            else {
+                $couponContent = '会员:'.$level['name'];
+            } else {
                 $couponContent = '全部VIP';
             }
 
