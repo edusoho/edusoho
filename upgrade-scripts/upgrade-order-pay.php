@@ -567,7 +567,7 @@ class EduSohoUpgrade extends AbstractUpdater
             )
             SELECT
                 `orderId` as `order_id`,
-                case when `type` = 'cancelled' then 'order.closed' when `type` = 'created' then 'order.created' when `type` = 'pay_success' then 'order.success' when `type` = 'refund_apply' then 'order_refund.auditing' when `type` = 'refund_cancel' then 'order_refund.cancel' when `type` = 'refund_failed' then 'order_refund.refused' when `type` = 'refund_success' then 'order_refund.refunded' else `type` end as `status`,
+                case when `type` = 'cancelled' then 'order.closed' when `type` = 'created' then 'order.created' when `type` = 'pay_success' then 'order.success' when `type` = 'refund_apply' then 'order_refund.auditing' when `type` = 'refund_cancel' then 'order_refund.cancel' when `type` = 'refund_failed' then 'order_refund.refused' when `type` = 'refund_success' then 'order.refunded' else `type` end as `status`,
                 `userId` as `user_id`,
                 `data` as `deal_data`,
                 '0' as `order_refund_id`,
@@ -870,6 +870,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
         $connection->exec("update biz_user_balance ub, (select user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
         $connection->exec("update biz_user_balance ub, (select user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
+        $connection->exec("update biz_user_balance ub set cash_amount = (select sum(amount) amount from biz_user_cashflow uc where uc.amount_type='money' and uc.type='outflow') where ub.user_id = 0;");
 
         return 1;
     }
