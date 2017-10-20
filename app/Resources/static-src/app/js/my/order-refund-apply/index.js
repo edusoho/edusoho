@@ -1,4 +1,5 @@
 let $form = $('#refund-apply-form');
+let $btn = $("#refund-apply-btn");
 let validator = $form.validate({
   rules: {
     reason : {
@@ -7,7 +8,12 @@ let validator = $form.validate({
   }
 });
 
-$("#refund-apply-btn").on('click', function () {
-  let $that = $(this);
-  $that.button('loading');
+$btn.click((event) => {
+  if (validator.form()) {
+    $.post($form.attr('action'), $form.serialize(), function (response) {
+      $btn.button('loading');
+      window.location.reload();
+    }, 'json').error(function (jqxhr, textStatus, errorThrown) {
+    });
+  }
 });

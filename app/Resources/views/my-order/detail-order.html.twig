@@ -152,7 +152,7 @@
               <td>
                 {{ orderLog.created_time|date('Y-n-d H:i')}}
                 <br>
-                <span class="color-gray text-sm">{{ orderLog.deal_data.ip|default('--')}}</span>
+                <span class="color-gray text-sm">{{ orderLog.ip|default('--')}}</span>
               </td>
             </tr>
           {% endfor %}
