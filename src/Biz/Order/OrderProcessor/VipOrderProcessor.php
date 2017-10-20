@@ -1,5 +1,4 @@
 <?php
-
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
@@ -50,10 +49,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($member) {
             if (array_key_exists('buyType', $fields) && $fields['buyType'] == 'upgrade') {
                 $buyType = 'upgrade';
-            } else {
+            }
+            else {
                 $buyType = 'renew';
             }
-        } else {
+        }
+        else {
             $buyType = 'new';
         }
 
@@ -66,12 +67,13 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if ($buyType == 'upgrade') {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
-        } else {
+        }
+        else {
             if (!ArrayToolkit::requireds($fields, array('unit', 'duration'))) {
                 throw new Exception('参数不正确');
             }
 
-            if (is_float($fields['duration']) || (int) $fields['duration'] > static::MAX_DURATION || (int) $fields['duration'] <= 0) {
+            if (is_float($fields['duration']) || (int)$fields['duration'] > static::MAX_DURATION || (int)$fields['duration'] <= 0) {
                 throw new Exception('参数错误!');
             }
 
@@ -103,7 +105,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if ($priceType == 'Coin') {
             $maxCoin = $coinPayAmount;
-        } else {
+        }
+        else {
             $maxCoin = NumberToolkit::roundUp($level['maxRate'] * $totalPrice / 100 * $cashRate);
         }
 
@@ -135,7 +138,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception('购买类型不正确，创建会员订单失败。');
         }
 
-        if (!(array_key_exists('buyType', $orderData) && $orderData['buyType'] == 'upgrade')) {
+        if (! (array_key_exists('buyType', $orderData) && $orderData['buyType'] == 'upgrade')) {
             $orderData['duration'] = intval($orderData['duration']);
 
             if (empty($orderData['duration'])) {
@@ -161,8 +164,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if (array_key_exists('buyType', $orderData) && $orderData['buyType'] == 'upgrade') {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
-        } else {
-            $unitPrice = $level[$orderData['unitType'].'Price'];
+        }
+        else {
+            $unitPrice = $level[$orderData['unitType'] . 'Price'];
 
             if ($priceType == 'Coin') {
                 $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
@@ -224,16 +228,21 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
 
+        if (is_float($fields['duration']) || (int)$fields['duration'] > static::MAX_DURATION || (int)$fields['duration'] <= 0) {
+            throw new Exception('参数错误!');
+        }
+
         $unitNames = array('month' => '个月', 'year' => '年');
 
         if (array_key_exists('buyType', $fields) && $fields['buyType'] == 'upgrade') {
-            $orderInfo['title'] = '升级会员到'.$level['name'];
+            $orderInfo['title'] = '升级会员到' . $level['name'];
             $orderInfo['snPrefix'] = 'M';
-        } else {
+        }
+        else {
             $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买');
-            $orderInfo['title'] .= $level['name'].' x '.$fields['duration'];
+            $orderInfo['title'] .= $level['name'] . ' x ' . $fields['duration'];
             $orderInfo['title'] .= $unitNames[$fields['unitType']];
-            $orderInfo['title'] .= $level['name'].'会员';
+            $orderInfo['title'] .= $level['name'] . '会员';
 
             $orderInfo['snPrefix'] = 'V';
         }
@@ -260,8 +269,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = '您已经成功加入'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
-        } elseif ($order['data']['buyType'] == 'renew') {
+            $message = '您已经成功加入' . $level['name'] . '，点击查看' . "<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>" . '课程';
+        }
+        elseif ($order['data']['buyType'] == 'renew') {
             $vip = $this->getVipService()->renewMember(
                 $order['userId'],
                 $order['data']['duration'],
@@ -270,8 +280,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = '您的'.$level['name'].'已成功续费，当前的有效期至：'.date('Y-m-d', $vip['deadline']);
-        } elseif ($order['data']['buyType'] == 'upgrade') {
+            $message = '您的' . $level['name'] . '已成功续费，当前的有效期至：' . date('Y-m-d', $vip['deadline']);
+        }
+        elseif ($order['data']['buyType'] == 'upgrade') {
             $vip = $this->getVipService()->upgradeMember(
                 $order['userId'],
                 $order['data']['targetId'],
@@ -279,7 +290,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = '您已经升级到'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
+            $message = '您已经升级到' . $level['name'] . '，点击查看' . "<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>" . '课程';
         }
 
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
@@ -326,7 +337,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function generateOrderToken()
     {
-        return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+        return 'c' . date('YmdHis', time()) . mt_rand(10000, 99999);
     }
 
     public function getOrderInfoTemplate()
