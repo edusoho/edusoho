@@ -105,7 +105,9 @@ export default class BasePayment {
     let params = {};
 
     if (tradeSn == undefined || tradeSn == '') {
-      return false;
+      return new Promise((resolve, reject) => {
+          resolve({isPaid:false});
+      });
     }
     if (tradeSn) {
       params.tradeSn = tradeSn;
