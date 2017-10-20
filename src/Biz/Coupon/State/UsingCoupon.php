@@ -25,6 +25,7 @@ class UsingCoupon extends Coupon implements CouponInterface
                 'orderId' => $params['orderId'],
             )
         );
+        $this->updateBachCouponUsedNum($coupon['batchId']);
 
         $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
 
@@ -52,6 +53,21 @@ class UsingCoupon extends Coupon implements CouponInterface
         ));
     }
 
+    private function updateBachCouponUsedNum($batchId)
+    {
+        if (0 == $batchId) {
+            return;
+        }
+        $couponApp = $this->getAppService()->getAppByCode('Coupon');
+        if (!empty($couponApp)) {
+            $usedCouponsCount = $this->getCouponService()->searchCouponsCount(array(
+                'status' => 'used',
+                'batchId' => $batchId,
+            ));
+            $usedCouponCount = $this->getCouponBatchService()->updateBatch($batchId, array('usedNum' => $usedCouponsCount));
+        }
+    }
+
     /**
      * @return LogService
      */
@@ -66,5 +82,21 @@ class UsingCoupon extends Coupon implements CouponInterface
     private function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    private function getCouponBatchService()
+    {
+        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
     }
 }
