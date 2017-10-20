@@ -22,7 +22,7 @@
         {{ select_options({ paid: 'admin.order.paid'|trans,created:'admin.order.created'|trans,cancelled:'admin.order.cancelled'|trans}, request.get('status'), 'order.status'|trans) }}
       </select>
       <select class="form-control" name="payment">
-        {{ select_options(dict('payment'), app.request.get('payment'), 'order.payment_pattern'|trans) }}
+        {{ select_options(dict('paymentSelect'), app.request.get('payment'), 'order.payment_pattern'|trans) }}
       </select>
     </div>
    

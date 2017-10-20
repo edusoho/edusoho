@@ -87,6 +87,14 @@ payment:
     coin: Coin
     none: Others
 
+paymentSelect:
+    alipay: Alipay
+    wechat: wechat
+    iap: iOSiap
+    lianlianpay: LLPay
+    coin: Coin
+    none: Others
+
 orderSource:
     self: Self
     marketing: Marketing
