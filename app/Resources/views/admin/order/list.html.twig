@@ -27,7 +27,7 @@
         </select>
 
         <select class="form-control" name="payment">
-          {{ select_options(dict('payment'), request.get('payment'), 'order.payment_pattern'|trans) }}
+          {{ select_options(dict('paymentSelect'), request.get('payment'), 'order.payment_pattern'|trans) }}
         </select>
         <select class="form-control" name="source">
           {{ select_options(dict('source'), request.get('source'), 'order.source'|trans) }}

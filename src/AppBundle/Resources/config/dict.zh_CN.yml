@@ -99,6 +99,14 @@ payment:
     coin: 虚拟币
     none: 其他
 
+paymentSelect:
+    alipay: 支付宝
+    wechat: 微信
+    iap: 苹果应用内支付
+    lianlianpay: 连连支付
+    coin: 虚拟币
+    none: 其他
+
 orderSource:
     self: 站内支付
     marketing: 营销平台支付
