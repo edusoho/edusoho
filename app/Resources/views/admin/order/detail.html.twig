@@ -146,7 +146,7 @@
                 {% endif %}
               </td>
               <td>
-                {{ orderLog.deal_data.ip|default('--')}}
+                {{ orderLog.ip|default('--')}}
               </td>
               <td>
                 {{ orderLog.created_time|date('Y-n-d H:i')}}
