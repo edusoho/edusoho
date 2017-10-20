@@ -124,7 +124,7 @@ class TestpaperForm {
           trim: true,
         },
         description: {
-          required: true,
+          //required: true,
           maxlength: 500,
           trim: true,
         },
