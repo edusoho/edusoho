@@ -868,8 +868,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_user_balance ub, (select DISTINCT user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow') a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
-        $connection->exec("update biz_user_balance ub, (select DISTINCT user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow') a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
+        $connection->exec("update biz_user_balance ub, (select user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
+        $connection->exec("update biz_user_balance ub, (select user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
 
         return 1;
     }
