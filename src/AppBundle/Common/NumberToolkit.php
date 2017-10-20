@@ -6,6 +6,8 @@ class NumberToolkit
 {
     public static function roundUp($value, $precision = 2)
     {
-        return round($value, $precision, PHP_ROUND_HALF_UP);
+        $mult = pow(10, $precision);
+
+        return ceil($value * $mult) / $mult;
     }
 }
