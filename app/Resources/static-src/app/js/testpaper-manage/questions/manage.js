@@ -94,7 +94,7 @@ export default class QuestionManage{
         var score = $(this).val();
 
         if (score == '0') {
-            notify('danger','activity.testpaper_manage.question_score_empty_hint');
+            notify('danger',Translator.trans('activity.testpaper_manage.question_score_empty_hint'));
             isOk = false;
         }
 
@@ -161,7 +161,7 @@ export default class QuestionManage{
     }
 
     $target.button('loading').addClass('disabled');
-    
+
     $.post(this.$element.attr('action'),{questions:this.questions,passedScore:passedScore},function(result){
       if (result.goto) {
         window.location.href = result.goto;

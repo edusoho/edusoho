@@ -28,10 +28,12 @@
             {{'user.settings.basic_info.shange_avatar'|trans}}
           </div>
         </div>
-        {% include 'common/crop-image.html.twig' with {
+        {% include 'common/local-crop-image.html.twig' with {
           saveUrl: 'settings_profile_avatar_crop_modal',
-          targetImg: '#profile-avatar'
-        }%}
+          targetImg: '#profile-avatar',
+          cropWidth: '270',
+          cropHeight: '270'
+        } %}
       </div>
       <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="nickname-form-group">
 

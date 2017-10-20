@@ -3119,6 +3119,7 @@ message.chat.send_for: 发给
 message.chat.unread_number: %unreadNum%条未读
 message.chat.total_number: 共%messageNum%条
 message.chat.total_unread_number: 共%messageNum%条
+message.chat.content_delete: 内容被删除
 
 #私信模块通用button
 message.btn.delete: 删除
@@ -7965,6 +7966,7 @@ log.action.course.sync_when_task_create: 同步创建任务
 log.action.course.sync_when_task_update: 同步更新任务
 log.action.course.sync_when_task_delete: 同步删除任务
 log.action.course.clone_course_set: 复制课程
+log.action.course.unlock_course: 解除课程同步
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
