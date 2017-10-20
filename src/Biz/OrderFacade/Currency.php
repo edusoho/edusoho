@@ -2,7 +2,6 @@
 
 namespace Biz\OrderFacade;
 
-use ApiBundle\Api\Util\Money;
 use Codeages\Biz\Framework\Context\Biz;
 
 class Currency

@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
@@ -167,7 +168,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return array(
             'id' => $balance['id'],
             'userId' => $balance['user_id'],
-            'cash' => $balance['amount']
+            'cash' => MathToolkit::simple($balance['amount'], 0.01)
         );
     }
 
