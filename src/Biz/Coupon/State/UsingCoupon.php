@@ -51,7 +51,6 @@ class UsingCoupon extends Coupon implements CouponInterface
         $this->getCouponService()->updateCoupon($this->coupon['id'], array(
             'status' => 'receive',
         ));
-        $this->updateBachCouponUsedNum($this->coupon['batchId']);
     }
 
     private function updateBachCouponUsedNum($batchId)
