@@ -66,7 +66,7 @@ class OrderInfo extends AbstractResource
             'account' => array(
                 'id' => $balance['id'],
                 'userId' => $balance['user_id'],
-                'cash' => MathToolkit::simple($balance['amount'], 0.01),
+                'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
             ),
         );
 
