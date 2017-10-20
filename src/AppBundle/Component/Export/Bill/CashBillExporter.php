@@ -48,7 +48,7 @@ class CashBillExporter extends Exporter
 
         foreach ($cashes as $cash) {
             $content = array();
-            $trade = $trades[$cash['trade_sn']];
+            $trade = empty($trades[$cash['trade_sn']]) ? array('platform_sn' => '--', 'trade_sn' => '--') : $trades[$cash['trade_sn']];
             if ($cash['type'] == 'outflow' && $cash['amount_type'] == 'money') {
                 //网校支出
                 $amountMark = '-';
@@ -83,7 +83,7 @@ class CashBillExporter extends Exporter
             $content[] = $amountMark.$cash['amount'] / 100;
             if ($cash['amount_type'] == 'money') {
                 $content[] = $paymentText;
-                $content[] = empty($trade['platform_sn']) ? '' : $trade['platform_sn']."\t";
+                $content[] = $trade['platform_sn']."\t";
             }
             $content[] = $profile['truename'];
             $content[] = $user['email'];
