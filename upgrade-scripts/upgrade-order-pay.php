@@ -544,8 +544,43 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateBizOrderLog($page)
     {
-        // TODO
-        return 1;
+        $this->addMigrateId('biz_order_log');
+
+        $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `order_log` where `id` not in (select migrate_id from `biz_order_log`)");
+        if (empty($count)) {
+            return 1;
+        }
+
+        $connection->exec("
+            INSERT into `biz_order_log` (
+                `order_id`,
+                `status`,
+                `user_id`,
+                `deal_data`,
+                `order_refund_id`,
+                `ip`,
+                `created_time`,
+                `updated_time`,
+                `migrate_id`
+            )
+            SELECT
+                `orderId` as `order_id`,
+                case when `type` = 'cancelled' then 'order.closed' when `type` = 'created' then 'order.created' when `type` = 'pay_success' then 'order.success' when `type` = 'refund_apply' then 'order_refund.auditing' when `type` = 'refund_cancel' then 'order_refund.cancel' when `type` = 'refund_failed' then 'order_refund.refused' when `type` = 'refund_success' then 'order_refund.refunded' else `type` end as `status`,
+                `userId` as `user_id`,
+                `data` as `deal_data`,
+                '0' as `order_refund_id`,
+                `ip`,
+                `createdTime` as `created_time`,
+                `createdTime` as `updated_time`,
+                `id` as `migrate_id`
+            FROM order_log WHERE id NOT IN (SELECT migrate_id FROM biz_order_log) LIMIT 0, {$this->pageSize}
+        ");
+
+        $this->logger('info', "处理biz_order_log的数据，当前页码{$page}");
+
+        return $page+1;
     }
 
     protected function migrateBizPaymentTrade($page)
@@ -1528,6 +1563,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
             $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
+        }
+
+        if (!$this->isFieldExist('biz_order_log', 'ip')) {
+            $connection->exec("ALTER TABLE `biz_order_log` ADD COLUMN `ip` VARCHAR(32) not null default '' COMMENT 'ip'");
         }
 
         $this->logger('info', '新建biz表');
