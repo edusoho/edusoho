@@ -64,7 +64,7 @@ class Coupon {
         const coinRate = this.$form.data('coin-rate');
         const coinName = this.$form.data('coin-name');
 
-        let deductAmount = (data['type'] == 'discount') ? this.$price.val() * data['rate'] : data['rate'];
+        let deductAmount = (data['type'] == 'discount') ? this.$price.val() * (1 - data['rate'] / 10) : data['rate'];
         
         if (priceType === 'coin') {
           deductAmount = parseFloat(parseFloat(deductAmount) * parseFloat(coinRate)).toFixed(2) + ' ' + coinName;
