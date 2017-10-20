@@ -415,9 +415,9 @@ refund_reason:
     other: 其他
 
 exit_reason:
-    refund: 退款
-    remove: 移除
-    exit: 用户退出
+    refund: 退款成功
+    remove: 老师移除
+    exit: 主动退出
 
 exchangeType:
     nickName: 用户名

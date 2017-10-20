@@ -48,7 +48,11 @@ class MemberOperationRecordController extends BaseController
 
         $userIds = ArrayToolkit::column($records, 'user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        
+        $orderIds = ArrayToolkit::column($records, 'order_id');
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($orders, 'id');
+        
         return $this->render(
             'member-record/quit.htm.twig',
             array(
@@ -56,6 +60,7 @@ class MemberOperationRecordController extends BaseController
                 'paginator' => $paginator,
                 'records' => $records,
                 'users' => $users,
+                'orders' => $orders,
             )
         );
     }
@@ -124,6 +129,11 @@ class MemberOperationRecordController extends BaseController
     protected function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 
 }

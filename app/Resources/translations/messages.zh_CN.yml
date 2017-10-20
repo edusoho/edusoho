@@ -8201,3 +8201,6 @@ site.join_to_learn: 加入学习
 site.fill_user_info_tip: 信息补全
 
 site.avatar.set_before_learning: 请先设置头像
+
+member.manage.exit_refund_yes: 是
+member.manage.exit_refund_no: 否
