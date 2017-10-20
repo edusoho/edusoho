@@ -24,17 +24,20 @@ export default class PaySDK {
 
   checkOrderStatus() {
     let paySdk = this.initPaySdk();
-    paySdk.checkOrderStatus();
+    if (paySdk != null) {
+      paySdk.checkOrderStatus();
+    }
   }
 
   cancelCheckOrder() {
     let paySdk = this.initPaySdk();
-    paySdk.cancelCheckOrder()
+    if (paySdk != null) {
+      paySdk.cancelCheckOrder()
+    }
   }
 
   initPaySdk(gateway) {
     gateway = gateway === undefined ? store.get('payment_gateway') : gateway;
-
     var paySdk = null;
     switch (gateway) {
       case 'WechatPay_Native':
