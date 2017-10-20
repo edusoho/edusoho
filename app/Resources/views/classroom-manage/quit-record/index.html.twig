@@ -5,5 +5,5 @@
 {% set submenu = 'record' %}
 
 {% block maincontent %}
-    {{ render(controller('AppBundle:MemberOperationRecord:showExitRecord', {request:app.request, type: 'classroom', id: classroom.id})) }}
+    {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'classroom', targetId: classroom.id, operatType: 'exit'})) }}
 {% endblock %}

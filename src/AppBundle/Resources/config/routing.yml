@@ -1800,9 +1800,9 @@ course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: AppBundle:Course/StudentManage:students}
 
-course_set_manage_course_quit_records:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
-  defaults: {_controller: AppBundle:Course/StudentManage:studentQuitRecords}
+course_set_manage_course_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/{type}/records
+  defaults: {_controller: AppBundle:Course/StudentManage:studentRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
@@ -2969,8 +2969,8 @@ try_export:
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
 member_operation_record:
-    path: /member/record/{type}/{id}
-    defaults: { _controller: AppBundle:MemberOperationRecord:showExitRecord }
+    path: /member/{operatType}/record/{targetType}/{targetId}
+    defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
 
 v2_demo:
    path: /v2/demo

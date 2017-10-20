@@ -3,7 +3,6 @@
 {% block title %}{{'course.members_manage.quit_records.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/course-manage/students/index.js']) %}
 {% set side_nav = 'students' %}
-{% set active = 'plan' %}
 
 {% block main %}
   <div class="panel panel-default">
@@ -20,17 +19,10 @@
       </div>
       {% endif %}
       </div>
-    <div class="panel-body">
-      <ul class="nav nav-pills mbl">
-        <li class="">
-          <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{ 'course.members_manage.official_student'|trans }}</a>
-        </li>
-
-        <li class="active">
-          <a href="javascript:;">{{ 'course.members_manage.quit_records'|trans }}</a>
-        </li>
-      </ul>
-      {{ render(controller('AppBundle:MemberOperationRecord:showExitRecord', {type: 'course', id: course.id})) }}
+      <div class="panel-body">
+        {% include 'course-manage/student/panel-nav.html.twig'  with {'panelNav': 'quit'} %}
+        {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {targetType: 'course', targetId: course.id, operatType: 'exit'})) }}
+      </div>
     </div>
   </div>
 {% endblock %}

@@ -81,13 +81,13 @@ class StudentManageController extends BaseController
         return array();
     }
 
-    public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)
+    public function studentRecordsAction(Request $request, $courseSetId, $courseId, $type)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         return $this->render(
-            'course-manage/student/quit-records.html.twig',
+            "course-manage/student/record/{$type}.html.twig",
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,

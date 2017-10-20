@@ -12,25 +12,25 @@ use AppBundle\Common\SimpleValidator;
 
 class MemberOperationRecordController extends BaseController
 {
-    public function showExitRecordAction(request $request, $id, $type)
+    public function showRecordAction(request $request, $operatType, $targetId, $targetType)
     {
-        $function = 'tryManage'.ucfirst($type);
+        $function = 'tryManage'.ucfirst($targetType);
         if (!method_exists($this, $function)) {
             throw new \RuntimeException("{$function} not exsit");
         }
 
-        $product = call_user_func(array($this, 'tryManage'.ucfirst($type)), $id);
+        $product = call_user_func(array($this, 'tryManage'.ucfirst($targetType)), $targetId);
 
         $condition = array(
-            'targetId' => $id,
-            'target_type' => $type,
+            'targetId' => $targetId,
+            'target_type' => $targetType,
             'status' => 'success',
             'operate_type' => 'exit',
         );
 
         $fields = $request->query->all();
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
         $paginator = new Paginator(
@@ -54,7 +54,7 @@ class MemberOperationRecordController extends BaseController
         $orders = ArrayToolkit::index($orders, 'id');
         
         return $this->render(
-            'member-record/quit.htm.twig',
+            "member-record/{$operatType}.html.twig",
             array(
                 'product' => $product,
                 'paginator' => $paginator,
@@ -63,36 +63,6 @@ class MemberOperationRecordController extends BaseController
                 'orders' => $orders,
             )
         );
-    }
-
-    private function getUserIds($keyword)
-    {
-        if (SimpleValidator::email($keyword)) {
-            $user = $this->getUserService()->getUserByEmail($keyword);
-
-            return $user ? array($user['id']) : array(-1);
-        }
-        if (SimpleValidator::mobile($keyword)) {
-            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers = $this->getUserService()->searchUserProfiles(
-                array('tel' => $keyword),
-                array('id' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-            $mobileNameUser = $this->getUserService()->getUserByNickname($keyword);
-            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-            $userIds = array_unique($userIds);
-
-            return $userIds ? $userIds : array(-1);
-        }
-        $user = $this->getUserService()->getUserByNickname($keyword);
-
-        return $user ? array($user['id']) : array(-1);
     }
 
     private function tryManageClassroom($id)
