@@ -30,9 +30,10 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
         if (!empty($record['reason'])) {
             unset($field['reason']);
+            unset($field['reason_type']);
         }
 
-        return $this->getRecordDao()->update($id, $field);
+        return $this->getRecordDao()->update($record['id'], $field);
     }
 
     public function countRecords($conditions)

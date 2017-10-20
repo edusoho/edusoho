@@ -160,6 +160,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
         }
     }
 
+    protected function updateMemberRecordByRefundItem($orderItem)
+    {
+        $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
+        $record = array(
+            'reason' => $orderRefund['reason'],
+            'refund_id' => $orderRefund['id'],
+            'reason_type' => 'refund',
+        );
+
+        $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
+    }
+
     public function getCreateExtra()
     {
         return array();
@@ -195,5 +207,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
     protected function getOrderService()
     {
         return $this->biz->service('Order:OrderService');
+    }
+
+    /**
+     * @return OrderRefundService
+     */
+    protected function getOrderRefundService()
+    {
+        return $this->biz->service('OrderFacade:OrderRefundService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->biz->service('MemberOperation:MemberOperationService');
     }
 }
