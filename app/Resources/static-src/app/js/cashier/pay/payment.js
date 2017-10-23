@@ -25,6 +25,7 @@ export default class BasePayment {
     if (trade.paidSuccessUrl) {
       location.href = trade.paidSuccessUrl;
     } else {
+      store.set('trade_' + this.getURLParameter('sn'), trade.tradeSn);
       this.afterTradeCreated(trade)
     }
 
@@ -49,13 +50,15 @@ export default class BasePayment {
   }
 
   startInterval() {
-    return false;
+    return true;
   }
 
   checkIsPaid() {
     let tradeSn = store.get('trade_' + this.getURLParameter('sn'));
     BasePayment.getTrade(tradeSn).then(res => {
       if (res.isPaid) {
+        store.remove('payment_gateway');
+        store.remove('trade_' + this.getURLParameter('sn'));
         location.href = res.paidSuccessUrl;
       }
     })
@@ -102,7 +105,9 @@ export default class BasePayment {
     let params = {};
 
     if (tradeSn == undefined || tradeSn == '') {
-      return false;
+      return new Promise((resolve, reject) => {
+          resolve({isPaid:false});
+      });
     }
     if (tradeSn) {
       params.tradeSn = tradeSn;
