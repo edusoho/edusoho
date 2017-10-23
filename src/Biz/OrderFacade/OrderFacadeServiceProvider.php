@@ -67,8 +67,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productPriceCalculator = new PickedDeductWrapper();
             $productPriceCalculator->setBiz($biz);
 
-            $productPriceCalculator->addCommand(new PickCouponCommand());
-            $productPriceCalculator->addCommand(new PickPaidCoursesCommand());
+            $productPriceCalculator->addCommand(new PickCouponCommand(), 10);
+            $productPriceCalculator->addCommand(new PickPaidCoursesCommand(), 20);
 
             return $productPriceCalculator;
         };
@@ -77,8 +77,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $availableDeductWrapper = new AvailableDeductWrapper();
             $availableDeductWrapper->setBiz($biz);
 
-            $availableDeductWrapper->addCommand(new AvailableCouponCommand());
-            $availableDeductWrapper->addCommand(new AvailablePaidCoursesCommand());
+            $availableDeductWrapper->addCommand(new AvailableCouponCommand(), 10);
+            $availableDeductWrapper->addCommand(new AvailablePaidCoursesCommand(), 20);
 
             return $availableDeductWrapper;
         };
