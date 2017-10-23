@@ -26,8 +26,6 @@ class BizXapi extends Migration
               KEY `status` (`status`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ");
-
-
     }
 
     /**
@@ -37,6 +35,6 @@ class BizXapi extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE `biz_xapi_statement`");
+        $connection->exec('DROP TABLE `biz_xapi_statement`');
     }
 }
