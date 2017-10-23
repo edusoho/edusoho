@@ -1,5 +1,4 @@
 import BasePayment from './payment';
-import 'store';
 
 export default class WechatPayNative extends BasePayment {
   $container = $('body');
@@ -46,15 +45,11 @@ export default class WechatPayNative extends BasePayment {
   }
 
   afterTradeCreated(res) {
-    store.set('trade_' + this.getURLParameter('sn'), res.tradeSn);
+    this.checkOrderStatus();
     let $modal = this.$container.find('#' + this.modalID);
     $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
     $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
     $modal.modal('show');
-    this.checkOrderStatus();
   }
 
-  startInterval() {
-    return true;
-  }
 }
