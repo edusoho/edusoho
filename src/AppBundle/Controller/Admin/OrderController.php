@@ -56,7 +56,7 @@ class OrderController extends BaseController
         );
     }
 
-    protected function prepareConditions($request, $targetType)
+    protected function prepareConditions($conditions)
     {
         if (!empty($conditions['orderItemType'])) {
             $conditions['order_item_target_type'] = $conditions['orderItemType'];

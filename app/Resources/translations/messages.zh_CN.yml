@@ -1046,14 +1046,18 @@ course.members_manage.official_student.add_expiry_day.failed_tips: 课程不能�
 course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，请课程发布后再增加。
 course.members_manage.quit_records: 退出记录
 course.members_manage.publish_btn: 发布
-course.members_manage.quit_records.content_title: 学员管理
-course.members_manage.quit_records.name: 学员名称
+course.members_manage.records.name: 学员名称
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
 course.members_manage.quit_records.date: 退出日期
 course.members_manage.quit_records.empty: 无学员记录
 course.members_manage.quit_records.join_time: 加入课程时间：
 course.members_manage.quit_records.success: 退款成功
+
+course.members_manage.join_records: 加入记录
+course.members_manage.records.join_reason: 加入原因
+course.members_manage.records.join_reason_type: 加入类型
+course.members_manage.join_records.date: 加入日期
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -4410,9 +4414,10 @@ course.member.classroom.tips: 您购买的班级已到期，无法学习任务�
 course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。
 course.member.course.join_btn: 退出并重新加入
-course.member.operation.quit_deadline_reach: 达到有效期，用户自己退出
-course.member.operation.admin_remove_course_student: 管理员手动移除
-course.member.operation.reason.remove_teachers: 删除老师角色时，退出课程
+course.member.operation.quit_deadline_reach: 达到有效期，退出课程
+course.member.operation.admin_remove_course_student: 老师手动移除学员
+course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
+
 # course/widgets
 course.widgets.belong_classroom.title: 所属%name%
 course.widgets.classroom_price.price: 价格：
@@ -8197,10 +8202,17 @@ order.pay_check_msg.pay_password_not_set: 支付密码未设置
 order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
 order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前）
 
+site.join_by_import: 导入
 site.join_by_free: 免费加入
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
 site.join_by_purchase: 购买加入
 site.remove_by_manual: 手动移除
 site.join_to_learn: 加入学习
 site.fill_user_info_tip: 信息补全
 
 site.avatar.set_before_learning: 请先设置头像
+
+member.manage.exit_refund_yes: 是
+member.manage.exit_refund_no: 否

@@ -916,14 +916,19 @@ course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to ex
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
 course.members_manage.quit_records: 'Quit history'
 course.members_manage.publish_btn: Publish
-course.members_manage.quit_records.content_title: 'Students'
-course.members_manage.quit_records.name: 'Student name'
+course.members_manage.records.name: 'Student name'
 course.members_manage.quit_records.reason: 'Quit reason'
 course.members_manage.quit_records.status: 'Refund status'
 course.members_manage.quit_records.date: 'Quit time'
 course.members_manage.quit_records.empty: 'No data'
 course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
+
+course.members_manage.join_records: 加入记录
+course.members_manage.records.join_reason: 加入原因
+course.members_manage.records.join_reason_type: 加入类型
+course.members_manage.join_records.date: 加入日
+
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
@@ -6530,4 +6535,13 @@ site.remove_by_manual: Manual remove
 site.join_to_learn: Join to learn
 site.fill_user_info_tip: Fill user info
 
+site.join_by_import: 导入课程
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
+
+
 site.avatar.set_before_learning: Please set avatar first
+
+member.manage.exit_refund_yes: 'Yes'
+member.manage.exit_refund_no: 'No'

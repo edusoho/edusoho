@@ -19,13 +19,20 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
             'orderbys' => array('id', 'created_time', 'operate_time'),
             'conditions' => array(
                 'id = :id',
+                'user_id IN (:user_ids)',
                 'operate_type = :operate_type',
                 'operate_time > :operate_time_GT',
                 'operate_time >= :operate_time_GE',
                 'operate_time < :operate_time_LT',
                 'target_type = :target_type',
+                'target_id = :target_id',
             ),
         );
+    }
+
+    public function getRecordByOrderIdAndType($orderId, $type)
+    {
+        return $this->getByFields(array('order_id' => $orderId, 'operate_type' => $type));
     }
 
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time')

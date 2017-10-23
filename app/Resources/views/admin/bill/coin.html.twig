@@ -5,7 +5,6 @@
 {% block main %}  
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
     <p class="text-muted">
-      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{ math_format(account.amount, 0.01)|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
       <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
       <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ outflow|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
       <span class="pull-right">
