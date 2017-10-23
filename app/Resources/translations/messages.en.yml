@@ -6185,6 +6185,7 @@ testpaper.do_gagin: 'Test again'
 testpaper.redo_countdown: 'Redo countdown'
 question_task.empty_tips: 'There is no problem with this task'
 payment.useless_tips: 'The payment method is not open. Please contact the administrator'
+payment.unusable_tips: 暂无可用的支付的支付方式,请尝试在微信外支付。
 open_course.live_label: Live
 open_course.lesson_num: 'The course No.%num%'
 open_course.student_num: '%num% peoples learning'
