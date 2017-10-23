@@ -17,7 +17,7 @@ class PickCouponCommandTest extends BaseTestCase
 
         $this->mockBiz('Coupon:CouponService', array(
             array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
-            array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10)),
+            array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10, 'code'=>'xxx')),
             array('functionName' => 'getDeductAmount', 'returnValue' => 10),
         ));
 
