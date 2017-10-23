@@ -1070,12 +1070,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 `targetType` as `target_type`,
                 'join' as `operate_type`,
                 `createdTime` as `operate_time`,
-                0 as `operator_id`,
+                `userId` as `operator_id`,
                 '' as `data`,
                 `userId` as `user_id`,
                 `id` as `order_id`,
                 0 as `refund_id`,
-                '' as `reason`,
+                `note` as `reason`,
                 `createdTime` as `created_time`
             from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join') LIMIT 0, {$this->pageSize}
         "); 
@@ -1128,7 +1128,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `user_id`,
                 `orderId` as `order_id`,
                 `id` as `refund_id`,
-                `reasonNote` as `reason`,
+                `note` as `reason`,
                 `createdTime` as `created_time`
             from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, {$this->pageSize};
         ");
