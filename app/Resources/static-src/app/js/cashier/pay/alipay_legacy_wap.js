@@ -7,7 +7,17 @@ export default class AlipayLegacyWap extends BasePayment {
   }
 
   customParams(params) {
-    params['app_pay'] = 'Y';
+    if (!this.isQQBuildInBrowser()) {
+      params['app_pay'] = 'Y';
+    }
     return params;
+  }
+
+  isQQBuildInBrowser() {
+    return navigator.userAgent.match(/QQ\//i) ? true : false;
+  }
+
+  startInterval() {
+    return false;
   }
 }
