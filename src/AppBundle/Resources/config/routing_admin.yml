@@ -683,7 +683,7 @@ admin_setting_live_logo_upload:
     permissions: [admin_setting_live_course]
 
 admin_setting_live_logo_remove:
-    path:  /setting/live/logo/remove
+    path:  /setting/live/{type}/logo/remove
     defaults: { _controller: AppBundle:Admin/Setting:liveLogoRemove }
     methods: [POST]
     permissions: [admin_setting_live_course]
@@ -2040,6 +2040,10 @@ admin_cloud_upload_live_logo:
 admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:Admin/EduCloud:liveSetting }
+
+admin_cloud_edulive_logo_crop:
+    path:  /cloud/edulive/{type}/logo/crop
+    defaults: { _controller: AppBundle:Admin/EduCloud:logoCrop }
 
 #sensitive
 admin_keyword:

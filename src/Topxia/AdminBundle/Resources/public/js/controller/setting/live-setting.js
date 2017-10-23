@@ -6,9 +6,9 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $form = $("#live-setting-form");
 
-        if($('#live-course-logo-upload').length>0) {
+        if($('#web-logo-upload').length>0) {
             var uploader = new WebUploader({
-                element: '#live-course-logo-upload',
+                element: '#web-logo-upload',
                 accept: {  
                     title: 'Images',  
                     extensions: 'png',  
@@ -17,29 +17,45 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadSuccess', function(file, response ) {
-                var url = $("#live-course-logo-upload").data("gotoUrl");
-
-                $("#live-course-logo-container").html('<img src="' + response.url + '">');
-                $form.find('[name=logo_path]').val(response.url);
-                $form.find('[name=logo_file_id]').val(response.id);
-                $("#live-course-logo-remove").show();
-                Notify.success(Translator.trans('上传直播课程的LOGO成功！'));
+                var url = $("#web-logo-upload").data("gotoUrl");
                 
-            });
-
-            $("#live-course-logo-remove").on('click', function(){
-                if (!confirm(Translator.trans('确认要删除吗？'))) return false;
-                var $btn = $(this);
-                $.post($btn.data('url'), function(){
-                    $("#live-course-logo-container").html('');
-                    $form.find('[name=logo_path]').val('');
-                    $btn.hide();
-                    Notify.success(Translator.trans('删除直播课程LOGO成功！'));
-                }).error(function(){
-                    Notify.danger(Translator.trans('删除直播课程LOGO失败！'));
-                });
+                $.get(url, function(html) {
+                  $("#modal").modal('show').html(html);
+                })
             });
         }
+
+        if($('#app-logo-upload').length>0) {
+            var uploader = new WebUploader({
+                element: '#app-logo-upload',
+                accept: {  
+                    title: 'Images',  
+                    extensions: 'png',  
+                    mimeTypes: 'image/png'  
+                },
+            });
+
+            uploader.on('uploadSuccess', function(file, response ) {
+                var url = $("#app-logo-upload").data("gotoUrl");
+                
+                $.get(url, function(html) {
+                  $("#modal").modal('show').html(html);
+                })
+            });
+        }
+
+        $(".logo-remove-btn-js").on('click', function(){
+            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+            var $btn = $(this);
+            var type = $btn.data('type');
+            $.post($btn.data('url'), function(){
+                $btn.siblings('.logo-container-js').html('');
+                $btn.hide();
+                Notify.success(Translator.trans('删除直播课程LOGO成功！'));
+            }).error(function(){
+                Notify.danger(Translator.trans('删除直播课程LOGO失败！'));
+            });
+        });
     };
 
 });

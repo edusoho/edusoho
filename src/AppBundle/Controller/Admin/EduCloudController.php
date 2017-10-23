@@ -1588,6 +1588,19 @@ class EduCloudController extends BaseController
 
             $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
 
+            if ($capacity['provider'] == 7) {
+                $logoData = array(
+                    'logoPcUrl' => $liveCourseSetting['webLogoPath'],
+                    'logoClientUrl' => $liveCourseSetting['appLogoPath'],
+                    'logoGotoUrl' => $liveCourseSetting['logoUrl']
+                );
+                $result = $client->setLiveLogo($logoData);
+
+                if (isset($result['error'])) {
+                    return $this->createMessageResponse('error', '设置直播logo出错');
+                }
+            }
+
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
 
@@ -1610,6 +1623,47 @@ class EduCloudController extends BaseController
             'account' => $overview['account'],
             'liveCourseSetting' => $liveCourseSetting,
             'capacity' => $capacity,
+        ));
+    }
+
+    public function logoCropAction(Request $request, $type)
+    {
+        if (!in_array($type, array('web','app'))) {
+            return $this->createMessageResponse('error', '参数不正确');
+        }
+
+        if ($request->getMethod() === 'POST') {
+            
+            $options = $request->request->all();
+
+            $image = $options['images'][0];
+            $file = $this->getFileService()->getFile($image['id']);
+
+            $liveSetting = $this->getSettingService()->get('live-course', array());
+            $url = $this->get('web.twig.extension')->getFurl($file['uri']);
+
+            $liveSetting["{$type}LogoFileId"] = $file['id'];
+            $liveSetting["{$type}LogoPath"] = $url;
+
+            $this->getSettingService()->set('live-course', $liveSetting);
+
+            return $this->createJsonResponse(array('fileId' => $file['id'], 'url' => $url, 'type' => $type));
+        }
+
+        $types = array(
+            'web' => array('width' => 280, 'height' => 60),
+            'app' => array('width' => 280, 'height' => 40),
+        );
+
+        $fileId = $request->getSession()->get('fileId');
+
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, $types[$type]['width'], $types[$type]['height']);
+
+        return $this->render('admin/edu-cloud/live/logo-crop-modal.html.twig', array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+            'type' => $type
         ));
     }
 
@@ -1671,5 +1725,10 @@ class EduCloudController extends BaseController
     protected function getConsultService()
     {
         return $this->createService('EduCloud:MicroyanConsultService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 }

@@ -43,27 +43,41 @@
       <legend>{{ 'admin.edu_cloud.edu_live.base_setting'|trans }}</legend>
 
       <div class="form-group">
-        <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo'|trans}}：</label>
+        <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo_web'|trans}}：</label>
         <div class="controls col-md-9">
-          <div id="live-course-logo-container">
-            {% if liveCourseSetting.logo_path|default(false) %}<img src="{{ asset(liveCourseSetting.logo_path) }}">{% endif %}
+          <div class="logo-container-js">
+            {% if liveCourseSetting.webLogoPath|default(false) %}<img src="{{ asset(liveCourseSetting.webLogoPath) }}">{% endif %}
           </div>
-          <a class="btn btn-default btn-sm" id="live-course-logo-upload"
+          <a class="btn btn-default btn-sm" id="web-logo-upload"
           data-upload-token="{{ upload_token('system', 'image') }}"
-          data-url="{{ path('admin_setting_live_logo_upload') }}"
+          data-goto-url="{{ path('admin_cloud_edulive_logo_crop', {type: 'web'}) }}"
           >{{'admin.edu_cloud.edu_live.upload_btn'|trans}}</a>
-          <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not liveCourseSetting.logo_path|default(false) %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
+          <button class="btn btn-default btn-sm logo-remove-btn-js" type="button" data-url="{{ path('admin_setting_live_logo_remove', {type: 'web'}) }}" data-type='web' {% if not liveCourseSetting.webLogoPath|default('') %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
           <p class="help-block">
-            {{'admin.edu_cloud.edu_live.upload_tips'|trans|raw}}
+            {{'admin.edu_cloud.edu_live.upload_web_tips'|trans|raw}}
           </p>
-          <input type="hidden" name="logo_path" value="{{ liveCourseSetting.logo_path|default("") }}">
-          <input type="hidden" name="logo_file_id" value="{{ liveCourseSetting.logo_file_id|default("") }}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo_app'|trans}}：</label>
+        <div class="controls col-md-9">
+          <div class="logo-container-js">
+            {% if liveCourseSetting.appLogoPath|default(false) %}<img src="{{ asset(liveCourseSetting.appLogoPath) }}">{% endif %}
+          </div>
+          <a class="btn btn-default btn-sm" id="app-logo-upload"
+          data-upload-token="{{ upload_token('system', 'image') }}"
+          data-goto-url="{{ path('admin_cloud_edulive_logo_crop', {type:'app'}) }}"
+          >{{'admin.edu_cloud.edu_live.upload_btn'|trans}}</a>
+          <button class="btn btn-default btn-sm logo-remove-btn-js" type="button" data-url="{{ path('admin_setting_live_logo_remove', {type: 'app'}) }}" data-type='app' {% if not liveCourseSetting.appLogoPath|default('') %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
+          <p class="help-block">
+            {{'admin.edu_cloud.edu_live.upload_app_tips'|trans|raw}}
+          </p>
         </div>
       </div>
       <div class="form-group">
         <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_live.logo_url'|trans }}：</label>
         <div class="controls col-md-9">
-          <input type="text" class="form-control width-input width-input-large" name="logo_url" value="{{ liveCourseSetting.logo_url }}" />
+          <input type="text" class="form-control width-input width-input-large" name="logoUrl" value="{{ liveCourseSetting.logoUrl|default('') }}" />
           <p class="help-block">
             {{'admin.edu_cloud.edu_live.logo_url_tips'|trans|raw}}
           </p>
