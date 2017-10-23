@@ -912,7 +912,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $this->createOperateRecord($member, 'join', array('order' => $order));
+        $reason = $this->buildJoinReason($info, $order);
+        $this->createOperateRecord($member, 'join', $reason);
 
         $params = array(
             'orderId' => $fields['orderId'],
@@ -937,6 +938,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         return $member;
+    }
+
+    private function buildJoinReason($info, $order)
+    {
+        if (ArrayToolkit::requireds($info, array('reason', 'reason_type'))) {
+            return ArrayToolkit::parts($info, array('reason', 'reason_type'));
+        }
+
+        $orderId = empty($order) ? 0 : $order['id'];
+
+        return $this->getMemberOperationService()->getJoinReasonByOrderId($orderId);
     }
 
     public function becomeStudentWithOrder($classroomId, $userId, $params = array())
@@ -1261,6 +1273,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
+        $data = array(
+            'reason' => 'site.join_by_auditor',
+            'reason_type' => 'auditor_join',
+        );
+        $this->createOperateRecord($member, 'join', $data);
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
         $this->dispatchEvent(
@@ -1296,7 +1313,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
-        $data = array('reason' => 'classroom.join_as_assistant');
+        $data = array(
+            'reason' => 'site.join_by_assistant',
+            'reason_type' => 'assistant_join',
+        );
         $this->createOperateRecord($member, 'join', $data);
 
         $this->dispatchEvent(
@@ -1966,11 +1986,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
-    protected function createOperateRecord($member, $operateType, $data = array())
+    protected function createOperateRecord($member, $operateType, $reason)
     {
         $currentUser = $this->getCurrentUser();
-        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
-
         $classroom = $this->getClassroom($member['classroomId']);
 
         $data['member'] = $member;
@@ -1982,11 +2000,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'target_type' => 'classroom',
             'operate_type' => $operateType,
             'operate_time' => time(),
-            'operator_id' => $operatorId,
+            'operator_id' => $currentUser['id'],
             'data' => $data,
-            'reason' => empty($data['reason']) ? '' : $data['reason'],
             'order_id' => $member['orderId'],
         );
+        $record = array_merge($record, ArrayToolkit::parts($reason, array('reason', 'reason_type')));
 
         return $this->getMemberOperationService()->createRecord($record);
     }

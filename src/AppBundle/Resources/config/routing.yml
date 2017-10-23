@@ -1800,9 +1800,9 @@ course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: AppBundle:Course/StudentManage:students}
 
-course_set_manage_course_quit_records:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
-  defaults: {_controller: AppBundle:Course/StudentManage:studentQuitRecords}
+course_set_manage_course_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/{type}/records
+  defaults: {_controller: AppBundle:Course/StudentManage:studentRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
@@ -2423,8 +2423,8 @@ classroom_manage_aduitor:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
 
 classroom_manage_record:
-    path: /classroom/{id}/manage/refund_record
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:refundRecord }
+    path: /classroom/{id}/manage/record/{type}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:record }
 
 classroom_manage_service:
     path: /classroom/{id}/manage/service
@@ -2968,6 +2968,9 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
+member_operation_record:
+    path: /member/{operatType}/record/{targetType}/{targetId}
+    defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
 
 v2_demo:
    path: /v2/demo
@@ -2980,3 +2983,4 @@ v2_demo_modal:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+

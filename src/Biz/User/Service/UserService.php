@@ -294,4 +294,6 @@ interface UserService
     public function changeAvatarFromImgUrl($userId, $imgUrl);
 
     public function generateNickname($registration, $maxLoop = 100);
+
+    public function getUserIdsByKeyword($word);
 }
