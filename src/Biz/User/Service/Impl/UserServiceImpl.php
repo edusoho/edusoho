@@ -1914,13 +1914,15 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->delete($id);
     }
 
-    public function getUserIdsByKeyword($word) 
+    public function getUserIdsByKeyword($keyword) 
     {
+
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserByEmail($keyword);
 
             return $user ? array($user['id']) : array(-1);
         }
+        
         if (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserByVerifiedMobile($keyword);
             $profileUsers = $this->searchUserProfiles(

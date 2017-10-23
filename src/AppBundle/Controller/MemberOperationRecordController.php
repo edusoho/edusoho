@@ -26,7 +26,7 @@ class MemberOperationRecordController extends BaseController
 
         $fields = $request->query->all();
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
+            $condition['user_ids'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
         $paginator = new Paginator(
@@ -50,6 +50,7 @@ class MemberOperationRecordController extends BaseController
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
 
+        $condition = $request->query->all();
         return $this->render(
             "member-record/{$operatType}.html.twig",
             array(
@@ -58,6 +59,7 @@ class MemberOperationRecordController extends BaseController
                 'records' => $records,
                 'users' => $users,
                 'orders' => $orders,
+                'conditions' => $condition,
             )
         );
     }
