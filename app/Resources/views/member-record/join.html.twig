@@ -22,21 +22,24 @@
       {% set user = users[record['user_id']] %}
       {% set order = orders[record['order_id']]|default() %}
       <tr>
-        <td class="media" style="vertical-align: middle;">
+        <td class="media vertical-middle">
           {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
           <a class="link-primary" target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
         </td>
-        <td style="vertical-align: middle;">
+        <td class="vertical-middle">
             {{ record.created_time|date('Y-n-d H:i') }}
         </td>
-        <td style="vertical-align: middle;word-break: break-all;">
+        <td class="vertical-middle">
           {{ dict_text('join_reason', record.reason_type) }}
         </td>
-        <td style="vertical-align: middle;word-break: break-all;">
-            {{ record.reason|trans }}
+        <td class="vertical-middle">
+          {% set operator = users[record['operator_id']]|default() %}
+          {% if operator %}
+              ({{ operator.nickname }})
+          {% endif %}{{ record.reason|trans }}
         </td>
-        <td>
-          {% if order.pay_amount > 0 %}
+        <td class="vertical-middle">
+          {% if order.pay_amount|default() > 0 %}
             是
           {% else %}
             否

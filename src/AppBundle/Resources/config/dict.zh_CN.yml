@@ -422,7 +422,7 @@ exit_reason:
 join_reason:
     free_join: 免费加入
     buy_join: 购买加入
-    export_join: 导入
+    import_join: 导入用户
     
 
 exchangeType:

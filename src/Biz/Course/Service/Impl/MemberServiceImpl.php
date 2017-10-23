@@ -79,7 +79,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             } else {
                 $info = array(
                     'orderId' => 0,
-                    'note' => $data['remark'],
+                    'reason' => 'site.join_by_import',
+                    'reason_type' => 'import_join',
                     'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
                 );
 
@@ -610,15 +611,12 @@ class MemberServiceImpl extends BaseService implements MemberService
             'deadline' => $deadline,
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
-            'remark' => empty($info['note']) ? '' : $info['note'],
+            'remark' => empty($info['reason']) ? '' : $info['reason'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $reason = array(
-            'reason' => empty($info['note']) ? 'course.member.operation.buy' : $info['note'],
-            'reason_type' => 'user_join'  
-        );
+        $reason = $this->buildJoinReason($info, $order);
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
@@ -1115,7 +1113,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function createOperateRecord($member, $operateType, $reason)
     {
         $currentUser = $this->getCurrentUser();
-        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
         $data['member'] = $member;
         $course = $this->getCourseService()->getCourse($member['courseId']);
         $record = array(
@@ -1126,7 +1123,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'target_type' => 'course',
             'operate_type' => $operateType,
             'operate_time' => time(),
-            'operator_id' => $operatorId,
+            'operator_id' => $currentUser['id'],
             'data' => $data,
             'order_id' => $member['orderId'],
             'title' => $course['title'],
@@ -1136,6 +1133,36 @@ class MemberServiceImpl extends BaseService implements MemberService
         $record =  $this->getMemberOperationService()->createRecord($record);
 
         return $record;
+    }
+
+    protected function buildJoinReason($reason, $order)
+    {
+        if (!empty($reason['reason_type'])) {
+            if (!ArrayToolkit::requireds($reason, array('reason', 'reason_type'))) {
+                throw $this->createServiceException('reason or reason_type is invalid!');
+            }
+
+            return ArrayToolkit::parts($reason, array('reason', 'reason_type'));
+        }
+
+        if (!empty($order['source']) && $order['source'] === 'outside') {
+            return array(
+                'reason' => 'site.join_by_import',
+                'reason_type' => 'import_join'
+            );
+        }
+
+        if (!empty($order['pay_amount']) && $order['pay_amount'] > 0) {
+            return array(
+                'reason' => 'site.join_by_purchase',
+                'reason_type' => 'buy_join'
+            );
+        }
+
+        return array(
+            'reason' => 'site.join_by_free',
+            'reason_type' => 'free_join'
+        );
     }
 
     private function addMember($member, $reason = array())

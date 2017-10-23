@@ -1976,7 +1976,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function createOperateRecord($member, $operateType, $reason)
     {
         $currentUser = $this->getCurrentUser();
-        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
         $classroom = $this->getClassroom($member['classroomId']);
 
         $data['member'] = $member;
@@ -1988,7 +1987,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'target_type' => 'classroom',
             'operate_type' => $operateType,
             'operate_time' => time(),
-            'operator_id' => $operatorId,
+            'operator_id' => $currentUser['id'],
             'data' => $data,
             'order_id' => $member['orderId'],
         );

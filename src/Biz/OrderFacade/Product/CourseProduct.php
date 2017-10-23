@@ -61,8 +61,7 @@ class CourseProduct extends Product implements OrderStatusCallback
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
-            'orderId' => $order['id'],
-            'note' => $order['created_reason'],
+            'orderId' => $order['id']
         );
 
         try {

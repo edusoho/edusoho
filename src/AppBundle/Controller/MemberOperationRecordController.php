@@ -47,12 +47,13 @@ class MemberOperationRecordController extends BaseController
         );
 
         $userIds = ArrayToolkit::column($records, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $operaterIds = ArrayToolkit::column($records, 'operator_id');
+        $users = $this->getUserService()->findUsersByIds(array_merge($userIds, $operaterIds));
         
         $orderIds = ArrayToolkit::column($records, 'order_id');
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
-        
+
         return $this->render(
             "member-record/{$operatType}.html.twig",
             array(
