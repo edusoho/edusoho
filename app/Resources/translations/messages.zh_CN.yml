@@ -8085,3 +8085,6 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
+
+

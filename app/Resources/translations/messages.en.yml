@@ -6407,3 +6407,7 @@ task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
+
+admin.cloud_live.manage.logo_set.modal_title: Crop Live LOGO
+
+

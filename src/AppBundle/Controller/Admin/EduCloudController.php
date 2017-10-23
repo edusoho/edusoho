@@ -1588,7 +1588,7 @@ class EduCloudController extends BaseController
 
             $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
 
-            if ($capacity['provider'] == 7) {
+            if ($capacity['provider'] == 'talkFun') {
                 $logoData = array(
                     'logoPcUrl' => $liveCourseSetting['webLogoPath'],
                     'logoClientUrl' => $liveCourseSetting['appLogoPath'],
