@@ -10,7 +10,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
-use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\CourseService;
 use Biz\Thread\Service\ThreadService;
 use AppBundle\Common\ClassroomToolkit;
@@ -274,7 +273,7 @@ class ClassroomManageController extends BaseController
             'classroom-manage/record/index.html.twig',
             array(
                 'classroom' => $classroom,
-                'type' => $type
+                'type' => $type,
             )
         );
     }
@@ -309,8 +308,8 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
         $this->getClassroomService()->removeStudent(
-            $classroomId, 
-            $userId, 
+            $classroomId,
+            $userId,
             array(
                 'reason' => 'site.remove_by_manual',
                 'reason_type' => 'remove',

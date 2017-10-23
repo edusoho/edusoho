@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\SimpleValidator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
@@ -87,11 +86,11 @@ class StudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         return $this->render(
-            "course-manage/student/records.html.twig",
+            'course-manage/student/records.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'type' => $type
+                'type' => $type,
             )
         );
     }

@@ -102,7 +102,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $orderItem = $orderRefundItem['order_item'];
         $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
     }
-    
+
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');

@@ -495,8 +495,8 @@ class ClassroomController extends BaseController
 
         $reason = $request->request->get('reason');
         $this->getClassroomService()->removeStudent(
-            $id, 
-            $user['id'], 
+            $id,
+            $user['id'],
             array('reason' => $reason['note'], 'reason_type' => 'exit')
         );
 

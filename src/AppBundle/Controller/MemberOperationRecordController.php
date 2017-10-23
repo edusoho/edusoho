@@ -51,6 +51,7 @@ class MemberOperationRecordController extends BaseController
         $orders = ArrayToolkit::index($orders, 'id');
 
         $condition = $request->query->all();
+
         return $this->render(
             "member-record/{$operatType}.html.twig",
             array(
