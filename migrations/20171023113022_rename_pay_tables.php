@@ -43,6 +43,5 @@ class RenamePayTables extends Migration
         $this->renameTable('biz_pay_cashflow', 'biz_user_cashflow');
         $this->renameTable('biz_pay_security_answer', 'biz_security_answer');
         $this->renameTable('biz_pay_user_balance', 'biz_user_balance');
-
     }
 }
