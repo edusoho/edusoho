@@ -36,34 +36,32 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->update($record['id'], $field);
     }
 
-    public function buildJoinReason($reason, $order)
+    public function getJoinReasonByOrderId($orderId = 0)
     {
-        if (!empty($reason['reason_type'])) {
-            if (!ArrayToolkit::requireds($reason, array('reason', 'reason_type'))) {
-                throw $this->createServiceException('reason or reason_type is invalid!');
-            }
-
-            return ArrayToolkit::parts($reason, array('reason', 'reason_type'));
+        $reason = array(
+                'reason' => 'site.join_by_free',
+                'reason_type' => 'free_join'
+        );
+        if (empty($orderId)) {
+            return $reason;
         }
 
-        if (!empty($order['source']) && $order['source'] === 'outside') {
+        $order = $this->getOrderService()->getOrder($orderId);
+        if ($order['source'] === 'outside') {
             return array(
                 'reason' => 'site.join_by_import',
                 'reason_type' => 'import_join'
             );
         }
 
-        if (!empty($order['pay_amount']) && $order['pay_amount'] > 0) {
+        if ($order['pay_amount'] > 0) {
             return array(
                 'reason' => 'site.join_by_purchase',
                 'reason_type' => 'buy_join'
             );
         }
 
-        return array(
-            'reason' => 'site.join_by_free',
-            'reason_type' => 'free_join'
-        );
+        return $reason;
     }
 
     public function countRecords($conditions)
@@ -92,5 +90,10 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
     protected function getRecordDao()
     {
         return $this->createDao('MemberOperation:MemberOperationRecordDao');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

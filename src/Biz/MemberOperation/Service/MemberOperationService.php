@@ -18,5 +18,5 @@ interface MemberOperationService
 
     public function getRecordByOrderIdAndType($orderId, $type);
 
-    public function buildJoinReason($reason, $order);
+    public function getJoinReasonByOrderId($orderId);
 }

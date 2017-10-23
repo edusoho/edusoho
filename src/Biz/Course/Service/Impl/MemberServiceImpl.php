@@ -615,7 +615,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $reason = $this->getMemberOperationService()->buildJoinReason($info, $order);
+        $reason = $this->buildJoinReason($info, $order);
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
@@ -627,6 +627,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         return $member;
+    }
+
+    private function buildJoinReason($info, $order)
+    { 
+        if (ArrayToolkit::requireds($reason, array('reason', 'reason_type'))) {
+            return ArrayToolkit::parts($reason, array('reason', 'reason_type'));
+        }
+
+        $orderId = empty($order) ? 0 : $order['id'];
+        
+        return $this->getMemberOperationService()->getJoinReasonByOrderId($orderId); 
     }
 
     private function getRefundDeadline()
