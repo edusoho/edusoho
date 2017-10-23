@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class BizUserCashflowAddTitle extends Migration
+class BizPayCashflowAddAction extends Migration
 {
     /**
      * Do the migration
@@ -12,8 +12,8 @@ class BizUserCashflowAddTitle extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isFieldExist('biz_user_cashflow', 'title')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称'");
+        if (!$this->isFieldExist('biz_pay_cashflow', 'action')) {
+            $connection->exec("ALTER TABLE `biz_pay_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
         }
     }
 
@@ -25,7 +25,7 @@ class BizUserCashflowAddTitle extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec('ALTER TABLE `biz_user_cashflow` DROP COLUMN `title`;');
+        $connection->exec('ALTER TABLE `biz_pay_cashflow` DROP COLUMN `action`;');
     }
 
     protected function isFieldExist($table, $filedName)

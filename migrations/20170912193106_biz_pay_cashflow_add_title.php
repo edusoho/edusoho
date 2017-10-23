@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class BizUserCashflowDeleteUserType extends Migration
+class BizPayCashflowAddTitle extends Migration
 {
     /**
      * Do the migration
@@ -12,8 +12,8 @@ class BizUserCashflowDeleteUserType extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if ($this->isFieldExist('biz_user_cashflow', 'user_type')) {
-            $connection->exec('ALTER TABLE `biz_user_cashflow` DROP COLUMN `user_type`');
+        if (!$this->isFieldExist('biz_pay_cashflow', 'title')) {
+            $connection->exec("ALTER TABLE `biz_pay_cashflow` ADD COLUMN `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称'");
         }
     }
 
@@ -24,6 +24,8 @@ class BizUserCashflowDeleteUserType extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
+
+        $connection->exec('ALTER TABLE `biz_pay_cashflow` DROP COLUMN `title`;');
     }
 
     protected function isFieldExist($table, $filedName)
