@@ -54,7 +54,7 @@ class CurrencyTest extends BaseTestCase
 
         $currency = new Currency($this->getBiz());
 
-        $this->assertEquals('2048.00虚币', implode('', $currency->formatParts('1024')));
+        $this->assertEquals('2048.00 虚币', implode('', $currency->formatParts('1024')));
     }
 
     /**
