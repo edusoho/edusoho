@@ -128,12 +128,12 @@ class BizPay extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("
+        $connection->exec('
             DROP TABLE `biz_pay_cashflow`;
             DROP TABLE `biz_pay_user_balance`;
             DROP TABLE `biz_pay_trade`;
             DROP TABLE `biz_pay_account`;
             DROP TABLE `biz_pay_security_answer`;
-        ");
+        ');
     }
 }
