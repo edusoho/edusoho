@@ -18,7 +18,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $systemUser = $this->getConnection()->fetchAssoc("select * from user where type='system';");
-            $this->systemUserId = $systemUser['id'];
+            $this->systemUserId = empty($systemUser['id']) ? 0 : $systemUser['id'];
 
             $result = $this->updateScheme($index);
 
