@@ -42,6 +42,10 @@ interface TaskDao extends AdvancedDaoInterface
 
     public function getByCourseIdAndSeq($courseId, $sql);
 
+    public function getByCopyId($copyId);
+
+    public function getByCourseIdAndCopyId($courseId, $copyId);
+
     /**
      * 统计当前时间以后每天的直播次数.
      *

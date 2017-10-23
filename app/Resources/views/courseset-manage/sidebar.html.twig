@@ -1,7 +1,7 @@
 {% block side %}
   {% set side_nav = side_nav|default(null) %}
   {% set menuType = 'course' %}
-  {% if side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files', 'plan', 'question_plus'] %}
+  {% if side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files', 'plan'] %}
     {% set menuType = 'courseSet' %}
   {% endif %}
   {% set coursesLength =  courses|length %}

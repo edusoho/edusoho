@@ -24,6 +24,7 @@ class AvailablePaidCoursesCommand extends Command
 
         list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom($user['id'], $product->targetId);
 
+        $totalDeductAmount = 0;
         foreach ($orderItems as $item) {
             if ($item['pay_amount'] <= 0) {
                 continue;
@@ -37,7 +38,10 @@ class AvailablePaidCoursesCommand extends Command
             $course['paidPrice'] = MathToolkit::simple($item['pay_amount'], 0.01);
 
             $product->availableDeducts['paidCourses'][] = $course;
+            $totalDeductAmount += $course['paidPrice'];
         }
+
+        $product->promotionPrice = $product->originPrice - $totalDeductAmount;
     }
 
     private function getClassroomService()

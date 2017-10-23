@@ -9,6 +9,7 @@ class BalloonCloudVideoPlayer extends Emitter {
   }
 
   setup() {
+    let element = this.options.element;
 
     var self = this;
 
@@ -51,7 +52,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       })
     }
 
-    if (self.options.enablePlaybackRates ) {
+    if (self.options.enablePlaybackRates) {
       extConfig = Object.assign(extConfig, {
         playbackRates: {
           enable: true,

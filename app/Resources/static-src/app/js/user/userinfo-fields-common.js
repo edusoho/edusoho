@@ -172,7 +172,7 @@ export default class UserInfoFieldsItemValidate {
     for (var i = 1; i <= 5; i++) {
       $(`[name="intField${i}"]`).rules('add', {
         required: true,
-        int: true,
+        positive_integer: true,
       });
       $(`[name="floatField${i}"]`).rules('add', {
         required: true,

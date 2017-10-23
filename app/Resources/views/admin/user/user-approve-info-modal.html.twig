@@ -8,7 +8,7 @@
 
 {% block body %}
   <div class="form-horizontal">
-  {% include 'admin/user/user-approval-form-content.html.twig' %}
+  {% include 'admin/user/user-approval-form-content.html.twig' with {'status':'approved'} %}
   </div>
 {% endblock %}
 
