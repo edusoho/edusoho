@@ -1592,7 +1592,7 @@ class EduCloudController extends BaseController
                 $logoData = array(
                     'logoPcUrl' => $liveCourseSetting['webLogoPath'],
                     'logoClientUrl' => $liveCourseSetting['appLogoPath'],
-                    'logoGotoUrl' => $liveCourseSetting['logoUrl']
+                    'logoGotoUrl' => $liveCourseSetting['logoUrl'],
                 );
                 $result = $client->setLiveLogo($logoData);
 
@@ -1628,12 +1628,11 @@ class EduCloudController extends BaseController
 
     public function logoCropAction(Request $request, $type)
     {
-        if (!in_array($type, array('web','app'))) {
+        if (!in_array($type, array('web', 'app'))) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 
         if ($request->getMethod() === 'POST') {
-            
             $options = $request->request->all();
 
             $image = $options['images'][0];
@@ -1663,7 +1662,7 @@ class EduCloudController extends BaseController
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
-            'type' => $type
+            'type' => $type,
         ));
     }
 
