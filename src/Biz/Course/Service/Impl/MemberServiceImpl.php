@@ -133,13 +133,12 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $result = $this->removeMember(
-            $member, 
+            $member,
             array(
-                'reason' =>  'course.member.operation.admin_remove_course_student',
+                'reason' => 'course.member.operation.admin_remove_course_student',
                 'reason_type' => 'remove',
             )
         );
-       
 
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -852,10 +851,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $member = $this->addMember(
-            $fields, 
+            $fields,
             array(
                 'reason' => 'course.member.operation.reason.join_classroom',
-                'reason_type' => 'classroom_join'
+                'reason_type' => 'classroom_join',
             )
         );
         $fields = array(
@@ -1130,7 +1129,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $record = array_merge($record, $reason);
-        $record =  $this->getMemberOperationService()->createRecord($record);
+        $record = $this->getMemberOperationService()->createRecord($record);
 
         return $record;
     }
@@ -1142,7 +1141,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $member = $this->getMemberDao()->create($member);
             if (!empty($reason)) {
                 $this->createOperateRecord($member, 'join', $reason);
-            } 
+            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();

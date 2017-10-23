@@ -3,12 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\MessageService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Common\SimpleValidator;
 
 class MemberOperationRecordController extends BaseController
 {
@@ -49,7 +45,7 @@ class MemberOperationRecordController extends BaseController
         $userIds = ArrayToolkit::column($records, 'user_id');
         $operaterIds = ArrayToolkit::column($records, 'operator_id');
         $users = $this->getUserService()->findUsersByIds(array_merge($userIds, $operaterIds));
-        
+
         $orderIds = ArrayToolkit::column($records, 'order_id');
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
@@ -86,7 +82,7 @@ class MemberOperationRecordController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
-   /**
+    /**
      * @return CourseService
      */
     protected function getCourseService()
@@ -106,5 +102,4 @@ class MemberOperationRecordController extends BaseController
     {
         return $this->createService('Order:OrderService');
     }
-
 }
