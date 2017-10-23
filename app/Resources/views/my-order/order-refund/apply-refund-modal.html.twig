@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-  <form method="post" id="refund-apply-form" action="{{path('my_order_refund_apply', {id: order.id })}}">
+  <form method="post" id="refund-apply-form" data-redirect="{{ path('my_order_refunds') }}" data-url="{{path('my_order_refund_apply', {id: order.id })}}">
 
     <table class="table cd-table table-striped order-detail-table">
       <tr>
