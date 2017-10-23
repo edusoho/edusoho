@@ -40,7 +40,7 @@ class StudentManageController extends BaseController
         );
 
         if (!empty($keyword)) {
-            $conditions['userIds'] = $this->getUserIds($keyword);
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($keyword);
         }
 
         $paginator = new Paginator(
@@ -81,47 +81,17 @@ class StudentManageController extends BaseController
         return array();
     }
 
-    public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)
+    public function studentRecordsAction(Request $request, $courseSetId, $courseId, $type)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $condition = array(
-            'targetId' => $courseId,
-            'target_type' => 'course',
-            'status' => 'success',
-            'operate_type' => 'exit',
-        );
-
-        $fields = $request->query->all();
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
-        }
-
-        $paginator = new Paginator(
-            $request,
-            $this->getMemberOperationService()->countRecords($condition),
-            20
-        );
-
-        $records = $this->getMemberOperationService()->searchRecords(
-            $condition,
-            array('created_time' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $userIds = ArrayToolkit::column($records, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
         return $this->render(
-            'course-manage/student/quit-records.html.twig',
+            "course-manage/student/records.html.twig",
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'records' => $records,
-                'users' => $users,
-                'paginator' => $paginator,
+                'type' => $type
             )
         );
     }
@@ -607,36 +577,6 @@ class StudentManageController extends BaseController
         }
 
         return false;
-    }
-
-    private function getUserIds($keyword)
-    {
-        if (SimpleValidator::email($keyword)) {
-            $user = $this->getUserService()->getUserByEmail($keyword);
-
-            return $user ? array($user['id']) : array(-1);
-        }
-        if (SimpleValidator::mobile($keyword)) {
-            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers = $this->getUserService()->searchUserProfiles(
-                array('tel' => $keyword),
-                array('id' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-            $mobileNameUser = $this->getUserService()->getUserByNickname($keyword);
-            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-            $userIds = array_unique($userIds);
-
-            return $userIds ? $userIds : array(-1);
-        }
-        $user = $this->getUserService()->getUserByNickname($keyword);
-
-        return $user ? array($user['id']) : array(-1);
     }
 
     /**

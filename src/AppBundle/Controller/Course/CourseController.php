@@ -653,13 +653,14 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         if (empty($member)) {
-            throw $this->createAccessDeniedException('');
+            throw $this->createAccessDeniedException('member not exist');
         }
 
         $user = $this->getCurrentUser();
         $req = $request->request->all();
         $this->getMemberService()->removeStudent($course['id'], $user['id'], array(
             'reason' => $req['reason']['note'],
+            'reason_type' => 'exit',
         ));
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $id)));

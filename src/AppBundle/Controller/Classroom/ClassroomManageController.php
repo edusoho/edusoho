@@ -179,8 +179,8 @@ class ClassroomManageController extends BaseController
         $fields = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        if (!empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
         $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'student'));
@@ -231,8 +231,8 @@ class ClassroomManageController extends BaseController
         $fields = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        if (!empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
         $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'auditor'));
@@ -265,46 +265,16 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function refundRecordAction(Request $request, $id)
+    public function recordAction(Request $request, $id, $type)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $condition = array(
-            'targetId' => $id,
-            'target_type' => 'classroom',
-            'status' => 'success',
-            'operate_type' => 'exit',
-        );
-
-        $fields = $request->query->all();
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
-        }
-
-        $paginator = new Paginator(
-            $request,
-            $this->getMemberOperationService()->countRecords($condition),
-            20
-        );
-
-        $records = $this->getMemberOperationService()->searchRecords(
-            $condition,
-            array('created_time' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $userIds = ArrayToolkit::column($records, 'member_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
         return $this->render(
-            'classroom-manage/quit-record/index.html.twig',
+            'classroom-manage/record/index.html.twig',
             array(
                 'classroom' => $classroom,
-                'paginator' => $paginator,
-                'records' => $records,
-                'users' => $users,
+                'type' => $type
             )
         );
     }
@@ -338,7 +308,14 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
 
-        $this->getClassroomService()->removeStudent($classroomId, $userId, array('reason' => 'classroom.admin_remove_student'));
+        $this->getClassroomService()->removeStudent(
+            $classroomId, 
+            $userId, 
+            array(
+                'reason' => 'site.remove_by_manual',
+                'reason_type' => 'remove',
+            )
+        );
 
         return $this->createJsonResponse(true);
     }
@@ -1117,43 +1094,6 @@ class ClassroomManageController extends BaseController
         $tags = $this->getTagService()->findTagsByNames($tags);
 
         return ArrayToolkit::column($tags, 'id');
-    }
-
-    private function getUserIds($keyword)
-    {
-        $userIds = array();
-
-        if (SimpleValidator::email($keyword)) {
-            $user = $this->getUserService()->getUserByEmail($keyword);
-
-            $userIds[] = $user ? $user['id'] : null;
-
-            return $userIds;
-        } elseif (SimpleValidator::mobile($keyword)) {
-            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers = $this->getUserService()->searchUserProfiles(
-                array('tel' => $keyword),
-                array('id' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-            $mobileNameUser = $this->getUserService()->getUserByNickname($keyword);
-            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-            $userIds = array_unique($userIds);
-
-            $userIds = $userIds ? $userIds : null;
-
-            return $userIds;
-        } else {
-            $user = $this->getUserService()->getUserByNickname($keyword);
-            $userIds[] = $user ? $user['id'] : null;
-
-            return $userIds;
-        }
     }
 
     protected function getCashRate()
