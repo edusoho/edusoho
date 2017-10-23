@@ -34,6 +34,7 @@ class CouponServiceTest extends BaseTestCase
             'type' => 'minus',
             'status' => 'used',
             'rate' => 10,
+            'deadline'=> time()
         ));
 
         $this->getCouponService()->getCouponStateById($coupon['id']);
@@ -54,6 +55,7 @@ class CouponServiceTest extends BaseTestCase
             'type' => 'minus',
             'status' => 'using',
             'rate' => 10,
+            'deadline'=> time()
         ));
 
         $this->assertInstanceOf('Biz\Coupon\State\UsingCoupon', $this->getCouponService()->getCouponStateById($coupon['id']));
