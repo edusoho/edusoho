@@ -57,4 +57,3 @@ deployment-config.json
 .webpack-watch.log
 /web/MP_*
 .webpack-watch.log
-/vendor/codeages/biz-framework
