@@ -941,14 +941,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     private function buildJoinReason($info, $order)
-    { 
+    {
         if (ArrayToolkit::requireds($reason, array('reason', 'reason_type'))) {
             return ArrayToolkit::parts($reason, array('reason', 'reason_type'));
         }
 
         $orderId = empty($order) ? 0 : $order['id'];
-        
-        return $this->getMemberOperationService()->getJoinReasonByOrderId($orderId); 
+
+        return $this->getMemberOperationService()->getJoinReasonByOrderId($orderId);
     }
 
     public function becomeStudentWithOrder($classroomId, $userId, $params = array())

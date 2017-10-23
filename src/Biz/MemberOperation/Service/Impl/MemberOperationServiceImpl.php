@@ -26,7 +26,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
     public function updateRefundInfoByOrderId($orderId, $info)
     {
         $record = $this->getRecordByOrderIdAndType($orderId, 'exit');
- 
+
         $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
         if (!empty($record['reason'])) {
             unset($field['reason']);
@@ -40,7 +40,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
     {
         $reason = array(
                 'reason' => 'site.join_by_free',
-                'reason_type' => 'free_join'
+                'reason_type' => 'free_join',
         );
         if (empty($orderId)) {
             return $reason;
@@ -50,14 +50,14 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         if ($order['source'] === 'outside') {
             return array(
                 'reason' => 'site.join_by_import',
-                'reason_type' => 'import_join'
+                'reason_type' => 'import_join',
             );
         }
 
         if ($order['pay_amount'] > 0) {
             return array(
                 'reason' => 'site.join_by_purchase',
-                'reason_type' => 'buy_join'
+                'reason_type' => 'buy_join',
             );
         }
 
