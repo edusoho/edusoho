@@ -1,9 +1,0 @@
- {% extends 'classroom-manage/students.html.twig' %}
-
-{% block title %}{{ 'classroom.exit_record'|trans }} - {{ parent() }}{% endblock %}
-
-{% set submenu = 'record' %}
-
-{% block maincontent %}
-    {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'classroom', targetId: classroom.id, operatType: 'exit'})) }}
-{% endblock %}

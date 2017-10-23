@@ -2423,8 +2423,8 @@ classroom_manage_aduitor:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
 
 classroom_manage_record:
-    path: /classroom/{id}/manage/refund_record
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:refundRecord }
+    path: /classroom/{id}/manage/record/{type}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:record }
 
 classroom_manage_service:
     path: /classroom/{id}/manage/service

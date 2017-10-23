@@ -265,15 +265,16 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function refundRecordAction(Request $request, $id)
+    public function recordAction(Request $request, $id, $type)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         return $this->render(
-            'classroom-manage/quit-record/index.html.twig',
+            'classroom-manage/record/index.html.twig',
             array(
                 'classroom' => $classroom,
+                'type' => $type
             )
         );
     }
