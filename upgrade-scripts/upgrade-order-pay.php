@@ -585,17 +585,17 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateBizPaymentTrade($page)
     {
-        $this->addMigrateId('biz_payment_trade');
+        $this->addMigrateId('biz_pay_trade');
 
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase')");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `orders` where `id` not in (select migrate_id from `biz_pay_trade` where `type` = 'purchase')");
         if (empty($count)) {
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_payment_trade` (
+            INSERT into `biz_pay_trade` (
                 `id`,
                 `title`,
                 `trade_sn`,
@@ -650,27 +650,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`updatedTime` as `updated_time`,
                 o.`createdTime` as `created_time`,
                 o.`id` as `migrate_id`
-            from `orders` o left join `order_refund` r on o.refundId=r.id where o.`id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase') LIMIT 0, {$this->pageSize}
+            from `orders` o left join `order_refund` r on o.refundId=r.id where o.`id` not in (select migrate_id from `biz_pay_trade` where `type` = 'purchase') LIMIT 0, {$this->pageSize}
         ");
 
-        $this->logger('info', "处理biz_payment_trade的数据，当前页码{$page}");
+        $this->logger('info', "处理biz_pay_trade的数据，当前页码{$page}");
 
         return $page + 1;
     }
 
     protected function migrateBizPaymentTradeFromCashOrder($page)
     {
-        $this->addMigrateId('biz_payment_trade');
+        $this->addMigrateId('biz_pay_trade');
 
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge')");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_orders` where `id` not in (select migrate_id from `biz_pay_trade` where `type` = 'recharge')");
         if (empty($count)) {
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_payment_trade` (
+            INSERT into `biz_pay_trade` (
                 `title`,
                 `trade_sn`,
                 `order_sn`,
@@ -723,10 +723,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 `paidTime` as `updated_time`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
-            from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge') LIMIT 0, {$this->pageSize}
+            from `cash_orders` where `id` not in (select migrate_id from `biz_pay_trade` where `type` = 'recharge') LIMIT 0, {$this->pageSize}
         ");
 
-        $this->logger('info', "处理biz_payment_trade的现金订单数据，当前页码{$page}");
+        $this->logger('info', "处理biz_pay_trade的现金订单数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -735,27 +735,27 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where platform = 'llpay';");
-        $connection->exec("update biz_payment_trade set platform = 'iap' where platform = 'iosiap';");
-        $connection->exec("update biz_payment_trade set platform = 'wechat' where platform = 'wxpay';");
+        $connection->exec("update biz_pay_trade set platform = 'lianlianpay' where platform = 'llpay';");
+        $connection->exec("update biz_pay_trade set platform = 'iap' where platform = 'iosiap';");
+        $connection->exec("update biz_pay_trade set platform = 'wechat' where platform = 'wxpay';");
 
-        $this->logger('info', "更新处理biz_payment_trade的platform数据，当前页码{$page}");
+        $this->logger('info', "更新处理biz_pay_trade的platform数据，当前页码{$page}");
 
         return 1;
     }
 
     protected function migrateBizSecurityAnswer($page)
     {
-        $this->addMigrateId('biz_security_answer');
+        $this->addMigrateId('biz_pay_security_answer');
 
         $connection = $this->getConnection();
-        $count = $connection->fetchColumn("SELECT COUNT(id) from user_secure_question where id not in (select migrate_id from biz_security_answer)");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from user_secure_question where id not in (select migrate_id from biz_pay_security_answer)");
         if (empty($count)) {
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_security_answer` (
+            INSERT into `biz_pay_security_answer` (
                 `id`,
                 `user_id`,
                 `question_key`,
@@ -774,10 +774,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `createdTime` as `updated_time`,
                 `id` as `migrate_id`
-            from user_secure_question where id not in (select migrate_id from biz_security_answer) LIMIT 0, {$this->pageSize}
+            from user_secure_question where id not in (select migrate_id from biz_pay_security_answer) LIMIT 0, {$this->pageSize}
         ");
 
-        $this->logger('info', "处理biz_security_answer的数据，当前页码{$page}");
+        $this->logger('info', "处理biz_pay_security_answer的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -821,13 +821,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateBizUserBalance($page)
     {
-        $this->addMigrateId('biz_user_balance');
+        $this->addMigrateId('biz_pay_user_balance');
 
         $connection = $this->getConnection();
-        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_user_balance`)");
+        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_pay_user_balance`)");
 
         if (empty($count)) {
-            $sql = "select * from `biz_user_balance` where user_id = 0;";
+            $sql = "select * from `biz_pay_user_balance` where user_id = 0;";
             $result = $this->getConnection()->fetchAssoc($sql);
             if (empty($result)) {
                 $currentTime = time();
@@ -835,14 +835,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 $total = $connection->fetchColumn('select sum(cash) from cash_account');
                 $total = 0 - $total*100;
 
-                $connection->exec("insert into `biz_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
+                $connection->exec("insert into `biz_pay_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
             }
 
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_user_balance` (
+            INSERT into `biz_pay_user_balance` (
               `id`,
               `user_id`,
               `amount`,
@@ -857,10 +857,10 @@ class EduSohoUpgrade extends AbstractUpdater
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
-            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`) LIMIT 0, {$this->pageSize}
+            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_pay_user_balance`) LIMIT 0, {$this->pageSize}
         ");
 
-        $this->logger('info', "处理biz_user_balance的数据，当前页码{$page}");
+        $this->logger('info', "处理biz_pay_user_balance的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -868,9 +868,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_user_balance ub, (select user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
-        $connection->exec("update biz_user_balance ub, (select user_id, sum(amount) amount from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
-        $connection->exec("update biz_user_balance ub set cash_amount = (select sum(amount) amount from biz_user_cashflow uc where uc.amount_type='money' and uc.type='outflow') where ub.user_id = 0;");
+        $connection->exec("update biz_pay_user_balance ub, (select user_id, sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
+        $connection->exec("update biz_pay_user_balance ub, (select user_id, sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
+        $connection->exec("update biz_pay_user_balance ub set cash_amount = (select sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='money' and uc.type='outflow') where ub.user_id = 0;");
 
         return 1;
     }
@@ -892,7 +892,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function migrateBizUserCashflow($page, $userIdType, $amountType = '')
     {
-        $this->addMigrateId('biz_user_cashflow');
+        $this->addMigrateId('biz_pay_cashflow');
 
         $connection = $this->getConnection();
 
@@ -901,7 +901,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $migrateType = "uf.`type` as `type`,";
             $migrateSn = "uf.`sn` as `sn`,";
 
-            $whereSql = "uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}";
+            $whereSql = "uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_pay_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}";
         }
 
         if ($userIdType=='site') {
@@ -918,7 +918,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $whereSql = "uf.`cashType`='coin' and ";
             }
 
-            $whereSql = "{$whereSql} uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0) LIMIT 0, {$this->pageSize}";
+            $whereSql = "{$whereSql} uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_pay_cashflow` where user_id=0) LIMIT 0, {$this->pageSize}";
 
         }
 
@@ -928,7 +928,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $sql = "
-            insert into `biz_user_cashflow` (
+            insert into `biz_pay_cashflow` (
                 `title`,
                 `sn`,
                 `parent_sn`,
@@ -968,7 +968,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection->exec($sql);
 
-        $this->logger('info', "处理{$userIdType}的biz_user_cashflow的数据，当前页码{$page}");
+        $this->logger('info', "处理{$userIdType}的biz_pay_cashflow的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -976,20 +976,20 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateBizPaymentTradePlatforms($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_payment_trade set platform=(select payment from biz_order where sn=order_sn) where type='purchase';");
+        $connection->exec("update biz_pay_trade set platform=(select payment from biz_order where sn=order_sn) where type='purchase';");
 
-        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where platform = 'llpay' and type='recharge';");
-        $connection->exec("update biz_payment_trade set platform = 'wechat' where platform = 'wxpay' and type='recharge';");
+        $connection->exec("update biz_pay_trade set platform = 'lianlianpay' where platform = 'llpay' and type='recharge';");
+        $connection->exec("update biz_pay_trade set platform = 'wechat' where platform = 'wxpay' and type='recharge';");
         return 1;
     }
 
     protected function migrateBizUserCashflowPlatform($page)
     {
         $connection = $this->getConnection();
-        $sql = "update `biz_user_cashflow` set platform='none' where amount_type='coin';";
+        $sql = "update `biz_pay_cashflow` set platform='none' where amount_type='coin';";
         $connection->exec($sql);
 
-        $sql = "update `biz_user_cashflow` uc set uc.platform=(select platform from biz_payment_trade where trade_sn=uc.trade_sn) where amount_type='money' and trade_sn in (select trade_sn from biz_payment_trade where trade_sn=uc.trade_sn);";
+        $sql = "update `biz_pay_cashflow` uc set uc.platform=(select platform from biz_pay_trade where trade_sn=uc.trade_sn) where amount_type='money' and trade_sn in (select trade_sn from biz_pay_trade where trade_sn=uc.trade_sn);";
         $connection->exec($sql);
         return 1;
     }
@@ -1326,9 +1326,9 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isTableExist('biz_user_cashflow')) {
+        if (!$this->isTableExist('biz_pay_cashflow')) {
             $connection->exec("
-                CREATE TABLE `biz_user_cashflow` (
+                CREATE TABLE `biz_pay_cashflow` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称',
                   `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
@@ -1350,9 +1350,9 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isTableExist('biz_user_balance')) {
+        if (!$this->isTableExist('biz_pay_user_balance')) {
             $connection->exec("
-                CREATE TABLE `biz_user_balance` (
+                CREATE TABLE `biz_pay_user_balance` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `user_id` int(10) unsigned NOT NULL COMMENT '用户',
                   `amount` int(10) NOT NULL DEFAULT '0' COMMENT '账户余额',
@@ -1366,9 +1366,9 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isTableExist('biz_payment_trade')) {
+        if (!$this->isTableExist('biz_pay_trade')) {
             $connection->exec("
-                CREATE TABLE `biz_payment_trade` (
+                CREATE TABLE `biz_pay_trade` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `title` varchar(1024) NOT NULL COMMENT '标题',
                   `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
@@ -1415,9 +1415,9 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isTableExist('biz_security_answer')) {
+        if (!$this->isTableExist('biz_pay_security_answer')) {
             $connection->exec("
-                CREATE TABLE `biz_security_answer` (
+                CREATE TABLE `biz_pay_security_answer` (
                   `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
                   `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
                   `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
@@ -1522,48 +1522,48 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币';");
         }
 
-        if ($this->isFieldExist('biz_payment_trade', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
+        if ($this->isFieldExist('biz_pay_trade', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_trade` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
         }
 
-        if ($this->isFieldExist('biz_payment_trade', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
+        if ($this->isFieldExist('biz_pay_trade', 'coin_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_trade` MODIFY COLUMN `coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
         }
 
-        if ($this->isFieldExist('biz_payment_trade', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
+        if ($this->isFieldExist('biz_pay_trade', 'cash_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_trade` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
         }
 
-        if ($this->isFieldExist('biz_user_balance', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
+        if ($this->isFieldExist('biz_pay_user_balance', 'cash_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
         }
 
-        if ($this->isFieldExist('biz_user_balance', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
+        if ($this->isFieldExist('biz_pay_user_balance', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
         }
 
-        if ($this->isFieldExist('biz_user_balance', 'locked_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `locked_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
+        if ($this->isFieldExist('biz_pay_user_balance', 'locked_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` MODIFY COLUMN `locked_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
         }
 
-        if ($this->isFieldExist('biz_user_cashflow', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
+        if ($this->isFieldExist('biz_pay_cashflow', 'amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_cashflow` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
         }
 
-        if ($this->isFieldExist('biz_user_cashflow', 'user_balance')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `user_balance` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
+        if ($this->isFieldExist('biz_pay_cashflow', 'user_balance')) {
+            $connection->exec("ALTER TABLE `biz_pay_cashflow` MODIFY COLUMN `user_balance` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
         }
 
-        if (!$this->isFieldExist('biz_user_cashflow', 'action')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
+        if (!$this->isFieldExist('biz_pay_cashflow', 'action')) {
+            $connection->exec("ALTER TABLE `biz_pay_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
         }
 
-        if (!$this->isFieldExist('biz_user_balance', 'recharge_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
+        if (!$this->isFieldExist('biz_pay_user_balance', 'recharge_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` ADD COLUMN `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
         }
 
-        if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
+        if (!$this->isFieldExist('biz_pay_user_balance', 'purchase_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` ADD COLUMN `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
         }
 
         if (!$this->isFieldExist('biz_order_log', 'ip')) {
