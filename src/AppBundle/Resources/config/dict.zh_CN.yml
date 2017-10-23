@@ -419,6 +419,12 @@ exit_reason:
     remove: 老师移除
     exit: 主动退出
 
+join_reason:
+    free_join: 免费加入
+    buy_join: 购买加入
+    export_join: 导入
+    
+
 exchangeType:
     nickName: 用户名
     sn: 订单号

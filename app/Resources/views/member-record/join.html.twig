@@ -14,6 +14,7 @@
       <th>{{'course.members_manage.join_records.date'|trans}}</th>
       <th>{{'course.members_manage.records.join_reason_type'|trans}}</th>
       <th>{{'course.members_manage.records.join_reason'|trans}}</th>
+      <th>{{'是否付费'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -29,10 +30,17 @@
             {{ record.created_time|date('Y-n-d H:i') }}
         </td>
         <td style="vertical-align: middle;word-break: break-all;">
-          {{ dict_text('exit_reason', record.reason_type) }}
+          {{ dict_text('join_reason', record.reason_type) }}
         </td>
         <td style="vertical-align: middle;word-break: break-all;">
             {{ record.reason|trans }}
+        </td>
+        <td>
+          {% if order.pay_amount > 0 %}
+            是
+          {% else %}
+            否
+          {% endif %}
         </td>
       </tr>
     {% else %}
