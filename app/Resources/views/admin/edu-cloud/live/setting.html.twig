@@ -46,7 +46,7 @@
         <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo_web'|trans}}：</label>
         <div class="controls col-md-9">
           <div class="logo-container-js">
-            {% if liveCourseSetting.webLogoPath|default(false) %}<img src="{{ asset(liveCourseSetting.webLogoPath) }}">{% endif %}
+            {% if liveCourseSetting.webLogoPath|default('') %}<img src="{{ asset(liveCourseSetting.webLogoPath) }}">{% endif %}
           </div>
           <a class="btn btn-default btn-sm" id="web-logo-upload"
           data-upload-token="{{ upload_token('system', 'image') }}"
@@ -62,7 +62,7 @@
         <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo_app'|trans}}：</label>
         <div class="controls col-md-9">
           <div class="logo-container-js">
-            {% if liveCourseSetting.appLogoPath|default(false) %}<img src="{{ asset(liveCourseSetting.appLogoPath) }}">{% endif %}
+            {% if liveCourseSetting.appLogoPath|default('') %}<img src="{{ asset(liveCourseSetting.appLogoPath) }}">{% endif %}
           </div>
           <a class="btn btn-default btn-sm" id="app-logo-upload"
           data-upload-token="{{ upload_token('system', 'image') }}"
