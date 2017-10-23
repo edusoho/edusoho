@@ -17,4 +17,6 @@ interface MemberOperationService
     public function updateRefundInfoByOrderId($orderId, $info);
 
     public function getRecordByOrderIdAndType($orderId, $type);
+
+    public function buildJoinReason($reason, $order);
 }

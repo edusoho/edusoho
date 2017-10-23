@@ -6534,6 +6534,12 @@ site.remove_by_manual: Manual remove
 site.join_to_learn: Join to learn
 site.fill_user_info_tip: Fill user info
 
+site.join_by_import: 导入课程
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
+
+
 site.avatar.set_before_learning: Please set avatar first
 
 member.manage.exit_refund_yes: 'Yes'

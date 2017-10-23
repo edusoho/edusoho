@@ -480,7 +480,7 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
 
-    public function exitAction($id)
+    public function exitAction(request $request, $id)
     {
         $user = $this->getCurrentUser();
 
@@ -494,10 +494,11 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
+        $reason = $request->request->get('reason');
         $this->getClassroomService()->removeStudent(
             $id, 
             $user['id'], 
-            array('reason' => 'classroom.user_exit', 'reason_type' => 'exit')
+            array('reason' => $reason['note'], 'reason_type' => 'exit')
         );
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));

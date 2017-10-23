@@ -616,7 +616,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $reason = $this->buildJoinReason($info, $order);
+        $reason = $this->getMemberOperationService()->buildJoinReason($info, $order);
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
@@ -1133,36 +1133,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         $record =  $this->getMemberOperationService()->createRecord($record);
 
         return $record;
-    }
-
-    protected function buildJoinReason($reason, $order)
-    {
-        if (!empty($reason['reason_type'])) {
-            if (!ArrayToolkit::requireds($reason, array('reason', 'reason_type'))) {
-                throw $this->createServiceException('reason or reason_type is invalid!');
-            }
-
-            return ArrayToolkit::parts($reason, array('reason', 'reason_type'));
-        }
-
-        if (!empty($order['source']) && $order['source'] === 'outside') {
-            return array(
-                'reason' => 'site.join_by_import',
-                'reason_type' => 'import_join'
-            );
-        }
-
-        if (!empty($order['pay_amount']) && $order['pay_amount'] > 0) {
-            return array(
-                'reason' => 'site.join_by_purchase',
-                'reason_type' => 'buy_join'
-            );
-        }
-
-        return array(
-            'reason' => 'site.join_by_free',
-            'reason_type' => 'free_join'
-        );
     }
 
     private function addMember($member, $reason = array())

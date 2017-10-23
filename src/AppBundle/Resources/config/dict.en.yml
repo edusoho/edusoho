@@ -397,6 +397,19 @@ refund_reason:
     bad_teacher_attitude: Service is not quite good
     other: Other
 
+exit_reason:
+    refund: 退款成功
+    remove: 移除
+    exit: 主动退出
+
+join_reason:
+    vip_join: 会员加入
+    free_join: 免费加入
+    buy_join: 购买加入
+    import_join: 导入用户
+    assistant_join: 助教加入
+    auditor_join: 旁听加入
+
 exchangeType:
     nickName: nickName
     sn: Order number

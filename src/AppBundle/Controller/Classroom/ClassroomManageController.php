@@ -312,7 +312,7 @@ class ClassroomManageController extends BaseController
             $classroomId, 
             $userId, 
             array(
-                'reason' => 'classroom.admin_remove_student',
+                'reason' => 'site.remove_by_manual',
                 'reason_type' => 'remove',
             )
         );

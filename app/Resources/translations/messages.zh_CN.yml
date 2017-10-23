@@ -8200,6 +8200,9 @@ order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前
 
 site.join_by_import: 导入课程
 site.join_by_free: 免费加入
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
 site.join_by_purchase: 购买加入
 site.remove_by_manual: 手动移除
 site.join_to_learn: 加入学习

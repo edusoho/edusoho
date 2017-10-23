@@ -912,11 +912,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $reason = array(
-            'reason' => $fields['remark'],
-            'reason_type' => 'user_join'
-        );
-        $this->createOperateRecord($member, 'join', $info);
+        $reason = $this->getMemberOperationService()->buildJoinReason($info, $order);
+        $this->createOperateRecord($member, 'join', $reason);
 
         $params = array(
             'orderId' => $fields['orderId'],
@@ -1265,6 +1262,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
+        $data = array(
+            'reason' => 'site.join_by_auditor',
+            'reason_type' => 'auditor_join'
+        );
+        $this->createOperateRecord($member, 'join', $data);
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
         $this->dispatchEvent(
@@ -1301,7 +1303,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $member = $this->getClassroomMemberDao()->create($fields);
         $data = array(
-            'reason' => 'classroom.join_as_assistant',
+            'reason' => 'site.join_by_assistant',
             'reason_type' => 'assistant_join'
         );
         $this->createOperateRecord($member, 'join', $data);

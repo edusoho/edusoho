@@ -416,15 +416,17 @@ refund_reason:
 
 exit_reason:
     refund: 退款成功
-    remove: 老师移除
+    remove: 移除
     exit: 主动退出
 
 join_reason:
+    vip_join: 会员加入
     free_join: 免费加入
     buy_join: 购买加入
     import_join: 导入用户
+    assistant_join: 助教加入
+    auditor_join: 旁听加入
     
-
 exchangeType:
     nickName: 用户名
     sn: 订单号

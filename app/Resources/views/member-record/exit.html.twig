@@ -35,7 +35,7 @@
         </td>
         <td class="vertical-middle">
           {% set operator = users[record['operator_id']]|default() %}
-            {% if operator %}
+            {% if record.user_id != record.operator_id  and operator %}
                 ({{ operator.nickname }})
             {% endif %}{{ record.reason|trans }}
         </td>
