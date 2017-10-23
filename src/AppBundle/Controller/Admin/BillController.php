@@ -22,11 +22,11 @@ class BillController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getAccountProxyService()->countUserCashflows($conditions),
+            $this->getAccountProxyService()->countCashflows($conditions),
             20
         );
 
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
+        $cashes = $this->getAccountProxyService()->searchCashflows(
             $conditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),

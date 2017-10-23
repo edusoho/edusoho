@@ -368,7 +368,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($coupon['type'] == 'minus') {
             return $coupon['rate'];
         } else {
-            return round($price * ((10 - $coupon['rate']) / 10), 2);
+            return $price > 0 ? round($price * ((10 - $coupon['rate']) / 10), 2) : 0;
         }
     }
 

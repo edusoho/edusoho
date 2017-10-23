@@ -6,7 +6,7 @@
 </div>
 
 <div class="form-group">
-  <div class="col-md-2 control-label"><label for="description-field" class="control-label-required">{{'course.testpaper_manage.create.description'|trans}}</label></div>
+  <div class="col-md-2 control-label"><label for="description-field">{{'course.testpaper_manage.create.description'|trans}}</label></div>
   <div class="col-md-8 controls">
     <textarea class="form-control" id="description-field" name="description" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
   </div>

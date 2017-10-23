@@ -1802,39 +1802,6 @@
         ]
     },
     {
-        "name": "codeages/biz-rate-limiter",
-        "version": "v0.1.8",
-        "version_normalized": "0.1.8.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-rate-limiter.git",
-            "reference": "bb15f5b1d9978aa9c141c696152259a6132de67d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/bb15f5b1d9978aa9c141c696152259a6132de67d",
-            "reference": "bb15f5b1d9978aa9c141c696152259a6132de67d",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.4|^0.5|^0.6|^0.7|^0.8|^0.9",
-            "codeages/rate-limiter": "^0.1.3"
-        },
-        "time": "2017-08-24T02:38:11+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\RateLimiter\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Rate limiter with Biz Framework."
-    },
-    {
         "name": "codeages/qiqiuyun-php-sdk",
         "version": "v0.0.1",
         "version_normalized": "0.0.1.0",
@@ -4748,112 +4715,6 @@
         ]
     },
     {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.21",
-        "version_normalized": "0.1.21.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "8793be694fe785615a5dd37d5712724f1de4adb8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/8793be694fe785615a5dd37d5712724f1de4adb8",
-            "reference": "8793be694fe785615a5dd37d5712724f1de4adb8",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/config": "^2.8",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.7",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.1.5"
-        },
-        "time": "2017-09-29T07:00:41+00:00",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "codeages team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
-        "name": "codeages/biz-framework",
-        "version": "v0.9.1",
-        "version_normalized": "0.9.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "85e2e8e9a573f6833f1b23a6b884652c5259867f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/85e2e8e9a573f6833f1b23a6b884652c5259867f",
-            "reference": "85e2e8e9a573f6833f1b23a6b884652c5259867f",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/symfony-lock-lite": "^1.0",
-            "davedevelopment/phpmig": "~1.2",
-            "doctrine/annotations": "~1.2",
-            "doctrine/dbal": "~2.4",
-            "monolog/monolog": "^1.20",
-            "mtdowling/cron-expression": "~1.2",
-            "php": "^5.3|^7.0",
-            "pimple/pimple": "~3.2",
-            "symfony/console": "~2.8|~3.0",
-            "symfony/event-dispatcher": "~2.8|~3.0",
-            "symfony/finder": "~2.8|~3.0",
-            "symfony/polyfill-php55": "~1.3",
-            "webpatser/laravel-uuid": "~2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8|^5.7|^6.0"
-        },
-        "time": "2017-10-09T03:20:54+00:00",
-        "bin": [
-            "bin/biz"
-        ],
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            },
-            "files": [
-                "src/functions.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "phpdocumentor/reflection-docblock",
         "version": "2.0.5",
         "version_normalized": "2.0.5.0",
@@ -5471,6 +5332,149 @@
         "keywords": [
             "constructor",
             "instantiate"
+        ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.10.0-beta",
+        "version_normalized": "0.10.0.0-beta",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "6425d1df21d04783f96568e3e0ea22428392953b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/6425d1df21d04783f96568e3e0ea22428392953b.zip",
+            "reference": "6425d1df21d04783f96568e3e0ea22428392953b",
+            "shasum": ""
+        },
+        "require": {
+            "canuonifeng/omnipay-wechatpay": "^1.1",
+            "codeages/symfony-lock-lite": "^1.0",
+            "davedevelopment/phpmig": "~1.2",
+            "doctrine/annotations": "~1.2",
+            "doctrine/dbal": "~2.4",
+            "monolog/monolog": "^1.20",
+            "mtdowling/cron-expression": "~1.2",
+            "php": "^5.3|^7.0",
+            "pimple/pimple": "~3.2",
+            "psr/log": "^1.0.0",
+            "symfony/console": "~2.8|~3.0",
+            "symfony/event-dispatcher": "~2.8|~3.0",
+            "symfony/finder": "~2.8|~3.0",
+            "symfony/polyfill-php55": "^1.4",
+            "webpatser/laravel-uuid": "~2.0",
+            "wenqinruan/omnipay-alipay": "^2.3"
+        },
+        "require-dev": {
+            "mockery/mockery": "^0.9.9",
+            "phpunit/phpunit": "^4.8|^5.7|^6.0"
+        },
+        "time": "2017-10-23T05:51:56+00:00",
+        "bin": [
+            "bin/biz"
+        ],
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            },
+            "files": [
+                "src/functions.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
+    },
+    {
+        "name": "codeages/biz-rate-limiter",
+        "version": "v0.1.8",
+        "version_normalized": "0.1.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-rate-limiter.git",
+            "reference": "bb15f5b1d9978aa9c141c696152259a6132de67d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/bb15f5b1d9978aa9c141c696152259a6132de67d",
+            "reference": "bb15f5b1d9978aa9c141c696152259a6132de67d",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.4|^0.5|^0.6|^0.7|^0.8|^0.9|^0.10",
+            "codeages/rate-limiter": "^0.1.3"
+        },
+        "time": "2017-08-24T02:38:11+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\RateLimiter\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Rate limiter with Biz Framework."
+    },
+    {
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.21",
+        "version_normalized": "0.1.21.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "8793be694fe785615a5dd37d5712724f1de4adb8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/8793be694fe785615a5dd37d5712724f1de4adb8",
+            "reference": "8793be694fe785615a5dd37d5712724f1de4adb8",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0 || ^0.10",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/config": "^2.8",
+            "symfony/framework-bundle": "^2.8 || ^3.0",
+            "symfony/twig-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8 || ~5.7",
+            "symfony/browser-kit": "^2.8 || ^3.0",
+            "symfony/phpunit-bridge": "~3.1.5"
+        },
+        "time": "2017-09-29T07:00:41+00:00",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "extension",
+            "plugin",
+            "theme"
         ]
     }
 ]

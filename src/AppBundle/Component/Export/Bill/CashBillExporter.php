@@ -28,7 +28,7 @@ class CashBillExporter extends Exporter
     public function getContent($start, $limit)
     {
         $payment = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
+        $cashes = $this->getAccountProxyService()->searchCashflows(
             $this->conditions,
             array('id' => 'DESC'),
             $start,
@@ -107,7 +107,7 @@ class CashBillExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getAccountProxyService()->countUserCashflows($this->conditions);
+        return $this->getAccountProxyService()->countCashflows($this->conditions);
     }
 
     public function buildCondition($conditions)

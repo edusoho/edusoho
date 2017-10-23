@@ -65,14 +65,14 @@ class UserApprovalController extends BaseController
 
     public function approveAction(Request $request, $id)
     {
-        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
+        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id, 'approving');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
-            if ($data['form_status'] == 'success') {
+            if ('success' == $data['form_status']) {
                 $this->getUserService()->passApproval($id, $data['note']);
-            } elseif ($data['form_status'] == 'fail') {
+            } elseif ('fail' == $data['form_status']) {
                 if ($this->isPluginInstalled('TeacherAudit')) {
                     $approval = $this->getTeacherAuditService()->getApprovalByUserId($user['id']);
 
@@ -97,7 +97,7 @@ class UserApprovalController extends BaseController
 
     public function viewApprovalInfoAction(Request $request, $id)
     {
-        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
+        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id, 'approved');
 
         return $this->render('admin/user/user-approve-info-modal.html.twig',
             array(
@@ -107,27 +107,28 @@ class UserApprovalController extends BaseController
         );
     }
 
-    protected function getApprovalInfo(Request $request, $id)
+    protected function getApprovalInfo(Request $request, $id, $status)
     {
         $user = $this->getUserService()->getUser($id);
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $status);
 
         return array($user, $userApprovalInfo);
     }
 
-    public function showIdcardAction($userId, $type)
+    public function showIdcardAction(Request $request, $userId, $type)
     {
         $user = $this->getUserService()->getUser($userId);
         $currentUser = $this->getUser();
+        $status = $request->query->get('status', 'approving');
 
         if (empty($currentUser)) {
             throw $this->createAccessDeniedException();
         }
 
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $status);
 
-        $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+        $idcardPath = 'back' === $type ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
         $imgConverToData = new ImgConverToData();
         $imgConverToData->getImgDir($idcardPath);
         $imgConverToData->img2Data();
