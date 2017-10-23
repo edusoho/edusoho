@@ -6,6 +6,42 @@ use Biz\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
 {
+    public function testGetUserIdsByKeyword()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13967340620',
+            'mobile' => '13967340621'
+        );
+        $registeredUser1 = $this->getUserService()->register($userInfo);
+
+        $userInfo = array(
+            'nickname' => 'test_nickname1',
+            'password' => 'test_password',
+            'email' => 'edusoho@edusoho.com',
+            'verifiedMobile' => '13967340622',
+            'mobile' => '13967340623'
+        );
+        $registeredUser2 = $this->getUserService()->register($userInfo);
+
+        $user = $this->getUserService()->getUserIdsByKeyword('test_nickname');
+        $this->assertTrue(in_array($registeredUser1['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('test_email');
+        $this->assertTrue(!in_array($registeredUser1['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('edusoho@edusoho.com');
+        $this->assertTrue(in_array($registeredUser2['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('13967340622');
+        $this->assertTrue(in_array($registeredUser2['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('13967340623');
+        $this->assertTrue(in_array($registeredUser2['id'], $user));
+    }
+
     /**
      * @group current
      */
