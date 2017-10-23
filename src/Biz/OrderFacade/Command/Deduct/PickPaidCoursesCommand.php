@@ -24,18 +24,23 @@ class PickPaidCoursesCommand extends Command
 
         list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom($user['id'], $product->targetId);
 
+        $totalDeductAmount = 0;
         foreach ($orderItems as $item) {
             if ($item['pay_amount'] <= 0) {
                 continue;
             }
 
+            $deductAmount = MathToolkit::simple($item['pay_amount'], 0.01);
             $deduct = array(
-                'deduct_amount' => MathToolkit::simple($item['pay_amount'], 0.01),
+                'deduct_amount' => $deductAmount,
                 'deduct_type' => 'paidCourse',
                 'deduct_id' => $item['target_id'],
             );
             $product->pickedDeducts[] = $deduct;
+            $totalDeductAmount += $deductAmount;
         }
+
+        $product->promotionPrice = $product->originPrice - $totalDeductAmount;
     }
 
     private function getClassroomService()
