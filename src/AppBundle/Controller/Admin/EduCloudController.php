@@ -1648,6 +1648,7 @@ class EduCloudController extends BaseController
         }
 
         if ($cloudConsult['cloud_consult_is_buy'] == 0) {
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
             return $this->renderConsultWithoutEnable($cloudConsult);
         }
 
