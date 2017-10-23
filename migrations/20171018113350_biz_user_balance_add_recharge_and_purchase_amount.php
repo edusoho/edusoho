@@ -12,12 +12,12 @@ class BizUserBalanceAddRechargeAndPurchaseAmount extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isFieldExist('biz_user_balance', 'recharge_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
+        if (!$this->isFieldExist('biz_pay_user_balance', 'recharge_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` ADD COLUMN `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
         }
 
-        if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
+        if (!$this->isFieldExist('biz_pay_user_balance', 'purchase_amount')) {
+            $connection->exec("ALTER TABLE `biz_pay_user_balance` ADD COLUMN `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
         }
     }
 
@@ -29,8 +29,8 @@ class BizUserBalanceAddRechargeAndPurchaseAmount extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec('ALTER TABLE `biz_user_balance` DROP COLUMN `recharge_amount`;');
-        $connection->exec('ALTER TABLE `biz_user_balance` DROP COLUMN `purchase_amount`;');
+        $connection->exec('ALTER TABLE `biz_pay_user_balance` DROP COLUMN `recharge_amount`;');
+        $connection->exec('ALTER TABLE `biz_pay_user_balance` DROP COLUMN `purchase_amount`;');
     }
 
     protected function isFieldExist($table, $filedName)

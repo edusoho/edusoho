@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class BizPaymentTradeAddPlatformType extends Migration
+class BizPayTradeAddPlatformType extends Migration
 {
     /**
      * Do the migration
@@ -12,8 +12,8 @@ class BizPaymentTradeAddPlatformType extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        if (!$this->isFieldExist('biz_payment_trade', 'platform_type')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` ADD COLUMN `platform_type` text COMMENT '在第三方系统中的支付方式'");
+        if (!$this->isFieldExist('biz_pay_trade', 'platform_type')) {
+            $connection->exec("ALTER TABLE `biz_pay_trade` ADD COLUMN `platform_type` text COMMENT '在第三方系统中的支付方式'");
         }
     }
 
@@ -25,7 +25,7 @@ class BizPaymentTradeAddPlatformType extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec('ALTER TABLE `biz_payment_trade` DROP COLUMN `platform_type`;');
+        $connection->exec('ALTER TABLE `biz_pay_trade` DROP COLUMN `platform_type`;');
     }
 
     protected function isFieldExist($table, $filedName)

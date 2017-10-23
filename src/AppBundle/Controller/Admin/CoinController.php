@@ -346,11 +346,11 @@ class CoinController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getAccountProxyService()->countUserCashflows($conditions),
+            $this->getAccountProxyService()->countCashflows($conditions),
             20
         );
 
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
+        $cashes = $this->getAccountProxyService()->searchCashflows(
             $conditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
