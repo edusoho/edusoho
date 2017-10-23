@@ -53,7 +53,6 @@ chunk-manifest.json
 !/web/static-dist/custombundle
 /web/static-dist/**/css/*.js
 deployment-config.json
-./vendor
 .webpack-watch.log
 /web/MP_*
 .webpack-watch.log

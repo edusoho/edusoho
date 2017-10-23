@@ -704,11 +704,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         return $this->controller->getService('Classroom:ClassroomService');
     }
 
-    protected function getClassroomOrderService()
-    {
-        return $this->controller->getService('Classroom:ClassroomOrderService');
-    }
-
     protected function getClassroomReviewService()
     {
         return $this->controller->getService('Classroom:ClassroomReviewService');

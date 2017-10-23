@@ -24,7 +24,6 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 
 class ClassroomController extends BaseController
@@ -815,14 +814,6 @@ class ClassroomController extends BaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return ClassroomOrderService
-     */
-    protected function getClassroomOrderService()
-    {
-        return $this->createService('Classroom:ClassroomOrderService');
     }
 
     /**
