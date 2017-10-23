@@ -38,7 +38,7 @@
     </div>
   </fieldset>
 
-  {#{% if capacity.provider|default(0) == 7 %}#}
+  {% if capacity.provider|default(0) == 'talkFun' %}
     <fieldset>
       <legend>{{ 'admin.edu_cloud.edu_live.base_setting'|trans }}</legend>
 
@@ -84,7 +84,7 @@
         </div>
       </div>
     </fieldset>
-  {#{% endif %}#}
+  {% endif %}
 
   <div class="controls col-md-offset-3 col-md-8">
     <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
