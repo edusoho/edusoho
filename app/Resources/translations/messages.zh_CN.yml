@@ -7624,6 +7624,7 @@ testpaper.redo_countdown: 重考倒计时
 question_task.empty_tips: 此任务还没有问题
 
 payment.useless_tips: 支付方式未开启，请联系管理员。
+payment.unusable_tips: 暂无可用的支付的支付方式，请尝试在微信外支付。
 
 open_course.live_label: 直播
 

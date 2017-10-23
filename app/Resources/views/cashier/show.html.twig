@@ -4,7 +4,6 @@
 {% do script(['libs/jquery-validation.js' ,'app/js/cashier/index.js']) %}
 
 {% set step = '2' %}
-
 {% block order_body %}
   <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
     {{ 'pay_center.pay.submit_tips'|trans }}
@@ -81,7 +80,10 @@
             <input type="hidden" name="payment" value="{{ type }}">
           {% endif %}
           {% else %}
-               暂无可支付的渠道
+            {% set payments = false %}
+            <span class="order-center-deduction__content">
+                {{ 'payment.unusable_tips'|trans }}
+            </span>
         {% endfor %}
       </div>
     {% endif %}
