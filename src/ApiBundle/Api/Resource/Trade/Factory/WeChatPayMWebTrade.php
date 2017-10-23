@@ -2,8 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 class WeChatPayMWebTrade extends BaseTrade
 {
     protected $payment = 'wechat';

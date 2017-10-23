@@ -6,6 +6,8 @@ use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
+use Codeages\Biz\Framework\Order\Status\Order\FailOrderStatus;
+use Codeages\Biz\Framework\Order\Status\Order\PaidOrderStatus;
 use Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
@@ -31,7 +33,7 @@ class CashierController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        if ($order['status'] == SuccessOrderStatus::NAME) {
+        if ($this->isOrderPaid($order)) {
             return $this->forward('AppBundle:Cashier/Cashier:purchaseSuccess', array('trade' => array(
                 'order_sn' => $order['sn'],
             )));
@@ -48,6 +50,15 @@ class CashierController extends BaseController
             'order' => $order,
             'product' => $this->getProduct($order['id']),
             'payments' => $payments,
+        ));
+    }
+
+    private function isOrderPaid($order)
+    {
+        return in_array($order['status'], array(
+            SuccessOrderStatus::NAME,
+            PaidOrderStatus::NAME,
+            FailOrderStatus::NAME,
         ));
     }
 
