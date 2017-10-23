@@ -759,10 +759,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
         }
 
-        if (in_array('teacher', $member['role'])) {
-            throw $this->createAccessDeniedException('教师无法退出班级！');
-        }
-
         $this->removeStudentsFromClasroomCourses($classroomId, $userId);
 
         if (count($member['role']) == 1) {
