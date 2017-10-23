@@ -1176,260 +1176,103 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        if (!$this->isTableExist('biz_order')) {
-            $connection->exec("
-                CREATE TABLE `biz_order` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '订单号',
-                  `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
-                  `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
-                  `price_amount` INT(12) unsigned NOT NULL COMMENT '订单总金额',
-                  `price_type` varchar(32) not null  COMMENT '标价类型，现金支付or虚拟币；money, coin',
-                  `pay_amount` INT(10) unsigned NOT NULL COMMENT '应付金额',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
-                  `callback` TEXT COMMENT '商品中心的异步回调信息',
-                  `trade_sn` VARCHAR(64) COMMENT '支付的交易号',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '订单状态',
-                  `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
-                  `payment` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '支付类型',
-                  `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间，交易成功后不得退款',
-                  `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
-                  `close_data` TEXT COMMENT '交易关闭描述',
-                  `close_user_id` INT(10) unsigned DEFAULT '0' COMMENT '关闭交易的用户',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `created_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的创建者',
-                  `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
-                  `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
-                  `paid_cash_amount` int(10) unsigned NOT NULL DEFAULT '0',
-                  `paid_coin_amount` int(10) unsigned NOT NULL DEFAULT '0',
-                  `refund_deadline` int(10) unsigned NOT NULL DEFAULT '0',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-        if (!$this->isTableExist('biz_order_item')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_item` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '编号',
-                  `title` VARCHAR(1024) NOT NULL COMMENT '商品名称',
-                  `detail` TEXT COMMENT '商品描述',
-                  `num` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '数量',
-                  `unit` varchar(16) COMMENT '单位',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
-                  `refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '最新退款id',
-                  `refund_status` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '退款状态',
-                  `price_amount` INT(10) unsigned NOT NULL COMMENT '商品价格',
-                  `pay_amount` INT(10) unsigned NOT NULL COMMENT '商品应付金额',
-                  `target_id` INT(10) unsigned NOT NULL COMMENT '商品id',
-                  `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
-                  `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
-                  `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间，交易成功后不得退款',
-                  `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
-                  `snapshot` text COMMENT '商品快照',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_cashflow` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '标题',
+              `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
+              `parent_sn` VARCHAR(64) COMMENT '本次交易的上一个账单的流水号',
+              `user_id` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
+              `user_balance` BIGINT(16) NOT NULL DEFAULT '0' COMMENT '账单生成后的对应账户的余额，若amount_type为coin，对应的是虚拟币账户，amount_type为money，对应的是现金庄户余额',
+              `buyer_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家',
+              `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
+              `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge',
+              `amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '金额',
+              `amount_type` VARCHAR(32) NOT NULL COMMENT 'ammount的类型：coin, money',
+              `currency` VARCHAR(32) NOT NULL COMMENT '支付的货币: coin, CNY...',
+              `order_sn` varchar(64) NOT NULL COMMENT '订单号',
+              `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
+              `platform` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT '支付平台：none, alipay, wxpay...',
+              `created_time` int(10) unsigned NOT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帐目流水';
+        ");
 
-        if (!$this->isTableExist('biz_order_item_deduct')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_item_deduct` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `detail` TEXT COMMENT '描述',
-                  `item_id` INT(10) unsigned NOT NULL COMMENT '商品id',
-                  `deduct_type` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '促销类型',
-                  `deduct_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '对应的促销活动id',
-                  `deduct_amount` INT(10) unsigned NOT NULL COMMENT '扣除的价格',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `snapshot` text COMMENT '促销快照',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_user_balance` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` int(10) unsigned NOT NULL COMMENT '用户',
+              `amount` BIGINT(16) NOT NULL DEFAULT '0' COMMENT '账户的虚拟币余额',
+              `cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '现金余额',
+              `locked_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额',
+              `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额',
+              `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额',
+              `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+              `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`user_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isTableExist('biz_order_refund')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_refund` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '退款订单编号',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
-                  `reason` TEXT COMMENT '退款的理由',
-                  `amount` INT(10) unsigned NOT NULL COMMENT '涉及金额',
-                  `currency` VARCHAR(32) NOT NULL DEFAULT 'money' COMMENT '货币类型: coin, money',
-                  `deal_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理时间',
-                  `deal_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理人',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
-                  `deal_reason` TEXT COMMENT '处理理由',
-                  `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
-                  `refund_cash_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款的现金金额',
-                  `refund_coin_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款的虚拟币金额',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_trade` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` varchar(1024) NOT NULL COMMENT '标题',
+              `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
+              `order_sn` varchar(64) NOT NULL COMMENT '客户订单号',
+              `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '交易状态',
+              `amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '订单的需支付金额',
+              `price_type` varchar(32) NOT NULL COMMENT '标价类型，现金支付or虚拟币；money, coin',
+              `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的货币类型',
+              `coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '虚拟币支付金额',
+              `cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '现金支付金额',
+              `rate` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '虚拟币和现金的汇率',
+              `type` varchar(32) NOT NULL DEFAULT 'purchase' COMMENT '交易类型：purchase，recharge，refund',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '买家id',
+              `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
+              `apply_refund_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款时间',
+              `refund_success_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功退款时间',
+              `notify_data` text,
+              `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
+              `platform_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',
+              `platform_type` text COMMENT '在第三方系统中的支付方式',
+              `platform_created_result` text,
+              `platform_created_params` text COMMENT '在第三方系统创建支付订单时的参数信息',
+              `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+              `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`trade_sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isTableExist('biz_order_item_refund')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_item_refund` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_refund_id` INT(10) unsigned NOT NULL COMMENT '退款订单id',
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
-                  `amount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '涉及金额',
-                  `coin_amount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '涉及虚拟币金额',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
-                  `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_account` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
+              `password` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '密码',
+              `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`user_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isTableExist('biz_order_log')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_log` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '订单id',
-                  `status` VARCHAR(32) NOT NULL COMMENT '订单状态',
-                  `user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户',
-                  `deal_data` TEXT COMMENT '处理数据',
-                  `order_refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '退款id',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_pay_cashflow')) {
-            $connection->exec("
-                CREATE TABLE `biz_pay_cashflow` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
-                  `parent_sn` VARCHAR(64) COMMENT '本次交易的上一个账单的流水号',
-                  `user_id` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
-                  `buyer_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家',
-                  `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
-                  `amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '金额',
-                  `currency` VARCHAR(32) NOT NULL COMMENT '支付的货币: coin, CNY...',
-                  `user_balance` int(10) NOT NULL DEFAULT '0' COMMENT '账单生成后的对应账户的余额，若amount_type为coin，对应的是虚拟币账户，amount_type为money，对应的是现金庄户余额',
-                  `order_sn` varchar(64) NOT NULL COMMENT '订单号',
-                  `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
-                  `platform` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT '支付平台：none, alipay, wxpay...',
-                  `amount_type` VARCHAR(32) NOT NULL COMMENT 'ammount的类型：coin, money, locked_amount',
-                  `created_time` int(10) unsigned NOT NULL,
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帐目流水';
-            ");
-        }
-
-        if (!$this->isTableExist('biz_pay_user_balance')) {
-            $connection->exec("
-                CREATE TABLE `biz_pay_user_balance` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` int(10) unsigned NOT NULL COMMENT '用户',
-                  `amount` int(10) NOT NULL DEFAULT '0' COMMENT '账户余额',
-                  `cash_amount` int(10) NOT NULL DEFAULT '0' COMMENT '现金余额',
-                  `locked_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额',
-                  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`user_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_pay_trade')) {
-            $connection->exec("
-                CREATE TABLE `biz_pay_trade` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` varchar(1024) NOT NULL COMMENT '标题',
-                  `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
-                  `order_sn` varchar(64) NOT NULL COMMENT '客户订单号',
-                  `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
-                  `platform_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',
-                  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '交易状态',
-                  `price_type` varchar(32) NOT NULL COMMENT '标价类型，现金支付or虚拟币；money, coin',
-                  `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的货币类型',
-                  `amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的需支付金额',
-                  `coin_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '虚拟币支付金额',
-                  `cash_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '现金支付金额',
-                  `rate` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '虚拟币和现金的汇率',
-                  `type` varchar(32) NOT NULL DEFAULT 'purchase' COMMENT '交易类型：purchase，recharge，refund',
-                  `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '买家id',
-                  `notify_data` text,
-                  `platform_created_result` text,
-                  `apply_refund_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款时间',
-                  `refund_success_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功退款时间',
-                  `platform_created_params` text COMMENT '在第三方系统创建支付订单时的参数信息',
-                  `platform_type` text COMMENT '在第三方系统中的支付方式',
-                  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`trade_sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_pay_account')) {
-            $connection->exec("
-                CREATE TABLE `biz_pay_account` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
-                  `password` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '密码',
-                  `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`user_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_pay_security_answer')) {
-            $connection->exec("
-                CREATE TABLE `biz_pay_security_answer` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
-                  `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
-                  `answer` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE (`user_id`, `question_key`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_security_answer` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
+              `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
+              `answer` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
+              `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE (`user_id`, `question_key`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
         if (!$this->isTableExist('member_operation_record')) {
             $connection->exec("
@@ -1454,121 +1297,144 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isFieldExist('biz_order', 'expired_refund_days')) {
-            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数'");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_order` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
+              `sn` VARCHAR(64) NOT NULL COMMENT '订单号',
+              `price_amount` BIGINT(16) unsigned NOT NULL COMMENT '订单总价',
+              `price_type` varchar(32) not null  COMMENT '订单总价的类型，现金支付or虚拟币；money, coin',
+              `pay_amount` BIGINT(16) unsigned NOT NULL COMMENT '应付金额',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '订单状态',
+              `trade_sn` VARCHAR(64) COMMENT '支付交易号，支付成功后记录',
+              `paid_cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '付款的现金金额，支付成功后记录',
+              `paid_coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '付款的虚拟币金额，支付成功后记录',
+              `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间，支付成功后记录',
+              `payment` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '支付类型，支付成功后记录',
+              `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间',
+              `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+              `close_data` TEXT COMMENT '交易关闭描述',
+              `close_user_id` INT(10) unsigned DEFAULT '0' COMMENT '关闭交易的用户',
+              `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数',
+              `refund_deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款截止日期',
+              `success_data` text COMMENT '交易成功的扩展信息字段',
+              `fail_data` text COMMENT '交易失败的扩展信息字段',
+              `created_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的创建者',
+              `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
+              `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
+              `callback` TEXT COMMENT '商品中心的异步回调信息',
+              `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
+              `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-        if (!$this->isFieldExist('biz_order', 'success_data')) {
-            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `success_data` text COMMENT '当订单改变为success时的数据记录';");
-        }
+            CREATE TABLE IF NOT EXISTS `biz_order_item` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL COMMENT '商品名称',
+              `detail` TEXT COMMENT '商品描述',
+              `sn` VARCHAR(64) NOT NULL COMMENT '编号',
+              `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+              `num` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '数量',
+              `unit` varchar(16) COMMENT '单位',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
+              `refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '最新退款id',
+              `refund_status` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '退款状态',
+              `price_amount` BIGINT(16) unsigned NOT NULL COMMENT '商品总价格',
+              `pay_amount` BIGINT(16) unsigned NOT NULL COMMENT '商品应付金额',
+              `target_id` INT(10) unsigned NOT NULL COMMENT '商品id',
+              `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
+              `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
+              `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间',
+              `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `snapshot` text COMMENT '商品快照',
+              `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-        if (!$this->isFieldExist('biz_order', 'fail_data')) {
-            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `fail_data` text COMMENT '当订单改变为fail时的数据记录'");
-        }
+            CREATE TABLE IF NOT EXISTS `biz_order_item_deduct` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+              `detail` TEXT COMMENT '描述',
+              `item_id` INT(10) unsigned NOT NULL COMMENT '商品id',
+              `deduct_type` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '促销类型',
+              `deduct_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '对应的促销活动id',
+              `deduct_amount` BIGINT(16) unsigned NOT NULL COMMENT '扣除的价格',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `snapshot` text COMMENT '促销快照',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-        if (!$this->isFieldExist('biz_order_item_refund', 'target_id')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` ADD COLUMN `target_id` INT(10) unsigned NOT NULL COMMENT '商品id'");
-        }
+            CREATE TABLE IF NOT EXISTS `biz_order_refund` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '退款单标题',
+              `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+              `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
+              `sn` VARCHAR(64) NOT NULL COMMENT '退款订单编号',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
+              `reason` TEXT COMMENT '退款的理由',
+              `amount` BIGINT(16) unsigned NOT NULL COMMENT '退款总金额',
+              `currency` VARCHAR(32) NOT NULL DEFAULT 'money' COMMENT '货币类型: coin, money',
+              `deal_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理时间',
+              `deal_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理人',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+              `deal_reason` TEXT COMMENT '处理理由',
+              `refund_cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款的现金金额',
+              `refund_coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款的虚拟币金额',
+              `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isFieldExist('biz_order_item_refund', 'target_type')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` ADD COLUMN `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型'");
-        }
+        $connection->exec("
+          CREATE TABLE IF NOT EXISTS `biz_order_item_refund` (
+            `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+            `order_refund_id` INT(10) unsigned NOT NULL COMMENT '退款订单id',
+            `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+            `order_item_id` INT(10) unsigned NOT NULL COMMENT '订单中的商品的id',
+            `target_id` INT(10) unsigned NOT NULL COMMENT '商品id',
+            `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
+            `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
+            `amount` BIGINT(16) unsigned NOT NULL DEFAULT 0 COMMENT '涉及金额',
+            `coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT 0 COMMENT '涉及虚拟币金额',
+            `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+            `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
+            `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            PRIMARY KEY (`id`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if ($this->isFieldExist('biz_order', 'price_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `price_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '订单总价';");
-        }
-
-        if ($this->isFieldExist('biz_order', 'pay_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `pay_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '应付价格';");
-        }
-
-        if ($this->isFieldExist('biz_order', 'paid_cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付的现金价格';");
-        }
-
-        if ($this->isFieldExist('biz_order', 'paid_coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付的虚拟币价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item', 'price_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `price_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '订单价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item', 'pay_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `pay_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item_deduct', 'deduct_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_deduct` MODIFY COLUMN `deduct_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '优惠价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item_refund', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款现金价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item_refund', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_refund', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款总价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_refund', 'refund_cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的现金价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_refund', 'refund_coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币';");
-        }
-
-        if ($this->isFieldExist('biz_pay_trade', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_trade` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_pay_trade', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_trade` MODIFY COLUMN `coin_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_pay_trade', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_trade` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_pay_user_balance', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_user_balance` MODIFY COLUMN `cash_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
-        }
-
-        if ($this->isFieldExist('biz_pay_user_balance', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_user_balance` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
-        }
-
-        if ($this->isFieldExist('biz_pay_user_balance', 'locked_amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_user_balance` MODIFY COLUMN `locked_amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
-        }
-
-        if ($this->isFieldExist('biz_pay_cashflow', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_cashflow` MODIFY COLUMN `amount` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
-        }
-
-        if ($this->isFieldExist('biz_pay_cashflow', 'user_balance')) {
-            $connection->exec("ALTER TABLE `biz_pay_cashflow` MODIFY COLUMN `user_balance` BIGINT(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
-        }
-
-        if (!$this->isFieldExist('biz_pay_cashflow', 'action')) {
-            $connection->exec("ALTER TABLE `biz_pay_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
-        }
-
-        if (!$this->isFieldExist('biz_pay_user_balance', 'recharge_amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_user_balance` ADD COLUMN `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额'");
-        }
-
-        if (!$this->isFieldExist('biz_pay_user_balance', 'purchase_amount')) {
-            $connection->exec("ALTER TABLE `biz_pay_user_balance` ADD COLUMN `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额'");
-        }
-
-        if (!$this->isFieldExist('biz_order_log', 'ip')) {
-            $connection->exec("ALTER TABLE `biz_order_log` ADD COLUMN `ip` VARCHAR(32) not null default '' COMMENT 'ip'");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_order_log` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `order_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '订单id',
+              `status` VARCHAR(32) NOT NULL COMMENT '订单状态',
+              `user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户',
+              `deal_data` TEXT COMMENT '处理数据',
+              `order_refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '退款id',
+              `ip` VARCHAR(32) not null default '' COMMENT 'ip',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
         $this->logger('info', '新建biz表');
 
