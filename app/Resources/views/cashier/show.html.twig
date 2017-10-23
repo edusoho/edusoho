@@ -80,6 +80,8 @@
           {% if loop.index == 1 %}
             <input type="hidden" name="payment" value="{{ type }}">
           {% endif %}
+          {% else %}
+               暂无可支付的渠道
         {% endfor %}
       </div>
     {% endif %}
