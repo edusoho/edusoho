@@ -590,7 +590,7 @@ class ClassroomController extends BaseController
         }
 
         $courseIds = ArrayToolkit::column($courses, 'parentId');
-//        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
+        //        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
 
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
@@ -610,7 +610,7 @@ class ClassroomController extends BaseController
             $totalPrice = $totalPrice * $coinSetting['cash_rate'];
         }
 
-//        $classroomSetting = $this->getSettingService()->get("classroom");
+        //        $classroomSetting = $this->getSettingService()->get("classroom");
 
         if ($this->getCoursesTotalPrice($courses, $priceType) >= (float) $totalPrice) {
             return true;
