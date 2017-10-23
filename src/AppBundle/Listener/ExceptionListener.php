@@ -55,10 +55,13 @@ class ExceptionListener
             return;
         }
 
-        $error = array('name' => 'Error', 'message' => $exception->getMessage());
+        $error = array('name' => 'Error');
 
         if ($this->container->get('kernel')->isDebug()) {
+            $error['message'] = $exception->getMessage();
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
+        } else {
+            $error['message'] = 'Request occurs and error';
         }
 
         if ($statusCode === 403) {

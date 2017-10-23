@@ -26,6 +26,8 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'], null);
 
+        $defaultCourseId = 0;
+        $newCourses = array();
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
             $newCourse['courseSetId'] = $newCourseSet['id'];
@@ -33,14 +35,21 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse['parentId'] = $originCourse['id'];
             $newCourse['price'] = $originCourse['originPrice'];
             $newCourse = $this->getCourseDao()->create($newCourse);
+
+            $newCourses[] = $newCourse;
             if ($newCourse['courseType'] == 'default') {
-                $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
+                $defaultCourseId = $newCourse['id'];
             }
 
             $options['newCourse'] = $newCourse;
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
         }
+
+        // 原课程defaultCourse被删除时，复制后defaultCourseId为课程下第一个计划的ID
+        $defaultCourseId = empty($defaultCourseId) ? $newCourses[0]['id'] : $defaultCourseId;
+        $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $defaultCourseId));
+
         $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
 
         $this->updateQuestionsCourseId($newCourseSet['id']);

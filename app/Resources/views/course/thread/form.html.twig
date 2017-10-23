@@ -65,25 +65,6 @@
           <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save">{{'form.btn.save'|trans}}</button>
         {% else %}
-          {% if setting('reward_point.enable',0) %}
-            {% if type == "question" and setting('reward_point.create_question.enable',0) and setting('reward_point.create_question.amount',0) > 0 %}
-              <span class="color-gray form-control-static mrm">
-                {{'reward_point.create_question_get'|trans}}<span class="color-primary"> {{setting('reward_point').create_question['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('admin.reward_point'|trans)}}
-                <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'reward_point.reward'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-                  {% if setting('reward_point').create_question['daily_limit']|default() %}
-                  data-content="{{'reward_point.create_question_hint'|trans({'%daily_limit%': setting('reward_point').create_question['daily_limit']|default('classroom.thread.create.maxUsers.placeholder'|trans),'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-                  {% else %} data-content="{{'reward_point.create_question_hint_unlimited'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"{% endif %}></i>
-              </span>
-            {% elseif type == "discussion" and setting('reward_point.create_discussion.enable',0) and setting('reward_point.create_discussion.amount',0) > 0 %}
-              <span class="color-gray form-control-static mrm">
-                {{'reward_point.create_discussion'|trans}}<span class="color-primary"> {{setting('reward_point').create_discussion['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('admin.reward_point'|trans)}}
-                <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'reward_point.reward'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-                  {% if setting('reward_point').create_discussion['daily_limit']|default() %}
-                  data-content="{{'reward_point.create_discussion_hint'|trans({'%daily_limit%':setting('reward_point').create_discussion['daily_limit']|default('classroom.thread.create.maxUsers.placeholder'|trans),'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"
-                  {% else %}data-content="{{'reward_point.create_discussion_hint_unlimited'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"{% endif %}></i>
-              </span>
-            {% endif %}
-          {% endif %}
            <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save">{{'form.btn.reply'|trans}}</button>
         {% endif  %}

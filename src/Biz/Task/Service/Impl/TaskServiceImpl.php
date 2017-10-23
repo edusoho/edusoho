@@ -34,6 +34,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
+    public function getCourseTaskByCourseIdAndCopyId($courseId, $copyId)
+    {
+        $task = $this->getTaskDao()->getByCourseIdAndCopyId($courseId, $copyId);
+        if (empty($task) || $task['courseId'] != $courseId) {
+            return array();
+        }
+
+        return $task;
+    }
+
     public function preCreateTaskCheck($task)
     {
         $this->getActivityService()->preCreateCheck($task['mediaType'], $task);
