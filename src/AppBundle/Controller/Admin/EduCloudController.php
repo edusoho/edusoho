@@ -1641,6 +1641,11 @@ class EduCloudController extends BaseController
             $liveSetting = $this->getSettingService()->get('live-course', array());
             $url = $this->get('web.twig.extension')->getFurl($file['uri']);
 
+            $oldFileId = $liveSetting["{$type}LogoFileId"];
+            if ($oldFileId) {
+                $this->getFileService()->deleteFile($fileId);
+            }
+
             $liveSetting["{$type}LogoFileId"] = $file['id'];
             $liveSetting["{$type}LogoPath"] = $url;
 

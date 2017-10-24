@@ -261,29 +261,6 @@ class SettingController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function liveLogoRemoveAction(Request $request, $type)
-    {
-        if (!in_array($type, array('web','app'))) {
-            return $this->createJsonResponse(array('code' => fase, 'message'=>'Invalid argument'));
-        }
-
-        $setting = $this->getSettingService()->get('live-course');
-
-        $fileId = empty($setting["{$type}LogoFileId"]) ? null : $setting["{$type}LogoFileId"];
-        $setting["{$type}LogoFileId"] = '';
-        $setting["{$type}LogoPath"] = '';
-
-        $this->getSettingService()->set('live-course', $setting);
-
-        if ($fileId) {
-            $this->getFileService()->deleteFile($fileId);
-        }
-
-        $this->getLogService()->info('system', 'update_settings', '移除直播LOGO');
-
-        return $this->createJsonResponse(array('code' => true, 'message' => ''));
-    }
-
     public function faviconUploadAction(Request $request)
     {
         $fileId = $request->request->get('id');

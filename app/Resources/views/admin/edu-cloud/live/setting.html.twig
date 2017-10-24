@@ -52,7 +52,7 @@
           data-upload-token="{{ upload_token('system', 'image') }}"
           data-goto-url="{{ path('admin_cloud_edulive_logo_crop', {type: 'web'}) }}"
           >{{'admin.edu_cloud.edu_live.upload_btn'|trans}}</a>
-          <button class="btn btn-default btn-sm logo-remove-btn-js" type="button" data-url="{{ path('admin_setting_live_logo_remove', {type: 'web'}) }}" data-type='web' {% if not liveCourseSetting.webLogoPath|default('') %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
+          
           <p class="help-block">
             {{'admin.edu_cloud.edu_live.upload_web_tips'|trans|raw}}
           </p>
@@ -68,7 +68,7 @@
           data-upload-token="{{ upload_token('system', 'image') }}"
           data-goto-url="{{ path('admin_cloud_edulive_logo_crop', {type:'app'}) }}"
           >{{'admin.edu_cloud.edu_live.upload_btn'|trans}}</a>
-          <button class="btn btn-default btn-sm logo-remove-btn-js" type="button" data-url="{{ path('admin_setting_live_logo_remove', {type: 'app'}) }}" data-type='app' {% if not liveCourseSetting.appLogoPath|default('') %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
+          
           <p class="help-block">
             {{'admin.edu_cloud.edu_live.upload_app_tips'|trans|raw}}
           </p>
@@ -77,7 +77,7 @@
       <div class="form-group">
         <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_live.logo_url'|trans }}：</label>
         <div class="controls col-md-9">
-          <input type="text" class="form-control width-input width-input-large" name="logoUrl" value="{{ liveCourseSetting.logoUrl|default('') }}" />
+          <input type="text" class="form-control width-input width-input-large" id="logoUrl" name="logoUrl" value="{{ liveCourseSetting.logoUrl|default('') }}" />
           <p class="help-block">
             {{'admin.edu_cloud.edu_live.logo_url_tips'|trans|raw}}
           </p>
@@ -87,7 +87,7 @@
   {% endif %}
 
   <div class="controls col-md-offset-3 col-md-8">
-    <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    <button type="submit" class="btn btn-primary save-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -682,12 +682,6 @@ admin_setting_live_logo_upload:
     methods: [POST]
     permissions: [admin_setting_live_course]
 
-admin_setting_live_logo_remove:
-    path:  /setting/live/{type}/logo/remove
-    defaults: { _controller: AppBundle:Admin/Setting:liveLogoRemove }
-    methods: [POST]
-    permissions: [admin_setting_live_course]
-
 admin_setting_favicon_upload:
     path: /setting/favicon/upload
     defaults: { _controller: AppBundle:Admin/Setting:faviconUpload }

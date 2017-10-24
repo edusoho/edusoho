@@ -44,18 +44,6 @@ define(function(require, exports, module) {
             });
         }
 
-        $(".logo-remove-btn-js").on('click', function(){
-            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
-            var $btn = $(this);
-            var type = $btn.data('type');
-            $.post($btn.data('url'), function(){
-                $btn.siblings('.logo-container-js').html('');
-                $btn.hide();
-                Notify.success(Translator.trans('删除直播课程LOGO成功！'));
-            }).error(function(){
-                Notify.danger(Translator.trans('删除直播课程LOGO失败！'));
-            });
-        });
     };
 
 });

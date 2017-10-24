@@ -28,7 +28,6 @@ define(function(require, exports, module) {
                 var $uploadBtn = $('#'+type+'-logo-upload');
 
                 $uploadBtn.siblings('.logo-container-js').html('<img src="' + result.url + '">');
-                $uploadBtn.siblings('.logo-remove-btn-js').show();
 
                 Notify.success(Translator.trans('上传LOGO成功！'), 1);
                 
