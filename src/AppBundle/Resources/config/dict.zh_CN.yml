@@ -26,6 +26,7 @@ couponType:
 
 couponStatus:
     used: 已使用
+    using: 使用中
     unused: 未使用
     receive: 已领取
 
