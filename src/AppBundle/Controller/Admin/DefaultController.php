@@ -278,7 +278,7 @@ class DefaultController extends BaseController
         $conditions = array(
             'pay_time_GT' => $startTime,
             'order_item_target_type' => 'course',
-            'price_amount_GT' => 0,
+            'pay_amount_GT' => 0,
             'statuses' => array('paid', 'success', 'refunded'),
         );
 
