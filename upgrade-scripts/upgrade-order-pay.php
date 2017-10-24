@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use Biz\Util\PluginUtil;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -95,6 +96,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'stopCrmJobs',
             'updateCourseIsFree',
             'updateUserRoles',
+            'removeGroupSell',
         );
 
         $funcNames = array();
@@ -1437,6 +1439,17 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         $this->logger('info', '新建biz表');
+
+        return 1;
+    }
+
+    protected function removeGroupSell()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            DELETE FROM `cloud_app` WHERE `code` = 'GroupSell';
+        ");
+        PluginUtil::refresh();
 
         return 1;
     }
