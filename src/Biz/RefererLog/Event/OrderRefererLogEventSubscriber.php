@@ -50,7 +50,7 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
 
         $token = $this->getRefererLogService()->getOrderRefererLikeByOrderId($order['id']);
 
-        if (empty($token) || $order['totalPrice'] == 0) {
+        if (empty($token) || $order['price_amount'] == 0) {
             return false;
         }
 
