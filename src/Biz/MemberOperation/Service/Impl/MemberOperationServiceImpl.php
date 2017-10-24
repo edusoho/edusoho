@@ -47,6 +47,17 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         }
 
         $order = $this->getOrderService()->getOrder($orderId);
+        if (empty($order)) {
+             return $reason;
+        }
+
+        if ($order['source'] === 'markting') {
+            return array(
+                'reason' => 'site.join_by_markting',
+                'reason_type' => 'markting_join',
+            );
+        }
+
         if ($order['source'] === 'outside') {
             return array(
                 'reason' => 'site.join_by_import',
