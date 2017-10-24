@@ -393,7 +393,6 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function useCoupon($id, $fields)
     {
-        
         $requiredFields = array('targetType', 'targetId', 'userId', 'orderId');
         $fields = ArrayToolkit::parts($fields, $requiredFields);
         if (!ArrayToolkit::requireds($fields, $requiredFields)) {

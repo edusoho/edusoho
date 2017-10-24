@@ -18,7 +18,7 @@ class UsingCoupon extends Coupon implements CouponInterface
             'targetType' => $params['targetType'],
             'targetId' => $params['targetId'],
             'userId' => $params['userId'],
-            'orderId' => $params['orderId'],           
+            'orderId' => $params['orderId'],
         );
         $coupon = $this->getCouponService()->useCoupon($this->coupon['id'], $copuon);
 

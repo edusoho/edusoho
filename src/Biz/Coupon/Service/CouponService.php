@@ -52,7 +52,7 @@ interface CouponService
     /**
      * @param array(
      *  'targetType' => 'course',
-     *   'targetId' => '1',      
+     *   'targetId' => '1',
      *   'userId' => 1,
      *   'orderId' => 1,
      * )
