@@ -11,7 +11,7 @@ class Login extends MarketingBase
     {
         $biz = $this->getBiz();
         $logger = $biz['logger'];
-        $logger->debug('营销平台请求登录授权');
+        $logger->debug('微营销请求登录授权');
         $content = $request->getContent();
         $postData = json_decode($content, true);
 
@@ -43,7 +43,7 @@ class Login extends MarketingBase
 
             return array('ticket' => $token['token']);
         } catch (\Exception $e) {
-            $logger->error('ES处理营销平台登录授权失败,'.$e->getMessage());
+            $logger->error('ES处理微营销登录授权失败,'.$e->getMessage());
 
             return array('code' => 'error', 'msg' => $e->getMessage());
         }
