@@ -48,7 +48,7 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
 
         $order = $this->getOrderService()->getOrder($orderId);
         if (empty($order)) {
-             return $reason;
+            return $reason;
         }
 
         if ($order['source'] === 'markting') {

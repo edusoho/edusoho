@@ -8,7 +8,6 @@ class MemberOperationServiceTest extends BaseTestCase
 {
     public function testGetJoinReasonByOrderId()
     {
-
         $reason = $this->getMemberOperationService()->getJoinReasonByOrderId(2);
         $this->assertEquals('site.join_by_free', $reason['reason']);
         $this->assertEquals('free_join', $reason['reason_type']);
@@ -39,7 +38,7 @@ class MemberOperationServiceTest extends BaseTestCase
         ));
         $reason = $this->getMemberOperationService()->getJoinReasonByOrderId(1);
         $this->assertEquals('site.join_by_free', $reason['reason']);
-        $this->assertEquals('free_join', $reason['reason_type']);       
+        $this->assertEquals('free_join', $reason['reason_type']);
     }
 
     public function getOrder()
