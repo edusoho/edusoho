@@ -11,6 +11,7 @@ use Biz\Order\Service\OrderFacadeService;
 use Biz\Order\Service\OrderService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -24,10 +25,15 @@ class OrderController extends BaseController
         if (!$currentUser->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+        $qTargetType = $request->query->get('targetType');
+        $targetType = $request->request->get('targetType', $qTargetType);
 
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-        $fields = $request->query->all();
+        $qTargetId = $request->query->get('targetId');
+        $targetId = $request->request->get('targetId', $qTargetId);
+
+        $fields = $request->request->all();
+        $fields = !empty($fields) ? $fields : $request->query->all();
+
         list($error, $orderInfo, $processor) = $this->getOrderFacadeService()->getOrderInfo($targetType, $targetId, $fields);
 
         if (isset($error['error'])) {
@@ -103,10 +109,9 @@ class OrderController extends BaseController
         } else {
             $fields['couponCode'] = trim($fields['couponCode']);
         }
-
         try {
             list($order, $processor) = $this->getOrderFacadeService()->createOrder($targetType, $targetId, $fields);
-        } catch (\Exception $e) {
+        } catch (ServiceException $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
 

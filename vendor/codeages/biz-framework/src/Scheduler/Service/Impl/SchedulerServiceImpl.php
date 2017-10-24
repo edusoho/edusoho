@@ -390,8 +390,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             'status' => 'executing',
             'fired_time_LT' => time() - $runtimeout,
         ), array(), 0, 100);
+
         foreach ($jobFireds as $jobFired) {
-            $this->markTimout($jobFired);
+            if ($jobFired['job_detail']['name'] != 'Scheduler_MarkExecutingTimeoutJob') {
+                $this->markTimout($jobFired);
+            }
+
         }
     }
 
