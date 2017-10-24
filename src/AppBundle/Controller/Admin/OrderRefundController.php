@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
@@ -143,7 +144,7 @@ class OrderRefundController extends BaseController
         $targetUrl = $this->generateUrl($backUrl['routing'], $backUrl['params']);
         $variables = array(
             'item' => "<a href='{$targetUrl}'>".$product->title.'</a>',
-            'amount' => $order['pay_amount'],
+            'amount' => MathToolkit::simple($order['pay_amount'], 0.01),
             'note' => $data['note'],
         );
 
