@@ -14,10 +14,10 @@ class ClassroomProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName'=>'getClassroom', 'returnValue'=> array('buyable'=>true)),
+            array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => true)),
             array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
-       $this->assertEquals(NULL, $courseProduct->validate()) ;
+        $this->assertEquals(null, $courseProduct->validate());
     }
 
     /**
@@ -29,7 +29,7 @@ class ClassroomProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName'=>'getClassroom', 'returnValue'=> array('buyable'=>true)),
+            array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => true)),
             array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
     }

@@ -18,7 +18,7 @@ class CourseProductTest extends BaseTestCase
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
 
-      $this->assertEquals(NULL,   $courseProduct->validate());
+        $this->assertEquals(null, $courseProduct->validate());
     }
 
     /**
@@ -34,8 +34,6 @@ class CourseProductTest extends BaseTestCase
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
     }
-
-
 
     /**
      * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
