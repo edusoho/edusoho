@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\MathToolkit;
@@ -68,10 +69,10 @@ class CoinController extends BaseController
     protected function savePicture(Request $request, $size)
     {
         $file = $request->files->get('coin_picture');
-        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
 
-        $pictureFilePath = $directory . '/' . $filename;
+        $pictureFilePath = $directory.'/'.$filename;
         $pathinfo = pathinfo($pictureFilePath);
 
         $imagine = new Imagine();
@@ -141,16 +142,14 @@ class CoinController extends BaseController
                 'maxCoursePrice_GT' => '0.00',
                 'parentId' => 0,
             ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
-        }
-        elseif ($type == 'classroom') {
+        } elseif ($type == 'classroom') {
             $items = $this->getClassroomService()->searchClassrooms(
                 array('private' => 0, 'price_GT' => '0.00'),
                 array('createdTime' => 'DESC'),
                 0,
                 PHP_INT_MAX
             );
-        }
-        elseif ($type == 'vip') {
+        } elseif ($type == 'vip') {
             // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
         }
@@ -179,8 +178,7 @@ class CoinController extends BaseController
                 if (isset($data['item-rate'])) {
                     $this->updateMaxRate($data);
                 }
-            }
-            else {
+            } else {
                 $coinSettings['price_type'] = 'Coin';
                 $coinSettings['cash_model'] = 'currency';
             }
@@ -202,13 +200,11 @@ class CoinController extends BaseController
             foreach ($data as $key => $value) {
                 $this->getCourseSetService()->updateMaxRate($key, $value);
             }
-        }
-        elseif ($type == 'classroom') {
+        } elseif ($type == 'classroom') {
             foreach ($data as $key => $value) {
                 $this->getClassroomService()->updateClassroom($key, array('maxRate' => $value));
             }
-        }
-        elseif ($type == 'vip') {
+        } elseif ($type == 'vip') {
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
             }
@@ -223,7 +219,7 @@ class CoinController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确，请上传png, gif, jpg格式的图片文件！');
         }
 
-        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file = $file->move($directory, $filename);
 
@@ -407,8 +403,7 @@ class CoinController extends BaseController
 
             if ($user) {
                 $conditions['userId'] = $user['id'];
-            }
-            else {
+            } else {
                 $conditions['userId'] = -1;
             }
         }
@@ -419,19 +414,19 @@ class CoinController extends BaseController
 
         if (!empty($conditions['lastHowManyMonths'])) {
             switch ($conditions['lastHowManyMonths']) {
-                case 'oneWeek' :
+                case 'oneWeek':
                     $conditions['startTime'] = $conditions['endTime'] - 7 * 24 * 3600;
                     break;
-                case 'twoWeeks' :
+                case 'twoWeeks':
                     $conditions['startTime'] = $conditions['endTime'] - 14 * 24 * 3600;
                     break;
-                case 'oneMonth' :
+                case 'oneMonth':
                     $conditions['startTime'] = $conditions['endTime'] - 30 * 24 * 3600;
                     break;
-                case 'twoMonths' :
+                case 'twoMonths':
                     $conditions['startTime'] = $conditions['endTime'] - 60 * 24 * 3600;
                     break;
-                case 'threeMonths' :
+                case 'threeMonths':
                     $conditions['startTime'] = $conditions['endTime'] - 90 * 24 * 3600;
                     break;
             }
