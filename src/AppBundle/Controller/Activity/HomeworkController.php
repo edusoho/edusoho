@@ -91,7 +91,7 @@ class HomeworkController extends BaseActivityController implements ActivityActio
             'questionItems' => $questionItems,
             'questions' => $questions,
             'courseSetId' => $course['courseSetId'],
-            'homework' => $homeworkActivity
+            'homework' => $homeworkActivity,
         ));
     }
 
