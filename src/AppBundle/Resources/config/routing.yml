@@ -594,11 +594,6 @@ web_user_order_detail:
     path: /my/order/{id}/detail
     defaults: { _controller: AppBundle:My/Order:detail }
 
-my_order_cancel_refund:
-    path: /my/order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:My/Order:cancelRefund }
-    methods: [POST]
-
 my_refunds:
     path: /my/refunds
     defaults: { _controller: AppBundle:My/Order:refunds }
@@ -956,9 +951,6 @@ group_thread_post_reply:
 group_thread_adopt:
     path:  /thread/{postId}/adopt
     defaults: { _controller: AppBundle:GroupThread:adopt }
-group_thread_hide:
-    path:  /thread/{threadId}/hide
-    defaults: { _controller: AppBundle:GroupThread:hide }
 group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }

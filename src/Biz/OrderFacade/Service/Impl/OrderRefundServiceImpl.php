@@ -46,7 +46,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             }
         }
 
-        return $product;
+        return $refund;
     }
 
     public function refuseRefund($orderId, $data)

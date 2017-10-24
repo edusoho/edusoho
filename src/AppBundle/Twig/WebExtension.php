@@ -121,9 +121,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
             new \Twig_SimpleFunction('user_coin_amount', array($this, 'userCoinAmount')),
 
-            //todo covertIP 要删除
-            new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-            new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
             new \Twig_SimpleFunction('user_balance', array($this, 'getBalance')),
 
             new \Twig_SimpleFunction('blur_user_name', array($this, 'blurUserName')),
@@ -544,32 +541,6 @@ class WebExtension extends \Twig_Extension
     private function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    public function getAccount($userId)
-    {
-        return $this->createService('Cash:CashAccountService')->getAccountByUserId($userId);
-    }
-
-    private function filterTime($type)
-    {
-        $time = 0;
-
-        switch ($type) {
-            case 'oneWeek':
-                $time = time() - 7 * 3600 * 24;
-                break;
-            case 'oneMonth':
-                $time = time() - 30 * 3600 * 24;
-                break;
-            case 'threeMonths':
-                $time = time() - 90 * 3600 * 24;
-                break;
-            default:
-                break;
-        }
-
-        return $time;
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)

@@ -9,11 +9,11 @@ class MeCashAccount extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        return $this->getCashAccountService()->getAccountByUserId($this->getCurrentUser()->getId());
+        return $this->getAccountService()->getUserBalanceByUserId($this->getCurrentUser()->getId());
     }
 
-    private function getCashAccountService()
+    private function getAccountService()
     {
-        return $this->service('Cash:CashAccountService');
+        return $this->service('Pay:AccountService');
     }
 }
