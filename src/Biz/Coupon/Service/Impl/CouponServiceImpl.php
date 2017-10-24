@@ -390,7 +390,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 break;
         }
     }
-
+    
     /**
      * @return CardService
      */
