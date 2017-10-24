@@ -73,9 +73,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateBizOrders',
             'migrateBizOrderItems', // done
             'updateBizOrderItems',
-            'migrateBizOrderItemDeductsByCouponAddColumns',
+            'migrateAddCouponIndex',
             'migrateBizOrderItemDeductsByCoupon', // done
-            'migrateBizOrderItemDeductCouponId',
             'migrateBizOrderItemDeductsByDiscount', // done
             'migrateBizOrderRefund', // done
             'migrateBizOrderRefundItems', // done
@@ -331,18 +330,14 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    protected function migrateBizOrderItemDeductsByCouponAddColumns($page)
+    protected function migrateAddCouponIndex($page)
     {
-        $this->logger('info', "添加biz_order_item_deduct的迁移字段，当前页码{$page}");
+        $this->logger('info', "添加coupon的索引，当前页码{$page}");
 
         $connection = $this->getConnection();
 
-        if (!$this->isFieldExist('biz_order_item_deduct', 'migrate_coupon')) {
-            $connection->exec("ALTER TABLE `biz_order_item_deduct` ADD COLUMN `migrate_coupon` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '数据迁移原表code';");
-        }
-
-        if (!$this->isFieldExist('biz_order_item_deduct', 'is_migrate_coupon_id')) {
-            $connection->exec("ALTER TABLE `biz_order_item_deduct` ADD COLUMN `is_migrate_coupon_id` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已经处理了coupon_id';");
+        if (!$this->isIndexExist('coupon', 'code', 'code')) {
+            $connection->exec("ALTER TABLE `coupon` ADD INDEX `code` (`code`);");
         }
 
         return 1;
@@ -378,15 +373,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 `snapshot`,
                 `created_time`,
                 `updated_time`,
-                `migrate_id`,
-                `migrate_coupon`
+                `migrate_id`
             ) 
             select 
                 o.`id` as `order_id`,
                 '' as `detail`,
                 o.`id` as `item_id`,
                 'coupon' as `deduct_type`,
-                0 as `deduct_id`,               
+                case when c.id is null then 0 else c.id end as `deduct_id`,               
                 round(o.`couponDiscount`*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 o.`userId` as `user_id`,
@@ -394,30 +388,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 concat('{\"couponCode\":\'', o.coupon, '\'}') as `snapshot`,
                 o.`createdTime` as `created_time`,
                 o.`updatedTime` as `updated_time`,
-                o.`id` as `migrate_id`,
-                o.coupon as `migrate_coupon`
-            from orders o where o.coupon <> '' and o.coupon is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon') LIMIT 0, {$this->pageSize};
-        ");
-
-        return $page + 1;
-    }
-
-    protected function migrateBizOrderItemDeductCouponId($page)
-    {
-        $this->logger('info', "处理biz_order_item_deduct的优惠码deduct_id数据，当前页码{$page}");
-
-        $connection = $this->getConnection();
-
-//        $count = $connection->fetchColumn("SELECT count(*) FROM `biz_order_item_deduct` WHERE `deduct_type` = 'coupon' and is_migrate_coupon_id = 0;");
-//
-//        if (empty($count)) {
-//            return 1;
-//        }
-
-        $connection->exec("
-            update biz_order_item_deduct oid, coupon c
-            set oid.deduct_id = c.id
-            where oid.migrate_coupon = c.code and oid.deduct_type = 'coupon';
+                o.`id` as `migrate_id`
+            from orders o left join coupon c on o.coupon = c.code where o.coupon <> '' and o.coupon is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon') LIMIT 0, {$this->pageSize};
         ");
 
         return $page + 1;
@@ -1179,7 +1151,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `user_id`,
                 `orderId` as `order_id`,
                 `id` as `refund_id`,
-                `note` as `reason`,
+                '' as `reason`,
                 `createdTime` as `created_time`
             from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, 50000;
         ");
