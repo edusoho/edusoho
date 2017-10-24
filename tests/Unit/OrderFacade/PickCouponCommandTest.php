@@ -47,6 +47,5 @@ class PickCouponCommandTest extends BaseTestCase
         $command->setBiz($this->getBiz());
 
         $command->execute($product, array('couponCode' => '123'));
-
     }
 }

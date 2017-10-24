@@ -377,7 +377,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'lastLearnTime' => '1',
             'courseSetId' => '1',
             'lastViewTime' => '0',
-            'refundDeadline'=>'0',
+            'refundDeadline' => '0',
             'learnedCompulsoryTaskNum' => '0',
         );
     }

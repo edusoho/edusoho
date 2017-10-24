@@ -22,7 +22,7 @@ class OrderFacadeServiceTest extends BaseTestCase
         $biz = $this->getBiz();
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 100, 'originPrice' => 200, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0, 'buyable'=>true)),
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 100, 'originPrice' => 200, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0, 'buyable' => true)),
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
@@ -61,7 +61,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             array('functionName' => 'isCourseStudent', 'returnValue' => false),
         ));
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'course set name1', 'cover'=>'')),
+            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'course set name1', 'cover' => '')),
         ));
 
         $biz = $this->getBiz();
@@ -83,7 +83,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testCreateClassroomImportOrder()
     {
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array('id' => 1, 'title' => 'classroom name1', 'price' => 10, 'middlePicture' => '', 'status' => 'published', 'maxRate' => 0,'smallPicture'=>'', 'largePicture'=>'')),
+            array('functionName' => 'getClassroom', 'returnValue' => array('id' => 1, 'title' => 'classroom name1', 'price' => 10, 'middlePicture' => '', 'status' => 'published', 'maxRate' => 0, 'smallPicture' => '', 'largePicture' => '')),
             array('functionName' => 'isClassroomStudent', 'returnValue' => false),
             array('functionName' => 'becomeStudent', 'returnValue' => array()),
         ));
