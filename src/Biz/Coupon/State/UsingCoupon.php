@@ -14,13 +14,18 @@ class UsingCoupon extends Coupon implements CouponInterface
 
     public function used($params)
     {
-        $copuon = array(
-            'targetType' => $params['targetType'],
-            'targetId' => $params['targetId'],
-            'userId' => $params['userId'],
-            'orderId' => $params['orderId'],
+
+        $coupon = $this->getCouponService()->updateCoupon(
+            $this->coupon['id'],
+            array(
+                'status' => 'used',
+                'targetType' => $params['targetType'],
+                'targetId' => $params['targetId'],
+                'orderTime' => time(),
+                'userId' => $params['userId'],
+                'orderId' => $params['orderId'],
+            )
         );
-        $coupon = $this->getCouponService()->useCoupon($this->coupon['id'], $copuon);
 
         $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
 
@@ -32,7 +37,8 @@ class UsingCoupon extends Coupon implements CouponInterface
         }
 
         $user = $this->getUserService()->getUser($coupon['userId']);
-
+        $this->dispatchEvent('coupon.use', $coupon);
+        
         $this->getLogService()->info(
             'coupon',
             'use',

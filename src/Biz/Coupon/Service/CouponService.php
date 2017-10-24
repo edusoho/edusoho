@@ -48,16 +48,4 @@ interface CouponService
      * @return CouponInterface
      */
     public function getCouponStateById($couponId);
-
-    /**
-     * @param array(
-     *  'targetType' => 'course',
-     *   'targetId' => '1',
-     *   'userId' => 1,
-     *   'orderId' => 1,
-     * )
-     *
-     * @return Coupon
-     */
-    public function useCoupon($id, $fields);
 }
