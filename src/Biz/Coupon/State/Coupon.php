@@ -6,7 +6,6 @@ use Biz\Card\Service\CardService;
 use Biz\Coupon\Service\CouponService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class Coupon
 {
