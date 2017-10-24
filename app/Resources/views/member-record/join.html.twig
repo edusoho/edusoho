@@ -7,7 +7,7 @@
       <th>{{'course.members_manage.join_records.date'|trans}}</th>
       <th>{{'course.members_manage.records.join_reason_type'|trans}}</th>
       <th>{{'course.members_manage.records.join_reason'|trans}}</th>
-      <th>{{'是否付费'|trans}}</th>
+      <th>{{'course.members_manage.is_paid'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -33,9 +33,9 @@
         </td>
         <td class="vertical-middle">
           {% if order.pay_amount|default() > 0 %}
-            是
+            {{ 'site_yes'|trans }}
           {% else %}
-            否
+            {{ 'site_no'|trans }}
           {% endif %}
         </td>
       </tr>
