@@ -190,11 +190,6 @@ class BaseProcessor
         return ServiceKernel::instance()->createService('User:TokenService');
     }
 
-    protected function getCourseOrderService()
-    {
-        return $this->controller->getService('Course:CourseOrderService');
-    }
-
     protected function getMobileDeviceService()
     {
         return $this->controller->getService('Util:MobileDeviceService');

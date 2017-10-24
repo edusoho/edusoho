@@ -69,14 +69,6 @@ class Order extends AbstractResource
     }
 
     /**
-     * @return PayService
-     */
-    private function getPayService()
-    {
-        return $this->service('Pay:PayService');
-    }
-
-    /**
      * @return OrderFacadeService
      */
     private function getOrderFacadeService()
