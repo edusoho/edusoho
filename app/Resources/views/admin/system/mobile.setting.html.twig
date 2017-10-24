@@ -125,7 +125,7 @@
               <div id="{{ mobileId }}-container">{% if mobile[splash] %}<img src="{{ asset(mobile[splash]) }}">{% endif %}</div>
               <a class="btn btn-default btn-sm" id="{{ mobileId }}-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type: splash}) }}">{{'form.btn.upload'|trans}}</a>
               <button class="btn btn-default btn-sm" id="{{ mobileId }}-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:splash}) }}" {% if not mobile[splash] %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-              <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}。</p>
+              <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
               <input type="hidden" name="{{ splash }}" value="{{ mobile[splash] }}">
           </div>
       </div>
