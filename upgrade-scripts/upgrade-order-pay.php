@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use Biz\Util\PluginUtil;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -97,6 +98,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'stopCrmJobs',
             'updateCourseIsFree',
             'updateUserRoles',
+            'removeGroupSell',
         );
 
         $funcNames = array();
@@ -1119,12 +1121,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 `targetType` as `target_type`,
                 'join' as `operate_type`,
                 `createdTime` as `operate_time`,
-                0 as `operator_id`,
+                `userId` as `operator_id`,
                 '' as `data`,
                 `userId` as `user_id`,
                 `id` as `order_id`,
                 0 as `refund_id`,
-                '' as `reason`,
+                `note` as `reason`,
                 `createdTime` as `created_time`
             from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join') LIMIT 0, 50000
         "); 
@@ -1177,7 +1179,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `user_id`,
                 `orderId` as `order_id`,
                 `id` as `refund_id`,
-                `reasonNote` as `reason`,
+                `note` as `reason`,
                 `createdTime` as `created_time`
             from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, 50000;
         ");
@@ -1486,6 +1488,17 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->createIndex('biz_pay_trade', 'type', 'type');
 
         $this->logger('info', '新建biz表');
+
+        return 1;
+    }
+
+    protected function removeGroupSell()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            DELETE FROM `cloud_app` WHERE `code` = 'GroupSell';
+        ");
+        PluginUtil::refresh();
 
         return 1;
     }
