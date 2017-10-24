@@ -25,4 +25,5 @@
   </div>
 
   <button class="btn btn-primary btn-sm">{{'form.btn.search'|trans}}</button>
+  {{ slot('course_set.questions_export_btn.extension', {'courseSet':courseSet, 'type':app.request.query.get('type'), 'courseId':app.request.query.get('courseId'), 'lessonId':app.request.query.get('lessonId'), 'keyword':app.request.query.get('keyword')}) }}
 </form>
