@@ -6139,7 +6139,7 @@ admin.edu_cloud.edu_live.edu_live_tips: >
   大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="%showUrl%" target="_blank">点击这里</a>了解详情。
 admin.edu_cloud.edu_live.base_setting: 直播LOGO设置
 admin.edu_cloud.edu_live.live_logo_web: 直播LOGO web端
-admin.edu_cloud.edu_live.live_logo_app: 直播LOGO app端
+admin.edu_cloud.edu_live.live_logo_app: 直播LOGO 欢拓客户端
 admin.edu_cloud.edu_live.upload_btn: 上传
 admin.edu_cloud.edu_live.delete_btn: 删除
 admin.edu_cloud.edu_live.upload_web_tips: >

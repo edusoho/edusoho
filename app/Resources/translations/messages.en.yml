@@ -4845,7 +4845,7 @@ admin.edu_cloud.edu_live.edu_live_close_btn: Disable
 admin.edu_cloud.edu_live.edu_live_tips: 'G class, small class, one to one counseling class, cloud live to live classroom more exciting. <a href="%showUrl%" target="_blank"> click here </a> for more information.'
 admin.edu_cloud.edu_live.base_setting: 'Live Logo Setting'
 admin.edu_cloud.edu_live.live_logo_web: 'Live Logo web'
-admin.edu_cloud.edu_live.live_logo_app: 'Live Logo app'
+admin.edu_cloud.edu_live.live_logo_app: 'Live Logo Huantuo client'
 admin.edu_cloud.edu_live.upload_btn: Upload
 admin.edu_cloud.edu_live.delete_btn: Delete
 admin.edu_cloud.edu_live.upload_web_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 60.'
