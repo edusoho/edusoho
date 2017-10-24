@@ -172,17 +172,17 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->countUsers(array());
 
-        $todayCourseMemberNum = $this->getOrderService()->countOrders(array('paidStartTime' => $todayTimeStart, 'paidEndTime' => $todayTimeEnd, 'targetType' => 'course', 'status' => 'paid'));
-        $todayClassroomMemberNum = $this->getOrderService()->countOrders(array('paidStartTime' => $todayTimeStart, 'paidEndTime' => $todayTimeEnd, 'targetType' => 'classroom', 'status' => 'paid'));
+        $todayCourseMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'course'));
+        $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom'));
 
-        $totalCourseMemberNum = $this->getOrderService()->countOrders(array('targetType' => 'course', 'status' => 'paid'));
-        $totalClassroomMemberNum = $this->getOrderService()->countOrders(array('targetType' => 'classroom', 'status' => 'paid'));
+        $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom'));
+        $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom'));
 
         $todayVipNum = 0;
         $totalVipNum = 0;
         if ($this->isPluginInstalled('vip')) {
-            $totalVipNum = $this->getVipService()->searchMembersCount(array());
-            $todayVipNum = $this->getVipService()->searchMembersCount(array('boughtTime_GT' => $todayTimeStart, 'boughtTime_LTE' => $todayTimeEnd, 'boughtType' => 'new'));
+            $totalVipNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'vip'));
+            $todayVipNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'vip'));
         }
 
         $todayThreadUnAnswerNum = $this->getThreadService()->countThreads(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
@@ -257,7 +257,7 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
 
-        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'display_status' => 'paid');
+        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'status' => 'success');
         $newOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newOrderCount'] = $newOrders;
 
@@ -622,6 +622,11 @@ class DefaultController extends BaseController
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 
     protected function isPluginInstalled($name)
