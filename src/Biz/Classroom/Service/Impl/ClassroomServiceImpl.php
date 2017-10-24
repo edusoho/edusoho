@@ -1685,7 +1685,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (empty($member)) {
-            return ;
+            return;
         }
 
         if (!in_array('student', $member['role'])) {
@@ -1710,7 +1710,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (empty($member)) {
-            return ;
+            return;
         }
 
         if (!in_array('student', $member['role'])) {
