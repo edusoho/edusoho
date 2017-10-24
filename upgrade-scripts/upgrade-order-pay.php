@@ -1179,7 +1179,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `userId` as `user_id`,
                 `orderId` as `order_id`,
                 `id` as `refund_id`,
-                `note` as `reason`,
+                `reasonNote` as `reason`,
                 `createdTime` as `created_time`
             from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, 50000;
         ");
