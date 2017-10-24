@@ -19,7 +19,7 @@ class AvailableCouponCommandTest extends BaseTestCase
 
         $coupons = array(
             array('type' => 'minus', 'rate' => 30, 'deadline' => time()),
-            array('type' => 'discount', 'rate' => 8, 'deadline' => time() +1),
+            array('type' => 'discount', 'rate' => 8, 'deadline' => time() + 1),
         );
 
         $cardService = $this->getMockBuilder('Biz\Card\Service\CardService')->getMock();

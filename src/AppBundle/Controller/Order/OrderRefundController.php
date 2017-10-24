@@ -16,6 +16,7 @@ class OrderRefundController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $this->getOrderRefundService()->cancelRefund($orderId);
+
         return $this->createJsonResponse(true);
     }
 
