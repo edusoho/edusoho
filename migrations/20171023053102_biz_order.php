@@ -40,7 +40,7 @@ class BizOrder extends Migration
               `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
               `callback` TEXT COMMENT '商品中心的异步回调信息',
               `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
-              `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
+              `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、微营销、第三方系统',
               `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
               `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),

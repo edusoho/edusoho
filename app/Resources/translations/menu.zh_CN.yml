@@ -346,7 +346,7 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
-##营销平台模块
+##微营销模块
 admin.marketing.menu: 微营销
 
 #web模块

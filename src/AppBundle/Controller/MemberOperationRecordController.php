@@ -18,7 +18,7 @@ class MemberOperationRecordController extends BaseController
         $product = call_user_func(array($this, 'tryManage'.ucfirst($targetType)), $targetId);
 
         $condition = array(
-            'targetId' => $targetId,
+            'target_id' => $targetId,
             'target_type' => $targetType,
             'status' => 'success',
             'operate_type' => $operatType,

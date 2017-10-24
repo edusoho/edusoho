@@ -25,7 +25,6 @@ class UsingCoupon extends Coupon implements CouponInterface
                 'orderId' => $params['orderId'],
             )
         );
-        $this->updateBachCouponUsedNum($coupon['batchId']);
 
         $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
 
@@ -37,6 +36,7 @@ class UsingCoupon extends Coupon implements CouponInterface
         }
 
         $user = $this->getUserService()->getUser($coupon['userId']);
+        $this->dispatchEvent('coupon.use', $coupon);
 
         $this->getLogService()->info(
             'coupon',
@@ -51,21 +51,6 @@ class UsingCoupon extends Coupon implements CouponInterface
         $this->getCouponService()->updateCoupon($this->coupon['id'], array(
             'status' => 'receive',
         ));
-    }
-
-    private function updateBachCouponUsedNum($batchId)
-    {
-        if (0 == $batchId) {
-            return;
-        }
-        $couponApp = $this->getAppService()->getAppByCode('Coupon');
-        if (!empty($couponApp)) {
-            $usedCouponsCount = $this->getCouponService()->searchCouponsCount(array(
-                'status' => 'used',
-                'batchId' => $batchId,
-            ));
-            $usedCouponCount = $this->getCouponBatchService()->updateBatch($batchId, array('usedNum' => $usedCouponsCount));
-        }
     }
 
     /**

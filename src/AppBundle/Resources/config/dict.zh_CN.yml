@@ -26,6 +26,7 @@ couponType:
 
 couponStatus:
     used: 已使用
+    using: 使用中
     unused: 未使用
     receive: 已领取
 
@@ -109,7 +110,7 @@ paymentSelect:
 
 orderSource:
     self: 站内支付
-    marketing: 营销平台支付
+    marketing: 微营销支付
     outside: 站外支付
 
 orderDeductType:
@@ -120,7 +121,7 @@ orderDeductType:
 source:
     self: 本站
     outside: 站外
-    marketing: 营销平台
+    marketing: 微营销
 
 moneyRecordType:
     income: 充值
