@@ -50,7 +50,7 @@
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
-    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}
