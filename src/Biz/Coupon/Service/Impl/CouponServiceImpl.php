@@ -391,6 +391,23 @@ class CouponServiceImpl extends BaseService implements CouponService
         }
     }
 
+    public function useCoupon($id, $fields)
+    {
+        
+        $requiredFields = array('targetType', 'targetId', 'userId', 'orderId');
+        $fields = ArrayToolkit::parts($fields, $requiredFields);
+        if (!ArrayToolkit::requireds($fields, $requiredFields)) {
+            throw new InvalidArgumentException('Missing parameter');
+        }
+
+        $fields['status'] = 'used';
+        $fields['orderTime'] = time();
+        $coupon = $this->updateCoupon($id, $fields);
+        $this->dispatchEvent('coupon.use', $coupon);
+
+        return $coupon;
+    }
+
     /**
      * @return CardService
      */

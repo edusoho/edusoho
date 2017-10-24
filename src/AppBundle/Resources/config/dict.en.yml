@@ -26,6 +26,7 @@ couponType:
 
 couponStatus:
     used: Used
+    using: Using
     unused: Unused
     receive: Received
 
