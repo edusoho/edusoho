@@ -10,14 +10,15 @@ use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Dictionary\Service\DictionaryService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\System\Service\SettingService;
-use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
 
 class SystemInitializer
 {
@@ -42,6 +43,7 @@ class SystemInitializer
         $this->_initOrg();
         $this->_initRole();
         $this->_initDictionary();
+        $this->_initUserBalance();
 
         $this->_initDefaultSetting();
         $this->_initMagicSetting();
@@ -529,7 +531,7 @@ EOD;
 
     protected function _initBlocks()
     {
-        $themeDir = ServiceKernel::instance()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../web/themes';
+        $themeDir = ServiceKernel::instance()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../web/themes';
         $this->output->write('  初始化编辑区');
 
         $metaFiles = array(
@@ -550,16 +552,16 @@ EOD;
                     $data[$key] = $item['default'];
                 }
 
-                $filename = __DIR__.'/blocks/'.'block-'.md5($code).'.html';
+                $filename = __DIR__ . '/blocks/' . 'block-' . md5($code) . '.html';
 
                 if (file_exists($filename)) {
                     $content = file_get_contents($filename);
                     $content = preg_replace_callback('/(<img[^>]+>)/i', function ($matches) {
                         preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
                         preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/'.INSTALL_URI.'.*/i', '', $_SERVER['REQUEST_URI']);
+                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
                         $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
-                        $src = $URI.trim($src);
+                        $src = $URI . trim($src);
 
                         $img = "<img src='{$src}'";
 
@@ -652,9 +654,9 @@ EOD;
     public function initFolders()
     {
         $folders = array(
-            ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/udisk',
-            ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/private_files',
-            ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/files',
+            ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/udisk',
+            ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/private_files',
+            ServiceKernel::instance()->getParameter('kernel.root_dir') . '/../web/files',
         );
 
         $filesystem = new Filesystem();
@@ -676,10 +678,18 @@ EOD;
     public function initLockFile()
     {
         $this->output->write('  初始化install.lock');
-        touch(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/install.lock');
-        touch(ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/routing_plugins.yml');
+        touch(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/install.lock');
+        touch(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/config/routing_plugins.yml');
 
         $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    /**
+     * 创建系统用户
+     */
+    private function _initUserBalance()
+    {
+        $this->getAccountService()->createUserBalance(array('user_id'=>0));
     }
 
     /**
@@ -688,6 +698,14 @@ EOD;
     protected function getTagService()
     {
         return ServiceKernel::instance()->getBiz()->service('Taxonomy:TagService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    protected function getAccountService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('Pay:AccountService');
     }
 
     /**

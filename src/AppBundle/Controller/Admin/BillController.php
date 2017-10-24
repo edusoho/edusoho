@@ -16,6 +16,7 @@ class BillController extends BaseController
         }
 
         $account = $this->getAccountService()->getUserBalanceByUserId(0);
+
         $conditions = $request->query->all();
         $conditions['amount_type'] = $type;
         $conditions['user_id'] = 0;
