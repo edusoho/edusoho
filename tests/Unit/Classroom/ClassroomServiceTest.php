@@ -23,7 +23,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id'],$info= array());
 
         $time = time();
         $deadline = ClassroomToolkit::buildMemberDeadline(array(

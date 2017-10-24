@@ -14,14 +14,31 @@ class CourseProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'getCourse', 'returnValue' => array('buyable' => true)),
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
 
-        $courseProduct->validate();
+      $this->assertEquals(NULL,   $courseProduct->validate());
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Biz\OrderFacade\Exception\OrderPayCheckException;
+     */
+    public function testValidateOnErrorWhenCourseUnPurchasable()
+    {
+        $courseProduct = new CourseProduct();
+        $courseProduct->setBiz($this->getBiz());
+
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'getCourse', 'returnValue' => array('buyable' => false)),
+            array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
+        ));
+    }
+
+
+
+    /**
+     * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
      */
     public function testValidateWithError()
     {
@@ -29,6 +46,7 @@ class CourseProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'getCourse', 'returnValue' => array('buyable' => true)),
             array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => 'error', 'msg' => 'wrong')),
         ));
 
