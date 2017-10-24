@@ -89,8 +89,8 @@
            {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.analysis', targetId: question.id|default(0)},{ useType:true,})) }}
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-score-field">{{'course.question_manage.manage.score'|trans}}</label></div>
-            <div class="col-md-4 controls">
-              <input class="form-control" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
+            <div class="col-md-8 controls">
+              <input class="form-control width-input" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
             </div>
           </div>
         </div>
