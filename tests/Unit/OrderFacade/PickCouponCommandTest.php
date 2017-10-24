@@ -32,9 +32,6 @@ class PickCouponCommandTest extends BaseTestCase
         $this->assertEquals(10, $product->pickedDeducts[0]['deduct_amount']);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
     public function testExecuteWithError()
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
@@ -50,5 +47,6 @@ class PickCouponCommandTest extends BaseTestCase
         $command->setBiz($this->getBiz());
 
         $command->execute($product, array('couponCode' => '123'));
+
     }
 }
