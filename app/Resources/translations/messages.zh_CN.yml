@@ -1045,7 +1045,8 @@ course.members_manage.official_student.add_expiry_day.days: 增加天数
 course.members_manage.official_student.add_expiry_day.failed_tips: 课程不能增加
 course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，请课程发布后再增加。
 course.members_manage.quit_records: 退出记录
-course.members_manage.publish_btn: 发布
+course.members_manage.quit_type: 退出类型
+course.members_manage.is_refunded: 是否退款
 course.members_manage.records.name: 学员名称
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
@@ -1053,7 +1054,7 @@ course.members_manage.quit_records.date: 退出日期
 course.members_manage.quit_records.empty: 无学员记录
 course.members_manage.quit_records.join_time: 加入课程时间：
 course.members_manage.quit_records.success: 退款成功
-
+course.members_manage.is_paid: 是否付费
 course.members_manage.join_records: 加入记录
 course.members_manage.records.join_reason: 加入原因
 course.members_manage.records.join_reason_type: 加入类型
@@ -8211,8 +8212,6 @@ site.join_by_purchase: 购买加入
 site.remove_by_manual: 手动移除
 site.join_to_learn: 加入学习
 site.fill_user_info_tip: 信息补全
-
 site.avatar.set_before_learning: 请先设置头像
-
-member.manage.exit_refund_yes: 是
-member.manage.exit_refund_no: 否
+site_yes: 是
+site_no: 否

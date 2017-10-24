@@ -915,7 +915,9 @@ course.members_manage.official_student.add_expiry_day.days: Extend
 course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to extend'
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
 course.members_manage.quit_records: 'Quit history'
-course.members_manage.publish_btn: Publish
+course.members_manage.quit_type: 退出类型
+course.members_manage.is_refunded: 是否退款
+course.members_manage.is_paid: 是否付费
 course.members_manage.records.name: 'Student name'
 course.members_manage.quit_records.reason: 'Quit reason'
 course.members_manage.quit_records.status: 'Refund status'
@@ -6539,9 +6541,6 @@ site.join_by_import: 导入课程
 site.join_by_vip: 会员加入
 site.join_by_auditor: 旁听生加入
 site.join_by_assistant: 助教加入
-
-
 site.avatar.set_before_learning: Please set avatar first
-
-member.manage.exit_refund_yes: 'Yes'
-member.manage.exit_refund_no: 'No'
+site_yes: 'Yes'
+site_no: 'No'
