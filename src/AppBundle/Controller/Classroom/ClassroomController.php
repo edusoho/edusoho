@@ -17,9 +17,7 @@ use Biz\Course\Service\ThreadService;
 use AppBundle\Common\ExtensionManager;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
-use Biz\Cash\Service\CashOrdersService;
 use AppBundle\Controller\BaseController;
-use Biz\Cash\Service\CashAccountService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
@@ -851,22 +849,6 @@ class ClassroomController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
-    }
-
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
-    {
-        return $this->createService('Cash:CashAccountService');
-    }
-
-    /**
-     * @return CashOrdersService
-     */
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
     }
 
     /**
