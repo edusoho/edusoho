@@ -18,7 +18,7 @@ class AvailableCouponCommandTest extends BaseTestCase
         $product->originPrice = 100;
 
         $coupons = array(
-            array('type' => 'minus', 'rate' => 30, 'deadline' => time()),
+            array('type' => 'minus', 'rate' => 30, 'deadline' => time() - 100),
             array('type' => 'discount', 'rate' => 8, 'deadline' => time()),
         );
 
