@@ -621,11 +621,6 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $this->createService('System:LogService');
     }
 
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
     private function getTokenService()
     {
         return $this->createService('User:TokenService');

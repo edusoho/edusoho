@@ -586,11 +586,6 @@ class DefaultController extends BaseController
         return $this->createService('CloudPlatform:AppService');
     }
 
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
     protected function getUpgradeNoticeService()
     {
         return $this->createService('User:UpgradeNoticeService');

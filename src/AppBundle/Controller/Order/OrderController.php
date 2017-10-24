@@ -128,11 +128,6 @@ class OrderController extends BaseController
         return $this->getBiz()->service('Coupon:CouponService');
     }
 
-    protected function getCashAccountService()
-    {
-        return $this->getBiz()->service('Cash:CashAccountService');
-    }
-
     /**
      * @return \Codeages\Biz\Framework\Order\Service\OrderService
      */

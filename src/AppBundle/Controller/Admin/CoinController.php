@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\MathToolkit;
@@ -69,10 +68,10 @@ class CoinController extends BaseController
     protected function savePicture(Request $request, $size)
     {
         $file = $request->files->get('coin_picture');
-        $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
 
-        $pictureFilePath = $directory.'/'.$filename;
+        $pictureFilePath = $directory . '/' . $filename;
         $pathinfo = pathinfo($pictureFilePath);
 
         $imagine = new Imagine();
@@ -124,9 +123,9 @@ class CoinController extends BaseController
             $coinSettings = $request->query->get('set');
         }
 
-        response:
+        response :
 
-        return $this->render('admin/coin/coin-model.html.twig', array(
+            return $this->render('admin/coin/coin-model.html.twig', array(
             'coinSettings' => $coinSettings,
         ));
     }
@@ -142,10 +141,16 @@ class CoinController extends BaseController
                 'maxCoursePrice_GT' => '0.00',
                 'parentId' => 0,
             ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
-        } elseif ($type == 'classroom') {
-            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'),
-                array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-        } elseif ($type == 'vip') {
+        }
+        elseif ($type == 'classroom') {
+            $items = $this->getClassroomService()->searchClassrooms(
+                array('private' => 0, 'price_GT' => '0.00'),
+                array('createdTime' => 'DESC'),
+                0,
+                PHP_INT_MAX
+            );
+        }
+        elseif ($type == 'vip') {
             // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
         }
@@ -174,7 +179,8 @@ class CoinController extends BaseController
                 if (isset($data['item-rate'])) {
                     $this->updateMaxRate($data);
                 }
-            } else {
+            }
+            else {
                 $coinSettings['price_type'] = 'Coin';
                 $coinSettings['cash_model'] = 'currency';
             }
@@ -196,11 +202,13 @@ class CoinController extends BaseController
             foreach ($data as $key => $value) {
                 $this->getCourseSetService()->updateMaxRate($key, $value);
             }
-        } elseif ($type == 'classroom') {
+        }
+        elseif ($type == 'classroom') {
             foreach ($data as $key => $value) {
                 $this->getClassroomService()->updateClassroom($key, array('maxRate' => $value));
             }
-        } elseif ($type == 'vip') {
+        }
+        elseif ($type == 'vip') {
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
             }
@@ -215,7 +223,7 @@ class CoinController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确，请上传png, gif, jpg格式的图片文件！');
         }
 
-        $filename = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file = $file->move($directory, $filename);
 
@@ -241,8 +249,12 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $this->getLogService()->info('system', 'update_settings', '更新虚拟币图片',
-            array('coin_picture' => $coin['coin_picture']));
+        $this->getLogService()->info(
+            'system',
+            'update_settings',
+            '更新虚拟币图片',
+            array('coin_picture' => $coin['coin_picture'])
+        );
 
         $response = array(
             'path' => $coin['coin_picture'],
@@ -298,9 +310,9 @@ class CoinController extends BaseController
             $balances = array();
             $balances[] = $this->getAccountProxyService()->getUserBalanceByUserId($conditions['user_id']);
 
-            response:
+            response :
 
-            return $this->render('admin/coin/coin-user-records.html.twig', array(
+                return $this->render('admin/coin/coin-user-records.html.twig', array(
                 'schoolBalance' => $schoolBalance,
                 'balances' => $balances,
                 'users' => $users,
@@ -377,75 +389,6 @@ class CoinController extends BaseController
         ));
     }
 
-    public function giveCoinAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-
-            $user = $this->getUserService()->getUserByNickname($fields['nickname']);
-
-            $account = $this->getCashAccountService()->getAccountByUserId($user['id']);
-
-            if (empty($account)) {
-                $account = $this->getCashAccountService()->createAccount($user['id']);
-            }
-
-            if ($fields['type'] == 'add') {
-                $this->getCashAccountService()->waveCashField($account['id'], $fields['amount']);
-                $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币",
-                    array());
-            } else {
-                $this->getCashAccountService()->waveDownCashField($account['id'], $fields['amount']);
-                $this->getLogService()->info('coin', 'deduct_coin', '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币",
-                    array());
-            }
-        }
-
-        return $this->render('admin/coin/order-create-modal.html.twig', array());
-    }
-
-    public function editAction(Request $request, $id)
-    {
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-
-            $account = $this->getCashAccountService()->getAccount($id);
-
-            if ($account) {
-                $user = $this->getUserService()->getUser($account['userId']);
-
-                if ($fields['type'] == 'add') {
-                    $this->getCashAccountService()->waveCashField($id, $fields['amount']);
-
-                    $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币",
-                        array());
-                } else {
-                    $this->getCashAccountService()->waveDownCashField($id, $fields['amount']);
-                    $this->getLogService()->info('coin', 'deduct_coin',
-                        '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
-                }
-            }
-        }
-
-        return $this->render('admin/coin/order-edit-modal.html.twig', array(
-            'id' => $id,
-        ));
-    }
-
-    public function checkNicknameAction(Request $request)
-    {
-        $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
-
-        if ($result) {
-            $response = array('success' => false, 'message' => '该用户不存在');
-        } else {
-            $response = array('success' => true, 'message' => '');
-        }
-
-        return $this->createJsonResponse($response);
-    }
-
     protected function convertFiltersToCondition($condition)
     {
         if (!empty($condition['keyword'])) {
@@ -464,7 +407,8 @@ class CoinController extends BaseController
 
             if ($user) {
                 $conditions['userId'] = $user['id'];
-            } else {
+            }
+            else {
                 $conditions['userId'] = -1;
             }
         }
@@ -475,19 +419,19 @@ class CoinController extends BaseController
 
         if (!empty($conditions['lastHowManyMonths'])) {
             switch ($conditions['lastHowManyMonths']) {
-                case 'oneWeek':
+                case 'oneWeek' :
                     $conditions['startTime'] = $conditions['endTime'] - 7 * 24 * 3600;
                     break;
-                case 'twoWeeks':
+                case 'twoWeeks' :
                     $conditions['startTime'] = $conditions['endTime'] - 14 * 24 * 3600;
                     break;
-                case 'oneMonth':
+                case 'oneMonth' :
                     $conditions['startTime'] = $conditions['endTime'] - 30 * 24 * 3600;
                     break;
-                case 'twoMonths':
+                case 'twoMonths' :
                     $conditions['startTime'] = $conditions['endTime'] - 60 * 24 * 3600;
                     break;
-                case 'threeMonths':
+                case 'threeMonths' :
                     $conditions['startTime'] = $conditions['endTime'] - 90 * 24 * 3600;
                     break;
             }
@@ -539,21 +483,6 @@ class CoinController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
-    }
-
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
-    protected function getCashAccountService()
-    {
-        return $this->createService('Cash:CashAccountService');
-    }
-
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
     }
 
     protected function getOrderService()
