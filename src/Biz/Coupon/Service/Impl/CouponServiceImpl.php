@@ -279,6 +279,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             if ($limiter->getAllow($currentUser->getId()) == 0) {
                 $message['message'] = '优惠码校验受限，请稍后尝试';
                 $this->commit();
+
                 return $message;
             }
 
@@ -299,7 +300,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             }
 
             if (empty($message['message']) && $this->isAvailableForTarget($coupon, $type, $id)) {
-               $message['message'] =  '该优惠券不能被该商品使用';
+                $message['message'] = '该优惠券不能被该商品使用';
             }
 
             if (!empty($message['message'])) {
@@ -313,11 +314,12 @@ class CouponServiceImpl extends BaseService implements CouponService
                 $this->receiveCouponByUserId($coupon['id'], $currentUser['id']);
             }
             $this->commit();
-            
+
             return $coupon;
         } catch (\Exception $e) {
             $this->rollback();
             $this->getLogService()->error('coupon', 'checkCoupon', "优惠码校验失败code: {$code}", array('message' => $e->getMessage()));
+
             return array(
                 'useable' => 'no',
                 'message' => '异常情况，优惠码不能被使用',
@@ -405,7 +407,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 break;
         }
     }
-    
+
     /**
      * @return CardService
      */
