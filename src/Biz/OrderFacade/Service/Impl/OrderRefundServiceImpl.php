@@ -87,8 +87,12 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
     public function cancelRefund($orderId)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($orderId);
-
+        if ($user->getId() != $order['user_id']) {
+            $this->createAccessDeniedException();
+        }
+        
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
         try {
             $this->beginTransaction();
