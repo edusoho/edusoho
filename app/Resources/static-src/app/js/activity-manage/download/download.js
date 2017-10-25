@@ -1,6 +1,8 @@
 import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
-import { chooserUiOpen } from '../widget/chooser-ui.js';
+import {
+  chooserUiOpen
+} from '../widget/chooser-ui.js';
 
 export default class DownLoad {
   constructor() {
@@ -65,7 +67,6 @@ export default class DownLoad {
       $("input[name=media]").val(JSON.stringify(file));
       chooserUiOpen();
       this.addFile(false);
-      console.log(this.firstName);
       if (this.firstName) {
         $('#title').val(this.firstName);
       } else {
@@ -80,7 +81,7 @@ export default class DownLoad {
   }
 
   titleChange(event) {
-  
+
     let $this = $(event.currentTarget);
     this.firstName = $this.val();
     console.log(this.firstName);
@@ -115,7 +116,7 @@ export default class DownLoad {
 
     if (!this.isEmpty(items) && items[media.id]) {
       $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_exist_error_hint')).show();
-      setTimeout(function () {
+      setTimeout(function() {
         $('.js-danger-redmine').slideUp();
       }, 3000);
       $('.js-current-file').text('');
@@ -131,7 +132,7 @@ export default class DownLoad {
     if (addToList && this.isEmpty(media)) {
       $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_error_hint')).show();
       $('.js-current-file').text('');
-      setTimeout(function () {
+      setTimeout(function() {
         $('.js-danger-redmine').slideUp();
       }, 3000);
       return;
@@ -175,7 +176,7 @@ export default class DownLoad {
     $('.file-browser-item').removeClass('active');
     $('.js-danger-redmine').hide();
     $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint')).show();
-    setTimeout(function () {
+    setTimeout(function() {
       $('.js-success-redmine').slideUp();
     }, 3000);
     if ($('.jq-validate-error:visible').length > 0) {
