@@ -1588,18 +1588,7 @@ class EduCloudController extends BaseController
 
             $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
 
-            if ($capacity['provider'] == 'talkFun') {
-                $logoData = array(
-                    'logoPcUrl' => $liveCourseSetting['webLogoPath'],
-                    'logoClientUrl' => $liveCourseSetting['appLogoPath'],
-                    'logoGotoUrl' => $liveCourseSetting['logoUrl'],
-                );
-                $result = $client->setLiveLogo($logoData);
-
-                if (isset($result['error'])) {
-                    return $this->createMessageResponse('error', '设置直播logo出错');
-                }
-            }
+            $this->setCloudLiveLogo($capacity['provider'], $client);
 
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
@@ -1724,6 +1713,28 @@ class EduCloudController extends BaseController
         return $this->render('admin/edu-cloud/consult/without-enable.html.twig', array(
             'cloud_consult' => $cloudConsult,
         ));
+    }
+
+    protected function setCloudLiveLogo($provider, $client)
+    {
+        $setting = $this->getSettingService()->get('live-course', array());
+
+        $isSetLogo = !empty($setting['webLogoPath']) || !empty($setting['appLogoPath']) || !empty($setting['LogoUrl']);
+
+        if ($provider == 'talkFun' && $isSetLogo) {
+            $logoData = array(
+                'logoPcUrl' => empty($setting['webLogoPath']) ? '' : $setting['webLogoPath'],
+                'logoClientUrl' => empty($setting['appLogoPath']) ? '' : $setting['appLogoPath'],
+                'logoGotoUrl' => empty($setting['logoUrl']) ? '' : $setting['logoUrl'],
+            );
+            $result = $client->setLiveLogo($logoData);
+
+            if (isset($result['error'])) {
+                return $this->createMessageResponse('error', '设置直播logo出错');
+            }
+        }
+
+        return true;
     }
 
     protected function getConsultService()
