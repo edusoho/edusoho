@@ -11,12 +11,12 @@ use Biz\Coupon\Service\CouponService;
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\InviteRecordService;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class CoinController extends BaseController
 {

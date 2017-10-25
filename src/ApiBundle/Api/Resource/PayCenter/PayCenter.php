@@ -5,9 +5,8 @@ namespace ApiBundle\Api\Resource\PayCenter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Codeages\Biz\Pay\Service\PayService;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PayCenter extends AbstractResource

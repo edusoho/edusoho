@@ -5,7 +5,7 @@ namespace AppBundle\Component\Export\Order;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class OrderExporter extends Exporter
 {

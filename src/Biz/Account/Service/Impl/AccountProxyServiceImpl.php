@@ -3,7 +3,7 @@
 namespace Biz\Account\Service\Impl;
 
 use Biz\Account\Service\AccountProxyService;
-use Codeages\Biz\Framework\Pay\Service\Impl\AccountServiceImpl;
+use Codeages\Biz\Pay\Service\Impl\AccountServiceImpl;
 
 class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxyService
 {

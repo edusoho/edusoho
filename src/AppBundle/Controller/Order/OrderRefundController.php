@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Order;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderRefundController extends BaseController

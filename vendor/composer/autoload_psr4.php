@@ -44,6 +44,7 @@ return array(
     'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
+    'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
     'Doctrine\\Bundle\\DoctrineCacheBundle\\' => array($vendorDir . '/doctrine/doctrine-cache-bundle'),
     'Doctrine\\Bundle\\DoctrineBundle\\' => array($vendorDir . '/doctrine/doctrine-bundle'),
@@ -56,6 +57,8 @@ return array(
     'Codeages\\RateLimiter\\' => array($vendorDir . '/codeages/rate-limiter/src'),
     'Codeages\\PluginBundle\\' => array($vendorDir . '/codeages/plugin-bundle'),
     'Codeages\\Biz\\RateLimiter\\' => array($vendorDir . '/codeages/biz-rate-limiter/src'),
+    'Codeages\\Biz\\Pay\\' => array($vendorDir . '/codeages/biz-order-pay/src/Pay'),
+    'Codeages\\Biz\\Order\\' => array($vendorDir . '/codeages/biz-order-pay/src/Order'),
     'Codeages\\Biz\\Framework\\' => array($vendorDir . '/codeages/biz-framework/src'),
     '' => array($vendorDir . '/asm89/twig-cache-extension/lib'),
 );

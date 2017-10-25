@@ -16,7 +16,7 @@ use Biz\User\Service\MessageService;
 use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -7,8 +7,8 @@ use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
 

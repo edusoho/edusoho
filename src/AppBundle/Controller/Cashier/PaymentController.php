@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class PaymentController extends BaseController
@@ -14,6 +14,7 @@ abstract class PaymentController extends BaseController
     protected function isMicroMessenger()
     {
         $masterRequest = $this->container->get('request_stack')->getMasterRequest();
+
         return strpos($masterRequest->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 

@@ -4,7 +4,7 @@ namespace Biz\OrderFacade\Command\OrderPayCheck;
 
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Context\BizAware;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class OrderPayChecker extends BizAware
 {

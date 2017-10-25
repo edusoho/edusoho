@@ -4,11 +4,11 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
-use Codeages\Biz\Framework\Pay\Status\PayingStatus;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
+use Codeages\Biz\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\PayService;
+use Codeages\Biz\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;

@@ -44,7 +44,7 @@ class AbstractCommand extends Command
 
         foreach ($finder as $file) {
             $path = $file->getRelativePathname();
-            if (substr(substr($path, 15), 0, -4) == $name) {
+            if (substr(substr($path, 19), 0, -4) == $name) {
                 return true;
             }
         }

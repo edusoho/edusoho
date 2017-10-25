@@ -10,7 +10,7 @@ use Biz\Sms\Service\SmsService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
 use AppBundle\Common\MathToolkit;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 abstract class Product extends BizAware implements OrderStatusCallback
 {

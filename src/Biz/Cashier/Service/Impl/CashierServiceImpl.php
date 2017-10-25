@@ -4,7 +4,7 @@ namespace Biz\Cashier\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Cashier\Service\CashierService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 
 class CashierServiceImpl extends BaseService implements CashierService
 {
