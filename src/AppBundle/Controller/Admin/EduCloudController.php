@@ -1674,6 +1674,7 @@ class EduCloudController extends BaseController
             $this->setFlashMessage('danger', $cloudConsult['error']);
         }
 
+        unset($cloudConsult['error']);
         if ($cloudConsult['cloud_consult_is_buy'] == 0) {
             $this->getSettingService()->set('cloud_consult', $cloudConsult);
 
