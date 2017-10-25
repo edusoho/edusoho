@@ -92,7 +92,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         if ($user->getId() != $order['user_id']) {
             $this->createAccessDeniedException();
         }
-        
+
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
         try {
             $this->beginTransaction();
