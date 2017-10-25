@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
-    require('webuploader');
+    require('webuploader2');
 
     var Uploader = Widget.extend({
         attrs: {
