@@ -30,8 +30,7 @@
       <i class="es-icon es-icon-share mr5"></i>{{'course.plan_task.share'|trans}}
     </a>
     {% set courseSet = data('CourseSet',{ id: task.fromCourseSetId })  %}
-    {% set isFinished = finishedRate == 100 ? 1 : 0 %}
-    {% include 'common/share-dropdown.html.twig' with {type:'courseSet' , courseSet:courseSet, isFinished:isFinished} %}
+    {% include 'common/share-dropdown.html.twig' with {type:'courseSet' , courseSet:courseSet} %}
   </div>
   {% if nextTask|default(false) %}
   <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">{{'course.plan_task.next_task'|trans}}</a>
