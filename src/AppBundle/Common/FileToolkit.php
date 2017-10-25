@@ -1104,7 +1104,7 @@ class FileToolkit
                 imagejpeg($image, $path);
                 imagedestroy($image);
 
-                return $image;
+                return $path;
             }
         } catch (\Exception $e) {
         }
