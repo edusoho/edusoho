@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
@@ -46,11 +45,13 @@ class CashierController extends BaseController
         $payments = $this->getPayService()->findEnabledPayments();
 
         return $this->render(
-            'cashier/show.html.twig', array(
-            'order' => $order,
-            'product' => $this->getProduct($order['id']),
-            'payments' => $payments,
-        ));
+            'cashier/show.html.twig',
+            array(
+                'order' => $order,
+                'product' => $this->getProduct($order['id']),
+                'payments' => $payments,
+            )
+        );
     }
 
     private function isOrderPaid($order)
@@ -134,16 +135,22 @@ class CashierController extends BaseController
 
     public function checkPayPasswordAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+        $maxAllowance = $this->getRateLimiter($user['email'], 5, 300)->check($user['email']);
+        if (empty($maxAllowance)) {
+            $response = array('success' => false, 'message' => '错误次数太多，请稍5分钟后再试');
+            return $this->createJsonResponse($response);
+        }
         $password = $request->query->get('value');
 
         $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
 
         if (!$isRight) {
             $response = array('success' => false, 'message' => '支付密码不正确');
-        } else {
+        }
+        else {
             $response = array('success' => true, 'message' => '支付密码正确');
         }
-
         return $this->createJsonResponse($response);
     }
 
@@ -182,5 +189,18 @@ class CashierController extends BaseController
     private function getWorkflowService()
     {
         return $this->createService('Order:WorkflowService');
+    }
+    /**
+     * Undocumented function
+     *
+     * @param [type] $name
+     * @param [type] $maxAllowance
+     * @param [type] $period
+     * @return \Codeages\RateLimiter\RateLimiter
+     */
+    private function getRateLimiter($name, $maxAllowance, $period)
+    {
+        $rateLimiter = $this->getBiz()->offsetGet('ratelimiter.factory');
+        return $rateLimiter($name, $maxAllowance, $period);
     }
 }
