@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
@@ -131,8 +132,7 @@ class CashierController extends BaseController
         if (!$isRight) {
             $maxAllowance = $this->getRateLimiter($user['email'], 3, 300)->check($user['email']);
             $response = array('success' => false, 'message' => empty($maxAllowance) ? '错误次数太多，请5分钟后再试' : '支付密码不正确');
-        }
-        else {
+        } else {
             $response = array('success' => true, 'message' => '支付密码正确');
         }
 
