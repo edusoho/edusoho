@@ -14,6 +14,7 @@ abstract class PaymentController extends BaseController
     protected function isMicroMessenger()
     {
         $masterRequest = $this->container->get('request_stack')->getMasterRequest();
+
         return strpos($masterRequest->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
