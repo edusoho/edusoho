@@ -11,8 +11,12 @@ class CoinCheckCommand extends OrderPayCheckCommand
 {
     public function execute($order, $params)
     {
-        if (empty($params['coinAmount']) || (float) $params['coinAmount'] <= 0) {
+        if (empty($params['coinAmount'])) {
             return;
+        }
+
+        if ($params['coinAmount'] < 0) {
+            throw new OrderPayCheckException('order.pay_check_msg.parameters_error');
         }
 
         if (empty($params['payPassword'])) {
