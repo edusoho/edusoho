@@ -84,11 +84,11 @@
         </div>
       </div>
     </fieldset>
-  {% endif %}
 
-  <div class="controls col-md-offset-3 col-md-8">
-    <button type="submit" class="btn btn-primary save-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
-  </div>
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary save-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
+    </div>
+  {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
