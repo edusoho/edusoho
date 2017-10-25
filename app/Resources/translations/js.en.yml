@@ -156,6 +156,10 @@ activity.audio_manage.finish_detail_digits_error_hint: The completion condition 
 
 activity.download_manage.link_error_hint: The link address is incorrect
 activity.download_manage.materials_error_hint: Please upload or select the resource
+ivity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
+activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
+activity.download_manage.materials_or_link_success: 资料添加成功
+activity.download_manage.materials_or_link_delete: 资料已删除
 activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
