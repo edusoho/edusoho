@@ -1095,8 +1095,12 @@ class FileToolkit
         try {
             $angle = static::getImagerotateAngle($path);
             if (!empty($angle)) {
+                $image = imagecreatefromstring(file_get_contents($path));
+                $image = imagerotate($image, $angle, 0);
                 imagejpeg($image, $path);
                 imagedestroy($image);
+
+                return $image;
             }
         } catch (\Exception $e) {
         }
@@ -1143,7 +1147,6 @@ class FileToolkit
         if (empty($exif['Orientation'])) {
             return $angle;
         }
-        $image = imagecreatefromstring(file_get_contents($path));
         switch ($exif['Orientation']) {
             case 8:
                 $angle = 90;
