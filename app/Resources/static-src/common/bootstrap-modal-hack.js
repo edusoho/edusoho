@@ -6,15 +6,12 @@
 
     if (url) {
       let $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')));
-      let loading = `<div class="cd-loading cd-loading-fixed">
-                        <div class="loading-content">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div>
-                      </div>`;
 
+      let loading = cd.loading({
+        loadingClass: 'cd-loading-fixed'
+      });
       $target.html(loading);
+
       $target.load(url);
     }
   });
