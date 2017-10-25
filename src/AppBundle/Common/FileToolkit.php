@@ -1035,10 +1035,14 @@ class FileToolkit
         $filePaths = array();
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
-                if (($naturalWidth == $value[0]) && ($naturalHeight == $value[1]) && ($filesize < 102400)) {
-                    $filePaths[$key] = $filePath;
+                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                $isCrop = ($naturalWidth == round($options['w'])) && ($naturalHeight == round($options['h'])) && ($filesize < 102400);
+                //原始尺寸=裁切的尺寸，不做裁切，$options['w']计算出来的裁切长度有可能是浮点数，不好判断和原始尺寸，所以做round处理
+                if ($isCrop) {
+                    $filePaths[$key] = $savedFilePath;
+                    $image = $rawImage->copy();
+                    $image->save($savedFilePath);
                 } else {
-                    $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
                     $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                     $filePaths[$key] = $savedFilePath;
                 }
