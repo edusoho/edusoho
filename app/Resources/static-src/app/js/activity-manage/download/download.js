@@ -67,6 +67,7 @@ export default class DownLoad {
       $("input[name=media]").val(JSON.stringify(file));
       chooserUiOpen();
       this.addFile(false);
+      console.log(this.firstName);
       if (this.firstName) {
         $('#title').val(this.firstName);
       } else {
@@ -81,7 +82,6 @@ export default class DownLoad {
   }
 
   titleChange(event) {
-
     let $this = $(event.currentTarget);
     this.firstName = $this.val();
     console.log(this.firstName);
