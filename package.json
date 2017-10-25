@@ -12,7 +12,7 @@
         "url": ""
     },
     "devDependencies": {
-        "es-webpack-engine": "3.5.0-bata5",
+        "es-webpack-engine": "3.5.0-bata7",
         "eslint": "3.18.0",
         "eslint-config-airbnb": "14.1.0",
         "eslint-plugin-import": "2.2.0",
@@ -73,6 +73,7 @@
         "typeahead.js": "0.11.1",
         "video.js": "4.10.2",
         "waypoints": "4.0.1",
+        "webpack": "3.7.1",
         "weixin-js-sdk": "^1.2.0"
     },
     "babel": {
