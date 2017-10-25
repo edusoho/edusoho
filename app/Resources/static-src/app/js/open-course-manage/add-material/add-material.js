@@ -19,9 +19,7 @@ export default class AddMaterial {
       ajax: true,
       rules: {
         link: 'url',
-        fileId: {
-          required: true,
-        },
+        fileId: 'required'
       },
       messages: {
         link: Translator.trans("activity.download_manage.link_error_hint"),
