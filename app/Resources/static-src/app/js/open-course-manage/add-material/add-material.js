@@ -33,7 +33,6 @@ export default class AddMaterial {
         $.post($form.attr('action'), $form.serializeArray(), (data) => {
           notify('success', Translator.trans('activity.download_manage.materials_or_link_success'));
           $("#material-list").append(data);
-          console.log(data);
           $btn.button('reset');
           $form.find('#materials').val('');
           $form.find('#link').val('');
@@ -104,7 +103,7 @@ export default class AddMaterial {
       let media = null;
       let fileIdVal = null;
 
-      $("input[name=media]").val(JSON.stringify(file));
+      $media.val(JSON.stringify(file));
       chooserUiOpen();
       $('.js-current-file').text(file.name);
 
