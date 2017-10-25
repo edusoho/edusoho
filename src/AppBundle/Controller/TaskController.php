@@ -397,7 +397,7 @@ class TaskController extends BaseController
         if ($exception->getMessage() == 'the Task is Locked') {
             $message = '先解锁上一任务才能继续学习';
         }
-        
+
         return $this->createMessageResponse(
             'info',
             $message,
