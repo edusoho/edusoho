@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 
             uploader.on('uploadSuccess', function(file, response ) {
                 var url = $("#web-logo-upload").data("gotoUrl");
-                
+                uploader.get('uploader').removeFile(file, true);
                 $.get(url, function(html) {
                   $("#modal").modal('show').html(html);
                 })
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 
             uploader.on('uploadSuccess', function(file, response ) {
                 var url = $("#app-logo-upload").data("gotoUrl");
-                
+                uploader.get('uploader').removeFile(file, true);
                 $.get(url, function(html) {
                   $("#modal").modal('show').html(html);
                 })

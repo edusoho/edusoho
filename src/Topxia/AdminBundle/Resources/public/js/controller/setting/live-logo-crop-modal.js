@@ -12,41 +12,51 @@ define(function(require, exports, module) {
 
         var width = 280,
             height = type == 'app' ? 40 : 60;
-
-        var imageCrop = new ImageCrop({
-            element: "#live-logo-crop",
-            group: 'system',
-            cropedWidth: width,
-            cropedHeight: height
-        });
         
-        imageCrop.on('afterCrop', function(response) {
-            var url = $formBtn.data('url');
-            $.post(url, {images: response})
-            .success(function(result){
-                $('#modal').modal('hide');
-                var $uploadBtn = $('#'+type+'-logo-upload');
+        var img = new Image();
+        img.src = $picture.attr('src');
+        if (img.complete) {
+          cropEvent();
+        } else {
+          img.onload = function () {
+              cropEvent();
+          };
+        };
 
-                $uploadBtn.siblings('.logo-container-js').html('<img src="' + result.url + '">');
+        function cropEvent(){
+          var imageCrop = new ImageCrop({
+              element: "#live-logo-crop",
+              group: 'system',
+              cropedWidth: width,
+              cropedHeight: height
+          });
+          imageCrop.on('afterCrop', function(response) {
+              var url = $formBtn.data('url');
+              $.post(url, {images: response})
+              .success(function(result){
+                  $('#modal').modal('hide');
+                  var $uploadBtn = $('#'+type+'-logo-upload');
 
-                Notify.success(Translator.trans('上传LOGO成功！'), 1);
-                
-            })
-            .error(function(){
-                Notify.danger(Translator.trans('上传LOGO失败！'), 1);
-            })
-        });
+                  $uploadBtn.siblings('.logo-container-js').html('<img src="' + result.url + '">');
 
-        $formBtn.click(function(e) {
-            e.stopPropagation();
+                  Notify.success(Translator.trans('上传LOGO成功！'), 1);
+                  
+              })
+              .error(function(){
+                  Notify.danger(Translator.trans('上传LOGO失败！'), 1);
+              })
+          });
 
-            imageCrop.crop({
-                imgs: {
-                    large: [width, height],
-                }
-            });
+          $formBtn.click(function(e) {
+              imageCrop.crop({
+                  imgs: {
+                      large: [width, height],
+                  }
+              });
 
-        })
+              return false;
+          })
+        }
 
         $('.go-back').click(function() {
             history.go(-1);
