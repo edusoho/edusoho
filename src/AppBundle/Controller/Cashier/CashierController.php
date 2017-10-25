@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
@@ -125,19 +124,15 @@ class CashierController extends BaseController
     public function checkPayPasswordAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $maxAllowance = $this->getRateLimiter($user['email'], 5, 300)->check($user['email']);
-        if (empty($maxAllowance)) {
-            $response = array('success' => false, 'message' => '错误次数太多，请稍5分钟后再试');
-
-            return $this->createJsonResponse($response);
-        }
         $password = $request->query->get('value');
 
         $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
 
         if (!$isRight) {
-            $response = array('success' => false, 'message' => '支付密码不正确');
-        } else {
+            $maxAllowance = $this->getRateLimiter($user['email'], 3, 300)->check($user['email']);
+            $response = array('success' => false, 'message' => empty($maxAllowance) ? '错误次数太多，请5分钟后再试' : '支付密码不正确');
+        }
+        else {
             $response = array('success' => true, 'message' => '支付密码正确');
         }
 
