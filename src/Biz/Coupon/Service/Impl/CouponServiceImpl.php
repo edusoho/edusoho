@@ -273,6 +273,15 @@ class CouponServiceImpl extends BaseService implements CouponService
                 'useable' => 'no',
             );
 
+            $factory = $this->biz['ratelimiter.factory'];
+            $limiter = $factory('coupon_check', 60, 3600);
+
+            if ($limiter->getAllow($currentUser->getId()) == 0) {
+                $message['message'] = '优惠码校验受限，请稍后尝试';
+                $this->commit();
+                return $message;
+            }
+
             if (empty($coupon)) {
                 $message['message'] = '该优惠券不存在';
             }
@@ -294,15 +303,9 @@ class CouponServiceImpl extends BaseService implements CouponService
             }
 
             if (!empty($message['message'])) {
-                $factory = $this->biz['ratelimiter.factory'];
-                //每小时，60次
-                $limiter = $factory('coupon_check', 60, 3600);
                 $remain = $limiter->check($currentUser->getId());
-                if ($remain == 0) {
-                    $message['message'] = '优惠码校验受限，请稍后尝试';
-                }
                 $this->commit();
-                
+
                 return $message;
             }
 
