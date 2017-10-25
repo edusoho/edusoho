@@ -21,7 +21,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'course.task.finish' => 'onCourseTaskFinish',
             'exam.finish' => 'onExamFinish',
             'course.note.create' => 'onCourseNoteCreate',
-            'course.thread.create' => 'onCourseThreadCreate'
+            'course.thread.create' => 'onCourseThreadCreate',
         );
     }
 
@@ -44,7 +44,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($task)) {
             return;
         }
-
     }
 
     public function onExamFinish(Event $event)
@@ -58,14 +57,11 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseNoteCreate(Event $event)
     {
         $note = $event->getSubject();
-
-
     }
 
     public function onCourseThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
-
     }
 
     private function getActor()
@@ -86,7 +82,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'email' => $currentUser['email'],
                 'mobile' => $currentUser['mobile'],
                 'homePage' => $host,
-            )
+            ),
         );
     }
 
@@ -114,8 +110,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         return $biz['user'];
     }
-
-
 
     /**
      * @return UserService
@@ -169,6 +163,4 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         return $this->getBiz()->service($alias);
     }
-
-
 }
