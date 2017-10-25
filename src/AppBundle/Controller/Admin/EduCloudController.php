@@ -1719,13 +1719,13 @@ class EduCloudController extends BaseController
     {
         $setting = $this->getSettingService()->get('live-course', array());
 
-        $isSetLogo = !empty($setting['webLogoPath']) || !empty($setting['appLogoPath']) || !empty($setting['LogoUrl']);
+        $isSetLogo = !empty($setting['webLogoPath']) || !empty($setting['appLogoPath']) || !empty($setting['logoUrl']);
 
         if ($provider == 'talkFun' && $isSetLogo) {
             $logoData = array(
                 'logoPcUrl' => empty($setting['webLogoPath']) ? '' : $setting['webLogoPath'],
                 'logoClientUrl' => empty($setting['appLogoPath']) ? '' : $setting['appLogoPath'],
-                'logoGotoUrl' => empty($setting['logoUrl']) ? '' : $setting['logoUrl'],
+                'logoGotoUrl' => empty($setting['logoUrl']) ? 'http://www.talk-fun.com' : $setting['logoUrl'],
             );
             $result = $client->setLiveLogo($logoData);
 

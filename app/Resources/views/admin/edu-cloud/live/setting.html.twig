@@ -77,7 +77,7 @@
       <div class="form-group">
         <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_live.logo_url'|trans }}：</label>
         <div class="controls col-md-9">
-          <input type="text" class="form-control width-input width-input-large" id="logoUrl" name="logoUrl" value="{{ liveCourseSetting.logoUrl|default('') }}" />
+          <input type="text" class="form-control width-input width-input-large" id="logoUrl" name="logoUrl" value="{% if liveCourseSetting.logoUrl|default('') != 'http://www.talk-fun.com' %}{{ liveCourseSetting.logoUrl|default('') }}{% endif %}" />
           <p class="help-block">
             {{'admin.edu_cloud.edu_live.logo_url_tips'|trans|raw}}
           </p>
