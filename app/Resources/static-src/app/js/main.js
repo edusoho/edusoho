@@ -1,11 +1,14 @@
 import Swiper from 'swiper';
+import Cookies from 'js-cookie';
+
+import 'common/codeages-design/js/codeages-design';
 import 'common/tabs-lavalamp';
 import 'common/card';
+import 'common/bootstrap-modal-hack';
 import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
-import Cookies from 'js-cookie';
 import notify from "common/notify";
-import 'common/codeages-design/js/codeages-design';
+
 
 let rpn = new RewardPointNotify();
 rpn.display();
@@ -56,7 +59,22 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 });
 
 $(document).ajaxSend(function (a, b, c) {
-  if (c.notSetHeader) return;
+  // 加载loading效果
+  let url = c.url;
+  let $dom = $(`[data-url="${url}"]`);
+  if ($dom.data('loading')) {
+    let loading;
+    if ($dom.data('loading-class')) {
+      loading = cd.loading({
+        loadingClass: $dom.data('loading-class')
+      });
+    } else {
+      loading = cd.loading();
+    }
+
+    let loadingBox = $($dom.data('target') || $dom);
+    loadingBox.append(loading);
+  };
 
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));

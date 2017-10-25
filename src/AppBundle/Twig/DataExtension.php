@@ -33,6 +33,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
             new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
+            new \Twig_SimpleFunction('isCloudConsultEnabled', array($this, 'isCloudConsultEnabled'), $options),
         );
     }
 
@@ -84,9 +85,25 @@ class DataExtension extends \Twig_Extension
         return $this->getEduCloudService()->isHiddenCloud();
     }
 
+    public function isCloudConsultEnabled()
+    {
+        $account = $this->getConsultService()->getAccount();
+
+        if (isset($account['code']) && $account['code'] > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function getEduCloudService()
     {
         return $this->biz->service('CloudPlatform:EduCloudService');
+    }
+
+    protected function getConsultService()
+    {
+        return $this->biz->service('EduCloud:MicroyanConsultService');
     }
 
     public function getName()

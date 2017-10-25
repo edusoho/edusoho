@@ -1,8 +1,8 @@
 class Radio {
   constructor(props) {
-    this.el = props.el;
-    this.parent = props.parent || document;
-    this.cb = props.cb;
+    Object.assign(this, {
+      parent: document
+    }, props);
 
     this.init();
   }
@@ -21,7 +21,12 @@ class Radio {
 
     $this.parent().addClass('checked')
          .siblings().removeClass('checked');
-    this.cb && this.cb(event);
+         
+    this.cb(event);
+  }
+
+  cb() {
+
   }
 }
 
