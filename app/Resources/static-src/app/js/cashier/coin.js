@@ -41,8 +41,7 @@ export default class Coin {
         price = parseFloat(inputCoinNum).toFixed(2) + ' ' + coinName;
 
         let originalPirce = parseFloat(this.$container.data('maxAllowCoin'));
-        let coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;
-        ;
+        let coinPrice = parseFloat(originalPirce - inputCoinNum).toFixed(2) + ' ' + coinName;;
         this.$form.trigger('changeCoinPrice', [coinPrice]);
       } else {
         price = '￥' + parseFloat(inputCoinNum / this.coinRate).toFixed(2);
@@ -53,10 +52,10 @@ export default class Coin {
   }
 
   addPasswordValidate() {
-    this.$container.find('[name="payPassword"]').rules('add', 'required passwordCheck');
+    this.$container.find('[name="payPassword"]').rules('add', 'required es_remote');
   }
 
   removePasswordValidate() {
-    this.$container.find('[name="payPassword"]').rules('remove', 'required passwordCheck');
+    this.$container.find('[name="payPassword"]').rules('remove', 'required es_remote');
   }
 }

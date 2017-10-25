@@ -29,18 +29,27 @@ class Order extends AbstractResource
             $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
             $product->setPickedDeduct($params);
             $order = $this->getOrderFacadeService()->create($product);
-            $params['gateway'] = 'Alipay_LegacyWap';
-            $params['type'] = 'purchase';
-            $params['orderSn'] = $order['sn'];
-            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
-            $trade = $this->invokeResource($apiRequest);
 
-            return array(
-                'id' => $trade['tradeSn'],
-                'sn' => $trade['tradeSn']
-            );
+            // 优惠卷全额抵扣
+            if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
+                return array(
+                    'id' => $order['id'],
+                    'sn' => $order['sn']
+                );
+            } else {
+                $params['gateway'] = 'Alipay_LegacyWap';
+                $params['type'] = 'purchase';
+                $params['orderSn'] = $order['sn'];
+                $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
+                $trade = $this->invokeResource($apiRequest);
+
+                return array(
+                    'id' => $trade['tradeSn'],
+                    'sn' => $trade['tradeSn']
+                );
+            }
 
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
