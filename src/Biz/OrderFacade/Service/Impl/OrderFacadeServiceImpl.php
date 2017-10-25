@@ -10,8 +10,8 @@ use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use AppBundle\Common\MathToolkit;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Service\WorkflowService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {

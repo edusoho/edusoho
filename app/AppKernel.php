@@ -163,8 +163,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $this->registerCacheServiceProvider($biz);
-        $biz->register(new Codeages\Biz\Framework\Provider\OrderServiceProvider());
-        $biz->register(new Codeages\Biz\Framework\Provider\PayServiceProvider());
+        $biz->register(new Codeages\Biz\Order\OrderServiceProvider());
+        $biz->register(new Codeages\Biz\Pay\PayServiceProvider());
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
         $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());

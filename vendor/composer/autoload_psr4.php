@@ -56,6 +56,8 @@ return array(
     'Codeages\\RateLimiter\\' => array($vendorDir . '/codeages/rate-limiter/src'),
     'Codeages\\PluginBundle\\' => array($vendorDir . '/codeages/plugin-bundle'),
     'Codeages\\Biz\\RateLimiter\\' => array($vendorDir . '/codeages/biz-rate-limiter/src'),
+    'Codeages\\Biz\\Pay\\' => array($vendorDir . '/codeages/biz-order-pay/src/Pay'),
+    'Codeages\\Biz\\Order\\' => array($vendorDir . '/codeages/biz-order-pay/src/Order'),
     'Codeages\\Biz\\Framework\\' => array($vendorDir . '/codeages/biz-framework/src'),
     '' => array($vendorDir . '/asm89/twig-cache-extension/lib'),
 );

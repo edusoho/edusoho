@@ -11,7 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OrderInfo extends AbstractResource

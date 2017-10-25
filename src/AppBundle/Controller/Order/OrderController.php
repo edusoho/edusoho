@@ -7,7 +7,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends BaseController
@@ -129,7 +129,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     * @return \Codeages\Biz\Order\Service\OrderService
      */
     protected function getOrderService()
     {

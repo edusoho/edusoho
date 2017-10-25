@@ -19,7 +19,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 

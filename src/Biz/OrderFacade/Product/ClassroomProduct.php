@@ -5,7 +5,7 @@ namespace Biz\OrderFacade\Product;
 use Biz\Accessor\AccessorInterface;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class ClassroomProduct extends Product implements OrderStatusCallback
 {

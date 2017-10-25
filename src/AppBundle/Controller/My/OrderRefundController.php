@@ -5,9 +5,9 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderRefundController extends BaseController

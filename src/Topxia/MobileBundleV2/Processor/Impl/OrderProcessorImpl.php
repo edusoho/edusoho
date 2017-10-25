@@ -6,7 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\ResourceKernel;
 use AppBundle\Common\ArrayToolkit;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;

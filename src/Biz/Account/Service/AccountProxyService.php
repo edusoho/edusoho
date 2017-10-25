@@ -2,7 +2,7 @@
 
 namespace Biz\Account\Service;
 
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 interface AccountProxyService extends AccountService
 {

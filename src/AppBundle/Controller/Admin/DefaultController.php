@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Vip\Service\Vip\VipService;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;

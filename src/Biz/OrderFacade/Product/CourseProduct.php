@@ -7,7 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class CourseProduct extends Product implements OrderStatusCallback
 {

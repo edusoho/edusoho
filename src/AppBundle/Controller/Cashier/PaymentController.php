@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class PaymentController extends BaseController

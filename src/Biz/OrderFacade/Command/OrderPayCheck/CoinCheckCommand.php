@@ -5,7 +5,7 @@ namespace Biz\OrderFacade\Command\OrderPayCheck;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class CoinCheckCommand extends OrderPayCheckCommand
 {

@@ -4,7 +4,7 @@ namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OrderFacade\Service\OrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
@@ -173,7 +173,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderRefundService
+     * @return \Codeages\Biz\Order\Service\OrderRefundService
      */
     protected function getOrderRedoundService()
     {

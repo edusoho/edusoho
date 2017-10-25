@@ -8,7 +8,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Order extends AbstractResource
