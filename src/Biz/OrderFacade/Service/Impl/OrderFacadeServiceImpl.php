@@ -59,7 +59,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         } else {
             return false;
         }
-
     }
 
     private function makeOrderItems(Product $product)
