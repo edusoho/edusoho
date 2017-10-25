@@ -50,7 +50,7 @@ export default class BasePayment {
   }
 
   startInterval() {
-    return true;
+    return false;
   }
 
   checkIsPaid() {
@@ -92,7 +92,7 @@ export default class BasePayment {
 
     let trade = null;
 
-    Api.trade.create({data: params, async: false, promise: false}).done(res => {
+    Api.trade.create({ data: params, async: false, promise: false }).done(res => {
       trade = res;
     }).error(res => {
       notify('danger', Translator.trans('cashier.pay.error_message'));
@@ -106,7 +106,7 @@ export default class BasePayment {
 
     if (tradeSn == undefined || tradeSn == '') {
       return new Promise((resolve, reject) => {
-          resolve({isPaid:false});
+        resolve({ isPaid: false });
       });
     }
     if (tradeSn) {
