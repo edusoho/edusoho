@@ -151,6 +151,6 @@ abstract class BaseTrade
      */
     protected function getOrderFacadeService()
     {
-        return $this->biz->service('OrderFacade:OrderFacadeservice');
+        return $this->biz->service('OrderFacade:OrderFacadeService');
     }
 }
