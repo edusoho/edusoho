@@ -4852,7 +4852,7 @@ admin.edu_cloud.edu_live.upload_web_tips: 'Please upload png format and transpar
 admin.edu_cloud.edu_live.upload_app_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 40.'
 #TODO trans
 admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
-admin.edu_cloud.edu_live.logo_url_tips: '以http开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
+admin.edu_cloud.edu_live.logo_url_tips: '以http(s)开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: Upgrade
 admin.edu_cloud.edu_live.renew: Renew
 admin.edu_cloud.edu_live.renewed: Renewed

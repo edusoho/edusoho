@@ -1632,7 +1632,7 @@ class EduCloudController extends BaseController
 
             $oldFileId = $liveSetting["{$type}LogoFileId"];
             if ($oldFileId) {
-                $this->getFileService()->deleteFile($fileId);
+                $this->getFileService()->deleteFile($oldFileId);
             }
 
             $liveSetting["{$type}LogoFileId"] = $file['id'];
@@ -1643,14 +1643,9 @@ class EduCloudController extends BaseController
             return $this->createJsonResponse(array('fileId' => $file['id'], 'url' => $url, 'type' => $type));
         }
 
-        $types = array(
-            'web' => array('width' => 280, 'height' => 60),
-            'app' => array('width' => 280, 'height' => 40),
-        );
-
         $fileId = $request->getSession()->get('fileId');
 
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, $types[$type]['width'], $types[$type]['height']);
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 100, 100);
 
         return $this->render('admin/edu-cloud/live/logo-crop-modal.html.twig', array(
             'pictureUrl' => $pictureUrl,
