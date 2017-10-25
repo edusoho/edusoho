@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{% if pageNav == 'teach' %}{{'user.homepage.teaching_courses'|trans}} - {% elseif pageNav == 'learn' %}{{'user.homepage.learning_courses'|trans}} - {% elseif pageNav == 'favorited' %}{{'user.homepage.favorite_courses'|trans}} - {% elseif pageNav == 'group' %}{{'user.homepage.joined_group'|trans}} - {% elseif pageNav == 'friend' %}{{'user.homepage.following_fan'|trans}} - {% else %}{{''}}{% endif %}{{'user.homepage'|trans({'%nickname%':setting('user.nickname')})}} - {{ parent() }}{% endblock %}
+{% block title %}{% if pageNav == 'teach' %}{{'user.homepage.teaching_courses'|trans}} - {% elseif pageNav == 'learn' %}{{'user.homepage.learning_courses'|trans}} - {% elseif pageNav == 'favorited' %}{{'user.homepage.favorite_courses'|trans}} - {% elseif pageNav == 'group' %}{{'user.homepage.joined_group'|trans}} - {% elseif pageNav == 'friend' %}{{'user.homepage.following_fan'|trans}} - {% else %}{{''}}{% endif %}{{'user.homepage'|trans({'%nickname%':user.nickname})}} - {{ parent() }}{% endblock %}
 {% block keywords %}{{ user.title }}{% endblock %}
 {% block description %}{{ user.about|default('')|plain_text(100) }}{% endblock %}
 {% set bodyClass = 'userpage bg-blank' %}
