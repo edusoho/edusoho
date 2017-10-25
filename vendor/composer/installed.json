@@ -5506,7 +5506,7 @@
         },
         "time": "2017-10-25T08:55:05+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "Codeages\\Biz\\Order\\": "src/Order/",
