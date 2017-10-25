@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Cashier;
 
 use ApiBundle\Api\ApiRequest;
