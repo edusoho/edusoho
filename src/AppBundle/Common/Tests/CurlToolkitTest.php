@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common\Tests;
 
 use AppBundle\Common\CurlToolkit;
@@ -36,6 +37,7 @@ class CurlTookitTest extends BaseTestCase
         if ($errorCode === 10012) {
             return 0;
         }
+
         return $errorCode;
     }
 }
