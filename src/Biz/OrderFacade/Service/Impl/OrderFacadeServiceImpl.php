@@ -12,6 +12,9 @@ use AppBundle\Common\MathToolkit;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
+use Codeages\Biz\Order\Status\Order\FailOrderStatus;
+use Codeages\Biz\Order\Status\Order\PaidOrderStatus;
+use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
@@ -45,12 +48,17 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
     }
 
-    private function getRefundDeadline()
+    public function isOrderPaid($orderId)
     {
-        $refundSetting = $this->getSettingService()->get('refund');
-        $timeInterval = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'] * 24 * 60 * 60;
-
-        return time() + $timeInterval;
+        if ($order = $this->getOrderService()->getOrder($orderId)) {
+            return in_array($order['status'], array(
+                SuccessOrderStatus::NAME,
+                PaidOrderStatus::NAME,
+                FailOrderStatus::NAME,
+            ));
+        } else {
+            return false;
+        }
     }
 
     private function makeOrderItems(Product $product)

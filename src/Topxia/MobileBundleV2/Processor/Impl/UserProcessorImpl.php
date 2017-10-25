@@ -172,14 +172,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         );
     }
 
-    /**
-     * @return AccountService
-     */
-    private function getAccountService()
-    {
-        return $this->controller->getService('Pay:AccountService');
-    }
-
     public function sendMessage()
     {
         $content = $this->getParam('content');

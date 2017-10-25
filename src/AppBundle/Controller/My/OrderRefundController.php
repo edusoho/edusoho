@@ -49,7 +49,12 @@ class OrderRefundController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
         $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
+        if ($user->getId() != $orderRefund['user_id']) {
+            throw $this->createAccessDeniedException();
+        }
+
         $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
         $item = $this->getOrderService()->getOrderItem($orderRefund['order_item_id']);
 
@@ -62,8 +67,11 @@ class OrderRefundController extends BaseController
 
     public function applyRefundAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
-
+        if ($user->getId() != $order['user_id']) {
+            throw $this->createAccessDeniedException();
+        }
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $product = $this->getLocalOrderRefundService()->applyOrderRefund($order['id'], $fields);

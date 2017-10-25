@@ -58,6 +58,11 @@ class Trade extends AbstractResource
 
     private function isOrderPaid($order)
     {
+        //如果订单已经支付不去查询第三方
+        if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
+            return true;
+        }
+
         if ($order['trade_sn']) {
             $trade = $this->getPayService()->queryTradeFromPlatform($order['trade_sn']);
 

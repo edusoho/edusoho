@@ -39,7 +39,7 @@ export default class WechatPayNative extends BasePayment {
       this.$container.append(template);
     }
 
-    this.$container.find('#' + this.modalID).on('hidden.bs.modal', function () {
+    this.$container.find('#' + this.modalID).on('hidden.bs.modal', function() {
       clearInterval(window.intervalWechatId);
     });
   }
@@ -50,6 +50,10 @@ export default class WechatPayNative extends BasePayment {
     $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
     $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
     $modal.modal('show');
+  }
+
+  startInterval() {
+    return true;
   }
 
 }

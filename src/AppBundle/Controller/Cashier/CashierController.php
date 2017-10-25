@@ -6,9 +6,6 @@ use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
-use Codeages\Biz\Order\Status\Order\FailOrderStatus;
-use Codeages\Biz\Order\Status\Order\PaidOrderStatus;
-use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 use Codeages\Biz\Pay\Service\AccountService;
 use Codeages\Biz\Pay\Service\PayService;
 use Codeages\Biz\Pay\Status\PayingStatus;
@@ -33,7 +30,7 @@ class CashierController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        if ($this->isOrderPaid($order)) {
+        if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
             return $this->forward('AppBundle:Cashier/Cashier:purchaseSuccess', array('trade' => array(
                 'order_sn' => $order['sn'],
             )));
@@ -46,20 +43,13 @@ class CashierController extends BaseController
         $payments = $this->getPayService()->findEnabledPayments();
 
         return $this->render(
-            'cashier/show.html.twig', array(
-            'order' => $order,
-            'product' => $this->getProduct($order['id']),
-            'payments' => $payments,
-        ));
-    }
-
-    private function isOrderPaid($order)
-    {
-        return in_array($order['status'], array(
-            SuccessOrderStatus::NAME,
-            PaidOrderStatus::NAME,
-            FailOrderStatus::NAME,
-        ));
+            'cashier/show.html.twig',
+            array(
+                'order' => $order,
+                'product' => $this->getProduct($order['id']),
+                'payments' => $payments,
+            )
+        );
     }
 
     private function getProduct($orderId)
@@ -134,12 +124,14 @@ class CashierController extends BaseController
 
     public function checkPayPasswordAction(Request $request)
     {
+        $user = $this->getCurrentUser();
         $password = $request->query->get('value');
 
         $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
 
         if (!$isRight) {
-            $response = array('success' => false, 'message' => '支付密码不正确');
+            $maxAllowance = $this->getRateLimiter($user['email'], 3, 300)->check($user['email']);
+            $response = array('success' => false, 'message' => empty($maxAllowance) ? '错误次数太多，请5分钟后再试' : '支付密码不正确');
         } else {
             $response = array('success' => true, 'message' => '支付密码正确');
         }
@@ -182,5 +174,21 @@ class CashierController extends BaseController
     private function getWorkflowService()
     {
         return $this->createService('Order:WorkflowService');
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $name
+     * @param [type] $maxAllowance
+     * @param [type] $period
+     *
+     * @return \Codeages\RateLimiter\RateLimiter
+     */
+    private function getRateLimiter($name, $maxAllowance, $period)
+    {
+        $rateLimiter = $this->getBiz()->offsetGet('ratelimiter.factory');
+
+        return $rateLimiter($name, $maxAllowance, $period);
     }
 }
