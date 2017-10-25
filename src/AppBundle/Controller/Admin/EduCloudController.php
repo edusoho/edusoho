@@ -1590,7 +1590,8 @@ class EduCloudController extends BaseController
 
             $this->setCloudLiveLogo($capacity['provider'], $client);
 
-            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
+            $redirectUrl = $capacity['provider'] == 'talkFun' ? 'admin_setting_cloud_edulive' : 'admin_cloud_edulive_overview';
+            return $this->redirect($this->generateUrl($redirectUrl));
         }
 
         if (empty($liveCourseSetting['live_course_enabled'])) {
