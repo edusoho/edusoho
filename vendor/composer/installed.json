@@ -5483,17 +5483,17 @@
     },
     {
         "name": "codeages/biz-order-pay",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "v0.1.0",
+        "version_normalized": "0.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "148c43313086b23e6a7d9e9bfe81c5516e1684f3"
+            "reference": "bfa5feb89fd427b53967f5dc308668f5082cfe80"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/148c43313086b23e6a7d9e9bfe81c5516e1684f3.zip",
-            "reference": "148c43313086b23e6a7d9e9bfe81c5516e1684f3",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/bfa5feb89fd427b53967f5dc308668f5082cfe80.zip",
+            "reference": "bfa5feb89fd427b53967f5dc308668f5082cfe80",
             "shasum": ""
         },
         "require": {
@@ -5504,7 +5504,7 @@
         "require-dev": {
             "mockery/mockery": "^0.9.9"
         },
-        "time": "2017-10-25T08:15:01+00:00",
+        "time": "2017-10-25T08:55:05+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
