@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Common;
 
 use Imagine\Image\Box;
@@ -34,13 +33,13 @@ class FileToolkit
 
         // of allowed extensions.
         foreach ($fileNameParts as $fileNamePart) {
-            $newFilename .= '.'.$fileNamePart;
+            $newFilename .= '.' . $fileNamePart;
             if (!in_array($fileNamePart, $whitelist) && preg_match("/^[a-zA-Z]{2,5}\d?$/", $fileNamePart)) {
                 $newFilename .= '_';
             }
         }
 
-        $fileName = $newFilename.'.'.$finalExtension;
+        $fileName = $newFilename . '.' . $finalExtension;
 
         return $fileName;
     }
@@ -53,14 +52,15 @@ class FileToolkit
 
         if ($file instanceof UploadedFile) {
             $filename = $file->getClientOriginalName();
-        } else {
+        }
+        else {
             $filename = $file->getFilename();
         }
 
         $errors = array();
-        $regex = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
+        $regex = '/\.(' . preg_replace('/ +/', '|', preg_quote($extensions)) . ')$/i';
         if (!preg_match($regex, $filename)) {
-            $errors[] = '只允许上传以下扩展名的文件：'.$extensions;
+            $errors[] = '只允许上传以下扩展名的文件：' . $extensions;
         }
 
         return $errors;
@@ -82,9 +82,9 @@ class FileToolkit
 
     public static function generateFilename($ext = '')
     {
-        $filename = date('Yndhis').'-'.substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
+        $filename = date('Yndhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 6);
 
-        return $filename.'.'.$ext;
+        return $filename . '.' . $ext;
     }
 
     public static function getFileExtension(File $file)
@@ -900,19 +900,26 @@ class FileToolkit
 
         if (in_array($extension, array('mp4', 'avi', 'mpg', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv', 'm4v'))) {
             return 'video';
-        } elseif (in_array($extension, array('mp3', 'wma'))) {
+        }
+        elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';
-        } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
+        }
+        elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
             return 'image';
-        } elseif (in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'))) {
+        }
+        elseif (in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'))) {
             return 'document';
-        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+        }
+        elseif (in_array($extension, array('ppt', 'pptx'))) {
             return 'ppt';
-        } elseif (in_array($extension, array('swf'))) {
+        }
+        elseif (in_array($extension, array('swf'))) {
             return 'flash';
-        } elseif (in_array($extension, array('srt'))) {
+        }
+        elseif (in_array($extension, array('srt'))) {
             return 'subtitle';
-        } else {
+        }
+        else {
             return 'other';
         }
     }
@@ -930,7 +937,7 @@ class FileToolkit
             }
         }
 
-        return sprintf('%.1f', $currentValue).$currentUnit;
+        return sprintf('%.1f', $currentValue) . $currentUnit;
     }
 
     public static function getMaxFilesize()
@@ -954,11 +961,11 @@ class FileToolkit
     public static function moveFile($originFile, $targetGroup)
     {
         $targetFilenamePrefix = rand(10000, 99999);
-        $hash = substr(md5($targetFilenamePrefix.time()), -8);
+        $hash = substr(md5($targetFilenamePrefix . time()), -8);
         $ext = $originFile->getClientOriginalExtension();
-        $filename = $targetFilenamePrefix.$hash.'.'.$ext;
+        $filename = $targetFilenamePrefix . $hash . '.' . $ext;
 
-        $directory = ServiceKernel::instance()->getParameter('topxia.upload.public_directory').'/'.$targetGroup;
+        $directory = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/' . $targetGroup;
         $file = $originFile->move($directory, $filename);
 
         return $file;
@@ -1035,15 +1042,21 @@ class FileToolkit
         $filePaths = array();
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
-                if (($naturalWidth == $value[0]) && ($naturalHeight == $value[1]) && ($filesize < 102400)) {
-                    $filePaths[$key] = $filePath;
-                } else {
-                    $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                $isCrop = ($naturalWidth == round($options['w'])) && ($naturalHeight == round($options['h'])) && ($filesize < 102400);
+                //原始尺寸=裁切的尺寸，不做裁切，$options['w']计算出来的裁切长度有可能是浮点数，不好判断和原始尺寸，所以做round处理
+                if ($isCrop) {
+                    $filePaths[$key] = $savedFilePath;
+                    $image = $rawImage->copy();
+                    $image->save($savedFilePath);
+                }
+                else {
                     $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                     $filePaths[$key] = $savedFilePath;
                 }
             }
-        } else {
+        }
+        else {
             $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}.{$pathinfo['extension']}";
             $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h']);
             $filePaths[] = $savedFilePath;
@@ -1060,9 +1073,11 @@ class FileToolkit
 
         if (in_array($extension, array('jpg', 'jpeg'))) {
             $options['jpeg_quality'] = $level * 10;
-        } elseif ($extension == 'png') {
+        }
+        elseif ($extension == 'png') {
             $options['png_compression_level'] = $level;
-        } else {
+        }
+        else {
             return $fullPath;
         }
 
@@ -1089,6 +1104,7 @@ class FileToolkit
         return array($naturalSize, $scaledSize);
     }
 
+  
     //将图片旋转正确
     public static function imagerotatecorrect($path)
     {
@@ -1135,11 +1151,12 @@ class FileToolkit
         return $savePath;
     }
 
+
     private static function getImagerotateAngle($path)
     {
         $angle = 0;
         //只旋转JPEG的图片
-        if (!(extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG)) {
+        if (! (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG)) {
             return $angle;
         }
 
@@ -1148,13 +1165,13 @@ class FileToolkit
             return $angle;
         }
         switch ($exif['Orientation']) {
-            case 8:
+            case 8 :
                 $angle = 90;
                 break;
-            case 3:
+            case 3 :
                 $angle = 180;
                 break;
-            case 6:
+            case 6 :
                 $angle = -90;
                 break;
         }
