@@ -1097,31 +1097,16 @@ class FileToolkit
     public static function imagerotatecorrect($path)
     {
         try {
-            //只旋转JPEG的图片
-            if (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG) {
-                $exif = @exif_read_data($path);
-                if (!empty($exif['Orientation'])) {
-                    $image = imagecreatefromstring(file_get_contents($path));
-                    switch ($exif['Orientation']) {
-                        case 8:
-                            $image = imagerotate($image, 90, 0);
-                            break;
-                        case 3:
-                            $image = imagerotate($image, 180, 0);
-                            break;
-                        case 6:
-                            $image = imagerotate($image, -90, 0);
-                            break;
-                    }
+            $angle = static::getImagerotateAngle($path);
+            if (!empty($angle)) {
+                $image = imagecreatefromstring(file_get_contents($path));
+                $image = imagerotate($image, $angle, 0);
+                imagejpeg($image, $path);
+                imagedestroy($image);
 
-                    imagejpeg($image, $path);
-                    imagedestroy($image);
-
-                    return $path;
-                }
+                return $path;
             }
         } catch (\Exception $e) {
-            //报错了不旋转，保证不影响上传流程
         }
 
         return false;
@@ -1152,5 +1137,32 @@ class FileToolkit
         fclose($tp);
 
         return $savePath;
+    }
+
+    private static function getImagerotateAngle($path)
+    {
+        $angle = 0;
+        //只旋转JPEG的图片
+        if (!(extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG)) {
+            return $angle;
+        }
+
+        $exif = @exif_read_data($path);
+        if (empty($exif['Orientation'])) {
+            return $angle;
+        }
+        switch ($exif['Orientation']) {
+            case 8:
+                $angle = 90;
+                break;
+            case 3:
+                $angle = 180;
+                break;
+            case 6:
+                $angle = -90;
+                break;
+        }
+
+        return $angle;
     }
 }
