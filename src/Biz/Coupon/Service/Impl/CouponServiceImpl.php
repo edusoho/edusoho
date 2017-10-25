@@ -266,7 +266,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     {
         try {
             $this->beginTransaction();
-            $coupon = $this->getCouponByCode($code, array('lock' => true));
+            $coupon = $this->getCouponByCode($code, true);
             $currentUser = $this->getCurrentUser();
             //todo 国际化
             $message = array(
@@ -337,9 +337,9 @@ class CouponServiceImpl extends BaseService implements CouponService
         return !($coupon['targetType'] == 'all' or ($coupon['targetType'] == $targetType && ($coupon['targetId'] == $targetId || $coupon['targetId'] == 0)));
     }
 
-    public function getCouponByCode($code, $arguments = array())
+    public function getCouponByCode($code, $lock = false)
     {
-        return $this->getCouponDao()->getByCode($code, $arguments);
+        return $this->getCouponDao()->getByCode($code, array('lock' => $lock));
     }
 
     private function receiveCouponByUserId($couponId, $useId)
