@@ -7,16 +7,11 @@ let validator = $form.validate({
     reason : {
       required: true,
     }
-  }
-});
-
-$btn.click((event) => {
-  if (validator.form()) {
-    $btn.button('loading');
-    $.post($form.data('url'), $form.serialize(), function (response) {
-      window.location.href = $form.data('redirect');
-    }, 'json').error(function (jqxhr, textStatus, errorThrown) {
-      notify.error('apply error!');
-    });
+  },
+  ajax: true,
+  currentDom: '#refund-apply-btn',
+  submitSuccess: function () {
+    $("#modal").modal('hide');
+    window.location.href = $form.data('redirect');
   }
 });

@@ -10,7 +10,7 @@
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
       <div class="form-group">
-        <label class="ptm">筛选条件：</label>
+        <label class="ptm">{{ 'admin.order.screen_condition'|trans }}：</label>
         <select class="form-control" name="refundItemType">
           {{ select_options(dict('refundItemType'), app.request.get('refundItemType'), 'order.refund.item_type'|trans) }}
         </select>
@@ -22,7 +22,7 @@
 
     <div class="mbm">
       <div class="form-group">
-        <label class="ptm">关键词：</label>
+        <label class="ptm">{{ 'form.placeholder.keyword'|trans }}：</label>
         <input class="form-control" type="text" name="nickname" value="{{ app.request.get('nickname') }}" placeholder="{{'admin.order_refund.nickname.input_placeholder'|trans}}">
         <input class="form-control" type="text" name="titleLike" value="{{ app.request.get('titleLike') }}"
                placeholder="{{ 'admin.order_refund.title.placeholder'|trans }}"
