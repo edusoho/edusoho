@@ -22,7 +22,7 @@ export default class Coin {
       inputCoinNum = this.maxCoinInput;
     }
 
-    if (isNaN(inputCoinNum) || parseFloat(inputCoinNum) <= 0) {
+    if (isNaN(parseFloat(inputCoinNum)) || parseFloat(inputCoinNum) <= 0) {
       inputCoinNum = 0;
       $this.val('');
       this.removePasswordValidate();

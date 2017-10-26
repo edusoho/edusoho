@@ -57,7 +57,6 @@ orderItemType:
 refundItemType:
     course: 教学计划
     classroom: 班级
-    vip: VIP
 
 orderDisplayStatus:
     notPaid: 未付款

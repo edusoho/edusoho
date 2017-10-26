@@ -430,11 +430,22 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     public function useMoneyCard($id, $fields)
     {
         try {
+            $user = $this->getCurrentUser();
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException('user is not login.');
+            }
+
             $this->beginTransaction();
 
             $moneyCard = $this->getMoneyCard($id, true);
 
             if ($moneyCard['cardStatus'] == 'recharged') {
+                $this->rollback();
+
+                return $moneyCard;
+            }
+
+            if ($moneyCard['rechargeUserId'] != $user['id']) {
                 $this->rollback();
 
                 return $moneyCard;
@@ -577,6 +588,15 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     'deadline' => strtotime($moneyCard['deadline']),
                     'userId' => $userId,
                 ));
+
+                $receivedNumber = $this->getMoneyCardDao()->count(array(
+                    'batchId' => $batch['id'],
+                    'receiveTime_GT' => 0,
+                ));
+                $batch = $this->getMoneyCardBatchDao()->update($batch['id'], array(
+                    'receivedNumber' => $receivedNumber,
+                ));
+
                 $message = "您有一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的充值卡领取成功";
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 $this->dispatchEvent('moneyCard.receive', $batch);

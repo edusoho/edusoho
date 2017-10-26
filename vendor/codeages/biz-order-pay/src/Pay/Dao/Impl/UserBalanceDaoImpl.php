@@ -35,7 +35,8 @@ class UserBalanceDaoImpl extends GeneralDaoImpl implements UserBalanceDao
             ),
             'conditions' => array(
                 'user_id IN (:user_ids)',
-                'user_id != :except_user_id'
+                'user_id != :except_user_id',
+                'user_id not in (:except_user_ids)'
             ),
         );
     }
