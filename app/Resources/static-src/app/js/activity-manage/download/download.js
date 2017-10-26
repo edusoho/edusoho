@@ -32,52 +32,46 @@ export default class DownLoad {
         materials: Translator.trans('activity.download_manage.materials_error_hint')
       }
     });
-    this.$form.data('validator', validator2);
   }
 
   bindEvent() {
-    this.$form.on('click', '.js-btn-delete', (event) => this.itemDelete(event));
-    this.$form.on('click', '.js-video-import', () => this.videoImport(false));
-    this.$form.on('click', '.js-add-file-list', () => this.addFileBtn(true));
-    this.$form.on('blur', '#title', (event) => this.titleChange(event));
+    this.$form.on('click', '.js-btn-delete', (event) => this.deleteItem(event));
+    this.$form.on('click', '.js-video-import', () => this.importLink());
+    this.$form.on('click', '.js-add-file-list', () => this.addFile());
+    this.$form.on('blur', '#title', (event) => this.changeTitle(event));
   }
 
-  itemDelete(event) {
+  deleteItem(event) {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
-    let items = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-    console.log('删除:' + items);
-    if (items && items[mediaId]) {
-      delete items[mediaId];
-      $("#materials").val(JSON.stringify(items));
+    if (this.materials && this.materials[mediaId]) {
+      delete this.materials[mediaId];
+      $("#materials").val(JSON.stringify(this.materials));
     }
     if ($parent.siblings('li').length <= 0) {
-      $("#materials").val(null);
+      $("#materials").val('');
     }
     $parent.remove();
   }
 
-  videoImport(state) {
-    this.addFile(state);
-  }
-
-  addFileBtn(state) {
-    this.addFile(state);
+  importLink() {
+    console.log('导入');
+    if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
+      console.log('可以导入');
+      $("#verifyLink").val($("#link").val());
+      $('.js-current-file').text($("#verifyLink").val());
+    }
   }
 
   initFileChooser() {
     const fileSelect = file => {
       // 赋值给media上传的文件信息
-      $("input[name=media]").val(JSON.stringify(file));
+      $('#media').val(JSON.stringify(file));
       chooserUiOpen();
+      // 获得数据对象
       this.loadFile();
-      // 上传文件的时候
-      if (this.firstName) {
-        $('#title').val(this.firstName);
-      } else {
-        $('#title').val('');
-      }
-      console.log('1111');
+      // 重置上传文件导致标题名称的改变
+      $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
     }
 
@@ -86,7 +80,7 @@ export default class DownLoad {
     fileChooser.on('select', fileSelect);
   }
 
-  titleChange(event) {
+  changeTitle(event) {
     let $this = $(event.currentTarget);
     this.firstName = $this.val();
   }
@@ -97,7 +91,6 @@ export default class DownLoad {
 
   addLink() {
     // 链接的时候，通过js手动把链接的信息设置成数组的形式
-    $("#verifyLink").val($("#link").val());
     let data = {
       source: 'link',
       id: $("#verifyLink").val(),
@@ -106,92 +99,50 @@ export default class DownLoad {
       summary: $("#file-summary").val(),
       size: 0
     }
-    console.log(JSON.stringify(data));
-    $('.js-current-file').text($("#verifyLink").val());
-    // media用来记录单个文件
-    console.log('换个链接名字')
+
     $("#media").val(JSON.stringify(data));
     this.media = JSON.parse($('#media').val());
-    console.log(this.media);
   }
 
 
   loadFile() {
     this.media = this.isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-    console.log(this.media);
     this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-    console.log(this.materials);
   }
 
-  addFile(addToList) {
-    //@TODO重构代码
 
-
-
-    // console.log(addToList);
-    // if (this.isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
+  addFile() {
+    console.log($("#link").val());
     if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
-
-      // 链接的时候，通过js手动把链接的信息设置成数组的形式
-      if (!addToList) {
-        this.addLink();
-      }
-      // $('.js-current-file').text($("#verifyLink").val());
-    }
-
-
-
-    // if (!this.isEmpty(items) && items[media.name]) {
-    //   $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_exist_error_hint')).show();
-    //   setTimeout(function() {
-    //     $('.js-danger-redmine').slideUp();
-    //   }, 3000);
-    //   $('.js-current-file').text('');
-    //   $("#media").val(null);
-    //   media = null;
-    //   return;
-    // }
-
-    if (!addToList) {
-      return;
+      console.log('添加链接');
+      // 链接存在而且格式验证通过
+      this.addLink();
     }
 
 
     // 失败提示：请上传或选择资料
-    if (addToList && this.isEmpty(this.media)) {
+    if (this.isEmpty(this.media)) {
+      console.log('数据为空');
       this.addFailTip();
       return;
     }
 
-    // 点击添加按钮，清空资料名称，将资料简介添加到media对象中
-    $('.js-current-file').text('');
     this.media.summary = $("#file-summary").val();
-    // 将media对象插入到materials数组中
-    console.log(this.media.id);
     this.materials[this.media.id] = this.media;
-    console.log(JSON.stringify(this.materials));
-    // 插入到$("#materials")元素中
     $("#materials").val(JSON.stringify(this.materials));
 
-    this.showFile();
 
-
-
+    // 获得第一次上传文件的title值赋值给标题名称
     if (!this.firstName) {
       this.firstName = this.media.name;
       $('#title').val(this.firstName);
     }
 
-
-    // $('.file-browser-item').removeClass('active');
-
-    //添加成功
-
     this.addSuccessTip();
 
+    this.showFile();
 
     if ($('.jq-validate-error:visible').length > 0) {
-
       // 点击 添加资料，并没有提交表单，url验证失败，返回false;
       this.$form.data('validator').form();
     }
@@ -223,23 +174,24 @@ export default class DownLoad {
     $('[data-toggle="tooltip"]').tooltip();
 
     this.media = {};
-    $('#media').val(this.media);
-    console.log($('#media').val());
+    $('#media').val('');
     $('#link').val('');
     $("#file-summary").val('');
 
   }
 
-
   addFailTip() {
-    $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_error_hint')).show();
+    $('.js-success-redmine').hide();
     $('.js-current-file').text('');
+    $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_error_hint')).show();
     setTimeout(function() {
       $('.js-danger-redmine').slideUp();
     }, 3000);
   }
 
   addSuccessTip() {
+    $('.js-danger-redmine').hide();
+    $('.js-current-file').text('');
     $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint')).show();
     setTimeout(function() {
       $('.js-success-redmine').slideUp();
