@@ -112,6 +112,10 @@ export default class DownLoad {
 
 
   addFile() {
+
+    const errorTip = 'activity.download_manage.materials_error_hint';
+    const successTip = 'activity.download_manage.materials_add_success_hint';
+
     console.log($("#link").val());
     if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
       console.log('添加链接');
@@ -123,7 +127,7 @@ export default class DownLoad {
     // 失败提示：请上传或选择资料
     if (this.isEmpty(this.media)) {
       console.log('数据为空');
-      this.addFailTip();
+      this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), errorTip);
       return;
     }
 
@@ -138,7 +142,8 @@ export default class DownLoad {
       $('#title').val(this.firstName);
     }
 
-    this.addSuccessTip();
+
+    this.showTip($('.js-danger-redmine'), $('.js-success-redmine'), successTip);
 
     this.showFile();
 
@@ -180,21 +185,13 @@ export default class DownLoad {
 
   }
 
-  addFailTip() {
-    $('.js-success-redmine').hide();
-    $('.js-current-file').text('');
-    $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_error_hint')).show();
-    setTimeout(function() {
-      $('.js-danger-redmine').slideUp();
-    }, 3000);
-  }
 
-  addSuccessTip() {
-    $('.js-danger-redmine').hide();
+  showTip($hideDom, $showDom, trans) {
+    $hideDom.hide();
     $('.js-current-file').text('');
-    $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint')).show();
+    $showDom.text(Translator.trans(trans)).show();
     setTimeout(function() {
-      $('.js-success-redmine').slideUp();
+      $showDom.slideUp();
     }, 3000);
   }
 
