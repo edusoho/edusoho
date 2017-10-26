@@ -79,6 +79,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             } else {
                 $info = array(
                     'orderId' => 0,
+                    'remark' => $data['remark'],
                     'reason' => 'site.join_by_import',
                     'reason_type' => 'import_join',
                     'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
@@ -610,7 +611,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'deadline' => $deadline,
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
-            'remark' => empty($info['reason']) ? '' : $info['reason'],
+            'remark' => empty($info['remark']) ? '' : $info['remark'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         );
