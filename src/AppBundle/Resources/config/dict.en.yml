@@ -57,7 +57,6 @@ orderItemType:
 refundItemType:
     course: course
     classroom: classroom
-    vip: VIP
 
 orderDisplayStatus:
     notPaid: notPaid
