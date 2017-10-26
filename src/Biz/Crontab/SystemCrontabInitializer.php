@@ -116,7 +116,8 @@ class SystemCrontabInitializer
         $count = self::getSchedulerService()->countJobs(array('name' => 'MarkExecutingTimeoutJob', 'source' => self::SOURCE_SYSTEM));
         if ($count == 0) {
             self::getSchedulerService()->register(array(
-                'name' => 'MarkExecutingTimeoutJob',
+                'name' => 'Scheduler_MarkExecutingTimeoutJob',
+                'pool' => 'dedicated',
                 'source' => self::SOURCE_SYSTEM,
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\MarkExecutingTimeoutJob',

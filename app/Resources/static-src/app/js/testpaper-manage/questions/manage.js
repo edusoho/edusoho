@@ -65,6 +65,11 @@ export default class QuestionManage{
         notify('danger', Translator.trans('activity.testpaper_manage.setting_pass_score_error_hint', {'passedScore':passedScore, 'totalScore':stats.total.score}));
         return;
       }
+      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(passedScore)) {
+        notify('danger', Translator.trans('activity.testpaper_manage.pass_score_error_hint'));
+        $(this).focus();
+        return;
+      }
     }
     
     let html='';
