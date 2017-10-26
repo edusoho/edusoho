@@ -24,7 +24,7 @@ class MoneyCardDaoImpl extends GeneralDaoImpl implements MoneyCardDao
                 'batchId = :batchId',
                 'deadline <= :deadlineSearchEnd',
                 'deadline >= :deadlineSearchBegin',
-                'receiveTime > :receiveTime_GT'
+                'receiveTime > :receiveTime_GT',
             ),
         );
     }
