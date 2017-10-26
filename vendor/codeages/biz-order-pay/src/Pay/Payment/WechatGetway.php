@@ -4,6 +4,7 @@ namespace Codeages\Biz\Pay\Payment;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Pay\Exception\PayGetwayException;
 use Omnipay\Omnipay;
 
 class WechatGetway extends AbstractGetway
@@ -117,7 +118,8 @@ class WechatGetway extends AbstractGetway
                 return $response->getData();
             }
         } else {
-            throw new InvalidArgumentException('Wechat pay send response error.');
+            $data = $response->getData();
+            throw new PayGetwayException($data['return_msg']);
         }
 
 
