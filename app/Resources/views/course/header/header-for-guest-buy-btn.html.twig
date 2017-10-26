@@ -11,7 +11,7 @@
 
   {% if slot('course.buy-btn.extension', {'course': course})|trim %}
     {% set btnText = slot('course.buy-btn.extension', {'course': course}) %}
-  {% elseif course.originPrice == 0 || course.isFree %}
+  {% elseif course.originPrice == 0 or course.isFree %}
     {% set btnText = 'course.btn.join' %}
   {% else  %}
     {% set btnText = 'course.btn.buy' %}
