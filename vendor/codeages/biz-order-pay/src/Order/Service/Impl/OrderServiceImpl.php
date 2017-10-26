@@ -72,6 +72,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->sumGroupByDate($column, $conditions, $sort, $dateColumn);
     }
 
+    public function sumPaidAmount($conditions)
+    {
+        $conditions = $this->filterConditions($conditions);
+        return $this->getOrderDao()->sumPaidAmount($conditions);
+    }
+
     public function searchOrderItems($conditions, $orderBy, $start, $limit)
     {
         return $this->getOrderItemDao()->search($conditions, $orderBy, $start, $limit);
