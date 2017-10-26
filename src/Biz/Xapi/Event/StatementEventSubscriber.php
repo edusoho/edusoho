@@ -44,6 +44,65 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($task)) {
             return;
         }
+
+        $actor = $this->getActor();
+        $object = array(
+            'id' => $task['id'],
+            'name' => $task['title'],
+            'course' => $course,
+            'resource' => array()
+        );
+
+        $this->finishActivity($actor, $object, array());
+
+
+    }
+
+    public function finishActivity($actor, $object, $result)
+    {
+        $statement = array();
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'http://adlnet.gov/expapi/verbs/completed',
+            'display' => array(
+                'zh-CN' => '完成了',
+                'en-US' => 'completed'
+            )
+        );
+
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'defination' => array(
+                'type' => 'https://w3id.org/xapi/acrossx/activities/video',
+                'name' => array(
+                    'zh-CN' => $object['name']
+                ),
+                'extensions' => array(
+                    'http://xapi.edusoho.com/extensions/course' => array(
+                        'id' => $object['course']['id'],
+                        'title' => $object['course']['title'],
+                        'description' => $object['course']['summary']
+
+                    ),
+//                    'http://xapi.edusoho.com/extensions/resource' => array(
+//                        'id' => $object['resource']['id'],
+//                        'name' => $object['resource']['name']
+//                    )
+                )
+            )
+        );
+
+        $statement['result'] = array(
+            'success' => true
+        );
+
+        $statement['context'] = array(
+            'extensions' => array(
+                'http://xapi.edusoho.com/extensions/school' => $this->getSchoolInfo()
+            )
+        );
+
+        $this->getXapiService()->createStatement($statement);
     }
 
     public function onExamFinish(Event $event)
@@ -51,7 +110,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         // testpaper, exercise, homework
         $testpaperResult = $event->getSubject();
 
-        $testpaperResult = $event->getArgument('useename');
     }
 
     public function onCourseNoteCreate(Event $event)
@@ -80,7 +138,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                 'id' => $currentUser['id'],
                 'name' => $currentUser['nickname'],
                 'email' => $currentUser['email'],
-                'mobile' => $currentUser['mobile'],
+                'mobile' => empty($currentUser['mobile']) ? '' : $currentUser['mobile'],
                 'homePage' => $host,
             ),
         );
@@ -156,11 +214,11 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
      */
     protected function getSettingService()
     {
-        return $this->createService('System:Setting');
+        return $this->createService('System:SettingService');
     }
 
     protected function createService($alias)
     {
-        return $this->getBiz()->service($alias);
+        return $this->getBiz() ->service($alias);
     }
 }
