@@ -98,6 +98,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateCourseIsFree',
             'updateUserRoles',
             'removeGroupSell',
+            'downloadPlugin',
+            'updatePlugin',
         );
 
         $funcNames = array();
@@ -132,6 +134,115 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[0];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[0];
+
+        $this->logger( 'warning', '升级'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger( 'warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install', 0);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger( 'info', '升级完毕');
+        return $page + 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            array(
+               'Discount',
+               1136,
+            ),
+            array(
+               'Coupon',
+                1140
+            ),
+            array(
+                'ChargeCoin',
+                1138,
+            ),
+            array(
+                'Vip', 
+                1135
+            ),
+            array(
+                'MoneyCard', 
+                1137,
+            ),
+            array(
+                'UserImporter',
+                1139
+            )            
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
     }
 
     protected function migrateBizOrders($page)
@@ -317,7 +428,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $data = json_decode($vipOrder['data'], true);
             $buyType = empty($data['buyType']) ? 'new' : $data['buyType'];
             $buyType = json_encode(array('buyType' => $buyType));
-            $duration = empty($data['duration']) ? 0 : $data['duration'];
+            $duration = empty($data['duration']) || !is_numeric($data['duration']) ? 0 : $data['duration'];
+            
             $unit = empty($data['unitType']) ? 0 : $data['unitType'];
             if ($duration<0) {
                 $duration = abs($duration);
@@ -1347,7 +1459,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
               `callback` TEXT COMMENT '商品中心的异步回调信息',
               `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
-              `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
+              `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、微营销、第三方系统',
               `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
               `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
