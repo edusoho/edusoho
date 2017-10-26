@@ -806,7 +806,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `user` where `id` not in (select `migrate_id` from `biz_pay_account`)");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `user` where payPassword<>'' and `id` not in (select `migrate_id` from `biz_pay_account`)");
         if (empty($count)) {
             return 1;
         }
@@ -829,7 +829,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `createdTime`,
               `updatedTime`,
               `id`
-            from `user` u where u.`id` not in (select `migrate_id` from `biz_pay_account`) LIMIT 0, 10000
+            from `user` u where payPassword<>'' and u.`id` not in (select `migrate_id` from `biz_pay_account`) LIMIT 0, 10000
         ");
 
         return $page + 1;
