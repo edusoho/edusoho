@@ -157,33 +157,27 @@ class AccountServiceImpl extends BaseService implements AccountService
 
     public function lockCoin($userId, $coinAmount)
     {
-        $lock = $this->biz['lock'];
-        $key = "user_balance_{$userId}";
-        $lock->get($key);
-
         $userBalance = $this->getUserBalanceDao()->getByUserId($userId);
+        $userBalance = $this->getUserBalanceDao()->get($userBalance['id'], array('lock' => true));
+
         $this->getUserBalanceDao()->wave(array($userBalance['id']), array(
             'amount' => (0 - $coinAmount),
             'locked_amount' => $coinAmount
         ));
 
-        $lock->release($key);
         return $this->getUserBalanceDao()->getByUserId($userId);
     }
 
     public function releaseCoin($userId, $coinAmount)
     {
-        $lock = $this->biz['lock'];
-        $key = "user_balance_{$userId}";
-        $lock->get($key);
-
         $userBalance = $this->getUserBalanceDao()->getByUserId($userId);
+        $userBalance = $this->getUserBalanceDao()->get($userBalance['id'], array('lock' => true));
+
         $this->getUserBalanceDao()->wave(array($userBalance['id']), array(
             'amount' => $coinAmount,
             'locked_amount' => 0 - $coinAmount
         ));
 
-        $lock->release($key);
         return $this->getUserBalanceDao()->getByUserId($userId);
     }
 
@@ -283,14 +277,13 @@ class AccountServiceImpl extends BaseService implements AccountService
             throw $this->createInvalidArgumentException('fields is invalid.');
         }
 
-        $lock = $this->biz['lock'];
-        $key = "user_balance_{$fields['user_id']}";
         try {
-            $lock->get($key);
             $this->beginTransaction();
 
             $amount = $fields['flow_type'] == 'inflow' ? $fields['amount'] : 0 - $fields['amount'];
             $userBalance = $this->getUserBalanceDao()->getByUserId($fields['user_id']);
+            $userBalance = $this->getUserBalanceDao()->get($userBalance['id'], array('lock' => true));
+
             $this->getUserBalanceDao()->wave(array($userBalance['id']), array(
                 'cash_amount' => $amount
             ));
@@ -315,11 +308,9 @@ class AccountServiceImpl extends BaseService implements AccountService
             $cashFlow = $this->getCashflowDao()->create($userFlow);
 
             $this->commit();
-            $lock->release($key);
             return $cashFlow;
         } catch (\Exception $e) {
             $this->rollback();
-            $lock->release($key);
             throw $e;
         }
     }
@@ -330,13 +321,12 @@ class AccountServiceImpl extends BaseService implements AccountService
             throw $this->createInvalidArgumentException('fields is invalid.');
         }
 
-        $lock = $this->biz['lock'];
-        $key = "user_balance_{$fields['user_id']}";
         try {
-            $lock->get($key);
             $this->beginTransaction();
 
             $userBalance = $this->getUserBalanceDao()->getByUserId($fields['user_id']);
+            $userBalance = $this->getUserBalanceDao()->get($userBalance['id'], array('lock' => true));
+
             $userBalanceFields = array(
                 'amount' => $fields['flow_type'] == 'inflow' ? $fields['amount'] : 0 - $fields['amount']
             );
@@ -363,11 +353,9 @@ class AccountServiceImpl extends BaseService implements AccountService
             $cashFlow = $this->getCashflowDao()->create($userFlow);
 
             $this->commit();
-            $lock->release($key);
             return $cashFlow;
         } catch (\Exception $e) {
             $this->rollback();
-            $lock->release($key);
             throw $e;
         }
     }
