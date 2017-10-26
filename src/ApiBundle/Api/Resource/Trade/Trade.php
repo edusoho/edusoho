@@ -17,6 +17,7 @@ class Trade extends AbstractResource
     public function get(ApiRequest $request, $tradeSn)
     {
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
+
         return array(
             'isPaid' => $trade['status'] === 'paid',
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
@@ -32,25 +33,28 @@ class Trade extends AbstractResource
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        $this->fillParams($params);
+        try {
+            $this->fillParams($params);
 
-        if (!empty($params['orderSn']) && $order = $this->getOrderService()->getOrderBySn($params['orderSn'])) {
-
-            if ($this->isOrderPaid($order)) {
-                return array(
-                    'tradeSn' => $order['trade_sn'],
-                    'isPaid' => true,
-                    'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
-                );
-            } else {
-                $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
+            if (!empty($params['orderSn']) && $order = $this->getOrderService()->getOrderBySn($params['orderSn'])) {
+                if ($this->isOrderPaid($order)) {
+                    return array(
+                            'tradeSn' => $order['trade_sn'],
+                            'isPaid' => true,
+                            'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
+                        );
+                } else {
+                    $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
+                }
             }
-        }
-        $tradeIns = $this->getTradeIns($params['gateway']);
-        $trade = $tradeIns->create($params);
+            $tradeIns = $this->getTradeIns($params['gateway']);
+            $trade = $tradeIns->create($params);
 
-        if ($trade['cash_amount'] == 0) {
-            $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
+            if ($trade['cash_amount'] == 0) {
+                $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
+            }
+        } catch (PayGetwayException $e) {
+            throw new BadRequestHttpException($e->getMessage(), $e, ErrorCode::BAD_REQUEST);
         }
 
         return $tradeIns->createResponse($trade);
@@ -74,6 +78,7 @@ class Trade extends AbstractResource
 
     /**
      * @param $gateway
+     *
      * @return BaseTrade
      */
     private function getTradeIns($gateway)
@@ -82,6 +87,7 @@ class Trade extends AbstractResource
         $tradeIns = $factory->create($gateway);
         $tradeIns->setRouter($this->container->get('router'));
         $tradeIns->setBiz($this->biz);
+
         return $tradeIns;
     }
 
