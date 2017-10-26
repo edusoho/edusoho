@@ -95,6 +95,11 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->getRecordByOrderIdAndType($orderId, $type);
     }
 
+    public function countUserIdsByConditions($conditions)
+    {
+        return $this->getRecordDao()->countUserIdsByConditions($conditions);
+    }
+
     /**
      * @return MemberOperationRecordDao
      */
