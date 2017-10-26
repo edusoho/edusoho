@@ -40,9 +40,6 @@ class OrderEventSubscriber extends EventSubscriber
                 if (!empty($inviteCoupon)) {
                     $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['user_id'], array(
                         'inviteUserCardId' => $inviteCoupon['id'],
-                        'amount' => MathToolkit::simple($order['pay_amount'], 0.01),
-                        'cashAmount' => MathToolkit::simple($order['paid_cash_amount'], 0.01),
-                        'coinAmount' => MathToolkit::simple($order['paid_coin_amount'], 0.01),
                     ));
                 }
             }
