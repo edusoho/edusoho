@@ -434,6 +434,8 @@ class EduSohoUpgrade extends AbstractUpdater
             if ($duration<0) {
                 $duration = abs($duration);
             }
+            $duration = substr($duration, 0, 9);
+
             $connection->exec("update biz_order_item set create_extra = '{$buyType}', num = '{$duration}', unit = '{$unit}' where migrate_id = {$vipOrder['id']} and target_type = 'vip';");
         }
 
