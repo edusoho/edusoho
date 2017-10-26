@@ -451,6 +451,11 @@ $.validator.addMethod('es_email', function(value, element, params) {
   return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
 }, Translator.trans('validate.valid_email_input.message'));
 
+$.validator.addMethod('es_score', function (value, element, params) {
+	return this.optional(element) || /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(value);
+}, Translator.trans('validate.valid_score_input.message'));
+
+
 function calculateByteLength(string) {
   let length = string.length;
   for (let i = 0; i < string.length; i++) {

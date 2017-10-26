@@ -2935,7 +2935,8 @@ attachments.download.times: 'Download times %hitNum%'
 attachments.download.download_btn: Download
 attachments.download.delete_btn: Delete
 attachments.download.delete_warning: 'Are you sure to delete this accesaary?'
-share.course_set_message: 'I am learning《%course%》gain a lot，come to study together.'
+share.course_set_learning_message: 'I am learning《%course%》gain a lot，come to study together.'
+share.course_set_learned_message: 'I was learned 《%course%》gain a lot，come to study together.'
 share.classroom_message: 'I am learning「%classroom%」gain a lot，come to study together.'
 share.article_message: 'I am watching「%articletitle%」, follow 「%sitename%」, share knowledge, creates future'
 share.group_thread_message: 'I saw 「%threadname%」in group「%groupname%」，it is so great，come to enroll us'
@@ -4931,11 +4932,16 @@ admin.edu_cloud.edu_live.edu_live_enable: 'Enable Cloud Live'
 admin.edu_cloud.edu_live.edu_live_enable_btn: Enabled
 admin.edu_cloud.edu_live.edu_live_close_btn: Disable
 admin.edu_cloud.edu_live.edu_live_tips: 'G class, small class, one to one counseling class, cloud live to live classroom more exciting. <a href="%showUrl%" target="_blank"> click here </a> for more information.'
-admin.edu_cloud.edu_live.base_setting: 'Base Setting'
-admin.edu_cloud.edu_live.live_logo: 'Live Logo'
+admin.edu_cloud.edu_live.base_setting: 'Live Logo Setting'
+admin.edu_cloud.edu_live.live_logo_web: 'Live Logo web'
+admin.edu_cloud.edu_live.live_logo_app: 'Live Logo Huantuo client'
 admin.edu_cloud.edu_live.upload_btn: Upload
 admin.edu_cloud.edu_live.delete_btn: Delete
-admin.edu_cloud.edu_live.upload_tips: '<B> Only for live new programs. </ B> <br> Please upload png, gif, jpg format image file. LOGO pictures suggest not to exceed 100 * 23.'
+admin.edu_cloud.edu_live.upload_web_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 60.'
+admin.edu_cloud.edu_live.upload_app_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 40.'
+#TODO trans
+admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
+admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: Upgrade
 admin.edu_cloud.edu_live.renew: Renew
 admin.edu_cloud.edu_live.renewed: Renewed
@@ -6545,3 +6551,6 @@ site.join_by_assistant: 助教加入
 site.avatar.set_before_learning: Please set avatar first
 site_yes: 'Yes'
 site_no: 'No'
+admin.cloud_live.manage.logo_set.modal_title: Crop Live LOGO
+
+

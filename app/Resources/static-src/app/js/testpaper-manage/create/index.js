@@ -169,8 +169,8 @@ class TestpaperForm {
 
       self.find('[data-role="score"]').rules('add', {
         min: 0,
-        max: 100,
-        digits: true
+        max: 1000,
+        es_score: true
       })
 
       if (self.find('[data-role="missScore"]').length > 0) {
@@ -179,7 +179,7 @@ class TestpaperForm {
           max: function () {
             return parseInt(self.find('[data-role="score"]').val());
           },
-          digits: true
+          es_score: true
         })
       }
     })

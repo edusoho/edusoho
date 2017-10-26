@@ -238,46 +238,27 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $site = $this->getSettingService()->get('course', array());
+        $site = $this->getSettingService()->get('live-course', array());
 
-        $oldFileId = empty($site['live_logo_file_id']) ? null : $site['live_logo_file_id'];
-        $site['live_logo_file_id'] = $fileId;
-        $site['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
-        $site['live_logo'] = ltrim($site['live_logo'], '/');
+        $oldFileId = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
+        $site['logo_file_id'] = $fileId;
+        $site['logo_path'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
+        $site['logo_path'] = ltrim($site['live_logo'], '/');
 
-        $this->getSettingService()->set('course', $site);
+        $this->getSettingService()->set('live-course', $site);
 
         if ($oldFileId) {
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', '更新直播LOGO', array('live_logo' => $site['live_logo']));
+        $this->getLogService()->info('system', 'update_settings', '更新直播LOGO', array('live_logo' => $site['logo_path']));
 
         $response = array(
-            'path' => $site['live_logo'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['live_logo']),
+            'path' => $site['logo_path'],
+            'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo_path']),
         );
 
         return $this->createJsonResponse($response);
-    }
-
-    public function liveLogoRemoveAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('course');
-        $setting['live_logo'] = '';
-
-        $fileId = empty($setting['live_logo_file_id']) ? null : $setting['live_logo_file_id'];
-        $setting['live_logo_file_id'] = '';
-
-        $this->getSettingService()->set('course', $setting);
-
-        if ($fileId) {
-            $this->getFileService()->deleteFile($fileId);
-        }
-
-        $this->getLogService()->info('system', 'update_settings', '移除直播LOGO');
-
-        return $this->createJsonResponse(true);
     }
 
     public function faviconUploadAction(Request $request)

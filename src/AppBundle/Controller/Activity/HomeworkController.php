@@ -76,8 +76,6 @@ class HomeworkController extends BaseActivityController implements ActivityActio
 
         $homeworkActivity = $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
 
-        $activity = array_merge($activity, $homeworkActivity);
-
         $questionItems = $this->getTestpaperService()->searchItems(
             array('testId' => $activity['mediaId']),
             array('id' => 'DESC'),
@@ -93,6 +91,7 @@ class HomeworkController extends BaseActivityController implements ActivityActio
             'questionItems' => $questionItems,
             'questions' => $questions,
             'courseSetId' => $course['courseSetId'],
+            'homework' => $homeworkActivity,
         ));
     }
 

@@ -1576,8 +1576,11 @@ class EduCloudController extends BaseController
             if (isset($overview['isBuy'])) {
                 $this->setFlashMessage('danger', 'site.illegal.request');
             }
-            $liveCourseSetting = $request->request->all();
+
+            $live = $request->request->all();
+            $liveCourseSetting = array_merge($liveCourseSetting, $live);
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+
             $courseSetting = $this->getSettingService()->get('course', array());
             $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
@@ -1585,7 +1588,11 @@ class EduCloudController extends BaseController
 
             $this->getLogService()->info('system', 'update_live_settings', '更新云直播设置', $setting);
 
-            return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
+            $this->setCloudLiveLogo($capacity['provider'], $client);
+
+            $redirectUrl = $capacity['provider'] == 'talkFun' ? 'admin_setting_cloud_edulive' : 'admin_cloud_edulive_overview';
+
+            return $this->redirect($this->generateUrl($redirectUrl));
         }
 
         if (empty($liveCourseSetting['live_course_enabled'])) {
@@ -1610,22 +1617,44 @@ class EduCloudController extends BaseController
         ));
     }
 
-    public function uploadLiveLogoAction(Request $request)
+    public function logoCropAction(Request $request, $type)
     {
-        if ($request->getMethod() == 'POST') {
-            $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-            $courseSetting = $this->getSettingService()->get('course', array());
-
-            $liveLogo = $request->request->all();
-            $liveCourseSetting = array_merge($liveCourseSetting, $liveLogo);
-            $this->getSettingService()->set('live-course', $liveCourseSetting);
-
-            $courseSetting = array_merge($courseSetting, $liveCourseSetting);
-            $this->getSettingService()->set('course', $courseSetting);
-            $this->setFlashMessage('success', 'site.save.success');
-
-            return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
+        if (!in_array($type, array('web', 'app'))) {
+            return $this->createMessageResponse('error', '参数不正确');
         }
+
+        if ($request->getMethod() === 'POST') {
+            $options = $request->request->all();
+
+            $image = $options['images'][0];
+            $file = $this->getFileService()->getFile($image['id']);
+
+            $liveSetting = $this->getSettingService()->get('live-course', array());
+            $url = $this->get('web.twig.extension')->getFurl($file['uri']);
+
+            $oldFileId = empty($liveSetting["{$type}LogoFileId"]) ? '' : $liveSetting["{$type}LogoFileId"];
+            if ($oldFileId) {
+                $this->getFileService()->deleteFile($oldFileId);
+            }
+
+            $liveSetting["{$type}LogoFileId"] = $file['id'];
+            $liveSetting["{$type}LogoPath"] = $url;
+
+            $this->getSettingService()->set('live-course', $liveSetting);
+
+            return $this->createJsonResponse(array('fileId' => $file['id'], 'url' => $url, 'type' => $type));
+        }
+
+        $fileId = $request->getSession()->get('fileId');
+
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 100, 100);
+
+        return $this->render('admin/edu-cloud/live/logo-crop-modal.html.twig', array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+            'type' => $type,
+        ));
     }
 
     public function consultSettingAction(Request $request)
@@ -1647,7 +1676,10 @@ class EduCloudController extends BaseController
             $this->setFlashMessage('danger', $cloudConsult['error']);
         }
 
+        unset($cloudConsult['error']);
         if ($cloudConsult['cloud_consult_is_buy'] == 0) {
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+
             return $this->renderConsultWithoutEnable($cloudConsult);
         }
 
@@ -1683,8 +1715,35 @@ class EduCloudController extends BaseController
         ));
     }
 
+    protected function setCloudLiveLogo($provider, $client)
+    {
+        $setting = $this->getSettingService()->get('live-course', array());
+
+        $isSetLogo = !empty($setting['webLogoPath']) || !empty($setting['appLogoPath']) || !empty($setting['logoUrl']);
+
+        if ($provider == 'talkFun' && $isSetLogo) {
+            $logoData = array(
+                'logoPcUrl' => empty($setting['webLogoPath']) ? '' : $setting['webLogoPath'],
+                'logoClientUrl' => empty($setting['appLogoPath']) ? '' : $setting['appLogoPath'],
+                'logoGotoUrl' => empty($setting['logoUrl']) ? 'http://www.talk-fun.com' : $setting['logoUrl'],
+            );
+            $result = $client->setLiveLogo($logoData);
+
+            if (isset($result['error'])) {
+                return $this->createMessageResponse('error', '设置直播logo出错');
+            }
+        }
+
+        return true;
+    }
+
     protected function getConsultService()
     {
         return $this->createService('EduCloud:MicroyanConsultService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 }

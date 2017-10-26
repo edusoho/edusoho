@@ -1,15 +1,11 @@
 class Upload {
   constructor(props) {
-    this.el = props.el;
-    this.parent = props.parent || document;
-    this.type = props.type || 'normal';
-
-    this.fileTypes = props.fileTypes || ['image/bmp', 'image/jpeg', 'image/png'];
-
-    this.fileSize = (props.fileSize || 2) * 1024 * 1024;
-    
-    this.success = props.success || this.success;
-    this.error = props.error || this.error;
+    Object.assign(this, {
+      parent: document,
+      type: 'normal',
+      fileTypes: ['image/bmp', 'image/jpeg', 'image/png'],
+      fileSize: 2 * 1024 * 1024,
+    }, props);
 
     this.init();
   }
@@ -73,9 +69,9 @@ class Upload {
 
     if ($target) {
       $target.css('background-image', `url(${src})`);
-      this.success && this.success(event, $target);
+      this.success(event, $target);
     } else {
-      this.success && this.success(event, src);
+      this.success(event, src);
     }
   }
 
@@ -107,7 +103,7 @@ class Upload {
         'height': scale.height,
       });
 
-      self.success && self.success(event, $image);
+      self.success(event, $image);
     };
 
     image.src = src;
