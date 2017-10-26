@@ -19,7 +19,7 @@ class WechatController extends PaymentController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
-        
+
         try {
             $biz = $this->getBiz();
 
