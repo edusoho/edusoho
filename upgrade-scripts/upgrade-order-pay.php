@@ -295,9 +295,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 `sn`,
                 'self' as `source`,
                 '' as `created_reason`,
-                round(`totalPrice`*100) as `price_amount`,
+                case when totalPrice<0 then 0 else round(`totalPrice`*100) end as `price_amount`,
                 `priceType` as `price_type`,
-                round((`amount` + `coinAmount`/coinRate)*100) as `pay_amount`,
+                case when (`amount` + `coinAmount`/coinRate) < 0 then 0 else round((`amount` + `coinAmount`/coinRate)*100) end as `pay_amount`,
                 `userId` as `user_id`,
                 '' as `callback`,
                 `sn` as `trade_sn`, -- trade_sn和sn一致
@@ -391,7 +391,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
-                round(`o`.`totalPrice`*100) as `price_amount`,
+                case when totalPrice<0 then 0 else round(`o`.`totalPrice`*100) end as `price_amount`,
                 case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else round(o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
                 `o`.`targetId` as `target_id`,
                 `o`.`targetType` as `target_type`,
