@@ -18,11 +18,11 @@ export default class Coin {
     let $this = $(event.currentTarget);
     let inputCoinNum = $this.val();
 
-    if (inputCoinNum > this.maxCoinInput) {
+    if (parseFloat(inputCoinNum) > parseFloat(this.maxCoinInput)) {
       inputCoinNum = this.maxCoinInput;
     }
 
-    if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
+    if (isNaN(inputCoinNum) || parseFloat(inputCoinNum) <= 0) {
       inputCoinNum = 0;
       $this.val('');
       this.removePasswordValidate();
