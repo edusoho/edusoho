@@ -11,9 +11,6 @@ use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Codeages\Biz\Pay\Exception\PayGetwayException;
-use ApiBundle\Api\Exception\ErrorCode;
 
 abstract class BaseTrade
 {
@@ -84,11 +81,7 @@ abstract class BaseTrade
         }
 
         $tradeFields = array_merge($tradeFields, $this->getCustomFields($params));
-        try {
-            $trade = $this->getPayService()->createTrade($tradeFields);
-        } catch (PayGetwayException $e) {
-            throw new BadRequestHttpException($e->getMessage(), $e, ErrorCode::BAD_REQUEST);
-        }
+        $trade = $this->getPayService()->createTrade($tradeFields);
 
         return $trade;
     }
