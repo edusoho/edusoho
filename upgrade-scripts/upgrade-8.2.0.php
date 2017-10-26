@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use Biz\Util\PluginUtil;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -18,7 +19,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $systemUser = $this->getConnection()->fetchAssoc("select * from user where type='system';");
-            $this->systemUserId = $systemUser['id'];
+            $this->systemUserId = empty($systemUser['id']) ? 0 : $systemUser['id'];
 
             $result = $this->updateScheme($index);
 
@@ -72,6 +73,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateBizOrders',
             'migrateBizOrderItems', // done
             'updateBizOrderItems',
+            'migrateAddCouponIndex',
             'migrateBizOrderItemDeductsByCoupon', // done
             'migrateBizOrderItemDeductsByDiscount', // done
             'migrateBizOrderRefund', // done
@@ -79,6 +81,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizOrderLog',
             'migrateBizPaymentTrade', // done
             'migrateBizPaymentTradeFromCashOrder', // done
+            'updateBizPaymentTrade',
             'updateBizPaymentTradePlatforms',
             'migrateBizSecurityAnswer', // done
             'migrateBizPayAccount',   // done
@@ -94,6 +97,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'stopCrmJobs',
             'updateCourseIsFree',
             'updateUserRoles',
+            'removeGroupSell',
+            'downloadPlugin',
+            'updatePlugin',
         );
 
         $funcNames = array();
@@ -130,9 +136,120 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger( 'warning', '升级'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger( 'warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install', 0);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger( 'info', '升级完毕');
+        return $page + 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            array(
+               'Discount',
+               1136,
+            ),
+            array(
+               'Coupon',
+                1140
+            ),
+            array(
+                'ChargeCoin',
+                1138,
+            ),
+            array(
+                'Vip', 
+                1135
+            ),
+            array(
+                'MoneyCard', 
+                1137,
+            ),
+            array(
+                'UserImporter',
+                1139
+            )            
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
+    }
+
     protected function migrateBizOrders($page)
     {
         $this->addMigrateId('biz_order');
+
+        $this->logger('info', "处理biz_orders数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
@@ -186,7 +303,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `sn` as `trade_sn`, -- trade_sn和sn一致
                 case when `status` in ('paid', 'refunding') then 'success' when `status` = 'cancelled' then 'closed' else `status` end as `status`,
                 `paidTime` as `pay_time`,
-                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay') then `payment` else 'none' end as `payment`,
+                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay', 'iosiap') then `payment` else 'none' end as `payment`,
                 `paidTime` as `finish_time`,
                 case when `status` = 'cancelled' then `updatedTime` else 0 end as `close_time`, -- TODO 当订单关闭状态时的时间, 从日志中取得
                 '' as `close_data`, -- TODO 当订单关闭状态时的数据, 从日志中取得
@@ -201,10 +318,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `updatedTime` as `updated_time`,
                 `id` as `migrate_id`
-            from orders where id not in (select migrate_id from `biz_order`) LIMIT 0, {$this->pageSize};
+            from orders where id not in (select migrate_id from `biz_order`) LIMIT 0, 50000;
         ");
-
-        $this->logger('info', "处理biz_orders数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -216,6 +331,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection->exec("update biz_order set source = 'outside' where migrate_id in (select id from orders where payment='outside');");
 
         $connection->exec("update biz_order set payment = 'lianlianpay' where payment = 'llpay';");
+        $connection->exec("update biz_order set payment = 'iap' where payment = 'iosiap';");
         $connection->exec("update biz_order set payment = 'wechat' where payment = 'wxpay';");
 
         $this->logger('info', "更新处理biz_orders数据，当前页码{$page}");
@@ -223,9 +339,12 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    // TODO LEFT JOIN
     protected function migrateBizOrderItems($page)
     {
         $this->addMigrateId('biz_order_item');
+
+        $this->logger('info', "处理biz_order_item数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
@@ -286,15 +405,12 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`createdTime` as `created_time`,
                 `o`.`updatedTime` as `updated_time`,
                 `o`.`id` as `migrate_id`
-            from orders o left join order_refund re on o.refundId = re.id where `o`.`id` not in (select migrate_id from `biz_order_item`) LIMIT 0, {$this->pageSize};
+            from orders o left join order_refund re on o.refundId = re.id where `o`.`id` not in (select migrate_id from `biz_order_item`) LIMIT 0, 50000;
         ");
-
-        $this->logger('info', "处理biz_order_item数据，当前页码{$page}");
 
         return $page + 1;
     }
 
-    // TODO 处理时间太长
     protected function updateBizOrderItems($page)
     {
         $connection = $this->getConnection();
@@ -312,7 +428,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $data = json_decode($vipOrder['data'], true);
             $buyType = empty($data['buyType']) ? 'new' : $data['buyType'];
             $buyType = json_encode(array('buyType' => $buyType));
-            $duration = empty($data['duration']) ? 0 : $data['duration'];
+            $duration = empty($data['duration']) || !is_numeric($data['duration']) ? 0 : $data['duration'];
+            
             $unit = empty($data['unitType']) ? 0 : $data['unitType'];
             if ($duration<0) {
                 $duration = abs($duration);
@@ -325,15 +442,30 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page + 1;
     }
 
-    // TODO 处理时间过长
+    protected function migrateAddCouponIndex($page)
+    {
+        $this->logger('info', "添加coupon的索引，当前页码{$page}");
+
+        $connection = $this->getConnection();
+
+        if (!$this->isIndexExist('coupon', 'code', 'code')) {
+            $connection->exec("ALTER TABLE `coupon` ADD INDEX `code` (`code`);");
+        }
+
+        return 1;
+    }
+
     protected function migrateBizOrderItemDeductsByCoupon($page)
     {
         $this->addMigrateId('biz_order_item_deduct');
 
+
+        $this->logger('info', "处理biz_order_item_deduct的优惠码数据，当前页码{$page}");
+
         $connection = $this->getConnection();
 
         // 有可能copon批次会删除，导致老数据不会迁移
-        $count = $connection->fetchColumn("SELECT COUNT(o.id) FROM orders o left join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id NOT IN (SELECT migrate_id FROM `biz_order_item_deduct` WHERE `deduct_type` = 'coupon');");
+        $count = $connection->fetchColumn("SELECT COUNT(o.id) FROM orders o where o.coupon <> '' and o.coupon is not null and o.id NOT IN (SELECT migrate_id FROM `biz_order_item_deduct` WHERE `deduct_type` = 'coupon');");
 
         if (empty($count)) {
             return 1;
@@ -360,7 +492,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 '' as `detail`,
                 o.`id` as `item_id`,
                 'coupon' as `deduct_type`,
-                c.`id` as `deduct_id`,               
+                case when c.id is null then 0 else c.id end as `deduct_id`,               
                 round(o.`couponDiscount`*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 o.`userId` as `user_id`,
@@ -369,18 +501,17 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`createdTime` as `created_time`,
                 o.`updatedTime` as `updated_time`,
                 o.`id` as `migrate_id`
-            from orders o inner join coupon c on o.coupon = c.code where o.coupon is not null and c.id is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon') LIMIT 0, {$this->pageSize};
+            from orders o left join coupon c on o.coupon = c.code where o.coupon <> '' and o.coupon is not null and o.id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'coupon') LIMIT 0, {$this->pageSize};
         ");
-
-        $this->logger('info', "处理biz_order_item_deduct的优惠码数据，当前页码{$page}");
 
         return $page + 1;
     }
 
-    // TODO 处理时间过长
     protected function migrateBizOrderItemDeductsByDiscount($page)
     {
         $this->addMigrateId('biz_order_item_deduct');
+
+        $this->logger('info', "处理biz_order_item_deduct的打折数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
@@ -423,14 +554,15 @@ class EduSohoUpgrade extends AbstractUpdater
             from orders o where discountId > 0 and id not in (select migrate_id from `biz_order_item_deduct` where `deduct_type` = 'discount') LIMIT 0, {$this->pageSize};
         ");
 
-        $this->logger('info', "处理biz_order_item_deduct的打折数据，当前页码{$page}");
-
         return $page + 1;
     }
 
+    // TODO LEFT JOIN
     protected function migrateBizOrderRefund($page)
     {
         $this->addMigrateId('biz_order_refund');
+
+        $this->logger('info', "处理biz_order_refund的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
@@ -481,10 +613,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `r`.`createdTime` as `created_time`,
                 `r`.`updatedTime` as `updated_time`,
                 `r`.`id` as `migrate_id`
-            from `order_refund` `r` left join `orders` `o` on `r`.`orderId`=`o`.`id` where r.`id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, {$this->pageSize}
+            from `order_refund` `r` left join `orders` `o` on `r`.`orderId`=`o`.`id` where r.`id` not in (select migrate_id from `biz_order_refund`) LIMIT 0, 5000
         ");
-
-        $this->logger('info', "处理biz_order_refund的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -492,6 +622,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizOrderRefundItems($page)
     {
         $this->addMigrateId('biz_order_item_refund');
+
+        $this->logger('info', "处理biz_order_item_refund的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
@@ -532,33 +664,68 @@ class EduSohoUpgrade extends AbstractUpdater
                 `targetId` as `target_id`,
                 `targetType` as `target_type`,
                 `id` as `migrate_id`
-            from `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`) LIMIT 0, {$this->pageSize}
+            from `order_refund` where `id` not in (select migrate_id from `biz_order_item_refund`) LIMIT 0, 5000
         ");
-
-        $this->logger('info', "处理biz_order_item_refund的数据，当前页码{$page}");
 
         return $page + 1;
     }
 
     protected function migrateBizOrderLog($page)
     {
-        // TODO
-        return 1;
-    }
+        $this->addMigrateId('biz_order_log');
 
-    protected function migrateBizPaymentTrade($page)
-    {
-        $this->addMigrateId('biz_payment_trade');
+        $this->logger('info', "处理biz_order_log的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase')");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `order_log` where `id` not in (select migrate_id from `biz_order_log`)");
         if (empty($count)) {
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_payment_trade` (
+            INSERT into `biz_order_log` (
+                `order_id`,
+                `status`,
+                `user_id`,
+                `deal_data`,
+                `order_refund_id`,
+                `ip`,
+                `created_time`,
+                `updated_time`,
+                `migrate_id`
+            )
+            SELECT
+                `orderId` as `order_id`,
+                case when `type` = 'cancelled' then 'order.closed' when `type` = 'created' then 'order.created' when `type` = 'pay_success' then 'order.success' when `type` = 'refund_apply' then 'order_refund.auditing' when `type` = 'refund_cancel' then 'order_refund.cancel' when `type` = 'refund_failed' then 'order_refund.refused' when `type` = 'refund_success' then 'order.refunded' else `type` end as `status`,
+                `userId` as `user_id`,
+                `data` as `deal_data`,
+                '0' as `order_refund_id`,
+                `ip`,
+                `createdTime` as `created_time`,
+                `createdTime` as `updated_time`,
+                `id` as `migrate_id`
+            FROM order_log WHERE id NOT IN (SELECT migrate_id FROM biz_order_log) LIMIT 0, 50000
+        ");
+
+        return $page+1;
+    }
+
+    protected function migrateBizPaymentTrade($page)
+    {
+        $this->addMigrateId('biz_pay_trade');
+
+        $this->logger('info', "处理biz_pay_trade的数据，当前页码{$page}");
+
+        $connection = $this->getConnection();
+
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `orders` where `id` not in (select migrate_id from `biz_pay_trade` where `type` = 'purchase')");
+        if (empty($count)) {
+            return 1;
+        }
+
+        $connection->exec("
+            INSERT into `biz_pay_trade` (
                 `id`,
                 `title`,
                 `trade_sn`,
@@ -613,27 +780,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`updatedTime` as `updated_time`,
                 o.`createdTime` as `created_time`,
                 o.`id` as `migrate_id`
-            from `orders` o left join `order_refund` r on o.refundId=r.id where o.`id` not in (select migrate_id from `biz_payment_trade` where `type` = 'purchase') LIMIT 0, {$this->pageSize}
+            from `orders` o left join `order_refund` r on o.refundId=r.id where o.`id` not in (select migrate_id from `biz_pay_trade` where `type` = 'purchase') LIMIT 0, 30000
         ");
-
-        $this->logger('info', "处理biz_payment_trade的数据，当前页码{$page}");
 
         return $page + 1;
     }
 
     protected function migrateBizPaymentTradeFromCashOrder($page)
     {
-        $this->addMigrateId('biz_payment_trade');
+        $this->addMigrateId('biz_pay_trade');
+
+        $this->logger('info', "处理biz_pay_trade的现金订单数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge')");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `cash_orders` where `id` not in (select migrate_id from `biz_pay_trade` where `type` = 'recharge')");
         if (empty($count)) {
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_payment_trade` (
+            INSERT into `biz_pay_trade` (
                 `title`,
                 `trade_sn`,
                 `order_sn`,
@@ -664,7 +831,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `title`,
                 `sn` as `trade_sn`,
                 '' as `order_sn`,
-                `payment` as `platform`,
+                case when `payment` in ('alipay', 'coin', 'heepay', 'llpay', 'none', 'quickpay', 'wxpay', 'iosiap') then `payment` else 'none' end as `payment`,
                 '' as `platform_sn`,
                 `status` as `status`,
                 'money' as `price_type`,
@@ -686,26 +853,39 @@ class EduSohoUpgrade extends AbstractUpdater
                 `paidTime` as `updated_time`,
                 `createdTime` as `created_time`,
                 `id` as `migrate_id`
-            from `cash_orders` where `id` not in (select migrate_id from `biz_payment_trade` where `type` = 'recharge') LIMIT 0, {$this->pageSize}
+            from `cash_orders` where `id` not in (select migrate_id from `biz_pay_trade` where `type` = 'recharge') LIMIT 0, {$this->pageSize}
         ");
-
-        $this->logger('info', "处理biz_payment_trade的现金订单数据，当前页码{$page}");
 
         return $page + 1;
     }
 
+    protected function updateBizPaymentTrade($page)
+    {
+        $connection = $this->getConnection();
+
+        $connection->exec("update biz_pay_trade set platform = 'lianlianpay' where platform = 'llpay';");
+        $connection->exec("update biz_pay_trade set platform = 'iap' where platform = 'iosiap';");
+        $connection->exec("update biz_pay_trade set platform = 'wechat' where platform = 'wxpay';");
+
+        $this->logger('info', "更新处理biz_pay_trade的platform数据，当前页码{$page}");
+
+        return 1;
+    }
+
     protected function migrateBizSecurityAnswer($page)
     {
-        $this->addMigrateId('biz_security_answer');
+        $this->addMigrateId('biz_pay_security_answer');
+
+        $this->logger('info', "处理biz_pay_security_answer的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
-        $count = $connection->fetchColumn("SELECT COUNT(id) from user_secure_question where id not in (select migrate_id from biz_security_answer)");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from user_secure_question where id not in (select migrate_id from biz_pay_security_answer)");
         if (empty($count)) {
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_security_answer` (
+            INSERT into `biz_pay_security_answer` (
                 `id`,
                 `user_id`,
                 `question_key`,
@@ -724,10 +904,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `createdTime` as `created_time`,
                 `createdTime` as `updated_time`,
                 `id` as `migrate_id`
-            from user_secure_question where id not in (select migrate_id from biz_security_answer) LIMIT 0, {$this->pageSize}
+            from user_secure_question where id not in (select migrate_id from biz_pay_security_answer) LIMIT 0, {$this->pageSize}
         ");
-
-        $this->logger('info', "处理biz_security_answer的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -736,9 +914,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->addMigrateId('biz_pay_account');
 
+        $this->logger('info', "处理biz_pay_account的数据，当前页码{$page}");
+
         $connection = $this->getConnection();
 
-        $count = $connection->fetchColumn("SELECT COUNT(id) from `user` where `id` not in (select `migrate_id` from `biz_pay_account`)");
+        $count = $connection->fetchColumn("SELECT COUNT(id) from `user` where payPassword<>'' and `id` not in (select `migrate_id` from `biz_pay_account`)");
         if (empty($count)) {
             return 1;
         }
@@ -761,23 +941,23 @@ class EduSohoUpgrade extends AbstractUpdater
               `createdTime`,
               `updatedTime`,
               `id`
-            from `user` u where u.`id` not in (select `migrate_id` from `biz_pay_account`) LIMIT 0, {$this->pageSize}
+            from `user` u where payPassword<>'' and u.`id` not in (select `migrate_id` from `biz_pay_account`) LIMIT 0, 10000
         ");
-
-        $this->logger('info', "处理biz_pay_account的数据，当前页码{$page}");
 
         return $page + 1;
     }
 
     protected function migrateBizUserBalance($page)
     {
-        $this->addMigrateId('biz_user_balance');
+        $this->addMigrateId('biz_pay_user_balance');
+
+        $this->logger('info', "处理biz_pay_user_balance的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
-        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_user_balance`)");
+        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_pay_user_balance`)");
 
         if (empty($count)) {
-            $sql = "select * from `biz_user_balance` where user_id = 0;";
+            $sql = "select * from `biz_pay_user_balance` where user_id = 0;";
             $result = $this->getConnection()->fetchAssoc($sql);
             if (empty($result)) {
                 $currentTime = time();
@@ -785,14 +965,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 $total = $connection->fetchColumn('select sum(cash) from cash_account');
                 $total = 0 - $total*100;
 
-                $connection->exec("insert into `biz_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
+                $connection->exec("insert into `biz_pay_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
             }
 
             return 1;
         }
 
         $connection->exec("
-            INSERT into `biz_user_balance` (
+            INSERT into `biz_pay_user_balance` (
               `id`,
               `user_id`,
               `amount`,
@@ -807,10 +987,8 @@ class EduSohoUpgrade extends AbstractUpdater
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
-            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_user_balance`) LIMIT 0, {$this->pageSize}
+            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_pay_user_balance`) LIMIT 0, 10000
         ");
-
-        $this->logger('info', "处理biz_user_balance的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -818,8 +996,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_user_balance ub set ub.purchase_amount = (select sum(amount) from biz_user_cashflow uc where ub.user_id=uc.user_id and uc.amount_type='coin' and uc.type='outflow') where ub.user_id in (select DISTINCT user_id from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='outflow');");
-        $connection->exec("update biz_user_balance ub set ub.recharge_amount = (select sum(amount) from biz_user_cashflow uc where ub.user_id=uc.user_id and uc.amount_type='coin' and uc.type='inflow') where ub.user_id in (select DISTINCT user_id from biz_user_cashflow uc where uc.amount_type='coin' and uc.type='inflow');");
+        $connection->exec("update biz_pay_user_balance ub, (select user_id, sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
+        $connection->exec("update biz_pay_user_balance ub, (select user_id, sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
+        $connection->exec("update biz_pay_user_balance ub set cash_amount = (select sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='money' and uc.type='outflow') where ub.user_id = 0;");
 
         return 1;
     }
@@ -839,9 +1018,12 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->migrateBizUserCashflow($page, 'site', 'money');
     }
 
+    // TODO LEFT JOIN
     protected function migrateBizUserCashflow($page, $userIdType, $amountType = '')
     {
-        $this->addMigrateId('biz_user_cashflow');
+        $this->addMigrateId('biz_pay_cashflow');
+
+        $this->logger('info', "处理{$userIdType}的biz_pay_cashflow的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
 
@@ -850,7 +1032,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $migrateType = "uf.`type` as `type`,";
             $migrateSn = "uf.`sn` as `sn`,";
 
-            $whereSql = "uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id<>0) LIMIT 0, {$this->pageSize}";
+            $whereSql = "uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_pay_cashflow` where user_id<>0)";
         }
 
         if ($userIdType=='site') {
@@ -867,7 +1049,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $whereSql = "uf.`cashType`='coin' and ";
             }
 
-            $whereSql = "{$whereSql} uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_user_cashflow` where user_id=0) LIMIT 0, {$this->pageSize}";
+            $whereSql = "{$whereSql} uf.amount>0 and uf.`id` not in (select `migrate_id` from `biz_pay_cashflow` where user_id=0)";
 
         }
 
@@ -877,7 +1059,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $sql = "
-            insert into `biz_user_cashflow` (
+            insert into `biz_pay_cashflow` (
                 `title`,
                 `sn`,
                 `parent_sn`,
@@ -912,12 +1094,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 uf.`createdTime` as `created_time`,
                 case when uf.`category` = 'charge' then 'recharge' else 'purchase' end  as `action`,
                 uf.`id` as `migrate_id`
-            from `cash_flow` uf left join orders o on uf.orderSn = o.sn where {$whereSql}
+            from `cash_flow` uf left join orders o on uf.orderSn = o.sn where {$whereSql} LIMIT 0, 10000
         ";
 
         $connection->exec($sql);
-
-        $this->logger('info', "处理{$userIdType}的biz_user_cashflow的数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -925,20 +1105,20 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateBizPaymentTradePlatforms($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_payment_trade set platform=(select payment from biz_order where sn=order_sn) where type='purchase';");
+        $connection->exec("update biz_pay_trade set platform=(select payment from biz_order where sn=order_sn) where type='purchase';");
 
-        $connection->exec("update biz_payment_trade set platform = 'lianlianpay' where platform = 'llpay' and type='recharge';");
-        $connection->exec("update biz_payment_trade set platform = 'wechat' where platform = 'wxpay' and type='recharge';");
+        $connection->exec("update biz_pay_trade set platform = 'lianlianpay' where platform = 'llpay' and type='recharge';");
+        $connection->exec("update biz_pay_trade set platform = 'wechat' where platform = 'wxpay' and type='recharge';");
         return 1;
     }
 
     protected function migrateBizUserCashflowPlatform($page)
     {
         $connection = $this->getConnection();
-        $sql = "update `biz_user_cashflow` set platform='none' where amount_type='coin';";
+        $sql = "update `biz_pay_cashflow` set platform='none' where amount_type='coin';";
         $connection->exec($sql);
 
-        $sql = "update `biz_user_cashflow` uc set uc.platform=(select platform from biz_payment_trade where trade_sn=uc.trade_sn) where amount_type='money' and trade_sn in (select trade_sn from biz_payment_trade where trade_sn=uc.trade_sn);";
+        $sql = "update `biz_pay_cashflow` uc set uc.platform=(select platform from biz_pay_trade where trade_sn=uc.trade_sn) where amount_type='money' and trade_sn in (select trade_sn from biz_pay_trade where trade_sn=uc.trade_sn);";
         $connection->exec($sql);
         return 1;
     }
@@ -966,7 +1146,7 @@ class EduSohoUpgrade extends AbstractUpdater
             ) VALUES (
                   'Order_CloseOrdersJob',
                   '20 * * * *',
-                  'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseOrdersJob',
+                  'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseExpiredOrdersJob',
                   '',
                   '100',
                   '0',
@@ -988,6 +1168,12 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateJoinMemberOperationRecord($page)
     {
         $connection = $this->getConnection();
+
+        $this->logger('info', "处理member_operation_record的加入数据，当前页码{$page}");
+
+        if (!$this->isIndexExist('member_operation_record', 'operate_type', 'operate_type')) {
+            $connection->exec("ALTER TABLE `member_operation_record` ADD INDEX operate_type (operate_type);");
+        }
 
         $count = $connection->fetchColumn("SELECT COUNT(id) FROM `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join')");
         if (empty($count)) {
@@ -1019,17 +1205,15 @@ class EduSohoUpgrade extends AbstractUpdater
                 `targetType` as `target_type`,
                 'join' as `operate_type`,
                 `createdTime` as `operate_time`,
-                0 as `operator_id`,
+                `userId` as `operator_id`,
                 '' as `data`,
                 `userId` as `user_id`,
                 `id` as `order_id`,
                 0 as `refund_id`,
-                '' as `reason`,
+                `note` as `reason`,
                 `createdTime` as `created_time`
-            from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join') LIMIT 0, {$this->pageSize}
+            from `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join') LIMIT 0, 50000
         "); 
-
-        $this->logger('info', "处理member_operation_record的加入数据，当前页码{$page}");
 
         return $page + 1;       
     }
@@ -1038,6 +1222,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
+        $this->logger('info', "处理member_operation_record的退出数据，当前页码{$page}");
+        
         $count = $connection->fetchColumn("SELECT COUNT(id) from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit')");
 
         if (empty($count)) {
@@ -1079,10 +1265,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `refund_id`,
                 `reasonNote` as `reason`,
                 `createdTime` as `created_time`
-            from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, {$this->pageSize};
+            from `order_refund` where status = 'success' and `orderId` not in (select `order_id` from `member_operation_record` where `operate_type` = 'exit') LIMIT 0, 50000;
         ");
-
-        $this->logger('info', "处理member_operation_record的退出数据，当前页码{$page}");
 
         return $page + 1;
     }
@@ -1125,260 +1309,103 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        if (!$this->isTableExist('biz_order')) {
-            $connection->exec("
-                CREATE TABLE `biz_order` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '订单号',
-                  `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、营销平台、第三方系统',
-                  `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
-                  `price_amount` INT(12) unsigned NOT NULL COMMENT '订单总金额',
-                  `price_type` varchar(32) not null  COMMENT '标价类型，现金支付or虚拟币；money, coin',
-                  `pay_amount` INT(10) unsigned NOT NULL COMMENT '应付金额',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
-                  `callback` TEXT COMMENT '商品中心的异步回调信息',
-                  `trade_sn` VARCHAR(64) COMMENT '支付的交易号',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '订单状态',
-                  `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
-                  `payment` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '支付类型',
-                  `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间，交易成功后不得退款',
-                  `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
-                  `close_data` TEXT COMMENT '交易关闭描述',
-                  `close_user_id` INT(10) unsigned DEFAULT '0' COMMENT '关闭交易的用户',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `created_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的创建者',
-                  `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
-                  `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
-                  `paid_cash_amount` int(10) unsigned NOT NULL DEFAULT '0',
-                  `paid_coin_amount` int(10) unsigned NOT NULL DEFAULT '0',
-                  `refund_deadline` int(10) unsigned NOT NULL DEFAULT '0',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-        if (!$this->isTableExist('biz_order_item')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_item` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '编号',
-                  `title` VARCHAR(1024) NOT NULL COMMENT '商品名称',
-                  `detail` TEXT COMMENT '商品描述',
-                  `num` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '数量',
-                  `unit` varchar(16) COMMENT '单位',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
-                  `refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '最新退款id',
-                  `refund_status` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '退款状态',
-                  `price_amount` INT(10) unsigned NOT NULL COMMENT '商品价格',
-                  `pay_amount` INT(10) unsigned NOT NULL COMMENT '商品应付金额',
-                  `target_id` INT(10) unsigned NOT NULL COMMENT '商品id',
-                  `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
-                  `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
-                  `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间，交易成功后不得退款',
-                  `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
-                  `snapshot` text COMMENT '商品快照',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_cashflow` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '标题',
+              `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
+              `parent_sn` VARCHAR(64) COMMENT '本次交易的上一个账单的流水号',
+              `user_id` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
+              `user_balance` BIGINT(16) NOT NULL DEFAULT '0' COMMENT '账单生成后的对应账户的余额，若amount_type为coin，对应的是虚拟币账户，amount_type为money，对应的是现金庄户余额',
+              `buyer_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家',
+              `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
+              `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge',
+              `amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '金额',
+              `amount_type` VARCHAR(32) NOT NULL COMMENT 'ammount的类型：coin, money',
+              `currency` VARCHAR(32) NOT NULL COMMENT '支付的货币: coin, CNY...',
+              `order_sn` varchar(64) NOT NULL COMMENT '订单号',
+              `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
+              `platform` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT '支付平台：none, alipay, wxpay...',
+              `created_time` int(10) unsigned NOT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帐目流水';
+        ");
 
-        if (!$this->isTableExist('biz_order_item_deduct')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_item_deduct` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `detail` TEXT COMMENT '描述',
-                  `item_id` INT(10) unsigned NOT NULL COMMENT '商品id',
-                  `deduct_type` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '促销类型',
-                  `deduct_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '对应的促销活动id',
-                  `deduct_amount` INT(10) unsigned NOT NULL COMMENT '扣除的价格',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `snapshot` text COMMENT '促销快照',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_user_balance` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` int(10) unsigned NOT NULL COMMENT '用户',
+              `amount` BIGINT(16) NOT NULL DEFAULT '0' COMMENT '账户的虚拟币余额',
+              `cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '现金余额',
+              `locked_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额',
+              `recharge_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额',
+              `purchase_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额',
+              `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+              `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`user_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isTableExist('biz_order_refund')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_refund` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '退款订单编号',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
-                  `reason` TEXT COMMENT '退款的理由',
-                  `amount` INT(10) unsigned NOT NULL COMMENT '涉及金额',
-                  `currency` VARCHAR(32) NOT NULL DEFAULT 'money' COMMENT '货币类型: coin, money',
-                  `deal_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理时间',
-                  `deal_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理人',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
-                  `deal_reason` TEXT COMMENT '处理理由',
-                  `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
-                  `refund_cash_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款的现金金额',
-                  `refund_coin_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款的虚拟币金额',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_trade` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` varchar(1024) NOT NULL COMMENT '标题',
+              `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
+              `order_sn` varchar(64) NOT NULL COMMENT '客户订单号',
+              `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '交易状态',
+              `amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '订单的需支付金额',
+              `price_type` varchar(32) NOT NULL COMMENT '标价类型，现金支付or虚拟币；money, coin',
+              `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的货币类型',
+              `coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '虚拟币支付金额',
+              `cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '现金支付金额',
+              `rate` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '虚拟币和现金的汇率',
+              `type` varchar(32) NOT NULL DEFAULT 'purchase' COMMENT '交易类型：purchase，recharge，refund',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '买家id',
+              `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
+              `apply_refund_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款时间',
+              `refund_success_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功退款时间',
+              `notify_data` text,
+              `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
+              `platform_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',
+              `platform_type` text COMMENT '在第三方系统中的支付方式',
+              `platform_created_result` text,
+              `platform_created_params` text COMMENT '在第三方系统创建支付订单时的参数信息',
+              `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+              `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`trade_sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isTableExist('biz_order_item_refund')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_item_refund` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_refund_id` INT(10) unsigned NOT NULL COMMENT '退款订单id',
-                  `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
-                  `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
-                  `amount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '涉及金额',
-                  `coin_amount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '涉及虚拟币金额',
-                  `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
-                  `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_account` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
+              `password` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '密码',
+              `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`user_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isTableExist('biz_order_log')) {
-            $connection->exec("
-                CREATE TABLE `biz_order_log` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `order_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '订单id',
-                  `status` VARCHAR(32) NOT NULL COMMENT '订单状态',
-                  `user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户',
-                  `deal_data` TEXT COMMENT '处理数据',
-                  `order_refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '退款id',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_user_cashflow')) {
-            $connection->exec("
-                CREATE TABLE `biz_user_cashflow` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '流水名称',
-                  `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
-                  `parent_sn` VARCHAR(64) COMMENT '本次交易的上一个账单的流水号',
-                  `user_id` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
-                  `buyer_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家',
-                  `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
-                  `amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '金额',
-                  `currency` VARCHAR(32) NOT NULL COMMENT '支付的货币: coin, CNY...',
-                  `user_balance` int(10) NOT NULL DEFAULT '0' COMMENT '账单生成后的对应账户的余额，若amount_type为coin，对应的是虚拟币账户，amount_type为money，对应的是现金庄户余额',
-                  `order_sn` varchar(64) NOT NULL COMMENT '订单号',
-                  `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
-                  `platform` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT '支付平台：none, alipay, wxpay...',
-                  `amount_type` VARCHAR(32) NOT NULL COMMENT 'ammount的类型：coin, money, locked_amount',
-                  `created_time` int(10) unsigned NOT NULL,
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帐目流水';
-            ");
-        }
-
-        if (!$this->isTableExist('biz_user_balance')) {
-            $connection->exec("
-                CREATE TABLE `biz_user_balance` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` int(10) unsigned NOT NULL COMMENT '用户',
-                  `amount` int(10) NOT NULL DEFAULT '0' COMMENT '账户余额',
-                  `cash_amount` int(10) NOT NULL DEFAULT '0' COMMENT '现金余额',
-                  `locked_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额',
-                  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`user_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_payment_trade')) {
-            $connection->exec("
-                CREATE TABLE `biz_payment_trade` (
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title` varchar(1024) NOT NULL COMMENT '标题',
-                  `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
-                  `order_sn` varchar(64) NOT NULL COMMENT '客户订单号',
-                  `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
-                  `platform_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',
-                  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '交易状态',
-                  `price_type` varchar(32) NOT NULL COMMENT '标价类型，现金支付or虚拟币；money, coin',
-                  `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的货币类型',
-                  `amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的需支付金额',
-                  `coin_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '虚拟币支付金额',
-                  `cash_amount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '现金支付金额',
-                  `rate` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '虚拟币和现金的汇率',
-                  `type` varchar(32) NOT NULL DEFAULT 'purchase' COMMENT '交易类型：purchase，recharge，refund',
-                  `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
-                  `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '买家id',
-                  `notify_data` text,
-                  `platform_created_result` text,
-                  `apply_refund_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款时间',
-                  `refund_success_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功退款时间',
-                  `platform_created_params` text COMMENT '在第三方系统创建支付订单时的参数信息',
-                  `platform_type` text COMMENT '在第三方系统中的支付方式',
-                  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`trade_sn`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_pay_account')) {
-            $connection->exec("
-                CREATE TABLE `biz_pay_account` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
-                  `password` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '密码',
-                  `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE(`user_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
-
-        if (!$this->isTableExist('biz_security_answer')) {
-            $connection->exec("
-                CREATE TABLE `biz_security_answer` (
-                  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
-                  `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
-                  `answer` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
-                  `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
-                  PRIMARY KEY (`id`),
-                  UNIQUE (`user_id`, `question_key`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            ");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_pay_security_answer` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
+              `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
+              `answer` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
+              `salt` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE (`user_id`, `question_key`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
         if (!$this->isTableExist('member_operation_record')) {
             $connection->exec("
@@ -1403,119 +1430,159 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isFieldExist('biz_order', 'expired_refund_days')) {
-            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数'");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_order` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
+              `sn` VARCHAR(64) NOT NULL COMMENT '订单号',
+              `price_amount` BIGINT(16) unsigned NOT NULL COMMENT '订单总价',
+              `price_type` varchar(32) not null  COMMENT '订单总价的类型，现金支付or虚拟币；money, coin',
+              `pay_amount` BIGINT(16) unsigned NOT NULL COMMENT '应付金额',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '订单状态',
+              `trade_sn` VARCHAR(64) COMMENT '支付交易号，支付成功后记录',
+              `paid_cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '付款的现金金额，支付成功后记录',
+              `paid_coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '付款的虚拟币金额，支付成功后记录',
+              `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间，支付成功后记录',
+              `payment` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '支付类型，支付成功后记录',
+              `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间',
+              `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+              `close_data` TEXT COMMENT '交易关闭描述',
+              `close_user_id` INT(10) unsigned DEFAULT '0' COMMENT '关闭交易的用户',
+              `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数',
+              `refund_deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款截止日期',
+              `success_data` text COMMENT '交易成功的扩展信息字段',
+              `fail_data` text COMMENT '交易失败的扩展信息字段',
+              `created_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的创建者',
+              `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
+              `created_reason` TEXT COMMENT '订单创建原因, 例如：导入，购买等',
+              `callback` TEXT COMMENT '商品中心的异步回调信息',
+              `device` varchar(32) COMMENT '下单设备（pc、mobile、app）',
+              `source` VARCHAR(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、微营销、第三方系统',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-        if (!$this->isFieldExist('biz_order', 'success_data')) {
-            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `success_data` text COMMENT '当订单改变为success时的数据记录';");
-        }
+            CREATE TABLE IF NOT EXISTS `biz_order_item` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL COMMENT '商品名称',
+              `detail` TEXT COMMENT '商品描述',
+              `sn` VARCHAR(64) NOT NULL COMMENT '编号',
+              `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+              `num` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '数量',
+              `unit` varchar(16) COMMENT '单位',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
+              `refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '最新退款id',
+              `refund_status` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '退款状态',
+              `price_amount` BIGINT(16) unsigned NOT NULL COMMENT '商品总价格',
+              `pay_amount` BIGINT(16) unsigned NOT NULL COMMENT '商品应付金额',
+              `target_id` INT(10) unsigned NOT NULL COMMENT '商品id',
+              `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
+              `pay_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
+              `finish_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间',
+              `close_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `snapshot` text COMMENT '商品快照',
+              `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-        if (!$this->isFieldExist('biz_order', 'fail_data')) {
-            $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `fail_data` text COMMENT '当订单改变为fail时的数据记录'");
-        }
+            CREATE TABLE IF NOT EXISTS `biz_order_item_deduct` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+              `detail` TEXT COMMENT '描述',
+              `item_id` INT(10) unsigned NOT NULL COMMENT '商品id',
+              `deduct_type` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '促销类型',
+              `deduct_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '对应的促销活动id',
+              `deduct_amount` BIGINT(16) unsigned NOT NULL COMMENT '扣除的价格',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '购买者',
+              `seller_id` INT(10) unsigned DEFAULT '0' COMMENT '卖家id',
+              `snapshot` text COMMENT '促销快照',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-        if (!$this->isFieldExist('biz_order_item_refund', 'target_id')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` ADD COLUMN `target_id` INT(10) unsigned NOT NULL COMMENT '商品id'");
-        }
+            CREATE TABLE IF NOT EXISTS `biz_order_refund` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '退款单标题',
+              `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+              `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
+              `sn` VARCHAR(64) NOT NULL COMMENT '退款订单编号',
+              `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
+              `reason` TEXT COMMENT '退款的理由',
+              `amount` BIGINT(16) unsigned NOT NULL COMMENT '退款总金额',
+              `currency` VARCHAR(32) NOT NULL DEFAULT 'money' COMMENT '货币类型: coin, money',
+              `deal_time` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理时间',
+              `deal_user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理人',
+              `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+              `deal_reason` TEXT COMMENT '处理理由',
+              `refund_cash_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款的现金金额',
+              `refund_coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款的虚拟币金额',
+              `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`),
+              UNIQUE(`sn`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isFieldExist('biz_order_item_refund', 'target_type')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` ADD COLUMN `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型'");
-        }
+        $connection->exec("
+          CREATE TABLE IF NOT EXISTS `biz_order_item_refund` (
+            `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+            `order_refund_id` INT(10) unsigned NOT NULL COMMENT '退款订单id',
+            `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
+            `order_item_id` INT(10) unsigned NOT NULL COMMENT '订单中的商品的id',
+            `target_id` INT(10) unsigned NOT NULL COMMENT '商品id',
+            `target_type` VARCHAR(32) NOT NULL COMMENT '商品类型',
+            `user_id` INT(10) unsigned NOT NULL COMMENT '退款人',
+            `amount` BIGINT(16) unsigned NOT NULL DEFAULT 0 COMMENT '涉及金额',
+            `coin_amount` BIGINT(16) unsigned NOT NULL DEFAULT 0 COMMENT '涉及虚拟币金额',
+            `status` VARCHAR(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+            `created_user_id` INT(10) unsigned NOT NULL COMMENT '申请者',
+            `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            PRIMARY KEY (`id`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if ($this->isFieldExist('biz_order', 'price_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `price_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '订单总价';");
-        }
+        $connection->exec("
+            CREATE TABLE IF NOT EXISTS `biz_order_log` (
+              `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+              `order_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '订单id',
+              `status` VARCHAR(32) NOT NULL COMMENT '订单状态',
+              `user_id` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户',
+              `deal_data` TEXT COMMENT '处理数据',
+              `order_refund_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '退款id',
+              `ip` VARCHAR(32) not null default '' COMMENT 'ip',
+              `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if ($this->isFieldExist('biz_order', 'pay_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `pay_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '应付价格';");
-        }
-
-        if ($this->isFieldExist('biz_order', 'paid_cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付的现金价格';");
-        }
-
-        if ($this->isFieldExist('biz_order', 'paid_coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order` MODIFY COLUMN `paid_coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付的虚拟币价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item', 'price_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `price_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '订单价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item', 'pay_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item` MODIFY COLUMN `pay_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item_deduct', 'deduct_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_deduct` MODIFY COLUMN `deduct_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '优惠价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item_refund', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款现金价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_item_refund', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_item_refund` MODIFY COLUMN `coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_refund', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款总价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_refund', 'refund_cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的现金价格';");
-        }
-
-        if ($this->isFieldExist('biz_order_refund', 'refund_coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_order_refund` MODIFY COLUMN `refund_coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '退款的虚拟币';");
-        }
-
-        if ($this->isFieldExist('biz_payment_trade', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_payment_trade', 'coin_amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `coin_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '虚拟币的支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_payment_trade', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_payment_trade` MODIFY COLUMN `cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '现金的支付价格';");
-        }
-
-        if ($this->isFieldExist('biz_user_balance', 'cash_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `cash_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '现金余额';");
-        }
-
-        if ($this->isFieldExist('biz_user_balance', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '虚拟币余额';");
-        }
-
-        if ($this->isFieldExist('biz_user_balance', 'locked_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` MODIFY COLUMN `locked_amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '冻结的虚拟币';");
-        }
-
-        if ($this->isFieldExist('biz_user_cashflow', 'amount')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `amount` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '账单金额';");
-        }
-
-        if ($this->isFieldExist('biz_user_cashflow', 'user_balance')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` MODIFY COLUMN `user_balance` DECIMAL(16) NOT NULL DEFAULT 0 COMMENT '生成账单后的用户余额';");
-        }
-
-        if (!$this->isFieldExist('biz_user_cashflow', 'action')) {
-            $connection->exec("ALTER TABLE `biz_user_cashflow` ADD COLUMN `action` VARCHAR(32) not null default '' COMMENT 'refund, purchase, recharge'");
-        }
-
-        if (!$this->isFieldExist('biz_user_balance', 'recharge_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `recharge_amount` int(10) NOT NULL DEFAULT '0' COMMENT '充值总额'");
-        }
-
-        if (!$this->isFieldExist('biz_user_balance', 'purchase_amount')) {
-            $connection->exec("ALTER TABLE `biz_user_balance` ADD COLUMN `purchase_amount` int(10) NOT NULL DEFAULT '0' COMMENT '消费总额'");
-        }
+        $this->createIndex('biz_pay_trade', 'type', 'type');
 
         $this->logger('info', '新建biz表');
+
+        return 1;
+    }
+
+    protected function removeGroupSell()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("
+            DELETE FROM `cloud_app` WHERE `code` = 'GroupSell';
+        ");
+        PluginUtil::refresh();
 
         return 1;
     }
@@ -1525,6 +1592,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
         if (!$this->isFieldExist($table, 'migrate_id')) {
             $connection->exec("ALTER TABLE `{$table}` ADD COLUMN `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id';");
+        }
+
+        if (!$this->isIndexExist($table, 'migrate_id', 'migrate_id')) {
+            $connection->exec("ALTER TABLE `{$table}` ADD INDEX migrate_id (migrate_id);");
         }
     }
 
@@ -1559,6 +1630,13 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
+    }
+
+    protected function createIndex($table, $index, $column)
+    {
+        if (!$this->isIndexExist($table, $column, $index)) {
+            $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
+        }
     }
 
     protected function isJobExist($code)

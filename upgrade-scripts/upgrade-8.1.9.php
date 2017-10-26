@@ -8,10 +8,12 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
+            $this->logger('begin to upgrade scripts', 'info');
             $this->updateScheme();
             $this->getConnection()->commit();
+            $this->logger('upgrade end', 'info');
         } catch (\Exception $e) {
-            $this->logger(self::VERSION, 'error', $e->getMessage());
+            $this->logger($e->getMessage(), 'error');
             $this->getConnection()->rollback();
             throw $e;
         }
@@ -24,7 +26,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $filesystem->remove($dir);
             }
         } catch (\Exception $e) {
-            $this->logger(self::VERSION, 'error', $e->getMessage());
+            $this->logger($e->getMessage(), 'error');
         }
 
         $developerSetting = $this->getSettingService()->get('developer', array());
@@ -37,6 +39,17 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme()
     {
         $this->changeMainAppType();
+        $this->addIsDeleteForMessage();
+        $this->updateOldUserApprovals();
+    }
+
+
+    private function addIsDeleteForMessage()
+    {
+        if (!$this->isFieldExist('message', 'isDelete')) {
+            $this->getConnection()->exec("ALTER TABLE `message` ADD isDelete INT(1) NOT NULL DEFAULT '0' COMMENT '是否已删除';");
+            $this->logger('ALTER TABLE `message` ADD isDelete INT(1) NOT NULL DEFAULT \'0\' COMMENT \'是否已删除\';');
+        }
     }
 
     /**
@@ -45,6 +58,14 @@ class EduSohoUpgrade extends AbstractUpdater
     private function changeMainAppType()
     {
         $this->getConnection()->exec("UPDATE cloud_app SET type ='core' WHERE code = 'MAIN';");
+        $this->logger('UPDATE cloud_app SET type =\'core\' WHERE code = \'MAIN\';');
+    }
+
+    //以前的数据认证通过之后没有改status的状态，所以需要统一修改
+    protected function updateOldUserApprovals()
+    {
+        $this->getConnection()->exec("UPDATE user_approval AS ua, user AS u SET ua.status = 'approved' WHERE ua.userId = u.id AND u.approvalStatus = 'approved' AND ua.status = 'approving'");
+        $this->logger('UPDATE user_approval AS ua, user AS u SET ua.status = \'approved\' WHERE ua.userId = u.id AND u.approvalStatus = \'approved\' AND ua.status = \'approving\'');
     }
 
     protected function isFieldExist($table, $filedName)
