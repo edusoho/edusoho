@@ -63,6 +63,7 @@ export default class Audio {
         if (file.length !== 0 && file.length !== undefined) {
           let $minute = $('#minute');
           let $second = $('#second');
+          let $length = $('#length');
 
           let length = parseInt(file.length);
           let minute = parseInt(length / 60);
