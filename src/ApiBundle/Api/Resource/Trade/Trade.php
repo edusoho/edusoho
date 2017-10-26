@@ -11,6 +11,7 @@ use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Codeages\Biz\Pay\Exception\PayGetwayException;
 
 class Trade extends AbstractResource
 {
