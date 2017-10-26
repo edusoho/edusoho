@@ -425,6 +425,50 @@ $.validator.addMethod('es_remote', function(value, element, params) {
   return this.optional(element) || isSuccess;
 }, Translator.trans('validate.es_remote.message'));
 
+
+$.validator.addMethod('es_remote_with_cache', function(value, element, params) {
+  console.log('es_remotees_remote')
+  let $element = $(element);
+  let url = $(element).data('url') ? $(element).data('url') : null;
+  let type = params.type ? params.type : 'GET';
+  let data = params.data ? params.data : { value: value };
+  let callback = params.callback ? params.callback : null;
+  let isSuccess = 0;
+
+  let cacheKey = btoa(url+type+JSON.stringify(data));
+  if (cacheKey in this.valueCache) {
+    return this.optional(element) || this.valueCache[cacheKey];
+  } else {
+    $.ajax({
+      url: url,
+      async: false,
+      type: type,
+      data: data,
+      dataType: 'json'
+    })
+      .success((response) => {
+        if (axis.isObject(response)) {
+          isSuccess = response.success;
+          $.validator.messages.es_remote = Translator.trans(response.message);
+
+        } else if (axis.isString(response)) {
+          isSuccess = false;
+          $.validator.messages.es_remote = Translator.trans(response);
+        } else if (axis.isBoolean(response)) {
+          isSuccess = response;
+        }
+        if (callback) {
+          callback(isSuccess);
+        }
+      });
+
+    this.valueCache[cacheKey] = isSuccess;
+    return this.optional(element) || isSuccess;
+  }
+
+
+}, Translator.trans('validate.es_remote.message'));
+
 $.validator.addMethod('reg_inviteCode', function(value, element) {
   return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
 }, Translator.trans('validate.reg_invite_code.message'));
