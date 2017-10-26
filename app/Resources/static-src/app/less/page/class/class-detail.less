@@ -689,6 +689,12 @@
 .comment-list {
   list-style-type: none;
   padding-left: 0;
+  .comment .comment-delete-btn {
+    visibility: hidden;
+  }
+  .comment-operated:hover .comment-delete-btn {
+    visibility: visible;
+  }
 }
 
 // 签到

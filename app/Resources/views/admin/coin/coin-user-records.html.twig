@@ -66,7 +66,7 @@
       {% if userIds %}
         {% for userId in userIds %}
           <tr>
-            <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
+            <td> {{ web_macro.user_link(users[userId] , '') }}</td>
             <td style="color:#1bb974;"> {{ userInCash(userId,condition.timeType)|default("0.00") }}</td>
             <td style="color:#ff7b0e;"> {{ userOutCash(userId,condition.timeType)|default("0.00") }}</td>
             <td style="color:blue;"> {{ user_account(userId).cash|default(0) }}</td>
