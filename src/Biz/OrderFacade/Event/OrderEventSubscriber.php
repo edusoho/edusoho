@@ -2,7 +2,6 @@
 
 namespace Biz\OrderFacade\Event;
 
-use AppBundle\Common\MathToolkit;
 use Biz\Coupon\Service\CouponService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\InviteRecordService;
@@ -31,7 +30,6 @@ class OrderEventSubscriber extends EventSubscriber
         if (isset($inviteSetting['get_coupon_setting'])
             && $inviteSetting['get_coupon_setting'] == 1
             && $order['pay_amount'] > 0) {
-
             $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['user_id']);
 
             if (!empty($record) && empty($record['inviteUserCardId'])) {
@@ -43,7 +41,6 @@ class OrderEventSubscriber extends EventSubscriber
                     ));
                 }
             }
-
         }
     }
 
