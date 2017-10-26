@@ -54,14 +54,6 @@ export default class DownLoad {
     $parent.remove();
   }
 
-  importLink() {
-    console.log('导入');
-    if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
-      console.log('可以导入');
-      $("#verifyLink").val($("#link").val());
-      $('.js-current-file').text($("#verifyLink").val());
-    }
-  }
 
   initFileChooser() {
     const fileSelect = file => {
@@ -89,6 +81,15 @@ export default class DownLoad {
     return obj == null || obj == "" || obj == undefined || Object.keys(obj).length == 0;
   }
 
+  importLink() {
+    console.log('导入');
+    if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
+      console.log('可以导入');
+      $("#verifyLink").val($("#link").val());
+      $('.js-current-file').text($("#verifyLink").val());
+    }
+  }
+
   addLink() {
     // 链接的时候，通过js手动把链接的信息设置成数组的形式
     let data = {
@@ -104,12 +105,10 @@ export default class DownLoad {
     this.media = JSON.parse($('#media').val());
   }
 
-
   loadFile() {
     this.media = this.isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
     this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
   }
-
 
   addFile() {
 
@@ -153,7 +152,6 @@ export default class DownLoad {
     }
   }
 
-
   //显示上传的文件或者链接名
   showFile() {
 
@@ -184,7 +182,6 @@ export default class DownLoad {
     $("#file-summary").val('');
 
   }
-
 
   showTip($hideDom, $showDom, trans) {
     $hideDom.hide();
