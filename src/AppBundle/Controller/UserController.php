@@ -494,7 +494,7 @@ class UserController extends BaseController
         $this->saveUserInfo($request, $user);
 
         return $this->createJsonResponse(array(
-            'courseId' => $request->request->get('courseId', 0)
+            'courseId' => $request->request->get('courseId', 0),
         ));
     }
 
