@@ -441,11 +441,13 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             if ($moneyCard['cardStatus'] == 'recharged') {
                 $this->rollback();
+
                 return $moneyCard;
             }
 
             if ($moneyCard['rechargeUserId'] != $user['id']) {
                 $this->rollback();
+
                 return $moneyCard;
             }
 
