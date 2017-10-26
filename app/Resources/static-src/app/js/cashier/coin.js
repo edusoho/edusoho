@@ -6,12 +6,23 @@ export default class Coin {
     this.priceType = this.$container.data('priceType');
     this.coinRate = this.$container.data('coinRate');
     this.maxCoinInput = this.$container.data('maxAllowCoin') > this.$container.data('coinBalance') ?
-      this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
+                        this.$container.data('coinBalance') : this.$container.data('maxAllowCoin');
+    
+    this.init();
+  }
+
+  init() {
+    this.clearDefault();
     this.initEvent();
   }
 
   initEvent() {
     this.$form.on('change', '.js-coin-amount', event => this.changeAmount(event));
+  }
+
+  clearDefault() {
+    $('.js-coin-amount').val('');
+    $('.js-pay-password').val('');
   }
 
   changeAmount(event) {
