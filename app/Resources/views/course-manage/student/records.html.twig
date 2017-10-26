@@ -10,7 +10,7 @@
       </div>
       <div class="panel-body">
         {% include 'course-manage/student/panel-nav.html.twig'  with {'panelNav': type} %}
-        {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {targetType: 'course', targetId: course.id, operatType: type})) }}
+        {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'course', targetId: course.id, operatType: type})) }}
       </div>
     </div>
   </div>
