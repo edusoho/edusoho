@@ -35,6 +35,14 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
         return $this->getByFields(array('order_id' => $orderId, 'operate_type' => $type));
     }
 
+    public function countUserIdsByConditions($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(distinct(user_id))");
+
+        return $builder->execute()->fetchColumn(0) ?: 0;
+    }
+
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time')
     {
         $builder = $this->createQueryBuilder($conditions)
