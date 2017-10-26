@@ -427,7 +427,6 @@ $.validator.addMethod('es_remote', function(value, element, params) {
 
 
 $.validator.addMethod('es_remote_with_cache', function(value, element, params) {
-  console.log('es_remotees_remote')
   let $element = $(element);
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = params.type ? params.type : 'GET';
@@ -449,11 +448,11 @@ $.validator.addMethod('es_remote_with_cache', function(value, element, params) {
       .success((response) => {
         if (axis.isObject(response)) {
           isSuccess = response.success;
-          $.validator.messages.es_remote = Translator.trans(response.message);
+          $.validator.messages.es_remote_with_cache = Translator.trans(response.message);
 
         } else if (axis.isString(response)) {
           isSuccess = false;
-          $.validator.messages.es_remote = Translator.trans(response);
+          $.validator.messages.es_remote_with_cache = Translator.trans(response);
         } else if (axis.isBoolean(response)) {
           isSuccess = response;
         }
