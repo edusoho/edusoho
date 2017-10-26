@@ -430,13 +430,22 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     public function useMoneyCard($id, $fields)
     {
         try {
+            $user = $this->getCurrentUser();
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException('user is not login.');
+            }
+
             $this->beginTransaction();
 
             $moneyCard = $this->getMoneyCard($id, true);
 
             if ($moneyCard['cardStatus'] == 'recharged') {
                 $this->rollback();
+                return $moneyCard;
+            }
 
+            if ($moneyCard['rechargeUserId'] != $user['id']) {
+                $this->rollback();
                 return $moneyCard;
             }
 

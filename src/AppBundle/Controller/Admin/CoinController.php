@@ -315,18 +315,20 @@ class CoinController extends BaseController
             ));
         }
 
+        $systemUser = $this->getUserService()->getUserByType('system');
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getAccountProxyService()->countBalances(
                 array(
-                    'except_user_id' => 0,
+                    'except_user_ids' => array(0, $systemUser['id']),
                 )
             ),
             20
         );
         $balances = $this->getAccountProxyService()->searchBalances(
             array(
-                'except_user_id' => 0,
+                'except_user_ids' => array(0, $systemUser['id']),
             ),
             array($sort => $direction),
             $paginator->getOffsetCount(),
