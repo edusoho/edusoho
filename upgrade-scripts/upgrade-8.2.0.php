@@ -101,6 +101,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'removeGroupSell',
             'downloadPlugin',
             'updatePlugin',
+            'updateAdminRoles',
+            'addRefundDeadline',
+            'changeCouponStatus',  
         );
 
         $funcNames = array();
@@ -135,6 +138,45 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function changeCouponStatus()
+    {
+        $connection = $this->getConnection();  
+        $connection->exec('ALTER TABLE `coupon` CHANGE `status` `status` ENUM(\'used\',\'unused\',\'receive\',\'using\') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT \'unused\';');
+
+        return 1;
+    }
+
+    protected function addRefundDeadline()
+    {
+        $connection = $this->getConnection();
+        if (!$this->isFieldExist('course_member', 'refundDeadline')) {
+            $connection->exec("ALTER TABLE `course_member` ADD COLUMN `refundDeadline`  int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间' AFTER `deadline`");
+        }
+        
+        if (!$this->isFieldExist('classroom_member', 'refundDeadline')) {
+            $connection->exec("ALTER TABLE `classroom_member` ADD COLUMN `refundDeadline`  int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间' AFTER `deadline`");
+        }
+
+        return 1;
+    }
+
+    protected function updateAdminRoles()
+    {
+        $roles = array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN');
+        $connection = $this->getConnection();
+
+        foreach ($roles as $role) {
+            $sql = "select * from role where code='{$role}';";
+            $result = $connection->fetchAssoc($sql);
+            if ($result) {
+                $data = array_merge(json_decode($result['data']), array('admin_orders', 'admin_order_manage', 'admin_order_refunds', 'admin_order_refunds_manage'));
+                $connection->exec("update role set data='".json_encode($data)."' where code='{$role}';");
+            }
+        }
+
+        return 1;
     }
 
     protected function downloadPlugin($page)
@@ -1436,6 +1478,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
                 `refund_id` int(11) NOT NULL DEFAULT '0' COMMENT '退款ID',
                 `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '加入理由或退出理由',
+                `reason_type` varchar(255) NOT NULL default '' COMMENT '用户退出或加入的类型：refund, remove, exit',
                 `created_time` int(10) UNSIGNED NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
