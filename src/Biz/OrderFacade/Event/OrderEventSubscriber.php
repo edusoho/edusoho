@@ -27,16 +27,18 @@ class OrderEventSubscriber extends EventSubscriber
     {
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 1) {
-            if ($order['pay_amount'] > 0) {
-                $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['user_id']);
+        if (isset($inviteSetting['get_coupon_setting'])
+            && $inviteSetting['get_coupon_setting'] == 1
+            && $order['pay_amount'] > 0) {
+            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['user_id']);
 
-                if (!empty($record) && $record['inviteUserCardId'] == null) {
-                    $inviteCoupon = $this->getCouponService()->generateInviteCoupon($record['inviteUserId'], 'pay');
+            if (!empty($record) && empty($record['inviteUserCardId'])) {
+                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($record['inviteUserId'], 'pay');
 
-                    if (!empty($inviteCoupon)) {
-                        $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['user_id'], array('inviteUserCardId' => $inviteCoupon['id']));
-                    }
+                if (!empty($inviteCoupon)) {
+                    $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['user_id'], array(
+                        'inviteUserCardId' => $inviteCoupon['id'],
+                    ));
                 }
             }
         }
