@@ -126,16 +126,23 @@ class CashierController extends BaseController
     {
         $user = $this->getCurrentUser();
         $password = $request->query->get('value');
+        $rateLimiter = $this->getRateLimiter($user['email'], 5, 300);
 
+        $maxAllowance = $rateLimiter->getAllow($user['email']);
+
+        if (empty($maxAllowance)) {
+            $response = array('success' => false, 'message' => '错误次数太多，请5分钟后再试');
+            goto end;
+        }
         $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
 
         if (!$isRight) {
-            $maxAllowance = $this->getRateLimiter($user['email'], 3, 300)->check($user['email']);
-            $response = array('success' => false, 'message' => empty($maxAllowance) ? '错误次数太多，请5分钟后再试' : '支付密码不正确');
+            $rateLimiter->check($user['email']);
+            $response = array('success' => false, 'message' => '支付密码不正确');
         } else {
             $response = array('success' => true, 'message' => '支付密码正确');
         }
-
+        end:
         return $this->createJsonResponse($response);
     }
 
