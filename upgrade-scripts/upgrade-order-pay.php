@@ -145,7 +145,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $pluginCode = $plugin[0];
-        $pluginPackageId = $plugin[0];
+        $pluginPackageId = $plugin[1];
 
         $this->logger('warning', '检测是否安装'.$pluginCode);
         $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
@@ -182,7 +182,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $pluginCode = $plugin[0];
-        $pluginPackageId = $plugin[0];
+        $pluginPackageId = $plugin[1];
 
         $this->logger( 'warning', '升级'.$pluginCode);
         $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
