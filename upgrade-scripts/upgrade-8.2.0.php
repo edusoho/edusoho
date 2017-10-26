@@ -90,6 +90,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'migrateBizUserCashflowAsSiteByMoney',
             'migrateBizUserCashflowPlatform',
             'migrateBizUserBalance',  // done
+            'migrateSiteUserBalance',
             'migrateBizUserBalanceRechargeAmountAndPurchaseAmount',  // done
             'registerJobs', // done
             'migrateJoinMemberOperationRecord',
@@ -959,22 +960,12 @@ class EduSohoUpgrade extends AbstractUpdater
         $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_pay_user_balance`)");
 
         if (empty($count)) {
-            $sql = "select * from `biz_pay_user_balance` where user_id = 0;";
-            $result = $this->getConnection()->fetchAssoc($sql);
-            if (empty($result)) {
-                $currentTime = time();
-
-                $total = $connection->fetchColumn('select sum(cash) from cash_account');
-                $total = 0 - $total*100;
-
-                $connection->exec("insert into `biz_pay_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
-            }
-
             return 1;
         }
 
         $connection->exec("
             INSERT into `biz_pay_user_balance` (
+              `id`,
               `user_id`,
               `amount`,
               `created_time`,
@@ -982,6 +973,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `migrate_id`
             )
             select
+              u.`id`,
               u.`id` as `user_id`,
               case when ca.`cash`*100 is null then 0 else round(ca.`cash`*100) end as `amount`,
               u.`createdTime` as `created_time`,
@@ -991,6 +983,26 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         return $page + 1;
+    }
+
+    protected function migrateSiteUserBalance($page)
+    {
+        $this->logger('info', "处理biz_pay_user_balance的site数据，当前页码{$page}");
+
+        $connection = $this->getConnection();
+
+        $sql = "select * from `biz_pay_user_balance` where user_id = 0;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        if (empty($result)) {
+            $currentTime = time();
+
+            $total = $connection->fetchColumn('select sum(cash) from cash_account');
+            $total = 0 - $total*100;
+
+            $connection->exec("insert into `biz_pay_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
+        }
+
+        return $page;
     }
 
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
