@@ -975,7 +975,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection->exec("
             INSERT into `biz_pay_user_balance` (
-              `id`,
               `user_id`,
               `amount`,
               `created_time`,
@@ -983,7 +982,6 @@ class EduSohoUpgrade extends AbstractUpdater
               `migrate_id`
             )
             select
-              u.`id`,
               u.`id` as `user_id`,
               case when ca.`cash`*100 is null then 0 else round(ca.`cash`*100) end as `amount`,
               u.`createdTime` as `created_time`,
