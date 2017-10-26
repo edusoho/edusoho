@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use Codeages\Biz\Order\Service\OrderService;
-use Vip\Service\Vip\VipService;
+use VipPlugin\Biz\Vip\Service\VipService;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -181,7 +181,7 @@ class DefaultController extends BaseController
         $todayVipNum = 0;
         $totalVipNum = 0;
         if ($this->isPluginInstalled('vip')) {
-            $totalVipNum = $this->getMemberOperationService()->countUserIdsByConditions(array('target_type' => 'vip', 'operate_type' => 'join'));
+            $totalVipNum = $this->getVipService()->searchMembersCount(array());
             $todayVipNum = $this->getMemberOperationService()->countUserIdsByConditions(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'vip', 'operate_type' => 'join'));
         }
 
