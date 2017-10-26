@@ -38,7 +38,7 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
     public function countUserIdsByConditions($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("count(distinct(user_id))");
+            ->select('count(distinct(user_id))');
 
         return $builder->execute()->fetchColumn(0) ?: 0;
     }
