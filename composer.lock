@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f6a60f546fa3147732cc1cc755a699e",
+    "content-hash": "b4ba2ab36f91a5e257ecc759c0741959",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -221,7 +221,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/canuonifeng/omnipay-wechatpay/zipball/d0503c495b621bd4fda4290d8342009bd57c7222",
+                "url": "https://files.phpcomposer.com/files/canuonifeng/omnipay-wechatpay/d0503c495b621bd4fda4290d8342009bd57c7222.zip",
                 "reference": "d0503c495b621bd4fda4290d8342009bd57c7222",
                 "shasum": ""
             },
@@ -345,16 +345,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "bfa5feb89fd427b53967f5dc308668f5082cfe80"
+                "reference": "85dc90d31d690113c9cd158d76f136fb95c6656e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/bfa5feb89fd427b53967f5dc308668f5082cfe80.zip",
-                "reference": "bfa5feb89fd427b53967f5dc308668f5082cfe80",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/85dc90d31d690113c9cd158d76f136fb95c6656e.zip",
+                "reference": "85dc90d31d690113c9cd158d76f136fb95c6656e",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2017-10-25T08:55:05+00:00"
+            "time": "2017-10-26T14:23:00+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -1686,7 +1686,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
+                "url": "https://files.phpcomposer.com/files/guzzle/guzzle3/0645b70d953bc1c067bbc8d5bc53194706b628d9.zip",
                 "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
                 "shasum": ""
             },
@@ -2231,7 +2231,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/omnipay-common/zipball/54910f2ece6b1be64f5e53e2111dd1254d50ee49",
+                "url": "https://files.phpcomposer.com/files/thephpleague/omnipay-common/54910f2ece6b1be64f5e53e2111dd1254d50ee49.zip",
                 "reference": "54910f2ece6b1be64f5e53e2111dd1254d50ee49",
                 "shasum": ""
             },
@@ -4102,7 +4102,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wenqinruan/omnipay-alipay/zipball/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
+                "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-alipay/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25.zip",
                 "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
                 "shasum": ""
             },

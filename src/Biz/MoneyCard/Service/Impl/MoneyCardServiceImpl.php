@@ -445,12 +445,6 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 return $moneyCard;
             }
 
-            if ($moneyCard['rechargeUserId'] != $user['id']) {
-                $this->rollback();
-
-                return $moneyCard;
-            }
-
             $moneyCard = $this->updateMoneyCard($id, $fields);
 
             $batch = $this->getBatch((int) $moneyCard['batchId']);
