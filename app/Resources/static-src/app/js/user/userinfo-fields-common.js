@@ -104,8 +104,13 @@ export default class UserInfoFieldsItemValidate {
       submitHandler: form => {
         if ($(form).valid()) {
           $.post($(form).attr('action'), $(form).serialize(), resp => {
-            notify('success', Translator.trans('site.save_success_hint'));
-            $('#modal').modal('hide');
+            if (resp.courseId) {
+              location.href = '/order/show?targetId='+ resp.courseId +'&targetType=course'
+            } else {
+              notify('success', Translator.trans('site.save_success_hint'));
+              $('#modal').modal('hide');
+            }
+
           });
         }
       }

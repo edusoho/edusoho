@@ -33,7 +33,7 @@
           <div class="form-group">
             <select class="form-control" name="payment">
               {% set options = {'':'order.payment_pattern'|trans,'alipay':'order.payment_pattern.alipay'|trans,'wxpay':'order.payment_pattern.wxpay'|trans,'none':'order.payment_pattern.other'|trans} %}
-              {{ select_options(options, request.get('paymentSelect')) }}
+              {{ select_options(options, request.get('payment')) }}
             </select>
           </div>
 
