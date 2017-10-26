@@ -175,7 +175,7 @@ class DefaultController extends BaseController
         $todayCourseMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'course'));
         $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom'));
 
-        $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom'));
+        $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'course'));
         $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom'));
 
         $todayVipNum = 0;
