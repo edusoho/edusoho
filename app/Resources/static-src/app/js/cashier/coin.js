@@ -12,17 +12,11 @@ export default class Coin {
   }
 
   init() {
-    this.clearDefault();
     this.initEvent();
   }
 
   initEvent() {
     this.$form.on('change', '.js-coin-amount', event => this.changeAmount(event));
-  }
-
-  clearDefault() {
-    $('.js-coin-amount').val('');
-    $('.js-pay-password').val('');
   }
 
   changeAmount(event) {

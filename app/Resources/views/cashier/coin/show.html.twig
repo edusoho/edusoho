@@ -25,8 +25,9 @@
 {% if isPasswordSet %}
   <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount|to_coin(0) }}"
     data-coin-rate="{{ setting('coin.cash_rate') }}" data-price-type="{{ currency }}">
+    <input name="old-coinAmount" type="text" class="hidden">
+    <input name="old-payPassword" type="password" class="hidden">
     <div class="form-group cd-form-group">
-      <input type="text" name="coinAmount" class="hidden">
       <input type="text" class="form-control form-control-sm js-coin-amount" autocomplete="off" name="coinAmount" 
         placeholder="{{ 'pay_center.pay.coin_input_placeholder'|trans({'%coin_name%':coinSetting.coin_name  }) }}">
     </div>
