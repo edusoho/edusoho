@@ -59,6 +59,14 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchAll();
     }
 
+    public function sumPaidAmount($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount");
+
+        return $builder->execute()->fetch();  
+    }
+
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
     {
         if (!$this->isSumColumnAllow($column)) {
