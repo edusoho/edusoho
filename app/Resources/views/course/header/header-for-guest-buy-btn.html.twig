@@ -11,10 +11,10 @@
 
   {% if slot('course.buy-btn.extension', {'course': course})|trim %}
     {% set btnText = slot('course.buy-btn.extension', {'course': course}) %}
-  {% elseif course.originPrice > 0 %}
-    {% set btnText = 'course.btn.buy' %}
-  {% else  %}
+  {% elseif course.originPrice == 0 || course.isFree %}
     {% set btnText = 'course.btn.join' %}
+  {% else  %}
+    {% set btnText = 'course.btn.buy' %}
   {% endif %}
 
   <a class="btn btn-primary js-buy-btn btn-lg {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
