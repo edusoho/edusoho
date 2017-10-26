@@ -65,7 +65,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
         foreach ($records as $record) {
             $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
-            
+
             $fields['amount'] = empty($orderInfo['payAmount']) ? 0 : MathToolkit::simple($orderInfo['payAmount'], 0.01);
             $fields['cashAmount'] = empty($orderInfo['cashAmount']) ? 0 : MathToolkit::simple($orderInfo['cashAmount'], 0.01);
             $fields['coinAmount'] = empty($orderInfo['coinAmount']) ? 0 : MathToolkit::simple($orderInfo['coinAmount'], 0.01);
