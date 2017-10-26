@@ -172,11 +172,11 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->countUsers(array());
 
-        $todayCourseMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'course'));
-        $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom'));
+        $todayCourseMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'course', 'operate_type' => 'join'));
+        $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom', 'operate_type' => 'join'));
 
-        $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'course'));
-        $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom'));
+        $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'course', 'operate_type' => 'join'));
+        $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom', 'operate_type' => 'join'));
 
         $todayVipNum = 0;
         $totalVipNum = 0;
