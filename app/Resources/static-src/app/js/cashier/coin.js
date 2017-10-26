@@ -23,6 +23,7 @@ export default class Coin {
     }
 
     if (isNaN(inputCoinNum) || inputCoinNum <= 0) {
+      inputCoinNum = 0;
       $this.val('');
       this.removePasswordValidate();
 
