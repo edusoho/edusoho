@@ -1229,6 +1229,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `member_operation_record` ADD INDEX operate_type (operate_type);");
         }
 
+        if (!$this->isIndexExist('member_operation_record', 'order_id', 'order_id')) {
+            $connection->exec("alter table member_operation_record add index order_id (order_id);");
+        }
+
         $count = $connection->fetchColumn("SELECT COUNT(id) FROM `orders` where status = 'paid' and `id` not in (select `order_id` from `member_operation_record` where `operate_type` = 'join')");
         if (empty($count)) {
             return 1;
