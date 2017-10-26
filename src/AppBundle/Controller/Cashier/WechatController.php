@@ -20,20 +20,20 @@ class WechatController extends PaymentController
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
-        $biz = $this->getBiz();
-
-        $options = $biz['payment.platforms.options']['wechat'];
-
-        $jsApi = new JsApiPay(array(
-            'appid' => $options['appid'],
-            'account' => $options['mch_id'],
-            'key' => $options['key'],
-            'secret' => $options['secret'],
-            'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay', array(), true),
-            'isMicroMessenger' => true,
-        ), $request);
-
         try {
+            $biz = $this->getBiz();
+
+            $options = $biz['payment.platforms.options']['wechat'];
+
+            $jsApi = new JsApiPay(array(
+                'appid' => $options['appid'],
+                'account' => $options['mch_id'],
+                'key' => $options['key'],
+                'secret' => $options['secret'],
+                'redirect_uri' => $this->generateUrl('cashier_wechat_js_pay', array(), true),
+                'isMicroMessenger' => true,
+            ), $request);
+
             $openid = $jsApi->getOpenid();
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', '不能使用微信支付，可能是网校未开启微信支付或配置不正确');
