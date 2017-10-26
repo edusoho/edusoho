@@ -114,12 +114,13 @@ export default class DownLoad {
 
     const errorTip = 'activity.download_manage.materials_error_hint';
     const successTip = 'activity.download_manage.materials_add_success_hint';
+    const existTip = 'activity.download_manage.materials_exist_error_hint';
 
-    console.log($("#link").val());
     if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
       console.log('添加链接');
       // 链接存在而且格式验证通过
       this.addLink();
+      console.log($("#media").val());
     }
 
 
@@ -128,6 +129,16 @@ export default class DownLoad {
       console.log('数据为空');
       this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), errorTip);
       return;
+    }
+
+
+    if (!this.isEmpty(this.materials) && !this.checkExisted()) {
+      console.log('是否存在');
+      this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), existTip);
+      $('#file-summary').val('');
+      // $("#media").val('');
+      // this.media = {};
+      // return;
     }
 
     this.media.summary = $("#file-summary").val();
@@ -142,6 +153,7 @@ export default class DownLoad {
     }
 
 
+
     this.showTip($('.js-danger-redmine'), $('.js-success-redmine'), successTip);
 
     this.showFile();
@@ -151,6 +163,21 @@ export default class DownLoad {
       this.$form.data('validator').form();
     }
   }
+
+
+
+  checkExisted() {
+    console.log(this.media.name);
+    for (let item in this.materials) {
+      if (this.media.name === this.materials[item].name) {
+        console.log('重复了');
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
 
   //显示上传的文件或者链接名
   showFile() {
