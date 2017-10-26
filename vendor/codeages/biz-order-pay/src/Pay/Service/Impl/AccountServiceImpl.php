@@ -159,6 +159,9 @@ class AccountServiceImpl extends BaseService implements AccountService
     {
         $userBalance = $this->getUserBalanceDao()->getByUserId($userId);
         $userBalance = $this->getUserBalanceDao()->get($userBalance['id'], array('lock' => true));
+        if (($userBalance['amount']-$coinAmount) < 0) {
+            throw $this->createAccessDeniedException('coin is not enough');
+        }
 
         $this->getUserBalanceDao()->wave(array($userBalance['id']), array(
             'amount' => (0 - $coinAmount),
