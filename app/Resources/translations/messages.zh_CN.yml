@@ -3618,7 +3618,8 @@ attachments.download.delete_btn: 删除
 attachments.download.delete_warning: 确定删除此附件
 
 # 分享
-share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.course_set_learning_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
+share.course_set_learned_message: 我学完了《%course%》，收获巨大哦，一起来学习吧！
 share.classroom_message: 我正在学习「%classroom%」，收获巨大哦，一起来学习吧！
 share.article_message: 我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。
 share.group_thread_message: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
@@ -6137,12 +6138,17 @@ admin.edu_cloud.edu_live.edu_live_enable_btn: 已启用
 admin.edu_cloud.edu_live.edu_live_close_btn: 关闭
 admin.edu_cloud.edu_live.edu_live_tips: >
   大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="%showUrl%" target="_blank">点击这里</a>了解详情。
-admin.edu_cloud.edu_live.base_setting: 基本设置
-admin.edu_cloud.edu_live.live_logo: 直播LOGO
+admin.edu_cloud.edu_live.base_setting: 直播LOGO设置
+admin.edu_cloud.edu_live.live_logo_web: 直播LOGO web端
+admin.edu_cloud.edu_live.live_logo_app: 直播LOGO 欢拓客户端
 admin.edu_cloud.edu_live.upload_btn: 上传
 admin.edu_cloud.edu_live.delete_btn: 删除
-admin.edu_cloud.edu_live.upload_tips: >
-  <b>只针对直播新方案。</b><br>请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
+admin.edu_cloud.edu_live.upload_web_tips: >
+  上传尺寸大小必须为280*60，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+admin.edu_cloud.edu_live.upload_app_tips: >
+  上传尺寸大小必须为280*40，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
+admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: 升级
 admin.edu_cloud.edu_live.renew: 续费
 admin.edu_cloud.edu_live.renewed: 已续费
@@ -8080,3 +8086,6 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
+
+

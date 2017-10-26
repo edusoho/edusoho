@@ -8,7 +8,12 @@
 {% if type == 'courseSet' %}
   {% set title = courseSet.title %}
   {% set summary = courseSet.summary|plain_text(50) %}
-  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_message')|trans({'%course%':courseSet.title}) %}
+  {% if isFinished|default('0') %}
+    {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_learned_message')|trans({'%course%':courseSet.title}) %}
+  {% else %}
+    {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_learning_message')|trans({'%course%':courseSet.title}) %}
+  {% endif %}
+  
   {% set url = url('course_show', {id:courseSet.defaultCourseId}) %}
   {% set picture = fileurl(courseSet.cover.large|default(null), 'course.png') %}
   {% set id = courseSet.id%}

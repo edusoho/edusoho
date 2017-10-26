@@ -232,9 +232,10 @@ activity.testpaper_manage.generate_mode_hint: 请选择生成方式
 activity.testpaper_manage.max_error_hint: 最大值不能超过1000000000
 activity.testpaper_manage.pass_score_hint: 达标分数：%passScore%分
 activity.testpaper_manage.setting_pass_score_error_hint: 及格分数（%passedScore%）不能高于总分（%totalScore%）。
+activity.testpaper_manage.pass_score_error_hint: 及格分数必须大于0且小于1000，最多保留一位小数
 activity.testpaper_manage.question_required_error_hint: 请选择题目
 activity.testpaper_manage.question_score_empty_hint: 题目分值不能为0
-activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，并且在3位数以内，保留一位小数
+activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，大于0且小于1000，最多保留一位小数
 activity.testpaper_manage.marking_validate_error_hint: 分数只能是<=题目分数、且>=0的整数或者1位小数
 activity.testpaper_manage.question_total_score: 总计
 activity.testpaper_manage.simple_percentage: 简单%simplePercentage%%
@@ -623,6 +624,7 @@ validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
 validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
+validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
