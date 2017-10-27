@@ -57,14 +57,10 @@ class SystemCrontabInitializer
                             $crontabJob
                         );
                     }
-
-
                 } elseif (count($crontabJobs) > self::MAX_CRONTAB_NUM) {
-
                     foreach (array_slice($crontabJobs, 0, count($crontabJobs) - self::MAX_CRONTAB_NUM) as $crontabJob) {
                         $crontabRepository->removeJob($crontabJob);
                     }
-
                 }
 
                 $crontabRepository->persist();
@@ -74,7 +70,7 @@ class SystemCrontabInitializer
                 AppLoggerConstant::CRONTAB,
                 'register_crontab_job',
              'crontab.register_crontab_job.fail',
-                      array('error' => $e->getMessage()
+                      array('error' => $e->getMessage(),
                 ));
             }
         }
@@ -88,7 +84,7 @@ class SystemCrontabInitializer
         $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
 
         $crontabJob = CrontabJob::createFromCrontabLine($command);
-        $crontabJob->comments = 'EduSoho scheduler Job ' . uniqid();
+        $crontabJob->comments = 'EduSoho scheduler Job '.uniqid();
 
         return $crontabJob;
     }
