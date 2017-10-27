@@ -1199,9 +1199,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `updated_time`,
                   `created_time`
             ) VALUES (
-                  'Order_CloseOrdersJob',
+                      'Order_CloseOrdersJob',
                   '20 * * * *',
-                  'Codeages\\\\Biz\\\\Framework\\\\Order\\\\Job\\\\CloseExpiredOrdersJob',
+                  'Codeages\\\\Biz\\\\Order\\\\Job\\\\CloseExpiredOrdersJob',
                   '',
                   '100',
                   '0',
