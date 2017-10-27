@@ -1,9 +1,7 @@
 @import "group.less";      //小组
-@import "userpage.less";   //用户中心
 @import "course.less";     //课程
 @import "thread.less";     //话题
 @import "live.less";       //直播课程
-@import "lesson.less";     //课时
 @import "float-consult.less"; //在线客服
 @import "notification.less"; //通知
 @import "media.less";        //私信
@@ -15,7 +13,6 @@
 
 // 用于其它主题
 @import "promoted-teacher.less";   //名师风采
-@import "vip.less";                //会员
 @import "navbar.less";             //导航
 
 // 需要
@@ -38,85 +35,4 @@
 // 待删
 .origin-price {
   font-size: 12px;
-}
-
-
-.panel.testpaper-question-block .testpaper-question{
-  position: relative;
-
-}
-.panel.testpaper-question-block .panel-body{
-  position:relative;
-  z-index:1;
-}
-
-.lt-ie8 .hidden-lt-ie8 {
-  display: none !important;
-}
-
-.visible-lt-ie8 {
-  display: none !important;
-}
-
-.lt-ie8 .visible-lt-ie8 {
-  display: block !important;
-}
-
-// 小组
-.user-simple-list .media-body {
-  vertical-align: middle;
-  line-height: 48px;
-}
-
-.user-avatar-link img {
-  width: 48px;
-  height: 48px;
-}
-
-.user-grids {
-  letter-spacing:-4px;
-  zoom:1;
-  margin: 0;
-  padding: 0;
-}
-
-.user-grids li {
-  list-style: none;
-  text-align: center;
-  display: inline-block;
-  letter-spacing:0;
-  width: 23%;
-  margin: 8px 1%;
-  font-size: 12px;
-  vertical-align:top;
-  height: 40px;
-  overflow: hidden;
-}
-
-.user-grids li p {
-  margin-bottom: 0;
-  word-wrap: break-word;
-  word-break: normal;
-}
-
-.user-grids .user-avatar-link {
-  margin-bottom: 5px;
-}
-
-.user-grids .user-link {
-  display: block;
-  width:100%;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-// 待换地方
-.container .vjs-default-skin .vjs-big-play-button {
-  top: 50%;
-  left: 50%;
-  margin-top: -40px;
-  margin-left: -50px;
-  width: 100px;
-  height: 80px;
 }
