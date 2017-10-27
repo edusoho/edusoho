@@ -103,7 +103,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'updatePlugin',
             'updateAdminRoles',
             'addRefundDeadline',
-            'changeCouponStatus',  
+            'changeCouponStatus',
+            'resetCrontabJobNum',
         );
 
         $funcNames = array();
@@ -1632,6 +1633,12 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('info', '新建biz表');
 
+        return 1;
+    }
+
+    protected function resetCrontabJobNum()
+    {
+        \Biz\Crontab\SystemCrontabInitializer::init();
         return 1;
     }
 
