@@ -3,6 +3,8 @@
 namespace Biz\Crontab;
 
 use AppBundle\System;
+use Biz\AppLoggerConstant;
+use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use TiBeN\CrontabManager\CrontabAdapter;
 use TiBeN\CrontabManager\CrontabJob;
@@ -13,7 +15,7 @@ class SystemCrontabInitializer
 {
     const SOURCE_SYSTEM = 'MAIN';
 
-    const MAX_CRONTAB_NUM = 10;
+    const MAX_CRONTAB_NUM = 2;
 
     public static function init()
     {
@@ -44,27 +46,47 @@ class SystemCrontabInitializer
         if (System::getOS() === System::OS_LINUX || System::getOS() === System::OS_OSX) {
             try {
                 $crontabRepository = new CrontabRepository(new CrontabAdapter());
-                $crontabJobs = self::findCrontabJobs();
-                if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
-                    $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
-                    $logPath = $rootDir.'/logs/crontab.log';
-                    $command = self::getCrontabJobCommand();
-                    $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
+                $command = self::getCrontabJobCommand();
+                $crontabJobs = $crontabRepository->findJobByRegex('/'.str_replace('/', '\/', $command).'/');
 
+                if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
+                    //如果数量少就增加
                     for ($i = 0; $i < self::MAX_CRONTAB_NUM - count($crontabJobs); ++$i) {
-                        $crontabJob = CrontabJob::createFromCrontabLine($command);
-                        $crontabJob->comments = 'Job '.$i;
+                        $crontabJob = self::createCrontabJob();
                         $crontabRepository->addJob(
                             $crontabJob
                         );
                     }
-
-                    $crontabRepository->persist();
+                } elseif (count($crontabJobs) > self::MAX_CRONTAB_NUM) {
+                    foreach (array_slice($crontabJobs, 0, count($crontabJobs) - self::MAX_CRONTAB_NUM) as $crontabJob) {
+                        $crontabRepository->removeJob($crontabJob);
+                    }
                 }
-            } catch (\DomainException $e) {
+
+                $crontabRepository->persist();
+            } catch (\Exception $e) {
                 //如果出现错误，就不注册
+                self::getLogService()->error(
+                AppLoggerConstant::CRONTAB,
+                'register_crontab_job',
+             'crontab.register_crontab_job.fail',
+                      array('error' => $e->getMessage(),
+                ));
             }
         }
+    }
+
+    private static function createCrontabJob()
+    {
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+        $logPath = $rootDir.'/logs/crontab.log';
+        $command = self::getCrontabJobCommand();
+        $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
+
+        $crontabJob = CrontabJob::createFromCrontabLine($command);
+        $crontabJob->comments = 'EduSoho scheduler Job '.uniqid();
+
+        return $crontabJob;
     }
 
     private static function registerDefaultJobs()
@@ -155,5 +177,13 @@ class SystemCrontabInitializer
     private static function getSchedulerService()
     {
         return ServiceKernel::instance()->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private static function getLogService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('System:LogService');
     }
 }
