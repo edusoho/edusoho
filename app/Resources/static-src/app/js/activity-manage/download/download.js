@@ -42,8 +42,10 @@ export default class DownLoad {
   }
 
   deleteItem(event) {
+    console.log('删除');
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
+    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
       $("#materials").val(JSON.stringify(this.materials));
@@ -189,7 +191,7 @@ export default class DownLoad {
     if (this.media.link) {
       item_tpl = `
         <li class="download-item " data-id="${ this.media.link }">
-          <a class="gray-primary" href="${ this.media.link}" target="_blank">${ this.media.name}<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
+          <a class="gray-primary" href="${ this.media.link}" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
           <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
         </li>
       `;
