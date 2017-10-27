@@ -103,7 +103,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'updatePlugin',
             'updateAdminRoles',
             'addRefundDeadline',
-            'changeCouponStatus',  
+            'changeCouponStatus',
+            'resetCrontabJobNum',
         );
 
         $funcNames = array();
@@ -1631,6 +1632,16 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->createIndex('biz_pay_trade', 'type', 'type');
 
         $this->logger('info', '新建biz表');
+
+        return 1;
+    }
+
+    protected function resetCrontabJobNum()
+    {
+        \Biz\Crontab\SystemCrontabInitializer::init();
+
+        $connection = $this->getConnection();
+        $connection->exec("update biz_scheduler_job bsj inner join biz_scheduler_job_fired bsjf on bsj.id=bsjf.job_id set status='failure' where bsjf.status='executing' and bsj.name='Scheduler_MarkExecutingTimeoutJob';");
 
         return 1;
     }
