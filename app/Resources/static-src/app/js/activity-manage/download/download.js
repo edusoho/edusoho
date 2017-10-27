@@ -42,7 +42,6 @@ export default class DownLoad {
   }
 
   deleteItem(event) {
-    console.log('删除');
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
     this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
@@ -84,9 +83,7 @@ export default class DownLoad {
   }
 
   importLink() {
-    console.log('导入');
     if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
-      console.log('可以导入');
       $("#verifyLink").val($("#link").val());
       $('.js-current-file').text($("#verifyLink").val());
     }
@@ -119,31 +116,25 @@ export default class DownLoad {
     const existTip = 'activity.download_manage.materials_exist_error_hint';
 
     if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
-      console.log('添加链接');
       // 链接存在而且格式验证通过
       this.addLink();
-      console.log($("#media").val());
     }
-
 
     // 失败提示：请上传或选择资料
     if (this.isEmpty(this.media)) {
-      console.log('数据为空');
       this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), errorTip);
       return;
     }
 
 
+    // 文件重复上传
     if (!this.isEmpty(this.materials) && this.checkExisted()) {
-      console.log('是否存在');
       this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), existTip);
       $('#file-summary').val('');
       $("#media").val('');
       this.media = {};
       return;
     }
-
-    this.checkExisted();
 
     this.media.summary = $("#file-summary").val();
     this.materials[this.media.id] = this.media;
@@ -156,8 +147,6 @@ export default class DownLoad {
       $('#title').val(this.firstName);
     }
 
-
-
     this.showTip($('.js-danger-redmine'), $('.js-success-redmine'), successTip);
 
     this.showFile();
@@ -168,13 +157,9 @@ export default class DownLoad {
     }
   }
 
-
-
   checkExisted() {
-    console.log(this.media.name);
     let flag = false;
     for (let item in this.materials) {
-      console.log(this.materials[item].name);
       if (this.media.name === this.materials[item].name) {
         flag = true;
       }
@@ -191,7 +176,7 @@ export default class DownLoad {
     if (this.media.link) {
       item_tpl = `
         <li class="download-item " data-id="${ this.media.link }">
-          <a class="gray-primary" href="${ this.media.link}" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
+          <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
           <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
         </li>
       `;
