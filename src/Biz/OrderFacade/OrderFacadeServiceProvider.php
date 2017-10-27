@@ -145,7 +145,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         };
 
         $biz['order.options'] = array(
-            'closed_expired_time' => 2*24*60*60,
+            'closed_expired_time' => 2 * 24 * 60 * 60,
         );
     }
 
