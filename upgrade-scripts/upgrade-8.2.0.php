@@ -1639,6 +1639,10 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function resetCrontabJobNum()
     {
         \Biz\Crontab\SystemCrontabInitializer::init();
+
+        $connection = $this->getConnection();
+        $connection->exec("update biz_scheduler_job bsj inner join biz_scheduler_job_fired bsjf on bsj.id=bsjf.job_id set status='failure' where bsjf.status='executing' and bsj.name='Scheduler_MarkExecutingTimeoutJob';");
+
         return 1;
     }
 
