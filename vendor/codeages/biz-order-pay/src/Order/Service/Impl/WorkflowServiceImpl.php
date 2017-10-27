@@ -69,8 +69,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
     public function closeExpiredOrders()
     {
+        $options = $this->biz['order.final_options'];
+        var_dump($options);
         $orders = $this->getOrderDao()->search(array(
-            'created_time_LT' => time()-2*60*60
+            'created_time_LT' => time()-$options['closed_expired_time'],
+            'statuses' => array('created', 'paying')
         ), array('id'=>'DESC'), 0, 1000);
 
         foreach ($orders as $order) {
