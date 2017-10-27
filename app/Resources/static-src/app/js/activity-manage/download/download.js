@@ -132,14 +132,16 @@ export default class DownLoad {
     }
 
 
-    if (!this.isEmpty(this.materials) && !this.checkExisted()) {
+    if (!this.isEmpty(this.materials) && this.checkExisted()) {
       console.log('是否存在');
       this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), existTip);
       $('#file-summary').val('');
-      // $("#media").val('');
-      // this.media = {};
-      // return;
+      $("#media").val('');
+      this.media = {};
+      return;
     }
+
+    this.checkExisted();
 
     this.media.summary = $("#file-summary").val();
     this.materials[this.media.id] = this.media;
@@ -168,14 +170,14 @@ export default class DownLoad {
 
   checkExisted() {
     console.log(this.media.name);
+    let flag = false;
     for (let item in this.materials) {
+      console.log(this.materials[item].name);
       if (this.media.name === this.materials[item].name) {
-        console.log('重复了');
-        return false;
-      } else {
-        return true;
+        flag = true;
       }
     }
+    return flag;
   }
 
 
