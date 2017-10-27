@@ -72,9 +72,9 @@ class SystemCrontabInitializer
                 //如果出现错误，就不注册
                 self::getLogService()->error(
                 AppLoggerConstant::CRONTAB,
-                 'register_crontab_job',
-                 '定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html',
-                    array('error' => $e->getMessage()
+                'register_crontab_job',
+             'crontab.register_crontab_job.fail',
+                      array('error' => $e->getMessage()
                 ));
             }
         }
