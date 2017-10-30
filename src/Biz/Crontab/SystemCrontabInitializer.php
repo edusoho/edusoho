@@ -91,13 +91,13 @@ class SystemCrontabInitializer
 
     private static function registerDefaultJobs()
     {
-        $count = self::getSchedulerService()->countJobs(array('name' => 'CancelOrderJob', 'source' => self::SOURCE_SYSTEM));
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Order_CloseOrdersJob', 'source' => self::SOURCE_SYSTEM));
         if ($count == 0) {
             self::getSchedulerService()->register(array(
-                'name' => 'CancelOrderJob',
+                'name' => 'Order_CloseOrdersJob',
                 'source' => self::SOURCE_SYSTEM,
                 'expression' => '0 * * * *',
-                'class' => 'Biz\Order\Job\CancelOrderJob',
+                'class' => 'Codeages\Biz\Order\Job\CloseExpiredOrdersJob',
                 'args' => array(),
             ));
         }
