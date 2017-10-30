@@ -96,7 +96,7 @@ class SystemCrontabInitializer
             self::getSchedulerService()->register(array(
                 'name' => 'Order_CloseOrdersJob',
                 'source' => self::SOURCE_SYSTEM,
-                'expression' => '0 * * * *',
+                'expression' => '20 * * * *',
                 'class' => 'Codeages\Biz\Order\Job\CloseExpiredOrdersJob',
                 'args' => array(),
             ));
