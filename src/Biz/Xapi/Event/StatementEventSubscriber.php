@@ -8,8 +8,8 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
+use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Xapi\Service\XapiService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -109,10 +109,13 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         switch ($examResult['type']) {
             case 'testpaper':
+                $this->testpaperFinish($examResult);
                 break;
             case 'homework':
+                $this->homeworkFinish($examResult);
                 break;
             case 'exercise':
+                $this->exerciseFinish($examResult);
                 break;
             default:
                 break;
@@ -134,6 +137,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseNoteCreate(Event $event)
     {
         $note = $event->getSubject();
+
+        $course = $this->getCourseService()->getCourse($note['courseId']);
     }
 
     public function onCourseThreadCreate(Event $event)
