@@ -1,63 +1,115 @@
-#! /bin/bash
+#!/usr/bin/env php
+<?php
+echos("---------------a command for build plugin apps---------------------------------");
+echos("-- bin/build-app        --- build All app  in plugins folder");
+echos("-- bin/build-app n      --- build All app  in plugins folder and compile js");
+echos("-- bin/build-app Vip    --- build Vip app");
+echos("-- bin/build-app Vip  n --- build Vip app and compile js");
+usleep(500000);
 
-SKIP="1"  
-search_dir='plugins'
-plugin='_'
+array_shift($argv);
+$argument_count = $argc - 1;
+$arguments = $argv;
 
-if [ $#  -gt 2 ] ; then
-    echo $(tput setaf 2)bin/build-app        $(tput sgr 0)--- build All app  in plugins folder
-    echo $(tput setaf 2)bin/build-app n      $(tput sgr 0)--- build All app  in plugins folder and compile js
-    echo $(tput setaf 2)bin/build-app Vip    $(tput sgr 0)--- build Vip app
-    echo $(tput setaf 2)bin/build-app Vip  n $(tput sgr 0)--- build Vip app and compile js
-    exit
-fi
+$base_folder = 'plugins';
+$default_skip_js = '_';
+$skip_js_arguments = ['y', 'Y', 'n', 'N'];
+$plugins = [];
 
-if [ $#  -eq 1 ] ; then
-    if [ $1 = 'y' ] || [ $1 = 'n' ]; then 
-        SKIP=$1
-    else
-        plugin=$1
-    fi
-fi
-
-if [ $#  -eq 2 ] ; then
-    plugin=$1
-    SKIP=$2
-fi
+if ($argument_count > 0) {
+    $skip_js = end($arguments);
+    if (in_array($skip_js, $skip_js_arguments)) {
+        $default_skip_js = strtolower($skip_js);
+        array_pop($arguments);
+    }
+    $plugins = $arguments;
+}
 
 
-if [ "$SKIP" = 'n' ]; then
-    # remove node modules folder and caches folder 
-    echo $(tput setaf 2)remove old node_modules and app/caches using  command  $(tput bold)rm -rf app/caches node_modules $(tput sgr 0)
-    rm -rf app/caches node_modules
-    yarn
+build_app($default_skip_js, $plugins);
 
-    #compile static resource file with webpack
-    echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
-    npm run compile
-else
-    echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
-fi
+function build_app($default_skip_js, $plugins)
+{
+    check_plugin($plugins);
+    compile_js($default_skip_js);
+    build_plugin($plugins);
+}
 
-if [ $plugin != '_' ]; then 
-    if [ ! -d $(pwd)/$search_dir/$plugin"Plugin" ]; then
-        echo 插件不存在，打包失败
-    else
-        cd $search_dir/$plugin"Plugin"
-        git pull
-        cd ../..
-        app/console build:plugin-app  $plugin
-    fi
-else
-    for entry in `ls $search_dir`; do
-        echo $(tput setaf 2) -- pull $entry using command  $(tput bold)cd $search_dir/$entry   git pull  $(tput sgr 0)
+function compile_js($skip_js)
+{
+    if ($skip_js == 'n') {
+       #remove node modules folder and caches folder 
+        echos("remove old node_modules and app/caches using command : rm - rf app/caches node_modules");
+        exec('rm -rf app/caches node_modules');
+        exec('yarn');
 
-        cd $search_dir/$entry
-        git pull
-        cd ../..
-        plugin=$(echo $entry | awk -F"Plugin" '{print $1}')  
-        app/console   build:plugin-app  $plugin
-        
-    done
-fi
+        #compile static resource file with webpack
+        echos("compile static resource file with webpack using command : npm run compile");
+        exec('npm run compile');
+    }
+    else {
+        echos(" WARING !!!skip compile js . ");
+    }
 
+}
+function build_plugin($plugins)
+{
+    $root_dir = __DIR__ . "/../plugins/";
+
+    if (empty($plugins)) {
+        $folders = scandir($root_dir);
+        foreach ($folders as $folder) {
+            if (is_dir($root_dir . $folder) && !in_array($folder, array(".", ".."))) {
+                array_push($plugins, substr($folder, 0, strpos($folder, 'Plugin')));
+            }
+        }
+    }
+    foreach ($plugins as $plugin) {
+        $full_path = $root_dir . $plugin . "Plugin";
+        echos($plugin . " is in " . exec("git rev-parse --abbrev-ref HEAD"));
+        exec_shell("cd $full_path && git pull && cd ../..");
+        usleep(100000);
+        exec_shell("app/console build:plugin-app $plugin");
+    }
+}
+
+function check_plugin($plugins)
+{
+    $none_exists = [];
+    $root_dir = __DIR__ . "/../plugins/";
+    if (empty($plugins)) {
+        return true;
+    }
+    foreach ($plugins as $plugin) {
+        if (!file_exists($root_dir . $plugin . "Plugin")) {
+            array_push($none_exists, $root_dir . $plugin . "Plugin");
+        }
+    }
+
+    if (!empty($none_exists)) {
+        echos(implode("\n", $none_exists) . " 插件不存在 ，请检查插件名称是否正确");
+        exit;
+    }
+
+}
+function echos($msg)
+{
+    echo $msg . "\n";
+}
+
+function exec_shell($cmd)
+{
+    $proc = proc_open(
+        $cmd,
+        array(
+            array("pipe", "r"),
+            array("pipe", "w"),
+            array("pipe", "w")
+        ),
+        $pipes
+    );
+    print stream_get_contents($pipes[1]);
+    echos("---" . $cmd . "is ok");
+    echos(" ");
+
+}
