@@ -47,32 +47,30 @@ export default class DownLoad {
   deleteItem(event) {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
-    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    let $materials = $('#materials');
+    this.materials = isEmpty($materials.val()) ? {} : JSON.parse($materials.val());
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
-      $("#materials").val(JSON.stringify(this.materials));
+      $materials.val(JSON.stringify(this.materials));
     }
     if ($parent.siblings('li').length <= 0) {
-      $("#materials").val('');
+      $materials.val('');
     }
     $parent.remove();
   }
 
 
   initFileChooser() {
-    const fileSelect = file => {
+    const fileSelect = (file) => {
       // 赋值给media上传的文件信息
       $('#media').val(JSON.stringify(file));
       chooserUiOpen();
-      // 获得数据对象
-      this.loadFile();
       // 重置上传文件导致标题名称的改变
       $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
     }
 
     const fileChooser = new FileChooser();
-
     fileChooser.on('select', fileSelect);
   }
 
@@ -82,63 +80,64 @@ export default class DownLoad {
   }
 
   importLink() {
-    if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
-      $("#verifyLink").val($("#link").val());
-      $('.js-current-file').text($("#verifyLink").val());
+    let $link = $('#link');
+    let $verifyLink = $('#verifyLink');
+    if (this.$form.data('validator').valid() && $link.val().length > 0) {
+      $verifyLink.val($link.val());
+      $('.js-current-file').text($verifyLink.val());
     }
   }
 
   addLink() {
     // 链接的时候，通过js手动把链接的信息设置成对象的形式
-    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    let verifyLinkVal = $('#verifyLink').val();
     let data = {
       source: 'link',
-      id: $("#verifyLink").val(),
-      name: $("#verifyLink").val(),
-      link: $("#verifyLink").val(),
-      summary: $("#file-summary").val(),
+      id: verifyLinkVal,
+      name: verifyLinkVal,
+      link: verifyLinkVal,
+      summary: $('#file-summary').val(),
       size: 0
     }
 
-    $("#media").val(JSON.stringify(data));
-    this.media = JSON.parse($('#media').val());
-  }
-
-  loadFile() {
-    this.media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    $('#media').val(JSON.stringify(data));
   }
 
   addFile() {
+
+    let $media = $('#media');
+    let $materials = $('#materials');
+    let $successTipDom = $('.js-success-redmine');
+    let $errorTipDom = $('.js-danger-redmine');
 
     const errorTip = 'activity.download_manage.materials_error_hint';
     const successTip = 'activity.download_manage.materials_add_success_hint';
     const existTip = 'activity.download_manage.materials_exist_error_hint';
 
-    if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
+    if ($('#verifyLink').val().length > 0) {
       // 链接存在而且格式验证通过
       this.addLink();
     }
 
+    // 从后台获取json字符串，进行转义获得json对象
+    this.media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
+    this.materials = isEmpty($materials.val()) ? {} : JSON.parse($materials.val());
+
     // 失败提示：请上传或选择资料
     if (isEmpty(this.media)) {
-      this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), errorTip);
+      this.showTip($successTipDom, $errorTipDom, errorTip);
       return;
     }
-
 
     // 文件重复上传
     if (!isEmpty(this.materials) && this.checkExisted()) {
-      this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), existTip);
-      $('#file-summary').val('');
-      $("#media").val('');
-      this.media = {};
+      this.showTip($successTipDom, $errorTipDom, existTip);
       return;
     }
 
-    this.media.summary = $("#file-summary").val();
+    this.media.summary = $('#file-summary').val();
     this.materials[this.media.id] = this.media;
-    $("#materials").val(JSON.stringify(this.materials));
+    $materials.val(JSON.stringify(this.materials));
 
     // 获得第一次上传文件的title值赋值给标题名称
     if (!this.firstName) {
@@ -146,9 +145,9 @@ export default class DownLoad {
       $('#title').val(this.firstName);
     }
 
-    this.showTip($('.js-danger-redmine'), $('.js-success-redmine'), successTip);
-
     this.showFile();
+
+    this.showTip($errorTipDom, $successTipDom, successTip);
 
     if ($('.jq-validate-error:visible').length > 0) {
       // 点击 添加资料，并没有提交表单，url验证失败，返回false;
@@ -157,10 +156,9 @@ export default class DownLoad {
   }
 
   checkExisted() {
-    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     let flag = false;
     for (let item in this.materials) {
-      if (this.materials[item].hasOwnProperty("link") && this.materials[item].link.length > 0) {
+      if (this.materials[item].hasOwnProperty('link') && this.materials[item].link.length > 0) {
         if (this.materials[item].link === this.media.id) {
           flag = true;
         }
@@ -177,38 +175,35 @@ export default class DownLoad {
 
   //显示上传的文件或者链接名
   showFile() {
-
     let item_tpl = '';
-
     if (this.media.link) {
       item_tpl = `
-        <li class="download-item " data-id="${ this.media.link }">
+        <li class="download-item" data-id="${ this.media.link }">
           <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
           <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
         </li>
       `;
     } else {
       item_tpl = `
-        <li class="download-item " data-id="${ this.media.id }">
+        <li class="download-item" data-id="${ this.media.id }">
           <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
           <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
         </li>
       `;
     }
 
-    $("#material-list").append(item_tpl);
+    $('#material-list').append(item_tpl);
     $('[data-toggle="tooltip"]').tooltip();
-
-    this.media = {};
-    $('#media').val('');
-    $('#link').val('');
-    $("#file-summary").val('');
-
   }
 
   showTip($hideDom, $showDom, trans) {
     $hideDom.hide();
     $('.js-current-file').text('');
+    $('#link').val('');
+    $('#verifyLink').val('');
+    $('#file-summary').val('');
+    $('#media').val('');
+    this.media = {};
     $showDom.text(Translator.trans(trans)).show();
     setTimeout(function() {
       $showDom.slideUp();
