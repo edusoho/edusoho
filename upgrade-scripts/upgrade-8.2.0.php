@@ -105,6 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addRefundDeadline',
             'changeCouponStatus',
             'resetCrontabJobNum',
+            'updateCloudAppType'
         );
 
         $funcNames = array();
@@ -1654,6 +1655,13 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
         PluginUtil::refresh();
 
+        return 1;
+    }
+
+    protected  function updateCloudAppType(){
+        $connection = $this->getConnection();
+        $connection->exec("alter table `cloud_app` MODIFY `type` varchar(64) NOT NULL DEFAULT 'plugin' COMMENT '应用类型(core系统，plugin插件应用, theme主题应用)';");
+        $connection->exec(" update cloud_app set type ='core' where code = 'MAIN';");
         return 1;
     }
 
