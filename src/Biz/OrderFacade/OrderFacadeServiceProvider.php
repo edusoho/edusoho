@@ -143,6 +143,10 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                 'goods_title' => empty($site['name']) ? 'EduSoho订单' : $site['name'].'订单',
             );
         };
+
+        $biz['order.options'] = array(
+            'closed_expired_time' => 2 * 24 * 60 * 60,
+        );
     }
 
     private function registerCurrency(Container $biz)

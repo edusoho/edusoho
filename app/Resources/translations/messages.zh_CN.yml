@@ -8176,7 +8176,7 @@ log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
 order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
-
+crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 
 cashflow.title: 名称

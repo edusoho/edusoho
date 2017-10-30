@@ -207,6 +207,7 @@ class PayServiceImpl extends BaseService implements PayService
             'cash_type' => 'CNY',
             'trade_sn' => $trade['trade_sn'],
             'status' => 'paid',
+            'pay_amount' => $data['pay_amount'],
         );
         $this->updateTradeToPaidAndTransferAmount($data);
         $trade = $this->getPayTradeDao()->get($trade['id']);
