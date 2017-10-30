@@ -806,7 +806,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`sn` as `order_sn`,
                 o.`payment` as `platform`,
                 '' as `platform_sn`,
-                case when o.`status` = 'created' then 'paying' when o.`status` = 'cancelled' then 'closed' else o.`status` end as o.`status`,
+                case when o.`status` = 'created' then 'paying' when o.`status` = 'cancelled' then 'closed' else o.`status` end as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
                 round(o.`amount`*100),
