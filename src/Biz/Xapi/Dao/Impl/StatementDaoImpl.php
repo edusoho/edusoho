@@ -14,13 +14,13 @@ class StatementDaoImpl extends GeneralDaoImpl implements StatementDao
         return array(
             'timestamps' => array('created_time'),
             'orderbys' => array(
-                'created_time'
+                'created_time',
             ),
             'serializes' => array(
-                'data' => 'json'
+                'data' => 'json',
             ),
             'conditions' => array(
-                'status = :status'
+                'status = :status',
             ),
         );
     }
