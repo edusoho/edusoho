@@ -21,9 +21,25 @@ class PublishedTasksDataTag extends BaseDataTag implements DataTag
         if (empty($arguments['courseSetId'])) {
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('courseSetId参数缺失'));
         }
-        $tasks = $this->getTaskService()->findPublishedTasksByCourseSetId($arguments['courseSetId']);
 
-        return $tasks;
+        $conditions = array(
+            'fromCourseSetId' => $arguments['courseSetId'],
+            'type' => 'live',
+            'status' => 'published',
+        );
+
+        if (empty($arguments['count'])) {
+            $count = $this->getTaskService()->countTasks($conditions);
+        } else {
+            $count = intval($arguments['count']);
+        }
+
+        return $this->getTaskService()->searchTasks(
+            $conditions,
+            array('startTime' => 'ASC'),
+            0,
+            $count
+        );
     }
 
     /**
