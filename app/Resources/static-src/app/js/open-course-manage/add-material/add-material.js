@@ -83,7 +83,6 @@ export default class AddMaterial {
     let $verifyLink = $("#verifyLink");
     let linkVal = $("#link").val();
     let linkLength = linkVal.length;
-
     let isValidated = this.$form.data('validator').valid();
 
     if (isValidated && (linkLength > 0)) {
@@ -93,14 +92,13 @@ export default class AddMaterial {
       $verifyLink.val('');
       $materials.val('');
     }
+
     $("#link").val($verifyLink.val());
     $('.js-current-file').text($verifyLink.val());
   }
 
   initFileChooser() {
-
-    const fileSelect = file => {
-
+    const fileSelect = (file) => {
       let $media = $("#media");
       let $materials = $("#materials");
       let media = null;
@@ -109,13 +107,11 @@ export default class AddMaterial {
       $media.val(JSON.stringify(file));
       chooserUiOpen();
       $('.js-current-file').text(file.name);
-
       media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
       fileIdVal = $materials.val(media.id);
     }
 
     const fileChooser = new FileChooser();
-
     fileChooser.on('select', fileSelect);
   }
 
