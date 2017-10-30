@@ -156,30 +156,16 @@
 	background-position:0 -80px;
 }
 
-// @font-face {font-family: "esicon";
-//   src: url('font/es-icon.eot'); /* IE9*/
-//   src: url('font/es-icon.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//   url('font/es-icon.woff') format('woff'), /* chrome、firefox */
-//   url('font/es-icon.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-//   url('font/es-icon.svg#es-icon') format('svg'); /* iOS 4.1- */
-// }
-
-// .esicon {
-//   font-family:"esicon" !important;
-//   font-style:normal;
-//   -webkit-font-smoothing: antialiased;
-//   -webkit-text-stroke-width: 0.2px;
-//   -moz-osx-font-smoothing: grayscale;
-// }
-
-// .esicon-safety:before { content: "\e600"; }
-// .esicon-share:before { content: "\e601"; }
-// .esicon-setting:before { content: "\e603"; }
-// .esicon-like:before { content: "\e605"; }
-// .esicon-exit:before { content: "\e602"; }
-// .esicon-user:before { content: "\e607"; }
-
-
+//上传专用btn; 可用于后台，现在整个系统上传图片按钮的可点范围都存在问题，可加改样式修复
+.upload-picture-btn  {
+  position: relative;
+  div {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
+  }
+}
 
 /*! define gallery2/video-js/4.2.1/video-js-debug.css */
 /*!
