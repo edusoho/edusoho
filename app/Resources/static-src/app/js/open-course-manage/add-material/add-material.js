@@ -1,6 +1,9 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
 import notify from 'common/notify';
 import {
+  isEmpty
+} from 'common/utils';
+import {
   chooserUiOpen
 } from 'app/js/activity-manage/widget/chooser-ui';
 
@@ -107,17 +110,13 @@ export default class AddMaterial {
       chooserUiOpen();
       $('.js-current-file').text(file.name);
 
-      media = this.isEmpty($media.val()) ? {} : JSON.parse($media.val());
+      media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
       fileIdVal = $materials.val(media.id);
     }
 
     const fileChooser = new FileChooser();
 
     fileChooser.on('select', fileSelect);
-  }
-
-  isEmpty(obj) {
-    return obj == null || obj == "" || obj == undefined || Object.keys(obj).length == 0;
   }
 
 }

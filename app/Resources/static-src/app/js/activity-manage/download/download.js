@@ -1,6 +1,9 @@
 import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
 import {
+  isEmpty
+} from 'common/utils';
+import {
   chooserUiOpen
 } from '../widget/chooser-ui';
 
@@ -44,7 +47,7 @@ export default class DownLoad {
   deleteItem(event) {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
-    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
       $("#materials").val(JSON.stringify(this.materials));
@@ -78,10 +81,6 @@ export default class DownLoad {
     this.firstName = $this.val();
   }
 
-  isEmpty(obj) {
-    return obj == null || obj == "" || obj == undefined || Object.keys(obj).length == 0;
-  }
-
   importLink() {
     if (this.$form.data('validator').valid() && $("#link").val().length > 0) {
       $("#verifyLink").val($("#link").val());
@@ -91,7 +90,7 @@ export default class DownLoad {
 
   addLink() {
     // 链接的时候，通过js手动把链接的信息设置成对象的形式
-    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     let data = {
       source: 'link',
       id: $("#verifyLink").val(),
@@ -106,8 +105,8 @@ export default class DownLoad {
   }
 
   loadFile() {
-    this.media = this.isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    this.media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
+    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
   }
 
   addFile() {
@@ -122,14 +121,14 @@ export default class DownLoad {
     }
 
     // 失败提示：请上传或选择资料
-    if (this.isEmpty(this.media)) {
+    if (isEmpty(this.media)) {
       this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), errorTip);
       return;
     }
 
 
     // 文件重复上传
-    if (!this.isEmpty(this.materials) && this.checkExisted()) {
+    if (!isEmpty(this.materials) && this.checkExisted()) {
       this.showTip($('.js-success-redmine'), $('.js-danger-redmine'), existTip);
       $('#file-summary').val('');
       $("#media").val('');
@@ -158,7 +157,7 @@ export default class DownLoad {
   }
 
   checkExisted() {
-    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
+    this.materials = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     let flag = false;
     for (let item in this.materials) {
       if (this.materials[item].hasOwnProperty("link") && this.materials[item].link.length > 0) {
