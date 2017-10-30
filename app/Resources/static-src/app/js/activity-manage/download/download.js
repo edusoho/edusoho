@@ -90,7 +90,7 @@ export default class DownLoad {
   }
 
   addLink() {
-    // 链接的时候，通过js手动把链接的信息设置成数组的形式
+    // 链接的时候，通过js手动把链接的信息设置成对象的形式
     this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     let data = {
       source: 'link',
@@ -158,11 +158,19 @@ export default class DownLoad {
   }
 
   checkExisted() {
+    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     let flag = false;
     for (let item in this.materials) {
-      if (this.media.name === this.materials[item].name) {
-        flag = true;
+      if (this.materials[item].hasOwnProperty("link") && this.materials[item].link.length > 0) {
+        if (this.materials[item].link === this.media.id) {
+          flag = true;
+        }
+      } else {
+        if (this.materials[item].name === this.media.name) {
+          flag = true;
+        }
       }
+
     }
     return flag;
   }
