@@ -511,10 +511,10 @@ class UserController extends BaseController
                 ));
             }
         }
-        /** end todo */
+        /* end todo */
 
         return $this->createJsonResponse(array(
-            'msg' => 'success'
+            'msg' => 'success',
         ));
     }
 
