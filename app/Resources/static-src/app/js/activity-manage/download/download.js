@@ -91,6 +91,7 @@ export default class DownLoad {
 
   addLink() {
     // 链接的时候，通过js手动把链接的信息设置成数组的形式
+    this.materials = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
     let data = {
       source: 'link',
       id: $("#verifyLink").val(),
@@ -139,7 +140,6 @@ export default class DownLoad {
     this.media.summary = $("#file-summary").val();
     this.materials[this.media.id] = this.media;
     $("#materials").val(JSON.stringify(this.materials));
-
 
     // 获得第一次上传文件的title值赋值给标题名称
     if (!this.firstName) {
