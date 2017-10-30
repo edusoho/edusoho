@@ -1874,6 +1874,7 @@ CREATE TABLE `message` (
   `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
   `content` text NOT NULL COMMENT '私信内容',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '私信发送时间',
+  `isDelete` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -257,6 +257,8 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'andit_refund',
                 'refund_cancel',
                 'unbind-back',
+                'course_callback',
+                'classroom_callback',
             ),
             self::CATEGORY => array(
                 'create',

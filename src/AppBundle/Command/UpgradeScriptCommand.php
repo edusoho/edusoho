@@ -15,6 +15,7 @@ class UpgradeScriptCommand extends BaseCommand
     {
         $this->setName('util:upgrade-script')
             ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
+            ->addArgument('index', InputArgument::OPTIONAL, '执行的序号')
             ->setDescription('用于命令行中执行指定版本的升级脚本');
     }
 
@@ -24,8 +25,12 @@ class UpgradeScriptCommand extends BaseCommand
 
         $code = 'MAIN';
         $version = $input->getArgument('version');
+        $index = 0;
+        if ($input->hasArgument('index')) {
+            $index = $input->getArgument('index');
+        }
 
-        $this->executeScript($code, $version);
+        $this->executeScript($code, $version, $index);
         $output->writeln('<info>执行脚本</info>');
 
         $this->removeCache();

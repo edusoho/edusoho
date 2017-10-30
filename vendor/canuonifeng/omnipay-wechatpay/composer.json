@@ -1,0 +1,31 @@
+{
+  "name": "canuonifeng/omnipay-wechatpay",
+  "type": "library",
+  "description": "Wechat gateway for Omnipay payment processing library",
+  "keywords": [
+    "php53",
+    "wechat",
+    "gateway",
+    "php",
+    "omnipay",
+    "pay",
+    "sdk",
+    "app",
+    "payment",
+    "purchase",
+    "微信支付"
+  ],
+  "homepage": "https://github.com/canuonifeng/omnipay-wechatpay",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Omnipay\\WechatPay\\": "src/"
+    }
+  },
+  "require": {
+    "omnipay/common": "~2.0"
+  },
+  "require-dev": {
+    "omnipay/tests": "~2.0"
+  }
+}

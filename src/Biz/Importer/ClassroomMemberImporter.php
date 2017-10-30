@@ -23,7 +23,7 @@ class ClassroomMemberImporter extends Importer
         $classroomId = $request->request->get('classroomId');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $price = $request->request->get('price');
-        $remark = $request->request->get('remark');
+        $remark = $request->request->get('remark', '通过批量导入添加');
         $orderData = array(
             'amount' => $price,
             'remark' => $remark,
@@ -55,47 +55,14 @@ class ClassroomMemberImporter extends Importer
             if ($isClassroomStudent || $isClassroomTeacher) {
                 ++$existsUserCount;
             } else {
-                $currentUser = $this->getUserService()->getCurrentUser();
-
-                $order = $this->getOrderService()->createOrder(array(
-                    'userId' => $user['id'],
-                    'title' => sprintf('购买班级《%s》(管理员添加)', $targetObject['title']),
-                    'targetType' => 'classroom',
-                    'targetId' => $targetObject['id'],
-                    'amount' => empty($orderData['amount']) ? 0 : $orderData['amount'],
-                    'payment' => 'outside',
-                    'snPrefix' => 'CR',
-                    'totalPrice' => $targetObject['price'],
-                ));
-
-                $this->getOrderService()->payOrder(array(
-                    'sn' => $order['sn'],
-                    'status' => 'success',
-                    'amount' => $order['amount'],
-                    'paidTime' => time(),
-                ));
-
                 $info = array(
-                    'orderId' => $order['id'],
-                    'note' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
+                    'price' => $orderData['amount'],
+                    'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
+                    'isNotify' => 1,
                 );
+                $this->getClassroomService()->becomeStudentWithOrder($targetObject['id'], $user['id'], $info);
 
-                if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
-                    ++$successCount;
-                }
-
-                $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
-
-                $message = array(
-                    'classroomId' => $targetObject['id'],
-                    'classroomTitle' => $targetObject['title'],
-                    'userId' => $currentUser['id'],
-                    'userName' => $currentUser['nickname'],
-                    'type' => 'create', );
-
-                $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
-
-                $this->getLogService()->info('classroom', 'add_student', "班级《{$targetObject['title']}》(#{$targetObject['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加");
+                ++$successCount;
             }
         }
 
@@ -426,26 +393,11 @@ class ClassroomMemberImporter extends Importer
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:UserService');
+        return $this->biz->service('User:UserService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
-    }
-
-    protected function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order:OrderService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('User:NotificationService');
-    }
-
-    protected function getLogService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('System:LogService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }

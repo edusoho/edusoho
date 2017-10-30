@@ -60,8 +60,6 @@ interface ClassroomService
 
     public function deleteClassroom($id);
 
-    public function exitClassroom($classroomId, $userId);
-
     public function searchClassrooms($conditions, $orderBy, $start, $limit);
 
     public function countClassrooms($condtions);
@@ -129,6 +127,8 @@ interface ClassroomService
 
     public function becomeStudent($classroomId, $userId, $info = array());
 
+    public function becomeStudentWithOrder($classroomId, $userId, $info = array());
+
     public function becomeAuditor($classroomId, $userId);
 
     public function becomeAssistant($classroomId, $userId);
@@ -188,4 +188,10 @@ interface ClassroomService
     public function findWillOverdueClassrooms();
 
     public function countCourseTasksByClassroomId($classroomId);
+
+    public function findUserPaidCoursesInClassroom($userId, $classroomId);
+
+    public function findMembersByMemberIds($ids);
+
+    public function tryFreeJoin($classroomId);
 }

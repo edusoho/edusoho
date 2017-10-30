@@ -8,7 +8,7 @@ let validator = $form.validate({
     sms_code: {
       required: true,
       unsigned_integer: true,
-      smsCode: true,
+      es_remote: true,
     }
   },
   messages: {

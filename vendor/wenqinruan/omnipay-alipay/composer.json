@@ -1,0 +1,38 @@
+{
+  "name": "wenqinruan/omnipay-alipay",
+  "type": "library",
+  "description": "Alipay gateway for Omnipay payment processing library",
+  "keywords": [
+    "php53",
+    "alipay",
+    "gateway",
+    "merchant",
+    "omnipay",
+    "pay",
+    "payment",
+    "purchase"
+  ],
+  "homepage": "https://github.com/wenqinruan/omnipay-alipay",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Wenqin Ruan",
+      "email": "ruanwenqinrl@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Omnipay\\Alipay\\": "src/",
+      "Omnipay\\Alipay\\Tests\\": "tests/"
+    },
+    "files": [
+      "src/Common/helpers.php"
+    ]
+  },
+  "require": {
+    "omnipay/common": "~2.0"
+  },
+  "require-dev": {
+    "omnipay/tests": "~2.0"
+  }
+}

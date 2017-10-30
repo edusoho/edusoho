@@ -1,3 +1,7 @@
+import { buyBtn } from 'app/common/widget/btn-util';
+
+buyBtn($('.js-task-preview-buy-btn'));
+
 $('#modal').on('hidden.bs.modal', function () {
     $("#viewerIframe").attr('src', '');
 });
