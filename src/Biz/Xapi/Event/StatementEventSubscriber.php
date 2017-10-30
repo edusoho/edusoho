@@ -108,7 +108,33 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onExamFinish(Event $event)
     {
         // testpaper, exercise, homework
-        $testpaperResult = $event->getSubject();
+        $examResult = $event->getSubject();
+
+        switch ($examResult['type']) {
+            case 'testpaper':
+                break;
+            case 'homework':
+                break;
+            case 'exercise':
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    protected function testpaperFinish($testpaperResult)
+    {
+
+    }
+
+    protected function homeworkFinish($homeworkResult)
+    {
+
+    }
+
+    protected function exerciseFinish($exerciseFinish)
+    {
 
     }
 
