@@ -50,12 +50,10 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'id' => $task['id'],
             'name' => $task['title'],
             'course' => $course,
-            'resource' => array()
+            'resource' => array(),
         );
 
         $this->finishActivity($actor, $object, array());
-
-
     }
 
     public function finishActivity($actor, $object, $result)
@@ -66,8 +64,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
                 'zh-CN' => '完成了',
-                'en-US' => 'completed'
-            )
+                'en-US' => 'completed',
+            ),
         );
 
         $statement['object'] = array(
@@ -75,31 +73,30 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'defination' => array(
                 'type' => 'https://w3id.org/xapi/acrossx/activities/video',
                 'name' => array(
-                    'zh-CN' => $object['name']
+                    'zh-CN' => $object['name'],
                 ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => $object['course']['id'],
                         'title' => $object['course']['title'],
-                        'description' => $object['course']['summary']
-
+                        'description' => $object['course']['summary'],
                     ),
 //                    'http://xapi.edusoho.com/extensions/resource' => array(
 //                        'id' => $object['resource']['id'],
 //                        'name' => $object['resource']['name']
 //                    )
-                )
-            )
+                ),
+            ),
         );
 
         $statement['result'] = array(
-            'success' => true
+            'success' => true,
         );
 
         $statement['context'] = array(
             'extensions' => array(
-                'http://xapi.edusoho.com/extensions/school' => $this->getSchoolInfo()
-            )
+                'http://xapi.edusoho.com/extensions/school' => $this->getSchoolInfo(),
+            ),
         );
 
         $this->getXapiService()->createStatement($statement);
@@ -120,22 +117,18 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             default:
                 break;
         }
-
     }
 
     protected function testpaperFinish($testpaperResult)
     {
-
     }
 
     protected function homeworkFinish($homeworkResult)
     {
-
     }
 
     protected function exerciseFinish($exerciseFinish)
     {
-
     }
 
     public function onCourseNoteCreate(Event $event)
@@ -245,6 +238,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     protected function createService($alias)
     {
-        return $this->getBiz() ->service($alias);
+        return $this->getBiz()->service($alias);
     }
 }
