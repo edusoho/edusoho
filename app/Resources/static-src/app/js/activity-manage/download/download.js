@@ -2,7 +2,7 @@ import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
 import {
   chooserUiOpen
-} from '../widget/chooser-ui.js';
+} from '../widget/chooser-ui';
 
 export default class DownLoad {
   constructor() {

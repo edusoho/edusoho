@@ -2,7 +2,7 @@ import FileChooser from 'app/js/file-chooser/file-choose';
 import notify from 'common/notify';
 import {
   chooserUiOpen
-} from 'app/js/activity-manage/widget/chooser-ui.js';
+} from 'app/js/activity-manage/widget/chooser-ui';
 
 export default class AddMaterial {
   constructor() {
