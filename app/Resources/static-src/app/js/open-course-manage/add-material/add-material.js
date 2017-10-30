@@ -84,9 +84,9 @@ export default class AddMaterial {
     let linkVal = $("#link").val();
     let linkLength = linkVal.length;
 
-    let validateFlag = this.$form.data('validator').valid();
+    let isValidated = this.$form.data('validator').valid();
 
-    if (validateFlag && (linkLength > 0)) {
+    if (isValidated && (linkLength > 0)) {
       $verifyLink.val(linkVal);
       $materials.val(0);
     } else {
