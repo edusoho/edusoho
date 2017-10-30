@@ -25,11 +25,8 @@ class SlotManager
 
         foreach ($injections as $name => $class) {
             $injection = new $class();
-
-            foreach ($args as $argName => $argValue) {
-                $injection->setContainer($this->container);
-                $injection->setArgements($args);
-            }
+            $injection->setContainer($this->container);
+            $injection->setArgements($args);
 
             $contents[] = $injection->inject();
         }

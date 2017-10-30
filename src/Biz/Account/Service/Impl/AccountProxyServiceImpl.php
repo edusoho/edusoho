@@ -3,74 +3,83 @@
 namespace Biz\Account\Service\Impl;
 
 use Biz\Account\Service\AccountProxyService;
-use Codeages\Biz\Framework\Pay\Service\Impl\AccountServiceImpl;
+use Codeages\Biz\Pay\Service\Impl\AccountServiceImpl;
 
 class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxyService
 {
     public function countUsersByConditions($conditions)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         return parent::countUsersByConditions($conditions);
     }
 
-    public function searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit)
+    public function countCashflows($conditions)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
-        return parent::searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit);
+        return parent::countCashflows($conditions);
     }
 
-    public function countUserCashflows($conditions)
+    public function searchCashflows($conditions, $orderBy, $start, $limit)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
-        return parent::countUserCashflows($conditions);
-    }
-
-    public function searchUserCashflows($conditions, $orderBy, $start, $limit)
-    {
-        $conditions = $this->_prepareConditions($conditions);
-
-        return parent::searchUserCashflows($conditions, $orderBy, $start, $limit);
+        return parent::searchCashflows($conditions, $orderBy, $start, $limit);
     }
 
     public function sumColumnByConditions($column, $conditions)
     {
-        $conditions = $this->_prepareConditions($conditions);
+        $conditions = $this->prepareConditions($conditions);
 
         return parent::sumColumnByConditions($column, $conditions);
     }
 
-    protected function _prepareConditions($conditions)
+    public function prepareConditions($conditions)
     {
-        if (isset($conditions['timeType'])) {
-            switch ($conditions['timeType']) {
-                case 'oneWeek':
-                    $conditions['created_time_GTE'] = time() - 7 * 3600 * 24;
-                    break;
-                case 'twoWeeks':
-                    $conditions['created_time_GTE'] = time() - 14 * 24 * 3600;
-                    break;
-                case 'oneMonth':
-                    $conditions['created_time_GTE'] = time() - 30 * 3600 * 24;
-                    break;
-                case 'twoMonths':
-                    $conditions['created_time_GTE'] = time() - 60 * 24 * 3600;
-                    break;
-                case 'threeMonths':
-                    $conditions['created_time_GTE'] = time() - 90 * 3600 * 24;
-                    break;
-                case 'all':
-                    $conditions['created_time_GTE'] = 0;
-                    break;
-                default:
-                    break;
-            }
+        if (!empty($conditions['startTime'])) {
+            $conditions['created_time_GTE'] = strtotime($conditions['startTime']);
+            unset($conditions['startTime']);
+        }
+        if (!empty($conditions['endTime'])) {
+            $conditions['created_time_LT'] = strtotime($conditions['endTime']);
+            unset($conditions['endTime']);
+        }
 
-            unset($conditions['timeType']);
+        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
+        }
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['user_id'] = empty($user) ? -1 : $user['id'];
+            unset($conditions['nickname']);
+        }
+
+        if (!empty($conditions['buyerNickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['buyerNickname']);
+            $conditions['buyer_id'] = empty($user) ? -1 : $user['id'];
+            unset($conditions['buyerNickname']);
+        }
+
+        if (!empty($conditions['platform_sn'])) {
+            $trade = $this->getPayService()->getTradeByPlatformSn($conditions['platform_sn']);
+            $conditions['trade_sn'] = empty($trade) ? '0' : $trade['trade_sn'];
+            unset($conditions['platform_sn']);
         }
 
         return $conditions;
+    }
+
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->biz->service('Pay:PayService');
     }
 }

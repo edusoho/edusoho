@@ -74,7 +74,6 @@ class Configuration implements ConfigurationInterface
     public function getProviderNames(NodeInterface $tree)
     {
         foreach ($tree->getChildren() as $providers) {
-
             if ($providers->getName() !== 'providers') {
                 continue;
             }
@@ -117,6 +116,7 @@ class Configuration implements ConfigurationInterface
                 $options = reset($params);
                 $conf    = array(
                     'type'            => 'custom_provider',
+                    'namespace' => isset($conf['namespace']) ? $conf['namespace'] : null ,
                     'custom_provider' => array(
                         'type'      => $conf['type'],
                         'options'   => $options ?: null,
@@ -377,6 +377,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('password')->defaultNull()->end()
                 ->scalarNode('timeout')->defaultNull()->end()
                 ->scalarNode('database')->defaultNull()->end()
+                ->booleanNode('persistent')->defaultFalse()->end()
             ->end()
         ;
 

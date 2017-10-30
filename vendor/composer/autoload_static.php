@@ -11,21 +11,21 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
-        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
+        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
-        '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
+        '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '3a6ac12a64116221776bf6b30b9b866b' => __DIR__ . '/..' . '/codeages/biz-framework/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
+        '5500a79e13a6ff0c087268676dcb4c2f' => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
-        '5500a79e13a6ff0c087268676dcb4c2f' => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -44,6 +44,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Symfony\\Polyfill\\Php55\\' => 23,
             'Symfony\\Polyfill\\Php54\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Apcu\\' => 22,
             'Symfony\\Component\\Security\\Acl\\' => 31,
             'Symfony\\Component\\Lock\\' => 23,
             'Symfony\\Component\\' => 18,
@@ -112,6 +113,8 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Codeages\\RateLimiter\\' => 21,
             'Codeages\\PluginBundle\\' => 22,
             'Codeages\\Biz\\RateLimiter\\' => 25,
+            'Codeages\\Biz\\Pay\\' => 17,
+            'Codeages\\Biz\\Order\\' => 19,
             'Codeages\\Biz\\Framework\\' => 23,
         ),
     );
@@ -152,6 +155,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Apcu\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-apcu',
         ),
         'Symfony\\Component\\Security\\Acl\\' => 
         array (
@@ -235,7 +242,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         ),
         'Omnipay\\WechatPay\\' => 
         array (
-            0 => __DIR__ . '/..' . '/wenqinruan/omnipay-wechatpay/src',
+            0 => __DIR__ . '/..' . '/canuonifeng/omnipay-wechatpay/src',
         ),
         'Omnipay\\Alipay\\Tests\\' => 
         array (
@@ -316,6 +323,14 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Codeages\\Biz\\RateLimiter\\' => 
         array (
             0 => __DIR__ . '/..' . '/codeages/biz-rate-limiter/src',
+        ),
+        'Codeages\\Biz\\Pay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Pay',
+        ),
+        'Codeages\\Biz\\Order\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/biz-order-pay/src/Order',
         ),
         'Codeages\\Biz\\Framework\\' => 
         array (
@@ -1011,6 +1026,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'SessionHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php54/Resources/stubs/SessionHandlerInterface.php',
+        'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
         'SqlFormatter' => __DIR__ . '/..' . '/jdorn/sql-formatter/lib/SqlFormatter.php',
         'Text_Diff_Renderer_parallel' => __DIR__ . '/..' . '/cerdic/css-tidy/testing/unit-tests/class.Text_Diff_Renderer_parallel.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',

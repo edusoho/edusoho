@@ -3,14 +3,12 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus;
-use Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
-use Codeages\Biz\Framework\Pay\Status\PayingStatus;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
+use Codeages\Biz\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\PayService;
+use Codeages\Biz\Pay\Status\PayingStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;
@@ -32,7 +30,7 @@ class CashierController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        if ($order['status'] == SuccessOrderStatus::NAME) {
+        if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
             return $this->forward('AppBundle:Cashier/Cashier:purchaseSuccess', array('trade' => array(
                 'order_sn' => $order['sn'],
             )));
@@ -44,29 +42,34 @@ class CashierController extends BaseController
 
         $payments = $this->getPayService()->findEnabledPayments();
 
-        return $this->render('cashier/show.html.twig', array(
-            'order' => $order,
-            'payments' => $payments,
-        ));
+        return $this->render(
+            'cashier/show.html.twig',
+            array(
+                'order' => $order,
+                'product' => $this->getProduct($order['id']),
+                'payments' => $payments,
+            )
+        );
     }
 
-    public function payAction(Request $request)
+    private function getProduct($orderId)
     {
-        $sn = $request->request->get('sn');
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
+        $orderItem = reset($orderItems);
 
-        $payment = $request->request->get('payment');
-        $payment = preg_replace('/\.\w+/', '', $payment);
-        $payment = ucfirst($payment);
+        return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
+    }
 
-        try {
-            $params = $request->request->all();
-            $params['clientIp'] = $request->getClientIp();
-            $trade = $this->getOrderFacadeService()->payingOrder($sn, $request->request->all());
-        } catch (OrderPayCheckException $e) {
-            return $this->createMessageResponse('error', $this->trans($e->getMessage()));
+    public function redirectAction(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        if ($trade['user_id'] !== $this->getCurrentUser()->getId()) {
+            throw $this->createAccessDeniedException();
         }
 
-        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
+        return $this->redirect($trade['platform_created_result']['url']);
     }
 
     public function successAction(Request $request)
@@ -121,16 +124,25 @@ class CashierController extends BaseController
 
     public function checkPayPasswordAction(Request $request)
     {
+        $user = $this->getCurrentUser();
         $password = $request->query->get('value');
+        $rateLimiter = $this->getRateLimiter($user['email'], 5, 300);
 
+        $maxAllowance = $rateLimiter->getAllow($user['email']);
+
+        if (empty($maxAllowance)) {
+            $response = array('success' => false, 'message' => '错误次数太多，请5分钟后再试');
+            goto end;
+        }
         $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
 
         if (!$isRight) {
+            $rateLimiter->check($user['email']);
             $response = array('success' => false, 'message' => '支付密码不正确');
         } else {
             $response = array('success' => true, 'message' => '支付密码正确');
         }
-
+        end:
         return $this->createJsonResponse($response);
     }
 
@@ -169,5 +181,21 @@ class CashierController extends BaseController
     private function getWorkflowService()
     {
         return $this->createService('Order:WorkflowService');
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $name
+     * @param [type] $maxAllowance
+     * @param [type] $period
+     *
+     * @return \Codeages\RateLimiter\RateLimiter
+     */
+    private function getRateLimiter($name, $maxAllowance, $period)
+    {
+        $rateLimiter = $this->getBiz()->offsetGet('ratelimiter.factory');
+
+        return $rateLimiter($name, $maxAllowance, $period);
     }
 }

@@ -5,7 +5,7 @@ namespace Biz\OrderFacade\Command\OrderPayCheck;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class CoinCheckCommand extends OrderPayCheckCommand
 {
@@ -13,6 +13,10 @@ class CoinCheckCommand extends OrderPayCheckCommand
     {
         if (empty($params['coinAmount'])) {
             return;
+        }
+
+        if ($params['coinAmount'] < 0) {
+            throw new OrderPayCheckException('order.pay_check_msg.parameters_error');
         }
 
         if (empty($params['payPassword'])) {

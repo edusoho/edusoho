@@ -1,44 +1,45 @@
-<div class="order-item clearfix" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount }}">
+{% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
 
-  <div class="order-item-title" style="width:30%">
-    <i class="es-icon es-icon-money"></i>
-    <span class="title">{{ coinSetting.coin_name }}</span>
-    <span>{{ 'order.confirm.exchange_rate'|trans({'%cashRate%':coinSetting.cash_rate,'%coin_name%':coinSetting.coin_name}) }}</span>
-  </div>
-
-  <div class="order-item-detail">
-
+<div class="order-center-deduction">
+  <span class="order-center-deduction__title">
+    {{ coinSetting.coin_name }}
+  </span>
+  <span class="order-center-deduction__content">
     {% if isPasswordSet %}
-      {{ 'order.confirm.use_tips'|trans }}
-      <input class="form-control text-center inline-block width-input-small mhm js-coin-amount" type="text" name="coinAmount" value="0">
-      {{ setting("coin.coin_name") }}
-    {% endif %}
-
-    <span class="coin-detail hidden-xs hidden-sm">
-      （{{ 'order.confirm.account_cash'|trans }}<span class="color-danger">{{ balance.amount }}</span> {{ coinSetting.coin_name }}）
-      </span>
-
-    {% if isPasswordSet %}
-      <div class="controls mtm" style="display:none">
-        <input class="form-control width-input-large inline-block js-pay-password"
-               name="payPassword" type="password" placeholder="{{ 'order.confirm.input_pay_password_tips'|trans }}"
-               data-url="{{ path('cashier_password_check') }}" autocomplete="off" data-type="get"
-               data-display="{{ 'order.confirm.forget_password_tips'|trans }}" />
-        <a href="{{ path('settings_find_pay_password') }}" target='_blank' class="btn-link">{{ 'order.confirm.forget_password_btn'|trans }}</a>
-        <br>
-      </div>
-
+      {% if currency == 'coin' %}
+        {{ 'order.confirm.current_account_cash_simple'|trans({ '%amount%':balance.amount|to_coin(0), '%coin_name%':coinSetting.coin_name }) }}
+      {% else %}
+         {{ 'order.confirm.current_account_cash'|trans({
+          '%amount%':balance.amount|to_coin(0), '%coin_name%':coinSetting.coin_name, '%rmb%': (balance.amount|to_coin(0) / coinSetting.cash_rate), '%rmb_unit%': (1 / coinSetting.cash_rate)
+        }) }}
+      {% endif %}
     {% else %}
-      <div  class="alert alert-warning alert-xs mtm inline-block" style="line-height:20px">
-        {{ 'order.confirm.safety_tips'|trans }}
-        {{ 'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_pay_password')})|raw }}
-      </div>
+      {{ 'pay_center.pay.coin.password_not_set.tips'|trans({ '%coin_name%':coinSetting.coin_name }) }} 
+      <a class="cd-link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_pay_password') }}">
+        {{ 'pay_center.pay.set_pay_password'|trans }}
+      </a>
     {% endif %}
-
-  </div>
-
-  <div class="order-item-price" style="width:25%">
-    <span class="color-danger" style="font-size: 24px" data-default-value="0.00"></span>
-  </div>
-
+  </span>
 </div>
+
+{% if isPasswordSet %}
+  <div class="order-center-coin-use" id="coin-use-section" data-max-allow-coin="{{ maxCoin }}" data-coin-balance="{{ balance.amount|to_coin(0) }}"
+    data-coin-rate="{{ setting('coin.cash_rate') }}" data-price-type="{{ currency }}">
+    <input name="old-coinAmount" type="text" style="display:  none;">
+    <input name="old-payPassword" type="password" style="display:  none;">
+    <div class="form-group cd-form-group">
+      <input type="text" class="form-control form-control-sm js-coin-amount" autocomplete="off" name="coinAmount" 
+        placeholder="{{ 'pay_center.pay.coin_input_placeholder'|trans({'%coin_name%':coinSetting.coin_name  }) }}">
+    </div>
+    <div class="form-group cd-form-group">
+      <input type="password" class="form-control form-control-sm js-pay-password" name="payPassword" autocomplete="off"
+            data-url="{{ path('cashier_password_check') }}" data-type="get"
+            data-display="{{ 'order.confirm.forget_password_tips'|trans }}" placeholder="{{ 'pay_center.pay.password_input_placeholder'|trans }}">
+    </div>
+    <a href="{{path('settings_find_pay_password')}}" target='_blank' class="cd-link-gray cd-ml16 hidden-xs cd-text-xs">
+      {{ 'order.confirm.forget_password_btn'|trans }}
+    </a>
+  </div>
+{% endif %}
+
+<div class="order-center-line"></div>

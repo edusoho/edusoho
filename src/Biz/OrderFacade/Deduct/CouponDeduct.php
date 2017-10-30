@@ -3,7 +3,7 @@
 namespace Biz\OrderFacade\Deduct;
 
 use Biz\Coupon\Service\CouponService;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class CouponDeduct extends Deduct implements OrderStatusCallback
 {

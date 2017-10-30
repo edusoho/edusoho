@@ -264,50 +264,67 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     public function checkCoupon($code, $id, $type)
     {
-        $coupon = $this->getCouponByCode($code);
-        $currentUser = $this->getCurrentUser();
+        try {
+            $this->beginTransaction();
+            $coupon = $this->getCouponByCode($code, true);
+            $currentUser = $this->getCurrentUser();
+            //todo 国际化
+            $message = array(
+                'useable' => 'no',
+            );
 
-        //todo 国际化
-        if (empty($coupon)) {
+            $factory = $this->biz['ratelimiter.factory'];
+            $limiter = $factory('coupon_check', 60, 3600);
+
+            if ($limiter->getAllow($currentUser->getId()) == 0) {
+                $message['message'] = '优惠码校验受限，请稍后尝试';
+                $this->commit();
+
+                return $message;
+            }
+
+            if (empty($coupon)) {
+                $message['message'] = '该优惠券不存在';
+            }
+
+            if (empty($message['message']) && $coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
+                $message['message'] = sprintf('优惠券%s已经被使用', $code);
+            }
+
+            if (empty($message['message']) && $coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
+                $message['message'] = sprintf('优惠券%s已经被其他人领取使用', $code);
+            }
+
+            if (empty($message['message']) && ($coupon['deadline'] + 86400 < time())) {
+                $message['message'] = sprintf('优惠券%s已过期', $code);
+            }
+
+            if (empty($message['message']) && $this->isAvailableForTarget($coupon, $type, $id)) {
+                $message['message'] = '该优惠券不能被该商品使用';
+            }
+
+            if (!empty($message['message'])) {
+                $remain = $limiter->check($currentUser->getId());
+                $this->commit();
+
+                return $message;
+            }
+
+            if ($coupon['status'] == 'unused') {
+                $this->receiveCouponByUserId($coupon['id'], $currentUser['id']);
+            }
+            $this->commit();
+
+            return $coupon;
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogService()->error('coupon', 'checkCoupon', "优惠码校验失败code: {$code}", array('message' => $e->getMessage()));
+
             return array(
                 'useable' => 'no',
-                'message' => '该优惠券不存在',
+                'message' => '异常情况，优惠码不能被使用',
             );
         }
-
-        if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
-            return array(
-                'useable' => 'no',
-                'message' => sprintf('优惠券%s已经被使用', $code),
-            );
-        }
-
-        if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
-            return array(
-                'useable' => 'no',
-                'message' => sprintf('优惠券%s已经被其他人领取使用', $code),
-            );
-        }
-
-        if ($coupon['deadline'] + 86400 < time()) {
-            return array(
-                'useable' => 'no',
-                'message' => sprintf('优惠券%s已过期', $code),
-            );
-        }
-
-        if ($this->isAvailableForTarget($coupon, $type, $id)) {
-            return array(
-                'useable' => 'no',
-                'message' => '该优惠券不能被该商品使用',
-            );
-        }
-
-        if ($coupon['status'] == 'unused') {
-            $this->receiveCouponByUserId($coupon['id'], $currentUser['id']);
-        }
-
-        return $coupon;
     }
 
     private function isAvailableForTarget($coupon, $targetType, $targetId)
@@ -320,9 +337,9 @@ class CouponServiceImpl extends BaseService implements CouponService
         return !($coupon['targetType'] == 'all' or ($coupon['targetType'] == $targetType && ($coupon['targetId'] == $targetId || $coupon['targetId'] == 0)));
     }
 
-    public function getCouponByCode($code)
+    public function getCouponByCode($code, $lock = false)
     {
-        return $this->getCouponDao()->getByCode($code);
+        return $this->getCouponDao()->getByCode($code, array('lock' => $lock));
     }
 
     private function receiveCouponByUserId($couponId, $useId)
@@ -337,11 +354,11 @@ class CouponServiceImpl extends BaseService implements CouponService
 
         $this->getCardService()->addCard(array(
             'cardType' => 'coupon',
-            'cardId'   => $coupon['id'],
+            'cardId' => $coupon['id'],
             'deadline' => $coupon['deadline'],
-            'userId'   => $useId
+            'userId' => $useId,
         ));
-        
+
         $this->getLogService()->info(
             'coupon',
             'receive',
@@ -368,7 +385,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         if ($coupon['type'] == 'minus') {
             return $coupon['rate'];
         } else {
-            return round($price * ((10 - $coupon['rate']) / 10), 2);
+            return $price > 0 ? round($price * ((10 - $coupon['rate']) / 10), 2) : 0;
         }
     }
 
@@ -386,7 +403,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             case 'receive':
                 return new ReceiveCoupon($this->biz, $coupon);
             default:
-                throw new InvalidArgumentException('Invalid coupon status given');
+                throw new InvalidArgumentException(sprintf('Invalid coupon status %s given', $coupon['status']));
                 break;
         }
     }

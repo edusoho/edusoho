@@ -23,6 +23,58 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->create($record);
     }
 
+    public function updateRefundInfoByOrderId($orderId, $info)
+    {
+        $record = $this->getRecordByOrderIdAndType($orderId, 'exit');
+
+        $field = ArrayToolkit::parts($info, array('refund_id', 'reason', 'reason_type'));
+        if (!empty($record['reason'])) {
+            unset($field['reason']);
+            unset($field['reason_type']);
+        }
+
+        return $this->getRecordDao()->update($record['id'], $field);
+    }
+
+    public function getJoinReasonByOrderId($orderId = 0)
+    {
+        $reason = array(
+                'reason' => 'site.join_by_free',
+                'reason_type' => 'free_join',
+        );
+        if (empty($orderId)) {
+            return $reason;
+        }
+
+        $order = $this->getOrderService()->getOrder($orderId);
+        if (empty($order)) {
+            return $reason;
+        }
+
+        if ($order['source'] === 'markting') {
+            return array(
+                'reason' => 'site.join_by_markting',
+                'reason_type' => 'markting_join',
+            );
+        }
+
+        if ($order['source'] === 'outside') {
+            return array(
+                'reason' => 'site.join_by_import',
+                'reason_type' => 'import_join',
+            );
+        }
+
+        if ($order['pay_amount'] > 0) {
+            return array(
+                'reason' => 'site.join_by_purchase',
+                'reason_type' => 'buy_join',
+            );
+        }
+
+        return $reason;
+    }
+
     public function countRecords($conditions)
     {
         return $this->getRecordDao()->count($conditions);
@@ -38,11 +90,26 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->countGroupByDate($conditions, $sort, $dateColumn);
     }
 
+    public function getRecordByOrderIdAndType($orderId, $type)
+    {
+        return $this->getRecordDao()->getRecordByOrderIdAndType($orderId, $type);
+    }
+
+    public function countUserIdsByConditions($conditions)
+    {
+        return $this->getRecordDao()->countUserIdsByConditions($conditions);
+    }
+
     /**
      * @return MemberOperationRecordDao
      */
     protected function getRecordDao()
     {
         return $this->createDao('MemberOperation:MemberOperationRecordDao');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

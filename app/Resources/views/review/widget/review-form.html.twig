@@ -15,12 +15,6 @@
     <span class="color-success pull-left js-review-remind" style="display: none;">{{'course.reviews.success_tips'|trans}}</span>
     <a href="javascript:;" class="btn btn-primary pull-right js-btn-save" data-loading-text="{{'form.btn.save.submiting'|trans}}" autocomplete="off">{{'form.btn.save'|trans}}</a>
     <a href="javascript:;" class="btn btn-link pull-right js-hide-review-form" {% if userReview %}style="display:none;"{% endif %}>{{'form.btn.cancel'|trans}}</a>
-    {% if setting('reward_point.enable',0) and setting('reward_point.appraise_course_classroom.enable',0) and setting('reward_point.appraise_course_classroom.amount',0) >0 %}
-      <span class="pull-right color-gray form-control-static mrm">
-        {{'reward_point.appraise'|trans}}<span class="color-primary">{{ setting('reward_point').appraise_course_classroom['amount']|default(0) }}</span>{{setting('reward_point').name|default('admin.reward_point'|trans)}}
-        <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'reward_point.reward'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}" data-content="{{'reward_point.appraise_hint'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}"></i>
-      </span>
-    {% endif %}
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -2,10 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\User\Service\NotificationService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -47,9 +48,33 @@ class OrderRefundController extends BaseController
         ));
     }
 
+    public function refundDetailAction(Request $request, $id)
+    {
+        $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
+        $applyUser = $this->getUserService()->getUser($orderRefund['user_id']);
+        $dealUser = empty($orderRefund['deal_user_id']) ? null : $this->getUserService()->getUser($orderRefund['deal_user_id']);
+        $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
+
+        return $this->render('admin/order-refund/detail-modal.html.twig', array(
+            'orderRefund' => $orderRefund,
+            'order' => $order,
+            'applyUser' => $applyUser,
+            'dealUser' => $dealUser,
+        ));
+    }
+
     protected function prepareRefundSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
+
+        if (!empty($conditions['refundItemType'])) {
+            $conditions['order_item_refund_target_type'] = $conditions['refundItemType'];
+        }
+
+        if (!empty($conditions['orderRefundSn'])) {
+            $conditions['sn'] = $conditions['orderRefundSn'];
+            unset($conditions['orderRefundSn']);
+        }
 
         if (!empty($conditions['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($conditions['orderSn']);
@@ -73,24 +98,34 @@ class OrderRefundController extends BaseController
 
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
+        $user = $this->getUserService()->getUser($refund['user_id']);
+
         if ($request->getMethod() == 'POST') {
             $pass = $request->request->get('result');
-            $fileds = $request->request->all();
-            $refundData = array('deal_reason' => $request->request->get('note'));
+            $fields = $request->request->all();
 
             if ('pass' === $pass) {
+                $refundData = array(
+                    'deal_reason' => $request->request->get('note'),
+                    'refund_coin_amount' => intval($request->request->get('refund_coin_amount', 0) * 100),
+                    'refund_cash_amount' => intval($request->request->get('refund_cash_amount', 0) * 100),
+                );
                 $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
             } else {
+                $refundData = array('deal_reason' => $request->request->get('note'));
                 $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], $refundData);
             }
-            $this->sendAuditRefundNotification($product, $order, $fileds);
+            $this->sendAuditRefundNotification($product, $order, $fields);
             $this->setFlashMessage('success', 'admin.order_refund_handle.success');
 
             return $this->redirect($this->generateUrl('admin_order_refunds', array('targetType' => $product->targetType)));
         }
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
+            'order' => $order,
             'refund' => $refund,
+            'user' => $user,
+            'trade' => $trade,
         ));
     }
 
@@ -109,7 +144,7 @@ class OrderRefundController extends BaseController
         $targetUrl = $this->generateUrl($backUrl['routing'], $backUrl['params']);
         $variables = array(
             'item' => "<a href='{$targetUrl}'>".$product->title.'</a>',
-            'amount' => $order['pay_amount'],
+            'amount' => MathToolkit::simple($order['pay_amount'], 0.01),
             'note' => $data['note'],
         );
 

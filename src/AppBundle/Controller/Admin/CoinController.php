@@ -124,9 +124,9 @@ class CoinController extends BaseController
             $coinSettings = $request->query->get('set');
         }
 
-        response:
+        response :
 
-        return $this->render('admin/coin/coin-model.html.twig', array(
+            return $this->render('admin/coin/coin-model.html.twig', array(
             'coinSettings' => $coinSettings,
         ));
     }
@@ -143,8 +143,12 @@ class CoinController extends BaseController
                 'parentId' => 0,
             ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
         } elseif ($type == 'classroom') {
-            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'),
-                array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+            $items = $this->getClassroomService()->searchClassrooms(
+                array('private' => 0, 'price_GT' => '0.00'),
+                array('createdTime' => 'DESC'),
+                0,
+                PHP_INT_MAX
+            );
         } elseif ($type == 'vip') {
             // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
@@ -241,8 +245,12 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $this->getLogService()->info('system', 'update_settings', '更新虚拟币图片',
-            array('coin_picture' => $coin['coin_picture']));
+        $this->getLogService()->info(
+            'system',
+            'update_settings',
+            '更新虚拟币图片',
+            array('coin_picture' => $coin['coin_picture'])
+        );
 
         $response = array(
             'path' => $coin['coin_picture'],
@@ -272,143 +280,69 @@ class CoinController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function recordsAction(Request $request)
-    {
-        $fields = $request->query->all();
-        $conditions['timeType'] = 'oneWeek';
-        $conditions['except_user_id'] = 0;
-        $conditions['amount_type'] = 'coin';
-
-        if (!empty($fields)) {
-            $conditions = array_merge($conditions, $this->filterCondition($fields));
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getAccountProxyService()->countUserCashflows($conditions),
-            20
-        );
-
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
-            $conditions,
-            array('created_time' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
-        }
-
-        if (isset($conditions['type'])) {
-            switch ($conditions['type']) {
-                case 'inflow':
-                    $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $outflow = 0;
-                    break;
-                case 'outflow':
-                    $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $inflow = 0;
-                    break;
-                default:
-                    $conditions['type'] = 'outflow';
-                    $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    $conditions['type'] = 'inflow';
-                    $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-                    break;
-            }
-        } else {
-            $conditions['type'] = 'outflow';
-            $outflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-            $conditions['type'] = 'inflow';
-            $inflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-        }
-
-        $in = $this->getAccountProxyService()->sumColumnByConditions('amount', array('type' => 'inflow', 'amount_type' => 'coin'));
-        $out = $this->getAccountProxyService()->sumColumnByConditions('amount', array('type' => 'outflow', 'amount_type' => 'coin'));
-        $amounts = $in - $out;
-
-        $userIds = ArrayToolkit::column($cashes, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('admin/coin/coin-records.html.twig', array(
-            'users' => $users,
-            'cashes' => $cashes,
-            'outflow' => $outflow,
-            'inflow' => $inflow,
-            'amounts' => $amounts,
-            'paginator' => $paginator,
-            'cashType' => 'Coin',
-        ));
-    }
-
     public function userRecordsAction(Request $request)
     {
-        $condition['timeType'] = 'oneWeek';
-        $condition['amount_type'] = 'coin';
-        $condition['orderBY'] = 'desc';
-        $condition['except_user_id'] = 0;
+        $sort = $request->query->get('sort', 'amount');
+        $direction = $request->query->get('direction', 'DESC');
+        $conditions['except_user_id'] = 0;
 
         $fields = $request->query->all();
 
         if (!empty($fields)) {
             $convertCondition = $this->convertFiltersToCondition($fields);
-            $condition = array_merge($condition, $convertCondition);
+            $conditions = array_merge($conditions, $convertCondition);
         }
 
-        if (isset($condition['userId'])) {
-            if ($condition['userId'] == 0) {
-                $userIds = array();
+        $schoolBalance = $this->getAccountProxyService()->getUserBalanceByUserId(0);
+
+        if (isset($conditions['user_id'])) {
+            if ($conditions['user_id'] == 0) {
                 $users = array();
-                $condition['userId'] = 'null';
+                $balances = array();
                 goto response;
             }
+            $user = $this->getUserService()->getUser($conditions['user_id']);
+            $users = array($conditions['user_id'] => $user);
+            $balances = array();
+            $balances[] = $this->getAccountProxyService()->getUserBalanceByUserId($conditions['user_id']);
 
-            $userIds = array($condition['userId']);
-            $user = $this->getUserService()->getUser($condition['userId']);
-            $users = array($condition['userId'] => $user);
+            response :
 
-            response:
-
-            return $this->render('admin/coin/coin-user-records.html.twig', array(
-                'condition' => $condition,
-                'userIds' => $userIds,
+                return $this->render('admin/coin/coin-user-records.html.twig', array(
+                'schoolBalance' => $schoolBalance,
+                'balances' => $balances,
                 'users' => $users,
             ));
         }
 
+        $systemUser = $this->getUserService()->getUserByType('system');
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getAccountProxyService()->countUsersByConditions($condition),
+            $this->getAccountProxyService()->countBalances(
+                array(
+                    'except_user_ids' => array(0, $systemUser['id']),
+                )
+            ),
             20
         );
+        $balances = $this->getAccountProxyService()->searchBalances(
+            array(
+                'except_user_ids' => array(0, $systemUser['id']),
+            ),
+            array($sort => $direction),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        $sort = $condition['orderBY'];
-
-        unset($condition['orderBY']);
-
-        if (isset($condition['type'])) {
-            $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderBySumColumn(
-                'amount',
-                $condition,
-                $sort,
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        } else {
-            $userIds = $this->getAccountProxyService()->searchUserIdsGroupByUserIdOrderByBalance(
-                $condition,
-                $sort,
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
+        $userIds = ArrayToolkit::column($balances, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/coin/coin-user-records.html.twig', array(
+            'schoolBalance' => $schoolBalance,
+            'balances' => $balances,
             'paginator' => $paginator,
-            'userIds' => $userIds,
             'users' => $users,
         ));
     }
@@ -416,24 +350,17 @@ class CoinController extends BaseController
     public function flowDetailAction(Request $request)
     {
         $userId = $request->query->get('userId');
-        $timeType = $request->query->get('timeType');
-
-        if (empty($timeType)) {
-            $timeType = 'oneWeek';
-        }
-
-        $condition['timeType'] = $timeType;
         $conditions['except_user_id'] = 0;
         $conditions['amount_type'] = 'coin';
         $conditions['user_id'] = $userId;
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getAccountProxyService()->countUserCashflows($conditions),
+            $this->getAccountProxyService()->countCashflows($conditions),
             20
         );
 
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
+        $cashes = $this->getAccountProxyService()->searchCashflows(
             $conditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -450,7 +377,6 @@ class CoinController extends BaseController
             'user' => $user,
             'cashes' => $cashes,
             'paginator' => $paginator,
-            'timeType' => $timeType,
         ));
     }
 
@@ -461,269 +387,12 @@ class CoinController extends BaseController
         ));
     }
 
-    public function giveCoinAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-
-            $user = $this->getUserService()->getUserByNickname($fields['nickname']);
-
-            $account = $this->getCashAccountService()->getAccountByUserId($user['id']);
-
-            if (empty($account)) {
-                $account = $this->getCashAccountService()->createAccount($user['id']);
-            }
-
-            if ($fields['type'] == 'add') {
-                $this->getCashAccountService()->waveCashField($account['id'], $fields['amount']);
-                $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币",
-                    array());
-            } else {
-                $this->getCashAccountService()->waveDownCashField($account['id'], $fields['amount']);
-                $this->getLogService()->info('coin', 'deduct_coin', '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币",
-                    array());
-            }
-        }
-
-        return $this->render('admin/coin/order-create-modal.html.twig', array());
-    }
-
-    public function editAction(Request $request, $id)
-    {
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-
-            $account = $this->getCashAccountService()->getAccount($id);
-
-            if ($account) {
-                $user = $this->getUserService()->getUser($account['userId']);
-
-                if ($fields['type'] == 'add') {
-                    $this->getCashAccountService()->waveCashField($id, $fields['amount']);
-
-                    $this->getLogService()->info('coin', 'add_coin', '添加 '.$user['nickname']." {$fields['amount']} 虚拟币",
-                        array());
-                } else {
-                    $this->getCashAccountService()->waveDownCashField($id, $fields['amount']);
-                    $this->getLogService()->info('coin', 'deduct_coin',
-                        '扣除 '.$user['nickname']." {$fields['amount']} 虚拟币", array());
-                }
-            }
-        }
-
-        return $this->render('admin/coin/order-edit-modal.html.twig', array(
-            'id' => $id,
-        ));
-    }
-
-    public function checkNicknameAction(Request $request)
-    {
-        $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
-
-        if ($result) {
-            $response = array('success' => false, 'message' => '该用户不存在');
-        } else {
-            $response = array('success' => true, 'message' => '');
-        }
-
-        return $this->createJsonResponse($response);
-    }
-
-    public function cashBillAction(Request $request)
-    {
-        $account = $this->getAccountService()->getUserBalanceByUserId(0);
-        $conditions = array(
-            'user_type' => 'seller',
-            'amount_type' => 'money',
-            'timeType' => $request->get('lastHowManyMonths'),
-            'user_id' => 0,
-        );
-
-        $nickname = $request->get('nickname');
-        if (!empty($nickname)) {
-            $user = $this->getUserService()->getUserByNickname($nickname);
-            $conditions['user_id'] = empty($user) ? -1 : $user['id'];
-        }
-
-        $paginator = new Paginator(
-            $request,
-            $this->getAccountProxyService()->countUserCashflows($conditions),
-            20
-        );
-
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
-            $conditions,
-            array('id' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
-        }
-        list($users, $orders) = $this->getBuyersByCashFlows($cashes);
-
-        $conditions['type'] = 'outflow';
-        $amountOutflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
-
-        return $this->render('admin/bill/cash.html.twig', array(
-            'cashes' => $cashes,
-            'paginator' => $paginator,
-            'users' => $users,
-            'orders' => $orders,
-            'cashType' => 'RMB',
-            'account' => $account,
-            'amountOutflow' => $amountOutflow,
-        ));
-    }
-
-    protected function getBuyersByCashFlows($cashFlows)
-    {
-        $orderSns = ArrayToolkit::column($cashFlows, 'order_sn');
-        $orders = $this->getOrderService()->findOrdersBySns($orderSns);
-
-        $orders = ArrayToolkit::index($orders, 'sn');
-        $userIds = ArrayToolkit::column($orders, 'user_id');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return array($users, $orders);
-    }
-
-    /**
-     * @param [type] $cashType RMB | Coin
-     */
-    public function exportCsvAction(Request $request, $cashType)
-    {
-        $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $conditions = $request->query->all();
-
-        if ($cashType == 'Coin') {
-            $conditions['amount_type'] = 'coin';
-            if (!empty($conditions)) {
-                $conditions = $this->filterCondition($conditions);
-            }
-        }
-        if ($cashType == 'RMB') {
-            $conditions['amount_type'] = 'money';
-            if (!empty($conditions)) {
-                $conditions = $this->filterConditionBill($conditions);
-            }
-        }
-
-        $conditions['except_user_id'] = 0;
-
-        $num = $this->getAccountProxyService()->countUserCashflows($conditions);
-        $orders = $this->getAccountProxyService()->searchUserCashflows($conditions, array('id' => 'DESC'), 0, $num);
-        $studentUserIds = ArrayToolkit::column($orders, 'user_id');
-
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');
-
-        $str = '流水号,账目名称,购买者,姓名,收支,支付方式,创建时间';
-
-        $str .= "\r\n";
-
-        $results = array();
-
-        foreach ($orders as $key => $order) {
-            $order = MathToolkit::multiply($order, array('amount'), 0.01);
-            $member = '';
-            $member .= '流水号'.$order['sn'].',';
-            $member .= $order['title'].',';
-            $member .= $users[$order['user_id']]['nickname'].',';
-            $member .= $profiles[$order['user_id']]['truename'] ? $profiles[$order['user_id']]['truename'].',' : '-'.',';
-
-            if ($order['type'] == 'inflow') {
-                $member .= '+'.$order['amount'].',';
-            }
-
-            if ($order['type'] == 'outflow') {
-                $member .= '-'.$order['amount'].',';
-            }
-
-            if (!empty($order['platform'])) {
-                $member .= (empty($payment[$order['platform']]) ? '--' : $payment[$order['platform']]).',';
-            } else {
-                $member .= '-'.',';
-            }
-
-            $member .= date('Y-n-d H:i:s', $order['created_time']).',';
-            $results[] = $member;
-        }
-
-        $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $filename = sprintf('%s-order-(%s).csv', $cashType, date('Y-n-d'));
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
-    }
-
     protected function convertFiltersToCondition($condition)
     {
-        $condition['orderBY'] = 'desc';
-        $keyword = '';
-
-        if (isset($condition['searchType'])) {
-            if (isset($condition['keyword'])) {
-                $keyword = $condition['keyword'];
-            }
-
-            if ($keyword != '') {
-                switch ($condition['searchType']) {
-                    case 'nickname':
-                        $user = $this->getUserService()->getUserByNickname($keyword);
-                        $condition['userId'] = $user ? $user['id'] : 0;
-                        break;
-                    case 'email':
-                        $user = $this->getUserService()->getUserByEmail($keyword);
-                        $condition['userId'] = $user ? $user['id'] : 0;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            unset($condition['searchType']);
+        if (!empty($condition['keyword'])) {
+            $user = $this->getUserService()->getUserByNickname($condition['keyword']);
+            $condition['user_id'] = $user ? $user['id'] : 0;
             unset($condition['keyword']);
-        }
-
-        if (isset($condition['sort'])) {
-            switch ($condition['sort']) {
-                case 'up':
-                    $condition['orderBY'] = 'ASC';
-                    break;
-                case 'down':
-                    $condition['orderBY'] = 'DESC';
-                    break;
-                default:
-                    break;
-            }
-
-            unset($condition['sort']);
-        }
-
-        if (isset($condition['flowType'])) {
-            switch ($condition['flowType']) {
-                case 'in':
-                    $condition['type'] = 'inflow';
-                    break;
-                case 'out':
-                    $condition['type'] = 'outflow';
-                    break;
-                default:
-                    break;
-            }
-            unset($condition['flowType']);
         }
 
         return $condition;
@@ -811,21 +480,6 @@ class CoinController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
-    }
-
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
-    protected function getCashAccountService()
-    {
-        return $this->createService('Cash:CashAccountService');
-    }
-
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
     }
 
     protected function getOrderService()

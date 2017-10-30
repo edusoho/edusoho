@@ -83,6 +83,16 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->db()->fetchAssoc($sql, array($seq, $courseId));
     }
 
+    public function getByCopyId($copyId)
+    {
+        return $this->getByFields(array('copyId' => $copyId));
+    }
+
+    public function getByCourseIdAndCopyId($courseId, $copyId)
+    {
+        return $this->getByFields(array('courseId' => $courseId, 'copyId' => $copyId));
+    }
+
     public function findByChapterId($chapterId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE categoryId = ? ORDER BY seq ASC ";
@@ -130,7 +140,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     {
         $time = time();
         $sql
-        = "SELECT fromCourseSetId, max(startTime) as startTime
+            = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()}
                  WHERE endTime < {$time} AND status='published' AND type = 'live'
                  GROUP BY fromCourseSetId

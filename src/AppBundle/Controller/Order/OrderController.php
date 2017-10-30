@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller\Order;
 
+use AppBundle\Common\MathToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends BaseController
@@ -15,6 +17,7 @@ class OrderController extends BaseController
         $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
 
         $product->setAvailableDeduct();
+        $product->setPickedDeduct(array());
 
         return $this->render('order/show/index.html.twig', array(
             'product' => $product,
@@ -76,6 +79,37 @@ class OrderController extends BaseController
 
             return $this->createJsonResponse($coupon);
         }
+
+        return $this->createAccessDeniedException();
+    }
+
+    public function detailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        $order = $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
+
+        preg_match('/管理员添加/', $order['title'], $order['edit']);
+        $user = $this->getUserService()->getUser($order['user_id']);
+
+        $orderLogs = $this->getOrderService()->findOrderLogsByOrderId($order['id']);
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
+        $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(array_column($orderLogs, 'user_id'));
+
+        return $this->render('order/detail-modal.html.twig', array(
+            'order' => $order,
+            'user' => $user,
+            'orderLogs' => $orderLogs,
+            'orderItems' => $orderItems,
+            'paymentTrade' => $paymentTrade,
+            'orderDeducts' => $orderDeducts,
+            'users' => $users,
+        ));
     }
 
     /**
@@ -94,8 +128,19 @@ class OrderController extends BaseController
         return $this->getBiz()->service('Coupon:CouponService');
     }
 
-    protected function getCashAccountService()
+    /**
+     * @return \Codeages\Biz\Order\Service\OrderService
+     */
+    protected function getOrderService()
     {
-        return $this->getBiz()->service('Cash:CashAccountService');
+        return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

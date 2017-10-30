@@ -4,7 +4,7 @@ namespace Biz\OrderFacade\Command\OrderPayCheck;
 
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class CouponCheckCommand extends OrderPayCheckCommand
 {

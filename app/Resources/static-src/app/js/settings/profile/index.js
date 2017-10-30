@@ -1,5 +1,6 @@
 import notify from 'common/notify';
 import InputEdit from 'app/common/input-edit';
+import 'app/common/local-image/upload';
 
 let editor = CKEDITOR.replace('profile_about', {
   toolbar: 'Simple',

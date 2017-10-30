@@ -8,7 +8,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Order extends AbstractResource
@@ -29,19 +28,28 @@ class Order extends AbstractResource
             $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
             $product->setPickedDeduct($params);
             $order = $this->getOrderFacadeService()->create($product);
-            $params['clientIp'] = $this->getClientIp();
-            $params['payment'] = 'alipay';
-            $trade = $this->getOrderFacadeService()->payingOrder($order['sn'], $params);
-            $trade['platform_type'] = 'Wap';
-            $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'alipay'), true);
-            $trade['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $trade['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-            $result = $this->getPayService()->createTrade($trade);
 
-            return array(
-                'id' => $result['trade_sn'],
-                'sn' => $result['trade_sn']
-            );
+            // 优惠卷全额抵扣
+            if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
+                return array(
+                    'id' => $order['id'],
+                    'sn' => $order['sn']
+                );
+            } else {
+                $params['gateway'] = 'Alipay_LegacyWap';
+                $params['type'] = 'purchase';
+                $params['orderSn'] = $order['sn'];
+                $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
+                $trade = $this->invokeResource($apiRequest);
+
+                return array(
+                    'id' => $trade['tradeSn'],
+                    'sn' => $trade['tradeSn']
+                );
+            }
+
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }
@@ -66,14 +74,6 @@ class Order extends AbstractResource
     private function decrypt($payPassword)
     {
         return \XXTEA::decrypt(base64_decode($payPassword), 'EduSoho');
-    }
-
-    /**
-     * @return PayService
-     */
-    private function getPayService()
-    {
-        return $this->service('Pay:PayService');
     }
 
     /**

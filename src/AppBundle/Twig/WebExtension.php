@@ -7,7 +7,6 @@ use AppBundle\Common\ConvertIpToolkit;
 use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
-use AppBundle\Common\MathToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
 use AppBundle\Component\ShareSdk\WeixinShare;
@@ -120,12 +119,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('convert_ip', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
-            new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
-            new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
+            new \Twig_SimpleFunction('user_coin_amount', array($this, 'userCoinAmount')),
 
-            //todo covertIP 要删除
-            new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-            new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
             new \Twig_SimpleFunction('user_balance', array($this, 'getBalance')),
 
             new \Twig_SimpleFunction('blur_user_name', array($this, 'blurUserName')),
@@ -508,30 +503,22 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId, $timeType = 'oneWeek')
+    public function userCoinAmount($type, $userId, $startDateTime = null, $endDateTime = null)
     {
+        if (!empty($endDateTime)) {
+            $condition['created_time_LTE'] = strtotime($endDateTime);
+        }
+
+        if (!empty($startDateTime)) {
+            $condition['created_time_GTE'] = strtotime($startDateTime);
+        }
+
         $condition = array(
             'user_id' => $userId,
-            'type' => 'outflow',
+            'type' => $type,
             'amount_type' => 'coin',
-            'timeType' => $timeType,
         );
         $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
-        $amount = MathToolkit::simple($amount, 0.01);
-
-        return $amount;
-    }
-
-    public function getInCash($userId, $timeType = 'oneWeek')
-    {
-        $condition = array(
-            'user_id' => $userId,
-            'type' => 'inflow',
-            'amount_type' => 'coin',
-            'timeType' => $timeType,
-        );
-        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
-        $amount = MathToolkit::simple($amount, 0.01);
 
         return $amount;
     }
@@ -539,7 +526,6 @@ class WebExtension extends \Twig_Extension
     public function getBalance($userId)
     {
         $balance = $this->getAccountProxyService()->getUserBalanceByUserId($userId);
-        $balance = MathToolkit::multiply($balance, array('amount', 'cash_amount', 'locked_amount'), 0.01);
 
         return $balance;
     }
@@ -555,32 +541,6 @@ class WebExtension extends \Twig_Extension
     private function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    public function getAccount($userId)
-    {
-        return $this->createService('Cash:CashAccountService')->getAccountByUserId($userId);
-    }
-
-    private function filterTime($type)
-    {
-        $time = 0;
-
-        switch ($type) {
-            case 'oneWeek':
-                $time = time() - 7 * 3600 * 24;
-                break;
-            case 'oneMonth':
-                $time = time() - 30 * 3600 * 24;
-                break;
-            case 'threeMonths':
-                $time = time() - 90 * 3600 * 24;
-                break;
-            default:
-                break;
-        }
-
-        return $time;
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)

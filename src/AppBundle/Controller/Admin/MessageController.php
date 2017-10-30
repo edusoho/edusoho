@@ -11,6 +11,7 @@ class MessageController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions['isDelete'] = 0; // 默认显示未删除的数据
 
         $paginator = new Paginator(
             $request,

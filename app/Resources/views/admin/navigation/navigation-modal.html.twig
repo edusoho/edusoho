@@ -49,9 +49,7 @@
     <div class="row form-group">
       <div class="col-md-3 control-label"><label for="url">{{ 'admin.setting.navigation.url'|trans }}</label></div>
       <div class="col-md-8 controls">
-        <div class="col-md-8 controls">
-          <input class="form-control" type="text" id="url" {% if navigation.url %} value="{{navigation.url}}" {% else %} value="{{ app.request.getScheme() }}://" {% endif %} name="url" >
-        </div>
+        <input class="form-control width-input width-input-large" type="text" id="url" {% if navigation.url %} value="{{navigation.url}}" {% else %} value="{{ app.request.getScheme() }}://" {% endif %} name="url" >
       </div>
     </div>
 

@@ -5,7 +5,6 @@ namespace AppBundle\Twig;
 use AppBundle\Common\MathToolkit;
 use Biz\OrderFacade\Currency;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class OrderExtension extends \Twig_Extension
@@ -50,25 +49,33 @@ class OrderExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('fen_to_yuan', array($this, 'fenToYuan')),
             new \Twig_SimpleFilter('price_format', array($this, 'priceFormat')),
             new \Twig_SimpleFilter('major_currency', array($this, 'majorCurrency')),
+            new \Twig_SimpleFilter('to_cash', array($this, 'toCash')),
+            new \Twig_SimpleFilter('to_coin', array($this, 'toCoin')),
         );
     }
 
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('check_order_type', array($this, 'checkOrderType')),
             new \Twig_SimpleFunction('display_order_status', array($this, 'displayOrderStatus'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('get_display_status', array($this, 'getDisplayStatus')),
         );
     }
 
-    public function fenToYuan($price, $displayPrefix = 1)
+    public function toCash($price, $display = 0)
     {
         $price = MathToolkit::simple($price, 0.01);
 
-        return $this->majorCurrency($price, $displayPrefix);
+        return $this->moneyCurrency($price, $display);
+    }
+
+    public function toCoin($price, $display = 0)
+    {
+        $price = MathToolkit::simple($price, 0.01);
+
+        return $this->coinCurrency($price, $display);
     }
 
     /**
@@ -89,9 +96,53 @@ class OrderExtension extends \Twig_Extension
         return implode($priceParts);
     }
 
+    public function coinCurrency($price, $displayPrefix = 1)
+    {
+        $priceParts = $this->getCurrency()->formatToCoinCurrency($price);
+
+        switch ($displayPrefix) {
+            case 1://number with coin_name end
+                unset($priceParts['prefix']);
+                break;
+
+            case 2://number with coin_name front
+                unset($priceParts['suffix']);
+                break;
+
+            default://number only
+                unset($priceParts['prefix']);
+                unset($priceParts['suffix']);
+                break;
+        }
+
+        return implode($priceParts);
+    }
+
+    protected function moneyCurrency($price, $displayPrefix = 1)
+    {
+        $priceParts = $this->getCurrency()->formatToMoneyCurrency($price);
+        switch ($displayPrefix) {
+            case 1://number with "元" end
+                unset($priceParts['prefix']);
+                break;
+
+            case 2://number with "¥" front
+                unset($priceParts['suffix']);
+                break;
+
+            default://number only
+                unset($priceParts['prefix']);
+                unset($priceParts['suffix']);
+                break;
+        }
+
+        return implode($priceParts);
+    }
+
     public function majorCurrency($price, $displayPrefix = 1)
     {
         $priceParts = $this->getCurrency()->formatToMajorCurrency($price);
+
         if (!$displayPrefix) {
             unset($priceParts['prefix']);
             unset($priceParts['suffix']);
@@ -106,16 +157,6 @@ class OrderExtension extends \Twig_Extension
     private function getCurrency()
     {
         return $this->biz['currency'];
-    }
-
-    public function checkOrderType($type)
-    {
-        $orderType = JoinPointToolkit::load('order');
-        if (in_array($type, array_keys($orderType))) {
-            return $orderType[$type]['order_show_template'];
-        }
-
-        return false;
     }
 
     public function displayOrderStatus($orderStatus, $isAdmin = 1)
@@ -151,7 +192,7 @@ class OrderExtension extends \Twig_Extension
         return $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
     }
 
-    private function getDisplayStatus($orderStatus, $isAdmin)
+    public function getDisplayStatus($orderStatus, $isAdmin)
     {
         $map = $isAdmin ? $this->adminStatusMap : $this->webStatusMap;
 
@@ -163,22 +204,22 @@ class OrderExtension extends \Twig_Extension
         $text = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('orderDisplayStatus', $displayStatus);
         switch ($displayStatus) {
             case 'notPaid':
-                $majorClass = 'label-warning';
+                $majorClass = 'color-warning';
                 break;
             case 'paid':
-                $majorClass = 'label-success';
+                $majorClass = 'color-success';
                 break;
             case 'refunded':
-                $majorClass = 'label-danger';
+                $majorClass = 'color-danger';
                 break;
             case 'closed':
-                $majorClass = 'label-default';
+                $majorClass = 'color-default';
                 break;
             default:
-                $majorClass = 'label-default';
+                $majorClass = 'color-default';
         }
 
-        return sprintf('<span class="label %s">%s</span>', $majorClass, $text);
+        return sprintf('<span class="%s">%s</span>', $majorClass, $text);
     }
 
     private function displayWebStatus($displayStatus)

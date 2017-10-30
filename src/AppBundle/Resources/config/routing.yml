@@ -280,7 +280,7 @@ live_auth:
 
 order_detail:
    path:  /order/{id}/detail
-   defaults: { _controller: AppBundle:Order:detail }
+   defaults: { _controller: AppBundle:Order/Order:detail }
 
 order_cancel_refund:
     path:  /order/{orderId}/cancel_refund
@@ -593,11 +593,6 @@ my_order_cancel:
 web_user_order_detail:
     path: /my/order/{id}/detail
     defaults: { _controller: AppBundle:My/Order:detail }
-
-my_order_cancel_refund:
-    path: /my/order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:My/Order:cancelRefund }
-    methods: [POST]
 
 my_refunds:
     path: /my/refunds
@@ -956,9 +951,6 @@ group_thread_post_reply:
 group_thread_adopt:
     path:  /thread/{postId}/adopt
     defaults: { _controller: AppBundle:GroupThread:adopt }
-group_thread_hide:
-    path:  /thread/{threadId}/hide
-    defaults: { _controller: AppBundle:GroupThread:hide }
 group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }
@@ -988,9 +980,6 @@ receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
-coin_pay:
-    path:     /my/coin/pay
-    defaults: { _controller: AppBundle:My/Coin:pay }
 coin_show:
     path:     /my/coin/show
     defaults: { _controller: AppBundle:My/Coin:show }
@@ -1003,14 +992,13 @@ cashier_show:
     path:   /cashier/standard
     defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
-cashier_pay:
-    path:   /cashier/pay
-    defaults: { _controller: AppBundle:Cashier/Cashier:pay }
-    methods: [POST]
+cashier_redirect:
+    path:   /cashier/redirect
+    defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
 
-cashier_wechat_h5_pay:
+cashier_wechat_js_pay:
     path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:Cashier/Wechat:h5 }
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
 
 cashier_password_check:
     path:  /cashier/password/check
@@ -1030,21 +1018,13 @@ cashier_pay_notify:
     defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
-cashier_pay_return:
-    path: /callback/{payment}/return
-    defaults: { _controller: AppBundle:Cashier/Callback:return}
-
 cashier_pay_return_for_app:
     path: /callback/{payment}/return_for_app
     defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
 
-cashier_wechat_roll:
-    path:   /cashier/wechat/roll
-    defaults: { _controller: AppBundle:Cashier/Wechat:roll }
-
-cashier_wechat_h5_return:
-    path:   /cashier/wechat/h5_return
-    defaults: { _controller: AppBundle:Cashier/Wechat:h5Return }
+cashier_pay_return:
+    path: /callback/{payment}/return
+    defaults: { _controller: AppBundle:Cashier/Callback:return}
 
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind
@@ -1216,10 +1196,6 @@ settings_find_pay_password_by_sms:
 settings_find_pay_password_by_question:
     path:  /settings/find_pay_password_by_question
     defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
-
-order_pay_sms_verification:
-    path:  /order/sms_verification
-    defaults: { _controller: AppBundle:Order:smsVerification }
 
 edu_cloud_sms_callback:
     path:  /edu_cloud/sms_callback
@@ -1816,9 +1792,9 @@ course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: AppBundle:Course/StudentManage:students}
 
-course_set_manage_course_quit_records:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
-  defaults: {_controller: AppBundle:Course/StudentManage:studentQuitRecords}
+course_set_manage_course_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/{type}/records
+  defaults: {_controller: AppBundle:Course/StudentManage:studentRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
@@ -2439,8 +2415,8 @@ classroom_manage_aduitor:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
 
 classroom_manage_record:
-    path: /classroom/{id}/manage/refund_record
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:refundRecord }
+    path: /classroom/{id}/manage/record/{type}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:record }
 
 classroom_manage_service:
     path: /classroom/{id}/manage/service
@@ -2984,19 +2960,19 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
+member_operation_record:
+    path: /member/{operatType}/record/{targetType}/{targetId}
+    defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
 
-#v2_demo:
-#    path: /v2/demo
-#    defaults: { _controller: AppBundle:V2:demo }
-#
-#v2_demo_modal:
-#    path: /v2/demo/modal
-#    defaults: { _controller: AppBundle:V2:modal }
+v2_demo:
+   path: /v2/demo
+   defaults: { _controller: AppBundle:V2:demo }
+
+v2_demo_modal:
+   path: /v2/demo/modal
+   defaults: { _controller: AppBundle:V2:modal }
 
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
-v2_demo_modal:
-    path: /v2/demo/modal
-    defaults: { _controller: AppBundle:V2:modal }

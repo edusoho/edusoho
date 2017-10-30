@@ -1,20 +1,16 @@
 class Confirm {
   constructor(props) {
-    this.title = props.title || '';
-    this.content = props.content || '';
-    this.confirmText = props.confirmText || Translator.trans('site.confirm');
-    this.cancelText = props.cancelText || Translator.trans('site.close');
-    
-
-    this.confirmClass = props.confirmClass || 'btn cd-btn cd-btn-flat-danger cd-btn-lg';
-    this.cancelClass = props.cancelClass || 'btn cd-btn cd-btn-flat-default cd-btn-lg';
-    this.dialogClass = props.dialogClass || 'cd-modal-dialog cd-modal-sm';
-
-    this.confirm = props.confirm || this.confirm;
-
-    this.confirmType = props.confirmType || '',
-    this.confirmUrl = props.confirmUrl || '',
-    this.ajax = props.ajax;
+    Object.assign(this, {
+      title: '',
+      content: '',
+      confirmText: 'confirm',
+      cancelText: 'cancel',
+      confirmClass: 'btn cd-btn cd-btn-flat-danger cd-btn-lg',
+      cancelClass: 'btn cd-btn cd-btn-flat-default cd-btn-lg',
+      dialogClass: 'cd-modal-dialog cd-modal-dialog-sm',
+      confirmType: '',
+      confirmUrl: '',
+    }, props);
 
     this.init();
   }
@@ -69,7 +65,7 @@ class Confirm {
       <div class="modal-header">
         <h4 class="modal-title">${this.title}</h4>
       </div>
-    `: '';
+    ` : '';
 
     let modalBody = `
       <div class="modal-body">
@@ -79,7 +75,7 @@ class Confirm {
       </div>
     `;
 
-    let confirmBtn =  `
+    let confirmBtn = `
       <button class="${this.confirmClass}" type="button" data-toggle="cd-confirm-btn" data-url="${this.confirmUrl}">
         ${this.confirmText}
       </button>

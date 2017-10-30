@@ -20,9 +20,9 @@ abstract class AbstractResource
     /**
      * @var Biz
      */
-    private $biz;
+    protected $biz;
 
-    private $container;
+    protected $container;
 
     const METHOD_SEARCH = 'search';
     const METHOD_GET = 'get';
@@ -152,6 +152,10 @@ abstract class AbstractResource
     public function getClientIp()
     {
         return $this->container->get('request')->getClientIp();
+    }
+
+    public function invokeResource(ApiRequest $apiRequest) {
+        return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
     }
     
     protected function makePagingObject($objects, $total, $offset, $limit)

@@ -26,6 +26,7 @@ couponType:
 
 couponStatus:
     used: Used
+    using: Using
     unused: Unused
     receive: Received
 
@@ -48,6 +49,15 @@ orderStatus:
     fail: Fail
     closed: Closed
 
+orderItemType:
+    course: course
+    classroom: classroom
+    vip: VIP
+
+refundItemType:
+    course: course
+    classroom: classroom
+
 orderDisplayStatus:
     notPaid: notPaid
     paid: paid
@@ -61,27 +71,39 @@ refundStatus:
     refused: Failed
     cancel: Cancelled
 
+refundDisplayStatus:
+    auditing: Applied
+    refunded: Success
+    refused: Failed
+    cancel: Cancelled
+
 payment:
-    none: --
     alipay: Alipay
-    alipay.in_time: Alipay
-    wxpay: Wxpay
     wechat: wechat
-    heepay: Heepay
-    quickpay: Quickpay
-    iosiap: iOSiap
-    outside: Outside
+    heepay: Heepay（HuiFuBao）
+    quickpay: QuickPay（HuiFuBao）
+    iap: iOSiap
+    lianlianpay: LLPay
     coin: Coin
-    llpay: LLpay
-    marketing: marketing
-   
-newPayment:
-    none: --
+    none: Others
+
+paymentSelect:
     alipay: Alipay
-    wechat: Wechat
-    heepay: Heepay
-    quickpay: Quickpay
-    llpay: LLpay
+    wechat: wechat
+    iap: iOSiap
+    lianlianpay: LLPay
+    coin: Coin
+    none: Others
+
+orderSource:
+    self: Self
+    marketing: Marketing
+    outside: Outside
+
+source:
+    self: Self
+    outside: Outside
+    marketing: Marketing
 
 moneyRecordType:
     income: Income
@@ -374,6 +396,19 @@ refund_reason:
     bad_content: Course quality is not quite good
     bad_teacher_attitude: Service is not quite good
     other: Other
+
+exit_reason:
+    refund: 退款成功
+    remove: 移除
+    exit: 主动退出
+
+join_reason:
+    vip_join: 会员加入
+    free_join: 免费加入
+    buy_join: 购买加入
+    import_join: 导入用户
+    assistant_join: 助教加入
+    auditor_join: 旁听加入
 
 exchangeType:
     nickName: nickName

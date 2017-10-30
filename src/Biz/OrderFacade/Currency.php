@@ -47,7 +47,7 @@ class Currency
             $this->isoCode = 'COIN';
             $this->symbol = $coinSetting['coin_name'];
             $this->prefix = '';
-            $this->suffix = $coinSetting['coin_name'];
+            $this->suffix = ' '.$coinSetting['coin_name'];
             $this->exchangeRate = $coinSetting['cash_rate'];
         }
 
@@ -85,6 +85,74 @@ class Currency
 
         if ($this->suffix) {
             $parts['suffix'] = $this->suffix;
+        }
+
+        return $parts;
+    }
+
+    public function formatToCoinCurrency($value)
+    {
+        $value = round($value, 2);
+
+        $parts = array();
+
+        if (0 > $value) {
+            $parts['sign'] = '-';
+        }
+
+        $parts['prefix'] = !empty($this->coinSetting['coin_name']) ? $this->coinSetting['coin_name'] : CoinCurrency::PREFIX;
+
+        $parts['integer'] = number_format(floor(abs($value)), 0, '', CoinCurrency::THOUSAND_DELIMITER);
+
+        if (0 < CoinCurrency::PRECISION) {
+            $parts['decimalDelimiter'] = CoinCurrency::DECIMAL_DELIMITER;
+            $parts['decimal'] = str_pad(
+                substr(
+                    strval(abs($value != 0 ? $value : 1) * pow(10, CoinCurrency::PRECISION)),
+                    -1 * CoinCurrency::PRECISION
+                ),
+                CoinCurrency::PRECISION,
+                '0',
+                STR_PAD_LEFT
+            );
+        }
+
+        $parts['suffix'] = !empty($this->coinSetting['coin_name']) ? $this->coinSetting['coin_name'] : CoinCurrency::SUFFIX;
+
+        return $parts;
+    }
+
+    public function formatToMoneyCurrency($value)
+    {
+        $value = round($value, 2);
+
+        $parts = array();
+
+        if (0 > $value) {
+            $parts['sign'] = '-';
+        }
+
+        if (MoneyCurrency::PREFIX) {
+            $parts['prefix'] = MoneyCurrency::PREFIX;
+        }
+
+        $parts['integer'] = number_format(floor(abs($value)), 0, '', MoneyCurrency::THOUSAND_DELIMITER);
+
+        if (0 < MoneyCurrency::PRECISION) {
+            $parts['decimalDelimiter'] = MoneyCurrency::DECIMAL_DELIMITER;
+            $parts['decimal'] = str_pad(
+                substr(
+                    strval(abs($value != 0 ? $value : 1) * pow(10, MoneyCurrency::PRECISION)),
+                    -1 * MoneyCurrency::PRECISION
+                ),
+                MoneyCurrency::PRECISION,
+                '0',
+                STR_PAD_LEFT
+            );
+        }
+
+        if (MoneyCurrency::SUFFIX) {
+            $parts['suffix'] = MoneyCurrency::SUFFIX;
         }
 
         return $parts;

@@ -45,10 +45,16 @@
       display: block;
       margin-right: 0;
     }
-    img{
-      width: 162px;
+    >img{
+      width: 213px;
+      @media (max-width: 1199px) {
+        width: 162px;
+      }
+      @media (max-width: 991px) {
+        width: 213px;
+      }
       @media (max-width: 767px) {
-        width: 100%;
+         width: 100%;
         display: block;
       }
     }

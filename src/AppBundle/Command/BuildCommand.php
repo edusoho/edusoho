@@ -244,6 +244,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeCreateCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeCreateCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ResetPasswordCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");

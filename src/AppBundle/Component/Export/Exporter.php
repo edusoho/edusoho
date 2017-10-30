@@ -22,14 +22,19 @@ abstract class Exporter implements ExporterInterface
         $this->conditions = $this->buildCondition($conditions);
     }
 
+    //定义导出标题
     abstract public function getTitles();
 
+    //获得导出正文内容
     abstract public function getContent($start, $limit);
 
+    //下载权限判断
     abstract public function canExport();
 
+    //获得导出总条数
     abstract public function getCount();
 
+    //构建查询条件
     abstract public function buildCondition($conditions);
 
     public function export($name = '')
@@ -66,6 +71,7 @@ abstract class Exporter implements ExporterInterface
         );
     }
 
+    //获得导出分页参数
     public function buildParameter($conditions)
     {
         $parameter = array();

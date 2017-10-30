@@ -46,7 +46,7 @@ class OrderInfoFilter extends Filter
             return 1;
         }
 
-        if ($data['cashRate'] != 0 && $data['maxRate'] == 100) {
+        if (!empty($data['coinPayAmount']) && $data['cashRate'] != 0 && $data['maxRate'] == 100) {
             return 1;
         }
 

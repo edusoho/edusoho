@@ -2,15 +2,14 @@
 
 namespace AppBundle\Controller\Cashier;
 
-use AppBundle\Common\MathToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Response;
 
 class CoinController extends BaseController
@@ -28,7 +27,7 @@ class CoinController extends BaseController
 
         return $this->render('cashier/coin/show.html.twig', array(
             'coinSetting' => $coinSetting,
-            'balance' => MathToolkit::multiply($balance, array('amount'), 0.01),
+            'balance' => $balance,
             'maxCoin' => $this->getMaxCoin($order),
             'isPasswordSet' => $this->getAccountService()->isPayPasswordSetted($user->getId()),
         ));
@@ -43,7 +42,11 @@ class CoinController extends BaseController
         /* @var $product Product */
         $product = $this->getOrderFacadeService()->getOrderProductByOrderItem($item);
 
-        return $product->getMaxCoinAmount();
+        $maxProductCoin = $product->getMaxCoinAmount();
+
+        $maxOrderCoin = $this->getCurrency()->convertToCoin($order['pay_amount']);
+
+        return min($maxProductCoin, $maxOrderCoin);
     }
 
     /**

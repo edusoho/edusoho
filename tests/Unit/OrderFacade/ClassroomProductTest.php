@@ -14,14 +14,28 @@ class ClassroomProductTest extends BaseTestCase
         $courseProduct->setBiz($this->getBiz());
 
         $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => true)),
             array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
-
-        $courseProduct->validate();
+        $this->assertEquals(null, $courseProduct->validate());
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Biz\OrderFacade\Exception\OrderPayCheckException;
+     */
+    public function testValidateOnErrorWhenClassroomUnPurchasable()
+    {
+        $courseProduct = new ClassroomProduct();
+        $courseProduct->setBiz($this->getBiz());
+
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'getClassroom', 'returnValue' => array('buyable' => true)),
+            array('functionName' => 'canJoinClassroom', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
+        ));
+    }
+
+    /**
+     * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
      */
     public function testValidateWithError()
     {

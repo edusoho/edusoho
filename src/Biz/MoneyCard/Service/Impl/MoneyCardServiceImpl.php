@@ -7,7 +7,7 @@ use Biz\MoneyCard\Dao\MoneyCardBatchDao;
 use Biz\MoneyCard\Dao\MoneyCardDao;
 use Biz\MoneyCard\Service\MoneyCardService;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 {
@@ -430,6 +430,11 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     public function useMoneyCard($id, $fields)
     {
         try {
+            $user = $this->getCurrentUser();
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException('user is not login.');
+            }
+
             $this->beginTransaction();
 
             $moneyCard = $this->getMoneyCard($id, true);
@@ -450,6 +455,8 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 'amount' => $batch['coin'] * 100,
                 'amount_type' => 'coin',
                 'title' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
+                'buyer_id' => $this->getCurrentUser()->getId(),
+                'action' => 'recharge',
             );
 
             $this->getAccountService()->transferCoin($recharge);
@@ -575,6 +582,15 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     'deadline' => strtotime($moneyCard['deadline']),
                     'userId' => $userId,
                 ));
+
+                $receivedNumber = $this->getMoneyCardDao()->count(array(
+                    'batchId' => $batch['id'],
+                    'receiveTime_GT' => 0,
+                ));
+                $batch = $this->getMoneyCardBatchDao()->update($batch['id'], array(
+                    'receivedNumber' => $receivedNumber,
+                ));
+
                 $message = "您有一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的充值卡领取成功";
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 $this->dispatchEvent('moneyCard.receive', $batch);
@@ -617,11 +633,6 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
     }
 
     private function getTokenService()

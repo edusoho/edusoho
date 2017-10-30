@@ -36,7 +36,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro refundStatus(status) %}
+{% macro adminRefundStatus(status) %}
     {% if status == 'auditing' %}
         <span class="text-warning">{{ 'common.refundStatus.created'|trans }}</span>
     {% elseif status == 'refunded' %}

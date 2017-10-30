@@ -1,3 +1,4 @@
+{% do script(['app/js/my/order-detail/index.js']) %}
 <div class="tab-content">
   <div class="tab-pane fade active in" id="detail">
     <table class="table cd-table table-striped order-detail-table">
@@ -7,73 +8,117 @@
              {{ display_order_status( order.status, 0) }}
            </td>
       </tr>
-      <tr> <td width="25%">{{'order.buyers'|trans}}</td>
-        <td width="75%">
-          <strong>
-            {{ web_macro.user_link(user) }}
-          </strong>
-        </td>
-      </tr>
+      {% if modalType in ['course'] %}
+        <tr>
+          <td width="25%">{{'order.buyers'|trans}}</td>
+          <td width="75%">
+            <strong>
+              {{ web_macro.user_link(user) }}
+            </strong>
+          </td>
+        </tr>
+      {% endif %}
       <tr>
-        <td width="25%">{{'order.name'|trans}}</td>
+        <td width="25%">{{'order.product_name'|trans}}</td>
         <td width="75%">
           {{ order.title }}
         </td>
       </tr>
-      <tr> <td width="25%">{{'order.price'|trans}}</td>
+      <tr> <td width="25%">{{'order.product_price'|trans}}</td>
         <td width="75%">
-          <span class="color-warning">{{ order.price_amount }}</span>
-          {% if paymentTrade.currency|default('') == "RMB" %}
-          {{'site.currency.CNY'|trans}}
-          {% elseif paymentTrade.currency|default('') == "Coin" %}
-          {{setting("coin.coin_name")}}
-          {% endif %}
+          <span class="color-danger">{{ order.price_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
         </td>
       </tr>
 
       {% if orderDeducts %}
         <tr>
           <td width="25%">{{ 'order.deduct'|trans}}</td>
-          <td width="75%"><span class="color-warning">-{{ (order.price_amount - order.pay_amount)|fen_to_yuan(0) }}</span></td>
+          <td width="75%"><span class="color-danger">-{{ (order.price_amount - order.pay_amount)|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
         </tr>
         {% for orderDeduct in orderDeducts %}
           <tr>
-            <td width="25%" class="color-gray" style="text-align: right">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
-            <td width="75%"><span class="text-muted">-{{ orderDeduct.deduct_amount|fen_to_yuan(0) }}</span></td>
+            <td width="25%" class="color-gray cd-pl32">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
+            <td width="75%">
+              <span class="color-danger">-{{ orderDeduct.deduct_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
+              {% if orderDeduct.snapshot.couponCode is defined %}
+                <span class="pull-right">
+                  <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
+                     data-toggle="popover" data-trigger="hover"
+                     data-placement="top"
+                     data-content="{{ 'order.use_coupon'|trans }} {{ orderDeduct.snapshot.couponCode }}"></a>
+                </span>
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
       {% endif %}
 
       <tr>
-        <td width="25%" class="color-gray" style="text-align:right;">
-          {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
-        </td>
-        <td width="75%">
-          <span class="color-warning">{{ order.paid_coin_amount }}</span> {{'site.currency.CNY'|trans}}
-        </td>
+        <td width="25%">{{ 'order.price_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
-      <tr>
-        <td width="25%" class="color-gray" style="text-align:right;">
-          {% if order.payment == 'none' %}
-            现金
-          {% else %}
-            {{ dict_text('payment', order.payment, '现金') }}
-          {% endif %}</td>
-        <td width="75%">
-          <span class="color-warning">{{ order.paid_cash_amount }}</span> {{'site.currency.CNY'|trans}}
-        </td>
-      </tr>
-      <tr> <td width="25%">{{'order.createdTime'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td> </tr>
-      {% if order.status == 'paid' %}
-        <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
-        {% if order.sn %}
-          <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.sn}}</td> </tr>
+
+      {% if order.pay_amount != 0 %}
+        {% if order.paid_coin_amount != 0 %}
+          <tr>
+            <td width="25%" class="color-gray cd-pl32">
+              {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
+            </td>
+            <td width="75%">
+              <span class="color-danger">{{ order.paid_coin_amount|to_coin(0) }}</span>
+              (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }})
+            </td>
+          </tr>
+        {% endif %}
+
+        {% if order.paid_cash_amount != 0 %}
+          <tr>
+            <td width="25%" class="color-gray cd-pl32">
+              {% if order.source in ['marketing', 'outside'] %}
+                {{ dict_text('orderSource', order.source) }}
+              {% elseif order.source in ['self'] %}
+                {{ dict_text('payment', order.payment, '--') }}
+              {% endif %}
+            </td>
+            <td width="75%">
+              <span class="color-danger">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
+              {% if paymentTrade.platform_sn is not null %}
+                <span class="pull-right">
+                  <a class="es-icon es-icon-help text-normal link-gray"  data-container="body"
+                     data-toggle="popover" data-trigger="hover"
+                     data-placement="top"
+                     data-content="{{ 'order.platform_sn'|trans }} {{ paymentTrade.platform_sn }}"></a>
+                </span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endif %}
+        {% if modalType in ['user'] and order.status in ['success'] and order.refund_deadline != 0 %}
+          <tr>
+            <td width="25%">
+              {{ 'order.refund_limit'|trans }}
+            </td>
+            <td width="75%">
+              {% if order.refund_deadline > date().timestamp %}
+                可在 {{ order.refund_deadline|date('Y-n-d H:i:s') }} 前申请退款
+              {% else %}
+                已错过申请退款时间（{{ order.refund_deadline|date('Y-n-d H:i:s') }} 前）
+              {% endif %}
+            </td>
+          </tr>
         {% endif %}
       {% endif %}
-      {#<tr>#}
-        {#<td width="25%">{{'user.orders.detail.special_operations'|trans}}</td>#}
-        {#<td width="75%">{{ order.edit[0]|default('--') }}</td>#}
-      {#</tr>#}
+
+      <tr>
+        <td width="25%">{{'order.created_time'|trans}}</td>
+        <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td>
+      </tr>
+      {% if get_display_status(order.status, 0) == 'paid' %}
+        <tr>
+          <td width="25%">{{'order.pay_time'|trans}}</td>
+          <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td>
+        </tr>
+      {% endif %}
     </table>
   </div>
 
@@ -107,7 +152,7 @@
               <td>
                 {{ orderLog.created_time|date('Y-n-d H:i')}}
                 <br>
-                <span class="color-gray text-sm">{{ orderLog.deal_data.ip|default('--')}}</span>
+                <span class="color-gray text-sm">{{ orderLog.ip|default('--')}}</span>
               </td>
             </tr>
           {% endfor %}

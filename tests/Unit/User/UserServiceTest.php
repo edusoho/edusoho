@@ -6,6 +6,42 @@ use Biz\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
 {
+    public function testGetUserIdsByKeyword()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13967340620',
+            'mobile' => '13967340621',
+        );
+        $registeredUser1 = $this->getUserService()->register($userInfo);
+
+        $userInfo = array(
+            'nickname' => 'test_nickname1',
+            'password' => 'test_password',
+            'email' => 'edusoho@edusoho.com',
+            'verifiedMobile' => '13967340622',
+            'mobile' => '13967340623',
+        );
+        $registeredUser2 = $this->getUserService()->register($userInfo);
+
+        $user = $this->getUserService()->getUserIdsByKeyword('test_nickname');
+        $this->assertTrue(in_array($registeredUser1['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('test_email');
+        $this->assertTrue(!in_array($registeredUser1['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('edusoho@edusoho.com');
+        $this->assertTrue(in_array($registeredUser2['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('13967340622');
+        $this->assertTrue(in_array($registeredUser2['id'], $user));
+
+        $user = $this->getUserService()->getUserIdsByKeyword('13967340623');
+        $this->assertTrue(in_array($registeredUser2['id'], $user));
+    }
+
     /**
      * @group current
      */
@@ -795,19 +831,19 @@ class UserServiceTest extends BaseTestCase
         $this->assertNotNull($email);
     }
 
-// public function testImportUpdateEmail()
+    // public function testImportUpdateEmail()
 
-// {
+    // {
 
-//     // $user1 = $this->createUser('user1');
+    //     // $user1 = $this->createUser('user1');
 
-//     // $user2 = $this->createUser('user2');
+    //     // $user2 = $this->createUser('user2');
 
-//     // $user3 = $this->createUser('user3');
+    //     // $user3 = $this->createUser('user3');
 
-//     // $users = array($user1,$user2,$user3);
+    //     // $users = array($user1,$user2,$user3);
 
-//     // $this->getUserService()->importUpdateEmail($users);
+    //     // $this->getUserService()->importUpdateEmail($users);
     // }
 
     public function testSetupAccount()
@@ -1146,11 +1182,11 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(0, count($result));
     }
 
-// public function testApplyUserApproval()//*
+    // public function testApplyUserApproval()//*
 
-// {
+    // {
 
-// }
+    // }
 
     /**
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
@@ -1209,13 +1245,13 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->rejectApproval($user['id'], $note);
     }
 
-// public function testDropFieldData()
+    // public function testDropFieldData()
 
-// {
+    // {
 
-//     $fieldName = null;
+    //     $fieldName = null;
 
-//     $this->getUserService()->dropFieldData($fie);
+    //     $this->getUserService()->dropFieldData($fie);
     // }
 
     public function testRememberLoginSessionIdOne()
