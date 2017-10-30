@@ -189,10 +189,8 @@ activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
 activity.download_manage.materials_or_link_success: 资料添加成功
 activity.download_manage.materials_or_link_delete: 资料已删除
 
-
 activity.download_manage.materials_exist_error_hint: 该文件已添加，请重新选择
 activity.download_manage.materials_delete_btn: 删除
-
 activity.download_manage.materials_add_success_hint: 添加成功，可继续选择资料添加或点击下一步
 
 activity.exercise_manage.title_required_error_hint: 请填写标题
