@@ -493,8 +493,28 @@ class UserController extends BaseController
 
         $this->saveUserInfo($request, $user);
 
+        /**
+         * 这里要重构,这段代码是多余了，为了兼容点击任务预览跳转支付页面
+         * TODO
+         */
+        $courseId = $request->request->get('courseId', 0);
+        if ($courseId) {
+            $this->getCourseService()->tryFreeJoin($courseId);
+            $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
+            if ($member) {
+                return $this->createJsonResponse(array(
+                    'url' => $this->generateUrl('my_course_show', array('id' => $courseId)),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'url' => $this->generateUrl('order_show', array('targetId' => $courseId, 'targetType' => 'course')),
+                ));
+            }
+        }
+        /** end todo */
+
         return $this->createJsonResponse(array(
-            'courseId' => $request->request->get('courseId', 0),
+            'msg' => 'success'
         ));
     }
 
