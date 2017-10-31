@@ -367,6 +367,8 @@ class XAPIService extends BaseService
         ));
 
         $response = json_decode($rawResponse->getBody(), true);
+
+        file_put_contents('1.txt', json_encode($response), FILE_APPEND);
         if (isset($response['error'])) {
             throw new ResponseException($rawResponse);
         }
