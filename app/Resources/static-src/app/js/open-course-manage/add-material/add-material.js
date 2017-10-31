@@ -33,19 +33,20 @@ export default class AddMaterial {
         let settings = this.settings;
         let $btn = $(settings.currentDom);
         $btn.button('loading');
-        $.post($form.attr('action'), $form.serializeArray(), (data) => {
-          notify('success', Translator.trans('activity.download_manage.materials_or_link_success'));
-          $("#material-list").append(data);
-          $btn.button('reset');
-          $form.find('#materials').val('');
-          $form.find('#link').val('');
-          $form.find('#media').val('');
-          $form.find('#file-summary').val('');
-          $form.find('.js-current-file').text('');
-        }).error((data) => {
-          $btn.button('reset');
-          notify('warning', Translator.trans('activity.download_manage.materials_or_link_fail'));
-        });
+        $.post($form.attr('action'), $form.serializeArray())
+          .done((data) => {
+            notify('success', Translator.trans('activity.download_manage.materials_or_link_success'));
+            $('#material-list').append(data);
+            $btn.button('reset');
+            $form.find('#materials').val('');
+            $form.find('#link').val('');
+            $form.find('#media').val('');
+            $form.find('#file-summary').val('');
+            $form.find('.js-current-file').text('');
+          }).fail(() => {
+            $btn.button('reset');
+            notify('warning', Translator.trans('activity.download_manage.materials_or_link_fail'));
+          });
       }
     });
 
@@ -53,6 +54,7 @@ export default class AddMaterial {
       if (validator2.form()) {
         this.$form.submit();
       } else {
+        // 移除底部错误提示，采用notify效果
         $('#materials-error').remove();
         notify('danger', Translator.trans('activity.download_manage.materials_or_link_error_hint'));
         this.$form.find('#materials').val('');
@@ -78,10 +80,9 @@ export default class AddMaterial {
   }
 
   addLink() {
-    let $media = $("#media");
-    let $materials = $("#materials");
-    let $verifyLink = $("#verifyLink");
-    let linkVal = $("#link").val();
+    const $materials = $('#materials');
+    const $verifyLink = $('#verifyLink');
+    let linkVal = $('#link').val();
     let linkLength = linkVal.length;
     let isValidated = this.$form.data('validator').valid();
 
@@ -93,19 +94,20 @@ export default class AddMaterial {
       $materials.val('');
     }
 
-    $("#link").val($verifyLink.val());
+    $('#link').val($verifyLink.val());
     $('.js-current-file').text($verifyLink.val());
   }
 
   initFileChooser() {
     const fileSelect = (file) => {
-      let $media = $("#media");
-      let $materials = $("#materials");
-      let media = null;
+      const $media = $('#media');
+      const $materials = $('#materials');
+      let media = {};
       let fileIdVal = null;
 
       $media.val(JSON.stringify(file));
       chooserUiOpen();
+      console.log('打断点');
       $('.js-current-file').text(file.name);
       media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
       fileIdVal = $materials.val(media.id);
