@@ -1676,7 +1676,7 @@ testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
 testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>.\n"
 testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
-testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
+testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime%</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
 testpaper.answer.student: 'Answerer: '
 testpaper.answer.endtime: 'Submit time: '
