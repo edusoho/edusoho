@@ -19,7 +19,6 @@
 
     {% include 'file-chooser/file-choose.html.twig' with { mediaType: 'download', fileType: 'all', file: null , courseId: course.id } %}
     <input id="materials" type="hidden" name="fileId">
-    <input id="media" type="hidden" name="media" value="{{ null }}">
   </form>
 
 {% endblock %}

@@ -188,6 +188,7 @@ activity.download_manage.materials_or_link_error_hint: 请先上传文件或添�
 activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
 activity.download_manage.materials_or_link_success: 资料添加成功
 activity.download_manage.materials_or_link_delete: 资料已删除
+activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
 
 activity.download_manage.materials_exist_error_hint: 该文件已添加，请重新选择
 activity.download_manage.materials_delete_btn: 删除
