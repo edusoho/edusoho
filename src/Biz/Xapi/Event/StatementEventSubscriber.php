@@ -146,8 +146,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'score' => array(
                 'max' => $testpaper['score'],
                 'min' => 0,
-                'raw' => $testpaperResult['score']
-            )
+                'raw' => $testpaperResult['score'],
+            ),
         );
 
         $this->createXAPIService()->finishTestpaper($actor, $object, $result);
