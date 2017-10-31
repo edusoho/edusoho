@@ -37,6 +37,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $taskResult = $event->getSubject();
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
 
         if (empty($course) || !$this->getMemberService()->isCourseStudent($course['id'], $user['id'])) {
             return;
