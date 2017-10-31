@@ -712,7 +712,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $this->beginTransaction();
 
             $this->deleteItemsByTestId($testpaper['id']);
-            $this->createItems($newItems, $questions, $testpaper['id']);
+            $this->createItems($newItems, $questions, $testpaper);
 
             $testpaper = $this->updateTestpaperByItems($testpaper['id'], $fields);
             $this->commit();
@@ -724,13 +724,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
     }
 
-    protected function createItems($newItems, $questions, $testpaperId)
+    protected function createItems($newItems, $questions, $testpaper)
     {
         if (!$questions) {
             return array();
         }
 
         $index = 1;
+        $metas = $testpaper['metas'];
         foreach ($newItems as $questionId => $item) {
             $question = !empty($questions[$questionId]) ? $questions[$questionId] : array();
             if (!$question) {
@@ -745,9 +746,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $filter['questionId'] = $question['id'];
             $filter['questionType'] = $question['type'];
-            $filter['testId'] = $testpaperId;
+            $filter['testId'] = $testpaper['id'];
             $filter['score'] = empty($item['score']) ? 0 : floatval($item['score']);
-            $filter['missScore'] = empty($item['missScore']) ? 0 : floatval($item['missScore']);
+            $filter['missScore'] = empty($metas['missScores'][$question['type']]) ? 0 : floatval($metas['missScores'][$question['type']]);
             $filter['parentId'] = $question['parentId'];
             $items[] = $this->createItem($filter);
         }
