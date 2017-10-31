@@ -106,7 +106,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     public function onExamFinish(Event $event)
     {
-
         $user = $this->getCurrentUser();
         if (empty($user) || !$user->isLogin()) {
             return;
@@ -137,7 +136,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $object = array(
             'id' => $testpaperResult['id'],
-            'course' => $course
+            'course' => $course,
         );
 
         $actor = $this->getActor();
@@ -154,7 +153,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $object = array(
             'id' => $homeworkResult['id'],
-            'course' => $course
+            'course' => $course,
         );
 
         $actor = $this->getActor();
@@ -171,7 +170,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $object = array(
             'id' => $exerciseFinish['id'],
-            'course' => $course
+            'course' => $course,
         );
 
         $actor = $this->getActor();
@@ -195,7 +194,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $object = array(
             'id' => $note['id'],
-            'course' => $course
+            'course' => $course,
         );
 
         $actor = $this->getActor();
@@ -209,7 +208,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $thread = $event->getSubject();
         if ($thread['type'] != 'question') {
-            return ;
+            return;
         }
 
         $course = $this->getCourseService()->getCourse($thread['courseId']);
@@ -217,7 +216,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $course['description'] = $courseSet['subtitle'];
         $object = array(
             'id' => $thread['id'],
-            'course' => $course
+            'course' => $course,
         );
 
         $actor = $this->getActor();
@@ -339,12 +338,13 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
         $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
         $auth = new Auth($accessKey, $secretKey);
+
         return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
             'base_uri' => 'http://localhost:8000/xapi/', //推送的URL需要配置
             'school' => array(
                 'id' => $accessKey,
                 'name' => $siteName,
-            )
+            ),
         ));
     }
 
