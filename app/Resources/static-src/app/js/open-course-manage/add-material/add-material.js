@@ -10,14 +10,13 @@ import {
 export default class AddMaterial {
   constructor() {
     this.$form = $('#course-material-form');
-    this.validator2 = null;
     this.initForm();
     this.bindEvent();
     this.initFileChooser();
   }
 
   initForm() {
-    let validator2 = this.$form.validate({
+    const validator2 = this.$form.validate({
       currentDom: '.js-add-file-list',
       ajax: true,
       rules: {
@@ -29,9 +28,9 @@ export default class AddMaterial {
         fileId: Translator.trans('activity.download_manage.materials_error_hint')
       },
       submitHandler(form) {
-        let $form = $(form);
-        let settings = this.settings;
-        let $btn = $(settings.currentDom);
+        const $form = $(form);
+        const settings = this.settings;
+        const $btn = $(settings.currentDom);
         $btn.button('loading');
         $.post($form.attr('action'), $form.serializeArray())
           .done((data) => {
@@ -55,10 +54,9 @@ export default class AddMaterial {
       if (validator2.form()) {
         this.$form.submit();
       } else {
-        // 移除底部错误提示，采用notify效果
+        $('#link').val('');
         $('#materials-error').remove();
         notify('danger', Translator.trans('activity.download_manage.materials_or_link_error_hint'));
-        this.$form.find('#materials').val('');
       }
     });
 
@@ -71,8 +69,8 @@ export default class AddMaterial {
   }
 
   deleteItem(event) {
-    let $target = $(event.currentTarget);
-    let $parent = $target.closest('li');
+    const $target = $(event.currentTarget);
+    const $parent = $target.closest('li');
 
     if (!confirm(Translator.trans('activity.download_manage.materials_or_link_confirm_delete'))) {
       return;
@@ -85,18 +83,20 @@ export default class AddMaterial {
   }
 
   addLink() {
-    const $materials = $('#materials');
     const $verifyLink = $('#verifyLink');
-    let linkVal = $('#link').val();
-    let linkLength = linkVal.length;
-    let isValidated = this.$form.data('validator').valid();
+    const linkVal = $('#link').val();
+    const $materials = $('#materials');
+    const isValidated = this.$form.data('validator').valid();
 
-    if (isValidated && (linkLength > 0)) {
-      $verifyLink.val(linkVal);
+    if (isValidated && linkVal) {
       $materials.val(0);
+      $verifyLink.val(linkVal);
+    } else {
+      $('#link').val('');
+      $verifyLink.val('');
+      $materials.val('');
     }
 
-    $('#link').val($verifyLink.val());
     $('.js-current-file').text($verifyLink.val());
   }
 
@@ -104,12 +104,11 @@ export default class AddMaterial {
     const fileSelect = (file) => {
       const $media = $('#media');
       const $materials = $('#materials');
-      let media = {};
 
       $media.val(JSON.stringify(file));
       chooserUiOpen();
       $('.js-current-file').text(file.name);
-      media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
+      let media = isEmpty($media.val()) ? Object.create(null) : JSON.parse($media.val());
       $materials.val(media.id);
     }
 
