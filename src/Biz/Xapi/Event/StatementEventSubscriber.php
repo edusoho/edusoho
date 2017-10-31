@@ -209,7 +209,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $result = $note;
 
-        $this->createXAPIService()->writeNote($actor, $object, $result);
+        $statement = $this->createXAPIService()->writeNote($actor, $object, $result);
     }
 
     public function onCourseThreadCreate(Event $event)

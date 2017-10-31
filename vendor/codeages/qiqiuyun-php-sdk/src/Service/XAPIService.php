@@ -21,7 +21,7 @@ class XAPIService extends BaseService
     public function watchVideo($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/acrossx/verbs/watched',
             'display' => array(
@@ -65,7 +65,7 @@ class XAPIService extends BaseService
     public function finishActivity($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
@@ -111,7 +111,7 @@ class XAPIService extends BaseService
     public function finishActivityQuestion($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/answered',
             'display' => array(
@@ -159,12 +159,12 @@ class XAPIService extends BaseService
     /**
      * 提交“完成作业”的学习记录
      *
-     * @return 
+     * @return
      */
     public function finishHomework($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
@@ -199,7 +199,7 @@ class XAPIService extends BaseService
     public function finishExercise($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
@@ -270,7 +270,7 @@ class XAPIService extends BaseService
     public function writeNote($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/adb/verbs/noted',
             'display' => array(
@@ -305,12 +305,12 @@ class XAPIService extends BaseService
     /**
      * 提交“提问题”的学习记录
      *
-     * @return void
+     * @return 
      */
     public function askQuestion($actor, $object, $result, $isPush = true)
     {
         $statement = array();
-        $statement['actor'] = array('account' => $actor);
+        $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/asked',
             'display' => array(
