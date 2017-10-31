@@ -3,6 +3,7 @@
 namespace Biz\Xapi\Event;
 
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
@@ -11,6 +12,7 @@ use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use QiQiuYun\SDK\Auth;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -104,6 +106,11 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     public function onExamFinish(Event $event)
     {
+
+        $user = $this->getCurrentUser();
+        if (empty($user) || !$user->isLogin()) {
+            return;
+        }
         // testpaper, exercise, homework
         $examResult = $event->getSubject();
 
@@ -124,26 +131,100 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     protected function testpaperFinish($testpaperResult)
     {
+        $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($testpaperResult['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
+
+        $object = array(
+            'id' => $testpaperResult['id'],
+            'course' => $course
+        );
+
+        $actor = $this->getActor();
+        $result = array();
+
+        $this->createXAPIService()->finishTestpaper($actor, $object, $result);
     }
 
     protected function homeworkFinish($homeworkResult)
     {
+        $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($homeworkResult['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
+
+        $object = array(
+            'id' => $homeworkResult['id'],
+            'course' => $course
+        );
+
+        $actor = $this->getActor();
+        $result = array();
+
+        $this->createXAPIService()->finishHomework($actor, $object, $result);
     }
 
     protected function exerciseFinish($exerciseFinish)
     {
+        $course = $this->getCourseService()->getCourse($exerciseFinish['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($exerciseFinish['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
+
+        $object = array(
+            'id' => $exerciseFinish['id'],
+            'course' => $course
+        );
+
+        $actor = $this->getActor();
+        $result = array();
+
+        $this->createXAPIService()->finishExercise($actor, $object, $result);
     }
 
     public function onCourseNoteCreate(Event $event)
     {
+        $user = $this->getCurrentUser();
+        if (empty($user) || !$user->isLogin()) {
+            return;
+        }
+
         $note = $event->getSubject();
 
         $course = $this->getCourseService()->getCourse($note['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($note['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
+
+        $object = array(
+            'id' => $note['id'],
+            'course' => $course
+        );
+
+        $actor = $this->getActor();
+
+        $result = $note;
+
+        $this->createXAPIService()->writeNote($actor, $object, $result);
     }
 
     public function onCourseThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
+        if ($thread['type'] != 'question') {
+            return ;
+        }
+
+        $course = $this->getCourseService()->getCourse($thread['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($thread['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
+        $object = array(
+            'id' => $thread['id'],
+            'course' => $course
+        );
+
+        $actor = $this->getActor();
+
+        $result = $thread;
+
+        $this->createXAPIService()->askQuestion($actor, $object, $result);
     }
 
     private function getActor()
@@ -234,11 +315,37 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     }
 
     /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
      * @return SettingService
      */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function createXAPIService()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        $siteSettings = $this->getSettingService()->get('site', array());
+
+        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
+        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
+        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
+        $auth = new Auth($accessKey, $secretKey);
+        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
+            'base_uri' => 'http://localhost:8000/xapi/', //推送的URL需要配置
+            'school' => array(
+                'id' => $accessKey,
+                'name' => $siteName,
+            )
+        ));
     }
 
     protected function createService($alias)
