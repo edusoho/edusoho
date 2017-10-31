@@ -43,8 +43,8 @@ class XAPIService extends BaseService
                         'description' => $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => $object['resource']['id'],
-                        'name' => $object['resource']['name'],
+                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
+                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
                     )
                 )
             )
@@ -89,8 +89,8 @@ class XAPIService extends BaseService
 
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => $object['resource']['id'],
-                        'name' => $object['resource']['name']
+                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
+                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
                     )
                 )
             )
@@ -139,8 +139,8 @@ class XAPIService extends BaseService
                         'title' => $object['activity']['title']
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => $object['resource']['id'],
-                        'name' => $object['resource']['name']
+                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
+                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
                     )
                 )
             )
@@ -305,7 +305,7 @@ class XAPIService extends BaseService
     /**
      * 提交“提问题”的学习记录
      *
-     * @return 
+     * @return
      */
     public function askQuestion($actor, $object, $result, $isPush = true)
     {
@@ -329,8 +329,8 @@ class XAPIService extends BaseService
 
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => $object['resource']['id'],
-                        'name' => $object['resource']['name']
+                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
+                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
                     )
                 )
             )
@@ -447,7 +447,8 @@ class XAPIService extends BaseService
     {
         $deadline = strtotime(date('Y-m-d H:0:0', strtotime('+2 hours')));
         $signingText = $this->auth->getAccessKey()."\n".$deadline;
-        return $this->auth->sign($signingText);
+        $signingText = $this->auth->getAccessKey().':'.$deadline.':'.$this->auth->sign($signingText);
+        return $signingText;
     }
 
     protected function getTime($timestamp, $format = 'iso8601')

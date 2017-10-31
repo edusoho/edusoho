@@ -356,7 +356,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $auth = new Auth($accessKey, $secretKey);
 
         return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => 'http://192.168.4.214:8762/xapi/', //推送的URL需要配置
+            'base_uri' => 'http://192.168.4.214:8769/v1/xapi/', //推送的URL需要配置
             'school' => array(
                 'id' => $accessKey,
                 'name' => $siteName,
