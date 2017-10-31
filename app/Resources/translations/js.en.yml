@@ -578,6 +578,9 @@ open_course.unpublish_success_hint: Lesson unpublished!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
+order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: Coupon is not available
 order.create.use_discount_coupon_hint: Coupon is available, and you are currently using coupons with %rate% discount.
 order.create.use_price_coupon_hint: Coupon is available, and you are currently using coupons with %rate% yuan deduction.
@@ -735,6 +738,7 @@ json_response.must_choose_question.message: Please select the title first
 json_response.cannot_send_message_self.message: Can not send yourself a private message!
 json_response.receiver_not_exist.message: The receiver does not exist
 
+validate_old.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
 validate_old.required.message: Please enter {{display}}
 validate_old.valid_email_input.message: %display% is not formatted correctly
 validate_old.valid_url_input.message: %display% is not formatted correctly
@@ -792,3 +796,17 @@ notify.course_set_clone_start.message: Start copying the course and check the no
 notify.job_redo_warning.hint: This course is already copied, please do not repeat it
 notify.course_set_copy_error.hint: There was an error in the copy course
 progress.copy_course_set.message: Copy done!
+
+confirm.warn: 警告
+confirm.exit.tip: 您确定要退出学习吗？
+
+cashier.wechat_pay: Wechat pay
+cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat, scan the QR code to pay
+cashier.confirm.fail_message: Payment unsuccessful, please check or repay
+cashier.pay.error_message: Payment has been abnormal, please contact the administrator
+cashier.confirm.title: Order payment
+cashier.confirm.success: Payment is done
+cashier.confirm.pick_again: Reissue payment method
+cashier.confirm.desc: |
+  Please re-open the page to complete the order payment.<br>
+  If you encounter problems in the payment process, please contact the website customer service solution.<br>

@@ -27,20 +27,20 @@
 		{% if cardDetail.type == "minus" %}￥{% endif %}
 		<strong>{{ cardDetail.rate }}</strong>
 		{% if cardDetail.type == "discount" %}{{ 'coupon.discount'|trans }}{% endif %}
-		{% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}
+		{% if cardDetail.targetType == "course" and cardDetail.targetId != 0 and cardDetail.status != 'using' %}
 			{% set courseSet = data('CourseSet', {id : cardDetail.targetId}) %}
 			<a href="{{ path('course_show',{ id : courseSet.defaultCourseId }) }}">{{ 'coupon.buy_course_btn'|trans }}
 				></a>
-		{% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}
+		{% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 and cardDetail.status != 'using' %}
 			<a href="{{ path('course_set_explore') }}">{{ 'coupon.buy_course_btn'|trans }}
 				></a>
 		{% elseif cardDetail.targetType == "vip" %}
 			<a href="{{ path('vip') }}">{{ 'coupon.buy_VIP_btn'|trans }}
 				></a>
-		{% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}
+		{% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 and cardDetail.status != 'using' %}
 			<a href="{{ path('classroom_explore') }}">{{ 'coupon.buy_classroom_btn'|trans }}
 				></a>
-		{% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}
+		{% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 and cardDetail.status != 'using' %}
 			<a href="{{ path('classroom_show',{ id : cardDetail.targetId }) }}">{{ 'coupon.buy_classroom_btn'|trans }}
 				></a>
 		{% else %}

@@ -326,7 +326,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $res[] = $this->getDao()->getByCourseIdAndUserId(1, 2);
         $users = $this->getDao()->findByUserIdAndRole(2, 'teacher');
         $tmp = $users[0];
-
         unset($tmp['id']);
         unset($tmp['createdTime']);
         unset($tmp['updatedTime']);
@@ -378,6 +377,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'lastLearnTime' => '1',
             'courseSetId' => '1',
             'lastViewTime' => '0',
+            'refundDeadline' => '0',
             'learnedCompulsoryTaskNum' => '0',
         );
     }

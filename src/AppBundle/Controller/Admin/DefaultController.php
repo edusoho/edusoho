@@ -2,7 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Vip\Service\Vip\VipService;
+use Codeages\Biz\Order\Service\OrderService;
+use VipPlugin\Biz\Vip\Service\VipService;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -171,17 +172,17 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->countUsers(array('startTime' => $todayTimeStart, 'endTime' => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->countUsers(array());
 
-        $todayCourseMemberNum = $this->getOrderService()->countOrders(array('paidStartTime' => $todayTimeStart, 'paidEndTime' => $todayTimeEnd, 'targetType' => 'course', 'status' => 'paid'));
-        $todayClassroomMemberNum = $this->getOrderService()->countOrders(array('paidStartTime' => $todayTimeStart, 'paidEndTime' => $todayTimeEnd, 'targetType' => 'classroom', 'status' => 'paid'));
+        $todayCourseMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'course', 'operate_type' => 'join'));
+        $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom', 'operate_type' => 'join'));
 
-        $totalCourseMemberNum = $this->getOrderService()->countOrders(array('targetType' => 'course', 'status' => 'paid'));
-        $totalClassroomMemberNum = $this->getOrderService()->countOrders(array('targetType' => 'classroom', 'status' => 'paid'));
+        $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'course', 'operate_type' => 'join'));
+        $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom', 'operate_type' => 'join'));
 
         $todayVipNum = 0;
         $totalVipNum = 0;
         if ($this->isPluginInstalled('vip')) {
             $totalVipNum = $this->getVipService()->searchMembersCount(array());
-            $todayVipNum = $this->getVipService()->searchMembersCount(array('boughtTime_GT' => $todayTimeStart, 'boughtTime_LTE' => $todayTimeEnd, 'boughtType' => 'new'));
+            $todayVipNum = $this->getMemberOperationService()->countUserIdsByConditions(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'vip', 'operate_type' => 'join'));
         }
 
         $todayThreadUnAnswerNum = $this->getThreadService()->countThreads(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
@@ -256,12 +257,12 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
 
-        $conditions = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
-        $newOrders = $this->getOrderService()->analysisOrderDate($conditions);
+        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'statuses' => array('paid', 'success', 'refunded'));
+        $newOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newOrderCount'] = $newOrders;
 
-        $conditions['totalPriceGreaterThan'] = 0;
-        $newPaidOrders = $this->getOrderService()->analysisOrderDate($conditions);
+        $conditions['pay_amount_GT'] = 0;
+        $newPaidOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newPaidOrderCount'] = $newPaidOrders;
 
         $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
@@ -274,8 +275,29 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
 
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
+        $conditions = array(
+            'pay_time_GT' => $startTime,
+            'order_item_target_type' => 'course',
+            'pay_amount_GT' => 0,
+            'statuses' => array('paid', 'success', 'refunded'),
+        );
 
-        $orderDatas = $this->getOrderService()->analysisPaidOrderGroupByTargetType($startTime, 'targetType');
+        $conditions['order_item_target_type'] = 'course';
+        $courseOrdersCount = $this->getOrderService()->countOrders($conditions);
+
+        $conditions['order_item_target_type'] = 'classroom';
+        $classroomOrdersCount = $this->getOrderService()->countOrders($conditions);
+
+        if ($this->isPluginInstalled('vip')) {
+            $conditions['order_item_target_type'] = 'vip';
+            $vipOrdersCount = $this->getOrderService()->countOrders($conditions);
+        }
+
+        $orderDatas = array(
+            'course' => array('targetType' => 'course', 'value' => $courseOrdersCount),
+            'vip' => array('targetType' => 'vip', 'value' => isset($vipOrdersCount) ? $vipOrdersCount : 0),
+            'classroom' => array('targetType' => 'classroom', 'value' => $classroomOrdersCount),
+        );
 
         $defaults = array(
             'course' => array('targetType' => 'course', 'value' => 0),
@@ -564,11 +586,6 @@ class DefaultController extends BaseController
         return $this->createService('CloudPlatform:AppService');
     }
 
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
     protected function getUpgradeNoticeService()
     {
         return $this->createService('User:UpgradeNoticeService');
@@ -600,6 +617,11 @@ class DefaultController extends BaseController
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 
     protected function isPluginInstalled($name)

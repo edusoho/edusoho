@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Cash\Service\CashAccountService;
-use Biz\Cash\Service\CashService;
 use Biz\Content\Service\FileService;
 use Biz\File\Service\UploadFileService;
 use Biz\Group\Service\GroupService;
@@ -458,23 +456,11 @@ class GroupThreadController extends BaseController
 
     public function setEliteAction($threadId)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
-
-        if ($this->isFeatureEnabled('group_reward')) {
-            $this->getCashAccountService()->reward(10, '话题被加精', $thread['userId']);
-        }
-
         return $this->postAction($threadId, 'setElite');
     }
 
     public function removeEliteAction($threadId)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
-
-        if ($this->isFeatureEnabled('group_reward')) {
-            $this->getCashAccountService()->reward(10, '话题被取消加精', $thread['userId'], 'cut');
-        }
-
         return $this->postAction($threadId, 'removeElite');
     }
 
@@ -547,54 +533,12 @@ class GroupThreadController extends BaseController
 
         if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             $post = $this->getThreadService()->updatePost($post['id'], array('adopt' => 1));
-
-            $this->getCashAccountService()->reward($thread['rewardCoin'], '您的回复被采纳为最佳回答！', $post['userId']);
         }
 
         response:
         return new Response($this->generateUrl('group_thread_show', array(
             'id' => $thread['groupId'], 'threadId' => $post['threadId'],
         )));
-    }
-
-    public function hideAction($threadId, Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
-
-        if (isset($account['cash'])) {
-            $account['cash'] = intval($account['cash']);
-        }
-
-        $need = $this->getThreadService()->sumGoodsCoinsByThreadId($threadId);
-
-        if ($request->getMethod() == 'POST') {
-            $thread = $this->getThreadService()->getThread($threadId);
-
-            if (!isset($account['cash']) || $account['cash'] < $need) {
-                return $this->createMessageResponse('info', '虚拟币余额不足!');
-            }
-
-            $account = $this->getCashAccountService()->getAccountByUserId($user->id);
-
-            $this->getCashAccountService()->reward($need, '查看话题隐藏内容', $user->id, 'cut');
-
-            $this->getThreadService()->addTrade(array('threadId' => $threadId, 'userId' => $user->id, 'createdTime' => time()));
-
-            $reward = $need * 0.5;
-
-            if (intval($reward) < 1) {
-                $reward = 1;
-            }
-
-            $this->getCashAccountService()->reward(intval($reward), '您发表的话题<%s>的隐藏内容被查看！', $thread['title'], $thread['userId']);
-        }
-
-        return $this->render('group/hide-modal.html.twig', array(
-            'account' => $account,
-            'threadId' => $threadId,
-            'need' => $need,
-        ));
     }
 
     protected function postAction($threadId, $action)
@@ -879,22 +823,6 @@ class GroupThreadController extends BaseController
         }
 
         return false;
-    }
-
-    /**
-     * @return CashService
-     */
-    protected function getCashService()
-    {
-        return $this->getBiz()->service('Cash:CashService');
-    }
-
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
-    {
-        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
     /**

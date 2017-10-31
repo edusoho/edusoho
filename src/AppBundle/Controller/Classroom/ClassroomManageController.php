@@ -10,7 +10,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
-use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\CourseService;
 use Biz\Thread\Service\ThreadService;
 use AppBundle\Common\ClassroomToolkit;
@@ -179,8 +178,8 @@ class ClassroomManageController extends BaseController
         $fields = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        if (!empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
         $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'student'));
@@ -231,8 +230,8 @@ class ClassroomManageController extends BaseController
         $fields = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        if (!empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($fields['keyword']);
         }
 
         $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'auditor'));
@@ -265,60 +264,16 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function refundRecordAction(Request $request, $id)
+    public function recordAction(Request $request, $id, $type)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields = $request->query->all();
-
-        $condition = array();
-
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
-        }
-
-        $condition['targetId'] = $id;
-        $condition['targetType'] = 'classroom';
-        $condition['status'] = 'success';
-
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->countRefunds($condition),
-            20
-        );
-
-        $refunds = $this->getOrderService()->searchRefunds(
-            $condition,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $userIds = ArrayToolkit::column($refunds, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $orderIds = ArrayToolkit::column($refunds, 'orderId');
-        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
-        $orders = ArrayToolkit::index($orders, 'id');
-
-        foreach ($refunds as $key => $refund) {
-            if (isset($users[$refund['userId']])) {
-                $refunds[$key]['user'] = $users[$refund['userId']];
-            }
-
-            if (isset($orders[$refund['orderId']])) {
-                $refunds[$key]['order'] = $orders[$refund['orderId']];
-            }
-        }
-
         return $this->render(
-            'classroom-manage/quit-record.html.twig',
+            'classroom-manage/record/index.html.twig',
             array(
                 'classroom' => $classroom,
-                'paginator' => $paginator,
-                'refunds' => $refunds,
+                'type' => $type,
             )
         );
     }
@@ -351,43 +306,17 @@ class ClassroomManageController extends BaseController
     public function removeAction($classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
-        if (in_array('assistant', $member['role'])) {
-            return $this->createJsonResponse(array('code' => 'error', 'message' => 'classroom_manage.student_manage_remove_assistant_hint'));
-        }
-
-        $user = $this->getCurrentUser();
-
-        $condition = array(
-            'targetType' => 'classroom',
-            'targetId' => $classroomId,
-            'userId' => $userId,
-            'status' => 'paid',
-        );
-        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
-        $order = current($orders);
-
-        $this->getClassroomService()->removeStudent($classroomId, $userId);
-
-        $reason = array(
-            'type' => 'other',
-            'note' => '"'.$user['nickname'].'"'.' 手动移除',
-            'operator' => $user['id'],
+        $this->getClassroomService()->removeStudent(
+            $classroomId,
+            $userId,
+            array(
+                'reason' => 'site.remove_by_manual',
+                'reason_type' => 'remove',
+            )
         );
 
-        $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
-        $message = array(
-            'classroomId' => $classroom['id'],
-            'classroomTitle' => $classroom['title'],
-            'userId' => $user['id'],
-            'userName' => $user['nickname'],
-            'type' => 'remove',
-        );
-        $this->getNotificationService()->notify($userId, 'classroom-student', $message);
-
-        return $this->createJsonResponse(array('code' => 'success', 'message' => ''));
+        return $this->createJsonResponse(true);
     }
 
     public function createAction(Request $request, $id)
@@ -404,63 +333,9 @@ class ClassroomManageController extends BaseController
                 throw $this->createNotFoundException("用户{$data['nickname']}不存在");
             }
 
-            if ($this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id'])) {
-                throw $this->createNotFoundException('用户已经是学员，不能添加！');
-            }
-
-            $classroomSetting = $this->getSettingService()->get('classroom');
-
-            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
-
-            if (empty($data['price'])) {
-                $data['price'] = 0;
-            }
-
-            $order = $this->getOrderService()->createOrder(
-                array(
-                    'userId' => $user['id'],
-                    'title' => "购买{$classroomName}《{$classroom['title']}》(管理员添加)",
-                    'targetType' => 'classroom',
-                    'targetId' => $classroom['id'],
-                    'amount' => $data['price'],
-                    'payment' => 'outside',
-                    'snPrefix' => 'CR',
-                    'totalPrice' => $classroom['price'],
-                )
-            );
-
-            $this->getOrderService()->payOrder(
-                array(
-                    'sn' => $order['sn'],
-                    'status' => 'success',
-                    'amount' => $order['amount'],
-                    'paidTime' => time(),
-                )
-            );
-
-            $info = array(
-                'orderId' => $order['id'],
-                'note' => $data['remark'],
-            );
-            $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
-
-            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-            $currentUser = $this->getCurrentUser();
-            $message = array(
-                'classroomId' => $classroom['id'],
-                'classroomTitle' => $classroom['title'],
-                'userId' => $currentUser['id'],
-                'userName' => $currentUser['nickname'],
-                'type' => 'create',
-            );
-
-            $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
-
-            $this->getLogService()->info(
-                'classroom',
-                'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
-            );
+            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $data['isNotify'] = 1;
+            $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
             return $this->createJsonResponse(array('success' => 1));
         }
@@ -1220,43 +1095,6 @@ class ClassroomManageController extends BaseController
         return ArrayToolkit::column($tags, 'id');
     }
 
-    private function getUserIds($keyword)
-    {
-        $userIds = array();
-
-        if (SimpleValidator::email($keyword)) {
-            $user = $this->getUserService()->getUserByEmail($keyword);
-
-            $userIds[] = $user ? $user['id'] : null;
-
-            return $userIds;
-        } elseif (SimpleValidator::mobile($keyword)) {
-            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers = $this->getUserService()->searchUserProfiles(
-                array('tel' => $keyword),
-                array('id' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-            $mobileNameUser = $this->getUserService()->getUserByNickname($keyword);
-            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-            $userIds = array_unique($userIds);
-
-            $userIds = $userIds ? $userIds : null;
-
-            return $userIds;
-        } else {
-            $user = $this->getUserService()->getUserByNickname($keyword);
-            $userIds[] = $user ? $user['id'] : null;
-
-            return $userIds;
-        }
-    }
-
     protected function getCashRate()
     {
         $coinSetting = $this->getSettingService()->get('coin');
@@ -1400,5 +1238,10 @@ class ClassroomManageController extends BaseController
     protected function getLearningDataAnalysisService()
     {
         return $this->createService('Classroom:LearningDataAnalysisService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 }
