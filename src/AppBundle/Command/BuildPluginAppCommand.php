@@ -90,7 +90,7 @@ class BuildPluginAppCommand extends BaseCommand
 
         $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
-        $this->_copyScript($pluginDir, $distDir);
+        $this->_copyScript($name, $pluginDir, $distDir);
         $this->_generateBlocks($pluginDir, $distDir, $this->getContainer());
         $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
@@ -120,7 +120,7 @@ class BuildPluginAppCommand extends BaseCommand
         }
     }
 
-    private function _copyScript($pluginDir, $distDir)
+    private function _copyScript($name, $pluginDir, $distDir)
     {
         $scriptDir = "{$pluginDir}/Scripts";
         $distScriptDir = "{$distDir}/Scripts";
@@ -134,7 +134,9 @@ class BuildPluginAppCommand extends BaseCommand
 
         $this->output->writeln('<info>    * 生成安装引导脚本：Upgrade.php</info>');
 
-        $this->filesystem->copy(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+        $data = file_get_contents(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php');
+        $data = str_replace('{{code}}', $name, $data);
+        file_put_contents("{$distDir}/EduSohoPluginUpgrade.php", $data);
     }
 
     private function _copyMeta($pluginDir, $distDir)
