@@ -20,11 +20,11 @@ class Client
         ), $options);
     }
 
-    public function request($method, $uri = '', array $options = [])
+    public function request($method, $uri = '', array $options = array())
     {
         $options = $this->prepareDefaults($options);
 
-        $headers = isset($options['headers']) ? $options['headers'] : [];
+        $headers = isset($options['headers']) ? $options['headers'] : array();
         $body = isset($options['body']) ? $options['body'] : null;
         if (isset($options['json'])) {
             $body = json_encode($options['json']);
