@@ -40,6 +40,7 @@ export default class AddMaterial {
             $btn.button('reset');
             $form.find('#materials').val('');
             $form.find('#link').val('');
+            $form.find('#verifyLink').val('');
             $form.find('#media').val('');
             $form.find('#file-summary').val('');
             $form.find('.js-current-file').text('');
@@ -73,6 +74,10 @@ export default class AddMaterial {
     let $target = $(event.currentTarget);
     let $parent = $target.closest('li');
 
+    if (!confirm(Translator.trans('activity.download_manage.materials_or_link_confirm_delete'))) {
+      return;
+    }
+
     $.post($target.data('url'), () => {
       $parent.remove();
       notify('success', Translator.trans('activity.download_manage.materials_or_link_delete'));
@@ -89,9 +94,6 @@ export default class AddMaterial {
     if (isValidated && (linkLength > 0)) {
       $verifyLink.val(linkVal);
       $materials.val(0);
-    } else {
-      $verifyLink.val('');
-      $materials.val('');
     }
 
     $('#link').val($verifyLink.val());
@@ -103,14 +105,12 @@ export default class AddMaterial {
       const $media = $('#media');
       const $materials = $('#materials');
       let media = {};
-      let fileIdVal = null;
 
       $media.val(JSON.stringify(file));
       chooserUiOpen();
-      console.log('打断点');
       $('.js-current-file').text(file.name);
       media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
-      fileIdVal = $materials.val(media.id);
+      $materials.val(media.id);
     }
 
     const fileChooser = new FileChooser();
