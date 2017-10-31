@@ -7,13 +7,16 @@ import {
   chooserUiOpen
 } from '../widget/chooser-ui';
 
+$.fn.isExist = function() {
+  return !!this.length;
+};
+
 export default class DownLoad {
   constructor() {
     this.$form = $('#step2-form');
-    this.validator2 = null;
     this.firstName = $('#title').val();
-    this.media = {};
-    this.materials = {};
+    this.media = Object.create(null);
+    this.materials = Object.create(null);
     this.initStep2Form();
     this.bindEvent();
     this.initFileChooser();
@@ -49,12 +52,12 @@ export default class DownLoad {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
     const $materials = $('#materials');
-    this.materials = isEmpty($materials.val()) ? {} : JSON.parse($materials.val());
+    this.materials = isEmpty($materials.val()) ? Object.create(null) : JSON.parse($materials.val());
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
       $materials.val(JSON.stringify(this.materials));
     }
-    if ($parent.siblings('li').length <= 0) {
+    if (!$parent.siblings('li').isExist()) {
       $materials.val('');
     }
     $parent.remove();
@@ -62,10 +65,8 @@ export default class DownLoad {
 
   initFileChooser() {
     const fileSelect = (file) => {
-      // 赋值给media上传的文件信息
       $('#media').val(JSON.stringify(file));
       chooserUiOpen();
-      // 重置上传文件导致标题名称的改变
       $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
     }
@@ -82,7 +83,7 @@ export default class DownLoad {
   importLink() {
     const $link = $('#link');
     const $verifyLink = $('#verifyLink');
-    if (this.$form.data('validator').valid() && $link.val().length > 0) {
+    if (this.$form.data('validator').valid() && $link.val()) {
       $verifyLink.val($link.val());
       $('.js-current-file').text($verifyLink.val());
     }
@@ -90,14 +91,14 @@ export default class DownLoad {
 
   addLink() {
     let verifyLinkVal = $('#verifyLink').val();
-    let data = {
+    const data = {
       source: 'link',
       id: verifyLinkVal,
       name: verifyLinkVal,
       link: verifyLinkVal,
       summary: $('#file-summary').val(),
       size: 0
-    }
+    };
 
     $('#media').val(JSON.stringify(data));
   }
@@ -112,12 +113,12 @@ export default class DownLoad {
     const successTip = 'activity.download_manage.materials_add_success_hint';
     const existTip = 'activity.download_manage.materials_exist_error_hint';
 
-    if ($('#verifyLink').val().length > 0) {
+    if ($('#verifyLink').val()) {
       this.addLink();
     }
 
-    this.media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
-    this.materials = isEmpty($materials.val()) ? {} : JSON.parse($materials.val());
+    this.media = isEmpty($media.val()) ? Object.create(null) : JSON.parse($media.val());
+    this.materials = isEmpty($materials.val()) ? Object.create(null) : JSON.parse($materials.val());
 
     if (isEmpty(this.media)) {
       this.showTip($successTipDom, $errorTipDom, errorTip);
@@ -142,26 +143,22 @@ export default class DownLoad {
 
     this.showTip($errorTipDom, $successTipDom, successTip);
 
-    if ($('.jq-validate-error:visible').length > 0) {
+    if ($('.jq-validate-error:visible').isExist()) {
       this.$form.data('validator').form();
     }
   }
 
   checkExisted() {
-    let flag = false;
     for (let item in this.materials) {
-      if (this.materials[item].hasOwnProperty('link') && this.materials[item].link.length > 0) {
-        if (this.materials[item].link === this.media.id) {
-          flag = true;
-        }
-      } else {
-        if (this.materials[item].name === this.media.name) {
-          flag = true;
-        }
-      }
+      const materialsItem = this.materials[item];
+      const checkFile = materialsItem.name === this.media.name;
+      const checkLink = materialsItem.link && (materialsItem.link === this.media.id);
 
+      if (checkFile || checkLink) {
+        return true;
+      }
     }
-    return flag;
+    return false;
   }
 
   showFile() {
@@ -193,7 +190,6 @@ export default class DownLoad {
     $('#verifyLink').val('');
     $('#file-summary').val('');
     $('#media').val('');
-    this.media = {};
     $showDom.text(Translator.trans(trans)).show();
     setTimeout(function() {
       $showDom.slideUp();
