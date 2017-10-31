@@ -56,7 +56,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'resource' => array(),
         );
 
-        $this->finishActivity($actor, $object, array());
+        $this->createXAPIService()->finishActivity($actor, $object, array());
     }
 
     public function finishActivity($actor, $object, $result)
@@ -84,10 +84,10 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                         'title' => $object['course']['title'],
                         'description' => $object['course']['summary'],
                     ),
-//                    'http://xapi.edusoho.com/extensions/resource' => array(
-//                        'id' => $object['resource']['id'],
-//                        'name' => $object['resource']['name']
-//                    )
+                    'http://xapi.edusoho.com/extensions/resource' => array(
+                        'id' => $object['resource']['id'],
+                        'name' => $object['resource']['name']
+                    )
                 ),
             ),
         );
