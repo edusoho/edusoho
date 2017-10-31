@@ -18,6 +18,7 @@ export default class DownLoad {
     this.bindEvent();
     this.initFileChooser();
   }
+
   initStep2Form() {
     let validator2 = this.$form.validate({
       rules: {
@@ -59,7 +60,6 @@ export default class DownLoad {
     $parent.remove();
   }
 
-
   initFileChooser() {
     const fileSelect = (file) => {
       // 赋值给media上传的文件信息
@@ -89,7 +89,6 @@ export default class DownLoad {
   }
 
   addLink() {
-    // 链接的时候，通过js手动把链接的信息设置成对象的形式
     let verifyLinkVal = $('#verifyLink').val();
     let data = {
       source: 'link',
@@ -104,7 +103,6 @@ export default class DownLoad {
   }
 
   addFile() {
-
     let $media = $('#media');
     let $materials = $('#materials');
     let $successTipDom = $('.js-success-redmine');
@@ -115,21 +113,17 @@ export default class DownLoad {
     const existTip = 'activity.download_manage.materials_exist_error_hint';
 
     if ($('#verifyLink').val().length > 0) {
-      // 链接存在而且格式验证通过
       this.addLink();
     }
 
-    // 从后台获取json字符串，进行转义获得json对象
     this.media = isEmpty($media.val()) ? {} : JSON.parse($media.val());
     this.materials = isEmpty($materials.val()) ? {} : JSON.parse($materials.val());
 
-    // 失败提示：请上传或选择资料
     if (isEmpty(this.media)) {
       this.showTip($successTipDom, $errorTipDom, errorTip);
       return;
     }
 
-    // 文件重复上传
     if (!isEmpty(this.materials) && this.checkExisted()) {
       this.showTip($successTipDom, $errorTipDom, existTip);
       return;
@@ -139,7 +133,6 @@ export default class DownLoad {
     this.materials[this.media.id] = this.media;
     $materials.val(JSON.stringify(this.materials));
 
-    // 获得第一次上传文件的title值赋值给标题名称
     if (!this.firstName) {
       this.firstName = this.media.name;
       $('#title').val(this.firstName);
@@ -150,7 +143,6 @@ export default class DownLoad {
     this.showTip($errorTipDom, $successTipDom, successTip);
 
     if ($('.jq-validate-error:visible').length > 0) {
-      // 点击 添加资料，并没有提交表单，url验证失败，返回false;
       this.$form.data('validator').form();
     }
   }
@@ -172,22 +164,20 @@ export default class DownLoad {
     return flag;
   }
 
-
-  //显示上传的文件或者链接名
   showFile() {
     let item_tpl = '';
     if (this.media.link) {
       item_tpl = `
         <li class="download-item" data-id="${ this.media.link }">
           <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
-          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
         </li>
       `;
     } else {
       item_tpl = `
         <li class="download-item" data-id="${ this.media.id }">
           <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
-          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
         </li>
       `;
     }
