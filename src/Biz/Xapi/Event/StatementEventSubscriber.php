@@ -86,8 +86,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => $object['resource']['id'],
-                        'name' => $object['resource']['name']
-                    )
+                        'name' => $object['resource']['name'],
+                    ),
                 ),
             ),
         );
