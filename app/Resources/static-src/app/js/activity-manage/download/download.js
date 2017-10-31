@@ -48,7 +48,7 @@ export default class DownLoad {
   deleteItem(event) {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
-    let $materials = $('#materials');
+    const $materials = $('#materials');
     this.materials = isEmpty($materials.val()) ? {} : JSON.parse($materials.val());
     if (this.materials && this.materials[mediaId]) {
       delete this.materials[mediaId];
@@ -80,8 +80,8 @@ export default class DownLoad {
   }
 
   importLink() {
-    let $link = $('#link');
-    let $verifyLink = $('#verifyLink');
+    const $link = $('#link');
+    const $verifyLink = $('#verifyLink');
     if (this.$form.data('validator').valid() && $link.val().length > 0) {
       $verifyLink.val($link.val());
       $('.js-current-file').text($verifyLink.val());
@@ -103,10 +103,10 @@ export default class DownLoad {
   }
 
   addFile() {
-    let $media = $('#media');
-    let $materials = $('#materials');
-    let $successTipDom = $('.js-success-redmine');
-    let $errorTipDom = $('.js-danger-redmine');
+    const $media = $('#media');
+    const $materials = $('#materials');
+    const $successTipDom = $('.js-success-redmine');
+    const $errorTipDom = $('.js-danger-redmine');
 
     const errorTip = 'activity.download_manage.materials_error_hint';
     const successTip = 'activity.download_manage.materials_add_success_hint';
