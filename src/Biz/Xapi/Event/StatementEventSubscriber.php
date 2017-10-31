@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
@@ -130,6 +131,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     protected function testpaperFinish($testpaperResult)
     {
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
         $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($testpaperResult['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
@@ -140,7 +142,13 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $actor = $this->getActor();
-        $result = array();
+        $result = array(
+            'score' => array(
+                'max' => $testpaper['score'],
+                'min' => 0,
+                'raw' => $testpaperResult['score']
+            )
+        );
 
         $this->createXAPIService()->finishTestpaper($actor, $object, $result);
     }
@@ -329,6 +337,14 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
+    }
+
     protected function createXAPIService()
     {
         $settings = $this->getSettingService()->get('storage', array());
@@ -340,7 +356,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $auth = new Auth($accessKey, $secretKey);
 
         return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => 'http://localhost:8000/xapi/', //推送的URL需要配置
+            'base_uri' => 'http://192.168.4.214:8762/xapi/', //推送的URL需要配置
             'school' => array(
                 'id' => $accessKey,
                 'name' => $siteName,
