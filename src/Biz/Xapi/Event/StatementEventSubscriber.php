@@ -30,7 +30,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'exam.finish' => 'onExamFinish',
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
-            'question_marker.finish' => 'onQuestionMarkerFinish'
+            'question_marker.finish' => 'onQuestionMarkerFinish',
         );
     }
 
@@ -75,7 +75,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     public function onQuestionMarkerFinish(Event $event)
     {
-
         $user = $this->getCurrentUser();
         if (empty($user) || !$user->isLogin()) {
             return;
@@ -92,18 +91,17 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $choices = array();
         if (isset($questionMarker['metas']['choices'])) {
-            foreach($questionMarker['metas']['choices'] as $id => $choice) {
+            foreach ($questionMarker['metas']['choices'] as $id => $choice) {
                 $choices[] = array(
                     'id' => $id,
                     'description' => array(
-                        'zh-CN' => $this->num_to_capital($id)
-                    )
+                        'zh-CN' => $this->num_to_capital($id),
+                    ),
                 );
             }
         }
 
         $task = $this->getTaskService()->getTask($questionMarkerResult['taskId']);
-
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -114,8 +112,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
         }
 
-
-
         $actor = $this->getActor();
         $object = array(
             'id' => $questionMarker['id'],
@@ -125,18 +121,15 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'choices' => $choices,
             'course' => $course,
             'activity' => $activity,
-            'resource' => empty($resource) ? array() : $resource
-
+            'resource' => empty($resource) ? array() : $resource,
         );
 
         $result = array(
             'score' => array(),
-            'response' => $answers
+            'response' => $answers,
         );
 
         $this->createXAPIService()->finishActivityQuestion($actor, $object, $result);
-
-
     }
 
     public function onExamFinish(Event $event)
@@ -322,7 +315,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     protected function num_to_capital($num)
     {
-        $char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
         return $char[$num];
     }
 
