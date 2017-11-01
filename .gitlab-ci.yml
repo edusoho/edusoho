@@ -4,8 +4,6 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-  SONAR_HOST: http://sonar.codeages.net
-  SONAR_TOKEN: 612b26d6107a6e28fb7e4b6f10af98f939a3365f
 
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
@@ -53,6 +51,12 @@ Unit Test With PHP 7.0:
   script:
     - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-html reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
+    - echo "sonar.links.ci=SONAR_LINKS_CI" >> sonar-project.properties
+    - echo "sonar.links.issue=SONAR_LINKS_ISSUE" >> sonar-project.properties
+    - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+    - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+    - /opt/sonar-scanner/bin/sonar-scanner
+
 
 #Functional Test With 5.5:
 #  stage: test
