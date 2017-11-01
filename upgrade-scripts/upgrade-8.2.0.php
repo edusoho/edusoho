@@ -106,6 +106,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'changeCouponStatus',
             'resetCrontabJobNum',
             'initCoinSetting',
+            'updateCloudAppType',
         );
 
         $funcNames = array();
@@ -1019,7 +1020,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', "处理biz_pay_user_balance的数据，当前页码{$page}");
 
         $connection = $this->getConnection();
-        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `migrate_id` from `biz_pay_user_balance`)");
+        $count = $connection->fetchColumn("SELECT count(id) FROM `user` where id not in (select `user_id` from `biz_pay_user_balance`)");
 
         if (empty($count)) {
             return 1;
@@ -1027,7 +1028,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection->exec("
             INSERT into `biz_pay_user_balance` (
-              `id`,
               `user_id`,
               `amount`,
               `created_time`,
@@ -1035,13 +1035,12 @@ class EduSohoUpgrade extends AbstractUpdater
               `migrate_id`
             )
             select
-              u.`id`,
               u.`id` as `user_id`,
               case when ca.`cash`*100 is null then 0 else round(ca.`cash`*100) end as `amount`,
               u.`createdTime` as `created_time`,
               u.`updatedTime` as `updated_time`,
               u.`id` as `migrate_id`
-            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `migrate_id` from `biz_pay_user_balance`) LIMIT 0, 10000
+            from `user` u left join cash_account ca on u.`id` = ca.`userId`  where u.`id` not in (select `user_id` from `biz_pay_user_balance`) LIMIT 0, 10000
         ");
 
         return $page + 1;
@@ -1673,6 +1672,13 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
         PluginUtil::refresh();
 
+        return 1;
+    }
+
+    protected  function updateCloudAppType(){
+        $connection = $this->getConnection();
+        $connection->exec("alter table `cloud_app` MODIFY `type` varchar(64) NOT NULL DEFAULT 'plugin' COMMENT '应用类型(core系统，plugin插件应用, theme主题应用)';");
+        $connection->exec(" update cloud_app set type ='core' where code = 'MAIN';");
         return 1;
     }
 
