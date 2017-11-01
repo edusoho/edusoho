@@ -437,7 +437,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `o`.`refundId` as `refund_id`,
                 case when re.status = 'refunded' then 'refunded' else '' end as `refund_status`, -- 当有refund_id时，冗余的退款状态
                 case when totalPrice<0 then 0 else round(`o`.`totalPrice`*100) end as `price_amount`,
-                case when (o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) < 0 then 0 else round(o.`totalPrice`*100 - o.`couponDiscount`*100 - o.`discount`*100) end as `pay_amount`, -- 应付款
+                case when (o.`amount` + o.`coinAmount`/coinRate) < 0 then 0 else round((o.`amount` + o.`coinAmount`/o.`coinRate`)*100) end as `pay_amount`, 
                 `o`.`targetId` as `target_id`,
                 `o`.`targetType` as `target_type`,
                 `o`.`paidTime` as `pay_time`,
@@ -590,7 +590,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `item_id`,
                 'discount' as `deduct_type`,
                 `discountId` as `deduct_id`,              
-                round(`discount`*100) as `deduct_amount`,
+                round((o.`totalPrice` - o.`totalPrice`/o.`discount`)*100) as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `userId` as `user_id`,
                 0 as `seller_id`,
@@ -807,7 +807,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 o.`sn` as `order_sn`,
                 o.`payment` as `platform`,
                 '' as `platform_sn`,
-                case when o.`status` = 'created' then 'paying' when o.`status` = 'cancelled' then 'closed' else o.`status` end as `status`,
+                case when o.`status` in ('paid', 'refunding') then 'paid' when o.`status` = 'created' then 'paying' when o.`status` = 'cancelled' then 'closed' else o.`status` end as `status`,
                 'money' as `price_type`,
                 'CNY' as `currency`,
                 round(o.`amount`*100),
