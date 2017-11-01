@@ -300,7 +300,7 @@ class PayServiceImpl extends BaseService implements PayService
         return $this->getTradeContext($trade['id'])->closed();
     }
 
-    public function applyRefundByTradeSn($tradeSn)
+    public function applyRefundByTradeSn($tradeSn, $data = array())
     {
         $trade = $this->getPayTradeDao()->getByTradeSn($tradeSn);
         if (in_array($trade['status'], array('refunding', 'refunded'))) {
@@ -315,7 +315,7 @@ class PayServiceImpl extends BaseService implements PayService
             return $this->refundPlatformTrade($trade);
         }
 
-        $trade = $this->updateTradeToRefunded($tradeSn, array());
+        $trade = $this->updateTradeToRefunded($tradeSn, $data);
 
         return $trade;
     }
