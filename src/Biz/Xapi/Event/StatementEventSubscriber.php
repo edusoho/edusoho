@@ -128,7 +128,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'score' => array(
                 'max' => 0,
                 'min' => 0,
-                'raw' => 0
+                'raw' => 0,
             ),
             'response' => $answers,
         );
