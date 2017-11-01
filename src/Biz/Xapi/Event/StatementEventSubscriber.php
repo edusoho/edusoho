@@ -2,9 +2,14 @@
 
 namespace Biz\Xapi\Event;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\File\Service\UploadFileService;
+use Biz\Marker\Service\MarkerService;
+use Biz\Marker\Service\QuestionMarkerResultService;
+use Biz\Marker\Service\QuestionMarkerService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -25,6 +30,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'exam.finish' => 'onExamFinish',
             'course.note.create' => 'onCourseNoteCreate',
             'course.thread.create' => 'onCourseThreadCreate',
+            'question_marker.finish' => 'onQuestionMarkerFinish'
         );
     }
 
@@ -39,6 +45,11 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+
+        $activity = $this->getActivityService()->getActivity($taskResult['activityId'], true);
+        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+        }
 
         if (empty($course) || !$this->getMemberService()->isCourseStudent($course['id'], $user['id'])) {
             return;
@@ -55,56 +66,77 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'id' => $task['id'],
             'name' => $task['title'],
             'course' => $course,
-            'resource' => array(),
+            'resource' => empty($resource) ? array() : $resource,
+            'definitionType' => $this->convertMediaType($task['type']),
         );
 
         $this->createXAPIService()->finishActivity($actor, $object, array());
     }
 
-    public function finishActivity($actor, $object, $result)
+    public function onQuestionMarkerFinish(Event $event)
     {
-        $statement = array();
-        $statement['actor'] = $actor;
-        $statement['verb'] = array(
-            'id' => 'http://adlnet.gov/expapi/verbs/completed',
-            'display' => array(
-                'zh-CN' => '完成了',
-                'en-US' => 'completed',
-            ),
+
+        $user = $this->getCurrentUser();
+        if (empty($user) || !$user->isLogin()) {
+            return;
+        }
+        $questionMarkerResult = $event->getSubject();
+
+        $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerResult['questionMarkerId']);
+        $answers = array();
+        if (is_array($questionMarker['answer'])) {
+            foreach ($questionMarker['answer'] as $answer) {
+                $answers[] = $this->num_to_capital($answer);
+            }
+        }
+
+        $choices = array();
+        if (isset($questionMarker['metas']['choices'])) {
+            foreach($questionMarker['metas']['choices'] as $id => $choice) {
+                $choices[] = array(
+                    'id' => $id,
+                    'description' => array(
+                        'zh-CN' => $this->num_to_capital($id)
+                    )
+                );
+            }
+        }
+
+        $task = $this->getTaskService()->getTask($questionMarkerResult['taskId']);
+
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course['description'] = $courseSet['subtitle'];
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
+        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+        }
+
+
+
+        $actor = $this->getActor();
+        $object = array(
+            'id' => $questionMarker['id'],
+            'type' => $questionMarker['type'],
+            'stem' => $questionMarker['stem'],
+            'answer' => $answers,
+            'choices' => $choices,
+            'course' => $course,
+            'activity' => $activity,
+            'resource' => empty($resource) ? array() : $resource
+
         );
 
-        $statement['object'] = array(
-            'id' => $object['id'],
-            'defination' => array(
-                'type' => 'https://w3id.org/xapi/acrossx/activities/video',
-                'name' => array(
-                    'zh-CN' => $object['name'],
-                ),
-                'extensions' => array(
-                    'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['summary'],
-                    ),
-                    'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => $object['resource']['id'],
-                        'name' => $object['resource']['name'],
-                    ),
-                ),
-            ),
+        $result = array(
+            'score' => array(),
+            'response' => $answers
         );
 
-        $statement['result'] = array(
-            'success' => true,
-        );
+        $this->createXAPIService()->finishActivityQuestion($actor, $object, $result);
 
-        $statement['context'] = array(
-            'extensions' => array(
-                'http://xapi.edusoho.com/extensions/school' => $this->getSchoolInfo(),
-            ),
-        );
 
-        $this->getXapiService()->createStatement($statement);
     }
 
     public function onExamFinish(Event $event)
@@ -197,21 +229,28 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         }
 
         $note = $event->getSubject();
-
+        $task = $this->getTaskService()->getTask($note['taskId']);
         $course = $this->getCourseService()->getCourse($note['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($note['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
+        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+        }
 
         $object = array(
             'id' => $note['id'],
             'course' => $course,
+            'definitionType' => $this->convertMediaType($task['type']),
+            'resource' => empty($resource) ? array() : $resource,
         );
 
         $actor = $this->getActor();
 
         $result = $note;
 
-        $statement = $this->createXAPIService()->writeNote($actor, $object, $result);
+        $this->createXAPIService()->writeNote($actor, $object, $result);
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -220,13 +259,21 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         if ($thread['type'] != 'question') {
             return;
         }
-
+        $task = $this->getTaskService()->getTask($thread['taskId']);
         $course = $this->getCourseService()->getCourse($thread['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($thread['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
+        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+        }
+
         $object = array(
             'id' => $thread['id'],
             'course' => $course,
+            'definitionType' => $this->convertMediaType($task['type']),
+            'resource' => empty($resource) ? array() : $resource,
         );
 
         $actor = $this->getActor();
@@ -271,6 +318,28 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             'name' => $name,
             'url' => $url,
         );
+    }
+
+    protected function num_to_capital($num)
+    {
+        $char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return $char[$num];
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 
     /**
@@ -340,6 +409,30 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     }
 
     /**
+     * @return QuestionMarkerResultService
+     */
+    protected function getQuestionMarkerResultService()
+    {
+        return $this->createService('Marker:QuestionMarkerResultService');
+    }
+
+    /**
+     * @return MarkerService
+     */
+    protected function getMarkerService()
+    {
+        return $this->createService('Marker:MarkerService');
+    }
+
+    /**
+     * @return QuestionMarkerService
+     */
+    protected function getQuestionMarkerService()
+    {
+        return $this->createService('Marker:QuestionMarkerService');
+    }
+
+    /**
      * @return TestpaperService
      */
     protected function getTestpaperService()
@@ -369,5 +462,24 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function createService($alias)
     {
         return $this->getBiz()->service($alias);
+    }
+
+    protected function convertMediaType($mediaType)
+    {
+        $list = array(
+            'audio' => 'audio',
+            'video' => 'video',
+            'doc' => 'document',
+            'ppt' => 'document',
+            'testpaper' => 'testpaper',
+            'homework' => 'homework',
+            'exercise' => 'exercise',
+            'download' => 'download',
+            'live' => 'live',
+            'text' => 'text',
+            'flash' => 'flash',
+        );
+
+        return empty($list[$mediaType]) ? $mediaType : $list[$mediaType];
     }
 }

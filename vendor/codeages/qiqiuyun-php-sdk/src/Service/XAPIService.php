@@ -31,7 +31,7 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
+            'definition' => array(
                 'type' => 'https://w3id.org/xapi/acrossx/activities/video',
                 'name' => array(
                     $this->defaultLang => $object['name'],
@@ -43,8 +43,8 @@ class XAPIService extends BaseService
                         'description' => $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
-                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
+                        'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
                     )
                 )
             )
@@ -76,8 +76,8 @@ class XAPIService extends BaseService
 
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
-                'type' => 'https://w3id.org/xapi/acrossx/activities/video',
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
                 'name' => array(
                     $this->defaultLang => $object['name']
                 ),
@@ -89,8 +89,8 @@ class XAPIService extends BaseService
 
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
-                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
+                        'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
                     )
                 )
             )
@@ -120,7 +120,7 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
+            'definition' => array(
                 'type' => 'http://adlnet.gov/expapi/activities/interaction',
                 'interactionType' => $object['type'],
                 'description' => array(
@@ -139,8 +139,8 @@ class XAPIService extends BaseService
                         'title' => $object['activity']['title']
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
-                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
+                        'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
                     )
                 )
             )
@@ -150,7 +150,7 @@ class XAPIService extends BaseService
             'score' => $result['score'],
             'success' => true,
             'response' => $result['response'],
-            'duration' => $this->convertTime($result['duration'])
+            'duration' => empty($result['duration']) ? '' : $this->convertTime($result['duration'])
         );
 
         return $isPush ? $this->pushStatement($statement) : $statement;
@@ -173,7 +173,7 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
+            'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/homework',
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
@@ -208,8 +208,8 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
-                'type' => 'http://xapi.edusoho.com/activities/testpaper',
+            'definition' => array(
+                'type' => 'http://xapi.edusoho.com/activities/exercise',
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => $object['course']['id'],
@@ -243,8 +243,8 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
-                'type' => 'http://xapi.edusoho.com/activities/examination',
+            'definition' => array(
+                'type' => 'http://xapi.edusoho.com/activities/testpaper',
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => $object['course']['id'],
@@ -279,8 +279,8 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
-                'type' => 'https://w3id.org/xapi/acrossx/activities/video',
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => $object['course']['id'],
@@ -289,8 +289,8 @@ class XAPIService extends BaseService
 
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
-                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
+                        'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
                     )
                 )
             ),
@@ -319,8 +319,8 @@ class XAPIService extends BaseService
         );
         $statement['object'] = array(
             'id' => $object['id'],
-            'defination' => array(
-                'type' => 'https://w3id.org/xapi/acrossx/activities/video',
+            'definition' => array(
+                'type' => $this->getActivityType($object['definitionType']),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => $object['course']['id'],
@@ -329,8 +329,8 @@ class XAPIService extends BaseService
 
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
-                        'id' => empty($object['resource']['id']) ? 0 : $object['resource']['id'],
-                        'name' => empty($object['resource']['name']) ? '' : $object['resource']['name']
+                        'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
                     )
                 )
             )
@@ -368,7 +368,8 @@ class XAPIService extends BaseService
 
         $response = json_decode($rawResponse->getBody(), true);
 
-        file_put_contents('1.txt', json_encode($response), FILE_APPEND);
+        file_put_contents('../app/logs/1.txt', json_encode($response).PHP_EOL, FILE_APPEND);
+        file_put_contents('../app/logs/2.txt', json_encode($statement).PHP_EOL, FILE_APPEND);
         if (isset($response['error'])) {
             throw new ResponseException($rawResponse);
         }
@@ -388,7 +389,7 @@ class XAPIService extends BaseService
             case 'document':
                 $activityType = 'https://w3id.org/xapi/acrossx/activities/document';
                 break;
-            case 'examination':
+            case 'exercise':
                 $activityType = 'http://xapi.edusoho.com/activities/examination';
                 break;
             case 'homework':
@@ -407,7 +408,7 @@ class XAPIService extends BaseService
                 $activityType = 'https://w3id.org/xapi/acrossx/activities/video';
                 break;
             default:
-                throw new SDKException('Please input correct type');
+                $activityType = $minType;
         }
 
         return $activityType;
@@ -512,4 +513,5 @@ class XAPIService extends BaseService
     {
         return empty($timestamp) ? date('c') : date('c', $timestamp);
     }
+
 }
