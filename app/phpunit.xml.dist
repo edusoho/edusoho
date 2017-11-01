@@ -29,7 +29,7 @@
     </php>
 
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist>
             <directory suffix=".php">../src/Biz</directory>
 
             <exclude>
@@ -38,9 +38,5 @@
 
         </whitelist>
     </filter>
-
-    <logging>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-    </logging>
 
 </phpunit>
