@@ -1,4 +1,5 @@
 site.alipay: Alipay
+site.trade.title: %name%Order
 site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
@@ -322,10 +323,12 @@ form.input_mobile: Input mobile
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
+finance.recover: Recorvey
 finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
 finance.balance: Balance
+finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
@@ -336,6 +339,7 @@ vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
+plugin.discount: Discount
 plugin.coupon: Coupon
 plugin.coupon.minus: Deduction
 plugin.coupon.minus_tips: 'Coupon for deduct %rate% CNY'
@@ -345,6 +349,7 @@ plugin.coupon.change_btn: 'Change coupon'
 plugin.coupon.use_btn: 'Use coupon'
 plugin.coupon.choose_btn: 'Fill in coupon'
 plugin.coupon.use.input_placeholder: 'Please fill in the coupon code'
+plugin.coupon.use.input_display: 请输入优惠券码
 plugin.coupon.code: 'Coupon code'
 plugin.coupon.amount: 'Coupon price amount'
 coin.online_school_balance: Balance
@@ -367,19 +372,55 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.createdTime: 'Create time'
+order.product_name: Product name
+order.product_price: Product Price
+order.price_amount: Price payable
+order.paid_amount: Paid price
+order.paid_coin_amount: Paid coin
+order.paid_cash_amount: Paid cash
+order.refund.deal_status: Deal status
+order.refund.deal_time: Deal Time
+order.refund.deal_persion: Deal persion
+order.refund_reason: Refund reason
+order.refund.detail: Refund detail
+order.refund_amount: Refund amount
+order.refund_coin_amount: Refund coin
+order.refund_cash_amount: Refund Cash
+order.refund_limit: Refund limit
+order.show_refund_detail: Show refund
+order.refunded_cash_amount: Refunded cash
+order.use_coupon: Use coupon
+order.refund_feedback: feedback
+order.refund.id: Refund id
+order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
+order.deduct: Order deduct
+order.item_type: Order type
+order.product_type: Product type
+order.source:  source
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
+order.due_pay: duePay(CNY)
+order.price_amount: PriceAmount
+order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
+order.deduct_amount: Deduct Amount
+order.coin_amount: Coin Amount
+order.cash_amount: Cash Amount
+order.buyer.username: Username
+order.buyer.true_name: True name
+order.buyer.email: Email
+order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
+order.platform_sn: Platform SN
+order.use_coupon_tip: Use Coupon
 order.price: 'Price'
 order.paid_time: 'Paid time'
 order.bank_code: 'Bank code'
@@ -401,18 +442,32 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_rmb: 'Price:'
+order.confirm.pay_total: Total
+order.confirm.pay_rmb: 'Price'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
+order.confirm.submit_btn_loading: Submiting...
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
+order.confirm.coupon.hint: 通过优惠券抵扣金额
+order.confirm.coupon.use_loading: 使用中
+order.confirm.coupon.expiry_date_hint: 有效期至
+order.confirm.coupon.select_existed: 选择已有优惠券
+order.confirm.coupon.used_coupon: 已使用优惠券
+order.confirm.coupon.deduction: 抵扣
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_name%
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
+order.confirm.price: 订单价格
+order.confirm.bought_course_deduction: 已购课程抵扣
+
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
 order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
 order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
-order.confirm.forget_password_btn: 'Forget password？'
+order.confirm.forget_password_btn: 'Forget pay password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
 order.confirm.top_use_tips: 'The order can use up to '
@@ -423,14 +478,20 @@ order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
 order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
 order.confirm.sms_code.bind_btn: 'Bind'
-order.paid_course.content_title: 'You already bought:'
-order.paid_course.minus: 'Deduct:'
+order.paid_course.title: 已购买课程
+order.paid_course.content: 之前购买过的课程能够抵扣对应金额
+order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
+order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
 order.refund.apply_for_btn: 'Apply for refund'
 order.refund.buy_price: '(you have paid：%amount% CNY）'
+order.refund.refund_is_not_supported: Refund is not supported
+# todo 文案更新
+order.refund.success_tips: You may apply for a refund within %maxRefundDays% days from the date of purchase
 order.refund.failed_tips: 'It''s behind the refund time %maxRefundDays% days. Refund application is refused.'
+
 order.refund.quit_study_btn: 'Quit the course'
 order.refund.quit_study_btn.submiting: Quiting...
 order.vip_order.total_months: Months
@@ -439,11 +500,21 @@ order.vip_order.renew_tips: '%level.name% renew vip x %duration%'
 order.vip_order.buy_tips: 'Buy %level.name% vip x %duration%'
 order.pay: 'Pay the order'
 order.success: 'Order finished'
+#TODO trans
+order.refund.notify_admin: '用户%nickname%申请退款 <a href="%targetUrl%">%title%</a>，请审核'
+
 pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
+pay_center.pay.price: 订单价格
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用%coin_name%抵扣
+pay_center.pay.set_pay_password: 设置支付密码
+pay_center.pay.coin_input_tips: 本次使用
+pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
+pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
 pay_center.pay.mode: 'Payment methods'
+pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 'Deposit card'
 pay_center.pay.credit_card: 'Credit card'
 pay_center.pay.use_new_card: 'Use new bank card'
@@ -452,6 +523,7 @@ pay_center.pay.online_banking_tips: 'If you want to pay through online banking s
 pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile browser, wechat pay is not supported.'
 pay_center.pay.pay_CNY: Price：q
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
+pay_center.pay.confirm_pay_btn_loading: 'Paying'
 pay_center.pay.weixin_pay: 'Wechat pay'
 pay_center.pay.weixin_pay.content_title: 'Payment info'
 pay_center.pay.weixin_pay.pay_btn: 'Pay now'
@@ -459,8 +531,9 @@ pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat <br>scan 
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Scan the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
+pay_center.finish_title: 'Order paid finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
-pay_center.finish_tips: 'Order paid successfully,redirecting in <span class="js-countdown">3</span> seconds</p>'
+pay_center.finish_tips: Redirecting in <span class="js-countdown">3</span> seconds
 pay_center.fee: Fee
 pay_center.remind: 'Click to enter alipay'
 pay_center.remind.content_title: 'Payment notification'
@@ -675,7 +748,7 @@ course.is_student_tips: 'You erolled this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
-course.approve_tips: 'You need to verify your id before buying this course.'
+buy.approve_tips: 'You need to verify your id before buying.'
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
@@ -842,19 +915,22 @@ course.members_manage.official_student.add_expiry_day.days: Extend
 course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to extend'
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
 course.members_manage.quit_records: 'Quit history'
-course.members_manage.publish_btn: Publish
-course.members_manage.quit_records.content_title: 'Students'
-course.members_manage.quit_records.name: 'Student name'
+course.members_manage.quit_type: 退出类型
+course.members_manage.is_refunded: 是否退款
+course.members_manage.is_paid: 是否付费
+course.members_manage.records.name: 'Student name'
 course.members_manage.quit_records.reason: 'Quit reason'
 course.members_manage.quit_records.status: 'Refund status'
-course.members_manage.quit_records.cash_count: 'Refund amount'
 course.members_manage.quit_records.date: 'Quit time'
-course.members_manage.quit_records.tips: '<li class="mt10 mb10">only display refund records of students who paid by cash</li><li>please check the refund deatil of class teaching plan in class manage panel</li>'
 course.members_manage.quit_records.empty: 'No data'
 course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
-course.members_manage.quit_records.failed: 'Refund failed'
-course.members_manage.quit_records.cancel: 'Refund cancelled'
+
+course.members_manage.join_records: 加入记录
+course.members_manage.records.join_reason: 加入原因
+course.members_manage.records.join_reason_type: 加入类型
+course.members_manage.join_records.date: 加入日
+
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
@@ -2023,7 +2099,6 @@ classroom.student_username: 'Student name'
 classroom.student_exit_reason: 'Quit reason'
 classroom.student_exit_date: 'Quit date'
 classroom.refund_status: 'Refund Status'
-classroom.refund_money: 'Refund Amount'
 classroom.refund_record_tips: 'Only show refund history of students who enrolled via cash'
 classroom.join_time: 'Enroll date'
 classroom.refund_success: 'Refund succeeded'
@@ -2367,6 +2442,8 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin.pay_coin: %coin_name% paid
+user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
 user.account.my_coin.outflow: 'Payment Records'
 user.account.my_coin.recharge: 'Learning card recharge'
@@ -2397,9 +2474,14 @@ user.account.my_invite_code.close: 'Invitation code feature is off'
 user.orders: 'My Order'
 user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
+user.order.order_list: Order List
+user.order.refund_list: Refund Manage
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
 user.orders.refunding_status: Refunding
+user.orders.closed_status: Closed
+user.orders.refunded_status: Refunded
+user.orders.no_paid_status: Unpaid
 user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
@@ -2411,6 +2493,7 @@ user.orders.detail.modal_title: 'Order Details'
 user.orders.detail.special_operations: 'Special operation'
 user.orders.detail.log_info: 'Log info'
 user.orders.detail.operator: Operator
+user.orders.detail.Ip: IP
 user.orders.detail.log_createdTime: 'Created at'
 user.orders.detail.empty: 'No transaction log'
 user.orders.refund_record_title: 'Refund record'
@@ -2420,6 +2503,7 @@ user.orders.refund_status: 'Refund Status'
 user.orders.refund_id: 'Refund number：%sn%'
 user.orders.refund_empty: 'No refund record'
 user.orders.placeholder_order_name: 'Input order name'
+user.orders.placeholder_product_name: 'Input product name'
 user.cards: 'My Wallet'
 user.cards.content_title: 'My Wallet'
 user.cards.all: All
@@ -3430,6 +3514,10 @@ course.member.classroom.tips: 'Your purchased class was expired and you have no 
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.operation.quit_deadline_reach: 达到有效期，用户自己退出
+course.member.operation.admin_remove_course_student: 管理员手动移除
+course.member.operation.reason.remove_teachers: 删除老师角色时，退出课程
+
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
 course.widgets.classroom_price.not_free: "Price : %price% CNY \n"
@@ -5536,7 +5624,8 @@ admin.cdn.status.close: Close
 admin.cdn.input_placeholder: 'If leave empty, then it will be default URL'
 admin.order.paid_time_range.input_placeholder: 'Payment time'
 admin.order.keyword: Keywords
-admin.order.buyer: 'Buyer''s user name'
+admin.order.buyer: 'Buyer'
+admin.order.title: Order title
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name
 admin.order.buyer_mobile: 'Buyer''s phone number'
@@ -5556,6 +5645,9 @@ admin.bill.time_option.last_three_month: 'Last 90 days'
 admin.coin.type_option.default: 'All records'
 admin.coin.type_option.inflow: 'Recharges'
 admin.coin.type_option.outflow: 'Consumers'
+admin.coin.school_out_amount: School total out amount
+admin.coin.school_in_amount: School total in amount
+admin.coin.school_wait_in_amount: School total wait in amount
 admin.coin.created_time_option.all: 'All records'
 admin.coin.created_time_option.oneWeek: 'Last 7 days'
 admin.coin.created_time_option.oneMonth: 'Last 30 days'
@@ -5568,6 +5660,7 @@ admin.coin.datagrid.filter.oneMonth: 'This month'
 admin.coin.datagrid.filter.threeMonths: 'Three months'
 admin.coin.datagrid.filter.all_history: 'All history'
 admin.coin.datagrid.filter.default: Default
+admin.coin.datagrid.filter.balance: Balance
 admin.coin.datagrid.filter.consume: Consumption
 admin.coin.datagrid.filter.recharge: Recharge
 admin.coin.datagrid.filter.asc: 'In ascending order'
@@ -5728,13 +5821,14 @@ admin.coin_model.currency_tips: "1, Could not manually update the user's virtual
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
+admin.order_refund.title.placeholder: Product name
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
-admin.order_refund.title.type_course_input_placeholder: 'Course title'
-admin.order_refund.title.type_classroom_input_placeholder: 'Class title'
 admin.order_refund.title: 'Refund order'
+admin.order_refund.sn: sn
 admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'
 admin.order_refund.refund_status: 'Refund status'
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: Operator
 admin.order_refund.operation: Action
 admin.order_refund.reason: 'Refund reason'
@@ -5745,14 +5839,18 @@ admin.order_refund.approve.content_title: 'Approve refund application'
 admin.order_refund.audit_refund_btn: Approve
 admin.order_refund.audit.content_title: 'Review refund requests'
 admin.order_refund.audit.result: 'Review result'
-admin.order_refund.audit.refund_actual_amount: 'Actual refund amount'
 admin.order_refund.audit.description: 'Review comment'
-admin.order_refund.audit.tips: 'System dosen''t support automatic refund,please contact the student to acquire relevant account and process the refund mannualy.'
+admin.order_cash_refund.audit.tips: 'System dosen''t support automatic refund,please contact the student to acquire relevant account and process the refund mannualy.'
+admin.order_cash_coin_refund.audit.tips: Virtual currency money will be automatically refunded after clicking "submit". Payments online do not support automatic refund. If you agree to refund, it is recommended that you first process the refund online and then submit it.
 admin.order.logs.content_title: 'Order detail'
 admin.order.logs.info: Log
 admin.order.logs.operator: Operator
 admin.order.logs.created_time: 'Create time'
 admin.order.logs.empty_hint: 'No transaction log'
+admin.order_coin.refund.success.tips: Automatic refund after submission
+admin.order_cash.refund.success.tips: Manual refund under line
+admin.order_refund_handle.success: Successful refund request operation
+
 admin.cloud_setting.trial_hint: 'You are using a trail version and cannot proceed with this operation. Please contact our business manager to purchase a licence.'
 admin.cloud_setting.package_info: 'Package info'
 admin.cloud_setting.package_name: 'Package name'
@@ -6100,6 +6198,7 @@ testpaper.do_gagin: 'Test again'
 testpaper.redo_countdown: 'Redo countdown'
 question_task.empty_tips: 'There is no problem with this task'
 payment.useless_tips: 'The payment method is not open. Please contact the administrator'
+payment.unusable_tips: 暂无可用的支付的支付方式,请尝试在微信外支付。
 open_course.live_label: Live
 open_course.lesson_num: 'The course No.%num%'
 open_course.student_num: '%num% peoples learning'
@@ -6409,6 +6508,49 @@ join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
+
+cashier.order.status.changed_tips: The order status has been changed, please reorder.
+cashflow.title: Name
+cashflow.sn: sn
+cashflow.user_name: username
+cashflow.created_time: createdTime
+cashflow.amount: amount
+cashflow.number: number
+cashflow.inflow: 收入
+cashflow.platform: platform
+cashflow.trade_sn: 交易号
+cashflow.user_truename: truename
+cashflow.user_email: emial
+cashflow.user_mobile: mobile
+cashflow.refund: 网校退款
+
+admin.cashflow.keyword: keyword
+
+order.pay_check_msg.parameters_error: parameters_error
+order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.unpurchasable_product: Unpurchasable Product
+order.pay_check_msg.order_not_exist: Order not exist
+order.pay_check_msg.user_not_login: User not login
+order.pay_check_msg.not_same_user: Not your order
+order.pay_check_msg.missing_pay_password: Missing payPassword
+order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
+order.pay_check_msg.balance_not_enough: Your balance is insufficient
+order.pay_check_msg.pay_password_not_set: Pay password not set
+order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
+
+site.join_by_free: Join by free
+site.join_by_purchase: Join by purchase
+site.remove_by_manual: Manual remove
+site.join_to_learn: Join to learn
+site.fill_user_info_tip: Fill user info
+
+site.join_by_import: 导入课程
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
+site.avatar.set_before_learning: Please set avatar first
+site_yes: 'Yes'
+site_no: 'No'
 admin.cloud_live.manage.logo_set.modal_title: Crop Live LOGO
 
 

@@ -42,13 +42,6 @@ class JsApiPay
      */
     public $data = null;
 
-    public function getRedirectUri()
-    {
-        $url = $this->request->getUri().'?'.http_build_query($this->request->request->all());
-
-        return urlencode($url);
-    }
-
     /**
      * 通过跳转获取用户的openid，跳转流程如下：
      * 1、设置自己需要调回的url及其其他参数，跳转到微信服务器https://open.weixin.qq.com/connect/oauth2/authorize
@@ -139,7 +132,7 @@ class JsApiPay
     private function __createOauthUrlForCode()
     {
         $urlObj['appid'] = $this->config['appid'];
-        $urlObj['redirect_uri'] = $this->getRedirectUri();
+        $urlObj['redirect_uri'] = urlencode($this->config['redirect_uri']);
         $urlObj['response_type'] = 'code';
         $urlObj['scope'] = 'snsapi_base';
         $urlObj['state'] = 'STATE'.'#wechat_redirect';

@@ -1,11 +1,20 @@
 {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
-    <a class="btn btn-info btn-sm pull-right mr5" href="{{ path('course_set_manage_course_orders_export_csv', {
-        courseSetId:course.courseSetId,
-        courseId:course.id,
-        startDateTime:app.request.query.get('startDateTime'),
-        endDateTime:app.request.query.get('endDateTime'),
-        status:request.get('status'),
-        payment:request.get('payment'),
-        keywordType:request.get('keywordType'),
-        keyword:request.get('keyword')}) }}"><i class="glyphicon glyphicon-export"></i> {{'order.export_btn'|trans}}</a>
+    {#<a class="btn btn-info btn-sm pull-right mr5" href="{{ path('course_set_manage_course_orders_export_csv', {#}
+        {#courseSetId:course.courseSetId,#}
+        {#courseId:course.id,#}
+        {#startDateTime:app.request.query.get('startDateTime'),#}
+        {#endDateTime:app.request.query.get('endDateTime'),#}
+        {#status:request.get('status'),#}
+        {#payment:request.get('payment'),#}
+        {#keywordType:request.get('keywordType'),#}
+        {#keyword:request.get('keyword')}) }}"><i class="glyphicon glyphicon-export"></i> {{'order.export_btn'|trans}}</a>#}
+
+  {% include 'export/export-btn.html.twig' with
+  {
+  'exportFileName' : 'order',
+  'targetFormId': 'user-search-form',
+  'exportClass': 'btn-sm pull-right',
+  'exportWebpack': 'ture'
+  }
+  %}
 {% endif %}

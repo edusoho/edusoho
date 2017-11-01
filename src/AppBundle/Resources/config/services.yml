@@ -40,6 +40,13 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension, priority: 10  }
+
+    payment.extension:
+        class: AppBundle\Extension\PaymentExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension, priority: 10  }
     
     callback.extension:
         class: AppBundle\Extension\CallbackExtension

@@ -54,6 +54,7 @@ abstract class AccessorAdapter implements AccessorInterface
         $this->messages['course.unpublished'] = '教学计划(#%s)尚未发布';
         $this->messages['course.closed'] = '教学计划(#%s)已关闭';
         $this->messages['course.not_buyable'] = '教学计划(#%s)未开放购买';
+        $this->messages['course.course.reach_max_student_num'] = '不达到最大人数限制，不可加入';
         $this->messages['course.expired'] = '教学计划(#%s)已到期';
         $this->messages['course.buy_expired'] = '教学计划(#%s)已过购买期限';
 

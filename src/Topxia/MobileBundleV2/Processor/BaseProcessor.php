@@ -135,19 +135,14 @@ class BaseProcessor
         return $this->controller->getContainer();
     }
 
-    protected function getCashAccountService()
+    protected function getAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash:CashAccountService');
+        return ServiceKernel::instance()->createService('Pay:AccountService');
     }
 
     protected function getAppService()
     {
         return $this->controller->getService('CloudPlatform.AppService');
-    }
-
-    protected function getCashOrdersService()
-    {
-        return ServiceKernel::instance()->createService('Cash:CashOrdersService');
     }
 
     protected function getBlockService()
@@ -188,11 +183,6 @@ class BaseProcessor
     protected function getTokenService()
     {
         return ServiceKernel::instance()->createService('User:TokenService');
-    }
-
-    protected function getCourseOrderService()
-    {
-        return $this->controller->getService('Course:CourseOrderService');
     }
 
     protected function getMobileDeviceService()
