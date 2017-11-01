@@ -105,6 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addRefundDeadline',
             'changeCouponStatus',
             'resetCrontabJobNum',
+            'initCoinSetting',
         );
 
         $funcNames = array();
@@ -139,6 +140,24 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function initCoinSetting()
+    {
+        $coinSetting = $this->getSettingService()->get('coin', array());
+        if (!is_array($coinSetting)) {
+            $coinSetting = array();
+        }
+        $defaultSetting = array(
+            'coin_enabled' => 0,
+            'cash_model' => 'deduction',
+            'cash_rate' => 1,
+            'coin_name' => '虚拟币',
+        );
+        $coinSetting = array_merge($defaultSetting, $coinSetting);
+        $this->getSettingService()->set('coin', $coinSetting);
+
+        return 1;
     }
 
     protected function changeCouponStatus()
