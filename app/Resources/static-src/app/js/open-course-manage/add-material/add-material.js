@@ -1,11 +1,7 @@
 import FileChooser from 'app/js/file-chooser/file-choose';
 import notify from 'common/notify';
-import {
-  isEmpty
-} from 'common/utils';
-import {
-  chooserUiOpen
-} from 'app/js/activity-manage/widget/chooser-ui';
+import { isEmpty } from 'common/utils';
+import { chooserUiOpen } from 'app/js/activity-manage/widget/chooser-ui';
 
 export default class AddMaterial {
   constructor() {
