@@ -74,6 +74,9 @@ class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
                 'target_type = :target_type',
                 'created_time >= :start_time',
                 'created_time <= :end_time',
+                'pay_time < :pay_time_LT',
+                'pay_time > :pay_time_GT',
+                'pay_amount > :pay_amount_GT',
             ),
         );
     }

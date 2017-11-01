@@ -7,30 +7,22 @@ define(function (require, exports, module) {
     var Cookie = require('cookie');
 
     exports.run = function () {
-
-        //云广告
-        showCloudAd();
         popover();
-
-
-        //ajax 获取数据
-        loadAjaxData();
-
         //图表
         courseExplore();
         studyCountStatistic();
         payOrderStatistic();
         studyTaskCountStatistic()
-
         //事件
         registerSwitchEvent();
-
         //提醒教师
         remindTeachersEvent();
-
         //热门搜索
         cloudHotSearch();
-
+        //ajax 获取数据
+        loadAjaxData();
+        //云广告
+        showCloudAd();
     };
 
     var loadAjaxData = function () {
