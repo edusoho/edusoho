@@ -85,8 +85,11 @@ export default class DownLoad {
     const $verifyLink = $('#verifyLink');
     if (this.$form.data('validator').valid() && $link.val()) {
       $verifyLink.val($link.val());
-      $('.js-current-file').text($verifyLink.val());
+    } else {
+      $link.val('');
+      $verifyLink.val('');
     }
+    $('.js-current-file').text($verifyLink.val());
   }
 
   addLink() {
