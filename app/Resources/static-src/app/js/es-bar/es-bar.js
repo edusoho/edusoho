@@ -56,7 +56,7 @@ class EsBar {
     const $this = $(e.currentTarget);
 
     // 判断是否登录
-    if(!isLogin){
+    if(!isLogin()){
       this.isNotLogin();
       return;
     }

@@ -3013,6 +3013,7 @@ my.teaching.open_course.lesson.mediaStatus.error: '(format conversion of %mediaT
 my.teaching.open_course.lesson.status.unpublished: Unpublished
 my.teaching.open_course.lesson.material: Material
 my.teaching.open_course.lesson.add_material_btn: 'Add Material'
+my.teaching.open_course.lesson.add_material.title: 添加资料
 my.teaching.open_course.lesson.edit_btn: Edit
 my.teaching.open_course.lesson.more_btn: More
 my.teaching.open_course.lesson.modal.edit: 'Edit Lesson'

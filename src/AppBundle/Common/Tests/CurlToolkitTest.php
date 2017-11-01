@@ -15,7 +15,6 @@ class CurlTookitTest extends BaseTestCase
             'key' => '1c85799c8c1a6675fb8c312e4b7a09d3',
         );
         $result = CurlToolkit::request('POST', $url, $data);
-
         $this->assertTrue(in_array($result['error_code'], array(0, 10012)));
     }
 
