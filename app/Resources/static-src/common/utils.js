@@ -81,9 +81,7 @@ const time2Sec = (time) => {
   return sec;
 }
 
-const isLogin = (() => {
-  return $("meta[name='is-login']").attr("content") == 1
-})();
+const isLogin = () => $("meta[name='is-login']").attr("content") == 1;
 
 const isEmpty = (obj) => {
   return obj === null || obj === "" || obj === undefined || Object.keys(obj).length === 0;

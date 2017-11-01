@@ -7,10 +7,6 @@ import {
   chooserUiOpen
 } from '../widget/chooser-ui';
 
-$.fn.isExist = function() {
-  return !!this.length;
-};
-
 export default class DownLoad {
   constructor() {
     this.$form = $('#step2-form');
@@ -57,7 +53,7 @@ export default class DownLoad {
       delete this.materials[mediaId];
       $materials.val(JSON.stringify(this.materials));
     }
-    if (!$parent.siblings('li').isExist()) {
+    if (!$parent.siblings('li').length) {
       $materials.val('');
     }
     $parent.remove();
@@ -146,7 +142,7 @@ export default class DownLoad {
 
     this.showTip($errorTipDom, $successTipDom, successTip);
 
-    if ($('.jq-validate-error:visible').isExist()) {
+    if ($('.jq-validate-error:visible').length) {
       this.$form.data('validator').form();
     }
   }
