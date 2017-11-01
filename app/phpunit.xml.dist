@@ -29,15 +29,18 @@
     </php>
 
     <filter>
-        <whitelist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../src/Biz</directory>
 
             <exclude>
                 <directory>../src/Biz/Util/Phpsec</directory>
-                <directory>../src/Topxia/Component/Payment</directory>
             </exclude>
 
         </whitelist>
     </filter>
+
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
 
 </phpunit>
