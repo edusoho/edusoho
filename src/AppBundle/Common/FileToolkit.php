@@ -1036,9 +1036,8 @@ class FileToolkit
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
                 $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
-                $isCrop = ($naturalWidth == round($options['w'])) && ($naturalHeight == round($options['h'])) && ($filesize < 102400);
-                //原始尺寸=裁切的尺寸，不做裁切，$options['w']计算出来的裁切长度有可能是浮点数，不好判断和原始尺寸，所以做round处理
-                if ($isCrop) {
+                $isCopy = ($options['w'] == $value[0]) && ($options['h'] == $value[1]) && ($filesize < 102400);
+                if ($isCopy) {
                     $filePaths[$key] = $savedFilePath;
                     $image = $rawImage->copy();
                     $image->save($savedFilePath);
