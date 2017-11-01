@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\BaseService;
+use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
@@ -71,11 +72,29 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getStatementDao()->search($conditions, $orders, $start, $limit);
     }
 
+    public function getWatchLog($id)
+    {
+        return $this->getActivityWatchLogDao()->get($id);
+    }
+
+    public function createWatchLog($watchLog)
+    {
+        return $this->getActivityWatchLogDao()->create($watchLog);
+    }
+
     /**
      * @return StatementDao
      */
     protected function getStatementDao()
     {
         return $this->biz->dao('Xapi:StatementDao');
+    }
+
+    /**
+     * @return ActivityWatchLogDao
+     */
+    protected function getActivityWatchLogDao()
+    {
+        return $this->biz->dao('Xapi:ActivityWatchLogDao');
     }
 }
