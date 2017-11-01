@@ -1691,9 +1691,9 @@ error-stack-parser@^2.0.0:
   dependencies:
     stackframe "^1.0.3"
 
-es-ckeditor@4.7.2-patch1:
-  version "4.7.2-patch1"
-  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch1.tgz#0009240bf77c446abb198a72e7b319c54b4c1364"
+es-ckeditor@4.7.2-patch2:
+  version "4.7.2-patch2"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch2.tgz#8c3e922009c5f8fbb807c481c53965f3d5e9f998"
 
 es-extract-text-webpack-plugin@latest:
   version "1.0.0"
