@@ -1,4 +1,4 @@
-import ParentUserInfo from 'userinfo-fields-common';
+import ParentUserInfo from './userinfo-fields-common';
 
 export default class UserInfoFieldsItemValidate extends ParentUserInfo {
   constructor(options) {
