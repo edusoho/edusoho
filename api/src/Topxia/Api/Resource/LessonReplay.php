@@ -37,6 +37,8 @@ class LessonReplay extends BaseResource
             return empty($replay['hidden']);
         });
 
+        $visibleReplays = array_values($visibleReplays);
+
         $user = $this->getCurrentUser();
         $response = array(
             'url' => '',
