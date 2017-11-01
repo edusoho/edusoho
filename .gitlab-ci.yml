@@ -4,6 +4,8 @@ stages:
 variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  SONAR_HOST: http://sonar.codeages.net
+  SONAR_TOKEN: 612b26d6107a6e28fb7e4b6f10af98f939a3365f
 
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
@@ -50,12 +52,14 @@ Unit Test With PHP 7.0:
     - redis:latest
   script:
     - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never
+    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --showUncoveredFiles=false --coverage-html reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
 
   only:
     - tags
     - develop
     - master
+    - feature
+    - release
     - trigger
 
 #Functional Test With 5.5:
