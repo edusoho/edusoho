@@ -1,10 +1,10 @@
 import BatchCreate from 'app/js/course-manage/batch-create/batch-create.js';
 
 new BatchCreate({
-  element: '#batch-uploader',
+  element: '#uploader-container',
 })
 
-let $el = $('#batch-uploader');
+let $el = $('#uploader-container');
 
 $el.parents('.modal').on('hidden.bs.modal', () => {
   window.location.reload();

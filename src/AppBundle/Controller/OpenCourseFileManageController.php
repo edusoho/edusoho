@@ -94,41 +94,6 @@ class OpenCourseFileManageController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    public function uploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
-            'course' => $course,
-            'storageSetting' => $this->setting('storage', array()),
-            'targetType' => $targetType,
-            'targetId' => $id,
-        ));
-    }
-
-    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        if ('materiallib' != $targetType) {
-            $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        } else {
-            $course = null;
-        }
-
-        $fileExts = '';
-
-        if ('opencourselesson' == $targetType) {
-            $fileExts = '*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf';
-        }
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course' => $course,
-            'storageSetting' => $this->setting('storage', array()),
-            'targetType' => $targetType,
-            'targetId' => $id,
-            'fileExts' => $fileExts,
-        ));
-    }
-
     public function deleteCourseFilesAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
