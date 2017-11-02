@@ -25,13 +25,18 @@ class RefundingStatus extends AbstractRefundStatus
             'status' => self::NAME
         );
 
+        $fields['amount'] = 0;
         if (!empty($data['refund_cash_amount'])) {
             $fields['refund_cash_amount'] = $data['refund_cash_amount'];
+            $fields['amount'] = $fields['amount'] + $fields['refund_cash_amount'];
         }
 
         if (!empty($data['refund_coin_amount'])) {
             $fields['refund_coin_amount'] = $data['refund_coin_amount'];
+            $rate = $this->getCoinRate();
+            $fields['amount'] = $fields['amount'] + round($fields['refund_coin_amount']/$rate);
         }
+
 
         $orderRefund = $this->getOrderRefundDao()->update($this->orderRefund['id'], $fields);
 
@@ -50,5 +55,11 @@ class RefundingStatus extends AbstractRefundStatus
         $orderRefund['orderItemRefunds'] = $updatedOrderItemRefunds;
 
         return $orderRefund;
+    }
+
+    protected function getCoinRate()
+    {
+        $options = $this->biz['payment.final_options'];
+        return empty($options['coin_rate']) ? 1: $options['coin_rate'];
     }
 }
