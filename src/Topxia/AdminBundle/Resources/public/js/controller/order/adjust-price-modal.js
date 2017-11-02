@@ -33,13 +33,13 @@ define(function(require, exports, module) {
     validator.addItem({
       element: 'input[name=adjust-by-price]',
       required: false,
-      rule: 'decimal'
+      rule: 'currency'
     });
 
     validator.addItem({
       element: 'input[name=adjust-by-discount]',
       required: false,
-      rule: 'decimal max{max: 10}',
+      rule: 'currency max{max: 10}',
       display: '折扣'
     });
 
@@ -48,8 +48,9 @@ define(function(require, exports, module) {
       $el = $(this);
       var adjustPrice = $el.val();
       if ($.isNumeric(adjustPrice)) {
-        var discount = (parseFloat(adjustPrice))*10/parseFloat(originPayAmount).toFixed(1);
+        var discount = (parseFloat(adjustPrice))*10/parseFloat(originPayAmount).toFixed(2);
         $form.find('.js-adjust-discount').val(discount);
+        $form.find('.js-pay-amount').text(adjustPrice);
       }
 
     });
@@ -58,8 +59,9 @@ define(function(require, exports, module) {
       $el = $(this);
       var discount = $el.val();
       if ($.isNumeric(discount)) {
-        var adjustPrice = (discount * originPayAmount / 10).toFixed(1);
+        var adjustPrice = (discount * originPayAmount / 10).toFixed(2);
         $form.find('.js-adjust-price').val(adjustPrice);
+        $form.find('.js-pay-amount').text(adjustPrice);
       }
 
     });
