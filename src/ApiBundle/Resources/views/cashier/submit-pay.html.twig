@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{'pay_center.finish.jump_tips'|trans}}</title>
+<body>
+
+<form action="{{ form.action }}"  method="{{ form.method }}" name="form">
+  {% for key, value in form.params %}
+    <input type="hidden" name="{{ key }}" value="{{ value }}">
+  {% endfor %}
+</form>
+
+<script>
+  document.all.form.submit();
+</script>
+
+</body>
+</html>

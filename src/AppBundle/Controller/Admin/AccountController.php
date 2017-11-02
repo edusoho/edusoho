@@ -195,4 +195,9 @@ class AccountController extends BaseController
     {
         return $this->createService('Order:OrderService');
     }
+
+    protected function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
+    }
 }

@@ -22,27 +22,6 @@ define(function(require, exports, module) {
 
         $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
 
-
-        $(".btn-export-csv").on('click', function(event) {
-            var $btn = $(this);
-            var exportCount = $btn.data('exportCount');
-            var exportCountFormat = $btn.data('exportCountFormat');
-            var exportAllowCount = $btn.data('exportAllowCount');
-            var exportAllowCountFormat = $btn.data('exportAllowCountFormat');
-
-            if (exportCount > exportAllowCount) {
-                Notify.danger(Translator.trans('您的导出结果数量（%exportCountFormat%条）已超出最大值（%exportAllowCountFormat%条），请调整筛选范围后分批导出',{'exportCountFormat': exportCountFormat,exportAllowCountFormat: exportAllowCountFormat}));
-                event.preventDefault();
-                return false;
-            }
-            if (exportCount == 0) {
-                Notify.danger(Translator.trans('没有可导出的数据'));
-                event.preventDefault();
-                return false;
-            }
-            Notify.success(Translator.trans('正在导出数据，请稍候...'));
-        })
-
         $('.js-pay-way-popover').popover({
             html: true,
             trigger: 'hover',

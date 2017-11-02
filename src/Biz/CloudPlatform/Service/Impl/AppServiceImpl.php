@@ -708,9 +708,13 @@ class AppServiceImpl extends BaseService implements AppService
             return;
         }
 
-        include_once $packageDir.'/Upgrade.php';
-
-        $upgrade = new \EduSohoUpgrade($this->biz);
+        if (in_array($package['id'], array('1135', '1136', '1137', '1138', '1139', '1140'))) {
+            include_once $packageDir.'/Upgrade.php';
+            $upgrade = new \EduSohoPluginUpgrade($this->biz);
+        } else {
+            include_once $packageDir.'/Upgrade.php';
+            $upgrade = new \EduSohoUpgrade($this->biz);
+        }
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);

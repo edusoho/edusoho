@@ -94,7 +94,7 @@ class EdusohoLiveClient
         $filter = array(
             'logoPcUrl',
             'logoClientUrl',
-            'logoGotoUrl'
+            'logoGotoUrl',
         );
 
         $logoData = ArrayToolkit::parts($logoData, $filter);

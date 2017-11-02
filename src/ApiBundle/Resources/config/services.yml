@@ -15,6 +15,10 @@ services:
         class: ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener
         arguments: ['@service_container']
 
+    api_old_token_header_listener:
+        class: ApiBundle\Security\Firewall\OldTokenAuthenticationListener
+        arguments: ['@service_container']
+
     api_anonymous_listener:
           class: ApiBundle\Security\Firewall\AnonymousListener
           arguments: ['@security.token_storage']
@@ -32,7 +36,7 @@ services:
     api_firewall:
         class: ApiBundle\Security\Firewall\Firewall
         arguments:
-            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_session_authentication_listener', '@api_anonymous_listener']
+            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_old_token_header_listener', '@api_session_authentication_listener', '@api_anonymous_listener']
 
     api_resource_kernel:
         class: ApiBundle\Api\ResourceKernel

@@ -1,0 +1,44 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% do script(['libs/jquery-validation.js','app/js/my/order-refund-apply/index.js']) %}
+
+{% block title %}
+  {{'order.status.refunding'|trans}}
+{% endblock %}
+
+{% block body %}
+  <form method="post" id="refund-apply-form" data-redirect="{{ path('my_order_refunds') }}" action="{{path('my_order_refund_apply', {id: order.id })}}">
+
+    <table class="table cd-table table-striped order-detail-table">
+      <tr>
+        <td width="25%">{{'order.product_name'|trans}}</td>
+        <td width="75%">{{ order.title }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'order.paid_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_coin_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|to_coin(0) }}</span></td>
+      </tr>
+      <tr>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_cash_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td class="25%">{{ 'order.refund_reason'|trans }}</td>
+        <td class="75%"><textarea data-display="{{ 'order.refund_reason'|trans }}" class="form-control" name="reason" id="" rows="5"></textarea></td>
+      </tr>
+    </table>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+    <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+    <button id="refund-apply-btn" class="btn cd-btn cd-btn-primary cd-btn-lg" type="button" data-target="#refund-apply-form" data-toggle="form-submit" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.confirm'|trans }}</button>
+{% endblock %}

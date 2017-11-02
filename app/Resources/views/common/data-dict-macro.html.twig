@@ -22,21 +22,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro orderStatus(status) %}
-    {% if status == 'created' %}
-        <span class="label label-danger">{{ 'common.orderStatus.created'|trans }}</span>
-    {% elseif status == 'paid' %}
-        <span class="label label-success">{{ 'common.orderStatus.paid'|trans }}</span>
-    {% elseif status == 'refunding' %}
-        <span class="text-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
-    {% elseif status == 'refunded' %}
-        <span class="color-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
-    {% elseif status == 'cancelled' %}
-        <span class="color-gray">{{ 'common.orderStatus.cancelled'|trans }}</span>
-    {% endif %}
-{% endmacro %}
-
-{% macro orderStatusV2(status) %}
+{% macro refundStatus(status) %}
     {% if status == 'created' %}
         <span class="cd-status cd-status-info">{{ 'common.orderStatus.created'|trans }}</span>
     {% elseif status == 'paid' %}
@@ -50,14 +36,14 @@
     {% endif %}
 {% endmacro %}
 
-{% macro refundStatus(status) %}
-    {% if status == 'created' %}
+{% macro adminRefundStatus(status) %}
+    {% if status == 'auditing' %}
         <span class="text-warning">{{ 'common.refundStatus.created'|trans }}</span>
-    {% elseif status == 'success' %}
+    {% elseif status == 'refunded' %}
         <span class="color-success">{{ 'common.refundStatus.success'|trans }}</span>
-    {% elseif status == 'failed' %}
+    {% elseif status == 'refused' %}
         <span class="color-danger">{{ 'common.refundStatus.failed'|trans }}</span>
-    {% elseif status == 'cancelled' %}
+    {% elseif status == 'cancel' %}
         <span class="color-gray">{{ 'common.refundStatus.cancelled'|trans }}</span>
     {% endif %}
 {% endmacro %}
