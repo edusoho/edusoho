@@ -13,7 +13,9 @@
   <div class="section-header"><h1>{{ content.title }}</h1></div>
 
   {% if content.body %}
-  	{{ content.body|raw }}
+    <div class="editor-text">
+  	  {{ content.body|raw }}
+    </div>
   {% else %}
     <div class="empty">{{'custom_page.empty'|trans}}</div>
   {% endif %}

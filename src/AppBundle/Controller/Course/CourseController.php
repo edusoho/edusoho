@@ -57,7 +57,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
         }
 
-        if ($this->canCourseShowRedirect($request)) {
+        if ($user->isLogin() && $this->canCourseShowRedirect($request)) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
                     'userId' => $user['id'],
@@ -649,21 +649,30 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exitAction($id)
+    public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是课程的学员。');
+            throw $this->createAccessDeniedException('member not exist');
         }
 
-        if ($member['joinedType'] == 'course' && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
-        }
+        $user = $this->getCurrentUser();
+        $req = $request->request->all();
+        $this->getMemberService()->removeStudent($course['id'], $user['id'], array(
+            'reason' => $req['reason']['note'],
+            'reason_type' => 'exit',
+        ));
 
-        $this->getMemberService()->removeStudent($course['id'], $user['id']);
+        return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+    }
 
-        return $this->createJsonResponse(true);
+    public function exitModalAction(Request $request)
+    {
+        $action = $request->query->get('action');
+
+        return $this->render('course/exit-modal.html.twig', array(
+            'action' => $action,
+        ));
     }
 
     public function renderCourseChoiceAction()

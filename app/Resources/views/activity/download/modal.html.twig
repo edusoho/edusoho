@@ -26,7 +26,6 @@
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value="{{ activity.mediaId|default(null) }}">
       <input id="materials" class="form-control" type="hidden" name="materials"
       {% if activity.ext.materials|default(null) %} value="{{ activity.ext.materials|default(null)|json_encode }}" {% endif %} >
-      <input id="media" type="hidden" name="media" value="{{null}}">
     </div>
     <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.download.file_tips'|trans}}</p>
   </div>

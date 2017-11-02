@@ -156,6 +156,11 @@ activity.audio_manage.finish_detail_digits_error_hint: The completion condition 
 
 activity.download_manage.link_error_hint: The link address is incorrect
 activity.download_manage.materials_error_hint: Please upload or select the resource
+activity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
+activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
+activity.download_manage.materials_or_link_success: 资料添加成功
+activity.download_manage.materials_or_link_delete: 资料已删除
+activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
 activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
@@ -290,6 +295,7 @@ activity.testpaper_manage.generate_mode_hint: Please select the generation metho
 activity.testpaper_manage.max_error_hint: The maximum value can not exceed 1000000000
 activity.testpaper_manage.pass_score_hint: 'Criteria Score: pass score: % passScore%'
 activity.testpaper_manage.setting_pass_score_error_hint: Pass score (% passedScore%) can not be higher than the total score (% totalScore%).
+activity.testpaper_manage.pass_score_error_hint: Pass score is greater than 0 and less than 1000, keep a decimal
 activity.testpaper_manage.question_required_error_hint: Please select the question
 activity.testpaper_manage.question_score_empty_hint: question score can not be zero
 activity.testpaper_manage.question_score_error_hint: question score can only be numbers, and within 3 digits, keep a decimal
@@ -577,6 +583,9 @@ open_course.unpublish_success_hint: Lesson unpublished!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
+order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: Coupon is not available
 order.create.use_discount_coupon_hint: Coupon is available, and you are currently using coupons with %rate% discount.
 order.create.use_price_coupon_hint: Coupon is available, and you are currently using coupons with %rate% yuan deduction.
@@ -680,6 +689,7 @@ validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
+validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
@@ -733,6 +743,7 @@ json_response.must_choose_question.message: Please select the title first
 json_response.cannot_send_message_self.message: Can not send yourself a private message!
 json_response.receiver_not_exist.message: The receiver does not exist
 
+validate_old.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
 validate_old.required.message: Please enter {{display}}
 validate_old.valid_email_input.message: %display% is not formatted correctly
 validate_old.valid_url_input.message: %display% is not formatted correctly
@@ -790,3 +801,17 @@ notify.course_set_clone_start.message: Start copying the course and check the no
 notify.job_redo_warning.hint: This course is already copied, please do not repeat it
 notify.course_set_copy_error.hint: There was an error in the copy course
 progress.copy_course_set.message: Copy done!
+
+confirm.warn: 警告
+confirm.exit.tip: 您确定要退出学习吗？
+
+cashier.wechat_pay: Wechat pay
+cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat, scan the QR code to pay
+cashier.confirm.fail_message: Payment unsuccessful, please check or repay
+cashier.pay.error_message: Payment has been abnormal, please contact the administrator
+cashier.confirm.title: Order payment
+cashier.confirm.success: Payment is done
+cashier.confirm.pick_again: Reissue payment method
+cashier.confirm.desc: |
+  Please re-open the page to complete the order payment.<br>
+  If you encounter problems in the payment process, please contact the website customer service solution.<br>

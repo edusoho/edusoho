@@ -73,10 +73,6 @@ interface UserService
 
     public function verifyPayPassword($id, $payPassword);
 
-    public function getUserSecureQuestionsByUserId($userId);
-
-    public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers);
-
     public function verifyInSaltOut($in, $salt, $out);
 
     public function isMobileUnique($mobile);
@@ -298,4 +294,6 @@ interface UserService
     public function changeAvatarFromImgUrl($userId, $imgUrl);
 
     public function generateNickname($registration, $maxLoop = 100);
+
+    public function getUserIdsByKeyword($word);
 }

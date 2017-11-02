@@ -90,7 +90,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
 
     public function getByCourseIdAndCopyId($courseId, $copyId)
     {
-        return $this->getByFields(array('courseId' => $courseId,'copyId' => $copyId));
+        return $this->getByFields(array('courseId' => $courseId, 'copyId' => $copyId));
     }
 
     public function findByChapterId($chapterId)

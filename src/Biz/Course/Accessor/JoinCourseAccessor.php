@@ -31,6 +31,10 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.buy_expired', array('courseId' => $course['id']));
         }
 
+        if ($course['maxStudentNum'] && $course['maxStudentNum'] <= $course['studentNum']) {
+            return $this->buildResult('course.reach_max_student_num', array('courseId' => $course['id']));
+        }
+
         return null;
     }
 

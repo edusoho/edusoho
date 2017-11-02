@@ -218,34 +218,22 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         if (!in_array($targetType, array('course', 'classroom'))) {
             return $this->createErrorResponse('error', '退出学习失败');
         }
-        $processor = OrderRefundProcessorFactory::create($targetType);
-
-        $target = $processor->getTarget($classRoomId);
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '您尚未登录，不能学习班级！');
         }
 
-        $member = $processor->getTargetMember($classRoomId, $user['id']);
-        if (empty($member) || empty($member['orderId'])) {
-            return $this->exitClassRoom($classRoomId, $user);
+        $member = $this->getClassroomService()->getClassroomMember($classRoomId, $user['id']);
+
+        if (empty($member)) {
+            return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
-        $order = $this->getOrderService()->getOrder($member['orderId']);
-        if (empty($order)) {
-            return $this->createErrorResponse('error', '您尚未购买，不能退学。');
-        }
-
-        $data = $this->request->request->all();
-        $reason = empty($data['reason']) ? array() : $data['reason'];
-        $amount = empty($data['applyRefund']) ? 0 : null;
+        $reason = $this->getParam('reason', '');
 
         try {
-            if (isset($data['applyRefund']) && $data['applyRefund']) {
-                $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
-            } else {
-                $processor->removeStudent($order['targetId'], $user['id']);
-            }
+            $this->getClassroomService()->tryTakeClassroom($classRoomId);
+            $this->getClassroomService()->removeStudent($classRoomId, $user['id'], array('reason' => $reason));
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -712,11 +700,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     private function getClassroomService()
     {
         return $this->controller->getService('Classroom:ClassroomService');
-    }
-
-    protected function getClassroomOrderService()
-    {
-        return $this->controller->getService('Classroom:ClassroomOrderService');
     }
 
     protected function getClassroomReviewService()

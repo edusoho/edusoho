@@ -7,6 +7,11 @@ use ApiBundle\Api\Resource\Filter;
 class PayCenterFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'sn', 'status', 'paymentForm', 'paymentHtml'
+        'id', 'trade_sn', 'status', 'paymentForm', 'paymentHtml'
     );
+
+    protected function publicFields(&$data)
+    {
+        $data['sn'] = $data['trade_sn'];
+    }
 }

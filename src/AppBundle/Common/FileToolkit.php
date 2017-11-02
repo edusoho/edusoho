@@ -1035,10 +1035,15 @@ class FileToolkit
         $filePaths = array();
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
-                if (($naturalWidth == $value[0]) && ($naturalHeight == $value[1]) && ($filesize < 102400)) {
-                    $filePaths[$key] = $filePath;
+                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                //原始尺寸等于要求的尺寸 并且 裁切的范围等于原始尺寸，不做裁切
+                $isCopy = ($naturalWidth == $value[0] && $options['w'] == $value[0]) && ($naturalHeight == $value[1] && $options['h'] == $value[1]) && ($filesize < 102400);
+
+                if ($isCopy) {
+                    $filePaths[$key] = $savedFilePath;
+                    $image = $rawImage->copy();
+                    $image->save($savedFilePath);
                 } else {
-                    $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
                     $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                     $filePaths[$key] = $savedFilePath;
                 }
@@ -1093,31 +1098,16 @@ class FileToolkit
     public static function imagerotatecorrect($path)
     {
         try {
-            //只旋转JPEG的图片
-            if (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG) {
-                $exif = @exif_read_data($path);
-                if (!empty($exif['Orientation'])) {
-                    $image = imagecreatefromstring(file_get_contents($path));
-                    switch ($exif['Orientation']) {
-                        case 8:
-                            $image = imagerotate($image, 90, 0);
-                            break;
-                        case 3:
-                            $image = imagerotate($image, 180, 0);
-                            break;
-                        case 6:
-                            $image = imagerotate($image, -90, 0);
-                            break;
-                    }
+            $angle = static::getImagerotateAngle($path);
+            if (!empty($angle)) {
+                $image = imagecreatefromstring(file_get_contents($path));
+                $image = imagerotate($image, $angle, 0);
+                imagejpeg($image, $path);
+                imagedestroy($image);
 
-                    imagejpeg($image, $path);
-                    imagedestroy($image);
-
-                    return $path;
-                }
+                return $path;
             }
         } catch (\Exception $e) {
-            //报错了不旋转，保证不影响上传流程
         }
 
         return false;
@@ -1148,5 +1138,32 @@ class FileToolkit
         fclose($tp);
 
         return $savePath;
+    }
+
+    private static function getImagerotateAngle($path)
+    {
+        $angle = 0;
+        //只旋转JPEG的图片
+        if (!(extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG)) {
+            return $angle;
+        }
+
+        $exif = @exif_read_data($path);
+        if (empty($exif['Orientation'])) {
+            return $angle;
+        }
+        switch ($exif['Orientation']) {
+            case 8:
+                $angle = 90;
+                break;
+            case 3:
+                $angle = 180;
+                break;
+            case 6:
+                $angle = -90;
+                break;
+        }
+
+        return $angle;
     }
 }

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\Service\InviteRecordService;
 use Symfony\Component\HttpFoundation\Request;
 
 class InviteController extends BaseController
@@ -218,6 +219,9 @@ class InviteController extends BaseController
         return array($paginator, $cardInformations);
     }
 
+    /**
+     * @return InviteRecordService
+     */
     protected function getInviteRecordService()
     {
         return $this->createService('User:InviteRecordService');

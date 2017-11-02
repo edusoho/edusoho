@@ -2,6 +2,7 @@ Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
+site.trade.title: %name%订单
 site.online_school_name: 网校名称
 site.online_school_about: 网校简介
 site.online_school_logo: 网校LOGO
@@ -402,10 +403,12 @@ form.input_mobile: 输入手机号码
 finance.income: 收入
 finance.total_income: 总计收入
 finance.expense: 支出
+finance.recover: 回收
 finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
+finance.net_income: 网校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
@@ -418,17 +421,19 @@ vip: 会员
 plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
-plugin.coupon: 优惠码
+plugin.coupon: 优惠券
+plugin.discount: 打折
 plugin.coupon.minus: 抵扣
 plugin.coupon.minus_tips: 优惠券 抵扣%rate%元
 plugin.coupon.discount_tips: 优惠券 抵价%rate%折
 plugin.coupon.no_use_option: 不使用优惠券
 plugin.coupon.change_btn: 更换优惠券
-plugin.coupon.use_btn: 使用优惠券
+plugin.coupon.input_hint: 优惠券
 plugin.coupon.choose_btn: 输入优惠券
-plugin.coupon.use.input_placeholder: 请输入优惠券
-plugin.coupon.code: 优惠码
-plugin.coupon.amount: 优惠金额
+plugin.coupon.use.input_placeholder: 输入优惠券码
+plugin.coupon.use.input_display: 请输入优惠券码
+plugin.coupon.code: 优惠券码
+plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用
 coin.online_school_balance: 网校余额
@@ -453,21 +458,57 @@ coin.pay.submit.request: 正在跳转到支付网关
 #订单通用
 order.charge: 收费
 order.name: 订单名称
-order.createdTime: 创建时间
+order.product_name: 商品名称
+order.product_price: 商品价格
+order.price_amount: 应付价格
+order.paid_amount: 实付价格
+order.paid_coin_amount: 实付虚拟币
+order.paid_cash_amount: 实付现金
+order.refund.deal_status: 处理状态
+order.refund.deal_time: 处理时间
+order.refund.deal_persion: 处理人
+order.refund_reason: 退款原因
+order.refund.detail: 退款详情
+order.refund_amount: 退款总额
+order.refund_coin_amount: 退款虚拟币
+order.refund_cash_amount: 退款现金
+order.refund_limit: 退款限制
+order.show_refund_detail: 查看退款
+order.refunded_cash_amount: 已退现金
+order.use_coupon: 使用优惠券
+order.refund_feedback: 反馈信息
+order.refund.id: 退款号
+order.created_time: 创建时间
 order.pay_time: 付款时间
 order.status: 订单状态
+order.deduct: 优惠抵扣
+order.item_type: 订单类型
+order.product_type: 商品类型
+order.source:  渠道
 order.status.created: 未完成
 order.status.paid: 已付款
 order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
-order.real_pay: 现金支付
+order.due_pay: 应付(元)
+order.price_amount: 总价
+order.discount_amount: 优惠
+order.real_pay: 实付
 order.buyers: 购买者
+order.deduct_amount: 优惠金额
+order.coin_amount: 虚拟币支付
+order.cash_amount: 现金支付
+order.buyer.username: 用户名
+order.buyer.true_name: 真实姓名
+order.buyer.email: 邮箱
+order.buyer.contact: 联系电话
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
+order.platform_sn: 支付流水号
+order.use_coupon_tip: 使用优惠劵
 order.price: 订单价格
-order.paid_time: 成交时间
+order.paid_time: 付款时间
 order.bank_code: 银行编号
 order.payment_pattern: 支付方式
 order.payment_pattern.coin: %coin_name%支付
@@ -487,20 +528,34 @@ order.log: 日志
 order.coin.empty_hint: 暂无虚拟币订单记录
 order.export_btn: 导出订单
 order.confirm: 订单确认
-order.confirm.pay_rmb: 应付金额：
+order.confirm.pay_total: 合计
+order.confirm.pay_rmb: 应付
 order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
+order.confirm.submit_btn_loading: 正在提交...
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
+order.confirm.coupon.hint: 通过优惠券抵扣金额
+order.confirm.coupon.use_loading: 使用中
+order.confirm.coupon.expiry_date_hint: 有效期至
+order.confirm.coupon.select_existed: 选择已有优惠券
+order.confirm.coupon.used_coupon: 已使用优惠券
+order.confirm.coupon.deduction: 抵扣
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_name%
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
+order.confirm.price: 订单价格
+order.confirm.bought_course_deduction: 已购课程抵扣
+
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
 order.confirm.setup_pay_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置支付密码</a>
 order.confirm.setup_login_password_tips: >
   为了保障账户资金安全，请先<a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">设置登录密码</a>
-order.confirm.forget_password_btn: 忘记密码？
+order.confirm.forget_password_btn: 忘记支付密码？
 order.confirm.forget_password_tips: 支付密码
 order.confirm.input_pay_password_tips: 请输入支付密码
 order.confirm.top_use_tips: 本订单最高可以使用
@@ -511,14 +566,18 @@ order.confirm.sms_code.input_placeholder: 输入短信验证码
 order.confirm.sms_code.get_code_btn: 获取短信验证码
 order.confirm.sms_code.not_bind_mobile_tips: 您还未绑定手机号
 order.confirm.sms_code.bind_btn: 去绑定
-order.paid_course.content_title: 您已购买过：
-order.paid_course.minus: 抵扣：
+order.paid_course.title: 已购买课程
+order.paid_course.content: 之前购买过的课程能够抵扣对应金额
+order.paid_course.minus: 抵扣
 order.refund: 退出学习
+order.refund.item_type: 商品类型
 order.refund.reason: 退出原因
 order.refund.reason_tips: 请输入您的退学原因
 order.refund.apply_for_btn: 申请退款
+order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联系客服。
 order.refund.buy_price: （购买时的价格：%amount%元）
-order.refund.failed_tips: 已经超出了退款期限%maxRefundDays%天，不能申请退款。
+order.refund.success_tips: 购买之日起%maxRefundDays%天内可申请退款。
+order.refund.failed_tips: 购买之日起%maxRefundDays%天内可申请退款，现已超出期限。您可以退出学习，但不支持退款。如有疑问，请联系客服
 order.refund.quit_study_btn: 退出学习
 order.refund.quit_study_btn.submiting: 正在退出...
 order.vip_order.total_months: 个月
@@ -527,20 +586,30 @@ order.vip_order.renew_tips: %level.name% 会员续费 x %duration%
 order.vip_order.buy_tips: 购买 %level.name%会员 x %duration%
 order.pay: 订单支付
 order.success: 订单完成
+order.refund.notify_admin: >
+  用户%nickname%申请退款 <a href='%targetUrl%'>%title%</a>，请审核
 
 # 支付中心
 pay_center: 支付中心
 pay_center.confirm: 订单确认
 pay_center.pay: 订单支付
-pay_center.pay.submit_tips: 订单已提交，请在４８小时内完成支付！逾期订单将被取消。
+pay_center.pay.price: 订单价格
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用%coin_name%抵扣
+pay_center.pay.set_pay_password: 设置支付密码
+pay_center.pay.coin_input_tips: 本次使用
+pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
+pay_center.pay.password_input_placeholder: 请输入支付密码
+pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
 pay_center.pay.mode: 支付方式
+pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 储蓄卡
 pay_center.pay.credit_card: 信用卡
 pay_center.pay.use_new_card: 使用新的银行卡
 pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其他支付方式
 pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
 pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
-pay_center.pay.confirm_pay_btn: 确认支付
+pay_center.pay.confirm_pay_btn: 支付订单
+pay_center.pay.confirm_pay_btn_loading: 正在支付
 pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
 pay_center.pay.weixin_pay.pay_btn: 立即支付
@@ -550,8 +619,9 @@ pay_center.pay.weixin_pay.press_qcode_pay_tips: 请长按二维码支付
 pay_center.pay.choose_other_way_btn: 选择其他支付方式
 pay_center.finish: 订单完成
 pay_center.finish.jump_tips: 正在跳转到支付网关...
+pay_center.finish_title: 订单支付完成
 pay_center.finish_tips: >
-  订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
+  将在 <span class="js-countdown">3</span> 秒后跳转
 pay_center.fee: 收费
 pay_center.remind: 支付提醒
 pay_center.remind.content_title: 支付提醒
@@ -793,7 +863,7 @@ course.payments_disabled_tips: 尚未开启支付模块，无法购买课程。
 course.delete_from_classroom_tips: 课程已从%classroomName%中移除
 course.not_member_in_classroom_tips: >
   还不是%classroomName%成员,请先<a href="%classroomUrl%">加入%classroomName%</a>
-course.approve_tips: 购买该课程需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
+buy.approve_tips: 购买需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
@@ -975,25 +1045,20 @@ course.members_manage.official_student.add_expiry_day.days: 增加天数
 course.members_manage.official_student.add_expiry_day.failed_tips: 课程不能增加
 course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，请课程发布后再增加。
 course.members_manage.quit_records: 退出记录
-course.members_manage.publish_btn: 发布
-course.members_manage.quit_records.content_title: 学员管理
-course.members_manage.quit_records.name: 学员名称
+course.members_manage.quit_type: 退出类型
+course.members_manage.is_refunded: 是否退款
+course.members_manage.records.name: 学员名称
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
-course.members_manage.quit_records.cash_count: 退款金额
 course.members_manage.quit_records.date: 退出日期
-course.members_manage.quit_records.tips: >
-  <li class="mt10 mb10">
-    仅显示通过现金购买加入的学员退款记录
-  </li>
-  <li>
-    班级教学计划退款情况请在班级管理中查看
-  </li>
 course.members_manage.quit_records.empty: 无学员记录
 course.members_manage.quit_records.join_time: 加入课程时间：
 course.members_manage.quit_records.success: 退款成功
-course.members_manage.quit_records.failed: 退款失败
-course.members_manage.quit_records.cancel: 退款取消
+course.members_manage.is_paid: 是否付费
+course.members_manage.join_records: 加入记录
+course.members_manage.records.join_reason: 加入原因
+course.members_manage.records.join_reason_type: 加入类型
+course.members_manage.join_records.date: 加入日期
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -2528,7 +2593,6 @@ classroom.student_username: 学员名称
 classroom.student_exit_reason: 退出原因
 classroom.student_exit_date: 退出日期
 classroom.refund_status: 退款状态
-classroom.refund_money: 退款金额
 classroom.refund_record_tips: 仅显示通过现金购买加入的学员退款记录
 classroom.join_time: 加入班级时间
 classroom.refund_success: 退款成功
@@ -3023,6 +3087,8 @@ user.account.empty: 暂无记录
 user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
 user.account.my_coin: %coin_name%账户
+user.account.my_coin.pay_coin: 实付%coin_name%
+user.account.my_coin.refunded_coin: 已退%coin_name%
 user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值
@@ -3056,9 +3122,14 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
+user.order.order_list: 订单列表
+user.order.refund_list: 退款管理
 user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.refunding_status: 退款中
+user.orders.closed_status: 已关闭
+user.orders.refunded_status: 已退款
+user.orders.no_paid_status: 未付款
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
 user.orders.target_course: 所属课程
@@ -3070,6 +3141,7 @@ user.orders.detail.modal_title: 订单详情
 user.orders.detail.special_operations: 特殊操作
 user.orders.detail.log_info: 日志信息
 user.orders.detail.operator: 操作人
+user.orders.detail.Ip: IP
 user.orders.detail.log_createdTime: 创建时间
 user.orders.detail.empty: 暂无交易日志
 user.orders.refund_record_title: 退款记录
@@ -3079,6 +3151,7 @@ user.orders.refund_status: 退款状态
 user.orders.refund_id: 订单号：%sn%
 user.orders.refund_empty: 没有退款记录
 user.orders.placeholder_order_name: 输入订单名称搜索
+user.orders.placeholder_product_name: 输入商品名称搜索
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包
@@ -3815,6 +3888,7 @@ my.teaching.open_course.lesson.mediaStatus.error: (%mediaTypeName%格式转换�
 my.teaching.open_course.lesson.status.unpublished: 未发布
 my.teaching.open_course.lesson.material: 资料
 my.teaching.open_course.lesson.add_material_btn: 添加资料
+my.teaching.open_course.lesson.add_material.title: 添加资料
 my.teaching.open_course.lesson.edit_btn: 编辑
 my.teaching.open_course.lesson.more_btn: 更多
 my.teaching.open_course.lesson.modal.edit: 编辑课时
@@ -4277,10 +4351,10 @@ common.orderStatus.paid: 已付款
 common.orderStatus.refunding: 退款中
 common.orderStatus.refunded: 已退款
 common.orderStatus.cancelled: 已关闭
-common.refundStatus.created: 已申请
+common.refundStatus.created: 用户已申请
 common.refundStatus.success: 退款成功
-common.refundStatus.failed: 退款失败
-common.refundStatus.cancelled: 已取消
+common.refundStatus.failed: 退款拒绝
+common.refundStatus.cancelled: 用户已撤消
 common.logLevel.info: 提示
 common.logLevel.warning: 警告
 common.logLevel.error: 错误
@@ -4342,6 +4416,9 @@ course.member.classroom.tips: 您购买的班级已到期，无法学习任务�
 course.member.course.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。
 course.member.course.join_btn: 退出并重新加入
+course.member.operation.quit_deadline_reach: 达到有效期，退出课程
+course.member.operation.admin_remove_course_student: 老师手动移除学员
+course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
 
 # course/widgets
 course.widgets.belong_classroom.title: 所属%name%
@@ -5072,13 +5149,13 @@ admin.homepage.todays_data.thread_un_answer: 未回复回答
 admin.homepage.order_statistic_title: 订单统计
 admin.homepage.order_statistic.tips: >
   <div class="popover-content hidden">
-    <div class="popover-item">`
-      <div class="title">新增订单</div>
-      <div class="content">平台当日产生的所有订单，包括免费和付费</div>
+    <div class="popover-item">
+      <div class="title">订单</div>
+      <div class="content">用户购买标价不为0的商品（教学计划、班级、会员等）会产生订单</div>
     </div>
     <div class="popover-item">
       <div class="title">付费订单</div>
-      <div class="content">平台当日产生的订单价格大于0元的订单</div>
+      <div class="content">产生实际支付（包括虚拟币和现金）的订单；去除通过抵扣优惠等方式减免全部费用的订单</div>
     </div>
   </div>
 admin.homepage.pay_order_statistic_title: 付费订单统计
@@ -6137,12 +6214,17 @@ admin.edu_cloud.edu_live.edu_live_enable_btn: 已启用
 admin.edu_cloud.edu_live.edu_live_close_btn: 关闭
 admin.edu_cloud.edu_live.edu_live_tips: >
   大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="%showUrl%" target="_blank">点击这里</a>了解详情。
-admin.edu_cloud.edu_live.base_setting: 基本设置
-admin.edu_cloud.edu_live.live_logo: 直播LOGO
+admin.edu_cloud.edu_live.base_setting: 直播LOGO设置
+admin.edu_cloud.edu_live.live_logo_web: 直播LOGO web端
+admin.edu_cloud.edu_live.live_logo_app: 直播LOGO 欢拓客户端
 admin.edu_cloud.edu_live.upload_btn: 上传
 admin.edu_cloud.edu_live.delete_btn: 删除
-admin.edu_cloud.edu_live.upload_tips: >
-  <b>只针对直播新方案。</b><br>请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
+admin.edu_cloud.edu_live.upload_web_tips: >
+  上传尺寸大小必须为280*60，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+admin.edu_cloud.edu_live.upload_app_tips: >
+  上传尺寸大小必须为280*40，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
+admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: 升级
 admin.edu_cloud.edu_live.renew: 续费
 admin.edu_cloud.edu_live.renewed: 已续费
@@ -6709,7 +6791,7 @@ admin.user_fields.Formart_verifcation.hide: 收起
 admin.user_fields.Require_personal_information: 登录后填写个人资料
 admin.user_fields.Require_personal_information.help_block: 开启后，学员登录后需填写个人资料
 admin.user_fields.other_setting: 其它设置
-admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
+admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
 admin.user_fields.verified_mobile_tip: 带短信校检
 
@@ -6828,7 +6910,7 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 营销平台地址
+admin.developer_setting.market_address: 微营销地址
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
@@ -7029,13 +7111,14 @@ admin.cdn.input_placeholder: 不填将默认是URL
 # 订单模块
 admin.order.paid_time_range.input_placeholder: 付款时间段
 admin.order.keyword: 关键词:
-admin.order.buyer: 购买者用户名
+admin.order.buyer: 购买者
+admin.order.title: 订单名称
 admin.order.screen_condition: 筛选条件:
 admin.order.target_name: 名
 admin.order.buyer_mobile: 购买者绑定手机号
 admin.order.buyer_email: 购买者邮箱
 admin.order.target_id: 编号
-admin.order.tips: 站外支付为该笔订单是通过导入或者手动添加的方式产生的，故为站外支付
+admin.order.tips: 站外为该笔订单是通过导入或者手动添加的方式产生的，故为站外
 admin.order.paid: 已支付
 admin.order.created: 未付款
 admin.order.cancelled: 已关闭
@@ -7054,6 +7137,9 @@ admin.coin.type_option.default: 全部记录
 admin.coin.type_option.inflow: 充值记录
 admin.coin.type_option.outflow: 消费记录
 
+admin.coin.school_out_amount: 网校总发放
+admin.coin.school_in_amount: 网校总回收
+admin.coin.school_wait_in_amount: 网校待回收
 admin.coin.created_time_option.all: 全部记录
 admin.coin.created_time_option.oneWeek: 最近一周
 admin.coin.created_time_option.oneMonth: 最近一个月
@@ -7069,6 +7155,7 @@ admin.coin.datagrid.filter.threeMonths: 三个月
 admin.coin.datagrid.filter.all_history: 全部历史
 
 admin.coin.datagrid.filter.default: 默认
+admin.coin.datagrid.filter.balance: 余额
 admin.coin.datagrid.filter.consume: 消费
 admin.coin.datagrid.filter.recharge: 充值
 
@@ -7232,11 +7319,12 @@ admin.payment_setting.quickpay_tips: 因汇付宝公司事务引起网银支付�
 admin.payment_setting.wxpay: 微信支付
 admin.payment_setting.wxpay_application: 简单申请介绍
 admin.payment_setting.wxpay_application_hint: >
-  仅支持配置微信<a target="_blank" href="%wxpayUrl%">公众号支付</a>，配置后，可在PC端和微信APP内选择微信支付。
+  仅支持配置微信<a target="_blank" href="%wxpayUrl%">公众号支付</a>，配置后，可在PC端、微信APP、wap内选择微信支付。
 admin.payment_setting.wxpay_application_tips: >
   使用前提：
-  <p>1、填写支付授权目录，路径：微信公众平台【微信支付】-【开发配置】-【支付授权目录】，目录地址为：网站域名/pay/center/  ；</p>
-  <p>2、绑定网页授权域名，路径：微信公众平台【接口权限】-【网页授权】-【修改】-【网页授权域名】。<br><a target="_blank" href="%qiqiuyuUrl%">【查看教程】</a></p>
+  <p>1、填写支付授权目录，路径：微信公众平台【微信支付】-【开发配置】-【支付授权目录】，目录地址为：网站域名/pay/center/  。</p>
+  <p>2、绑定网页授权域名，路径：微信公众平台【接口权限】-【网页授权】-【修改】-【网页授权域名】。</p>
+  <p>3、开启H5支付功能，路径：微信商户中心-【产品中心】-【支付产品】-【H5支付】。<br><a target="_blank" href="%qiqiuyuUrl%">【查看教程】</a></p>
 admin.payment_setting.wxpay_appid_word: >
   AppID来自<a target="_blank" href="%wxpayUrl%">微信公众平台</a>内左侧栏【开发】-【基本配置】
 
@@ -7308,13 +7396,14 @@ admin.coin_setting.price_set_tips: 请设置正确的价格
 
 #退款管理
 admin.order_refund.status.default: 退款状态
-admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.type_course_input_placeholder: 课程名
-admin.order_refund.title.type_classroom_input_placeholder: 班级名
+admin.order_refund.sn: 退款单号
+admin.order_refund.nickname.input_placeholder: 退款人
+admin.order_refund.title.placeholder: 商品名称
 admin.order_refund.title: 退款订单
-admin.order_refund.order_amount: 订单成交金额
+admin.order_refund.order_amount: 退款金额
 admin.order_refund.refund_person: 退款人
 admin.order_refund.refund_status: 退款状态
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: 操作人
 admin.order_refund.operation: 操作
 admin.order_refund.reason: 退款理由
@@ -7325,10 +7414,12 @@ admin.order_refund.approve.content_title: 审核退款申请
 admin.order_refund.audit_refund_btn: 审核
 admin.order_refund.audit.content_title: 审核退款申请
 admin.order_refund.audit.result: 审核结果
-admin.order_refund.audit.refund_actual_amount: 实际退款金额
 admin.order_refund.audit.description: 审核说明
-admin.order_refund.audit.tips: 系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。
-
+admin.order_cash_refund.audit.tips: 在线支付的款项，不支持自动退款。若同意退款，建议您先在线下处理完退款，再确定提交。
+admin.order_cash_coin_refund.audit.tips: 虚拟币款项，将会在点击“提交”以后自动退款。在线支付的款项，不支持自动退款。若同意退款，建议您先在线下处理完退款，再确定提交。
+admin.order_coin.refund.success.tips: 提交后自动退款
+admin.order_cash.refund.success.tips: 需线下手动退款
+admin.order_refund_handle.success: 退款已处理
 admin.order.logs.content_title: 订单详情
 admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
@@ -7570,6 +7661,7 @@ testpaper.redo_countdown: 重考倒计时
 question_task.empty_tips: 此任务还没有问题
 
 payment.useless_tips: 支付方式未开启，请联系管理员。
+payment.unusable_tips: 暂无可用的支付方式，请在浏览器中打开页面完成支付。
 
 open_course.live_label: 直播
 
@@ -8020,6 +8112,8 @@ log.action.order.pay_result: 支付结果
 log.action.order.andit_refund: 退款审核
 log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
+log.action.order.course_callback: 课程回调
+log.action.order.classroom_callback: 班级回调
 log.action.category.create: 新增
 log.action.category.update: 修改
 log.action.category.delete: 删除
@@ -8080,3 +8174,55 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+order.course_callback.fail: 订单处理成功，但是用户加入课程失败
+order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
+crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
+cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+
+cashflow.title: 名称
+cashflow.sn: 流水号
+cashflow.order_sn: 订单号
+cashflow.user_name: 用户名
+cashflow.trade_sn: 交易号
+cashflow.created_time: 成交时间
+cashflow.amount: 金额
+cashflow.number: 数量
+cashflow.inflow: 网校收入
+cashflow.platform: 支付方式
+cashflow.platform_sn: 支付平台流水号
+cashflow.user_truename: 姓名
+cashflow.user_email: 邮箱
+cashflow.user_mobile: 联系电话
+cashflow.refund: 线下退款
+
+admin.cashflow.keyword: 关键字
+admin.cashflow.keyword_default: --选择类型--
+
+order.pay_check_msg.parameters_error: 参数错误
+order.pay_check_msg.coupon_had_been_used: 优惠码已经被使用了
+order.pay_check_msg.unpurchasable_product: 未开放购买
+order.pay_check_msg.order_not_exist: 订单不存在
+order.pay_check_msg.user_not_login: 用户未登录，不能支付
+order.pay_check_msg.not_same_user: 不是您的订单，不能支付
+order.pay_check_msg.missing_pay_password: 没有输入支付密码，不能使用虚拟币支付
+order.pay_check_msg.incorrect_pay_password: 支付密码不正确
+order.pay_check_msg.balance_not_enough: 余额不足
+order.pay_check_msg.pay_password_not_set: 支付密码未设置
+order.pay_check_msg.out_of_max_coin: 超过最大允许支付的虚拟币额度
+order.refund_deadline.outdated_message: 已错过申请退款时间（%date% 前）
+
+site.join_by_import: 导入
+site.join_by_free: 免费加入
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
+site.join_by_purchase: 购买加入
+site.remove_by_manual: 手动移除
+site.join_to_learn: 加入学习
+site.fill_user_info_tip: 信息补全
+site.avatar.set_before_learning: 请先设置头像
+site_yes: 是
+site_no: 否
+admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
+
+

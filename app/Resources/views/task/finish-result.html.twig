@@ -1,8 +1,9 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{%  set modal_class ="modal-message task-state-modal modal-sm"%}
+{%  set modal_class ="task-state-modal task-finish-modal modal-sm"%}
 
 {% block title %}
-  <i class="es-icon es-icon-iccheckcircleblack24px color-success mrs"></i>{{'course.plan_task.finish_task_title'|trans}}
+  <i class="es-icon es-icon-iccheckcircleblack24px color-success mrs" style="font-size:20px"></i>
+  {{'course.plan_task.finish_task_title'|trans}}
 {% endblock %}
 
 {% block body %}
