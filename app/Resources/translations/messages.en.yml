@@ -2935,8 +2935,7 @@ attachments.download.times: 'Download times %hitNum%'
 attachments.download.download_btn: Download
 attachments.download.delete_btn: Delete
 attachments.download.delete_warning: 'Are you sure to delete this accesaary?'
-share.course_set_learning_message: 'I am learning《%course%》gain a lot，come to study together.'
-share.course_set_learned_message: 'I was learned 《%course%》gain a lot，come to study together.'
+share.course_set_message: 'I am learning《%course%》gain a lot，come to study together.'
 share.classroom_message: 'I am learning「%classroom%」gain a lot，come to study together.'
 share.article_message: 'I am watching「%articletitle%」, follow 「%sitename%」, share knowledge, creates future'
 share.group_thread_message: 'I saw 「%threadname%」in group「%groupname%」，it is so great，come to enroll us'

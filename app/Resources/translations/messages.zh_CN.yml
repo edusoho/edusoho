@@ -3691,8 +3691,7 @@ attachments.download.delete_btn: 删除
 attachments.download.delete_warning: 确定删除此附件
 
 # 分享
-share.course_set_learning_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
-share.course_set_learned_message: 我学完了《%course%》，收获巨大哦，一起来学习吧！
+share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
 share.classroom_message: 我正在学习「%classroom%」，收获巨大哦，一起来学习吧！
 share.article_message: 我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。
 share.group_thread_message: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
