@@ -1,10 +1,10 @@
 <?php
 
-namespace Biz\Framework\Xapi\Job;
+namespace Biz\Xapi\Job;
 
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Guzzle\Http\Client;
 
 class PushStatementsJob extends AbstractJob
