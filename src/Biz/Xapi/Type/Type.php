@@ -137,7 +137,7 @@ abstract class Type extends BizAware
         );
     }
 
-    protected function createXAPIService()
+    public function createXAPIService()
     {
         $settings = $this->getSettingService()->get('storage', array());
         $siteSettings = $this->getSettingService()->get('site', array());

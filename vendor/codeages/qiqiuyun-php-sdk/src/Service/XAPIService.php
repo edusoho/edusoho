@@ -365,8 +365,34 @@ class XAPIService extends BaseService
 
         $response = json_decode($rawResponse->getBody(), true);
 
-//        file_put_contents('../app/logs/1.txt', json_encode($response).PHP_EOL, FILE_APPEND);
-//        file_put_contents('../app/logs/2.txt', json_encode($statement).PHP_EOL, FILE_APPEND);
+        if (isset($response['error'])) {
+            throw new ResponseException($rawResponse);
+        }
+
+        return $statement;
+    }
+
+    public function pushStatements($statements)
+    {
+        foreach ($statements as &$statement) {
+            $statement['context'] = array(
+                'extensions' => array (
+                    'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
+                )
+            );
+
+            $statement['timestamp'] = $this->getTime(null);
+        }
+
+
+        $rawResponse = $this->client->request('POST', '/statements', array(
+            'json' => $statements,
+            'headers' => array(
+                'Authorization' => 'Signature '.$this->makeSignature(),
+            )
+        ));
+
+        $response = json_decode($rawResponse->getBody(), true);
 
         if (isset($response['error'])) {
             throw new ResponseException($rawResponse);
