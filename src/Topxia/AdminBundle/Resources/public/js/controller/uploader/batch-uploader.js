@@ -632,9 +632,7 @@ define(function(require, exports, module) {
       } else {
         var time = totalspeed == 0 ? 0 : this._secondToDate((leftsize / totalspeed));
 
-        $('.js-left-time').text((time == 0) ? Translator.trans('uploader.status.will_done') : Translator.trans('uploader.status.remnant_time', {
-          '%time%': time
-        }));
+        $('.js-left-time').text((time == 0) ? Translator.trans('uploader.status.will_done') : Translator.trans('uploader.status.remnant_time', { '%time%': time }));
       }
     },
 
