@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
   require('webuploader2');
   var store = require('store');
   var filesize = require('filesize');
@@ -23,15 +23,15 @@ define(function (require, exports, module) {
       hookRegisted: false
     },
 
-    _onUploadStop: function (event) {
+    _onUploadStop: function(event) {
       var self = this;
 
       //过滤出未完成的文件并做处理
-      this.element.find('li').filter(function () {
+      this.element.find('li').filter(function() {
         var fileId = $(this).attr('id');
         var file = self.uploader.getFile(fileId);
         return file !== undefined && 'complete' !== file.getStatus();
-      }).each(function () {
+      }).each(function() {
         var file = self.uploader.getFile($(this).attr('id'));
         self.uploader.cancelFile(file.id);
         $(this).find('.file-status').html(Translator.trans('uploader.status.pausing'));
@@ -40,14 +40,14 @@ define(function (require, exports, module) {
       });
     },
 
-    _onUploadResume: function (event) {
+    _onUploadResume: function(event) {
       var self = this;
       //过滤出未完成的文件并做处理
-      this.element.find('li').filter(function () {
+      this.element.find('li').filter(function() {
         var fileId = $(this).attr('id');
         var file = self.uploader.getFile(fileId);
         return file !== undefined && 'complete' !== file.getStatus();
-      }).each(function () {
+      }).each(function() {
         var file = self.uploader.getFile($(this).attr('id'));
         $(this).find('.file-status').html(Translator.trans('uploader.status.wait'));
         $(this).find('.js-file-resume').addClass('hidden');
@@ -56,7 +56,7 @@ define(function (require, exports, module) {
       this.uploader.upload();
     },
 
-    _onFileUploadResume: function (event) {
+    _onFileUploadResume: function(event) {
       var fileId = $(event.target).parents('li.file-item').attr('id');
       var file = this.uploader.getFile(fileId);
       $(event.target).addClass('hidden');
@@ -66,7 +66,7 @@ define(function (require, exports, module) {
       //this._displaySpeed();
     },
 
-    _onFileUploadStop: function (event) {
+    _onFileUploadStop: function(event) {
       var $li = $(event.target).parents('li.file-item');
       var fileId = $li.attr('id');
       var file = this.uploader.getFile(fileId);
@@ -79,7 +79,7 @@ define(function (require, exports, module) {
       //this._displaySpeed();
     },
 
-    _onFileUploadRemove: function (event) {
+    _onFileUploadRemove: function(event) {
       // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
       var $li = $(event.target).parents('li.file-item');
       var fileId = $li.attr('id');
@@ -91,24 +91,24 @@ define(function (require, exports, module) {
 
       $li.remove();
 
-      delete  this.uploader.totalSpeedQueue[fileId];
-      delete  this.uploader.leftTotalSizeQueue[fileId];
+      delete this.uploader.totalSpeedQueue[fileId];
+      delete this.uploader.leftTotalSizeQueue[fileId];
 
       if (jQuery.isEmptyObject(this.uploader.leftTotalSizeQueue)) {
         $('.ballon-uploader-display-footer').addClass('hidden');
       }
     },
 
-    _makeAccept: function () {
+    _makeAccept: function() {
       var mimeTypes = require('edusoho.mimetypes');
       var accept = {};
       accept.title = 'file';
       accept.extensions = this.get('accept')['extensions'].join(',');
-      accept.mimeTypes = Array.prototype.concat.apply([], _.map(this.get('accept')['extensions'], mimeTypes));// 二维数组降维到一维数组
+      accept.mimeTypes = Array.prototype.concat.apply([], _.map(this.get('accept')['extensions'], mimeTypes)); // 二维数组降维到一维数组
       return accept;
     },
 
-    setup: function () {
+    setup: function() {
       this._initUI();
       var accept = this._makeAccept();
 
@@ -147,7 +147,7 @@ define(function (require, exports, module) {
       this._registerUploaderEvent(uploader);
 
       var self = this;
-      this.element.find('.start-upload-btn').on('click', function () {
+      this.element.find('.start-upload-btn').on('click', function() {
         uploader.upload();
         $(self.element).find('.pause-btn').prop('disabled', false);
       });
@@ -161,7 +161,7 @@ define(function (require, exports, module) {
 
     },
 
-    destroy: function () {
+    destroy: function() {
       if (this.uploader) {
         this.uploader.stop();
         this.uploader.destroy();
@@ -170,7 +170,7 @@ define(function (require, exports, module) {
       BatchUploader.superclass.destroy.call(this);
     },
 
-    _initUI: function () {
+    _initUI: function() {
       var html = '';
       html += '<div class="balloon-uploader-heading">' + Translator.trans('uploader.modal.heading') + '</div>';
       html += '<div class="balloon-uploader-body">';
@@ -207,11 +207,11 @@ define(function (require, exports, module) {
     },
 
 
-    _registerUploaderEvent: function (uploader) {
+    _registerUploaderEvent: function(uploader) {
       var self = this;
       var $uploader = this.element;
       // 当有文件添加进来的时候
-      uploader.on('fileQueued', function (file) {
+      uploader.on('fileQueued', function(file) {
         $uploader.find('.balloon-nofile').remove();
         var $list = $uploader.find('.balloon-filelist ul');
 
@@ -236,7 +236,7 @@ define(function (require, exports, module) {
         }
 
       });
-      uploader.on('error', function (handler) {
+      uploader.on('error', function(handler) {
         switch (handler) {
           case 'F_EXCEED_SIZE':
             Notify.danger(Translator.trans('uploader.size_limit_hint'));
@@ -249,7 +249,7 @@ define(function (require, exports, module) {
             break;
         }
       });
-      uploader.on('beforeFileQueued', function (file) {
+      uploader.on('beforeFileQueued', function(file) {
         file.uploaderWidget = self;
 
         /*if ($('.ballon-uploader-display-footer').hasClass('hidden')) {
@@ -265,12 +265,16 @@ define(function (require, exports, module) {
         this.updateDisplayIndex = 0; //自带的进度条更新的太快了,速度也刷新的有点快, 所以计时器增加到5,然后刷新一下,同时重置为0
       });
 
-      uploader.on('uploadStart', function (file) {
-        this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: _.now()};
+      uploader.on('uploadStart', function(file) {
+        this.uploadQueue[file.id] = {
+          id: file.id,
+          size: file.size,
+          starttime: _.now()
+        };
         self.trigger('file.uploadStart');
       });
       // 文件上传过程中创建进度条实时显示。
-      uploader.on('uploadProgress', function (file, percentage) {
+      uploader.on('uploadProgress', function(file, percentage) {
 
         var queuefile = this.uploadQueue[file.id]; //获取文件开始上传时的信息
 
@@ -296,7 +300,7 @@ define(function (require, exports, module) {
         }
       });
 
-      uploader.on('uploadSuccess', function (file) {
+      uploader.on('uploadSuccess', function(file) {
         var $li = $('#' + file.id);
         $li.find('.file-status').html(Translator.trans('uploader.status.finished'));
         $li.find('.file-progress-bar').css('width', '0%');
@@ -307,14 +311,13 @@ define(function (require, exports, module) {
         store.remove(key);
       });
 
-      uploader.on('beforeFileQueued', function (file) {
+      uploader.on('beforeFileQueued', function(file) {
         file.uploaderWidget = self;
       });
 
-      uploader.on('uploadComplete', function (file) {
-      });
+      uploader.on('uploadComplete', function(file) {});
 
-      uploader.on('uploadAccept', function (object, ret) {
+      uploader.on('uploadAccept', function(object, ret) {
         var key = 'file_' + object.file.hash;
         var value = store.get(key);
         value[object.chunk] = ret;
@@ -324,14 +327,14 @@ define(function (require, exports, module) {
         strategy.uploadAccept(object, ret);
       });
 
-      uploader.on('uploadBeforeSend', function (object, data, headers, tr) {
+      uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
         var strategy = self.get('strategy');
         strategy.uploadBeforeSend(object, data, headers, tr);
       });
 
-      uploader.on('upload.finish', function (file) {
-        delete  this.totalSpeedQueue[file.id];
-        delete  this.leftTotalSizeQueue[file.id];
+      uploader.on('upload.finish', function(file) {
+        delete this.totalSpeedQueue[file.id];
+        delete this.leftTotalSizeQueue[file.id];
         var uploadStates = uploader.getStats();
 
         /*if ($.isEmptyObject(this.leftTotalSizeQueue) && uploadStates.cancelNum == 0) {
@@ -341,7 +344,7 @@ define(function (require, exports, module) {
       });
     },
 
-    _getDirectives: function (file) {
+    _getDirectives: function(file) {
       var extOutputs = {
         'mp4': 'video',
         'avi': 'video',
@@ -370,7 +373,7 @@ define(function (require, exports, module) {
           audioQuality: 'normal'
         },
         'document': {
-          type : 'html'
+          type: 'html'
         },
         'ppt': {},
         'audio': {
@@ -385,13 +388,13 @@ define(function (require, exports, module) {
       if (extOutput == 'video') {
         if (this.get('process') == 'none' || this.get('process') == 'auto') {
           params = paramsDefault[extOutput];
-        } else if (this.get('process') instanceof Object){
+        } else if (this.get('process') instanceof Object) {
           params = this.get('process');
         }
       }
 
       if (extOutput == 'document' || extOutput == 'ppt') {
-          params = paramsDefault[extOutput];
+        params = paramsDefault[extOutput];
       }
 
       params.output = extOutput;
@@ -399,11 +402,11 @@ define(function (require, exports, module) {
       return params;
     },
 
-    _getUploader: function () {
+    _getUploader: function() {
       return this.uploader;
     },
 
-    _initUploaderHook: function () {
+    _initUploaderHook: function() {
       if (WebUploader.Uploader.hookRegisted) {
         return;
       } else {
@@ -416,7 +419,7 @@ define(function (require, exports, module) {
         'before-send': 'checkchunk',
         'after-send-file': 'finishupload',
       }, {
-        preupload: function (file) {
+        preupload: function(file) {
           //不是批量上传组件的uploader直接退出
           if (!('isBatchUploader' in this.owner.options)) {
             return;
@@ -424,7 +427,7 @@ define(function (require, exports, module) {
 
           var deferred = WebUploader.Deferred();
           file.uploaderWidget.trigger('preupload', file);
-          file.uploaderWidget._makeFileHash(file).done(function (hash) {
+          file.uploaderWidget._makeFileHash(file).done(function(hash) {
 
             file.hash = hash;
             var params = {
@@ -443,7 +446,7 @@ define(function (require, exports, module) {
               params.id = value.id;
             }
 
-            $.post(file.uploaderWidget.get('initUrl'), params, function (response) {
+            $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
               var key = 'file_' + file.hash;
               file.hashId = response.hashId;
               if (response.resumed != 'ok') {
@@ -466,7 +469,7 @@ define(function (require, exports, module) {
                 file.uploaderWidget._showHiddenButton();
               }
 
-              require.async('./' + uploadMode + '-strategy', function (Strategy) {
+              require.async('./' + uploadMode + '-strategy', function(Strategy) {
                 var strategy = new Strategy(file, response);
                 file.uploaderWidget.set('strategy', strategy);
 
@@ -478,7 +481,7 @@ define(function (require, exports, module) {
           return deferred.promise();
         },
 
-        checkchunk: function (block) {
+        checkchunk: function(block) {
           //不是批量上传组件的uploader直接退出
           if (!('isBatchUploader' in this.owner.options)) {
             return;
@@ -499,7 +502,7 @@ define(function (require, exports, module) {
           return deferred.promise();
         },
 
-        finishupload: function (file, ret, hds) {
+        finishupload: function(file, ret, hds) {
           //不是批量上传组件的uploader直接退出
           if (!('isBatchUploader' in this.owner.options)) {
             return;
@@ -516,7 +519,7 @@ define(function (require, exports, module) {
           data.size = file.size;
           data.id = file.fileId;
 
-          $.post(file.uploaderWidget.get('finishUrl'), data).done(function (response) {
+          $.post(file.uploaderWidget.get('finishUrl'), data).done(function(response) {
             deferred.resolve();
 
             file.uploaderWidget.trigger('file.uploaded', file, data, response);
@@ -531,7 +534,7 @@ define(function (require, exports, module) {
               file.uploaderWidget._getUploader().trigger('upload.finish', file, data);
             }
 
-          }).fail(function () {
+          }).fail(function() {
             var $li = $('#' + file.id);
             var html = Translator.trans('uploader.status.error') + "<a class='glyphicon glyphicon-question-sign text-muted' data-toggle='popover'>";
             $li.find('.file-status').html(html);
@@ -557,7 +560,7 @@ define(function (require, exports, module) {
 
     },
 
-    _makeFileHash: function (file) {
+    _makeFileHash: function(file) {
       var start1 = 0;
       var end1 = (file.size < 4096) ? file.size : 4096;
       var promise1 = this.uploader.md5File(file, start1, end1);
@@ -575,7 +578,7 @@ define(function (require, exports, module) {
       var promise4 = this.uploader.md5File(file, start4, end4);
 
       var deferred = WebUploader.Deferred();
-      WebUploader.when(promise1, promise2, promise3, promise4).done(function (hash1, hash2, hash3, hash4) {
+      WebUploader.when(promise1, promise2, promise3, promise4).done(function(hash1, hash2, hash3, hash4) {
         var hash = hash1.slice(0, 8);
         hash += hash2.slice(8, 16);
         hash += hash3.slice(16, 24);
@@ -586,27 +589,25 @@ define(function (require, exports, module) {
       return deferred.promise();
     },
 
-    _secondToDate: function (sd) {
+    _secondToDate: function(sd) {
       var time = isNaN(parseFloat(sd)) ? 0 : parseFloat(sd);
       if (null != time && "" != time) {
         if (time > 60 && time < 60 * 60) {
           time = parseInt(time / 60.0) + Translator.trans('site.date.minute') + parseInt((parseFloat(time / 60.0) -
-              parseInt(time / 60.0)) * 60) + Translator.trans('site.date.second');
-        }
-        else if (time >= 60 * 60 && time < 60 * 60 * 24) {
+            parseInt(time / 60.0)) * 60) + Translator.trans('site.date.second');
+        } else if (time >= 60 * 60 && time < 60 * 60 * 24) {
           time = parseInt(time / 3600.0) + Translator.trans('site.date.hour') + parseInt((parseFloat(time / 3600.0) -
               parseInt(time / 3600.0)) * 60) + Translator.trans('site.date.minute') +
             parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
               parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + Translator.trans('site.date.second');
-        }
-        else {
+        } else {
           time = parseInt(time) + Translator.trans('site.date.second');
         }
       }
       return time;
     },
 
-    _displaySpeed: function () {
+    _displaySpeed: function() {
       var totalspeed = 0;
       var leftsize = 0;
       var resumeFileCount = 0;
@@ -631,11 +632,13 @@ define(function (require, exports, module) {
       } else {
         var time = totalspeed == 0 ? 0 : this._secondToDate((leftsize / totalspeed));
 
-        $('.js-left-time').text((time == 0) ? Translator.trans('uploader.status.will_done') : Translator.trans('uploader.status.remnant_time',{'%time%':time})) ;
+        $('.js-left-time').text((time == 0) ? Translator.trans('uploader.status.will_done') : Translator.trans('uploader.status.remnant_time', {
+          '%time%': time
+        }));
       }
     },
 
-    getStrategyModel: function (mode) {
+    getStrategyModel: function(mode) {
       if (this.get('uploadMode') !== undefined) {
         return this.get('uploadMode');
       }
@@ -646,13 +649,13 @@ define(function (require, exports, module) {
       return mode;
     },
 
-    isIE: function (ver) {
+    isIE: function(ver) {
       var b = document.createElement('b');
       b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
       return b.getElementsByTagName('i').length === 1
     },
 
-    _showHiddenButton: function () {
+    _showHiddenButton: function() {
       if (this.get('multi')) {
         this.element.find('.pause-btn').removeClass('hidden');
       }
