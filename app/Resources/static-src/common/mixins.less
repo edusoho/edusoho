@@ -1,0 +1,96 @@
+// 字符串截取
+.text-overflow() {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+// 透明度兼容
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+// 图片响应式
+.img-responsive(@display: block) {
+  display: @display;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-full(@display: block) {
+  display: @display;
+  height: auto;
+  width: 100%;
+}
+
+.img-full {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+// css3样式简写
+.es-transform(@x:1.1 , @y:1.1) {
+  -webkit-transform: scale(@x, @y);
+     -moz-transform: scale(@x, @y);
+      -ms-transform: scale(@x, @y);
+       -o-transform: scale(@x, @y);
+          transform: scale(@x, @y);
+}
+
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
+}
+
+.box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+     -moz-box-shadow: @box-shadow;
+          box-shadow: @box-shadow;
+}
+
+.es-box-shadow {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+}
+
+.border-radius(@border-radius:4px) {
+  -webkit-border-radius: @border-radius;
+     -moz-border-radius: @border-radius;
+          border-radius: @border-radius;
+}
+
+.border-top-left-radius(@border-radius:4px) {
+  border-top-left-radius: @border-radius;
+}
+.border-top-right-radius(@border-radius:4px) {
+  border-top-right-radius: @border-radius;
+}
+.border-bottom-left-radius(@border-radius:4px) {
+  border-bottom-left-radius: @border-radius;
+}
+.border-bottom-right-radius(@border-radius:4px) {
+  border-bottom-right-radius: @border-radius;
+}
+
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+}
+
+.transform(@transform) {
+  -webkit-transform: @transform;
+     -moz-transform: @transform;
+       -o-transform: @transform;
+          transform: @transform;
+}

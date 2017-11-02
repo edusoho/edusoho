@@ -28,7 +28,7 @@ module.exports = {
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/jquery-raty.js'],
     'echarts': ['echarts'],
-    'select2': ['libs/select2.js'],
+    'select2': ['libs/select2/index.js'],
 
     // 即将删除
     'app-bootstrap': ['app/less/bootstrap.less']
@@ -72,6 +72,6 @@ module.exports = {
     }
   ],
   vendorName: 'libs/base,libs/vendor',
-  extryCssName: '{main,header,index,bootstrap}',
+  extryCssName: '{main,header,bootstrap,mobile,admin}',
 }
 
