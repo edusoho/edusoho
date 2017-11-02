@@ -138,7 +138,7 @@ class CourseSetServiceTest extends BaseTestCase
         $created['audiences'] = array(1);
 
         $updated = $this->getCourseSetService()->updateCourseSetDetail($created['id'], $created);
-        $this->assertEquals($updated['summary'], $created['summary']);
+        $this->assertEquals($updated['summary'], 'this is summary ');
     }
 
     public function testChangeCover()
