@@ -10,8 +10,11 @@ use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use AppBundle\Common\MathToolkit;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Service\WorkflowService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
+use Codeages\Biz\Order\Status\Order\FailOrderStatus;
+use Codeages\Biz\Order\Status\Order\PaidOrderStatus;
+use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
@@ -28,7 +31,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'created_reason' => 'site.join_by_purchase',
             'price_type' => 'CNY',
             'currency_exchange_rate' => $currency->exchangeRate,
-            'refund_deadline' => $this->getRefundDeadline(),
+            'expired_refund_days' => $this->getRefundDays(),
         );
 
         $orderItems = $this->makeOrderItems($product);
@@ -38,12 +41,24 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    private function getRefundDeadline()
+    private function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
-        $timeInterval = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'] * 24 * 60 * 60;
 
-        return time() + $timeInterval;
+        return empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
+    }
+
+    public function isOrderPaid($orderId)
+    {
+        if ($order = $this->getOrderService()->getOrder($orderId)) {
+            return in_array($order['status'], array(
+                SuccessOrderStatus::NAME,
+                PaidOrderStatus::NAME,
+                FailOrderStatus::NAME,
+            ));
+        } else {
+            return false;
+        }
     }
 
     private function makeOrderItems(Product $product)
@@ -145,6 +160,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         } else {
             throw $this->createServiceException("The {$orderItem['target_type']} product not found");
         }
+    }
+
+    public function sumOrderItemPayAmount($conditions)
+    {
+        return $this->getOrderService()->sumOrderItemPayAmount($conditions);
     }
 
     public function checkOrderBeforePay($sn, $params)

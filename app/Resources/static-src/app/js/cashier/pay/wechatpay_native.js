@@ -35,32 +35,25 @@ export default class WechatPayNative extends BasePayment {
       </div>
     `;
 
-    if (this.$container.find('#'+this.modalID).length === 0) {
+    if (this.$container.find('#' + this.modalID).length === 0) {
       this.$container.append(template);
     }
 
-    this.$container.find('#'+this.modalID).on('hidden.bs.modal', function () {
+    this.$container.find('#' + this.modalID).on('hidden.bs.modal', function() {
       clearInterval(window.intervalWechatId);
     });
   }
 
   afterTradeCreated(res) {
-   let $modal = this.$container.find('#'+this.modalID);
-   $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
-   $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
-   $modal.modal('show');
-   this.startInterval(res.tradeSn);
- }
+    this.checkOrderStatus();
+    let $modal = this.$container.find('#' + this.modalID);
+    $modal.find('.js-qrcode-img').attr('src', res.qrcodeUrl);
+    $modal.find('.js-pay-amount').text('￥' + res.cash_amount);
+    $modal.modal('show');
+  }
 
- startInterval(tradeSn) {
-   window.intervalWechatId = setInterval(this.checkIsPaid.bind(this, tradeSn), 2000);
- }
+  startInterval() {
+    return true;
+  }
 
- checkIsPaid(tradeSn) {
-   BasePayment.getTrade(tradeSn).then(res => {
-     if (res.isPaid) {
-       location.href = res.paidSuccessUrl;
-     }
-   });
- }
 }

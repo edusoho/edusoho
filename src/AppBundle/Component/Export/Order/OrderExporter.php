@@ -5,7 +5,7 @@ namespace AppBundle\Component\Export\Order;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class OrderExporter extends Exporter
 {
@@ -31,7 +31,7 @@ class OrderExporter extends Exporter
 
     public function getTitles()
     {
-        return array('order.id', 'order.name', 'order.status', 'order.price_amount', 'order.deduct_amount', 'order.real_pay', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
+        return array('order.id', 'order.product_name', 'order.status', 'order.price_amount', 'order.deduct_amount', 'order.real_pay', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
     }
 
     public function buildCondition($conditions)
@@ -80,11 +80,11 @@ class OrderExporter extends Exporter
     protected function handlerOrder($orders, $users, $profiles)
     {
         $ordersContent = array();
-
+        $source = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('source');
         foreach ($orders as $key => $order) {
             $member = array();
             // 订单号
-            $member[] = $order['sn'];
+            $member[] = $order['sn']."\t";
             // 订单名称
             $member[] = $order['title'];
             // 订单状态
@@ -102,6 +102,8 @@ class OrderExporter extends Exporter
             // 支付方式
             $member[] = $this->getExportPayment($order['payment']);
 
+            //渠道
+            $member[] = empty($source[$order['source']]) ? '--' : $source[$order['source']];
             //用户名
             $member[] = $users[$order['user_id']]['nickname'];
             //真实姓名
@@ -143,7 +145,7 @@ class OrderExporter extends Exporter
     private function getExportPayment($payment)
     {
         if (!$this->paymentDict) {
-            $this->paymentDict = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('newPayment');
+            $this->paymentDict = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         }
 
         return isset($this->paymentDict[$payment]) ? $this->paymentDict[$payment] : $payment;

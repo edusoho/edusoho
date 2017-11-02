@@ -5,9 +5,8 @@ namespace ApiBundle\Api\Resource\PayCenter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Component\Payment\Payment;
-use Biz\Order\OrderProcessor\OrderProcessorFactory;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PayCenter extends AbstractResource
@@ -17,6 +16,17 @@ class PayCenter extends AbstractResource
         $params = $request->request->all();
         if (empty($params['orderId'])) {
             throw new BadRequestHttpException('Missing params', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        //可能传过来的是 已经支付的order id， 不是tradeSn
+        if ($this->getOrderFacadeService()->isOrderPaid($params['orderId'])) {
+            return array(
+                'id' => $params['orderId'],
+                'status' => 'paid',
+                'trade_sn' => '',
+                'paymentForm' => array(),
+                'paymentHtml' => '',
+            );
         }
 
         $trade = $this->getPayService()->getTradeByTradeSn($params['orderId']);
@@ -52,5 +62,13 @@ class PayCenter extends AbstractResource
     private function getPayService()
     {
         return $this->service('Pay:PayService');
+    }
+
+    /**
+     * @return OrderFacadeService
+     */
+    private function getOrderFacadeService()
+    {
+        return $this->service('OrderFacade:OrderFacadeService');
     }
 }

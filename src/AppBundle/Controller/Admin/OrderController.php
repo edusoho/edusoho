@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends BaseController
@@ -114,35 +114,6 @@ class OrderController extends BaseController
     }
 
     /**
-     *  导出订单.
-     */
-    public function exportCsvAction(Request $request)
-    {
-        $exporter = $this->get('export_factory')->create('order', $request->query->all());
-
-        $result = $exporter->export();
-
-        if ($result['status'] == 'continue') {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_order_manage_export_csv',
-                    array_merge($request->query->all(), array('start' => $result['start'], 'fileName' => $result['fileName']))
-                )
-            );
-        }
-
-        $exportPath = $this->getParameter('topxia.upload.private_directory').DIRECTORY_SEPARATOR.basename($result['fileName']);
-        if (!file_exists($exportPath)) {
-            return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
-        }
-
-        $class = 'AppBundle\Component\Office\CsvHelper';
-        $officeHelp = new $class();
-
-        return $officeHelp->write('order', $exportPath);
-    }
-
-    /**
      * @return PayService
      */
     protected function getPayService()
@@ -151,7 +122,7 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     * @return \Codeages\Biz\Order\Service\OrderService
      */
     protected function getOrderService()
     {

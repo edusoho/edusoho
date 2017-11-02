@@ -57,7 +57,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
         }
 
-        if ($this->canCourseShowRedirect($request)) {
+        if ($user->isLogin() && $this->canCourseShowRedirect($request)) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
                     'userId' => $user['id'],
@@ -653,13 +653,14 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         if (empty($member)) {
-            throw $this->createAccessDeniedException('');
+            throw $this->createAccessDeniedException('member not exist');
         }
 
         $user = $this->getCurrentUser();
         $req = $request->request->all();
         $this->getMemberService()->removeStudent($course['id'], $user['id'], array(
             'reason' => $req['reason']['note'],
+            'reason_type' => 'exit',
         ));
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $id)));

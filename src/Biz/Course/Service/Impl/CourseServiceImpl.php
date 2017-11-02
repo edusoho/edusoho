@@ -1837,13 +1837,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $access = $this->canJoinCourse($courseId);
 
         if ($access['code'] != AccessorInterface::SUCCESS) {
-            throw new UnableJoinException($access['code'], $access['msg']);
+            throw new UnableJoinException($access['msg'], $access['code']);
         }
 
         $course = $this->getCourse($courseId);
 
         if ($course['isFree'] == 1 || $course['originPrice'] == 0) {
-            $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
+            $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId());
         }
 
         $this->dispatch('course.try_free_join', $course);

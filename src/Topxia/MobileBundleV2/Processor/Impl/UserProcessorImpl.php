@@ -4,12 +4,13 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -167,16 +168,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return array(
             'id' => $balance['id'],
             'userId' => $balance['user_id'],
-            'cash' => $balance['amount']
+            'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
         );
-    }
-
-    /**
-     * @return AccountService
-     */
-    private function getAccountService()
-    {
-        return $this->controller->getService('Pay:AccountService');
     }
 
     public function sendMessage()

@@ -759,10 +759,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
         }
 
-        if (in_array('teacher', $member['role'])) {
-            throw $this->createAccessDeniedException('教师无法退出班级！');
-        }
-
         $this->removeStudentsFromClasroomCourses($classroomId, $userId);
 
         if (count($member['role']) == 1) {
@@ -912,7 +908,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $this->createOperateRecord($member, 'join', array('order' => $order));
+        $reason = $this->buildJoinReason($info, $order);
+        $this->createOperateRecord($member, 'join', $reason);
 
         $params = array(
             'orderId' => $fields['orderId'],
@@ -937,6 +934,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         return $member;
+    }
+
+    private function buildJoinReason($info, $order)
+    {
+        if (ArrayToolkit::requireds($info, array('reason', 'reason_type'))) {
+            return ArrayToolkit::parts($info, array('reason', 'reason_type'));
+        }
+
+        $orderId = empty($order) ? 0 : $order['id'];
+
+        return $this->getMemberOperationService()->getJoinReasonByOrderId($orderId);
     }
 
     public function becomeStudentWithOrder($classroomId, $userId, $params = array())
@@ -1261,6 +1269,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
+        $data = array(
+            'reason' => 'site.join_by_auditor',
+            'reason_type' => 'auditor_join',
+        );
+        $this->createOperateRecord($member, 'join', $data);
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
         $this->dispatchEvent(
@@ -1296,7 +1309,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);
-        $data = array('reason' => 'classroom.join_as_assistant');
+        $data = array(
+            'reason' => 'site.join_by_assistant',
+            'reason_type' => 'assistant_join',
+        );
         $this->createOperateRecord($member, 'join', $data);
 
         $this->dispatchEvent(
@@ -1668,7 +1684,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
-        if (empty($member) || !in_array('student', $member['role'])) {
+        if (empty($member)) {
+            return;
+        }
+
+        if (!in_array('student', $member['role'])) {
             throw $this->createServiceException("用户(#{$classroomId})不是班级(#{$classroomId})的学员，封锁学员失败。");
         }
 
@@ -1684,12 +1704,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("班级(#{$classroomId})不存在，解封学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
-        if (empty($member) || !in_array('student', $member['role'])) {
+        if (empty($member)) {
+            return;
+        }
+
+        if (!in_array('student', $member['role'])) {
             throw $this->createServiceException("用户(#{$userId})不是该班级(#{$classroomId})的学员，解封学员失败。");
         }
 
@@ -1861,7 +1885,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $access = $this->canJoinClassroom($classroomId);
         if ($access['code'] != AccessorInterface::SUCCESS) {
-            throw new UnableJoinException($access['code'], $access['msg']);
+            throw new UnableJoinException($access['msg'], $access['code']);
         }
 
         $classroom = $this->getClassroom($classroomId);
@@ -1966,11 +1990,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
-    protected function createOperateRecord($member, $operateType, $data = array())
+    protected function createOperateRecord($member, $operateType, $reason)
     {
         $currentUser = $this->getCurrentUser();
-        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
-
         $classroom = $this->getClassroom($member['classroomId']);
 
         $data['member'] = $member;
@@ -1982,11 +2004,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'target_type' => 'classroom',
             'operate_type' => $operateType,
             'operate_time' => time(),
-            'operator_id' => $operatorId,
+            'operator_id' => $currentUser['id'],
             'data' => $data,
-            'reason' => empty($data['reason']) ? '' : $data['reason'],
             'order_id' => $member['orderId'],
         );
+        $record = array_merge($record, ArrayToolkit::parts($reason, array('reason', 'reason_type')));
 
         return $this->getMemberOperationService()->createRecord($record);
     }

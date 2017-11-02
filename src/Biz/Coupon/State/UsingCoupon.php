@@ -36,6 +36,7 @@ class UsingCoupon extends Coupon implements CouponInterface
         }
 
         $user = $this->getUserService()->getUser($coupon['userId']);
+        $this->dispatchEvent('coupon.use', $coupon);
 
         $this->getLogService()->info(
             'coupon',
@@ -66,5 +67,21 @@ class UsingCoupon extends Coupon implements CouponInterface
     private function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->biz->service('CloudPlatform:AppService');
+    }
+
+    /**
+     * @return CouponBatchService
+     */
+    private function getCouponBatchService()
+    {
+        return $this->biz->service('CouponPlugin:Coupon:CouponBatchService');
     }
 }

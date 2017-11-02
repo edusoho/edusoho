@@ -107,12 +107,33 @@
   &-coupon {
     .cd-form-group-action {
       padding-right: 78px;
+      @media(max-width: @screen-xs-max) {
+        padding-right: 68px;
+      }
     }
     .form-control {
       width: 176px;
+      @media(max-width: @screen-xs-max) {
+        width: 108px;
+      }
     }
     .action-button {
       width: 70px;
+      @media(max-width: @screen-xs-max) {
+        width: 60px;
+      }
+    }
+    .popover {
+      max-width: 300px;
+    }
+    .popover-content {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    &__selected {
+      font-size: 12px;
+      padding-top: 6px;
+      margin-bottom: 32px;
     }
   }
   &-price {

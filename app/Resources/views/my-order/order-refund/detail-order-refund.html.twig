@@ -1,71 +1,71 @@
 <table class="table cd-table table-striped order-detail-table">
   <tr>
-    <td width="25%">{{'退款号'|trans}}</td>
+    <td width="25%">{{'order.refund.id'|trans}}</td>
     <td width="75%">{{ orderRefund.sn }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '退款申请时间'|trans }}</td>
+    <td width="25%">{{ 'user.orders.refund_apply_time'|trans }}</td>
     <td width="75%">{{ orderRefund.created_time|date('Y-n-d H:i:s') }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '退款理由'|trans }}</td>
+    <td width="25%">{{ 'admin.order_refund.reason'|trans }}</td>
     <td width="75%">{{ orderRefund.reason|trans }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '订单号'|trans }}</td>
+    <td width="25%">{{ 'order.id'|trans }}</td>
     <td width="75%">{{ order.sn }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '商品名称'|trans }}</td>
+    <td width="25%">{{ 'order.product_name'|trans }}</td>
     <td width="75%">{{ order.title }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '应付价格'|trans }}</td>
-    <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+    <td width="25%">{{ 'order.price_amount'|trans }}</td>
+    <td width="75%"><span class="color-danger">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
   </tr>
   <tr>
     <td width="25%" class="color-gray cd-pl32">{{ 'user.account.my_coin.pay_coin'|trans({'%coin_name%' : setting('coin.coin_name')|default("finance.coin"|trans)}) }}</td>
     <td width="75%"><span class="color-danger">
-      {{ order.paid_coin_amount|fen_to_yuan(0) }}</span>
-      (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }})
+      {{ order.paid_coin_amount|to_coin(0) }}</span>
+      (等于 <span class="color-danger">{{ (order.pay_amount - order.paid_cash_amount)|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }})
     </td>
   </tr>
   <tr>
-    <td width="25%" class="color-gray cd-pl32">{{ '实付现金'|trans }}</td>
-    <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+    <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_amount'|trans }}</td>
+    <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|to_coin(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '付款时间'|trans }}</td>
+    <td width="25%">{{ 'order.pay_time'|trans }}</td>
     <td width="75%">{{ order.pay_time|date('Y-n-d H:i:s') }}</td>
   </tr>
   <tr>
-    <td width="25%">{{ '处理状态'|trans }}</td>
+    <td width="25%">{{ 'order.refund.deal_status'|trans }}</td>
     <td width="75%">{{ dict_text('refundStatus', orderRefund.status) }}</td>
   </tr>
 
   {% if orderRefund.status in ['refunded', 'refused'] %}
     <tr>
-      <td width="25%">{{ '处理时间'|trans }}</td>
+      <td width="25%">{{ 'order.refund.deal_time'|trans }}</td>
       <td width="75%">{% if orderRefund.status in ['refunded', 'refused'] %}{{ orderRefund.deal_time|date('Y-n-d H:i:s') }}{% else %}--{% endif %}</td>
     </tr>
     {% if orderRefund.status in ['refunded'] %}
       <tr>
-        <td width="25%">{{ '退款总额'|trans }}</td>
-        <td width="75%"><span class="color-danger">{{ orderRefund.amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        <td width="25%">{{ 'order.refund_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ orderRefund.amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
       <tr>
         <td width="25%" class="color-gray cd-pl32">{{ 'user.account.my_coin.refunded_coin'|trans({'%coin_name%' : setting('coin.coin_name')|default("finance.coin"|trans)}) }}</td>
         <td width="75%">
-          <span class="color-danger">{{ orderRefund.refund_coin_amount|fen_to_yuan(0) }}</span>
+          <span class="color-danger">{{ orderRefund.refund_coin_amount|to_coin(0) }}</span>
         </td>
       </tr>
       <tr>
-        <td width="25%" class="color-gray cd-pl32">{{ '已退现金'|trans }}</td>
-        <td width="75%"><span class="color-danger">{{ orderRefund.refund_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.refunded_cash_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ orderRefund.refund_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
       </tr>
     {% endif %}
     <tr>
-      <td width="25%">{{ '反馈信息'|trans }}</td>
+      <td width="25%">{{ 'order.refund_feedback'|trans }}</td>
       <td width="75">{{ orderRefund.deal_reason }}</td>
     </tr>
   {% endif %}

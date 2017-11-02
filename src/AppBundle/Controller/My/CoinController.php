@@ -6,21 +6,17 @@ use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\Card\Service\CardService;
-use Biz\Cash\Service\CashService;
 use Biz\User\Service\UserService;
 use Biz\Coupon\Service\CouponService;
 use Biz\System\Service\SettingService;
-use Biz\Cash\Service\CashOrdersService;
-use Biz\Cash\Service\CashAccountService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\InviteRecordService;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\MathToolkit;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class CoinController extends BaseController
 {
@@ -57,11 +53,11 @@ class CoinController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getAccountService()->countUserCashflows($conditions),
+            $this->getAccountService()->countCashflows($conditions),
             20
         );
 
-        $cashes = $this->getAccountService()->searchUserCashflows(
+        $cashes = $this->getAccountService()->searchCashflows(
             $conditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -290,30 +286,6 @@ class CoinController extends BaseController
     protected function getInviteRecordService()
     {
         return $this->getBiz()->service('User:InviteRecordService');
-    }
-
-    /**
-     * @return CashService
-     */
-    protected function getCashService()
-    {
-        return $this->getBiz()->service('Cash:CashService');
-    }
-
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
-    {
-        return $this->getBiz()->service('Cash:CashAccountService');
-    }
-
-    /**
-     * @return CashOrdersService
-     */
-    protected function getCashOrdersService()
-    {
-        return $this->getBiz()->service('Cash:CashOrdersService');
     }
 
     /**

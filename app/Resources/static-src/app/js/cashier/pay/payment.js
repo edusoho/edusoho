@@ -21,21 +21,56 @@ export default class BasePayment {
   }
 
   pay(params) {
-
-    let trade = BasePayment.createTrade(params);
+    let trade = this.createTrade(params);
+    if (trade == null) {
+      return;
+    }
     if (trade.paidSuccessUrl) {
       location.href = trade.paidSuccessUrl;
     } else {
+      store.set('trade_' + this.getURLParameter('sn'), trade.tradeSn);
       this.afterTradeCreated(trade)
     }
-
   }
 
   afterTradeCreated(res) {
 
   }
 
-  static filterParams(postParams) {
+  customParams(params) {
+    return params;
+  }
+
+  checkOrderStatus() {
+    if (this.startInterval()) {
+      window.intervalCheckOrderId = setInterval(this.checkIsPaid.bind(this), 2000);
+    }
+  }
+
+  cancelCheckOrder() {
+    clearInterval(window.intervalCheckOrderId)
+  }
+
+  startInterval() {
+    return false;
+  }
+
+  checkIsPaid() {
+    let tradeSn = store.get('trade_' + this.getURLParameter('sn'));
+    BasePayment.getTrade(tradeSn).then(res => {
+      if (res.isPaid) {
+        store.remove('payment_gateway');
+        store.remove('trade_' + this.getURLParameter('sn'));
+        location.href = res.paidSuccessUrl;
+      }
+    })
+  }
+
+  getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+  }
+
+  filterParams(postParams) {
     let params = {
       gateway: postParams.gateway,
       type: postParams.type,
@@ -46,21 +81,28 @@ export default class BasePayment {
       payPassword: postParams.payPassword
     };
 
+    params = this.customParams(params);
+
     Object.keys(params).forEach(k => (!params[k] && params[k] !== undefined) && delete params[k]);
 
     return params;
   }
 
-  static createTrade(postParams) {
+  createTrade(postParams) {
 
     let params = this.filterParams(postParams);
 
     let trade = null;
 
-    Api.trade.create({data:params, async: false, promise: false}).done( res => {
+    Api.trade.create({ data: params, async: false, promise: false }).done(res => {
       trade = res;
-    }).error( res => {
-      notify('danger', Translator.trans('cashier.pay.error_message'));
+    }).error(res => {
+      let response = JSON.parse(res.responseText);
+      if (response.error.code == 2) {
+        notify('danger', response.error.message);
+      } else {
+        notify('danger', Translator.trans('cashier.pay.error_message'));
+      }
     });
 
     return trade;
@@ -69,6 +111,11 @@ export default class BasePayment {
   static getTrade(tradeSn, orderSn = '') {
     let params = {};
 
+    if (tradeSn == undefined || tradeSn == '') {
+      return new Promise((resolve, reject) => {
+        resolve({ isPaid: false });
+      });
+    }
     if (tradeSn) {
       params.tradeSn = tradeSn;
     }
@@ -76,9 +123,10 @@ export default class BasePayment {
     if (orderSn) {
       params.orderSn = orderSn;
     }
-
     return Api.trade.get({
       params: params
     });
   }
+
+
 }

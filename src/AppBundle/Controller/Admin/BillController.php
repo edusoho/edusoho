@@ -16,22 +16,26 @@ class BillController extends BaseController
         }
 
         $account = $this->getAccountService()->getUserBalanceByUserId(0);
-        $conditions = $this->buildConditions($request->query->all());
+
+        $conditions = $request->query->all();
         $conditions['amount_type'] = $type;
         $conditions['user_id'] = 0;
 
         $paginator = new Paginator(
             $request,
-            $this->getAccountProxyService()->countUserCashflows($conditions),
+            $this->getAccountProxyService()->countCashflows($conditions),
             20
         );
 
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
+        $cashes = $this->getAccountProxyService()->searchCashflows(
             $conditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $tradeSns = ArrayToolkit::column($cashes, 'trade_sn');
+        $trades = $this->getPayService()->findTradesByTradeSn($tradeSns);
+        $trades = ArrayToolkit::index($trades, 'trade_sn');
 
         foreach ($cashes as &$cash) {
             $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
@@ -48,6 +52,7 @@ class BillController extends BaseController
             'account' => $account,
             'outflow' => $outflow,
             'inflow' => $inflow,
+            'trades' => $trades,
         ));
     }
 
@@ -61,26 +66,6 @@ class BillController extends BaseController
         return array($amountInflow * 0.01, $amountOutflow * 0.01);
     }
 
-    private function buildConditions($conditions)
-    {
-        if (!empty($conditions['startTime'])) {
-            $conditions['created_time_GTE'] = strtotime($conditions['startTime']);
-            unset($conditions['startTime']);
-        }
-        if (!empty($conditions['endTime'])) {
-            $conditions['created_time_LT'] = strtotime($conditions['endTime']);
-            unset($conditions['endTime']);
-        }
-
-        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-        }
-
-        return $conditions;
-    }
-
     /**
      * @return AccountProxyService
      */
@@ -92,5 +77,10 @@ class BillController extends BaseController
     protected function getAccountService()
     {
         return $this->createService('Pay:AccountService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

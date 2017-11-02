@@ -745,11 +745,6 @@ class MobileBaseController extends BaseController
         return $this->createService('User:TokenService');
     }
 
-    public function getCourseOrderService()
-    {
-        return $this->createService('Course:CourseOrderService');
-    }
-
     public function getThreadService()
     {
         return $this->createService('Course:ThreadService');

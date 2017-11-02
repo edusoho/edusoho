@@ -1,0 +1,38 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.cloud_live.manage.logo_set.modal_title'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="logo-crop-form" method="post" >
+   
+    <div class="form-group clearfix">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <img class="img-responsive" src="{{ filepath(pictureUrl) }}" id="live-logo-crop" width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+        <div class="help-block">{{'admin.user.manage.avatar_crop.crop_hint'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <a class="btn btn-fat btn-primary" 
+        id="upload-avatar-btn" 
+        data-url="{{ path('admin_cloud_edulive_logo_crop', {type:type}) }}"
+        data-type="{{ type }}"
+        >{{'form.btn.save'|trans}}</a>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    
+  </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  
+  <script>app.load('setting/live-logo-crop-modal.js');</script>
+{% endblock %}

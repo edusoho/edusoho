@@ -2,18 +2,12 @@
 
 {% set menu = 'admin_coin_user_records' %}
 
-{% set script_controller = 'coin/records' %}
-
 {% block main %}
 
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
       <div class="form-group">
-        <label class="ptm">{{ 'order.created_time'|trans }}:</label>
-        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{ app.request.get('startDateTime') }}" placeholder="{{ 'form.placeholder.start_date'|trans }}">
-        -
-        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{ app.request.get('endDateTime') }}" placeholder="{{ 'form.placeholder.end_date'|trans }}">
-
+        <label class="ptm">{{ 'form.placeholder.keyword'|trans }}:</label>
         <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.nickname'|trans}}">
 
         <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
@@ -22,33 +16,33 @@
   </form>
   
   <p class="text-muted">
-    <span class="mrl">{{ 'coin.online_school_balance'|trans }}：<strong class="inflow-num">{{ math_format(schoolAccount.amount, 0.01) }}</strong></span>
-    <span class="mrl">{{ 'finance.expense'|trans }}：<strong class="outflow-num">{{ math_format(inflowAmount, 0.01) }}</strong></span>
-    <span class="mrl">{{ 'finance.recover'|trans }}：<strong class="outflow-num">{{ math_format(outflowAmount, 0.01) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_out_amount'|trans }}：<strong class="color-success">{{ schoolBalance.purchase_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_in_amount'|trans }}：<strong class="color-warning">{{ schoolBalance.recharge_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_wait_in_amount'|trans }}：<strong class="color-info">{{ (schoolBalance.purchase_amount-schoolBalance.recharge_amount)|to_coin(0) }}</strong></span>
   </p>
   <div class="table-responsive">
     <table class="table table-striped">
-      {% set querySort = app.request.query.get('sort', 'balance') %}
+      {% set querySort = app.request.query.get('sort', 'amount') %}
       {% set direction = app.request.query.get('direction', 'desc') %}
       <tr>
         <th width="30%">{{'user'|trans}}</th>
-        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge', path: 'admin_coin_user_records'} %}</th>
-        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'consume', path: 'admin_coin_user_records'} %}</th>
-        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'balance', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'purchase_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'amount', path: 'admin_coin_user_records'} %}</th>
         <th>{{'admin.coin.operation'|trans}}</th>
       </tr>
 
-      {% if userIds %}
-        {% for userId in userIds %}
+      {% if balances %}
+        {% for balance in balances %}
           <tr>
-            <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
-            <td style="color:#1bb974;"> {{ user_coin_amount('inflow', userId, app.request.get('startDateTime'), app.request.get('endDateTime'))|default(0)|number_format(2) }}</td>
-            <td style="color:#ff7b0e;"> {{ user_coin_amount('outflow', userId, app.request.get('startDateTime'), app.request.get('endDateTime'))|default(0)|number_format(2) }}</td>
-            <td style="color:blue;"> {{ user_balance(userId).amount|default(0)|number_format(2) }}</td>
+            <td> {{ web_macro.user_link(users[balance['user_id']] , 'link-muted') }}</td>
+            <td class="color-success"> {{ balance.recharge_amount|to_coin(0) }}</td>
+            <td class="color-warning"> {{ balance.purchase_amount|default(0)|to_coin(0) }}</td>
+            <td style="color:blue;"> {{ balance.amount|default(0)|to_coin(0) }}</td>
             <td>
-              <a {% if user_balance(userId).amount <= 0 %}class="disabled"{% endif %}
+              <a {% if balance.amount <= 0 %}class="disabled"{% endif %}
               data-toggle="modal" data-target="#modal"
-              data-url="{{ path('admin_coin_flow_detail',{userId:userId,startDateTime:app.request.get('startDateTime'), endDateTime: app.request.get('endDateTime')}) }}"
+              data-url="{{ path('admin_coin_flow_detail',{userId:balance.user_id}) }}"
               href="javascript:;">{{'form.btn.view'|trans}}</a>
             </td>
           </tr>
@@ -56,7 +50,7 @@
       {% endif %}
 
     </table>
-    {% if not userIds %}
+    {% if not balances %}
       <div class="empty">{{'site.datagrid.empty'|trans}}</div>{% endif %}
     {% if paginator|default(null) %}
       {{ admin_macro.paginator(paginator) }}

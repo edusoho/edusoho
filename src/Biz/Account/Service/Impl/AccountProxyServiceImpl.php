@@ -3,7 +3,7 @@
 namespace Biz\Account\Service\Impl;
 
 use Biz\Account\Service\AccountProxyService;
-use Codeages\Biz\Framework\Pay\Service\Impl\AccountServiceImpl;
+use Codeages\Biz\Pay\Service\Impl\AccountServiceImpl;
 
 class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxyService
 {
@@ -14,25 +14,18 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         return parent::countUsersByConditions($conditions);
     }
 
-    public function searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit)
+    public function countCashflows($conditions)
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return parent::searchUserIdsGroupByUserIdOrderByBalance($conditions, $sort, $start, $limit);
+        return parent::countCashflows($conditions);
     }
 
-    public function countUserCashflows($conditions)
+    public function searchCashflows($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return parent::countUserCashflows($conditions);
-    }
-
-    public function searchUserCashflows($conditions, $orderBy, $start, $limit)
-    {
-        $conditions = $this->prepareConditions($conditions);
-
-        return parent::searchUserCashflows($conditions, $orderBy, $start, $limit);
+        return parent::searchCashflows($conditions, $orderBy, $start, $limit);
     }
 
     public function sumColumnByConditions($column, $conditions)
@@ -54,7 +47,7 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         }
 
         if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
@@ -71,11 +64,22 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
             unset($conditions['buyerNickname']);
         }
 
+        if (!empty($conditions['platform_sn'])) {
+            $trade = $this->getPayService()->getTradeByPlatformSn($conditions['platform_sn']);
+            $conditions['trade_sn'] = empty($trade) ? '0' : $trade['trade_sn'];
+            unset($conditions['platform_sn']);
+        }
+
         return $conditions;
     }
 
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->biz->service('Pay:PayService');
     }
 }

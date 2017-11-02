@@ -23,7 +23,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id'], $info = array());
 
         $time = time();
         $deadline = ClassroomToolkit::buildMemberDeadline(array(
@@ -1157,43 +1157,6 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testTryHandleClassroom()
     {
-    }
-
-    public function testExitClassroom()
-    {
-        $user = $this->createUser();
-        $textClassroom = array(
-            'title' => 'test',
-        );
-
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-
-        $currentUser = $this->getCurrentUser();
-
-        $this->getClassroomService()->publishClassroom($classroom['id']);
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 2,
-            'nickname' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => 'admin',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER'),
-        ));
-
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $this->getClassroomService()->becomeStudent($classroom['id'], 2);
-
-        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
-        $this->assertEquals(true, $enabled);
-
-        $this->getClassroomService()->exitClassroom($classroom['id'], 2);
-
-        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
-        $this->assertEquals(true, $enabled);
     }
 
     public function testFindCoursesByClassroomId()

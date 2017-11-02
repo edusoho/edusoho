@@ -57,7 +57,7 @@ class Lesson extends BaseResource
 
         $lesson = $this->filter($this->convertLessonContent($lesson, $ssl, $isTrail));
 
-        $hasRemainTime = $this->hasRemainTime($lesson);
+        $hasRemainTime = $this->hasRemainTime($lesson, $task['type']);
         if ($hasRemainTime && $currentUser->isLogin()) {
             $remainTime = $this->getRemainTime($currentUser, $lesson);
             $lesson['remainTime'] = $remainTime;
@@ -86,7 +86,7 @@ class Lesson extends BaseResource
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
             case 'document':
-                return $this->getDocumentLesson($lesson);
+                return $this->getDocumentLesson($lesson, $ssl);
             default:
                 return $this->getTextLesson($lesson);
         }
@@ -355,9 +355,9 @@ class Lesson extends BaseResource
         return $this->createService('Task:TaskService');
     }
 
-    protected function hasRemainTime($task)
+    protected function hasRemainTime($task, $taskType)
     {
-        if ('video' != $task['type']) {
+        if ('video' != $task['type'] || $taskType == 'live') {
             return false;
         }
 

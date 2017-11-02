@@ -13,4 +13,12 @@ interface MemberOperationService
     public function searchRecords($conditions, $orderBy, $start, $limit);
 
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time');
+
+    public function updateRefundInfoByOrderId($orderId, $info);
+
+    public function getRecordByOrderIdAndType($orderId, $type);
+
+    public function getJoinReasonByOrderId($orderId);
+
+    public function countUserIdsByConditions($conditions);
 }

@@ -1,5 +1,4 @@
 import Coin from 'app/js/cashier/coin';
-import notify from 'common/notify';
 
 class CashierForm {
   constructor($form) {

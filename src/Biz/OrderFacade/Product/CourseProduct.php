@@ -7,7 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class CourseProduct extends Product implements OrderStatusCallback
 {
@@ -62,7 +62,7 @@ class CourseProduct extends Product implements OrderStatusCallback
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
             'orderId' => $order['id'],
-            'note' => $order['created_reason'],
+            'remark' => $order['created_reason'],
         );
 
         try {
@@ -94,10 +94,13 @@ class CourseProduct extends Product implements OrderStatusCallback
     public function onOrderRefundRefunded($orderRefundItem)
     {
         $orderItem = $orderRefundItem['order_item'];
+
         $member = $this->getCourseMemberService()->getCourseMember($orderItem['target_id'], $orderItem['user_id']);
         if (!empty($member)) {
             $this->getCourseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id']);
         }
+
+        $this->updateMemberRecordByRefundItem($orderItem);
     }
 
     public function onOrderRefundRefused($orderRefundItem)

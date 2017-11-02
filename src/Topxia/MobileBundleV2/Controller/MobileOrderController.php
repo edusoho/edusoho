@@ -33,7 +33,6 @@ class MobileOrderController extends MobileBaseController
     public function refundCourseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
-        $user = $this->getCurrentUser();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if (empty($member) || empty($member['orderId'])) {
@@ -48,9 +47,8 @@ class MobileOrderController extends MobileBaseController
 
         $data = $request->query->all();
         $reason = empty($data['reason']) ? array() : $data['reason'];
-        $amount = empty($data['applyRefund']) ? 0 : null;
 
-        $refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+        $refund =$this->getLocalOrderRefundService()->applyOrderRefund($order['id'], array('reason' => $reason));
 
         return $this->createJson($request, $refund);
     }
@@ -58,5 +56,10 @@ class MobileOrderController extends MobileBaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getLocalOrderRefundService()
+    {
+        return $this->createService('OrderFacade:OrderRefundService');
     }
 }

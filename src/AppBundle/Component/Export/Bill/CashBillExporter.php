@@ -13,11 +13,12 @@ class CashBillExporter extends Exporter
             'cashflow.sn',
             'cashflow.title',
             'cashflow.order_sn',
+            'cashflow.trade_sn',
             'cashflow.user_name',
             'cashflow.created_time',
             'cashflow.amount',
             'cashflow.platform',
-            'cashflow.trade_sn',
+            'cashflow.platform_sn',
             'cashflow.user_truename',
             'cashflow.user_email',
             'cashflow.user_mobile',
@@ -27,12 +28,16 @@ class CashBillExporter extends Exporter
     public function getContent($start, $limit)
     {
         $payment = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $cashes = $this->getAccountProxyService()->searchUserCashflows(
+        $cashes = $this->getAccountProxyService()->searchCashflows(
             $this->conditions,
             array('id' => 'DESC'),
             $start,
             $limit
         );
+
+        $tradeSns = ArrayToolkit::column($cashes, 'trade_sn');
+        $trades = $this->getPayService()->findTradesByTradeSn($tradeSns);
+        $trades = ArrayToolkit::index($trades, 'trade_sn');
 
         $userIds = ArrayToolkit::column($cashes, 'buyer_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -43,7 +48,7 @@ class CashBillExporter extends Exporter
 
         foreach ($cashes as $cash) {
             $content = array();
-
+            $trade = empty($trades[$cash['trade_sn']]) ? array('platform_sn' => '--', 'trade_sn' => '--') : $trades[$cash['trade_sn']];
             if ($cash['type'] == 'outflow' && $cash['amount_type'] == 'money') {
                 //网校支出
                 $amountMark = '-';
@@ -69,17 +74,20 @@ class CashBillExporter extends Exporter
             if (strpos($user['email'], '@edusoho.net') !== false) {
                 $user['email'] = '--';
             }
-            $content[] = $cash['sn'];
+            $content[] = $cash['sn']."\t";
             $content[] = $cash['title'];
-            $content[] = empty($cash['order_sn']) ? '--' : $cash['order_sn'];
+            $content[] = empty($cash['order_sn']) ? '--' : $cash['order_sn']."\t";
+            $content[] = $cash['trade_sn']."\t";
             $content[] = $user['nickname'];
             $content[] = date('Y-n-d H:i:s', $cash['created_time']);
             $content[] = $amountMark.$cash['amount'] / 100;
-            $content[] = $paymentText;
-            $content[] = $cash['trade_sn'];
+            if ($cash['amount_type'] == 'money') {
+                $content[] = $paymentText;
+                $content[] = $trade['platform_sn']."\t";
+            }
             $content[] = $profile['truename'];
             $content[] = $user['email'];
-            $content[] = $user['verifiedMobile'];
+            $content[] = $profile['mobile']."\t";
             $datas[] = $content;
         }
 
@@ -99,7 +107,7 @@ class CashBillExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getAccountProxyService()->countUserCashflows($this->conditions);
+        return $this->getAccountProxyService()->countCashflows($this->conditions);
     }
 
     public function buildCondition($conditions)
@@ -118,5 +126,10 @@ class CashBillExporter extends Exporter
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->getBiz()->service('Pay:PayService');
     }
 }

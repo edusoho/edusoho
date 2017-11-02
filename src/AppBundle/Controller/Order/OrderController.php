@@ -7,7 +7,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends BaseController
@@ -17,6 +17,7 @@ class OrderController extends BaseController
         $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
 
         $product->setAvailableDeduct();
+        $product->setPickedDeduct(array());
 
         return $this->render('order/show/index.html.twig', array(
             'product' => $product,
@@ -127,13 +128,8 @@ class OrderController extends BaseController
         return $this->getBiz()->service('Coupon:CouponService');
     }
 
-    protected function getCashAccountService()
-    {
-        return $this->getBiz()->service('Cash:CashAccountService');
-    }
-
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     * @return \Codeages\Biz\Order\Service\OrderService
      */
     protected function getOrderService()
     {

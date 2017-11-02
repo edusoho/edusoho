@@ -3,18 +3,20 @@
 namespace Biz\Course\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\MathToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\StatusService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -63,7 +65,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onCourseJoin(Event $event)
     {
         $this->countStudentMember($event);
-        //$this->countIncome($event);
+        $this->countIncome($event);
         $this->sendWelcomeMsg($event);
         $this->publishStatus($event, 'become_student');
     }
@@ -115,8 +117,16 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
 
-        /*$income = $this->getOrderService()->sumOrderPriceByTarget('course', $course['id']);
-        $this->getCourseDao()->update($course['id'], array('income' => $income));*/
+        $conditions = array(
+            'target_id' => $course['id'],
+            'target_type' => 'course',
+            'status' => 'success',
+        );
+
+        $income = $this->getOrderFacadeService()->sumOrderItemPayAmount($conditions);
+        $income = MathToolkit::simple($income, 0.01);
+
+        $this->getCourseDao()->update($course['id'], array('income' => $income));
     }
 
     private function sendWelcomeMsg(Event $event)
@@ -231,6 +241,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
+     * @return OrderFacadeService
+     */
+    protected function getOrderFacadeService()
+    {
+        return $this->getBiz()->service('OrderFacade:OrderFacadeService');
     }
 
     /**

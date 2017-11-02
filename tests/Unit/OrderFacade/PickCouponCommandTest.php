@@ -17,7 +17,7 @@ class PickCouponCommandTest extends BaseTestCase
 
         $this->mockBiz('Coupon:CouponService', array(
             array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
-            array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10)),
+            array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10, 'code' => 'xxx')),
             array('functionName' => 'getDeductAmount', 'returnValue' => 10),
         ));
 
@@ -32,9 +32,6 @@ class PickCouponCommandTest extends BaseTestCase
         $this->assertEquals(10, $product->pickedDeducts[0]['deduct_amount']);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
     public function testExecuteWithError()
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();

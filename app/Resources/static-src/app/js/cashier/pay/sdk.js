@@ -4,16 +4,47 @@ import AlipayLegacyWap from './alipay_legacy_wap';
 import LianlianpayWap from './lianlianpay_wap';
 import LianlianpayWeb from './lianlianpay_web';
 import WechatPayJs from './wechatpay_js';
+import WechatPayMweb from './wechatpay_mweb';
+
+import 'store';
 
 export default class PaySDK {
 
   pay(params, options = {}) {
-    let gateway = this.getGateway(params['payment'], params['isMobile'], params['openid']);
+    let gateway = this.getGateway(params['payment'], params['isMobile'], params['isWechat']);
     params.gateway = gateway;
-    let paySdk = null;
+    let paySdk = this.initPaySdk(gateway);
+
+    paySdk.options = Object.assign({
+      'showConfirmModal': 1
+    }, options);
+
+    paySdk.pay(params);
+  }
+
+  checkOrderStatus() {
+    let paySdk = this.initPaySdk();
+    if (paySdk != null) {
+      paySdk.checkOrderStatus();
+    }
+  }
+
+  cancelCheckOrder() {
+    let paySdk = this.initPaySdk();
+    if (paySdk != null) {
+      paySdk.cancelCheckOrder()
+    }
+  }
+
+  initPaySdk(gateway) {
+    gateway = gateway === undefined ? store.get('payment_gateway') : gateway;
+    var paySdk = null;
     switch (gateway) {
       case 'WechatPay_Native':
         paySdk = this.wpn ? this.wpn : this.wpn = new WechatPayNative();
+        break;
+      case 'WechatPay_MWeb':
+        paySdk = this.wpm ? this.wpm : this.wpm = new WechatPayMweb();
         break;
       case 'WechatPay_Js':
         paySdk = this.wpj ? this.wpj : this.wpj = new WechatPayJs();
@@ -31,26 +62,21 @@ export default class PaySDK {
         paySdk = this.llwb ? this.llwb : this.llwb = new LianlianpayWeb();
         break;
     }
-
-    paySdk.options = Object.assign({
-      'showConfirmModal': 1
-    }, options);
-
-    paySdk.pay(params);
+    return paySdk;
   }
 
-  getGateway(payment, isMobile, openid) {
-
+  getGateway(payment, isMobile, isWechat) {
     let gateway = '';
     switch (payment) {
       case 'wechat':
-        if (openid > 0) {
+        if (isWechat) {
           gateway = 'WechatPay_Js';
+        } else if (isMobile) {
+          gateway = 'WechatPay_MWeb';
         } else {
           gateway = 'WechatPay_Native';
         }
         break;
-
       case 'alipay':
         if (isMobile) {
           gateway = 'Alipay_LegacyWap';
@@ -68,6 +94,7 @@ export default class PaySDK {
         break;
     }
 
+    store.set('payment_gateway', gateway);
     return gateway;
   }
 

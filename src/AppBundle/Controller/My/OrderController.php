@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller\My;
 
-use Biz\Course\Service\CourseOrderService;
-use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Service\WorkflowService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -90,7 +88,6 @@ class OrderController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $currentUser = $this->getCurrentUser();
         $order = $this->tryManageOrder($id);
 
         $user = $this->getUserService()->getUser($order['user_id']);
@@ -114,15 +111,6 @@ class OrderController extends BaseController
             'orderDeducts' => $orderDeducts,
             'users' => $users,
         ));
-    }
-
-    public function cancelRefundAction(Request $request, $id)
-    {
-        $order = $this->tryManageOrder($id);
-        $processor = OrderRefundProcessorFactory::create($order['targetType']);
-        $processor->cancelRefundOrder($id);
-
-        return $this->createJsonResponse(true);
     }
 
     public function cancelAction(Request $request, $id)
@@ -159,14 +147,6 @@ class OrderController extends BaseController
     protected function getWorkflowService()
     {
         return $this->createService('Order:WorkflowService');
-    }
-
-    /**
-     * @return CourseOrderService
-     */
-    protected function getCourseOrderService()
-    {
-        return $this->getBiz()->service('Course:CourseOrderService');
     }
 
     /**

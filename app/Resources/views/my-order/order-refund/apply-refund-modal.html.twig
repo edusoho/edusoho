@@ -5,48 +5,40 @@
 {% do script(['libs/jquery-validation.js','app/js/my/order-refund-apply/index.js']) %}
 
 {% block title %}
-  {{'申请退款'|trans}}
+  {{'order.status.refunding'|trans}}
 {% endblock %}
 
 {% block body %}
-  {% if order.refund_deadline == 0 or order.refund_deadline > date().timestamp %}
-    <form method="post" id="refund-apply-form" action="{{path('my_order_refund_apply', {id: order.id })}}">
+  <form method="post" id="refund-apply-form" data-redirect="{{ path('my_order_refunds') }}" action="{{path('my_order_refund_apply', {id: order.id })}}">
 
-      <table class="table cd-table table-striped order-detail-table">
-        <tr>
-          <td width="25%">{{'商品名称'|trans}}</td>
-          <td width="75%">{{ order.title }}</td>
-        </tr>
-        <tr>
-          <td width="25%">{{ '实付价格'|trans }}</td>
-          <td width="75%"><span class="color-danger">{{ order.pay_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
-        </tr>
-        <tr>
-          <td width="25%" class="color-gray cd-pl32">{{ '实付虚拟币'|trans }}</td>
-          <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|fen_to_yuan(0) }}</span></td>
-        </tr>
-        <tr>
-          <td width="25%" class="color-gray cd-pl32">{{ '实付现金'|trans }}</td>
-          <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|fen_to_yuan(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
-        </tr>
-        <tr>
-          <td class="25%">{{ '退款原因'|trans }}</td>
-          <td class="75%"><textarea data-display="{{ '退款原因'|trans }}" class="form-control" name="reason" id="" rows="5"></textarea></td>
-        </tr>
-      </table>
+    <table class="table cd-table table-striped order-detail-table">
+      <tr>
+        <td width="25%">{{'order.product_name'|trans}}</td>
+        <td width="75%">{{ order.title }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'order.paid_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_coin_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_coin_amount|to_coin(0) }}</span></td>
+      </tr>
+      <tr>
+        <td width="25%" class="color-gray cd-pl32">{{ 'order.paid_cash_amount'|trans }}</td>
+        <td width="75%"><span class="color-danger">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td class="25%">{{ 'order.refund_reason'|trans }}</td>
+        <td class="75%"><textarea data-display="{{ 'order.refund_reason'|trans }}" class="form-control" name="reason" id="" rows="5"></textarea></td>
+      </tr>
+    </table>
 
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    </form>
-  {% else %}
-    <p class="color-warning">您的退款截止时间为：{{ order.refund_deadline|date('Y-n-d H:i:s') }}，不能退款！</p>
-  {% endif %}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
 {% endblock %}
 
 {% block footer %}
-  {% if order.refund_deadline == 0 or order.refund_deadline > date().timestamp %}
-    <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">取消</button>
-    <button id="card-use-btn" class="btn cd-btn cd-btn-primary cd-btn-lg" type="submit" data-target="#refund-apply-form" data-toggle="form-submit" data-loading-text="{{ '正在提交' | trans }}">确定</button>
-  {% else %}
-    <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">关闭</button>
-  {% endif %}
+    <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+    <button id="refund-apply-btn" class="btn cd-btn cd-btn-primary cd-btn-lg" type="button" data-target="#refund-apply-form" data-toggle="form-submit" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.confirm'|trans }}</button>
 {% endblock %}

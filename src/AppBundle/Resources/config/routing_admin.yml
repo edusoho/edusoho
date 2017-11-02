@@ -570,6 +570,11 @@ admin_order_refunds:
     defaults: { _controller: AppBundle:Admin/OrderRefund:refunds }
     permissions: [admin_finance]
 
+admin_order_refund_detail:
+    path: /order/refund/{id}/detail
+    defaults: { _controller: AppBundle:Admin/OrderRefund:refundDetail }
+    permissions: [admin_finance]
+
 admin_order_audit_refund:
     path: /order/{refundId}/audit_refund
     defaults: { _controller: AppBundle:Admin/OrderRefund:auditRefund }
@@ -673,12 +678,6 @@ admin_setting_logo_remove:
 admin_setting_live_logo_upload:
     path:  /setting/live/logo/upload
     defaults: { _controller: AppBundle:Admin/Setting:liveLogoUpload }
-    methods: [POST]
-    permissions: [admin_setting_live_course]
-
-admin_setting_live_logo_remove:
-    path:  /setting/live/logo/remove
-    defaults: { _controller: AppBundle:Admin/Setting:liveLogoRemove }
     methods: [POST]
     permissions: [admin_setting_live_course]
 
@@ -1760,33 +1759,9 @@ admin_coin_records:
     path:     /coin/records
     defaults: { _controller: AppBundle:Admin/Coin:records }
 
-admin_coin_orders_log:
-    path:     /coin/orders/log/{id}
-    defaults: { _controller: AppBundle:Admin/CoinOrder:logs }
-
-# admin_coin_admin:
-#     path:     /coin/admin
-#     defaults: { _controller: AppBundle:Admin/Coin:admin }
-
-# admin_coin_admin_edit:
-#     path:     /coin/admin/edit/{id}
-#     defaults: { _controller: AppBundle:Admin/Coin:edit }
-
-# admin_coin_give:
-#     path:     /coin/give
-#     defaults: { _controller: AppBundle:Admin/Coin:giveCoin }
-
-# admin_coin_give_check_nickname:
-#     path:     /coin/give/check_nickname
-#     defaults: { _controller: AppBundle:Admin/Coin:checkNickname }
-
 admin_order_manage_export_csv:
     path: /order/manage/export
     defaults: { _controller: AppBundle:Admin/Order:exportCsv }
-
-admin_order_manage_export_coin_csv:
-    path: /order/manage/coin
-    defaults: { _controller: AppBundle:Admin/CoinOrder:exportCsv }
 
 # admin_account_center:
 #     path:     /account/center
@@ -2021,6 +1996,10 @@ admin_cloud_upload_live_logo:
 admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:Admin/EduCloud:liveSetting }
+
+admin_cloud_edulive_logo_crop:
+    path:  /cloud/edulive/{type}/logo/crop
+    defaults: { _controller: AppBundle:Admin/EduCloud:logoCrop }
 
 #sensitive
 admin_keyword:
@@ -2279,4 +2258,4 @@ admin_online:
 
 admin_bill:
     path: /bill/{type}
-    defaults: { _controller: AppBundle:Admin/Bill:Bill } 
+    defaults: { _controller: AppBundle:Admin/Bill:bill } 

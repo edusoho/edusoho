@@ -218,13 +218,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         if (!in_array($targetType, array('course', 'classroom'))) {
             return $this->createErrorResponse('error', '退出学习失败');
         }
-
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '您尚未登录，不能学习班级！');
         }
-
-        $this->getClassroomService()->tryTakeClassroom($classRoomId);
 
         $member = $this->getClassroomService()->getClassroomMember($classRoomId, $user['id']);
 
@@ -235,6 +232,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $reason = $this->getParam('reason', '');
 
         try {
+            $this->getClassroomService()->tryTakeClassroom($classRoomId);
             $this->getClassroomService()->removeStudent($classRoomId, $user['id'], array('reason' => $reason));
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
@@ -702,11 +700,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     private function getClassroomService()
     {
         return $this->controller->getService('Classroom:ClassroomService');
-    }
-
-    protected function getClassroomOrderService()
-    {
-        return $this->controller->getService('Classroom:ClassroomOrderService');
     }
 
     protected function getClassroomReviewService()

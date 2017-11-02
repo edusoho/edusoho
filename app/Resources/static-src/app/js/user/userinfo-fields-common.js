@@ -104,8 +104,13 @@ export default class UserInfoFieldsItemValidate {
       submitHandler: form => {
         if ($(form).valid()) {
           $.post($(form).attr('action'), $(form).serialize(), resp => {
-            notify('success', Translator.trans('site.save_success_hint'));
-            $('#modal').modal('hide');
+            if (resp.url) {
+              location.href = resp.url;
+            } else {
+              notify('success', Translator.trans('site.save_success_hint'));
+              $('#modal').modal('hide');
+            }
+
           });
         }
       }
@@ -172,7 +177,7 @@ export default class UserInfoFieldsItemValidate {
     for (var i = 1; i <= 5; i++) {
       $(`[name="intField${i}"]`).rules('add', {
         required: true,
-        int: true,
+        positive_integer: true,
       });
       $(`[name="floatField${i}"]`).rules('add', {
         required: true,

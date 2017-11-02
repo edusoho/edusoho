@@ -5,15 +5,10 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Annotation\ResponseFilter;
 use Biz\Exception\UnableJoinException;
-use Biz\System\Service\SettingService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use VipPlugin\Biz\Vip\Service\VipFacadeService;
 
 class ClassroomMember extends AbstractResource
 {

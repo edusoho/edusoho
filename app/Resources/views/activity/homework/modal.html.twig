@@ -8,7 +8,7 @@
     <div class="form-group">
       <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.info'|trans}}</label></div>
       <div class="col-sm-10 controls">
-        <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.description|default('') }}</textarea>
+        <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ homework.description|default('') }}</textarea>
       </div>
     </div>
 
@@ -70,9 +70,9 @@
     <div class="col-xs-4 form-control-static">
       {{'course.plan_task.activity_manage.homework.submit'|trans}}
       <select class="form-control hidden" id="condition-select" name="finishCondition">
-        {{ select_options({'submit':'course.plan_task.activity_manage.homework.submit'|trans}, activity.finishCondition['type']|default('score')) }}
+        {{ select_options({'submit':'course.plan_task.activity_manage.homework.submit'|trans}, homework.finishCondition['type']|default('score')) }}
       </select>
-      <input type="hidden" name="finishScore" value="{{ activity.finishCondition['score']|default('0') }}" />
+      <input type="hidden" name="finishScore" value="{{ homework.finishCondition['score']|default('0') }}" />
       <input type="hidden" name="mediaType" value="homework" />
 
     </div>

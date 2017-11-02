@@ -17,6 +17,8 @@
   <form id="course-buy-form" class="form-horizontal" method="post"
   action="{{ path('user_info_fill',{id: user.id}) }}"
   >
+    <input type="hidden" name="courseId" value="{{ courseId|default(0) }}">
+
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'course.name'|trans}}</div>
       <div class="col-sm-9 form-control-static ">

@@ -5,9 +5,9 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Codeages\Biz\Framework\Order\Service\OrderRefundService;
+use Codeages\Biz\Order\Service\OrderRefundService;
 use Biz\OrderFacade\Service\OrderRefundService as LocalOrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderRefundController extends BaseController
@@ -49,7 +49,12 @@ class OrderRefundController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
         $orderRefund = $this->getOrderRefundService()->getOrderRefundById($id);
+        if ($user->getId() != $orderRefund['user_id']) {
+            throw $this->createAccessDeniedException();
+        }
+
         $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
         $item = $this->getOrderService()->getOrderItem($orderRefund['order_item_id']);
 
@@ -62,13 +67,16 @@ class OrderRefundController extends BaseController
 
     public function applyRefundAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
-
+        if ($user->getId() != $order['user_id']) {
+            throw $this->createAccessDeniedException();
+        }
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $product = $this->getLocalOrderRefundService()->applyOrderRefund($order['id'], $fields);
 
-            return $this->redirect($this->generateUrl('my_order_refunds'));
+            return $this->createJsonResponse(array('success' => 1));
         }
 
         return $this->render('my-order/order-refund/apply-refund-modal.html.twig', array(

@@ -17,14 +17,11 @@ use Biz\Course\Service\ThreadService;
 use AppBundle\Common\ExtensionManager;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
-use Biz\Cash\Service\CashOrdersService;
 use AppBundle\Controller\BaseController;
-use Biz\Cash\Service\CashAccountService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 
 class ClassroomController extends BaseController
@@ -341,7 +338,7 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('不允许未登录访问');
         }
 
-        $this->getClassroomService()->exitClassroom($classroomId, $user['id']);
+        $this->getClassroomService()->removeStudent($classroomId, $user['id']);
 
         return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
     }
@@ -480,7 +477,7 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
 
-    public function exitAction($id)
+    public function exitAction(request $request, $id)
     {
         $user = $this->getCurrentUser();
 
@@ -494,7 +491,12 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
-        $this->getClassroomService()->removeStudent($id, $user['id'], array('reason' => 'classroom.user_exit'));
+        $reason = $request->request->get('reason');
+        $this->getClassroomService()->removeStudent(
+            $id,
+            $user['id'],
+            array('reason' => $reason['note'], 'reason_type' => 'exit')
+        );
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
@@ -591,7 +593,7 @@ class ClassroomController extends BaseController
         }
 
         $courseIds = ArrayToolkit::column($courses, 'parentId');
-//        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
+        //        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
 
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
@@ -611,7 +613,7 @@ class ClassroomController extends BaseController
             $totalPrice = $totalPrice * $coinSetting['cash_rate'];
         }
 
-//        $classroomSetting = $this->getSettingService()->get("classroom");
+        //        $classroomSetting = $this->getSettingService()->get("classroom");
 
         if ($this->getCoursesTotalPrice($courses, $priceType) >= (float) $totalPrice) {
             return true;
@@ -818,14 +820,6 @@ class ClassroomController extends BaseController
     }
 
     /**
-     * @return ClassroomOrderService
-     */
-    protected function getClassroomOrderService()
-    {
-        return $this->createService('Classroom:ClassroomOrderService');
-    }
-
-    /**
      * @return ClassroomReviewService
      */
     protected function getClassroomReviewService()
@@ -855,22 +849,6 @@ class ClassroomController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
-    }
-
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
-    {
-        return $this->createService('Cash:CashAccountService');
-    }
-
-    /**
-     * @return CashOrdersService
-     */
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
     }
 
     /**

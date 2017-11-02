@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\DateToolkit;
-use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
@@ -22,7 +21,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Testpaper\Service\TestpaperService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -886,7 +885,6 @@ class CourseManageController extends BaseController
         foreach ($orders as &$order) {
             $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
-            $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
@@ -1201,7 +1199,7 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderService
+     * @return \Codeages\Biz\Order\Service\OrderService
      */
     protected function getOrderService()
     {

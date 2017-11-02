@@ -4,7 +4,7 @@ namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OrderFacade\Service\OrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
@@ -46,7 +46,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             }
         }
 
-        return $product;
+        return $refund;
     }
 
     public function refuseRefund($orderId, $data)
@@ -87,7 +87,11 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
     public function cancelRefund($orderId)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($orderId);
+        if ($user->getId() != $order['user_id']) {
+            $this->createAccessDeniedException();
+        }
 
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
         try {
@@ -119,7 +123,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         }
         $orderItem = reset($orderItems);
 
-        $params = array('targetId' => $orderItem['target_id']);
+        $params = array('targetId' => $orderItem['target_id'], 'orderId' => $order['id'], 'orderItemId' => $orderItem['id']);
         $product = $this->getOrderFacadeService()->getOrderProduct($orderItem['target_type'], $params);
 
         return array($product, $orderItem);
@@ -173,7 +177,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     }
 
     /**
-     * @return \Codeages\Biz\Framework\Order\Service\OrderRefundService
+     * @return \Codeages\Biz\Order\Service\OrderRefundService
      */
     protected function getOrderRedoundService()
     {

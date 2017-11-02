@@ -10,7 +10,7 @@ use Biz\Sms\Service\SmsService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
 use AppBundle\Common\MathToolkit;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 abstract class Product extends BizAware implements OrderStatusCallback
 {
@@ -36,11 +36,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public $title;
 
     /**
-     * 商品价格
+     * 商品原价
      *
      * @var float
      */
     public $originPrice;
+
+    /**
+     * 促销价格
+     *
+     * @var float
+     */
+    public $promotionPrice = 0;
 
     /**
      * 可使用的折扣
@@ -153,6 +160,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
         }
     }
 
+    protected function updateMemberRecordByRefundItem($orderItem)
+    {
+        $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
+        $record = array(
+            'reason' => $orderRefund['reason'],
+            'refund_id' => $orderRefund['id'],
+            'reason_type' => 'refund',
+        );
+
+        $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
+    }
+
     public function getCreateExtra()
     {
         return array();
@@ -188,5 +207,18 @@ abstract class Product extends BizAware implements OrderStatusCallback
     protected function getOrderService()
     {
         return $this->biz->service('Order:OrderService');
+    }
+
+    /**
+     * @return OrderRefundService
+     */
+    protected function getOrderRefundService()
+    {
+        return $this->biz->service('OrderFacade:OrderRefundService');
+    }
+
+    protected function getMemberOperationService()
+    {
+        return $this->biz->service('MemberOperation:MemberOperationService');
     }
 }

@@ -6,11 +6,12 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\Money;
+use AppBundle\Common\MathToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OrderInfo extends AbstractResource
@@ -65,7 +66,7 @@ class OrderInfo extends AbstractResource
             'account' => array(
                 'id' => $balance['id'],
                 'userId' => $balance['user_id'],
-                'cash' => $balance['amount']
+                'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
             ),
         );
 

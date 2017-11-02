@@ -18,8 +18,8 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
-use Codeages\Biz\Framework\Order\Service\OrderRefundService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderRefundService;
+use Codeages\Biz\Order\Service\OrderService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -79,7 +79,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             } else {
                 $info = array(
                     'orderId' => 0,
-                    'note' => $data['remark'],
+                    'remark' => $data['remark'],
+                    'reason' => 'site.join_by_import',
+                    'reason_type' => 'import_join',
                     'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
                 );
 
@@ -115,7 +117,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    // 手动移除
+    // 管理员，老师手动移除学员
     public function removeCourseStudent($courseId, $userId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -131,7 +133,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
 
-        $result = $this->removeMember($member, 'course.member.operation.admin_remove_course_student');
+        $result = $this->removeMember(
+            $member,
+            array(
+                'reason' => 'course.member.operation.admin_remove_course_student',
+                'reason_type' => 'remove',
+            )
+        );
 
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -419,7 +427,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $existTeacherMembers = $this->findCourseTeachers($courseId);
 
         foreach ($existTeacherMembers as $member) {
-            $this->removeMember($member, 'course.member.operation.reason.remove_teachers');
+            $this->removeMember($member);
         }
 
         // 逐个插入新的教师的学员数据
@@ -430,10 +438,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
 
             if ($existMember) {
-                $this->removeMember($existMember, 'course.member.operation.reason.remove_teachers');
+                $this->removeMember($existMember);
             }
 
-            $member = $this->addMember($member, 'course.member.operation.reason.become_teachers');
+            $member = $this->addMember($member);
 
             if ($member['isVisible']) {
                 $visibleTeacherIds[] = $member['userId'];
@@ -447,13 +455,6 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseDao()->update($courseId, $fields);
 
         $this->dispatchEvent('course.teachers.update', new Event($course, array('teachers' => $teachers)));
-
-        //@deprecated to be deleted
-        // $this->dispatchEvent("course.teacher.update", array(
-        //     "courseId" => $courseId,
-        //     "course"   => $course,
-        //     'teachers' => $teachers
-        // ));
     }
 
     /**
@@ -468,7 +469,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         foreach ($members as $member) {
             $course = $this->getCourseService()->getCourse($member['courseId']);
 
-            $this->removeMember($member, 'course.member.operation.reason.cancle_teacher_role');
+            $this->removeMember($member);
 
             $fields = array(
                 'teacherIds' => array_diff($course['teacherIds'], array($member['userId'])),
@@ -530,7 +531,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
         $user = $this->getUserService()->getUser($userId);
 
-        $this->removeMember($member, 'course.member.operation.quit_deadline_reach');
+        $this->removeMember($member, array(
+            'reason' => 'course.member.operation.quit_deadline_reach',
+            'reason_type' => 'system',
+        ));
 
         $this->dispatchEvent(
             'course.quit',
@@ -607,13 +611,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             'deadline' => $deadline,
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
-            'remark' => empty($info['note']) ? '' : $info['note'],
+            'remark' => empty($info['remark']) ? '' : $info['remark'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         );
 
-        $reason = empty($info['note']) ? 'course.member.operation.reason.buy' : $info['note'];
-        $member = $this->addMember($fields, $reason, array('order' => $order));
+        $reason = $this->buildJoinReason($info, $order);
+        $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
 
@@ -624,6 +628,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         return $member;
+    }
+
+    private function buildJoinReason($info, $order)
+    {
+        if (ArrayToolkit::requireds($info, array('reason', 'reason_type'))) {
+            return ArrayToolkit::parts($info, array('reason', 'reason_type'));
+        }
+
+        $orderId = empty($order) ? 0 : $order['id'];
+
+        return $this->getMemberOperationService()->getJoinReasonByOrderId($orderId);
     }
 
     private function getRefundDeadline()
@@ -730,7 +745,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $deadline;
     }
 
-    public function removeStudent($courseId, $userId, $info = array())
+    public function removeStudent($courseId, $userId, $reason = array())
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -744,7 +759,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
-        $reason = empty($info['reason']) ? '' : $info['reason'];
+        $reason = ArrayToolkit::parts($reason, array('reason', 'reason_type'));
         $this->removeMember($member, $reason);
 
         $this->getCourseDao()->update(
@@ -797,12 +812,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，解封学员失败。");
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
-        if (empty($member) || ($member['role'] != 'student')) {
+        if (empty($member)) {
+            return;
+        }
+
+        if ($member['role'] != 'student') {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，解封学员失败。");
         }
 
@@ -847,7 +866,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             return array();
         }
 
-        $member = $this->addMember($fields, 'course.member.operation.reason.join_classroom');
+        $member = $this->addMember(
+            $fields,
+            array(
+                'reason' => 'course.member.operation.reason.join_classroom',
+                'reason_type' => 'classroom_join',
+            )
+        );
         $fields = array(
             'studentNum' => $this->getCourseStudentCount($courseId),
         );
@@ -1100,44 +1125,39 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
-    protected function createOperateRecord($member, $operateType, $reason = '', $data = array())
+    protected function createOperateRecord($member, $operateType, $reason)
     {
         $currentUser = $this->getCurrentUser();
-        $operatorId = $currentUser['id'] != $member['userId'] ? $currentUser['id'] : 0;
         $data['member'] = $member;
         $course = $this->getCourseService()->getCourse($member['courseId']);
-
         $record = array(
             'user_id' => $member['userId'],
             'member_id' => $member['id'],
             'member_type' => $member['role'],
-            'reason' => $reason,
             'target_id' => $member['courseId'],
             'target_type' => 'course',
             'operate_type' => $operateType,
             'operate_time' => time(),
-            'operator_id' => $operatorId,
+            'operator_id' => $currentUser['id'],
             'data' => $data,
             'order_id' => $member['orderId'],
+            'title' => $course['title'],
         );
 
-        $orderItem = $this->getOrderService()->getOrderItemByOrderIdAndTargetIdAndTargetType($member['orderId'], $member['courseId'], 'course');
-        if ($orderItem['refund_id'] !== 0 && $orderItem['refund_status'] == 'refunded') {
-            $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
-            $record['reason'] = $orderRefund['reason'];
-            $record['refund_id'] = $orderRefund['id'];
-        }
-        $record['title'] = $course['title'];
+        $record = array_merge($record, $reason);
+        $record = $this->getMemberOperationService()->createRecord($record);
 
-        return $this->getMemberOperationService()->createRecord($record);
+        return $record;
     }
 
-    private function addMember($member, $reason, $data = array())
+    private function addMember($member, $reason = array())
     {
         try {
             $this->beginTransaction();
             $member = $this->getMemberDao()->create($member);
-            $this->createOperateRecord($member, 'join', $reason, $data);
+            if (!empty($reason)) {
+                $this->createOperateRecord($member, 'join', $reason);
+            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -1147,12 +1167,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
-    private function removeMember($member, $reason = '', $data = array())
+    private function removeMember($member, $reason = array())
     {
         try {
             $this->beginTransaction();
             $result = $this->getMemberDao()->delete($member['id']);
-            $this->createOperateRecord($member, 'exit', $reason, $data);
+            if (!empty($reason)) {
+                $this->createOperateRecord($member, 'exit', $reason);
+            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();

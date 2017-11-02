@@ -1,14 +1,15 @@
 import radio from './radio';
 import confirm from './confirm';
-
-import './table';
-import './upload';
-import './loading';
-import './form';
+import loading from './loading';
+import upload from './upload';
+import table from './table';
 
 let codeAgesDisign = {
   radio,
-  confirm
+  confirm,
+  loading,
+  upload,
+  table,
 };
 
 window.cd = codeAgesDisign;

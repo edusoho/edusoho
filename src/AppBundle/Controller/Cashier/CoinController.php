@@ -7,9 +7,9 @@ use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Response;
 
 class CoinController extends BaseController
