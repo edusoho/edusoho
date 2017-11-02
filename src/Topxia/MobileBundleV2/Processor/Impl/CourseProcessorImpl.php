@@ -965,34 +965,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('error', '您不是课程的学员或尚未购买该课程，不能退学。');
         }
 
-        if (!empty($member['orderId'])) {
-            $order = $this->getOrderService()->getOrder($member['orderId']);
-
-            if (empty($order)) {
-                return $this->createErrorResponse('error', '订单不存在，不能退学。');
-            }
-
-            $reason = $this->getParam('reason', '');
-            $amount = $this->getParam('amount', 0);
-            $refund = $this->getCourseOrderService()->applyRefundOrder(
-                $member['orderId'],
-                $amount,
-                array(
-                    'type' => 'other',
-                    'note' => $reason,
-                ),
-                $this->getContainer()
-            );
-
-            if (empty($refund) || $refund['status'] != 'success') {
-                return $this->createErrorResponse('error', '退出课程失败');
-            }
-
-            return true;
-        }
+        $reason = $this->getParam('reason', '');
 
         try {
-            $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
+            $this->getCourseMemberService()->removeStudent($course['id'], $user['id'], array(
+                'reason' => $reason
+            ));
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }

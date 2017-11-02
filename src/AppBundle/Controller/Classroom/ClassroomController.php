@@ -17,14 +17,11 @@ use Biz\Course\Service\ThreadService;
 use AppBundle\Common\ExtensionManager;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
-use Biz\Cash\Service\CashOrdersService;
 use AppBundle\Controller\BaseController;
-use Biz\Cash\Service\CashAccountService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 
 class ClassroomController extends BaseController
@@ -341,7 +338,7 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('不允许未登录访问');
         }
 
-        $this->getClassroomService()->exitClassroom($classroomId, $user['id']);
+        $this->getClassroomService()->removeStudent($classroomId, $user['id']);
 
         return $this->redirect($this->generateUrl('classroom_introductions', array('id' => $classroomId)));
     }
@@ -480,7 +477,7 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
 
-    public function exitAction($id)
+    public function exitAction(request $request, $id)
     {
         $user = $this->getCurrentUser();
 
@@ -494,17 +491,12 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
-        if (!empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
-        }
-
-        $order = $this->getOrderService()->getOrder($member['orderId']);
-
-        if ($order['targetType'] == 'groupSell') {
-            throw $this->createAccessDeniedException('组合购买课程不能退出。');
-        }
-
-        $this->getClassroomService()->exitClassroom($id, $user['id']);
+        $reason = $request->request->get('reason');
+        $this->getClassroomService()->removeStudent(
+            $id,
+            $user['id'],
+            array('reason' => $reason['note'], 'reason_type' => 'exit')
+        );
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
     }
@@ -569,55 +561,6 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function buyAction(Request $request, $id)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($id);
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $previewAs = $request->query->get('previewAs');
-
-        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-        $member = $this->previewAsMember($previewAs, $member, $classroom);
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        $userInfo = $this->getUserService()->getUserProfile($user['id']);
-        $userInfo['approvalStatus'] = $user['approvalStatus'];
-
-        $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
-
-        if (empty($account)) {
-            $this->getCashAccountService()->createAccount($user['id']);
-        }
-
-        if (isset($account['cash'])) {
-            $account['cash'] = intval($account['cash']);
-        }
-
-        $amount = $this->getOrderService()->analysisAmount(array('userId' => $user['id'], 'status' => 'paid'));
-        $amount += $this->getCashOrdersService()->analysisAmount(array('userId' => $user['id'], 'status' => 'paid'));
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        return $this->render('classroom/buy-modal.html.twig', array(
-            'classroom' => $classroom,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
-            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
-            'courseSetting' => $courseSetting,
-            'member' => $member,
-            'userFields' => $userFields,
-            'account' => $account,
-            'amount' => $amount,
-        ));
-    }
-
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
@@ -650,7 +593,7 @@ class ClassroomController extends BaseController
         }
 
         $courseIds = ArrayToolkit::column($courses, 'parentId');
-//        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
+        //        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
 
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
@@ -670,7 +613,7 @@ class ClassroomController extends BaseController
             $totalPrice = $totalPrice * $coinSetting['cash_rate'];
         }
 
-//        $classroomSetting = $this->getSettingService()->get("classroom");
+        //        $classroomSetting = $this->getSettingService()->get("classroom");
 
         if ($this->getCoursesTotalPrice($courses, $priceType) >= (float) $totalPrice) {
             return true;
@@ -877,14 +820,6 @@ class ClassroomController extends BaseController
     }
 
     /**
-     * @return ClassroomOrderService
-     */
-    protected function getClassroomOrderService()
-    {
-        return $this->createService('Classroom:ClassroomOrderService');
-    }
-
-    /**
      * @return ClassroomReviewService
      */
     protected function getClassroomReviewService()
@@ -914,22 +849,6 @@ class ClassroomController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
-    }
-
-    /**
-     * @return CashAccountService
-     */
-    protected function getCashAccountService()
-    {
-        return $this->createService('Cash:CashAccountService');
-    }
-
-    /**
-     * @return CashOrdersService
-     */
-    protected function getCashOrdersService()
-    {
-        return $this->createService('Cash:CashOrdersService');
     }
 
     /**

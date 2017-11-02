@@ -8,7 +8,6 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
@@ -22,6 +21,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -838,17 +838,26 @@ class CourseManageController extends BaseController
 
         $conditions = $request->query->all();
         $type = 'course';
-        $conditions['targetType'] = $type;
+        $conditions['order_item_target_type'] = $type;
 
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
 
-        $conditions['targetId'] = $courseId;
+        $conditions['order_item_target_ids'] = array($courseId);
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']);
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+            $conditions['end_time'] = strtotime($conditions['endDateTime']);
+        }
+
+        if (!empty($conditions['buyer'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+
+        if (!empty($conditions['displayStatus'])) {
+            $conditions['statuses'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
         }
 
         $paginator = new Paginator(
@@ -859,24 +868,29 @@ class CourseManageController extends BaseController
 
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
-            'latest',
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderSns = ArrayToolkit::column($orders, 'sn');
 
-        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
-                && ($expiredOrderToBeUpdated['status'] == 'created')
-            ) {
-                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-                $orders[$index]['status'] = 'cancelled';
-            }
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
+        $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
+
+        foreach ($orders as &$order) {
+            $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
+            $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
         }
 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
+
         return $this->render(
-            'course-manage/orders.html.twig',
+            'course-manage/order/list.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
@@ -1185,7 +1199,7 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return OrderService
+     * @return \Codeages\Biz\Order\Service\OrderService
      */
     protected function getOrderService()
     {
@@ -1267,5 +1281,13 @@ class CourseManageController extends BaseController
     protected function getMarkerReportService()
     {
         return $this->createService('Marker:ReportService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

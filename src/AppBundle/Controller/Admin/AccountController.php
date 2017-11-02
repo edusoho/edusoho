@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Component\Echats\EchartsBuilder;
+use AppBundle\Common\Paginator;
 
 class AccountController extends BaseController
 {
@@ -194,5 +195,10 @@ class AccountController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 }

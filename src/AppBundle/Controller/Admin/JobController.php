@@ -67,10 +67,8 @@ class JobController extends BaseController
 
         if (($defPool && $defPool['num'] >= $defPool['max_num'])
             || ($dedPool && $dedPool['num'] >= $dedPool['max_num'])) {
-
             $this->setFlashMessage('danger', 'There some pool is full, please go to restore.');
         }
-
     }
 
     public function enabledAction(Request $request, $id)

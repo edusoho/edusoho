@@ -23,6 +23,8 @@ $biz->register(new \Codeages\Biz\Framework\Provider\SettingServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\XapiServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), array('monolog.logfile' => $biz['log_directory'] . '/biz.log',));
+$biz->register(new \Codeages\Biz\Order\OrderServiceProvider());
+$biz->register(new \Codeages\Biz\Pay\PayServiceProvider());
 $biz->boot();
 
 return $biz;

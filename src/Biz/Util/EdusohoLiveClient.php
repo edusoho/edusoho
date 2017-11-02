@@ -3,6 +3,7 @@
 namespace Biz\Util;
 
 use Biz\CloudPlatform\CloudAPIFactory;
+use AppBundle\Common\ArrayToolkit;
 
 class EdusohoLiveClient
 {
@@ -86,5 +87,18 @@ class EdusohoLiveClient
         $response = CloudAPIFactory::create($server)->get('/lives/'.$liveId.'/available_record', $args);
 
         return isset($response['success']) ? true : false;
+    }
+
+    public function setLiveLogo($logoData)
+    {
+        $filter = array(
+            'logoPcUrl',
+            'logoClientUrl',
+            'logoGotoUrl',
+        );
+
+        $logoData = ArrayToolkit::parts($logoData, $filter);
+
+        return CloudAPIFactory::create('root')->post('/liveaccount/logo/set', $logoData);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Biz\RefererLog\Event;
 
+use Biz\RefererLog\Service\OrderRefererLogService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class OrderRefererLogEventSubscriber extends EventSubscriber
@@ -10,8 +12,8 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'order.service.paid' => 'onOrderPaid',
-            'order.service.created' => 'onOrderCreated',
+            'order.paid' => 'onOrderPaid',
+            'order.created' => 'onOrderCreated',
         );
     }
 
@@ -43,9 +45,12 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
     {
         $order = $event->getSubject();
 
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $orderItem = reset($orderItems);
+
         $token = $this->getRefererLogService()->getOrderRefererLikeByOrderId($order['id']);
 
-        if (empty($token) || $order['totalPrice'] == 0) {
+        if (empty($token) || $order['price_amount'] == 0) {
             return false;
         }
 
@@ -67,9 +72,9 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
                 'orderId' => $order['id'],
                 'sourceTargetId' => $refererLog['targetId'],
                 'sourceTargetType' => $refererLog['targetType'],
-                'targetType' => $order['targetType'],
-                'targetId' => $order['targetId'],
-                'createdUserId' => $order['userId'],
+                'targetType' => $orderItem['target_type'],
+                'targetId' => $orderItem['target_id'],
+                'createdUserId' => $order['user_id'],
             );
 
             $this->getOrderRefererLogService()->addOrderRefererLog($fields);
@@ -78,11 +83,25 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
         }
     }
 
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
+    }
+
+    /**
+     * @return OrderRefererLogService
+     */
     protected function getOrderRefererLogService()
     {
         return $this->getBiz()->service('RefererLog:OrderRefererLogService');
     }
 
+    /**
+     * @return OrderRefererLogService
+     */
     protected function getRefererLogService()
     {
         return $this->getBiz()->service('RefererLog:RefererLogService');
