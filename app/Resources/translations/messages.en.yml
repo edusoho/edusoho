@@ -462,6 +462,8 @@ order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.price: 订单价格
 order.confirm.bought_course_deduction: 已购课程抵扣
+order.adjust_price_btn: 改价
+order.adjust_price_modal_title: 订单改价
 
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'

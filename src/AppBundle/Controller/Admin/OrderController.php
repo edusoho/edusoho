@@ -113,6 +113,14 @@ class OrderController extends BaseController
         ));
     }
 
+    public function adjustPriceAction($id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        return $this->render('admin/order/adjust-price-modal.html.twig', array(
+            'order' => $order
+        ));
+    }
+
     /**
      * @return PayService
      */

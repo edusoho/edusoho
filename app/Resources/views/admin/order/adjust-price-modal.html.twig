@@ -1,0 +1,56 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'order.adjust_price_modal_title'|trans }}
+{% endblock %}
+
+{% block body %}
+  <style>
+    .adjust-price {
+      display: inline-block;
+      width: 80px;
+    }
+
+  </style>
+
+  <form method="POST" action="{{ path('admin_order_adjust_price', {id:order.id}) }}" id="order-adjust-form">
+
+    <span style="padding: 8px">
+      {{ 'order.before_adjust_price'|trans }}: <span class="color-danger">{{ order.pay_amount|to_cash(1) }}</span>
+    </span>
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="30%">{{ 'order.product_name'|trans }}</th>
+          <th>{{ 'order.price_amount'|trans }}</th>
+          <th class="text-center">{{ 'order.discount_amount'|trans }}</th>
+          <th>{{ 'order.real_pay'|trans }}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr class="adjust-price-tr">
+          <td style="vertical-align: middle;">{{ order.title }}</td>
+          <td style="vertical-align: middle;">{{ order.price_amount|to_cash(0) }}</td>
+          <td class="text-center">
+            <input type="text" name="adjust-by-discount" class="js-adjust-discount adjust-price form-control"/>
+            折 =
+            <input type="text" name="adjust-by-amount" class="js-adjust-amount adjust-price form-control"/> 元
+          </td>
+          <td class="color-danger js-pay-amount" style="vertical-align: middle;" data-origin-amount="{{ order.pay_amount|to_cash(0) }}">{{ order.pay_amount|to_cash(0) }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="js-display-error color-danger pull-right"></div>
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+  <button type="button" class="btn btn-primary" type="submit"  data-toggle="form-submit" data-target="#order-adjust-form"  data-submiting-text="{{'form.btn.submit.submiting'|trans}}" >{{ 'form.btn.submit'|trans }}</button>
+
+  <script>app.load('topxiaadminbundle/controller/order/adjust-price-modal')</script>
+{% endblock %}
+

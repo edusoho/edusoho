@@ -21,7 +21,7 @@ use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
-    const DEDUCT_TYPE_ADJUST = 'adjust_price';
+    const DEDUCT_TYPE_ADJUST = 'adjustPrice';
 
     public function create(Product $product)
     {
