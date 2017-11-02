@@ -6,7 +6,8 @@
 {% do script([get_upload_sdk(), 'libs/jquery-sortable.js', 'app/js/batch-upload/index.js']) %}
 
 {% block body %}
-  {% set mediaType = 'all' %}
+  {% set mediaType = 'video' %}
+  {% set showVideoQuality = 1 %}
   {% include 'file-chooser/parts/upload-file.html.twig' %}
 {% endblock %}
 
