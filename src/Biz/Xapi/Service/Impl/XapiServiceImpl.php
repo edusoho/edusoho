@@ -100,6 +100,7 @@ class XapiServiceImpl extends BaseService implements XapiService
         $watchLog = $this->getLatestWatchLogByUserIdAndActivityId($user['id'], $task['activityId']);
         if (empty($watchLog) || $watchLog['created_time'] < time() - 30 * 60) {
             $log = array(
+                'user_id' => $user['id'],
                 'activity_id' => $task['activityId'],
                 'course_id' => $task['courseId'],
                 'task_id' => $task['id'],
