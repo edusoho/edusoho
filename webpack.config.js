@@ -72,6 +72,6 @@ module.exports = {
     }
   ],
   vendorName: 'libs/base,libs/vendor',
-  extryCssName: '{main,header,index,bootstrap}',
+  extryCssName: '{main,header,bootstrap}',
 }
 

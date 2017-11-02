@@ -12,8 +12,7 @@
         "url": ""
     },
     "devDependencies": {
-        "babel-loader": "6.2.10",
-        "es-webpack-engine": "3.4.5"
+        "es-webpack-engine": "3.5.0-bata7"
     },
     "dependencies": {
         "babel-polyfill": "6.5.0",
