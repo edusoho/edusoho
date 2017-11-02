@@ -30,6 +30,7 @@ class AddActivityWatchToStatementJob extends AbstractJob
             );
 
             $this->getXapiService()->createStatement($statement);
+            $this->getXapiService()->updateWatchLog($watchLog['id'], array('is_push' => 1));
         }
     }
 
