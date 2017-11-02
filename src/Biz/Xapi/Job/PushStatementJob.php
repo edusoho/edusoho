@@ -69,17 +69,17 @@ class PushStatementsJob extends AbstractJob
 //            $pushStatement['id'] = $statement['uuid'];
 //            $pushdStatements[] = $pushStatement;
 //        }
-//
+    //
 //        $client = new Client();
 //        $request = $client->post($this->biz['xapi.options']['getway'], array(
 //            'Content-type' => 'application/json; charset=utf-8',
 //        ), json_encode($pushdStatements));
-//
+    //
 //        $response = $request->send();
 //        if ($response->getStatusCode() == 200) {
 //            return true;
 //        }
-//
+    //
 //        return false;
 //    }
 
