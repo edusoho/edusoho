@@ -1,1 +1,1 @@
-webpackJsonp(["app/css/header-purple-light"],[function(p,e){}]);
+webpackJsonp(["app/css/header-purple-light"],{"651d2c3d5bb9c9281ceb":function(c,b){}},["651d2c3d5bb9c9281ceb"]);
