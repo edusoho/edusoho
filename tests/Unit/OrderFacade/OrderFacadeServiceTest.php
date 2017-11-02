@@ -105,6 +105,47 @@ class OrderFacadeServiceTest extends BaseTestCase
         $this->assertArraySubset($params, $order);
     }
 
+    /**
+     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testAdjustOrderPayAmountWithError()
+    {
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'getOrder', 'returnValue' => array('price_amount' => 100)),
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20)) ),
+            array('functionName' => 'addOrderItemDeduct', 'returnValue' => array()),
+        ));
+
+        $this->getOrderFacadeService()->adjustOrderPayAmount(1, 120);
+    }
+
+    public function testAdjustOrderPayAmountInFirstTime()
+    {
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'getOrder', 'returnValue' => array('price_amount' => 100)),
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20)) ),
+            array('functionName' => 'addOrderItemDeduct', 'returnValue' => 30),
+        ));
+
+        $adjustAmount = $this->getOrderFacadeService()->adjustOrderPayAmount(1, 50);
+        $this->assertEquals(30, $adjustAmount);
+    }
+
+    public function testAdjustOrderPayAmountInSecondTime()
+    {
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'getOrder', 'returnValue' => array('price_amount' => 100)),
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
+                array('deduct_type' => 'discount', 'deduct_amount' => 20),
+                array('deduct_type' => 'adjust_price', 'deduct_amount' => 10)
+            )),
+            array('functionName' => 'updateOrderItemDeduct', 'returnValue' => 30),
+        ));
+
+        $adjustAmount = $this->getOrderFacadeService()->adjustOrderPayAmount(1, 50);
+        $this->assertEquals(30, $adjustAmount);
+    }
+
     private function mockCurrency()
     {
         $biz = $this->getBiz();

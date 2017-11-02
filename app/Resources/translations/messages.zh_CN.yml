@@ -8114,6 +8114,7 @@ log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
 log.action.order.course_callback: 课程回调
 log.action.order.classroom_callback: 班级回调
+log.action.order.adjust_price: 价格调整
 log.action.category.create: 新增
 log.action.category.update: 修改
 log.action.category.delete: 删除
@@ -8178,6 +8179,7 @@ order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 
 cashflow.title: 名称
 cashflow.sn: 流水号
