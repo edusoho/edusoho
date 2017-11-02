@@ -9,11 +9,10 @@ use Guzzle\Http\Client;
 
 class PushStatementsJob extends AbstractJob
 {
-
     public function execute()
     {
         $condition = array(
-            'status' => 'created'
+            'status' => 'created',
         );
         $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
         $statementIds = ArrayToolkit::column($statements, 'id');

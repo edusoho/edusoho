@@ -11,7 +11,7 @@ class AddActivityWatchToStatementJob extends AbstractJob
     {
         $conditions = array(
             'is_push' => 0,
-            'created_time_LT' => time() - 60*60
+            'created_time_LT' => time() - 60 * 60,
         );
 
         $orderBy = array('created_time' => 'ASC');
@@ -20,11 +20,8 @@ class AddActivityWatchToStatementJob extends AbstractJob
 
         foreach ($watchLogs as $watchLog) {
             $statement = array(
-
             );
         }
-
-
     }
 
     /**

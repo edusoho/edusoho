@@ -86,6 +86,4 @@ class XapiServiceProvider implements ServiceProviderInterface
             return $type;
         });
     }
-
-
 }

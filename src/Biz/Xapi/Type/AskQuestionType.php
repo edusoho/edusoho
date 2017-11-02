@@ -2,8 +2,6 @@
 
 namespace Biz\Xapi\Type;
 
-use Biz\Marker\Service\QuestionMarkerResultService;
-
 class AskQuestionType extends Type
 {
     const TYPE = 'ask_question';
