@@ -15,6 +15,13 @@ define(function(require, exports, module) {
           return ;
         }
 
+        $.post($form.action, {adjustPrice:$form.find('.js-adjust-price').val()}, function(resp) {
+          "use strict";
+
+
+
+        });
+
         $('#refund-confirm-btn').button('submiting').addClass('disabled');
       }
     });
@@ -24,7 +31,7 @@ define(function(require, exports, module) {
     };
 
     validator.addItem({
-      element: 'input[name=adjust-by-amount]',
+      element: 'input[name=adjust-by-price]',
       required: false,
       rule: 'decimal'
     });
@@ -36,18 +43,26 @@ define(function(require, exports, module) {
       display: '折扣'
     });
 
+    var originPayAmount = $form.find('.js-pay-amount').data('originAmount');
+    $form.on('change', '.js-adjust-price', function () {
+      $el = $(this);
+      var adjustPrice = $el.val();
+      if ($.isNumeric(adjustPrice)) {
+        var discount = (parseFloat(adjustPrice))*10/parseFloat(originPayAmount).toFixed(1);
+        $form.find('.js-adjust-discount').val(discount);
+      }
+
+    });
+
     $form.on('change', '.js-adjust-discount', function () {
       $el = $(this);
+      var discount = $el.val();
+      if ($.isNumeric(discount)) {
+        var adjustPrice = (discount * originPayAmount / 10).toFixed(1);
+        $form.find('.js-adjust-price').val(adjustPrice);
+      }
+
     });
-
-    $form.on('change', '.js-adjust-amount', function () {
-      $el = $(this);
-    });
-
-    function changeAmount() {
-      "use strict";
-
-    }
 
   };
 

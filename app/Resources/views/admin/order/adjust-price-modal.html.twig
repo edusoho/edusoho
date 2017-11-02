@@ -35,7 +35,7 @@
           <td class="text-center">
             <input type="text" name="adjust-by-discount" class="js-adjust-discount adjust-price form-control"/>
             折 =
-            <input type="text" name="adjust-by-amount" class="js-adjust-amount adjust-price form-control"/> 元
+            <input type="text" name="adjust-by-price" class="js-adjust-price adjust-price form-control"/> 元
           </td>
           <td class="color-danger js-pay-amount" style="vertical-align: middle;" data-origin-amount="{{ order.pay_amount|to_cash(0) }}">{{ order.pay_amount|to_cash(0) }}</td>
         </tr>
