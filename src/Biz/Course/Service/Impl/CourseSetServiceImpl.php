@@ -524,6 +524,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             )
         );
 
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
+
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
