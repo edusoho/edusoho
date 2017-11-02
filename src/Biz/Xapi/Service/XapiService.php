@@ -11,4 +11,10 @@ interface XapiService
     public function updateStatementsPushingByStatementIds($statementIds);
 
     public function searchStatements($conditions, $orders, $start, $limit);
+
+    public function updateWatchLog($id, $watchLog);
+
+    public function createWatchLog($watchLog);
+
+    public function watchTask($taskId, $watchTime);
 }

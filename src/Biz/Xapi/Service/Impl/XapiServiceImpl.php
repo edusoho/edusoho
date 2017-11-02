@@ -82,6 +82,16 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getActivityWatchLogDao()->create($watchLog);
     }
 
+    public function updateWatchLog($id, $watchLog)
+    {
+        return $this->getActivityWatchLogDao()->update($id, $watchLog);
+    }
+
+    public function watchTask($taskId, $watchTime)
+    {
+
+    }
+
     /**
      * @return StatementDao
      */
