@@ -14,6 +14,7 @@ class XapiActivityWatch extends Migration
         $connection->exec("
         CREATE TABLE `xapi_activity_watch_log` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
           `activity_id` int(11) DEFAULT NULL COMMENT '教学活动ID',
           `course_id` int(11) DEFAULT NULL COMMENT '教学计划ID',
           `task_id` int(11) DEFAULT NULL COMMENT '任务ID',
