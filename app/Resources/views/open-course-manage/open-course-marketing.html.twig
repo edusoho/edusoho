@@ -3,37 +3,7 @@
 {% set side_nav = 'marketing' %}
 {% do script(['app/js/open-course-manage/recommend-course/index.js'])%}
 
-
 {% block main %}
-
-<style>
-
-.course-grid {
-    display: inline-block;
-    vertical-align: top;
-    margin: 15px 15px 15px 0;
-    border: 1px solid #e1e1e1;
-    border-radius: 4px;
-}
-
-.course-grid .add-course {
-    font-size: 80px;
-    height: 148px;
-    text-align: center;
-    padding-top: 30px;
-}
-.sort{
-    padding-top: 50px;
-    padding-right: 20px;
-    padding-left: 20px;
-}
-
-.price{
-  color: #e57259;
-  font-size: 16px;
-}
-</style>
-
 <div class="panel panel-default panel-col">
   <div class="panel-heading">{{'my.teaching.open_course.recommend_setting.title'|trans}}
     <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
@@ -54,7 +24,7 @@
               <li class="course-item item-{{courseSet.id}} clearfix" data-role="item" >
                 <input type="hidden" name="recommendIds[]" value="{{ recommendId }}" />
                 
-                <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
+                <span class="glyphicon glyphicon-resize-vertical sort-handle" style="padding: 50px 20px 0 20px"></span>
                 <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
                   <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
                 </a>

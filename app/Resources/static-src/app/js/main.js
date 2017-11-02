@@ -8,7 +8,7 @@ import 'common/bootstrap-modal-hack';
 import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import notify from "common/notify";
-
+import './alert';
 
 let rpn = new RewardPointNotify();
 rpn.display();
@@ -92,27 +92,13 @@ $('i.hover-spin').mouseenter(function () {
   $(this).removeClass('md-spin');
 });
 
-if ($('.set-email-alert').length > 0) {
-  $('.set-email-alert .close').click(function () {
-    Cookies.set('close_set_email_alert', 'true');
-  });
-}
-
-if ($('#announcements-alert').length > 0) {
-  if ($('#announcements-alert .swiper-container .swiper-wrapper').children().length > 1) {
-    let noticeSwiper = new Swiper('#announcements-alert .swiper-container', {
-      speed: 300,
-      loop: true,
-      mode: 'vertical',
-      autoplay: 5000,
-      calculateHeight: true
-    });
-  }
-
-  $('#announcements-alert .close').click(function () {
-    Cookies.set('close_announcements_alert', 'true', {
-      path: '/'
-    });
+if ($('#announcements-alert').length && $('#announcements-alert .swiper-container .swiper-wrapper').children().length > 1) {
+  let noticeSwiper = new Swiper('#announcements-alert .swiper-container', {
+    speed: 300,
+    loop: true,
+    mode: 'vertical',
+    autoplay: 5000,
+    calculateHeight: true
   });
 }
 
