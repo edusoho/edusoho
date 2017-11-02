@@ -45,7 +45,7 @@ class EduSohoPluginUpgrade
             $this->copyStaticFile();
         }
 
-        $this->initBlock();   
+        $this->initBlock();
     }
 
     protected function initBlock()
@@ -69,7 +69,7 @@ class EduSohoPluginUpgrade
     private function copyStaticFile()
     {
         $rootDir = realpath($this->kernel['root_directory']);
-        $code  = '{{code}}';
+        $code = '{{code}}';
         $filesystem = new Filesystem();
 
         $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
@@ -78,19 +78,19 @@ class EduSohoPluginUpgrade
             if ($filesystem->exists($targetDir)) {
                 $filesystem->remove($targetDir);
             }
-            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));          
+            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         }
 
         $lowerCode = strtolower($code);
         $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/static-dist/{$lowerCode}plugin";
         $targetDir = "{$rootDir}/web/static-dist/{$lowerCode}plugin";
 
-        if(is_dir($originDir)){
+        if (is_dir($originDir)) {
             if ($filesystem->exists($targetDir)) {
                 $filesystem->remove($targetDir);
             }
 
-            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));           
+            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         }
     }
 

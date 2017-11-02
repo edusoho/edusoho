@@ -707,9 +707,9 @@ class AppServiceImpl extends BaseService implements AppService
         if (file_exists($packageDir.'/EduSohoPluginUpgrade.php') || in_array($package['id'], array('1135', '1136', '1137', '1138', '1139', '1140'))) {
             include_once $packageDir.'/EduSohoPluginUpgrade.php';
             $upgrade = new \EduSohoPluginUpgrade($this->biz);
-        } else if (file_exists($packageDir.'/Upgrade.php')) {
+        } elseif (file_exists($packageDir.'/Upgrade.php')) {
             include_once $packageDir.'/Upgrade.php';
-            $upgrade = new \EduSohoUpgrade($this->biz);     
+            $upgrade = new \EduSohoUpgrade($this->biz);
         } else {
             return;
         }
