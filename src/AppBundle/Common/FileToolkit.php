@@ -1038,7 +1038,7 @@ class FileToolkit
                 $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
                 //原始尺寸等于要求的尺寸 并且 裁切的范围等于原始尺寸，不做裁切
                 $isCopy = ($naturalWidth == $value[0] && $options['w'] == $value[0]) && ($naturalHeight == $value[1] && $options['h'] == $value[1]) && ($filesize < 102400);
-                
+
                 if ($isCopy) {
                     $filePaths[$key] = $savedFilePath;
                     $image = $rawImage->copy();
