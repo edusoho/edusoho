@@ -13,7 +13,7 @@ class Orders extends MarketingBase
     {
         $biz = $this->getBiz();
         $logger = $biz['logger'];
-        $logger->debug('营销平台通知处理订单');
+        $logger->debug('微营销通知处理订单');
         $content = $request->getContent();
         $postData = json_decode($content, true);
 
@@ -56,8 +56,8 @@ class Orders extends MarketingBase
             $response['msg'] = "把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}";
         } catch (\Exception $e) {
             $response['code'] = 'error';
-            $response['msg'] = 'ES处理营销平台订单失败,'.$e->getMessage();
-            $logger->error('ES处理营销平台订单失败,'.$e->getMessage());
+            $response['msg'] = 'ES处理微营销订单失败,'.$e->getMessage();
+            $logger->error('ES处理微营销订单失败,'.$e->getMessage());
         }
 
         return $response;
@@ -105,8 +105,8 @@ class Orders extends MarketingBase
 
         $data['price'] = $data['marketingOrderPayAmount'];
         $data['payment'] = 'marketing';
-        $data['remark'] = '来自营销平台';
-        $data['orderTitleRemark'] = '(来自营销平台)';
+        $data['remark'] = '来自微营销';
+        $data['orderTitleRemark'] = '(来自微营销)';
         list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
 
         return array($course, $member, $order);

@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Codeages\Biz\Framework\Dao\ArrayStorage;
 use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\RedisServiceProvider;
@@ -43,6 +44,7 @@ class IntegrationTestCase extends TestCase
     {
         $this->biz = $this->createBiz();
         $this->db = $this->biz['db'];
+
         $this->redis = $this->biz['redis'];
 
         $this->db->beginTransaction();
@@ -105,8 +107,8 @@ class IntegrationTestCase extends TestCase
         }
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
-            $biz['dao.cache.array_storage'] = function () {
-                return new Codeages\Biz\Framework\Dao\ArrayStorage();
+            $biz['dao.cache.array_storage'] = function() {
+                return new ArrayStorage();
             };
         }
 
@@ -124,7 +126,6 @@ class IntegrationTestCase extends TestCase
         $biz['lock.flock.directory'] = sys_get_temp_dir();
 
         $biz->boot();
-
         return $biz;
     }
 

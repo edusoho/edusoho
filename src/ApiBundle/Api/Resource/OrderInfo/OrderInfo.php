@@ -5,7 +5,13 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\Money;
+use AppBundle\Common\MathToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Biz\OrderFacade\Product\Product;
+use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OrderInfo extends AbstractResource
@@ -18,17 +24,77 @@ class OrderInfo extends AbstractResource
             throw new BadRequestHttpException('缺少参数', null, ErrorCode::INVALID_ARGUMENT);
         }
 
-        $this->addVipParams($params);
+        try {
+            $this->addVipParams($params);
+            $product = $this->getProduct($params['targetType'], $params);
+            $product->validate();
+            $product->setAvailableDeduct();
+            $product->setPickedDeduct(array());
 
-        list($checkInfo, $orderInfo) = $this->service('Order:OrderFacadeService')->getOrderInfo($params['targetType'], $params['targetId'], $params);
+            return $this->getOrderInfoFromProduct($product);
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
+        }
+    }
 
-        if (isset($checkInfo['error'])) {
-            throw new BadRequestHttpException($checkInfo['error'], null, ErrorCode::INVALID_ARGUMENT);
+    private function getOrderInfoFromProduct(Product $product)
+    {
+        $biz = $this->getBiz();
+        /** @var  $currency  Currency */
+        $currency = $biz['currency'];
+
+        $user = $this->getCurrentUser();
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
+
+        $orderInfo = array(
+            'targetId' => $product->targetId,
+            'targetType' => $product->targetType,
+            'title' => $product->title,
+            'maxRate' => $product->maxRate,
+            'unitType' => $product->unit,
+            'duration' => $product->num,
+            'totalPrice' => $product->getPayablePrice(),
+            'availableCoupons' => array(),
+            'coinName' => '',
+            'cashRate' => "1",
+            'buyType' => '',
+            'priceType' => $currency->isoCode == 'CNY' ? 'RMB' : 'Coin',
+            'coinPayAmount' => 0,
+            'fullCoinPayable' => 0,
+            'verifiedMobile' => (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
+            'hasPayPassword' => $this->getAccountService()->isPayPasswordSetted($user['id']),
+            'account' => array(
+                'id' => $balance['id'],
+                'userId' => $balance['user_id'],
+                'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
+            ),
+        );
+
+        if ($extra = $product->getCreateExtra()) {
+            $orderInfo['buyType'] = $extra['buyType'];
         }
 
-        $this->addOrderAssocInfo($orderInfo);
+        if ($product->availableDeducts && isset($product->availableDeducts['coupon'])) {
+            $orderInfo['availableCoupons'] = $product->availableDeducts['coupon'];
+        }
 
+        $coinSetting = $this->service('System:SettingService')->get('coin');
+        if (!empty($coinSetting['coin_name'])) {
+            $orderInfo['coinName'] = $coinSetting['coin_name'];
+        } else {
+            $orderInfo['coinName'] = '虚拟币';
+        }
 
+        if (!empty($coinSetting['coin_enabled'])) {
+            $orderInfo['cashRate'] = $coinSetting['cash_rate'];
+            $orderInfo['coinPayAmount'] = round($orderInfo['totalPrice'] * $orderInfo['cashRate'], 2);
+            $orderInfo['maxCoin'] = round($orderInfo['coinPayAmount'] * $orderInfo['maxRate'] / 100, 2);
+        }
+
+        if ($orderInfo['priceType'] == 'Coin') {
+            $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
+        }
+        
         return $orderInfo;
     }
 
@@ -39,6 +105,7 @@ class OrderInfo extends AbstractResource
             $defaultUnitType = 'month';
             $defaultDuration = 3;
             if ($vipSetting && !empty($vipSetting['buyType'])) {
+                //按年月
                 if ($vipSetting['buyType'] == '10') {
                     $defaultDuration = $vipSetting['default_buy_months10'];
                     //按年
@@ -52,35 +119,27 @@ class OrderInfo extends AbstractResource
             }
 
             $params['unit'] = $defaultUnitType;
-            $params['duration'] = $defaultDuration;
+            $params['num'] = $defaultDuration;
         }
     }
 
-    private function addOrderAssocInfo(&$orderInfo)
+    private function getProduct($targetType, $params)
     {
-        $couponTargetId = $orderInfo['targetId'];
-        if ($orderInfo['targetType'] == 'course') {
-            $course = $this->getCourseService()->getCourse($orderInfo['targetId']);
-            $couponTargetId = $course['courseSetId'];
-        }
-        $orderInfo['availableCoupons'] = $this->service('Card:CardService')->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
-            $orderInfo['targetType'], $couponTargetId
-        );
+        $biz = $this->getBiz();
 
-        $coinSetting = $this->service('System:SettingService')->get('coin');
+        /* @var $product Product */
+        $product = $biz['order.product.'.$targetType];
 
-        if (!empty($coinSetting['coin_name'])) {
-            $orderInfo['coinName'] = $coinSetting['coin_name'];
-        } else {
-            $orderInfo['coinName'] = '虚拟币';
-        }
+        $product->init($params);
+
+        return $product;
     }
 
     /**
-     * @return CourseService
+     * @return AccountService
      */
-    private function getCourseService()
+    private function getAccountService()
     {
-        return $this->service('Course:CourseService');
+        return $this->service('Pay:AccountService');
     }
 }

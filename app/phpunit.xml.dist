@@ -34,7 +34,6 @@
 
             <exclude>
                 <directory>../src/Biz/Util/Phpsec</directory>
-                <directory>../src/Topxia/Component/Payment</directory>
             </exclude>
 
         </whitelist>

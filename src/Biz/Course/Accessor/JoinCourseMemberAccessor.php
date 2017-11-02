@@ -3,6 +3,7 @@
 namespace Biz\Course\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
+use Biz\Course\Service\MemberService;
 
 class JoinCourseMemberAccessor extends AccessorAdapter
 {
@@ -17,6 +18,18 @@ class JoinCourseMemberAccessor extends AccessorAdapter
             return $this->buildResult('user.locked', array('userId' => $user['id']));
         }
 
+        if ($this->getCourseMemberService()->getCourseMember($course['id'], $user->getId())) {
+            return $this->buildResult('member.member_exist', array('userId' => $user['id']));
+        }
+
         return null;
+    }
+
+    /**
+     * @return MemberService
+     */
+    private function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

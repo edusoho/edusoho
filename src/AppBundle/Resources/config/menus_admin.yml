@@ -608,49 +608,36 @@ admin:
                         admin_keyword_banlogs:
                             name: admin.operation.sensitive_words.banlogs_tab
                             disable: true
-
-        admin_order:
-            name: admin.nav.order
-            children:
-                admin_course_order_manage:
-                    name: admin.order.course_menu
-                    children:
-                        admin_course_order:
-                            name: admin.order.course.basic_tab
-                            router_name: admin_course_order_manage
-                            disable: true
-                admin_coin_order_manange:
-                    name: admin.order.coin_menu
-                    children:
-                        admin_coin_orders:
-                            name: admin.order.coin.basic_tab
-                            disable: true
-                admin_classroom_order_manage:
-                    name: admin.order.classroom_menu
-                    parent: admin_order
-                    after: admin_course_order
-                    children:
-                        admin_classroom_order:
-                            name: admin.order.classroom.basic_tab
-                            disable: true
         admin_finance:
             name: admin.nav.finance
             children:
-                # admin_accounts_center:
-                #     name: 账务中心
-                #     children:
-                #         admin_account_center:
-                #             name: 账务中心
-                #             disable: true
+                admin_orders:
+                     name: admin.finance.order_menu
+                     children:
+                        admin_order_manage:
+                            name: admin.finance.order_menu
+                admin_order_refunds:
+                    name: admin.finance.refunds_menu
+                    children:
+                        admin_order_refunds_manage:
+                            name: admin.finance.refunds.basic_tab
+                            router_name: admin_order_refunds
                 admin_bills:
                     name: admin.finance.bills_menu
                     children:
-                        admin_bill:
+                        admin_bill_cash:
                             name: admin.finance.bills.cash_records_tab
+                            router_name: admin_bill
+                            router_params:
+                                type: money
                             disable: true
-                        admin_coin_records:
+                        admin_bill_coin:
                             name: admin.finance.bills.coin_records_tab
+                            router_name: admin_bill
+                            router_params:
+                                type: coin
                             disable: true
+                            router_name: admin_order_refunds
                 admin_coin_user:
                     name: admin.finance.coin_menu
                     children:
@@ -658,32 +645,6 @@ admin:
                             name: admin.finance.coin.basic_tab
                             disable: true
                             router_name: admin_coin_user_records
-                admin_course_refunds:
-                    name: admin.finance.course_refunds_menu
-                    children:
-                        admin_course_refunds_manage:
-                            name: admin.finance.course_refunds.basic_tab
-                            disable: true
-                            router_name: admin_order_refunds
-                            router_params:
-                                targetType: course
-                                status: created
-                admin_classroom_refunds:
-                    name: admin.finance.classroom_refunds_menu
-                    parent: admin_finance
-                    router_name: admin_order_refunds
-                    router_params:
-                        targetType: classroom
-                        status: created
-                    after: admin_course_refunds
-                    children:
-                        admin_classroom_refunds_manage:
-                            name: admin.finance.classroom_refunds.basic_tab
-                            disable: true
-                            router_name: admin_order_refunds
-                            router_params:
-                                targetType: classroom
-                                status: created
         admin_app:
             name: admin.nav.cloud
             visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云

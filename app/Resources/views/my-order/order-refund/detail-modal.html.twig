@@ -1,0 +1,16 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% block title %}
+  {{'order.refund.detail'|trans}}
+{% endblock %}
+
+{% block body %}
+  {% include 'my-order/order-refund/detail-order-refund.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}
+

@@ -4,11 +4,13 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Pay\Service\AccountService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -161,13 +163,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', '网校虚拟币未开启！');
         }
 
-        $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user['id']);
 
-        if (empty($account)) {
-            $account = $this->getCashAccountService()->createAccount($user->id);
-        }
-
-        return $account;
+        return array(
+            'id' => $balance['id'],
+            'userId' => $balance['user_id'],
+            'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
+        );
     }
 
     public function sendMessage()
