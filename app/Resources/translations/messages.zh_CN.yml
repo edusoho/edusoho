@@ -3889,6 +3889,7 @@ my.teaching.open_course.lesson.mediaStatus.error: (%mediaTypeName%格式转换�
 my.teaching.open_course.lesson.status.unpublished: 未发布
 my.teaching.open_course.lesson.material: 资料
 my.teaching.open_course.lesson.add_material_btn: 添加资料
+my.teaching.open_course.lesson.add_material.title: 添加资料
 my.teaching.open_course.lesson.edit_btn: 编辑
 my.teaching.open_course.lesson.more_btn: 更多
 my.teaching.open_course.lesson.modal.edit: 编辑课时

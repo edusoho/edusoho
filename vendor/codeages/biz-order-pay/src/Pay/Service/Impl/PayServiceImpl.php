@@ -510,7 +510,7 @@ class PayServiceImpl extends BaseService implements PayService
     protected function getGoodsTitle()
     {
         $options = $this->biz['payment.final_options'];
-        return empty($options['goods_title']) ? '': $options['goods_title'];
+        return empty($options['goods_title']) ? '': mb_substr($options['goods_title'], 0, 30, 'utf-8');
     }
 
     protected function getCurrencyType()
