@@ -1,0 +1,20 @@
+<div class="order-center-card clearfix">
+  <div class="order-center-card__img">
+    <a href="{{ path('classroom_show', {id: product.targetId}) }}">
+      <img src="{{ filepath(product.middlePicture, 'classroom.png') }}" alt="{{ product.title }}">
+    </a>
+  </div>
+  <div class="order-center-card__info">
+    <div class="order-center-card__title">
+      {{ product.title }}
+    </div>
+    <div class="order-center-card__price">
+      {{ product.originPrice|price_format }}
+    </div>
+  </div>
+</div>
+
+{% if product.availableDeducts.paidCourses|default(null) %}
+  {% set paidCourses = product.availableDeducts.paidCourses %}
+  {% include 'order/paid-course.html.twig' %}
+{% endif %}

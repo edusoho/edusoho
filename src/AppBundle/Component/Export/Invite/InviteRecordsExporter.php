@@ -79,7 +79,6 @@ class InviteRecordsExporter extends Exporter
 
     protected function exportDataByRecord($record, $users)
     {
-        list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
         $content = array();
         $content[] = $users[$record['inviteUserId']]['nickname'];
         $content[] = $users[$record['invitedUserId']]['nickname'];

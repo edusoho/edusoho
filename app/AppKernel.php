@@ -50,7 +50,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $this->initializeBiz();
         $this->initializeServiceKernel();
-
         foreach ($this->getBundles() as $bundle) {
             $bundle->setContainer($this->container);
             $bundle->boot();
@@ -146,6 +145,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz['env'] = array(
             'base_url' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath(),
         );
+
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
             'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir') . '/biz.log',
@@ -163,10 +163,12 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $this->registerCacheServiceProvider($biz);
+        $biz->register(new Codeages\Biz\Order\OrderServiceProvider());
+        $biz->register(new Codeages\Biz\Pay\PayServiceProvider());
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
+        $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
-
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
 
         $biz->boot();

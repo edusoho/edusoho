@@ -23,7 +23,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id'], $info = array());
 
         $time = time();
         $deadline = ClassroomToolkit::buildMemberDeadline(array(
@@ -1159,43 +1159,6 @@ class ClassroomServiceTest extends BaseTestCase
     {
     }
 
-    public function testExitClassroom()
-    {
-        $user = $this->createUser();
-        $textClassroom = array(
-            'title' => 'test',
-        );
-
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-
-        $currentUser = $this->getCurrentUser();
-
-        $this->getClassroomService()->publishClassroom($classroom['id']);
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 2,
-            'nickname' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => 'admin',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER'),
-        ));
-
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $this->getClassroomService()->becomeStudent($classroom['id'], 2);
-
-        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
-        $this->assertEquals(true, $enabled);
-
-        $this->getClassroomService()->exitClassroom($classroom['id'], 2);
-
-        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
-        $this->assertEquals(true, $enabled);
-    }
-
     public function testFindCoursesByClassroomId()
     {
         $user = $this->createUser();
@@ -1403,6 +1366,36 @@ class ClassroomServiceTest extends BaseTestCase
         $result = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array(-1, -2));
 
         $this->assertCount(0, $result);
+    }
+
+    public function testFindUserPaidCoursesInClassroom()
+    {
+        $textClassroom = array(
+            'title' => 'test',
+        );
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $course1 = $this->createCourse('Test Course 1');
+        $course2 = $this->createCourse('Test Course 2');
+        $course3 = $this->createCourse('Test Course 3');
+
+        $courseIds = array($course1['id'], $course2['id'], $course3['id']);
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'findCoursesByStudentIdAndCourseIds', 'returnValue' => array(array('id' => 1, 'courseId' => $course1['id'], 'orderId' => 1))),
+        ));
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'searchOrderItems', 'returnValue' => array(array('id' => 1, 'order_id' => 1))),
+        ));
+
+        list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom(1, $classroom['id']);
+
+        $this->assertEquals(1, count($paidCourses));
+        $this->assertEquals(1, count($orderItems));
     }
 
     protected function mockCourse($title = 'Test Course 1')

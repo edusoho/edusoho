@@ -10,7 +10,6 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: $form,
-            autoSubmit: false,
             autoFocus: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -18,13 +17,13 @@ define(function(require, exports, module) {
                 }
 
                 $('#refund-confirm-btn').button('submiting').addClass('disabled');
-                $.post($form.attr('action'), $form.serialize(), function(response){
-                    $modal.modal('hide');
-                    Notify.success(Translator.trans('退款申请处理结果已提交'));
-                    window.location.reload();
-                });
-            }
 
+                // $.post($form.attr('action'), $form.serialize(), function(response){
+                //     $modal.modal('hide');
+                //     Notify.success(Translator.trans('退款申请处理结果已提交'));
+                //     window.location.reload();
+                // });
+            }
         });
 
         validator.addItem({
@@ -40,17 +39,48 @@ define(function(require, exports, module) {
 
         $form.find('input[name=result]').on('change', function() {
             if ($(this).val() == 'pass') {
+                coinToRmb();
                 $form.find('.amount-form-group').show();
                 validator.addItem({
-                    element: '#refund-amount-field',
+                    element: '#refund-coin-amount-field',
                     required: true,
-                    rule: 'number'
+                    rule: 'positive_currency min{min: 0} max{max: '+ $('#refund-coin-amount-field').data('maxCoinAmount') +'}'
                 });
+
+                validator.addItem({
+                    element: '#refund-cash-amount-field',
+                    required: true,
+                    rule: 'positive_currency min{min: 0} max{max: '+ $('#refund-cash-amount-field').data('maxCashAmount') +'}'
+                });
+                $form.find('input[name=refund_coin_amount]').on('change', function() {
+                    calculateAmount();
+                    coinToRmb();
+                });
+
+                $form.find('input[name=refund_cash_amount]').on('change', function() {
+                    calculateAmount();
+                });
+
             } else {
                 $form.find('.amount-form-group').hide();
-                validator.removeItem('#refund-amount-field');
+                validator.removeItem('#refund-coin-amount-field');
+                validator.removeItem('#refund-cash-amount-field');
             }
         });
+
+        function calculateAmount() {
+            var coinAmount = $('#refund-coin-amount-field').val();
+            var cashAmount = $('#refund-cash-amount-field').val();
+            var amount = (coinAmount*100 + cashAmount*100)/100;
+            $('#amount-display').text(amount.toFixed(2));
+        }
+
+        function coinToRmb() {
+            var coinDisplay = $('#coin-to-rmb');
+            var coinAmount = $('#refund-coin-amount-field');
+            var coinToRmb = (coinAmount.val()*100 / coinAmount.data('rate'))/100;
+            coinDisplay.text(coinToRmb.toFixed(2));
+        }
 
     };
 

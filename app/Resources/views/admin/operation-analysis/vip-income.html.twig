@@ -1,0 +1,14 @@
+{% extends 'admin/operation-analysis/analysis-base-layout.html.twig' %}
+{% set script_controller = 'analysis/vip-income' %}
+{% set href="admin_operation_analysis_vip_income" %}
+{% set menu = 'vip-income' %}
+{% block analysisBody %}
+  <div class="col-md-12">
+    {% if tab=="trend" %}
+      <div id="line-data"></div>
+      <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>
+    {% elseif tab=="detail" %}
+      {% include 'admin/order/order-table.html.twig' %}
+    {% endif %}
+  </div>
+{% endblock %}
