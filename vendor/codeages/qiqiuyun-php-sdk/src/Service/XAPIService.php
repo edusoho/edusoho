@@ -38,9 +38,9 @@ class XAPIService extends BaseService
                 ),
                 'extensions' => array (
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description'],
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -83,10 +83,9 @@ class XAPIService extends BaseService
                 ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description']
-
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -130,9 +129,9 @@ class XAPIService extends BaseService
                 'choices' => $object['choices'],
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description'],
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/activity' => array(
                         'id' => $object['activity']['id'],
@@ -177,9 +176,9 @@ class XAPIService extends BaseService
                 'type' => 'http://xapi.edusoho.com/activities/homework',
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description'],
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                 )
             ),
@@ -212,9 +211,9 @@ class XAPIService extends BaseService
                 'type' => 'http://xapi.edusoho.com/activities/exercise',
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description'],
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                 )
             ),
@@ -247,9 +246,9 @@ class XAPIService extends BaseService
                 'type' => 'http://xapi.edusoho.com/activities/testpaper',
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description'],
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                 )
             ),
@@ -283,10 +282,9 @@ class XAPIService extends BaseService
                 'type' => $this->getActivityType($object['definitionType']),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description']
-
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -323,10 +321,9 @@ class XAPIService extends BaseService
                 'type' => $this->getActivityType($object['definitionType']),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
-                        'id' => $object['course']['id'],
-                        'title' => $object['course']['title'],
-                        'description' => $object['course']['description']
-
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
@@ -368,8 +365,9 @@ class XAPIService extends BaseService
 
         $response = json_decode($rawResponse->getBody(), true);
 
-        file_put_contents('../app/logs/1.txt', json_encode($response).PHP_EOL, FILE_APPEND);
-        file_put_contents('../app/logs/2.txt', json_encode($statement).PHP_EOL, FILE_APPEND);
+//        file_put_contents('../app/logs/1.txt', json_encode($response).PHP_EOL, FILE_APPEND);
+//        file_put_contents('../app/logs/2.txt', json_encode($statement).PHP_EOL, FILE_APPEND);
+
         if (isset($response['error'])) {
             throw new ResponseException($rawResponse);
         }

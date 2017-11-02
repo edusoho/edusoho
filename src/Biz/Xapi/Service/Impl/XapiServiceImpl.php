@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\BaseService;
+use Biz\Task\Service\TaskService;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
@@ -77,6 +78,11 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getActivityWatchLogDao()->get($id);
     }
 
+    public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0)
+    {
+        return $this->getActivityWatchLogDao()->getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush);
+    }
+
     public function createWatchLog($watchLog)
     {
         return $this->getActivityWatchLogDao()->create($watchLog);
@@ -86,10 +92,24 @@ class XapiServiceImpl extends BaseService implements XapiService
     {
         return $this->getActivityWatchLogDao()->update($id, $watchLog);
     }
-
+    
     public function watchTask($taskId, $watchTime)
     {
+        $user = $this->getCurrentUser();
+        $task = $this->getTaskService()->tryTakeTask($taskId);
+        $watchLog = $this->getLatestWatchLogByUserIdAndActivityId($user['id'], $task['activityId']);
+        if (empty($watchLog) || $watchLog['created_time'] < time()-30*60) {
+            $log = array(
+                'activity_id' => $task['activityId'],
+                'course_id' => $task['courseId'],
+                'task_id' => $task['id'],
+                'watched_time' => $watchTime
+            );
 
+            $this->createWatchLog($log);
+        } else {
+            $this->getActivityWatchLogDao()->wave(array($watchLog['id']), array('watched_time' => $watchTime));
+        }
     }
 
     /**
@@ -106,5 +126,13 @@ class XapiServiceImpl extends BaseService implements XapiService
     protected function getActivityWatchLogDao()
     {
         return $this->biz->dao('Xapi:ActivityWatchLogDao');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
     }
 }

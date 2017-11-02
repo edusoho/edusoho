@@ -17,4 +17,6 @@ interface XapiService
     public function createWatchLog($watchLog);
 
     public function watchTask($taskId, $watchTime);
+
+    public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0);
 }
