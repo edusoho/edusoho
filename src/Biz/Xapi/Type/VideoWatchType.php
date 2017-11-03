@@ -30,7 +30,7 @@ class VideoWatchType extends Type
         $actor = $this->getActor($statement['user_id']);
 
         $result = array(
-            'duration' => $watchLog['watched_time']
+            'duration' => $watchLog['watched_time'],
         );
 
         return $this->createXAPIService()->watchVideo($actor, $object, $result, false);
