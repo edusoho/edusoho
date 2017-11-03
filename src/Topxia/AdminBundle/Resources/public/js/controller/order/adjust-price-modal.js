@@ -35,7 +35,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: 'input[name=adjust-by-discount]',
       required: false,
-      rule: 'currency max{max: 10}',
+      rule: 'currency min{min:0.01} max{max: 10}',
       display: '折扣',
       errormessageCurrency: '请输入正确到折扣,最多保留两位小数'
     });
