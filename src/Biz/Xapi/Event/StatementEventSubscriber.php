@@ -44,7 +44,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $taskResult = $event->getSubject();
 
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $user['id'],
             'verb' => 'finish',
             'target_id' => $taskResult['id'],
@@ -92,7 +91,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $questionMarkerResult = $event->getSubject();
 
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $user['id'],
             'verb' => 'answered',
             'target_id' => $questionMarkerResult['id'],
@@ -183,7 +181,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function testpaperFinish($testpaperResult)
     {
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $testpaperResult['userId'],
             'verb' => 'completed',
             'target_id' => $testpaperResult['id'],
@@ -216,7 +213,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function homeworkFinish($homeworkResult)
     {
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $homeworkResult['userId'],
             'verb' => 'completed',
             'target_id' => $homeworkResult['id'],
@@ -242,7 +238,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     protected function exerciseFinish($exerciseFinish)
     {
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $exerciseFinish['userId'],
             'verb' => 'completed',
             'target_id' => $exerciseFinish['id'],
@@ -274,7 +269,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $note = $event->getSubject();
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $note['userId'],
             'verb' => 'noted',
             'target_id' => $note['id'],
@@ -313,7 +307,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
             return;
         }
         $statement = array(
-            'version' => '1.0.0',
             'user_id' => $thread['userId'],
             'verb' => 'asked',
             'target_id' => $thread['id'],

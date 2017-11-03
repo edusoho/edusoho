@@ -59,7 +59,7 @@ class DoQuestionType extends Type
                 'min' => 0,
                 'raw' => 0,
             ),
-            'response' => $answers,
+            'response' => implode(',', $answers),
         );
 
         return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, false);

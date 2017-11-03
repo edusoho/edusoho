@@ -22,7 +22,6 @@ class AddActivityWatchToStatementJob extends AbstractJob
         foreach ($watchLogs as $watchLog) {
             $activity = $this->getActivityService()->getActivity($watchLog['activity_id']);
             $statement = array(
-                'version' => '1.0.0',
                 'user_id' => $watchLog['user_id'],
                 'verb' => 'watch',
                 'target_id' => $watchLog['id'],

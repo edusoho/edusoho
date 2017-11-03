@@ -341,6 +341,37 @@ class XAPIService extends BaseService
 
     public function watchLive($actor, $object, $result, $isPush = true)
     {
+        $statement = array();
+        $statement['actor'] = $actor;
+        $statement['verb'] = array(
+            'id' => 'https://w3id.org/xapi/acrossx/verbs/watched',
+            'display' => array(
+                'zh-CN' => '观看了',
+                'en-US' => 'watched'
+            )
+        );
+        $statement['object'] = array(
+            'id' => $object['id'],
+            'definition' => array(
+                'type' => 'http://xapi.edusoho.com/activities/live',
+                'name' => array(
+                    $this->defaultLang => $object['name'],
+                ),
+                'extensions' => array (
+                    'http://xapi.edusoho.com/extensions/course' => array(
+                        'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
+                        'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
+                        'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
+                    )
+                )
+            )
+        );
+
+        $statement['result'] = array(
+            'duration' => $this->convertTime($result['duration']),
+        );
+
+        return $isPush ? $this->pushStatement($statement) : $statement;
 
     }
 
@@ -388,9 +419,6 @@ class XAPIService extends BaseService
 
             $statement['timestamp'] = $this->getTime(null);
         }
-
-        file_put_contents('2.txt', json_encode($statements));
-
 
         $rawResponse = $this->client->request('POST', '/statements', array(
             'json' => $statements,
