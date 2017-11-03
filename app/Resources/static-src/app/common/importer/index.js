@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import { arrayToJson } from 'common/utils';
 import Progress from './progress';
 
 class Importer {
@@ -16,6 +17,7 @@ class Importer {
 
       rules: {},
       importData: [],
+      formData: {},
     }, props);
 
     this.$container = $(this.container);
@@ -54,6 +56,8 @@ class Importer {
         let $form = $(form);
         let $btn = $(self.importBtn);
         $btn.button('loading');
+
+        self.formData = arrayToJson($form.serializeArray());
         
         $.ajax({
           type: 'POST',
@@ -151,6 +155,7 @@ class Importer {
     new Progress({
       importData: this.importData,
       $container: this.$container,
+      formData: this.formData
     })
   }
 }

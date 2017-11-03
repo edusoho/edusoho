@@ -4,9 +4,30 @@ class Progress {
       importData: [],
       $container: null,
       quantity: 0,
-      total: 0
+      total: 0,
+      checkType: 'ignore',
+      chunkSize: 8,
+      chunkData: []
     }, props);
-    
+
+    this.data = Object.assign({
+      checkType: this.checkType,
+      type: this.$container.data('type'),
+      importData: []
+    }, this.formData);
+
+    this.total = this.importData.length;
+
+    this.importData.forEach((value, index) => {
+      let i = Math.floor(index / this.chunkSize);
+      if (this.chunkData[i]) {
+        this.chunkData[i].push(value)
+      } else {
+        this.chunkData[i] = [];
+        this.chunkData[i][0] = value;
+      }
+    });
+
     this.init();
   }
 
@@ -25,12 +46,11 @@ class Progress {
   }
 
   onProgress() {
-    this.total = this.importData.length;
     let progress = parseInt(this.quantity / this.total * 100) + '%';
 
-    this.$el.find('.progress-bar-success').css('width', progress);
-    this.$el.find('.progress-text').text('已经导入: ' + this.quantity + '条数据');
-    this.$el.find('.js-import-progress-text').removeClass('hidden');
+    this.$container.find('.progress-bar-success').css('width', progress);
+    this.$container.find('.progress-text').text('已经导入: ' + this.quantity + '条数据');
+    this.$container.find('.js-import-progress-text').removeClass('hidden');
   }
 
   onComplate() {
@@ -41,18 +61,17 @@ class Progress {
   }
 
   import(index) {
-    if (!this.importData[index]) {
+    if (!this.chunkData[index]) {
       this.onComplate();
       return;
     }
 
-    const data = {};
-    data.importData = this.importData[index];
-    $.post(this.$container.data('importUrl'), data).done((res) => {
-      this.quantity = this.quantity + 1;
+    this.data.importData = this.chunkData[index];
+    $.post(this.$container.data('importUrl'), this.data).then((res) => {
+      this.quantity = this.quantity + this.chunkData[index].length;
       this.onProgress();
       this.import(index + 1);
-    }).fail((res) => {
+    }, (res) => {
       this.onError();
     })
   }

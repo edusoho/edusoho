@@ -83,6 +83,23 @@ const time2Sec = (time) => {
 
 const isLogin = (() => { return $("meta[name='is-login']").attr("content") == 1 })();
 
+
+const arrayToJson = (formArray) => {
+  const dataArray = {};
+  $.each(formArray, function() {
+    if (dataArray[this.name]) {
+      if (!dataArray[this.name].push) {
+        dataArray[this.name] = [dataArray[this.name]];
+      }
+      dataArray[this.name].push(this.value || '');
+    } else {
+      dataArray[this.name] = this.value || '';
+    }
+  });
+
+  return dataArray;
+}
+
 export {
   Browser,
   isLogin,
@@ -92,4 +109,5 @@ export {
   initPopover,
   sec2Time,
   time2Sec,
+  arrayToJson
 };
