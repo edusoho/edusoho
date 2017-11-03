@@ -208,7 +208,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         if ($adjustDeduct) {
             $this->getOrderService()->updateOrderItemDeduct($adjustDeduct['id'], array(
                 'deduct_amount' => $adjustAmount,
-                'user_id' => $this->getCurrentUser()->getId(),
+                'user_id' => $order['user_id'],
             ));
         } else {
             $this->getOrderService()->addOrderItemDeduct(array(
@@ -217,7 +217,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 'deduct_type' => self::DEDUCT_TYPE_ADJUST,
                 'deduct_id' => 0,
                 'deduct_amount' => $adjustAmount,
-                'user_id' => $this->getCurrentUser()->getId(),
+                'user_id' => $order['user_id'],
             ));
         }
 

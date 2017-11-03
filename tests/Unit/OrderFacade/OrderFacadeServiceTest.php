@@ -122,7 +122,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testAdjustOrderPayAmountInFirstTime()
     {
         $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order', 'pay_amount' => 80, 'price_amount' => 100)),
+            array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order', 'pay_amount' => 80, 'price_amount' => 100, 'user_id' => 1)),
             array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20))),
             array('functionName' => 'addOrderItemDeduct', 'returnValue' => 30),
         ));
@@ -134,7 +134,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testAdjustOrderPayAmountInSecondTime()
     {
         $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order',  'pay_amount' => 80, 'price_amount' => 100)),
+            array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order', 'pay_amount' => 80, 'price_amount' => 100, 'user_id' => 1)),
             array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
                 array('deduct_type' => 'discount', 'deduct_amount' => 20),
                 array('id' => 1, 'deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 10),
