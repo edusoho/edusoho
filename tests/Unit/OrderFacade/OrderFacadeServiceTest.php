@@ -7,6 +7,7 @@ use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\Accessor\AccessorInterface;
+use Biz\System\Service\LogService;
 
 class OrderFacadeServiceTest extends BaseTestCase
 {
@@ -105,45 +106,23 @@ class OrderFacadeServiceTest extends BaseTestCase
         $this->assertArraySubset($params, $order);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
-    public function testAdjustOrderPayAmountWithError()
+    public function testAdjustOrderPrice()
     {
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array('price_amount' => 100)),
-            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20))),
-            array('functionName' => 'addOrderItemDeduct', 'returnValue' => array()),
+        $mockAdjustDeduct = array(
+            'deduct_amount' => 200,
+            'order' => array(
+                'title' => 'order',
+            ),
+        );
+        $this->mockBiz('Order:WorkflowService', array(
+            array('functionName' => 'adjustPrice', 'returnValue' => $mockAdjustDeduct),
         ));
 
-        $this->getOrderFacadeService()->adjustOrderPayAmount(1, 120);
-    }
+        $result = $this->getOrderFacadeService()->adjustOrderPrice(1, 2000);
 
-    public function testAdjustOrderPayAmountInFirstTime()
-    {
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order', 'pay_amount' => 80, 'price_amount' => 100, 'user_id' => 1)),
-            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20))),
-            array('functionName' => 'addOrderItemDeduct', 'returnValue' => 30),
-        ));
-
-        $adjustAmount = $this->getOrderFacadeService()->adjustOrderPayAmount(1, 50);
-        $this->assertEquals(30, $adjustAmount);
-    }
-
-    public function testAdjustOrderPayAmountInSecondTime()
-    {
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order', 'pay_amount' => 80, 'price_amount' => 100, 'user_id' => 1)),
-            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
-                array('deduct_type' => 'discount', 'deduct_amount' => 20),
-                array('id' => 1, 'deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 10),
-            )),
-            array('functionName' => 'updateOrderItemDeduct', 'returnValue' => 30),
-        ));
-
-        $adjustAmount = $this->getOrderFacadeService()->adjustOrderPayAmount(1, 50);
-        $this->assertEquals(30, $adjustAmount);
+        $this->assertSame($mockAdjustDeduct, $result);
+        $log = $this->getLogService()->searchLogs(array('module' => 'order', 'action' => OrderFacadeService::DEDUCT_TYPE_ADJUST), array(), 0, 1);
+        $this->assertNotNull($log);
     }
 
     public function testGetOrderAdjustInfo()
@@ -182,5 +161,13 @@ class OrderFacadeServiceTest extends BaseTestCase
     private function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

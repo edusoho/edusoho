@@ -118,8 +118,8 @@ class OrderController extends BaseController
     public function adjustPriceAction(Request $request, $id)
     {
         if ($request->getMethod() == 'POST') {
-            $this->getOrderFacadeService()->adjustOrderPayAmount(
-                $id,  MathToolkit::simple($request->request->get('adjustPrice'), 100)
+            $this->getOrderFacadeService()->adjustOrderPrice(
+                $id, MathToolkit::simple($request->request->get('adjustPrice'), 100)
             );
 
             return $this->createJsonResponse(array());
@@ -127,6 +127,7 @@ class OrderController extends BaseController
 
         $order = $this->getOrderService()->getOrder($id);
         $adjustInfo = $this->getOrderFacadeService()->getOrderAdjustInfo($order);
+
         return $this->render('admin/order/adjust-price-modal.html.twig', array(
             'order' => $order,
             'adjustInfo' => $adjustInfo,
