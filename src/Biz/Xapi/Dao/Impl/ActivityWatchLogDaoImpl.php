@@ -22,6 +22,8 @@ class ActivityWatchLogDaoImpl extends GeneralDaoImpl implements ActivityWatchLog
                 'is_push = :is_push',
                 'created_time > :created_time_GT',
                 'created_time < :created_time_LT',
+                'updated_time > :updated_time_GT',
+                'updated_time < :updated_time_LT',
             ),
         );
     }
