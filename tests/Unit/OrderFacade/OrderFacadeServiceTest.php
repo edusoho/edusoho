@@ -112,10 +112,10 @@ class OrderFacadeServiceTest extends BaseTestCase
             'deduct_amount' => 200,
             'order' => array(
                 'title' => 'order',
-            )
+            ),
         );
         $this->mockBiz('Order:WorkflowService', array(
-            array('functionName' => 'adjustPrice', 'returnValue' => $mockAdjustDeduct)
+            array('functionName' => 'adjustPrice', 'returnValue' => $mockAdjustDeduct),
         ));
 
         $result = $this->getOrderFacadeService()->adjustOrderPrice(1, 2000);
@@ -123,7 +123,6 @@ class OrderFacadeServiceTest extends BaseTestCase
         $this->assertSame($mockAdjustDeduct, $result);
         $log = $this->getLogService()->searchLogs(array('module' => 'order', 'action' => OrderFacadeService::DEDUCT_TYPE_ADJUST), array(), 0, 1);
         $this->assertNotNull($log);
-
     }
 
     public function testGetOrderAdjustInfo()
