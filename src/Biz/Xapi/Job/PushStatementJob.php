@@ -17,20 +17,21 @@ class PushStatementJob extends AbstractJob
             'status' => 'created',
         );
         $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
-        file_put_contents('1.txt', json_encode($statements));
         $statementIds = ArrayToolkit::column($statements, 'id');
 
         $pushStatements = array();
-        foreach ($statementIds as $statement) {
+        foreach ($statements as $statement) {
             $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
             $pushStatements[] = $push->package($statement);
         }
 
         $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
         $result = $this->createXAPIService()->pushStatements($pushStatements);
+
         if ($result) {
             $this->getXapiService()->updateStatementsPushedByStatementIds($statementIds);
         }
+
     }
 
     public function createXAPIService()

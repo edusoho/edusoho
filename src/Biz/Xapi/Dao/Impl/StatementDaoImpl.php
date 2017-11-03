@@ -2,10 +2,10 @@
 
 namespace Biz\Xapi\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Biz\Xapi\Dao\StatementDao;
 
-class StatementDaoImpl extends GeneralDaoImpl implements StatementDao
+class StatementDaoImpl extends AdvancedDaoImpl implements StatementDao
 {
     protected $table = 'xapi_statement';
 

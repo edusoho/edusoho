@@ -117,14 +117,9 @@ abstract class Type extends BizAware
     protected function getActor($userId)
     {
         $currentUser = $this->getUserService()->getUser($userId);
-        global $kernel;
+        $siteSettings = $this->getSettingService()->get('site', array());
 
-        if (empty($kernel)) {
-            return false;
-        }
-
-        //host待解决
-        $host = $kernel->getContainer()->get('request')->getHttpHost();
+        $host = empty($siteSettings['url']) ? '' : $siteSettings['url'];
 
         return array(
             'account' => array(

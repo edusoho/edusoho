@@ -115,7 +115,7 @@ class XapiServiceImpl extends BaseService implements XapiService
      */
     protected function getStatementDao()
     {
-        return $this->biz->dao('Xapi:StatementDao');
+        return $this->createDao('Xapi:StatementDao');
     }
 
     /**
@@ -123,7 +123,7 @@ class XapiServiceImpl extends BaseService implements XapiService
      */
     protected function getActivityWatchLogDao()
     {
-        return $this->biz->dao('Xapi:ActivityWatchLogDao');
+        return $this->createDao('Xapi:ActivityWatchLogDao');
     }
 
     /**
@@ -131,6 +131,6 @@ class XapiServiceImpl extends BaseService implements XapiService
      */
     protected function getTaskService()
     {
-        return $this->biz->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 }
