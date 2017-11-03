@@ -238,7 +238,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
         list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
         $adjustDeduct['payAmountExcludeAdjust'] = MathToolkit::simple($order['price_amount']  - $totalDeductAmountExcludeAdjust, 0.01);
-        $adjustDeduct['adjustPrice'] = empty($adjustDeduct['deduct_amount']) ? '' : MathToolkit::simple($order['pay_amount'], 0.01);
+        $adjustDeduct['adjustPrice'] = empty($adjustDeduct['deduct_amount']) ? '' : MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01);
         $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01)*10/$adjustDeduct['payAmountExcludeAdjust'], 2);
         return $adjustDeduct;
     }

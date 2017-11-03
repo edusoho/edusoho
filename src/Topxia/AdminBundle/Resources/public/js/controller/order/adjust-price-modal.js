@@ -15,7 +15,7 @@ define(function(require, exports, module) {
           return ;
         }
 
-        $.post($form.attr('action'), {adjustPrice:$form.find('.js-adjust-price').val()}, function(resp) {
+        $.post($form.attr('action'), {adjustPrice:$form.find('.js-pay-amount').html()}, function(resp) {
           window.location.reload();
         });
 
@@ -45,9 +45,9 @@ define(function(require, exports, module) {
     var originPayAmount = $form.find('.js-origin-pay-amount').data('originAmount');
     $form.on('change', '.js-adjust-price', function () {
       $el = $(this);
-      var adjustPrice = $el.val();
+      var adjustPrice = parseFloat(originPayAmount) - parseFloat($el.val());
       if ($.isNumeric(adjustPrice)) {
-        var discount = (parseFloat(adjustPrice))*10/parseFloat(originPayAmount);
+        var discount = (adjustPrice)*10/parseFloat(originPayAmount);
         $form.find('.js-adjust-discount').val(discount.toFixed(2));
         $form.find('.js-pay-amount').text(adjustPrice);
       }
@@ -58,9 +58,9 @@ define(function(require, exports, module) {
       $el = $(this);
       var discount = $el.val();
       if ($.isNumeric(discount)) {
-        var adjustPrice = (discount * originPayAmount / 10);
+        var adjustPrice = ((10 - discount) * originPayAmount / 10);
         $form.find('.js-adjust-price').val(adjustPrice.toFixed(2));
-        $form.find('.js-pay-amount').text(adjustPrice.toFixed(2));
+        $form.find('.js-pay-amount').text((originPayAmount - adjustPrice).toFixed(2));
       }
 
     });
