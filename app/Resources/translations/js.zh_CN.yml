@@ -141,6 +141,16 @@ uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
 
+
+importer.import_verify_tips_start: 校验成功！一共包含
+importer.import_verify_tips_end: 条数据
+importer.import_back_btn: 返回
+importer.import_reselect_btn: 重新导入
+importer.import_confirm_btn: 确定导入
+importer.import_error: 导入出错
+importer.import_progress_data: 已经导入%number%条数据
+importer.import_finish_data: 导入成功, 总共导入%number%条数据
+
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕
 subtitle.upload_srt_hint: 请上传srt格式的文件

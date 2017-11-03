@@ -22,8 +22,6 @@ class Importer {
 
     this.$container = $(this.container);
     this.$form = $(this.form);
-    this.$confirmEl = $(this.confirmEl);
-    this.$progressEl = $(this.progressEl);
     this.$progressTemplate = $(this.progressTemplate);
 
     this.init();
@@ -45,7 +43,7 @@ class Importer {
     if (filename === '') {
       return;
     }
-    this.$container.find('.filename').val(filename);
+    this.$container.find('.js-filename').val(filename);
   }
 
   onVerify(event) {
@@ -54,7 +52,7 @@ class Importer {
       rules: self.rules,
       submitHandler(form) {
         let $form = $(form);
-        let $btn = $(self.importBtn);
+        let $btn = $(self.verifyBtn);
         $btn.button('loading');
 
         self.formData = arrayToJson($form.serializeArray());
@@ -86,8 +84,8 @@ class Importer {
   }
 
   onReSelect(event) {
+    this.$container.find(this.confirmEl).remove();
     this.$form.show();
-    this.$confirmEl.remove();
   }
 
   onDanger(res) {
@@ -97,12 +95,13 @@ class Importer {
   onError(res) {
     const source = `
       <div id="importer-confirm">
-        {{#errors}}<div class="col-md-offset-2">{{error}}</div>{{/errors}}
-        <br>
-        <div class="col-md-offset-2">
-          <a type="button" class="btn btn-primary js-reselect" href="javascript:;">
-            ${Translator.trans('重新导入')}
-          </a>
+        <div class="alert alert-danger">
+          {{#errors}}{{error}}<br>{{/errors}}
+        </div>
+        <div class="text-right">
+          <button type="button" class="btn btn-primary js-reselect">
+            ${Translator.trans('importer.import_reselect_btn')}
+          </button>
         </div>
       </div>
     `;
@@ -122,14 +121,16 @@ class Importer {
   }
 
   onSuccess(res) {
-    console.log('res', res);
     let source = `
       <div id="importer-confirm">
-        {{#importData}}<div class="col-md-offset-2">{{nickname}}</div><br>{{/importData}}
-        <div class="col-md-offset-2">${Translator.trans('校验成功！一共包含')}<b>{{importData.length}}</b>${Translator.trans('条数据')}</div><br>
-        <div class="col-md-offset-2">
-          <button type="button" class="btn btn-primary" id="import-btn">${Translator.trans('确定导入')}</button>
-          <a type="button" class="btn btn-primary js-reselect" href="javascript:;">${Translator.trans('返回')}</a>
+        <div class="alert alert-success">
+          ${Translator.trans('importer.import_verify_tips_start')}
+          {{importData.length}}
+          ${Translator.trans('importer.import_verify_tips_end')}
+        </div>
+        <div class="text-right">
+          <button type="button" class="btn btn-default mrm js-reselect">${Translator.trans('importer.import_back_btn')}</button>
+          <button type="button" class="btn btn-primary" id="import-btn">${Translator.trans('importer.import_confirm_btn')}</button>
         </div>
       </div>
     `;

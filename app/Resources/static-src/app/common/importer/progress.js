@@ -32,8 +32,18 @@ class Progress {
   }
 
   init() {
-    console.log('import');
     this.import(0);
+    this.events();
+  }
+
+  events() {
+    this.$container.on('click', '.js-import-finish-btn', event => this.onFinish(event));
+  }
+
+  onFinish(event) {
+    let $this = $(event.currentTarget);
+    $this.button('loading');
+    window.location.reload();
   }
 
   onError() {
@@ -41,23 +51,23 @@ class Progress {
     .removeClass('progress-bar-success')
     .addClass('progress-bar-danger');
 
-    this.$container.find('.progress-text').text('发生未知错误').removeClass('text-success').addClass('text-danger');
-    // this.$container.find('a').removeClass('hidden').text('重新导入');
+    this.$container.find('.progress-text').text(Translator.trans('importer.import_error')).removeClass('text-success').addClass('text-danger');
+    this.$container.find('.js-import-finish-btn').removeClass('hidden').text(Translator.trans('importer.import_reselect_btn'));
   }
 
   onProgress() {
     let progress = parseInt(this.quantity / this.total * 100) + '%';
 
-    this.$container.find('.progress-bar-success').css('width', progress);
-    this.$container.find('.progress-text').text('已经导入: ' + this.quantity + '条数据');
+    this.$container.find('.progress-bar').css('width', progress);
+    this.$container.find('.progress-text').text(Translator.trans('importer.import_progress_data', {'number': this.quantity}));
     this.$container.find('.js-import-progress-text').removeClass('hidden');
   }
 
   onComplate() {
-     this.$container.find('.progress-bar').css('width', '100%');
-    //  this.$container.find('a').removeClass('hidden');
-     this.$container.find('.progress-text').text('导入成功, 总共导入: ' + this.quantity + '条数据');
-     this.$container.find('.js-import-progress-text').addClass('hidden');
+    this.$container.find('.progress-bar').css('width', '100%');
+    this.$container.find('.progress-text').text(Translator.trans('importer.import_finish_data', {'number': this.quantity}));
+    this.$container.find('.js-import-progress-text').addClass('hidden');
+    this.$container.find('.js-import-finish-btn').removeClass('hidden');
   }
 
   import(index) {
