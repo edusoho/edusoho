@@ -35,7 +35,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: 'input[name=adjust-by-discount]',
       required: false,
-      rule: 'currency min{min:0.01} max{max: 10}',
+      rule: 'currency max{max: 10}',
       display: '折扣',
       errormessageCurrency: '请输入正确到折扣,最多保留两位小数'
     });
@@ -47,7 +47,7 @@ define(function(require, exports, module) {
       if ($.isNumeric(adjustPrice)) {
         var discount = (adjustPrice)*10/parseFloat(originPayAmount);
         $form.find('.js-adjust-discount').val(discount.toFixed(2));
-        $form.find('.js-pay-amount').text(adjustPrice);
+        $form.find('.js-pay-amount').text(adjustPrice.toFixed(2));
       }
 
     });
