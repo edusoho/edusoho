@@ -25,6 +25,7 @@ class PushStatementJob extends AbstractJob
             $pushStatements[] = $push->package($statement);
         }
 
+
         $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
         $result = $this->createXAPIService()->pushStatements($pushStatements);
 

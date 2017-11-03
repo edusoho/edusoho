@@ -7,6 +7,7 @@ use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
+use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Context\BizAware;
 use QiQiuYun\SDK\Auth;
 
@@ -63,6 +64,9 @@ abstract class Type extends BizAware
         return $this->createService('Course:MemberService');
     }
 
+    /**
+     * @return XapiService
+     */
     protected function getXapiService()
     {
         return $this->createService('Xapi:XapiService');

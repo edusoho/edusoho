@@ -18,6 +18,8 @@ interface XapiService
 
     public function searchWatchLogs($conditions, $orderBys, $start, $limit);
 
+    public function getWatchLog($id);
+
     public function watchTask($taskId, $watchTime);
 
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0);
