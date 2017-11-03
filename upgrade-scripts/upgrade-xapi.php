@@ -109,71 +109,28 @@ class EduSohoUpgrade extends AbstractUpdater
     {
 
         if (!$this->isJobExist('Xapi_PushStatementsJob')) {
-            $currentTime = time();
-            $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-                  `name`,
-                  `expression`,
-                  `class`,
-                  `args`,
-                  `priority`,
-                  `pre_fire_time`,
-                  `next_fire_time`,
-                  `misfire_threshold`,
-                  `misfire_policy`,
-                  `enabled`,
-                  `creator_id`,
-                  `updated_time`,
-                  `created_time`
-            ) VALUES (
-                  'Xapi_PushStatementsJob',
-                  '* * * * *',
-                  'Codeages\\\\Biz\\\\Xapi\\\\Job\\\\PushStatementJob',
-                  '',
-                  '100',
-                  '0',
-                  '{$currentTime}',
-                  '300',
-                  'missed',
-                  '1',
-                  '0',
-                  '{$currentTime}',
-                  '{$currentTime}'
-            )");
+            $this->getSchedulerService()->register(array(
+                'name' => 'Xapi_PushStatementsJob',
+                'pool' => 'default',
+                'source' => 'MAIN',
+                'expression' => '* * * * *',
+                'class' => 'Biz\Xapi\Job\PushStatementJob',
+                'args' => array(),
+            ));
         }
 
         $this->logger('info', '新增PushStatementJob');
 
         if (!$this->isJobExist('Xapi_AddActivityWatchToStatementJob')) {
-            $currentTime = time();
-            $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-                  `name`,
-                  `expression`,
-                  `class`,
-                  `args`,
-                  `priority`,
-                  `pre_fire_time`,
-                  `next_fire_time`,
-                  `misfire_threshold`,
-                  `misfire_policy`,
-                  `enabled`,
-                  `creator_id`,
-                  `updated_time`,
-                  `created_time`
-            ) VALUES (
-                  'Xapi_AddActivityWatchToStatementJob',
-                  '* * * * *',
-                  'Codeages\\\\Biz\\\\Xapi\\\\Job\\\\AddActivityWatchToStatementJob',
-                  '',
-                  '100',
-                  '0',
-                  '{$currentTime}',
-                  '300',
-                  'missed',
-                  '1',
-                  '0',
-                  '{$currentTime}',
-                  '{$currentTime}'
-            )");
+
+            $this->getSchedulerService()->register(array(
+                'name' => 'Xapi_AddActivityWatchToStatementJob',
+                'pool' => 'default',
+                'source' => 'MAIN',
+                'expression' => '* * * * *',
+                'class' => 'Biz\Xapi\Job\AddActivityWatchToStatementJob',
+                'args' => array(),
+            ));
         }
 
         $this->logger('info', '新增AddActivityWatchToStatementJob');
