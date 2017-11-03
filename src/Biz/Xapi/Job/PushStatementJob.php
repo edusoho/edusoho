@@ -31,7 +31,6 @@ class PushStatementJob extends AbstractJob
         if ($result) {
             $this->getXapiService()->updateStatementsPushedByStatementIds($statementIds);
         }
-
     }
 
     public function createXAPIService()

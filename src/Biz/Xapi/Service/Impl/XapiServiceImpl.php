@@ -2,9 +2,7 @@
 
 namespace Biz\Xapi\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
-use AppBundle\Common\Exception\InvalidArgumentException;
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
