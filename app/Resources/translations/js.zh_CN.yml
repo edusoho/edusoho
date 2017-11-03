@@ -710,7 +710,7 @@ validate_old.reg_invite_code.message: %display%必须是5位数字、英文字�
 validate_old.alphanumeric.message: %display%必须是英文字母、数字及下划线组成
 validate_old.alphabet_underline.message: %display%必须以英文字母或下划线开头
 validate_old.byte_minlength.message: %display%的长度必须大于等于%min%，一个中文字算2个字符
-validate_old.date_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
+validate_old.currency_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
 validate_old.currency.message: %display%的长度必须小于等于%max%，一个中文字算2个字符
 validate_old.idcard.message: %display%格式不正确
 validate_old.password.message: %display%只能由4-20个字符组成
@@ -718,7 +718,7 @@ validate_old.second_range.message: 秒数只能在0-59之间
 validate_old.date.message: 请输入正确的日期,格式如XXXX-MM-DD
 validate_old.qq.message: %display%格式不正确
 validate_old.integer.message: %display%必须为整数
-validate_old.date_check.message: 请输入正确的小数,只保留到两位小数
+validate_old.float_check.message: 请输入正确的小数,只保留到两位小数
 validate_old.float.message: 请输入正确的小数,只保留到一位小数
 validate_old.int.message: %display%必须为整数,最大到9位整数
 validate_old.positive_integer.message: %display%必须为正整数

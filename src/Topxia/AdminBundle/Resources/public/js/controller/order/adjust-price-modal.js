@@ -24,20 +24,22 @@ define(function(require, exports, module) {
     });
 
     validator.getExplain = function (ele) {
-      return $('.js-display-error ');
+      return $('.js-display-error');
     };
 
     validator.addItem({
       element: 'input[name=adjust-by-price]',
       required: false,
-      rule: 'currency'
+      rule: 'currency',
+      display: '优惠价格'
     });
 
     validator.addItem({
       element: 'input[name=adjust-by-discount]',
       required: false,
       rule: 'currency max{max: 10}',
-      display: '折扣'
+      display: '折扣',
+      errormessageCurrency: '请输入正确到折扣'
     });
 
     var originPayAmount = $form.find('.js-origin-pay-amount').data('originAmount');
@@ -45,8 +47,8 @@ define(function(require, exports, module) {
       $el = $(this);
       var adjustPrice = $el.val();
       if ($.isNumeric(adjustPrice)) {
-        var discount = (parseFloat(adjustPrice))*10/parseFloat(originPayAmount).toFixed(2);
-        $form.find('.js-adjust-discount').val(discount);
+        var discount = (parseFloat(adjustPrice))*10/parseFloat(originPayAmount);
+        $form.find('.js-adjust-discount').val(discount.toFixed(2));
         $form.find('.js-pay-amount').text(adjustPrice);
       }
 
@@ -56,9 +58,9 @@ define(function(require, exports, module) {
       $el = $(this);
       var discount = $el.val();
       if ($.isNumeric(discount)) {
-        var adjustPrice = (discount * originPayAmount / 10).toFixed(2);
-        $form.find('.js-adjust-price').val(adjustPrice);
-        $form.find('.js-pay-amount').text(adjustPrice);
+        var adjustPrice = (discount * originPayAmount / 10);
+        $form.find('.js-adjust-price').val(adjustPrice.toFixed(2));
+        $form.find('.js-pay-amount').text(adjustPrice.toFixed(2));
       }
 
     });

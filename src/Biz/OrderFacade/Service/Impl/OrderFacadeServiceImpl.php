@@ -225,8 +225,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(
             'title' => $order['title'],
             'orderId' => $order['id'],
-            'oldPrice' => $order['pay_amount'],
-            'newPrice' => $payAmount,
+            'oldPrice' => MathToolkit::simple($order['pay_amount'], 0.01),
+            'newPrice' => MathToolkit::simple($payAmount, 0.01),
             'adjust_amount' => $adjustAmount,
         ));
 

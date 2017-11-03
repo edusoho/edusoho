@@ -8117,7 +8117,7 @@ log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
 log.action.order.course_callback: 课程回调
 log.action.order.classroom_callback: 班级回调
-log.action.order.adjust_price: 价格调整
+log.action.order.adjustPrice: 价格调整
 log.action.category.create: 新增
 log.action.category.update: 修改
 log.action.category.delete: 删除
