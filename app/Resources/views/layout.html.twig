@@ -8,10 +8,9 @@
 <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html> <!--<![endif]-->
-{# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
-{% set mobile = is_show_mobile_page() %}
 {% set lang = app.request.getLocale() %}
-<html lang="{{ lang }}" class="{% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %}es-mobile{% endif %}{% if lang == 'en' %}es-en{% endif %}">
+{% set mobile = is_show_mobile_page() %}
+<html lang="{{ lang }}" class="{% if lang == 'en' %}es-en{% endif %}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -50,7 +49,7 @@
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
-    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}
