@@ -194,42 +194,19 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    public function adjustOrderPayAmount($orderId, $payAmount)
+    public function adjustOrderPrice($orderId, $newPayAmount)
     {
-        $order = $this->getOrderService()->getOrder($orderId);
-        $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($orderId);
-        list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
-        $adjustAmount = $order['price_amount'] - $payAmount - $totalDeductAmountExcludeAdjust;
-
-        if ($adjustAmount < 0) {
-            throw new InvalidArgumentException('order.adjust_price.over_limit', 21111);
-        }
-
-        if ($adjustDeduct) {
-            $this->getOrderService()->updateOrderItemDeduct($adjustDeduct['id'], array(
-                'deduct_amount' => $adjustAmount,
-                'user_id' => $order['user_id'],
-            ));
-        } else {
-            $this->getOrderService()->addOrderItemDeduct(array(
-                'order_id' => $order['id'],
-                'item_id' => 0,
-                'deduct_type' => self::DEDUCT_TYPE_ADJUST,
-                'deduct_id' => 0,
-                'deduct_amount' => $adjustAmount,
-                'user_id' => $order['user_id'],
-            ));
-        }
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($orderId, $newPayAmount);
 
         $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(
-            'title' => $order['title'],
-            'orderId' => $order['id'],
-            'oldPrice' => MathToolkit::simple($order['pay_amount'], 0.01),
-            'newPrice' => MathToolkit::simple($payAmount, 0.01),
-            'adjust_amount' => $adjustAmount,
+            'title' => $adjustDeduct['order']['title'],
+            'orderId' => $orderId,
+            'oldPrice' => MathToolkit::simple($newPayAmount + $adjustDeduct['deduct_amount'], 0.01),
+            'newPrice' => MathToolkit::simple($newPayAmount, 0.01),
+            'adjust_amount' => MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01),
         ));
 
-        return $adjustAmount;
+        return $adjustDeduct;
     }
 
     public function getOrderAdjustInfo($order)

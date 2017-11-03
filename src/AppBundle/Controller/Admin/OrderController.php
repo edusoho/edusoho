@@ -118,7 +118,7 @@ class OrderController extends BaseController
     public function adjustPriceAction(Request $request, $id)
     {
         if ($request->getMethod() == 'POST') {
-            $this->getOrderFacadeService()->adjustOrderPayAmount(
+            $this->getOrderFacadeService()->adjustOrderPrice(
                 $id,  MathToolkit::simple($request->request->get('adjustPrice'), 100)
             );
 
