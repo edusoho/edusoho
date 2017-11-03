@@ -16,7 +16,7 @@ class ViewLogServiceTest extends BaseTestCase
                     'returnValue' => array('id' => 111, 'title' => 'title'),
                     'withParams' => array(
                         array('title' => 'title')
-                    )
+                    ),
                 )
             )
         );
@@ -42,8 +42,8 @@ class ViewLogServiceTest extends BaseTestCase
                         array('title' => 'title'),
                         array('id', 'asc'),
                         0,
-                        5
-                    )
+                        5,
+                    ),
                 )
             )
         );
@@ -52,7 +52,7 @@ class ViewLogServiceTest extends BaseTestCase
             array('title' => 'title'),
             array('id', 'asc'),
             0,
-            5
+            5,
         );
         $this->assertArrayEquals(
             array('id' => 111, 'title' => 'title'),
@@ -71,7 +71,7 @@ class ViewLogServiceTest extends BaseTestCase
                     'withParams' => array(
                         array('title' => 'title'),
                         12312322211,
-                        12312322311
+                        12312322311,
                     )
                 )
             )
@@ -80,7 +80,7 @@ class ViewLogServiceTest extends BaseTestCase
         $result = $this->getViewLogService()->searchViewLogsGroupByTime(
             array('title' => 'title'),
             12312322211,
-            12312322311
+            12312322311,
         );
         $this->assertArrayEquals(
             array('id' => 111, 'title' => 'title'),
@@ -96,7 +96,7 @@ class ViewLogServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'count',
                     'returnValue' => 123,
-                    'withParams' => array(array('title' => 'title'))
+                    'withParams' => array(array('title' => 'title')),
                 )
             )
         );
