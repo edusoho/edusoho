@@ -137,13 +137,32 @@ class OrderFacadeServiceTest extends BaseTestCase
             array('functionName' => 'getOrder', 'returnValue' => array('price_amount' => 100)),
             array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
                 array('deduct_type' => 'discount', 'deduct_amount' => 20),
-                array('deduct_type' => 'adjust_price', 'deduct_amount' => 10)
+                array('deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 10)
             )),
             array('functionName' => 'updateOrderItemDeduct', 'returnValue' => 30),
         ));
 
         $adjustAmount = $this->getOrderFacadeService()->adjustOrderPayAmount(1, 50);
         $this->assertEquals(30, $adjustAmount);
+    }
+
+    public function testGetOrderAdjustInfo()
+    {
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
+                array('deduct_type' => 'discount', 'deduct_amount' => 2000),
+                array('deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 1000)
+            ))
+        ));
+
+        $order = array('id' => 1, 'price_amount' => 10000, 'pay_amount' => 7000);
+        $adjustInfo = $this->getOrderFacadeService()->getOrderAdjustInfo($order);
+
+        $this->assertArrayEquals(
+            $adjustInfo,
+            array('payAmountExcludeAdjust' => 80, 'adjustPrice' => 70, 'adjustDiscount' => 8.75),
+            array('payAmountExcludeAdjust', 'adjustPrice', 'adjustDiscount')
+        );
     }
 
     private function mockCurrency()

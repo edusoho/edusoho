@@ -21,8 +21,6 @@ use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
-    const DEDUCT_TYPE_ADJUST = 'adjustPrice';
-
     public function create(Product $product)
     {
         $product->validate();
@@ -112,7 +110,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
     public function createSpecialOrder(Product $product, $userId, $params = array())
     {
-        $currency = $this->getCurrency();
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
