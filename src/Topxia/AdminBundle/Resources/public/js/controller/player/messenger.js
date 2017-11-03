@@ -16,8 +16,8 @@ define(function(require, exports, module) {
 
     setup: function() {
       var self = this;
-
       var messenger = new OriginMessenger(this.get("name"), this.get("project"));
+
       if (this.get("type") == "child") {
         messenger.addTarget(window.parent, 'parent');
       } else if (this.get("type") == "parent") {
@@ -33,8 +33,8 @@ define(function(require, exports, module) {
       })
 
       this.set("messenger", messenger);
-
     },
+
     sendToParent: function(eventName, args) {
       this.get("messenger").targets['parent'].send(
         this.convertToString(eventName, args)
