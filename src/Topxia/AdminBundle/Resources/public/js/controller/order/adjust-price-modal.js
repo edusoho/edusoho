@@ -18,8 +18,6 @@ define(function(require, exports, module) {
         $.post($form.attr('action'), {adjustPrice:$form.find('.js-pay-amount').html()}, function(resp) {
           window.location.reload();
         });
-
-        $('#refund-confirm-btn').button('submiting').addClass('disabled');
       }
     });
 
