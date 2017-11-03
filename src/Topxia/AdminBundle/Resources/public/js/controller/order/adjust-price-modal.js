@@ -15,11 +15,8 @@ define(function(require, exports, module) {
           return ;
         }
 
-        $.post($form.action, {adjustPrice:$form.find('.js-adjust-price').val()}, function(resp) {
-          "use strict";
-
-
-
+        $.post($form.attr('action'), {adjustPrice:$form.find('.js-adjust-price').val()}, function(resp) {
+          window.location.reload();
         });
 
         $('#refund-confirm-btn').button('submiting').addClass('disabled');
@@ -43,7 +40,7 @@ define(function(require, exports, module) {
       display: '折扣'
     });
 
-    var originPayAmount = $form.find('.js-pay-amount').data('originAmount');
+    var originPayAmount = $form.find('.js-origin-pay-amount').data('originAmount');
     $form.on('change', '.js-adjust-price', function () {
       $el = $(this);
       var adjustPrice = $el.val();

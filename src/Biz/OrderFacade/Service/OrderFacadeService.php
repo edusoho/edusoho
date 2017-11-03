@@ -29,4 +29,6 @@ interface OrderFacadeService
     public function sumOrderItemPayAmount($conditions);
 
     public function adjustOrderPayAmount($orderId, $payAmount);
+
+    public function getOrderAdjustInfo($order);
 }
