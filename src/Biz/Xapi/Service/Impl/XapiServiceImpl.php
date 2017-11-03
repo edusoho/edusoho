@@ -19,7 +19,6 @@ class XapiServiceImpl extends BaseService implements XapiService
         }
 
         $statement['version'] = $this->biz['xapi.options']['version'];
-        $statement['user_id'] = $this->biz['user']['id'];
         $statement['uuid'] = $this->generateUUID();
 
         return $this->getStatementDao()->create($statement);

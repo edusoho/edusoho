@@ -13,9 +13,11 @@ class DoTestpaperType extends Type
         $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($testpaperResult['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $course['title'] = $courseSet['title'].'-'.$course['title'];
 
         $object = array(
             'id' => $testpaperResult['id'],
+            'name' => $testpaperResult['paperName'],
             'course' => $course,
         );
 

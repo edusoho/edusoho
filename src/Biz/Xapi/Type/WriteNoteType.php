@@ -13,6 +13,7 @@ class WriteNoteType extends Type
         $course = $this->getCourseService()->getCourse($note['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($note['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $course['title'] = $courseSet['title'].'-'.$course['title'];
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {

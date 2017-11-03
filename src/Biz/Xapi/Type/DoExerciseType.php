@@ -12,9 +12,11 @@ class DoExerciseType extends Type
         $course = $this->getCourseService()->getCourse($exerciseFinish['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($exerciseFinish['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $course['title'] = $courseSet['title'].'-'.$course['title'];
 
         $object = array(
             'id' => $exerciseFinish['id'],
+            'name' => $exerciseFinish['paperName'],
             'course' => $course,
         );
 

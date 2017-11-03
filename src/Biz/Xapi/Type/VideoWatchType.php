@@ -13,6 +13,7 @@ class VideoWatchType extends Type
         $course = $this->getCourseService()->getCourse($watchLog['course_id']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $course['title'] = $courseSet['title'].'-'.$course['title'];
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {

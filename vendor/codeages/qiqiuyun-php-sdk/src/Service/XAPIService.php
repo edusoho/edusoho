@@ -174,6 +174,9 @@ class XAPIService extends BaseService
             'id' => $object['id'],
             'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/homework',
+                'name' => array(
+                    $this->defaultLang => $object['name']
+                ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
@@ -209,6 +212,9 @@ class XAPIService extends BaseService
             'id' => $object['id'],
             'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/exercise',
+                'name' => array(
+                    $this->defaultLang => $object['name']
+                ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
@@ -244,6 +250,9 @@ class XAPIService extends BaseService
             'id' => $object['id'],
             'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/testpaper',
+                'name' => array(
+                    $this->defaultLang => $object['name']
+                ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],

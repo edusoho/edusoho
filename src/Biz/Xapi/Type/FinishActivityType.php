@@ -12,6 +12,7 @@ class FinishActivityType extends Type
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $course['title'] = $courseSet['title'].'-'.$course['title'];
 
         $activity = $this->getActivityService()->getActivity($taskResult['activityId'], true);
         if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {

@@ -12,9 +12,11 @@ class DoHomeworkType extends Type
         $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($homeworkResult['courseSetId']);
         $course['description'] = $courseSet['subtitle'];
+        $course['title'] = $courseSet['title'].'-'.$course['title'];
 
         $object = array(
             'id' => $homeworkResult['id'],
+            'name' => $homeworkResult['paperName'],
             'course' => $course,
         );
 
