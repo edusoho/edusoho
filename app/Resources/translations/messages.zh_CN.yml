@@ -677,8 +677,8 @@ import.finish_loading: 正在完成导入, 请稍等...
 import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 批量添加新用户
 import.user_import.content_title: 批量添加学员
-import.user_import.choose_file: 选择要导入的文件
-import.user_import.browser_btn: 浏览...
+import.user_import.choose_file: 选择文件
+import.user_import.browser_btn: 选择
 import.user_import.download_example_btn: 点击下载示例说明文件
 import.user_import.download_example_tips: 支持从Excel文件导入
 import.user_import.price: 购买价格
