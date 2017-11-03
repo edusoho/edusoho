@@ -45,4 +45,8 @@ interface OrderService
     public function sumOrderItemPayAmount($conditions);
 
     public function sumPaidAmount($conditions);
+
+    public function addOrderItemDeduct($deduct);
+
+    public function updateOrderItemDeduct($deductId, $updateFields);
 }

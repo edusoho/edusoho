@@ -186,8 +186,6 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         $seq = 1;
 
         foreach ($questions as $item) {
-            $questionType = $this->getQuestionService()->getQuestionConfig($item['questionType']);
-
             $item['seq'] = $seq;
 
             if ($item['questionType'] != 'material') {

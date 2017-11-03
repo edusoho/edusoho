@@ -548,6 +548,9 @@ order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.price: 订单价格
 order.confirm.bought_course_deduction: 已购课程抵扣
+order.adjust_price_btn: 改价
+order.before_adjust_price: 订单原价
+order.adjust_price_modal_title: 订单改价
 
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
@@ -2082,7 +2085,7 @@ testpaper.answer.answer_card.exam_tips: >
 testpaper.answer.answer_card.exam_with_pass_score_tips: >
   <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>，及格为<span class="color-primary">%finishScore%</span>分
 testpaper.answer.answer_card.limited_time_tips: >
-  请在<span class="color-primary">%limitedTime%分钟</span>内作答。
+  请在<span class="color-primary">%limitedTime%</span>内作答。
 testpaper.answer.answer_card.submit_btn: 马上交卷
 testpaper.answer.student: 答题人：
 testpaper.answer.endtime: 交卷时间：
@@ -8114,6 +8117,7 @@ log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
 log.action.order.course_callback: 课程回调
 log.action.order.classroom_callback: 班级回调
+log.action.order.adjust_price: 价格调整
 log.action.category.create: 新增
 log.action.category.update: 修改
 log.action.category.delete: 删除
@@ -8178,6 +8182,7 @@ order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 
 cashflow.title: 名称
 cashflow.sn: 流水号

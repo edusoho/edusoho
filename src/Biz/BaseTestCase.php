@@ -56,7 +56,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $keys = $biz->keys();
 
         foreach ($keys as $key) {
-            if ('@' === substr($key, 0, 1)) {
+            if (substr($key, 0, 1) === '@' && substr($key, 0, 8) != '@Custom:') {
                 unset($biz[$key]);
             }
         }
