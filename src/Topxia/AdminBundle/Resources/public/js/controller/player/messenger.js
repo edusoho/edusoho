@@ -4,8 +4,8 @@ define(function(require, exports, module) {
 
   var Messenger = Widget.extend({
     attrs: {
-      name: "",
-      project: "",
+      name: '',
+      project: '',
       children: [],
       type: '' //enum: parent,child
     },
