@@ -17,7 +17,7 @@ class ViewLogServiceTest extends BaseTestCase
                     'withParams' => array(
                         array('title' => 'title')
                     ),
-                )
+                ),
             )
         );
 
@@ -44,7 +44,7 @@ class ViewLogServiceTest extends BaseTestCase
                         0,
                         5,
                     ),
-                )
+                ),
             )
         );
 
@@ -73,7 +73,7 @@ class ViewLogServiceTest extends BaseTestCase
                         12312322211,
                         12312322311,
                     ),
-                )
+                ),
             )
         );
 
@@ -97,7 +97,7 @@ class ViewLogServiceTest extends BaseTestCase
                     'functionName' => 'count',
                     'returnValue' => 123,
                     'withParams' => array(array('title' => 'title')),
-                )
+                ),
             )
         );
 
