@@ -15,7 +15,7 @@ class ViewLogServiceTest extends BaseTestCase
                     'functionName' => 'create',
                     'returnValue' => array('id' => 111, 'title' => 'title'),
                     'withParams' => array(
-                        array('title' => 'title')
+                        array('title' => 'title'),
                     ),
                 ),
             )
