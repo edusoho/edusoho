@@ -1,7 +1,5 @@
-{% extends 'importer/layout.html.twig' %}
+{% extends 'importer/old-importer-layout.html.twig' %}
 {% block title %}{{'classroom.batch_add_student'|trans}}{% endblock %}
-
-{% do script(['libs/handlebars.js', 'libs/jquery-validation.js', 'app/js/classroom-manage/student-import/index.js']) %}
 
 {% block form_data %}
 	<div class="form-group" id="teachers-form-group">
@@ -11,7 +9,7 @@
 		<div class="col-md-8 controls">
 			<div class="uploader blue">
 				<input type="text" class="filename" readonly="readonly"/>
-				<button type="button" class=" button" value="{{ 'classroom.import_file_preview'|trans }}..."/></button>
+				<input type="button" name="excel" class=" button" value="{{ 'classroom.import_file_preview'|trans }}..."/>
 				<input type="file" size="30" name="excel"/>
 			</div>
 			<br>
@@ -48,12 +46,12 @@
 	<input type="hidden" name="classroomId" value="{{ classroom.id }}">
 {% endblock %}
 
-{# {% block load_import_js %}
+{% block load_import_js %}
 	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 	app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/manage/student-import'); };
-{% endblock %} #}
+{% endblock %}
 
-{# {% block stylesheet %}
+{% block stylesheet %}
 	<style>
 		.page-header {
 			padding-bottom: 12px;
@@ -62,4 +60,4 @@
 			border-bottom-width: 2px;
 		}
 	</style>
-{% endblock %} #}
+{% endblock %}
