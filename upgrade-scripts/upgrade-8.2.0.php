@@ -609,7 +609,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` as `item_id`,
                 'discount' as `deduct_type`,
                 `discountId` as `deduct_id`,              
-                round(o.`totalPrice` * (10 - o.`discount`) * 10) as `deduct_amount`,
+                case when o.`discount` = 10 then 0 else round(o.`totalPrice` * (10 - o.`discount`) * 10) end as `deduct_amount`,
                 case when `o`.`status` in ('paid', 'refunding') then 'success' when `o`.`status` = 'cancelled' then 'closed' else `o`.`status` end  as `status`, -- TODO 保持和biz_order一样
                 `userId` as `user_id`,
                 0 as `seller_id`,
