@@ -56,7 +56,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $keys = $biz->keys();
 
         foreach ($keys as $key) {
-            if (substr($key, 0, 1) === '@') {
+            if ('@' === substr($key, 0, 1)) {
                 unset($biz[$key]);
             }
         }
@@ -166,7 +166,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
         foreach ($params as $param) {
             $expectation = $mockObj->shouldReceive($param['functionName']);
-            
+
             if (!empty($param['runTimes'])) {
                 $expectation = $expectation->times($param['runTimes']);
             }

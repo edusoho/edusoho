@@ -2,10 +2,6 @@
 
 namespace Tests\Unit\Task;
 
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
-use Biz\Task\Service\TaskResultService;
 use Biz\BaseTestCase;
 
 class ViewLogServiceTest extends BaseTestCase
@@ -29,7 +25,7 @@ class ViewLogServiceTest extends BaseTestCase
         $result = $this->getViewLogService()->createViewLog(array('title' => 'title'));
          
         $this->assertArrayEquals(
-            array('id' => 111, 'title' => 'title'), 
+            array('id' => 111, 'title' => 'title'),
             $result
         );
     }
@@ -43,9 +39,9 @@ class ViewLogServiceTest extends BaseTestCase
                     'functionName' => 'search',
                     'returnValue' => array('id' => 111, 'title' => 'title'),
                     'withParams' => array(
-                        array('title' => 'title'), 
-                        array('id', 'asc'), 
-                        0, 
+                        array('title' => 'title'),
+                        array('id', 'asc'),
+                        0,
                         5
                     )
                 )
@@ -53,13 +49,13 @@ class ViewLogServiceTest extends BaseTestCase
         );
 
         $result = $this->getViewLogService()->searchViewLogs(
-            array('title' => 'title'), 
-            array('id', 'asc'), 
-            0, 
+            array('title' => 'title'),
+            array('id', 'asc'),
+            0,
             5
         );
         $this->assertArrayEquals(
-            array('id' => 111, 'title' => 'title'), 
+            array('id' => 111, 'title' => 'title'),
             $result
         );
     }
@@ -73,8 +69,8 @@ class ViewLogServiceTest extends BaseTestCase
                     'functionName' => 'searchGroupByTime',
                     'returnValue' => array('id' => 111, 'title' => 'title'),
                     'withParams' => array(
-                        array('title' => 'title'), 
-                        12312322211, 
+                        array('title' => 'title'),
+                        12312322211,
                         12312322311
                     )
                 )
@@ -82,12 +78,12 @@ class ViewLogServiceTest extends BaseTestCase
         );
 
         $result = $this->getViewLogService()->searchViewLogsGroupByTime(
-            array('title' => 'title'), 
-            12312322211, 
+            array('title' => 'title'),
+            12312322211,
             12312322311
         );
         $this->assertArrayEquals(
-            array('id' => 111, 'title' => 'title'), 
+            array('id' => 111, 'title' => 'title'),
             $result
         );
     }
@@ -118,5 +114,4 @@ class ViewLogServiceTest extends BaseTestCase
     {
         return $this->createDao('Task:ViewLogDao');
     }
-
 }
