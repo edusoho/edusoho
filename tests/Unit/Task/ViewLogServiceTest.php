@@ -23,7 +23,7 @@ class ViewLogServiceTest extends BaseTestCase
 
         //　上面的mock方法指定了　参数为一个数组，如果传入的参数和指定的参数不一样，会报错
         $result = $this->getViewLogService()->createViewLog(array('title' => 'title'));
-         
+
         $this->assertArrayEquals(
             array('id' => 111, 'title' => 'title'),
             $result
@@ -52,7 +52,7 @@ class ViewLogServiceTest extends BaseTestCase
             array('title' => 'title'),
             array('id', 'asc'),
             0,
-            5,
+            5
         );
         $this->assertArrayEquals(
             array('id' => 111, 'title' => 'title'),
@@ -72,7 +72,7 @@ class ViewLogServiceTest extends BaseTestCase
                         array('title' => 'title'),
                         12312322211,
                         12312322311,
-                    )
+                    ),
                 )
             )
         );
@@ -80,7 +80,7 @@ class ViewLogServiceTest extends BaseTestCase
         $result = $this->getViewLogService()->searchViewLogsGroupByTime(
             array('title' => 'title'),
             12312322211,
-            12312322311,
+            12312322311
         );
         $this->assertArrayEquals(
             array('id' => 111, 'title' => 'title'),
