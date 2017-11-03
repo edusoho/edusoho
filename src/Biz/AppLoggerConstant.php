@@ -259,6 +259,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'unbind-back',
                 'course_callback',
                 'classroom_callback',
+                'adjustPrice',
             ),
             self::CATEGORY => array(
                 'create',

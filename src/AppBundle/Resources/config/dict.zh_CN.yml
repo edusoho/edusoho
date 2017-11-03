@@ -116,6 +116,7 @@ orderDeductType:
     discount: 打折
     coupon: 优惠券
     paidCourse: 班级课程抵扣
+    adjustPrice: 改价
 
 source:
     self: 本站
