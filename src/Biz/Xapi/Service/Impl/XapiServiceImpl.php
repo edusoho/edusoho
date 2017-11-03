@@ -20,14 +20,6 @@ class XapiServiceImpl extends BaseService implements XapiService
             throw new AccessDeniedException('user is not login.');
         }
 
-        if (!ArrayToolkit::requireds($statement, array('data'))) {
-            throw new InvalidArgumentException('args is invalid, miss required fields.');
-        }
-
-        if (!ArrayToolkit::requireds($statement['data'], array('actor', 'verb', 'object'))) {
-            throw new InvalidArgumentException('statement is invalid, miss required fields.');
-        }
-
         $statement['version'] = $this->biz['xapi.options']['version'];
         $statement['user_id'] = $this->biz['user']['id'];
         $statement['uuid'] = $this->generateUUID();

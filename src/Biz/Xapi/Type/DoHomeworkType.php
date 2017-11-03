@@ -4,7 +4,7 @@ namespace Biz\Xapi\Type;
 
 class DoHomeworkType extends Type
 {
-    const TYPE = 'do_homework';
+    const TYPE = 'completed_homework';
 
     public function package($statement)
     {

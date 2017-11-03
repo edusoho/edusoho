@@ -4,7 +4,7 @@ namespace Biz\Xapi\Type;
 
 class WriteNoteType extends Type
 {
-    const TYPE = 'write_note';
+    const TYPE = 'noted_note';
 
     public function package($statement)
     {

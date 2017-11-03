@@ -339,6 +339,11 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
+    public function watchLive($actor, $object, $result, $isPush = true)
+    {
+
+    }
+
     /**
      * 提交学习记录
      * @param $statement

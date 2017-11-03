@@ -4,7 +4,7 @@ namespace Biz\Xapi\Type;
 
 class DoTestpaperType extends Type
 {
-    const TYPE = 'do_testpaper';
+    const TYPE = 'completed_testpaper';
 
     public function package($statement)
     {

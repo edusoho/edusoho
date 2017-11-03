@@ -9,7 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use Guzzle\Http\Client;
 use QiQiuYun\SDK\Auth;
 
-class PushStatementsJob extends AbstractJob
+class PushStatementJob extends AbstractJob
 {
     public function execute()
     {
@@ -17,6 +17,7 @@ class PushStatementsJob extends AbstractJob
             'status' => 'created',
         );
         $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
+        file_put_contents('1.txt', json_encode($statements));
         $statementIds = ArrayToolkit::column($statements, 'id');
 
         $pushStatements = array();

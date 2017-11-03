@@ -4,7 +4,7 @@ namespace Biz\Xapi\Type;
 
 class DoExerciseType extends Type
 {
-    const TYPE = 'do_exercise';
+    const TYPE = 'completed_exercise';
 
     public function package($statement)
     {

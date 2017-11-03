@@ -3,7 +3,7 @@
 namespace Biz\Xapi\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\Biz\Framework\Xapi\Dao\StatementDao;
+use Biz\Xapi\Dao\StatementDao;
 
 class StatementDaoImpl extends GeneralDaoImpl implements StatementDao
 {

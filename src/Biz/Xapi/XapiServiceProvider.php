@@ -85,5 +85,10 @@ class XapiServiceProvider implements ServiceProviderInterface
 
             return $type;
         });
+
+        $biz['xapi.options'] = array(
+            'version' => '1.0.0',
+            'getway' => ''
+        );
     }
 }

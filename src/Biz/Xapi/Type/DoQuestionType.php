@@ -4,7 +4,7 @@ namespace Biz\Xapi\Type;
 
 class DoQuestionType extends Type
 {
-    const TYPE = 'do_question';
+    const TYPE = 'answered_question';
 
     public function package($statement)
     {
