@@ -210,7 +210,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 'deduct_amount' => $adjustAmount,
                 'user_id' => $this->getCurrentUser()->getId(),
             ));
-
         } else {
             $this->getOrderService()->addOrderItemDeduct(array(
                 'order_id' => $order['id'],
@@ -218,7 +217,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 'deduct_type' => self::DEDUCT_TYPE_ADJUST,
                 'deduct_id' => 0,
                 'deduct_amount' => $adjustAmount,
-                'user_id' => $this->getCurrentUser()->getId()
+                'user_id' => $this->getCurrentUser()->getId(),
             ));
         }
 
@@ -237,9 +236,10 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
         list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
-        $adjustDeduct['payAmountExcludeAdjust'] = MathToolkit::simple($order['price_amount']  - $totalDeductAmountExcludeAdjust, 0.01);
+        $adjustDeduct['payAmountExcludeAdjust'] = MathToolkit::simple($order['price_amount'] - $totalDeductAmountExcludeAdjust, 0.01);
         $adjustDeduct['adjustPrice'] = empty($adjustDeduct['deduct_amount']) ? '' : MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01);
-        $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01)*10/$adjustDeduct['payAmountExcludeAdjust'], 2);
+        $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01) * 10 / $adjustDeduct['payAmountExcludeAdjust'], 2);
+
         return $adjustDeduct;
     }
 

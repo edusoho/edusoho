@@ -106,13 +106,13 @@ class OrderFacadeServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testAdjustOrderPayAmountWithError()
     {
         $this->mockBiz('Order:OrderService', array(
             array('functionName' => 'getOrder', 'returnValue' => array('price_amount' => 100)),
-            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20)) ),
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20))),
             array('functionName' => 'addOrderItemDeduct', 'returnValue' => array()),
         ));
 
@@ -123,7 +123,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     {
         $this->mockBiz('Order:OrderService', array(
             array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order', 'pay_amount' => 80, 'price_amount' => 100)),
-            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20)) ),
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(array('deduct_type' => 'discount', 'deduct_amount' => 20))),
             array('functionName' => 'addOrderItemDeduct', 'returnValue' => 30),
         ));
 
@@ -137,7 +137,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             array('functionName' => 'getOrder', 'returnValue' => array('id' => 1, 'title' => 'order',  'pay_amount' => 80, 'price_amount' => 100)),
             array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
                 array('deduct_type' => 'discount', 'deduct_amount' => 20),
-                array('id' => 1, 'deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 10)
+                array('id' => 1, 'deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 10),
             )),
             array('functionName' => 'updateOrderItemDeduct', 'returnValue' => 30),
         ));
@@ -151,8 +151,8 @@ class OrderFacadeServiceTest extends BaseTestCase
         $this->mockBiz('Order:OrderService', array(
             array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
                 array('deduct_type' => 'discount', 'deduct_amount' => 2000),
-                array('deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 1000)
-            ))
+                array('deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 1000),
+            )),
         ));
 
         $order = array('id' => 1, 'price_amount' => 10000, 'pay_amount' => 7000);
