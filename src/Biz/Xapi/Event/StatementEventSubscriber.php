@@ -496,12 +496,13 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->createService('Testpaper:TestpaperService');
     }
 
-    protected function createXAPIService()
+    public function createXAPIService()
     {
         $settings = $this->getSettingService()->get('storage', array());
         $siteSettings = $this->getSettingService()->get('site', array());
 
         $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
+        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
         $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
         $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
         $auth = new Auth('9DdikSDLhmObBhE0t3mhN9UUl8FW2Zdh', 'jNqSV44Fx5kxBFc4VI840pLk8D6QeO86');
@@ -509,7 +510,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
             'base_uri' => 'http://192.168.4.214:8769/v1/xapi/', //推送的URL需要配置
             'school' => array(
-                'id' => $accessKey,
+                'accessKey' => $accessKey,
+                'url' => $siteUrl,
                 'name' => $siteName,
             ),
         ));

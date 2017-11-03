@@ -42,7 +42,7 @@ class ResponseException extends SDKException
 
     public function getDebugTrace()
     {
-        return $this->get('trace', []);
+        return $this->get('trace', array());
     }
 
     private function get($key, $default = null)
