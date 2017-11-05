@@ -5,7 +5,7 @@
 
 {% include 'thread/part/thread-crumbs.html.twig' with {target:target, thread:thread,type:type, isUpdate:isUpdate} %}
 
-<form id="thread-form" class="form-horizontal" method="post"
+<form id="thread-form" class="form-vertical {% if type == 'event' %}form-horizontal{% endif %}" method="post"
   {% if thread %}
     action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
   {% else %}
@@ -15,7 +15,7 @@
 
   {% if type =='question' %}
     <div class="form-group">
-      <div class="col-md-12">
+      <div class="controls">
         <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.question'|trans}}" data-display="{{'classroom.thread.create.question'|trans}}" name= "title" value="{{ thread.title|default('') }}">
         </div>
     </div>
@@ -23,7 +23,7 @@
 
   {% if type =='discussion' %}
     <div class="form-group">
-      <div class="col-md-12">
+      <div class="controls">
         <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.discussion'|trans}}" data-display="{{'classroom.thread.create.discussion'|trans}}" name= "title" value="{{ thread.title|default('') }}">
       </div>
     </div>
@@ -85,7 +85,7 @@
         </textarea>
       </div>
     {% else %}
-      <div class="controls col-md-12">
+      <div class="controls">
         <textarea id="thread_content" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
           data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}
         </textarea>
