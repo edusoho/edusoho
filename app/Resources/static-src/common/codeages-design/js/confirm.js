@@ -7,7 +7,7 @@ class Confirm {
       cancelText: 'cancel',
       confirmClass: 'btn cd-btn cd-btn-flat-danger cd-btn-lg',
       cancelClass: 'btn cd-btn cd-btn-flat-default cd-btn-lg',
-      dialogClass: 'cd-modal-dialog cd-modal-sm',
+      dialogClass: 'cd-modal-dialog cd-modal-dialog-sm',
       confirmType: '',
       confirmUrl: '',
     }, props);
@@ -65,7 +65,7 @@ class Confirm {
       <div class="modal-header">
         <h4 class="modal-title">${this.title}</h4>
       </div>
-    `: '';
+    ` : '';
 
     let modalBody = `
       <div class="modal-body">
@@ -75,7 +75,7 @@ class Confirm {
       </div>
     `;
 
-    let confirmBtn =  `
+    let confirmBtn = `
       <button class="${this.confirmClass}" type="button" data-toggle="cd-confirm-btn" data-url="${this.confirmUrl}">
         ${this.confirmText}
       </button>

@@ -16,27 +16,22 @@ class OrderInfoFilter extends Filter
         $orderInfo = array(
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
-            'totalPrice' => $data['totalPrice'],
+            'totalPrice' => strval($data['totalPrice']),
+            'title' => $data['title'],
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],
             'hasPayPassword' => empty($data['hasPayPassword']) ? 0 : 1,
             'verifiedMobile' => empty($data['verifiedMobile']) ? '' : $data['verifiedMobile'],
             'coinName' => $data['coinName'],
             'cashRate' => empty($data['cashRate']) ? 0 : $data['cashRate'],
             'priceType' => empty($data['priceType']) ? 'RMB' : $data['priceType'],
-            'coinPayAmount' => empty($data['coinPayAmount']) ? 0 : $data['coinPayAmount'],
-            'maxCoin' => empty($data['maxCoin']) ? 0 : $data['maxCoin'],
+            'coinPayAmount' => empty($data['coinPayAmount']) ? 0 : strval($data['coinPayAmount']),
+            'maxCoin' => empty($data['maxCoin']) ? 0 : strval($data['maxCoin']),
             'availableCoupons' => $data['availableCoupons'],
             'unitType' => isset($data['unitType']) ? $data['unitType'] : '',
             'duration' => isset($data['duration']) ? $data['duration'] : '',
             'buyType' => isset($data['buyType']) ? $data['buyType'] : '',
             'fullCoinPayable' => $this->fullCoinPayable($data)
         );
-
-        if ($data['targetType'] == 'vip') {
-            $orderInfo['title'] = $data['level']['name'];
-        } else {
-            $orderInfo['title'] = $data[$data['targetType']]['title'];
-        }
 
         $data = $orderInfo;
     }
@@ -51,13 +46,7 @@ class OrderInfoFilter extends Filter
             return 1;
         }
 
-        if ($data['targetType'] == 'vip') {
-            $maxRate = $data['level']['maxRate'];
-        } else {
-            $maxRate = $data[$data['targetType']]['maxRate'];
-        }
-
-        if ($data['cashRate'] != 0 && $maxRate == 100) {
+        if (!empty($data['coinPayAmount']) && $data['cashRate'] != 0 && $data['maxRate'] == 100) {
             return 1;
         }
 

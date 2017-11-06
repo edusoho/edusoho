@@ -1,0 +1,30 @@
+.order-pay-list {
+  margin-bottom: 24px;
+}
+.order-pay-type {
+  cursor: pointer;
+  width: 140px;
+  height: 40px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  margin-right: 16px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  @media(max-width: @screen-xs-max) {
+    margin: 2px auto;
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+  img {
+    height: 40px;
+    width: auto;
+  }
+  &.active {
+    border-color: @brand-primary;
+  }
+}

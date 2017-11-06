@@ -13,15 +13,13 @@
   {% else %}
     {% if setting("course.buy_fill_userinfo")|default(false) %}
       {% if checkMemberLevelResult == 'ok' %}
-        <a class="btn btn-primary btn-lg" href="#modal" data-toggle="modal"
-          data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+        <a class="btn btn-primary btn-lg js-classroom-buy-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
       {% else %}
         {% if classroom.buyable == 1 %}
           {% if not isAuditor %}
             <a class="btn btn-link" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">{{ 'classroom.go_inside'|trans }}</a>
           {% endif %}
-          <a class="btn btn-primary btn-lg" href="#modal" data-toggle="modal"
-            data-url="{{ path('classroom_buy', {id:classroom.id}) }}">{{ 'classroom.join_buy'|trans }}</a>
+          <a class="btn btn-primary btn-lg js-classroom-buy-btn" data-url="{{ path('classroom_buy', {id:classroom.id}) }}">{{ 'classroom.join_buy'|trans }}</a>
         {% else %}
           <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top"
             title="{{ 'classroom.not_online_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">{{ 'classroom.not_buy'|trans }}</button>
@@ -52,13 +50,7 @@
 
       {% else %}
         {% if classroom.buyable == 1 %}
-          <a class="btn btn-primary btn-lg" href="{{ path('order_show',{targetId:classroom.id,targetType:'classroom'}) }}"
-            {% if canFreeJoin and app.user and classroom.price > 0 %}
-              data-toggle="tooltip"
-              data-placement="top"
-              title="{{ 'classroom.alerday_buy_course_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}"
-            {% endif %}
-          >{{ 'classroom.free_join'|trans }}</a>
+          <a class="btn btn-primary btn-lg js-classroom-buy-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_join'|trans }}</a>
         {% else %}
           <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top"
             title="{{ 'classroom.not_online_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">{{ 'classroom.not_buy'|trans }}</button>

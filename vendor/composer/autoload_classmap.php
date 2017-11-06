@@ -86,6 +86,7 @@ return array(
     'IntlDateFormatter' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
     'Locale' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
     'NumberFormatter' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
+    'Omnipay\\Omnipay' => $vendorDir . '/omnipay/common/src/Omnipay/Omnipay.php',
     'PHPUnit\\Framework\\Assert' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
     'PHPUnit\\Framework\\AssertionFailedError' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
     'PHPUnit\\Framework\\BaseTestListener' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',

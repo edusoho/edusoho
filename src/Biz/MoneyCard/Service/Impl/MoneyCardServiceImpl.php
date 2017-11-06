@@ -7,6 +7,7 @@ use Biz\MoneyCard\Dao\MoneyCardBatchDao;
 use Biz\MoneyCard\Dao\MoneyCardDao;
 use Biz\MoneyCard\Service\MoneyCardService;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Pay\Service\AccountService;
 
 class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 {
@@ -429,6 +430,11 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     public function useMoneyCard($id, $fields)
     {
         try {
+            $user = $this->getCurrentUser();
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException('user is not login.');
+            }
+
             $this->beginTransaction();
 
             $moneyCard = $this->getMoneyCard($id, true);
@@ -443,16 +449,18 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
             $batch = $this->getBatch((int) $moneyCard['batchId']);
 
-            $flow = array(
-                'userId' => $fields['rechargeUserId'],
-                'amount' => $batch['coin'],
-                'name' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
-                'orderSn' => '',
-                'category' => 'inflow',
-                'note' => '',
+            $recharge = array(
+                'to_user_id' => $fields['rechargeUserId'],
+                'from_user_id' => 0,
+                'amount' => $batch['coin'] * 100,
+                'amount_type' => 'coin',
+                'title' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
+                'buyer_id' => $this->getCurrentUser()->getId(),
+                'action' => 'recharge',
             );
 
-            $this->getCashService()->inflowByCoin($flow);
+            $this->getAccountService()->transferCoin($recharge);
+
             $batch['rechargedNumber'] += 1;
             $this->updateBatch($batch['id'], $batch);
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
@@ -574,6 +582,15 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     'deadline' => strtotime($moneyCard['deadline']),
                     'userId' => $userId,
                 ));
+
+                $receivedNumber = $this->getMoneyCardDao()->count(array(
+                    'batchId' => $batch['id'],
+                    'receiveTime_GT' => 0,
+                ));
+                $batch = $this->getMoneyCardBatchDao()->update($batch['id'], array(
+                    'receivedNumber' => $receivedNumber,
+                ));
+
                 $message = "您有一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的充值卡领取成功";
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 $this->dispatchEvent('moneyCard.receive', $batch);
@@ -618,11 +635,6 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $this->createService('System:LogService');
     }
 
-    protected function getCashService()
-    {
-        return $this->createService('Cash:CashService');
-    }
-
     private function getTokenService()
     {
         return $this->createService('User:TokenService');
@@ -636,5 +648,13 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     private function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    private function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 }
