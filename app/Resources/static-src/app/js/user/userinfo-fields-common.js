@@ -104,8 +104,8 @@ export default class UserInfoFieldsItemValidate {
       submitHandler: form => {
         if ($(form).valid()) {
           $.post($(form).attr('action'), $(form).serialize(), resp => {
-            if (resp.courseId) {
-              location.href = '/order/show?targetId='+ resp.courseId +'&targetType=course'
+            if (resp.url) {
+              location.href = resp.url;
             } else {
               notify('success', Translator.trans('site.save_success_hint'));
               $('#modal').modal('hide');

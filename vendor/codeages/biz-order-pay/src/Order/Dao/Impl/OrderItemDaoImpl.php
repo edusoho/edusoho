@@ -69,10 +69,14 @@ class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
                 'status IN (:statuses)',
                 'target_id IN (:target_ids)',
                 'target_id = :target_id',
+                'user_id = :user_id',
                 'title like :title_LIKE',
                 'target_type = :target_type',
                 'created_time >= :start_time',
                 'created_time <= :end_time',
+                'pay_time < :pay_time_LT',
+                'pay_time > :pay_time_GT',
+                'pay_amount > :pay_amount_GT',
             ),
         );
     }

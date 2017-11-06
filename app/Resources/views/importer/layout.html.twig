@@ -1,0 +1,32 @@
+{% extends "bootstrap-modal-layout.html.twig" %}
+
+{% block title %}{{'import.user_import'|trans}}{% endblock %}
+
+{% block body %}
+  <div id="importer-app" data-type="{{ importerType }}" data-import-url="{{ path('importer_import', {type: importerType}) }}">
+    <form method="post" id="importer-form" enctype="multipart/form-data" class="form-horizontal" action="{{ path('importer_check', {type: importerType}) }}">
+      {% block form_data %}{% endblock %}
+      
+      <div class="text-right">
+        <button type="button" class="btn btn-primary" id="import-verify-btn" data-loading-text="{{'import.check_datas_loading'|trans}}">{{'import.check_datas'|trans}}</button>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+
+  <script type="text/x-handlebars-template" id="importer-progress-template">
+    <div id="importer-progress" class="package-update-progress">
+      <div class="progress progress-striped active">
+        <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+      </div>
+      <div class="color-success progress-text"></div>
+    </div>
+    <div class="text-right">
+      <a data-loading-text="{{'import.finish_loading'|trans}}" class="btn btn-primary hidden js-import-finish-btn" href="javascript:;">{{ 'import.finish'|trans }}</a>
+      <span class="color-danger js-import-progress-text hidden">{{ 'import.import_warning_tips'|trans }}</span>
+    </div>
+  </script>
+
+{% endblock %}
+
+{% set hide_footer = true %}

@@ -12,7 +12,7 @@
       </div>
 
       <form id="message-reply-form" class="message-reply-form clearfix" method="post"
-      action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
+      action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}" style="margin-bottom: 30px;">
         <div class="form-group">
           <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="{{'message.chat.content_tips' |trans }}"></textarea>
         </div>

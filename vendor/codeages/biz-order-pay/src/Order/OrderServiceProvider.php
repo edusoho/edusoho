@@ -21,6 +21,20 @@ class OrderServiceProvider implements ServiceProviderInterface
             return new \Codeages\Biz\Order\Command\TableCommand($biz);
         };
 
+        $biz['order.options'] = null;
+
+        $biz['order.final_options'] =  function () use ($biz) {
+
+            $options = array(
+                'closed_expired_time' => 2*24*60*60,
+            );
+
+            if (!empty($biz['order.options'])) {
+                $options = array_merge($options, $biz['order.options']);
+            }
+
+            return $options;
+        };
     }
 
     private function registerOrderRefundStatus($biz)
