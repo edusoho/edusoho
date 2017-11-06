@@ -387,6 +387,8 @@ order.refund_amount: Refund amount
 order.refund_coin_amount: Refund coin
 order.refund_cash_amount: Refund Cash
 order.refund_limit: Refund limit
+order.redund_deadline: Refund Deadline
+order.refund_deadline_none: None
 order.show_refund_detail: Show refund
 order.refunded_cash_amount: Refunded cash
 order.use_coupon: Use coupon
@@ -460,7 +462,7 @@ order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_nam
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
-order.confirm.price: 订单价格
+order.confirm.price: Product price
 order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.adjust_price_modal_title: 订单改价
