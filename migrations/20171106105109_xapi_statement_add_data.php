@@ -13,7 +13,6 @@ class XapiStatementAddData extends Migration
         $db = $biz['db'];
 
         $db->exec("ALTER TABLE `xapi_statement` ADD COLUMN `data` text COMMENT '数据' after `status`");
-
     }
 
     /**
@@ -25,6 +24,6 @@ class XapiStatementAddData extends Migration
 
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `xapi_statement` DROP COLUMN `data`;");
+        $db->exec('ALTER TABLE `xapi_statement` DROP COLUMN `data`;');
     }
 }
