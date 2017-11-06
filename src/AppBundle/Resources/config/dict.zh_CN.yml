@@ -60,8 +60,8 @@ refundItemType:
 
 orderDisplayStatus:
     notPaid: 未付款
-    paid: 已付款
-    closed: 已关闭
+    paid: 交易成功
+    closed: 交易关闭
     refunded: 已退款
 
 orderLogStatus:
@@ -81,14 +81,14 @@ refundStatus:
     auditing: 已申请
     refunding: 退款中
     refunded: 退款成功
-    refused: 退款拒绝
+    refused: 退款关闭
     cancel: 已取消
 
 refundDisplayStatus:
-    auditing: 用户已申请
+    auditing: 退款待处理
     refunded: 退款成功
-    refused: 退款拒绝
-    cancel: 用户已撤销
+    refused: 退款关闭
+    cancel: 退款撤销
 
 payment:
     alipay: 支付宝

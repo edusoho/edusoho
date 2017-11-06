@@ -460,7 +460,7 @@ order.charge: 收费
 order.name: 订单名称
 order.product_name: 商品名称
 order.product_price: 商品价格
-order.price_amount: 应付价格
+order.price_amount: 订单价格
 order.paid_amount: 实付价格
 order.paid_coin_amount: 实付虚拟币
 order.paid_cash_amount: 实付现金
@@ -473,6 +473,8 @@ order.refund_amount: 退款总额
 order.refund_coin_amount: 退款虚拟币
 order.refund_cash_amount: 退款现金
 order.refund_limit: 退款限制
+order.refund_deadline: 退款有效期
+order.refund_deadline_none: 无
 order.show_refund_detail: 查看退款
 order.refunded_cash_amount: 已退现金
 order.use_coupon: 使用优惠券
@@ -546,7 +548,7 @@ order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_nam
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
-order.confirm.price: 订单价格
+order.confirm.price: 商品价格
 order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.before_adjust_price: 订单原价
@@ -4356,10 +4358,10 @@ common.orderStatus.paid: 已付款
 common.orderStatus.refunding: 退款中
 common.orderStatus.refunded: 已退款
 common.orderStatus.cancelled: 已关闭
-common.refundStatus.created: 用户已申请
+common.refundStatus.created: 退款待处理
 common.refundStatus.success: 退款成功
-common.refundStatus.failed: 退款拒绝
-common.refundStatus.cancelled: 用户已撤消
+common.refundStatus.failed: 退款关闭
+common.refundStatus.cancelled: 退款撤销
 common.logLevel.info: 提示
 common.logLevel.warning: 警告
 common.logLevel.error: 错误
