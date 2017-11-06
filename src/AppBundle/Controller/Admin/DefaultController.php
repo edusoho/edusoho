@@ -277,20 +277,19 @@ class DefaultController extends BaseController
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
         $conditions = array(
             'pay_time_GT' => $startTime,
-            'order_item_target_type' => 'course',
+            'target_type' => 'course',
             'pay_amount_GT' => 0,
             'statuses' => array('paid', 'success', 'refunded'),
         );
 
-        $conditions['order_item_target_type'] = 'course';
-        $courseOrdersCount = $this->getOrderService()->countOrders($conditions);
+        $courseOrdersCount = $this->getOrderService()->countOrderItems($conditions);
 
-        $conditions['order_item_target_type'] = 'classroom';
-        $classroomOrdersCount = $this->getOrderService()->countOrders($conditions);
+        $conditions['target_type'] = 'classroom';
+        $classroomOrdersCount = $this->getOrderService()->countOrderItems($conditions);
 
         if ($this->isPluginInstalled('vip')) {
-            $conditions['order_item_target_type'] = 'vip';
-            $vipOrdersCount = $this->getOrderService()->countOrders($conditions);
+            $conditions['target_type'] = 'vip';
+            $vipOrdersCount = $this->getOrderService()->countOrderItems($conditions);
         }
 
         $orderDatas = array(

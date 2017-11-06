@@ -207,6 +207,7 @@ class PayServiceImpl extends BaseService implements PayService
             'cash_type' => 'CNY',
             'trade_sn' => $trade['trade_sn'],
             'status' => 'paid',
+            'pay_amount' => $data['pay_amount'],
         );
         $this->updateTradeToPaidAndTransferAmount($data);
         $trade = $this->getPayTradeDao()->get($trade['id']);
@@ -509,7 +510,7 @@ class PayServiceImpl extends BaseService implements PayService
     protected function getGoodsTitle()
     {
         $options = $this->biz['payment.final_options'];
-        return empty($options['goods_title']) ? '': $options['goods_title'];
+        return empty($options['goods_title']) ? '': mb_substr($options['goods_title'], 0, 30, 'utf-8');
     }
 
     protected function getCurrencyType()

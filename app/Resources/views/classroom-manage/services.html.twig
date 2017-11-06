@@ -12,34 +12,34 @@
       <div class="form-group mb10">
         <label class="col-sm-2 control-label">{{'classroom.commitment_service_label'|trans}}</label>
         <div class="col-sm-8 form-control-static">
-          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block{% if 'event' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.activity_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}"
+          <a class="label label-md bg-primary-hover js-service-item mr10 mb20 inline-block{% if 'event' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.activity_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}"
           >
             {{setting("classroom.name")|default('classroom'|trans)}}{{'classroom.activiy'|trans}}
             <input class="hidden" type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %} checked='checked'{% endif %}>
           </a>
           
-          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block {% if 'workAdvise' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.employ_guide_tips'|trans}}"
+          <a class="label label-md bg-primary-hover js-service-item mr10 mb20 inline-block {% if 'workAdvise' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.employ_guide_tips'|trans}}"
           >
             {{'classroom.employ_guide'|trans}}
             <input class="hidden" type="checkbox" name="service[]" value="workAdvise" {% if 'workAdvise' in classroom.service %} checked='checked'{% endif %}>
           </a>
-          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block{% if 'liveAnswer' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.one_to_one_answer_tips'|trans}}"
+          <a class="label label-md bg-primary-hover js-service-item mr10 mb20 inline-block{% if 'liveAnswer' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.one_to_one_answer_tips'|trans}}"
           >
             {{'classroom.one_to_one_answer'|trans}}
             <input class="hidden" type="checkbox" name="service[]" value="liveAnswer" {% if 'liveAnswer' in classroom.service %} checked='checked'{% endif %}>
           </a>
-          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block{% if 'teacherAnswer' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.answer_questions_tips'|trans}}"
+          <a class="label label-md bg-primary-hover js-service-item mr10 mb20 inline-block{% if 'teacherAnswer' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.answer_questions_tips'|trans}}"
           >
             {{'classroom.answer_questions'|trans}}
             <input class="hidden" type="checkbox" name="service[]" value="teacherAnswer" {% if 'teacherAnswer' in classroom.service %} checked='checked'{% endif %}>
           </a>
           
-          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block {% if 'testpaperReview' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.testpaper_review_tips'|trans}}"
+          <a class="label label-md bg-primary-hover js-service-item mr10 mb20 inline-block {% if 'testpaperReview' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.testpaper_review_tips'|trans}}"
           >
             {{'classroom.testpaper_review'|trans}}
             <input class="hidden" type="checkbox" name="service[]" value="testpaperReview" {% if 'testpaperReview' in classroom.service %} checked='checked'{% endif %}>
           </a>
-          <a class="label label-md label-hover-primary js-service-item mr10 mb20 inline-block {% if 'homeworkReview' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.testpaper_review_tips'|trans}}"
+          <a class="label label-md bg-primary-hover js-service-item mr10 mb20 inline-block {% if 'homeworkReview' in classroom.service %} label-primary {% else %} label-default {% endif %} " data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'classroom.testpaper_review_tips'|trans}}"
           >
            {{'classroom.homework_review'|trans}}
             <input class="hidden" type="checkbox" name="service[]" value="homeworkReview" {% if 'homeworkReview' in classroom.service %}checked='checked'{% endif %}>

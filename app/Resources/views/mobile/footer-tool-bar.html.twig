@@ -1,3 +1,5 @@
+{% set mobile = is_show_mobile_page() %}
+{% if mobile %}
 <div class="footer-tool-bar">
   <div class="{% if mobile_tool_bar == 'index' %}active{% endif %}">
     <a href="{{ path('homepage') }}">
@@ -18,3 +20,4 @@
     </a>
   </div>
 </div>
+{% endif %}

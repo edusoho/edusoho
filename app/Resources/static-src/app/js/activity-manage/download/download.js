@@ -1,16 +1,19 @@
 import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
-import { chooserUiOpen } from '../widget/chooser-ui.js';
+import { isEmpty } from 'common/utils';
+import { chooserUiOpen } from '../widget/chooser-ui';
 
 export default class DownLoad {
   constructor() {
     this.$form = $('#step2-form');
-    this.validator2 = null;
     this.firstName = $('#title').val();
+    this.media = Object.create(null);
+    this.materials = Object.create(null);
     this.initStep2Form();
     this.bindEvent();
     this.initFileChooser();
   }
+
   initStep2Form() {
     let validator2 = this.$form.validate({
       rules: {
@@ -28,158 +31,164 @@ export default class DownLoad {
         materials: Translator.trans('activity.download_manage.materials_error_hint')
       }
     });
-    this.$form.data('validator', validator2);
   }
 
   bindEvent() {
-    this.$form.on('click', '.js-btn-delete', (event) => this.itemDelete(event));
-    this.$form.on('click', '.js-video-import', () => this.videoImport(false));
-    this.$form.on('click', '.js-add-file-list', () => this.addFileBtn(true));
-    this.$form.on('blur', '#title', (event) => this.titleChange(event));
+    this.$form.on('click', '.js-btn-delete', (event) => this.deleteItem(event));
+    this.$form.on('click', '.js-video-import', () => this.importLink());
+    this.$form.on('click', '.js-add-file-list', () => this.addFile());
+    this.$form.on('blur', '#title', (event) => this.changeTitle(event));
   }
 
-  itemDelete(event) {
+  deleteItem(event) {
     let $parent = $(event.currentTarget).closest('li');
     let mediaId = $parent.data('id');
-    let items = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-    if (items && items[mediaId]) {
-      delete items[mediaId];
-      $("#materials").val(JSON.stringify(items));
+    const $materials = $('#materials');
+    this.materials = isEmpty($materials.val()) ? Object.create(null) : JSON.parse($materials.val());
+    if (this.materials && this.materials[mediaId]) {
+      delete this.materials[mediaId];
+      $materials.val(JSON.stringify(this.materials));
     }
-    if ($parent.siblings('li').length <= 0) {
-      $("#materials").val(null);
+    if (!$parent.siblings('li').length) {
+      $materials.val('');
     }
     $parent.remove();
   }
 
-  videoImport(state) {
-    this.addFile(state);
-  }
-
-  addFileBtn(state) {
-    this.addFile(state);
-  }
-
   initFileChooser() {
-    const fileSelect = file => {
-      $("input[name=media]").val(JSON.stringify(file));
+    const fileSelect = (file) => {
+      $('#media').val(JSON.stringify(file));
       chooserUiOpen();
-      this.addFile(false);
-      console.log(this.firstName);
-      if (this.firstName) {
-        $('#title').val(this.firstName);
-      } else {
-        $('#title').val('');
-      }
+      $('#title').val(this.firstName);
       $('.js-current-file').text(file.name);
     }
 
     const fileChooser = new FileChooser();
-
     fileChooser.on('select', fileSelect);
   }
 
-  titleChange(event) {
-  
+  changeTitle(event) {
     let $this = $(event.currentTarget);
     this.firstName = $this.val();
-    console.log(this.firstName);
   }
 
-  isEmpty(obj) {
-    return obj == null || obj == "" || obj == undefined || Object.keys(obj).length == 0;
+  importLink() {
+    const $link = $('#link');
+    const $verifyLink = $('#verifyLink');
+    if (this.$form.data('validator').valid() && $link.val()) {
+      $verifyLink.val($link.val());
+    } else {
+      $link.val('');
+      $verifyLink.val('');
+    }
+    $('.js-current-file').text($verifyLink.val());
   }
 
-  addFile(addToList) {
-    //@TODO重构代码
-    $('.js-success-redmine').hide();
-    if (this.isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
-      if (!addToList) {
-        $("#verifyLink").val($("#link").val());
-      }
-      let data = {
-        source: 'link',
-        id: $("#verifyLink").val(),
-        name: $("#verifyLink").val(),
-        link: $("#verifyLink").val(),
-        summary: $("#file-summary").val(),
-        size: 0
-      };
-      $('.js-current-file').text($("#verifyLink").val());
-      $("#media").val(JSON.stringify(data));
+  addLink() {
+    let verifyLinkVal = $('#verifyLink').val();
+    const data = {
+      source: 'link',
+      id: verifyLinkVal,
+      name: verifyLinkVal,
+      link: verifyLinkVal,
+      summary: $('#file-summary').val(),
+      size: 0
+    };
+
+    $('#media').val(JSON.stringify(data));
+  }
+
+  addFile() {
+    const $media = $('#media');
+    const $materials = $('#materials');
+    const $successTipDom = $('.js-success-redmine');
+    const $errorTipDom = $('.js-danger-redmine');
+
+    const errorTip = 'activity.download_manage.materials_error_hint';
+    const successTip = 'activity.download_manage.materials_add_success_hint';
+    const existTip = 'activity.download_manage.materials_exist_error_hint';
+
+    if ($('#verifyLink').val()) {
+      this.addLink();
     }
 
+    this.media = isEmpty($media.val()) ? Object.create(null) : JSON.parse($media.val());
+    this.materials = isEmpty($materials.val()) ? Object.create(null) : JSON.parse($materials.val());
 
-    let media = this.isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
-    let items = this.isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-
-    if (!this.isEmpty(items) && items[media.id]) {
-      $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_exist_error_hint')).show();
-      setTimeout(function () {
-        $('.js-danger-redmine').slideUp();
-      }, 3000);
-      $('.js-current-file').text('');
-      $("#media").val(null);
-      media = null;
+    if (isEmpty(this.media)) {
+      this.showTip($successTipDom, $errorTipDom, errorTip);
       return;
     }
 
-    if (!addToList) {
+    if (!isEmpty(this.materials) && this.checkExisted()) {
+      this.showTip($successTipDom, $errorTipDom, existTip);
       return;
     }
 
-    if (addToList && this.isEmpty(media)) {
-      $('.js-danger-redmine').text(Translator.trans('activity.download_manage.materials_error_hint')).show();
-      $('.js-current-file').text('');
-      setTimeout(function () {
-        $('.js-danger-redmine').slideUp();
-      }, 3000);
-      return;
-    }
-
-
-    $('.js-current-file').text('');
-    media.summary = $("#file-summary").val();
-    items[media.id] = media;
-    $("#materials").val(JSON.stringify(items));
-
-    $("#media").val(null);
-    $('#link').val(null);
-    $("#file-summary").val(null);
+    this.media.summary = $('#file-summary').val();
+    this.materials[this.media.id] = this.media;
+    $materials.val(JSON.stringify(this.materials));
 
     if (!this.firstName) {
-      this.firstName = media.name;
-      $('#title').val(media.name);
+      this.firstName = this.media.name;
+      $('#title').val(this.firstName);
     }
 
+    this.showFile();
 
-    let item_tpl = '';
-    if (media.link) {
-      item_tpl = `
-    <li class="download-item " data-id="${media.link}">
-        <a class="gray-primary" href="${ media.link}" target="_blank">${media.name}</a>
-        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
-        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"></span>
-    </li>
-  `;
-    } else {
-      item_tpl = `
-    <li class="download-item " data-id="${media.id}">
-      <a class="gray-primary" href="/materiallib/${ media.id}/download">${media.name}</a>
-      <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
-    </li>
-  `;
-    }
-    $("#material-list").append(item_tpl);
-    $('[data-toggle="tooltip"]').tooltip();
-    $('.file-browser-item').removeClass('active');
-    $('.js-danger-redmine').hide();
-    $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint')).show();
-    setTimeout(function () {
-      $('.js-success-redmine').slideUp();
-    }, 3000);
-    if ($('.jq-validate-error:visible').length > 0) {
-      $("#step2-form").data('validator').form();
+    this.showTip($errorTipDom, $successTipDom, successTip);
+
+    if ($('.jq-validate-error:visible').length) {
+      this.$form.data('validator').form();
     }
   }
+
+  checkExisted() {
+    for (let item in this.materials) {
+      const materialsItem = this.materials[item];
+      const checkFile = materialsItem.name === this.media.name;
+      const checkLink = materialsItem.link && (materialsItem.link === this.media.id);
+
+      if (checkFile || checkLink) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  showFile() {
+    let item_tpl = '';
+    if (this.media.link) {
+      item_tpl = `
+        <li class="download-item" data-id="${ this.media.link }">
+          <a class="gray-primary" href="${ this.media.link }" target="_blank">${ this.media.summary ? this.media.summary : this.media.name }<span class="glyphicon glyphicon-new-window text-muted text-sm mlm" title="${ Translator.trans('activity.download_manage.materials_delete_btn')}"></span></a>
+          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+        </li>
+      `;
+    } else {
+      item_tpl = `
+        <li class="download-item" data-id="${ this.media.id }">
+          <a class="gray-primary" href="/materiallib/${ this.media.id }/download">${ this.media.name }</a>
+          <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('activity.download_manage.materials_delete_btn')}"><i class="es-icon es-icon-delete"></i></a>
+        </li>
+      `;
+    }
+
+    $('#material-list').append(item_tpl);
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+
+  showTip($hideDom, $showDom, trans) {
+    $hideDom.hide();
+    $('.js-current-file').text('');
+    $('#link').val('');
+    $('#verifyLink').val('');
+    $('#file-summary').val('');
+    $('#media').val('');
+    $showDom.text(Translator.trans(trans)).show();
+    setTimeout(function() {
+      $showDom.slideUp();
+    }, 3000);
+  }
+
 }

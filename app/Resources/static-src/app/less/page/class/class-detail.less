@@ -353,8 +353,7 @@
   }
 }
 
-
-// 班级主体、课程主体－－－－－－－－－－－－－－－－－－－－
+// 班级-课程列表
 .class-course-list {
   .course-item {
     margin-top: 30px;
@@ -429,96 +428,6 @@
   }
 }
 
-// 课时列表
-.period-list {
-  margin-top: 20px;
-  margin-bottom: 0;
-  padding-left: 0;
-  list-style-type: none;
-  >li {
-    margin-bottom: 10px;
-    padding: 10px 15px;
-  }
-  .chapter,
-  .section {
-    background-color: @gray-lighter;
-    color: @gray;
-  }
-  .chapter {
-    position: relative;
-    &:hover {
-      cursor: pointer;  
-    }
-    .es-icon-toc {
-      position: absolute;
-      top: 11px;
-      left: 15px;
-    }
-    .period-show {
-      position: absolute;
-      top: 8px;
-      right: 15px;
-    }
-    .title {
-      padding: 0 30px;
-      .text-overflow;
-    }
-  }
-  .section {
-    padding-left: 45px;
-    .text-overflow;
-  }
-  .period {
-    position: relative;
-    padding: 10px 100px 10px 45px;
-    &:hover,
-    &.item-active {
-      background-color: #f2fae3;
-    }
-    &.disable {
-      background: none;
-    }
-    >a {
-      color: @gray;
-      display: block;
-      .text-overflow;
-    }
-    .es-icon-undone,
-    .es-icon-doing,
-    .es-icon-done1 {
-      position: absolute;
-      top: 11px;
-      left: 15px;
-    }
-    .title {
-      color: @gray-dark;
-    }
-    .date {
-      position: absolute;
-      top: 11px;
-      right: 50px;
-    }
-    .course-type {
-      position: absolute;
-      top: 11px;
-      right: 15px;
-      line-height: 20px;
-      i {
-        font-size: 20px;
-      }
-      small {
-        margin-top: -3px;
-      }
-    }
-    .period-state {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      color: @gray;
-    }
-  }
-}
-
 // 班级tab内容
 .class-detail-content {
   min-height: 300px;
@@ -526,7 +435,6 @@
     p {
       line-height: 30px;
       margin-bottom: 30px;
-      // text-indent: 2em;
     }
     img {
       max-width: 100%;
@@ -689,6 +597,12 @@
 .comment-list {
   list-style-type: none;
   padding-left: 0;
+  .comment .comment-delete-btn {
+    visibility: hidden;
+  }
+  .comment-operated:hover .comment-delete-btn {
+    visibility: visible;
+  }
 }
 
 // 签到

@@ -2,11 +2,11 @@ const Browser = {};
 let userAgent = navigator.userAgent.toLowerCase();
 let s;
 
-(s = userAgent.match(/msie ([\d.]+)/)) ? Browser.ie = s[1] :
-(s = userAgent.match(/firefox\/([\d.]+)/)) ? Browser.firefox = s[1] :
-(s = userAgent.match(/chrome\/([\d.]+)/)) ? Browser.chrome = s[1] :
-(s = userAgent.match(/opera.([\d.]+)/)) ? Browser.opera = s[1] :
-(s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
+(s = userAgent.match(/msie ([\d.]+)/)) ? Browser.ie = s[1]:
+  (s = userAgent.match(/firefox\/([\d.]+)/)) ? Browser.firefox = s[1] :
+  (s = userAgent.match(/chrome\/([\d.]+)/)) ? Browser.chrome = s[1] :
+  (s = userAgent.match(/opera.([\d.]+)/)) ? Browser.opera = s[1] :
+  (s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
 
 Browser.ie10 = /MSIE\s+10.0/i.test(navigator.userAgent)
 Browser.ie11 = (/Trident\/7\./).test(navigator.userAgent);
@@ -81,7 +81,27 @@ const time2Sec = (time) => {
   return sec;
 }
 
-const isLogin = (() => { return $("meta[name='is-login']").attr("content") == 1 })();
+const isLogin = () => $("meta[name='is-login']").attr("content") == 1;
+
+const isEmpty = (obj) => {
+  return obj === null || obj === "" || obj === undefined || Object.keys(obj).length === 0;
+}
+
+const arrayToJson = (formArray) => {
+  const dataArray = {};
+  $.each(formArray, function() {
+    if (dataArray[this.name]) {
+      if (!dataArray[this.name].push) {
+        dataArray[this.name] = [dataArray[this.name]];
+      }
+      dataArray[this.name].push(this.value || '');
+    } else {
+      dataArray[this.name] = this.value || '';
+    }
+  });
+
+  return dataArray;
+}
 
 export {
   Browser,
@@ -92,4 +112,6 @@ export {
   initPopover,
   sec2Time,
   time2Sec,
+  arrayToJson,
+  isEmpty
 };

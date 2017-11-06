@@ -1885,7 +1885,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $access = $this->canJoinClassroom($classroomId);
         if ($access['code'] != AccessorInterface::SUCCESS) {
-            throw new UnableJoinException($access['code'], $access['msg']);
+            throw new UnableJoinException($access['msg'], $access['code']);
         }
 
         $classroom = $this->getClassroom($classroomId);

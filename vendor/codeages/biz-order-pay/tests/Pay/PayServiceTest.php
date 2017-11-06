@@ -31,12 +31,15 @@ class PayServiceTest extends IntegrationTestCase
 
     public function testCreateTrade()
     {
+        $this->rechargeCoin();
+
         $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
 
         $data = $this->mockTrade();
-        $this->getPayService()->createTrade($data);
+        $data['cash_amount'] = 200;
+        $data['coin_amount'] = 80;
+        $trade = $this->getPayService()->createTrade($data);
 
-        $trade = $this->getPayTradeDao()->getByOrderSnAndPlatform('123456', 'wechat');
         $this->assertCreatedTrade($data, $trade);
     }
 
@@ -62,6 +65,7 @@ class PayServiceTest extends IntegrationTestCase
 
     public function testPurchaseNotify()
     {
+        $this->rechargeCoin();
         $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
 
         $data = $this->mockTrade();
@@ -169,7 +173,7 @@ class PayServiceTest extends IntegrationTestCase
 
     public function testCreateZeroTrade()
     {
-        $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
+        $this->rechargeCoin();
 
         $data = $this->mockTrade();
         $data['amount'] = 20;
@@ -238,6 +242,25 @@ class PayServiceTest extends IntegrationTestCase
 
         $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
         $this->assertEquals('1000', $userBalance['amount']);
+    }
+
+    protected function rechargeCoin()
+    {
+        $user = array(
+            'user_id' => $this->biz['user']['id']
+        );
+        $this->getAccountService()->createUserBalance($user);
+
+        $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
+
+        $data = $this->mockTrade();
+        $data['type'] = 'recharge';
+        $trade = $this->getPayService()->createTrade($data);
+
+        $notifyData = $this->mockNotifyData($trade);
+        $this->biz['payment.wechat'] = $this->mockConvertNotifyData($notifyData);
+        $result = $this->getPayService()->notifyPaid('wechat', $notifyData);
+        $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
     }
 
     protected function mockIapGetWay()
