@@ -573,10 +573,14 @@ upload.video_quality_switcher.audio_quality.normal: Normal
 upload.video_quality_switcher.audio_quality.high: High
 import.step_one: 'Step 1: '
 import.check_datas: 'Start check datas'
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 'Import users'
 import.user_import.content_title: 'Import users'
 import.user_import.choose_file: 'Choose the file to import'
-import.user_import.browser_btn: Browse...
+import.user_import.browser_btn: Choose
 import.user_import.download_example_btn: 'Click to download the sample file'
 import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price

@@ -674,10 +674,14 @@ upload.video_quality_switcher.audio_quality.high: 高品
 # 导入
 import.step_one: 步骤1
 import.check_datas: 开始校验数据
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 批量添加新用户
 import.user_import.content_title: 批量添加学员
-import.user_import.choose_file: 选择要导入的文件
-import.user_import.browser_btn: 浏览...
+import.user_import.choose_file: 选择文件
+import.user_import.browser_btn: 选择
 import.user_import.download_example_btn: 点击下载示例说明文件
 import.user_import.download_example_tips: 支持从Excel文件导入
 import.user_import.price: 购买价格
@@ -2608,8 +2612,8 @@ classroom.remark_tips: 选填
 classroom.publish_add_student_tips: >
   %status%%name%不能添加学员，请%classroomName%发布后再添加。
 classroom.batch_add_student: 批量添加学员
-classroom.select_import_file: 选择要导入的文件
-classroom.import_file_preview: 浏览
+classroom.select_import_file: 选择文件
+classroom.import_file_preview: 选择
 classroom.download_example_file: 点击下载示例说明文件
 classroom.support_excel_import: 支持从Excel文件导入
 classroom.import_buy_price: 购买价格
