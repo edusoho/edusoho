@@ -75,6 +75,7 @@ orderLogStatus:
     order.closed: 已关闭
     order_refund.auditing: 退款审核中
     order_refund.cancel: 退款被拒绝
+    order.adjust_price: 改价
 
 refundStatus:
     auditing: 已申请
@@ -116,6 +117,7 @@ orderDeductType:
     discount: 打折
     coupon: 优惠券
     paidCourse: 班级课程抵扣
+    adjust_price: 改价
 
 source:
     self: 本站
