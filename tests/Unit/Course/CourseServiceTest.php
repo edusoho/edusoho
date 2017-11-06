@@ -60,7 +60,6 @@ class CourseServiceTest extends BaseTestCase
         $defaultCourse = reset($courses);
 
         $this->assertEquals($defaultCourse['title'], $course['title']);
-
     }
 
     public function testCreateCourse()
