@@ -429,6 +429,8 @@ class XAPIService extends BaseService
             $statement['timestamp'] = $this->getTime(null);
         }
 
+        file_put_contents('1.txt', json_encode($statements), FILE_APPEND);
+
         $rawResponse = $this->client->request('POST', '/statements', array(
             'json' => $statements,
             'headers' => array(
