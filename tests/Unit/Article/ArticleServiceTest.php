@@ -67,7 +67,7 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals(null, $this->getArticleService()->getArticle($newArticle2['id']));
     }
 
-    public function testfindAllArticles()
+    public function testFindAllArticles()
     {
         $this->createArticle();
         $this->createArticleSecond();
@@ -76,7 +76,7 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals('2', count($article));
     }
 
-    public function testfindArticlesByIds()
+    public function testFindArticlesByIds()
     {
         $newarticle1 = $this->createArticle();
         $newarticle2 = $this->createArticle();
@@ -88,7 +88,7 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals('2', count($findArticles));
     }
 
-    public function testsearchArticles()
+    public function testSearchArticles()
     {
         $this->createArticle();
         $this->createArticleSecond();
@@ -99,7 +99,7 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals('2', count($result));
     }
 
-    public function testcountArticles()
+    public function testCountArticles()
     {
         $this->createArticle();
         $this->createArticleSecond();
