@@ -20,9 +20,12 @@ class PushStatementJob extends AbstractJob
         $statementIds = ArrayToolkit::column($statements, 'id');
 
         $pushStatements = array();
+        $pushData = array();
         foreach ($statements as $statement) {
             $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
-            $pushStatements[] = $push->package($statement);
+            $pushStatement = $push->package($statement);
+            $pushStatements[] = $pushStatement;
+            $pushData[$statement['id']] = $pushStatement;
         }
 
         if (empty($pushStatements)) {
@@ -33,7 +36,7 @@ class PushStatementJob extends AbstractJob
         $result = $this->createXAPIService()->pushStatements($pushStatements);
 
         if ($result) {
-            $this->getXapiService()->updateStatementsPushedByStatementIds($statementIds);
+            $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
         }
     }
 

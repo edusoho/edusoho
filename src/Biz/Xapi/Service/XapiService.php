@@ -10,6 +10,8 @@ interface XapiService
 
     public function updateStatementsPushingByStatementIds($statementIds);
 
+    public function updateStatementsPushedAndDataByStatementData($pushStatementsData);
+
     public function searchStatements($conditions, $orders, $start, $limit);
 
     public function updateWatchLog($id, $watchLog);
