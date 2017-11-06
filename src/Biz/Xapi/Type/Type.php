@@ -130,7 +130,7 @@ abstract class Type extends BizAware
                 'id' => $currentUser['id'],
                 'name' => $currentUser['nickname'],
                 'email' => $currentUser['email'],
-                'mobile' => empty($currentUser['mobile']) ? '' : $currentUser['mobile'],
+                'phone' => empty($currentUser['mobile']) ? '' : $currentUser['mobile'],
                 'homePage' => $host,
             ),
         );
