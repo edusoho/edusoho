@@ -21,7 +21,7 @@
 		{% endif %}
     {{ 'testpaper.answer.answer_card.exam_tips'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw }}
 		{% if testpaperActivity.limitedTime|default(0) > 0 %}
-      {{ 'testpaper.answer.answer_card.limited_time_tips'|trans({'%limitedTime%':limitedTime})|raw }}
+      {{ 'testpaper.answer.answer_card.limited_time_tips'|trans({'%limitedTime%':limitedTime|time_formatter})|raw }}
 		{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
 	</div>
 	<div class="panel-body">

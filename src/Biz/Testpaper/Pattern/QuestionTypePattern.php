@@ -32,8 +32,6 @@ class QuestionTypePattern implements TestpaperPatternInterface
                 continue;
             }
 
-            $missScore = empty($options['missScores'][$type]) ? 0 : intval($options['missScores'][$type]);
-
             if ($options['mode'] == 'difficulty') {
                 $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
 
@@ -178,9 +176,12 @@ class QuestionTypePattern implements TestpaperPatternInterface
         $items = array();
         for ($i = 0; $i < $count; ++$i) {
             $question = $questions[$i];
-            $score = empty($options['scores'][$question['type']]) ? 0 : $options['scores'][$question['type']];
-            $missScore = empty($options['missScores'][$question['type']]) ? 0 : $options['missScores'][$question['type']];
+
+            $score = empty($options['scores'][$question['type']]) ? 0 : floatval($options['scores'][$question['type']]);
+            $missScore = empty($options['missScores'][$question['type']]) ? 0 : floatval($options['missScores'][$question['type']]);
+
             $items[] = $this->makeItem($testpaper, $question, $score, $missScore);
+
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id'], 0, $question['subCount']);
                 foreach ($subQuestions as $subQuestion) {

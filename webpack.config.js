@@ -28,7 +28,7 @@ module.exports = {
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/jquery-raty.js'],
     'echarts': ['echarts'],
-    'select2': ['libs/select2.js'],
+    'select2': ['libs/select2/index.js'],
     'handlebars': ['handlebars']
   },
   noParseDeps: [ // 不解析依赖，加快编译速度
@@ -71,6 +71,6 @@ module.exports = {
     }
   ],
   vendorName: 'libs/base,libs/vendor',
-  extryCssName: '{main,header,bootstrap}',
+  extryCssName: '{main,header,bootstrap,mobile,admin}',
 }
 

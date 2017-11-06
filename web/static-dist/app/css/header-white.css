@@ -1,1 +1,45 @@
-.img-full{display:block;height:auto;width:100%}.es-box-shadow{box-shadow:0 1px 2px 0 rgba(0,0,0,.1)}.es-header{background-color:#fff}.es-header .navbar-header .navbar-brand,.es-header .navbar-mobile .navbar-more{color:#313131}.es-header .nav-mobile .nav.navbar-nav>li>a{color:#c1c1c1}.es-header .nav-mobile .nav.navbar-nav>li.active>a,.es-header .nav-mobile .nav.navbar-nav>li.open.active>a,.es-header .nav-mobile .nav.navbar-nav>li.open>a,.es-header .nav-mobile .nav.navbar-nav>li.open>a:focus,.es-header .nav-mobile .nav.navbar-nav>li.open>a:hover,.es-header .nav-mobile .nav.navbar-nav>li>a:focus,.es-header .nav-mobile .nav.navbar-nav>li>a:hover{color:#fff}.es-header .nav.navbar-nav>li>a{color:#616161}.es-header .nav.navbar-nav>li.active>a,.es-header .nav.navbar-nav>li.open.active>a,.es-header .nav.navbar-nav>li.open>a,.es-header .nav.navbar-nav>li.open>a:focus,.es-header .nav.navbar-nav>li.open>a:hover,.es-header .nav.navbar-nav>li>a:focus,.es-header .nav.navbar-nav>li>a:hover{color:#313131}.es-header .nav.user-nav>li>a{color:#616161}.es-header .nav.user-nav>li>a:focus,.es-header .nav.user-nav>li>a:hover{color:#313131}.navbar-form .form-control{border-color:#e1e1e1}
+/* =========================== main-color =========================== */
+/* =========================== media =========================== */
+.es-header {
+  background-color: #fff;
+}
+.es-header .navbar-header .navbar-brand {
+  color: #313131;
+}
+.es-header .navbar-mobile .navbar-more {
+  color: #313131;
+}
+.es-header .nav-mobile .nav.navbar-nav > li > a {
+  color: #c1c1c1;
+}
+.es-header .nav-mobile .nav.navbar-nav > li.open.active > a,
+.es-header .nav-mobile .nav.navbar-nav > li.open > a:hover,
+.es-header .nav-mobile .nav.navbar-nav > li.open > a:focus,
+.es-header .nav-mobile .nav.navbar-nav > li.open > a,
+.es-header .nav-mobile .nav.navbar-nav > li.active > a,
+.es-header .nav-mobile .nav.navbar-nav > li > a:hover,
+.es-header .nav-mobile .nav.navbar-nav > li > a:focus {
+  color: #fff;
+}
+.es-header .nav.navbar-nav > li > a {
+  color: #616161;
+}
+.es-header .nav.navbar-nav > li.open.active > a,
+.es-header .nav.navbar-nav > li.open > a:hover,
+.es-header .nav.navbar-nav > li.open > a:focus,
+.es-header .nav.navbar-nav > li.open > a,
+.es-header .nav.navbar-nav > li.active > a,
+.es-header .nav.navbar-nav > li > a:hover,
+.es-header .nav.navbar-nav > li > a:focus {
+  color: #313131;
+}
+.es-header .nav.user-nav > li > a {
+  color: #616161;
+}
+.es-header .nav.user-nav > li > a:hover,
+.es-header .nav.user-nav > li > a:focus {
+  color: #313131;
+}
+.navbar-form .form-control {
+  border-color: #e1e1e1;
+}

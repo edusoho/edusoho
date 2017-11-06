@@ -19,11 +19,10 @@
         </div>
         <div class="clearfix"></div>
       </form>
-      <table class="table table-middle table-striped" id="course-student-list">
+      <table class="table table-striped" id="course-student-list">
         <thead>
           <tr>
             <th width="40%">{{'site.default.student'|trans}}</th>
-            {# <th width="20%">{{'服务期限'|trans}}</th> #}
             <th width="30%">{{'course.members_manage.official_student'|trans}}</th>
             <th width="30%">{{'course.members_manage.official_student.operation'|trans}}</th>
           </tr>
@@ -46,10 +45,10 @@
                   <div class="color-gray text-sm">{{'course.members_manage.official_student.expiry_date'|trans({'%deadline%': student.deadline|date('Y-n-d H:i') })}} ({{ student.deadline|remain_time }})</div>
                 {% endif %}
               </td>
-              <td>
+              <td style="vertical-align: middle;">
                 {{ student.learningProgressPercent }}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.detail'|trans}}</a>
               </td>
-              <td>
+              <td style="vertical-align: middle;">
                 <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
                 {% if app.user.isAdmin() %}
                 <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>

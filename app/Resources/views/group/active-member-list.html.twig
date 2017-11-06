@@ -2,10 +2,10 @@
   <div class="panel-heading"><h3 class="panel-title">{{'group.detail.new_group_members'|trans}}</h3></div>
   <div class="panel-body">
     {% if activeMembers %}
-      <ul class="user-grids">
+      <ul class="user-avatar-list">
         {% for member in activeMembers %}
-          <li style="width:18%;">
-            {{ web_macro.user_avatar(members[member.userId] , 'user-link user-avatar-link pull-left media-object media-object-small ')}}
+          <li>
+            {{ web_macro.user_avatar(members[member.userId])}}
           </li>
         {% endfor %}
       </ul>
