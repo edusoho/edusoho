@@ -16,10 +16,10 @@
 			<span class="color-danger">{{'testpaper.answer.answer_card.one_chance_tips'|trans}}</span>
 		{% endif %}
 		<a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='
+		{{ 'testpaper.answer.answer_card.exam_tips'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw }}
 		{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}
-      {{ 'testpaper.answer.answer_card.exam_with_pass_score_tips'|trans({'%itemCount%':paper.itemCount,'%score%':paper.score,'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0) })|raw }}
+      {{ 'testpaper.answer.answer_card.exam_with_pass_score_tips'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0) })|raw }}
 		{% endif %}
-    {{ 'testpaper.answer.answer_card.exam_tips'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw }}
 		{% if testpaperActivity.limitedTime|default(0) > 0 %}
       {{ 'testpaper.answer.answer_card.limited_time_tips'|trans({'%limitedTime%':limitedTime|time_formatter})|raw }}
 		{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>

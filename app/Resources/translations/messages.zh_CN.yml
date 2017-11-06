@@ -2081,11 +2081,9 @@ testpaper.answer.answer_card: 答题卡
 testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
 testpaper.answer.answer_card.one_chance_tips: 本次考试仅一次机会
 testpaper.answer.answer_card.exam_tips: >
-  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>。
-testpaper.answer.answer_card.exam_with_pass_score_tips: >
-  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>，及格为<span class="color-primary">%finishScore%</span>分
-testpaper.answer.answer_card.limited_time_tips: >
-  请在<span class="color-primary">%limitedTime%</span>内作答。
+  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
+testpaper.answer.answer_card.exam_with_pass_score_tips: '，及格为<span class="color-primary">%finishScore%</span>分'
+testpaper.answer.answer_card.limited_time_tips: '，请在<span class="color-primary">%limitedTime%</span>内作答。'
 testpaper.answer.answer_card.submit_btn: 马上交卷
 testpaper.answer.student: 答题人：
 testpaper.answer.endtime: 交卷时间：
