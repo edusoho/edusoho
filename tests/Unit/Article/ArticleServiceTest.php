@@ -384,6 +384,7 @@ class ArticleServiceTest extends BaseTestCase
                 'code' => 'article',
                 'parentId' => 0,
             );
+
             return $this->getCategoryService()->createCategory($category);
         }
 
