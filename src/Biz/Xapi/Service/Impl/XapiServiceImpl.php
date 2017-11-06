@@ -91,6 +91,10 @@ class XapiServiceImpl extends BaseService implements XapiService
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->tryTakeTask($taskId);
+
+        if ($task['type'] != 'video') {
+            return ;
+        }
         $watchLog = $this->getLatestWatchLogByUserIdAndActivityId($user['id'], $task['activityId']);
         if (empty($watchLog) || $watchLog['updated_time'] < time() - 30 * 60) {
             $log = array(
