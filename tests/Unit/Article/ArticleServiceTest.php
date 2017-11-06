@@ -20,27 +20,25 @@ class ArticleServiceTest extends BaseTestCase
         $this->getSettingService()->set('mobile', array('about' => 'about', 'logo' => 'logo'));
     }
 
-    public function testgetArticle()
+    public function testGetArticle()
     {
-        $user = $this->getCurrentUser();
         $newArticle = $this->createArticle();
         $getArticle = $this->getArticleService()->getArticle($newArticle['id']);
         $this->assertEquals('test article', $getArticle['title']);
         $this->assertEquals('正午时分', $getArticle['body']);
     }
 
-    public function testgetArticlePrevious()
+    public function testGetArticlePrevious()
     {
         $newArticle = $this->createArticle();
-        $newArticlesend = $this->createArticlesencond();
-        $getArticle = $this->getArticleService()->getArticlePrevious($newArticle['id']);
+        $this->createArticleSecond();
+        $this->getArticleService()->getArticlePrevious($newArticle['id']);
     }
 
-    public function testgetArticleNext()
+    public function testGetArticleNext()
     {
         $newArticle = $this->createArticle();
-        sleep(2);
-
+        sleep(1);
         $fields = array(
             'publishedTime' => 'now',
             'title' => 'test article2',
@@ -53,26 +51,26 @@ class ArticleServiceTest extends BaseTestCase
             'sourceUrl' => 'http://www.edusoho.com',
             'tags' => 'default',
         );
-        $newArticlesend = $this->getArticleService()->createArticle($fields);
+        $newArticle2 = $this->getArticleService()->createArticle($fields);
         $getArticle = $this->getArticleService()->getArticleNext($newArticle['id']);
 
-        $this->assertEquals($newArticlesend['id'], $getArticle['id']);
+        $this->assertEquals($newArticle2['id'], $getArticle['id']);
     }
 
     public function testDeleteArticlesByIds()
     {
         $newArticle = $this->createArticle();
-        $newArticlesend = $this->createArticle();
-        $this->getArticleService()->deleteArticlesByIds(array($newArticle['id'], $newArticlesend['id']));
+        $newArticle2 = $this->createArticle();
+        $this->getArticleService()->deleteArticlesByIds(array($newArticle['id'], $newArticle2['id']));
 
         $this->assertEquals(null, $this->getArticleService()->getArticle($newArticle['id']));
-        $this->assertEquals(null, $this->getArticleService()->getArticle($newArticlesend['id']));
+        $this->assertEquals(null, $this->getArticleService()->getArticle($newArticle2['id']));
     }
 
     public function testfindAllArticles()
     {
-        $newarticle = $this->createArticle();
-        $newarticle2 = $this->createArticlesencond();
+        $this->createArticle();
+        $this->createArticleSecond();
 
         $article = $this->getArticleService()->findAllArticles();
         $this->assertEquals('2', count($article));
@@ -92,8 +90,8 @@ class ArticleServiceTest extends BaseTestCase
 
     public function testsearchArticles()
     {
-        $newArticle = $this->createArticle();
-        $newarticle2 = $this->createArticlesencond();
+        $this->createArticle();
+        $this->createArticleSecond();
         $conditions = array(
             'status' => 'published',
         );
@@ -103,18 +101,18 @@ class ArticleServiceTest extends BaseTestCase
 
     public function testcountArticles()
     {
-        $newArticle = $this->createArticle();
-        $newarticle2 = $this->createArticlesencond();
+        $this->createArticle();
+        $this->createArticleSecond();
         $conditions = array(
             'status' => 'published',
         );
-        $result = $this->getArticleService()->countArticles($conditions, 'published', 0, 20);
+        $result = $this->getArticleService()->countArticles($conditions);
         $this->assertEquals('2', $result);
     }
 
-    public function testcreateArticle()
+    public function testCreateArticle()
     {
-        $fileds = array(
+        $fields = array(
             'publishedTime' => 'now',
             'title' => 'test article',
             'type' => 'article',
@@ -126,7 +124,7 @@ class ArticleServiceTest extends BaseTestCase
             'sourceUrl' => 'http://www.edusoho.com',
             'tags' => '',
         );
-        $article = $this->getArticleService()->createArticle($fileds);
+        $article = $this->getArticleService()->createArticle($fields);
         $this->assertEquals('test article', $article['title']);
     }
 
@@ -136,7 +134,7 @@ class ArticleServiceTest extends BaseTestCase
     public function testcreateEmptyArticle()
     {
         $article = null;
-        $article = $this->getArticleService()->createArticle($article);
+        $this->getArticleService()->createArticle($article);
     }
 
     public function testupdateArticle()
@@ -164,7 +162,7 @@ class ArticleServiceTest extends BaseTestCase
     public function testupdateEmptyArticle()
     {
         $article = null;
-        $article = $this->getArticleService()->updateArticle($article['id'], $article);
+        $this->getArticleService()->updateArticle($article['id'], $article);
     }
 
     public function testhitArticle()
@@ -187,7 +185,7 @@ class ArticleServiceTest extends BaseTestCase
     public function testhitEmptyArticle()
     {
         $article = null;
-        $article = $this->getArticleService()->hitArticle($article['id']);
+        $this->getArticleService()->hitArticle($article['id']);
     }
 
     public function testgetArticleLike()
@@ -231,7 +229,7 @@ class ArticleServiceTest extends BaseTestCase
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
-    public function testlikeTwich()
+    public function testlikeTwice()
     {
         $newArticle = $this->createArticle();
         $this->getArticleService()->like($newArticle['id']);
@@ -333,7 +331,7 @@ class ArticleServiceTest extends BaseTestCase
             'sourceUrl' => 'http://www.edusoho.com',
             'tags' => sprintf('%s,%s,%s', $tag1['name'], $tag2['name'], $tag3['name']),
         );
-        $article2 = $this->getArticleService()->createArticle($article2);
+        $this->getArticleService()->createArticle($article2);
 
         $article3 = array(
             'publishedTime' => 'now',
@@ -358,58 +356,58 @@ class ArticleServiceTest extends BaseTestCase
 
     protected function createArticle()
     {
-        $fileds = array(
+        $category = $this->getCategory();
+
+        $fields = array(
             'publishedTime' => 'now',
             'title' => 'test article',
             'type' => 'article',
             'body' => '正午时分',
             'thumb' => 'thumb',
             'originalThumb' => 'originalThumb',
-            'categoryId' => '1',
+            'categoryId' => $category['id'],
             'source' => 'http://www.edusoho.com',
             'sourceUrl' => 'http://www.edusoho.com',
             'tags' => 'default',
         );
 
-        $category = $this->getCategoryService()->getCategory(1);
-        if (empty($category)) {
-            $this->createCategory();
+        return $this->getArticleService()->createArticle($fields);
+    }
+
+    protected function getCategory()
+    {
+        $category = $this->getCategoryService()->getCategoryByCode('article');
+
+        if (!$category) {
+            $category = array(
+                'name' => '文章',
+                'code' => 'article',
+                'parentId' => 0,
+            );
+            return $this->getCategoryService()->createCategory($category);
         }
 
-        return $this->getArticleService()->createArticle($fileds);
+        return $category;
     }
 
-    protected function createCategory()
+    protected function createArticleSecond()
     {
-        $category = array(
-            'name' => '文章',
-            'code' => 'article',
-            'parentId' => 0,
-        );
-        $this->getCategoryService()->createCategory($category);
-    }
+        $category = $this->getCategory();
 
-    protected function createArticlesencond()
-    {
-        $fileds = array(
+        $fields = array(
             'publishedTime' => 'now',
             'title' => 'test article2',
             'type' => 'article2',
             'body' => '正午时分2',
             'thumb' => 'thumb2',
             'originalThumb' => 'originalThumb2',
-            'categoryId' => '1',
+            'categoryId' => $category['id'],
             'source' => 'http://try6.edusoho.cn',
             'sourceUrl' => 'http://try6.edusoho.cn',
             'tags' => 'default',
         );
 
-        $category = $this->getCategoryService()->getCategory(1);
-        if (empty($category)) {
-            $this->createCategory();
-        }
-
-        return $this->getArticleService()->createArticle($fileds);
+        return $this->getArticleService()->createArticle($fields);
     }
 
     protected function createUser($user)
