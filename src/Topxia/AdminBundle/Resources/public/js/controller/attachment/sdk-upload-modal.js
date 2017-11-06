@@ -1,6 +1,6 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
   require('new-uploader');
-  exports.run = function () {
+  exports.run = function() {
     var $uploader = $('#uploader-container');
 
     var uploader = new UploaderSDK({
@@ -13,7 +13,7 @@ define(function (require, exports, module) {
       ui: 'single'
     });
 
-    uploader.on('file.finish', function (file) {
+    uploader.on('file.finish', function(file) {
       if (file.length && file.length > 0) {
         var minute = parseInt(file.length / 60);
         var second = Math.round(file.length % 60);
@@ -29,11 +29,11 @@ define(function (require, exports, module) {
       var $list = $('.' + $metas.data('listClass'));
 
       if (currentTarget != '') {
-        $ids = $('[data-role='+currentTarget+']').find('.' + $metas.data('idsClass'));
-        $list = $('[data-role='+currentTarget+']').find('.' + $metas.data('listClass'));
+        $ids = $('[data-role=' + currentTarget + ']').find('.' + $metas.data('idsClass'));
+        $list = $('[data-role=' + currentTarget + ']').find('.' + $metas.data('listClass'));
       }
 
-      $.get('/attachment/file/' + file.id + '/show', function (html) {
+      $.get('/attachment/file/' + file.id + '/show', function(html) {
         $list.append(html);
         $ids.val(file.id);
         $('#attachment-modal').modal('hide');
@@ -42,7 +42,7 @@ define(function (require, exports, module) {
     });
 
     //只执行一次
-    $('#attachment-modal').one('hide.bs.modal', function () {
+    $('#attachment-modal').one('hide.bs.modal', function() {
       uploader.destroy();
       uploader = null;
     });
