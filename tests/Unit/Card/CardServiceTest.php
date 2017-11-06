@@ -64,7 +64,6 @@ class CardServiceTest extends BaseTestCase
         ));
 
         $this->assertEquals($timestamp, $results['deadline']);
-
     }
 
     public function testGetCard()
