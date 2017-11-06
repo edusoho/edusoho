@@ -1,3 +1,5 @@
+{% do script(['app/js/float-consult/index.js'])  %}
+
 {% set consult = setting('consult') %}
 <div id="float-consult" class="float-consult hidden-xs">
   <div class="btn-group-vertical">
@@ -93,6 +95,3 @@
     </div>
   </div>
 </div>
-
-{% do load_script('topxiawebbundle/util/float-consult') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
