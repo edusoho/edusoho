@@ -121,6 +121,7 @@ abstract class Type extends BizAware
     protected function getActor($userId)
     {
         $currentUser = $this->getUserService()->getUser($userId);
+        $userProfile = $this->getUserService()->getUserProfile($userId);
         $siteSettings = $this->getSettingService()->get('site', array());
 
         $host = empty($siteSettings['url']) ? '' : $siteSettings['url'];
@@ -130,7 +131,7 @@ abstract class Type extends BizAware
                 'id' => $currentUser['id'],
                 'name' => $currentUser['nickname'],
                 'email' => $currentUser['email'],
-                'phone' => empty($currentUser['mobile']) ? '' : $currentUser['mobile'],
+                'phone' => empty($userProfile['mobile']) ? '' : $userProfile['mobile'],
                 'homePage' => $host,
             ),
         );
