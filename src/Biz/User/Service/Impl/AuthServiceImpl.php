@@ -18,7 +18,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             throw $this->createInvalidArgumentException('site.register.sensitive_words');
         }
         //营销平台不需要注册频率限制
-        if ($registration['type'] != 'marketing' && $this->registerLimitValidator($registration)) {
+        if (isset($registration['type']) && $registration['type'] != 'marketing' && $this->registerLimitValidator($registration)) {
             throw $this->createAccessDeniedException('site.register.time_limit');
         }
 
