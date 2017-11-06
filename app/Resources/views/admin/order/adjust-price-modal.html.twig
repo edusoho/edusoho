@@ -32,7 +32,7 @@
         <tr class="adjust-price-tr">
           <td style="vertical-align: middle;">{{ order.title }}</td>
           <td style="vertical-align: middle;">{{ order.price_amount|to_cash(0) }}</td>
-          <td class="text-center">
+          <td class="text-center" style="vertical-align: middle;">
             <input type="text" name="adjust-by-discount" class="js-adjust-discount adjust-price form-control" value="{{ adjustInfo.adjustDiscount }}"/>
             折 =
             - <input type="text" name="adjust-by-price" class="js-adjust-price adjust-price form-control" value="{{ adjustInfo.adjustPrice }}"/> 元

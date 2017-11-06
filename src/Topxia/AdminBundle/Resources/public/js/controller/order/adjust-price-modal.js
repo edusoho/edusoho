@@ -37,7 +37,7 @@ define(function(require, exports, module) {
       required: false,
       rule: 'currency max{max: 10}',
       display: '折扣',
-      errormessageCurrency: '请输入正确到折扣,最多保留两位小数'
+      errormessageCurrency: '请输入正确的折扣,最多保留两位小数'
     });
 
     var originPayAmount = $form.find('.js-origin-pay-amount').data('originAmount');
