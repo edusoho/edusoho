@@ -1923,9 +1923,9 @@ error-stack-parser@^2.0.0:
   dependencies:
     stackframe "^1.0.3"
 
-es-ckeditor@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.2.2.tgz#b9327f2b4e412bd217203a5fa6e2e308bab5d826"
+es-ckeditor@4.7.2-patch2:
+  version "4.7.2-patch2"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch2.tgz#8c3e922009c5f8fbb807c481c53965f3d5e9f998"
 
 es-jcrop@latest:
   version "2.0.5"
