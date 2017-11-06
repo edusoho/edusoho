@@ -70,18 +70,18 @@ class EduSohoPluginUpgrade
     {
         $rootDir = realpath($this->kernel['root_directory']);
         $code = '{{code}}';
+        $lowerCode = strtolower($code);
+        
         $filesystem = new Filesystem();
-
         $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
         if (is_dir($originDir)) {
-            $targetDir = "{$rootDir}/web/bundles/".strtolower($code).'plugin';
+            $targetDir = "{$rootDir}/web/bundles/{{$lowerCode}}plugin";
             if ($filesystem->exists($targetDir)) {
                 $filesystem->remove($targetDir);
             }
             $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         }
 
-        $lowerCode = strtolower($code);
         $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/static-dist/{$lowerCode}plugin";
         $targetDir = "{$rootDir}/web/static-dist/{$lowerCode}plugin";
 
