@@ -1,5 +1,5 @@
-import FloatConsult from './float-consult';
+import { floatConsult } from './float-consult';
 
-let floatConsult = new FloatConsult({
-  ele: '#float-consult'
-})
+const popoverBtnClass = '.btn-group-vertical .btn';
+
+floatConsult($('#float-consult'), popoverBtnClass);
