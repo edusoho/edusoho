@@ -104,9 +104,10 @@ class Orders extends MarketingBase
         $biz['user'] = $currentUser;
 
         $data['price'] = $data['marketingOrderPayAmount'];
-        $data['payment'] = 'marketing';
+        $data['source'] = 'marketing';
         $data['remark'] = '来自微营销';
         $data['orderTitleRemark'] = '(来自微营销)';
+
         list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
 
         return array($course, $member, $order);
