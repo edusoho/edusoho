@@ -47,7 +47,7 @@ class Orders extends MarketingBase
                 'marketingOrderPayAmount' => $postData['order_pay_amount'],
                 'marketingActivityId' => $postData['activity_id'],
                 'marketingActivityName' => $postData['activity_name'],
-                'deducts' => $this->getUserOrderDeduct($user['id'],$postData['deduct']),
+                'deducts' => $this->getUserOrderDeduct($user['id'], $postData['deduct']),
             );
             $target = array(
                 'type' => $postData['target_type'],
@@ -66,14 +66,14 @@ class Orders extends MarketingBase
         return $response;
     }
 
-    private function getUserOrderDeduct($userId,$deduct)
+    private function getUserOrderDeduct($userId, $deduct)
     {
         return array(array(
-            'detail'=>$deduct['detail'],
-            'deduct_type'=>$deduct['deduct_type'],
+            'detail' => $deduct['detail'],
+            'deduct_type' => $deduct['deduct_type'],
             'deduct_amount' => $deduct['deduct_amount'],
-            'user_id' =>$userId,
-            'id' => 0));
+            'user_id' => $userId,
+            'id' => 0, ));
     }
 
     private function createUserFromMarketing($postData, $request)
