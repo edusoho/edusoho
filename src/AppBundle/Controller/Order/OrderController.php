@@ -86,7 +86,6 @@ class OrderController extends BaseController
     public function detailAction(Request $request, $id)
     {
         $order = $this->getOrderService()->getOrder($id);
-        $order = $order = MathToolkit::multiply($order, array('price_amount', 'pay_amount'), 0.01);
 
         preg_match('/管理员添加/', $order['title'], $order['edit']);
         $user = $this->getUserService()->getUser($order['user_id']);
