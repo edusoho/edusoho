@@ -46,7 +46,7 @@ class BaseTestCase extends TestCase
 
     protected function getCurrentUser()
     {
-        return $this->getServiceKernel()->getCurrentUser();
+        return $this->biz['user'];
     }
 
     public function getServiceKernel()
@@ -78,9 +78,13 @@ class BaseTestCase extends TestCase
      */
     protected function initBiz()
     {
-        $biz = new Biz(self::$appKernel->getContainer()->getParameter('biz_config'));
+        $container = self::$appKernel->getContainer();
+        $biz = new Biz($container->getParameter('biz_config'));
         self::$appKernel->initializeBiz($biz);
-        $biz['db'] = self::db();
+        $singletonBiz = $container->get('biz');
+        $biz['dispatcher'] = $singletonBiz['dispatcher'];
+        $biz['db'] = $singletonBiz['db'];
+        $biz['redis'] = $singletonBiz['redis'];
 
         $this->biz = $biz;
         return $biz;
@@ -111,7 +115,8 @@ class BaseTestCase extends TestCase
 
     protected function initCurrentUser()
     {
-        $userService = ServiceKernel::instance()->createService('User:UserService');
+        /** @var $userService \Biz\User\Service\UserService */
+        $userService = $this->createService('User:UserService');
 
         $currentUser = new CurrentUser();
         //由于创建管理员用户时，当前用户（CurrentUser）必须有管理员权限，所以在register之前先mock一个临时管理员用户作为CurrentUser
@@ -123,6 +128,7 @@ class BaseTestCase extends TestCase
             'org' => array('id' => 1),
         ));
 
+        $this->getServiceKernel()->setBiz($this->getBiz());
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $user = $userService->register(array(
@@ -145,7 +151,11 @@ class BaseTestCase extends TestCase
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
         $biz = $this->getBiz();
-        $biz['user'] = $this->getCurrentUser();
+        $biz['user'] = $currentUser;
+
+        $container = self::$appKernel->getContainer();
+        $singletonBiz = $container->get('biz');
+        $singletonBiz['user'] = $currentUser;
 
         return $this;
     }
