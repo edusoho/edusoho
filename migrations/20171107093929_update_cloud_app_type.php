@@ -23,6 +23,12 @@ class UpdateCloudAppType extends Migration
      */
     public function down()
     {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
 
+        $connection->exec("
+            ALTER TABLE `cloud_app` MODIFY `type` enum('plugin','theme') NOT NULL DEFAULT 'plugin' ");
+        $connection->exec("
+            UPDATE `cloud_app` SET type ='plugin' WHERE code = 'MAIN'");
     }
 }
