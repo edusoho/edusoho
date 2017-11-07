@@ -26,8 +26,8 @@ class UnitTestsBootstrap
             $this->biz['db.options'] = $options;
         }
 
-        BaseTestCase::setBiz($this->biz);
-        BaseTestCase::emptyDatabase(true);
+        $clear = new DatabaseDataClearer($this->biz['db']);
+        $clear->clear();
 
         $migration = new MigrationBootstrap($this->biz['db'], $this->biz['migration.directories']);
         $container = $migration->boot();

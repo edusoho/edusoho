@@ -26,6 +26,8 @@ $biz = $kernel->getContainer()->get('biz');
 $bootstrap = new UnitTestsBootstrap($biz);
 $bootstrap->boot();
 
+\Biz\BaseTestCase::setAppKernel($kernel);
+
 // init service kernel env
 ServiceKernel::instance()
     ->setEnvVariable(array(

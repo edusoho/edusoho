@@ -2,14 +2,29 @@
 
 namespace Biz;
 
+use Codeages\Biz\Framework\UnitTests\DatabaseDataClearer;
 use Mockery;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
+use PHPUnit\Framework\TestCase;
 
-class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
+class BaseTestCase extends TestCase
 {
+    protected static $appKernel;
+
+    public static function setAppKernel(\AppKernel $appKernel)
+    {
+        self::$appKernel = $appKernel;
+    }
+
+    public function emptyDatabaseQuickly()
+    {
+        $clear = new DatabaseDataClearer(self::$biz['db']);
+        $clear->clearQuickly();
+    }
+
     protected function createService($alias)
     {
         return $this->getBiz()->service($alias);
@@ -38,12 +53,12 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     public function setUp()
     {
         $biz = $this->getBiz();
-        parent::emptyDatabaseQuickly();
+        $this->emptyDatabaseQuickly();
         $biz['db']->beginTransaction();
         if (isset($biz['redis'])) {
             $biz['redis']->flushDb();
-            //$biz['dao.cache.shared_storage']->flush();
         }
+
         $this
             ->flushPool()
             ->initDevelopSetting()
