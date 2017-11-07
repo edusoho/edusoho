@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/material-lib/global-player/index"],[function(a,e){"use strict";var l=$("#global-player");new QiQiuYun.Player({id:"global-player",resNo:l.data("resNo"),token:l.data("token"),user:{id:l.data("userId"),name:l.data("userName")}})}]);
+webpackJsonp(["app/js/material-lib/global-player/index"],{"54eb8a51c367f5d3d872":function(a,e,d){"use strict";var l=$("#global-player");new QiQiuYun.Player({id:"global-player",resNo:l.data("resNo"),token:l.data("token"),user:{id:l.data("userId"),name:l.data("userName")}})}},["54eb8a51c367f5d3d872"]);

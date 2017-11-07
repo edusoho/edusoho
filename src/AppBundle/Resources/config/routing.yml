@@ -1336,14 +1336,6 @@ open_course_manage_file_status:
    path:  /open/course/manage/file/status
    defaults: { _controller: AppBundle:OpenCourseFileManage:fileStatus }
 
-open_course_manage_files_batch_upload:
-    path:  /open/course/{id}/manage/files/batch/upload/{targetType}
-    defaults: { _controller: AppBundle:OpenCourseFileManage:batchUploadCourseFiles }
-
-open_course_manage_files_upload:
-    path:  /open/course/{id}/manage/files/upload/{targetType}
-    defaults: { _controller: AppBundle:OpenCourseFileManage:uploadCourseFiles }
-
 open_course_manage_delete_materials_show:
     path:  /open/course/{id}/manage/show/delete/materials
     defaults: { _controller: AppBundle:OpenCourseFileManage:deleteMaterialShow }

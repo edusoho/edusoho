@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
-    var BatchUploader = require('../../../../topxiaweb/js/controller/uploader/batch-uploader');
+    var BatchUploader = require('../uploader/batch-uploader');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 

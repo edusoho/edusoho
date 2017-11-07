@@ -3,20 +3,15 @@
 {% block myStudyPlace %}
 {% if courses %}
   <!-- 课程 -->
-  <ul class="course-grids">
+  <div class="course-list">
     {% set courseCount = 15 %}
     {% for course in courses %}
       {% set courseCount = loop.length %}
       {% set courseSet = data('CourseSet',{id:course.courseSetId}) %}
-      <li class="course-grid mt0">
+      <div class="course-item">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body" style="width: auto">
-          <div class="course-grid-img">
+          <div class="course-img">
             <img src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" class="img-responsive thumb">
-            <div class="course-grid-mask">
-              <span class="btn btn-warning btn-sm course-grid-btn-learn">
-                {{ 'course.btn.continue_learning_btn'|trans }}
-              </span>
-            </div>
           </div>
           <div class="progress progress-sm mb0">
             <div class="progress-bar" role="progressbar" aria-valuenow="{{ course.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ course.percent }}%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
@@ -30,10 +25,9 @@
             </span>
           </div>
         </a>
-      
-      </li>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
   {% if courseCount >= 15 %}
     <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'my.course.more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
   {% endif %}
