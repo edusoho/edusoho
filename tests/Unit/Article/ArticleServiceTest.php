@@ -188,32 +188,26 @@ class ArticleServiceTest extends BaseTestCase
         $this->getArticleService()->hitArticle($article['id']);
     }
 
-    public function testgetArticleLike()
+    public function testGetArticleLike()
     {
-        $user = $this->createCurrentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
         $newArticle = $this->createArticle();
         $this->getArticleService()->like($newArticle['id']);
 
-        $like = $this->getArticleService()->getArticleLike($newArticle['id'], $currentUser['id']);
+        $like = $this->getArticleService()->getArticleLike($newArticle['id'], $user['id']);
 
         $this->assertNotNull($like);
     }
 
-    public function testlike()
+    public function testLike()
     {
-        $user = $this->createCurrentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
         $newArticle = $this->createArticle();
         $this->getArticleService()->like($newArticle['id']);
 
-        $like = $this->getArticleService()->getArticleLike($newArticle['id'], $currentUser['id']);
+        $like = $this->getArticleService()->getArticleLike($newArticle['id'], $user['id']);
         $this->assertNotNull($like);
     }
 
@@ -238,10 +232,7 @@ class ArticleServiceTest extends BaseTestCase
 
     public function testcancelLike()
     {
-        $user = $this->createCurrentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $currentUser = $this->getCurrentUser();
 
         $newArticle = $this->createArticle();
         $this->getArticleService()->like($newArticle['id']);
@@ -420,19 +411,6 @@ class ArticleServiceTest extends BaseTestCase
         $userInfo['loginIp'] = '127.0.0.1';
 
         return $this->getUserService()->register($userInfo);
-    }
-
-    private function createCurrentUser()
-    {
-        $user = array();
-        $user['email'] = 'user@user.com';
-        $user['nickname'] = 'user';
-        $user['password'] = 'user';
-        $user = $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-
-        return $user;
     }
 
     /**

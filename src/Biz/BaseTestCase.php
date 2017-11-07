@@ -12,16 +12,25 @@ use PHPUnit\Framework\TestCase;
 
 class BaseTestCase extends TestCase
 {
+    /** @var $appKernel \AppKernel  */
     protected static $appKernel;
+
+    protected $biz;
 
     public static function setAppKernel(\AppKernel $appKernel)
     {
         self::$appKernel = $appKernel;
     }
 
+    public static function db()
+    {
+        $singletonBiz = self::$appKernel->getContainer()->get('biz');
+        return $singletonBiz['db'];
+    }
+
     public function emptyDatabaseQuickly()
     {
-        $clear = new DatabaseDataClearer(self::$biz['db']);
+        $clear = new DatabaseDataClearer(self::db());
         $clear->clearQuickly();
     }
 
@@ -52,17 +61,29 @@ class BaseTestCase extends TestCase
 
     public function setUp()
     {
-        $biz = $this->getBiz();
+        $biz = $this->initBiz();
         $this->emptyDatabaseQuickly();
-        $biz['db']->beginTransaction();
+        self::db()->beginTransaction();
         if (isset($biz['redis'])) {
             $biz['redis']->flushDb();
         }
 
         $this
-            ->flushPool()
             ->initDevelopSetting()
             ->initCurrentUser();
+    }
+
+    /**
+     * @return Biz
+     */
+    protected function initBiz()
+    {
+        $biz = new Biz(self::$appKernel->getContainer()->getParameter('biz_config'));
+        self::$appKernel->initializeBiz($biz);
+        $biz['db'] = self::db();
+
+        $this->biz = $biz;
+        return $biz;
     }
 
     public function tearDown()
@@ -130,26 +151,6 @@ class BaseTestCase extends TestCase
     }
 
     /**
-     * mock对象
-     *
-     * @param string $objectName mock的类名
-     * @param array  $params     mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
-     */
-    protected function mock($objectName, $params = array())
-    {
-        $newService = explode('.', $objectName);
-        $mockObject = Mockery::mock($newService[1]);
-
-        foreach ($params as $param) {
-            $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
-        }
-
-        $pool = array();
-        $pool[$objectName] = $mockObject;
-        $this->setPool($pool);
-    }
-
-    /**
      * 用于 mock　service　和　dao
      * 如　$this->mockBiz(
      *      'Course:CourseService',
@@ -201,26 +202,6 @@ class BaseTestCase extends TestCase
         $biz['@'.$alias] = $mockObj;
     }
 
-    protected function setPool($object)
-    {
-        $reflectionObject = new \ReflectionObject($this->getServiceKernel());
-        $pool = $reflectionObject->getProperty('pool');
-        $pool->setAccessible(true);
-        $value = $pool->getValue($this->getServiceKernel());
-        $objects = array_merge($value, $object);
-        $pool->setValue($this->getServiceKernel(), $objects);
-    }
-
-    protected function flushPool()
-    {
-        $reflectionObject = new \ReflectionObject($this->getServiceKernel());
-        $pool = $reflectionObject->getProperty('pool');
-        $pool->setAccessible(true);
-        $pool->setValue($this->getServiceKernel(), array());
-
-        return $this;
-    }
-
     protected static function getContainer()
     {
         global $kernel;
@@ -233,7 +214,7 @@ class BaseTestCase extends TestCase
      */
     protected function getBiz()
     {
-        return self::$biz;
+        return $this->biz;
     }
 
     protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())
@@ -260,6 +241,7 @@ class BaseTestCase extends TestCase
     {
         $permissions = new \ArrayObject();
         $permissions['admin_course_content_manage'] = true;
+        /* @var $currentUser CurrentUser */
         $currentUser->setPermissions($permissions);
     }
 }
