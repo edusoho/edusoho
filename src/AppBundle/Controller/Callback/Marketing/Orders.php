@@ -73,7 +73,7 @@ class Orders extends MarketingBase
             'deduct_type' => $deduct['deduct_type'],
             'deduct_amount' => $deduct['deduct_amount'],
             'user_id' => $userId,
-            'id' => 0, ));
+        ));
     }
 
     private function createUserFromMarketing($postData, $request)
