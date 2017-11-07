@@ -27,6 +27,8 @@ $bootstrap = new UnitTestsBootstrap($biz);
 $bootstrap->boot();
 
 \Biz\BaseTestCase::setAppKernel($kernel);
+\Biz\BaseTestCase::setDb($biz['db']);
+\Biz\BaseTestCase::setRedis($biz['redis']);
 
 // init service kernel env
 ServiceKernel::instance()

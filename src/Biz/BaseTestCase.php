@@ -3,10 +3,13 @@
 namespace Biz;
 
 use Codeages\Biz\Framework\UnitTests\DatabaseDataClearer;
+use Codeages\PluginBundle\Event\LazyDispatcher;
 use Mockery;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\Event;
 use Topxia\Service\Common\ServiceKernel;
 use PHPUnit\Framework\TestCase;
 
@@ -17,20 +20,29 @@ class BaseTestCase extends TestCase
 
     protected $biz;
 
+    /** @var $db \Doctrine\DBAL\Connection  */
+    protected static $db;
+
+    protected static $redis = null;
+
+    public static function setDb($db)
+    {
+        self::$db = $db;
+    }
+
+    public static function setRedis($redis)
+    {
+        self::$redis = $redis;
+    }
+
     public static function setAppKernel(\AppKernel $appKernel)
     {
         self::$appKernel = $appKernel;
     }
 
-    public static function db()
-    {
-        $singletonBiz = self::$appKernel->getContainer()->get('biz');
-        return $singletonBiz['db'];
-    }
-
     public function emptyDatabaseQuickly()
     {
-        $clear = new DatabaseDataClearer(self::db());
+        $clear = new DatabaseDataClearer(self::$db);
         $clear->clearQuickly();
     }
 
@@ -63,7 +75,7 @@ class BaseTestCase extends TestCase
     {
         $biz = $this->initBiz();
         $this->emptyDatabaseQuickly();
-        self::db()->beginTransaction();
+        self::$db->beginTransaction();
         if (isset($biz['redis'])) {
             $biz['redis']->flushDb();
         }
@@ -81,12 +93,17 @@ class BaseTestCase extends TestCase
         $container = self::$appKernel->getContainer();
         $biz = new Biz($container->getParameter('biz_config'));
         self::$appKernel->initializeBiz($biz);
-        $singletonBiz = $container->get('biz');
-        $biz['dispatcher'] = $singletonBiz['dispatcher'];
-        $biz['db'] = $singletonBiz['db'];
-        $biz['redis'] = $singletonBiz['redis'];
+        $biz['dispatcher'] = null;
+        $biz['db'] = self::$db;
+        $biz['redis'] = self::$redis;
 
         $this->biz = $biz;
+        $biz['dispatcher'] = function () use ($container, $biz) {
+            $dispatcher = new TestCaseLazyDispatcher($container);
+            $dispatcher->setBiz($biz);
+            return $dispatcher;
+        };
+
         return $biz;
     }
 
@@ -253,5 +270,59 @@ class BaseTestCase extends TestCase
         $permissions['admin_course_content_manage'] = true;
         /* @var $currentUser CurrentUser */
         $currentUser->setPermissions($permissions);
+    }
+}
+
+class TestCaseLazyDispatcher extends LazyDispatcher
+{
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var Biz
+     */
+    private $biz;
+
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+        $this->container = $container;
+    }
+
+    public function dispatch($eventName, Event $event = null)
+    {
+        if (null === $event) {
+            $event = new Event();
+        }
+
+        $event->setDispatcher($this);
+        $event->setName($eventName);
+
+        $subscribers = $this->container->get('codeags_plugin.event.lazy_subscribers');
+
+        $callbacks = $subscribers->getCallbacks($eventName);
+
+        foreach ($callbacks as $callback) {
+            if ($event->isPropagationStopped()) {
+                break;
+            }
+
+            list($id, $method) = $callback;
+            if ($this->container->has($id)) {
+                $subscriber = $this->container->get($id);
+                $className = get_class($subscriber);
+                $newSubscriber = new $className($this->biz);
+                call_user_func(array($newSubscriber, $method), $event);
+            }
+        }
+
+        return $event;
+    }
+
+    public function setBiz($biz)
+    {
+        $this->biz = $biz;
     }
 }
