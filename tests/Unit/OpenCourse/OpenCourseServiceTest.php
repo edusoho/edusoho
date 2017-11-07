@@ -80,7 +80,6 @@ class OpenCourseServiceTest extends BaseTestCase
     {
         $course1 = $this->_createLiveOpenCourse();
         $this->getOpenCourseService()->waveCourse($course1['id'], 'hitNum', 2);
-        $this->flushPool();
         $course = $this->getOpenCourseService()->getCourse($course1['id']);
 
         $this->assertEquals(2, $course['hitNum']);
@@ -592,6 +591,6 @@ class OpenCourseServiceTest extends BaseTestCase
      */
     protected function getOpenCourseService()
     {
-        return self::$biz->service('OpenCourse:OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 }

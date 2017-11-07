@@ -4,7 +4,6 @@ namespace Biz\Util\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\Service\SystemUtilService;
-use Topxia\Service\Common\ServiceKernel;
 
 class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 {
@@ -58,6 +57,6 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 }
