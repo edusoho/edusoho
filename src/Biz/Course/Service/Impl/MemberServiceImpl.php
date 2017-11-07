@@ -31,7 +31,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 {
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
-//        $data = ArrayToolkit::parts($data, array('price', 'amount', 'remark', 'isAdminAdded', 'source'));
+        //        $data = ArrayToolkit::parts($data, array('price', 'amount', 'remark', 'isAdminAdded', 'source'));
 
         if (!ArrayToolkit::requireds($data, array('price', 'remark'))) {
             throw $this->createServiceException('parameter is invalid!');
@@ -1113,7 +1113,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'created_reason' => $data['remark'],
             'source' => $data['source'],
             'create_extra' => $data,
-            'deducts' => empty($data['deducts']) ? array() : $data['deducts']
+            'deducts' => empty($data['deducts']) ? array() : $data['deducts'],
         );
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
