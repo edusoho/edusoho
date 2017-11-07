@@ -24,9 +24,12 @@ class PublishedTasksDataTag extends BaseDataTag implements DataTag
 
         $conditions = array(
             'fromCourseSetId' => $arguments['courseSetId'],
-            'type' => 'live',
             'status' => 'published',
         );
+
+        if (!empty($arguments['type'])) {
+            $conditions['type'] = $arguments['type'];
+        }
 
         if (empty($arguments['count'])) {
             $count = $this->getTaskService()->countTasks($conditions);
