@@ -6692,7 +6692,7 @@ admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
 admin.user_auth.Protection.low.Explanation: 方案说明：
-admin.user_auth.Protection.low.Verification_code: 注册时需填写验证码。
+admin.user_auth.Protection.low.Verification_code: 注册时需填写图形验证码。
 admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
