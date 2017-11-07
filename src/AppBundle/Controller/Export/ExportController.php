@@ -15,7 +15,7 @@ class ExportController extends BaseController
             $export = $this->container->get('export_factory')->create($name, $conditions);
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('message' => $e->getMessage()));
-        }        
+        }
         $response = array('success' => 1);
 
         $count = $export->getCount();
