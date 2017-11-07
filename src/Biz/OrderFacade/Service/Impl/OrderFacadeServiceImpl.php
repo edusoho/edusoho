@@ -114,6 +114,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'created_reason' => empty($params['created_reason']) ? '' : $params['created_reason'],
             'source' => empty($params['source']) ? 'self' : $params['source'],
             'price_type' => 'CNY',
+            'create_extra' => empty($params['create_extra']) ? '' : $params['create_extra'],
         );
 
         $orderItems = $this->makeOrderItems($product);

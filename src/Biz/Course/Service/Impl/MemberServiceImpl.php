@@ -75,7 +75,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->beginTransaction();
             if ($data['price'] > 0) {
                 //支付完成后会自动加入课程
-                $order = $this->createOrder($course['id'], $user['id'], $data['price'], $orderPayment, $data['remark']);
+                $order = $this->createOrder($course['id'], $user['id'], $data['price'], $orderPayment, $data);
             } else {
                 $info = array(
                     'orderId' => 0,
@@ -1112,14 +1112,15 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByIds($ids);
     }
 
-    protected function createOrder($courseId, $userId, $price, $source, $remark)
+    protected function createOrder($courseId, $userId, $price, $source, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
         $courseProduct->price = $price;
 
         $params = array(
-            'created_reason' => $remark,
+            'created_reason' => $data['remark'],
             'source' => $source,
+            'create_extra' => $data
         );
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
