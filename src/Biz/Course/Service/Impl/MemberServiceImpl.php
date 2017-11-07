@@ -54,17 +54,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $orderTitle = "购买课程《{$courseSet['title']}》- {$course['title']}";
-        $orderPayment = '';
+
         if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
-            $orderTitle = $orderTitle.'(管理员添加)';
-            $orderPayment = 'outside';
+            $data['source'] = 'outside';
         }
-        if (isset($data['orderTitleRemark'])) {
-            $orderTitle = $orderTitle.$data['orderTitleRemark'];
-        }
+
+        // TODO: 需要统一改成source
         if (isset($data['payment'])) {
-            $orderPayment = $data['payment'];
+            $data['source'] = $data['payment'];
         }
 
         if (empty($data['price'])) {
@@ -74,19 +71,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             if ($data['price'] > 0) {
-                //支付完成后会自动加入课程
-                $order = $this->createOrder($course['id'], $user['id'], $data['price'], $orderPayment, $data);
+                $order = $this->createOrder($course['id'], $user['id'], $data);
             } else {
+                $order = array('id' => 0);
                 $info = array(
-                    'orderId' => 0,
+                    'orderId' => $order['id'],
                     'remark' => $data['remark'],
                     'reason' => 'site.join_by_import',
                     'reason_type' => 'import_join',
                     'isAdminAdded' => empty($data['isAdminAdded']) ? 0 : 1,
                 );
-
                 $this->becomeStudent($course['id'], $user['id'], $info);
-                $order = array('id' => 0);
             }
 
             $member = $this->getCourseMember($course['id'], $user['id']);
@@ -1112,14 +1107,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByIds($ids);
     }
 
-    protected function createOrder($courseId, $userId, $price, $source, $data)
+    protected function createOrder($courseId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
-        $courseProduct->price = $price;
+        $courseProduct->price = $data['price'];
 
         $params = array(
             'created_reason' => $data['remark'],
-            'source' => $source,
+            'source' => $data['source'],
             'create_extra' => $data,
         );
 
