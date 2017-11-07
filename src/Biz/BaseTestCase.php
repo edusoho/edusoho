@@ -15,12 +15,12 @@ use PHPUnit\Framework\TestCase;
 
 class BaseTestCase extends TestCase
 {
-    /** @var $appKernel \AppKernel  */
+    /** @var $appKernel \AppKernel */
     protected static $appKernel;
 
     protected $biz;
 
-    /** @var $db \Doctrine\DBAL\Connection  */
+    /** @var $db \Doctrine\DBAL\Connection */
     protected static $db;
 
     protected static $redis = null;
@@ -101,6 +101,7 @@ class BaseTestCase extends TestCase
         $biz['dispatcher'] = function () use ($container, $biz) {
             $dispatcher = new TestCaseLazyDispatcher($container);
             $dispatcher->setBiz($biz);
+
             return $dispatcher;
         };
 
