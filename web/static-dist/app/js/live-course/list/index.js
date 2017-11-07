@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/live-course/list/index"],[function(s,t){"use strict";$("#categoryId").change(function(){$(this).closest("form").submit()}),$("#vipCategoryId").change(function(){$(this).closest("form").submit()})}]);
+webpackJsonp(["app/js/live-course/list/index"],{"5f64873460886414bc51":function(s,t,c){"use strict";$("#categoryId").change(function(){$(this).closest("form").submit()}),$("#vipCategoryId").change(function(){$(this).closest("form").submit()})}},["5f64873460886414bc51"]);

@@ -60,8 +60,8 @@ refundItemType:
 
 orderDisplayStatus:
     notPaid: 未付款
-    paid: 已付款
-    closed: 已关闭
+    paid: 交易成功
+    closed: 交易关闭
     refunded: 已退款
 
 orderLogStatus:
@@ -75,19 +75,20 @@ orderLogStatus:
     order.closed: 已关闭
     order_refund.auditing: 退款审核中
     order_refund.cancel: 退款被拒绝
+    order.adjust_price: 改价
 
 refundStatus:
     auditing: 已申请
     refunding: 退款中
     refunded: 退款成功
-    refused: 退款拒绝
+    refused: 退款关闭
     cancel: 已取消
 
 refundDisplayStatus:
-    auditing: 用户已申请
+    auditing: 退款待处理
     refunded: 退款成功
-    refused: 退款拒绝
-    cancel: 用户已撤销
+    refused: 退款关闭
+    cancel: 退款撤销
 
 payment:
     alipay: 支付宝
@@ -116,6 +117,7 @@ orderDeductType:
     discount: 打折
     coupon: 优惠券
     paidCourse: 班级课程抵扣
+    adjust_price: 改价
 
 source:
     self: 本站

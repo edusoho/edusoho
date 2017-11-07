@@ -1,31 +1,33 @@
+{% do script(['app/js/float-consult/index.js'])  %}
+
 {% set consult = setting('consult') %}
 <div id="float-consult" class="float-consult hidden-xs">
   <div class="btn-group-vertical">
 
     {% set break = 0 %}
     {% for qq in consult.qq if qq.name is not empty and qq.number is not empty and break == 0 %}
-      <span class="btn btn-consult-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="{{'customer_service.qq_customer_service'|trans}}" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
+      <span class="btn btn-consult-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="{{'customer_service.qq_customer_service'|trans}}" data-content-element="#consult-qq-content"><span class="es-icon es-icon-qq"></span></span>
       {% set break = 1 %}
     {% endfor %}
 
     {% set break = 0 %}
     {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty and break == 0 %}
-      <span class="btn btn-consult-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="{{'customer_service.qq_group'|trans}}" data-content-element="#consult-qqgroup-content"><span class="icon icon-qqgroup"></span></span>
+      <span class="btn btn-consult-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="{{'customer_service.qq_group'|trans}}" data-content-element="#consult-qqgroup-content"><span class="es-icon es-icon-friends"></span></span>
       {% set break = 1 %}
     {% endfor %}
 
     {% set break = 0 %}
     {% for phone in consult.phone if phone.name is not empty and break == 0 %}
-      <span class="btn btn-consult-{{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="{{'customer_service.mobile_group'|trans}}" data-content-element="#consult-phone-content"><span class="icon icon-phone"></span></span>
+      <span class="btn btn-consult-{{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="{{'customer_service.mobile_group'|trans}}" data-content-element="#consult-phone-content"><span class="es-icon es-icon-phone"></span></span>
       {% set break = 1 %}
     {% endfor %}
 
     {% if consult.webchatURI is not empty %}
-      <span class="btn btn-consult-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="{{'customer_service.weixin-content'|trans}}" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
+      <span class="btn btn-consult-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="{{'customer_service.weixin-content'|trans}}" data-content-element="#consult-weixin-content"><span class="es-icon es-icon-weixin"></span></span>
     {% endif %}
 
     {% if consult.email is not empty %}
-      <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'customer_service.email'|trans}}" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
+      <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'customer_service.email'|trans}}" data-content-element="#consult-email-content"><span class="es-icon es-icon-mail"></span></span>
     {% endif %}
   </div>
 
@@ -93,6 +95,3 @@
     </div>
   </div>
 </div>
-
-{% do load_script('topxiawebbundle/util/float-consult') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

@@ -3,11 +3,11 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
-{% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null)%}
+{% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null) and is_show_mobile_page() %}
 {% if appDownload %}
-    {% set bodyClass = 'homepage has-app' %}
+  {% set bodyClass = 'homepage has-app' %}
 {% else %}
-    {% set bodyClass = 'homepage' %}
+  {% set bodyClass = 'homepage' %}
 {% endif %}
 {% set siteNav = '/' %}
 
@@ -21,9 +21,9 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
-    {% if appDownload  %}
-        {{ render(controller('AppBundle:Default:appDownload')) }}
-    {% endif %}
-    {% block content %}{% endblock %}
-    {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'index' } %}
+  {% if appDownload  %}
+    {{ render(controller('AppBundle:Default:appDownload')) }}
+  {% endif %}
+  {% block content %}{% endblock %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'index' } %}
 {% endblock %}
