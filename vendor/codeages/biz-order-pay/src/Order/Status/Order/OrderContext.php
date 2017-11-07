@@ -58,6 +58,7 @@ class OrderContext
             throw $e;
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
+            $this->biz['logger']->error($e);
             throw new ServiceException($e->getMessage());
         }
 
