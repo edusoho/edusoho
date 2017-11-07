@@ -71,7 +71,7 @@ class EduSohoPluginUpgrade
         $rootDir = realpath($this->kernel['root_directory']);
         $code = '{{code}}';
         $lowerCode = strtolower($code);
-        
+
         $filesystem = new Filesystem();
         $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
         if (is_dir($originDir)) {
