@@ -7,6 +7,7 @@ use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\Accessor\AccessorInterface;
+use Biz\System\Service\LogService;
 
 class OrderFacadeServiceTest extends BaseTestCase
 {
@@ -105,6 +106,44 @@ class OrderFacadeServiceTest extends BaseTestCase
         $this->assertArraySubset($params, $order);
     }
 
+    public function testAdjustOrderPrice()
+    {
+        $mockAdjustDeduct = array(
+            'deduct_amount' => 200,
+            'order' => array(
+                'title' => 'order',
+            ),
+        );
+        $this->mockBiz('Order:WorkflowService', array(
+            array('functionName' => 'adjustPrice', 'returnValue' => $mockAdjustDeduct),
+        ));
+
+        $result = $this->getOrderFacadeService()->adjustOrderPrice(1, 2000);
+
+        $this->assertSame($mockAdjustDeduct, $result);
+        $log = $this->getLogService()->searchLogs(array('module' => 'order', 'action' => OrderFacadeService::DEDUCT_TYPE_ADJUST), array(), 0, 1);
+        $this->assertNotNull($log);
+    }
+
+    public function testGetOrderAdjustInfo()
+    {
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
+                array('deduct_type' => 'discount', 'deduct_amount' => 2000),
+                array('deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 1000),
+            )),
+        ));
+
+        $order = array('id' => 1, 'price_amount' => 10000, 'pay_amount' => 7000);
+        $adjustInfo = $this->getOrderFacadeService()->getOrderAdjustInfo($order);
+
+        $this->assertArrayEquals(
+            $adjustInfo,
+            array('payAmountExcludeAdjust' => 80, 'adjustPrice' => 10, 'adjustDiscount' => 8.75),
+            array('payAmountExcludeAdjust', 'adjustPrice', 'adjustDiscount')
+        );
+    }
+
     private function mockCurrency()
     {
         $biz = $this->getBiz();
@@ -122,5 +161,13 @@ class OrderFacadeServiceTest extends BaseTestCase
     private function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

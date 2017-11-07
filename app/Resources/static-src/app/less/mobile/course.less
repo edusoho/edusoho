@@ -1,309 +1,82 @@
-.es-mobile {
-  //全局
-  .course-dashboard-page {
-    background-color: #fff;
-    .breadcrumb-o, .es-footer-link, .es-footer, .progress-sm {
-      display: none;
-    }
-    .course-detail-header .es-section {
-      margin: 10px 0;
-    }
-    #content-container {
-      margin: 10px auto;
-      min-height: auto;
-    }
-    .course-sidebar {
-      display: none;
-    }
-    .course-operation {
-      width: auto;
-      float: none;
-    }
-    //营销页面
-    .course-detail-section {
-     margin: 10px 0;
-    }
-    .course-detail-section-responsive  {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      z-index: 998;
-      right: 0;
-      margin: 0;
-      padding: 8px 0;
-      .es-share.top.learn-es-share .dropdown-menu {
-        left: 0;
-        margin-left: 0px;
-        &:after {
-          left: 25px;
-        }
-      }
-    }
-    .buy-btn-group {
-      position: fixed;
-      right: 15px;
-      bottom: 7px;
-      z-index: 998;
-      .btn-lg {
-        padding: 8px 10px;
-      }
-    }
-    .course-progress {
-      margin-bottom: 10px;
-    }
-  }
-
-  
-  // .buy .wap-buyer{
-  //  padding: 0;
-  //  top: -7px;
-  //  position: relative;
-  //  right: 14px;
-  // }
-  // .course-detail-header .course-data {
-  //  position: fixed;
-  //  bottom: 0;
-  //  left: 0;
-  //  z-index: 9999;
-  //  padding: 0;
-  //  width: 60%;
-
-  //  >li {
-  //    width: auto;
-  //    margin: 6px 0;
-  //    padding: 0 20px;
-  //    line-height: inherit;
-  //    position: relative;
-
-  //    i {
-  //      font-size: 20px;
-  //    }
-  //    p {
-  //      font-size: 12px;
-  //    }
-  //  }
-  // }
-  // .es-mobile-course-bottom {
-  //  position: fixed;
-  //  bottom: 0;
-  //  left: 0;
-  //  right: 0;
-  //  height: 49px;
-  //  background-color: #F5F5F5;
-  //  z-index: 2;
-  //  border-top: 1px solid #ececec;
-  // }
-  // .course-detail-header .course-header-bottom, .buy {
-  //  position: fixed;
-  //  bottom: 0;
-  //  z-index: 9999;
-  //  right: 0;
-  //  padding: 0;
-
-  //  >span {
-  //    float: none !important;
-  //    vertical-align: sub;
-  //    padding-right: 15px;
-  //  }
-  //  .btn {
-  //    padding: 16px 13px 15px;
-  //    border: none;
-  //    .border-radius(0);
-  //  }
-  // }
-  // .es-mobile-section {
-  //  padding: 0;
-  // }
-  .next-class, .es-piece .piece-header {
+//全局
+.course-dashboard-page {
+  background-color: #fff;
+  .breadcrumb-o, .es-footer-link, .es-footer, .progress-sm {
     display: none;
   }
-  // .course-detail-header.before .course-operation .buy {
-  //  width: auto;
-  //  padding: 0;
-    
-  //  .btn {
-  //    padding: 17px 14px 18px;
-  //    line-height: 1;
-  //  }
-  // }
-  .es-mobile-nav li {
-    width: 33.33%;
-    text-align: center;
+  .course-detail-header .es-section {
+    margin: 10px 0;
+  }
+  #content-container {
+    margin: 10px auto;
+    min-height: auto;
+  }
+  .course-sidebar {
+    display: none;
+  }
+  .course-operation {
+    width: auto;
+    float: none;
+  }
+  //营销页面
+  .course-detail-section {
+    margin: 10px 0;
+  }
+  .course-detail-section-responsive  {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 998;
+    right: 0;
+    margin: 0;
+    padding: 8px 0;
+    .es-share.top.learn-es-share .dropdown-menu {
+      left: 0;
+      margin-left: 0px;
+      &:after {
+        left: 25px;
+      }
+    }
+  }
+  .buy-btn-group {
+    position: fixed;
+    right: 15px;
+    bottom: 7px;
+    z-index: 998;
+    .btn-lg {
+      padding: 8px 10px;
+    }
+  }
+  .course-progress {
+    margin-bottom: 10px;
+  }
+}
+.next-class, .es-piece .piece-header {
+  display: none;
+}
+.es-mobile-nav li {
+  width: 33.33%;
+  text-align: center;
+  a {
+    font-weight: normal;
+  }
+  &.active {
+    border-bottom: 1px solid @brand-primary;
     a {
-      font-weight: normal;
-    }
-    &.active {
-      border-bottom: 1px solid @brand-primary;
-      a {
-        color: @brand-primary;
-      }
-    }
-    &.active.navs {
-      width: auto;
-      border: none;
-      a {
-        color: @gray-darker;
-      }
+      color: @brand-primary;
     }
   }
-  //加入课程前后
-  // .course-detail-header.after, .course-detail-header.before {
-  //  .course-info {
-  //    padding: 15px 10px 10px;
-  //  }
-  //  .subtitle {
-  //    display: none;
-  //  }
-  //  .title {
-  //    font-size: 18px;
-  //  }
-  //  .course-operation {
-  //    background-color: transparent;
-  //    line-height: 1;
-  //  }
-  //  .course-data>li p {
-  //    margin-bottom: 5px;
-  //    font-size: 10px;
-  //    &:last-child {
-  //      margin-bottom: 0;
-  //    }
-  //  }
-  // }
-  // //加入课程前
-  // .course-detail-header.before {
-  //  .score, .discount-price label, .old-price label, .expiry-date {
-  //    display: none;
-  //  }
-  //  .es-share {
-  //    position: relative;
-
-  //    &:before {
-  //      content: '';
-  //      position: absolute;
-  //      background: @gray-medium;
-  //      width: 1px;
-  //      height: 14px;
-  //      left: -20px;
-  //      top: 11px;
-  //    }
-  //  }
-  //  .discount-price .price {
-  //    font-size: 18px;
-  //    color: @brand-danger;
-  //    margin: 0;
-  //  }
-  //  .course-data.active > li {
-  //    width: auto;
-  //    padding: 0 10%;
-  //  }
-  //  .course-info {
-  //    padding: 15px 10px 0;
-  //  }
-  //  .buyer-btn {
-  //    position: fixed;
-  //    right: 84px;
-  //    bottom: 0;
-
-  //    .btn {
-  //      border: none;
-  //      .border-radius(0);
-  //      padding: 17px 14px 18px;
-  //      line-height: 1;
-  //    }
-  //  }
-  //  .activity {
-  //    display: none;
-  //  }
-  //  .discount {
-  //    margin-left: 0;
-  //    margin-right: 5px;
-  //    float: left;
-  //    background-color: @brand-warning;
-  //    font-size: 12px;
-  //    height: 18px;
-  //    line-height: 20px;
-  //    .border-radius(4px);
-  //    padding: 0 6px;
-  //    top: 3px;
-
-  //    &:before {
-  //      border-color: transparent;
-  //      border-width: 0;
-  //    }
-  //    &:after {
-  //      background: transparent;
-  //      width: 0;
-  //      height: 0;
-  //    }
-  //  }
-  //  .title {
-  //    margin: 0 0 10px;
-  //  }
-  //  .discount-price, .old-price {
-  //    display: inline-block;
-  //    margin-right: 3px;
-  //  }
-  //  .student-num {
-  //    display: inline-block !important;
-  //    width: auto;
-  //    padding: 0;
-  //    float: right;
-  //    margin-top: 0;
-  //    font-size: 12px;
-
-  //    i {
-  //      font-size: 16px;
-  //    }
-  //  }
-  //  .course-operation {
-  //    padding: 4px 10px 10px;
-  //  }
-  //  .es-mobile-teacher {
-  //    vertical-align: super;
-  //  }
-  //  .metas p {
-  //    margin: 0 0 5px;
-  //  }
-  // }
-  // //加入课程后
-  // .course-detail-header.after {
-  //  .metas {
-  //    display: none;
-  //  }
-  //  .title {
-  //    margin: 0 0 5px;
-  //  }
-  //  #favorite-btn,#unfavorite-btn{
-  //    display: none;
-  //  }
-  //  .es-mobile-nav li {
-  //    width: auto;
-  //    padding: 0 10%;
-
-  //    &.active {
-  //      border: none;
-  //    }
-  //    a {
-  //      font-weight: normal;
-  //    }
-  //  }
-  //  .course-data.two-col > li {
-  //    width: auto;
-  //  }
-  //  .course-header-bottom {
-  //    line-height: 46px;
-  //  }
-  //  .es-share.top .dropdown-menu{
-  //    margin-left: -14px;
-  //    &:after{
-  //      left:20%;
-  //    }
-  //  }
-  // }
-  .modal {
-    z-index: 9999;
+  &.active.navs {
+    width: auto;
+    border: none;
+    a {
+      color: @gray-darker;
+    }
   }
-  .notify-content{
-    z-index: 10001
-  }
+}
+.modal {
+  z-index: 9999;
+}
+.notify-content{
+  z-index: 10001
 }

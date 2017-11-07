@@ -19,6 +19,53 @@ class CardServiceTest extends BaseTestCase
         $this->assertEquals($card['userId'], $results['userId']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testAddCardWithParamsException()
+    {
+        $card = $this->generateCard();
+        unset($card['cardId']);
+        $this->getCardService()->addCard($card);
+    }
+
+    public function testGetCardByCardId()
+    {
+        $card = $this->generateCard();
+        $this->getCardService()->addCard($card);
+
+        $results = $this->getCardService()->getCardByCardId($card['cardId']);
+
+        $this->assertEquals($card['cardId'], $results['cardId']);
+        $this->assertEquals($card['cardType'], $results['cardType']);
+        $this->assertEquals($card['deadline'], $results['deadline']);
+        $this->assertEquals($card['userId'], $results['userId']);
+    }
+
+    public function testGetCardByUserId()
+    {
+        $card = $this->generateCard();
+        $this->getCardService()->addCard($card);
+
+        $results = $this->getCardService()->getCardByUserId($card['userId']);
+        $this->assertEquals($card['cardId'], $results['cardId']);
+        $this->assertEquals($card['cardType'], $results['cardType']);
+        $this->assertEquals($card['deadline'], $results['deadline']);
+        $this->assertEquals($card['userId'], $results['userId']);
+    }
+
+    public function testUpdateCardByCardIdAndCardType()
+    {
+        $card = $this->generateCard();
+        $this->getCardService()->addCard($card);
+        $timestamp = time();
+        $results = $this->getCardService()->updateCardByCardIdAndCardType($card['cardId'], $card['cardType'], array(
+            'deadline' => $timestamp,
+        ));
+
+        $this->assertEquals($timestamp, $results['deadline']);
+    }
+
     public function testGetCard()
     {
         $card = $this->generateCard();

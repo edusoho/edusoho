@@ -32,10 +32,12 @@ class UploadFileServiceTest extends BaseTestCase
                 'functionName' => 'getFile',
                 'runTimes' => 1,
                 'withParams' => array(
-                    'id' => 1,
-                    'storage' => 'cloud',
-                    'filename' => 'test',
-                    'createdUserId' => 1,
+                    array(
+                        'id' => 1,
+                        'storage' => 'cloud',
+                        'filename' => 'test',
+                        'createdUserId' => 1,
+                    ),
                 ),
                 'returnValue' => array(
                     'id' => 1,
@@ -81,12 +83,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'storage' => 'cloud',
-                    'filename' => 'test',
-                    'createdUserId' => 1,
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -330,7 +326,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array($withConditions, $orderBy, $start, $limit),
                 'returnValue' => array(
                     array(
                         'id' => 1,
@@ -357,7 +352,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'findByTargetUserIdAndIsActive',
                 'runTimes' => 1,
-                'withParams' => array(1),
                 'returnValue' => array(
                     array(
                         'id' => 1,
@@ -452,7 +446,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'count',
                 'runTimes' => 1,
-                'withParams' => array(1),
                 'returnValue' => 2,
             ),
         );
@@ -472,7 +465,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'withParams' => array(1),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -488,13 +480,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'addFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'storage' => 'cloud',
-                    'filename' => 'test',
-                    'createdUserId' => 1,
-                    'targetType' => 'materiallib',
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -522,12 +507,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'filename' => array(
-                        'filename' => 'test2',
-                    ),
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -538,7 +517,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
                 'returnValue' => array(
                     'id' => 1,
                     'convertParams' => null,
@@ -567,17 +545,11 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'delete',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                ),
                 'returnValue' => true,
             ),
             array(
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -592,23 +564,11 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'deleteFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'storage' => 'cloud',
-                    'filename' => 'test',
-                    'createdUserId' => 1,
-                ),
                 'returnValue' => true,
             ),
             array(
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'storage' => 'cloud',
-                    'filename' => 'test',
-                    'createdUserId' => 1,
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -733,11 +693,13 @@ class UploadFileServiceTest extends BaseTestCase
         $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
         $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
 
-        $shareFiles = $this->getUploadFileService()->searchShareHistories(array(
+        $shareFiles = $this->getUploadFileService()->searchShareHistories(
+            array(
             'sourceUserId' => 1,
         ),
             array('createdTime' => 'DESC'),
-            0, 10
+            0,
+            10
         );
 
         $this->assertEquals(2, count($shareFiles));
@@ -749,7 +711,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'withParams' => array(1),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -762,7 +723,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'waveUsedCount',
                 'runTimes' => 1,
-                'withParams' => array(1),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -778,12 +738,6 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'addFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'storage' => 'cloud',
-                    'filename' => 'test',
-                    'createdUserId' => 1,
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',

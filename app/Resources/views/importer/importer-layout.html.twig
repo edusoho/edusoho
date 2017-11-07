@@ -41,7 +41,6 @@
   {% block stylesheet %}
   {% endblock %}
 
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script> app.lazyLoad = function() { app.load('topxiawebbundle/controller/importer/importer') }; </script>
+  <script>app.load('topxiaadminbundle/controller/importer/importer')</script>
 
 {% endblock %}
