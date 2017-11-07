@@ -374,7 +374,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 case when `status` = 'cancelled' then {$this->systemUserId} else 0 end as `close_user_id`, -- TODO 当订单关闭状态时的操作人, 从日志中取得
                 0 as `seller_id`,
                 `userId` as `created_user_id`, -- TODO 创建订单者
-                '' as `create_extra`, -- 不迁移data数据
+                `data` as `create_extra`, 
                 '' as `device`, -- TODO 处理device字段, 下单设备：app, pc, 手机
                 round(`amount`*100) as `paid_cash_amount`,
                 round(`coinAmount`*100) as `paid_coin_amount`,
