@@ -45,7 +45,7 @@ class Factory
             $map = array_merge($map, $this->container->get($names[0].'_export_map')->getMap());
         }
         if (empty($map[$name])) {
-            throw new \RuntimeException('type error');
+            throw new \RuntimeException('exporter class could be found');
         }
 
         return $map[$name];
