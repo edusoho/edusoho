@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "546d9c80ce2831b2de987c8db4bdb1ee",
+    "content-hash": "be1af7c8b5990a391d0608284fcee14f",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -345,16 +345,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.5",
+            "version": "v0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "f94fa226cae0bfa4572d23e71a5df6dc3e212e11"
+                "reference": "b02fc7fd959155279449757b1fdb98d1c1f8b467"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/f94fa226cae0bfa4572d23e71a5df6dc3e212e11.zip",
-                "reference": "f94fa226cae0bfa4572d23e71a5df6dc3e212e11",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/b02fc7fd959155279449757b1fdb98d1c1f8b467.zip",
+                "reference": "b02fc7fd959155279449757b1fdb98d1c1f8b467",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2017-11-01T13:10:38+00:00"
+            "time": "2017-11-07T10:48:34+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",

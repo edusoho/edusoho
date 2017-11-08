@@ -7326,7 +7326,7 @@ admin.payment_setting.quickpay_tips: 因汇付宝公司事务引起网银支付�
 admin.payment_setting.wxpay: 微信支付
 admin.payment_setting.wxpay_application: 简单申请介绍
 admin.payment_setting.wxpay_application_hint: >
-  仅支持配置微信<a target="_blank" href="%wxpayUrl%">公众号支付</a>，配置后，可在PC端、微信APP、wap内选择微信支付。
+  仅支持配置微信<a target="_blank" href="%wxpayUrl%">公众号支付</a>，配置后，可在PC端、微信APP、WAP内选择微信支付。
 admin.payment_setting.wxpay_application_tips: >
   使用前提：
   <p>1、填写支付授权目录，路径：微信公众平台【微信支付】-【开发配置】-【支付授权目录】，目录地址为：网站域名/pay/center/  。</p>
