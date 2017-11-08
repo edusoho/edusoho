@@ -23,6 +23,7 @@ class BaseTestCase extends TestCase
     /** @var $db \Doctrine\DBAL\Connection */
     protected static $db;
 
+    /** @var $redis \Redis  */
     protected static $redis = null;
 
     public static function setDb($db)
@@ -73,11 +74,11 @@ class BaseTestCase extends TestCase
 
     public function setUp()
     {
-        $biz = $this->initBiz();
+        $this->initBiz();
         $this->emptyDatabaseQuickly();
         self::$db->beginTransaction();
-        if (isset($biz['redis'])) {
-            $biz['redis']->flushDb();
+        if (self::$redis) {
+            self::$redis->flushDb();
         }
 
         $this

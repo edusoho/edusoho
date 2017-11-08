@@ -28,7 +28,11 @@ $bootstrap->boot();
 
 \Biz\BaseTestCase::setAppKernel($kernel);
 \Biz\BaseTestCase::setDb($biz['db']);
-\Biz\BaseTestCase::setRedis($biz['redis']);
+
+if (isset($biz['redis'])) {
+    \Biz\BaseTestCase::setRedis($biz['redis']);
+}
+
 
 // init service kernel env
 ServiceKernel::instance()
