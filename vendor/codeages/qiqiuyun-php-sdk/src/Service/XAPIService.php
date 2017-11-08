@@ -348,7 +348,7 @@ class XAPIService extends BaseService
             )
         );
         $statement['result'] = array(
-            'response' => $result['title'].htmlspecialchars_decode($result['content']),
+            'response' => $result['title'].'-'.htmlspecialchars_decode($result['content']),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
