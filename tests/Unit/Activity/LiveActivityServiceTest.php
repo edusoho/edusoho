@@ -88,7 +88,7 @@ class LiveActivityServiceTest extends BaseTestCase
 
     public function testFindLiveActivitiesByIds()
     {
-        $this->mockBiz( 
+        $this->mockBiz(
             'Activity:LiveActivityDao',
             array(
                 array(
@@ -117,12 +117,12 @@ class LiveActivityServiceTest extends BaseTestCase
             )
         );
         $liveRoom = $this->getLiveActivityService()->createLiveroom(array(
-            'fromUserId' => 111, 
+            'fromUserId' => 111,
             'remark' => 'test',
             'startTime' => 4541222,
             'length' => 2,
             'title' => 'test',
-            'fromCourseId' => 12
+            'fromCourseId' => 12,
         ));
     }
 
