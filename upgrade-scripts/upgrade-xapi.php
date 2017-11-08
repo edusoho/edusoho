@@ -135,6 +135,16 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('info', '新增AddActivityWatchToStatementJob');
 
+        if (!$this->isJobExist('Order_FinishSuccessOrdersJob')) {
+            $this->getSchedulerService()->register(array(
+                'name' => 'Order_FinishSuccessOrdersJob',
+                'pool' => 'default',
+                'source' => 'MAIN',
+                'expression' => '* * * * *',
+                'class' => 'Codeages\Biz\Order\Job\FinishSuccessOrdersJob',
+                'args' => array(),
+            ));
+        }
 
         return 1;
     }
