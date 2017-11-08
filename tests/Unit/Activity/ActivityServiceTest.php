@@ -253,6 +253,218 @@ class ActivityServiceTest extends BaseTestCase
         $this->getActivityService()->preUpdateCheck(1, array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
     }
 
+    public function testGetActivity()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 111, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+
+        $activity = $this->getActivityService()->getActivity(1);
+
+        $this->assertEquals(array('id' => 111, 'title' => 'title'), $activity);
+    }
+
+    public function testGetActivityByCopyIdAndCourseSetId()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'getByCopyIdAndCourseSetId',
+                    'returnValue' => array('id' => 111, 'title' => 'title'),
+                    'withParams' => array(1, 1),
+                ),
+            )
+        );
+
+        $activity = $this->getActivityService()->getActivityByCopyIdAndCourseSetId(1, 1);
+
+        $this->assertEquals(array('id' => 111, 'title' => 'title'), $activity);
+    }
+
+    public function testFindActivities()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'returnValue' => array(array(
+                        'id' => 111,
+                        'title' => 'title',
+                        'mediaType' => 'text',
+                        'fromCourseId' => 1,
+                        'fromCourseSetId' => 1,
+                        'mediaId' => 1,
+                    )),
+                    'withParams' => array(array(1, 2)),
+                ),
+            )
+        );
+
+        $activities = $this->getActivityService()->findActivities(array(1, 2));
+
+        $this->assertEquals(
+            array(
+                'id' => 111,
+                'title' => 'title',
+                'mediaType' => 'text',
+                'fromCourseId' => 1,
+                'fromCourseSetId' => 1,
+                'mediaId' => 1,
+            ),
+            $activities[0]
+        );
+
+        $activities = $this->getActivityService()->findActivities(array(1, 2), true);
+
+        $this->assertArrayHasKey('ext', $activities[0]);
+    }
+
+    public function testFindActivitiesByCourseIdAndType()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array(
+                        'id' => 111,
+                        'title' => 'title',
+                        'mediaType' => 'text',
+                        'fromCourseId' => 1,
+                        'fromCourseSetId' => 1,
+                        'mediaId' => 1,
+                    )),
+                    'withParams' => array(
+                        array('fromCourseId' => 1, 'mediaType' => 'text'),
+                        null,
+                        0,
+                        1000,
+                    ),
+                ),
+            )
+        );
+
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType(1, 'text', true);
+
+        $this->assertEquals(111, $activities[0]['id']);
+        $this->assertArrayHasKey('ext', $activities[0]);
+    }
+
+    public function testFindActivitiesByCourseSetIdAndType()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array(
+                        'id' => 111,
+                        'title' => 'title',
+                        'mediaType' => 'text',
+                        'fromCourseId' => 1,
+                        'fromCourseSetId' => 1,
+                        'mediaId' => 1,
+                    )),
+                    'withParams' => array(
+                        array('fromCourseSetId' => 1, 'mediaType' => 'text'),
+                        null,
+                        0,
+                        1000,
+                    ),
+                ),
+            )
+        );
+
+        $activities = $this->getActivityService()->findActivitiesByCourseSetIdAndType(1, 'text', true);
+
+        $this->assertEquals(111, $activities[0]['id']);
+        $this->assertArrayHasKey('ext', $activities[0]);
+    }
+
+    public function testIsFinished()
+    {
+        $activity1 = array(
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+        );
+        $savedActivity1 = $this->getActivityService()->createActivity($activity1);
+
+        $result = $this->getActivityService()->isFinished(1);
+
+        $this->assertTrue($result);
+    }
+
+    public function testFindActivitySupportVideoTryLook()
+    {
+        $this->mockBiz(
+            'Activity:ActivityDao',
+            array(
+                array(
+                    'functionName' => 'findSelfVideoActivityByCourseIds',
+                    'returnValue' => array(array(
+                        'id' => 111,
+                        'title' => 'title',
+                        'mediaType' => 'text',
+                        'fromCourseId' => 1,
+                        'fromCourseSetId' => 1,
+                        'fileId' => 1,
+                    )),
+                    'withParams' => array(array(1, 2)),
+                ),
+            )
+        );
+
+        $result = $this->getActivityService()->findActivitySupportVideoTryLook(array(1, 2));
+
+        $this->assertEquals(array(), $result);
+    }
+
+    public function testGetMaterialsFromActivity()
+    {
+        $result1 = $this->getActivityService()->getMaterialsFromActivity(
+            array('materials' => '{"id" : 1}'),
+            'text'
+        );
+
+        $this->assertEquals(1, $result1['id']);
+
+        $result2 = $this->getActivityService()->getMaterialsFromActivity(
+            array('media' => '{"id" : 1}'),
+            'text'
+        );
+
+        $this->assertEquals(1, $result2[0]['id']);
+    }
+
+    public function testFetchMedia()
+    {
+        $result1 = $this->getActivityService()->fetchMedia(array());
+
+        $this->assertEquals(array(), $result1);
+
+        $result2 = $this->getActivityService()->fetchMedia(array('mediaId' => 1, 'mediaType' => 'text'));
+
+        $this->assertNull($result2['ext']);
+    }
+
+    public function testFetchMedias()
+    {
+        $results = $this->getActivityService()->fetchMedias('text', array(array('mediaId' => 1)));
+
+        $this->assertArrayHasKey('ext', $results[0]);
+    }
+
     /**
      * @return ActivityService
      */
