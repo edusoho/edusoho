@@ -7,7 +7,6 @@ namespace AppBundle\Common;
  */
 class ReflectionUtils
 {
-    
     /**
      * 通过反射的方式调用方法, 可调用私有方法
      * 如
@@ -51,6 +50,7 @@ class ReflectionUtils
         $class = new \ReflectionClass($classPackName);
         $property = $class->getProperty($propertyName);
         $property->setAccessible(true);
+
         return $property->getValue($classObj);
     }
 
