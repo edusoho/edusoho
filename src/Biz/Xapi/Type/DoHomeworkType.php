@@ -27,6 +27,6 @@ class DoHomeworkType extends Type
             $result['success'] = ($homeworkResult['passedStatus'] == 'passed') ? true : false;
         }
 
-        return $this->createXAPIService()->finishHomework($actor, $object, $result, $statement['created_time'],  false);
+        return $this->createXAPIService()->finishHomework($actor, $object, $result, $statement['created_time'], false);
     }
 }

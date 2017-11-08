@@ -73,9 +73,9 @@ class DoQuestionType extends Type
             'single_choice' => 'choice',
             'choice' => 'choice',
             'fill' => 'fill-in',
-            'material' => 'material',//
-            'essay' => 'essay',//
-            'determine' => 'true-false'
+            'material' => 'material',
+            'essay' => 'essay',
+            'determine' => 'true-false',
         );
 
         return empty($types[$questionType]) ? $questionType : $types[$questionType];
