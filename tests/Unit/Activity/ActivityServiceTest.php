@@ -297,8 +297,8 @@ class ActivityServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'findByIds',
                     'returnValue' => array(array(
-                        'id' => 111, 
-                        'title' => 'title', 
+                        'id' => 111,
+                        'title' => 'title',
                         'mediaType' => 'text',
                         'fromCourseId' => 1,
                         'fromCourseSetId' => 1,
@@ -313,13 +313,13 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->assertEquals(
             array(
-                'id' => 111, 
-                'title' => 'title', 
+                'id' => 111,
+                'title' => 'title',
                 'mediaType' => 'text',
                 'fromCourseId' => 1,
                 'fromCourseSetId' => 1,
-                'mediaId' => 1
-            ), 
+                'mediaId' => 1,
+            ),
             $activities[0]
         );
 
@@ -336,18 +336,18 @@ class ActivityServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'search',
                     'returnValue' => array(array(
-                        'id' => 111, 
-                        'title' => 'title', 
+                        'id' => 111,
+                        'title' => 'title',
                         'mediaType' => 'text',
                         'fromCourseId' => 1,
                         'fromCourseSetId' => 1,
                         'mediaId' => 1,
                     )),
                     'withParams' => array(
-                        array('fromCourseId' => 1,'mediaType' => 'text'),
+                        array('fromCourseId' => 1, 'mediaType' => 'text'),
                         null,
                         0,
-                        1000
+                        1000,
                     ),
                 ),
             )
@@ -367,18 +367,18 @@ class ActivityServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'search',
                     'returnValue' => array(array(
-                        'id' => 111, 
-                        'title' => 'title', 
+                        'id' => 111,
+                        'title' => 'title',
                         'mediaType' => 'text',
                         'fromCourseId' => 1,
                         'fromCourseSetId' => 1,
                         'mediaId' => 1,
                     )),
                     'withParams' => array(
-                        array('fromCourseSetId' => 1,'mediaType' => 'text'),
+                        array('fromCourseSetId' => 1, 'mediaType' => 'text'),
                         null,
                         0,
-                        1000
+                        1000,
                     ),
                 ),
             )
@@ -413,8 +413,8 @@ class ActivityServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'findSelfVideoActivityByCourseIds',
                     'returnValue' => array(array(
-                        'id' => 111, 
-                        'title' => 'title', 
+                        'id' => 111,
+                        'title' => 'title',
                         'mediaType' => 'text',
                         'fromCourseId' => 1,
                         'fromCourseSetId' => 1,
