@@ -27,7 +27,7 @@ class FinishActivityType extends Type
             'name' => $task['title'],
             'course' => $course,
             'resource' => empty($resource) ? array() : $resource,
-            'definitionType' => $this->convertMediaType($task['type']),
+            'definitionType' => $this->convertMediaType($activity['mediaType']),
         );
 
         return $this->createXAPIService()->finishActivity($actor, $object, array(), $statement['created_time'], false);
