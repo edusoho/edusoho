@@ -24,6 +24,6 @@ class ReflectionTester
 
     protected function getHello($param1, $param2)
     {
-        return 'hello' . '_' . $param1 . '_' . $param2;
+        return 'hello'.'_'.$param1.'_'.$param2;
     }
 }

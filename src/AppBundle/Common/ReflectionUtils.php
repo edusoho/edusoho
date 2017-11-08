@@ -2,8 +2,6 @@
 
 namespace AppBundle\Common;
 
-use Topxia\Common\TimeMachine;
-
 /**
  * 使用方法可参考　ReflectionUtilsTest.php
  */
