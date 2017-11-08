@@ -34,10 +34,6 @@ class DownloadActivityServiceTest extends BaseTestCase
         $result = $this->getDownloadActivityService()->downloadActivityFile(22, 33);
 
         $this->assertEquals(array('id' => 111, 'fileId' => 111, 'link' => 'test'), $result);
-        
-        $biz = $this->getBiz();
-        unset($biz['@Activity:ActivityService']);
-        unset($biz['@Course:MaterialService']);
     }
 
     protected function getDownloadActivityService()

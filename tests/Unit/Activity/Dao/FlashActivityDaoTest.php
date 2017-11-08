@@ -19,7 +19,7 @@ class FlashActivityDaoTest extends BaseDaoTestCase
     {
         return array(
             'mediaId' => 1,
-            'finishType' => 'test',
+            'finishType' => 'click',
             'finishDetail' => 'test',
         );
     }

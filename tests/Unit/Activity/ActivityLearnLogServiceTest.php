@@ -52,9 +52,6 @@ class ActivityLearnLogServiceTest extends BaseTestCase
         $result = $this->getActivityLearnLogService()->calcLearnProcessByCourseIdAndUserId(24, 24);
 
         $this->assertEquals(10, $result[0]);
-
-        $biz = $this->getBiz();
-        unset($biz['@Activity:ActivityLearnLogDao']);
     }
 
     public function testDeleteLearnLogsByActivityId()
@@ -73,9 +70,6 @@ class ActivityLearnLogServiceTest extends BaseTestCase
         $result = $this->getActivityLearnLogService()->deleteLearnLogsByActivityId(33);
 
         $this->assertEquals(array('id' => 111, 'event' => 'finish'), $result);
-
-        $biz = $this->getBiz();
-        unset($biz['@Activity:ActivityLearnLogDao']);
     }
 
     public function testGetLastestLearnLogByActivityIdAndUserId()
@@ -94,9 +88,6 @@ class ActivityLearnLogServiceTest extends BaseTestCase
         $result = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId(33, 22);
 
         $this->assertEquals(array('id' => 111, 'event' => 'finish'), $result);
-
-        $biz = $this->getBiz();
-        unset($biz['@Activity:ActivityLearnLogDao']);
     }
 
     protected function getActivityLearnLogService()

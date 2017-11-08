@@ -18,7 +18,7 @@ class DocActivityDaoTest extends BaseDaoTestCase
     protected function getDefaultMockFields()
     {
         return array(
-            'finishType' => 'test',
+            'finishType' => 'click',
             'finishDetail' => 'test',
         );
     }

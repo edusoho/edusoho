@@ -402,7 +402,7 @@ class ActivityServiceTest extends BaseTestCase
 
         $result = $this->getActivityService()->isFinished(1);
 
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     public function testFindActivitySupportVideoTryLook()
@@ -455,7 +455,7 @@ class ActivityServiceTest extends BaseTestCase
 
         $result2 = $this->getActivityService()->fetchMedia(array('mediaId' => 1, 'mediaType' => 'text'));
 
-        $this->assertEquals(null, $result2['ext']);
+        $this->assertNull($result2['ext']);
     }
 
     public function testFetchMedias()
