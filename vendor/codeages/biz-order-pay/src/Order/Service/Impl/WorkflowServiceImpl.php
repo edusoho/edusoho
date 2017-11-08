@@ -145,8 +145,10 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function refuseRefund($id, $data = array())
     {
         $this->validateLogin();
+        $refund = $this->getOrderRefundContext($id)->refused($data);
+        $this->getOrderContext($refund['order_id'])->finished($data);
 
-        return $this->getOrderRefundContext($id)->refused($data);
+        return $refund;
     }
 
     public function setRefunded($id, $data = array())
