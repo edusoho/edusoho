@@ -325,7 +325,7 @@ class ActivityServiceTest extends BaseTestCase
 
         $activities = $this->getActivityService()->findActivities(array(1, 2), true);
 
-        $this->assertEquals(array(), $activities[0]['ext']);
+        $this->assertArrayHasKey('ext', $activities[0]);
     }
 
     public function testFindActivitiesByCourseIdAndType()
@@ -356,7 +356,7 @@ class ActivityServiceTest extends BaseTestCase
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType(1, 'text', true);
 
         $this->assertEquals(111, $activities[0]['id']);
-        $this->assertEquals(array(), $activities[0]['ext']);
+        $this->assertArrayHasKey('ext', $activities[0]);
     }
 
     public function testFindActivitiesByCourseSetIdAndType()
@@ -387,7 +387,7 @@ class ActivityServiceTest extends BaseTestCase
         $activities = $this->getActivityService()->findActivitiesByCourseSetIdAndType(1, 'text', true);
 
         $this->assertEquals(111, $activities[0]['id']);
-        $this->assertEquals(array(), $activities[0]['ext']);
+        $this->assertArrayHasKey('ext', $activities[0]);
     }
 
     public function testIsFinished()
@@ -462,7 +462,7 @@ class ActivityServiceTest extends BaseTestCase
     {
         $results = $this->getActivityService()->fetchMedias('text', array(array('mediaId' => 1)));
 
-        $this->assertEquals(array(), $results[0]['ext']);
+        $this->assertArrayHasKey('ext', $results[0]);
     }
 
     /**
