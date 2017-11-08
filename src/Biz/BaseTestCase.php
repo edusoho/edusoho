@@ -94,7 +94,6 @@ class BaseTestCase extends TestCase
         $container = self::$appKernel->getContainer();
         $biz = new Biz($container->getParameter('biz_config'));
         self::$appKernel->initializeBiz($biz);
-        $biz['dispatcher'] = null;
         $biz['db'] = self::$db;
         $biz['redis'] = self::$redis;
 
