@@ -150,6 +150,7 @@ class ThreadShowWidget {
         const $list = $('.thread-pripost-list');
         const $form = $('#thread-post-form');
         const that = this;
+
         if ($form.length == 0) {
             return;
         }
