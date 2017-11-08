@@ -40,6 +40,14 @@ class Factory
             'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
         );
 
+        $names = explode(':', $name);
+        if (2 == count($names)) {
+            $map = array_merge($map, $this->container->get($names[0].'_export_map')->getMap());
+        }
+        if (empty($map[$name])) {
+            throw new \RuntimeException('exporter class could be found');
+        }
+
         return $map[$name];
     }
 }
