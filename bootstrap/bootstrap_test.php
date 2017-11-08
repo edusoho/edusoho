@@ -26,6 +26,13 @@ $biz = $kernel->getContainer()->get('biz');
 $bootstrap = new UnitTestsBootstrap($biz);
 $bootstrap->boot();
 
+\Biz\BaseTestCase::setAppKernel($kernel);
+\Biz\BaseTestCase::setDb($biz['db']);
+
+if (isset($biz['redis'])) {
+    \Biz\BaseTestCase::setRedis($biz['redis']);
+}
+
 // init service kernel env
 ServiceKernel::instance()
     ->setEnvVariable(array(

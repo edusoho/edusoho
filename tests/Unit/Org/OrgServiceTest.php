@@ -163,8 +163,7 @@ class OrgServiceTest extends BaseTestCase
 
     public function testBatchUpdateOrgwithEnableOrg()
     {
-        $magic = $this->getSettingService()->set('magic', array('enable_org' => 1));
-        $magic = $this->getSettingService()->get('magic');
+        $this->getSettingService()->set('magic', array('enable_org' => 1));
 
         $org = $this->mookOrg($name = 'edusoho');
         $org1 = $this->mookOrg($name = 'edusoho1');

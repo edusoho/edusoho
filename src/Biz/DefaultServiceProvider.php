@@ -97,7 +97,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
         };
 
         $biz['course.strategy_context'] = function ($biz) {
-            return StrategyContext::getInstance($biz);
+            return new StrategyContext($biz);
         };
         $biz['course.default_strategy'] = function ($biz) {
             return new DefaultStrategy($biz);
