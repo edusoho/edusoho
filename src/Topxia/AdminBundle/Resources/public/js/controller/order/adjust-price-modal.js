@@ -29,7 +29,8 @@ define(function(require, exports, module) {
       element: 'input[name=adjust-by-price]',
       required: false,
       rule: 'currency',
-      display: '优惠价格'
+      display: '优惠价格',
+      errormessageCurrency: '请输入正确的价格,最多保留两位小数'
     });
 
     validator.addItem({
