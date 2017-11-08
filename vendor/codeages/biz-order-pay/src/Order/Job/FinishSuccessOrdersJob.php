@@ -5,11 +5,11 @@ namespace Codeages\Biz\Order\Job;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Order\Service\WorkflowService;
 
-class CloseExpiredOrdersJob extends AbstractJob
+class FinishSuccessOrdersJob extends AbstractJob
 {
     public function execute()
     {
-        $this->getWorkflowService()->closeExpiredOrders();
+        $this->getWorkflowService()->finishSuccessOrders();
     }
 
     /**

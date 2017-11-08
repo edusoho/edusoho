@@ -3,6 +3,7 @@
 namespace Codeages\Biz\Order\Status\Order;
 
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -137,7 +138,7 @@ class OrderContext
         $results = array_unique($results);
         if ($status == PaidOrderStatus::NAME) {
             if (in_array(OrderStatusCallback::SUCCESS, $results) && count($results) == 1) {
-                $this->getWorkflowService()->finish($order['id']);
+                $this->getWorkflowService()->success($order['id']);
             } else if (count($results) > 0) {
                 $this->getWorkflowService()->fail($order['id']);
             }
@@ -234,6 +235,9 @@ class OrderContext
         return $this->biz->service('Order:OrderService');
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');

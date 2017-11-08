@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class OrderRefundServiceTest extends IntegrationTestCase
 {
@@ -16,7 +17,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testFinishOrderRefundWithoutCurrentUser()
     {
@@ -27,7 +28,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testRefuseOrderRefundWithoutCurrentUser()
     {
@@ -96,7 +97,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
 
         $this->getWorkflowService()->paying($order['id']);
         $this->getWorkflowService()->paid($data);
-        $this->getWorkflowService()->finish($order['id'], array());
+        $this->getWorkflowService()->success($order['id'], array());
         $orderRefund = $this->getWorkflowService()->applyOrderRefund($order['id'], array('reason' => '对该课程不感兴趣'));
         $this->assertNotEmpty($orderRefund);
         $this->assertNotEmpty($orderRefund['sn']);
@@ -123,7 +124,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
         );
         $this->getWorkflowService()->paying($order['id']);
         $this->getWorkflowService()->paid($data);
-        $this->getWorkflowService()->finish($order['id'], array());
+        $this->getWorkflowService()->success($order['id'], array());
         $orderItemIds = ArrayToolkit::column($order['items'], 'id');
         $orderRefund = $this->getWorkflowService()->applyOrderItemsRefund($order['id'], $orderItemIds, array('reason' => '对该课程不感兴趣'));
 
@@ -203,6 +204,9 @@ class OrderRefundServiceTest extends IntegrationTestCase
         return $this->biz->dao('Order:OrderItemRefundDao');
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');
