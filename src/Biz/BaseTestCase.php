@@ -111,14 +111,6 @@ class BaseTestCase extends TestCase
     public function tearDown()
     {
         $biz = $this->getBiz();
-        $keys = $biz->keys();
-
-        foreach ($keys as $key) {
-            if (substr($key, 0, 1) === '@' && substr($key, 0, 8) != '@Custom:') {
-                unset($biz[$key]);
-            }
-        }
-
         $biz['db']->rollback();
     }
 
