@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Org\Dao\OrgDao;
 use Biz\Org\Service\OrgService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Org\Service\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
@@ -226,6 +225,7 @@ class OrgServiceImpl extends BaseService implements OrgService
     protected function getModuleService($module)
     {
         $moduleService = OrgBatchUpdateFactory::getModuleService($module);
+
         return $this->createService($moduleService['service']);
     }
 }
