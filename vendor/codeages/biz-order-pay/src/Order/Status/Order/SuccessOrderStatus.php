@@ -39,4 +39,9 @@ class SuccessOrderStatus extends AbstractOrderStatus
     {
         return $this->getOrderStatus(RefundingOrderStatus::NAME)->process($data);
     }
+
+    public function finished($data = array())
+    {
+        return $this->getOrderStatus(FinishedOrderStatus::NAME)->process($data);
+    }
 }

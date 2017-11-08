@@ -96,7 +96,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function finishSuccessOrders()
     {
         $orders = $this->getOrderDao()->search(array(
-            'refund_time_LT' => time(),
+            'refund_deadline_LT' => time(),
             'status' => 'success',
         ), array('id' => 'DESC'), 0, 1000);
 

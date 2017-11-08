@@ -185,7 +185,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'created_time <= :end_time',
                 'title LIKE :title_like',
                 'updated_time >= :updated_time_GE',
-                'refund_time < :refund_time_LT',
+                'refund_deadline < :refund_deadline_LT',
             ),
         );
     }
