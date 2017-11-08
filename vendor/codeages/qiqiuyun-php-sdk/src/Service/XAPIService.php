@@ -117,7 +117,7 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/answered',
             'display' => array(
-                'zh-CN' => '回答'
+                'zh-CN' => '回答了'
             )
         );
         $statement['object'] = array(
@@ -348,7 +348,7 @@ class XAPIService extends BaseService
             )
         );
         $statement['result'] = array(
-            'response' => $result['title']
+            'response' => $result['title'].htmlspecialchars_decode($result['content']),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);

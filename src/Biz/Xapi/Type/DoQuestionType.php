@@ -55,11 +55,6 @@ class DoQuestionType extends Type
         );
 
         $result = array(
-            'score' => array(
-                'max' => 0,
-                'min' => 0,
-                'raw' => 0,
-            ),
             'response' => implode(',', $answers),
             'success' => ($questionMarkerResult['status'] == 'right') ? true : false,
         );
