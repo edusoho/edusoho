@@ -64,7 +64,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $this->getOrderContext($orderId)->closed($data);
     }
 
-    public function success($orderId, $data = array())
+    public function finish($orderId, $data = array())
     {
         return $this->getOrderContext($orderId)->success($data);
     }

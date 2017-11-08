@@ -12,7 +12,7 @@ interface WorkflowService
 
     public function paid($notifyData);
 
-    public function success($orderId, $data = array());
+    public function finish($orderId, $data = array());
 
     public function fail($orderId, $data = array());
 
