@@ -88,7 +88,7 @@ class LiveActivityServiceTest extends BaseTestCase
 
     public function testFindLiveActivitiesByIds()
     {
-        $this->mockBiz(
+        $this->mockBiz( 
             'Activity:LiveActivityDao',
             array(
                 array(

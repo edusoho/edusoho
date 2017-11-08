@@ -53,7 +53,7 @@ class ActivityLearnLogServiceTest extends BaseTestCase
 
         $this->assertEquals(10, $result[0]);
 
-        $biz = $this->getBiz();
+        $biz = $this->getBiz(); 
         unset($biz['@Activity:ActivityLearnLogDao']);
     }
 
