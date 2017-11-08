@@ -13,7 +13,7 @@
 
   </style>
 
-  <form method="post" action="{{ path('admin_order_adjust_price', {id:order.id}) }}" id="order-adjust-form">
+  <form method="post" class="clearfix mbl" action="{{ path('admin_order_adjust_price', {id:order.id}) }}" id="order-adjust-form">
 
     <span style="padding: 8px">
       {{ 'order.product_price'|trans }}: <span class="color-danger">{{ order.price_amount|to_cash(1) }}</span>
@@ -41,16 +41,13 @@
         </tr>
       </tbody>
     </table>
-
     <div class="js-display-error color-danger pull-right"></div>
-
-    <div class="alert alert-info">
-      <strong>
-        {{ 'order.adjust_price_modal.hint'|trans }}
-      </strong>
-    </div>
-
   </form>
+  <div class="alert alert-info ">
+    <strong>
+      {{ 'order.adjust_price_modal.hint'|trans }}
+    </strong>
+  </div>
 {% endblock %}
 
 {% block footer %}
