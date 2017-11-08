@@ -47,6 +47,7 @@ orderStatus:
     refunded: Refunded
     success: Success
     fail: Fail
+    finished: Finished
     closed: Closed
 
 orderItemType:

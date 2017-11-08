@@ -45,8 +45,9 @@ orderStatus:
     paid: 已付款
     refunding: 退款中
     refunded: 已退款
-    success: 交易成功
+    success: 购买成功
     fail: 交易失败
+    finished: 交易成功
     closed: 已关闭
 
 orderItemType:
