@@ -59,7 +59,7 @@
               <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'order.content_title'|trans}}</a>
             </div>
 
-            {% if order.pay_amount != 0 and order.status in ['paid', 'success'] and order.refund.status|default('') in ['cancel', ''] %}
+            {% if order.pay_amount != 0 and order.status in ['success'] and order.refund.status|default('') in ['cancel', ''] %}
               <br>
               {% if order.refund_deadline != 0 and order.item.target_type in ['course', 'classroom'] %}
                 {% if order.refund_deadline > date().timestamp %}

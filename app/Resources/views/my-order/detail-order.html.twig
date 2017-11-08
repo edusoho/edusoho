@@ -106,7 +106,7 @@
         </tr>
       {% endif %}
 
-      {% if modalType in ['user'] and order.status in ['success'] and order.refund_deadline < date().timestamp %}
+      {% if modalType in ['user'] and order.status in ['success'] and order.pay_amount != 0 %}
         <tr>
           <td width="25%">
             {{ 'order.refund_deadline'|trans }}
