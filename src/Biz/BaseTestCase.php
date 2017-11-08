@@ -23,7 +23,7 @@ class BaseTestCase extends TestCase
     /** @var $db \Doctrine\DBAL\Connection */
     protected static $db;
 
-    /** @var $redis \Redis  */
+    /** @var $redis \Redis */
     protected static $redis = null;
 
     public static function setDb($db)

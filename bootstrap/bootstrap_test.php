@@ -33,7 +33,6 @@ if (isset($biz['redis'])) {
     \Biz\BaseTestCase::setRedis($biz['redis']);
 }
 
-
 // init service kernel env
 ServiceKernel::instance()
     ->setEnvVariable(array(
