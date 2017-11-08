@@ -45,7 +45,7 @@ class DoQuestionType extends Type
         $actor = $this->getActor($statement['user_id']);
         $object = array(
             'id' => $questionMarker['id'],
-            'type' => $questionMarker['type'],
+            'type' => $this->convertQuestionType($questionMarker['type']),
             'stem' => $questionMarker['stem'],
             'answer' => $answers,
             'choices' => $choices,
@@ -61,8 +61,23 @@ class DoQuestionType extends Type
                 'raw' => 0,
             ),
             'response' => implode(',', $answers),
+            'success' => ($questionMarkerResult['status'] == 'right') ? true : false,
         );
 
-        return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, false);
+        return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, $statement['created_time'], false);
+    }
+
+    public function convertQuestionType($questionType)
+    {
+        $types = array(
+            'single_choice' => 'choice',
+            'choice' => 'choice',
+            'fill' => 'fill-in',
+            'material' => 'material',//
+            'essay' => 'essay',//
+            'determine' => 'true-false'
+        );
+
+        return empty($types[$questionType]) ? $questionType : $types[$questionType];
     }
 }

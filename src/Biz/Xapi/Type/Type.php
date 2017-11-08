@@ -172,13 +172,14 @@ abstract class Type extends BizAware
             'video' => 'video',
             'doc' => 'document',
             'ppt' => 'document',
+            'discuss' => 'online-discussion',
             'testpaper' => 'testpaper',
             'homework' => 'homework',
             'exercise' => 'exercise',
-            'download' => 'download',
+            'download' => 'document',
             'live' => 'live',
-            'text' => 'text',
-            'flash' => 'flash',
+            'text' => 'document',
+            'flash' => 'document',
         );
 
         return empty($list[$mediaType]) ? $mediaType : $list[$mediaType];
