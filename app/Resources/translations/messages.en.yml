@@ -378,6 +378,7 @@ order.price_amount: Price payable
 order.paid_amount: Paid price
 order.paid_coin_amount: Paid coin
 order.paid_cash_amount: Paid cash
+order.paid_time_none: None
 order.refund.deal_status: Deal status
 order.refund.deal_time: Deal Time
 order.refund.deal_persion: Deal persion

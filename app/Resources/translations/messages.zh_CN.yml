@@ -464,6 +464,7 @@ order.price_amount: 订单价格
 order.paid_amount: 实付价格
 order.paid_coin_amount: 实付虚拟币
 order.paid_cash_amount: 实付现金
+order.paid_time_none: 无
 order.refund.deal_status: 处理状态
 order.refund.deal_time: 处理时间
 order.refund.deal_persion: 处理人
