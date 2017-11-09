@@ -1,14 +1,20 @@
 <?php
 
 namespace Topxia\Api\Util;
+
 use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
+use AppBundle\Common\Exception\AccessDeniedException;
 
 class UserUtil
 {
-    public function generateUser($type, $token, $oauthUser,$setData)
+    public function generateUser($type, $token, $oauthUser, $setData)
     {
+        if ($type == 'marketing') {
+            throw new AccessDeniedException('Not allowed for such type');
+        }
+
         $registration = array();
 
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -54,7 +60,7 @@ class UserUtil
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
 
-        if($this->getSettingService()->get("auth.register_mode", "email") == "email_or_mobile") {
+        if ($this->getSettingService()->get("auth.register_mode", "email") == "email_or_mobile") {
             $registration['emailOrMobile'] = $registration['email'];
             unset($registration['email']);
         }
@@ -77,7 +83,7 @@ class UserUtil
             $smallPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $smallName;
             $mediumPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $mediumName;
             $largePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $largeName;
-            curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
             $imageData = curl_exec($curl);
             curl_close($curl);
