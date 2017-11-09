@@ -1057,7 +1057,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if (empty($result)) {
             $currentTime = time();
 
-            $total = $connection->fetchColumn('select sum(cash) from cash_account');
+            $total = $connection->fetchColumn('select case when sum(cash) is not null then sum(cash) else 0 end from cash_account');
             $total = 0 - $total*100;
 
             $connection->exec("insert into `biz_pay_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
