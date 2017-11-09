@@ -12,7 +12,7 @@ class UserUtil
     public function generateUser($type, $token, $oauthUser, $setData)
     {
         if ($type == 'marketing') {
-            throw new AccessDeniedException('Not allowed for such type');
+            throw new AccessDeniedException('marketing.type.not.allowed');
         }
 
         $registration = array();
