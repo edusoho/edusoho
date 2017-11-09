@@ -792,7 +792,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection->exec("
             INSERT into `biz_pay_trade` (
-                `id`,
                 `title`,
                 `trade_sn`,
                 `order_sn`,
@@ -820,7 +819,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 `migrate_id`
             )
             select 
-                o.`id`,
                 o.`title`,
                 o.`sn` as `trade_sn`,
                 o.`sn` as `order_sn`,
