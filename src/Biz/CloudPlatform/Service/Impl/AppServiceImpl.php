@@ -133,6 +133,7 @@ class AppServiceImpl extends BaseService implements AppService
         $canUpgradeApps = array_filter($apps, function ($app) {
             $userAccess = isset($app['userAccess']) ? $app['userAccess'] : null;
             $purchased = isset($app['purchased']) ? $app['purchased'] : null;
+
             return !($userAccess == 'fail' && $purchased == false);
         });
 
