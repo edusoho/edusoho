@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Article;
 
-use Biz\User\CurrentUser;
 use Biz\BaseTestCase;
 
 class ArticleServiceTest extends BaseTestCase

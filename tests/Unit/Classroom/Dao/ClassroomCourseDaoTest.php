@@ -66,6 +66,14 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals(array('classroomId' => '1'), $res);
     }
 
+    public function testGetByCourseSetId()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('courseSetId' => 11));
+        $res = $this->getDao()->getByCourseSetId(11);
+        $this->assertArrayEquals(array('classroomId' => '1'), $res);
+    }
+
     public function testGetByClassroomIdAndCourseId()
     {
         $expected = array();
@@ -121,6 +129,19 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         }
     }
 
+    public function testFindByCourseSetIds()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('courseSetId' => 11));
+        $expected[] = $this->mockDataObject(array('courseSetId' => 22));
+        $res = $this->getDao()->findByCourseSetIds(array(11, 22));
+        $testFields = $this->getCompareKeys();
+
+        foreach ($res as $key => $result) {
+            $this->assertArrayEquals($expected[$key], $result, $testFields);
+        }
+    }
+
     public function testFindEnabledByCoursesIds()
     {
         $expected = array();
@@ -147,6 +168,22 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         }
     }
 
+    public function testCountCourseTasksByClassroomId()
+    {
+        $result1 = $this->getDao()->countCourseTasksByClassroomId(1);
+
+        $this->assertEquals(0, $result1);
+
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('courseId' => 1));
+        $expected[] = $this->mockDataObject(array('courseId' => 2));
+        $course1 = $this->getCourseDao()->create(array('taskNum' => 3));
+        $course2 = $this->getCourseDao()->create(array('taskNum' => 4));
+        $result2 = $this->getDao()->countCourseTasksByClassroomId(1);
+
+        $this->assertEquals(7, $result2);
+    }
+
     protected function getDefaultMockFields()
     {
         return array(
@@ -154,5 +191,13 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
             'courseId' => 1,
             'parentCourseId' => 2,
             );
+    }
+
+    /**
+     * @return CourseDao
+     */
+    private function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }
