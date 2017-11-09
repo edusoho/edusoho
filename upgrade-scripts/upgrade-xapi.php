@@ -135,7 +135,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('info', '新增AddActivityWatchToStatementJob');
 
-
         return 1;
     }
 
