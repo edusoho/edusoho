@@ -69,6 +69,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'registerJobs',
+            'resetCrontabJobNum',
         );
 
         $funcNames = array();
