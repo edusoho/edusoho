@@ -83,18 +83,18 @@ class ArticleServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'searchByCategoryIds',
-                    'returnValue' => array('id' => 111, 'title' => 'title'),
+                    'returnValue' => array(array('id' => 111, 'title' => 'title')),
                     'withParams' => array(
-                        array('title' => 'title'),
+                        array(111, 222),
                         0,
                         5,
                     ),
                 ),
             )
         );
-        $result = $this->getArticleService()->findArticlesByCategoryIds(array('title' => 'title'), 0, 5);
+        $result = $this->getArticleService()->findArticlesByCategoryIds(array(111, 222), 0, 5);
 
-        $this->assertEquals(array('id' => 111, 'title' => 'title'), $result);
+        $this->assertEquals(array(array('id' => 111, 'title' => 'title')), $result);
     }
 
     public function testFindArticlesByIds()
