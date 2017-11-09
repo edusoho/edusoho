@@ -2,11 +2,6 @@
 
 namespace Tests\Unit\Article;
 
-use Biz\Article\Service\ArticleService;
-use Biz\Article\Service\CategoryService;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;
 
