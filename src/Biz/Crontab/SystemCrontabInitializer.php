@@ -91,6 +91,17 @@ class SystemCrontabInitializer
 
     private static function registerDefaultJobs()
     {
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Order_FinishSuccessOrdersJob', 'source' => self::SOURCE_SYSTEM));
+        if ($count == 0) {
+            self::getSchedulerService()->register(array(
+                'name' => 'Order_FinishSuccessOrdersJob',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '20 * * * *',
+                'class' => 'Codeages\Biz\Order\Job\FinishSuccessOrdersJob',
+                'args' => array(),
+            ));
+        }
+
         $count = self::getSchedulerService()->countJobs(array('name' => 'Order_CloseOrdersJob', 'source' => self::SOURCE_SYSTEM));
         if ($count == 0) {
             self::getSchedulerService()->register(array(
