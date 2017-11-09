@@ -466,6 +466,7 @@ order.confirm.price: Product price
 order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.adjust_price_modal_title: 订单改价
+order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠的力度，系统会自动进行换算。
 
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'

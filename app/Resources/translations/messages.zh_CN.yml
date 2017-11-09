@@ -553,6 +553,7 @@ order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.before_adjust_price: 订单原价
 order.adjust_price_modal_title: 订单改价
+order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠的力度，系统会自动进行换算。
 
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
