@@ -54,6 +54,23 @@ class CardServiceTest extends BaseTestCase
         $this->assertEquals($card['userId'], $results['userId']);
     }
 
+    public function testGetCardByCardIdAndCardType()
+    {
+        $this->mockBiz(
+            'Card:CardDao',
+            array(
+                array(
+                    'functionName' => 'getByCardIdAndCardType',
+                    'returnValue' => array('id' => 111, 'cardId' => 'cardId'),
+                    'withParams' => array(1, 'a'),
+                ),
+            )
+        );
+        $result = $this->getCardService()->getCardByCardIdAndCardType(1, 'a');
+
+        $this->assertEquals(array('id' => 111, 'cardId' => 'cardId'), $result);
+    }
+
     public function testUpdateCardByCardIdAndCardType()
     {
         $card = $this->generateCard();
@@ -88,6 +105,40 @@ class CardServiceTest extends BaseTestCase
         $this->getCardService()->addCard($card2);
         $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], 'moneyCard');
         $this->assertCount(2, $cardLists);
+    }
+
+    public function testFindCardDetailByCardTypeAndCardId()
+    {
+        $this->mockBiz(
+            'Coupon:CouponService',
+            array(
+                array(
+                    'functionName' => 'getCoupon',
+                    'returnValue' => array('id' => 111, 'code' => 'code'),
+                    'withParams' => array(111),
+                ),
+            )
+        );
+        $result = $this->getCardService()->findCardDetailByCardTypeAndCardId('coupon', 111);
+
+        $this->assertEquals(array('id' => 111, 'code' => 'code'), $result);
+    }
+
+    public function testFindCardDetailsByCardTypeAndCardIds()
+    {
+        $this->mockBiz(
+            'Coupon:CouponService',
+            array(
+                array(
+                    'functionName' => 'getCouponsByIds',
+                    'returnValue' => array(array('id' => 111, 'code' => 'code')),
+                    'withParams' => array(array(111)),
+                ),
+            )
+        );
+        $result = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon', array(111));
+
+        $this->assertEquals(array(array('id' => 111, 'code' => 'code')), $result);
     }
 
     /**
@@ -141,6 +192,22 @@ class CardServiceTest extends BaseTestCase
 
         $cardLists = $this->getCardService()->findCardsByCardIds($ids);
         $this->assertCount(2, $cardLists);
+    }
+
+    public function testSortArrayByField()
+    {
+        $arr = array(array('a' => 2), array('a' => 4), array('a' => 4));
+        $result = $this->getCardService()->sortArrayByField($arr, 'a');
+
+        $this->assertEquals(array(array('a' => 2), array('a' => 4), array('a' => 4)), $result);
+    }
+
+    public function testSortArrayByKey()
+    {
+        $arr = array(array('a' => 2), array('a' => 4), array('a' => 4));
+        $result = $this->getCardService()->sortArrayByKey($arr, 'a');
+
+        $this->assertEquals(array(array('a' => 2), array('a' => 4), array('a' => 4)), $result);
     }
 
     public function testFindCurrentUserAvailableCouponForTargetTypeAndTargetId()

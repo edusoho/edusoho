@@ -104,6 +104,14 @@ class CardDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $res[1], $this->getCompareKeys());
     }
 
+    public function testFindByUserIdAndCardTypeAndStatus()
+    {
+        $card = $this->mockDataObject(array('cardId' => '2'));
+        $result = $this->getDao()->findByUserIdAndCardTypeAndStatus(1, 'a', 'receive');
+
+        $this->assertArrayEquals($card, $result[0], $this->getCompareKeys());
+     }
+
     public function testFindByCardIds()
     {
         $expected = array();
