@@ -23,6 +23,7 @@ class Orders extends MarketingBase
             $logger->debug('准备验证auth');
             $authentication->auth($request);
             $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
+            $logger->debug(json_encode($postData));
 
             $response = array();
             $isNew = false;
@@ -42,9 +43,11 @@ class Orders extends MarketingBase
             $logger->debug("准备把用户,{$user['id']}添加到课程");
             $orderInfo = array(
                 'marketingOrderId' => $postData['order_id'],
+                'marketingOrderPriceAmount' => $postData['order_price_amount'],
                 'marketingOrderPayAmount' => $postData['order_pay_amount'],
                 'marketingActivityId' => $postData['activity_id'],
                 'marketingActivityName' => $postData['activity_name'],
+                'deducts' => $this->getUserOrderDeduct($user['id'], $postData['deduct']),
             );
             $target = array(
                 'type' => $postData['target_type'],
@@ -57,10 +60,20 @@ class Orders extends MarketingBase
         } catch (\Exception $e) {
             $response['code'] = 'error';
             $response['msg'] = 'ES处理微营销订单失败,'.$e->getMessage();
-            $logger->error('ES处理微营销订单失败,'.$e->getMessage());
+            $logger->error($e);
         }
 
         return $response;
+    }
+
+    private function getUserOrderDeduct($userId, $deduct)
+    {
+        return array(array(
+            'detail' => $deduct['detail'],
+            'deduct_type' => $deduct['deduct_type'],
+            'deduct_amount' => $deduct['deduct_amount'],
+            'user_id' => $userId,
+        ));
     }
 
     private function createUserFromMarketing($postData, $request)
@@ -102,11 +115,11 @@ class Orders extends MarketingBase
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $biz = $this->getBiz();
         $biz['user'] = $currentUser;
-
-        $data['price'] = $data['marketingOrderPayAmount'];
-        $data['payment'] = 'marketing';
+        $data['price'] = $data['marketingOrderPriceAmount'] * 100;
+        $data['source'] = 'marketing';
         $data['remark'] = '来自微营销';
         $data['orderTitleRemark'] = '(来自微营销)';
+
         list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
 
         return array($course, $member, $order);

@@ -2,11 +2,6 @@
 
 namespace Tests\Unit\Article;
 
-use Biz\Article\Service\ArticleService;
-use Biz\Article\Service\CategoryService;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\UserService;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;
 
@@ -76,6 +71,27 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals('2', count($article));
     }
 
+    public function testFindArticlesByCategoryIds()
+    {
+        $this->mockBiz(
+            'Article:ArticleDao',
+            array(
+                array(
+                    'functionName' => 'searchByCategoryIds',
+                    'returnValue' => array(array('id' => 111, 'title' => 'title')),
+                    'withParams' => array(
+                        array(111, 222),
+                        0,
+                        5,
+                    ),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->findArticlesByCategoryIds(array(111, 222), 0, 5);
+
+        $this->assertEquals(array(array('id' => 111, 'title' => 'title')), $result);
+    }
+
     public function testFindArticlesByIds()
     {
         $newarticle1 = $this->createArticle();
@@ -86,6 +102,25 @@ class ArticleServiceTest extends BaseTestCase
         );
         $findArticles = $this->getArticleService()->findArticlesByIds($ids);
         $this->assertEquals('2', count($findArticles));
+    }
+
+    public function testFindArticlesCount()
+    {
+        $this->mockBiz(
+            'Article:ArticleDao',
+            array(
+                array(
+                    'functionName' => 'countByCategoryIds',
+                    'returnValue' => 2,
+                    'withParams' => array(
+                        array(1, 2),
+                    ),
+                ),
+            )
+        );
+        $count = $this->getArticleService()->findArticlesCount(array(1, 2));
+
+        $this->assertEquals(2, $count);
     }
 
     public function testSearchArticles()
@@ -154,6 +189,26 @@ class ArticleServiceTest extends BaseTestCase
         );
         $article = $this->getArticleService()->updateArticle($newArticle['id'], $fields);
         $this->assertEquals('正午时分2', $article['body']);
+    }
+
+    public function testBatchUpdateOrg()
+    {
+        $this->mockBiz(
+            'Article:ArticleDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => 1,
+                    'withParams' => array(
+                        1,
+                        array(),
+                    ),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->batchUpdateOrg(1, null);
+
+        $this->getArticleDao()->shouldHaveReceived('update');
     }
 
     /**
@@ -245,6 +300,23 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertNull($like);
     }
 
+    public function testCount()
+    {
+        $this->mockBiz(
+            'Article:ArticleDao',
+            array(
+                array(
+                    'functionName' => 'waveArticle',
+                    'returnValue' => array('id' => 1, 'hits' => 3),
+                    'withParams' => array(1, 'hits', 2),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->count(1, 'hits', 2);
+
+        $this->getArticleDao()->shouldHaveReceived('waveArticle');
+    }
+
     public function testsetArticleProperty()
     {
         $property = 'promoted';
@@ -274,6 +346,59 @@ class ArticleServiceTest extends BaseTestCase
         $this->assertEquals('trash', $trashArticle['status']);
     }
 
+    public function testRemoveArticlethumb()
+    {
+        $newArticle = $this->createArticle();
+        $this->mockBiz(
+            'Content:FileService',
+            array(
+                array(
+                    'functionName' => 'deleteFileByUri',
+                    'withParams' => array('thumb'),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                    'withParams' => array('originalThumb'),
+                    'runTimes' => 2,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'System:LogService',
+            array(
+                array(
+                    'functionName' => 'info',
+                    'withParams' => array('article', 'removeThumb', '文章#1removeThumb'),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->removeArticlethumb(1);
+
+        $this->getFileService()->shouldHaveReceived('deleteFileByUri', array('thumb'));
+        $this->getFileService()->shouldHaveReceived('deleteFileByUri', array('originalThumb'));
+        $this->getLogService()->shouldHaveReceived('info');
+    }
+
+    public function testDeleteArticle()
+    {
+        $newArticle = $this->createArticle();
+        $this->mockBiz(
+            'System:LogService',
+            array(
+                array(
+                    'functionName' => 'info',
+                    'withParams' => array('article', 'delete', '文章#1永久删除'),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->deleteArticle(1);
+
+        $this->getLogService()->shouldHaveReceived('info');
+
+        $this->assertTrue($result);
+    }
+
     public function testpublishArticle()
     {
         $newArticle = $this->createArticle();
@@ -289,6 +414,85 @@ class ArticleServiceTest extends BaseTestCase
         $this->getArticleService()->unpublishArticle($newArticle['id']);
         $getArticle = $this->getArticleService()->getArticle($newArticle['id']);
         $this->assertEquals($getArticle['status'], 'unpublished');
+    }
+
+    public function testChangeIndexPicture()
+    {
+        $this->mockBiz(
+            'Content:FileService',
+            array(
+                array(
+                    'functionName' => 'getFilesByIds',
+                    'withParams' => array(array(1)),
+                    'returnValue' => array(array('id' => 1, 'uri' => 'test')),
+                ),
+                array(
+                    'functionName' => 'getFileObject',
+                    'withParams' => array(1),
+                    'returnValue' => array(array('id' => 1, 'uri' => 'test')),
+                ),
+                array(
+                    'functionName' => 'uploadFile',
+                    'withParams' => array('article', array(array('id' => 1, 'uri' => 'test'))),
+                    'returnValue' => array(array('id' => 1, 'uri' => 'test')),
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                    'withParams' => array('test'),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->changeIndexPicture(array(array('id' => 1, 'type' => 'origin')));
+
+        $this->getFileService()->shouldHaveReceived('deleteFileByUri');
+        $this->assertArrayHasKey('file', $result['origin']);
+
+        $result = $this->getArticleService()->changeIndexPicture(array(array('id' => 1, 'type' => 'new')));
+        $this->assertArrayHasKey('file', $result['new']);
+    }
+
+    public function testFindPublishedArticlesByTagIdsAndCount()
+    {
+        $this->mockBiz(
+            'Taxonomy:TagService',
+            array(
+                array(
+                    'functionName' => 'findTagOwnerRelationsByTagIdsAndOwnerType',
+                    'withParams' => array(array(1), 'article'),
+                    'returnValue' => array(array('id' => 1, 'title' => 'title')),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Article:ArticleDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'withParams' => array(
+                        array('articleIds' => array(1), 'status' => 'published'),
+                        array('publishedTime' => 'DESC'),
+                        0,
+                        5,
+                    ),
+                    'returnValue' => array(array('id' => 1, 'title' => 'test')),
+                ),
+            )
+        );
+        $result = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount(array(1), 5);
+
+        $this->assertEquals(array(array('id' => 1, 'title' => 'test')), $result);
+    }
+
+    public function testViewArticle()
+    {
+        $result1 = $this->getArticleService()->viewArticle(1);
+
+        $this->assertEquals(array(), $result1);
+
+        $newArticle = $this->createArticle();
+        $result2 = $this->getArticleService()->viewArticle(1);
+
+        $this->assertEquals($newArticle, $result2);
     }
 
     public function testFindRelativeArticles()
@@ -451,5 +655,26 @@ class ArticleServiceTest extends BaseTestCase
     protected function getCategoryService()
     {
         return $this->createService('Article:CategoryService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return ArticleDao
+     */
+    protected function getArticleDao()
+    {
+        return $this->createDao('Article:ArticleDao');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

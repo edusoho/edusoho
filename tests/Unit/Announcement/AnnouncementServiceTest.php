@@ -116,6 +116,46 @@ class AnnouncementServiceTest extends BaseTestCase
         $this->assertEquals($updateInfo['content'], $getAnnouncement['content']);
     }
 
+    public function testCountAnnouncements()
+    {
+        $this->mockBiz(
+            'Announcement:AnnouncementDao',
+            array(
+                array(
+                    'functionName' => 'count',
+                    'returnValue' => 1,
+                    'withParams' => array(
+                        array('targetType' => 'course'),
+                    ),
+                ),
+            )
+        );
+
+        $count = $this->getAnnouncementService()->countAnnouncements(array('targetType' => 'course'));
+
+        $this->assertEquals(1, $count);
+    }
+
+    public function testBatchUpdateOrg()
+    {
+        $this->mockBiz(
+            'Announcement:AnnouncementDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => 1,
+                    'withParams' => array(
+                        1,
+                        array(),
+                    ),
+                ),
+            )
+        );
+        $result = $this->getAnnouncementService()->batchUpdateOrg(1, null);
+
+        $this->assertNull($result);
+    }
+
     /**
      * @return AnnouncementService
      */
