@@ -383,7 +383,7 @@ class ArticleServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'info',
-                    'withParams' => array('article', 'removeThumb', "文章#1removeThumb"),
+                    'withParams' => array('article', 'removeThumb', '文章#1removeThumb'),
                 ),
             )
         );
@@ -402,7 +402,7 @@ class ArticleServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'info',
-                    'withParams' => array('article', 'delete', "文章#1永久删除"),
+                    'withParams' => array('article', 'delete', '文章#1永久删除'),
                 ),
             )
         );
@@ -483,10 +483,10 @@ class ArticleServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'search',
                     'withParams' => array(
-                        array('articleIds' => array(1), 'status' => 'published'), 
-                        array('publishedTime' => 'DESC'), 
-                        0, 
-                        5
+                        array('articleIds' => array(1), 'status' => 'published'),
+                        array('publishedTime' => 'DESC'),
+                        0,
+                        5,
                     ),
                     'returnValue' => array(array('id' => 1, 'title' => 'test')),
                 ),
@@ -499,12 +499,12 @@ class ArticleServiceTest extends BaseTestCase
 
     public function testViewArticle()
     {
-        $result1 =$this->getArticleService()->viewArticle(1);
+        $result1 = $this->getArticleService()->viewArticle(1);
 
         $this->assertEquals(array(), $result1);
 
         $newArticle = $this->createArticle();
-        $result2 =$this->getArticleService()->viewArticle(1);
+        $result2 = $this->getArticleService()->viewArticle(1);
 
         $this->assertEquals($newArticle, $result2);
     }
