@@ -1057,7 +1057,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if (empty($result)) {
             $currentTime = time();
 
-            $total = $connection->fetchColumn('select sum(cash) from cash_account');
+            $total = $connection->fetchColumn('select case when sum(cash) is not null then sum(cash) else 0 end from cash_account');
             $total = 0 - $total*100;
 
             $connection->exec("insert into `biz_pay_user_balance` (`user_id`, `amount`, `created_time`, `updated_time`) values (0, {$total}, {$currentTime}, {$currentTime});");
@@ -1069,9 +1069,9 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function migrateBizUserBalanceRechargeAmountAndPurchaseAmount($page)
     {
         $connection = $this->getConnection();
-        $connection->exec("update biz_pay_user_balance ub, (select user_id, sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
-        $connection->exec("update biz_pay_user_balance ub, (select user_id, sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
-        $connection->exec("update biz_pay_user_balance ub set cash_amount = (select sum(amount) amount from biz_pay_cashflow uc where uc.amount_type='money' and uc.type='outflow') where ub.user_id = 0;");
+        $connection->exec("update biz_pay_user_balance ub, (select user_id, case when sum(amount) is not null then sum(amount) else 0 end amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='outflow' group by user_id) a set ub.purchase_amount = a.amount where ub.user_id=a.user_id;");
+        $connection->exec("update biz_pay_user_balance ub, (select user_id, case when sum(amount) is not null then sum(amount) else 0 end amount from biz_pay_cashflow uc where uc.amount_type='coin' and uc.type='inflow' group by user_id) a set ub.recharge_amount = a.amount where ub.user_id =a.user_id;");
+        $connection->exec("update biz_pay_user_balance ub set cash_amount = (select case when sum(amount) is not null then sum(amount) else 0 end amount from biz_pay_cashflow uc where uc.amount_type='money' and uc.type='outflow') where ub.user_id = 0;");
 
         return 1;
     }
