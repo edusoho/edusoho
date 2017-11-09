@@ -3,6 +3,11 @@
 namespace Tests;
 
 
+use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Dao\OrderLogDao;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
+
 class OrderServiceTest extends IntegrationTestCase
 {
     public function setUp()
@@ -308,6 +313,115 @@ class OrderServiceTest extends IntegrationTestCase
         );
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testAddOrderItemDeductWithErrorDeduct()
+    {
+        $deduct = array();
+
+        $this->getOrderService()->addOrderItemDeduct($deduct);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testAddOrderItemDeductWithErrorOrderStatus()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+        $order = $this->getOrderdao()->update($order['id'], array('status' => 'paid'));
+
+        $deduct = array(
+            'order_id' => $order['id'],
+            'deduct_id' => 1,
+            'deduct_type' => 'test',
+            'deduct_amount' => 100,
+            'user_id' => 1,
+        );
+
+        $this->getOrderService()->addOrderItemDeduct($deduct);
+    }
+
+    public function testAddOrderItemDeduct()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+        $deduct = array(
+            'order_id' => $order['id'],
+            'item_id' => 0,
+            'deduct_id' => 1,
+            'deduct_type' => 'test',
+            'deduct_amount' => 100,
+            'user_id' => 1,
+        );
+
+        $newDeduct = $this->getOrderService()->addOrderItemDeduct($deduct);
+        $this->assertArraySubset($deduct, $newDeduct);
+
+        $order = $this->getOrderdao()->get($order['id']);
+        $this->assertEquals(78, $order['pay_amount']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testUpdateOrderItemDeductWithNotExist()
+    {
+        $this->getOrderService()->updateOrderItemDeduct(0, array());
+    }
+
+    public function testUpdateOrderItemDeduct()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+        $deduct = array(
+            'order_id' => $order['id'],
+            'item_id' => 0,
+            'deduct_id' => 1,
+            'deduct_type' => 'test',
+            'deduct_amount' => 100,
+            'user_id' => 1,
+        );
+
+        $newDeduct = $this->getOrderService()->addOrderItemDeduct($deduct);
+        $newDeduct = $this->getOrderService()->updateOrderItemDeduct($newDeduct['id'], array('deduct_amount' => 10));
+        $this->assertEquals(10 , $newDeduct['deduct_amount']);
+
+        $order = $this->getOrderdao()->get($order['id']);
+        $this->assertEquals(168, $order['pay_amount']);
+    }
+
+    public function testAdjustPrice()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($order['id'], 158);
+
+        $this->assertEquals(20, $adjustDeduct['deduct_amount']);
+        $this->assertArrayHasKey('order', $adjustDeduct);
+
+        $orderLogs = $this->getOrderLogDao()->search(array('status' => 'order.adjust_price'), array(), 0, 1);
+        $this->assertNotNull($orderLogs);
+    }
+
+    public function testAdjustPriceSecondTime()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($order['id'], 158);
+        $this->assertEquals(20, $adjustDeduct['deduct_amount']);
+
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($order['id'], 100);
+        $this->assertEquals(78, $adjustDeduct['deduct_amount']);
+    }
+
     protected function sumOrderItemPayAmount($item)
     {
         $priceAmount = $item['price_amount'];
@@ -357,11 +471,17 @@ class OrderServiceTest extends IntegrationTestCase
         return $priceAmount;
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->biz->service('Order:OrderService');
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');
@@ -370,6 +490,22 @@ class OrderServiceTest extends IntegrationTestCase
     protected function getOrderItemRefundDao()
     {
         return $this->biz->dao('Order:OrderItemRefundDao');
+    }
+
+    /**
+     * @return OrderDao
+     */
+    protected function getOrderdao()
+    {
+        return $this->biz->dao('Order:OrderDao');
+    }
+
+    /**
+     * @return OrderLogDao
+     */
+    protected function getOrderLogDao()
+    {
+        return $this->biz->dao('Order:OrderLogDao');
     }
 
 }

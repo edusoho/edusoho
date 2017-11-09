@@ -6,11 +6,10 @@
 {% import "macro.html.twig" as web_macro %}
   <thead>
     <tr>
-      <th width="25%">{{'order.name'|trans}}</th>
-      <th>{{'order.created_time'|trans}}</th>
+      <th width="30%">{{'order.product_name'|trans}}</th>
       <th>{{'order.status'|trans}}</th>
-      <th>{{'order.price_amount'|trans }}</th>
-      <th>{{'order.real_pay'|trans}}</th>
+      <th>{{'order.product_price'|trans }}</th>
+      <th>{{'order.price'|trans}}</th>
       <th width="10%">{{'order.buyers'|trans}}</th>
       <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
     </tr>
@@ -31,8 +30,9 @@
             {% endif %}
             <br>
             <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
+            <br>
+            <span class="color-gray text-sm">{{'order.created_time'|trans}}：{{ order.created_time|date('Y-n-d H:i:s') }}</span>
           </td>
-          <td><span class="color-gray text-sm">{{ order.created_time|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ display_order_status(order.status, 0) }}</td>
           <td><span class="color-warning">{{ order.price_amount|to_cash(0) }}</span></td>
           <td><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span></td>
