@@ -193,7 +193,7 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
             );
     }
 
-        /**
+    /**
      * @return CourseDao
      */
     private function getCourseDao()
