@@ -139,6 +139,9 @@ class OrderContext
         if ($status == PaidOrderStatus::NAME) {
             if (in_array(OrderStatusCallback::SUCCESS, $results) && count($results) == 1) {
                 $this->getWorkflowService()->finish($order['id']);
+                if ($order['refund_deadline'] == 0) {
+                    $this->getWorkflowService()->finished($order['id']);
+                }
             } else if (count($results) > 0) {
                 $this->getWorkflowService()->fail($order['id']);
             }
