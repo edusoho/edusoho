@@ -25,13 +25,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $this->getConnection()->commit();
 
-            $dir = realpath($this->biz['kernel.root_dir'] . "/../app/cache/prod");
-            $filesystem = new Filesystem();
-
-            if (!empty($dir)) {
-                $filesystem->remove($dir);
-            }
-
             if (!empty($result)) {
                 return $result;
             } else {
