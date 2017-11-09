@@ -97,7 +97,7 @@ class Orders extends MarketingBase
         $registration['nickname'] = $this->getUserService()->generateNickname($registration);
         $logger->debug('ES用户名：'.$registration['nickname']);
         $registration['registeredWay'] = 'web';
-        $registration['createdIp'] = $request->getClientIp();
+        $registration['createdIp'] = isset($postData['client_ip']) ? $postData['client_ip'] : '';
         $registration['password'] = $postData['password'];
         $registration['type'] = 'marketing';
 
