@@ -5,16 +5,11 @@ namespace Topxia\Api\Util;
 use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
-use AppBundle\Common\Exception\AccessDeniedException;
 
 class UserUtil
 {
     public function generateUser($type, $token, $oauthUser, $setData)
     {
-        if ($type == 'marketing') {
-            throw new AccessDeniedException('marketing.type.not.allowed');
-        }
-
         $registration = array();
 
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
