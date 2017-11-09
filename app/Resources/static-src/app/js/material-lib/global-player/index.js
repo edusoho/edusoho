@@ -1,5 +1,5 @@
 let $element = $('#global-player');
-import EsMessenger from '../../../common/messenger';
+import EsMessenger from 'app/common/messenger';
 
 let play = new QiQiuYun.Player({
   id: 'global-player',
