@@ -249,7 +249,7 @@ class CardServiceTest extends BaseTestCase
     protected function generateCard($currentUser = null)
     {
         $time = time() + 86400;
-        $user = null == $currentUser ? $this->createUser() : $currentUser;
+        $user = $currentUser == null ? $this->createUser() : $currentUser;
 
         return array(
             'cardType' => 'moneyCard',
