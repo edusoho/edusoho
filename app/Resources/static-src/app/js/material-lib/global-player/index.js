@@ -1,5 +1,7 @@
 let $element = $('#global-player');
-new QiQiuYun.Player({
+import EsMessenger from 'app/common/messenger';
+
+let play = new QiQiuYun.Player({
   id: 'global-player',
   resNo: $element.data('resNo'),
   token: $element.data('token'),
@@ -7,4 +9,14 @@ new QiQiuYun.Player({
     id: $element.data('userId'),
     name: $element.data('userName')
   }
+});
+
+let messenger = new EsMessenger({
+    name: 'parent',
+    project: 'PlayerProject',
+    type: 'child'
+  });
+
+play.on("video.timeupdate", (mes) => {
+  messenger.sendToParent("video.timeupdate", mes);
 });
