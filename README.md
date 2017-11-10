@@ -1,7 +1,6 @@
 master 
 
 [![build](http://coding.codeages.net/edusoho/edusoho/badges/master/build.svg)](http://coding.codeages.net/edusoho/edusoho/commits/master) 
-[![coverage](http://coding.codeages.net/edusoho/edusoho/badges/master/coverage.svg)](http://coding.codeages.net/edusoho/edusoho/commits/master)
 
 develop 
 
