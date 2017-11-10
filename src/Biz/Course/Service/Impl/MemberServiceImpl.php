@@ -860,7 +860,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'joinedType' => 'classroom',
             'learnedNum' => $learnedNum,
             'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
-            'lastLearnTime' => $lastLearnTime
+            'lastLearnTime' => $lastLearnTime,
         );
         $isMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
