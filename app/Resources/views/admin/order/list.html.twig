@@ -13,10 +13,10 @@
         <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{ request.get('startDateTime') }}"
           placeholder="{{ 'form.placeholder.start_date'|trans }}">
         -
-        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{ request.get('endDateTime') }}"
+        <input class="form-control mlm" type="text" id="endDate" name="endDateTime" value="{{ request.get('endDateTime') }}"
           placeholder="{{ 'form.placeholder.end_date'|trans }}">
       </div>
-      <div class="form-group mlm">
+      <div class="form-group">
         <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
         <select class="form-control" name="orderItemType">
           {{ select_options(dict('orderItemType'), request.get('orderItemType'), 'order.product_type'|trans) }}
