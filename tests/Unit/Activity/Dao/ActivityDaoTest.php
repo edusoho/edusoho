@@ -80,7 +80,7 @@ class ActivityDaoTest extends BaseDaoTestCase
             'title' => 'activity4',
             'mediaType' => 'video',
             'mediaId' => 1,
-            'fromCourseId' => 2
+            'fromCourseId' => 2,
         ));
         $activities = $this->getActivityDao()->findSelfVideoActivityByCourseIds(array(1, 2));
 
