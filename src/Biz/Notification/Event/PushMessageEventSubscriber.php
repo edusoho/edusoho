@@ -311,7 +311,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         if ($this->isIMEnabled()) {
             $currentUser = $this->getBiz()->offsetGet('user');
-            if (empty($currentUser) || $currentUser['id'] == $userId) {
+            if (empty($currentUser['id']) || $currentUser['id'] == $userId) {
                 return;
             }
 
@@ -1029,7 +1029,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 return;
             }
 
-            if ($currentUser['id'] == $member['userId']) {
+            if ($currentUser['id'] == $member['userId'] || empty($currentUser['id'])) {
                 return;
             }
 
