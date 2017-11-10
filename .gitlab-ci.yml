@@ -57,7 +57,7 @@ Unit Test With PHP 7.0 For Non-Develop:
     - release
     - trigger
 
-Unit Test With PHP 7.0 FOR Develop:
+Unit Test With PHP 7.0 For Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
