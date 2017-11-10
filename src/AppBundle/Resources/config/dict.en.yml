@@ -60,7 +60,7 @@ refundItemType:
 
 orderDisplayStatus:
     notPaid: notPaid
-    paid: paid
+    paid: success
     closed: closed
     refunded: refunded
 

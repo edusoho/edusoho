@@ -1,3 +1,172 @@
+.vip-banner {
+  padding: 20px 0;
+  .vip-banner-thumb {
+    float: left;
+    width: 870px;
+    @media(max-width: @screen-md-max) {
+      width: 720px;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 100%;
+    }
+    img {
+      width: 100%;
+      .border-top-left-radius();
+      .border-bottom-left-radius();
+      @media(max-width: @screen-sm-max) {
+        .border-radius;
+      }
+    }
+  }
+}
+
+.vip-user {
+  float: left;
+  width: 270px;
+  height: 350px;
+  padding: 30px 20px;
+  background-color: #fff;
+  text-align: center;
+  .border-top-right-radius();
+  .border-bottom-right-radius();
+  @media(max-width: @screen-md-max) {
+    padding: 10px;
+    width: 220px;
+    height: 290px;
+  }
+  .user-avatar {
+    position: relative;
+    display: inline-block;
+    > img {
+      .border-radius(50%);
+      width: 100px;
+      height: 100px;
+      @media(max-width: @screen-md-max) {
+        width: 90px;
+        height: 90px;
+      }
+    }
+    .icon-user-status {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: #a1a1a1;
+    }
+  }
+}
+
+.vip-cat {
+  text-align: center;
+  margin-bottom: 20px;
+  .nav-pills {
+    display: inline-block;
+    li {
+      margin: 0 20px;
+    }
+  }
+}
+
+.vip-wide-item {
+  width: 940px;
+  height: 200px;
+  padding: 30px 20px !important;
+  margin: 0 auto 30px !important;
+  @media (max-width: @screen-sm-max) {
+    width: 100%;
+  }
+  @media (max-width: @screen-xs-max) {
+    height: auto;
+  }
+  .vip-thumb {
+    float: left;
+    width: 14%;
+    text-align: center;
+    margin-top: 15px;
+    padding-right: 20px;
+    @media (max-width: @screen-sm-max) {
+      width: 18%;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+      .border-radius(50%);
+    }
+  }
+  .vip-info {
+    float: left;
+    width: 29%;
+    height: 140px;
+    padding: 10px;
+    .border-radius;
+    text-align: center;
+    background-color: @gray-lighter;
+    @media (max-width: @screen-sm-max) {
+      width: 54%;
+      padding: 10px;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .name {
+      color: @gray-darker;
+    }
+    .price {
+      color: @gray;
+      font-size: 12px;
+      margin-bottom: 0;
+      span {
+        font-size: 18px;
+        margin-right: 5px;
+        color: @brand-danger;
+      }
+    }
+    .number {
+      font-size: 12px;
+      margin: 10px auto;
+    }
+  }
+  .vip-content {
+    float: left;
+    width: 45%;
+    margin: 10px 0;
+    height: 120px;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 20px;
+    overflow: hidden;
+    color: @gray-darker;
+    @media(max-width:@screen-sm-max) {
+      display: none;
+    }
+    p {
+      margin: 0;
+    }
+  }
+  .vip-item-footer {
+    float: right;
+    width: 12%;
+    margin-top: 53px;
+    text-align: center;
+    
+    @media(max-width:@screen-sm-max) {
+      width: 25%;
+    }
+    @media (max-width: @screen-xs-max) {
+      margin-top: 0;
+      width: 100%;
+      .btn {
+        display: block;
+      }
+    }
+  }
+}
+
 .vip-item-list {
   background-color: @bg-color;
   padding-bottom: 15px;
@@ -60,6 +229,41 @@
     color: @gray-darker;
     p {
       margin: 0;
+    }
+  }
+}
+
+.vip-filer {
+  background-color: #fff;
+  padding-bottom: 40px;
+}
+
+.vip-new-member {
+  background-color: @bg-color;
+  // background: url('@{img-src}vip/vip_bg.jpg') center center no-repeat;
+  padding: 10px 0 30px 0;
+  text-align: center;
+  .text-line {
+    padding-bottom: 30px;
+  }
+  .title {
+    font-size: 32px;
+    color: #fff;
+    margin-bottom: 50px; 
+  }
+  .member-list {
+    margin-bottom: 30px;
+    img {
+      display: inline-block;
+      margin: 15px;
+      border: 4px solid #fff;
+      height: 80px !important;
+      width: 80px !important;
+      .es-transition;
+      &:hover {
+        border-color: @brand-primary;
+        .es-transition;
+      }
     }
   }
 }

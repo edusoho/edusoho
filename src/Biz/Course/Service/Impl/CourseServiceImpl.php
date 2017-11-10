@@ -203,10 +203,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $newCourse = $this->validateExpiryMode($newCourse);
 
-        // $entityCopy = new CourseCopy($this->biz);
-
-        // return $entityCopy->copy($sourceCourse, $newCourse);
-
         return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
@@ -318,7 +314,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ($courseSet['status'] == 'published') {

@@ -387,6 +387,8 @@ order.refund_amount: Refund amount
 order.refund_coin_amount: Refund coin
 order.refund_cash_amount: Refund Cash
 order.refund_limit: Refund limit
+order.redund_deadline: Refund Deadline
+order.refund_deadline_none: None
 order.show_refund_detail: Show refund
 order.refunded_cash_amount: Refunded cash
 order.use_coupon: Use coupon
@@ -460,7 +462,7 @@ order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_nam
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
-order.confirm.price: 订单价格
+order.confirm.price: Product price
 order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.adjust_price_modal_title: 订单改价
@@ -573,10 +575,14 @@ upload.video_quality_switcher.audio_quality.normal: Normal
 upload.video_quality_switcher.audio_quality.high: High
 import.step_one: 'Step 1: '
 import.check_datas: 'Start check datas'
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 'Import users'
 import.user_import.content_title: 'Import users'
 import.user_import.choose_file: 'Choose the file to import'
-import.user_import.browser_btn: Browse...
+import.user_import.browser_btn: Choose
 import.user_import.download_example_btn: 'Click to download the sample file'
 import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price
@@ -1677,8 +1683,8 @@ testpaper.answer.answer_card: 'Answer card'
 testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
 testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>.\n"
-testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
-testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime%</span>.'
+testpaper.answer.answer_card.exam_with_pass_score_tips: ",pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
+testpaper.answer.answer_card.limited_time_tips: ',Please answer in <span class="color-primary">%limitedTime%</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
 testpaper.answer.student: 'Answerer: '
 testpaper.answer.endtime: 'Submit time: '

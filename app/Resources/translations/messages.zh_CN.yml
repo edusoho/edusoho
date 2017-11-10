@@ -460,7 +460,7 @@ order.charge: 收费
 order.name: 订单名称
 order.product_name: 商品名称
 order.product_price: 商品价格
-order.price_amount: 应付价格
+order.price_amount: 订单价格
 order.paid_amount: 实付价格
 order.paid_coin_amount: 实付虚拟币
 order.paid_cash_amount: 实付现金
@@ -473,6 +473,8 @@ order.refund_amount: 退款总额
 order.refund_coin_amount: 退款虚拟币
 order.refund_cash_amount: 退款现金
 order.refund_limit: 退款限制
+order.refund_deadline: 退款有效期
+order.refund_deadline_none: 无
 order.show_refund_detail: 查看退款
 order.refunded_cash_amount: 已退现金
 order.use_coupon: 使用优惠券
@@ -546,7 +548,7 @@ order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_nam
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
-order.confirm.price: 订单价格
+order.confirm.price: 商品价格
 order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.before_adjust_price: 订单原价
@@ -674,10 +676,14 @@ upload.video_quality_switcher.audio_quality.high: 高品
 # 导入
 import.step_one: 步骤1
 import.check_datas: 开始校验数据
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 批量添加新用户
 import.user_import.content_title: 批量添加学员
-import.user_import.choose_file: 选择要导入的文件
-import.user_import.browser_btn: 浏览...
+import.user_import.choose_file: 选择文件
+import.user_import.browser_btn: 选择
 import.user_import.download_example_btn: 点击下载示例说明文件
 import.user_import.download_example_tips: 支持从Excel文件导入
 import.user_import.price: 购买价格
@@ -2081,11 +2087,9 @@ testpaper.answer.answer_card: 答题卡
 testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
 testpaper.answer.answer_card.one_chance_tips: 本次考试仅一次机会
 testpaper.answer.answer_card.exam_tips: >
-  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>。
-testpaper.answer.answer_card.exam_with_pass_score_tips: >
-  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>，及格为<span class="color-primary">%finishScore%</span>分
-testpaper.answer.answer_card.limited_time_tips: >
-  请在<span class="color-primary">%limitedTime%</span>内作答。
+  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
+testpaper.answer.answer_card.exam_with_pass_score_tips: '，及格为<span class="color-primary">%finishScore%</span>分'
+testpaper.answer.answer_card.limited_time_tips: '，请在<span class="color-primary">%limitedTime%</span>内作答。'
 testpaper.answer.answer_card.submit_btn: 马上交卷
 testpaper.answer.student: 答题人：
 testpaper.answer.endtime: 交卷时间：
@@ -2610,8 +2614,8 @@ classroom.remark_tips: 选填
 classroom.publish_add_student_tips: >
   %status%%name%不能添加学员，请%classroomName%发布后再添加。
 classroom.batch_add_student: 批量添加学员
-classroom.select_import_file: 选择要导入的文件
-classroom.import_file_preview: 浏览
+classroom.select_import_file: 选择文件
+classroom.import_file_preview: 选择
 classroom.download_example_file: 点击下载示例说明文件
 classroom.support_excel_import: 支持从Excel文件导入
 classroom.import_buy_price: 购买价格
@@ -4354,10 +4358,10 @@ common.orderStatus.paid: 已付款
 common.orderStatus.refunding: 退款中
 common.orderStatus.refunded: 已退款
 common.orderStatus.cancelled: 已关闭
-common.refundStatus.created: 用户已申请
+common.refundStatus.created: 退款待处理
 common.refundStatus.success: 退款成功
-common.refundStatus.failed: 退款拒绝
-common.refundStatus.cancelled: 用户已撤消
+common.refundStatus.failed: 退款关闭
+common.refundStatus.cancelled: 退款撤销
 common.logLevel.info: 提示
 common.logLevel.warning: 警告
 common.logLevel.error: 错误
@@ -6688,7 +6692,7 @@ admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
 admin.user_auth.Protection.low.Explanation: 方案说明：
-admin.user_auth.Protection.low.Verification_code: 注册时需填写验证码。
+admin.user_auth.Protection.low.Verification_code: 注册时需填写图形验证码。
 admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
@@ -7322,7 +7326,7 @@ admin.payment_setting.quickpay_tips: 因汇付宝公司事务引起网银支付�
 admin.payment_setting.wxpay: 微信支付
 admin.payment_setting.wxpay_application: 简单申请介绍
 admin.payment_setting.wxpay_application_hint: >
-  仅支持配置微信<a target="_blank" href="%wxpayUrl%">公众号支付</a>，配置后，可在PC端、微信APP、wap内选择微信支付。
+  仅支持配置微信<a target="_blank" href="%wxpayUrl%">公众号支付</a>，配置后，可在PC端、微信APP、WAP内选择微信支付。
 admin.payment_setting.wxpay_application_tips: >
   使用前提：
   <p>1、填写支付授权目录，路径：微信公众平台【微信支付】-【开发配置】-【支付授权目录】，目录地址为：网站域名/pay/center/  。</p>

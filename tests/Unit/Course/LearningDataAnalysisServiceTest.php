@@ -60,9 +60,9 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         $this->assertEquals(
             array(
                 'taskCount' => 100,
-                'progress' => 30,
+                'progress' => 30.0,
                 'taskResultCount' => 30,
-                'toLearnTasks' => array(),
+                'toLearnTasks' => null,
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
                 'planProgressProgress' => 0,

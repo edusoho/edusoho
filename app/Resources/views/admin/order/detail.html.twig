@@ -73,7 +73,7 @@
         {% endif %}
 
         <tr>
-          <td width="25%">{{ '应付价格'|trans }}</td>
+          <td width="25%">{{ 'order.price_amount'|trans }}</td>
           <td width="75%">
             <span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
           </td>

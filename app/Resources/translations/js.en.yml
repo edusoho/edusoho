@@ -122,6 +122,15 @@ uploader.filelist.head.operation: Operating
 uploader.select_one_file: Please upload one files
 uploader.file.exist: This file exist
 
+importer.import_verify_tips_start: 校验成功！一共包含
+importer.import_verify_tips_end: 条数据
+importer.import_back_btn: 返回
+importer.import_reselect_btn: 重新导入
+importer.import_confirm_btn: 确定导入
+importer.import_error: 导入出错
+importer.import_progress_data: 已经导入%number%条数据
+importer.import_finish_data: 导入成功, 总共导入%number%条数据
+
 subtitle.delete_success_hint: Delete subtitle success
 subtitle.no_subtitle_hint: None subtitle
 subtitle.upload_srt_hint: Please upload srt file format

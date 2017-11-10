@@ -80,7 +80,6 @@ class OpenCourseServiceTest extends BaseTestCase
     {
         $course1 = $this->_createLiveOpenCourse();
         $this->getOpenCourseService()->waveCourse($course1['id'], 'hitNum', 2);
-        $this->flushPool();
         $course = $this->getOpenCourseService()->getCourse($course1['id']);
 
         $this->assertEquals(2, $course['hitNum']);
@@ -565,9 +564,6 @@ class OpenCourseServiceTest extends BaseTestCase
             array(
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
@@ -579,20 +575,11 @@ class OpenCourseServiceTest extends BaseTestCase
             array(
                 'functionName' => 'waveUploadFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    'usedCount',
-                    1,
-                ),
                 'returnValue' => true,
             ),
             array(
                 'functionName' => 'waveUsedCount',
                 'runTimes' => 1,
-                'withParams' => array(
-                    'id' => 1,
-                    1,
-                ),
                 'returnValue' => true,
             ),
         );
@@ -604,6 +591,6 @@ class OpenCourseServiceTest extends BaseTestCase
      */
     protected function getOpenCourseService()
     {
-        return self::$biz->service('OpenCourse:OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 }

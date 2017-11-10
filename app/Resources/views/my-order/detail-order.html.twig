@@ -93,20 +93,6 @@
             </td>
           </tr>
         {% endif %}
-        {% if modalType in ['user'] and order.status in ['success'] and order.refund_deadline != 0 %}
-          <tr>
-            <td width="25%">
-              {{ 'order.refund_limit'|trans }}
-            </td>
-            <td width="75%">
-              {% if order.refund_deadline > date().timestamp %}
-                可在 {{ order.refund_deadline|date('Y-n-d H:i:s') }} 前申请退款
-              {% else %}
-                已错过申请退款时间（{{ order.refund_deadline|date('Y-n-d H:i:s') }} 前）
-              {% endif %}
-            </td>
-          </tr>
-        {% endif %}
       {% endif %}
 
       <tr>
@@ -119,6 +105,22 @@
           <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td>
         </tr>
       {% endif %}
+
+      {% if modalType in ['user'] and order.status in ['success'] and order.refund_deadline < date().timestamp %}
+        <tr>
+          <td width="25%">
+            {{ 'order.refund_deadline'|trans }}
+          </td>
+          <td width="75%">
+            {% if order.refund_deadline == 0 %}
+              {{ 'order.refund_deadline_none'|trans }}
+            {% else %}
+              {{ order.refund_deadline|date('Y-n-d H:i:s') }}
+            {% endif %}
+          </td>
+        </tr>
+      {% endif %}
+
     </table>
   </div>
 

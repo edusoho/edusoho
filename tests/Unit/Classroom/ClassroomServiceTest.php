@@ -1108,7 +1108,7 @@ class ClassroomServiceTest extends BaseTestCase
         $result = $this->getClassroomService()->canJoinClassroom($classroom['id']);
         $this->assertEquals($result['code'], 'success');
 
-        sleep(3);
+        sleep(1);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
         $this->assertEquals($result1['code'], 'classroom.expired');
     }

@@ -12,7 +12,7 @@ interface PayService
 
     public function findTradesByOrderSns($orderSns);
 
-    public function applyRefundByTradeSn($tradeSn);
+    public function applyRefundByTradeSn($tradeSn, $data = array());
 
     public function notifyPaid($payment, $data);
 

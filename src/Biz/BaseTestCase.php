@@ -2,14 +2,51 @@
 
 namespace Biz;
 
+use Codeages\Biz\Framework\UnitTests\DatabaseDataClearer;
+use Codeages\PluginBundle\Event\LazyDispatcher;
 use Mockery;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\Event;
 use Topxia\Service\Common\ServiceKernel;
+use PHPUnit\Framework\TestCase;
 
-class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
+class BaseTestCase extends TestCase
 {
+    /** @var $appKernel \AppKernel */
+    protected static $appKernel;
+
+    protected $biz;
+
+    /** @var $db \Doctrine\DBAL\Connection */
+    protected static $db;
+
+    /** @var $redis \Redis */
+    protected static $redis = null;
+
+    public static function setDb($db)
+    {
+        self::$db = $db;
+    }
+
+    public static function setRedis($redis)
+    {
+        self::$redis = $redis;
+    }
+
+    public static function setAppKernel(\AppKernel $appKernel)
+    {
+        self::$appKernel = $appKernel;
+    }
+
+    public function emptyDatabaseQuickly()
+    {
+        $clear = new DatabaseDataClearer(self::$db);
+        $clear->clearQuickly();
+    }
+
     protected function createService($alias)
     {
         return $this->getBiz()->service($alias);
@@ -22,7 +59,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function getCurrentUser()
     {
-        return $this->getServiceKernel()->getCurrentUser();
+        return $this->biz['user'];
     }
 
     public function getServiceKernel()
@@ -37,30 +74,43 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     public function setUp()
     {
-        $biz = $this->getBiz();
-        parent::emptyDatabaseQuickly();
-        $biz['db']->beginTransaction();
-        if (isset($biz['redis'])) {
-            $biz['redis']->flushDb();
-            //$biz['dao.cache.shared_storage']->flush();
+        $this->initBiz();
+        $this->emptyDatabaseQuickly();
+        self::$db->beginTransaction();
+        if (self::$redis) {
+            self::$redis->flushDb();
         }
+
         $this
-            ->flushPool()
             ->initDevelopSetting()
             ->initCurrentUser();
+    }
+
+    /**
+     * @return Biz
+     */
+    protected function initBiz()
+    {
+        $container = self::$appKernel->getContainer();
+        $biz = new Biz($container->getParameter('biz_config'));
+        self::$appKernel->initializeBiz($biz);
+        $biz['db'] = self::$db;
+        $biz['redis'] = self::$redis;
+
+        $this->biz = $biz;
+        $biz['dispatcher'] = function () use ($container, $biz) {
+            $dispatcher = new TestCaseLazyDispatcher($container);
+            $dispatcher->setBiz($biz);
+
+            return $dispatcher;
+        };
+
+        return $biz;
     }
 
     public function tearDown()
     {
         $biz = $this->getBiz();
-        $keys = $biz->keys();
-
-        foreach ($keys as $key) {
-            if (substr($key, 0, 1) === '@' && substr($key, 0, 8) != '@Custom:') {
-                unset($biz[$key]);
-            }
-        }
-
         $biz['db']->rollback();
     }
 
@@ -75,7 +125,8 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function initCurrentUser()
     {
-        $userService = ServiceKernel::instance()->createService('User:UserService');
+        /** @var $userService \Biz\User\Service\UserService */
+        $userService = $this->createService('User:UserService');
 
         $currentUser = new CurrentUser();
         //由于创建管理员用户时，当前用户（CurrentUser）必须有管理员权限，所以在register之前先mock一个临时管理员用户作为CurrentUser
@@ -87,6 +138,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             'org' => array('id' => 1),
         ));
 
+        $this->getServiceKernel()->setBiz($this->getBiz());
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $user = $userService->register(array(
@@ -109,31 +161,39 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
         $biz = $this->getBiz();
-        $biz['user'] = $this->getCurrentUser();
+        $biz['user'] = $currentUser;
+
+        $container = self::$appKernel->getContainer();
+        $singletonBiz = $container->get('biz');
+        $singletonBiz['user'] = $currentUser;
 
         return $this;
     }
 
     /**
-     * mock对象
-     *
-     * @param string $objectName mock的类名
-     * @param array  $params     mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
+     * 用于 mock　service　和　dao
+     * 如　$this->mockBiz(
+     *      'Course:CourseService',
+     *       array(
+     *          array(
+     *              'functionName' => 'tryManageCourse',
+     *              'returnValue' => array('id' => 1),
+     *          ),
+     *      )
+     *  );
+     * ＠param $alias  createService　或　createDao 里面的字符串
+     * ＠param $params 二维数组
+     *  array(
+     *      array(
+     *          'functionName' => 'tryManageCourse',　//必填
+     *          'returnValue' => array('id' => 1),　// 非必填，填了表示有相应的返回结果
+     *          'withParams' => array('param1', array('arrayParamKey1' => '123')),　
+     *                          //非必填，表示填了相应参数才会有相应返回结果
+     *                          //参数必须要用一个数组包含
+     *          'runTimes' => 1 //非必填，表示跑第几次会出相应结果, 不填表示无论跑多少此，结果都一样
+     *      )
+     *  )
      */
-    protected function mock($objectName, $params = array())
-    {
-        $newService = explode('.', $objectName);
-        $mockObject = Mockery::mock($newService[1]);
-
-        foreach ($params as $param) {
-            $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
-        }
-
-        $pool = array();
-        $pool[$objectName] = $mockObject;
-        $this->setPool($pool);
-    }
-
     protected function mockBiz($alias, $params = array())
     {
         $aliasList = explode(':', $alias);
@@ -141,31 +201,25 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $mockObj = Mockery::mock($className);
 
         foreach ($params as $param) {
-            $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
+            $expectation = $mockObj->shouldReceive($param['functionName']);
+
+            if (!empty($param['runTimes'])) {
+                $expectation = $expectation->times($param['runTimes']);
+            }
+
+            if (!empty($param['withParams'])) {
+                $expectation = $expectation->withArgs($param['withParams']);
+            } else {
+                $expectation = $expectation->withAnyArgs();
+            }
+
+            if (!empty($param['returnValue'])) {
+                $expectation->andReturn($param['returnValue']);
+            }
         }
 
         $biz = $this->getBiz();
         $biz['@'.$alias] = $mockObj;
-    }
-
-    protected function setPool($object)
-    {
-        $reflectionObject = new \ReflectionObject($this->getServiceKernel());
-        $pool = $reflectionObject->getProperty('pool');
-        $pool->setAccessible(true);
-        $value = $pool->getValue($this->getServiceKernel());
-        $objects = array_merge($value, $object);
-        $pool->setValue($this->getServiceKernel(), $objects);
-    }
-
-    protected function flushPool()
-    {
-        $reflectionObject = new \ReflectionObject($this->getServiceKernel());
-        $pool = $reflectionObject->getProperty('pool');
-        $pool->setAccessible(true);
-        $pool->setValue($this->getServiceKernel(), array());
-
-        return $this;
     }
 
     protected static function getContainer()
@@ -180,7 +234,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
      */
     protected function getBiz()
     {
-        return self::$biz;
+        return $this->biz;
     }
 
     protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())
@@ -207,6 +261,61 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     {
         $permissions = new \ArrayObject();
         $permissions['admin_course_content_manage'] = true;
+        /* @var $currentUser CurrentUser */
         $currentUser->setPermissions($permissions);
+    }
+}
+
+class TestCaseLazyDispatcher extends LazyDispatcher
+{
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var Biz
+     */
+    private $biz;
+
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+        $this->container = $container;
+    }
+
+    public function dispatch($eventName, Event $event = null)
+    {
+        if (null === $event) {
+            $event = new Event();
+        }
+
+        $event->setDispatcher($this);
+        $event->setName($eventName);
+
+        $subscribers = $this->container->get('codeags_plugin.event.lazy_subscribers');
+
+        $callbacks = $subscribers->getCallbacks($eventName);
+
+        foreach ($callbacks as $callback) {
+            if ($event->isPropagationStopped()) {
+                break;
+            }
+
+            list($id, $method) = $callback;
+            if ($this->container->has($id)) {
+                $subscriber = $this->container->get($id);
+                $className = get_class($subscriber);
+                $newSubscriber = new $className($this->biz);
+                call_user_func(array($newSubscriber, $method), $event);
+            }
+        }
+
+        return $event;
+    }
+
+    public function setBiz($biz)
+    {
+        $this->biz = $biz;
     }
 }
