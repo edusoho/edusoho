@@ -43,7 +43,6 @@ class TaskServiceTest extends BaseTestCase
         $updatedTask = $this->getTaskDao()->update($savedTask['id'], array('copyId' => 10));
         $result = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($task['fromCourseId'], 10);
         $this->assertEquals($updatedTask['id'], $result['id']);
-
     }
 
     /**
