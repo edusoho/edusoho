@@ -3,6 +3,7 @@
 namespace Tests\Unit\Task;
 
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
@@ -10,6 +11,41 @@ use Biz\BaseTestCase;
 
 class TaskServiceTest extends BaseTestCase
 {
+    public function testGetCourseTask()
+    {
+        $task = $this->mockTask();
+        $savedTask = $this->getTaskService()->createTask($task);
+        $result = $this->getTaskService()->getCourseTask($task['fromCourseId'], $savedTask['id']);
+        $this->assertEquals($savedTask['id'], $result['id']);
+        $this->assertEquals($savedTask['courseId'], $result['courseId']);
+    }
+
+    public function testGetCourseTaskWithNonExistTaskId()
+    {
+        $task = $this->mockTask();
+        $savedTask = $this->getTaskService()->createTask($task);
+        $result = $this->getTaskService()->getCourseTask($task['fromCourseId'], $savedTask['id'] + 100);
+        $this->assertEquals(array(), $result);
+    }
+
+    public function testGetCourseTaskWithNonExistCourseId()
+    {
+        $task = $this->mockTask();
+        $savedTask = $this->getTaskService()->createTask($task);
+        $result = $this->getTaskService()->getCourseTask($task['fromCourseId'] + 100, $savedTask['id']);
+        $this->assertEquals(array(), $result);
+    }
+
+    public function testGetCourseTaskByCourseIdAndCopyId()
+    {
+        $task = $this->mockTask();
+        $savedTask = $this->getTaskService()->createTask($task);
+        $updatedTask = $this->getTaskDao()->update($savedTask['id'], array('copyId' => 10));
+        $result = $this->getTaskService()->getCourseTaskByCourseIdAndCopyId($task['fromCourseId'], 10);
+        $this->assertEquals($updatedTask['id'], $result['id']);
+
+    }
+
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
@@ -252,5 +288,13 @@ class TaskServiceTest extends BaseTestCase
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    protected function getTaskDao()
+    {
+        return $this->createDao('Task:TaskDao');
     }
 }
