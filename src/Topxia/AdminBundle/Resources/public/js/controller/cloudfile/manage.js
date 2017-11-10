@@ -520,7 +520,7 @@ define(function(require, exports, module) {
         });
 
         var $panel = $('#materials-form');
-        require('../../../../topxiaweb/js/util/batch-select')($panel);
+        require('../../util/batch-select')($panel);
 
     }
 
