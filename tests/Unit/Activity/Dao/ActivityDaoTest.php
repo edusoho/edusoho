@@ -77,8 +77,8 @@ class ActivityDaoTest extends BaseDaoTestCase
         $activity2 = $this->mockActivity(array('title' => 'activity2', 'mediaId' => 1));
         $activity3 = $this->mockActivity(array('title' => 'activity3', 'mediaType' => 'video'));
         $activity4 = $this->mockActivity(array(
-            'title' => 'activity4', 
-            'mediaType' => 'video', 
+            'title' => 'activity4',
+            'mediaType' => 'video',
             'mediaId' => 1,
             'fromCourseId' => 2
         ));
