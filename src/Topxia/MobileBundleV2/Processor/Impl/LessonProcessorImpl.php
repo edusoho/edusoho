@@ -677,26 +677,12 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $content = $lesson['content'];
         $content = $this->controller->convertAbsoluteUrl($this->request, $content);
 
-        //$resourceUrl = ($ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/global_file/{$file['globalId']}/player?token={$result['token']}";
-
         $response = $this->controller->render('material-lib/player/global-document-player.html.twig', array(
                 'globalId' => $file['globalId'],
                 'token' => $result['token'],
             ));
 
-        /*$lesson['content'] = array(
-            'resource' => $resourceUrl,
-            'previewUrl' => $resourceUrl,
-        );*/
         $lesson['content'] = $response->getContent();
-        
-        /*$render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-            'pdfUri' => $file['pdf'],
-            'swfUri' => $file['swf'],
-            'title' => $lesson['title'],
-        ));
-
-        $lesson['content'] = $render->getContent();*/
 
         return $lesson;
     }
