@@ -13,8 +13,8 @@ class SettingTest extends BaseTestCase
     {
         $api = new Setting(new Container(), $this->getBiz());
 
-        $apiRequest = new ApiRequest('', '', array('type' => 'register'), array());
-        $result = $api->get($apiRequest);
+        $apiRequest = new ApiRequest('', '', array());
+        $result = $api->get($apiRequest, 'register');
 
         $this->assertEquals(array('mode' => 'closed'), $result);
 
@@ -38,7 +38,7 @@ class SettingTest extends BaseTestCase
                 array('functionName' => 'get', 'returnValue' => $act)
             ));
 
-            $result = $api->get($apiRequest);
+            $result = $api->get($apiRequest, 'register');
             $this->assertEquals($expected[$key], $result);
         }
 

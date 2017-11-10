@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Setting;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -12,10 +13,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Setting extends AbstractResource
 {
-    public function get(ApiRequest $request)
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $type)
     {
-        $type = $request->query->get('type');
-
         if (!in_array($type, array('register'))) {
             throw new BadRequestHttpException('Type is error', null, ErrorCode::INVALID_ARGUMENT);
         }

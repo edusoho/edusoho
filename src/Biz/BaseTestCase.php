@@ -57,6 +57,9 @@ class BaseTestCase extends TestCase
         return $this->getBiz()->Dao($alias);
     }
 
+    /**
+     * @return CurrentUser
+     */
     protected function getCurrentUser()
     {
         return $this->biz['user'];
