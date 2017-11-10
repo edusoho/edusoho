@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Order;
+namespace ApiBundle\Api\Resource\Setting;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;

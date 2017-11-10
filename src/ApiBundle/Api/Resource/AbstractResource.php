@@ -36,10 +36,10 @@ abstract class AbstractResource
 
     const PREFIX_SORT_DESC = '-';
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz = $container->get('biz');
+        $this->biz = $biz;
     }
 
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
