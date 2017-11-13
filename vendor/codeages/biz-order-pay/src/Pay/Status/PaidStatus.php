@@ -16,8 +16,8 @@ class PaidStatus extends AbstractStatus
         return $this->getPayStatus(RefundingStatus::NAME)->process();
     }
 
-    public function refunded()
+    public function refunded($data=array())
     {
-        return $this->getPayStatus(RefundedStatus::NAME)->process();
+        return $this->getPayStatus(RefundedStatus::NAME)->process($data);
     }
 }

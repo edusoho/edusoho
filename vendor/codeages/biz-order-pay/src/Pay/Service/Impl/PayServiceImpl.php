@@ -245,7 +245,6 @@ class PayServiceImpl extends BaseService implements PayService
 
             if ($trade['cash_amount'] != $data['pay_amount']) {
                 $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.pay_amount.mismatch', $data['trade_sn'], "{$data['trade_sn']}实际支付的价格{$data['pay_amount']}和交易记录价格{$trade['cash_amount']}不匹配，状态为：{$trade['status']}", $data);
-                return $trade;
             }
 
             try {
@@ -300,7 +299,7 @@ class PayServiceImpl extends BaseService implements PayService
         return $this->getTradeContext($trade['id'])->closed();
     }
 
-    public function applyRefundByTradeSn($tradeSn)
+    public function applyRefundByTradeSn($tradeSn, $data = array())
     {
         $trade = $this->getPayTradeDao()->getByTradeSn($tradeSn);
         if (in_array($trade['status'], array('refunding', 'refunded'))) {
@@ -315,7 +314,7 @@ class PayServiceImpl extends BaseService implements PayService
             return $this->refundPlatformTrade($trade);
         }
 
-        $trade = $this->updateTradeToRefunded($tradeSn, array());
+        $trade = $this->updateTradeToRefunded($tradeSn, $data);
 
         return $trade;
     }
