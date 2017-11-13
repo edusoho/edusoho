@@ -379,6 +379,7 @@ body.cd-design {
 .cd-content {
   position: relative;
   border-radius: 4px;
+  margin-top: 24px;
   margin-bottom: 24px;
 }
 .cd-main {
@@ -2484,7 +2485,6 @@ body.cd-design {
   border-radius: 4px;
 }
 .cd-design .es-header {
-  margin-bottom: 24px;
   -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.01), 0 4px 4px 0 rgba(0, 0, 0, 0.04);
   -moz-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.01), 0 4px 4px 0 rgba(0, 0, 0, 0.04);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.01), 0 4px 4px 0 rgba(0, 0, 0, 0.04);
