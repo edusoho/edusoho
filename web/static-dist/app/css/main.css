@@ -6618,6 +6618,76 @@ a.transition:hover {
 .quality-switcher .quality-actions {
   margin-top: 10px;
 }
+ .noUi-target {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border: none;
+}
+.noUi-horizontal {
+  width: 300px;
+  height: 4px;
+}
+.noUi-horizontal .noUi-handle {
+  height: 14px;
+  width: 14px;
+  left: -7px;
+  top: -5px;
+  background-color: #fff;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.noUi-horizontal .noUi-handle:before,
+.noUi-horizontal .noUi-handle:after {
+  display: none;
+}
+.noUi-horizontal .noUi-handle:hover .score-tooltip .tooltip {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.noUi-horizontal .noUi-handle .score-tooltip {
+  position: absolute;
+  top: -34px;
+  left: 0;
+  width: 150px ;
+  margin-left: -75px;
+  text-align: center;
+}
+.noUi-horizontal .noUi-handle .score-tooltip .tooltip {
+  position: relative;
+  display: inline-block;
+}
+.noUi-horizontal .noUi-tooltip {
+  bottom: -33px;
+  background-color: transparent;
+  border-color: transparent;
+  color: #43bc60;
+}
+.noUi-base {
+  background-color: #e1e1e1;
+  height: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.noUi-connect {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background-color: #43bc60;
+}
 .ckeditor-balloon-uploader .balloon-filelist ul {
   max-height: 200px!important;
 }
