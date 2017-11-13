@@ -1,0 +1,15 @@
+{% extends 'wap/third-part/third-part-login-layout.html.twig' %}
+
+{% block page_title %}
+  {{ '绑定账号'|trans }}
+{% endblock %}
+
+{% block panel_body %}
+  <div class="alert cd-alert cd-alert-warning">
+    {{ '为获取更优质服务，请绑定您的手机或邮箱账号'|trans }}
+  </div>
+  <div class="avatar-wrap">
+    <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+  </div>
+{% endblock %}
+

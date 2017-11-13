@@ -1,0 +1,21 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block full_content %}
+  <div class="cd-login-section">
+    <div class="cd-panel third-part-panel">
+      {% block panel %}
+        <div class="cd-panel-heading third-part-panel__heading">
+          {% block panel_heading %}
+            <div class="cd-panel-title">
+              {% block page_title %}{% endblock %}
+            </div>
+          {% endblock %}
+        </div>
+        <div class="cd-panel-body third-part-panel__body">
+          {% block panel_body %}
+          {% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

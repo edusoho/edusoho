@@ -34,6 +34,12 @@ class LoginController extends BaseController
         ));
     }
 
+    public function thirdPartAction(Request $request)
+    {
+        return $this->render('wap/third-part/third-part-login.html.twig', array(
+        ));
+    }
+
     public function ajaxAction(Request $request)
     {
         return $this->render('login/ajax.html.twig', array(
