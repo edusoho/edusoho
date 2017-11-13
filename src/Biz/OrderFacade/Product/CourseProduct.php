@@ -34,6 +34,7 @@ class CourseProduct extends Product implements OrderStatusCallback
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->title = $this->courseSet['title'].'-'.$course['title'];
+        $this->price = $course['price'];
         $this->originPrice = $course['originPrice'];
         $this->maxRate = $course['maxRate'];
         $this->cover = $this->courseSet['cover'];
