@@ -5860,6 +5860,8 @@ admin.order.logs.empty_hint: 'No transaction log'
 admin.order_coin.refund.success.tips: Automatic refund after submission
 admin.order_cash.refund.success.tips: Manual refund under line
 admin.order_refund_handle.success: Successful refund request operation
+#TODO trans
+admin.order_refund.audit.tip: 用户支付的虚拟币实时返回账户，支付的现金需线下人工联系退款，此处仅作为记录。
 
 admin.cloud_setting.trial_hint: 'You are using a trail version and cannot proceed with this operation. Please contact our business manager to purchase a licence.'
 admin.cloud_setting.package_info: 'Package info'

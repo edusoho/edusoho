@@ -7429,6 +7429,7 @@ admin.order_cash_coin_refund.audit.tips: 虚拟币款项，将会在点击“提
 admin.order_coin.refund.success.tips: 提交后自动退款
 admin.order_cash.refund.success.tips: 需线下手动退款
 admin.order_refund_handle.success: 退款已处理
+admin.order_refund.audit.tip: 用户支付的虚拟币实时返回账户，支付的现金需线下人工联系退款，此处仅作为记录。
 admin.order.logs.content_title: 订单详情
 admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
