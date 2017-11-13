@@ -49,6 +49,18 @@
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
+   
+    {# 
+      兼容样式，防止主题重写了stylesheet-webpack.html.twig, 下一版本移回stylesheet-webpack.html.twig
+    #}
+    <link href="{{ asset('static-dist/app/css/main-v2.css') }}" rel="stylesheet" />
+    {% if mobile %}
+      <link href="{{ asset('static-dist/app/css/mobile.css') }}" rel="stylesheet" />
+    {% endif %} 
+    {#
+     兼容样式，防止主题重写了stylesheet-webpack.html.twig, 下一版本移回stylesheet-webpack.html.twig
+    #}
+    
     {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
   {% endblock %}
 
