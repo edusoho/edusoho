@@ -68,6 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCrontabJobNum',
+            'updateCloudApp',
         );
 
         $funcNames = array();
@@ -110,6 +111,15 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection = $this->getConnection();
         $connection->exec("update biz_scheduler_job bsj inner join biz_scheduler_job_fired bsjf on bsj.id=bsjf.job_id set status='failure' where bsjf.status='executing' and bsj.name='Scheduler_MarkExecutingTimeoutJob';");
+
+        return 1;
+    }
+
+    protected function updateCloudApp()
+    {
+        $connection = $this->getConnection();
+        $connection->exec("ALTER TABLE `cloud_app` MODIFY `type` varchar(64) NOT NULL DEFAULT 'plugin' COMMENT '应用类型(core系统，plugin插件应用, theme主题应用)';");
+        $connection->exec("UPDATE `cloud_app` SET type ='core' WHERE code = 'MAIN';");
 
         return 1;
     }
