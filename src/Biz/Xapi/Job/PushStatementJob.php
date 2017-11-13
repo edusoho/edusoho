@@ -13,32 +13,37 @@ class PushStatementJob extends AbstractJob
 {
     public function execute()
     {
-        $condition = array(
-            'status' => 'created',
-        );
-        $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
-        $statementIds = ArrayToolkit::column($statements, 'id');
+        try{
+            $condition = array(
+                'status' => 'created',
+            );
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
+            $statementIds = ArrayToolkit::column($statements, 'id');
 
-        $pushStatements = array();
-        $pushData = array();
-        foreach ($statements as $statement) {
-            $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
-            $pushStatement = $push->package($statement);
-            $pushStatements[] = $pushStatement;
-            $pushData[$statement['id']] = $pushStatement;
+            $pushStatements = array();
+            $pushData = array();
+            foreach ($statements as $statement) {
+                $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
+                $pushStatement = $push->package($statement);
+                $pushStatements[] = $pushStatement;
+                $pushData[$statement['id']] = $pushStatement;
+            }
+
+            if (empty($pushStatements)) {
+                return;
+            }
+
+            $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
+            $result = $this->createXAPIService()->pushStatements($pushStatements);
+            file_put_contents('1.txt', json_encode($result).PHP_EOL, FILE_APPEND);
+
+            if ($result) {
+                $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
+            }
+        } catch (\Exception $e) {
+            file_put_contents('2.txt', $e->getMessage());
         }
 
-        if (empty($pushStatements)) {
-            return;
-        }
-
-        $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
-        $result = $this->createXAPIService()->pushStatements($pushStatements);
-        file_put_contents('1.txt', json_encode($result));
-
-        if ($result) {
-            $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
-        }
     }
 
     public function createXAPIService()
