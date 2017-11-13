@@ -190,7 +190,7 @@ class XAPIService extends BaseService
                 )
             ),
         );
-        $statement['result'] = $result;
+        $statement['result'] = empty($result) ? (object)$result : $result;
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -228,7 +228,7 @@ class XAPIService extends BaseService
                 )
             ),
         );
-        $statement['result'] = $result;
+        $statement['result'] = empty($result) ? (object)$result : $result;
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
@@ -266,7 +266,7 @@ class XAPIService extends BaseService
                 )
             ),
         );
-        $statement['result'] = $result;
+        $statement['result'] = empty($result) ? (object)$result : $result;
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
