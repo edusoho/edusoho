@@ -13,7 +13,7 @@ class PushStatementJob extends AbstractJob
 {
     public function execute()
     {
-        try{
+        try {
             $condition = array(
                 'status' => 'created',
             );
@@ -43,7 +43,6 @@ class PushStatementJob extends AbstractJob
         } catch (\Exception $e) {
             file_put_contents('2.txt', $e->getMessage());
         }
-
     }
 
     public function createXAPIService()
