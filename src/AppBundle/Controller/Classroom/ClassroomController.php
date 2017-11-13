@@ -43,7 +43,7 @@ class ClassroomController extends BaseController
         $category = $this->getCategoryService()->getCategory($classroom['categoryId']);
         $parentCategory = array();
 
-        if (!empty($category) && $category['parentId'] != 0) {
+        if (!empty($category) && 0 != $category['parentId']) {
             $parentCategory = $this->getCategoryService()->getCategory($category['parentId']);
         }
 
@@ -157,7 +157,7 @@ class ClassroomController extends BaseController
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
-        if ($member && $member['locked'] == '0') {
+        if ($member && '0' == $member['locked']) {
             if (in_array('student', $member['role'])) {
                 return $this->redirect($this->generateUrl('classroom_courses', array(
                     'classroomId' => $id,
@@ -179,7 +179,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
-            if ($previewAs == 'guest') {
+            if ('guest' == $previewAs) {
                 return;
             }
 
@@ -203,7 +203,7 @@ class ClassroomController extends BaseController
                 'deadline' => $deadline,
             );
 
-            if ($previewAs == 'member') {
+            if ('member' == $previewAs) {
                 $member['role'] = array('member');
             }
         }
@@ -315,7 +315,7 @@ class ClassroomController extends BaseController
             $price += $course['price'];
         }
 
-        if ($member && $member['locked'] == '0') {
+        if ($member && '0' == $member['locked']) {
             return $this->render('classroom/role.html.twig', array(
                 'classroom' => $classroom,
                 'courses' => $courses,
@@ -554,7 +554,7 @@ class ClassroomController extends BaseController
     {
         $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
-        $classroom = empty($classroomIds) || count($classroomIds) == 0 ? null : $this->getClassroomService()->getClassroom($classroomIds[0]);
+        $classroom = empty($classroomIds) || 0 == count($classroomIds) ? null : $this->getClassroomService()->getClassroom($classroomIds[0]);
 
         return $this->render('classroom/classroom-block.html.twig', array(
             'classroom' => $classroom,
@@ -601,7 +601,7 @@ class ClassroomController extends BaseController
         $priceType = 'RMB';
 
         $coinSetting = $this->getSettingService()->get('coin');
-        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+        $coinEnable = isset($coinSetting['coin_enabled']) && 1 == $coinSetting['coin_enabled'];
 
         if ($coinEnable && !empty($coinSetting) && array_key_exists('price_type', $coinSetting)) {
             $priceType = $coinSetting['price_type'];
@@ -609,7 +609,7 @@ class ClassroomController extends BaseController
 
         $totalPrice = $classroom['price'];
 
-        if ($priceType == 'Coin') {
+        if ('Coin' == $priceType) {
             $totalPrice = $totalPrice * $coinSetting['cash_rate'];
         }
 
@@ -629,9 +629,9 @@ class ClassroomController extends BaseController
         $cashRate = $this->getCashRate();
 
         foreach ($courses as $key => $course) {
-            if ($priceType == 'RMB') {
+            if ('RMB' == $priceType) {
                 $coursesTotalPrice += $course['originPrice'];
-            } elseif ($priceType == 'Coin') {
+            } elseif ('Coin' == $priceType) {
                 $coursesTotalPrice += $course['originPrice'] * $cashRate;
             }
         }
@@ -647,7 +647,7 @@ class ClassroomController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($classroom['status'] != 'published') {
+        if ('published' != $classroom['status']) {
             throw $this->createNotFoundException();
         }
     }
@@ -710,7 +710,7 @@ class ClassroomController extends BaseController
     protected function getCashRate()
     {
         $coinSetting = $this->getSettingService()->get('coin');
-        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+        $coinEnable = isset($coinSetting['coin_enabled']) && 1 == $coinSetting['coin_enabled'];
         $cashRate = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting['cash_rate'] : 1;
 
         return $cashRate;

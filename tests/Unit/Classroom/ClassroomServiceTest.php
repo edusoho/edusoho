@@ -228,7 +228,7 @@ class ClassroomServiceTest extends BaseTestCase
                             'recommended' => 1,
                             'recommendedSeq' => 11,
                             'recommendedTime' => time(),
-                        )
+                        ),
                     ),
                 ),
             )
@@ -241,7 +241,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'withParams' => array(
                         'classroom',
                         'recommend',
-                        "推荐班级《title》(#1),序号为11"
+                        '推荐班级《title》(#1),序号为11',
                     ),
                 ),
             )
@@ -281,7 +281,7 @@ class ClassroomServiceTest extends BaseTestCase
                             'recommended' => 0,
                             'recommendedTime' => 0,
                             'recommendedSeq' => 100,
-                        )
+                        ),
                     ),
                 ),
             )
@@ -294,7 +294,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'withParams' => array(
                         'classroom',
                         'cancel_recommend',
-                        "取消推荐班级《title》(#1)"
+                        '取消推荐班级《title》(#1)',
                     ),
                 ),
             )
@@ -631,11 +631,11 @@ class ClassroomServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'get',
                     'returnValue' => array(
-                        'id' => 1, 
+                        'id' => 1,
                         'title' => 'title',
                         'smallPicture' => 'smallPicture',
                         'middlePicture' => 'middlePicture',
-                        'largePicture' => 'largePicture'
+                        'largePicture' => 'largePicture',
                     ),
                     'withParams' => array(1),
                 ),
@@ -644,7 +644,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'returnValue' => array('id' => 1, 'title' => 'title'),
                     'withParams' => array(
                         1,
-                        array('smallPicture' => 'uri1', 'middlePicture' => 'uri2', 'largePicture' => 'uri3')
+                        array('smallPicture' => 'uri1', 'middlePicture' => 'uri2', 'largePicture' => 'uri3'),
                     ),
                 ),
             )
@@ -657,7 +657,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'returnValue' => array(
                         array('id' => 1, 'uri' => 'uri1'),
                         array('id' => 2, 'uri' => 'uri2'),
-                        array('id' => 3, 'uri' => 'uri3')
+                        array('id' => 3, 'uri' => 'uri3'),
                     ),
                     'withParams' => array(array(1, 2, 3)),
                 ),
@@ -690,12 +690,12 @@ class ClassroomServiceTest extends BaseTestCase
                     'withParams' => array(
                         'classroom',
                         'update_picture',
-                        "更新课程《title》(#1)图片",
+                        '更新课程《title》(#1)图片',
                         array(
                             'smallPicture' => 'uri1',
                             'middlePicture' => 'uri2',
                             'largePicture' => 'uri3',
-                        )
+                        ),
                     ),
                     'runTimes' => 1,
                 ),
@@ -705,7 +705,7 @@ class ClassroomServiceTest extends BaseTestCase
                     'withParams' => array(
                         'classroom',
                         'update',
-                        "更新班级《title》(#1)",
+                        '更新班级《title》(#1)',
                     ),
                     'runTimes' => 1,
                 ),
@@ -716,7 +716,7 @@ class ClassroomServiceTest extends BaseTestCase
             array(
                 array('id' => 1, 'type' => 'small'),
                 array('id' => 2, 'type' => 'middle'),
-                array('id' => 3, 'type' => 'large')
+                array('id' => 3, 'type' => 'large'),
             )
         );
 
@@ -1257,7 +1257,7 @@ class ClassroomServiceTest extends BaseTestCase
                             'role' => array('teacher'),
                             'remark' => '',
                             'createdTime' => time(),
-                        )
+                        ),
                     ),
                 ),
             )
@@ -1404,11 +1404,11 @@ class ClassroomServiceTest extends BaseTestCase
         );
         $this->getClassroomService()->updateAssistants(1, array(1, 2));
         $this->getClassroomMemberDao()->shouldHaveReceived(
-            'update', 
+            'update',
             array(1, array('role' => array('student', 'assistant')))
         );
         $this->getClassroomMemberDao()->shouldHaveReceived(
-            'update', 
+            'update',
             array(3, array('role' => array('student')))
         );
         $this->getClassroomDao()->shouldHaveReceived('update');
@@ -2361,16 +2361,16 @@ class ClassroomServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'get',
                     'returnValue' => array(
-                        'id' => 1, 
-                        'title' => 'title', 
-                        'status' => 'published', 
-                        'buyable' => 1, 
-                        'expiryMode' => 'forever', 
-                        'price' => 0, 
-                        'expiryValue' => 0, 
-                        'middlePicture' => 'middlePicture', 
+                        'id' => 1,
+                        'title' => 'title',
+                        'status' => 'published',
+                        'buyable' => 1,
+                        'expiryMode' => 'forever',
+                        'price' => 0,
+                        'expiryValue' => 0,
+                        'middlePicture' => 'middlePicture',
                         'about' => 'test',
-                        'showable' => 1
+                        'showable' => 1,
                     ),
                     'withParams' => array(1),
                 ),
