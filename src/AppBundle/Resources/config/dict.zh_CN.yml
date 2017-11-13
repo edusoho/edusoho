@@ -53,7 +53,7 @@ orderStatus:
 orderItemType:
     course: 教学计划
     classroom: 班级
-    vip: VIP
+    vip: 会员
 
 refundItemType:
     course: 教学计划
