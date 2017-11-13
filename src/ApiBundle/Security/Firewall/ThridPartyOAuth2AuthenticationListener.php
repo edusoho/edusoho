@@ -5,11 +5,10 @@ namespace ApiBundle\Security\Firewall;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ThridPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
 {
-    const TOKEN_HEADER = 'X-Auth-Token';
-
     public function handle(Request $request)
     {
         if (null !== $this->getTokenStorage()->getToken()) {
@@ -21,18 +20,52 @@ class ThridPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
             && $type = $request->query->get('type')) {
 
             $client = $this->createOAuthClient($type);
-            $user = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $type));
+            $thirdPartyUser = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $type));
 
+            $this->getUserTokenFromAccessToken($request, $thirdPartyUser, $type);
 
             return;
         }
     }
 
+    private function getUserTokenFromAccessToken(Request $request, $thirdPartyUser, $type)
+    {
+        $user = $this->getUserService()->getUserBindByTypeAndFromId($type, $thirdPartyUser);
+
+        if ($user) {
+            $token = $this->createTokenFromRequest($request, $user['id']);
+            $this->getTokenStorage()->setToken($token);
+        }
+
+        return null;
+    }
+
     private function makeFakeToken($type, $accessToken, $openid)
     {
         switch ($type) {
-
+            case 'weibo':
+                $token = array(
+                    'uid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            case 'qq':
+                $token = array(
+                    'openid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            case 'weixin':
+                $token = array(
+                    'openid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            default:
+                throw new BadRequestHttpException('Bad type');
         }
+
+        return $token;
     }
 
     /**
