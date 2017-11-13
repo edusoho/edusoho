@@ -733,6 +733,7 @@ class AnalysisController extends BaseController
                 'ASC'
             );
             $data = $this->fillAnalysisData($condition, $paidCourseData);
+            $count = $this->sumTrendDataCount($paidCourseData);
         }
 
         $courseIds = ArrayToolkit::column($paidCourseDetails, 'course_id'); //订单中的课程
