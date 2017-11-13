@@ -197,17 +197,23 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
     public function adjustOrderPrice($orderId, $newPayAmount)
     {
-        $adjustDeduct = $this->getWorkflowService()->adjustPrice($orderId, $newPayAmount);
+        $order = $this->getOrderService()->getOrder($orderId);
 
-        $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(
-            'title' => $adjustDeduct['order']['title'],
-            'orderId' => $orderId,
-            'oldPrice' => MathToolkit::simple($newPayAmount + $adjustDeduct['deduct_amount'], 0.01),
-            'newPrice' => MathToolkit::simple($newPayAmount, 0.01),
-            'adjust_amount' => MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01),
-        ));
+        if ($newPayAmount != $order['pay_amount']) {
+            $adjustDeduct = $this->getWorkflowService()->adjustPrice($orderId, $newPayAmount);
 
-        return $adjustDeduct;
+            $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(
+                'title' => $adjustDeduct['order']['title'],
+                'orderId' => $orderId,
+                'oldPrice' => MathToolkit::simple($newPayAmount + $adjustDeduct['deduct_amount'], 0.01),
+                'newPrice' => MathToolkit::simple($newPayAmount, 0.01),
+                'adjust_amount' => MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01),
+            ));
+
+            return $adjustDeduct;
+        }
+
+        return null;
     }
 
     public function getOrderAdjustInfo($order)

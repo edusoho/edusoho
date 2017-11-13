@@ -166,6 +166,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function adjustPrice($orderId, $newPayAmount)
     {
         $order = $this->getOrderService()->getOrder($orderId);
+
+        if ($order['pay_amount'] == $newPayAmount) {
+            return null;
+        }
+
         $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($orderId);
         list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
         $adjustAmount = $order['price_amount'] - $newPayAmount - $totalDeductAmountExcludeAdjust;
