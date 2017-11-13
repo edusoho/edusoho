@@ -1980,8 +1980,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function createOrder($classroomId, $userId, $params, $source)
     {
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
-        $courseProduct->price = $params['price'];
+        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
 
         $params = array(
             'created_reason' => $params['remark'],
@@ -1989,7 +1988,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'create_extra' => $params,
         );
 
-        return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
+        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
     }
 
     protected function createOperateRecord($member, $operateType, $reason)

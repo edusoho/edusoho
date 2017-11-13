@@ -1107,7 +1107,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function createOrder($courseId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
-        $courseProduct->price = $data['price'];
 
         $params = array(
             'created_reason' => $data['remark'],
