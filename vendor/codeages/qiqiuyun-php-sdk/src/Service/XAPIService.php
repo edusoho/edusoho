@@ -149,7 +149,6 @@ class XAPIService extends BaseService
         );
 
         $statement['result'] = array(
-            'score' => $result['score'],
             'success' => $result['success'],
             'response' => $result['response'],
             'duration' => empty($result['duration']) ? '' : $this->convertTime($result['duration'])
