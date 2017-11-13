@@ -22,7 +22,7 @@ class OrderExtension extends \Twig_Extension
         'created' => 'notPaid',
         'paying' => 'notPaid',
         'closed' => 'closed',
-        'refunded' => 'closed',
+        'refunded' => 'refunded',
         'fail' => 'paid',
         'paid' => 'paid',
         'refunding' => 'paid',
