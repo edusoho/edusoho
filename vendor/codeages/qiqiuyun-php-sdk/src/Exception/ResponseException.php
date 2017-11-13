@@ -15,7 +15,7 @@ class ResponseException extends SDKException
         $this->responseData = json_decode($response->getBody(), true);
 
         $errorCode = $this->get('code', -1);
-        file_put_contents('3.txt', json_encode($response), FILE_APPEND);
+        file_put_contents('3.txt', $response->getBody(), FILE_APPEND);
         $errorMessage = $this->get('message', 'Unknow error');
 
         parent::__construct($errorMessage, $errorCode);
