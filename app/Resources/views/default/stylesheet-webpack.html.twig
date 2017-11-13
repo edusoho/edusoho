@@ -16,7 +16,3 @@
 {% if navigationcolor != 'default' %}
   <link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
-
-{{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
-
-{% include 'stylesheet/stylesheet-custom.html.twig' %}
