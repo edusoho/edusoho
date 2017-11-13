@@ -48,8 +48,8 @@
 
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
-    {% include 'css_loader.html.twig' %}
-   
+    {% include 'css_loader.html.twig' %} 
+    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
     {# 
       兼容样式，防止主题重写了stylesheet-webpack.html.twig, 下一版本移回stylesheet-webpack.html.twig
     #}
@@ -60,8 +60,6 @@
     {#
      兼容样式，防止主题重写了stylesheet-webpack.html.twig, 下一版本移回stylesheet-webpack.html.twig
     #}
-    
-    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}
