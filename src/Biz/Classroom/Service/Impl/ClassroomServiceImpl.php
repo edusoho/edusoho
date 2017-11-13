@@ -6,6 +6,7 @@ use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Exception\UnableJoinException;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -972,7 +973,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if ($params['price'] > 0) {
                 //支付完成后会自动加入课程
-                $order = $this->createOrder($classroom['id'], $user['id'], $params['price'], 'outside', $params['remark']);
+                $order = $this->createOrder($classroom['id'], $user['id'], $params, 'outside');
             } else {
                 $info = array(
                     'orderId' => 0,
@@ -1977,14 +1978,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    protected function createOrder($classroomId, $userId, $price, $source, $remark)
+    protected function createOrder($classroomId, $userId, $params, $source)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
-        $courseProduct->price = $price;
+        $courseProduct->price = $params['price'];
 
         $params = array(
-            'created_reason' => $remark,
+            'created_reason' => $params['remark'],
             'source' => $source,
+            'create_extra' => $params,
         );
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
@@ -2151,6 +2153,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
     protected function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
