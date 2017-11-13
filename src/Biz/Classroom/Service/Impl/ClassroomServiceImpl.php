@@ -720,11 +720,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->count($conditions);
     }
 
-    public function findMemberUserIdsByClassroomId($classroomId)
-    {
-        return $this->getClassroomMemberDao()->findMemberIdsByClassroomId($classroomId);
-    }
-
     public function getClassroomMember($classroomId, $userId)
     {
         $member = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroomId, $userId);

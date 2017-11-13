@@ -2601,10 +2601,6 @@ classroom_vip_buy:
     path: /classroom/{id}/vip_buy
     defaults: { _controller: AppBundle:Classroom/Classroom:becomeStudent }
 
-classroom_member_ids:
-    path: /classroom/{id}/member_ids
-    defaults: { _controller: AppBundle:Classroom/Classroom:memberIds }
-
 classroom_thread_members_become:
     path: /classroom/{classroomId}/thread/{threadId}/members/become
     defaults: { _controller: AppBundle:Classroom/ThreadMember:become }
