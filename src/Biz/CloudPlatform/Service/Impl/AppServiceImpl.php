@@ -129,8 +129,15 @@ class AppServiceImpl extends BaseService implements AppService
         } else {
             $extInfos = array('_t' => (string) time());
         }
+        $apps = $this->createAppClient()->checkUpgradePackages($args, $extInfos);
+        $canUpgradeApps = array_filter($apps, function ($app) {
+            $userAccess = isset($app['userAccess']) ? $app['userAccess'] : null;
+            $purchased = isset($app['purchased']) ? $app['purchased'] : null;
 
-        return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
+            return !($userAccess == 'fail' && $purchased == false);
+        });
+
+        return $canUpgradeApps;
     }
 
     public function getMessages()

@@ -7521,6 +7521,7 @@ admin.app_center.buy_btn: 购买
 admin.app_center.price: 价格：
 admin.app_center.free: 免费
 admin.app_center.ontrial_btn: 试用中
+admin.app_center.expired_btn: 试用期已过
 admin.app_center.buyed_btn: 已购买
 admin.app_center.tria_btn: 试用
 admin.app_center.show_detail_btn: 查看详情
