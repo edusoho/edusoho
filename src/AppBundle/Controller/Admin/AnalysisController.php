@@ -53,7 +53,7 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $registerData = $this->getUserService()->analysisRegisterDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -102,7 +102,7 @@ class AnalysisController extends BaseController
             'tab' => $tab,
         );
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $registerData = $this->getUserService()->analysisRegisterDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -174,7 +174,7 @@ class AnalysisController extends BaseController
 
         $courseSetInitSum = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -247,7 +247,7 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $courseData = $this->getCourseService()->analysisCourseDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -326,7 +326,7 @@ class AnalysisController extends BaseController
 
         $loginData = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $loginData = $this->getLogService()->analysisLoginDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -389,7 +389,7 @@ class AnalysisController extends BaseController
 
         $courseSetData = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -457,7 +457,7 @@ class AnalysisController extends BaseController
         );
 
         $count = 0;
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $taskData);
             $count = $this->sumTrendDataCount($taskData);
@@ -535,7 +535,7 @@ class AnalysisController extends BaseController
 
         $joinLessonData = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $joinLessonData = $this->getMemberOperationService()->countGroupByDate(
                 $detailConditions,
                 'ASC'
@@ -618,7 +618,7 @@ class AnalysisController extends BaseController
 
         $exitLessonData = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $exitLessonData = $this->getOrderService()->analysisCourseOrderDataByTimeAndStatus(
                 $timeRange['startTime'],
                 $timeRange['endTime'],
@@ -724,7 +724,7 @@ class AnalysisController extends BaseController
             $paidCourseDetail = MathToolkit::multiply($paidCourseDetail, array('price_amount', 'pay_amount'), 0.01);
         }
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $paidCourseData = $this->getOrderService()->countGroupByDate(
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
@@ -833,7 +833,7 @@ class AnalysisController extends BaseController
         }
 
         $count = 0;
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $paidClassroomData = $this->getOrderService()->countGroupByDate(
                 array(
                     'pay_time_GT' => $timeRange['startTime'],
@@ -912,7 +912,7 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $completedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
@@ -995,7 +995,7 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
                 array('fileType' => 'video'),
                 $timeRange['startTime'],
@@ -1062,7 +1062,7 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
                 array('fileType' => 'video', 'fileStorage' => 'cloud'),
                 $timeRange['startTime'],
@@ -1132,7 +1132,7 @@ class AnalysisController extends BaseController
 
         $videoViewedTrendData = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
                 array('fileType' => 'video', 'fileStorage' => 'local'),
                 $timeRange['startTime'],
@@ -1202,7 +1202,7 @@ class AnalysisController extends BaseController
 
         $videoViewedTrendData = '';
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
                 array('fileType' => 'video', 'fileStorage' => 'net'),
                 $timeRange['startTime'],
@@ -1284,7 +1284,7 @@ class AnalysisController extends BaseController
             $incomeDetail['trade'] = empty($paymentTrades[$incomeDetail['sn']]) ? array() : $paymentTrades[$incomeDetail['sn']];
         }
 
-        if ($tab == 'trend') {
+        if ('trend' == $tab) {
             $incomeData = $this->getOrderService()->sumGroupByDate(
                 'pay_amount',
                 $conditions,
