@@ -21,9 +21,11 @@
         </ul>
       </div>
     </div>
-    <div class="M_header-back js-back">
-      <a><i class="es-icon es-icon-chevronleft"></i></a>
-    </div>
+    {% if mobile %}
+      <div class="M_header-back js-back">
+        <a><i class="es-icon es-icon-chevronleft"></i></a>
+      </div>
+    {% endif %}
     <a href="{{ path('homepage') }}" class="navbar-brand">
       {% if setting('site.logo') %}
         <img src="{{ filepath('../' ~ setting('site.logo'),'') }}">

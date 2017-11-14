@@ -378,6 +378,7 @@ order.price_amount: Price payable
 order.paid_amount: Paid price
 order.paid_coin_amount: Paid coin
 order.paid_cash_amount: Paid cash
+order.paid_time_none: None
 order.refund.deal_status: Deal status
 order.refund.deal_time: Deal Time
 order.refund.deal_persion: Deal persion
@@ -387,6 +388,8 @@ order.refund_amount: Refund amount
 order.refund_coin_amount: Refund coin
 order.refund_cash_amount: Refund Cash
 order.refund_limit: Refund limit
+order.redund_deadline: Refund Deadline
+order.refund_deadline_none: None
 order.show_refund_detail: Show refund
 order.refunded_cash_amount: Refunded cash
 order.use_coupon: Use coupon
@@ -460,8 +463,11 @@ order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_nam
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
-order.confirm.price: 订单价格
+order.confirm.price: Product price
 order.confirm.bought_course_deduction: 已购课程抵扣
+order.adjust_price_btn: 改价
+order.adjust_price_modal_title: 订单改价
+order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠的力度，系统会自动进行换算。
 
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
@@ -571,10 +577,14 @@ upload.video_quality_switcher.audio_quality.normal: Normal
 upload.video_quality_switcher.audio_quality.high: High
 import.step_one: 'Step 1: '
 import.check_datas: 'Start check datas'
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 'Import users'
 import.user_import.content_title: 'Import users'
 import.user_import.choose_file: 'Choose the file to import'
-import.user_import.browser_btn: Browse...
+import.user_import.browser_btn: Choose
 import.user_import.download_example_btn: 'Click to download the sample file'
 import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price
@@ -1675,8 +1685,8 @@ testpaper.answer.answer_card: 'Answer card'
 testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
 testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>.\n"
-testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
-testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
+testpaper.answer.answer_card.exam_with_pass_score_tips: ",pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
+testpaper.answer.answer_card.limited_time_tips: ',Please answer in <span class="color-primary">%limitedTime%</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
 testpaper.answer.student: 'Answerer: '
 testpaper.answer.endtime: 'Submit time: '
@@ -2935,8 +2945,7 @@ attachments.download.times: 'Download times %hitNum%'
 attachments.download.download_btn: Download
 attachments.download.delete_btn: Delete
 attachments.download.delete_warning: 'Are you sure to delete this accesaary?'
-share.course_set_learning_message: 'I am learning《%course%》gain a lot，come to study together.'
-share.course_set_learned_message: 'I was learned 《%course%》gain a lot，come to study together.'
+share.course_set_message: 'I am learning《%course%》gain a lot，come to study together.'
 share.classroom_message: 'I am learning「%classroom%」gain a lot，come to study together.'
 share.article_message: 'I am watching「%articletitle%」, follow 「%sitename%」, share knowledge, creates future'
 share.group_thread_message: 'I saw 「%threadname%」in group「%groupname%」，it is so great，come to enroll us'
@@ -3097,6 +3106,7 @@ my.teaching.open_course.lesson.mediaStatus.error: '(format conversion of %mediaT
 my.teaching.open_course.lesson.status.unpublished: Unpublished
 my.teaching.open_course.lesson.material: Material
 my.teaching.open_course.lesson.add_material_btn: 'Add Material'
+my.teaching.open_course.lesson.add_material.title: 添加资料
 my.teaching.open_course.lesson.edit_btn: Edit
 my.teaching.open_course.lesson.more_btn: More
 my.teaching.open_course.lesson.modal.edit: 'Edit Lesson'
@@ -5851,6 +5861,8 @@ admin.order.logs.empty_hint: 'No transaction log'
 admin.order_coin.refund.success.tips: Automatic refund after submission
 admin.order_cash.refund.success.tips: Manual refund under line
 admin.order_refund_handle.success: Successful refund request operation
+#TODO trans
+admin.order_refund.audit.tip: 用户支付的虚拟币实时返回账户，支付的现金需线下人工联系退款，此处仅作为记录。
 
 admin.cloud_setting.trial_hint: 'You are using a trail version and cannot proceed with this operation. Please contact our business manager to purchase a licence.'
 admin.cloud_setting.package_info: 'Package info'
@@ -6555,3 +6567,189 @@ site_no: 'No'
 admin.cloud_live.manage.logo_set.modal_title: Crop Live LOGO
 
 
+
+log.module.user: 用户
+log.module.course: 课程
+log.module.classroom: 班级
+log.module.group: 小组话题
+log.module.upload_file: 文件
+log.module.order: 订单
+log.module.article: 资讯
+log.module.category: 栏目
+log.module.content: 资讯内容
+log.module.notify: 通知
+log.module.sms: 短信
+log.module.tag: 标签
+log.module.system: 系统设置
+log.module.crontab: 定时任务
+log.module.marker: 驻点
+log.module.vip: 会员
+log.module.coin: 虚拟币
+log.module.coupon: 优惠码
+log.module.money_card: 学习卡
+log.module.discount: 打折活动
+log.module.exercise: 练习
+log.module.homework: 作业
+log.module.question_plus: 题库增强版
+log.module.announcement: 公告
+log.module.open_course: 公开课
+
+log.action.course.create: 创建课程
+log.action.course.update: 修改课程
+log.action.course.update_picture: 更新课程图片
+log.action.course.publish: 发布课程
+log.action.course.close: 关闭课程
+log.action.course.delete: 删除课程
+log.action.course.add_task: 添加学习任务
+log.action.course.update_task: 更新学习任务
+log.action.course.delete_task: 删除学习任务
+log.action.course.add_student: 添加课程学员
+log.action.course.remove_student: 移除课程学员
+log.action.course.update_teacher: 更新课程教师
+log.action.course.cancel_teachers_all: 取消用户的教师身份
+log.action.course.delete_taskLearn: 删除任务学习记录
+log.action.course.delete_chapter: 删除章节
+log.action.course.delete_favorite: 删除收藏
+log.action.course.delete_note: 删除笔记
+log.action.course.delete_thread: 删除话题
+log.action.course.delete_review: 删除评价
+log.action.course.delete_announcement: 删除公告
+log.action.course.delete_status: 删除动态
+log.action.course.recommend: 课程推荐
+log.action.course.cancel_recommend: 取消课程推荐
+log.action.course.delete_material: 移除资料
+log.action.course.add_testpaper: 新增试卷
+log.action.course.publish_testpaper: 发布试卷
+log.action.course.close_testpaper: 关闭试卷
+log.action.course.delete_testpaper: 删除试卷
+log.action.course.add_question: 新增题目
+log.action.course.delete_question: 删除题目
+log.action.course.refresh_learning_progress: 刷新学习进度
+log.action.course.sync_when_task_create: 同步创建任务
+log.action.course.sync_when_task_update: 同步更新任务
+log.action.course.sync_when_task_delete: 同步删除任务
+log.action.course.clone_course_set: 复制课程
+log.action.course.unlock_course: 解除课程同步
+log.action.user.exportCsv: 导出
+log.action.user.add: 新增
+log.action.user.edit: 修改
+log.action.user.send_email_verify: 邮箱验证
+log.action.user.nickname_change: 修改昵称
+log.action.user.password-changed: 重置密码
+log.action.user.pay-password-changed: 重置支付密码
+log.action.user.verifiedMobile-changed: 重置手机
+log.action.user.change_role: 修改角色
+log.action.user.unbind: 解绑用户
+log.action.user.login_success: 登录成功
+log.action.user.login_fail: 登录失败
+log.action.user.lock: 禁封用户
+log.action.user.unlock: 解禁用户
+log.action.user.recommend: 推荐用户
+log.action.user.cancel_recommend: 取消推荐用户
+log.action.user.approved: 实名认证成功
+log.action.user.approval_fail: 实名认证失败
+log.action.user.password-reset: 重置密码邮件发送
+log.action.system.email_send_check: 邮件自检
+log.action.system.setting_email_change: 更变邮箱
+log.action.system.setting_email-verify: 邮箱验证
+log.action.system.update_settings: 更新设置
+log.action.system.questions_settings: 题库设置
+log.action.system.customerServiceSetting: 客服管理
+log.action.system.setting_userCenter: 用户中心设置
+log.action.system.update_block: 更新编辑区
+log.action.system.update_app_version: 更新版本
+log.action.classroom.create: 新增班级
+log.action.classroom.delete: 删除班级
+log.action.classroom.add_course: 添加课程
+log.action.classroom.add_student: 添加学员
+log.action.classroom.delete_course: 移除课程
+log.action.classroom.delete_review: 删除评价
+log.action.classroom.delete_thread: 删除话题
+log.action.classroom.update_picture: 更新图片
+log.action.classroom.remove_student: 移除学员
+log.action.classroom.recommend: 推荐班级
+log.action.classroom.cancel_recommend: 取消推荐
+log.action.article.update_settings: 更新设置
+log.action.article.create: 新增
+log.action.article.update: 修改
+log.action.article.update_property: 更新属性
+log.action.article.cancel_property: 取消属性
+log.action.article.trash: 移动到回收站
+log.action.article.removeThumb: 移除图片
+log.action.article.delete: 删除
+log.action.article.publish: 发布
+log.action.article.unpublish: 取消发布
+log.action.notify.create: 创建
+log.action.notify.check_fail: 检测
+log.action.order.pay_result: 支付结果
+log.action.order.andit_refund: 退款审核
+log.action.order.refund_cancel: 取消退款
+log.action.order.unbind-back: 解绑银行卡
+log.action.order.course_callback: 课程回调
+log.action.order.classroom_callback: 班级回调
+log.action.order.adjust_price: 价格调整
+log.action.category.create: 新增
+log.action.category.update: 修改
+log.action.category.delete: 删除
+log.action.content.create: 新增
+log.action.content.update: 修改
+log.action.content.trash: 移动到回收站
+log.action.content.delete: 删除
+log.action.content.publish: 发布
+log.action.crontab.job_start: 开始任务
+log.action.crontab.job_end: 结束任务
+log.action.upload_file.create: 新增文件
+log.action.upload_file.delete: 删除文件
+log.action.upload_file.download: 下载文件
+log.action.upload_file.cloud_convert_callback: 回调处理
+log.action.upload_file.cloud_convert_error: 转码失败
+log.action.marker.create: 增加驻点
+log.action.marker.delete: 删除驻点
+log.action.marker.mediaId_notExist: 视频不存在
+log.action.marker.delete_question: 删除驻点问题
+log.action.group.create_thread: 新增话题
+log.action.group.delete_thread: 删除话题
+log.action.group.close_thread: 关闭话题
+log.action.group.open_thread: 开启话题
+log.action.sms.sms_forget_password: 登录密码重置
+log.action.sms.sms_user_pay: 使用网站余额支付
+log.action.sms.sms_forget_pay_password: 支付密码重置
+log.action.sms.sms_bind: 手机绑定
+log.action.sms.sms_classroom_publish: 新班级发布
+log.action.sms.sms_course_publish: 新课程发布
+log.action.sms.sms_normal_lesson_publish: 学习任务发布通知（普通课程）
+log.action.sms.sms_live_lesson_publish: 学习任务发布通知（直播）
+log.action.sms.sms_live_play_one_day: 直播开播前通知（提前1天）
+log.action.sms.sms_live_play_one_hour: 直播开播前通知（提前1小时）
+log.action.sms.sms_homework_check: 作业完成批阅
+log.action.sms.sms_testpaper_check: 试卷完成批阅
+log.action.sms.sms_course_buy_notify: 课程购买
+log.action.sms.sms_classroom_buy_notify: 班级购买
+log.action.sms.sms_vip_buy_notify: 会员购买
+log.action.sms.sms_coin_buy_notify: 虚拟币充值
+log.action.tag.create: 新增
+log.action.tag.update: 修改
+log.action.tag.delete: 删除
+log.action.coin.update_settings: 设置
+log.action.coin.add_coin: 增加
+log.action.coin.deduct_coin: 扣除
+log.action.announcement.delete: 删除公告
+log.action.open_course.create_course: 创建公开课
+log.action.open_course.update_course: 更新公开课
+log.action.open_course.delete_course: 删除课程
+log.action.open_course.pulish_course: 发布公开课
+log.action.open_course.close_course: 关闭公开课
+log.action.open_course.update_picture: 更新公开课图片
+log.action.open_course.add_lesson: 添加公开课课时
+log.action.open_course.update_lesson: 更新公开课课时
+log.action.open_course.delete_lesson: 删除课时
+log.action.open_course.delete_member: 删除学员
+log.action.open_course.add_material: 新增资料
+log.action.open_course.delete_material: 移除资料
+log.action.open_course.update_teacher: 更新公开课教师
+log.action.open_course.delete_recommend_course: 删除推荐课程
+order.course_callback.fail: 订单处理成功，但是用户加入课程失败
+order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
+crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
+cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.

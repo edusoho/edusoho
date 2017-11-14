@@ -9,16 +9,24 @@
 {% else %}
   {{ slot('course.purchase.extension', {'course':course}) }}
 
+
+  {% set noVipText = 1  %}
   {% if slot('course.buy-btn.extension', {'course': course})|trim %}
     {% set btnText = slot('course.buy-btn.extension', {'course': course}) %}
+    {% set noVipText = 0 %}
   {% elseif course.originPrice == 0 or course.isFree %}
     {% set btnText = 'course.btn.join' %}
   {% else  %}
     {% set btnText = 'course.btn.buy' %}
   {% endif %}
 
-  <a class="btn btn-primary js-buy-btn btn-lg {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
-    {{ btnText|trans }}
-  </a>
+  {# 特殊业务逻辑 #}
+  {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId > 0) and noVipText %}
+  {% else %}
+    <a class="btn btn-primary js-buy-btn btn-lg {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
+      {{ btnText|trans }}
+    </a>
+  {% endif %}
+
 
 {% endif %}

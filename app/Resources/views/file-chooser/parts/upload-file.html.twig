@@ -1,5 +1,9 @@
 {% set targetType = targetType|default('course-activity') %}
-{% set token = uploader_token(targetType, courseId, 'private') %}
+{% if token|default('') %}
+  {% set token = token %}
+{% else %}
+  {% set token = uploader_token(targetType, courseId, 'private') %}
+{% endif %}
 {% set storageSetting = setting('storage') %}
 <div class="uploader-content">
   <div class="uploader-container" id="uploader-container"
@@ -8,7 +12,7 @@
   data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
   data-process="{{ uploader_process(targetType) }}">
   </div>
-  {% if mediaType|default(null) == 'video' and setting('storage.upload_mode', 'local') != 'local' %}
+  {% if (mediaType|default(null) == 'video' or showVideoQuality|default(0)) and setting('storage.upload_mode', 'local') != 'local' %}
     <div class="uploader-bottom">
       <div class="row">
         <div class="col-xs-8">
@@ -25,7 +29,7 @@
         <div class="col-xs-4 text-xs text-center">
           <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="{{'file_chooser.upload_file.convert_tips'|trans}}">{{'file_chooser.upload_file.convert'|trans}}</a>
           ｜
-          <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.suopprt_audio_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}</a>
+          <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{% if showVideoQuality|default(0) %}{{'upload.cloud_upload_tips'|trans|raw}}{% else %}{{'file_chooser.upload_file.suopprt_audio_tips'|trans|raw}}{% endif %}">{{'file_chooser.upload_file.upload_tips'|trans}}</a>
         </div>
       </div>
     </div>

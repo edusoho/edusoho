@@ -6,6 +6,8 @@ use Biz\OrderFacade\Product\Product;
 
 interface OrderFacadeService
 {
+    const DEDUCT_TYPE_ADJUST = 'adjust_price';
+
     public function create(Product $product);
 
     public function getTradePayCashAmount($order, $coinAmount);
@@ -27,4 +29,8 @@ interface OrderFacadeService
     public function checkOrderBeforePay($sn, $params);
 
     public function sumOrderItemPayAmount($conditions);
+
+    public function adjustOrderPrice($orderId, $newPayAmount);
+
+    public function getOrderAdjustInfo($order);
 }

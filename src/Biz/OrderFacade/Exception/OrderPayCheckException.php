@@ -6,5 +6,4 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderPayCheckException extends ServiceException
 {
-
 }

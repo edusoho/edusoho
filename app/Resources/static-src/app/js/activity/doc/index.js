@@ -1,4 +1,4 @@
-import DocPlayer from '../../../common/doc-player';
+import DocPlayer from 'app/common/doc-player';
 
 let $element = $('#document-content');
 let watermarkUrl = $element.data('watermark-url');

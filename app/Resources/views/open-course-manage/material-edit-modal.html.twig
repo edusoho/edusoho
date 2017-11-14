@@ -1,46 +1,25 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 {% set modal_class = 'modal-lg' %}
-{% block title %}{{ '添加资料'|trans }}{% endblock %}
+{% block title %}{{ 'my.teaching.open_course.lesson.add_material.title'|trans }}{% endblock %}
+
+
+{% do script([get_upload_sdk(), 'libs/jquery-validation.js', 'app/js/open-course-manage/add-material/index.js']) %}
+
 {% block body %}
 
   {% set uploadUrl = path('open_course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) %}
 
-  <form id="course-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
-    <div class="form-group">
-      <div class="col-md-10 col-md-offset-1  controls">
-        <ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>
-          {% for material in materials %}
-            {% include 'open-course-manage/material-list-item.html.twig' %}
-          {% endfor %}
-        </ul>
-        {% if not materials %}
-          <span class="control-text color-warning">{{ '暂无资料，请上传。'|trans }}</span>
-        {% endif %}
-      </div>
-    </div>
-    {% set targetType = targetType|default('coursematerial') %}
-    {% set targetId   = course.id %}
-    <div class="form-group">
-      <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
-        {% include 'open-course-manage/material-file-chooser.html.twig' %}
-        <input type="hidden" name="fileId">
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-10 col-md-offset-1 controls">
-        <textarea class="form-control" name="description" rows="2" placeholder="{{ '填写资料简介 (可选)'|trans }}"></textarea>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-10 col-md-offset-1 controls">
-        <button class="btn btn-primary" id="material-upload-btn" type="submit">{{ '添加'|trans }}</button>
-      </div>
-    </div>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </form>
+  <form class="form-horizontal" id="course-material-form" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
 
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script> app.lazyLoad = function() { app.load('course-manage/material-modal') }; </script>
+    <ul class="download-list" id="material-list">
+      {% for material in materials|default(null) %}
+        {% include 'open-course-manage/material-list-item.html.twig' %}
+      {% endfor %}
+    </ul>
+
+    {% include 'file-chooser/file-choose.html.twig' with { mediaType: 'download', fileType: 'all', file: null , courseId: course.id } %}
+    <input id="materials" type="hidden" name="fileId">
+  </form>
 
 {% endblock %}
 {% set hide_footer = true %}

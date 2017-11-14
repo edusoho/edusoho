@@ -93,7 +93,7 @@ define(function(require, exports, module) {
         [
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
-            Translator.trans('validate_old.date_check.message', {display: '{{display}}'})
+            Translator.trans('validate_old.currency_check.message', {display: '{{display}}'})
         ],
         [
             'positive_currency',
@@ -183,7 +183,7 @@ define(function(require, exports, module) {
         [
             'float',
             /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
-            Translator.trans('validate_old.date_check.message')
+            Translator.trans('validate_old.float_check.message')
         ],
         [
             'decimal',

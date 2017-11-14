@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -113,6 +115,25 @@ class OrderController extends BaseController
         ));
     }
 
+    public function adjustPriceAction(Request $request, $id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $this->getOrderFacadeService()->adjustOrderPrice(
+                $id, MathToolkit::simple($request->request->get('adjustPrice'), 100)
+            );
+
+            return $this->createJsonResponse(array());
+        }
+
+        $order = $this->getOrderService()->getOrder($id);
+        $adjustInfo = $this->getOrderFacadeService()->getOrderAdjustInfo($order);
+
+        return $this->render('admin/order/adjust-price-modal.html.twig', array(
+            'order' => $order,
+            'adjustInfo' => $adjustInfo,
+        ));
+    }
+
     /**
      * @return PayService
      */
@@ -127,5 +148,13 @@ class OrderController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return OrderFacadeService
+     */
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 }

@@ -4,9 +4,9 @@
   <tr>
     <th width="30%">{{ 'order.product_name'|trans }}</th>
     <th>{{ 'order.status'|trans }}</th>
-    <th> {{ 'order.price_amount'|trans }} </th>
+    <th>{{ 'order.product_price'|trans }} </th>
     <th>{{ 'order.discount_amount'|trans }}</th>
-    <th>{{ 'order.real_pay'|trans }}</th>
+    <th>{{ 'order.price'|trans }}</th>
     <th width="10%">{{'order.buyers'|trans }}</th>
     <th>
       {{ 'order.payment_pattern'|trans }}
@@ -47,7 +47,12 @@
       <td>{{ dict_text('payment',order.payment) }}</td>
       <td>{{ dict_text('source', order.source) }}</td>
       <td>
-        <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
+        <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
+
+        {% if order.status == 'created' or order.status == 'paying' %}
+          <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_adjust_price', {id:order.id}) }}">{{ 'order.adjust_price_btn'|trans }}</a>
+        {% endif %}
+
       </td>
     </tr>
   {% else %}

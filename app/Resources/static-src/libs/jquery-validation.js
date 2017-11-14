@@ -238,7 +238,11 @@ $.validator.addMethod("currency", function(value, element, params) {
 
 //@TODO这里不应该判断大于0，应该用组合positive_currency:true，min:1，看到替换
 $.validator.addMethod("positive_currency", function(value, element, params) {
-  return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
+    return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
+}, Translator.trans('validate.positive_currency.message'));
+
+$.validator.addMethod("positive_price", function(value, element, params) {
+    return /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, Translator.trans('validate.positive_currency.message'));
 
 jQuery.validator.addMethod("max_year", function(value, element) {

@@ -102,7 +102,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return $priceAmount;
     }
 
-    protected function countOrderPayAmount($payAmount, $orderDeducts, $items)
+    public static function countOrderPayAmount($payAmount, $orderDeducts, $items)
     {
         foreach ($orderDeducts as $deduct) {
             $payAmount = $payAmount - $deduct['deduct_amount'];
@@ -172,7 +172,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
     {
         $savedDeducts = array();
         foreach ($deducts as $deduct) {
-            $deduct['item_id'] = $item['id'];
+            $deduct['item_id'] = empty($item['id']) ? 0 : $item['id'];
             $deduct['order_id'] = $item['order_id'];
             $deduct['seller_id'] = $item['seller_id'];
             $deduct['user_id'] = $item['user_id'];

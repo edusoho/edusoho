@@ -9,7 +9,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here. For example:
     var lang = document.documentElement.lang;
     lang = lang ? lang : 'zh-ch';
-	config.language = lang.replace('_', '-').toLowerCase();
+    config.language = lang.replace('_', '-').toLowerCase();
 	// config.uiColor = '#AADC6E';
 
     config.toolbar_Minimal = [
@@ -82,7 +82,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.removePlugins= 'elementspath';
 
-    config.extraPlugins = 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog';
+    config.extraPlugins = 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,flash,find';
     // config.dialog_backgroundCoverColor = 'white';
     // config.stylesSet = 'my_styles';
     config.codeSnippet_theme = 'zenburn';

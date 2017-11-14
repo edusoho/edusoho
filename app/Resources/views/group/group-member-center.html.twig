@@ -18,7 +18,7 @@
               {% include 'group/group-member-nav-pill.html.twig' %}
 
               <div class="page-header">
-                <h4> {{'group.member_center.my_join'|trans}}<a class="badge pull-right" href="{{path('group_member_join',{type:'myGroup'})}}" style="background-color:#3cb373;">{{groupsCount}}</a></h4>
+                <h4> {{'group.member_center.my_join'|trans}}<a class="badge pull-right badge-primary" href="{{path('group_member_join',{type:'myGroup'})}}">{{groupsCount}}</a></h4>
               </div>
 
               {% include 'group/groups-ul.html.twig' with {
@@ -30,7 +30,7 @@
             <div class="col-md-12">
 
               <div class="page-header">
-                <h4>{{'group.member_center.my_thread'|trans}}<a class="badge pull-right" href="{{path('group_member_threads')}}" style="background-color:#3cb373;">{{threadsCount}}</a></h4>
+                <h4>{{'group.member_center.my_thread'|trans}}<a class="badge pull-right badge-primary" href="{{path('group_member_threads')}}">{{threadsCount}}</a></h4>
               </div>
 
               {% include 'my/learning/group/groups-threads-ul.html.twig' with {
@@ -43,7 +43,7 @@
             <div class="col-md-12">
 
               <div class="page-header">
-                <h4>{{'group.member_center.my_reply_thread'|trans}}<a class="badge pull-right" href="{{path('group_member_posts')}}" style="background-color:#3cb373;">{{postsCount}}</a></h4>
+                <h4>{{'group.member_center.my_reply_thread'|trans}}<a class="badge pull-right badge-primary" href="{{path('group_member_posts')}}">{{postsCount}}</a></h4>
               </div>
 
               {% include 'my/learning/group/groups-threads-ul.html.twig' with {
@@ -58,7 +58,7 @@
             <div class="col-md-12">
 
               <div class="page-header">
-                <h4>{{'group.member_center.my_collect_thread'|trans}}<a class="badge pull-right" href="{{path('group_thread_collecting')}}" style="background-color:#3cb373;">{{collectCount}}</a></h4>
+                <h4>{{'group.member_center.my_collect_thread'|trans}}<a class="badge pull-right badge-primary" href="{{path('group_thread_collecting')}}">{{collectCount}}</a></h4>
               </div>
 
               {% include 'my/learning/group/groups-threads-ul.html.twig' with {

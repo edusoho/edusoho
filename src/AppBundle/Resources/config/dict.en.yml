@@ -47,6 +47,7 @@ orderStatus:
     refunded: Refunded
     success: Success
     fail: Fail
+    finished: Finished
     closed: Closed
 
 orderItemType:
@@ -62,6 +63,7 @@ orderDisplayStatus:
     notPaid: notPaid
     paid: paid
     closed: closed
+    finished: finished
     refunded: refunded
 
 refundStatus:

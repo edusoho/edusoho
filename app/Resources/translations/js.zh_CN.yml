@@ -141,6 +141,16 @@ uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
 
+
+importer.import_verify_tips_start: 校验成功！一共包含
+importer.import_verify_tips_end: 条数据
+importer.import_back_btn: 返回
+importer.import_reselect_btn: 重新导入
+importer.import_confirm_btn: 确定导入
+importer.import_error: 导入出错
+importer.import_progress_data: 已经导入%number%条数据
+importer.import_finish_data: 导入成功, 总共导入%number%条数据
+
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕
 subtitle.upload_srt_hint: 请上传srt格式的文件
@@ -184,6 +194,12 @@ activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数�
 
 activity.download_manage.link_error_hint: 链接地址不正确
 activity.download_manage.materials_error_hint: 请上传或选择资料
+activity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
+activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
+activity.download_manage.materials_or_link_success: 资料添加成功
+activity.download_manage.materials_or_link_delete: 资料已删除
+activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
+
 activity.download_manage.materials_exist_error_hint: 该文件已添加，请重新选择
 activity.download_manage.materials_delete_btn: 删除
 activity.download_manage.materials_add_success_hint: 添加成功，可继续选择资料添加或点击下一步
@@ -348,6 +364,7 @@ course_manage.student_remark_success_hint: 备注%username%成功
 course_manage.student_remark_failed_hint: 备注%username%失败，请重试！
 
 course_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
 course_set.show.time_finish_hint: 活动时间到，正在刷新网页，请稍等...
@@ -710,7 +727,7 @@ validate_old.reg_invite_code.message: %display%必须是5位数字、英文字�
 validate_old.alphanumeric.message: %display%必须是英文字母、数字及下划线组成
 validate_old.alphabet_underline.message: %display%必须以英文字母或下划线开头
 validate_old.byte_minlength.message: %display%的长度必须大于等于%min%，一个中文字算2个字符
-validate_old.date_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
+validate_old.currency_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
 validate_old.currency.message: %display%的长度必须小于等于%max%，一个中文字算2个字符
 validate_old.idcard.message: %display%格式不正确
 validate_old.password.message: %display%只能由4-20个字符组成
@@ -718,7 +735,7 @@ validate_old.second_range.message: 秒数只能在0-59之间
 validate_old.date.message: 请输入正确的日期,格式如XXXX-MM-DD
 validate_old.qq.message: %display%格式不正确
 validate_old.integer.message: %display%必须为整数
-validate_old.date_check.message: 请输入正确的小数,只保留到两位小数
+validate_old.float_check.message: 请输入正确的小数,只保留到两位小数
 validate_old.float.message: 请输入正确的小数,只保留到一位小数
 validate_old.int.message: %display%必须为整数,最大到9位整数
 validate_old.positive_integer.message: %display%必须为正整数

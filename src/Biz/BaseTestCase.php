@@ -56,7 +56,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $keys = $biz->keys();
 
         foreach ($keys as $key) {
-            if (substr($key, 0, 1) === '@') {
+            if (substr($key, 0, 1) === '@' && substr($key, 0, 8) != '@Custom:') {
                 unset($biz[$key]);
             }
         }
@@ -134,6 +134,30 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
+    /**
+     * 用于 mock　service　和　dao
+     * 如　$this->mockBiz(
+     *      'Course:CourseService',
+     *       array(
+     *          array(
+     *              'functionName' => 'tryManageCourse',
+     *              'returnValue' => array('id' => 1),
+     *          ),
+     *      )
+     *  );
+     * ＠param $alias  createService　或　createDao 里面的字符串
+     * ＠param $params 二维数组
+     *  array(
+     *      array(
+     *          'functionName' => 'tryManageCourse',　//必填
+     *          'returnValue' => array('id' => 1),　// 非必填，填了表示有相应的返回结果
+     *          'withParams' => array('param1', array('arrayParamKey1' => '123')),　
+     *                          //非必填，表示填了相应参数才会有相应返回结果
+     *                          //参数必须要用一个数组包含
+     *          'runTimes' => 1 //非必填，表示跑第几次会出相应结果, 不填表示无论跑多少此，结果都一样
+     *      )
+     *  )
+     */
     protected function mockBiz($alias, $params = array())
     {
         $aliasList = explode(':', $alias);
@@ -141,7 +165,21 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $mockObj = Mockery::mock($className);
 
         foreach ($params as $param) {
-            $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
+            $expectation = $mockObj->shouldReceive($param['functionName']);
+
+            if (!empty($param['runTimes'])) {
+                $expectation = $expectation->times($param['runTimes']);
+            }
+
+            if (!empty($param['withParams'])) {
+                $expectation = $expectation->withArgs($param['withParams']);
+            } else {
+                $expectation = $expectation->withAnyArgs();
+            }
+
+            if (!empty($param['returnValue'])) {
+                $expectation->andReturn($param['returnValue']);
+            }
         }
 
         $biz = $this->getBiz();

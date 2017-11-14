@@ -16,6 +16,8 @@ interface WorkflowService
 
     public function fail($orderId, $data = array());
 
+    public function finished($orderId, $data = array());
+
     public function applyOrderItemRefund($orderItemId, $data);
 
     public function applyOrderRefund($orderId, $data);
@@ -31,4 +33,8 @@ interface WorkflowService
     public function cancelRefund($refundId);
 
     public function closeExpiredOrders();
+
+    public function finishSuccessOrders();
+
+    public function adjustPrice($orderId, $newPayAmount);
 }

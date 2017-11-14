@@ -295,7 +295,7 @@ class ExploreController extends BaseController
         }
 
         $levels = ArrayToolkit::index(
-            $this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100),
+            $this->getLevelService()->searchLevels(array('enabled' => 1), array('seq' => 'ASC'), 0, 100),
             'id'
         );
 
@@ -457,7 +457,7 @@ class ExploreController extends BaseController
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index(
-                $this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100),
+                $this->getLevelService()->searchLevels(array('enabled' => 1), array('seq' => 'ASC'), 0, 100),
                 'id'
             );
 

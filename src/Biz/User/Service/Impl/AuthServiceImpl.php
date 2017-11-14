@@ -18,7 +18,8 @@ class AuthServiceImpl extends BaseService implements AuthService
             throw $this->createInvalidArgumentException('site.register.sensitive_words');
         }
 
-        if ($this->registerLimitValidator($registration)) {
+        //营销平台不需要注册频率限制
+        if (!$this->isMarketingType($registration) && $this->registerLimitValidator($registration)) {
             throw $this->createAccessDeniedException('site.register.time_limit');
         }
 
@@ -410,5 +411,10 @@ class AuthServiceImpl extends BaseService implements AuthService
     protected function getKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    private function isMarketingType($registration)
+    {
+        return isset($registration['type']) && $registration['type'] == 'marketing';
     }
 }

@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/search/index"],[function(c,e){"use strict";echo.init()}]);
+webpackJsonp(["app/js/search/index"],{"252ace85339c975bd119":function(c,e,a){"use strict";echo.init()}},["252ace85339c975bd119"]);
