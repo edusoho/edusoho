@@ -586,7 +586,7 @@ class ThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('threadId' => $threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
 
             $message = array(
                 'userId' => $user['id'],

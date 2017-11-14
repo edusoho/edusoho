@@ -50,6 +50,31 @@
     {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
     {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
+    {# 
+      兼容样式，防止主题重写了stylesheet-webpack.html.twig, 下一版本移回stylesheet-webpack.html.twig
+    #}
+    {% if isEditColor|default(0) %}
+      {% set maincolor = currentTheme.config.maincolor|default('default') %}
+      {% set navigationcolor = currentTheme.config.navigationcolor|default('default') %}
+    {% else %}
+      {% set maincolor = currentTheme.confirmConfig.maincolor|default('default') %}
+      {% set navigationcolor = currentTheme.confirmConfig.navigationcolor|default('default') %}
+    {% endif %}
+    <link href="{{ asset('static-dist/app/css/main-v2.css') }}" rel="stylesheet" />
+    {% if mobile %}
+      <link href="{{ asset('static-dist/app/css/mobile.css') }}" rel="stylesheet" />
+    {% endif %}
+    {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+      <link href="{{ asset('static-dist/app/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+    {% endif %}
+    {% if navigationcolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+      <link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
+    {% endif %}
+    {{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
+    {% include 'stylesheet/stylesheet-custom.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
+    {#
+     兼容样式，防止主题重写了stylesheet-webpack.html.twig, 下一版本移回stylesheet-webpack.html.twig
+    #}
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}

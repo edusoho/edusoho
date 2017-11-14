@@ -31,7 +31,7 @@ class OrderExporter extends Exporter
 
     public function getTitles()
     {
-        return array('order.id', 'order.product_name', 'order.status', 'order.price_amount', 'order.deduct_amount', 'order.real_pay', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
+        return array('order.id', 'order.product_name', 'order.status', 'order.product_price', 'order.deduct_amount', 'order.price', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
     }
 
     public function buildCondition($conditions)

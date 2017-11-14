@@ -738,6 +738,15 @@ a:hover {
 .vip-new-member .member-list img:hover {
   border-color: #096;
 }
+.noUi-horizontal .noUi-handle {
+  border: 2px solid #096;
+}
+.noUi-horizontal .noUi-tooltip {
+  color: #096;
+}
+.noUi-connect {
+  background-color: #096;
+}
 .course-progress .cricle-progress .percent .num {
   color: #096;
 }
@@ -1616,6 +1625,41 @@ a:hover {
   .vip-price {
     margin-top: 0;
   }
+}
+.latest-review-list {
+  font-size: 13px;
+}
+.latest-review-list .author-nickname {
+  color: #555;
+}
+.latest-review-list .author-picture-link {
+  float: left;
+  margin: 0 10px 5px 0;
+}
+.latest-review-list .author-picture {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 3px;
+}
+.latest-review-list .review-content {
+  font-size: 13px;
+  color: #999;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+.latest-review-list .review-footer {
+  text-align: right;
+  margin-top: 5px;
+}
+.latest-review-list .course-title {
+  color: #555;
+  font-size: 12px;
+}
+.latest-review-list .divider {
+  width: 1px;
+  border-left: 1px solid #ccc;
+  margin: 0 5px;
 }
 .homepage .teachers ul,
 .homepage .vip ul {

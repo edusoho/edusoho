@@ -738,6 +738,15 @@ a:hover {
 .vip-new-member .member-list img:hover {
   border-color: #cf010e;
 }
+.noUi-horizontal .noUi-handle {
+  border: 2px solid #cf010e;
+}
+.noUi-horizontal .noUi-tooltip {
+  color: #cf010e;
+}
+.noUi-connect {
+  background-color: #cf010e;
+}
 .course-progress .cricle-progress .percent .num {
   color: #cf010e;
 }
