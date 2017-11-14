@@ -177,8 +177,8 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         $expected = array();
         $expected[] = $this->mockDataObject(array('courseId' => 1));
         $expected[] = $this->mockDataObject(array('courseId' => 2));
-        $course1 = $this->getCourseDao()->create(array('taskNum' => 3));
-        $course2 = $this->getCourseDao()->create(array('taskNum' => 4));
+        $course1 = $this->getCourseDao()->create(array('taskNum' => 3, 'courseSetId' => 1));
+        $course2 = $this->getCourseDao()->create(array('taskNum' => 4, 'courseSetId' => 1));
         $result2 = $this->getDao()->countCourseTasksByClassroomId(1);
 
         $this->assertEquals(7, $result2);
