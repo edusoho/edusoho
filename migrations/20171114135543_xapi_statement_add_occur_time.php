@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class XapiStatementAddOccurTimne extends Migration
+class XapiStatementAddOccurTime extends Migration
 {
     /**
      * Do the migration
