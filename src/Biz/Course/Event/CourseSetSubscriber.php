@@ -17,6 +17,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'courseSet.recommend' => 'onCourseSetRecommend',
             'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
             'course-set.update' => 'onCourseSetUpdate',
+            'course-set.unlock' => 'onCourseSetUnlock'
         );
     }
 
@@ -53,6 +54,13 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         $this->getCourseService()->updateCategoryByCourseSetId($courseSet['id'], $courseSet['categoryId']);
     }
 
+    public function onCourseSetUnlock(Event $event)
+    {
+        $courseSet = $event->getSubject();
+        $defaultCourse = $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $this->getChapterDao()->update(array('courseId' => $defaultCourse['id']), array('copyId' => 0));
+    }
+
     /**
      * @return CourseSetService
      */
@@ -67,5 +75,21 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->getBiz()->dao('Course:CourseDao');
+    }
+
+    /**
+     * @return CourseChapterDao
+     */
+    protected function getChapterDao()
+    {
+        return $this->getBiz()->dao('Course:CourseChapterDao');
     }
 }

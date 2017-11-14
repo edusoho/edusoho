@@ -7,7 +7,6 @@ use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -806,8 +805,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($id, $fields);
             $this->getCourseDao()->update($courses[0]['id'], $fields);
 
-            $defaultCourse = $this->getCourseDao()->getDefaultCourseByCourseSetId($id);
-            $this->getChapterDao()->update(array('courseId' => $defaultCourse['id']), array('copyId' => 0));
+            $this->dispatchEvent('course-set.unlock', new Event($courseSet));
 
             $this->commit();
 
@@ -965,14 +963,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
-    }
-
-    /**
-     * @return CourseChapterDao
-     */
-    protected function getChapterDao()
-    {
-        return $this->createDao('Course:CourseChapterDao');
     }
 
     /**
