@@ -17,7 +17,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'courseSet.recommend' => 'onCourseSetRecommend',
             'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
             'course-set.update' => 'onCourseSetUpdate',
-            'course-set.unlock' => 'onCourseSetUnlock'
+            'course-set.unlock' => 'onCourseSetUnlock',
         );
     }
 
