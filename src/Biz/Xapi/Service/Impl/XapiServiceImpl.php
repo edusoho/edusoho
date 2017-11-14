@@ -6,6 +6,7 @@ use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
+use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
@@ -145,5 +146,13 @@ class XapiServiceImpl extends BaseService implements XapiService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return StatementArchiveDao
+     */
+    protected function getStatementArchiveDao()
+    {
+        return $this->createDao('Xapi:StatementArchiveDao');
     }
 }
