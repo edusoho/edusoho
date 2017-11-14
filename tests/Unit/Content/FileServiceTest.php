@@ -180,7 +180,7 @@ class FileServiceTest extends BaseTestCase
             )
         );
         $result = $this->getFileService()->addFile('code', $file);
-        
+
         $this->assertEquals(111, $result['groupId']);
     }
 

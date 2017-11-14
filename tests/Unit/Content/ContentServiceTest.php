@@ -139,7 +139,7 @@ class ContentServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'info',
-                    'withParams' => array('content', 'trash', "内容#111移动到回收站"),
+                    'withParams' => array('content', 'trash', '内容#111移动到回收站'),
                 ),
             )
         );
@@ -164,7 +164,7 @@ class ContentServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'info',
-                    'withParams' => array('content', 'delete', "内容#111永久删除"),
+                    'withParams' => array('content', 'delete', '内容#111永久删除'),
                 ),
             )
         );
@@ -189,7 +189,7 @@ class ContentServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'info',
-                    'withParams' => array('content', 'publish', "内容#111发布"),
+                    'withParams' => array('content', 'publish', '内容#111发布'),
                 ),
             )
         );

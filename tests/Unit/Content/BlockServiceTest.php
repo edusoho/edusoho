@@ -25,16 +25,16 @@ class BlockServiceTest extends BaseTestCase
                     'functionName' => 'create',
                     'returnValue' => array('id' => 111, 'code' => 'test'),
                     'withParams' => array(array(
-                        'code' => 'test', 
-                        'mode' => 'template', 
-                        'category' => 'test', 
-                        'meta' => 'test', 
-                        'data' => '', 
-                        'templateName' => 'template', 
-                        'title' => '默认', 
-                        'createdTime' => time(), 
-                        'updateTime' => time()
-                    ),),
+                        'code' => 'test',
+                        'mode' => 'template',
+                        'category' => 'test',
+                        'meta' => 'test',
+                        'data' => '',
+                        'templateName' => 'template',
+                        'title' => '默认',
+                        'createdTime' => time(),
+                        'updateTime' => time(),
+                    )),
                 ),
             )
         );
@@ -261,14 +261,14 @@ class BlockServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'get',
                     'returnValue' => array(
-                        'id' => 111, 
-                        'code' => 'code', 
-                        'template' => 'template', 
-                        'tips' => 'tips', 
-                        'mode' => 'html', 
-                        'meta' => 'meta', 
-                        'title' => 'title', 
-                        'templateName' => 'templateName'
+                        'id' => 111,
+                        'code' => 'code',
+                        'template' => 'template',
+                        'tips' => 'tips',
+                        'mode' => 'html',
+                        'meta' => 'meta',
+                        'title' => 'title',
+                        'templateName' => 'templateName',
                     ),
                     'withParams' => array(111),
                     'runTimes' => 1,
@@ -282,15 +282,15 @@ class BlockServiceTest extends BaseTestCase
         $this->assertEquals(
             array(
                 'id' => 111,
-                'blockId' => 111, 
+                'blockId' => 111,
                 'blockTemplateId' => 111,
-                'code' => 'code', 
-                'template' => 'template', 
-                'tips' => 'tips', 
-                'mode' => 'html', 
-                'meta' => 'meta', 
-                'title' => 'title', 
-                'templateName' => 'templateName'
+                'code' => 'code',
+                'template' => 'template',
+                'tips' => 'tips',
+                'mode' => 'html',
+                'meta' => 'meta',
+                'title' => 'title',
+                'templateName' => 'templateName',
             ),
             $result2
         );
@@ -310,8 +310,8 @@ class BlockServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'get',
                     'returnValue' => array(
-                        'id' => 111, 
-                        'code' => 'code', 
+                        'id' => 111,
+                        'code' => 'code',
                     ),
                     'withParams' => array(111),
                     'runTimes' => 1,
@@ -406,7 +406,7 @@ class BlockServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'info',
-                    'withParams' => array('blockTemplate', 'update_block_template', "更新编辑区模板#111"),
+                    'withParams' => array('blockTemplate', 'update_block_template', '更新编辑区模板#111'),
                 ),
             )
         );

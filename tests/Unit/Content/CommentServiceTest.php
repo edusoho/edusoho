@@ -59,8 +59,8 @@ class CommentServiceTest extends BaseTestCase
                     'functionName' => 'create',
                     'returnValue' => array('id' => 111, 'objectType' => 'course'),
                     'withParams' => array(array(
-                        'objectType' => 'course', 
-                        'objectId' => 111, 
+                        'objectType' => 'course',
+                        'objectId' => 111,
                         'content' => 'content',
                         'userId' => $this->getCurrentUser()->id,
                         'createdTime' => time(),
