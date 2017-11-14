@@ -89,7 +89,7 @@
 
 				<textarea id="question-input-long-{{ question.id }}" class="form-control essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|default(null)|bbCode2Html|raw }}{% endif %}</textarea>
 
-				<a class="btn btn-link btn-muted btn-sm essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up color-gray"></span> {{'site.btn.collapse'|trans}}</a>
+				<a class="btn btn-link color-gray btn-sm essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up color-gray"></span> {{'site.btn.collapse'|trans}}</a>
 
 				<br/>
 

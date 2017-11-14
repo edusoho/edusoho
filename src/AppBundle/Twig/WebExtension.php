@@ -254,11 +254,11 @@ class WebExtension extends \Twig_Extension
 
     public function timeFormatterFilter($time)
     {
-        if ($time < 60) {
+        if ($time <= 60) {
             return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => 0));
         }
 
-        if ($time < 3600) {
+        if ($time <= 3600) {
             return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => round($time / 60)));
         }
 
@@ -624,6 +624,7 @@ class WebExtension extends \Twig_Extension
 
         $names[] = 'customweb';
         $names[] = 'customadmin';
+        $names[] = 'custom';
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';

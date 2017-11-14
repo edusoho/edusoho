@@ -66,7 +66,7 @@
         <span style="min-width:85px;display:inline-block;_display:inline;">{{ config.name|trans }}</span>
         <span class="mlm">{{'course.testpaper_manage.create.questions_setup.number'|trans}}:</span>
         <input type="text" class="form-control width-input width-input-mini item-number" name="counts[{{ type }}]" data-role="count"  value="0" {% if questionNums[type].questionNum|default(0) == 0  %} disabled {% endif %} />/
-        <span class="text-info question-num" role="questionNum" type="{{ type }}" >{{ questionNums[type].questionNum|default(0) }}</span>
+        <span class="text-info question-num" role="questionNum" type="{{ type }}" style="display:inline-block;min-width: 45px;">{{ questionNums[type].questionNum|default(0) }}</span>
 
         <span class="mlm">{{'course.testpaper_manage.create.questions_setup.score'|trans}}:</span>
         <input type="text" class="form-control width-input width-input-mini item-score" name="scores[{{ type }}]"  value="2" data-role="score" />

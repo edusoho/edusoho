@@ -1,8 +1,3 @@
-
-// .class-banner {
-//   background: url("@{img-src}class_banner.jpg") center center;
-// }
-
 .class-list {
   .class-item {
     background-color: #fff;
@@ -11,6 +6,10 @@
     .es-box-shadow;
     .class-img {
       position: relative;
+    }
+    .image-overlay {
+      .border-bottom-left-radius(0);
+      .border-bottom-right-radius(0); 
     }
     h3 {
       position: absolute;
@@ -56,8 +55,4 @@
       height: 70px;
     }
   }
-}
-
-.lt-ie9 .class-list .class-item {
-  border: 1px solid @gray-light;
 }

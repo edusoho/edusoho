@@ -2,6 +2,7 @@
 
 namespace Biz\OrderFacade\Service\Impl;
 
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Currency;
@@ -9,6 +10,7 @@ use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use AppBundle\Common\MathToolkit;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
@@ -121,6 +123,12 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
+        $price = empty($orderFields['create_extra']['price']) ? 0 : $orderFields['create_extra']['price'];
+
+        if ($price > 0) {
+            $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
+        }
+
         $this->getWorkflowService()->paying($order['id'], array());
 
         $data = array(
@@ -193,6 +201,53 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
+    public function adjustOrderPrice($orderId, $newPayAmount)
+    {
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        if ($newPayAmount != $order['pay_amount']) {
+            $adjustDeduct = $this->getWorkflowService()->adjustPrice($orderId, $newPayAmount);
+
+            $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(
+                'title' => $adjustDeduct['order']['title'],
+                'orderId' => $orderId,
+                'oldPrice' => MathToolkit::simple($newPayAmount + $adjustDeduct['deduct_amount'], 0.01),
+                'newPrice' => MathToolkit::simple($newPayAmount, 0.01),
+                'adjust_amount' => MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01),
+            ));
+
+            return $adjustDeduct;
+        }
+
+        return null;
+    }
+
+    public function getOrderAdjustInfo($order)
+    {
+        $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+        list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
+        $adjustDeduct['payAmountExcludeAdjust'] = MathToolkit::simple($order['price_amount'] - $totalDeductAmountExcludeAdjust, 0.01);
+        $adjustDeduct['adjustPrice'] = empty($adjustDeduct['deduct_amount']) ? '' : MathToolkit::simple($adjustDeduct['deduct_amount'], 0.01);
+        $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01) * 10 / $adjustDeduct['payAmountExcludeAdjust'], 2);
+
+        return $adjustDeduct;
+    }
+
+    private function getTotalDeductExcludeAdjust($deducts)
+    {
+        $totalDeductAmountExcludeAdjust = 0;
+        $adjustDeduct = array();
+        foreach ($deducts as $deduct) {
+            if ($deduct['deduct_type'] == self::DEDUCT_TYPE_ADJUST) {
+                $adjustDeduct = $deduct;
+            } else {
+                $totalDeductAmountExcludeAdjust += $deduct['deduct_amount'];
+            }
+        }
+
+        return array($totalDeductAmountExcludeAdjust, $adjustDeduct);
+    }
+
     /**
      * @return Currency
      */
@@ -223,5 +278,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

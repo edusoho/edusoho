@@ -12,8 +12,7 @@
         "url": ""
     },
     "devDependencies": {
-        "babel-loader": "6.2.10",
-        "es-webpack-engine": "3.4.5"
+        "es-webpack-engine": "3.5.0-bata7"
     },
     "dependencies": {
         "babel-polyfill": "6.5.0",
@@ -27,13 +26,14 @@
         "easy-pie-chart": "2.1.7",
         "echarts": "3.1.10",
         "echo-js": "1.7.3",
-        "es-ckeditor": "1.2.2",
+        "es-ckeditor": "4.7.2-patch2",
         "es-jcrop": "latest",
         "es-messenger": "latest",
         "es-swfobject": "latest",
         "es5-shim": "4.5.9",
         "es6-promise": "4.0.5",
         "font-awesome": "4.6.3",
+        "handlebars": "4.0.11",
         "html5shiv": "3.7.3",
         "iframe-resizer": "3.5.5",
         "intro.js": "2.4.0",
@@ -54,10 +54,7 @@
         "postal": "2.0.5",
         "postal.federation": "0.5.3",
         "postal.xframe": "0.5.0",
-        "rc-select": "6.6.9",
-        "rc-steps": "2.2",
         "react": "0.14.8",
-        "react-anything-sortable": "1.6.1",
         "react-dom": "0.14.8",
         "reset.css": "2.0.2",
         "respond.js": "1.4.2",
@@ -81,7 +78,8 @@
         "compact": false
     },
     "scripts": {
-        "dev": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+        "dev": "cross-env NODE_ENV=development node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+        "dev:restart": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
         "dev:debug": "npm run dev sourcemap:true",
         "dev:custom": "npm run dev watch:CustomBundle",
         "compile": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",

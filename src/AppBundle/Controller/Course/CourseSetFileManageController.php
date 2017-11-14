@@ -135,20 +135,6 @@ class CourseSetFileManageController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    public function uploadCourseFilesAction($id, $targetType)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-
-        $storageSetting = $this->getSettingService()->get('storage', array());
-
-        return $this->render('courseset-manage/file/modal-upload-course-files.html.twig', array(
-            'courseSet' => $courseSet,
-            'storageSetting' => $storageSetting,
-            'targetType' => $targetType,
-            'targetId' => $id,
-        ));
-    }
-
     public function deleteMaterialsAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);

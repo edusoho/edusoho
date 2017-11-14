@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/material-lib/image-player/index"],[function(a,e){"use strict";var i=$("#image-player"),t=i.data("params");i.html('<img src="'+t.preview+'" style="width: 100%; height:auto; display:block">')}]);
+webpackJsonp(["app/js/material-lib/image-player/index"],{f969c9e46cdea9ca2a18:function(a,e,i){"use strict";var c=$("#image-player"),t=c.data("params");c.html('<img src="'+t.preview+'" style="width: 100%; height:auto; display:block">')}},["f969c9e46cdea9ca2a18"]);

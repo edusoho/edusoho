@@ -122,6 +122,15 @@ uploader.filelist.head.operation: Operating
 uploader.select_one_file: Please upload one files
 uploader.file.exist: This file exist
 
+importer.import_verify_tips_start: 校验成功！一共包含
+importer.import_verify_tips_end: 条数据
+importer.import_back_btn: 返回
+importer.import_reselect_btn: 重新导入
+importer.import_confirm_btn: 确定导入
+importer.import_error: 导入出错
+importer.import_progress_data: 已经导入%number%条数据
+importer.import_finish_data: 导入成功, 总共导入%number%条数据
+
 subtitle.delete_success_hint: Delete subtitle success
 subtitle.no_subtitle_hint: None subtitle
 subtitle.upload_srt_hint: Please upload srt file format
@@ -156,6 +165,11 @@ activity.audio_manage.finish_detail_digits_error_hint: The completion condition 
 
 activity.download_manage.link_error_hint: The link address is incorrect
 activity.download_manage.materials_error_hint: Please upload or select the resource
+activity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
+activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
+activity.download_manage.materials_or_link_success: 资料添加成功
+activity.download_manage.materials_or_link_delete: 资料已删除
+activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
 activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
@@ -404,6 +418,7 @@ course_manage.student_remark_success_hint: Remarks %username% succeed
 course_manage.student_remark_failed_hint: Remarks %username% failed, please try again!
 
 course_manage.student_create.field_required_error_hint: Please enter student email / mobile number / username
+course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
 course_set.show.time_finish_hint: Activity times up. Refreshing page, please wait ...
@@ -768,7 +783,7 @@ validate_old.reg_invite_code.message: %display% must be a 5-digit alphabet
 validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and underlined
 validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
 validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
-validate_old.date_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
+validate_old.currency_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
 validate_old.currency.message: %display% must be less than or equal to% max%, and one Chinese word is 2 characters
 validate_old.idcard.message: %display% is not formatted correctly
 validate_old.password.message: %display% can only be composed of 4-20 characters
@@ -776,7 +791,7 @@ validate_old.second_range.message: Seconds can only be between 0-59
 validate_old.date.message: Please enter the correct date in the format XXXX-MM-DD
 validate_old.qq.message: %display% is not formatted correctly
 validate_old.integer.message: %display% must be an integer
-validate_old.date_check.message: Please enter the correct decimal, only to two decimal places
+validate_old.float_check.message: Please enter the correct decimal, only to two decimal places
 validate_old.float.message: Please enter the correct decimal number, only to a fraction
 validate_old.int.message: %display% must be an integer, up to 9 digits
 validate_old.positive_integer.message: %display% must be a positive integer

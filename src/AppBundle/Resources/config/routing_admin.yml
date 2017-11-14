@@ -565,6 +565,11 @@ admin_order_detail:
     path: /order/{id}/detail
     defaults: { _controller: AppBundle:Admin/Order:detail }
 
+admin_order_adjust_price:
+    path: /order/{id}/adjust_price
+    defaults: { _controller: AppBundle:Admin/Order:adjustPrice }
+    permissions: [admin_finance]
+
 admin_order_refunds:
     path: /order/refunds
     defaults: { _controller: AppBundle:Admin/OrderRefund:refunds }

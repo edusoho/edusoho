@@ -42,10 +42,3 @@ $("#orders-table").on('click', '.js-cancel', function() {
     }
   })
 });
-
-$("#orders-table").on('click', '.js-apply-outdated', function () {
-  let $that = $(this);
-
-  notify('danger', $that.data('text'),{delay: 5000});
-
-});

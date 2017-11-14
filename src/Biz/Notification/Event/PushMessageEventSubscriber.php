@@ -1618,6 +1618,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $converted['hitNum'] = $thread['hitNum'];
         $converted['updateTime'] = isset($thread['updateTime']) ? $thread['updateTime'] : $thread['updatedTime'];
         $converted['createdTime'] = $thread['createdTime'];
+        $converted['targetType'] = empty($thread['targetType']) ? '' : $thread['targetType'];
 
         return $converted;
     }

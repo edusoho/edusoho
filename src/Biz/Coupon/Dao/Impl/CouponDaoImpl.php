@@ -3,9 +3,9 @@
 namespace Biz\Coupon\Dao\Impl;
 
 use Biz\Coupon\Dao\CouponDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
+class CouponDaoImpl extends AdvancedDaoImpl implements CouponDao
 {
     protected $table = 'coupon';
 

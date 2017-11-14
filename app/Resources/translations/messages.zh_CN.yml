@@ -460,10 +460,11 @@ order.charge: 收费
 order.name: 订单名称
 order.product_name: 商品名称
 order.product_price: 商品价格
-order.price_amount: 应付价格
+order.price_amount: 订单价格
 order.paid_amount: 实付价格
 order.paid_coin_amount: 实付虚拟币
 order.paid_cash_amount: 实付现金
+order.paid_time_none: 无
 order.refund.deal_status: 处理状态
 order.refund.deal_time: 处理时间
 order.refund.deal_persion: 处理人
@@ -473,6 +474,8 @@ order.refund_amount: 退款总额
 order.refund_coin_amount: 退款虚拟币
 order.refund_cash_amount: 退款现金
 order.refund_limit: 退款限制
+order.refund_deadline: 退款有效期
+order.refund_deadline_none: 无
 order.show_refund_detail: 查看退款
 order.refunded_cash_amount: 已退现金
 order.use_coupon: 使用优惠券
@@ -546,8 +549,12 @@ order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_nam
 order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
-order.confirm.price: 订单价格
+order.confirm.price: 商品价格
 order.confirm.bought_course_deduction: 已购课程抵扣
+order.adjust_price_btn: 改价
+order.before_adjust_price: 订单原价
+order.adjust_price_modal_title: 订单改价
+order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠的力度，系统会自动进行换算。
 
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
@@ -671,10 +678,14 @@ upload.video_quality_switcher.audio_quality.high: 高品
 # 导入
 import.step_one: 步骤1
 import.check_datas: 开始校验数据
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 批量添加新用户
 import.user_import.content_title: 批量添加学员
-import.user_import.choose_file: 选择要导入的文件
-import.user_import.browser_btn: 浏览...
+import.user_import.choose_file: 选择文件
+import.user_import.browser_btn: 选择
 import.user_import.download_example_btn: 点击下载示例说明文件
 import.user_import.download_example_tips: 支持从Excel文件导入
 import.user_import.price: 购买价格
@@ -2078,11 +2089,9 @@ testpaper.answer.answer_card: 答题卡
 testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
 testpaper.answer.answer_card.one_chance_tips: 本次考试仅一次机会
 testpaper.answer.answer_card.exam_tips: >
-  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>。
-testpaper.answer.answer_card.exam_with_pass_score_tips: >
-  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>，及格为<span class="color-primary">%finishScore%</span>分
-testpaper.answer.answer_card.limited_time_tips: >
-  请在<span class="color-primary">%limitedTime%分钟</span>内作答。
+  <div>本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
+testpaper.answer.answer_card.exam_with_pass_score_tips: '，及格为<span class="color-primary">%finishScore%</span>分'
+testpaper.answer.answer_card.limited_time_tips: '，请在<span class="color-primary">%limitedTime%</span>内作答。'
 testpaper.answer.answer_card.submit_btn: 马上交卷
 testpaper.answer.student: 答题人：
 testpaper.answer.endtime: 交卷时间：
@@ -2607,8 +2616,8 @@ classroom.remark_tips: 选填
 classroom.publish_add_student_tips: >
   %status%%name%不能添加学员，请%classroomName%发布后再添加。
 classroom.batch_add_student: 批量添加学员
-classroom.select_import_file: 选择要导入的文件
-classroom.import_file_preview: 浏览
+classroom.select_import_file: 选择文件
+classroom.import_file_preview: 选择
 classroom.download_example_file: 点击下载示例说明文件
 classroom.support_excel_import: 支持从Excel文件导入
 classroom.import_buy_price: 购买价格
@@ -3691,8 +3700,7 @@ attachments.download.delete_btn: 删除
 attachments.download.delete_warning: 确定删除此附件
 
 # 分享
-share.course_set_learning_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
-share.course_set_learned_message: 我学完了《%course%》，收获巨大哦，一起来学习吧！
+share.course_set_message: 我正在学习《%course%》，收获巨大哦，一起来学习吧！
 share.classroom_message: 我正在学习「%classroom%」，收获巨大哦，一起来学习吧！
 share.article_message: 我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。
 share.group_thread_message: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
@@ -3889,6 +3897,7 @@ my.teaching.open_course.lesson.mediaStatus.error: (%mediaTypeName%格式转换�
 my.teaching.open_course.lesson.status.unpublished: 未发布
 my.teaching.open_course.lesson.material: 资料
 my.teaching.open_course.lesson.add_material_btn: 添加资料
+my.teaching.open_course.lesson.add_material.title: 添加资料
 my.teaching.open_course.lesson.edit_btn: 编辑
 my.teaching.open_course.lesson.more_btn: 更多
 my.teaching.open_course.lesson.modal.edit: 编辑课时
@@ -4351,10 +4360,10 @@ common.orderStatus.paid: 已付款
 common.orderStatus.refunding: 退款中
 common.orderStatus.refunded: 已退款
 common.orderStatus.cancelled: 已关闭
-common.refundStatus.created: 用户已申请
+common.refundStatus.created: 退款待处理
 common.refundStatus.success: 退款成功
-common.refundStatus.failed: 退款拒绝
-common.refundStatus.cancelled: 用户已撤消
+common.refundStatus.failed: 退款关闭
+common.refundStatus.cancelled: 退款撤销
 common.logLevel.info: 提示
 common.logLevel.warning: 警告
 common.logLevel.error: 错误
@@ -7420,6 +7429,7 @@ admin.order_cash_coin_refund.audit.tips: 虚拟币款项，将会在点击“提
 admin.order_coin.refund.success.tips: 提交后自动退款
 admin.order_cash.refund.success.tips: 需线下手动退款
 admin.order_refund_handle.success: 退款已处理
+admin.order_refund.audit.tip: 用户支付的虚拟币实时返回账户，支付的现金需线下人工联系退款，此处仅作为记录。
 admin.order.logs.content_title: 订单详情
 admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
@@ -8114,6 +8124,7 @@ log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
 log.action.order.course_callback: 课程回调
 log.action.order.classroom_callback: 班级回调
+log.action.order.adjust_price: 价格调整
 log.action.category.create: 新增
 log.action.category.update: 修改
 log.action.category.delete: 删除
@@ -8178,6 +8189,7 @@ order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 
 cashflow.title: 名称
 cashflow.sn: 流水号
