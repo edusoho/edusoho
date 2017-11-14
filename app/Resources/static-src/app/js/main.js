@@ -61,6 +61,7 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 $(document).ajaxSend(function (a, b, c) {
   // 加载loading效果
   let url = c.url;
+  url = url.split('?')[0];
   let $dom = $(`[data-url="${url}"]`);
   if ($dom.data('loading')) {
     let loading;
@@ -73,7 +74,7 @@ $(document).ajaxSend(function (a, b, c) {
     }
 
     let loadingBox = $($dom.data('target') || $dom);
-    loadingBox.append(loading);
+    loadingBox.html(loading);
   };
 
   if (c.type === 'POST') {

@@ -42,7 +42,7 @@ $('.js-btn-thread-post-form-save').click(() => {
         //清除附件
         $('.js-attachment-list').empty();
         $('.js-attachment-ids').val("");
-        $('.js-upload-file').removeClass('hidden');
+        $('.js-upload-file').show();
 
         $form.find('[type=submit]').removeAttr('disabled');
 

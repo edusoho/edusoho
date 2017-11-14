@@ -547,8 +547,9 @@ class AnalysisController extends BaseController
         $courseIds = ArrayToolkit::column($joinLessonDetail, 'target_id');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $userIds = ArrayToolkit::column($joinLessonDetail, 'member_id');
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $userIds = ArrayToolkit::column($joinLessonDetail, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -577,6 +578,7 @@ class AnalysisController extends BaseController
                 'users' => $users,
                 'joinLessonStartDate' => $joinLessonStartDate,
                 'dataInfo' => $dataInfo,
+                'courseSets' => $courseSets,
             )
         );
     }

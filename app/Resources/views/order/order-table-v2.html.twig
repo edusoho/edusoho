@@ -6,7 +6,7 @@
   <tr>
     <th width="25%">{{'order.product_name'|trans}}</th>
     <th>{{'order.id'|trans}}</th>
-    <th class="text-right">{{'order.real_pay'|trans}}</th>
+    <th class="text-right">{{'order.price'|trans}}</th>
     <th>{{'order.created_time'|trans}}</th>
     <th>{{'order.status'|trans}}</th>
     <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
@@ -54,26 +54,22 @@
               </ul>
             </div>
           {% endif %}
-          {% if order.status in ['paid', 'refunding', 'refunded', 'closed', 'success'] %}
+          {% if order.status in ['paid', 'refunding', 'refunded', 'closed', 'success', 'finished'] %}
             <div class="table-action__item">
               <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'order.content_title'|trans}}</a>
             </div>
 
-            {% if order.pay_amount != 0 and order.status in ['paid', 'success'] and order.refund.status|default('') in ['cancel', ''] %}
-              <br>
+            {% if order.pay_amount != 0 and order.status in ['success'] and order.refund.status|default('') in ['cancel', ''] %}
               {% if order.refund_deadline != 0 and order.item.target_type in ['course', 'classroom'] %}
                 {% if order.refund_deadline > date().timestamp %}
+                  <br>
                   <div class="table-action__item">
                     <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'order.refund.apply_for_btn'|trans}}</a>
-                  </div>
-                {% else %}
-                  <div class="table-action__item">
-                    <a href="javascript:;" class="cd-link-gray js-apply-outdated" data-text="{{ 'order.refund_deadline.outdated_message'|trans({ '%date%': order.refund_deadline|date('Y-n-d H:i:s') }) }}">{{'order.status.refunding'|trans}}</a>
                   </div>
                 {% endif %}
               {% endif %}
             {% endif %}
-            {% if order.status in ['refunded', 'refunding', 'success', 'closed'] and order.refund.status|default('') in ['auditing', 'refunding', 'refunded', 'refused'] %}
+            {% if order.status in ['refunded', 'refunding', 'success', 'closed', 'finished'] and order.refund.status|default('') in ['auditing', 'refunding', 'refunded', 'refused'] %}
               <br>
               <div class="table-action__item">
                 <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'order.show_refund_detail'|trans}}</a>

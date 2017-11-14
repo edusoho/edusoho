@@ -839,6 +839,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             $deadline = $course['expiryEndDate'];
         }
 
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
+            array('courseId' => $courseId, 'userId' => $userId, 'status' => 'finish')
+        );
+        $lastLearnTime = ($learnedNum > 0) ? time() : null;
+
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
+
         $fields = array(
             'courseId' => $courseId,
             'courseSetId' => $course['courseSetId'],
@@ -851,6 +858,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             'createdTime' => time(),
             'classroomId' => $classRoomId,
             'joinedType' => 'classroom',
+            'learnedNum' => $learnedNum,
+            'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+            'lastLearnTime' => $lastLearnTime,
         );
         $isMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
@@ -1107,7 +1117,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function createOrder($courseId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
-        $courseProduct->price = $data['price'];
 
         $params = array(
             'created_reason' => $data['remark'],
@@ -1314,5 +1323,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
     }
 }
