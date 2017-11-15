@@ -45,7 +45,7 @@
     <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button">{{ '同意服务协议并注册'|trans }}</button>
 
     <span class="pull-left third-party-link">{{ '请详细阅读'|trans }}<a href="{{ path('user_terms') }}" target="_blank">《{{'用户服务协议'|trans}}》</a></span>
-    <a class="pull-right third-party-link" href="">{{ '绑定已有账号？'|trans }}</a>
+    <a class="pull-right third-party-link" href="{{ path('login_third_party') }}">{{ '绑定已有账号？'|trans }}</a>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
