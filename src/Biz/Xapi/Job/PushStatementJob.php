@@ -35,6 +35,8 @@ class PushStatementJob extends AbstractJob
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
             $result = $this->createXAPIService()->pushStatements($pushStatements);
 
+            file_put_contents('1.txt', json_encode($result).PHP_EOL, FILE_APPEND);
+
             if ($result) {
                 $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
             }
