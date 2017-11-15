@@ -5,9 +5,6 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\ServiceKernel;
-use Biz\Util\PluginUtil;
 use Biz\CloudPlatform\Service\Impl\AppServiceImpl;
 
 class UpgradePluginCommand extends BaseCommand
@@ -26,10 +23,10 @@ class UpgradePluginCommand extends BaseCommand
         $version = $input->getArgument('version');
         $output->writeln("<info>升级 {$code} 版本号为 {$version } </info>");
         $localAppService = new localAppServiceImpl($this->getBiz(), $code, $version);
-        
+
         $localAppService->beginPackageUpdate(0, 'upgrade');
 
-        $output->writeln("<info>升级 成功</info>");
+        $output->writeln('<info>升级 成功</info>');
     }
 
     protected function getAppService()
@@ -37,8 +34,6 @@ class UpgradePluginCommand extends BaseCommand
         return $this->getBiz()->service('CloudPlatform:AppService');
     }
 }
-
-
 
 class localAppServiceImpl extends AppServiceImpl
 {
@@ -68,7 +63,7 @@ class localAppServiceImpl extends AppServiceImpl
     {
         \print_r($message);
     }
-   
+
     protected function updateAppForPackageUpdate($package, $packageDir)
     {
         return;
