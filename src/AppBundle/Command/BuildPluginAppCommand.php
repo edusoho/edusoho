@@ -132,7 +132,7 @@ class BuildPluginAppCommand extends BaseCommand
             $this->output->writeln('<comment>    * 拷贝脚本：无</comment>');
         }
 
-        $this->output->writeln('<info>    * 生成安装引导脚本：Upgrade.php</info>');
+        $this->output->writeln('<info>    * 生成安装引导脚本：EduSohoPluginUpgrade.php</info>');
 
         $data = file_get_contents(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php');
         $data = str_replace('{{code}}', $name, $data);

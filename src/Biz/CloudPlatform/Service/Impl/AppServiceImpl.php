@@ -704,7 +704,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        if (file_exists($packageDir.'/EduSohoPluginUpgrade.php') || in_array($package['id'], array('1135', '1136', '1137', '1138', '1139', '1140'))) {
+        if (file_exists($packageDir.'/EduSohoPluginUpgrade.php')) {
             include_once $packageDir.'/EduSohoPluginUpgrade.php';
             $upgrade = new \EduSohoPluginUpgrade($this->biz);
         } elseif (file_exists($packageDir.'/Upgrade.php')) {
