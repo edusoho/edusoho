@@ -26,7 +26,7 @@ class EduSohoUpgrade
             throw new \RuntimeException("Upgrade type `{$this->upgradeType}` is error.");
         }
 
-        if (($this->upgradeType == 'upgrade') && empty($this->upgradeVersion)) {
+        if (('upgrade' == $this->upgradeType) && empty($this->upgradeVersion)) {
             throw new \RuntimeException("Upgrade version `{$this->upgradeVersion}` is empty");
         }
 

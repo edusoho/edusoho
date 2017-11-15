@@ -238,7 +238,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $totalDeductAmountExcludeAdjust = 0;
         $adjustDeduct = array();
         foreach ($deducts as $deduct) {
-            if ($deduct['deduct_type'] == self::DEDUCT_TYPE_ADJUST) {
+            if (self::DEDUCT_TYPE_ADJUST == $deduct['deduct_type']) {
                 $adjustDeduct = $deduct;
             } else {
                 $totalDeductAmountExcludeAdjust += $deduct['deduct_amount'];
