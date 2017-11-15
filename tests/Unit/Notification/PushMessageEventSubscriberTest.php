@@ -43,7 +43,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
 
         $friendsInfo = array(
             'fromId' => 1,
-            'toId' => 2
+            'toId' => 2,
         );
         $event = new Event($friendsInfo);
         $subscriber = new PushMessageEventSubscriber($this->biz);
