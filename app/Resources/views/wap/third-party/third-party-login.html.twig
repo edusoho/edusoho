@@ -1,4 +1,4 @@
-{% extends 'wap/third-party/third-party-login-layout.html.twig' %}
+{# {% extends 'wap/third-party/third-party-login-layout.html.twig' %}
 
 {% block page_title %}
   {{ '绑定账号'|trans }}
@@ -24,8 +24,8 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 {% endblock %}
+ #}
 
-
-{% extends 'wap/third-party/third-party-login-new-accout.html.twig' %}
-{# {% extends 'wap/third-party/third-party-validate-password.html.twig' %} #}
+{% include 'wap/third-party/third-party-login-new-accout.html.twig' %}
+{# {% include 'wap/third-party/third-party-validate-password.html.twig' %} #}
 
