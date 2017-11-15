@@ -25,6 +25,11 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getStatementDao()->create($statement);
     }
 
+    public function getStatement($id)
+    {
+        return $this->getStatementDao()->get($id);
+    }
+
     protected function generateUUID()
     {
         mt_srand((float) microtime() * 10000);
@@ -73,6 +78,11 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function searchStatements($conditions, $orders, $start, $limit)
     {
         return $this->getStatementDao()->search($conditions, $orders, $start, $limit);
+    }
+
+    public function countStatements($conditions)
+    {
+        return $this->getStatementDao()->count($conditions);
     }
 
     public function getWatchLog($id)
