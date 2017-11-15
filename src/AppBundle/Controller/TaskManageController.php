@@ -251,6 +251,7 @@ class TaskManageController extends BaseController
         } else {
             $id = $request->query->get('id');
             $task = $this->getTaskService()->getTask($id);
+            $this->getCourseService()->tryManageCourse($task['courseId']);
 
             return $this->forward(
                 'AppBundle:Activity/Activity:update',
