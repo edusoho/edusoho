@@ -35,32 +35,27 @@ class XapiController extends BaseController
                 'paginator' => $paginator,
             )
         );
-
-
-
     }
 
     public function detailAction(Request $request, $id)
     {
-
         $statement = $this->getXapiService()->getStatement($id);
 
         return $this->render(
             'admin/xapi/detail.html.twig',
             array(
-                'statement' => $statement
+                'statement' => $statement,
             )
         );
-
     }
 
     public function settingAction(Request $request)
     {
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $xapiSetting = $request->request->all();
             $default = array(
                 'enabled' => 0,
-                'push_url' => 'http://xapi.edusoho.net'
+                'push_url' => 'http://xapi.edusoho.net',
             );
             $xapiSetting = array_merge($default, $xapiSetting);
             $this->getSettingService()->set('xapi', $xapiSetting);
