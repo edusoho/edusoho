@@ -13,4 +13,11 @@
 {% endif %}
 {{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
 
-{% include 'stylesheet/stylesheet-custom.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false), mobile: mobile} %}
+{% include 'stylesheet/stylesheet-custom.html.twig' with {
+    config: currentTheme, 
+    isEditColor: isEditColor|default(false), 
+    mobile: mobile,
+    maincolor: maincolor,
+    navigationcolor: navigationcolor,
+    } 
+  %}
