@@ -68,7 +68,7 @@ class TaskManageController extends BaseController
 
     protected function prepareRenderTaskForDefaultCourseType($courseType, $task)
     {
-        if ($courseType != CourseService::DEFAULT_COURSE_TYPE) {
+        if (CourseService::DEFAULT_COURSE_TYPE != $courseType) {
             return $task;
         }
         $chapter = $this->getChapterDao()->get($task['categoryId']);
@@ -131,7 +131,7 @@ class TaskManageController extends BaseController
             'ext' => array('mediaSource' => 'self', 'mediaId' => $file['id']),
             'categoryId' => 0,
         );
-        if ($file['type'] == 'document') {
+        if ('document' == $file['type']) {
             $task['type'] = 'doc';
             $task['mediaType'] = 'doc';
         }
@@ -154,7 +154,7 @@ class TaskManageController extends BaseController
 
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
-        if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && isset($task['mode']) && $task['mode'] != 'lesson') {
+        if (CourseService::DEFAULT_COURSE_TYPE == $course['courseType'] && isset($task['mode']) && 'lesson' != $task['mode']) {
             return $this->createJsonResponse(
                 array(
                     'append' => false,
@@ -190,7 +190,7 @@ class TaskManageController extends BaseController
             throw new InvalidArgumentException('任务不在计划中');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $task = $request->request->all();
 
             if (!isset($task['isOptional'])) {
@@ -238,7 +238,7 @@ class TaskManageController extends BaseController
     {
         $course = $this->tryManageCourse($courseId);
 
-        if ($mode === 'create') {
+        if ('create' === $mode) {
             $type = $request->query->get('type');
 
             return $this->forward(
@@ -271,7 +271,7 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($taskId);
-        if (isset($task['mode']) && $task['mode'] == 'lesson') {
+        if (isset($task['mode']) && 'lesson' == $task['mode']) {
             $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
         }
 
