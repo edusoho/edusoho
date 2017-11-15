@@ -87,9 +87,17 @@ class DataExtension extends \Twig_Extension
 
     public function isCloudConsultEnabled()
     {
-        $account = $this->getConsultService()->getAccount();
+        $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
 
-        if (isset($account['code']) && $account['code'] > 0) {
+        if (empty($cloudConsult['cloud_consult_expired_time']) || time() > $cloudConsult['cloud_consult_expired_time']) {
+            $account = $this->getConsultService()->getAccount();
+            $cloudConsult['cloud_consult_expired_time'] = time() + 60 * 60 * 0.5;
+            $cloudConsult['cloud_consult_code'] = empty($account['code']) ? 0 : $account['code'];
+
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+        }
+
+        if (!empty($cloudConsult['cloud_consult_code'])) {
             return false;
         }
 
@@ -104,6 +112,11 @@ class DataExtension extends \Twig_Extension
     protected function getConsultService()
     {
         return $this->biz->service('EduCloud:MicroyanConsultService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     public function getName()
