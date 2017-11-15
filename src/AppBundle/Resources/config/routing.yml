@@ -66,9 +66,9 @@ login_bind_newset:
     defaults: { _controller: AppBundle:LoginBind:newSet }
     methods: [POST]
 
-login_third_part:
+login_third_party:
     path:  /login/third/
-    defaults: { _controller: AppBundle:Login:thirdPart }
+    defaults: { _controller: AppBundle:Login:thirdParty }
 
 login_bind_exist:
     path:  /login/bind/{type}/exist
