@@ -1868,7 +1868,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = array(
             'order_ids' => $orderIds,
             'target_type' => 'course',
-            'status' => 'success',
+            'statuses' => array('success', 'finished'),
         );
 
         $orderItems = $this->getOrderService()->searchOrderItems($conditions, array(), 0, PHP_INT_MAX);
