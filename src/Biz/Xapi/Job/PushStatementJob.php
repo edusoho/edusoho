@@ -39,7 +39,7 @@ class PushStatementJob extends AbstractJob
                 $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
             }
         } catch (\Exception $e) {
-            $this->biz['logger']->error($e->getMessage());
+            file_put_contents('1.txt', $e->getMessage().PHP_EOL, FILE_APPEND );
         }
     }
 
