@@ -3,10 +3,8 @@
 namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Resource\ResourceProxy;
+use ApiBundle\Event\ResourceEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class ResourceAuthenticationProviderManager implements ResourceAuthenticationInterface
@@ -40,7 +38,7 @@ class ResourceAuthenticationProviderManager implements ResourceAuthenticationInt
             $provider->authenticate($resourceProxy, $method);
         }
 
-        $this->container->get('event_dispatcher')->dispatch(AuthenticationEvents::AFTER_AUTHENTICATE, new GetResponseEvent($this->container->get('kernel'), $this->container->get('request'), HttpKernelInterface::MASTER_REQUEST));
+        $this->container->get('event_dispatcher')->dispatch(AuthenticationEvents::AFTER_AUTHENTICATE, new ResourceEvent($this->container->get('request'), $resourceProxy));
     }
 
 }

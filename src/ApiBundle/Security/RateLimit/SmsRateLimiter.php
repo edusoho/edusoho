@@ -25,7 +25,7 @@ class SmsRateLimiter implements RateLimiterInterface
 
     const IP_CAPTCHA_MAX_ALLOW_ATTEMPT_ONE_HOUR = 3;
 
-    const IP_MAX_ALLOW_ATTEMPT_ONE_HOUR = 1000;
+    const IP_MAX_ALLOW_ATTEMPT_ONE_HOUR = 10;
 
     const SITE_MAX_ALLOW_ATTEMPT_ONE_DAY = 100000;
 

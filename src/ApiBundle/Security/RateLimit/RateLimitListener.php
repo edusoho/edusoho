@@ -3,9 +3,9 @@
 namespace ApiBundle\Security\RateLimit;
 
 use ApiBundle\Api\Exception\ErrorCode;
+use ApiBundle\Event\ResourceEvent;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class RateLimitListener
@@ -18,15 +18,15 @@ class RateLimitListener
     }
 
     private $ruleMap = array(
-        'sms' => array('/api/sms_center', 'post', 'SmsRateLimiter'),
+        array('SmsCenter', 'post', 'SmsRateLimiter'),
     );
 
-    public function handle(GetResponseEvent $event)
+    public function handle(ResourceEvent $event)
     {
         $request = $event->getRequest();
         foreach ($this->ruleMap as $rule) {
 
-            if ($this->isRateLimitApi($rule, $request)) {
+            if ($this->isRateLimitApi($rule, $event)) {
                 $rateLimiter = $this->getRateLimiter($rule[2]);
                 $result = $rateLimiter->handle($request);
 
@@ -69,11 +69,22 @@ class RateLimitListener
         return $this->getBizCaptcha()->check($captchaId, $phrase);
     }
 
-    private function isRateLimitApi($rule, Request $request)
+    private function isRateLimitApi($rule, ResourceEvent $event)
     {
-        return strcasecmp($rule[0], $request->getPathInfo()) === 0
+        $request = $event->getRequest();
+        $resourceProxy = $event->getResourceProxy();
+        $class = get_class($resourceProxy->getResource());
+        $className = $this->getClassName($class);
+        return strcasecmp($rule[0], $className) === 0
             && strcasecmp($rule[1], $request->getMethod()) === 0;
     }
+
+    private function getClassName($class)
+    {
+        $path = explode('\\', $class);
+        return array_pop($path);
+    }
+
     /**
      * @return \ApiBundle\Security\RateLimit\RateLimiterInterface
      */
