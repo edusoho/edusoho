@@ -14,7 +14,7 @@ class UpgradePluginCommand extends BaseCommand
         $this->setName('util:upgrade-plugin')
             ->addArgument('code', InputArgument::REQUIRED, '插件code')
             ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
-            ->setDescription('用于命令行中，升级制定版本插件');
+            ->setDescription('用于命令行中，升级指定版本插件');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -61,7 +61,7 @@ class localAppServiceImpl extends AppServiceImpl
 
     protected function createPackageUpdateLog($package, $status = 'SUCCESS', $message = '')
     {
-        \print_r($message);
+        print_r($message);
     }
 
     protected function updateAppForPackageUpdate($package, $packageDir)
