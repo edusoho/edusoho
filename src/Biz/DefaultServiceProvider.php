@@ -2,9 +2,11 @@
 
 namespace Biz;
 
+use Biz\Common\BizCaptcha;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
+use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -105,5 +107,13 @@ class DefaultServiceProvider implements ServiceProviderInterface
         $biz['course.normal_strategy'] = function ($biz) {
             return new NormalStrategy($biz);
         };
+
+        $biz['biz_captcha'] = $biz->factory(function ($biz) {
+            $bizCaptcha = new BizCaptcha();
+            $bizCaptcha->setBiz($biz);
+            $bizCaptcha->setCaptchaBuilder(new CaptchaBuilder());
+
+            return $bizCaptcha;
+        });
     }
 }
