@@ -66,7 +66,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                     'toId' => 2,
                     'title' => '收到一个用户关注',
                     'message' => '用户1已经关注了你！',
-                )
+                ),
             ),
             $this->getQueueService()->getJob()->getBody()
         );
