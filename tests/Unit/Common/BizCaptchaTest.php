@@ -17,7 +17,7 @@ class BizCaptchaTest extends BaseTestCase
     public function testCheck()
     {
         $result = $this->getBizCaptcha()->generate();
-        $verify = $this->getBizCaptcha()->check($result['captchaId'], '0000');
+        $verify = $this->getBizCaptcha()->check($result['captchaToken'], '0000');
         $this->assertFalse($verify);
     }
 

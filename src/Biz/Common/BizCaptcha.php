@@ -27,7 +27,7 @@ class BizCaptcha extends BizAware
             ),
         ));
 
-        return array('image' => $this->captchaBuilder->inline($options['quality']), 'captchaId' => $token['token']);
+        return array('image' => $this->captchaBuilder->inline($options['quality']), 'captchaToken' => $token['token']);
     }
 
     public function check($captchaId, $phrase)

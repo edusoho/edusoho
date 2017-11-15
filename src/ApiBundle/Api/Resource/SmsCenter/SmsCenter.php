@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\SmsCenter;
 
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -20,7 +21,7 @@ class SmsCenter extends AbstractResource
     {
         if (!($type = $request->request->get('type'))
             || !($mobile = $request->request->get('mobile'))) {
-            throw new BadRequestHttpException('Params missing');
+            throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $type = $this->convertType($type);
@@ -37,14 +38,14 @@ class SmsCenter extends AbstractResource
             )
         ));
         return array(
-            'smsId' => $smsToken['token']
+            'smsToken' => $smsToken['token']
         );
     }
 
     private function convertType($type)
     {
         if (!array_key_exists($type, $this->smsType)) {
-            throw new BadRequestHttpException('Params error');
+            throw new BadRequestHttpException('Params error', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         return $this->smsType[$type];

@@ -64,7 +64,7 @@ class RateLimitListener
     private function isCorrectCaptcha(Request $request)
     {
         $phrase = $request->request->get('phrase', '');
-        $captchaId = $request->request->get('captchaId', '');
+        $captchaId = $request->request->get('captchaToken', '');
 
         return $this->getBizCaptcha()->check($captchaId, $phrase);
     }

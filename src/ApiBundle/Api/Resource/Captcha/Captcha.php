@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Captcha;
 
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Course\Course;
 use Biz\Classroom\Service\ClassroomService;
@@ -36,7 +37,7 @@ class Captcha extends AbstractResource
     public function get(ApiRequest $request, $captchaId)
     {
         if (!($phrase = $request->query->get('phrase'))) {
-            throw new BadRequestHttpException();
+            throw new BadRequestHttpException('Missing Params', ErrorCode::INVALID_ARGUMENT);
         }
 
         return array(
