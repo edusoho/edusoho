@@ -1,11 +1,14 @@
 {% extends 'wap/third-party/third-party-login-layout.html.twig' %}
+{% do script(['app/js/default/message/index.js']) %}
 
 {% block page_title %}
   {{ '绑定成功'|trans }}
 {% endblock %}
 
+{% set duration = 3 %}
+
 {% block panel_body %}
-  <div class="cd-feedback third-party-feedback cd-mb32" data-goto="" data-duration="" id="page-message-container">
+  <div class="cd-feedback third-party-feedback cd-mb32" data-goto="{{ path('homepage') }}"data-duration="{{ duration }}" id="page-message-container">
     <div class="feedback-icon"><i class="cd-icon cd-icon-check"></i></div>
     <div class="feedback-title">{{ '账号绑定成功'|trans }}</div>
     <div class="feedback-content">{{ 'user.settings.security.set_pay_password_success.closed_automatically'|trans }}</div>
