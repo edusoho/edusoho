@@ -1,15 +1,31 @@
-{% extends 'wap/third-part/third-part-login-layout.html.twig' %}
+{# {% extends 'wap/third-part/third-part-login-layout.html.twig' %}
 
 {% block page_title %}
   {{ '绑定账号'|trans }}
 {% endblock %}
 
 {% block panel_body %}
-  <div class="alert cd-alert cd-alert-warning">
+  <div class="alert cd-alert cd-alert-warning cd-mb32">
     {{ '为获取更优质服务，请绑定您的手机或邮箱账号'|trans }}
   </div>
-  <div class="avatar-wrap">
-    <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+  <div class="text-center cd-mb32">
+    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset('static-dist/app/img/card_user.png') }}">
   </div>
+
+  <form class="third-part-form" method="post" data-url="">
+
+    <div class="form-group cd-form-group">
+      <label class="label-required">{{ '手机/邮箱'|trans }}</label>
+      <input class="form-control" type="text" id="way" name="way">
+    </div>
+
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button">{{ 'form.btn.next'|trans }}</button>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
 {% endblock %}
+ #}
+
+{% extends 'wap/third-part/third-part-login-new-accout.html.twig' %}
+{# {% extends 'wap/third-part/third-part-validate-password.html.twig' %} #}
 

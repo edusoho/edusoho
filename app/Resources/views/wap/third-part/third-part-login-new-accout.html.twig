@@ -1,0 +1,52 @@
+{% extends 'wap/third-part/third-part-login-layout.html.twig' %}
+
+{% block page_title %}
+  {{ '创建账号'|trans }}
+{% endblock %}
+
+{% block panel_body %}
+  <div class="text-center cd-mb32">
+    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset('static-dist/app/img/card_user.png') }}">
+  </div>
+
+  <div class="text-center cd-mb32">
+    <div class="third-part-bind-tip">{{ '使用手机创建账号'|trans }}</div>
+    <div class="third-part-user color-primary">{{ '15988811903'|trans }}</div>
+  </div>
+
+  <form class="third-part-form clearfix" method="post" data-url="">
+
+    <div class="form-group cd-form-group">
+      <label class="label-required">{{ '用户名'|trans }}</label>
+      <input class="form-control" type="text" id="username" name="username" placeholder="{{ '最长 18 个英文或 9 个汉字'|trans }}">
+    </div>
+
+    <div class="form-group cd-form-group">
+      <label class="label-required">{{ '密码'|trans }}</label>
+      <input class="form-control" type="password" id="password" name="password" placeholder="{{ '5-20 位英文、数字、符号'|trans }}">
+    </div>
+
+    <div class="form-group cd-form-group">
+      <label class="label-required">{{ '确认密码'|trans }}</label>
+      <input class="form-control" type="password" id=" confirmPassword" name="confirmPayPassword" placeholder="{{ '再次输入密码'|trans }}">
+    </div>
+
+    <div class="form-group cd-form-group cd-form-group-action third-part-sms-form-group cd-mb32">
+      <label for="sms_code">{{ '输入验证码'|trans }}</label>
+      <input class="form-control" type="text" id="sms-code" name="sms_code" placeholder="{{ '请输入手机收到的验证码'|trans }}">
+      <div class="action-button">
+        <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" disabled>
+          <span id="js-time-left"></span>
+          <span id="js-fetch-btn-text">{{'发送验证'|trans}}</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button">{{ '同意服务协议并注册'|trans }}</button>
+
+    <span class="pull-left third-part-link">{{ '请详细阅读'|trans }}<a href="{{ path('user_terms') }}" target="_blank">《{{'用户服务协议'|trans}}》</a></span>
+    <a class="pull-right third-part-link" href="">{{ '绑定已有账号？'|trans }}</a>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
