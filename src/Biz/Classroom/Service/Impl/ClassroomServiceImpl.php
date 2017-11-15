@@ -11,7 +11,7 @@ use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
