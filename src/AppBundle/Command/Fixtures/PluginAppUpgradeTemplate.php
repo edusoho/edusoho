@@ -3,7 +3,7 @@
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\BlockToolkit;
 
-class EduSohoUpgrade
+class EduSohoPluginUpgrade
 {
     protected $kernel;
 
@@ -42,9 +42,8 @@ class EduSohoUpgrade
             include $scriptFilePath;
             $updater = new \InstallScript($this->kernel);
             $updater->execute();
-            $this->copyStaticFile();
         }
-
+        $this->copyStaticFile();
         $this->initBlock();
     }
 
@@ -62,8 +61,9 @@ class EduSohoUpgrade
             $className = "\\{$className}";
             $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
-            $this->copyStaticFile();
         }
+        
+        $this->copyStaticFile();
     }
 
     private function copyStaticFile()

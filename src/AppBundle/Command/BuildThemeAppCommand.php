@@ -82,10 +82,13 @@ class BuildThemeAppCommand extends BaseCommand
     private function _copySource($name, $themeDir, $distDir)
     {
         $sourceTargetDir = $distDir.'/source/'.$name;
+        if ($this->filesystem->exists($themeDir."/../../static-dist/{$name}theme")) {
+            $this->filesystem->mirror($themeDir."/../../static-dist/{$name}theme", $themeDir."/static-dist/{$name}theme");
+            $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
+        } else {
+            $this->output->writeln("<info>    * 无静态资源文件</info>");
+        }
 
-        $this->filesystem->mirror($themeDir."/../../static-dist/{$name}theme", $themeDir."/static-dist/{$name}theme");
-
-        $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
 
         $this->filesystem->remove($sourceTargetDir.'/dev');
