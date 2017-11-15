@@ -42,6 +42,7 @@ class EduSohoUpgrade
             include $scriptFilePath;
             $updater = new \InstallScript($this->kernel);
             $updater->execute();
+            $this->copyStaticFile();
         }
 
         $this->initBlock();
@@ -61,6 +62,35 @@ class EduSohoUpgrade
             $className = "\\{$className}";
             $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
+            $this->copyStaticFile();
+        }
+    }
+
+    private function copyStaticFile()
+    {
+        $rootDir = realpath($this->kernel['root_directory']);
+        $code = '{{code}}';
+        $lowerCode = strtolower($code);
+
+        $filesystem = new Filesystem();
+        $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
+        if (is_dir($originDir)) {
+            $targetDir = "{$rootDir}/web/bundles/{{$lowerCode}}plugin";
+            if ($filesystem->exists($targetDir)) {
+                $filesystem->remove($targetDir);
+            }
+            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
+        }
+
+        $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/static-dist/{$lowerCode}plugin";
+        $targetDir = "{$rootDir}/web/static-dist/{$lowerCode}plugin";
+
+        if (is_dir($originDir)) {
+            if ($filesystem->exists($targetDir)) {
+                $filesystem->remove($targetDir);
+            }
+
+            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         }
     }
 
