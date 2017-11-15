@@ -6,9 +6,6 @@ use Biz\System\Service\SettingService;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use AppBundle\Common\ArrayToolkit;
-use Guzzle\Http\Client;
-use QiQiuYun\SDK\Auth;
 
 class PushStatementJob extends AbstractJob
 {
