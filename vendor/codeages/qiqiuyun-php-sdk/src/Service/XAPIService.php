@@ -433,7 +433,7 @@ class XAPIService extends BaseService
             );
         }
 
-        file_put_contents('1.txt', json_encode($statements), FILE_APPEND);
+        file_put_contents('1.txt', json_encode($this->makeSignature()), FILE_APPEND);
 
         $rawResponse = $this->client->request('POST', '/statements', array(
             'json' => $statements,

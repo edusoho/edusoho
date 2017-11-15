@@ -51,35 +51,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-//        $course = $this->getCourseService()->getCourse($taskResult['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//
-//        $activity = $this->getActivityService()->getActivity($taskResult['activityId'], true);
-//        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-//            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
-//        }
-//
-//        if (empty($course) || !$this->getMemberService()->isCourseStudent($course['id'], $user['id'])) {
-//            return;
-//        }
-//
-//        $task = $this->getTaskService()->getTask($taskResult['courseTaskId']);
-//
-//        if (empty($task)) {
-//            return;
-//        }
-//
-//        $actor = $this->getActor();
-//        $object = array(
-//            'id' => $task['id'],
-//            'name' => $task['title'],
-//            'course' => $course,
-//            'resource' => empty($resource) ? array() : $resource,
-//            'definitionType' => $this->convertMediaType($task['type']),
-//        );
-//
-//        $this->createXAPIService()->finishActivity($actor, $object, array());
     }
 
     public function onQuestionMarkerFinish(Event $event)
@@ -98,60 +69,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-
-//        $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerResult['questionMarkerId']);
-//        $answers = array();
-//        if (is_array($questionMarker['answer'])) {
-//            foreach ($questionMarker['answer'] as $answer) {
-//                $answers[] = $this->num_to_capital($answer);
-//            }
-//        }
-//
-//        $choices = array();
-//        if (isset($questionMarker['metas']['choices'])) {
-//            foreach ($questionMarker['metas']['choices'] as $id => $choice) {
-//                $choices[] = array(
-//                    'id' => $id,
-//                    'description' => array(
-//                        'zh-CN' => $this->num_to_capital($id),
-//                    ),
-//                );
-//            }
-//        }
-//
-//        $task = $this->getTaskService()->getTask($questionMarkerResult['taskId']);
-//
-//        $course = $this->getCourseService()->getCourse($task['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-//
-//        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-//            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
-//        }
-//
-//        $actor = $this->getActor();
-//        $object = array(
-//            'id' => $questionMarker['id'],
-//            'type' => $questionMarker['type'],
-//            'stem' => $questionMarker['stem'],
-//            'answer' => $answers,
-//            'choices' => $choices,
-//            'course' => $course,
-//            'activity' => $activity,
-//            'resource' => empty($resource) ? array() : $resource,
-//        );
-//
-//        $result = array(
-//            'score' => array(
-//                'max' => 0,
-//                'min' => 0,
-//                'raw' => 0,
-//            ),
-//            'response' => $answers,
-//        );
-//
-//        $this->createXAPIService()->finishActivityQuestion($actor, $object, $result);
     }
 
     public function onExamFinish(Event $event)
@@ -188,26 +105,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-//        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-//        $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($testpaperResult['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//
-//        $object = array(
-//            'id' => $testpaperResult['id'],
-//            'course' => $course,
-//        );
-//
-//        $actor = $this->getActor();
-//        $result = array(
-//            'score' => array(
-//                'max' => $testpaper['score'],
-//                'min' => 0,
-//                'raw' => $testpaperResult['score'],
-//            ),
-//        );
-//
-//        $this->createXAPIService()->finishTestpaper($actor, $object, $result);
     }
 
     protected function homeworkFinish($homeworkResult)
@@ -220,19 +117,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-//        $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($homeworkResult['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//
-//        $object = array(
-//            'id' => $homeworkResult['id'],
-//            'course' => $course,
-//        );
-//
-//        $actor = $this->getActor();
-//        $result = array();
-//
-//        $this->createXAPIService()->finishHomework($actor, $object, $result);
     }
 
     protected function exerciseFinish($exerciseFinish)
@@ -245,19 +129,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-//        $course = $this->getCourseService()->getCourse($exerciseFinish['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($exerciseFinish['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//
-//        $object = array(
-//            'id' => $exerciseFinish['id'],
-//            'course' => $course,
-//        );
-//
-//        $actor = $this->getActor();
-//        $result = array();
-//
-//        $this->createXAPIService()->finishExercise($actor, $object, $result);
     }
 
     public function onCourseNoteCreate(Event $event)
@@ -276,28 +147,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-//        $task = $this->getTaskService()->getTask($note['taskId']);
-//        $course = $this->getCourseService()->getCourse($note['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($note['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-//
-//        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-//            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
-//        }
-//
-//        $object = array(
-//            'id' => $note['id'],
-//            'course' => $course,
-//            'definitionType' => $this->convertMediaType($task['type']),
-//            'resource' => empty($resource) ? array() : $resource,
-//        );
-//
-//        $actor = $this->getActor();
-//
-//        $result = $note;
-//
-//        $this->createXAPIService()->writeNote($actor, $object, $result);
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -314,28 +163,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $this->getXapiService()->createStatement($statement);
-//        $task = $this->getTaskService()->getTask($thread['taskId']);
-//        $course = $this->getCourseService()->getCourse($thread['courseId']);
-//        $courseSet = $this->getCourseSetService()->getCourseSet($thread['courseSetId']);
-//        $course['description'] = $courseSet['subtitle'];
-//        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-//
-//        if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-//            $resource = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
-//        }
-//
-//        $object = array(
-//            'id' => $thread['id'],
-//            'course' => $course,
-//            'definitionType' => $this->convertMediaType($task['type']),
-//            'resource' => empty($resource) ? array() : $resource,
-//        );
-//
-//        $actor = $this->getActor();
-//
-//        $result = $thread;
-//
-//        $this->createXAPIService()->askQuestion($actor, $object, $result);
     }
 
     private function getActor()
