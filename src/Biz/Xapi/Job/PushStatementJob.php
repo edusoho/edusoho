@@ -35,13 +35,12 @@ class PushStatementJob extends AbstractJob
 
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
             $result = $this->createXAPIService()->pushStatements($pushStatements);
-            file_put_contents('1.txt', json_encode($result).PHP_EOL, FILE_APPEND);
 
             if ($result) {
                 $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
             }
         } catch (\Exception $e) {
-            file_put_contents('2.txt', $e->getMessage());
+
         }
     }
 
@@ -49,6 +48,7 @@ class PushStatementJob extends AbstractJob
     {
         $settings = $this->getSettingService()->get('storage', array());
         $siteSettings = $this->getSettingService()->get('site', array());
+        $xapiSetting = $this->getSettingService()->get('xapi', array());
 
         $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
         $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
@@ -73,29 +73,6 @@ class PushStatementJob extends AbstractJob
     {
         return $this->biz->service('System:SettingService');
     }
-
-//    protected function pushStatements($statements)
-//    {
-//        $pushdStatements = array();
-//        foreach ($statements as $statement) {
-//            $pushStatement = ArrayToolkit::parts($statement['data'], array('actor', 'verb', 'object', 'result', 'context'));
-//            $pushStatement['timestamp'] = time();
-//            $pushStatement['id'] = $statement['uuid'];
-//            $pushdStatements[] = $pushStatement;
-//        }
-    //
-//        $client = new Client();
-//        $request = $client->post($this->biz['xapi.options']['getway'], array(
-//            'Content-type' => 'application/json; charset=utf-8',
-//        ), json_encode($pushdStatements));
-    //
-//        $response = $request->send();
-//        if ($response->getStatusCode() == 200) {
-//            return true;
-//        }
-    //
-//        return false;
-//    }
 
     /**
      * @return XapiService
