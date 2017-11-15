@@ -12,6 +12,11 @@ class PushStatementJob extends AbstractJob
 {
     public function execute()
     {
+        $xapiSetting = $this->getSettingService()->get('xapi', array());
+        if (empty($xapiSetting['enabled'])) {
+            return ;
+        }
+
         try {
             $condition = array(
                 'status' => 'created',
