@@ -28,11 +28,6 @@ class UpgradePluginCommand extends BaseCommand
 
         $output->writeln('<info>升级 成功</info>');
     }
-
-    protected function getAppService()
-    {
-        return $this->getBiz()->service('CloudPlatform:AppService');
-    }
 }
 
 class localAppServiceImpl extends AppServiceImpl
