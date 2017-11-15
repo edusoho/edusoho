@@ -5,6 +5,7 @@ namespace Biz\Sms\Service\Impl;
 use Biz\BaseService;
 use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class SmsServiceImpl extends BaseService implements SmsService
 {
@@ -47,17 +48,17 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function sendVerifySms($smsType, $to, $smsLastTime = 0)
     {
         if (!$this->checkPhoneNum($to)) {
-            throw new \RuntimeException(sprintf('手机号错误:%s', $to));
+            throw new ServiceException(sprintf('手机号错误:%s', $to));
         }
 
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException('云短信相关设置未开启!');
+            throw new ServiceException('云短信相关设置未开启!');
         }
 
         $allowedTime = 120;
         $currentTime = time();
         if ($this->isNeedWaiting($smsLastTime, $currentTime, $allowedTime)) {
-            throw new \RuntimeException('请等待120秒再申请!');
+            throw new ServiceException('请等待120秒再申请!');
         }
         $currentUser = $this->getCurrentUser();
 

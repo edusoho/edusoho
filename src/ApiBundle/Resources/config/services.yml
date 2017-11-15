@@ -58,6 +58,13 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'api.before_authenticate', priority: 1024, method: onAuthenticate }
 
+    api_ratelimit_listener:
+        class: ApiBundle\Security\RateLimit\RateLimitListener
+        arguments: ['@biz']
+        tags:
+            - { name: kernel.event_listener, event: api.after_authenticate, priority: 1024, method: handle }
+
+
     api_response_viewer:
         class: ApiBundle\Viewer
         arguments: ['@service_container']
