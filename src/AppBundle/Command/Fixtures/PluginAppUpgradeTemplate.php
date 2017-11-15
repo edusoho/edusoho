@@ -62,7 +62,7 @@ class EduSohoPluginUpgrade
             $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
         }
-        
+
         $this->copyStaticFile();
     }
 
