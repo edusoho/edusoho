@@ -16,15 +16,15 @@ class BizCaptcha extends BizAware
     public function generate($options = array())
     {
         $options = array_merge(array('width' => 150, 'height' => 32, 'quality' => 90, 'verify_times' => 2), $options);
-        $this->captchaBuilder->build($options['width'], $options['height'],null, null);
+        $this->captchaBuilder->build($options['width'], $options['height'], null, null);
 
         $token = $this->getTokenService()->makeToken($this->tokenType, array(
-            'times'    => $options['verify_times'],
+            'times' => $options['verify_times'],
             'duration' => 60 * 30,
-            'userId'   => 0,
-            'data'     => array(
-                'phrase' => $this->captchaBuilder->getPhrase()
-            )
+            'userId' => 0,
+            'data' => array(
+                'phrase' => $this->captchaBuilder->getPhrase(),
+            ),
         ));
 
         return array('image' => $this->captchaBuilder->inline($options['quality']), 'captchaId' => $token['token']);
