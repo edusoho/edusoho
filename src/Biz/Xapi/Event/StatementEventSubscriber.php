@@ -18,7 +18,6 @@ use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use QiQiuYun\SDK\Auth;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -120,7 +119,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     private function createStatement($userId, $verb, $targetId, $targetType)
     {
         if (empty($userId)) {
-            return ;
+            return;
         }
         try {
             $statement = array(
@@ -133,9 +132,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
             $this->getXapiService()->createStatement($statement);
         } catch (\Exception $e) {
-
         }
-
     }
 
     /**
