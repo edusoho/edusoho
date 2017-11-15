@@ -26,6 +26,7 @@ class AddActivityWatchToStatementJob extends AbstractJob
                 'verb' => 'watch',
                 'target_id' => $watchLog['id'],
                 'target_type' => $activity['mediaType'],
+                'occur_time' => $watchLog['updated_time'],
             );
 
             $this->getXapiService()->createStatement($statement);

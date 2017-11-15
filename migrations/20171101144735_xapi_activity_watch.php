@@ -19,8 +19,6 @@ class XapiActivityWatch extends Migration
           `course_id` int(11) DEFAULT NULL COMMENT '教学计划ID',
           `task_id` int(11) DEFAULT NULL COMMENT '任务ID',
           `watched_time` int(10) unsigned NOT NULL COMMENT '观看时长',
-          `start_time` int(10) unsigned DEFAULT NULL COMMENT '开始时间',
-          `end_time` int(10) unsigned DEFAULT NULL COMMENT '结束时间',
           `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
           `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
           `is_push` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否推送',

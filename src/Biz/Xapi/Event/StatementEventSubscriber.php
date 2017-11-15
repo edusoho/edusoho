@@ -43,14 +43,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
         $taskResult = $event->getSubject();
 
-        $statement = array(
-            'user_id' => $user['id'],
-            'verb' => 'finish',
-            'target_id' => $taskResult['id'],
-            'target_type' => 'activity',
-        );
-
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($user['id'], 'finish', $taskResult['id'], 'activity');
     }
 
     public function onQuestionMarkerFinish(Event $event)
@@ -61,14 +54,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $questionMarkerResult = $event->getSubject();
 
-        $statement = array(
-            'user_id' => $user['id'],
-            'verb' => 'answered',
-            'target_id' => $questionMarkerResult['id'],
-            'target_type' => 'question',
-        );
-
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($user['id'], 'answered', $questionMarkerResult['id'], 'question');
     }
 
     public function onExamFinish(Event $event)
@@ -97,38 +83,17 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
     protected function testpaperFinish($testpaperResult)
     {
-        $statement = array(
-            'user_id' => $testpaperResult['userId'],
-            'verb' => 'completed',
-            'target_id' => $testpaperResult['id'],
-            'target_type' => 'testpaper',
-        );
-
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($testpaperResult['userId'], 'completed', $testpaperResult['id'], 'testpaper');
     }
 
     protected function homeworkFinish($homeworkResult)
     {
-        $statement = array(
-            'user_id' => $homeworkResult['userId'],
-            'verb' => 'completed',
-            'target_id' => $homeworkResult['id'],
-            'target_type' => 'homework',
-        );
-
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($homeworkResult['userId'], 'completed', $homeworkResult['id'], 'homework');
     }
 
     protected function exerciseFinish($exerciseFinish)
     {
-        $statement = array(
-            'user_id' => $exerciseFinish['userId'],
-            'verb' => 'completed',
-            'target_id' => $exerciseFinish['id'],
-            'target_type' => 'exercise',
-        );
-
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($exerciseFinish['userId'], 'completed', $exerciseFinish['id'], 'exercise');
     }
 
     public function onCourseNoteCreate(Event $event)
@@ -137,16 +102,9 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         if (empty($user) || !$user->isLogin()) {
             return;
         }
-
         $note = $event->getSubject();
-        $statement = array(
-            'user_id' => $note['userId'],
-            'verb' => 'noted',
-            'target_id' => $note['id'],
-            'target_type' => 'note',
-        );
 
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($note['userId'], 'noted', $note['id'], 'note');
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -155,58 +113,29 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         if ($thread['type'] != 'question') {
             return;
         }
-        $statement = array(
-            'user_id' => $thread['userId'],
-            'verb' => 'asked',
-            'target_id' => $thread['id'],
-            'target_type' => 'question',
-        );
 
-        $this->getXapiService()->createStatement($statement);
+        $this->createStatement($thread['userId'], 'asked', $thread['id'], 'question');
     }
 
-    private function getActor()
+    private function createStatement($userId, $verb, $targetId, $targetType)
     {
-        $currentUser = $this->getCurrentUser();
-        global $kernel;
+        if (empty($userId)) {
+            return ;
+        }
+        try {
+            $statement = array(
+                'user_id' => $userId,
+                'verb' => $verb,
+                'target_id' => $targetId,
+                'target_type' => $targetType,
+                'occur_time' => time(),
+            );
 
-        if (empty($kernel)) {
-            return false;
+            $this->getXapiService()->createStatement($statement);
+        } catch (\Exception $e) {
+
         }
 
-        $host = $kernel->getContainer()->get('request')->getHttpHost();
-
-        return array(
-            'account' => array(
-                'id' => $currentUser['id'],
-                'name' => $currentUser['nickname'],
-                'email' => $currentUser['email'],
-                'mobile' => empty($currentUser['mobile']) ? '' : $currentUser['mobile'],
-                'homePage' => $host,
-            ),
-        );
-    }
-
-    private function getSchoolInfo()
-    {
-        $storage = $this->getSettingService()->get('storage', array());
-        $accessKey = $storage['cloud_access_key'];
-        $site = $this->getSettingService()->get('site', array());
-        $name = empty($site['name']) ? '' : $site['name'];
-        $url = empty($site['url']) ? '' : $site['url'];
-
-        return array(
-            'id' => $accessKey,
-            'name' => $name,
-            'url' => $url,
-        );
-    }
-
-    protected function num_to_capital($num)
-    {
-        $char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        return $char[$num];
     }
 
     /**
@@ -323,48 +252,8 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->createService('Testpaper:TestpaperService');
     }
 
-    public function createXAPIService()
-    {
-        $settings = $this->getSettingService()->get('storage', array());
-        $siteSettings = $this->getSettingService()->get('site', array());
-
-        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
-        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth('9DdikSDLhmObBhE0t3mhN9UUl8FW2Zdh', 'jNqSV44Fx5kxBFc4VI840pLk8D6QeO86');
-
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => 'http://192.168.4.214:8769/v1/xapi/', //推送的URL需要配置
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
-            ),
-        ));
-    }
-
     protected function createService($alias)
     {
         return $this->getBiz()->service($alias);
-    }
-
-    protected function convertMediaType($mediaType)
-    {
-        $list = array(
-            'audio' => 'audio',
-            'video' => 'video',
-            'doc' => 'document',
-            'ppt' => 'document',
-            'testpaper' => 'testpaper',
-            'homework' => 'homework',
-            'exercise' => 'exercise',
-            'download' => 'download',
-            'live' => 'live',
-            'text' => 'text',
-            'flash' => 'flash',
-        );
-
-        return empty($list[$mediaType]) ? $mediaType : $list[$mediaType];
     }
 }
