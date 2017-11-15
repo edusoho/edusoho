@@ -58,7 +58,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $userId);
         if (!empty($member)) {
             $fields['lastViewTime'] = time();
-            $this->getCourseMemberService()-,>updateMember($member['id'], $fields);
+            $this->getCourseMemberService()->updateMember($member['id'], $fields);
         }
     }
 
