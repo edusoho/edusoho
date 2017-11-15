@@ -17,7 +17,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                 array(
                     'functionName' => 'get',
                     'returnValue' => array('enabled' => true),
-                    'withParams' => array('app_im', array())
+                    'withParams' => array('app_im', array()),
                 ),
             )
         );
@@ -28,12 +28,12 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                 array(
                     'functionName' => 'getUser',
                     'returnValue' => array('id' => 1, 'nickname' => '用户1'),
-                    'withParams' => array(1)
+                    'withParams' => array(1),
                 ),
                 array(
                     'functionName' => 'getUser',
                     'returnValue' => array('id' => 2, 'nickname' => '用户2'),
-                    'withParams' => array(2)
+                    'withParams' => array(2),
                 ),
             )
         );

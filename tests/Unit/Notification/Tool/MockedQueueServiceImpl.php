@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Queue\Job;
 class MockedQueueServiceImpl
 {
     private $job;
-    
+
     public function pushJob(Job $job, $queue = null)
     {
         $this->job = $job;

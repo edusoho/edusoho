@@ -183,16 +183,17 @@ class BaseTestCase extends TestCase
      *  );
      * ＠param $alias  createService　或　createDao 里面的字符串
      * ＠param $params 二维数组
-            array(
-                array(
-                    'functionName' => 'tryManageCourse', //必填
-                    'returnValue' => array('id' => 1), // 非必填，填了表示有相应的返回结果
-                    'withParams' => array('param1', array('arrayParamKey1' => '123')),
-                        //非必填，表示填了相应参数才会有相应返回结果
-                        //参数必须要用一个数组包含
-                    'runTimes' => 1,  //非必填，表示跑第几次会出相应结果, 不填表示无论跑多少此，结果都一样
-                ),
-            )
+     *  array(
+     *      array(
+     *          'functionName' => 'tryManageCourse',　//必填
+     *          'returnValue' => array('id' => 1),　// 非必填，填了表示有相应的返回结果
+     *          'withParams' => array('param1', array('arrayParamKey1' => '123')),　
+     *                          //非必填，表示填了相应参数才会有相应返回结果
+     *                          //参数必须要用一个数组包含
+     *          'runTimes' => 1 //非必填，表示跑第几次会出相应结果, 不填表示无论跑多少此，结果都一样
+     *      )
+     *  )
+
      */
     protected function mockBiz($alias, $params = array())
     {
