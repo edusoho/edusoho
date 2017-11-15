@@ -6,7 +6,6 @@ use Biz\System\Service\SettingService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use AppBundle\Common\ArrayToolkit;
-use Guzzle\Http\Client;
 use QiQiuYun\SDK\Auth;
 
 class PushStatementJob extends AbstractJob
@@ -40,7 +39,6 @@ class PushStatementJob extends AbstractJob
                 $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
             }
         } catch (\Exception $e) {
-
         }
     }
 
