@@ -26,6 +26,12 @@
     position: absolute;
     top: 24px;
     left: 107px;
+    @media(max-width: @screen-xs-min) {
+      left: 20%;
+    }
+    @media(max-width: 320px) {
+      left: 12%;
+    }
     border: 2px solid #fff;
     .cd-box-shadow(8px);
   }
