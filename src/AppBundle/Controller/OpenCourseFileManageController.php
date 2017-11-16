@@ -104,13 +104,15 @@ class OpenCourseFileManageController extends BaseController
 
             $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
 
-            if (!empty($deletedMaterials)) {
+            if (empty($deletedMaterials)) {
+                return $this->createJsonResponse(true);
+            }
+
+            if (!empty($formData['isDeleteFile'])) {
                 $fileIds = array_unique(ArrayToolkit::column($deletedMaterials, 'fileId'));
-                if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
-                    foreach ($fileIds as $key => $fileId) {
-                        if ($this->getUploadFileService()->canManageFile($fileId)) {
-                            $this->getUploadFileService()->deleteFile($fileId);
-                        }
+                foreach ($fileIds as $fileId) {
+                    if ($this->getUploadFileService()->canManageFile($fileId)) {
+                        $this->getUploadFileService()->deleteFile($fileId);
                     }
                 }
             }
