@@ -99,7 +99,7 @@ class OpenCourseFileManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
 
             $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
