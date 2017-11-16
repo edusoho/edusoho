@@ -29,7 +29,7 @@ abstract class BaseRegister
     /**
      * 用于user_profile表
      * key 为 $registration 内的属性名
-     * value = 默认值（无属性，使用默认值)
+     * value = 默认值（$registration内无属性，使用默认值)
      */
     protected function getCreatedProfileFields()
     {
@@ -50,7 +50,7 @@ abstract class BaseRegister
     /**
      * 用于user表
      * key 为 $registration 内的属性名
-     * value = 默认值（无属性，使用默认值)
+     * value = 默认值（$registration内无属性，使用默认值)
      */
     protected function getCreatedUserFields()
     {
