@@ -1,4 +1,4 @@
-{% extends 'wap/third-party/third-party-login-layout.html.twig' %}
+{% extends 'oauth2/layout.html.twig' %}
 {% do script(['libs/jquery-validation.js','app/js/wap/third-party/login/index.js']) %}
 
 {% block page_title %}
@@ -12,7 +12,7 @@
   <div class="text-center cd-mb32">
     <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset('static-dist/app/img/card_user.png') }}">
   </div>
-
+  {{ '当前注册模式:' ~ dump(mode) }}
   <form class="third-party-form" id="third-party-login-form" method="post" data-url="">
 
     <div class="form-group cd-form-group">

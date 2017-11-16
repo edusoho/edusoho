@@ -14,6 +14,8 @@ class BindController extends BaseController
 
         $registerSetting = $setting->getRegister();
 
-        return $this->render('oauth2/index.html.twig');
+        return $this->render('oauth2/index.html.twig', array(
+            'mode' => $registerSetting['mode']
+        ));
     }
 }
