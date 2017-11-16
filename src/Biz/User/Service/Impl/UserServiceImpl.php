@@ -880,7 +880,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->dispatchEvent('user.registered', new Event($user));
-        
+
         return $user;
     }
 

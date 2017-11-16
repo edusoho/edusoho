@@ -67,7 +67,6 @@ abstract class BaseRegister
 
     protected function validate($registration)
     {
-
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw new InvalidArgumentException('Invalid nickname');
         }
