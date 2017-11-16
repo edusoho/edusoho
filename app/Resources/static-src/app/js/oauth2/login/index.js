@@ -56,4 +56,3 @@ $btn.click((event) => {
     window.location.href = $btn.data('create-url');
   }
 });
-
