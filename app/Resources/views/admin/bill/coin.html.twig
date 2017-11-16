@@ -3,7 +3,6 @@
 {% set menu = 'admin_bill_coin' %}
 {% set coinSetting = setting('coin') %}
 {% block main %}  
-{{dump(coinSetting)}}
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
     <p class="text-muted">
       <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
