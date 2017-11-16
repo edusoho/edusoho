@@ -50,8 +50,8 @@
                     <img class="js-img-set img-responsive" style="cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}"></div>
                   {% endfor %}
                 </div>
-                <div class="tab-pane-img material-detail-img" id="self-select" style="height:300px;">
-                  <div class="video-player-container detail-img" style="width: 527px;">
+                <div class="tab-pane-img material-detail-img" id="self-select">
+                  <div class="video-player-container detail-img">
                     <iframe src="{{ path('material_lib_file_player', {fileId:material.id, watermarkOpened:'hidden', 'disableVolumeButton': 1, 'disablePlaybackButton':1, 'disableResolutionSwitcher': 1}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
                   </div>
                   <div class="btn-content">
