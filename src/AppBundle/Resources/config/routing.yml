@@ -60,9 +60,9 @@ oauth2_login_index:
     path:  /oauth2/login/index
     defaults: { _controller: AppBundle:OAuth2/Login:index }
 
-oauth2_login_bind:
-    path:  /oauth2/login/bind
-    defaults: { _controller: AppBundle:OAuth2/Login:bind }
+oauth2_login_bind_account:
+    path:  /oauth2/login/bind_account
+    defaults: { _controller: AppBundle:OAuth2/Login:bindAccount }
     methods: [POST]
 
 oauth2_login_bind_login:

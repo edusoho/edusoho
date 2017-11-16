@@ -23,7 +23,7 @@ class LoginController extends BaseController
         ));
     }
 
-    public function bindAction(Request $request)
+    public function bindAccountAction(Request $request)
     {
 
         $oauthUser = $this->getOauthUser($request);
@@ -44,13 +44,19 @@ class LoginController extends BaseController
 
         $request->getSession()->set('oauth_user', $oauthUser);
 
-        return $this->createJsonResponse(array(
-           'redirectUrl' => $redirectUrl,
-        ));
+        return $this->redirect($redirectUrl);
     }
 
     public function bindLoginAction(Request $request)
     {
+        $oauthUser = $this->getOauthUser($request);
+        if ('POST' == $request->getMethod()) {
+            return $this->redirect($this->getTargetPath($request));
+        } else {
+            return $this->render('oauth2/bind-login.html.twig', array(
+                'oauthUser' => $oauthUser,
+            ));
+        }
     }
 
     public function successAction(Request $request)
