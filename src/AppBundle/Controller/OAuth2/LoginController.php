@@ -21,19 +21,19 @@ class LoginController extends BaseController
 
     public function bindAction(Request $request)
     {
-        return $this->render('wap/third-party/third-party-login-bind-accout.html.twig', array(
+        return $this->render('oauth2/bind-accout.html.twig', array(
         ));
     }
 
     public function successAction(Request $request)
     {
-        return $this->render('wap/third-party/third-party-login-success.html.twig', array(
+        return $this->render('oauth2/success.html.twig', array(
         ));
     }
 
     public function createAction(Request $request)
     {
-        return $this->render('wap/third-party/third-party-login-create-accout.html.twig', array(
+        return $this->render('oauth2/create-accout.html.twig', array(
         ));
     }
 }
