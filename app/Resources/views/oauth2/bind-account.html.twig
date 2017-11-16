@@ -1,4 +1,4 @@
-{% extends 'wap/third-party/third-party-login-layout.html.twig' %}
+{% extends 'oauth2/layout.html.twig' %}
 {% do script(['libs/jquery-validation.js','app/js/wap/third-party/bind/index.js']) %}
 
 {% block page_title %}
@@ -30,8 +30,8 @@
       <label class="label-required" for="password">{{ '网校账号密码'|trans }}</label>
       <input class="form-control" type="password" id="password" name="password" data-url="{{ path('settings_check_login_password') }}">
     </div>
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('login_third_party_bind_success') }}">{{ '绑定并继续'|trans }}</button>
-    <a class="pull-right third-party-link" href="{{ path('login_third_party') }}">{{ '绑定其他账号？'|trans }}</a>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_success') }}">{{ '绑定并继续'|trans }}</button>
+    <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ '绑定其他账号？'|trans }}</a>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>

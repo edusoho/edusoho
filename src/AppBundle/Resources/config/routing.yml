@@ -58,19 +58,19 @@ login_bind_choose:
 
 oauth2_login_index:
     path:  /oauth2/login/index
-    defaults: { _controller: AppBundle:OAuth2/Bind:index }
+    defaults: { _controller: AppBundle:OAuth2/Login:index }
 
 oauth2_login_bind:
     path:  /oauth2/login/bind
-    defaults: { _controller: AppBundle:OAuth2/Bind:bind }
+    defaults: { _controller: AppBundle:OAuth2/Login:bind }
 
 oauth2_login_create:
     path:  /oauth2/login/create
-    defaults: { _controller: AppBundle:OAuth2/Bind:create }
+    defaults: { _controller: AppBundle:OAuth2/Login:create }
 
 oauth2_login_success:
     path:  /oauth2/login/success
-    defaults: { _controller: AppBundle:OAuth2/Bind:success }
+    defaults: { _controller: AppBundle:OAuth2/Login:success }
 
 login_bind_new:
     path:  /login/bind/{type}/new
@@ -81,22 +81,6 @@ login_bind_newset:
     path:  /login/bind/{type}/newset
     defaults: { _controller: AppBundle:LoginBind:newSet }
     methods: [POST]
-
-login_third_party:
-    path:  /login/third/
-    defaults: { _controller: AppBundle:Login:thirdParty }
-
-login_third_party_bind:
-    path:  /login/third/bind
-    defaults: { _controller: AppBundle:Login:thirdPartyBind }
-
-login_third_party_bind_success:
-    path:  /login/third/bind/success
-    defaults: { _controller: AppBundle:Login:thirdPartyBindSuccess }
-
-login_third_party_create:
-    path:  /login/third/create
-    defaults: { _controller: AppBundle:Login:thirdPartyCreate }
 
 login_bind_exist:
     path:  /login/bind/{type}/exist
