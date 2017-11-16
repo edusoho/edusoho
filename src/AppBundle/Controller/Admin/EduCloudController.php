@@ -226,6 +226,7 @@ class EduCloudController extends BaseController
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', 'site.save.success');
+
             return $this->createJsonResponse(true);
         } else {
             $storageSetting = array_merge($default, $storageSetting);
