@@ -44,13 +44,12 @@ class LoginController extends BaseController
         $request->getSession()->set('oauth_user', $oauthUser);
 
         return $this->createJsonResponse(array(
-           'redirectUrl' => $redirectUrl
+           'redirectUrl' => $redirectUrl,
         ));
     }
 
     public function bindLoginAction(Request $request)
     {
-
     }
 
     public function successAction(Request $request)
