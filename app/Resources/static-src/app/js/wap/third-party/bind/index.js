@@ -12,11 +12,6 @@ let validator = $form.validate({
       },
     },
   },
-  messages: {
-    password: {
-      required: Translator.trans('请输入密码')
-    }
-  },
   submitSuccess(data) {
     notify('success', Translator.trans(data.message));
   },

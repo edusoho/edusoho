@@ -27,7 +27,7 @@
       <div class="third-party-form__way">15988811903</div>
     </div>
     <div class="form-group cd-form-group">
-      <label class="label-required">{{ '网校账号密码'|trans }}</label>
+      <label class="label-required" for="password">{{ '网校账号密码'|trans }}</label>
       <input class="form-control" type="password" id="password" name="password" data-url="{{ path('settings_check_login_password') }}">
     </div>
     <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('login_third_party_bind_success') }}">{{ '绑定并继续'|trans }}</button>
