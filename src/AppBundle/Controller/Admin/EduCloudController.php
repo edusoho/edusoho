@@ -226,6 +226,7 @@ class EduCloudController extends BaseController
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', 'site.save.success');
+            return $this->createJsonResponse(true);
         } else {
             $storageSetting = array_merge($default, $storageSetting);
         }
@@ -248,6 +249,12 @@ class EduCloudController extends BaseController
             'headLeader' => $headLeader,
             'video' => $overview['video'],
         ));
+    }
+
+    public function deleteVideoAction()
+    {
+        //admin/edu-cloud/video/video-delete-success-modal.html.twig
+        return $this->render('admin/edu-cloud/video/video-delete-confirm-modal.html.twig');
     }
 
     public function videoControlAction(Request $request)

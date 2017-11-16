@@ -226,9 +226,16 @@
         <label for="support_mobile">{{ 'admin.edu_cloud.edu_video.support_mobile'|trans }}：</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('support_mobile', {'1':'admin.edu_cloud.edu_video.open_radio'|trans, '0':'admin.edu_cloud.edu_video.close_radio'|trans}, storageSetting.support_mobile) }}
-        <div class="help-block">
-          {{'admin.edu_cloud.edu_video.support_mobile_tips'|trans|raw}}
+        {{ radios('support_mobile', {'1':'admin.edu_cloud.edu_video.normal_mode'|trans, '0':'admin.edu_cloud.edu_video.encryption_mode'|trans}, storageSetting.support_mobile) }}
+        {% if storageSetting.support_mobile|default(0) == 0 %}
+          <button type="button" class="btn btn-sm btn-default js-delete-video-btn" data-url="{{ path('admin_cloud_normal_video_delete') }}" data-target="#modal", data-toggle="modal">{{ 'admin.edu_cloud.edu_video.delete_btn'|trans }}</button>
+        {% endif %}
+
+        <div class="help-block js-normal-mode-tip {% if storageSetting.support_mobile|default(0) == 0 %}hidden{% endif %}">
+          {{'admin.edu_cloud.edu_video.normal_mode_tips'|trans|raw}}
+        </div>
+        <div class="help-block js-encryption-mode-tip {% if storageSetting.support_mobile|default(0) == 1 %}hidden{% endif %}">
+          {{'admin.edu_cloud.edu_video.encryption_mode_tips'|trans|raw}}
         </div>
       </div>
     </div>
@@ -398,6 +405,43 @@
       </div>
     </div>
 
+    <input type="hidden" name="isDeleteMP4" value="0" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
+
+  <div id="delete-video-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{{ 'admin.edu_cloud.edu_video_setting.delete_modal_title'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          {{ 'admin.edu_cloud.edu_video_setting.delete_modal_content'|trans }}
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-link gray-darker" type="button" data-delete="0">{{ 'form.btn.not_delete'|trans }}</button>
+          <button type="button" class="btn btn-link color-success js-confirm-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-delete="1">{{ 'form.btn.delete'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="change-normal-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{{ 'admin.edu_cloud.edu_video_setting.change_normal_title'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          {{ 'admin.edu_cloud.edu_video_setting.change_normal_content'|trans|raw }}
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-link gray-darker" data-dismiss="modal" type="button">{{ 'form.btn.cancel'|trans }}</button>
+          <button type="button" class="btn btn-link color-success js-confirm-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.yes'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
