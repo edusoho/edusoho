@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,10 +102,15 @@ class OpenCourseFileManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
 
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
+            $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
 
-            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
-                foreach ($formData['ids'] as $key => $fileId) {
+            if (empty($deletedMaterials)) {
+                return $this->createJsonResponse(true);
+            }
+
+            if (!empty($formData['isDeleteFile'])) {
+                $fileIds = array_unique(ArrayToolkit::column($deletedMaterials, 'fileId'));
+                foreach ($fileIds as $fileId) {
                     if ($this->getUploadFileService()->canManageFile($fileId)) {
                         $this->getUploadFileService()->deleteFile($fileId);
                     }
@@ -195,6 +201,9 @@ class OpenCourseFileManageController extends BaseController
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');
