@@ -2,14 +2,9 @@
 {% set otherClients = [] %}
 
 {% for type, client in clients if (settings[type ~ '_enabled']|default(false) and type != 'weixinmob' and client.icon_class|default(null)) %}
-  {% if type in ['weibo', 'renren', 'qq'] %}
+  {% if type in ['weibo', 'renren', 'qq', 'weixinweb'] %}
     <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}" class="social-icon social-{{ client.icon_class }}">
       <i class="es-icon es-icon-{{ client.icon_class }}"></i>
-    </a>
-
-  {% elseif type == 'weixinweb' %}
-    <a href="{{ path('login_third_party') }}" class="social-icon social-{{ client.icon_class }}">
-      <i class="es-icon es-icon-weixin"></i>
     </a>
   {% else %}
     {% set otherClients = otherClients|merge({(type):client}) %}
