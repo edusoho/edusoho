@@ -33,7 +33,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
             new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
-            new \Twig_SimpleFunction('isCloudConsultEnabled', array($this, 'isCloudConsultEnabled'), $options),
+            new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
         );
     }
 
@@ -85,9 +85,12 @@ class DataExtension extends \Twig_Extension
         return $this->getEduCloudService()->isHiddenCloud();
     }
 
-    public function isCloudConsultEnabled()
+    public function getCloudConsultPath()
     {
         $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
+        if (empty($cloudConsult)) {
+            return false;
+        }
 
         if (!isset($cloudConsult['cloud_consult_expired_time']) || time() > $cloudConsult['cloud_consult_expired_time']) {
             $account = $this->getConsultService()->getAccount();
@@ -96,12 +99,13 @@ class DataExtension extends \Twig_Extension
 
             $this->getSettingService()->set('cloud_consult', $cloudConsult);
         }
+        $cloudConsultEnable = empty($cloudConsult['cloud_consult_code']) && $cloudConsult['cloud_consult_setting_enabled'] && $cloudConsult['cloud_consult_is_buy'];
 
-        if (!empty($cloudConsult['cloud_consult_code'])) {
+        if (!$cloudConsultEnable) {
             return false;
         }
 
-        return true;
+        return empty($cloudConsult['cloud_consult_js']) ? false : $cloudConsult['cloud_consult_js'];
     }
 
     private function getEduCloudService()

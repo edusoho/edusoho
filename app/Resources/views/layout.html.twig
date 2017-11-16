@@ -133,8 +133,10 @@
   {% block floatConsult %}
 
     {% set cloud_consult = setting('cloud_consult', '') %}
-    {% if isCloudConsultEnabled() and cloud_consult and cloud_consult.cloud_consult_setting_enabled |default(0) and cloud_consult.cloud_consult_is_buy |default(0) and cloud_consult.cloud_consult_js |default('') %}
-      {{ cloud_consult.cloud_consult_js | raw }}
+    {% set cloudConsultPath = cloudConsultPath() %}
+    
+    {% if cloudConsultPath|default() %}
+      {{ cloudConsultPath | raw }}
     {% endif %}
 
     {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
