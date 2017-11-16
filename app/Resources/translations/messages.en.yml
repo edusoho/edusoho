@@ -2639,7 +2639,7 @@ cloud_file.process_status.waiting: Converting
 cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
 my.teaching.open_course.title: Name
-cloud_file.material_thumbnail_generate: 'Producing screenshots, please wait ...'
+cloud_file.material_thumbnail_generate: 'Producing screenshots...'
 cloud_file.screen_shot_btn: Screenshots
 cloud_file.search_empty: 'Sorry,no rescouce found'
 cloud_file.use_status: 'Using'
