@@ -5,7 +5,6 @@ namespace AppBundle\Controller\OAuth2;
 use ApiBundle\Api\Resource\Setting\Setting;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class LoginController extends BaseController

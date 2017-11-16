@@ -90,7 +90,6 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-
             $oauthUser = $oauthClient->getUserInfo($token);
             $oauthUser['type'] = $type;
             $request->getSession()->set('oauth_user', $oauthUser);
