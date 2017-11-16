@@ -2827,7 +2827,6 @@ group.buy_attach.content_title: 'Download accessaries'
 group.buy_attach.require_coin_name: 'Need %name%'
 group.buy_attach.purchased_tips: 'You have already purchased this attachement'
 article: Article
-article.channel: 'Channel %article_name%'
 article.banner_tips: "headlines banner need to set thumbnail and add headlines attribute in infomation management page first <a class=\"mls alert-link\" href=\"%articleUrl%\">setting</a>\n"
 article.empty: 'No article'
 article.popular_article: 'Popular article'

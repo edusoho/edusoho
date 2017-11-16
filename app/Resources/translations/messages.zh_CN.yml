@@ -3556,7 +3556,6 @@ group.buy_attach.purchased_tips: 您已购买该附件
 
 # 资讯
 article: 资讯
-article.channel: %article_name%频道
 article.banner_tips: >
   头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性<a class="mls alert-link" href="%articleUrl%">前往设置</a>
 article.empty: 还没有任何资讯
