@@ -2,7 +2,6 @@
 
 namespace Biz\User\Register;
 
-use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use AppBundle\Common\SimpleValidator;
 

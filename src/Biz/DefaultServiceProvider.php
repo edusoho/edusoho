@@ -106,7 +106,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
         $biz['course.normal_strategy'] = function ($biz) {
             return new NormalStrategy($biz);
         };
-        
+
         $biz['user.register'] = function ($biz) {
             return new RegisterFactory($biz);
         };

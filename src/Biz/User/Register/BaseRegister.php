@@ -71,7 +71,7 @@ abstract class BaseRegister
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw new InvalidArgumentException('Invalid nickname');
         }
-        
+
         if (!$this->getUserService()->isNicknameAvaliable($registration['nickname'])) {
             throw new InvalidArgumentException('Nickname Occupied');
         }
@@ -108,7 +108,7 @@ abstract class BaseRegister
     private function createUser($registration, $type)
     {
         $user = array();
-        
+
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
                 $user[$attr] = $registration[$attr];
@@ -139,6 +139,7 @@ abstract class BaseRegister
             $user['orgId'] = $registration['orgId'];
             $user['orgCode'] = $registration['orgCode'];
         }
+
         return $this->getUserDao()->create($user);
     }
 
@@ -185,6 +186,7 @@ abstract class BaseRegister
                 $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
             }
         }
+
         return $inviteUser;
     }
 }
