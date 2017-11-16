@@ -89,9 +89,9 @@ class DataExtension extends \Twig_Extension
     {
         $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
 
-        if (empty($cloudConsult['cloud_consult_expired_time']) || time() > $cloudConsult['cloud_consult_expired_time']) {
+        if (isset($cloudConsult['cloud_consult_expired_time']) || time() > $cloudConsult['cloud_consult_expired_time']) {
             $account = $this->getConsultService()->getAccount();
-            $cloudConsult['cloud_consult_expired_time'] = time() + 60 * 60 * 0.5;
+            $cloudConsult['cloud_consult_expired_time'] = time() + 60 * 60 * 1;
             $cloudConsult['cloud_consult_code'] = empty($account['code']) ? 0 : $account['code'];
 
             $this->getSettingService()->set('cloud_consult', $cloudConsult);
