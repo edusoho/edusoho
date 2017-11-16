@@ -34,8 +34,12 @@
               </td>
               <td>
                   {% if user %}
-                    <span><a href="{{ path('user_show', {id: user.id}) }}">
-                    {{ user.nickname }}</a></span>
+                    {% if isUserManager|default() %}
+                      <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
+                    {% else %}
+                      <span><a target="_blank" href="{{ path('user_show', {id: user.id}) }}">
+                      {{ user.nickname }}</a></span>
+                    {% endif %}
                   {% else %}
                       --
                   {% endif %}

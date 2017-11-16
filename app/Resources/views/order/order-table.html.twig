@@ -36,9 +36,15 @@
           <td>{{ display_order_status(order.status, 0) }}</td>
           <td><span class="color-warning">{{ order.price_amount|to_cash(0) }}</span></td>
           <td><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span></td>
-          <td>
-            {{ web_macro.user_link(buyer) }}
-          </td>
+          {% if isUserManager|default() %}
+            <td>
+              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
+            </td>
+          {% else %}
+            <td>
+              <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
+            </td>
+          {% endif %}
           <td>
             <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
           </td>

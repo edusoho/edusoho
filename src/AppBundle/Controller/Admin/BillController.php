@@ -44,6 +44,7 @@ class BillController extends BaseController
         $users = $this->getUserService()->findUsersByIds($buyerIds);
 
         list($inflow, $outflow) = $this->getInflowAndOutflow($conditions);
+        $isUserManager = $this->getCurrentUser()->hasPermission('admin_user_manage');
 
         return $this->render("admin/bill/{$type}.html.twig", array(
             'cashes' => $cashes,
@@ -53,6 +54,7 @@ class BillController extends BaseController
             'outflow' => $outflow,
             'inflow' => $inflow,
             'trades' => $trades,
+            'isUserManager' => $isUserManager,
         ));
     }
 

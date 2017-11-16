@@ -46,7 +46,8 @@ class OrderController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
-
+        $isUserManager = $this->getCurrentUser()->hasPermission('admin_user_manage');
+        
         return $this->render(
             'admin/order/list.html.twig',
             array(
@@ -54,6 +55,7 @@ class OrderController extends BaseController
                 'orders' => $orders,
                 'users' => $users,
                 'paginator' => $paginator,
+                'isUserManager' => $isUserManager,
             )
         );
     }

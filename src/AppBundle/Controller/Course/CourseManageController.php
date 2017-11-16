@@ -888,6 +888,7 @@ class CourseManageController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
+        $isUserManager = $this->getCurrentUser()->hasPermission('admin_user_manage');
 
         return $this->render(
             'course-manage/order/list.html.twig',
@@ -898,6 +899,7 @@ class CourseManageController extends BaseController
                 'orders' => $orders,
                 'users' => $users,
                 'paginator' => $paginator,
+                'isUserManager' => $isUserManager,
             )
         );
     }

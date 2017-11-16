@@ -3,6 +3,7 @@
 {% set menu = 'admin_bill_coin' %}
 {% set coinSetting = setting('coin') %}
 {% block main %}  
+{{dump(coinSetting)}}
     {% include 'admin/bill/form-filter.html.twig' with {'exportName': 'bill-coin-flow'} %}
     <p class="text-muted">
       <span class="mrl">{{ 'finance.income'|trans }}：<strong class="inflow-num">{{ inflow|default(0) }}</strong> {{ coinSetting.coin_name }}</span>
@@ -33,8 +34,12 @@
               <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span><br/>
               <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
             </td>
-            <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
-            {{ user.nickname }}</a></td>
+            {% if isUserManager|default() %}
+              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
+            {% else %}
+              <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
+              {{ user.nickname }}</a></td>
+            {% endif %}
             <td>{{ cash.created_time|date('Y-m-d H:i') }}</td>
             <td class="text-right prl">
             {% if cash.type =="inflow" %}
