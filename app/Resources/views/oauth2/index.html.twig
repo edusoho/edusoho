@@ -10,7 +10,7 @@
     {{ '为获取更优质服务，请绑定您的手机或邮箱账号'|trans }}
   </div>
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset('static-dist/app/img/card_user.png') }}">
+    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
   </div>
   <form class="third-party-form" id="third-party-login-form" method="post">
 
@@ -31,7 +31,7 @@
     </div>
   {% endif %}
 
-  <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" data-url="{{ path('login_third_party_bind') }}" data-create-url="{{ path('login_third_party_create') }}" type="button">{{ 'form.btn.next'|trans }}</button>
+  <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" data-url="{{ path('oauth2_login_bind') }}" data-create-url="{{ path('oauth2_login_create') }}" type="button">{{ 'form.btn.next'|trans }}</button>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>

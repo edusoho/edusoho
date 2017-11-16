@@ -64,7 +64,8 @@ class LoginBindController extends BaseController
         $this->validateToken($request, $type);
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type, 'token' => $token), true);
-        $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+        $oauthClient = $this->createOAuthClient($type);
+        $token = $oauthClient->getAccessToken($code, $callbackUrl);
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
@@ -89,7 +90,11 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type, 'inviteCode' => $inviteCode)));
+            $oauthUser = $oauthClient->getUserInfo($token);
+            $oauthUser['type'] = $type;
+            $request->getSession()->set('oauth_user', $oauthUser);
+
+            return $this->redirect($this->generateUrl('oauth2_login_index', array('inviteCode' => $inviteCode)));
         }
     }
 
