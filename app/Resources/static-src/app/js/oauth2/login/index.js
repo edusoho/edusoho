@@ -27,42 +27,8 @@ const validateLogin = (validateName, rule, message) => {
       required: Translator.trans(message)
     },
   });
-  let isBind = bindCheck($item);
   let isValidated = validator.form();
-
-  let type;
-
-  if (isValidated && isBind) {
-    type = 'bind';
-  } else if (isValidated && !isBind) {
-    type = 'create';
-  } else {
-    type = 'fail';
-  }
-  return type;
-}
-
-const bindCheck = ($dom) => {
-  let url = $dom.data('url');
-  let value = $dom.val();
-  let isSuccess = 0;
-  $.ajax({
-    url: url,
-    async: false,
-    type: 'get',
-    data: { value: value },
-    dataType: 'json'
-  })
-  .success((response) => {
-    if (axis.isObject(response)) {
-      isSuccess = response.success;
-    } else if (axis.isString(response)) {
-      isSuccess = false;
-    } else if (axis.isBoolean(response)) {
-      isSuccess = response;
-    }
-  })
-  return isSuccess;
+  return isValidated;
 }
 
 
@@ -74,6 +40,8 @@ $btn.click((event) => {
   let isEmail = validateLogin('email', 'email', 'validate.valid_email_input.message');
 
   console.log(isEmail);
+
+
 
 })
 // $btn.click((event) => {
