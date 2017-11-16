@@ -405,8 +405,8 @@ $.validator.addMethod('es_remote', function(value, element, params) {
   let callback = params.callback ? params.callback : null;
   let isSuccess = 0;
   this.valueCache ? this.valueCache : {};
-
-  let cacheKey = btoa(url + type + JSON.stringify(data));
+  let cacheKey = url + type + JSON.stringify(data);
+  
   if (cacheKey in this.valueCache) {
     return this.optional(element) || this.valueCache[cacheKey];
   }
