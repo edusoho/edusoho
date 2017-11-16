@@ -12,16 +12,27 @@
   <div class="text-center cd-mb32">
     <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset('static-dist/app/img/card_user.png') }}">
   </div>
-  {{ '当前注册模式:' ~ dump(mode) }}
-  <form class="third-party-form" id="third-party-login-form" method="post" data-url="">
+  <form class="third-party-form" id="third-party-login-form" method="post">
 
+  {% if mode == 'mobile' %}
     <div class="form-group cd-form-group">
-      <label class="label-required" for="way">{{ '手机/邮箱'|trans }}</label>
-      <input class="form-control" type="text" id="way" name="way" required data-url="{{ path('register_email_or_mobile_check') }}">
+      <label class="label-required" for="mobile">{{ '手机'|trans }}</label>
+      <input class="form-control" type="number" id="mobile" name="mobile" required data-url="{{ path('register_mobile_check') }}">
     </div>
+  {% elseif mode == 'email' %}
+    <div class="form-group cd-form-group">
+      <label class="label-required" for="email">{{ '邮箱'|trans }}</label>
+      <input class="form-control" type="email" id="email" name="email" required data-url="{{ path('register_email_check') }}">
+    </div>
+  {% else %}
+    <div class="form-group cd-form-group">
+      <label class="label-required" for="mobileOrEmail">{{ '手机/邮箱'|trans }}</label>
+      <input class="form-control" type="text" id="mobileOrEmail" name="mobileOrEmail" required data-url="{{ path('register_email_or_mobile_check') }}">
+    </div>
+  {% endif %}
 
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" data-url="{{ path('login_third_party_bind') }}" data-create-url="{{ path('login_third_party_create') }}" type="button">{{ 'form.btn.next'|trans }}</button>
+  <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" data-url="{{ path('login_third_party_bind') }}" data-create-url="{{ path('login_third_party_create') }}" type="button">{{ 'form.btn.next'|trans }}</button>
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 {% endblock %}
