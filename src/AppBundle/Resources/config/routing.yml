@@ -70,6 +70,22 @@ login_bind_newset:
     defaults: { _controller: AppBundle:LoginBind:newSet }
     methods: [POST]
 
+login_third_party:
+    path:  /login/third/
+    defaults: { _controller: AppBundle:Login:thirdParty }
+
+login_third_party_bind:
+    path:  /login/third/bind
+    defaults: { _controller: AppBundle:Login:thirdPartyBind }
+
+login_third_party_bind_success:
+    path:  /login/third/bind/success
+    defaults: { _controller: AppBundle:Login:thirdPartyBindSuccess }
+
+login_third_party_create:
+    path:  /login/third/create
+    defaults: { _controller: AppBundle:Login:thirdPartyCreate }
+
 login_bind_exist:
     path:  /login/bind/{type}/exist
     defaults: { _controller: AppBundle:LoginBind:exist }
@@ -2604,10 +2620,6 @@ classroom_thread_update:
 classroom_vip_buy:
     path: /classroom/{id}/vip_buy
     defaults: { _controller: AppBundle:Classroom/Classroom:becomeStudent }
-
-classroom_member_ids:
-    path: /classroom/{id}/member_ids
-    defaults: { _controller: AppBundle:Classroom/Classroom:memberIds }
 
 classroom_thread_members_become:
     path: /classroom/{classroomId}/thread/{threadId}/members/become

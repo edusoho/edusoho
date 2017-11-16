@@ -498,6 +498,25 @@ $.validator.addMethod('es_score', function (value, element, params) {
 	return this.optional(element) || /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(value);
 }, Translator.trans('validate.valid_score_input.message'));
 
+$.validator.addMethod('email_or_mobile_check', function (value, element, params) {
+  let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  var reg_mobile = /^1\d{10}$/;
+  var result = false;
+  var isEmail = reg_email.test(value);
+  var isMobile = reg_mobile.test(value);
+  if (isMobile) {
+    $(".email_mobile_msg").removeClass('hidden');
+    $('.js-captcha').addClass('hidden');
+  } else {
+    $(".email_mobile_msg").addClass('hidden');
+    $('.js-captcha').removeClass('hidden');
+  }
+  if (isEmail || isMobile) {
+    result = true;
+  }
+  $.validator.messages.email_or_mobile_check = Translator.trans('请输入正确的手机／邮箱');
+  return this.optional(element) || result;
+}, Translator.trans('validate.email_or_mobile_check.message'));
 
 function calculateByteLength(string) {
   let length = string.length;
