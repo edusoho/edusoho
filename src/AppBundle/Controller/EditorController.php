@@ -89,6 +89,9 @@ class EditorController extends BaseController
         $url = str_replace(' ', '%20', $url);
         $url = str_replace('+', '%2B', $url);
         $url = str_replace('#', '%23', $url);
+        if (!preg_match('/^https?\:\/\/formula\.edusoho\.net/', $url)) {
+            throw $this->createAccessDeniedException('上传授权域名不正确，请输入合法的域名！');
+        }
         $maker = new UploadToken();
         $token = $maker->parse($token);
 

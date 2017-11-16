@@ -159,10 +159,15 @@ class CourseSetFileManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
 
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
+            $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
 
-            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
-                foreach ($formData['ids'] as $key => $fileId) {
+            if (empty($deletedMaterials)) {
+                return $this->createJsonResponse(true);
+            }
+
+            if (!empty($formData['isDeleteFile'])) {
+                $fileIds = array_unique(ArrayToolkit::column($deletedMaterials, 'fileId'));
+                foreach ($fileIds as $fileId) {
                     if ($this->getUploadFileService()->canManageFile($fileId)) {
                         $this->getUploadFileService()->deleteFile($fileId);
                     }

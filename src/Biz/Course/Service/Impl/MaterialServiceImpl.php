@@ -140,14 +140,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         );
 
         if (!$materials) {
-            return false;
+            return array();
         }
 
         foreach ($materials as $key => $material) {
             $this->deleteMaterial($courseSetId, $material['id']);
         }
 
-        return true;
+        return $materials;
     }
 
     public function deleteMaterialsByFileId($fileId)
