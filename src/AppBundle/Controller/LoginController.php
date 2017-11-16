@@ -40,6 +40,24 @@ class LoginController extends BaseController
         ));
     }
 
+    public function thirdPartyBindAction(Request $request)
+    {
+        return $this->render('wap/third-party/third-party-login-bind-accout.html.twig', array(
+        ));
+    }
+
+    public function thirdPartyBindSuccessAction(Request $request)
+    {
+        return $this->render('wap/third-party/third-party-login-success.html.twig', array(
+        ));
+    }
+
+    public function thirdPartyCreateAction(Request $request)
+    {
+        return $this->render('wap/third-party/third-party-login-create-accout.html.twig', array(
+        ));
+    }
+
     public function ajaxAction(Request $request)
     {
         return $this->render('login/ajax.html.twig', array(

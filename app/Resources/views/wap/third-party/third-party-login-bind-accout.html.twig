@@ -1,0 +1,40 @@
+{% extends 'wap/third-party/third-party-login-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/wap/third-party/bind/index.js']) %}
+
+{% block page_title %}
+  {{ '验证密码'|trans }}
+{% endblock %}
+
+{% block panel_body %}
+
+  <div class="text-center cd-mb32">
+    <div class="third-party-avatar-wrap">
+      <img class="cd-avatar cd-avater-md" src="{{ asset('static-dist/app/img/card_user.png') }}">
+    </div>
+    <div class="web-avatar-wrap">
+      <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+    </div>
+  </div>
+
+  <div class="text-center cd-mb32">
+    <div class="third-party-bind-tip">{{ '正在绑定网校用户'|trans }}</div>
+    <div class="third-party-user color-primary">{{ app.user.nickname }}</div>
+  </div>
+
+  <form class="third-party-form clearfix" id="third-party-bind-form" method="post" action="">
+    <div class="form-group cd-form-group third-party-form__info">
+      <label>{{ '手机/邮箱'|trans }}</label>
+      <div class="third-party-form__way">15988811903</div>
+    </div>
+    <div class="form-group cd-form-group">
+      <label class="label-required">{{ '网校账号密码'|trans }}</label>
+      <input class="form-control" type="password" id="password" name="password" data-url="{{ path('settings_check_login_password') }}">
+    </div>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('login_third_party_bind_success') }}">{{ '绑定并继续'|trans }}</button>
+    <a class="pull-right third-party-link" href="{{ path('login_third_party') }}">{{ '绑定其他账号？'|trans }}</a>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+  </div>
+{% endblock %}
