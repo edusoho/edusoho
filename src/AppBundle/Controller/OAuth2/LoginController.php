@@ -66,7 +66,7 @@ class LoginController extends BaseController
 
     public function createAction(Request $request)
     {
-        return $this->render('wap/third-party/third-party-login-create-accout.html.twig', array(
+        return $this->render('oauth2/create-account.html.twig', array(
         ));
     }
 
