@@ -51,11 +51,12 @@ export default class Cover {
     var $target = $(event.currentTarget);
     var self = this;
     $target.button('loading');
+    var screenshotSecond = self.second;
     $.ajax({
       type: 'get',
       url: $target.data('url'),
       data: {
-        'second': self.second
+        'second': screenshotSecond
       }
     }).done(function(resp) {
       if (resp.status == 'success') {
@@ -64,7 +65,7 @@ export default class Cover {
         //轮询
         self.intervalId = setInterval(function() {
           $.get($target.data('url'), {
-            'second': self.second
+            'second': screenshotSecond
           }, function(resp) {
             if (resp.status == 'success') {
               self._successGeneratePic($target, resp);
@@ -121,7 +122,7 @@ export default class Cover {
       //   self.player = window.frames["viewerIframe"].contentWindow.BalloonPlayer;
       // });
 
-      messenger.on('timechange', function(data) {
+      messenger.on('video.timeupdate', function(data) {
         self.second = Math.floor(data.currentTime);
       });
     }
