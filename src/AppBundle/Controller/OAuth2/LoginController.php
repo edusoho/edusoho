@@ -28,28 +28,29 @@ class LoginController extends BaseController
 
         $oauthUser = $this->getOauthUser($request);
 
-        $type = $request->query->get('type');
-        $account = $request->query->get('account');
+        $type = $request->request->get('accountType');
+        $account = $request->request->get('account');
 
         $user = $this->getUserByTypeAndAccount($type, $account);
+        $oauthUser['accountType'] = $type;
+        $oauthUser['account'] = $account;
 
         if ($user) {
-            return $this->render(
-                'oauth2/bind-account.html.twig', array(
-                'oauthUser' => $oauthUser,
-                'esUser' => $user,
-                'account' => $account,
-                'type' => $type,
-            ));
+            $oauthUser['esUserId'] = $user['id'];
+            $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
         } else {
-            return $this->render(
-                'oauth2/create-account.html.twig', array(
-                'oauthUser' => $oauthUser,
-                'esUser' => $user,
-                'account' => $account,
-                'type' => $type,
-            ));
+            $redirectUrl = $this->generateUrl('oauth2_login_create');
         }
+
+        $request->getSession()->set('oauth_user', $oauthUser);
+
+        return $this->createJsonResponse(array(
+           'redirectUrl' => $redirectUrl,
+        ));
+    }
+
+    public function bindLoginAction(Request $request)
+    {
     }
 
     public function successAction(Request $request)
