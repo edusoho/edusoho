@@ -56,9 +56,21 @@ login_bind_choose:
     path:  /login/bind/{type}/choose
     defaults: { _controller: AppBundle:LoginBind:choose }
 
-oauth2_bind:
-    path:  /oauth2/bind
+oauth2_login_index:
+    path:  /oauth2/login/index
     defaults: { _controller: AppBundle:OAuth2/Bind:index }
+
+oauth2_login_bind:
+    path:  /oauth2/login/bind
+    defaults: { _controller: AppBundle:OAuth2/Bind:bind }
+
+oauth2_login_create:
+    path:  /oauth2/login/create
+    defaults: { _controller: AppBundle:OAuth2/Bind:create }
+
+oauth2_login_success:
+    path:  /oauth2/login/success
+    defaults: { _controller: AppBundle:OAuth2/Bind:success }
 
 login_bind_new:
     path:  /login/bind/{type}/new
