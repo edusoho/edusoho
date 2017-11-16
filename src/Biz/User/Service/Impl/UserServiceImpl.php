@@ -866,6 +866,23 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
+    public function newRegister($registration, $type = 'default', $registerType = 'email')
+    {
+        $register = $this->biz['user.register']->createRegister($registerType);
+
+        list($user, $inviteUser) = $register->register($registration, $type);
+
+        if (!empty($inviteUser)) {
+            $this->dispatchEvent(
+                'user.register',
+                new Event(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
+            );
+        }
+
+        $this->dispatchEvent('user.registered', new Event($user));
+        return $user;
+    }
+
     public function generateNickname($registration, $maxLoop = 100)
     {
         $rawNickname = isset($registration['nickname']) ? $registration['nickname'] : '';

@@ -23,6 +23,7 @@ use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\User\Register\RegisterFactory;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -104,6 +105,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
         };
         $biz['course.normal_strategy'] = function ($biz) {
             return new NormalStrategy($biz);
+        };
+        
+        $biz['user.register'] = function ($biz) {
+            return new RegisterFactory($biz);
         };
     }
 }
