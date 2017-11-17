@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\OAuth2;
 
+use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -46,9 +47,13 @@ class LoginController extends BaseController
         if ('POST' == $request->getMethod()) {
             $password = $request->request->get('password');
 
-            $isCorrectPW = $this->getUserService()->verifyPassword($oauthUser['esUserId'], $password);
+            $this->loginAttemptCheck($oauthUser->account, $request);
 
-            return $this->redirect($this->getTargetPath($request));
+            $isSuccess = $this->bindUser($oauthUser, $password);
+
+            return $isSuccess ?
+                $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success'))) :
+                $this->createFailJsonResponse(array('message' => $this->trans('user.settings.security.password_modify.incorrect_password')));
         } else {
             $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
@@ -56,6 +61,20 @@ class LoginController extends BaseController
                 'oauthUser' => $oauthUser,
                 'esUser' => $user,
             ));
+        }
+    }
+
+    private function bindUser(OauthUser $oauthUser, $password)
+    {
+        $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
+
+        $isCorrectPassword = $this->getUserService()->verifyPassword($user['id'], $password);
+        if ($isCorrectPassword) {
+            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->id, $user['id'], null);
+
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -111,7 +130,10 @@ class LoginController extends BaseController
         return $oauthUser;
     }
 
-    private function loginAtt()
+    private function loginAttemptCheck($account, Request $request)
     {
+        $limiter = new LoginFailRateLimiter($this->getBiz());
+        $request->request->set('username', $account);
+        $limiter->handle($request);
     }
 }
