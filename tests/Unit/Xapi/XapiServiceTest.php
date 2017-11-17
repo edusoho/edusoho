@@ -11,14 +11,16 @@ class XapiServiceTest extends BaseTestCase
     {
         $statement = $this->mockStatement();
 
-//        $createdStatement = $this
+        $createdStatement = $this->getXapiService()->createStatement($statement); 
+
+
 
     }
 
     private function mockStatement()
     {
         $statement = array(
-            'user_id' => ,
+            'user_id' => 2,
             'verb' => 'watch',
             'target_id' => 1,
             'target_type' => 'video',
