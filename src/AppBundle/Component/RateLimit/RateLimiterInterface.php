@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Security\RateLimit;
+namespace AppBundle\Component\RateLimit;
 
 use Symfony\Component\HttpFoundation\Request;
 
