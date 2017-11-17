@@ -50,6 +50,10 @@ class LoginController extends BaseController
     {
         $oauthUser = $this->getOauthUser($request);
         if ('POST' == $request->getMethod()) {
+            $password = $request->request->get('password');
+
+            $isCorrectPW = $this->getUserService()->verifyPassword($oauthUser['esUserId'], $password);
+
             return $this->redirect($this->getTargetPath($request));
         } else {
             return $this->render('oauth2/bind-login.html.twig', array(
@@ -60,13 +64,17 @@ class LoginController extends BaseController
 
     public function successAction(Request $request)
     {
+        $oauthUser = $this->getOauthUser($request);
         return $this->render('wap/third-party/third-party-login-success.html.twig', array(
+            'oauthUser' => $oauthUser,
         ));
     }
 
     public function createAction(Request $request)
     {
+        $oauthUser = $this->getOauthUser($request);
         return $this->render('oauth2/create-account.html.twig', array(
+            'oauthUser' => $oauthUser,
         ));
     }
 
@@ -95,5 +103,10 @@ class LoginController extends BaseController
         }
 
         return $oauthUser;
+    }
+
+    private function getIPRateLimiter()
+    {
+
     }
 }
