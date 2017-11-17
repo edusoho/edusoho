@@ -99,7 +99,11 @@
                 {% if app.purchased|default(false) == true or installedApp %}
 
                   {% if installedApp %}
-                    {% if app.ontrial|default(false) %}
+                    {% if (app.ontrial|default(false)) and (app.userAccess|default(null) != 'ok') %}
+                      <p><a href="javascript:;" class="btn btn-default disabled app-btn">{{ 'admin.app_center.expired_btn'|trans }}</a></p>
+                      <p><a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn"
+                            target="_blank">{{ 'admin.app_center.buy_btn'|trans }}</a></p>
+                    {% elseif app.purchased|default(false) == false %}
                       <p><a href="javascript:;" class="btn btn-default disabled app-btn">{{ 'admin.app_center.ontrial_btn'|trans }}</a></p>
                       <p><a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn"
                             target="_blank">{{ 'admin.app_center.buy_btn'|trans }}</a></p>

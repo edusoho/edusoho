@@ -11,7 +11,7 @@ use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
@@ -1868,7 +1868,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = array(
             'order_ids' => $orderIds,
             'target_type' => 'course',
-            'status' => 'success',
+            'statuses' => array('success', 'finished'),
         );
 
         $orderItems = $this->getOrderService()->searchOrderItems($conditions, array(), 0, PHP_INT_MAX);
