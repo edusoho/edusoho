@@ -11,15 +11,16 @@
   </div>
 
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
+    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser.avatar) }}">
   </div>
+
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
-    {% if mode == 'mobile' %}
+    {% if oauthUser.mode == 'mobile' %}
       <div class="form-group cd-form-group">
         <label class="label-required" for="mobile">{{ '手机'|trans }}</label>
         <input class="form-control" type="number" id="mobile" name="account" required>
       </div>
-    {% elseif mode == 'email' %}
+    {% elseif oauthUser.mode == 'email' %}
       <div class="form-group cd-form-group">
         <label class="label-required" for="email">{{ '邮箱'|trans }}</label>
         <input class="form-control" type="email" id="email" name="account" required>

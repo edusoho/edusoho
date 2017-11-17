@@ -7,11 +7,11 @@
 
 {% block panel_body %}
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
+    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser.avatar) }}">
   </div>
   <div class="text-center cd-mb32">
-    <div class="third-party-bind-tip">{{ '使用手机创建账号'|trans }}</div>
-    <div class="third-party-user color-primary">{{ '15988811903'|trans }}</div>
+    <div class="third-party-bind-tip">{% if oauthUser.accountType == "email" %}{{ '使用邮箱创建账号'|trans }}{% else %}{{ '使用手机创建账号'|trans }}{% endif %}</div>
+    <div class="third-party-user color-primary">{{ oauthUser.account }}</div>
   </div>
 
   <form class="third-party-form clearfix" id="third-party-create-account-form" method="post">
