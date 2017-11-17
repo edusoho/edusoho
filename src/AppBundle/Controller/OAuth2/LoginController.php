@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\OAuth2;
 
+use ApiBundle\Api\ApiRequest;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Controller\LoginBindController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class LoginController extends LoginBindController
@@ -16,6 +18,48 @@ class LoginController extends LoginBindController
         return $this->render('oauth2/index.html.twig', array(
             'oauthUser' => $oauthUser,
         ));
+    }
+
+    public function appAction(Request $request)
+    {
+        $accessToken = $request->query->get('access_token');
+        $openid = $request->query->get('openid');
+        $type = $request->query->get('type');
+
+        $client = $this->createOAuthClient($type);
+        $oUser = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $openid));
+
+        $this->storeOauthUserToSession($request, $oUser, $type, true);
+
+        return $this->redirect($this->generateUrl('oauth2_login_index'));
+    }
+
+    private function makeFakeToken($type, $accessToken, $openid)
+    {
+        switch ($type) {
+            case 'weibo':
+                $token = array(
+                    'uid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            case 'qq':
+                $token = array(
+                    'openid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            case 'weixinweb':
+                $token = array(
+                    'openid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            default:
+                throw new BadRequestHttpException('Bad type');
+        }
+
+        return $token;
     }
 
     public function bindAccountAction(Request $request)
@@ -87,11 +131,17 @@ class LoginController extends LoginBindController
             throw new NotFoundHttpException();
         }
 
-        $request->getSession()->set('oauth_user', null);
-        $this->authenticateUser($user);
+        if ($oauthUser->isApp) {
+            $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
+        } else {
+            $request->getSession()->set('oauth_user', null);
+            $this->authenticateUser($user);
+            $token = null;
+        }
 
         return $this->render('oauth2/success.html.twig', array(
             'oauthUser' => $oauthUser,
+            'token' => $token,
             'isCreate' => $request->query->get('isCreate'),
         ));
     }

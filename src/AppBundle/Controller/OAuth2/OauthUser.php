@@ -39,6 +39,11 @@ class OauthUser implements \Serializable
      */
     public $accountType;
 
+    /*
+     * @var bool 是否来自移动端
+     */
+    public $isApp = false;
+
     public function serialize()
     {
         return serialize(array(
@@ -49,6 +54,7 @@ class OauthUser implements \Serializable
             $this->mode,
             $this->account,
             $this->accountType,
+            $this->isApp,
         ));
     }
 
@@ -63,6 +69,8 @@ class OauthUser implements \Serializable
             $this->name,
             $this->mode,
             $this->account,
-            $this->accountType) = $data;
+            $this->accountType,
+            $this->isApp
+            ) = $data;
     }
 }
