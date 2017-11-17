@@ -60,7 +60,6 @@ class SmsRateLimiter implements RateLimiterInterface
         } else {
             throw new TooManyRequestsHttpException(null, 'request.max_attempt_reach', null, RateLimiterInterface::MAX_REQUEST_OCCUR);
         }
-
     }
 
     public function setRateLimiter(RateLimiter $rateLimiter)

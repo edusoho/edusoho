@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Security\RateLimit;
+namespace ApiBundle\EventListener;
 
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Event\ResourceEvent;
@@ -9,7 +9,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
-class RateLimitListener
+class BizRateLimitListener
 {
     private $biz;
 
