@@ -1768,10 +1768,8 @@ class EduCloudController extends BaseController
     protected function deleteCloudMP4Files()
     {
         $user = $this->getUser();
-        $scheme = $this->get('request')->getScheme();
-        $host = $this->get('request')->getHttpHost();
 
-        $callback = $scheme.':'.$host.$this->generateUrl('edu_cloud_delete_mp4_callback');
+        $callback = $this->get('request')->getSchemeAndHttpHost().$this->generateUrl('edu_cloud_delete_mp4_callback');
 
         $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
 
