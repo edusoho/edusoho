@@ -10,9 +10,9 @@
     {{ '为获取更优质服务，请绑定您的手机或邮箱账号'|trans }}
   </div>
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
+    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser.avatar) }}">
   </div>
-  {{ '当前注册模式:' ~ dump(mode) }}
+  {{ '当前注册模式:' ~ oauthUser.mode }}
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
 
     <div class="form-group cd-form-group">

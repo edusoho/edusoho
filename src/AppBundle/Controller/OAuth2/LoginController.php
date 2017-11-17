@@ -11,14 +11,9 @@ class LoginController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $setting = new Setting($this->container, $this->getBiz());
-
-        $registerSetting = $setting->getRegister();
-
         $oauthUser = $this->getOauthUser($request);
 
         return $this->render('oauth2/index.html.twig', array(
-            'mode' => $registerSetting['mode'],
             'oauthUser' => $oauthUser,
         ));
     }
@@ -31,11 +26,10 @@ class LoginController extends BaseController
         $account = $request->request->get('account');
 
         $user = $this->getUserByTypeAndAccount($type, $account);
-        $oauthUser['accountType'] = $type;
-        $oauthUser['account'] = $account;
+        $oauthUser->accountType = $type;
+        $oauthUser->account = $account;
 
         if ($user) {
-            $oauthUser['esUserId'] = $user['id'];
             $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
         } else {
             $redirectUrl = $this->generateUrl('oauth2_login_create');
@@ -56,8 +50,10 @@ class LoginController extends BaseController
 
             return $this->redirect($this->getTargetPath($request));
         } else {
+            $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
             return $this->render('oauth2/bind-login.html.twig', array(
                 'oauthUser' => $oauthUser,
+                'esUser' => $user,
             ));
         }
     }
@@ -97,6 +93,10 @@ class LoginController extends BaseController
         return $user;
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \AppBundle\Controller\OAuth2\OauthUser
+     */
     private function getOauthUser(Request $request)
     {
         $oauthUser = $request->getSession()->get('oauth_user');
@@ -107,7 +107,7 @@ class LoginController extends BaseController
         return $oauthUser;
     }
 
-    private function getIPRateLimiter()
+    private function loginAtt()
     {
     }
 }
