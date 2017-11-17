@@ -1,5 +1,6 @@
 <?php
 use AppBundle\Common\ExtensionManager;
+use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\MonologServiceProvider;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
@@ -48,7 +49,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         // init container
         $this->initializeContainer();
 
-        $this->initializeBiz();
+        $this->initializeBiz($this->getContainer()->get('biz'));
         $this->initializeServiceKernel();
         foreach ($this->getBundles() as $bundle) {
             $bundle->setContainer($this->container);
@@ -138,9 +139,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         return $this;
     }
 
-    protected function initializeBiz()
+    public function initializeBiz(Biz $biz)
     {
-        $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
         $biz['env'] = array(
             'base_url' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath(),

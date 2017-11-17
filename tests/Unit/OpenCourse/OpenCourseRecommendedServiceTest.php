@@ -146,21 +146,21 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
      */
     protected function getCourseRecommendedService()
     {
-        return self::$biz->service('OpenCourse:OpenCourseRecommendedService');
+        return $this->createService('OpenCourse:OpenCourseRecommendedService');
     }
 
     protected function getOpenCourseService()
     {
-        return self::$biz->service('OpenCourse:OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getCourseService()
     {
-        return self::$biz->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseSetService()
     {
-        return self::$biz->service('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 }

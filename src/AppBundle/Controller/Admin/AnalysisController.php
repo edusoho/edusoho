@@ -681,28 +681,24 @@ class AnalysisController extends BaseController
 
         $timeRange = $this->getTimeRange($condition);
 
+        $searchCondition = array(
+            'pay_time_GT' => $timeRange['startTime'],
+            'pay_time_LT' => $timeRange['endTime'],
+            'statuses' => array('success', 'finished'),
+            'pay_amount_GT' => '0',
+            'order_item_target_type' => 'course',
+        );
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(
-                array(
-                    'pay_time_GT' => $timeRange['startTime'],
-                    'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'success',
-                    'pay_amount_GT' => '0',
-                    'order_item_target_type' => 'course',
-                )
+                $searchCondition
             ),
             20
         );
 
         $paidCourseDetails = $this->getOrderService()->searchOrders(
-            array(
-                'pay_time_GT' => $timeRange['startTime'],
-                'pay_time_LT' => $timeRange['endTime'],
-                'status' => 'success',
-                'pay_amount_GT' => '0',
-                'order_item_target_type' => 'course',
-            ),
+            $searchCondition,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -726,12 +722,7 @@ class AnalysisController extends BaseController
 
         if ($tab == 'trend') {
             $paidCourseData = $this->getOrderService()->countGroupByDate(
-                array(
-                    'pay_time_GT' => $timeRange['startTime'],
-                    'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'success',
-                    'order_item_target_type' => 'course',
-                ),
+                $searchCondition,
                 'ASC'
             );
             $data = $this->fillAnalysisData($condition, $paidCourseData);
@@ -751,7 +742,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidCourseStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'success', 'pay_amount_GT' => '0'),
+            array('statuses' => array('success', 'finished'), 'pay_amount_GT' => '0'),
             array('created_time' => 'ASC'),
             0,
             1
@@ -790,27 +781,22 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
         $paidClassroomStartDate = '';
 
+        $searchConditions = array(
+            'pay_time_GT' => $timeRange['startTime'],
+            'pai_time_LT' => $timeRange['endTime'],
+            'statuses' => array('success', 'finished'),
+            'pay_amount_GT' => '0',
+            'order_item_target_type' => 'classroom',
+        );
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(
-                array(
-                    'pay_time_GT' => $timeRange['startTime'],
-                    'pai_time_LT' => $timeRange['endTime'],
-                    'status' => 'success',
-                    'pay_amount_GT' => '0',
-                    'order_item_target_type' => 'classroom',
-                )
+                $searchConditions
             ),
             20
         );
         $paidClassroomDetails = $this->getOrderService()->searchOrders(
-            array(
-                'pay_time_GT' => $timeRange['startTime'],
-                'pai_time_LT' => $timeRange['endTime'],
-                'status' => 'success',
-                'pay_amount_GT' => '0.00',
-                'order_item_target_type' => 'classroom',
-            ),
+            $searchConditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -835,12 +821,7 @@ class AnalysisController extends BaseController
         $count = 0;
         if ($tab == 'trend') {
             $paidClassroomData = $this->getOrderService()->countGroupByDate(
-                array(
-                    'pay_time_GT' => $timeRange['startTime'],
-                    'pay_time_LT' => $timeRange['endTime'],
-                    'status' => 'success',
-                    'order_item_target_type' => 'classroom',
-                ),
+                $searchConditions,
                 'ASC'
             );
             $data = $this->fillAnalysisData($condition, $paidClassroomData);
@@ -856,7 +837,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidClassroomStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'success', 'pay_amount_GT' => '0'),
+            array('statuses' => array('success', 'finished'), 'pay_amount_GT' => '0'),
             array('created_time' => 'ASC'),
             0,
             1
@@ -1251,7 +1232,7 @@ class AnalysisController extends BaseController
         $conditions = array(
             'pay_time_GT' => $timeRange['startTime'],
             'pay_time_LT' => $timeRange['endTime'],
-            'status' => 'success',
+            'statuses' => array('success', 'finished'),
             'pay_amount_GT' => 0,
         );
 

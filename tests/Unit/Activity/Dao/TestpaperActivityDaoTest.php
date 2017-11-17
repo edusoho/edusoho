@@ -40,6 +40,17 @@ class TestpaperActivityDaoTest extends BaseDaoTestCase
         }
     }
 
+    public function testFindByMediaIds()
+    {
+        $expectedActivity1 = $this->mockDataObject();
+        $expectedActivity2 = $this->mockDataObject(array('mediaId' => 2));
+        $results = $this->getDao()->findByMediaIds(array(1, 2));
+
+        $this->assertEquals(count($results), 2);
+        $this->assertArrayEquals($expectedActivity1, $results[0], $this->getCompareKeys());
+        $this->assertArrayEquals($expectedActivity2, $results[1], $this->getCompareKeys());
+    }
+
     protected function getDefaultMockFields()
     {
         return array(
