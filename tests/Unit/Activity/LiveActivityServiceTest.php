@@ -69,6 +69,63 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->assertNull($result);
     }
 
+    public function testGetLiveActivity()
+    {
+        $this->mockBiz(
+            'Activity:LiveActivityDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 111, 'liveId' => 111),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result = $this->getLiveActivityService()->getLiveActivity(1);
+
+        $this->assertEquals(array('id' => 111, 'liveId' => 111), $result);
+    }
+
+    public function testFindLiveActivitiesByIds()
+    {
+        $this->mockBiz(
+            'Activity:LiveActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'returnValue' => array(array('id' => 111, 'liveId' => 111)),
+                    'withParams' => array(array(1, 2)),
+                ),
+            )
+        );
+
+        $results = $this->getLiveActivityService()->findLiveActivitiesByIds(array(1, 2));
+
+        $this->assertEquals(array(array('id' => 111, 'liveId' => 111)), $results);
+    }
+
+    public function testCreateLiveroom()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 111, 'nickname' => 'test'),
+                    'withParams' => array(111),
+                ),
+            )
+        );
+        $liveRoom = $this->getLiveActivityService()->createLiveroom(array(
+            'fromUserId' => 111,
+            'remark' => 'test',
+            'startTime' => 4541222,
+            'length' => 2,
+            'title' => 'test',
+            'fromCourseId' => 12,
+        ));
+    }
+
     /**
      * @return LiveActivityService
      */

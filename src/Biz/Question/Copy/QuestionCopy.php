@@ -4,7 +4,6 @@ namespace Biz\Question\Copy;
 
 use Biz\AbstractCopy;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Question\Dao\QuestionDao;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class QuestionCopy extends AbstractCopy

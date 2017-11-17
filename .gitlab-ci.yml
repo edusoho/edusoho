@@ -23,6 +23,19 @@ Unit Test With PHP 5.3:
   image: codeages/ci-php:5.3-2
   services:
     - mysql:5.5
+  script:
+    - bin/phpunit -c app/
+  only:
+    - tags
+    - develop
+    - master
+    - trigger
+
+Unit Test With PHP 5.3 And Redis:
+  stage: test
+  image: codeages/ci-php:5.3-2
+  services:
+    - mysql:5.5
     - redis:latest
   script:
     - bin/phpunit -c app/

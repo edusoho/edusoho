@@ -45,6 +45,50 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
+    public function testCreate()
+    {
+        $result = $this->getDao()->create($this->getDefaultMockFields());
+
+        $this->assertEquals('finish', $result['event']);
+    }
+
+    public function testGetRecentFinishedLogByActivityIdAndUserId()
+    {
+        $log = $this->mockDataObject(array('event' => 'finish', 'activityId' => 2, 'userId' => 2));
+        $result = $this->getDao()->getRecentFinishedLogByActivityIdAndUserId(2, 2);
+
+        $this->assertEquals('finish', $result[0]['event']);
+    }
+
+    public function testCountLearnedDaysByCourseIdAndUserId()
+    {
+        $this->mockActivity();
+        $log = $this->getDao()->create($this->getDefaultMockFields());
+
+        $result = $this->getDao()->countLearnedDaysByCourseIdAndUserId(1, 1);
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testDeleteByActivityId()
+    {
+        $log = $this->getDao()->create($this->getDefaultMockFields());
+        $result = $this->getDao()->deleteByActivityId(1);
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testGetLastestByActivityIdAndUserId()
+    {
+        $log1 = $this->getDao()->create($this->getDefaultMockFields());
+        $log2 = $this->mockDataObject(array('event' => 'unfinish', 'activityId' => 1, 'userId' => 1));
+        $log3 = $this->mockDataObject(array('event' => 'wait', 'activityId' => 1, 'userId' => 1));
+
+        $result = $this->getDao()->getLastestByActivityIdAndUserId(1, 1);
+
+        $this->assertEquals('finish', $result['event']);
+    }
+
     protected function fetchAndAssembleIds(array $rawInput)
     {
         $res = array();
@@ -81,7 +125,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             'activityId' => 1,
             'userId' => 1,
             'mediaType' => 'video',
-            'event' => 'ffff',
+            'event' => 'finish',
             'data' => array('a'),
             'learnedTime' => 1,
             'courseTaskId' => 1,

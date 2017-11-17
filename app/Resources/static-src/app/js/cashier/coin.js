@@ -56,10 +56,10 @@ export default class Coin {
   }
 
   addPasswordValidate() {
-    this.$container.find('[name="payPassword"]').rules('add', 'required es_remote_with_cache');
+    this.$container.find('[name="payPassword"]').rules('add', 'required es_remote');
   }
 
   removePasswordValidate() {
-    this.$container.find('[name="payPassword"]').rules('remove', 'required es_remote_with_cache');
+    this.$container.find('[name="payPassword"]').rules('remove', 'required es_remote');
   }
 }
