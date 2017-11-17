@@ -21,14 +21,14 @@
     <div class="third-party-user color-primary">{{ esUser.nickname }}</div>
   </div>
 
-  <form class="third-party-form clearfix" id="third-party-bind-form" method="post" action="">
+  <form class="third-party-form clearfix" id="third-party-bind-form" method="post" action="{{ path('oauth2_login_bind_login') }}">
     <div class="form-group cd-form-group third-party-form__info">
-      <label>{{ '手机/邮箱'|trans }}</label>
+      <label>{% if oauthUser.accountType == 'email' %}{{ 'user.oauth.login_by_email'|trans }}{% else %}{{ 'user.oauth.login_by_mobile'|trans }}{% endif %}</label>
       <div class="third-party-form__way">{{ oauthUser.account }}</div>
     </div>
     <div class="form-group cd-form-group">
       <label class="label-required" for="password">{{ '网校账号密码'|trans }}</label>
-      <input class="form-control" type="password" id="password" name="password" data-url="{{ path('settings_check_login_password') }}">
+      <input class="form-control" type="password" id="password" name="password">
     </div>
     <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_success') }}">{{ '绑定并继续'|trans }}</button>
     <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ '绑定其他账号？'|trans }}</a>

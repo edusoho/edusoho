@@ -18,7 +18,7 @@
 
     <div class="form-group cd-form-group">
       <label class="label-required" for="username">{{ '用户名'|trans }}</label>
-      <input class="form-control" type="text" id="username" name="username" placeholder="{{ 'user.oauth.register.nickname_placeholder'|trans }}" data-url="{{ path('register_nickname_check') }}">
+      <input class="form-control" type="text" id="username" name="username" placeholder="{{ 'user.oauth.register.nickname_placeholder'|trans }}" data-url="{{ path('register_nickname_check') }}" value="{{ oauthUser.name }}">
     </div>
 
     <div class="form-group cd-form-group">
