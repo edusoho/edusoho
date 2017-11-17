@@ -100,6 +100,44 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
+    public function testUpdateByClassroomIdAndRole()
+    {
+        $expected = $this->mockDataObject(array('role' => array('student')));
+        $result = $this->getDao()->updateByClassroomIdAndRole(
+            1,
+            'student',
+            array('role' => array('teacher'))
+        );
+
+        $this->assertEquals(0, $result);
+    }
+
+    public function testFindMembersByUserIdAndClassroomIds()
+    {
+        $result1 = $this->getDao()->findMembersByUserIdAndClassroomIds(1, array());
+
+        $this->assertEquals(array(), $result1);
+
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('classroomId' => 1));
+        $expected[] = $this->mockDataObject(array('classroomId' => 2));
+        $result2 = $this->getDao()->findMembersByUserIdAndClassroomIds(1, array(1, 2));
+
+        $this->assertArrayEquals($expected[0], $result2[0]);
+        $this->assertArrayEquals($expected[1], $result2[1]);
+    }
+
+    public function testFindMembersByUserId()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('classroomId' => 1));
+        $expected[] = $this->mockDataObject(array('classroomId' => 2));
+        $result = $this->getDao()->findMembersByUserId(1);
+
+        $this->assertArrayEquals($expected[0], $result[0]);
+        $this->assertArrayEquals($expected[1], $result[1]);
+    }
+
     public function testCountStudents()
     {
         $expected = array();
@@ -120,10 +158,23 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
 
     public function testFindAssistantsByClassroomId()
     {
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('role' => array('assistant', 'teacher')));
+        $expected[] = $this->mockDataObject(array('role' => array('assistant')));
+        $result = $this->getDao()->findAssistantsByClassroomId(1);
+
+        $this->assertArrayEquals($expected[0], $result[0]);
+        $this->assertArrayEquals($expected[1], $result[1]);
     }
 
     public function testFindTeachersByClassroomId()
     {
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('role' => array('auditor', 'teacher')));
+        $expected[] = $this->mockDataObject(array('role' => array('teacher')));
+        $result = $this->getDao()->findTeachersByClassroomId(1);
+
+        $this->assertArrayEquals($expected[1], $result[1]);
     }
 
     public function testFindByUserIdAndClassroomIds()
@@ -160,10 +211,6 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals('1', $res);
     }
 
-    public function testCountMobileVerifiedMembersByClassroomId()
-    {
-    }
-
     public function testFindByClassroomIdAndRole()
     {
         $expected = array();
@@ -174,12 +221,15 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $res[1]);
     }
 
-    public function testFindMemberIdsByClassroomId()
-    {
-    }
-
     public function testFindByUserId()
     {
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('classroomId' => 1));
+        $expected[] = $this->mockDataObject(array('classroomId' => 2));
+        $result = $this->getDao()->findByUserId(1);
+
+        $this->assertArrayEquals($expected[0], $result[0]);
+        $this->assertArrayEquals($expected[1], $result[1]);
     }
 
     protected function getDefaultMockFields()

@@ -117,8 +117,6 @@ interface ClassroomService
 
     public function searchMemberCount($conditions);
 
-    public function findMemberUserIdsByClassroomId($classroomId);
-
     public function getClassroomMember($classroomId, $userId);
 
     public function remarkStudent($classroomId, $userId, $remark);

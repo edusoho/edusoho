@@ -15,6 +15,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Order\Status\Order\FailOrderStatus;
+use Codeages\Biz\Order\Status\Order\FinishedOrderStatus;
 use Codeages\Biz\Order\Status\Order\PaidOrderStatus;
 use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
@@ -57,6 +58,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 SuccessOrderStatus::NAME,
                 PaidOrderStatus::NAME,
                 FailOrderStatus::NAME,
+                FinishedOrderStatus::NAME,
             ));
         } else {
             return false;

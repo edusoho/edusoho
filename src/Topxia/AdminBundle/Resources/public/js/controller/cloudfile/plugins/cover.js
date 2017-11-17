@@ -5,7 +5,8 @@ define(function(require, exports, module) {
 
   var Cover = Widget.extend({
     attrs: {
-      callback: ''
+      callback: '',
+      playMessage: {},
     },
     events: {
       'click .js-img-set': 'onClickChangePic',
@@ -31,7 +32,7 @@ define(function(require, exports, module) {
     onClickScreenshot: function(event) {
       var $target = $(event.currentTarget);
       var self = this;
-      var second = this.player.getCurrentTime();
+      var second = self.playMessage.currentTime;
       second = Math.floor(second);
       $target.button('loading');
       $.ajax({
@@ -76,16 +77,15 @@ define(function(require, exports, module) {
     _initPlayer: function() {
       var self = this;
       if (this.$('#viewerIframe').length > 0) {
-        this.$('#viewerIframe');
+
         var messenger = new Messenger({
           name: 'parent',
           project: 'PlayerProject',
           children: [document.getElementById('viewerIframe')],
           type: 'parent'
         });
-
-        messenger.on("ready", function() {
-          self.player = window.frames["viewerIframe"].contentWindow.BalloonPlayer;
+        messenger.on("video.timeupdate", function(message) {
+          self.playMessage = message;
         });
       }
 
