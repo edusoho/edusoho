@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\OAuth2;
 
-use ApiBundle\Api\ApiRequest;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Controller\LoginBindController;
 use Symfony\Component\HttpFoundation\Request;

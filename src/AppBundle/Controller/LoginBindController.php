@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use ApiBundle\Api\Resource\Setting\Setting;
-use AppBundle\Component\OAuthClient\AbstractOAuthClient;
 use AppBundle\Controller\OAuth2\OauthUser;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\User\CurrentUser;
