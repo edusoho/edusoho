@@ -6151,14 +6151,14 @@ admin.edu_cloud.edu_video.transcode_quality_normal: >
   标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%
 admin.edu_cloud.edu_video.transcode_quality_high: >
   精细 %<span class="text-muted">%(适合动态电影)%</span>%
-admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质
+admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质：
 admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
-admin.edu_cloud.edu_video.play_speed: 倍速播放
+admin.edu_cloud.edu_video.play_speed: 倍速播放：
 admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
-admin.edu_cloud.edu_video.video_header: 云视频片头
+admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
 admin.edu_cloud.edu_video.video_header_tips: >
   正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
@@ -6183,7 +6183,7 @@ admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、j
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
-admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
+admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强

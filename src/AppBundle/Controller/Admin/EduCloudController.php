@@ -224,6 +224,10 @@ class EduCloudController extends BaseController
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
             $storageSetting = array_merge($default, $storageSetting, $set);
+            if (!empty($set['isDeleteMP4'])) {
+                $this->deleteCloudMP4Files();
+                $storageSetting['delete_mp4_status'] = 'waiting';
+            }
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', 'site.save.success');
 
@@ -258,16 +262,8 @@ class EduCloudController extends BaseController
         $files = $this->getCloudFileService()->search($conditions, 0, 1);
 
         if ($request->getMethod() == 'POST') {
-            $user = $this->getUser();
-            $tokenFields = array(
-                'userId' => $user['id'],
-                'duration' => 3600 * 24 * 30,
-                'times' => 1,
-            );
-            $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
-            $callback = $this->generateUrl('edu_cloud_delete_mp4_callback', array('token' => $token));
-
-            $this->getCloudFileService()->deleteCloudMP4Files($callback);
+            
+            $this->deleteCloudMP4Files();
 
             $setting = $this->getSettingService()->get('storage', array());
             $setting['delete_mp4_status'] = 'waiting';
@@ -1770,6 +1766,16 @@ class EduCloudController extends BaseController
         return true;
     }
 
+    protected  function deleteCloudMP4Files()
+    {
+        $user = $this->getUser();
+        $callback = $this->generateUrl('edu_cloud_delete_mp4_callback');
+        
+        $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
+
+        return true;
+    }
+
     protected function getConsultService()
     {
         return $this->createService('EduCloud:MicroyanConsultService');
@@ -1783,10 +1789,5 @@ class EduCloudController extends BaseController
     protected function getCloudFileService()
     {
         return $this->createService('CloudFile:CloudFileService');
-    }
-
-    protected function getTokenService()
-    {
-        return $this->createService('User:TokenService');
     }
 }

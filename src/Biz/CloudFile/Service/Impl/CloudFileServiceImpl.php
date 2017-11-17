@@ -239,8 +239,17 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getStatistics($options);
     }
 
-    public function deleteCloudMP4Files($callback)
+    public function deleteCloudMP4Files($userId, $callback)
     {
+        $tokenFields = array(
+            'userId' => $userId,
+            'duration' => 3600 * 24 * 30,
+            'times' => 1,
+        );
+        $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
+
+        $callback = $callback.'?token='.$token['token'];
+
         return $this->getCloudFileImplementor()->deleteMP4Files($callback);
     }
 
@@ -303,5 +312,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getMaterialService()
     {
         return ServiceKernel::instance()->createService('Course:MaterialService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }
