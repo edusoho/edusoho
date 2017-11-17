@@ -2639,7 +2639,7 @@ cloud_file.process_status.waiting: Converting
 cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
 my.teaching.open_course.title: Name
-cloud_file.material_thumbnail_generate: 'Producing screenshots, please wait ...'
+cloud_file.material_thumbnail_generate: 'Producing screenshots...'
 cloud_file.screen_shot_btn: Screenshots
 cloud_file.search_empty: 'Sorry,no rescouce found'
 cloud_file.use_status: 'Using'
@@ -5959,6 +5959,7 @@ admin.app_center.buy_btn: Purchase
 admin.app_center.price: Price：
 admin.app_center.free: Free
 admin.app_center.ontrial_btn: Trial
+admin.app_center.expired_btn: Expired Trial
 admin.app_center.buyed_btn: Bought
 admin.app_center.tria_btn: Trial
 admin.app_center.show_detail_btn: 'View Detail'

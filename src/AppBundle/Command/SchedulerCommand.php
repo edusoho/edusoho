@@ -9,7 +9,8 @@ class SchedulerCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('util:scheduler');
+        $this->setName('util:scheduler')
+        ->setDescription('执行定时任务');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

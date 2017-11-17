@@ -3334,7 +3334,7 @@ cloud_file.process_status.ok: 转码成功
 cloud_file.process_status.waiting: 转码中
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
-cloud_file.material_thumbnail_generate: 正在生成截图，请稍等...
+cloud_file.material_thumbnail_generate: 生成截图中...
 cloud_file.screen_shot_btn: 截图
 cloud_file.search_empty: 没有搜索到任何资源......
 
@@ -7527,6 +7527,7 @@ admin.app_center.buy_btn: 购买
 admin.app_center.price: 价格：
 admin.app_center.free: 免费
 admin.app_center.ontrial_btn: 试用中
+admin.app_center.expired_btn: 试用期已过
 admin.app_center.buyed_btn: 已购买
 admin.app_center.tria_btn: 试用
 admin.app_center.show_detail_btn: 查看详情
