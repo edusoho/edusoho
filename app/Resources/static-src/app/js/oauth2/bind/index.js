@@ -19,8 +19,9 @@ $btn.click((event) => {
   if (!validator.form()) {
     return;
   }
+  $(event.target).button('loading');
   $.post($form.attr('action'), $form.serialize(), (response) => {
-      if (response.success === 0) {
+    if (response.success === 0) {
       notify('danger', response.message);
     } else {
       window.location.href = response.url;
