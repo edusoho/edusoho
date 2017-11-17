@@ -93,7 +93,6 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-
             $this->storeOauthUserToSession($request, $oauthClient, $token, $type);
 
             return $this->redirect($this->generateUrl('oauth2_login_index', array('inviteCode' => $inviteCode)));

@@ -63,9 +63,6 @@ class OauthUser implements \Serializable
             $this->name,
             $this->mode,
             $this->account,
-            $this->accountType,
-            ) = $data;
+            $this->accountType) = $data;
     }
-
-
 }

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\OAuth2;
 
-use ApiBundle\Api\Resource\Setting\Setting;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -51,6 +50,7 @@ class LoginController extends BaseController
             return $this->redirect($this->getTargetPath($request));
         } else {
             $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
+
             return $this->render('oauth2/bind-login.html.twig', array(
                 'oauthUser' => $oauthUser,
                 'esUser' => $user,
@@ -95,6 +95,7 @@ class LoginController extends BaseController
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \AppBundle\Controller\OAuth2\OauthUser
      */
     private function getOauthUser(Request $request)
