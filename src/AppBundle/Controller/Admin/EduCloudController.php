@@ -262,7 +262,6 @@ class EduCloudController extends BaseController
         $files = $this->getCloudFileService()->search($conditions, 0, 1);
 
         if ($request->getMethod() == 'POST') {
-            
             $this->deleteCloudMP4Files();
 
             $setting = $this->getSettingService()->get('storage', array());
@@ -1766,11 +1765,11 @@ class EduCloudController extends BaseController
         return true;
     }
 
-    protected  function deleteCloudMP4Files()
+    protected function deleteCloudMP4Files()
     {
         $user = $this->getUser();
         $callback = $this->generateUrl('edu_cloud_delete_mp4_callback');
-        
+
         $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
 
         return true;
