@@ -65,6 +65,7 @@ class LoginController extends BaseController
     public function successAction(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
+
         return $this->render('wap/third-party/third-party-login-success.html.twig', array(
             'oauthUser' => $oauthUser,
         ));
@@ -73,6 +74,7 @@ class LoginController extends BaseController
     public function createAction(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
+
         return $this->render('oauth2/create-account.html.twig', array(
             'oauthUser' => $oauthUser,
         ));
@@ -107,6 +109,5 @@ class LoginController extends BaseController
 
     private function getIPRateLimiter()
     {
-
     }
 }
