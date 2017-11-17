@@ -12,7 +12,7 @@ $form.keypress(function (e) {
 });
 
 const validateLogin = (validateName, rule, message) => {
-  const $item = $('input[name='+ validateName +']');
+  const $item = $('#'+ validateName);
   if (!$item.length) {
     return;
   }

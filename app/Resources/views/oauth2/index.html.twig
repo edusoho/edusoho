@@ -12,26 +12,28 @@
   <div class="text-center cd-mb32">
     <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
   </div>
-  <form class="third-party-form" id="third-party-login-form" method="post">
+  <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
 
     {% if mode == 'mobile' %}
       <div class="form-group cd-form-group">
         <label class="label-required" for="mobile">{{ '手机'|trans }}</label>
-        <input class="form-control" type="number" id="mobile" name="mobile" required data-url="{{ path('register_mobile_check') }}">
+        <input class="form-control" type="number" id="mobile" name="account" required>
       </div>
     {% elseif mode == 'email' %}
       <div class="form-group cd-form-group">
         <label class="label-required" for="email">{{ '邮箱'|trans }}</label>
-        <input class="form-control" type="email" id="email" name="email" required data-url="{{ path('register_email_check') }}">
+        <input class="form-control" type="email" id="email" name="account" required>
       </div>
     {% else %}
       <div class="form-group cd-form-group">
         <label class="label-required" for="mobileOrEmail">{{ '手机/邮箱'|trans }}</label>
-        <input class="form-control" type="text" id="mobileOrEmail" name="mobileOrEmail" required data-url="{{ path('register_email_or_mobile_check') }}">
+        <input class="form-control" type="text" id="mobileOrEmail" name="account" required>
       </div>
     {% endif %}
 
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" data-url="{{ path('oauth2_login_bind') }}" type="button">{{ 'form.btn.next'|trans }}</button>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit">{{ 'form.btn.next'|trans }}</button>
+
+    <input class="form-control" id="accountType" type="hidden" name="accountType">
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
