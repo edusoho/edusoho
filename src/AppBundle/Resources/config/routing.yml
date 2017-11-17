@@ -1178,6 +1178,7 @@ edu_cloud_search_callback:
 edu_cloud_delete_mp4_callback:
     path:  /edu_cloud/delete/mp4/callback
     defaults: { _controller: AppBundle:EduCloud:deleteVideoCallback }
+    methods: [POST]
 
 settings_bind_mobile:
     path:  /settings/bind_mobile
