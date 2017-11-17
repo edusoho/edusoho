@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use ApiBundle\Api\Resource\Setting\Setting;
-use AppBundle\Component\OAuthClient\AbstractOAuthClient;
 use AppBundle\Controller\OAuth2\OauthUser;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\User\CurrentUser;
@@ -93,24 +92,24 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            $this->storeOauthUserToSession($request, $oauthClient, $token, $type);
+            $oUser = $oauthClient->getUserInfo($token);
+            $this->storeOauthUserToSession($request, $oUser, $type);
 
             return $this->redirect($this->generateUrl('oauth2_login_index', array('inviteCode' => $inviteCode)));
         }
     }
 
-    private function storeOauthUserToSession(Request $request, AbstractOAuthClient $oauthClient, $token, $type)
+    protected function storeOauthUserToSession(Request $request, $oUser, $type, $isApp = false)
     {
         $setting = new Setting($this->container, $this->getBiz());
         $registerSetting = $setting->getRegister();
-
-        $oUser = $oauthClient->getUserInfo($token);
         $oauthUser = new OauthUser();
         $oauthUser->id = $oUser['id'];
         $oauthUser->name = mb_substr($oUser['name'], 9);
         $oauthUser->avatar = $oUser['avatar'];
         $oauthUser->type = $type;
         $oauthUser->mode = $registerSetting['mode'];
+        $oauthUser->isApp = $isApp;
 
         $request->getSession()->set('oauth_user', $oauthUser);
     }
