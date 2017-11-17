@@ -1015,6 +1015,7 @@ class FileToolkit
 
     public static function cropImages($filePath, $options)
     {
+        $fileSystem = new Filesystem();
         $pathinfo = pathinfo($filePath);
         $filesize = filesize($filePath);
 
@@ -1041,8 +1042,7 @@ class FileToolkit
 
                 if ($isCopy) {
                     $filePaths[$key] = $savedFilePath;
-                    $image = $rawImage->copy();
-                    $image->save($savedFilePath);
+                    $fileSystem->copy($filePath, $savedFilePath);
                 } else {
                     $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                     $filePaths[$key] = $savedFilePath;
