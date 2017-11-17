@@ -51,7 +51,6 @@ class LoginFailRateLimiter implements RateLimiterInterface
             } else {
                 $remaind = 1;
             }
-
         }
 
         if ($remaind <= 0) {

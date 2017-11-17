@@ -70,6 +70,7 @@ class LoginController extends BaseController
         $isCorrectPassword = $this->getUserService()->verifyPassword($user['id'], $password);
         if ($isCorrectPassword) {
             $this->getUserService()->bindUser($oauthUser->type, $oauthUser->id, $user['id'], null);
+
             return true;
         } else {
             return false;
@@ -128,8 +129,8 @@ class LoginController extends BaseController
 
     private function loginAttemptCheck($account, Request $request)
     {
-       $limiter = new LoginFailRateLimiter($this->getBiz());
-       $request->request->set('username', $account);
-       $limiter->handle($request);
+        $limiter = new LoginFailRateLimiter($this->getBiz());
+        $request->request->set('username', $account);
+        $limiter->handle($request);
     }
 }
