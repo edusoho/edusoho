@@ -27,28 +27,26 @@ const validateLogin = (validateName, rule, message) => {
       required: Translator.trans(message)
     },
   });
-  let isValidated = validator.form();
-  return isValidated;
+  return validator.form();
 }
 
-
 $btn.click((event) => {
+
   let isMobileOrEmail = validateLogin('mobileOrEmail', 'email_or_mobile_check', 'validate.phone_and_email_input.message');
-
   let isMobile = validateLogin('mobile', 'mobile', 'validate.phone.message');
-
   let isEmail = validateLogin('email', 'email', 'validate.valid_email_input.message');
 
-  console.log(isEmail);
+  let isValidated = isMobileOrEmail || isMobile || isEmail;
 
+  let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
+  let type;
 
+  if (isValidated) {
+
+    let isFinalEmail = reg_email.test($("input[name='account']").val());
+    type = isFinalEmail ? 'email' : 'mobile';
+    $('#accountType').val(type);
+    $form.submit();
+  }
 })
-// $btn.click((event) => {
-//   if (validator.form() && !IsBind) {
-//     $form.submit();
-//     window.location.href = $btn.data('url');
-//   } else if (validator.form() && IsBind) {
-//     window.location.href = $btn.data('create-url');
-//   }
-// });

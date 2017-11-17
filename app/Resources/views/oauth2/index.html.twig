@@ -13,7 +13,6 @@
     <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
   </div>
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
-
     {% if mode == 'mobile' %}
       <div class="form-group cd-form-group">
         <label class="label-required" for="mobile">{{ '手机'|trans }}</label>
@@ -31,9 +30,10 @@
       </div>
     {% endif %}
 
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit">{{ 'form.btn.next'|trans }}</button>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" id="submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" type="button">{{ 'form.btn.next'|trans }}</button>
 
     <input class="form-control" id="accountType" type="hidden" name="accountType">
+
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
