@@ -16,9 +16,14 @@
     <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalRegisterNum }}</p>
   </li>
   <li>
-    <div class="title">{{ 'admin.homepage.todays_data.new_students'|trans }}</div>
-    <span class="number"> {{ todayCourseMemberNum + todayClassroomMemberNum }}</span>
-    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalCourseMemberNum + totalClassroomMemberNum }}</p>
+    <div class="title">{{ 'admin.homepage.todays_data.new_course_members'|trans }}</div>
+    <span class="number"> {{ todayCourseMemberNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalCourseMemberNum }}</p>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.new_classroom_members'|trans }}</div>
+    <span class="number"> {{ todayClassroomMemberNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalClassroomMemberNum }}</p>
   </li>
   {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
     <li>

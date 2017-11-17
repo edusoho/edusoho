@@ -4042,12 +4042,48 @@ admin.homepage.status_bar.mobile_app_title: 'Mobile APP'
 admin.homepage.status_bar.mobile_app_status.open: Enabled
 admin.homepage.status_bar.mobile_app_status.not_open: 'Not Enabled'
 admin.homepage.todays_data_title: 'Today''s Data Statistics'
-admin.homepage.todays_data.tooltips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">\n    <div class=\"title\">Login User</div>\n    <div class=\"content\">Users who have login and been active in last 15 mins.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Online Number</div>\n    <div class=\"content\">Users who are active in last 15 mins, include user who is not login.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Registered Numbers</div>\n    <div class=\"content\">New user include self-registered、3rd part account registered or imported</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Students</div>\n    <div class=\"content\">Total times that enrolled course or classroom today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Vip Number</div>\n    <div class=\"content\">New Vip enroll number today.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Question without answer number</div>\n    <div class=\"content\">Number of new created question without answer today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Not Answer Question Number</div>\n    <div class=\"content\">Current not answer Question Number</div>\n  </div>\n</div>\n"
+admin.homepage.todays_data.tooltips: >
+  <div class="popover-content hidden">
+    <div class="popover-item">
+      <div class="title">Login User</div>
+      <div class="content">Users who have login and been active in last 15 mins.</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">Online Number</div>
+      <div class="content">Users who are active in last 15 mins, include user who is not login.</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New Registered Numbers</div>
+      <div class="content">New user include self-registered、3rd part account registered or imported</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New course members</div>
+      <div class="content">The course relation count that members joined course or classroom today</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New classroom members</div>
+      <div class="content">The classroom relation count that members joined classroom today</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New Vip Number</div>
+      <div class="content">New Vip enroll number today.</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">Question without answer number</div>
+      <div class="content">Number of new created question without answer today</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">Not Answer Question Number</div>
+      <div class="content">Current not answer Question Number</div>
+    </div>
+  </div>
 admin.homepage.todays_data.login_users: 'Login Users'
 admin.homepage.todays_data.login_users.online_total: 'Total Online Number'
 admin.homepage.todays_data.new_registration: 'New Registers'
 admin.homepage.todays_data.total: Total
 admin.homepage.todays_data.new_students: 'New Students'
+admin.homepage.todays_data.new_course_members: 'New Course Members'
+admin.homepage.todays_data.new_classroom_members: 'New Classroom Members'
 admin.homepage.todays_data.total_number: 'Total'
 admin.homepage.todays_data.new_vip_members: 'New VIPs'
 admin.homepage.todays_data.thread_un_answer: 'Not Answered'

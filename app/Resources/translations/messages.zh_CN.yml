@@ -5131,8 +5131,12 @@ admin.homepage.todays_data.tooltips: >
       <div class="content">平台新增用户数，包括自主注册、第三方注册及导入</div>
     </div>
     <div class="popover-item">
-      <div class="title">新增学员人次</div>
-      <div class="content">今日加入课程和班级的总人次，1个学员加入2个课程，算2人次</div>
+      <div class="title">课程新增学员人次</div>
+      <div class="content">今日加入课程和班级课程的总人次，一个学员加入2个课程，算2人次；一个学员加入一个班级，班级中有2个课程，算2人次</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">班级新增学员人次</div>
+      <div class="content">今日加入班级的总人次，1个学员加入2个班级，算2人次</div>
     </div>
     <div class="popover-item">
       <div class="title">新增会员</div>
@@ -5152,6 +5156,8 @@ admin.homepage.todays_data.login_users.online_total: 在线总数
 admin.homepage.todays_data.new_registration: 新增注册
 admin.homepage.todays_data.total: 总数
 admin.homepage.todays_data.new_students: 新增学员
+admin.homepage.todays_data.new_course_members: 课程新增学员
+admin.homepage.todays_data.new_classroom_members: 班级新增学员
 admin.homepage.todays_data.total_number: 总人次
 admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
