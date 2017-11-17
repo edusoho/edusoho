@@ -2853,7 +2853,7 @@ user.oauth.bind_other_account: 绑定其他账号？
 user.oauth.bind_existed_account: 绑定已有账号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
-user.oauth.register_account: 使用%accountType%创建账号
+user.oauth.register_account_by_ways: 使用%accountType%创建账号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
