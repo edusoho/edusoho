@@ -46,7 +46,7 @@ class OrderController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'user_id'));
-        
+
         return $this->render(
             'admin/order/list.html.twig',
             array(
@@ -117,7 +117,7 @@ class OrderController extends BaseController
 
     public function adjustPriceAction(Request $request, $id)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $this->getOrderFacadeService()->adjustOrderPrice(
                 $id, MathToolkit::simple($request->request->get('adjustPrice'), 100)
             );
