@@ -34,7 +34,7 @@
               <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
             </td>
             {% if has_permission('admin_user_manage') %}
-              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a></td>
             {% else %}
               <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
               {{ user.nickname }}</a></td>
