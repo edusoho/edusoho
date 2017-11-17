@@ -228,7 +228,7 @@
       <div class="controls col-md-8 radios">
         {{ radios('support_mobile', {'1':'admin.edu_cloud.edu_video.normal_mode'|trans, '0':'admin.edu_cloud.edu_video.encryption_mode'|trans}, storageSetting.support_mobile) }}
         {% if storageSetting.support_mobile|default(0) == 0 %}
-          <button type="button" class="btn btn-sm btn-default js-delete-video-btn" data-url="{{ path('admin_cloud_normal_video_delete') }}" data-target="#modal", data-toggle="modal">{{ 'admin.edu_cloud.edu_video.delete_btn'|trans }}</button>
+          <button type="button" class="btn btn-sm btn-default js-delete-video-btn {% if storageSetting.delete_mp4_status|default('') == 'waiting' %}disabled{% endif %}" data-url="{{ path('admin_cloud_normal_video_delete') }}" data-target="#modal", data-toggle="modal">{{ 'admin.edu_cloud.edu_video.delete_btn'|trans }}</button>
         {% endif %}
 
         <div class="help-block js-normal-mode-tip {% if storageSetting.support_mobile|default(0) == 0 %}hidden{% endif %}">

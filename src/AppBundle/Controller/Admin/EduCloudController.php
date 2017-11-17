@@ -252,9 +252,34 @@ class EduCloudController extends BaseController
         ));
     }
 
-    public function deleteVideoAction()
+    public function deleteVideoAction(Request $request)
     {
-        //admin/edu-cloud/video/video-delete-success-modal.html.twig
+        $conditions = array('mcStatus' => 'yes');
+        $files = $this->getCloudFileService()->search($conditions, 0, 1);
+
+        if ($request->getMethod() == 'POST') {
+            $user = $this->getUser();
+            $tokenFields = array(
+                'userId' => $user['id'],
+                'duration' => 3600 * 24 * 30,
+                'times' => 1,
+            );
+            $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
+            $callback = $this->generateUrl('edu_cloud_delete_mp4_callback', array('token' => $token));
+
+            $this->getCloudFileService()->deleteCloudMP4Files($callback);
+
+            $setting = $this->getSettingService()->get('storage', array());
+            $setting['delete_mp4_status'] = 'waiting';
+            $this->getSettingService()->set('storage', $setting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        if (!$files) {
+            return $this->render('admin/edu-cloud/video/video-delete-success-modal.html.twig');
+        }
+
         return $this->render('admin/edu-cloud/video/video-delete-confirm-modal.html.twig');
     }
 
@@ -1753,5 +1778,15 @@ class EduCloudController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->createService('CloudFile:CloudFileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

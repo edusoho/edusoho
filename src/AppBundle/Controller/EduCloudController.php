@@ -182,6 +182,25 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function deleteVideoCallbackAction(Request $request)
+    {
+        $token = $request->query->get('token', '');
+
+        $token = $this->getTokenService()->verifyToken('mp4_delete.callback', $token);
+
+        if (!$token) {
+            return $this->createJsonResponse(false);
+        }
+
+        $setting = $this->getSettingService()->get('storage', array());
+        $setting['delete_mp4_status'] = 'finished';
+        $this->getSettingService()->set('storage', $setting);
+
+        $this->getNotifiactionService()->notify($token['userId'], 'delete-cloud-mp4', array());
+
+        return $this->createJsonResponse(true); 
+    }
+
     protected function generateSmsCode($length = 6)
     {
         $code = rand(0, 9);
@@ -410,5 +429,15 @@ class EduCloudController extends BaseController
         $factory = $this->getBiz()->offsetGet('ratelimiter.factory');
 
         return $factory($id, $maxAllowance, $period);
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
+    }
+
+    protected function getNotifiactionService()
+    {
+        return $this->createService('User:NotificationService');
     }
 }

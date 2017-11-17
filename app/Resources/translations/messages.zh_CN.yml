@@ -7812,6 +7812,8 @@ notification.materialLib.click_to_view: 点击查看
 notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
 notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
+notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
 status.become_student.course.simple: 加入学习

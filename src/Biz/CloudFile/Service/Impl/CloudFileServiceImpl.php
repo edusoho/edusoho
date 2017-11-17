@@ -18,25 +18,39 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     public function search($conditions, $start, $limit)
     {
         if (empty($conditions['resType'])) {
-            $conditions['noTargetType'] = 'attachment';
-            $conditions = $this->filterConditions($conditions);
+            $conditions['start'] = $start;
+            $conditions['limit'] = $limit;
+            $conditions          = $this->filterConditions($conditions);
+            $result              = $this->getCloudFileImplementor()->search($conditions);
+
+            if (!empty($result['data'])) {
+                $createdUserIds = array();
+
+                foreach ($result['data'] as &$cloudFile) {
+                    $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
+
+                    if (!empty($file)) {
+                        $createdUserIds[]           = $file['createdUserId'];
+                        $cloudFile['createdUserId'] = $file['createdUserId'];
+                    }
+                }
+
+                $result['createdUsers'] = ArrayToolkit::index($this->getUserService()->findUsersByIds($createdUserIds), 'id');
+            }
         } else {
             $conditions['targetType'] = $conditions['resType'];
+            $result['count']          = $this->getUploadFileService()->searchFileCount($conditions);
+            $result['data']           = $this->getUploadFileService()->searchFiles($conditions, array('id', 'DESC'), $start, $limit);
+
+            $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
+            $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+
+            $result['data'] = array_map(function ($file) {
+                $file['no']            = $file['globalId'];
+                $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
+                return $file;
+            }, $result['data']);
         }
-
-        $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
-        $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
-
-        $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
-        $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
-
-        $result['data'] = array_map(function ($file) {
-            $file['no'] = $file['globalId'];
-            $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
-
-            return $file;
-        }, $result['data']);
-
         return $result;
     }
 
@@ -221,6 +235,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     public function getStatistics($options = array())
     {
         return $this->getCloudFileImplementor()->getStatistics($options);
+    }
+
+    public function deleteCloudMP4Files($callback)
+    {
+        return $this->getCloudFileImplementor()->deleteMP4Files($callback);
     }
 
     protected function getResourceService()

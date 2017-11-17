@@ -6339,6 +6339,9 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
+#TODO trans
+notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn
 status.become_student.classroom.simple: Enroll to learn
