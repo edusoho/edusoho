@@ -382,7 +382,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function deleteMP4Files($callback)
     {
         $api = CloudAPIFactory::create('root');
-        return $api->post("/system_jobs/delete_all_video_mp4", array('callback' => $callback));
+
+        return $api->post('/system_jobs/delete_all_video_mp4', array('callback' => $callback));
     }
 
     private function mergeCloudFile($localFile, $cloudFile)

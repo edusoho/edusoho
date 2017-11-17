@@ -20,8 +20,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if (empty($conditions['resType'])) {
             $conditions['start'] = $start;
             $conditions['limit'] = $limit;
-            $conditions          = $this->filterConditions($conditions);
-            $result              = $this->getCloudFileImplementor()->search($conditions);
+            $conditions = $this->filterConditions($conditions);
+            $result = $this->getCloudFileImplementor()->search($conditions);
 
             if (!empty($result['data'])) {
                 $createdUserIds = array();
@@ -30,7 +30,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                     $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
 
                     if (!empty($file)) {
-                        $createdUserIds[]           = $file['createdUserId'];
+                        $createdUserIds[] = $file['createdUserId'];
                         $cloudFile['createdUserId'] = $file['createdUserId'];
                     }
                 }
@@ -39,18 +39,20 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             }
         } else {
             $conditions['targetType'] = $conditions['resType'];
-            $result['count']          = $this->getUploadFileService()->searchFileCount($conditions);
-            $result['data']           = $this->getUploadFileService()->searchFiles($conditions, array('id', 'DESC'), $start, $limit);
+            $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
+            $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id', 'DESC'), $start, $limit);
 
-            $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
+            $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
             $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
 
             $result['data'] = array_map(function ($file) {
-                $file['no']            = $file['globalId'];
+                $file['no'] = $file['globalId'];
                 $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
+
                 return $file;
             }, $result['data']);
         }
+
         return $result;
     }
 

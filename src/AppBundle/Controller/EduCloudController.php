@@ -198,7 +198,7 @@ class EduCloudController extends BaseController
 
         $this->getNotifiactionService()->notify($token['userId'], 'delete-cloud-mp4', array());
 
-        return $this->createJsonResponse(true); 
+        return $this->createJsonResponse(true);
     }
 
     protected function generateSmsCode($length = 6)
