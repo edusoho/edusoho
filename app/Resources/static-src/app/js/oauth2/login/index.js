@@ -1,8 +1,5 @@
-import axis from 'common/axis';
-
 const $form = $('#third-party-login-form');
 const $btn = $('.js-submit-btn');
-
 
 $form.keypress(function (e) {
   if (e.which == 13) {
@@ -43,7 +40,6 @@ $btn.click((event) => {
   let type;
 
   if (isValidated) {
-
     let isFinalEmail = reg_email.test($("input[name='account']").val());
     type = isFinalEmail ? 'email' : 'mobile';
     $('#accountType').val(type);

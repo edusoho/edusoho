@@ -9,7 +9,6 @@
   <div class="text-center cd-mb32">
     <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser['avatar']) }}">
   </div>
-
   <div class="text-center cd-mb32">
     <div class="third-party-bind-tip">{{ '使用手机创建账号'|trans }}</div>
     <div class="third-party-user color-primary">{{ '15988811903'|trans }}</div>
@@ -19,12 +18,12 @@
 
     <div class="form-group cd-form-group">
       <label class="label-required" for="username">{{ '用户名'|trans }}</label>
-      <input class="form-control" type="text" id="username" name="username" placeholder="{{ '最长 18 个英文或 9 个汉字'|trans }}" data-url="{{ path('register_nickname_check') }}">
+      <input class="form-control" type="text" id="username" name="username" placeholder="{{ 'user.oauth.register.nickname_placeholder'|trans }}" data-url="{{ path('register_nickname_check') }}">
     </div>
 
     <div class="form-group cd-form-group">
       <label class="label-required" for="password">{{ '密码'|trans }}</label>
-      <input class="form-control" type="password" id="password" name="password" placeholder="{{ '5-20 位英文、数字、符号'|trans }}">
+      <input class="form-control" type="password" id="password" name="password" placeholder="{{ 'user.oauth.register.password__placeholder'|trans }}">
     </div>
 
     <div class="form-group cd-form-group">

@@ -2834,6 +2834,22 @@ user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自�
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
 
+
+# 用户第三方登录
+
+user.oauth.login_by_email: 邮箱
+user.oauth.login_by_mobile: 手机
+user.oauth.login_by_mobile_or_email: 手机/邮箱
+user.oauth.bind_account: 绑定账号
+user.oauth.bind_account_success: 账号绑定成功
+user.oauth.register_account_success: 账号注册成功
+user.oauth.web_account_password: 网校账号密码
+user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
+user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
+
+
+
+
 # 用户个人设置
 user.settings: 个人设置
 user.settings.basic.page_title: 基础信息
