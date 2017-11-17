@@ -81,7 +81,7 @@ class BizRateLimitListener
      */
     private function getRateLimiter($name)
     {
-        $class = __NAMESPACE__. '\\'. $name;
+        $class = 'AppBundle\\Component\\RateLimit\\'. $name;
         return new $class($this->biz);
     }
 }
