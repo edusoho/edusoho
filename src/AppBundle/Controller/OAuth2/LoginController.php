@@ -83,7 +83,7 @@ class LoginController extends BaseController
 
         $oauthUser = $this->getOauthUser($request);
 
-        return $this->render('wap/third-party/third-party-login-success.html.twig', array(
+        return $this->render('oauth2/success.html.twig', array(
             'oauthUser' => $oauthUser,
         ));
     }

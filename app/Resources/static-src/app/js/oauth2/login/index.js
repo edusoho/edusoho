@@ -1,12 +1,9 @@
+import { enterSubmit } from 'common/utils';
+
 const $form = $('#third-party-login-form');
 const $btn = $('.js-submit-btn');
 
-$form.keypress(function (e) {
-  if (e.which == 13) {
-    $btn.trigger('click');
-    e.preventDefault();
-  }
-});
+
 
 const validateLogin = (validateName, rule, message) => {
   const $item = $('#'+ validateName);
@@ -26,6 +23,8 @@ const validateLogin = (validateName, rule, message) => {
   });
   return validator.form();
 }
+
+enterSubmit($form, $btn);
 
 $btn.click((event) => {
 

@@ -1,4 +1,5 @@
 import SmsSender from 'app/common/widget/sms-sender';
+import { enterSubmit } from 'common/utils';
 
 const $form = $('#third-party-create-account-form');
 const $btn = $('.js-submit-btn');
@@ -37,13 +38,7 @@ let validator = $form.validate({
   }
 });
 
-$form.keypress(function (e) {
-  if (e.which == 13) {
-    $btn.trigger('click');
-    e.preventDefault();
-  }
-});
-
+enterSubmit($form, $btn);
 
 $btn.click((event) => {
   if (validator.form()) {

@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import { enterSubmit } from 'common/utils';
 
 const $form = $('#third-party-bind-form');
 const $btn = $('.js-submit-btn');
@@ -12,13 +13,7 @@ let validator = $form.validate({
 });
 
 
-$form.keypress(function (e) {
-  if (e.which == 13) {
-    $btn.trigger('click');
-    e.preventDefault();
-  }
-});
-
+enterSubmit($form, $btn);
 
 $btn.click((event) => {
   if (!validator.form()) {
