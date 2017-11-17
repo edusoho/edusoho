@@ -41,7 +41,7 @@
       <td><span class="color-warning">{{ order.price_amount|to_cash(0) }}</span></td>
       <td><span class="color-warning">{{ (order.price_amount - order.pay_amount)|to_cash(0) }}</span></td>
       <td><span class="color-warning">{{order.pay_amount|to_cash(0) }}</span></td>
-      {% if isUserManager|default() %}
+      {% if has_permission('admin_user_manage') %}
         <td>
           <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
         </td>

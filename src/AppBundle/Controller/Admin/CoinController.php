@@ -339,14 +339,11 @@ class CoinController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $isUserManager = $this->getCurrentUser()->hasPermission('admin_user_manage');
-
         return $this->render('admin/coin/coin-user-records.html.twig', array(
             'schoolBalance' => $schoolBalance,
             'balances' => $balances,
             'paginator' => $paginator,
             'users' => $users,
-            'isUserManager' => $isUserManager,
         ));
     }
 

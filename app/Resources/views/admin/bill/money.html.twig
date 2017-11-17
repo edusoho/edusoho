@@ -34,7 +34,7 @@
               </td>
               <td>
                   {% if user %}
-                    {% if isUserManager|default() %}
+                    {% if has_permission('admin_user_manage') %}
                       <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
                     {% else %}
                       <span><a target="_blank" href="{{ path('user_show', {id: user.id}) }}">

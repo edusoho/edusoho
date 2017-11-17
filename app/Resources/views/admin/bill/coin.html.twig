@@ -33,7 +33,7 @@
               <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span><br/>
               <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
             </td>
-            {% if isUserManager|default() %}
+            {% if has_permission('admin_user_manage') %}
               <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
             {% else %}
               <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
