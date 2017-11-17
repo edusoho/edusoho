@@ -51,7 +51,7 @@ class LoginController extends BaseController
             $isSuccess = $this->bindUser($oauthUser, $password);
 
             return $isSuccess ?
-                $this->createSuccessJsonResponse(array('url' => $this->getTargetPath($request))) :
+                $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success'))) :
                 $this->createFailJsonResponse(array('message' => $this->trans('user.settings.security.password_modify.incorrect_password')));
         } else {
             $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
