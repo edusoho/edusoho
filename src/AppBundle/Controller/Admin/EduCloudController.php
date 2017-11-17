@@ -258,9 +258,6 @@ class EduCloudController extends BaseController
 
     public function deleteVideoAction(Request $request)
     {
-        $conditions = array('mcStatus' => 'yes');
-        $files = $this->getCloudFileService()->search($conditions, 0, 1);
-
         if ($request->getMethod() == 'POST') {
             $this->deleteCloudMP4Files();
 
@@ -270,6 +267,9 @@ class EduCloudController extends BaseController
 
             return $this->createJsonResponse(true);
         }
+
+        $conditions = array('mcStatus' => 'yes', 'page' => 1);
+        $files = $this->getCloudFileService()->search($conditions, 0, 1);
 
         if (!$files) {
             return $this->render('admin/edu-cloud/video/video-delete-success-modal.html.twig');
@@ -1768,7 +1768,7 @@ class EduCloudController extends BaseController
     protected function deleteCloudMP4Files()
     {
         $user = $this->getUser();
-        $callback = $this->generateUrl('edu_cloud_delete_mp4_callback');
+        $callback = $this->get('request')->getHttpHost().$this->generateUrl('edu_cloud_delete_mp4_callback');
 
         $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
 
