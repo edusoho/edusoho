@@ -20,7 +20,6 @@ class LoginController extends LoginBindController
 
     public function bindAccountAction(Request $request)
     {
-
         $oauthUser = $this->getOauthUser($request);
 
         $type = $request->request->get('accountType');
@@ -93,13 +92,12 @@ class LoginController extends LoginBindController
 
         return $this->render('oauth2/success.html.twig', array(
             'oauthUser' => $oauthUser,
-            'isCreate' => $request->query->get('isCreate')
+            'isCreate' => $request->query->get('isCreate'),
         ));
     }
 
     public function createAction(Request $request)
     {
-
         $oauthUser = $this->getOauthUser($request);
 
         return $this->render('oauth2/create-account.html.twig', array(
