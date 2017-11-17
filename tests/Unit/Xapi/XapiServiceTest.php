@@ -11,10 +11,7 @@ class XapiServiceTest extends BaseTestCase
     {
         $statement = $this->mockStatement();
 
-        $createdStatement = $this->getXapiService()->createStatement($statement); 
-
-
-
+        $createdStatement = $this->getXapiService()->createStatement($statement);
     }
 
     private function mockStatement()
