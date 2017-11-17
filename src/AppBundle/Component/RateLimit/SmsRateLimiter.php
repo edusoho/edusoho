@@ -1,10 +1,11 @@
 <?php
 
-namespace ApiBundle\Security\RateLimit;
+namespace AppBundle\Component\RateLimit;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\RateLimiter\RateLimiter;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class SmsRateLimiter implements RateLimiterInterface
 {
@@ -49,24 +50,15 @@ class SmsRateLimiter implements RateLimiterInterface
         $ok = $icr > 0 && $ihr > 0 && $sdr > 0;
 
         if ($ok) {
-            return array(
-                'code' => RateLimiterInterface::PASS,
-                'message' => 'ok'
-            );
+            return;
         }
 
         $needCaptcha = $icr == 0 && $ihr > 0 && $sdr > 0;
 
         if ($needCaptcha) {
-            return array(
-                'code' => RateLimiterInterface::CAPTCHA_OCCUR,
-                'message' => 'request.need.captcha',
-            );
+            throw new TooManyRequestsHttpException(null, 'request.need_verify_captcha', null, RateLimiterInterface::CAPTCHA_OCCUR);
         } else {
-            return array(
-                'code' => RateLimiterInterface::MAX_REQUEST_OCCUR,
-                'message' => 'request.max_attempt_reach'
-            );
+            throw new TooManyRequestsHttpException(null, 'request.max_attempt_reach', null, RateLimiterInterface::MAX_REQUEST_OCCUR);
         }
 
     }

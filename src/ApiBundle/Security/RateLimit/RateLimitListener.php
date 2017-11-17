@@ -4,6 +4,7 @@ namespace ApiBundle\Security\RateLimit;
 
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Event\ResourceEvent;
+use AppBundle\Component\RateLimit\RateLimiterInterface;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -28,27 +29,17 @@ class RateLimitListener
 
             if ($this->isRateLimitApi($rule, $event)) {
                 $rateLimiter = $this->getRateLimiter($rule[2]);
-                $result = $rateLimiter->handle($request);
 
-                switch ($result['code']) {
-                    case RateLimiterInterface::CAPTCHA_OCCUR:
+                try {
+                    $rateLimiter->handle($request);
+                } catch (TooManyRequestsHttpException $exception) {
+                    $isPassVerifyCaptcha = $exception->getCode() === RateLimiterInterface::CAPTCHA_OCCUR
+                        && $this->isCorrectCaptcha($request);
 
-                        if ($this->isCorrectCaptcha($request)) {
-                            continue;
-                        } else {
-                            $captcha = $this->getBizCaptcha()->generate();
-                            $captchaOccurException = new CaptchaOccurHttpException(null, $result['message'], null, RateLimiterInterface::CAPTCHA_OCCUR);
-                            $captchaOccurException->setData($captcha);
-                            throw $captchaOccurException;
-                        }
-                    case RateLimiterInterface::MAX_REQUEST_OCCUR:
-                        throw new TooManyRequestsHttpException(null, $result['message'], null, ErrorCode::API_TOO_MANY_CALLS);
-                        break;
-                    default:
-                        break;
-
+                    if (!$isPassVerifyCaptcha) {
+                        throw $exception;
+                    }
                 }
-
             }
         }
     }
@@ -86,7 +77,7 @@ class RateLimitListener
     }
 
     /**
-     * @return \ApiBundle\Security\RateLimit\RateLimiterInterface
+     * @return \AppBundle\Component\RateLimit\RateLimiterInterface
      */
     private function getRateLimiter($name)
     {

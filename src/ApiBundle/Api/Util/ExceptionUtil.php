@@ -24,10 +24,6 @@ class ExceptionUtil
             $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        if (method_exists($exception, 'getData')) {
-            $error['data'] = $exception->getData();
-        }
-
         if ($isDebug) {
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         }
