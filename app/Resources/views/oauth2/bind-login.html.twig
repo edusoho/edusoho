@@ -2,7 +2,7 @@
 {% do script(['libs/jquery-validation.js','app/js/oauth2/bind/index.js']) %}
 
 {% block page_title %}
-  {{ '验证密码'|trans }}
+  {{ 'user.oauth.validate_password'|trans }}
 {% endblock %}
 
 {% block panel_body %}
@@ -17,7 +17,7 @@
   </div>
 
   <div class="text-center cd-mb32">
-    <div class="third-party-bind-tip">{{ '正在绑定网校用户'|trans }}</div>
+    <div class="third-party-bind-tip">{{ 'user.oauth.binding_web_user'|trans }}</div>
     <div class="third-party-user color-primary">{{ esUser.nickname }}</div>
   </div>
 
@@ -27,11 +27,11 @@
       <div class="third-party-form__way">{{ oauthUser.account }}</div>
     </div>
     <div class="form-group cd-form-group">
-      <label class="label-required" for="password">{{ '网校账号密码'|trans }}</label>
+      <label class="label-required" for="password">{{ 'user.oauth.web_account_password'|trans }}</label>
       <input class="form-control" type="password" id="password" name="password">
     </div>
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_success') }}">{{ '绑定并继续'|trans }}</button>
-    <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ '绑定其他账号？'|trans }}</a>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button">{{ 'user.oauth.bind_account_and_go_continue'|trans }}</button>
+    <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_other_account'|trans }}</a>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>

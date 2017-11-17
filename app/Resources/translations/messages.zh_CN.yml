@@ -2840,10 +2840,16 @@ user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">
 user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
 user.oauth.login_by_mobile_or_email: 手机/邮箱
+user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
 user.oauth.bind_account: 绑定账号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%账号
+user.oauth.validate_password: 验证密码
 user.oauth.bind_account_success: 账号绑定成功
 user.oauth.register_account_success: 账号注册成功
 user.oauth.web_account_password: 网校账号密码
+user.oauth.binding_web_user: 正在绑定网校用户
+user.oauth.bind_account_and_go_continue: 绑定并继续
+user.oauth.bind_other_account: 绑定其他账号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
 
