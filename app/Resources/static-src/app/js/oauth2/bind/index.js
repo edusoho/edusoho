@@ -1,4 +1,3 @@
-import notify from 'common/notify';
 import { enterSubmit } from 'common/utils';
 
 const $form = $('#third-party-bind-form');
@@ -8,10 +7,13 @@ let validator = $form.validate({
   rules: {
     password: {
       required: true,
-    },
+    }
   }
 });
 
+$('#password').focus(() => {
+  $('.js-password-error').remove();
+})
 
 enterSubmit($form, $btn);
 
@@ -19,10 +21,14 @@ $btn.click((event) => {
   if (!validator.form()) {
     return;
   }
-  $(event.target).button('loading');
+  const $target = $(event.target);
+  $target.button('loading');
   $.post($form.attr('action'), $form.serialize(), (response) => {
     if (response.success === 0) {
-      notify('danger', response.message);
+      $target.button('reset');
+      if (!$('.js-password-error').length) {
+        $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">${response.message}</p>`);
+      }
     } else {
       window.location.href = response.url;
     }
