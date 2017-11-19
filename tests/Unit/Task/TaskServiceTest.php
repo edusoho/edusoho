@@ -239,7 +239,6 @@ class TaskServiceTest extends BaseTestCase
         $newTask = $this->getTaskService()->getTask($task['id']);
 
         $this->assertEquals('published', $newTask['status']);
-
     }
 
     /**
@@ -259,7 +258,6 @@ class TaskServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->getTaskService()->publishTask($task['id']);
-
     }
 
     /**
@@ -320,7 +318,6 @@ class TaskServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $this->getTaskService()->unpublishTask($task['id']);
-
     }
 
     /**
@@ -350,7 +347,6 @@ class TaskServiceTest extends BaseTestCase
 
         $this->assertEquals(10, $result['seq']);
         $this->assertEquals(10, $result['number']);
-
     }
 
     public function testUpdateTasks()
@@ -462,7 +458,7 @@ class TaskServiceTest extends BaseTestCase
             array('functionName' => 'findUserTaskResultsByTaskIds', 'returnValue' => array(
                 array('courseTaskId' => $task1['id']),
                 array('courseTaskId' => $task['id']),
-                )
+                ),
             ),
         ));
 
@@ -490,7 +486,7 @@ class TaskServiceTest extends BaseTestCase
             )),
             array('functionName' => 'searchCourses', 'returnValue' => array(
                 array('id' => $task1['courseId']),
-            ))
+            )),
         ));
 
         $tasks = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($this->getCurrentUser()['id'], $courseSet['id']);
@@ -565,7 +561,7 @@ class TaskServiceTest extends BaseTestCase
 
         $this->mockBiz('Activity:ActivityService', array(
             array('functionName' => 'getActivity', 'returnValue' => array('id' => 1, 'mediaType' => 'live')),
-            array('functionName' => 'isFinished', 'returnValue' => true)
+            array('functionName' => 'isFinished', 'returnValue' => true),
         ));
 
         $this->mockBiz('Task:TaskResultService', array(
@@ -616,7 +612,7 @@ class TaskServiceTest extends BaseTestCase
 
         $this->mockBiz('Task:TaskDao', array(
             array('functionName' => 'findFutureLiveDates', 'returnValue' => array(
-                array('count' => 2, 'courseSetId' => $courseSet['id'], 'date' => date('Y-m-d', time() + 86400))
+                array('count' => 2, 'courseSetId' => $courseSet['id'], 'date' => date('Y-m-d', time() + 86400)),
             )),
         ));
 
