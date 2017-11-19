@@ -15,7 +15,7 @@ class User extends AbstractResource
      */
     public function get(ApiRequest $request, $identify)
     {
-        $identifyType = $request->query->get('identify_type', 'id');
+        $identifyType = $request->query->get('identifyType', 'id');
 
         $user = null;
         switch ($identifyType) {
@@ -27,6 +27,9 @@ class User extends AbstractResource
                 break;
             case 'mobile':
                 $user = $this->getUserService()->getUserByVerifiedMobile($identify);
+                break;
+            case 'nickname':
+                $user = $this->getUserService()->getUserByNickname($identify);
                 break;
             default:
                 break;
