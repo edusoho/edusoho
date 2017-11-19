@@ -29,6 +29,10 @@ let validator = $form.validate({
       required: true,
       unsigned_integer: true,
       es_remote: true,
+    },
+    captcha_code: {
+      required: true,
+      alphanumeric: true,
     }
   },
   messages: {
