@@ -54,7 +54,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
 
     public function testGetRecentFinishedLogByActivityIdAndUserId()
     {
-        $log = $this->getDao()->create(array('event' => 'finish', 'activityId' => 2, 'userId' => 2));
+        $log = $this->getDao()->create(array('event' => 'finish', 'activityId' => 2, 'userId' => 2, 'mediaType' => 'video'));
         $result = $this->getDao()->getRecentFinishedLogByActivityIdAndUserId(2, 2);
 
         $this->assertEquals('finish', $result[0]['event']);
@@ -81,8 +81,8 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
     public function testGetLastestByActivityIdAndUserId()
     {
         $log1 = $this->getDao()->create($this->getDefaultMockFields());
-        $log2 = $this->getDao()->create(array('event' => 'unfinish', 'activityId' => 1, 'userId' => 1));
-        $log3 = $this->getDao()->create(array('event' => 'wait', 'activityId' => 1, 'userId' => 1));
+        $log2 = $this->getDao()->create(array('event' => 'unfinish', 'activityId' => 1, 'userId' => 1, 'mediaType' => 'video'));
+        $log3 = $this->getDao()->create(array('event' => 'wait', 'activityId' => 1, 'userId' => 1, 'mediaType' => 'video'));
 
         $result = $this->getDao()->getLastestByActivityIdAndUserId(1, 1);
 
