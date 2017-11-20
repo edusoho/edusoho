@@ -9,7 +9,6 @@ class XapiStatementArchive extends Migration
      */
     public function up()
     {
-
         $biz = $this->getContainer();
         $db = $biz['db'];
 
@@ -29,7 +28,6 @@ class XapiStatementArchive extends Migration
           PRIMARY KEY (`id`),
           UNIQUE KEY `uuid` (`uuid`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
     }
 
     /**
