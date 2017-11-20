@@ -192,7 +192,7 @@ class ThreadShowWidget {
                 //清除附件
                 $('.js-attachment-list').empty();
                 $('.js-attachment-ids').val("");
-                $('.js-upload-file').removeClass('hidden');
+                $('.js-upload-file').show();
             },
             submitError: function (data) {
                 $btn.button('reset');

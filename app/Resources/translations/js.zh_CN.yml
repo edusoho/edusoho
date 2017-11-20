@@ -364,6 +364,7 @@ course_manage.student_remark_success_hint: 备注%username%成功
 course_manage.student_remark_failed_hint: 备注%username%失败，请重试！
 
 course_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
 course_set.show.time_finish_hint: 活动时间到，正在刷新网页，请稍等...

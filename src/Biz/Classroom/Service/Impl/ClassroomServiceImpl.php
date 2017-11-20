@@ -6,11 +6,12 @@ use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Exception\UnableJoinException;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
@@ -967,7 +968,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if ($params['price'] > 0) {
                 //支付完成后会自动加入课程
-                $order = $this->createOrder($classroom['id'], $user['id'], $params['price'], 'outside', $params['remark']);
+                $order = $this->createOrder($classroom['id'], $user['id'], $params, 'outside');
             } else {
                 $info = array(
                     'orderId' => 0,
@@ -1867,7 +1868,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = array(
             'order_ids' => $orderIds,
             'target_type' => 'course',
-            'status' => 'success',
+            'statuses' => array('success', 'finished'),
         );
 
         $orderItems = $this->getOrderService()->searchOrderItems($conditions, array(), 0, PHP_INT_MAX);
@@ -1972,17 +1973,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    protected function createOrder($classroomId, $userId, $price, $source, $remark)
+    protected function createOrder($classroomId, $userId, $params, $source)
     {
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
-        $courseProduct->price = $price;
+        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
 
         $params = array(
-            'created_reason' => $remark,
+            'created_reason' => $params['remark'],
             'source' => $source,
+            'create_extra' => $params,
         );
 
-        return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
+        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
     }
 
     protected function createOperateRecord($member, $operateType, $reason)
@@ -2146,6 +2147,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
     protected function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');

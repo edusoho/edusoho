@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class OrderRefundServiceTest extends IntegrationTestCase
 {
@@ -16,7 +17,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testFinishOrderRefundWithoutCurrentUser()
     {
@@ -27,7 +28,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testRefuseOrderRefundWithoutCurrentUser()
     {
@@ -203,6 +204,9 @@ class OrderRefundServiceTest extends IntegrationTestCase
         return $this->biz->dao('Order:OrderItemRefundDao');
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');

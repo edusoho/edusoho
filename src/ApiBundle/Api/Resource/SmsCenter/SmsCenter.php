@@ -6,12 +6,13 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
+use Biz\Common\BizSms;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class SmsCenter extends AbstractResource
 {
     private $smsType = array(
-        'register' => 'sms_bind'
+        'register' => BizSms::SMS_BIND_TYPE
     );
 
     /**
@@ -26,17 +27,8 @@ class SmsCenter extends AbstractResource
 
         $type = $this->convertType($type);
 
-        $result = $this->getSmsService()->sendVerifySms($type, $mobile, 0);
+        $smsToken = $this->getBizSms()->send($type, $mobile);
 
-        $smsToken = $this->getTokenService()->makeToken($type, array(
-            'times'    => 5,
-            'duration' => 60 * 30,
-            'userId'   => 0,
-            'data'     => array(
-                'code' => $result['captcha_code'],
-                'mobile'   => $mobile
-            )
-        ));
         return array(
             'smsToken' => $smsToken['token']
         );
@@ -52,18 +44,10 @@ class SmsCenter extends AbstractResource
     }
 
     /**
-     * @return \Biz\Sms\Service\SmsService
+     * @return BizSms
      */
-    private function getSmsService()
+    private function getBizSms()
     {
-        return $this->service('Sms:SmsService');
-    }
-
-    /**
-     * @return \Biz\User\Service\TokenService
-     */
-    private function getTokenService()
-    {
-        return $this->service('User:TokenService');
+        return $this->biz['biz_sms'];
     }
 }

@@ -2,8 +2,11 @@
 
 namespace AppBundle\Controller\OAuth2;
 
+use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
+use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
+use Biz\Common\BizSms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,11 +27,16 @@ class LoginController extends LoginBindController
         $accessToken = $request->query->get('access_token');
         $openid = $request->query->get('openid');
         $type = $request->query->get('type');
+        $os = $request->query->get('os');
+
+        if (!in_array($os, array('iOS', 'Android'))) {
+            throw $this->createNotFoundException();
+        }
 
         $client = $this->createOAuthClient($type);
         $oUser = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $openid));
 
-        $this->storeOauthUserToSession($request, $oUser, $type, true);
+        $this->storeOauthUserToSession($request, $oUser, $type, $os);
 
         return $this->redirect($this->generateUrl('oauth2_login_index'));
     }
@@ -113,11 +121,20 @@ class LoginController extends LoginBindController
         $isCorrectPassword = $this->getUserService()->verifyPassword($user['id'], $password);
         if ($isCorrectPassword) {
             $this->getUserService()->bindUser($oauthUser->type, $oauthUser->id, $user['id'], null);
+            $this->authenticatedOauthUser();
 
             return true;
         } else {
             return false;
         }
+    }
+
+    private function authenticatedOauthUser()
+    {
+        $request = $this->get('request');
+        $oauthUser = $this->getOauthUser($this->get('request'));
+        $oauthUser->authenticated = true;
+        $request->getSession()->set('oauth_user', $oauthUser);
     }
 
     public function successAction(Request $request)
@@ -126,12 +143,12 @@ class LoginController extends LoginBindController
 
         $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
-        if (!$user) {
+        if (!$user || !$oauthUser->authenticated) {
             throw new NotFoundHttpException();
         }
 
-        if ($oauthUser->isApp) {
-            $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
+        if (!$oauthUser->os) {
+            $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
             $request->getSession()->set('oauth_user', null);
             $this->authenticateUser($user);
@@ -149,9 +166,52 @@ class LoginController extends LoginBindController
     {
         $oauthUser = $this->getOauthUser($request);
 
-        return $this->render('oauth2/create-account.html.twig', array(
-            'oauthUser' => $oauthUser,
-        ));
+        if ('POST' == $request->getMethod()) {
+            $validateResult = $this->validateRegisterRequest($request);
+
+            if ($validateResult['hasError']) {
+                return $this->createFailJsonResponse(array('msg' => $validateResult['msg']));
+            }
+
+            $this->registerAttemptCheck($request);
+            $this->authenticatedOauthUser();
+
+            return $this->createSuccessJsonResponse(array('url' => $this->redirect($this->generateUrl('oauth2_login_success', array('isCreate' => 1)))));
+        } else {
+            return $this->render('oauth2/create-account.html.twig', array(
+                'oauthUser' => $oauthUser,
+            ));
+        }
+    }
+
+    private function validateRegisterRequest(Request $request)
+    {
+        $validateResult = array(
+            'hasError' => false,
+        );
+
+        $oauthUser = $this->getOauthUser($request);
+        if ($oauthUser['mode'] == 'mobile' or $oauthUser['mode'] == 'email_or_mobile') {
+            $smsToken = $request->request->get('smsToken');
+            $mobile = $request->request->get('mobile');
+            $smsCode = $request->request->get('smsCode');
+            $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
+
+            $validateResult['hasError'] = $status !== BizSms::STATUS_SUCCESS;
+            $validateResult['msg'] = $status;
+        }
+
+        return $validateResult;
+    }
+
+    /**
+     * @return \Biz\Common\BizSms
+     */
+    private function getBizSms()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['biz_sms'];
     }
 
     private function getUserByTypeAndAccount($type, $account)
@@ -190,6 +250,12 @@ class LoginController extends LoginBindController
     {
         $limiter = new LoginFailRateLimiter($this->getBiz());
         $request->request->set('username', $account);
+        $limiter->handle($request);
+    }
+
+    private function registerAttemptCheck(Request $request)
+    {
+        $limiter = new RegisterRateLimiter($this->getBiz());
         $limiter->handle($request);
     }
 }
