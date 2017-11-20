@@ -27,8 +27,7 @@ class XapiStatementArchive extends Migration
           `occur_time` int(10) unsigned NOT NULL COMMENT '行为发生时间',
           `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`),
-          UNIQUE KEY `uuid` (`uuid`),
-          KEY `status` (`status`)
+          UNIQUE KEY `uuid` (`uuid`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
     }
