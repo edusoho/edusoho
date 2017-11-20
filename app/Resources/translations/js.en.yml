@@ -418,6 +418,7 @@ course_manage.student_remark_success_hint: Remarks %username% succeed
 course_manage.student_remark_failed_hint: Remarks %username% failed, please try again!
 
 course_manage.student_create.field_required_error_hint: Please enter student email / mobile number / username
+course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
 course_set.show.time_finish_hint: Activity times up. Refreshing page, please wait ...

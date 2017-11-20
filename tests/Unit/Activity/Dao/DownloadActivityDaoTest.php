@@ -8,8 +8,8 @@ class DownloadActivityDaoTest extends BaseDaoTestCase
 {
     public function testFindByIds()
     {
-        $activity1 = $this->getDao()->create();
-        $activity2 = $this->getDao()->create();
+        $activity1 = $this->mockDataObject();
+        $activity2 = $this->mockDataObject();
         $results = $this->getDao()->findByIds(array(1, 2));
 
         $this->assertEquals(2, $results[1]['id']);
@@ -19,7 +19,7 @@ class DownloadActivityDaoTest extends BaseDaoTestCase
     {
         return array(
             'mediaCount' => 10,
-            'fields' => 'test',
+            'fileIds' => array(1),
         );
     }
 }

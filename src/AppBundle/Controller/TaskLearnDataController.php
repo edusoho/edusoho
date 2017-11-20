@@ -44,6 +44,7 @@ class TaskLearnDataController extends BaseController
 
     public function studentDetailAction(Request $request, $courseId)
     {
+        $this->getCourseService()->tryManageCourse($courseId);
         $course = $this->getCourseService()->getCourse($courseId);
         $conditions = $request->query->all();
 

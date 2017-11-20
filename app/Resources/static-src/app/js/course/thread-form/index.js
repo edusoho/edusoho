@@ -1,5 +1,3 @@
-import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
-
 let $form = $('#thread-form');
 let validator = $form.validate({
   rules: {
@@ -33,5 +31,3 @@ editor.on('blur', () => {
   $('#thread_content').val(editor.getData());
   validator.form();
 });
-
-new AttachmentActions($form);

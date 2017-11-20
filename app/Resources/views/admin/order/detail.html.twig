@@ -113,8 +113,22 @@
           <td width="25%">{{'order.created_time'|trans}}</td> <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td>
         </tr>
 
-        {% if get_display_status(order.status, 0) == 'paid' %}
-          <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        {% if get_display_status(order.status, 0) in ['paid', 'finished'] %}
+          <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.pay_time == 0 %} {{ order.pay_time | date('Y-n-d H:i:s') }} {% else %} {{ 'order.paid_time_none'|trans }} {% endif %}</td> </tr>
+        {% endif %}
+        {% if order.pay_amount != 0 %}
+          <tr>
+            <td width="25%">
+              {{ 'order.refund_deadline'|trans }}
+            </td>
+            <td width="75%">
+              {% if order.refund_deadline == 0 %}
+                {{ 'order.refund_deadline_none'|trans }}
+              {% else %}
+                {{ order.refund_deadline|date('Y-n-d H:i:s') }}
+              {% endif %}
+            </td>
+          </tr>
         {% endif %}
 
       </table>

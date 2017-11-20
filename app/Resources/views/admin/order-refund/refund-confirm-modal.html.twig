@@ -77,7 +77,7 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="alert alert-danger">
       <strong>
-        退款虚拟币会实时退回虚拟币账户，退款现仅需线下人工退款，此处只是账单数据记录
+        {{ 'admin.order_refund.audit.tip'|trans }}
       </strong>
     </div>
   </form>

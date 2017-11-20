@@ -13,10 +13,10 @@
 
   </style>
 
-  <form method="post" action="{{ path('admin_order_adjust_price', {id:order.id}) }}" id="order-adjust-form">
+  <form method="post" class="clearfix mbl" action="{{ path('admin_order_adjust_price', {id:order.id}) }}" id="order-adjust-form">
 
     <span style="padding: 8px">
-      {{ 'order.before_adjust_price'|trans }}: <span class="color-danger js-origin-pay-amount" data-origin-amount="{{ adjustInfo.payAmountExcludeAdjust }}">{{ adjustInfo.payAmountExcludeAdjust }}</span>
+      {{ 'order.product_price'|trans }}: <span class="color-danger">{{ order.price_amount|to_cash(1) }}</span>
     </span>
     <table class="table">
       <thead>
@@ -31,7 +31,7 @@
       <tbody>
         <tr class="adjust-price-tr">
           <td style="vertical-align: middle;">{{ order.title }}</td>
-          <td style="vertical-align: middle;">{{ order.price_amount|to_cash(0) }}</td>
+          <td style="vertical-align: middle;"><span class="js-origin-pay-amount" data-origin-amount="{{ adjustInfo.payAmountExcludeAdjust }}">{{ adjustInfo.payAmountExcludeAdjust|number_format(2,'.') }}</span></td>
           <td class="text-center" style="vertical-align: middle;">
             <input type="text" name="adjust-by-discount" class="js-adjust-discount adjust-price form-control" value="{{ adjustInfo.adjustDiscount }}"/>
             折 =
@@ -41,10 +41,13 @@
         </tr>
       </tbody>
     </table>
-
     <div class="js-display-error color-danger pull-right"></div>
-
   </form>
+  <div class="alert alert-info ">
+    <strong>
+      {{ 'order.adjust_price_modal.hint'|trans }}
+    </strong>
+  </div>
 {% endblock %}
 
 {% block footer %}

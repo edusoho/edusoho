@@ -8,8 +8,8 @@ class FlashActivityDaoTest extends BaseDaoTestCase
 {
     public function testFindByIds()
     {
-        $activity1 = $this->getDao()->create();
-        $activity2 = $this->getDao()->create();
+        $activity1 = $this->mockDataObject();
+        $activity2 = $this->mockDataObject();
         $results = $this->getDao()->findByIds(array(1, 2));
 
         $this->assertEquals(2, $results[1]['id']);
@@ -21,6 +21,7 @@ class FlashActivityDaoTest extends BaseDaoTestCase
             'mediaId' => 1,
             'finishType' => 'click',
             'finishDetail' => 'test',
+            'createdUserId' => 1,
         );
     }
 }

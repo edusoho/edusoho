@@ -464,6 +464,7 @@ order.price_amount: 订单价格
 order.paid_amount: 实付价格
 order.paid_coin_amount: 实付虚拟币
 order.paid_cash_amount: 实付现金
+order.paid_time_none: 无
 order.refund.deal_status: 处理状态
 order.refund.deal_time: 处理时间
 order.refund.deal_persion: 处理人
@@ -553,6 +554,7 @@ order.confirm.bought_course_deduction: 已购课程抵扣
 order.adjust_price_btn: 改价
 order.before_adjust_price: 订单原价
 order.adjust_price_modal_title: 订单改价
+order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠的力度，系统会自动进行换算。
 
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
@@ -3354,7 +3356,7 @@ cloud_file.process_status.ok: 转码成功
 cloud_file.process_status.waiting: 转码中
 cloud_file.process_status.error: 转码失败
 cloud_file.transcoding_tips: 视频还没有转码完成，请等待转码完成......
-cloud_file.material_thumbnail_generate: 正在生成截图，请稍等...
+cloud_file.material_thumbnail_generate: 生成截图中...
 cloud_file.screen_shot_btn: 截图
 cloud_file.search_empty: 没有搜索到任何资源......
 
@@ -7449,6 +7451,7 @@ admin.order_cash_coin_refund.audit.tips: 虚拟币款项，将会在点击“提
 admin.order_coin.refund.success.tips: 提交后自动退款
 admin.order_cash.refund.success.tips: 需线下手动退款
 admin.order_refund_handle.success: 退款已处理
+admin.order_refund.audit.tip: 用户支付的虚拟币实时返回账户，支付的现金需线下人工联系退款，此处仅作为记录。
 admin.order.logs.content_title: 订单详情
 admin.order.logs.info: 日志信息
 admin.order.logs.operator: 操作人
@@ -7540,6 +7543,7 @@ admin.app_center.buy_btn: 购买
 admin.app_center.price: 价格：
 admin.app_center.free: 免费
 admin.app_center.ontrial_btn: 试用中
+admin.app_center.expired_btn: 试用期已过
 admin.app_center.buyed_btn: 已购买
 admin.app_center.tria_btn: 试用
 admin.app_center.show_detail_btn: 查看详情

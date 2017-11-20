@@ -57,7 +57,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
+        if (isset($data['isAdminAdded']) && 1 == $data['isAdminAdded']) {
             $data['source'] = 'outside';
         }
 
@@ -84,7 +84,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $member = $this->getCourseMember($course['id'], $user['id']);
 
             $currentUser = $this->getCurrentUser();
-            if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
+            if (isset($data['isAdminAdded']) && 1 == $data['isAdminAdded']) {
                 $message = array(
                     'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
@@ -121,7 +121,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (empty($member)) {
             throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
         }
-        if ($member['role'] !== 'student') {
+        if ('student' !== $member['role']) {
             throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
         }
 
@@ -264,7 +264,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $vipNonExpired = $this->isVipMemberNonExpired($course, $member);
         }
 
-        if ($member['deadline'] == 0) {
+        if (0 == $member['deadline']) {
             return $vipNonExpired;
         }
 
@@ -291,14 +291,14 @@ class MemberServiceImpl extends BaseService implements MemberService
             return false;
         }
 
-        if (!empty($member['classroomId']) && $member['joinedType'] == 'classroom') {
+        if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
             $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
             $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
         } else {
             $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
         }
 
-        return $status === 'ok';
+        return 'ok' === $status;
     }
 
     //TODO 有问题 分页数无效
@@ -366,7 +366,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (!$member) {
             return false;
         } else {
-            return empty($member) || $member['role'] != 'teacher' ? false : true;
+            return empty($member) || 'teacher' != $member['role'] ? false : true;
         }
     }
 
@@ -377,7 +377,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (!$member) {
             return false;
         } else {
-            return empty($member) || $member['role'] != 'student' ? false : true;
+            return empty($member) || 'student' != $member['role'] ? false : true;
         }
     }
 
@@ -512,7 +512,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
-        if (empty($member) || ($member['role'] != 'student')) {
+        if (empty($member) || ('student' != $member['role'])) {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
@@ -569,7 +569,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            if ($member['role'] == 'teacher') {
+            if ('teacher' == $member['role']) {
                 return $member;
             } else {
                 throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
@@ -578,10 +578,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
-        if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
+        if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
-        } elseif ($course['expiryMode'] == 'date' || $course['expiryMode'] == 'end_date') {
+        } elseif ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
             $deadline = $course['expiryEndDate'];
         }
 
@@ -727,10 +727,10 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
-        if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
+        if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
-        } elseif ($course['expiryMode'] == 'date' || $course['expiryMode'] == 'end_date') {
+        } elseif ('date' == $course['expiryMode'] || 'end_date' == $course['expiryMode']) {
             $deadline = $course['expiryEndDate'];
         }
 
@@ -747,7 +747,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
-        if (empty($member) || ($member['role'] != 'student')) {
+        if (empty($member) || ('student' != $member['role'])) {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
@@ -788,7 +788,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return;
         }
 
-        if ($member['role'] != 'student') {
+        if ('student' != $member['role']) {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，封锁学员失败。");
         }
 
@@ -813,7 +813,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return;
         }
 
-        if ($member['role'] != 'student') {
+        if ('student' != $member['role']) {
             throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，解封学员失败。");
         }
 
@@ -831,7 +831,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $deadline = 0;
         if (isset($info['deadline'])) {
             $deadline = $info['deadline'];
-        } elseif ($course['expiryMode'] == 'days') {
+        } elseif ('days' == $course['expiryMode']) {
             if (!empty($course['expiryDays'])) {
                 $deadline = strtotime('+'.$course['expiryDays'].' days');
             }
@@ -898,7 +898,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCoursesByStudentIdAndCourseIds($userId, $courseIds)
     {
-        if (empty($courseIds) || count($courseIds) == 0) {
+        if (empty($courseIds) || 0 == count($courseIds)) {
             return array();
         }
 
@@ -1117,7 +1117,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function createOrder($courseId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
-        $courseProduct->price = $data['price'];
 
         $params = array(
             'created_reason' => $data['remark'],
