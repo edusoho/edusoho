@@ -15,9 +15,9 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
             return;
         }
 
-        if (($accessToken = $request->query->get('access_token'))
-            && ($openid = $request->query->get('openid'))
-            && ($type = $request->query->get('type'))) {
+        if (($accessToken = $request->request->get('access_token'))
+            && ($openid = $request->request->get('openid'))
+            && ($type = $request->request->get('type'))) {
             $client = $this->createOAuthClient($type);
             $thirdPartyUser = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $openid));
             $this->getUserTokenFromAccessToken($request, $thirdPartyUser, $type);
