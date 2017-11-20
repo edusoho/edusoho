@@ -8,11 +8,6 @@ abstract class RegistDecoder extends BaseRegister
 {
     private $register;
 
-    public function __construct(Biz $biz)
-    {
-        $this->biz = $biz;
-    }
-
     public function setRegister(BaseRegister $register)
     {
         $this->register = $register;
