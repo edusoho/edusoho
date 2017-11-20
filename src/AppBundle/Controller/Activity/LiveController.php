@@ -161,8 +161,9 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
             $eventName = $request->query->get('eventName');
+            $data = $request->query->get('data');
             if (!empty($eventName)) {
-                $this->getTaskService()->trigger($task['id'], $eventName);
+                $this->getTaskService()->trigger($task['id'], $eventName, $data);
             }
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
