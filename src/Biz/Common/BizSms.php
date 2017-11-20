@@ -7,11 +7,11 @@ use Codeages\Biz\Framework\Context\BizAware;
 
 class BizSms extends BizAware
 {
-    const STATUS_SUCCESS = 'success';
+    const STATUS_SUCCESS = 'sms.code.success';
 
-    const STATUS_INVALID = 'invalid';
+    const STATUS_INVALID = 'sms.code.invalid';
 
-    const STATUS_EXPIRED = 'expired';
+    const STATUS_EXPIRED = 'sms.code.expired';
 
     const SMS_BIND_TYPE = 'sms_bind';
 

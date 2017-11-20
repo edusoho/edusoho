@@ -193,7 +193,7 @@ class LoginController extends LoginBindController
         );
 
         $oauthUser = $this->getOauthUser($request);
-        if ($oauthUser->mode == 'mobile' or $oauthUser->mode == 'email_or_mobile') {
+        if (in_array($oauthUser->mode, array('mobile', 'email_or_mobile')) == 'mobile' or $oauthUser->mode == 'email_or_mobile') {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get('mobile');
             $smsCode = $request->request->get('smsCode');
