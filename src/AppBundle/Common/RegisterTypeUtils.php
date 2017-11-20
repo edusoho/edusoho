@@ -16,7 +16,7 @@ class RegisterTypeUtils
         }
 
         if (!empty($type) && in_array($type, array('qq', 'weibo', 'renren', 'weixinweb', 'weixinmob'))) {
-            $regTypes[] = 'binder';       
+            $regTypes[] = 'binder';
         }
 
         return $regTypes;
