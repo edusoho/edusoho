@@ -47,7 +47,7 @@ class BizSms extends BizAware
             return self::STATUS_EXPIRED;
         }
 
-        if ($token['data']['code'] !== $code) {
+        if ($token['data']['code'] !== $code || $token['data']['code'] !== $mobile) {
             return self::STATUS_INVALID;
         }
 

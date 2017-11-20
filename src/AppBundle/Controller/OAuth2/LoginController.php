@@ -7,6 +7,7 @@ use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
 use Biz\Common\BizSms;
+use Codeages\Biz\Pay\Util\RandomToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -174,6 +175,7 @@ class LoginController extends LoginBindController
             }
 
             $this->registerAttemptCheck($request);
+            $this->register($request);
             $this->authenticatedOauthUser();
 
             return $this->createSuccessJsonResponse(array('url' => $this->redirect($this->generateUrl('oauth2_login_success', array('isCreate' => 1)))));
@@ -202,6 +204,23 @@ class LoginController extends LoginBindController
         }
 
         return $validateResult;
+    }
+
+    private function register(Request $request)
+    {
+        $oauthUser = $this->getOauthUser($request);
+        $nickname = $oauthUser['name'].RandomToolkit::generateString(4);
+        $this->getUserService()->register(array(
+            'nickname' => $nickname,
+            'email' => $nickname.'@admin.com',
+            'password' => 'admin',
+            'createdIp' => '127.0.0.1',
+            'orgCode' => '1.',
+            'orgId' => '1',
+        ));
+
+        $oauthUser->name = $nickname;
+        $request->getSession()->set('oauth_user', $oauthUser);
     }
 
     /**
