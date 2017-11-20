@@ -14,7 +14,7 @@ class PushStatementJob extends AbstractJob
     {
         $xapiSetting = $this->getSettingService()->get('xapi', array());
         if (empty($xapiSetting['enabled'])) {
-            return ;
+            return;
         }
 
         try {

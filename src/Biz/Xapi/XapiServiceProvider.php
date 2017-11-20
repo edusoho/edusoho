@@ -96,7 +96,7 @@ class XapiServiceProvider implements ServiceProviderInterface
 
         $biz['xapi.options'] = array(
             'version' => '1.0.0',
-            'getway' => ''
+            'getway' => '',
         );
     }
 }
