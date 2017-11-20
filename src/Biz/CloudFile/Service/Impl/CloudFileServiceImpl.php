@@ -20,8 +20,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if (empty($conditions['resType'])) {
             $conditions['start'] = $start;
             $conditions['limit'] = $limit;
-            $conditions          = $this->filterConditions($conditions);
-            $result              = $this->getCloudFileImplementor()->search($conditions);
+            $conditions = $this->filterConditions($conditions);
+            $result = $this->getCloudFileImplementor()->search($conditions);
 
             if (!empty($result['data'])) {
                 $createdUserIds = array();
@@ -30,7 +30,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                     $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
 
                     if (!empty($file)) {
-                        $createdUserIds[]           = $file['createdUserId'];
+                        $createdUserIds[] = $file['createdUserId'];
                         $cloudFile['createdUserId'] = $file['createdUserId'];
                     }
                 }
@@ -39,18 +39,20 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             }
         } else {
             $conditions['targetType'] = $conditions['resType'];
-            $result['count']          = $this->getUploadFileService()->searchFileCount($conditions);
-            $result['data']           = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
+            $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
+            $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
 
-            $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
+            $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
             $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
 
             $result['data'] = array_map(function ($file) {
-                $file['no']            = $file['globalId'];
+                $file['no'] = $file['globalId'];
                 $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
+
                 return $file;
             }, $result['data']);
         }
+
         return $result;
     }
 
@@ -88,9 +90,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         $files = $this->getUploadFileService()->searchFiles(
-            $fileConditions, 
+            $fileConditions,
             array('createdTime' => 'DESC'),
-            0, 
+            0,
             PHP_INT_MAX
         );
 
@@ -113,15 +115,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $filesInTags = $this->getUploadFileTagService()->findByTagId($conditions['tags']);
         if (!$filesInTags) {
             $conditions['nos'] = array(-1);
+
             return $conditions;
         }
 
         $fileIds = ArrayToolkit::column($filesInTags, 'fileId');
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
-        
+
         $nos = empty($conditions['nos']) ? array() : $conditions['nos'];
         $conditions['nos'] = array_merge($nos, ArrayToolkit::column($files, 'globalId'));
-        
+
         unset($conditions['tags']);
 
         return $conditions;
@@ -142,9 +145,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         if ($searchType == 'course') {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
-            
+
             if (empty($courseSets)) {
                 $conditions['nos'] = array(-1);
+
                 return $conditions;
             }
 
@@ -162,6 +166,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $files = $this->getUploadFileService()->findFilesByIds($fileIds);
             if (!$files) {
                 $conditions['nos'] = array(-1);
+
                 return $conditions;
             }
 
