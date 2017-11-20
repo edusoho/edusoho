@@ -132,7 +132,6 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
 
             $this->getXapiService()->createStatement($statement);
         } catch (\Exception $e) {
-            file_put_contents('1.txt', $e->getMessage().PHP_EOL, FILE_APPEND);
         }
     }
 
