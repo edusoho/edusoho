@@ -166,11 +166,16 @@ class LoginController extends LoginBindController
         $oauthUser = $this->getOauthUser($request);
 
         if ('POST' == $request->getMethod()) {
-            $this->validateRegisterRequest($request);
+            $validateResult = $this->validateRegisterRequest($request);
+
+            if ($validateResult['hasError']) {
+                return $this->createFailJsonResponse(array('msg' => $validateResult['msg']));
+            }
+
             $this->registerAttemptCheck($request);
             $this->authenticatedOauthUser();
 
-            return $this->redirect($this->generateUrl('oauth2_login_success', array('isCreate' => 1)));
+            return $this->createSuccessJsonResponse(array('url' => $this->redirect($this->generateUrl('oauth2_login_success', array('isCreate' => 1)))));
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
@@ -180,14 +185,22 @@ class LoginController extends LoginBindController
 
     private function validateRegisterRequest(Request $request)
     {
+        $validateResult = array(
+            'hasError' => false
+        );
+
         $oauthUser = $this->getOauthUser($request);
         if ($oauthUser['mode'] == 'mobile' or $oauthUser['mode'] == 'email_or_mobile') {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get('mobile');
             $smsCode = $request->request->get('smsCode');
-            $result = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsCode);
+            $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
 
+            $validateResult['hasError'] = $status !== BizSms::STATUS_SUCCESS;
+            $validateResult['msg'] = $status;
         }
+
+        return $validateResult;
     }
 
     /**

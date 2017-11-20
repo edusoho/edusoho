@@ -33,7 +33,7 @@ class BizSms extends BizAware
         return $smsToken;
     }
 
-    public function check($smsType, $smsToken, $code)
+    public function check($smsType, $mobile, $smsToken, $code)
     {
         $token = $this->getTokenService()->verifyToken($smsType, $smsToken);
 
