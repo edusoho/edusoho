@@ -23,6 +23,10 @@ use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\User\Register\RegisterFactory;
+use Biz\User\Register\Impl\EmailRegistDecoderImpl;
+use Biz\User\Register\Impl\MobileRegistDecoderImpl;
+use Biz\User\Register\Impl\BinderRegistDecoderImpl;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -104,6 +108,22 @@ class DefaultServiceProvider implements ServiceProviderInterface
         };
         $biz['course.normal_strategy'] = function ($biz) {
             return new NormalStrategy($biz);
+        };
+
+        $biz['user.register'] = function ($biz) {
+            return new RegisterFactory($biz);
+        };
+
+        $biz['user.register.email'] = function ($biz) {
+            return new EmailRegistDecoderImpl($biz);
+        };
+
+        $biz['user.register.mobile'] = function ($biz) {
+            return new MobileRegistDecoderImpl($biz);
+        };
+
+        $biz['user.register.binder'] = function ($biz) {
+            return new BinderRegistDecoderImpl($biz);
         };
     }
 }
