@@ -3,6 +3,7 @@
 namespace Biz\Xapi;
 
 use Biz\Xapi\Type\AskQuestionType;
+use Biz\Xapi\Type\AudioListen;
 use Biz\Xapi\Type\DoExerciseType;
 use Biz\Xapi\Type\DoHomeworkType;
 use Biz\Xapi\Type\DoQuestionType;
@@ -80,6 +81,13 @@ class XapiServiceProvider implements ServiceProviderInterface
         });
 
         $biz[sprintf('xapi.push.%s', WriteNoteType::TYPE)] = $biz->factory(function ($biz) {
+            $type = new WriteNoteType();
+            $type->setBiz($biz);
+
+            return $type;
+        });
+
+        $biz[sprintf('xapi.push.%s', AudioListen::TYPE)] = $biz->factory(function ($biz) {
             $type = new WriteNoteType();
             $type->setBiz($biz);
 
