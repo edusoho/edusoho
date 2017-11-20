@@ -4,12 +4,12 @@ namespace Biz\User\Register\Impl;
 
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class MobileRegistDecoderImpl extends RegistDecoder
+class BinderRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration, $type)
     {
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-        if (empty($thirdLoginInfo["{$type}_set_fill_account"]) && $thirdLoginInfo["{$type}_set_fill_account"]) {
+        if (empty($thirdLoginInfo["{$type}_set_fill_account"]) || !$thirdLoginInfo["{$type}_set_fill_account"]) {
             throw new InvalidArgumentException('Invalid binder type');
         }
     }
@@ -33,6 +33,6 @@ class MobileRegistDecoderImpl extends RegistDecoder
      */
     protected function getSettingService()
     {
-        return $this->biz->dao('System:SettingService');
+        return $this->biz->service('System:SettingService');
     }
 }
