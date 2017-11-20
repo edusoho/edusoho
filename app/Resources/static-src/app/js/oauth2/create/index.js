@@ -9,7 +9,7 @@ const $timeLeft = $('.js-time-left');
 const $fetchBtnText = $('.js-fetch-btn-text');
 
 let captchaToken = null;
-
+let smsToken = null;
 let validator = $form.validate({
   rules: {
     username: {
@@ -106,7 +106,7 @@ $smsCode.click((event) => {
     phrase: $('#captcha_code').val()
   };
   Api.sms.send({ data: data }).then((res) => {
-    console.log(res);
+    smsToken = res.smsToken;
     showCountDown();
   }).catch((res) => {
     const code = res.responseJSON.error.code;
@@ -165,7 +165,14 @@ enterSubmit($form, $btn);
 
 $btn.click((event) => {
   if (validator.form()) {
-    $.post($btn.data('url'), $form.serialize(), (response) => {
+    let data = {
+      smsToken: smsToken,
+      mobile: $('.js-account').html(),
+      smsCode: $('#sms-code'),
+      captchaToken: captchaToken,
+      phrase: $('#captcha_code').val()
+    }
+    $.post($btn.data('url'), data, (response) => {
       if (response.success === 1) {
         window.location.href = response.url;
       } else {
