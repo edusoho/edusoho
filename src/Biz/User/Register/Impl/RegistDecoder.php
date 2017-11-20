@@ -2,8 +2,6 @@
 
 namespace Biz\User\Register\Impl;
 
-use Codeages\Biz\Framework\Context\Biz;
-
 abstract class RegistDecoder extends BaseRegister
 {
     private $register;
