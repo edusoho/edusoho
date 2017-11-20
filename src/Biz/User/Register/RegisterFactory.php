@@ -17,7 +17,7 @@ class RegisterFactory
     {
         $register = null;
         foreach ($types as $type) {
-            $currentRegister = $this->biz['user.register.' . $type];
+            $currentRegister = $this->biz['user.register.'.$type];
 
             if (!empty($register)) {
                 $currentRegister->setRegister($register);

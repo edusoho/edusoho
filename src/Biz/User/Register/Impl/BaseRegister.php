@@ -104,7 +104,7 @@ abstract class BaseRegister
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
-        } elseif ($type === 'marketing') {
+        } elseif ('marketing' === $type) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 0;
@@ -158,6 +158,7 @@ abstract class BaseRegister
     private function createUser($registration, $type)
     {
         $user = $this->beforeSave($registration, $type);
+
         return $this->getUserDao()->create($user);
     }
 

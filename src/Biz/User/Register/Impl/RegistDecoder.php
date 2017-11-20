@@ -3,9 +3,6 @@
 namespace Biz\User\Register\Impl;
 
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use AppBundle\Common\SimpleValidator;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 abstract class RegistDecoder extends BaseRegister
 {
@@ -24,7 +21,7 @@ abstract class RegistDecoder extends BaseRegister
     /**
      * 用于继承的方法
      */
-    protected abstract function validateBeforeSave($registration, $type);
+    abstract protected function validateBeforeSave($registration, $type);
 
     /**
      * 用于继承的方法
@@ -56,6 +53,7 @@ abstract class RegistDecoder extends BaseRegister
         if (!empty($register)) {
             $user = $register->dealDataBeforeSave($registration, $type, $user);
         }
+
         return $this->dealDataBeforeSave($registration, $type, $user);
     }
 

@@ -114,15 +114,15 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new RegisterFactory($biz);
         };
 
-        $biz['user.register.email'] = function($biz) {
+        $biz['user.register.email'] = function ($biz) {
             return new EmailRegistDecoderImpl($biz);
         };
 
-        $biz['user.register.mobile'] = function($biz) {
+        $biz['user.register.mobile'] = function ($biz) {
             return new MobileRegistDecoderImpl($biz);
         };
 
-        $biz['user.register.binder'] = function($biz) {
+        $biz['user.register.binder'] = function ($biz) {
             return new BinderRegistDecoderImpl($biz);
         };
     }

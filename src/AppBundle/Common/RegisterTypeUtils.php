@@ -21,6 +21,4 @@ class RegisterTypeUtils
 
         return $regTypes;
     }
-
-    
 }

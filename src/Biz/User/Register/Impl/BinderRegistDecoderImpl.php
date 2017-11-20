@@ -3,7 +3,6 @@
 namespace Biz\User\Register\Impl;
 
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use AppBundle\Common\SimpleValidator;
 
 class MobileRegistDecoderImpl extends RegistDecoder
 {
@@ -20,6 +19,7 @@ class MobileRegistDecoderImpl extends RegistDecoder
         $user['salt'] = '';
         $user['password'] = '';
         $user['setup'] = 1;
+
         return $user;
     }
 
@@ -35,5 +35,4 @@ class MobileRegistDecoderImpl extends RegistDecoder
     {
         return $this->biz->dao('System:SettingService');
     }
-    
 }
