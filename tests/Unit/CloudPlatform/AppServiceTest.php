@@ -146,7 +146,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $result = $this->getAppService()->checkAppUpgrades();
 
-        $this->assertEquals(1, $result);
+        $this->assertEquals(1, $result[0]['id']);
     }
 
     public function testGetMessages()
@@ -323,7 +323,7 @@ class AppServiceTest extends BaseTestCase
         $mockObject->shouldReceive('getApps')->times(1)->andReturn(array(array('name' => 'cloud app', 'code' => 'cloudApp', 'description' => '')));
         $mockObject->shouldReceive('getBinded')->times(1)->andReturn(1);
         $mockObject->shouldReceive('getPackage')->times(1)->andReturn(array('product' => array('code' => 'MAIN', 'name' => 'MAIN'), 'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.0'));
-        $mockObject->shouldReceive('checkUpgradePackages')->times(1)->andReturn(1);
+        $mockObject->shouldReceive('checkUpgradePackages')->times(1)->andReturn(array(array('id' => 1, 'code' => 'MAIN', 'userAccess' => true, 'purchased' => 1)));
         $mockObject->shouldReceive('getMessages')->times(1)->andReturn('message');
         $mockObject->shouldReceive('downloadPackage')->times(1)->andReturn('message');
         $mockObject->shouldReceive('repairProblem')->times(1)->andReturn('problem');
