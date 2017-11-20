@@ -2,9 +2,12 @@
 
 namespace Biz;
 
+use Biz\Common\BizCaptcha;
+use Biz\Common\BizSms;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
+use Gregwar\Captcha\CaptchaBuilder;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -124,6 +127,21 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['user.register.binder'] = function ($biz) {
             return new BinderRegistDecoderImpl($biz);
+        };
+
+        $biz['biz_captcha'] = $biz->factory(function ($biz) {
+            $bizCaptcha = new BizCaptcha();
+            $bizCaptcha->setBiz($biz);
+            $bizCaptcha->setCaptchaBuilder(new CaptchaBuilder());
+
+            return $bizCaptcha;
+        });
+
+        $biz['biz_sms'] = function ($biz) {
+            $bizSms = new BizSms();
+            $bizSms->setBiz($biz);
+
+            return $bizSms;
         };
     }
 }

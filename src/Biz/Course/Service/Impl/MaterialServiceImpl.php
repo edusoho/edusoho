@@ -54,7 +54,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->create($fields);
 
-        $logType = $material['type'] == 'openCourse' ? 'open_course' : 'course';
+        $logType = 'openCourse' == $material['type'] ? 'open_course' : 'course';
         //$this->getLogService()->info($logType, 'add_material', "新增资料(#{$material['id']})", $material);
         $this->dispatchEvent('course.material.create', new Event($material, array('argument' => $argument)));
 
@@ -80,7 +80,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $this->getMaterialDao()->delete($materialId);
 
-        $logType = $material['type'] == 'openCourse' ? 'open_course' : 'course';
+        $logType = 'openCourse' == $material['type'] ? 'open_course' : 'course';
         $this->getLogService()->info($logType, 'delete_material', "移除资料(#{$material['id']})", $material);
         $this->dispatchEvent('course.material.delete', new Event($material));
     }
@@ -125,7 +125,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             'fileIds' => $fileIds,
             'type' => $courseType,
         );
-        if ($courseType == 'openCourse') {
+        if ('openCourse' == $courseType) {
             $conditions['courseId'] = $courseSetId;
             $conditions['courseSetId'] = 0;
         } else {
@@ -140,14 +140,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         );
 
         if (!$materials) {
-            return false;
+            return array();
         }
 
         foreach ($materials as $key => $material) {
             $this->deleteMaterial($courseSetId, $material['id']);
         }
 
-        return true;
+        return $materials;
     }
 
     public function deleteMaterialsByFileId($fileId)

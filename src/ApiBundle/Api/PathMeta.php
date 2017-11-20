@@ -91,6 +91,7 @@ class PathMeta
     private function getNormalResClass($namespace)
     {
         $qualifiedResName = $this->convertToSingular($this->resNames[0]).'\\';
+
         foreach ($this->resNames as $resName) {
             $qualifiedResName .= $this->convertToSingular($resName);
         }

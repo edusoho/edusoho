@@ -102,9 +102,8 @@ class ThemeController extends BaseController
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
         return $this->render(
-            'default/index.html.twig',
+            'admin/theme/default/index.html.twig',
             array(
-                'isEditColor' => true,
                 'friendlyLinks' => $friendlyLinks,
             )
         );

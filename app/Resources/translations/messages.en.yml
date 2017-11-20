@@ -2233,6 +2233,37 @@ user.register.email_label: Email
 user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload your avatar later'
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
+
+user.oauth.login_by_email: 邮箱
+user.oauth.login_by_mobile: 手机
+user.oauth.login_by_mobile_or_email: 手机/邮箱
+user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
+user.oauth.bind_account: 绑定账号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%账号
+user.oauth.validate_password: 验证密码
+user.oauth.bind_success: 账号绑定成功
+user.oauth.bind_account_success: 绑定成功
+user.oauth.web_account_password: 网校账号密码
+user.oauth.binding_web_user: 正在绑定网校用户
+user.oauth.bind_account_and_go_continue: 绑定并继续
+user.oauth.bind_other_account: 绑定其他账号？
+user.oauth.bind_existed_account: 绑定已有账号？
+user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
+user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
+user.oauth.register_account_by_ways: 使用%accountType%创建账号
+user.oauth.register.confirm_password_label: 确认密码
+user.oauth.register.confirm_password_placeholder: 再次输入密码
+user.oauth.register.input_sms_code_tips: 输入验证码
+user.oauth.register.input_sms_code_placeholder: 请输入手机收到的验证码
+user.oauth.register.send_sms: 发送验证
+user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
+user.oauth.register.agree_terms: 同意服务协议并注册
+user.oauth.register.read_detail: 请详细阅读
+user.oauth.register.user_service_protocol: 用户服务协议
+user.oauth.register_account: 创建账号
+user.oauth.register_success: 注册成功
+user.oauth.register_account_success: 账号注册成功
+
 user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Profile'
@@ -2639,7 +2670,7 @@ cloud_file.process_status.waiting: Converting
 cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
 my.teaching.open_course.title: Name
-cloud_file.material_thumbnail_generate: 'Producing screenshots, please wait ...'
+cloud_file.material_thumbnail_generate: 'Producing screenshots...'
 cloud_file.screen_shot_btn: Screenshots
 cloud_file.search_empty: 'Sorry,no rescouce found'
 cloud_file.use_status: 'Using'
@@ -5923,6 +5954,7 @@ admin.app_center.buy_btn: Purchase
 admin.app_center.price: Price：
 admin.app_center.free: Free
 admin.app_center.ontrial_btn: Trial
+admin.app_center.expired_btn: Expired Trial
 admin.app_center.buyed_btn: Bought
 admin.app_center.tria_btn: Trial
 admin.app_center.show_detail_btn: 'View Detail'

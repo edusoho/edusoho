@@ -397,78 +397,44 @@ $.validator.addMethod("nickname", function(value, element, params) {
 }, Translator.trans('validate.nickname.message'));
 
 $.validator.addMethod('es_remote', function(value, element, params) {
-  console.log('es_remotees_remote')
+  console.log('es_remote');
   let $element = $(element);
   let url = $(element).data('url') ? $(element).data('url') : null;
   let type = params.type ? params.type : 'GET';
   let data = params.data ? params.data : { value: value };
   let callback = params.callback ? params.callback : null;
   let isSuccess = 0;
-  $.ajax({
-      url: url,
-      async: false,
-      type: type,
-      data: data,
-      dataType: 'json'
-    })
-    .success((response) => {
-      if (axis.isObject(response)) {
-        isSuccess = response.success;
-        $.validator.messages.es_remote = Translator.trans(response.message);
-
-      } else if (axis.isString(response)) {
-        isSuccess = false;
-        $.validator.messages.es_remote = Translator.trans(response);
-      } else if (axis.isBoolean(response)) {
-        isSuccess = response;
-      }
-      if (callback) {
-        callback(isSuccess);
-      }
-    })
-  return this.optional(element) || isSuccess;
-}, Translator.trans('validate.es_remote.message'));
-
-
-$.validator.addMethod('es_remote_with_cache', function(value, element, params) {
-  let $element = $(element);
-  let url = $(element).data('url') ? $(element).data('url') : null;
-  let type = params.type ? params.type : 'GET';
-  let data = params.data ? params.data : { value: value };
-  let callback = params.callback ? params.callback : null;
-  let isSuccess = 0;
-
-  let cacheKey = btoa(url+type+JSON.stringify(data));
+  this.valueCache ? this.valueCache : {};
+  let cacheKey = url + type + JSON.stringify(data);
+  
   if (cacheKey in this.valueCache) {
     return this.optional(element) || this.valueCache[cacheKey];
-  } else {
-    $.ajax({
-      url: url,
-      async: false,
-      type: type,
-      data: data,
-      dataType: 'json'
-    })
-      .success((response) => {
-        if (axis.isObject(response)) {
-          isSuccess = response.success;
-          $.validator.messages.es_remote_with_cache = Translator.trans(response.message);
-
-        } else if (axis.isString(response)) {
-          isSuccess = false;
-          $.validator.messages.es_remote_with_cache = Translator.trans(response);
-        } else if (axis.isBoolean(response)) {
-          isSuccess = response;
-        }
-        if (callback) {
-          callback(isSuccess);
-        }
-      });
-
-    this.valueCache[cacheKey] = isSuccess;
-    return this.optional(element) || isSuccess;
   }
 
+  $.ajax({
+    url: url,
+    async: false,
+    type: type,
+    data: data,
+    dataType: 'json'
+  }).success((response) => {
+    if (axis.isObject(response)) {
+      isSuccess = response.success;
+      $.validator.messages.es_remote = Translator.trans(response.message);
+
+    } else if (axis.isString(response)) {
+      isSuccess = false;
+      $.validator.messages.es_remote = Translator.trans(response);
+    } else if (axis.isBoolean(response)) {
+      isSuccess = response;
+    }
+    if (callback) {
+      callback(isSuccess);
+    }
+  })
+
+  this.valueCache[cacheKey] = isSuccess;
+  return this.optional(element) || isSuccess;
 
 }, Translator.trans('validate.es_remote.message'));
 
@@ -502,6 +468,25 @@ $.validator.addMethod('es_score', function (value, element, params) {
 	return this.optional(element) || /^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(value);
 }, Translator.trans('validate.valid_score_input.message'));
 
+$.validator.addMethod('email_or_mobile_check', function (value, element, params) {
+  let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  var reg_mobile = /^1\d{10}$/;
+  var result = false;
+  var isEmail = reg_email.test(value);
+  var isMobile = reg_mobile.test(value);
+  if (isMobile) {
+    $(".email_mobile_msg").removeClass('hidden');
+    $('.js-captcha').addClass('hidden');
+  } else {
+    $(".email_mobile_msg").addClass('hidden');
+    $('.js-captcha').removeClass('hidden');
+  }
+  if (isEmail || isMobile) {
+    result = true;
+  }
+  $.validator.messages.email_or_mobile_check = Translator.trans('请输入正确的手机／邮箱');
+  return this.optional(element) || result;
+}, Translator.trans('validate.email_or_mobile_check.message'));
 
 function calculateByteLength(string) {
   let length = string.length;
