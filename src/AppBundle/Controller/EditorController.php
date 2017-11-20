@@ -33,11 +33,11 @@ class EditorController extends BaseController
                 $file = $request->files->get('upload');
             }
 
-            if ($token['type'] == 'image') {
+            if ('image' == $token['type']) {
                 if (!FileToolkit::isImageFile($file)) {
                     throw $this->createAccessDeniedException('您上传的不是图片文件，请重新上传。');
                 }
-            } elseif ($token['type'] == 'flash') {
+            } elseif ('flash' == $token['type']) {
                 $errors = FileToolkit::validateFileExtension($file, 'swf');
 
                 if (!empty($errors)) {
@@ -60,7 +60,7 @@ class EditorController extends BaseController
             } else {
                 $funcNum = $request->query->get('CKEditorFuncNum');
 
-                if ($token['type'] == 'image') {
+                if ('image' == $token['type']) {
                     $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', function(){ this._.dialog.getParentEditor().insertHtml('<img src=\"{$url}\">'); this._.dialog.hide(); return false; });</script>";
                 } else {
                     $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}');</script>";
