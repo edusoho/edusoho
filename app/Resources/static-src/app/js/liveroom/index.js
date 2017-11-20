@@ -50,7 +50,7 @@ class Live {
       $.ajax({
         url: $('meta[name="trigger_url"]').attr('content'),
         type: 'GET',
-        data: { eventName: eventName },
+        data: { eventName: eventName, data: {lastTime: Date.now().substr(0, 10), events: {watching: {watchTime: 60}}}},
         success: function(response) {
           if (response.live_end) {
             clearInterval(eventTrigger);
