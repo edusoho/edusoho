@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\User\Register;
+namespace Biz\User\Register\Impl;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -18,10 +18,12 @@ abstract class BaseRegister
 
     public function register($registration, $type)
     {
-        $this->validate($registration);
+        $this->validate($registration, $type);
 
         $user = $this->createUser($registration, $type);
         $this->createUserProfile($registration, $user);
+
+        $this->afterSave($registration, $type, $user);
 
         return array($user, $this->createPerInviteUser($registration, $user));
     }
@@ -65,7 +67,7 @@ abstract class BaseRegister
         );
     }
 
-    protected function validate($registration)
+    protected function validate($registration, $type)
     {
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw new InvalidArgumentException('Invalid nickname');
@@ -84,30 +86,8 @@ abstract class BaseRegister
         }
     }
 
-    protected function getUserService()
+    protected function beforeSave($registration, $type, $user = array())
     {
-        return $this->biz->service('User:UserService');
-    }
-
-    protected function getUserDao()
-    {
-        return $this->biz->dao('User:UserDao');
-    }
-
-    protected function getProfileDao()
-    {
-        return $this->biz->dao('User:UserProfileDao');
-    }
-
-    protected function getPasswordEncoder()
-    {
-        return new MessageDigestPasswordEncoder('sha256');
-    }
-
-    private function createUser($registration, $type)
-    {
-        $user = array();
-
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
                 $user[$attr] = $registration[$attr];
@@ -139,6 +119,45 @@ abstract class BaseRegister
             $user['orgCode'] = $registration['orgCode'];
         }
 
+        return $user;
+    }
+
+    protected function afterSave($registration, $type, $user)
+    {
+    }
+
+    /**
+     * return \Biz\User\Service\UserService
+     */
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * return \Biz\User\Dao\UserDao
+     */
+    protected function getUserDao()
+    {
+        return $this->biz->dao('User:UserDao');
+    }
+
+    /**
+     * return \Biz\User\Dao\UserProfileDao
+     */
+    protected function getProfileDao()
+    {
+        return $this->biz->dao('User:UserProfileDao');
+    }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    private function createUser($registration, $type)
+    {
+        $user = $this->beforeSave($registration, $type);
         return $this->getUserDao()->create($user);
     }
 

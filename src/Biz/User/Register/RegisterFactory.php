@@ -13,10 +13,18 @@ class RegisterFactory
         $this->biz = $biz;
     }
 
-    public function createRegister($type)
+    public function createRegister($types)
     {
-        if ($type == 'email') {
-            return new EmailRegister($this->biz);
+        $register = null;
+        foreach ($types as $type) {
+            $currentRegister = $this->biz['user.register.' . $type];
+
+            if (!empty($register)) {
+                $currentRegister->setRegister($register);
+            }
+            $register = $currentRegister;
         }
+
+        return $register;
     }
 }

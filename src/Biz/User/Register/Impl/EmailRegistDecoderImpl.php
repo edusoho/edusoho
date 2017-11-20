@@ -1,16 +1,14 @@
 <?php
 
-namespace Biz\User\Register;
+namespace Biz\User\Register\Impl;
 
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use AppBundle\Common\SimpleValidator;
 
-class EmailRegister extends BaseRegister
+class EmailRegistDecoderImpl extends RegistDecoder
 {
-    protected function validate($registration)
+    public function validateBeforeSave($registration, $type)
     {
-        Parent::validate($registration);
-
         if (!SimpleValidator::email($registration['email'])) {
             throw new InvalidArgumentException('Invalid Email');
         }

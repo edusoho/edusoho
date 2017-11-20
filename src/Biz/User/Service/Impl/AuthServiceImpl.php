@@ -5,6 +5,7 @@ namespace Biz\User\Service\Impl;
 use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\RegisterTypeUtils;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService
@@ -37,9 +38,17 @@ class AuthServiceImpl extends BaseService implements AuthService
                     );
                 }
 
-                $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
+                $newUser = $this->getUserService()->register(
+                    $registration, 
+                    $this->getAuthProvider()->getProviderName(),
+                    RegisterTypeUtils::getRegisterTypes($registration, $type)
+                );
             } else {
-                $newUser = $this->getUserService()->register($registration, $type);
+                $newUser = $this->getUserService()->register(
+                    $registration, 
+                    $type, 
+                    RegisterTypeUtils::getRegisterTypes($registration, $type)
+                );
 
                 if (!empty($authUser['id'])) {
                     $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);

@@ -738,7 +738,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->getUserByType($type);
     }
 
-    public function register($registration, $type = 'default')
+    public function oldRegister($registration, $type = 'default')
     {
         $this->validateNickname($registration['nickname']);
 
@@ -866,9 +866,13 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
-    public function newRegister($registration, $type = 'default', $registerType = 'email')
+    /**
+     * @param $registerTypes 数组，可以是多个类型的组合
+     *   类型范围  email, mobile, binder(第三方登录)
+     */
+    public function register($registration, $type = 'default', $registerTypes = array('email'))
     {
-        $register = $this->biz['user.register']->createRegister($registerType);
+        $register = $this->biz['user.register']->createRegister($registerTypes);
 
         list($user, $inviteUser) = $register->register($registration, $type);
 
