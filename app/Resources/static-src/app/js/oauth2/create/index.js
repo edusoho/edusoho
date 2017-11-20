@@ -65,8 +65,14 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
     captchaToken: captchaToken
   }
   Api.captcha.validate({ data: data, params: params, async: false, promise: false }).done(res => {
-    isSuccess = res.status;
-    if (!isSuccess) {
+    if (res.status === 'success') {
+      isSuccess = true;
+    } else if (res.status === 'expired') {
+      isSuccess = false;
+      $.validator.messages.captcha_checkout = Translator.trans('图形验证码已过期');
+      initCaptchaCode();
+    } else {
+      isSuccess = false;
       $.validator.messages.captcha_checkout = Translator.trans('图形验证码错误');
       initCaptchaCode();
     }
@@ -159,6 +165,14 @@ enterSubmit($form, $btn);
 
 $btn.click((event) => {
   if (validator.form()) {
-    window.location.href = $btn.data('url');
+    $.post($btn.data('url'), $form.serialize(), (response) => {
+      if (response.success === 1) {
+        window.location.href = response.url;
+      } else {
+        if (!$('.js-password-error').length) {
+          $btn.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">${response.message}</p>`);
+        }
+      }
+    })
   }
 });

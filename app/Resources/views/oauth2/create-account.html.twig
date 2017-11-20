@@ -58,7 +58,7 @@
     {% endif %}
 
 
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_success') }}">{{ 'user.oauth.register.agree_terms'|trans }}</button>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_create') }}">{{ 'user.oauth.register.agree_terms'|trans }}</button>
 
     <span class="pull-left third-party-link">{{ 'user.oauth.register.read_detail'|trans }}<a href="{{ path('user_terms') }}" target="_blank">《{{'user.oauth.register.user_service_protocol'|trans}}》</a></span>
     <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
