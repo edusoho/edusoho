@@ -47,10 +47,12 @@ class Live {
     let eventTrigger = setInterval(function() {
       if (!self.isLiveRoomOpened || $('meta[name="trigger_url"]').length == 0) return;
       eventName = eventName ? 'doing' : 'start';
+      let timestamp = Date.parse( new Date() ).toString();
+      timestamp = timestamp.substr(0,10);
       $.ajax({
         url: $('meta[name="trigger_url"]').attr('content'),
         type: 'GET',
-        data: { eventName: eventName, data: {lastTime: Date.now().substr(0, 10), events: {watching: {watchTime: 60}}}},
+        data: { eventName: eventName, data: {lastTime: timestamp, events: {watching: {watchTime: 60}}}},
         success: function(response) {
           if (response.live_end) {
             clearInterval(eventTrigger);
