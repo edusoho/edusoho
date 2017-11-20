@@ -489,7 +489,7 @@ class TaskServiceTest extends BaseTestCase
             )),
         ));
 
-        $tasks = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($this->getCurrentUser()['id'], $courseSet['id']);
+        $tasks = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($this->getCurrentUser()->getId(), $courseSet['id']);
         $this->assertEquals(2, count($tasks));
     }
 
