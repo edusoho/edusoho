@@ -14,9 +14,13 @@ class BinderRegistDecoderImplTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'get',
-                    'returnValue' => array('qq_set_fill_account' => true),
+                    'returnValue' => array(
+                        'qq_enable' => true,
+                        'qq_secret' => 'qqKey',
+                        'qq_key' => 'qqSecret',
+                        'qq_set_fill_account' => true,
+                    ),
                     'withParams' => array('login_bind', array()),
-                    'runTimes' => 1,
                 ),
             )
         );

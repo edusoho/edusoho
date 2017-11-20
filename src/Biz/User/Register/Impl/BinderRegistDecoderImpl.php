@@ -9,16 +9,21 @@ class BinderRegistDecoderImpl extends RegistDecoder
     protected function validateBeforeSave($registration, $type)
     {
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-        if (empty($thirdLoginInfo["{$type}_set_fill_account"]) || !$thirdLoginInfo["{$type}_set_fill_account"]) {
+        if (empty($thirdLoginInfo["{$type}_enable"]) || 
+                empty($thirdLoginInfo["{$type}_key"]) || 
+                empty($thirdLoginInfo["{$type}_secret"])) {
             throw new InvalidArgumentException('Invalid binder type');
         }
     }
 
     protected function dealDataBeforeSave($registration, $type, $user)
     {
-        $user['salt'] = '';
-        $user['password'] = '';
-        $user['setup'] = 1;
+        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
+        if (!empty($thirdLoginInfo["{$type}_set_fill_account"])) {
+            $user['salt'] = '';
+            $user['password'] = '';
+            $user['setup'] = 1;
+        }
 
         return $user;
     }
