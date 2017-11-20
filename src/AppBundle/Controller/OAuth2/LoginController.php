@@ -122,6 +122,7 @@ class LoginController extends LoginBindController
         if ($isCorrectPassword) {
             $this->getUserService()->bindUser($oauthUser->type, $oauthUser->id, $user['id'], null);
             $this->authenticatedOauthUser();
+
             return true;
         } else {
             return false;
@@ -186,7 +187,7 @@ class LoginController extends LoginBindController
     private function validateRegisterRequest(Request $request)
     {
         $validateResult = array(
-            'hasError' => false
+            'hasError' => false,
         );
 
         $oauthUser = $this->getOauthUser($request);
@@ -209,8 +210,10 @@ class LoginController extends LoginBindController
     private function getBizSms()
     {
         $biz = $this->getBiz();
+
         return $biz['biz_sms'];
     }
+
     private function getUserByTypeAndAccount($type, $account)
     {
         $user = null;

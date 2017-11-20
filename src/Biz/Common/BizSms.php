@@ -21,13 +21,13 @@ class BizSms extends BizAware
         $result = $this->getSmsService()->sendVerifySms($smsType, $mobile, 0);
 
         $smsToken = $this->getTokenService()->makeToken($smsType, array(
-            'times'    => $options['verify_times'],
+            'times' => $options['verify_times'],
             'duration' => $options['duration'],
-            'userId'   => $options['userId'],
-            'data'     => array(
+            'userId' => $options['userId'],
+            'data' => array(
                 'code' => $result['captcha_code'],
-                'mobile'   => $mobile
-            )
+                'mobile' => $mobile,
+            ),
         ));
 
         return $smsToken;
