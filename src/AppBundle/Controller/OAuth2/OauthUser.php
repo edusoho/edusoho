@@ -44,6 +44,8 @@ class OauthUser implements \Serializable
      */
     public $isApp = false;
 
+    public $authenticated = false;
+
     public function serialize()
     {
         return serialize(array(
@@ -55,6 +57,7 @@ class OauthUser implements \Serializable
             $this->account,
             $this->accountType,
             $this->isApp,
+            $this->authenticated,
         ));
     }
 
@@ -70,7 +73,8 @@ class OauthUser implements \Serializable
             $this->mode,
             $this->account,
             $this->accountType,
-            $this->isApp
+            $this->isApp,
+            $this->authenticated
             ) = $data;
     }
 }

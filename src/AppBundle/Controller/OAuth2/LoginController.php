@@ -113,11 +113,19 @@ class LoginController extends LoginBindController
         $isCorrectPassword = $this->getUserService()->verifyPassword($user['id'], $password);
         if ($isCorrectPassword) {
             $this->getUserService()->bindUser($oauthUser->type, $oauthUser->id, $user['id'], null);
-
+            $this->authenticatedOauthUser();
             return true;
         } else {
             return false;
         }
+    }
+
+    private function authenticatedOauthUser()
+    {
+        $request = $this->get('request');
+        $oauthUser = $this->getOauthUser($this->get('request'));
+        $oauthUser->authenticated = true;
+        $request->getSession()->set('oauth_user', $oauthUser);
     }
 
     public function successAction(Request $request)
@@ -126,7 +134,7 @@ class LoginController extends LoginBindController
 
         $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
-        if (!$user) {
+        if (!$user || !$oauthUser->authenticated) {
             throw new NotFoundHttpException();
         }
 
