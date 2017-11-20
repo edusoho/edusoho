@@ -9,6 +9,10 @@ class TimeMachine
 {
     private $timezone;
 
+    const ONE_DAY = 86400;
+
+    const ONE_HOUR = 3600;
+
     public function __construct($timezone)
     {
         $this->timezone = $timezone;
