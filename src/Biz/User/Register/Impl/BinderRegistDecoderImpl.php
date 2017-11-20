@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class MobileRegistDecoderImpl extends RegistDecoder
 {
-    public function validateBeforeSave($registration, $type)
+    protected function validateBeforeSave($registration, $type)
     {
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (empty($thirdLoginInfo["{$type}_set_fill_account"]) && $thirdLoginInfo["{$type}_set_fill_account"]) {

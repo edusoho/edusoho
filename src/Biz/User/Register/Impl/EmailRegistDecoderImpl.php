@@ -7,7 +7,7 @@ use AppBundle\Common\SimpleValidator;
 
 class EmailRegistDecoderImpl extends RegistDecoder
 {
-    public function validateBeforeSave($registration, $type)
+    protected function validateBeforeSave($registration, $type)
     {
         if (!SimpleValidator::email($registration['email'])) {
             throw new InvalidArgumentException('Invalid Email');
