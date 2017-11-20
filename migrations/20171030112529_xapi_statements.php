@@ -24,8 +24,7 @@ class XapiStatements extends Migration
           `status` varchar(16) NOT NULL DEFAULT 'created' COMMENT '状态: created, pushing, pushed',
           `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`),
-          UNIQUE KEY `uuid` (`uuid`),
-          KEY `status` (`status`)
+          UNIQUE KEY `uuid` (`uuid`)
         ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
         ");
     }
