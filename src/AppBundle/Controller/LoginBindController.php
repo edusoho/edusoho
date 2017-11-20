@@ -99,7 +99,7 @@ class LoginBindController extends BaseController
         }
     }
 
-    protected function storeOauthUserToSession(Request $request, $oUser, $type, $isApp = false)
+    protected function storeOauthUserToSession(Request $request, $oUser, $type, $os = '')
     {
         $setting = new Setting($this->container, $this->getBiz());
         $registerSetting = $setting->getRegister();
@@ -109,7 +109,7 @@ class LoginBindController extends BaseController
         $oauthUser->avatar = $oUser['avatar'];
         $oauthUser->type = $type;
         $oauthUser->mode = $registerSetting['mode'];
-        $oauthUser->isApp = $isApp;
+        $oauthUser->os = $os;
 
         $request->getSession()->set('oauth_user', $oauthUser);
     }

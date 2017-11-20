@@ -6,6 +6,12 @@ use Codeages\Biz\Framework\Context\BizAware;
 
 class BizCaptcha extends BizAware
 {
+    const STATUS_SUCCESS = 'success';
+
+    const STATUS_INVALID = 'invalid';
+
+    const STATUS_EXPIRED = 'expired';
+
     private $tokenType = 'captcha';
 
     /**
@@ -35,10 +41,16 @@ class BizCaptcha extends BizAware
         $token = $this->getTokenService()->verifyToken($this->tokenType, $captchaId);
 
         if (empty($token)) {
-            return false;
+            return self::STATUS_INVALID;
         }
 
-        return $phrase == $token['data']['phrase'];
+        $remainedTimes = $token['remainedTimes'];
+
+        if (0 == $remainedTimes) {
+            return self::STATUS_EXPIRED;
+        }
+
+        return $phrase == $token['data']['phrase'] ? self::STATUS_SUCCESS : self::STATUS_INVALID;
     }
 
     public function setCaptchaBuilder($captchaBuilder)

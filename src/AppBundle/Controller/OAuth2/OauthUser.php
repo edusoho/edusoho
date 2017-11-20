@@ -40,9 +40,9 @@ class OauthUser implements \Serializable
     public $accountType;
 
     /*
-     * @var bool 是否来自移动端
+     * @var string 操作系统
      */
-    public $isApp = false;
+    public $os = '';
 
     public $authenticated = false;
 
@@ -56,7 +56,7 @@ class OauthUser implements \Serializable
             $this->mode,
             $this->account,
             $this->accountType,
-            $this->isApp,
+            $this->os,
             $this->authenticated,
         ));
     }
@@ -73,7 +73,7 @@ class OauthUser implements \Serializable
             $this->mode,
             $this->account,
             $this->accountType,
-            $this->isApp,
+            $this->os,
             $this->authenticated
             ) = $data;
     }

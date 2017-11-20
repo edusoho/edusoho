@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\RateLimit;
 
+use Biz\Common\BizCaptcha;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
@@ -41,9 +42,9 @@ class AbstractRateLimiter
             throw $this->createCaptchaOccurException();
         }
 
-        $isCorrect = $this->getBizCaptcha()->check($token, $phrase);
+        $status = $this->getBizCaptcha()->check($token, $phrase);
 
-        if (!$isCorrect) {
+        if (BizCaptcha::STATUS_SUCCESS != $status) {
             throw $this->createCaptchaOccurException();
         }
     }

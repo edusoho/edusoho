@@ -3,6 +3,7 @@
 namespace Biz;
 
 use Biz\Common\BizCaptcha;
+use Biz\Common\BizSms;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Biz\Task\Strategy\StrategyContext;
@@ -115,5 +116,11 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
             return $bizCaptcha;
         });
+
+        $biz['biz_sms'] = function ($biz) {
+            $bizSms = new BizSms();
+            $bizSms->setBiz($biz);
+            return $bizSms;
+        };
     }
 }
