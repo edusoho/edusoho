@@ -1,47 +1,63 @@
+import { enterSubmit } from 'common/utils';
+
 const $form = $('#third-party-login-form');
 const $btn = $('.js-submit-btn');
 
-$form.keypress(function (e) {
-  if (e.which == 13) {
-    $btn.trigger('click');
-    e.preventDefault();
-  }
-});
+let validator;
 
-const validateLogin = (validateName, rule, message) => {
-  const $item = $('#'+ validateName);
-  if (!$item.length) {
-    return;
-  }
-  let validator = $form.validate({
+if ($('#email').length) {
+  validator = $form.validate({
     rules: {
-      validateName: {
+      account: {
         required: true,
-        rule: true,
+        email: true,
       },
     },
     messages: {
-      required: Translator.trans(message)
+      required: Translator.trans('validate.valid_email_input.message'),
     },
   });
-  return validator.form();
 }
 
+if ($('#mobile').length) {
+  validator = $form.validate({
+    rules: {
+      account: {
+        required: true,
+        phone: true,
+      },
+    },
+    messages: {
+      required: Translator.trans('validate.phone.message')
+    },
+  });
+}
+
+if ($('#mobileOrEmail').length) {
+  validator = $form.validate({
+    rules: {
+      account: {
+        required: true,
+        email_or_mobile_check: true,
+      },
+    },
+    messages: {
+      required: Translator.trans('validate.phone_and_email_input.message')
+    },
+  });
+}
+
+
+enterSubmit($form, $btn);
+
 $btn.click((event) => {
-
-  let isMobileOrEmail = validateLogin('mobileOrEmail', 'email_or_mobile_check', 'validate.phone_and_email_input.message');
-  let isMobile = validateLogin('mobile', 'mobile', 'validate.phone.message');
-  let isEmail = validateLogin('email', 'email', 'validate.valid_email_input.message');
-
-  let isValidated = isMobileOrEmail || isMobile || isEmail;
-
-  let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
   let type;
+  const reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-  if (isValidated) {
-    let isFinalEmail = reg_email.test($("input[name='account']").val());
-    type = isFinalEmail ? 'email' : 'mobile';
+  if (validator.form()) {
+    $(event.target).button('loading');
+    let isEmail = reg_email.test($("input[name='account']").val());
+    type = isEmail ? 'email' : 'mobile';
     $('#accountType').val(type);
     $form.submit();
   }
