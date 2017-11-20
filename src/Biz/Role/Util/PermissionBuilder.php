@@ -235,7 +235,7 @@ class PermissionBuilder
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         $files = array(
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
-            $rootDir.'/../src/Custom/AdminBundle/Resources/config/menus_admin.yml',
+            $rootDir.'/../src/CustomBundle/Resources/config/menus_admin.yml',
         );
 
         foreach ($files as $filepath) {
@@ -248,11 +248,11 @@ class PermissionBuilder
         $apps = $this->getAppService()->findApps(0, $count);
 
         foreach ($apps as $app) {
-            if ($app['type'] != 'plugin') {
+            if ('plugin' != $app['type']) {
                 continue;
             }
 
-            if ($app['code'] !== 'MAIN' && $app['protocol'] < 3) {
+            if ('MAIN' !== $app['code'] && $app['protocol'] < 3) {
                 continue;
             }
 
@@ -306,7 +306,7 @@ class PermissionBuilder
         $environment = ServiceKernel::instance()->getEnvironment();
         $cacheDir = ServiceKernel::instance()->getParameter('kernel.cache_dir');
         $cacheFile = $cacheDir.'/menus_cache_'.$this->position.'.php';
-        if ($environment != 'dev' && file_exists($cacheFile)) {
+        if ('dev' != $environment && file_exists($cacheFile)) {
             $this->cached['getOriginPermissions'] = include $cacheFile;
 
             return $this->cached['getOriginPermissions'];

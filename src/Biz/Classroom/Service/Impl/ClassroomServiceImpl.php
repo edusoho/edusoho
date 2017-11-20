@@ -6,11 +6,12 @@ use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Exception\UnableJoinException;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
-use Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
@@ -335,7 +336,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function canUpdateMembersDeadline($classroom, $expiryMode)
     {
-        if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
+        if ($expiryMode == $classroom['expiryMode'] && 'days' != $expiryMode) {
             return true;
         }
 
@@ -348,7 +349,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return true;
         }
 
-        if ($classroom['status'] == 'draft') {
+        if ('draft' == $classroom['status']) {
             return true;
         }
 
@@ -398,7 +399,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'tagIds',
         ));
 
-        if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
+        if (isset($fields['expiryMode']) && 'date' == $fields['expiryMode']) {
             if ($fields['expiryValue'] < time()) {
                 throw $this->createServiceException('设置的有效期小于当前时间！');
             }
@@ -415,7 +416,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
 
-        if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
+        if ('date' == $classroom['expiryMode'] && $classroom['expiryValue'] < time()) {
             return true;
         }
 
@@ -457,7 +458,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($classrooms as $classroom) {
             $member = $members[$classroom['id']];
 
-            if ($classroom['expiryValue'] > 0 && $member['deadlineNotified'] == 0 && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
+            if ($classroom['expiryValue'] > 0 && 0 == $member['deadlineNotified'] && $currentTime < $member['deadline'] && (10 * 24 * 60 * 60 + $currentTime) > $member['deadline']) {
                 $shouldNotifyClassrooms[] = $classroom;
                 $shouldNotifyClassroomMembers[] = $member;
             }
@@ -514,7 +515,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('班级不存在，操作失败。');
         }
 
-        if ($classroom['status'] != 'draft') {
+        if ('draft' != $classroom['status']) {
             throw $this->createServiceException('只有未发布班级可以删除，操作失败。');
         }
 
@@ -572,11 +573,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         foreach ($deleteTeacherIds as $userId) {
-            if (count($deleteMembers[$userId]['role']) == 1) {
+            if (1 == count($deleteMembers[$userId]['role'])) {
                 $this->getClassroomMemberDao()->delete($deleteMembers[$userId]['id']);
             } else {
                 foreach ($deleteMembers[$userId]['role'] as $key => $value) {
-                    if ($value == 'teacher') {
+                    if ('teacher' == $value) {
                         unset($deleteMembers[$userId]['role'][$key]);
                     }
                 }
@@ -683,7 +684,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     continue;
                 }
                 // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
-                if ($classroomRef['parentCourseId'] != 0) {
+                if (0 != $classroomRef['parentCourseId']) {
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
@@ -718,11 +719,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomMemberDao()->count($conditions);
-    }
-
-    public function findMemberUserIdsByClassroomId($classroomId)
-    {
-        return $this->getClassroomMemberDao()->findMemberIdsByClassroomId($classroomId);
     }
 
     public function getClassroomMember($classroomId, $userId)
@@ -761,11 +757,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->removeStudentsFromClasroomCourses($classroomId, $userId);
 
-        if (count($member['role']) == 1) {
+        if (1 == count($member['role'])) {
             $this->getClassroomMemberDao()->delete($member['id']);
         } else {
             foreach ($member['role'] as $key => $value) {
-                if ($value == 'student') {
+                if ('student' == $value) {
                     unset($member['role'][$key]);
                 }
             }
@@ -857,7 +853,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!empty($info['becomeUseMember'])) {
             $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
 
-            if ($levelChecked != 'ok') {
+            if ('ok' != $levelChecked) {
                 throw $this->createServiceException("用户(#{$userId})不能以会员身份加入班级！");
             }
 
@@ -972,7 +968,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if ($params['price'] > 0) {
                 //支付完成后会自动加入课程
-                $order = $this->createOrder($classroom['id'], $user['id'], $params['price'], 'outside', $params['remark']);
+                $order = $this->createOrder($classroom['id'], $user['id'], $params, 'outside');
             } else {
                 $info = array(
                     'orderId' => 0,
@@ -1125,11 +1121,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $headTeacherMember = $this->getClassroomMember($classroomId, $classroom['headTeacherId']);
 
-            if (count($headTeacherMember['role']) == 1) {
+            if (1 == count($headTeacherMember['role'])) {
                 $this->getClassroomMemberDao()->deleteByClassroomIdAndUserId($classroomId, $classroom['headTeacherId']);
             } else {
                 foreach ($headTeacherMember['role'] as $key => $value) {
-                    if ($value == 'headTeacher') {
+                    if ('headTeacher' == $value) {
                         unset($headTeacherMember['role'][$key]);
                     }
                 }
@@ -1242,7 +1238,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createNotFoundException();
         }
 
-        if ($classroom['status'] != 'published') {
+        if ('published' != $classroom['status']) {
             throw $this->createServiceException('不能加入未发布班级');
         }
 
@@ -1382,7 +1378,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = array_filter(
             $conditions,
             function ($value) {
-                if ($value === 0 || !empty($value)) {
+                if (0 === $value || !empty($value)) {
                     return true;
                 } else {
                     return false;
@@ -1636,7 +1632,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $count = 0;
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
-            if ($courseMember['role'] != 'student') {
+            if ('student' != $courseMember['role']) {
                 continue;
             }
 
@@ -1786,7 +1782,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+        if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
             throw $this->createAccessDeniedException('您不是管理员，无权操作！');
         }
 
@@ -1872,7 +1868,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions = array(
             'order_ids' => $orderIds,
             'target_type' => 'course',
-            'status' => 'success',
+            'statuses' => array('success', 'finished'),
         );
 
         $orderItems = $this->getOrderService()->searchOrderItems($conditions, array(), 0, PHP_INT_MAX);
@@ -1884,13 +1880,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryFreeJoin($classroomId)
     {
         $access = $this->canJoinClassroom($classroomId);
-        if ($access['code'] != AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS != $access['code']) {
             throw new UnableJoinException($access['msg'], $access['code']);
         }
 
         $classroom = $this->getClassroom($classroomId);
 
-        if ($classroom['price'] == 0) {
+        if (0 == $classroom['price']) {
             $this->becomeStudent($classroom['id'], $this->getCurrentUser()->getId(), array('note' => 'site.join_by_free'));
         }
 
@@ -1977,17 +1973,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    protected function createOrder($classroomId, $userId, $price, $source, $remark)
+    protected function createOrder($classroomId, $userId, $params, $source)
     {
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
-        $courseProduct->price = $price;
+        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroomId));
 
         $params = array(
-            'created_reason' => $remark,
+            'created_reason' => $params['remark'],
             'source' => $source,
+            'create_extra' => $params,
         );
 
-        return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
+        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
     }
 
     protected function createOperateRecord($member, $operateType, $reason)
@@ -2151,6 +2147,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
     protected function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');

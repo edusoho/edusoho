@@ -22,11 +22,12 @@ class OrderExtension extends \Twig_Extension
         'created' => 'notPaid',
         'paying' => 'notPaid',
         'closed' => 'closed',
-        'refunded' => 'closed',
+        'refunded' => 'refunded',
         'fail' => 'paid',
         'paid' => 'paid',
         'refunding' => 'paid',
         'success' => 'paid',
+        'finished' => 'finished',
     );
 
     protected $adminStatusMap = array(
@@ -38,6 +39,7 @@ class OrderExtension extends \Twig_Extension
         'paid' => 'paid',
         'refunding' => 'paid',
         'success' => 'paid',
+        'finished' => 'finished',
     );
 
     public function __construct($container, Biz $biz)
@@ -207,13 +209,16 @@ class OrderExtension extends \Twig_Extension
                 $majorClass = 'color-warning';
                 break;
             case 'paid':
-                $majorClass = 'color-success';
+                $majorClass = 'color-info';
                 break;
             case 'refunded':
                 $majorClass = 'color-danger';
                 break;
             case 'closed':
                 $majorClass = 'color-default';
+                break;
+            case 'finished':
+                $majorClass = 'color-success';
                 break;
             default:
                 $majorClass = 'color-default';
@@ -230,13 +235,16 @@ class OrderExtension extends \Twig_Extension
                 $majorClass = 'cd-status-warning';
                 break;
             case 'paid':
-                $majorClass = 'cd-status-success';
+                $majorClass = 'cd-status-info';
                 break;
             case 'refunded':
                 $majorClass = 'cd-status-danger';
                 break;
             case 'closed':
                 $majorClass = 'cd-status-disabled';
+                break;
+            case 'finished':
+                $majorClass = 'cd-status-success';
                 break;
             default:
                 $majorClass = 'cd-status-disabled';

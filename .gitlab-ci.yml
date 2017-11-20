@@ -55,7 +55,22 @@ Unit Test With PHP 5.5:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit -c app/
 
-Unit Test With PHP 7.0:
+Unit Test With PHP 7.0 For Non-Develop:
+  stage: test
+  image: codeages/ci-php:7.0-7
+  services:
+    - mysql:5.5
+    - redis:latest
+  script:
+    - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
+    - phpdbg -qrr bin/phpunit -c app/
+  only:
+    - tags
+    - master
+    - release
+    - trigger
+
+Unit Test With PHP 7.0 For Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
@@ -69,13 +84,8 @@ Unit Test With PHP 7.0:
     - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - /opt/sonar-scanner/bin/sonar-scanner
-
   only:
-    - tags
     - develop
-    - master
-    - release
-    - trigger
 
 #Functional Test With 5.5:
 #  stage: test

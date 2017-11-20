@@ -3,6 +3,7 @@
 namespace Codeages\Biz\Order\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class CloseExpiredOrdersJob extends AbstractJob
 {
@@ -11,6 +12,9 @@ class CloseExpiredOrdersJob extends AbstractJob
         $this->getWorkflowService()->closeExpiredOrders();
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');

@@ -1,11 +1,3 @@
-{% if isEditColor|default(0) %}
-  {% set maincolor = config.config.maincolor|default('default') %}
-  {% set navigationcolor = config.config.navigationcolor|default('default') %}
-{% else %}
-  {% set maincolor = config.confirmConfig.maincolor|default('default') %}
-  {% set navigationcolor = config.confirmConfig.navigationcolor|default('default') %}
-{% endif %}
-
 <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet" />
 <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
 <link href="{{ asset('static-dist/app/css/main-v2.css') }}" rel="stylesheet" />
@@ -13,15 +5,19 @@
 {% if mobile %}
   <link href="{{ asset('static-dist/app/css/mobile.css') }}" rel="stylesheet" />
 {% endif %}
-
-{% if maincolor != 'default' %}
+{% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
   <link href="{{ asset('static-dist/app/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
-
-{% if navigationcolor != 'default' %}
+{% if navigationcolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
   <link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
-
 {{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
 
-{% include 'stylesheet/stylesheet-custom.html.twig' %}
+{% include 'stylesheet/stylesheet-custom.html.twig' with {
+    config: currentTheme, 
+    isEditColor: isEditColor|default(false), 
+    mobile: mobile,
+    maincolor: maincolor,
+    navigationcolor: navigationcolor,
+    } 
+  %}
