@@ -13,8 +13,8 @@ class MobileRegistDecoderImplTest extends BaseTestCase
     public function testWithInvalidSetting()
     {
         ReflectionUtils::invokeMethod(
-            $this->getMobileRegistDecoder(), 
-            'validateBeforeSave', 
+            $this->getMobileRegistDecoder(),
+            'validateBeforeSave',
             array(array('mobile' => 'dss'), 'default')
         );
     }

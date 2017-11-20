@@ -17,7 +17,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
                     'returnValue' => array('qq_set_fill_account' => true),
                     'withParams' => array('login_bind', array()),
                     'runTimes' => 1,
-                )
+                ),
             )
         );
 
@@ -57,7 +57,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
                     'returnValue' => array('qq_set_fill_account' => false),
                     'withParams' => array('login_bind', array()),
                     'runTimes' => 1,
-                )
+                ),
             )
         );
         ReflectionUtils::invokeMethod($this->getBinderRegistDecoder(), 'validateBeforeSave', array(array(), 'qq'));
