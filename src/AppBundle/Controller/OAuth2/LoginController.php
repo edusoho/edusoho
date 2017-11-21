@@ -150,7 +150,7 @@ class LoginController extends LoginBindController
         if ($oauthUser->isApp()) {
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
-            //$request->getSession()->set('oauth_user', null);
+            $request->getSession()->set('oauth_user', null);
             $this->authenticateUser($user);
             $token = null;
         }
@@ -181,6 +181,7 @@ class LoginController extends LoginBindController
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
+                'captchaEnabled' => $oauthUser->accountType == 'mobile' || $oauthUser->captchaEnabled,
             ));
         }
     }
@@ -192,7 +193,7 @@ class LoginController extends LoginBindController
         );
 
         $oauthUser = $this->getOauthUser($request);
-        if (in_array($oauthUser->mode, array('mobile', 'email_or_mobile')) == 'mobile' or $oauthUser->mode == 'email_or_mobile') {
+        if ($oauthUser->accountType == 'mobile') {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get('mobile');
             $smsCode = $request->request->get('smsCode');

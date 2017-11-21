@@ -44,7 +44,15 @@ class OauthUser implements \Serializable
      */
     public $os = '';
 
+    /**
+     * @var bool 是否已绑定
+     */
     public $authenticated = false;
+
+    /**
+     * @var bool 图形验证码是否已开启
+     */
+    public $captchaEnabled = false;
 
     public function serialize()
     {
@@ -58,6 +66,7 @@ class OauthUser implements \Serializable
             $this->accountType,
             $this->os,
             $this->authenticated,
+            $this->captchaEnabled,
         ));
     }
 
@@ -74,7 +83,8 @@ class OauthUser implements \Serializable
             $this->account,
             $this->accountType,
             $this->os,
-            $this->authenticated
+            $this->authenticated,
+            $this->captchaEnabled
             ) = $data;
     }
 
