@@ -73,6 +73,7 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
       initCaptchaCode();
     } else {
       isSuccess = false;
+      console.log('表单提交的验证');
       $.validator.messages.captcha_checkout = Translator.trans('图形验证码错误');
       initCaptchaCode();
     }
@@ -84,7 +85,6 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
   });
   return this.optional(element) || isSuccess;
 }, Translator.trans('validate.captcha_checkout.message'));
-
 
 
 
@@ -164,20 +164,26 @@ $('#getcode_num').click((event) => {
 enterSubmit($form, $btn);
 
 $btn.click((event) => {
+  $('#captcha_code').rules('remove', 'captcha_checkout');
   if (validator.form()) {
     let data = {
       smsToken: smsToken,
       mobile: $('.js-account').html(),
-      smsCode: $('#sms-code'),
+      smsCode: $('#sms-code').val(),
       captchaToken: captchaToken,
       phrase: $('#captcha_code').val()
     }
+    console.log(data);
     $.post($btn.data('url'), data, (response) => {
+      console.log(response);
       if (response.success === 1) {
         window.location.href = response.url;
       } else {
+        $('#captcha_code').rules('add', {
+          captcha_checkout: true
+        });
         if (!$('.js-password-error').length) {
-          $btn.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">${response.message}</p>`);
+          $btn.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">您输入的短信验证码不正确</p>`);
         }
       }
     })
