@@ -211,11 +211,15 @@ class LoginController extends LoginBindController
         $registerFields = array(
             'nickname' => $request->request->get('nickname'),
             'password' => $request->request->get('password'),
-            'mobile' => $oauthUser->account,
+            $oauthUser->accountType => $oauthUser->account,
             'avatar' => $oauthUser->avatar,
         );
 
-        $this->getUserService()->register($registerFields, array('mobile'));
+        if ($oauthUser->accountType == OAuthUser::MOBILE_TYPE) {
+            $registerFields['verifiedMobile'] = $oauthUser->account;
+        }
+
+        $this->getUserService()->register($registerFields, array($oauthUser->accountType, 'binder'));
     }
 
     /**
