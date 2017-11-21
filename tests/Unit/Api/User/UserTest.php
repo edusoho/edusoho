@@ -26,9 +26,8 @@ class UserTest extends BaseTestCase
         );
 
         foreach ($actual as $key => $act) {
-
             $this->mockBiz('User:UserService', array(
-                array('functionName' => $act[2], 'returnValue' => $expected, 'withParams' => array($act[1]))
+                array('functionName' => $act[2], 'returnValue' => $expected, 'withParams' => array($act[1])),
             ));
 
             $api = new User(new Container(), $this->getBiz());
