@@ -10,8 +10,6 @@ class BinderRegistDecoderImpl extends RegistDecoder
     {
         $type = $registration['type'];
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-
-
         if (empty($thirdLoginInfo["{$type}_enabled"]) ||
                 empty($thirdLoginInfo["{$type}_key"]) ||
                 empty($thirdLoginInfo["{$type}_secret"])) {
@@ -23,21 +21,22 @@ class BinderRegistDecoderImpl extends RegistDecoder
     {
         $type = $registration['type'];
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
+        
+        if (!empty($registration['password'])) {
+            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+            $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
+        } else {
+            $user['salt'] = '';
+            $user['password'] = '';
+        }
+
         if (!empty($thirdLoginInfo["{$type}_set_fill_account"])) {
-            if (!empty($user['password'])) {
-                $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-                $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-            } else {
-                $user['salt'] = '';
-                $user['password'] = '';
-            }
             $user['setup'] = 1;
         }
 
         if (in_array($registration['type'], array('weixinmobile', 'weixinweb'))) {
             $user['type'] = 'weixin';
         }
-
         return $user;
     }
 
