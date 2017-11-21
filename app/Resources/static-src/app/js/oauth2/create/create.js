@@ -77,7 +77,7 @@ export default class Create {
     $.validator.addMethod('captcha_checkout', function(value, element, param) {
       let $element = $(element);
       if (value.length < 5) {
-        $.validator.messages.captcha_checkout = Translator.trans('图形码为5位数');
+        $.validator.messages.captcha_checkout = Translator.trans('oauth.captcha_code_length_tip');
         return;
       }
       let data = param.data ? param.data : { phrase: value };
@@ -91,10 +91,10 @@ export default class Create {
           isSuccess = true;
         } else if (res.status === 'expired') {
           isSuccess = false;
-          $.validator.messages.captcha_checkout = Translator.trans('图形验证码已过期');
+          $.validator.messages.captcha_checkout = Translator.trans('oauth.captcha_code_expired_tip');
         } else {
           isSuccess = false;
-          $.validator.messages.captcha_checkout = Translator.trans('图形验证码错误');
+          $.validator.messages.captcha_checkout = Translator.trans('oauth.captcha_code_error_tip');
         }
         if (callback) {
           callback(isSuccess);
@@ -118,6 +118,7 @@ export default class Create {
 
   sendMessage() {
     const $smsCode = $('.js-sms-send');
+    const $captchaCode = $('#captcha_code');
     if (!$smsCode.length) {
       return;
     }
@@ -127,7 +128,7 @@ export default class Create {
         type: 'register',
         mobile: $('.js-account').html(),
         captchaToken: this.captchaToken,
-        phrase: $('#captcha_code').val()
+        phrase: $captchaCode.val()
       };
       Api.sms.send({ data: data }).then((res) => {
         this.smsToken = res.smsToken;
@@ -136,13 +137,13 @@ export default class Create {
         const code = res.responseJSON.error.code;
         switch(code) {
           case 30001:
-            notify('danger', Translator.trans('oauth.refresh_captcha_code_tip'));
-            $('#captcha_code').val('');
+            notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
+            $captchaCode.val('');
             $target.attr('disabled', true);
             this.initCaptchaCode();
             break;
           case 30002:
-            notify('danger', Translator.trans('oauth.send_error_message_tip'));
+            notify('danger', Translator.trans('oauth.send.error_message_tip'));
             break;
           case 30003:
             notify('danger', Translator.trans('admin.site.cloude_sms_enable_hint'));
@@ -181,13 +182,14 @@ export default class Create {
         captchaToken: this.captchaToken,
         phrase: $('#captcha_code').val()
       }
+      const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
         if (response.success === 1) {
           window.location.href = response.url;
         } else {
           $target.button('reset');
           if (!$('.js-password-error').length) {
-            $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">您输入的短信验证码不正确</p>`);
+            $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">${errorTip}</p>`);
           }
         }
       })
