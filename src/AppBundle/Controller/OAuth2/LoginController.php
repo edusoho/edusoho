@@ -147,13 +147,16 @@ class LoginController extends LoginBindController
         if (!$user || !$oauthUser->authenticated) {
             throw new NotFoundHttpException();
         }
+
         if ($oauthUser->isApp()) {
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
-            $request->getSession()->set(OAuthUser::SESSION_KEY, null);
-            $this->authenticateUser($user);
             $token = null;
         }
+
+        $this->authenticateUser($user);
+        $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser->avatar);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, null);
 
         return $this->render('oauth2/success.html.twig', array(
             'oauthUser' => $oauthUser,
