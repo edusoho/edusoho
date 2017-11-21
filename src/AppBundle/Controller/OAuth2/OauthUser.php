@@ -77,4 +77,9 @@ class OauthUser implements \Serializable
             $this->authenticated
             ) = $data;
     }
+
+    public function isApp()
+    {
+        return !empty($this->os);
+    }
 }

@@ -147,11 +147,10 @@ class LoginController extends LoginBindController
         if (!$user || !$oauthUser->authenticated) {
             throw new NotFoundHttpException();
         }
-
-        if (!$oauthUser->os) {
+        if ($oauthUser->isApp()) {
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
-            $request->getSession()->set('oauth_user', null);
+            #$request->getSession()->set('oauth_user', null);
             $this->authenticateUser($user);
             $token = null;
         }
