@@ -1,9 +1,9 @@
 {% extends 'v2/layout.html.twig' %}
 
-{% if oauthUser.isApp() %}
-  {% block header %}
-  {% endblock %}
-{% endif %}
+
+{% block header %}
+  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+{% endblock %}
 
 {% block full_content %}
   <div class="cd-login-section">
@@ -25,7 +25,6 @@
   </div>
 {% endblock %}
 
-{% if oauthUser.isApp() %}
-  {% block footer %}
-  {% endblock %}
-{% endif %}
+{% block footer %}
+  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+{% endblock %}
