@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\OAuth2;
 
+use AppBundle\Common\RegisterTypeUtils;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
 use Biz\Common\BizSms;
-use Codeages\Biz\Pay\Util\RandomToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -209,20 +209,14 @@ class LoginController extends LoginBindController
     private function register(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
-        $nickname = $oauthUser->name.RandomToolkit::generateString(4);
-        $email = RandomToolkit::generateString(10).'@admin.com';
-        $this->getUserService()->register(array(
-            'nickname' => $nickname,
-            'email' => $email,
-            'password' => 'admin',
-            'createdIp' => '127.0.0.1',
-            'orgCode' => '1.',
-            'orgId' => '1',
-        ));
+        $registerFields = array(
+            'nickname' => $request->request->get('nickname'),
+            $oauthUser->accountType => $oauthUser->account,
+            'password' => $request->request->get('password'),
+        );
 
-        $oauthUser->account = $email;
-        $oauthUser->accountType = 'email';
-        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
+        $this->getUserService()->register($registerFields, $oauthUser->type, RegisterTypeUtils::getRegisterTypes($registerFields, $oauthUser->type));
+
     }
 
     /**
