@@ -44,10 +44,14 @@
   position: relative;
 }
 
+.third-party-link {
+  font-size: 12px;
+  line-height: 1;
+}
 
 .third-party-form {
   padding: 0 26px;
-  .label-required {
+  .third-party-form__label {
     position: relative;
     &:after {
       margin-left: 4px;
@@ -56,6 +60,14 @@
       content: "*";
       color: @brand-warning;
     }
+  }
+}
+
+.third-party-form-group {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+  .third-party-form-group__info {
+    margin-bottom: 8px;
+    color: @cd-gray-light;
   }
 }
 
@@ -68,21 +80,6 @@
     right: 0;
     width: 140px;
   }
-}
-
-
-.third-party-form__info {
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
-  label,
-  .third-party-form__way {
-    margin-bottom: 8px;
-    color: @cd-gray-light;
-  }
-}
-
-.third-party-link {
-  font-size: 12px;
-  line-height: 1;
 }
 
 .third-party-captcha-form-group {
