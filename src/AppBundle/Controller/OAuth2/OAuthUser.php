@@ -13,7 +13,7 @@ class OAuthUser implements \Serializable
     /**
      * @var string 第三方id
      */
-    public $openid;
+    public $authid;
 
     /**
      * @var string 第三方登录类型
@@ -63,7 +63,7 @@ class OAuthUser implements \Serializable
     public function serialize()
     {
         return serialize(array(
-            $this->openid,
+            $this->authid,
             $this->type,
             $this->avatar,
             $this->name,
@@ -81,7 +81,7 @@ class OAuthUser implements \Serializable
         $data = unserialize($serialized);
 
         list(
-            $this->openid,
+            $this->authid,
             $this->type,
             $this->avatar,
             $this->name,

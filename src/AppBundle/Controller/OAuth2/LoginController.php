@@ -121,7 +121,7 @@ class LoginController extends LoginBindController
 
         $isCorrectPassword = $this->getUserService()->verifyPassword($user['id'], $password);
         if ($isCorrectPassword) {
-            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->openid, $user['id'], null);
+            $this->getUserService()->bindUser($oauthUser->type, $oauthUser->authid, $user['id'], null);
             $this->authenticatedOauthUser();
 
             return true;
@@ -214,7 +214,7 @@ class LoginController extends LoginBindController
             $oauthUser->accountType => $oauthUser->account,
             'avatar' => $oauthUser->avatar,
             'type' => $oauthUser->type,
-            'openid' => $oauthUser->openid,
+            'authid' => $oauthUser->authid,
         );
 
         if ($oauthUser->accountType == OAuthUser::MOBILE_TYPE) {
