@@ -155,7 +155,10 @@ class LoginController extends LoginBindController
         }
 
         $this->authenticateUser($user);
-        $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser->avatar);
+        if (!empty($oauthUser->avatar)) {
+            $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser->avatar);
+        }
+
         $request->getSession()->set(OAuthUser::SESSION_KEY, null);
 
         return $this->render('oauth2/success.html.twig', array(
