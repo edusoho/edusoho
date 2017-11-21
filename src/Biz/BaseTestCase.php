@@ -18,6 +18,9 @@ class BaseTestCase extends TestCase
     /** @var $appKernel \AppKernel */
     protected static $appKernel;
 
+    /**
+     * @var Biz
+     */
     protected $biz;
 
     /** @var $db \Doctrine\DBAL\Connection */
@@ -95,10 +98,13 @@ class BaseTestCase extends TestCase
     protected function initBiz()
     {
         $container = self::$appKernel->getContainer();
+        $oldBiz = $container->get('biz');
         $biz = new Biz($container->getParameter('biz_config'));
         self::$appKernel->initializeBiz($biz);
         $biz['db'] = self::$db;
         $biz['redis'] = self::$redis;
+        $biz['migration.directories'] = $oldBiz['migration.directories'];
+        $biz['autoload.aliases'] = $oldBiz['autoload.aliases'];
 
         $this->biz = $biz;
         $biz['dispatcher'] = function () use ($container, $biz) {
