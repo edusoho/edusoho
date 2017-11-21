@@ -21,6 +21,6 @@ class XapiStatementAddOccurTime extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("ALTER TABLE `xapi_statement` DROP COLUMN `occur_time`;");
+        $db->exec('ALTER TABLE `xapi_statement` DROP COLUMN `occur_time`;');
     }
 }
