@@ -178,7 +178,7 @@ class LoginController extends LoginBindController
             $this->register($request);
             $this->authenticatedOauthUser();
 
-            return $this->createSuccessJsonResponse(array('url' => $this->redirect($this->generateUrl('oauth2_login_success', array('isCreate' => 1)))));
+            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success', array('isCreate' => 1))));
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
@@ -210,16 +210,18 @@ class LoginController extends LoginBindController
     {
         $oauthUser = $this->getOauthUser($request);
         $nickname = $oauthUser->name.RandomToolkit::generateString(4);
+        $email = RandomToolkit::generateString(10).'@admin.com';
         $this->getUserService()->register(array(
             'nickname' => $nickname,
-            'email' => RandomToolkit::generateString(10).'@admin.com',
+            'email' => $email,
             'password' => 'admin',
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',
         ));
 
-        $oauthUser->name = $nickname;
+        $oauthUser->account = $email;
+        $oauthUser->accountType = 'email';
         $request->getSession()->set('oauth_user', $oauthUser);
     }
 
