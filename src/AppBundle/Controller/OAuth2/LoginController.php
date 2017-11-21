@@ -216,7 +216,6 @@ class LoginController extends LoginBindController
         );
 
         $this->getUserService()->register($registerFields, $oauthUser->type, RegisterTypeUtils::getRegisterTypes($registerFields, $oauthUser->type));
-
     }
 
     /**
