@@ -66,7 +66,7 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
   let params = {
     captchaToken: captchaToken
   }
-  Api.captcha.validate({ data: data, params: params, async: false, promise: false }).done(res => {
+  Api.captcha.validate({ data: data, params: params }).done(res => {
     if (res.status === 'success') {
       isSuccess = true;
     } else if (res.status === 'expired') {
@@ -90,7 +90,7 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
 
 
 const initCaptchaCode = () => {
-  Api.captcha.get({ async: false, promise: false }).done(res => {
+  Api.captcha.get({ data: {} }).done(res => {
     $('#getcode_num').attr('src', res.image);
     captchaToken = res.captchaToken;
   }).error(res => {
@@ -173,10 +173,13 @@ enterSubmit($form, $btn);
 
 $btn.click((event) => {
   if (validator.form()) {
+    $form.s
     $btn.button('loading');
     let data = {
-      smsToken: smsToken,
+      nickname: $('#username').val(),
       mobile: $('.js-account').html(),
+      password: $('#password').val(),
+      smsToken: smsToken,
       smsCode: $('#sms-code').val(),
       captchaToken: captchaToken,
       phrase: $('#captcha_code').val()
