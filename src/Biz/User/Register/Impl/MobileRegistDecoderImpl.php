@@ -12,5 +12,9 @@ class MobileRegistDecoderImpl extends RegistDecoder
         if (!empty($registration['mobile']) && !SimpleValidator::mobile($registration['mobile'])) {
             throw new InvalidArgumentException('Invalid Mobile');
         }
+
+        if (!$this->getUserService()->isMobileAvaliable($registration['mobile'])) {
+            throw new InvalidArgumentException('Mobile Occupied');
+        }
     }
 }
