@@ -87,7 +87,7 @@ class LoginController extends LoginBindController
             $redirectUrl = $this->generateUrl('oauth2_login_create');
         }
 
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
 
         return $this->redirect($redirectUrl);
     }
@@ -115,7 +115,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    private function bindUser(OauthUser $oauthUser, $password)
+    private function bindUser(OAuthUser $oauthUser, $password)
     {
         $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
@@ -135,7 +135,7 @@ class LoginController extends LoginBindController
         $request = $this->get('request');
         $oauthUser = $this->getOauthUser($this->get('request'));
         $oauthUser->authenticated = true;
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
 
     public function successAction(Request $request)
@@ -150,7 +150,7 @@ class LoginController extends LoginBindController
         if ($oauthUser->isApp()) {
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
-            $request->getSession()->set('oauth_user', null);
+            $request->getSession()->set(OAuthUser::SESSION_KEY, null);
             $this->authenticateUser($user);
             $token = null;
         }
@@ -222,7 +222,7 @@ class LoginController extends LoginBindController
 
         $oauthUser->account = $email;
         $oauthUser->accountType = 'email';
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
 
     /**
@@ -254,12 +254,11 @@ class LoginController extends LoginBindController
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \AppBundle\Controller\OAuth2\OauthUser
+     * @return \AppBundle\Controller\OAuth2\OAuthUser
      */
     private function getOauthUser(Request $request)
     {
-        $oauthUser = $request->getSession()->get('oauth_user');
+        $oauthUser = $request->getSession()->get(OAuthUser::SESSION_KEY);
         if (!$oauthUser) {
             throw new NotFoundHttpException();
         }
