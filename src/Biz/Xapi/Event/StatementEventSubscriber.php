@@ -109,7 +109,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onCourseThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
-        if ($thread['type'] != 'question') {
+        if ('question' != $thread['type']) {
             return;
         }
 

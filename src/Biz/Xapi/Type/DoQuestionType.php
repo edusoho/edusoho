@@ -56,7 +56,7 @@ class DoQuestionType extends Type
 
         $result = array(
             'response' => implode(',', $answers),
-            'success' => ($questionMarkerResult['status'] == 'right') ? true : false,
+            'success' => ('right' == $questionMarkerResult['status']) ? true : false,
         );
 
         return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, $statement['created_time'], false);

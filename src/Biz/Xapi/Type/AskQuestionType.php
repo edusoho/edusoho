@@ -9,7 +9,7 @@ class AskQuestionType extends Type
     public function package($statement)
     {
         $thread = $this->getThreadService()->getThread(0, $statement['target_id']);
-        if ($thread['type'] != 'question') {
+        if ('question' != $thread['type']) {
             return;
         }
         $task = $this->getTaskService()->getTask($thread['taskId']);
