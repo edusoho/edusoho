@@ -23,7 +23,7 @@ class SettingTest extends BaseTestCase
             array('register_mode' => 'email', 'email_enabled' => 'opened'),
             array('register_mode' => 'mobile', 'email_enabled' => 'closed'),
             array('register_mode' => 'email_or_mobile', 'email_enabled' => 'closed'),
-            array('register_mode' => 'email_or_mobile', 'email_enabled' =>  'opened'),
+            array('register_mode' => 'email_or_mobile', 'email_enabled' => 'opened'),
         );
         $expected = array(
             array('mode' => 'email'),
@@ -35,13 +35,11 @@ class SettingTest extends BaseTestCase
 
         foreach ($actual as $key => $act) {
             $this->mockBiz('System:SettingService', array(
-                array('functionName' => 'get', 'returnValue' => $act)
+                array('functionName' => 'get', 'returnValue' => $act),
             ));
 
             $result = $api->get($apiRequest, 'register');
             $this->assertEquals($expected[$key], $result);
         }
-
-
     }
 }

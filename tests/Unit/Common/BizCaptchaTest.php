@@ -29,5 +29,4 @@ class BizCaptchaTest extends BaseTestCase
     {
         return $this->biz['biz_captcha'];
     }
-
 }
