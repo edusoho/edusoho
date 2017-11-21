@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\OAuth2;
 
+use AppBundle\Common\RegisterTypeUtils;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
 use AppBundle\Controller\LoginBindController;
 use Biz\Common\BizSms;
-use Codeages\Biz\Pay\Util\RandomToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -80,6 +80,7 @@ class LoginController extends LoginBindController
         $user = $this->getUserByTypeAndAccount($type, $account);
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
+        $oauthUser->captchaEnabled = $oauthUser->accountType == OAuthUser::MOBILE_TYPE || $oauthUser->captchaEnabled;
 
         if ($user) {
             $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
@@ -87,7 +88,7 @@ class LoginController extends LoginBindController
             $redirectUrl = $this->generateUrl('oauth2_login_create');
         }
 
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
 
         return $this->redirect($redirectUrl);
     }
@@ -115,7 +116,7 @@ class LoginController extends LoginBindController
         }
     }
 
-    private function bindUser(OauthUser $oauthUser, $password)
+    private function bindUser(OAuthUser $oauthUser, $password)
     {
         $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
 
@@ -135,7 +136,7 @@ class LoginController extends LoginBindController
         $request = $this->get('request');
         $oauthUser = $this->getOauthUser($this->get('request'));
         $oauthUser->authenticated = true;
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
 
     public function successAction(Request $request)
@@ -150,7 +151,7 @@ class LoginController extends LoginBindController
         if ($oauthUser->isApp()) {
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
-            $request->getSession()->set('oauth_user', null);
+            $request->getSession()->set(OAuthUser::SESSION_KEY, null);
             $this->authenticateUser($user);
             $token = null;
         }
@@ -181,7 +182,6 @@ class LoginController extends LoginBindController
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
-                'captchaEnabled' => $oauthUser->accountType == 'mobile' || $oauthUser->captchaEnabled,
             ));
         }
     }
@@ -193,9 +193,9 @@ class LoginController extends LoginBindController
         );
 
         $oauthUser = $this->getOauthUser($request);
-        if ($oauthUser->accountType == 'mobile') {
+        if ($oauthUser->accountType == OAuthUser::MOBILE_TYPE) {
             $smsToken = $request->request->get('smsToken');
-            $mobile = $request->request->get('mobile');
+            $mobile = $request->request->get(OAuthUser::MOBILE_TYPE);
             $smsCode = $request->request->get('smsCode');
             $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
 
@@ -209,20 +209,13 @@ class LoginController extends LoginBindController
     private function register(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
-        $nickname = $oauthUser->name.RandomToolkit::generateString(4);
-        $email = RandomToolkit::generateString(10).'@admin.com';
-        $this->getUserService()->register(array(
-            'nickname' => $nickname,
-            'email' => $email,
-            'password' => 'admin',
-            'createdIp' => '127.0.0.1',
-            'orgCode' => '1.',
-            'orgId' => '1',
-        ));
+        $registerFields = array(
+            'nickname' => $request->request->get('nickname'),
+            $oauthUser->accountType => $oauthUser->account,
+            'password' => $request->request->get('password'),
+        );
 
-        $oauthUser->account = $email;
-        $oauthUser->accountType = 'email';
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $this->getUserService()->register($registerFields, $oauthUser->type, RegisterTypeUtils::getRegisterTypes($registerFields, $oauthUser->type));
     }
 
     /**
@@ -239,10 +232,10 @@ class LoginController extends LoginBindController
     {
         $user = null;
         switch ($type) {
-            case 'email':
+            case OAuthUser::EMAIL_TYPE:
                 $user = $this->getUserService()->getUserByEmail($account);
                 break;
-            case 'mobile':
+            case OAuthUser::MOBILE_TYPE:
                 $user = $this->getUserService()->getUserByVerifiedMobile($account);
                 break;
             default:
@@ -255,11 +248,11 @@ class LoginController extends LoginBindController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return \AppBundle\Controller\OAuth2\OauthUser
+     * @return \AppBundle\Controller\OAuth2\OAuthUser
      */
     private function getOauthUser(Request $request)
     {
-        $oauthUser = $request->getSession()->get('oauth_user');
+        $oauthUser = $request->getSession()->get(OAuthUser::SESSION_KEY);
         if (!$oauthUser) {
             throw new NotFoundHttpException();
         }

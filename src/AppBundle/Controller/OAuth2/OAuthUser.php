@@ -2,8 +2,14 @@
 
 namespace AppBundle\Controller\OAuth2;
 
-class OauthUser implements \Serializable
+class OAuthUser implements \Serializable
 {
+    const SESSION_KEY = 'oauth_user';
+
+    const MOBILE_TYPE = 'verifiedMobile';
+
+    const EMAIL_TYPE = 'email';
+
     /**
      * @var string 第三方id
      */

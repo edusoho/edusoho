@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use ApiBundle\Api\Resource\Setting\Setting;
-use AppBundle\Controller\OAuth2\OauthUser;
+use AppBundle\Controller\OAuth2\OAuthUser;
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
@@ -103,7 +103,7 @@ class LoginBindController extends BaseController
     {
         $setting = new Setting($this->container, $this->getBiz());
         $registerSetting = $setting->getRegister();
-        $oauthUser = new OauthUser();
+        $oauthUser = new OAuthUser();
         $oauthUser->id = $oUser['id'];
         $oauthUser->name = mb_substr($oUser['name'], 0, 9, 'utf8');
         $oauthUser->avatar = $oUser['avatar'];
@@ -112,7 +112,7 @@ class LoginBindController extends BaseController
         $oauthUser->captchaEnabled = $registerSetting['captchaEnabled'];
         $oauthUser->os = $os;
 
-        $request->getSession()->set('oauth_user', $oauthUser);
+        $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
     }
 
     public function chooseAction(Request $request, $type)

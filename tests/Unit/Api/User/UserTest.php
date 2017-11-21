@@ -22,7 +22,7 @@ class UserTest extends BaseTestCase
             'id' => 1,
             'nickname' => 'test',
             'title' => 'hellp',
-            'avatar' => array()
+            'avatar' => array(),
         );
 
         foreach ($actual as $key => $act) {
@@ -37,7 +37,5 @@ class UserTest extends BaseTestCase
 
             $this->assertEquals($expected, $result);
         }
-
-
     }
 }

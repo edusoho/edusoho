@@ -738,7 +738,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->getUserByType($type);
     }
 
-    public function register($registration, $type = 'default')
+    public function oldRegister($registration, $type = 'default')
     {
         $this->validateNickname($registration['nickname']);
 
@@ -859,6 +859,28 @@ class UserServiceImpl extends BaseService implements UserService
 
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
+        }
+
+        $this->dispatchEvent('user.registered', new Event($user));
+
+        return $user;
+    }
+
+    /**
+     * @param $registerTypes 数组，可以是多个类型的组合
+     *   类型范围  email, mobile, binder(第三方登录)
+     */
+    public function register($registration, $type = 'default', $registerTypes = array('email'))
+    {
+        $register = $this->biz['user.register']->createRegister($registerTypes);
+
+        list($user, $inviteUser) = $register->register($registration, $type);
+
+        if (!empty($inviteUser)) {
+            $this->dispatchEvent(
+                'user.register',
+                new Event(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
+            );
         }
 
         $this->dispatchEvent('user.registered', new Event($user));
