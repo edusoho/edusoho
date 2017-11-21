@@ -248,7 +248,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         );
         $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
 
-        $callback = $callback.'?token='.$token['token'];
+        $callback = $callback.'&token='.$token['token'];
 
         return $this->getCloudFileImplementor()->deleteMP4Files($callback);
     }
