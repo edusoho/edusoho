@@ -199,10 +199,6 @@ define(function(require, exports, module) {
           })
         }
 
-        $('.js-delete-video-btn').click(function(){
-          
-        })
-
     }
 
 })
