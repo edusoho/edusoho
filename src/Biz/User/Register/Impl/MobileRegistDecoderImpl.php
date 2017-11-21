@@ -17,4 +17,13 @@ class MobileRegistDecoderImpl extends RegistDecoder
             throw new InvalidArgumentException('Mobile Occupied');
         }
     }
+
+    protected function dealDataBeforeSave($registration, $user)
+    {
+        if (empty($registration['email'])) {
+            $user['email'] = $this->getUserService()->generateEmail($registration);
+        }
+
+        return $user;
+    }
 }

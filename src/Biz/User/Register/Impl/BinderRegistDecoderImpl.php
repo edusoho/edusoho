@@ -30,10 +30,6 @@ class BinderRegistDecoderImpl extends RegistDecoder
             $user['password'] = '';
         }
 
-        if (!empty($thirdLoginInfo["{$type}_set_fill_account"])) {
-            $user['setup'] = 1;
-        }
-
         if (in_array($registration['type'], array('weixinmobile', 'weixinweb'))) {
             $user['type'] = 'weixin';
         }
