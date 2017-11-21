@@ -7,7 +7,7 @@ let token = $message.data('token');
 if ('iOds' === os) {
   window.webkit.messageHandlers.login.postMessage(token);
 } else if ('Android' === os) {
-  alert('还不可以呢');
+  window.android.login(token);
 } else {
   if (duration > 0 && gotoUrl) {
     setTimeout(function () {

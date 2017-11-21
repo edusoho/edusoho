@@ -4,6 +4,7 @@ namespace Tests\Unit\User;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class BinderRegistDecoderImplTest extends BaseTestCase
 {
@@ -15,7 +16,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
                 array(
                     'functionName' => 'get',
                     'returnValue' => array(
-                        'qq_enable' => true,
+                        'qq_enabled' => true,
                         'qq_secret' => 'qqKey',
                         'qq_key' => 'qqSecret',
                         'qq_set_fill_account' => true,
@@ -29,7 +30,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
             'email' => 'hello@howzhi.com',
             'nickname' => 'hello',
             'password' => '123',
-            'token' => array('userId' => 1, 'token' => 'newToken'),
+            'authid' => 'sdfses1',
             'type' => 'qq',
         );
 
@@ -39,14 +40,13 @@ class BinderRegistDecoderImplTest extends BaseTestCase
 
         $user = $this->getUserService()->getUser($user['id']);
 
+        $expectedPass = $this->getPasswordEncoder()->encodePassword('123', $user['salt']);
         $this->assertEquals('hello@howzhi.com', $user['email']);
-        $this->assertEquals('', $user['salt']);
-        $this->assertEquals('', $user['password']);
+        $this->assertEquals($expectedPass, $user['password']);
         $this->assertEquals(1, $user['setup']);
 
-        $userBind = $this->getUserBindDao()->getByTypeAndFromId('qq', 1);
-        $this->assertEquals(1, $userBind['fromId']);
-        $this->assertEquals('newToken', $userBind['token']);
+        $userBind = $this->getUserBindDao()->getByTypeAndFromId('qq', 'sdfses1');
+        $this->assertEquals('sdfses1', $userBind['fromId']);
     }
 
     /**
@@ -65,7 +65,7 @@ class BinderRegistDecoderImplTest extends BaseTestCase
                 ),
             )
         );
-        ReflectionUtils::invokeMethod($this->getBinderRegistDecoder(), 'validateBeforeSave', array(array(), 'qq'));
+        ReflectionUtils::invokeMethod($this->getBinderRegistDecoder(), 'validateBeforeSave', array(array('type' => 'qq')));
     }
 
     protected function getEmailRegistDecoder()
@@ -91,5 +91,10 @@ class BinderRegistDecoderImplTest extends BaseTestCase
     protected function getUserBindDao()
     {
         return $this->biz->service('User:UserBindDao');
+    }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 }

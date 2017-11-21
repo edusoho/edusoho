@@ -14,12 +14,12 @@ abstract class RegistDecoder extends BaseRegister
     /**
      * 用于继承的方法
      */
-    abstract protected function validateBeforeSave($registration, $type);
+    abstract protected function validateBeforeSave($registration);
 
     /**
      * 用于继承的方法
      */
-    protected function dealDataBeforeSave($registration, $type, $user)
+    protected function dealDataBeforeSave($registration, $user)
     {
         return $user;
     }
@@ -27,35 +27,35 @@ abstract class RegistDecoder extends BaseRegister
     /**
      * 用于继承的方法
      */
-    protected function dealDataAfterSave($registration, $type, $user)
+    protected function dealDataAfterSave($registration, $user)
     {
     }
 
-    protected function validate($registration, $type)
+    protected function validate($registration)
     {
-        parent::validate($registration, $type);
+        parent::validate($registration);
         if (!empty($register)) {
             $register->validateBeforeSave($registration);
         }
-        $this->validateBeforeSave($registration, $type);
+        $this->validateBeforeSave($registration);
     }
 
-    protected function beforeSave($registration, $type, $user = array())
+    protected function beforeSave($registration, $user = array())
     {
-        $user = parent::beforeSave($registration, $type, $user);
+        $user = parent::beforeSave($registration, $user);
         if (!empty($register)) {
-            $user = $register->dealDataBeforeSave($registration, $type, $user);
+            $user = $register->dealDataBeforeSave($registration, $user);
         }
 
-        return $this->dealDataBeforeSave($registration, $type, $user);
+        return $this->dealDataBeforeSave($registration, $user);
     }
 
-    protected function afterSave($registration, $type, $user)
+    protected function afterSave($registration, $user)
     {
-        parent::afterSave($registration, $type, $user);
+        parent::afterSave($registration, $user);
         if (!empty($register)) {
-            $register->dealDataAfterSave($registration, $type, $user);
+            $register->dealDataAfterSave($registration, $user);
         }
-        $this->dealDataAfterSave($registration, $type, $user);
+        $this->dealDataAfterSave($registration, $user);
     }
 }

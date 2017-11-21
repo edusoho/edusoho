@@ -36,7 +36,7 @@ class MobileRegistDecoderImplTest extends BaseTestCase
         ReflectionUtils::invokeMethod(
             $this->getMobileRegistDecoder(),
             'validateBeforeSave',
-            array(array('mobile' => '13675662211'), 'default')
+            array(array('mobile' => '13675662211'))
         );
     }
 
