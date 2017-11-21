@@ -35,7 +35,7 @@ class TestUserCommand extends BaseCommand
         );
         $user['nickname'] = '体验管理员';
         $user['email'] = $verifiedMobile.'@example.com';
-        $user = $this->getUserService()->register($user, 'default', array('email', 'mobile'));
+        $user = $this->getUserService()->register($user, array('email', 'mobile'));
         $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'));
         $this->getUserService()->lockUser(1);
         $output->writeln('<info>添加测试用户完毕</info>');

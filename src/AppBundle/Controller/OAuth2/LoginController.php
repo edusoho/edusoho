@@ -199,7 +199,7 @@ class LoginController extends LoginBindController
             $smsCode = $request->request->get('smsCode');
             $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
 
-            $validateResult['hasError'] = $status !== BizSms::STATUS_SUCCESS;
+            $validateResult['hasError'] = BizSms::STATUS_SUCCESS !== $status;
             $validateResult['msg'] = $status;
         }
 

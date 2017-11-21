@@ -97,7 +97,7 @@ class Users extends BaseResource
         }
 
         register:
-        $user = $this->getUserService()->register($fields, 'default', array('mobile'));
+        $user = $this->getUserService()->register($fields, array('mobile'));
         $user['profile'] = $this->getUserService()->getUserProfile($user['id']);
         return $this->callFilter('User', $user);
 
