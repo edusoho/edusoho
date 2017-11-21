@@ -6763,8 +6763,6 @@ admin.login_connect.type.weixinweb.help_block: >
 admin.login_connect.type.weixinmob.help_block: >
   APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
 admin.login_connect.type.weixinmob.MP_verify.help_block: 请填写微信提供的MP_verify文件中的内容
-admin.login_connect.required_email: 登录时必须设置邮箱
-admin.login_connect.required_email.help_block: 在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过
 admin.login_connect.type.weibo.help_block: 最后一步,请在底部输入登录接口验证代码
 admin.login_connect.verifcation_loging_interface: 登录接口验证代码
 admin.login_connect.verifcation_code: 验证代码
