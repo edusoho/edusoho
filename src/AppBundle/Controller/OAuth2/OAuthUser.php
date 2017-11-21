@@ -80,6 +80,7 @@ class OAuthUser implements \Serializable
             $this->os,
             $this->authenticated,
             $this->captchaEnabled,
+            $this->isNewAccount,
         ));
     }
 
@@ -97,7 +98,8 @@ class OAuthUser implements \Serializable
             $this->accountType,
             $this->os,
             $this->authenticated,
-            $this->captchaEnabled
+            $this->captchaEnabled,
+            $this->isNewAccount
             ) = $data;
     }
 
