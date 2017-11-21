@@ -1,5 +1,11 @@
-{% import "macro.html.twig" as web_macro %}
 {% extends 'v2/layout.html.twig' %}
+
+{% set isMobileDevice = true %}
+
+{% if isMobileDevice %}
+  {% block header %}
+  {% endblock %}
+{% endif %}
 
 {% block full_content %}
   <div class="cd-login-section">
@@ -20,3 +26,10 @@
     </div>
   </div>
 {% endblock %}
+
+
+
+{% if isMobileDevice %}
+  {% block footer %}
+  {% endblock %}
+{% endif %}
