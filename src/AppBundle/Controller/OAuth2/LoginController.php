@@ -80,11 +80,12 @@ class LoginController extends LoginBindController
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
         $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType || $oauthUser->captchaEnabled;
+        $oauthUser->isNewAccount = $user ? false : true;
 
-        if ($user) {
-            $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
-        } else {
+        if ($oauthUser->isNewAccount) {
             $redirectUrl = $this->generateUrl('oauth2_login_create');
+        } else {
+            $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
         }
 
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
@@ -103,7 +104,7 @@ class LoginController extends LoginBindController
             $isSuccess = $this->bindUser($oauthUser, $password);
 
             return $isSuccess ?
-                $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success', array('isCreate' => 0)))) :
+                $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success'))) :
                 $this->createFailJsonResponse(array('message' => $this->trans('user.settings.security.password_modify.incorrect_password')));
         } else {
             $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
@@ -147,18 +148,27 @@ class LoginController extends LoginBindController
         if (!$user || !$oauthUser->authenticated) {
             throw new NotFoundHttpException();
         }
+
         if ($oauthUser->isApp()) {
+            $request->getSession()->set(OAuthUser::SESSION_SKIP_KEY, true);
             $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + TimeMachine::ONE_MONTH);
         } else {
-            $request->getSession()->set(OAuthUser::SESSION_KEY, null);
-            $this->authenticateUser($user);
             $token = null;
         }
+
+        $this->authenticateUser($user);
+
+        $isNewAccount = $oauthUser->isNewAccount;
+        if ($isNewAccount && !empty($oauthUser->avatar)) {
+            $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser->avatar);
+        }
+
+        $request->getSession()->set(OAuthUser::SESSION_KEY, null);
 
         return $this->render('oauth2/success.html.twig', array(
             'oauthUser' => $oauthUser,
             'token' => $token,
-            'isCreate' => $request->query->get('isCreate'),
+            'isNewAccount' => $isNewAccount,
         ));
     }
 
@@ -177,7 +187,7 @@ class LoginController extends LoginBindController
             $this->register($request);
             $this->authenticatedOauthUser();
 
-            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success', array('isCreate' => 1))));
+            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,

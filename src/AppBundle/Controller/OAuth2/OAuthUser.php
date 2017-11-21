@@ -6,6 +6,8 @@ class OAuthUser implements \Serializable
 {
     const SESSION_KEY = 'oauth_user';
 
+    const SESSION_SKIP_KEY = 'oauth_user_green_channel';
+
     const MOBILE_TYPE = 'mobile';
 
     const EMAIL_TYPE = 'email';
@@ -60,6 +62,11 @@ class OAuthUser implements \Serializable
      */
     public $captchaEnabled = false;
 
+    /**
+     * @var bool 是否是新用户
+     */
+    public $isNewAccount = false;
+
     public function serialize()
     {
         return serialize(array(
@@ -73,6 +80,7 @@ class OAuthUser implements \Serializable
             $this->os,
             $this->authenticated,
             $this->captchaEnabled,
+            $this->isNewAccount,
         ));
     }
 
@@ -90,7 +98,8 @@ class OAuthUser implements \Serializable
             $this->accountType,
             $this->os,
             $this->authenticated,
-            $this->captchaEnabled
+            $this->captchaEnabled,
+            $this->isNewAccount
             ) = $data;
     }
 
