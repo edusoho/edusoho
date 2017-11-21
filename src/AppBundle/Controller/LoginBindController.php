@@ -109,6 +109,7 @@ class LoginBindController extends BaseController
         $oauthUser->avatar = $oUser['avatar'];
         $oauthUser->type = $type;
         $oauthUser->mode = $registerSetting['mode'];
+        $oauthUser->captchaEnabled = $registerSetting['captchaEnabled'];
         $oauthUser->os = $os;
 
         $request->getSession()->set('oauth_user', $oauthUser);
