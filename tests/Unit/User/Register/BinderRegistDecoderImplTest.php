@@ -4,6 +4,7 @@ namespace Tests\Unit\User;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class BinderRegistDecoderImplTest extends BaseTestCase
 {
@@ -39,9 +40,9 @@ class BinderRegistDecoderImplTest extends BaseTestCase
 
         $user = $this->getUserService()->getUser($user['id']);
 
+        $expectedPass = $this->getPasswordEncoder()->encodePassword('123', $user['salt']);
         $this->assertEquals('hello@howzhi.com', $user['email']);
-        $this->assertEquals('', $user['salt']);
-        $this->assertEquals('', $user['password']);
+        $this->assertEquals($expectedPass, $user['password']);
         $this->assertEquals(1, $user['setup']);
 
         $userBind = $this->getUserBindDao()->getByTypeAndFromId('qq', 'sdfses1');
@@ -90,5 +91,10 @@ class BinderRegistDecoderImplTest extends BaseTestCase
     protected function getUserBindDao()
     {
         return $this->biz->service('User:UserBindDao');
+    }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 }
