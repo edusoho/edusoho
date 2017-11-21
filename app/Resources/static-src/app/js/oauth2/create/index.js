@@ -66,7 +66,7 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
   let params = {
     captchaToken: captchaToken
   }
-  Api.captcha.validate({ data: data, params: params }).done(res => {
+  Api.captcha.validate({ data: data, params: params }).then(res => {
     if (res.status === 'success') {
       isSuccess = true;
     } else if (res.status === 'expired') {
@@ -81,7 +81,7 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
     if (callback) {
       callback(isSuccess);
     }
-  }).error(res => {
+  }).catch(res => {
     console.log(res);
   });
   return this.optional(element) || isSuccess;
@@ -90,10 +90,10 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
 
 
 const initCaptchaCode = () => {
-  Api.captcha.get({ data: {} }).done(res => {
+  Api.captcha.get({ data: {} }).then(res => {
     $('#getcode_num').attr('src', res.image);
     captchaToken = res.captchaToken;
-  }).error(res => {
+  }).catch(res => {
     console.log('catch', res.responseJSON.error.message);
   });
 }
