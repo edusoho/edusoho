@@ -212,11 +212,11 @@ class LoginController extends LoginBindController
         $registerFields = array(
             'nickname' => $request->request->get('nickname'),
             'password' => $request->request->get('password'),
-            $oauthUser->accountType => $oauthUser->account,
+            'mobile' => $oauthUser->account,
             'avatar' => $oauthUser->avatar,
         );
 
-        $this->getUserService()->register($registerFields, $oauthUser->type, RegisterTypeUtils::getRegisterTypes($registerFields, $oauthUser->type));
+        $this->getUserService()->register($registerFields, array('mobile'));
     }
 
     /**

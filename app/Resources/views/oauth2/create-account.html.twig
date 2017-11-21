@@ -44,7 +44,7 @@
       </div>
     {% endif %}
 
-    {% if oauthUser.accountType == "verifiedMobile" %}
+    {% if oauthUser.accountType == "mobile" %}
       <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">
         <label for="sms_code">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
         <input class="form-control" type="number" maxlength="6" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
