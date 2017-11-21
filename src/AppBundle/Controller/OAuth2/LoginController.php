@@ -80,12 +80,12 @@ class LoginController extends LoginBindController
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
         $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType || $oauthUser->captchaEnabled;
-        $oauthUser->isNewAccount = $user ? true : false;
+        $oauthUser->isNewAccount = !$user;
 
         if ($oauthUser->isNewAccount) {
-            $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
-        } else {
             $redirectUrl = $this->generateUrl('oauth2_login_create');
+        } else {
+            $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
         }
 
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
