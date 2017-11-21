@@ -29,7 +29,7 @@ class UserTest extends BaseTestCase
         foreach ($actual as $key => $act) {
             $this->mockBiz('User:UserService', array(
                 array('functionName' => $act[2], 'returnValue' => $expected),
-                array('functionName' => 'getUser', 'returnValue' => array())
+                array('functionName' => 'getUser', 'returnValue' => array()),
             ));
 
             $apiRequest = new ApiRequest('', '', array('identify_type' => $act[0]));

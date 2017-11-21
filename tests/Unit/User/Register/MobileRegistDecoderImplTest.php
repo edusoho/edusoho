@@ -29,8 +29,8 @@ class MobileRegistDecoderImplTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'isMobileAvaliable',
-                    'returnValue' => false
-                )
+                    'returnValue' => false,
+                ),
             )
         );
         ReflectionUtils::invokeMethod(
