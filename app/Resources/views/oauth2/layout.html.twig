@@ -1,8 +1,6 @@
 {% extends 'v2/layout.html.twig' %}
 
-{% set isMobileDevice = true %}
-
-{% if isMobileDevice %}
+{% if oauthUser.isApp() %}
   {% block header %}
   {% endblock %}
 {% endif %}
@@ -27,7 +25,7 @@
   </div>
 {% endblock %}
 
-{% if isMobileDevice %}
+{% if oauthUser.isApp() %}
   {% block footer %}
   {% endblock %}
 {% endif %}
