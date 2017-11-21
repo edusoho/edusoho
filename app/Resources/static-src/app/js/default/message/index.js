@@ -4,7 +4,7 @@ let duration = $message.data('duration');
 let os = $message.data('os');
 let token = $message.data('token');
 
-if ('iOds' === os) {
+if ('iOS' === os) {
   window.webkit.messageHandlers.login.postMessage(token);
 } else if ('Android' === os) {
   window.android.login(token);
