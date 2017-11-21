@@ -156,15 +156,6 @@
                   </div>
                 </div>
               {% endif %}
-              <div class="form-group">
-                <div class="col-md-3 control-label">
-                  <label for="">{{ 'admin.login_connect.required_email'|trans }}</label>
-                </div>
-                <div class="controls col-md-8 radios">
-                  {{ radios(type ~ '_set_fill_account' , {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect[type ~ '_set_fill_account']) }}
-                  <p class="help-block">{{ 'admin.login_connect.required_email.help_block'|trans({'%admin_name%': client.admin_name }) }}</p>
-                </div>
-              </div>
               {% if type == 'weibo' %}
                 <div class="form-group">
                   <div class="col-md-3 control-label">

@@ -930,21 +930,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function setupAccount($userId)
-    {
-        $user = $this->getUser($userId);
-
-        if (empty($user)) {
-            throw $this->createNotFoundException("User#{$userId} Not Found");
-        }
-
-        if ($user['setup']) {
-            throw $this->createAccessDeniedException('Account has been set');
-        }
-
-        return $this->getUserDao()->update($userId, array('setup' => 1));
-    }
-
     public function updateUserProfile($id, $fields)
     {
         $user = $this->getUser($id);

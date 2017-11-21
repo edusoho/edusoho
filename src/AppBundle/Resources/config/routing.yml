@@ -436,10 +436,6 @@ settings_binds_bind_callback:
     path: /settings/bind/{type}/callback
     defaults: { _controller: AppBundle:Settings:bindCallback }
 
-settings_setup:
-    path: /settings/setup
-    defaults: { _controller: AppBundle:Settings:setup }
-
 settings_setup_password:
     path: /settings/setup_password
     defaults: { _controller: AppBundle:Settings:setupPassword }
