@@ -209,10 +209,10 @@ class LoginController extends LoginBindController
     private function register(Request $request)
     {
         $oauthUser = $this->getOauthUser($request);
-        $nickname = $oauthUser['name'].RandomToolkit::generateString(4);
+        $nickname = $oauthUser->name.RandomToolkit::generateString(4);
         $this->getUserService()->register(array(
             'nickname' => $nickname,
-            'email' => $nickname.'@admin.com',
+            'email' => RandomToolkit::generateString(10).'@admin.com',
             'password' => 'admin',
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',

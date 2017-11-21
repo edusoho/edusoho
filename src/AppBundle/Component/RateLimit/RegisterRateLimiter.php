@@ -3,17 +3,11 @@
 namespace AppBundle\Component\RateLimit;
 
 use AppBundle\Common\TimeMachine;
-use Codeages\Biz\Framework\Context\Biz;
 use Codeages\RateLimiter\RateLimiter;
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
 {
-    /**
-     * @var Biz
-     */
-    private $biz;
-
     const MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY = 30;
 
     const HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_DAY = 10;

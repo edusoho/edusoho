@@ -36,7 +36,6 @@ class BizSms extends BizAware
     public function check($smsType, $mobile, $smsToken, $code)
     {
         $token = $this->getTokenService()->verifyToken($smsType, $smsToken);
-
         if (empty($token)) {
             return self::STATUS_INVALID;
         }
@@ -47,7 +46,7 @@ class BizSms extends BizAware
             return self::STATUS_EXPIRED;
         }
 
-        if ($token['data']['code'] !== $code || $token['data']['code'] !== $mobile) {
+        if ($token['data']['code'] !== $code || $token['data']['mobile'] !== $mobile) {
             return self::STATUS_INVALID;
         }
 

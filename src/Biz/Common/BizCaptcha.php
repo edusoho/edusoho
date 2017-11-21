@@ -21,7 +21,7 @@ class BizCaptcha extends BizAware
 
     public function generate($options = array())
     {
-        $options = array_merge(array('width' => 150, 'height' => 32, 'quality' => 90, 'verify_times' => 2), $options);
+        $options = array_merge(array('width' => 150, 'height' => 32, 'quality' => 90, 'verify_times' => 10), $options);
         $this->captchaBuilder->build($options['width'], $options['height'], null, null);
 
         $token = $this->getTokenService()->makeToken($this->tokenType, array(
