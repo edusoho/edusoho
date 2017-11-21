@@ -825,3 +825,6 @@ cashier.confirm.pick_again: Reissue payment method
 cashier.confirm.desc: |
   Please re-open the page to complete the order payment.<br>
   If you encounter problems in the payment process, please contact the website customer service solution.<br>
+
+oauth.send_error_message_tip: 请求发送次数过多，请稍后尝试
+oauth.refresh_captcha_code_tip: 图形验证码已失效，请重新输入图形验证码

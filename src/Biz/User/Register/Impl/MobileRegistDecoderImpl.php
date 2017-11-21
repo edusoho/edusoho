@@ -7,10 +7,14 @@ use AppBundle\Common\SimpleValidator;
 
 class MobileRegistDecoderImpl extends RegistDecoder
 {
-    protected function validateBeforeSave($registration, $type)
+    protected function validateBeforeSave($registration)
     {
         if (!empty($registration['mobile']) && !SimpleValidator::mobile($registration['mobile'])) {
             throw new InvalidArgumentException('Invalid Mobile');
+        }
+
+        if (!$this->getUserService()->isMobileAvaliable($registration['mobile'])) {
+            throw new InvalidArgumentException('Mobile Occupied');
         }
     }
 }

@@ -16,14 +16,18 @@ abstract class BaseRegister
         $this->biz = $biz;
     }
 
-    public function register($registration, $type)
+    public function register($registration)
     {
-        $this->validate($registration, $type);
+        if (empty($registration['type'])) {
+            $registration['type'] = 'default';
+        }
 
-        $user = $this->createUser($registration, $type);
+        $this->validate($registration);
+
+        $user = $this->createUser($registration);
         $this->createUserProfile($registration, $user);
 
-        $this->afterSave($registration, $type, $user);
+        $this->afterSave($registration, $user);
 
         return array($user, $this->createPerInviteUser($registration, $user));
     }
@@ -67,7 +71,7 @@ abstract class BaseRegister
         );
     }
 
-    protected function validate($registration, $type)
+    protected function validate($registration)
     {
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw new InvalidArgumentException('Invalid nickname');
@@ -86,7 +90,7 @@ abstract class BaseRegister
         }
     }
 
-    protected function beforeSave($registration, $type, $user = array())
+    protected function beforeSave($registration, $user = array())
     {
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
@@ -97,14 +101,14 @@ abstract class BaseRegister
         }
 
         $user['roles'] = array('ROLE_USER');
-        $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
+        $user['type'] = $registration['type'];
         $user['createdTime'] = time();
 
-        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
+        if (in_array($registration['type'], array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
-        } elseif ('marketing' === $type) {
+        } elseif ('marketing' === $registration['type']) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 0;
@@ -122,7 +126,7 @@ abstract class BaseRegister
         return $user;
     }
 
-    protected function afterSave($registration, $type, $user)
+    protected function afterSave($registration, $user)
     {
     }
 
@@ -155,9 +159,9 @@ abstract class BaseRegister
         return new MessageDigestPasswordEncoder('sha256');
     }
 
-    private function createUser($registration, $type)
+    private function createUser($registration)
     {
-        $user = $this->beforeSave($registration, $type);
+        $user = $this->beforeSave($registration);
 
         return $this->getUserDao()->create($user);
     }

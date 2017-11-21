@@ -191,7 +191,7 @@ class UserServiceImpl extends BaseService implements UserService
             $user = $this->getUserDao()->getByNickname($keyword);
         }
 
-        if (isset($user['type']) && $user['type'] == 'system') {
+        if (isset($user['type']) && 'system' == $user['type']) {
             return null;
         }
 
@@ -455,7 +455,7 @@ class UserServiceImpl extends BaseService implements UserService
             );
         }
 
-        if (isset($options['deleteOriginFile']) && $options['deleteOriginFile'] == 0) {
+        if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
             $fields[] = array(
                 'type' => 'origin',
                 'id' => $record['id'],
@@ -632,7 +632,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $mode = $this->getRegisterMode();
 
-        if ($mode == 'email_or_mobile') {
+        if ('email_or_mobile' == $mode) {
             if (!empty($registration['emailOrMobile'])) {
                 if (SimpleValidator::email($registration['emailOrMobile'])) {
                     $registration['email'] = $registration['emailOrMobile'];
@@ -647,7 +647,7 @@ class UserServiceImpl extends BaseService implements UserService
             } else {
                 throw $this->createInvalidArgumentException('Invalid Mobile or Email');
             }
-        } elseif ($mode == 'mobile') {
+        } elseif ('mobile' == $mode) {
             if (!empty($registration['mobile'])) {
                 if (SimpleValidator::mobile($registration['mobile'])) {
                     $registration['verifiedMobile'] = $registration['mobile'];
@@ -671,7 +671,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $authSetting = $this->getSettingService()->get('auth');
 
-        return !empty($authSetting['register_mode']) && (($authSetting['register_mode'] == 'email_or_mobile') || ($authSetting['register_mode'] == 'mobile'));
+        return !empty($authSetting['register_mode']) && (('email_or_mobile' == $authSetting['register_mode']) || ('mobile' == $authSetting['register_mode']));
     }
 
     /**
@@ -785,7 +785,7 @@ class UserServiceImpl extends BaseService implements UserService
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 1;
-        } elseif ($type === 'marketing') {
+        } elseif ('marketing' === $type) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 0;
@@ -819,15 +819,15 @@ class UserServiceImpl extends BaseService implements UserService
             );
         }
 
-        if (isset($registration['mobile']) && $registration['mobile'] != '' && !SimpleValidator::mobile($registration['mobile'])) {
+        if (isset($registration['mobile']) && '' != $registration['mobile'] && !SimpleValidator::mobile($registration['mobile'])) {
             throw $this->createInvalidArgumentException('Invalid Mobile');
         }
 
-        if (isset($registration['idcard']) && $registration['idcard'] != '' && !SimpleValidator::idcard($registration['idcard'])) {
+        if (isset($registration['idcard']) && '' != $registration['idcard'] && !SimpleValidator::idcard($registration['idcard'])) {
             throw $this->createInvalidArgumentException('Invalid ID number');
         }
 
-        if (isset($registration['truename']) && $registration['truename'] != '' && !SimpleValidator::truename($registration['truename'])) {
+        if (isset($registration['truename']) && '' != $registration['truename'] && !SimpleValidator::truename($registration['truename'])) {
             throw $this->createInvalidArgumentException('Invalid truename');
         }
 
@@ -857,7 +857,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getProfileDao()->create($profile);
 
-        if ($type != 'default') {
+        if ('default' != $type) {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
@@ -867,14 +867,16 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     /**
+     * @registration type属性使用了原先的 $type 参数, 不填，则为default （原先的接口参数为 $registration, $type)
+     *
      * @param $registerTypes 数组，可以是多个类型的组合
      *   类型范围  email, mobile, binder(第三方登录)
      */
-    public function register($registration, $type = 'default', $registerTypes = array('email'))
+    public function register($registration, $registerTypes = array('email'))
     {
         $register = $this->biz['user.register']->createRegister($registerTypes);
 
-        list($user, $inviteUser) = $register->register($registration, $type);
+        list($user, $inviteUser) = $register->register($registration);
 
         if (!empty($inviteUser)) {
             $this->dispatchEvent(
@@ -1096,7 +1098,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $fields = array_filter($fields, function ($value) {
-            if ($value === 0) {
+            if (0 === $value) {
                 return true;
             }
 
@@ -1243,7 +1245,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserBindByTypeAndFromId($type, $fromId)
     {
-        if ($type == 'weixinweb' || $type == 'weixinmob') {
+        if ('weixinweb' == $type || 'weixinmob' == $type) {
             $type = 'weixin';
         }
 
@@ -1267,7 +1269,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Type');
         }
 
-        if ($type == 'weixinweb' || $type == 'weixinmob') {
+        if ('weixinweb' == $type || 'weixinmob' == $type) {
             $type = 'weixin';
         }
 
@@ -1286,7 +1288,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Type');
         }
 
-        if ($type == 'weixinweb' || $type == 'weixinmob') {
+        if ('weixinweb' == $type || 'weixinmob' == $type) {
             $type = 'weixin';
         }
 
@@ -1313,7 +1315,7 @@ class UserServiceImpl extends BaseService implements UserService
             'loginTime' => time(),
         ));
         //if user type is system,we do not record user login log
-        if ($user['type'] == 'system') {
+        if ('system' == $user['type']) {
             return false;
         }
         $this->getLogService()->info('user', 'login_success', '登录成功');
@@ -1969,11 +1971,11 @@ class UserServiceImpl extends BaseService implements UserService
 
     protected function _prepareApprovalConditions($conditions)
     {
-        if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'truename') {
+        if (!empty($conditions['keywordType']) && 'truename' == $conditions['keywordType']) {
             $conditions['truename'] = trim($conditions['keyword']);
         }
 
-        if (!empty($conditions['keywordType']) && $conditions['keywordType'] == 'idcard') {
+        if (!empty($conditions['keywordType']) && 'idcard' == $conditions['keywordType']) {
             $conditions['idcard'] = trim($conditions['keyword']);
         }
 

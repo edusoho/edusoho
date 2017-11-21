@@ -8,12 +8,9 @@ use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 abstract class AbstractResource
 {
@@ -36,10 +33,10 @@ abstract class AbstractResource
 
     const PREFIX_SORT_DESC = '-';
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz = $container->get('biz');
+        $this->biz = $biz;
     }
 
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
@@ -177,10 +174,5 @@ abstract class AbstractResource
     {
         $biz = $this->getBiz();
         return $biz['user'];
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

@@ -9,6 +9,14 @@ class TimeMachine
 {
     private $timezone;
 
+    const HALF_HOUR = 1800;
+
+    const ONE_HOUR = 3600;
+
+    const ONE_DAY = 86400;
+
+    const ONE_MONTH = 259200;
+
     public function __construct($timezone)
     {
         $this->timezone = $timezone;

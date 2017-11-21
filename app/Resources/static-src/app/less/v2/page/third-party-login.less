@@ -1,0 +1,126 @@
+.third-party-panel {
+  .third-party-panel__heading {
+    padding: 27px 24px;
+    .cd-box-shadow(2px);
+  }
+  .third-party-panel__body {
+    padding: 32px 24px 40px;
+    @media(max-width: @screen-xs-min) {
+      padding: 32px 4px;
+    }
+  }
+}
+
+.third-party-user {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.third-party-bind-tip {
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1;
+  color: @cd-gray;
+}
+
+.third-party-avatar-wrap {
+  position: relative;
+  img {
+    position: absolute;
+    top: 24px;
+    left: 107px;
+    @media(max-width: @screen-xs-min) {
+      left: 20%;
+    }
+    @media(max-width: 320px) {
+      left: 12%;
+    }
+    border: 2px solid #fff;
+    .cd-box-shadow(8px);
+  }
+}
+
+.web-avatar-wrap {
+  position: relative;
+}
+
+
+.third-party-form {
+  padding: 0 26px;
+  .label-required {
+    position: relative;
+    &:after {
+      margin-left: 4px;
+      position: absolute;
+      top: -1px;
+      content: "*";
+      color: @brand-warning;
+    }
+  }
+}
+
+.third-party-sms-form-group {
+  position: relative;
+  padding-right: 156px;
+  .third-part-action-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 140px;
+  }
+}
+
+
+.third-party-form__info {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+  label,
+  .third-party-form__way {
+    margin-bottom: 8px;
+    color: @cd-gray-light;
+  }
+}
+
+.third-party-link {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.third-party-captcha-form-group {
+  position: relative;
+  padding-right: 114px;
+}
+
+.third-party-captcha {
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  width: 98px;
+  .third-party-captcha__img {
+    width: 100%;
+    height: 32px;
+    cursor: pointer;
+  }
+}
+
+.third-party-feedback {
+  padding-top: 8px;
+  padding-bottom: 0;
+  .feedback-icon {
+    i {
+      font-size: 104px;
+      color: @brand-success;
+    }
+  }
+  .feedback-title {
+    margin-bottom: 24px;
+    font-size: 24px;
+    color: @brand-success;
+    line-height: 1;
+  }
+  .feedback-content {
+    margin-bottom: 0;
+    font-size: 14px;
+    color: @cd-gray-light;
+    line-height: 1;
+  }
+}
