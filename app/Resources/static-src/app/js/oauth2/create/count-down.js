@@ -18,7 +18,7 @@ const refreshTimeLeft = () => {
     setTimeout(refreshTimeLeft, 1000);
   } else {
     $timeLeft.html('');
-    $fetchBtnText.html(Translator.trans('site.data.get_sms_code_btn'));
+    $fetchBtnText.html(Translator.trans('oauth.send.validate_message'));
     $smsCode.removeAttr('disabled');
   }
 }

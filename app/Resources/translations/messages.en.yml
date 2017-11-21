@@ -2254,7 +2254,7 @@ user.oauth.register_account_by_ways: 使用%accountType%创建账号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
-user.oauth.register.input_sms_code_placeholder: 请输入手机收到的验证码
+user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
 user.oauth.register.send_sms: 发送验证
 user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
 user.oauth.register.agree_terms: 同意服务协议并注册

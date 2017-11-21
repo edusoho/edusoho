@@ -767,6 +767,7 @@ cashier.confirm.desc: |
   请在新开页面中完成订单支付。<br>
   如在支付过程中遇到问题，请联系网站客服解决。<br>
 
+oauth.send.validate_message: 发送验证
 oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
 oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
 oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码

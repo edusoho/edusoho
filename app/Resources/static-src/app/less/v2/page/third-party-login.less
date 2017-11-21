@@ -74,11 +74,20 @@
 .third-party-sms-form-group {
   position: relative;
   padding-right: 156px;
+  @media(max-width: 320px) {
+    padding-right: 136px;
+  }
   .third-part-action-button {
     position: absolute;
     bottom: 0;
     right: 0;
     width: 140px;
+    @media(max-width: 320px) {
+      width: 120px;
+      button {
+        padding: 9px 4px;
+      }
+    }
   }
 }
 
