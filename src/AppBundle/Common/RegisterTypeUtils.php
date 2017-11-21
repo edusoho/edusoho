@@ -4,7 +4,7 @@ namespace AppBundle\Common;
 
 class RegisterTypeUtils
 {
-    public static function getRegisterTypes($registrations, $type = '')
+    public static function getRegisterTypes($registrations)
     {
         $regTypes = array();
         if (!empty($registrations['verifiedMobile'])) {
@@ -15,7 +15,8 @@ class RegisterTypeUtils
             $regTypes[] = 'email';
         }
 
-        if (!empty($type) && in_array($type, array('qq', 'weibo', 'renren', 'weixinweb', 'weixinmob'))) {
+        if (!empty($registrations['type']) && 
+                in_array($registrations['type'], array('qq', 'weibo', 'renren', 'weixinweb', 'weixinmob'))) {
             $regTypes[] = 'binder';
         }
 

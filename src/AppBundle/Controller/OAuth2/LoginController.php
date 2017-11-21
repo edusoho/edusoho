@@ -181,7 +181,7 @@ class LoginController extends LoginBindController
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
-                'captchaEnabled' => $oauthUser->accountType == 'mobile' || $oauthUser->captchaEnabled,
+                'captchaEnabled' => 'mobile' == $oauthUser->accountType || $oauthUser->captchaEnabled,
             ));
         }
     }
@@ -193,13 +193,13 @@ class LoginController extends LoginBindController
         );
 
         $oauthUser = $this->getOauthUser($request);
-        if ($oauthUser->accountType == 'mobile') {
+        if ('mobile' == $oauthUser->accountType) {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get('mobile');
             $smsCode = $request->request->get('smsCode');
             $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
 
-            $validateResult['hasError'] = $status !== BizSms::STATUS_SUCCESS;
+            $validateResult['hasError'] = BizSms::STATUS_SUCCESS !== $status;
             $validateResult['msg'] = $status;
         }
 
