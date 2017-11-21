@@ -35,7 +35,7 @@ class CoinController extends BaseController
         );
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
 
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
@@ -95,10 +95,10 @@ class CoinController extends BaseController
     {
         $coinSettings = $this->getSettingService()->get('coin', array());
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
 
-            if ($set['cash_model'] == 'none') {
+            if ('none' == $set['cash_model']) {
                 $coinSettings['cash_model'] = 'none';
                 $coinSettings['price_type'] = 'RMB';
                 $coinSettings['cash_rate'] = $set['cash_rate'];
@@ -137,19 +137,19 @@ class CoinController extends BaseController
         $type = $conditions['type'];
         $set = $conditions['set'];
 
-        if ($type == 'course') {
+        if ('course' == $type) {
             $items = $this->getCourseSetService()->searchCourseSets(array(
                 'maxCoursePrice_GT' => '0.00',
                 'parentId' => 0,
             ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
-        } elseif ($type == 'classroom') {
+        } elseif ('classroom' == $type) {
             $items = $this->getClassroomService()->searchClassrooms(
                 array('private' => 0, 'price_GT' => '0.00'),
                 array('createdTime' => 'DESC'),
                 0,
                 PHP_INT_MAX
             );
-        } elseif ($type == 'vip') {
+        } elseif ('vip' == $type) {
             // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
         }
@@ -165,13 +165,13 @@ class CoinController extends BaseController
     {
         $coinSettings = $this->getSettingService()->get('coin', array());
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
             $coinSettings['coin_enabled'] = 1;
             $coinSettings['cash_rate'] = $data['cash_rate'];
 
-            if ($data['cash_model'] == 'deduction') {
+            if ('deduction' == $data['cash_model']) {
                 $coinSettings['price_type'] = 'RMB';
                 $coinSettings['cash_model'] = 'deduction';
 
@@ -196,15 +196,15 @@ class CoinController extends BaseController
         $type = $data['type'];
         $data = $data['item-rate'];
 
-        if ($type == 'course') {
+        if ('course' == $type) {
             foreach ($data as $key => $value) {
                 $this->getCourseSetService()->updateMaxRate($key, $value);
             }
-        } elseif ($type == 'classroom') {
+        } elseif ('classroom' == $type) {
             foreach ($data as $key => $value) {
                 $this->getClassroomService()->updateClassroom($key, array('maxRate' => $value));
             }
-        } elseif ($type == 'vip') {
+        } elseif ('vip' == $type) {
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
             }
@@ -296,7 +296,7 @@ class CoinController extends BaseController
         $schoolBalance = $this->getAccountProxyService()->getUserBalanceByUserId(0);
 
         if (isset($conditions['user_id'])) {
-            if ($conditions['user_id'] == 0) {
+            if (0 == $conditions['user_id']) {
                 $users = array();
                 $balances = array();
                 goto response;
@@ -440,7 +440,7 @@ class CoinController extends BaseController
     protected function filterCondition($conditions)
     {
         if (isset($conditions['keywordType'])) {
-            if ($conditions['keywordType'] == 'userName') {
+            if ('userName' == $conditions['keywordType']) {
                 $conditions['keywordType'] = 'user_id';
                 $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
                 $conditions['keyword'] = $userFindbyNickName ? $userFindbyNickName['id'] : -1;

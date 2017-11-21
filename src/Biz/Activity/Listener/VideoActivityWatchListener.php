@@ -3,6 +3,7 @@
 namespace Biz\Activity\Listener;
 
 use Biz\Task\Service\TaskService;
+use Biz\Xapi\Service\XapiService;
 
 class VideoActivityWatchListener extends Listener
 {
@@ -16,7 +17,7 @@ class VideoActivityWatchListener extends Listener
         if (empty($data['task'])) {
             return;
         }
-
+        $this->getXapiService()->watchTask($data['task']['id'], $watchTime);
         $this->getTaskService()->watchTask($data['task']['id'], $watchTime);
     }
 
@@ -26,5 +27,13 @@ class VideoActivityWatchListener extends Listener
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return XapiService
+     */
+    protected function getXapiService()
+    {
+        return $this->getBiz()->service('Xapi:XapiService');
     }
 }

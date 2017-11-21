@@ -156,7 +156,7 @@ class CourseSetFileManageController extends BaseController
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
 
             $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
