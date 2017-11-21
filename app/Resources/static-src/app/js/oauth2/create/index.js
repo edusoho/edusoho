@@ -1,2 +1,2 @@
-import create from './create';
-new create();
+import Create from './create';
+new Create();
