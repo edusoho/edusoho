@@ -1887,7 +1887,7 @@ class UserServiceTest extends BaseTestCase
     public function testMarkLoginInfo()
     {
         $user = $this->biz['user'];
-        $user['currentIp'] = '127.2.1.' . rand(1, 255);
+        $user['currentIp'] = '127.2.1.'.rand(1, 255);
         $this->biz['user'] = $user;
         $this->getUserService()->markLoginInfo();
 
