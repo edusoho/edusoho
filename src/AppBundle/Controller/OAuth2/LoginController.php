@@ -254,6 +254,7 @@ class LoginController extends LoginBindController
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \AppBundle\Controller\OAuth2\OAuthUser
      */
     private function getOauthUser(Request $request)
