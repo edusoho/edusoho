@@ -34,7 +34,7 @@
       <input class="form-control" type="password" id="confirmPassword" name="confirmPayPassword" required="required" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
     </div>
 
-    {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+    {% if oauthUser.captchaEnabled %}
       <div class="form-group cd-form-group third-party-captcha-form-group js-captcha">
         <label class="label-required" for="captcha_code">{{'form.captcha_code'|trans}}</label>
         <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
