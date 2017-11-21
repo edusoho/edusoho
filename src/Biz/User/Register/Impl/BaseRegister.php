@@ -107,16 +107,15 @@ abstract class BaseRegister
         if (in_array($registration['type'], array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-            $user['setup'] = 1;
         } elseif ('marketing' === $registration['type']) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-            $user['setup'] = 0;
         } else {
             $user['salt'] = '';
             $user['password'] = '';
-            $user['setup'] = 0;
         }
+
+        $user['setup'] = 1;
 
         if (isset($registration['orgId'])) {
             $user['orgId'] = $registration['orgId'];
