@@ -23,7 +23,6 @@ class MobileRegistDecoderImpl extends RegistDecoder
         if (empty($registration['email'])) {
             $user['email'] = $this->getUserService()->generateEmail($registration);
         }
-
         return $user;
     }
 }
