@@ -2,7 +2,7 @@
 {% do script(['app/js/default/message/index.js']) %}
 
 {% block page_title %}
-  {% if isCreate|default('') %}{{ 'user.oauth.register_success'|trans }}{% else %}{{ 'user.oauth.bind_account_success'|trans }}{% endif %}
+  {% if isNewAccount|default('') %}{{ 'user.oauth.register_success'|trans }}{% else %}{{ 'user.oauth.bind_account_success'|trans }}{% endif %}
 {% endblock %}
 
 {% set duration = 3 %}
@@ -10,7 +10,7 @@
 {% block panel_body %}
   <div class="cd-feedback third-party-feedback cd-mb32" data-token="{{ token }}" data-goto="{{ path('homepage') }}" data-duration="{{ duration }}" id="page-message-container" data-os="{{ oauthUser.os }}">
     <div class="feedback-icon"><i class="cd-icon cd-icon-check"></i></div>
-    <div class="feedback-title">{% if isCreate|default('') %}{{ 'user.oauth.register_account_success'|trans }}{% else %}{{ 'user.oauth.bind_account_success'|trans }}{% endif %}</div>
+    <div class="feedback-title">{% if isNewAccount|default('') %}{{ 'user.oauth.register_account_success'|trans }}{% else %}{{ 'user.oauth.bind_account_success'|trans }}{% endif %}</div>
     <div class="feedback-content">{{ 'user.settings.security.set_pay_password_success.closed_automatically'|trans }}</div>
   </div>
 {% endblock %}

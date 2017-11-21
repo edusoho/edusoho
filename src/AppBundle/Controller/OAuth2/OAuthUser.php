@@ -60,6 +60,11 @@ class OAuthUser implements \Serializable
      */
     public $captchaEnabled = false;
 
+    /**
+     * @var bool 是否是新用户
+     */
+    public $isNewAccount = false;
+
     public function serialize()
     {
         return serialize(array(

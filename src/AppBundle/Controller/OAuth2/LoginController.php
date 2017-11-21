@@ -80,8 +80,9 @@ class LoginController extends LoginBindController
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
         $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType || $oauthUser->captchaEnabled;
+        $oauthUser->isNewAccount = $user ? true : false;
 
-        if ($user) {
+        if ($oauthUser->isNewAccount) {
             $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
         } else {
             $redirectUrl = $this->generateUrl('oauth2_login_create');
@@ -103,7 +104,7 @@ class LoginController extends LoginBindController
             $isSuccess = $this->bindUser($oauthUser, $password);
 
             return $isSuccess ?
-                $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success', array('isCreate' => 0)))) :
+                $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success'))) :
                 $this->createFailJsonResponse(array('message' => $this->trans('user.settings.security.password_modify.incorrect_password')));
         } else {
             $user = $this->getUserByTypeAndAccount($oauthUser->accountType, $oauthUser->account);
@@ -155,7 +156,9 @@ class LoginController extends LoginBindController
         }
 
         $this->authenticateUser($user);
-        if (!empty($oauthUser->avatar)) {
+
+        $isNewAccount = $oauthUser->isNewAccount;
+        if ($isNewAccount && !empty($oauthUser->avatar)) {
             $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser->avatar);
         }
 
@@ -164,7 +167,7 @@ class LoginController extends LoginBindController
         return $this->render('oauth2/success.html.twig', array(
             'oauthUser' => $oauthUser,
             'token' => $token,
-            'isCreate' => $request->query->get('isCreate'),
+            'isNewAccount' => $isNewAccount,
         ));
     }
 
@@ -183,7 +186,7 @@ class LoginController extends LoginBindController
             $this->register($request);
             $this->authenticatedOauthUser();
 
-            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success', array('isCreate' => 1))));
+            return $this->createSuccessJsonResponse(array('url' => $this->generateUrl('oauth2_login_success')));
         } else {
             return $this->render('oauth2/create-account.html.twig', array(
                 'oauthUser' => $oauthUser,
