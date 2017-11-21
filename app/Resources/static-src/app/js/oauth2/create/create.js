@@ -74,7 +74,6 @@ export default class Create {
       }
     });
 
-
     $.validator.addMethod('captcha_checkout', function(value, element, param) {
       let $element = $(element);
       if (value.length < 5) {
@@ -87,8 +86,6 @@ export default class Create {
       let params = {
         captchaToken: self.captchaToken
       }
-      console.log(self.captchaToken);
-
       Api.captcha.validate({ data: data, params: params, async: false, promise: false }).done(res => {
         if (res.status === 'success') {
           isSuccess = true;
@@ -136,7 +133,6 @@ export default class Create {
         this.smsToken = res.smsToken;
         countDown(20);
       }).catch((res) => {
-        console.log(res);
         const code = res.responseJSON.error.code;
         switch(code) {
           case 30001:
@@ -159,15 +155,6 @@ export default class Create {
     })
   }
 
-  removeSmsErrorTip() {
-    $('#sms-code').focus(() => {
-      const $tip = $('.js-password-error');
-      if ($tip.length) {
-        $tip.remove();
-      }
-    })
-  }
-
   changeCaptchaCode() {
     const $getCodeNum = $('#getcode_num');
     if (!$getCodeNum.length) {
@@ -181,33 +168,41 @@ export default class Create {
   submitForm() {
     this.$btn.click((event) => {
       const $target = $(event.target);
-      if (this.validator.form()) {
-        $target.button('loading');
-        let data = {
-          nickname: $('#username').val(),
-          password: $('#password').val(),
-          mobile: $('.js-account').html(),
-          smsToken: this.smsToken,
-          smsCode: $('#sms-code').val(),
-          captchaToken: this.captchaToken,
-          phrase: $('#captcha_code').val()
-        }
-
-        $.post($target.data('url'), data, (response) => {
-          console.log(response);
-          if (response.success === 1) {
-            window.location.href = response.url;
-          } else {
-            $target.button('reset');
-            if (!$('.js-password-error').length) {
-              $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">您输入的短信验证码不正确</p>`);
-            }
-          }
-        })
+      if (!this.validator.form()) {
+        return;
       }
+      $target.button('loading');
+      let data = {
+        nickname: $('#username').val(),
+        password: $('#password').val(),
+        mobile: $('.js-account').html(),
+        smsToken: this.smsToken,
+        smsCode: $('#sms-code').val(),
+        captchaToken: this.captchaToken,
+        phrase: $('#captcha_code').val()
+      }
+      $.post($target.data('url'), data, (response) => {
+        if (response.success === 1) {
+          window.location.href = response.url;
+        } else {
+          $target.button('reset');
+          if (!$('.js-password-error').length) {
+            $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">您输入的短信验证码不正确</p>`);
+          }
+        }
+      })
     })
 
     enterSubmit(this.$form, this.$btn);
+  }
+
+  removeSmsErrorTip() {
+    $('#sms-code').focus(() => {
+      const $tip = $('.js-password-error');
+      if ($tip.length) {
+        $tip.remove();
+      }
+    })
   }
 
 }
