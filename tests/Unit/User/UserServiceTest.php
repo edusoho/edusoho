@@ -839,36 +839,6 @@ class UserServiceTest extends BaseTestCase
         $this->assertNotNull($email);
     }
 
-    // public function testImportUpdateEmail()
-
-    // {
-
-    //     // $user1 = $this->createUser('user1');
-
-    //     // $user2 = $this->createUser('user2');
-
-    //     // $user3 = $this->createUser('user3');
-
-    //     // $users = array($user1,$user2,$user3);
-
-    //     // $this->getUserService()->importUpdateEmail($users);
-    // }
-
-    public function testSetupAccount()
-    {
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email' => 'test_email@email.com',
-            'token' => array('userId' => 999, 'token' => 'token', 'expiredTime' => strtotime('+1 day')),
-            'type' => 'weibo',
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $this->assertEquals('0', $registeredUser['setup']);
-        $result = $this->getUserService()->setupAccount($registeredUser['id']);
-        $this->assertEquals('1', $result['setup']);
-    }
-
     /**
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
