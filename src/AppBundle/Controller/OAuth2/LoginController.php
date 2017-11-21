@@ -211,8 +211,9 @@ class LoginController extends LoginBindController
         $oauthUser = $this->getOauthUser($request);
         $registerFields = array(
             'nickname' => $request->request->get('nickname'),
-            $oauthUser->accountType => $oauthUser->account,
             'password' => $request->request->get('password'),
+            $oauthUser->accountType => $oauthUser->account,
+            'avatar' => $oauthUser->avatar,
         );
 
         $this->getUserService()->register($registerFields, $oauthUser->type, RegisterTypeUtils::getRegisterTypes($registerFields, $oauthUser->type));
