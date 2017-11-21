@@ -16,7 +16,7 @@ class SettingTest extends BaseTestCase
         $apiRequest = new ApiRequest('', '', array());
         $result = $api->get($apiRequest, 'register');
 
-        $this->assertEquals(array('mode' => 'closed'), $result);
+        $this->assertArraySubset(array('mode' => 'closed'), $result);
 
         $actual = array(
             array('register_mode' => 'email', 'email_enabled' => 'closed'),
@@ -39,7 +39,7 @@ class SettingTest extends BaseTestCase
             ));
 
             $result = $api->get($apiRequest, 'register');
-            $this->assertEquals($expected[$key], $result);
+            $this->assertArraySubset($expected[$key], $result);
         }
     }
 }

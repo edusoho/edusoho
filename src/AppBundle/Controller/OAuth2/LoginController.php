@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\OAuth2;
 
-use AppBundle\Common\RegisterTypeUtils;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
@@ -199,7 +198,7 @@ class LoginController extends LoginBindController
             $smsCode = $request->request->get('smsCode');
             $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $mobile, $smsToken, $smsCode);
 
-            $validateResult['hasError'] = $status !== BizSms::STATUS_SUCCESS;
+            $validateResult['hasError'] = BizSms::STATUS_SUCCESS !== $status;
             $validateResult['msg'] = $status;
         }
 
@@ -211,11 +210,12 @@ class LoginController extends LoginBindController
         $oauthUser = $this->getOauthUser($request);
         $registerFields = array(
             'nickname' => $request->request->get('nickname'),
-            $oauthUser->accountType => $oauthUser->account,
             'password' => $request->request->get('password'),
+            'mobile' => $oauthUser->account,
+            'avatar' => $oauthUser->avatar,
         );
 
-        $this->getUserService()->register($registerFields, $oauthUser->type, RegisterTypeUtils::getRegisterTypes($registerFields, $oauthUser->type));
+        $this->getUserService()->register($registerFields, array('mobile'));
     }
 
     /**

@@ -16,8 +16,13 @@ abstract class BaseRegister
         $this->biz = $biz;
     }
 
-    public function register($registration, $type)
+    public function register($registration)
     {
+        if (empty($registration['type'])) {
+            $registration['type'] = 'default';
+        }
+        $type = $registration['type'];
+
         $this->validate($registration, $type);
 
         $user = $this->createUser($registration, $type);

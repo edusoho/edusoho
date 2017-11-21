@@ -176,7 +176,7 @@ $btn.click((event) => {
     $btn.button('loading');
     let data = {
       nickname: $('#username').val(),
-      verifiedMobile: $('.js-account').html(),
+      mobile: $('.js-account').html(),
       password: $('#password').val(),
       smsToken: smsToken,
       smsCode: $('#sms-code').val(),

@@ -6,7 +6,7 @@ class OAuthUser implements \Serializable
 {
     const SESSION_KEY = 'oauth_user';
 
-    const MOBILE_TYPE = 'verifiedMobile';
+    const MOBILE_TYPE = 'mobile';
 
     const EMAIL_TYPE = 'email';
 

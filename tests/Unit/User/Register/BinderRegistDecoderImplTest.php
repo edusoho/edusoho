@@ -30,11 +30,12 @@ class BinderRegistDecoderImplTest extends BaseTestCase
             'nickname' => 'hello',
             'password' => '123',
             'token' => array('userId' => 1, 'token' => 'newToken'),
+            'type' => 'qq',
         );
 
         $binderDecoder = $this->getBinderRegistDecoder();
         $binderDecoder->setRegister($this->getEmailRegistDecoder());
-        list($user, $inviteUser) = $binderDecoder->register($registration, 'qq');
+        list($user, $inviteUser) = $binderDecoder->register($registration);
 
         $user = $this->getUserService()->getUser($user['id']);
 

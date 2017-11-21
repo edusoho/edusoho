@@ -28,7 +28,6 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-
             $authUser = $this->getAuthProvider()->register($registration);
 
             if ('default' == $type) {
@@ -38,16 +37,16 @@ class AuthServiceImpl extends BaseService implements AuthService
                     );
                 }
 
+                $registration['type'] = $this->getAuthProvider()->getProviderName();
                 $newUser = $this->getUserService()->register(
                     $registration,
-                    $this->getAuthProvider()->getProviderName(),
-                    RegisterTypeUtils::getRegisterTypes($registration, $type)
+                    RegisterTypeUtils::getRegisterTypes($registration)
                 );
             } else {
+                $registration['type'] = $type;
                 $newUser = $this->getUserService()->register(
                     $registration,
-                    $type,
-                    RegisterTypeUtils::getRegisterTypes($registration, $type)
+                    RegisterTypeUtils::getRegisterTypes($registration)
                 );
 
                 if (!empty($authUser['id'])) {

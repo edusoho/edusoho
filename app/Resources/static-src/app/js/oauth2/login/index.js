@@ -57,7 +57,7 @@ $btn.click((event) => {
   if (validator.form()) {
     $(event.target).button('loading');
     let isEmail = reg_email.test($("input[name='account']").val());
-    type = isEmail ? 'email' : 'verifiedMobile';
+    type = isEmail ? 'email' : 'mobile';
     $('#accountType').val(type);
     $form.submit();
   }
