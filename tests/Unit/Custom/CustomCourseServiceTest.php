@@ -3,11 +3,11 @@
 namespace Tests\Unit\Course;
 
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
 use CustomBundle\Biz\Course\Dao\Impl\CourseDaoImpl;
 use CustomBundle\Biz\Course\Service\Impl\CourseServiceImpl;
-use CustomBundle\Biz\CustomTestCase;
 
-class CustomCourseServiceTest extends CustomTestCase
+class CustomCourseServiceTest extends BaseTestCase
 {
     public function testOverwriteService()
     {

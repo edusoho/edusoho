@@ -4,6 +4,7 @@ namespace Biz;
 
 use Codeages\Biz\Framework\UnitTests\DatabaseDataClearer;
 use Codeages\PluginBundle\Event\LazyDispatcher;
+use CustomBundle\Biz\CustomServiceProvider;
 use Mockery;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
@@ -105,6 +106,7 @@ class BaseTestCase extends TestCase
         $biz['redis'] = self::$redis;
         $biz['migration.directories'] = $oldBiz['migration.directories'];
         $biz['autoload.aliases'] = $oldBiz['autoload.aliases'];
+        $biz->register(new CustomServiceProvider());
 
         $this->biz = $biz;
         $biz['dispatcher'] = function () use ($container, $biz) {
