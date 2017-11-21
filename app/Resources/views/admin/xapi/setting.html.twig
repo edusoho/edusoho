@@ -1,0 +1,40 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_xapi_setting' %}
+
+{% set script_controller='xapi/index' %}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  <form action="{{ path('admin_xapi_setting') }}" method="post" id="xapi-setting-form" class="form-horizontal">
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="enabled">开启xAPI</label>
+      </div>
+      <div class="controls col-md-7 radios">
+        {{ radios('enabled', {1 : '开启', 0 : '关闭'}, xapiSetting.enabled|default(0)) }}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="push_url">设置xAPI地址</label>
+      </div>
+      <div class="spinner col-md-7 controls">
+        <input type="text" id="push_url" name="push_url" class="form-control" value="{{ xapiSetting.push_url|default('') }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-offset-2 col-md-7">
+        <p class="text-muted">默认地址是：http://xapi.qiqiuyu.net</p>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+{% endblock %}

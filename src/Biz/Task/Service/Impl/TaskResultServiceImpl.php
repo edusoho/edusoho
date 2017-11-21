@@ -56,6 +56,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->deleteByTaskId($taskId);
     }
 
+    public function getTaskResult($resultId)
+    {
+        return $this->getTaskResultDao()->get($resultId);
+    }
+
     public function createTaskResult($taskResult)
     {
         ArrayToolkit::requireds($taskResult, array(
