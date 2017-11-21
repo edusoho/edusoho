@@ -10,6 +10,7 @@ const $fetchBtnText = $('.js-fetch-btn-text');
 
 let captchaToken = null;
 let smsToken = null;
+
 let validator = $form.validate({
   rules: {
     username: {
@@ -33,7 +34,7 @@ let validator = $form.validate({
     },
     sms_code: {
       required: true,
-      unsigned_integer: true,
+      rangelength: [6, 6],
     },
     captcha_code: {
       required: true,
@@ -52,6 +53,7 @@ let validator = $form.validate({
   messages: {
     sms_code: {
       required: Translator.trans('site.captcha_code.required'),
+      rangelength: Translator.trans('validate.sms_code.message')
     }
   }
 });
@@ -64,7 +66,7 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
   let params = {
     captchaToken: captchaToken
   }
-  Api.captcha.validate({ data: data, params: params, async: false, promise: false }).done(res => {
+  Api.captcha.validate({ data: data, params: params }).done(res => {
     if (res.status === 'success') {
       isSuccess = true;
     } else if (res.status === 'expired') {
@@ -73,7 +75,6 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
       initCaptchaCode();
     } else {
       isSuccess = false;
-      console.log('表单提交的验证');
       $.validator.messages.captcha_checkout = Translator.trans('图形验证码错误');
       initCaptchaCode();
     }
@@ -89,12 +90,39 @@ $.validator.addMethod('captcha_checkout', function(value, element, param) {
 
 
 const initCaptchaCode = () => {
-  Api.captcha.get({ async: false, promise: false }).done(res => {
+  Api.captcha.get({ data: {} }).done(res => {
     $('#getcode_num').attr('src', res.image);
     captchaToken = res.captchaToken;
   }).error(res => {
     console.log('catch', res.responseJSON.error.message);
   });
+}
+
+
+const showCountDown = () => {
+  $timeLeft.html('10');
+  $fetchBtnText.html(Translator.trans('site.data.get_sms_code_again_btn'));
+  notify('success', Translator.trans('site.data.get_sms_code_success_hint'));
+  refreshTimeLeft();
+}
+
+const refreshTimeLeft = () => {
+  let leftTime = $timeLeft.text();
+  $timeLeft.html(leftTime - 1);
+  if (leftTime - 1 > 0) {
+    $smsCode.attr('disabled', true);
+    setTimeout(refreshTimeLeft, 1000);
+  } else {
+    $timeLeft.html('');
+    $fetchBtnText.html(Translator.trans('site.data.get_sms_code_btn'));
+    $smsCode.removeAttr('disabled');
+  }
+}
+
+
+// 刷新二维码
+window.onload = () => {
+ initCaptchaCode();
 }
 
 $smsCode.click((event) => {
@@ -130,30 +158,6 @@ $smsCode.click((event) => {
   });
 })
 
-const showCountDown = () => {
-  $timeLeft.html('10');
-  $fetchBtnText.html(Translator.trans('site.data.get_sms_code_again_btn'));
-  notify('success', Translator.trans('site.data.get_sms_code_success_hint'));
-  refreshTimeLeft();
-}
-
-const refreshTimeLeft = () => {
-  let leftTime = $timeLeft.text();
-  $timeLeft.html(leftTime - 1);
-  if (leftTime - 1 > 0) {
-    $smsCode.attr('disabled', true);
-    setTimeout(refreshTimeLeft, 1000);
-  } else {
-    $timeLeft.html('');
-    $fetchBtnText.html(Translator.trans('site.data.get_sms_code_btn'));
-    $smsCode.removeAttr('disabled');
-  }
-}
-
-// 刷新二维码
-window.onload = () => {
- initCaptchaCode();
-}
 
 $('#getcode_num').click((event) => {
   initCaptchaCode();
@@ -161,14 +165,21 @@ $('#getcode_num').click((event) => {
 
 // 提交表单
 
+$('#sms-code').focus(() => {
+  $('.js-password-error').remove();
+})
+
 enterSubmit($form, $btn);
 
 $btn.click((event) => {
-  $('#captcha_code').rules('remove', 'captcha_checkout');
   if (validator.form()) {
+    $form.s
+    $btn.button('loading');
     let data = {
-      smsToken: smsToken,
+      nickname: $('#username').val(),
       mobile: $('.js-account').html(),
+      password: $('#password').val(),
+      smsToken: smsToken,
       smsCode: $('#sms-code').val(),
       captchaToken: captchaToken,
       phrase: $('#captcha_code').val()
@@ -179,9 +190,7 @@ $btn.click((event) => {
       if (response.success === 1) {
         window.location.href = response.url;
       } else {
-        $('#captcha_code').rules('add', {
-          captcha_checkout: true
-        });
+        $btn.button('reset');
         if (!$('.js-password-error').length) {
           $btn.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">您输入的短信验证码不正确</p>`);
         }

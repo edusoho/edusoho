@@ -34,7 +34,7 @@
       <input class="form-control" type="password" id="confirmPassword" name="confirmPayPassword" required="required" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
     </div>
 
-    {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+    {% if oauthUser.captchaEnabled %}
       <div class="form-group cd-form-group third-party-captcha-form-group js-captcha">
         <label class="label-required" for="captcha_code">{{'form.captcha_code'|trans}}</label>
         <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
@@ -47,7 +47,7 @@
     {% if oauthUser.accountType == "mobile" %}
       <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">
         <label for="sms_code">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
-        <input class="form-control" type="text" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
+        <input class="form-control" type="number" maxlength="6" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
         <div class="third-part-action-button">
           <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" disabled>
             <span class="js-time-left"></span>
