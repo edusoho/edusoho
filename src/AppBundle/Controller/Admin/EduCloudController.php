@@ -209,8 +209,8 @@ class EduCloudController extends BaseController
             'upload_mode' => 'local',
             'support_mobile' => 0,
             'enable_playback_rates' => 0,
-            'video_quality' => 'low',
-            'video_audio_quality' => 'low',
+            'video_quality' => 'high',
+            'video_audio_quality' => 'high',
             'video_watermark' => 0,
             'video_watermark_image' => '',
             'video_embed_watermark_image' => '',
@@ -228,6 +228,7 @@ class EduCloudController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         } else {
             $storageSetting = array_merge($default, $storageSetting);
+            $this->getSettingService()->set('storage', $storageSetting);
         }
 
         try {
