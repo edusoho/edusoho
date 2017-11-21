@@ -11,12 +11,11 @@ class UserTest extends BaseTestCase
 {
     public function testGetUser()
     {
-        $api = new User(new Container(), $this->getBiz());
-
         $actual = array(
             array('id', 1, 'getUser'),
             array('email', 'test@edusoho.com', 'getUserByEmail'),
             array('mobile', '139250312345', 'getUserByVerifiedMobile'),
+            array('nickname', 'test', 'getUserByNickname'),
         );
 
         $expected = array(
@@ -27,11 +26,13 @@ class UserTest extends BaseTestCase
         );
 
         foreach ($actual as $key => $act) {
+
             $this->mockBiz('User:UserService', array(
-                array('functionName' => $act[2], 'returnValue' => $expected)
+                array('functionName' => $act[2], 'returnValue' => $expected, 'withParams' => array($act[1]))
             ));
 
-            $apiRequest = new ApiRequest('', '', array('identify_type' => $act[0]));
+            $api = new User(new Container(), $this->getBiz());
+            $apiRequest = new ApiRequest('', '', array('identifyType' => $act[0]));
             $result = $api->get($apiRequest, $act[1]);
 
             $this->assertEquals($expected, $result);
