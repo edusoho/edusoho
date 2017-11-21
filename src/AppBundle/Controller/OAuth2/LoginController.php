@@ -79,7 +79,7 @@ class LoginController extends LoginBindController
         $user = $this->getUserByTypeAndAccount($type, $account);
         $oauthUser->accountType = $type;
         $oauthUser->account = $account;
-        $oauthUser->captchaEnabled = $oauthUser->accountType == OAuthUser::MOBILE_TYPE || $oauthUser->captchaEnabled;
+        $oauthUser->captchaEnabled = OAuthUser::MOBILE_TYPE == $oauthUser->accountType || $oauthUser->captchaEnabled;
 
         if ($user) {
             $redirectUrl = $this->generateUrl('oauth2_login_bind_login');
@@ -192,7 +192,7 @@ class LoginController extends LoginBindController
         );
 
         $oauthUser = $this->getOauthUser($request);
-        if ($oauthUser->accountType == OAuthUser::MOBILE_TYPE) {
+        if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
             $smsToken = $request->request->get('smsToken');
             $mobile = $request->request->get(OAuthUser::MOBILE_TYPE);
             $smsCode = $request->request->get('smsCode');
@@ -217,7 +217,7 @@ class LoginController extends LoginBindController
             'authid' => $oauthUser->authid,
         );
 
-        if ($oauthUser->accountType == OAuthUser::MOBILE_TYPE) {
+        if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
             $registerFields['verifiedMobile'] = $oauthUser->account;
         }
 

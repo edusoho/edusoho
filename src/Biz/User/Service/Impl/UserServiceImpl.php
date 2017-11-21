@@ -858,7 +858,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getProfileDao()->create($profile);
 
         if ('default' != $type) {
-            $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
+            $this->bindUser($type, $registration['openId'], $user['id'], $registration['token']);
         }
 
         $this->dispatchEvent('user.registered', new Event($user));
