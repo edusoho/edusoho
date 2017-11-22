@@ -2074,7 +2074,6 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
-        $this->getUserService()->bindUser('renren', 222222, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
         $this->getUserService()->bindUser('weibo', 333333, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
         $userBinds = $this->getUserService()->findBindsByUserId($registeredUser['id']);
         $fromIds = array();
@@ -2084,7 +2083,6 @@ class UserServiceTest extends BaseTestCase
         }
 
         $this->assertContains(111111, $fromIds);
-        $this->assertContains(222222, $fromIds);
         $this->assertContains(333333, $fromIds);
     }
 
@@ -2113,9 +2111,10 @@ class UserServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
-        $this->getUserService()->bindUser('renren', 222222, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
         $this->getUserService()->bindUser('weibo', 333333, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
-        $this->getUserService()->findBindsByUserId(999);
+        $binders = $this->getUserService()->findBindsByUserId(999);
+
+        $this->assertEquals(2, count($binders));
     }
 
     /**
