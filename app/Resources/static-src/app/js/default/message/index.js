@@ -6,3 +6,4 @@ if (duration > 0 && gotoUrl) {
     window.location.href = gotoUrl;
   }, duration);
 }
+
