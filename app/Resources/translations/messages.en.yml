@@ -5818,6 +5818,8 @@ admin.payment_setting.llpay: 'Lianlian Pay'
 admin.payment_setting.llpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.llpay_key: 'Merchant account'
 admin.payment_setting.llpay_secret: 'Business platform Key'
+admin.payment_setting.llpay_public_key: Public Key
+admin.payment_setting.llpay_private_key: Private Key
 admin.payment_setting.quickpay: 'Meeting fubao-quick pay'
 admin.payment_setting.quickpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.quickpay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'

@@ -7327,6 +7327,8 @@ admin.payment_setting.llpay: 连连支付
 admin.payment_setting.llpay_api_application_word: 下载接口申请说明文档
 admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
+admin.payment_setting.llpay_public_key: 公钥
+admin.payment_setting.llpay_private_key: 密钥
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
