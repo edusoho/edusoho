@@ -132,7 +132,7 @@ export default class Create {
       };
       Api.sms.send({ data: data }).then((res) => {
         this.smsToken = res.smsToken;
-        countDown(20);
+        countDown(120);
       }).catch((res) => {
         const code = res.responseJSON.error.code;
         switch(code) {
