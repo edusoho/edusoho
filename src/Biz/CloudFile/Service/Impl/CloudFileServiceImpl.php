@@ -295,8 +295,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
         $materialGlobalIds = $files ? ArrayToolkit::column($files, 'globalId') : $nos;
+        $materialGlobalIds = empty($globalIds) ? $materialGlobalIds : array_intersect($globalIds, $materialGlobalIds);
 
-        return empty($globalIds) ? $materialGlobalIds : array_intersect($globalIds, $materialGlobalIds);
+        return empty($materialGlobalIds) ? $nos : $materialGlobalIds;
     }
 
     protected function findGlobalIdsByNickname($nickname, $globalIds)
