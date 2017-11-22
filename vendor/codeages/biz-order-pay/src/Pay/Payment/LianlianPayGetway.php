@@ -109,19 +109,6 @@ class LianlianPayGetway extends AbstractGetway
     protected function signParams($params, $options)
     {
         return SignatureToolkit::signParams($params, $options);
-        // ksort($params);
-        // $sign = '';
-        // foreach ($params as $key => $value) {
-        //     if (empty($value)) {
-        //         continue;
-        //     }
-
-        //     $sign .= $key.'='.$value.'&';
-        // }
-
-        // $setting = $this->getSetting();
-        // $sign .= 'key='.$setting['secret'];
-        // return md5($sign);
     }
 
     protected function convertParams($params)
