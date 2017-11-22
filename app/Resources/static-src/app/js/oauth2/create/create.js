@@ -107,8 +107,12 @@ export default class Create {
   }
 
   initCaptchaCode() {
+    const $getCodeNum = $('#getcode_num');
+    if (!$getCodeNum.length) {
+      return;
+    }
     Api.captcha.get({ async: false, promise: false }).done(res => {
-    $('#getcode_num').attr('src', res.image);
+    $getCodeNum.attr('src', res.image);
       this.captchaToken = res.captchaToken;
     }).error(res => {
       console.log('catch', res.responseJSON.error.message);
@@ -158,9 +162,6 @@ export default class Create {
 
   changeCaptchaCode() {
     const $getCodeNum = $('#getcode_num');
-    if (!$getCodeNum.length) {
-      return;
-    }
     $getCodeNum.click(() => {
       this.initCaptchaCode();
     });
