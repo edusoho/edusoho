@@ -3,7 +3,6 @@
 namespace Tests\Unit\CloudFile;
 
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
 use Mockery;
 use QiQiuYun\SDK\Service\ResourceService;
 
@@ -28,7 +27,7 @@ class CloudFileServiceTest extends BaseTestCase
         $this->assertEquals(2, count($result['data']));
         $this->assertEquals(2, count($result['createdUsers']));
 
-        $conditions = array('useStatus' => 'unUsed','no' => '56b1b123fe5847719b7234d96ba8af69');
+        $conditions = array('useStatus' => 'unUsed', 'no' => '56b1b123fe5847719b7234d96ba8af69');
         $result = $this->getCloudFileService()->search($conditions, 0, 5);
         $this->assertEquals(2, count($result['data']));
         $this->assertEquals(2, count($result['createdUsers']));
@@ -98,11 +97,11 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getFileByGlobalId',
-                    'returnValue' => array('id'=>1,'no'=>'56b1b123fe5847719b7234d96ba8af69','createdUserId' => 1),
+                    'returnValue' => array('id' => 1, 'no' => '56b1b123fe5847719b7234d96ba8af69', 'createdUserId' => 1),
                 ),
                 array(
                     'functionName' => 'update',
-                    'returnValue' => array()
+                    'returnValue' => array(),
                 ),
             )
         );
@@ -143,12 +142,12 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getFileByGlobalId',
-                    'returnValue' => array('id'=>1,'no'=>'56b1b123fe5847719b7234d96ba8af69','createdUserId' => 1),
+                    'returnValue' => array('id' => 1, 'no' => '56b1b123fe5847719b7234d96ba8af69', 'createdUserId' => 1),
                 ),
                 array(
                     'functionName' => 'deleteFile',
-                    'returnValue' => true
-                )
+                    'returnValue' => true,
+                ),
             )
         );
 
@@ -164,12 +163,12 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getFileByGlobalId',
-                    'returnValue' => array('id'=>1,'no'=>'56b1b123fe5847719b7234d96ba8af69','createdUserId' => 1),
+                    'returnValue' => array('id' => 1, 'no' => '56b1b123fe5847719b7234d96ba8af69', 'createdUserId' => 1),
                 ),
                 array(
                     'functionName' => 'deleteFile',
-                    'returnValue' => true
-                )
+                    'returnValue' => true,
+                ),
             )
         );
 
@@ -228,7 +227,7 @@ class CloudFileServiceTest extends BaseTestCase
     public function testReconvertFileEmpty()
     {
         $this->_mockCloudFileImplementor();
-        
+
         $this->mockBiz(
             'File:UploadFileService',
             array(
@@ -279,47 +278,47 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'search',
-                    'returnValue' => array('data'=>array(array('id'=>1,'no'=>'fbb5c6ef413f4cbbb425d70793a23703'),array('id'=>2,'no'=>'56b1b123fe5847719b7234d96ba8af69'))),
+                    'returnValue' => array('data' => array(array('id' => 1, 'no' => 'fbb5c6ef413f4cbbb425d70793a23703'), array('id' => 2, 'no' => '56b1b123fe5847719b7234d96ba8af69'))),
                 ),
                 array(
                     'functionName' => 'updateFile',
-                    'returnValue' => array('id' => 1, 'name' => 'updateName','no' => '56b1b123fe5847719b7234d96ba8af69','tags' => 'tag1')
+                    'returnValue' => array('id' => 1, 'name' => 'updateName', 'no' => '56b1b123fe5847719b7234d96ba8af69', 'tags' => 'tag1'),
                 ),
                 array(
                     'functionName' => 'deleteFile',
-                    'returnValue' => true
+                    'returnValue' => true,
                 ),
                 array(
                     'functionName' => 'getFileByGlobalId',
-                    'returnValue' => array('id'=>1,'no'=>'fbb5c6ef413f4cbbb425d70793a23703')
+                    'returnValue' => array('id' => 1, 'no' => 'fbb5c6ef413f4cbbb425d70793a23703'),
                 ),
                 array(
                     'functionName' => 'player',
-                    'returnValue' => array('player'=>'video')
+                    'returnValue' => array('player' => 'video'),
                 ),
                 array(
                     'functionName' => 'download',
-                    'returnValue' => array('url'=>'http://demo.edusoho.com')
+                    'returnValue' => array('url' => 'http://demo.edusoho.com'),
                 ),
                 array(
                     'functionName' => 'reconvert',
-                    'returnValue' => ''
+                    'returnValue' => '',
                 ),
                 array(
                     'functionName' => 'getFile',
-                    'returnValue' => array('id'=>1,'no'=>'fbb5c6ef413f4cbbb425d70793a23703')
+                    'returnValue' => array('id' => 1, 'no' => 'fbb5c6ef413f4cbbb425d70793a23703'),
                 ),
                 array(
                     'functionName' => 'getDefaultHumbnails',
-                    'returnValue' => array('no'=>'123','url'=>'http://demo.edusoho.com')
+                    'returnValue' => array('no' => '123', 'url' => 'http://demo.edusoho.com'),
                 ),
                 array(
                     'functionName' => 'getThumbnail',
-                    'returnValue' => array('no'=>'123','url'=>'http://demo.edusoho.com','status'=>'success')
+                    'returnValue' => array('no' => '123', 'url' => 'http://demo.edusoho.com', 'status' => 'success'),
                 ),
                 array(
                     'functionName' => 'getStatistics',
-                    'returnValue' => array('storage'=>array(),'video'=>array())
+                    'returnValue' => array('storage' => array(), 'video' => array()),
                 ),
             )
         );
@@ -336,15 +335,15 @@ class CloudFileServiceTest extends BaseTestCase
                 ),
                 array(
                     'functionName' => 'searchFiles',
-                    'returnValue' => array(array('id'=>1,'globalId' => 'fbb5c6ef413f4cbbb425d70793a23703','createdUserId'=>1,'processStatus' => 'none'),array('id'=>2,'globalId'=>'56b1b123fe5847719b7234d96ba8af69', 'createdUserId'=>2,'processStatus' => 'success')),
+                    'returnValue' => array(array('id' => 1, 'globalId' => 'fbb5c6ef413f4cbbb425d70793a23703', 'createdUserId' => 1, 'processStatus' => 'none'), array('id' => 2, 'globalId' => '56b1b123fe5847719b7234d96ba8af69', 'createdUserId' => 2, 'processStatus' => 'success')),
                 ),
                 array(
                     'functionName' => 'getFileByGlobalId',
-                    'returnValue' => array('id'=>1,'no'=>'56b1b123fe5847719b7234d96ba8af69','createdUserId' => 1),
+                    'returnValue' => array('id' => 1, 'no' => '56b1b123fe5847719b7234d96ba8af69', 'createdUserId' => 1),
                 ),
                 array(
                     'functionName' => 'findFilesByIds',
-                    'returnValue' => array(array('id'=>1,'globalId'=>'56b1b123fe5847719b7234d96ba8af69'),array('id'=>2,'globalId'=>'56b1b123fe5847719b7234d96ba8af69')),
+                    'returnValue' => array(array('id' => 1, 'globalId' => '56b1b123fe5847719b7234d96ba8af69'), array('id' => 2, 'globalId' => '56b1b123fe5847719b7234d96ba8af69')),
                 ),
             )
         );
@@ -357,12 +356,12 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'findUsersByIds',
-                    'returnValue' => array(array('id'=>1,'nickname'=>'user1'),array('id'=>2,'nickname'=>'user2')),
+                    'returnValue' => array(array('id' => 1, 'nickname' => 'user1'), array('id' => 2, 'nickname' => 'user2')),
                 ),
                 array(
                     'functionName' => 'searchUsers',
-                    'returnValue' => array(array('id'=>1,'nickname'=>'user1'),array('id'=>2,'nickname'=>'user2')),
-                )
+                    'returnValue' => array(array('id' => 1, 'nickname' => 'user1'), array('id' => 2, 'nickname' => 'user2')),
+                ),
             )
         );
     }
@@ -374,7 +373,7 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'findByTagId',
-                    'returnValue' => array(array('id'=>1,'fileId'=>1,'tagId'=>1)),
+                    'returnValue' => array(array('id' => 1, 'fileId' => 1, 'tagId' => 1)),
                     'withParams' => array(1),
                 ),
             )
@@ -388,7 +387,7 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'findCourseSetsLikeTitle',
-                    'returnValue' => array(array('id'=>1)),
+                    'returnValue' => array(array('id' => 1)),
                 ),
             )
         );
@@ -401,7 +400,7 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'searchMaterials',
-                    'returnValue' => array(array('id'=>1)),
+                    'returnValue' => array(array('id' => 1)),
                 ),
             )
         );
