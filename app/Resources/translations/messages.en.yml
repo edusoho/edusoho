@@ -2263,6 +2263,7 @@ user.oauth.register.user_service_protocol: 用户服务协议
 user.oauth.register_account: 创建账号
 user.oauth.register_success: 注册成功
 user.oauth.register_account_success: 账号注册成功
+user.oauth.register.closed: 注册已关闭，请联系管理员
 
 user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'

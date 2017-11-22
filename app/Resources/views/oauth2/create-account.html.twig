@@ -7,61 +7,68 @@
 
 {% block panel_body %}
 
-  {% if oauthUser.accountType == "email" %} {% set accountType = 'user.oauth.login_by_email'|trans %}{% else %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% endif %}
+  {% if oauthUser.mode != 'closed' %}
 
-  <div class="text-center cd-mb32">
-    <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
-  </div>
-  <div class="text-center cd-mb32">
-    <div class="third-party-bind-tip">{{ 'user.oauth.register_account_by_ways'|trans({ '%accountType%': accountType }) }}</div>
-    <div class="third-party-user color-primary js-account">{{ oauthUser.account }}</div>
-  </div>
+    {% if oauthUser.accountType == "email" %} {% set accountType = 'user.oauth.login_by_email'|trans %}{% else %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% endif %}
 
-  <form class="third-party-form clearfix" id="third-party-create-account-form" method="post">
-
-    <div class="form-group cd-form-group">
-      <label class="third-party-form__label" for="username">{{ 'user.register.username_label'|trans }}</label>
-      <input class="form-control" type="text" id="username" name="username" placeholder="{{ 'user.oauth.register.nickname_placeholder'|trans }}" data-url="{{ path('register_nickname_check') }}" value="{{ oauthUser.name }}">
+    <div class="text-center cd-mb32">
+      <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
+    </div>
+    <div class="text-center cd-mb32">
+      <div class="third-party-bind-tip">{{ 'user.oauth.register_account_by_ways'|trans({ '%accountType%': accountType }) }}</div>
+      <div class="third-party-user color-primary js-account">{{ oauthUser.account }}</div>
     </div>
 
-    <div class="form-group cd-form-group">
-      <label class="third-party-form__label" for="password">{{ 'user.register.password_label'|trans }}</label>
-      <input class="form-control" type="password" id="password" name="password" placeholder="{{ 'user.oauth.register.password__placeholder'|trans }}">
-    </div>
+    <form class="third-party-form clearfix" id="third-party-create-account-form" method="post">
 
-    <div class="form-group cd-form-group">
-      <label class="third-party-form__label" for="confirmPassword">{{ 'user.oauth.register.confirm_password_label'|trans }}</label>
-      <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
-    </div>
-
-    {% if oauthUser.captchaEnabled %}
-      <div class="form-group cd-form-group third-party-captcha-form-group js-captcha">
-        <label class="third-party-form__label" for="captcha_code">{{'form.captcha_code'|trans}}</label>
-        <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
-        <div class="third-party-captcha">
-          <img class="third-party-captcha__img" src="{{ asset('static-dist/app/img/captcha.png') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}">
-        </div>
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="username">{{ 'user.register.username_label'|trans }}</label>
+        <input class="form-control" type="text" id="username" name="username" placeholder="{{ 'user.oauth.register.nickname_placeholder'|trans }}" data-url="{{ path('register_nickname_check') }}" value="{{ oauthUser.name }}">
       </div>
-    {% endif %}
 
-    {% if oauthUser.accountType == "mobile" %}
-      <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">
-        <label for="sms_code">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
-        <input class="form-control" type="text" maxlength="6" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
-        <div class="third-part-action-button">
-          <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" disabled>
-            <span class="js-time-left"></span>
-            <span class="js-fetch-btn-text">{{ 'user.oauth.register.send_sms'|trans }}</span>
-          </button>
-        </div>
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="password">{{ 'user.register.password_label'|trans }}</label>
+        <input class="form-control" type="password" id="password" name="password" placeholder="{{ 'user.oauth.register.password__placeholder'|trans }}">
       </div>
-    {% endif %}
 
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_create') }}">{{ 'user.oauth.register.agree_terms'|trans }}</button>
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="confirmPassword">{{ 'user.oauth.register.confirm_password_label'|trans }}</label>
+        <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
+      </div>
 
-    <span class="pull-left third-party-link">{{ 'user.oauth.register.read_detail'|trans }}<a href="{{ path('user_terms') }}" target="_blank">《{{'user.oauth.register.user_service_protocol'|trans}}》</a></span>
-    <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+      {% if oauthUser.captchaEnabled %}
+        <div class="form-group cd-form-group third-party-captcha-form-group js-captcha">
+          <label class="third-party-form__label" for="captcha_code">{{'form.captcha_code'|trans}}</label>
+          <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
+          <div class="third-party-captcha">
+            <img class="third-party-captcha__img" src="{{ asset('static-dist/app/img/captcha.png') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}">
+          </div>
+        </div>
+      {% endif %}
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </form>
+      {% if oauthUser.accountType == "mobile" %}
+        <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">
+          <label for="sms_code">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
+          <input class="form-control" type="text" maxlength="6" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
+          <div class="third-part-action-button">
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" disabled>
+              <span class="js-time-left"></span>
+              <span class="js-fetch-btn-text">{{ 'user.oauth.register.send_sms'|trans }}</span>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+
+      <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_create') }}">{{ 'user.oauth.register.agree_terms'|trans }}</button>
+
+      <span class="pull-left third-party-link">{{ 'user.oauth.register.read_detail'|trans }}<a href="{{ path('user_terms') }}" target="_blank">《{{'user.oauth.register.user_service_protocol'|trans}}》</a></span>
+      <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+
+  {% else %}
+    <h1 class="text-center cd-text-gray-dark">{{ 'user.oauth.register.closed'|trans }}</h1>
+  {% endif %}
+
 {% endblock %}
