@@ -162,6 +162,9 @@ export default class Create {
 
   changeCaptchaCode() {
     const $getCodeNum = $('#getcode_num');
+    if (!$getCodeNum.length) {
+      return;
+    }
     $getCodeNum.click(() => {
       this.initCaptchaCode();
     });
