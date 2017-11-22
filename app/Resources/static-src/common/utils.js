@@ -103,6 +103,16 @@ const arrayToJson = (formArray) => {
   return dataArray;
 }
 
+
+const enterSubmit = ($formDom, $btnDom) => {
+  $formDom.keypress((e) => {
+    if (e.which == 13) {
+      $btnDom.trigger('click');
+      e.preventDefault();
+    }
+  });
+}
+
 export {
   Browser,
   isLogin,
@@ -113,5 +123,6 @@ export {
   sec2Time,
   time2Sec,
   arrayToJson,
-  isEmpty
+  isEmpty,
+  enterSubmit
 };

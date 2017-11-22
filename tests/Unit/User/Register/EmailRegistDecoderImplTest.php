@@ -95,7 +95,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
             'idcard' => '1231123',
             'truename' => '陈列',
         );
-        $this->getEmailRegistDecoder()->register($registration, 'default');
+        $this->getEmailRegistDecoder()->register($registration);
     }
 
     protected function getEmailRegistDecoder()

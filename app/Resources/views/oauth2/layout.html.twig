@@ -1,0 +1,22 @@
+{% import "macro.html.twig" as web_macro %}
+{% extends 'v2/layout.html.twig' %}
+
+{% block full_content %}
+  <div class="cd-login-section">
+    <div class="cd-panel third-party-panel">
+      {% block panel %}
+        <div class="cd-panel-heading third-party-panel__heading">
+          {% block panel_heading %}
+            <div class="cd-panel-title">
+              {% block page_title %}{% endblock %}
+            </div>
+          {% endblock %}
+        </div>
+        <div class="cd-panel-body third-party-panel__body">
+          {% block panel_body %}
+          {% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
