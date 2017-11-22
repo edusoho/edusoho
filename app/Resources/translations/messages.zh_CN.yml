@@ -2800,6 +2800,9 @@ user.register.emaill_not_useful_tips: >
   <h5>原邮箱已失效？</h5>
   <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
 user.register.service_protocol: 服务协议
+user.register.agree_terms: 同意服务协议并注册
+user.register.read_detail: 请详细阅读
+user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
 user.register.reset_email.origin_email: 原邮箱地址:
 user.register.reset_email.school_login_password: 网校密码：
@@ -2862,12 +2865,11 @@ user.oauth.register.input_sms_code_tips: 输入验证码
 user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
 user.oauth.register.send_sms: 发送验证
 user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
-user.oauth.register.agree_terms: 同意服务协议并注册
-user.oauth.register.read_detail: 请详细阅读
-user.oauth.register.user_service_protocol: 用户服务协议
 user.oauth.register_account: 创建账号
 user.oauth.register_success: 注册成功
 user.oauth.register_account_success: 账号注册成功
+user.oauth.page.closed: 秒后该页面自动关闭
+user.oauth.register.closed: 注册已关闭，请联系管理员
 
 # 用户个人设置
 user.settings: 个人设置

@@ -12,7 +12,7 @@
   </div>
 
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser.avatar) }}">
+    <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
   </div>
 
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
@@ -39,4 +39,5 @@
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
+  <input class="js-third-party-type" type="hidden" name="mode" data-type="{{ oauthUser.mode }}">
 {% endblock %}

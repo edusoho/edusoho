@@ -700,6 +700,7 @@ validate.user_terms.message: Check to agree to this service agreement in order t
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
+validate.mobile_or_email_message: 请输入正确的手机／邮箱
 
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
