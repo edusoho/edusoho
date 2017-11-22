@@ -465,9 +465,6 @@ class LoginBindController extends BaseController
             case 'qq':
                 return 'QQ注册帐号';
                 break;
-            case 'renren':
-                return '人人注册帐号';
-                break;
             default:
                 return '';
         }
@@ -485,9 +482,6 @@ class LoginBindController extends BaseController
                 break;
             case 'qq':
                 return 'QQ绑定已有帐号';
-                break;
-            case 'renren':
-                return '人人绑定已有帐号';
                 break;
             default:
                 return '';

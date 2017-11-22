@@ -292,7 +292,6 @@ user.not_login.tips: >
   <a href='%login%'>登录或</a>
   <a href='%register%'>注册！</a>
 user.approve_tips: 温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！
-user.email_tips: 为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
 user.approved: 已认证
 user.approving: 实名认证中
 user.mobile_bind: 已绑定
@@ -5618,7 +5617,6 @@ admin.operation_analysis.register.web_mobile: 网站手机注册
 admin.operation_analysis.register.web_email: 网站邮箱注册
 admin.operation_analysis.register.weibo: 新浪微博
 admin.operation_analysis.register.qq: QQ
-admin.operation_analysis.register.renren: 人人
 admin.operation_analysis.register.discuz: discuz
 admin.operation_analysis.register.phpwind: phpwind
 admin.operation_analysis.register.weixin: 微信
