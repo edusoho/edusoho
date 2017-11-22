@@ -15,8 +15,8 @@ class SmsServiceImpl extends BaseService implements SmsService
     {
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
 
-        if ((isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
-            && (isset($cloudSmsSetting[$smsType])) && ($cloudSmsSetting[$smsType] == 'on')) {
+        if ((isset($cloudSmsSetting['sms_enabled'])) && ('1' == $cloudSmsSetting['sms_enabled'])
+            && (isset($cloudSmsSetting[$smsType])) && ('on' == $cloudSmsSetting[$smsType])) {
             return true;
         }
 
@@ -65,7 +65,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $this->checkSmsType($smsType, $currentUser);
 
         if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
-            if ($smsType == 'sms_bind') {
+            if ('sms_bind' == $smsType) {
                 $description = '手机绑定';
             } else {
                 $description = '用户注册';
@@ -82,7 +82,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             }
         }
 
-        if ($smsType == 'sms_forget_password') {
+        if ('sms_forget_password' == $smsType) {
             $description = '登录密码重置';
             $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
@@ -90,7 +90,7 @@ class SmsServiceImpl extends BaseService implements SmsService
                 throw new ServiceException('用户不存在');
             }
 
-            if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
+            if ((!isset($targetUser['verifiedMobile']) || (0 == strlen($targetUser['verifiedMobile'])))) {
                 throw new ServiceException('用户没有被绑定的手机号');
             }
 
@@ -101,13 +101,13 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
-            if ($smsType == 'sms_user_pay') {
+            if ('sms_user_pay' == $smsType) {
                 $description = '网站余额支付';
             } else {
                 $description = '支付密码重置';
             }
 
-            if ((!isset($currentUser['verifiedMobile']) || (strlen($currentUser['verifiedMobile']) == 0))) {
+            if ((!isset($currentUser['verifiedMobile']) || (0 == strlen($currentUser['verifiedMobile'])))) {
                 throw new ServiceException('用户没有被绑定的手机号');
             }
 
@@ -118,7 +118,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $to = $currentUser['verifiedMobile'];
         }
 
-        if ($smsType == 'system_remind') {
+        if ('system_remind' == $smsType) {
             $description = '直播公开课';
         }
 
@@ -140,7 +140,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $result['smsCode'] = $smsCode;
         $result['userId'] = $currentUser['id'];
 
-        if ($currentUser['id'] != 0) {
+        if (0 != $currentUser['id']) {
             $result['nickname'] = $currentUser['nickname'];
         }
 
@@ -156,11 +156,11 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     public function checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode)
     {
-        if (strlen($actualSmsCode) == 0 || strlen($expectedSmsCode) == 0) {
+        if (0 == strlen($actualSmsCode) || 0 == strlen($expectedSmsCode)) {
             $result = array('success' => false, 'message' => '验证码错误');
         }
 
-        if ($actualMobile != '' && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
+        if ('' != $actualMobile && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
             return array('success' => false, 'message' => '验证码和手机号码不匹配');
         }
 
@@ -186,7 +186,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         $smsSetting = $this->getSettingService()->get('cloud_sms', array());
 
-        if (!empty($smsSetting["{$smsType}"]) && $smsSetting["{$smsType}"] != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
+        if (!empty($smsSetting["{$smsType}"]) && 'on' != $smsSetting["{$smsType}"] && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
     }
@@ -209,7 +209,7 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function isNeedWaiting($smsLastTime, $currentTime, $allowedTime = 120)
     {
-        if (strlen($smsLastTime) == 0) {
+        if (0 == strlen($smsLastTime)) {
             return false;
         }
         if (($currentTime - $smsLastTime) < $allowedTime) {

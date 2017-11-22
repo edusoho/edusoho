@@ -269,7 +269,7 @@ class LoginBindController extends BaseController
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
         }
-        
+
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->switchUser($request, $currentUser);

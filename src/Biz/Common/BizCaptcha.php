@@ -50,7 +50,7 @@ class BizCaptcha extends BizAware
             return self::STATUS_EXPIRED;
         }
 
-        return $phrase == $token['data']['phrase'] ? self::STATUS_SUCCESS : self::STATUS_INVALID;
+        return $token['data']['phrase'] == $phrase ? self::STATUS_SUCCESS : self::STATUS_INVALID;
     }
 
     public function setCaptchaBuilder($captchaBuilder)
