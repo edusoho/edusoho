@@ -9,4 +9,4 @@ const enterSubmit = ($formDom, $btnDom) => {
 
 export {
   enterSubmit
-}
+};

@@ -30,7 +30,7 @@
       <label class="third-party-form__label" for="password">{{ 'user.oauth.web_account_password'|trans }}</label>
       <input class="form-control" type="password" id="password" name="password">
     </div>
-    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button">{{ 'user.oauth.bind_account_and_go_continue'|trans }}</button>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="submit">{{ 'user.oauth.bind_account_and_go_continue'|trans }}</button>
     <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_other_account'|trans }}</a>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
