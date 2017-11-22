@@ -1,4 +1,4 @@
-import { enterSubmit } from 'common/form';
+import { enterSubmit } from 'app/common/form';
 import notify from 'common/notify';
 import { countDown } from './count-down';
 import Api from 'common/api';

@@ -1,4 +1,4 @@
-import { enterSubmit } from 'common/form';
+import { enterSubmit } from 'app/common/form';
 
 const $form = $('#third-party-bind-form');
 const $btn = $('.js-submit-btn');
