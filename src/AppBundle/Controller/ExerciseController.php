@@ -30,7 +30,7 @@ class ExerciseController extends BaseController
 
         $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
-        if ($result['status'] == 'doing') {
+        if ('doing' == $result['status']) {
             return $this->redirect($this->generateUrl('exercise_show', array(
                 'resultId' => $result['id'],
             )));
@@ -123,7 +123,7 @@ class ExerciseController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.exercise_cannot_submit_answer.message'));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
@@ -139,7 +139,7 @@ class ExerciseController extends BaseController
     protected function getActureQuestionNum($questions)
     {
         return array_reduce($questions, function ($count, $question) {
-            if ($question['type'] == 'material' && isset($question['subs'])) {
+            if ('material' == $question['type'] && isset($question['subs'])) {
                 $count += count($question['subs']);
             } else {
                 $count += 1;
@@ -154,12 +154,12 @@ class ExerciseController extends BaseController
         usort($questions, function ($a, $b) use ($order) {
             $pos_a = array_search($a['id'], $order);
             $pos_b = array_search($b['id'], $order);
+
             return $pos_a - $pos_b;
         });
 
         return $questions;
     }
-
 
     /**
      * @return TestpaperService
