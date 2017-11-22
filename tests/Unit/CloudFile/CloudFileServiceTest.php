@@ -186,8 +186,9 @@ class CloudFileServiceTest extends BaseTestCase
         $this->assertEquals('fbb5c6ef413f4cbbb425d70793a23703', $result['no']);
     }
 
-    public function testPlayer()
+    /*public function testPlayer()
     {
+        $this->_mockCloudFileImplementor();
         $this->mockBiz(
             'System:SettingService',
             array(
@@ -198,10 +199,77 @@ class CloudFileServiceTest extends BaseTestCase
             )
         );
 
-        $mockObject = Mockery::mock($api);
-        $mockObject->shouldReceive('delete')->times(1)->andReturn(array('success' => true));
+        $mockObject = Mockery::mock('ResourceService');
+        $mockObject->shouldReceive('generatePlayToken')->times(1)->andReturn('456789');
 
-        $result = $this->getCloudFileService()->player($globalId, $ssl = false);
+        $result = $this->getCloudFileService()->player('fbb5c6ef413f4cbbb425d70793a23703', $ssl = false);
+
+        $this->assertEquals('video', $result['player']);
+        $this->assertEquals('456789', $result['token']);
+    }*/
+
+    public function testDownload()
+    {
+        $this->_mockCloudFileImplementor();
+        $result = $this->getCloudFileService()->download('fbb5c6ef413f4cbbb425d70793a23703');
+
+        $this->assertArrayHasKey('url', $result);
+    }
+
+    public function testReconvertFileExist()
+    {
+        $this->_mockCloudFileImplementor();
+        $this->_mockUploadFileService();
+        $result = $this->getCloudFileService()->reconvert('fbb5c6ef413f4cbbb425d70793a23703', $options = array());
+
+        $this->assertArrayHasKey('no', $result);
+    }
+
+    public function testReconvertFileEmpty()
+    {
+        $this->_mockCloudFileImplementor();
+        
+        $this->mockBiz(
+            'File:UploadFileService',
+            array(
+                array(
+                    'functionName' => 'getFileByGlobalId',
+                    'returnValue' => array(),
+                ),
+            )
+        );
+
+        $result = $this->getCloudFileService()->reconvert('fbb5c6ef413f4cbbb425d70793a23703', $options = array());
+
+        $this->assertArrayHasKey('no', $result);
+    }
+
+    public function testGetDefaultHumbnails()
+    {
+        $this->_mockCloudFileImplementor();
+        $result = $this->getCloudFileService()->getDefaultHumbnails('fbb5c6ef413f4cbbb425d70793a23703');
+
+        $this->assertArrayHasKey('no', $result);
+        $this->assertArrayHasKey('url', $result);
+    }
+
+    public function testGetThumbnail()
+    {
+        $this->_mockCloudFileImplementor();
+        $result = $this->getCloudFileService()->getThumbnail('fbb5c6ef413f4cbbb425d70793a23703', array());
+
+        $this->assertArrayHasKey('no', $result);
+        $this->assertArrayHasKey('url', $result);
+        $this->assertArrayHasKey('status', $result);
+    }
+
+    public function testGetStatistics()
+    {
+        $this->_mockCloudFileImplementor();
+        $result = $this->getCloudFileService()->getStatistics($options = array());
+
+        $this->assertArrayHasKey('storage', $result);
+        $this->assertArrayHasKey('video', $result);
     }
 
     private function _mockCloudFileImplementor()
@@ -222,12 +290,36 @@ class CloudFileServiceTest extends BaseTestCase
                     'returnValue' => true
                 ),
                 array(
-                    'functionName' => 'getByGlobalId',
+                    'functionName' => 'getFileByGlobalId',
                     'returnValue' => array('id'=>1,'no'=>'fbb5c6ef413f4cbbb425d70793a23703')
                 ),
                 array(
                     'functionName' => 'player',
                     'returnValue' => array('player'=>'video')
+                ),
+                array(
+                    'functionName' => 'download',
+                    'returnValue' => array('url'=>'http://demo.edusoho.com')
+                ),
+                array(
+                    'functionName' => 'reconvert',
+                    'returnValue' => ''
+                ),
+                array(
+                    'functionName' => 'getFile',
+                    'returnValue' => array('id'=>1,'no'=>'fbb5c6ef413f4cbbb425d70793a23703')
+                ),
+                array(
+                    'functionName' => 'getDefaultHumbnails',
+                    'returnValue' => array('no'=>'123','url'=>'http://demo.edusoho.com')
+                ),
+                array(
+                    'functionName' => 'getThumbnail',
+                    'returnValue' => array('no'=>'123','url'=>'http://demo.edusoho.com','status'=>'success')
+                ),
+                array(
+                    'functionName' => 'getStatistics',
+                    'returnValue' => array('storage'=>array(),'video'=>array())
                 ),
             )
         );
