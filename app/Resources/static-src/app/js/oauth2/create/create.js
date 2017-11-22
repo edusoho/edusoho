@@ -1,4 +1,4 @@
-import { enterSubmit } from 'common/utils';
+import { enterSubmit } from 'common/form';
 import notify from 'common/notify';
 import { countDown } from './count-down';
 import Api from 'common/api';
@@ -12,6 +12,10 @@ export default class Create {
     this.captchaToken = null;
     this.smsToken = null;
 
+    this.init();
+  }
+
+  init() {
     this.initCaptchaCode();
     this.initValidator();
     this.changeCaptchaCode();
