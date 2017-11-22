@@ -19,6 +19,7 @@ const validateMode = {
     rules: {
       account: {
         required: true,
+        maxlength: 32,
         email: true,
       },
     },
@@ -30,6 +31,7 @@ const validateMode = {
     rules: {
       account: {
         required: true,
+        maxlength: 32,
         email_or_mobile_check: true,
       },
     },
