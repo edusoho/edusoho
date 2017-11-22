@@ -28,41 +28,18 @@ class LoginController extends LoginBindController
         $openid = $request->query->get('openid');
         $type = $request->query->get('type');
         $os = $request->query->get('os');
+        $appid = $request->query->get('appid');
 
         if (!in_array($os, array('iOS', 'Android'))) {
             throw $this->createNotFoundException();
         }
 
         $client = $this->createOAuthClient($type);
-        $oUser = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $openid));
+        $oUser = $client->getUserInfo($client->makeToken($type, $accessToken, $openid, $appid));
 
         $this->storeOauthUserToSession($request, $oUser, $type, $os);
 
         return $this->redirect($this->generateUrl('oauth2_login_index'));
-    }
-
-    private function makeFakeToken($type, $accessToken, $openid)
-    {
-        switch ($type) {
-            case 'weibo':
-                $token = array(
-                    'uid' => $openid,
-                    'access_token' => $accessToken,
-                );
-                break;
-            case 'qq':
-            case 'weixinmob':
-            case 'weixinweb':
-                $token = array(
-                    'openid' => $openid,
-                    'access_token' => $accessToken,
-                );
-                break;
-            default:
-                throw new BadRequestHttpException('Bad type');
-        }
-
-        return $token;
     }
 
     public function bindAccountAction(Request $request)

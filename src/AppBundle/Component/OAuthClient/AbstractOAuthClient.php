@@ -17,6 +17,36 @@ abstract class AbstractOAuthClient
         $this->config = $config;
     }
 
+    public function makeToken($type, $accessToken, $openid, $appid = '')
+    {
+        switch ($type) {
+            case 'weibo':
+                $token = array(
+                    'uid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            case 'qq':
+                $token = array(
+                    'openid' => $openid,
+                    'access_token' => $accessToken,
+                    'key' => $appid
+                );
+                break;
+            case 'weixinmob':
+            case 'weixinweb':
+                $token = array(
+                    'openid' => $openid,
+                    'access_token' => $accessToken,
+                );
+                break;
+            default:
+                throw new \InvalidArgumentException('Bad type');
+        }
+
+        return $token;
+    }
+
     abstract public function getAuthorizeUrl($callbackUrl);
 
     abstract public function getAccessToken($code, $callbackUrl);

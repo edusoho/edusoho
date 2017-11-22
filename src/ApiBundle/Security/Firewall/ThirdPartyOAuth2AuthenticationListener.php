@@ -19,7 +19,7 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
             && ($openid = $request->request->get('openid'))
             && ($type = $request->request->get('type'))) {
             $client = $this->createOAuthClient($type);
-            $thirdPartyUser = $client->getUserInfo($this->makeFakeToken($type, $accessToken, $openid));
+            $thirdPartyUser = $client->getUserInfo($client->makeToken($type, $accessToken, $openid, $request->request->get('appid')));
             $this->getUserTokenFromAccessToken($request, $thirdPartyUser, $type);
 
             return;
@@ -35,34 +35,6 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
         }
 
         return null;
-    }
-
-    private function makeFakeToken($type, $accessToken, $openid)
-    {
-        switch ($type) {
-            case 'weibo':
-                $token = array(
-                    'uid' => $openid,
-                    'access_token' => $accessToken,
-                );
-                break;
-            case 'qq':
-                $token = array(
-                    'openid' => $openid,
-                    'access_token' => $accessToken,
-                );
-                break;
-            case 'weixinweb':
-                $token = array(
-                    'openid' => $openid,
-                    'access_token' => $accessToken,
-                );
-                break;
-            default:
-                throw new BadRequestHttpException('Bad type');
-        }
-
-        return $token;
     }
 
     /**
