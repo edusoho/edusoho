@@ -13,4 +13,6 @@ interface ActivityLearnLogDao extends GeneralDaoInterface
     public function deleteByActivityId($activityId);
 
     public function getLastestByActivityIdAndUserId($activityId, $userId);
+
+    public function sumLearnTimeGroupByUserId($startTime, $endTime);
 }

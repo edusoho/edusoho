@@ -142,8 +142,8 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function countFinishedTaskNumGroupByUserId($startTime, $endTime)
     {
-        $sql = 'SELECT count(*) FROM `course_task_result` WHERE status = "finish" and `createdTime` >= ? and `createdTime` < ? group by userId';
-
+        $sql = 'SELECT count(*) as taskNum, userId FROM `course_task_result` WHERE status = "finish" and `createdTime` >= ? and `createdTime` < ? group by userId';
+        
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 

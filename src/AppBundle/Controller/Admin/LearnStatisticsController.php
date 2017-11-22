@@ -22,6 +22,8 @@ class LearnStatisticsController extends BaseController
 {
     public function showAction(Request $request)
     {
+        $this->getLearnStatisticesService()->syncLearnStatistics();
+        
         return $this->render('admin/learn-statistices/show.html.twig');
     }  
 

@@ -14,7 +14,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
     public function countFinishedTaskNumGroupByUserId($startTime, $endTime)
     {
-         return $this->getTaskResultDao()->countFinishedTaskNumGroupByUserId($startTime, $endTime);
+         $result = $this->getTaskResultDao()->countFinishedTaskNumGroupByUserId($startTime, $endTime);
+         
+         return ArrayToolkit::index($result, 'userId');
     }
 
     public function analysisCompletedTaskDataByTime($startTime, $endTime)

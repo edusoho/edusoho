@@ -2,9 +2,10 @@
 
 namespace Biz\LearnStatistics\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Biz\LearnStatistics\Dao\DailyStatisticsDao;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class LearnStatisticsDaoImpl extends \Codeages\Biz\Framework\Dao\GeneralDaoImpl
+class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsDao
 {
     protected $table = 'user_learn_statistics_daily';
 
@@ -24,18 +25,18 @@ class LearnStatisticsDaoImpl extends \Codeages\Biz\Framework\Dao\GeneralDaoImpl
             ),
             'orderbys' => array(
                 'id',
-                'create_time',
-                'update_time',
+                'createdTime',
+                'updatedTime',
             ),
-            'timestamps' => array('create_time', 'update_time'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'id =: id',
                 'id IN ( :ids)',
                 'id NOT IN ( :excludeIds )',
-                'create_time >= :createTime_GE',
-                'create_time <= :createTime_LE',
-                'update_time >= :updateTime_GE',
-                'update_time <= :updateTime_LE',
+                'createdTime >= :createTime_GE',
+                'createdTime <= :createTime_LE',
+                'updatedTime >= :updateTime_GE',
+                'updatedTime <= :updateTime_LE',
             )
         );
     }
