@@ -269,6 +269,7 @@ form.btn.cancel: Cancel
 form.btn.confirm: Confirm
 form.btn.insert: Insert
 form.btn.delete: Delete
+form.btn.not_delete: Not delete
 form.btn.import: Import
 form.btn.submit_disabled: Submitted
 form.btn.reset_password: 'Reset password'
@@ -320,6 +321,9 @@ form.change_captcha_code: Can't see, click change one
 form.mobile: Mobile
 form.change_mobile: Change mobile
 form.input_mobile: Input mobile
+form.btn.yes: 'Yes'
+form.btn.no: 'No'
+
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
@@ -4944,10 +4948,15 @@ admin.edu_cloud.edu_video.open_btn: Enabled
 admin.edu_cloud.edu_video.close_btn: Disable
 admin.edu_cloud.edu_video.switch_tips: "Cloud Video provides you with a safe, cost-effective, and high-quality audio-visual experience that allows you to easily create online video lessons. Click <a href=\"%cloudShow%\" target=\"_blank\"> here </a> for more information.\n"
 admin.edu_cloud.edu_video.base_setting: 'Base Setting'
-admin.edu_cloud.edu_video.support_mobile: 'Mobile browser MP4 video'
+admin.edu_cloud.edu_video.support_mobile: 'Mobile browser security'
+admin.edu_cloud.edu_video.normal_mode: Normal
+admin.edu_cloud.edu_video.encryption_mode: Encryption
 admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
-admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different phone models under the use of different phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
+#TODO trans
+admin.edu_cloud.edu_video.normal_mode_tips: '选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>'
+admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
+
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
@@ -5001,6 +5010,20 @@ admin.edu_cloud.edu_video.month_flow: 'Traffic this month'
 admin.edu_cloud.edu_video.no_enable: 'Cloud video is not enabled yet'
 admin.edu_cloud.edu_video.enable: 'Enable Immediately'
 admin.edu_cloud.edu_video.enable_tips: "<P> 1. Focus on education - to provide video with practice, video subtitles, video barrage and many other online education for video teaching methods, so that video teaching more fun. </ P> <P> 2. Stable security - to provide video watermark, video fingerprints and many other security measures to prevent video theft, effectively prevent video piracy and malicious download. Stable and reliable video cloud storage services to protect data security, to prevent physical loss. </ P> <P> 3. Cost-effective - for online education video transcoding technology, as well as browser cache playback, mobile off-line playback and many other features, greatly compressed video traffic costs. </ P> <P> 4. Quality audio-visual experience - using CDN (content distribution network) technology, more than 200 high-quality domestic and foreign nodes, to ensure high-definition smooth audio-visual experience. A variety of clarity free to switch, different network environment can be smooth to watch. Multi-terminal full platform perfect support, anytime, anywhere to watch the wonderful video. </ P> <P> 5. Price ¥ 0.8 / GB, buy cloud video packs to enjoy more offers, and immediately <a href=\"%url%\" target=\"_blank\"> learn more </a>. </ P>\n"
+admin.edu_cloud.edu_video_setting.delete_modal_title: Is delete MP4 videos
+#TODO trans
+admin.edu_cloud.edu_video_setting.delete_modal_content: 您选择了加密模式，删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video_setting.change_normal_title: 转换为普通模式
+admin.edu_cloud.edu_video_setting.change_normal_content: 转换为普通模式能增强视频对手机浏览器的兼容性；但<span class="text-danger">可能降低网校视频的安全性</span>，是否继续？
+admin.edu_cloud.edu_video.delete_btn: Delete MP4 videos
+admin.edu_cloud.edu_video.delete_success: Congratulations
+admin.edu_cloud.edu_video.delete_ok_confirm: Congratulations,your cloud videos are all security.
+admin.edu_cloud.edu_video.delete_ok_btn: OK
+#TOFO trans
+admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
+admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+
+
 admin.edu_cloud.edu_live.student_num: 'Number of live participants (last 7 days)'
 admin.edu_cloud.edu_live.locked_tips: 'Your education cloud service has been locked, please contact customer service 4008041114.'
 admin.edu_cloud.edu_live.service_suspend: 'Your cloud live service has been suspended, can not be used, please contact customer service 4008041114.'
@@ -6382,6 +6405,9 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
+#TODO trans
+notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn
 status.become_student.classroom.simple: Enroll to learn
