@@ -36,7 +36,8 @@ class FinanceSettingController extends BaseController
             'quickpay_aes' => '',
             'llpay_enabled' => 0,
             'llpay_key' => '',
-            'llpay_secret' => '',
+            'llpay_accessKey' => '',
+            'llpay_secretKey' => ''
         );
         $default['wxpay_mp_secret'] = $this->getWeixinMpFile();
 

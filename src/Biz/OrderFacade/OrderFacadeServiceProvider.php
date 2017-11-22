@@ -126,7 +126,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             if (isset($paymentSetting['llpay_enabled']) && $paymentSetting['llpay_enabled']) {
                 $enabledPayments['lianlianpay'] = array(
                     'oid_partner' => $paymentSetting['llpay_key'],
-                    'secret' => $paymentSetting['llpay_secret'],
+                    'accessKey' => $paymentSetting['llpay_accessKey'],
+                    'secret' => $paymentSetting['llpay_secretKey'],
                 );
             }
 

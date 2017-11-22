@@ -64,7 +64,8 @@ class LianlianPayGetway extends AbstractGetway
         ));
 
         $setting = $this->getSetting();
-        if (!SignatureToolkit::signVerify($data, array('secret'=>$setting['secret']))) {
+        $data['sign_type'] = 'RSA';
+        if (!SignatureToolkit::signVerify($data, array('accessKey'=>$setting['accessKey']))) {
             return array(
                 array(
                     'status' => 'failture',
@@ -106,21 +107,22 @@ class LianlianPayGetway extends AbstractGetway
         throw new AccessDeniedException('can not convert refund notify with lianlianpay.');
     }
 
-    protected function signParams($params)
+    protected function signParams($params, $options)
     {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
+        return SignatureToolkit::signParams($params, $options);
+        // ksort($params);
+        // $sign = '';
+        // foreach ($params as $key => $value) {
+        //     if (empty($value)) {
+        //         continue;
+        //     }
 
-            $sign .= $key.'='.$value.'&';
-        }
+        //     $sign .= $key.'='.$value.'&';
+        // }
 
-        $setting = $this->getSetting();
-        $sign .= 'key='.$setting['secret'];
-        return md5($sign);
+        // $setting = $this->getSetting();
+        // $sign .= 'key='.$setting['secret'];
+        // return md5($sign);
     }
 
     protected function convertParams($params)
@@ -135,7 +137,7 @@ class LianlianPayGetway extends AbstractGetway
         if (!empty($params['notify_url'])) {
             $converted['notify_url'] = $params['notify_url'];
         }
-        $converted['sign_type']    = 'MD5';
+        $converted['sign_type']    = 'RSA';
         $converted['version']      = '1.0';
 
         $converted['oid_partner']  = $setting['oid_partner'];
@@ -154,7 +156,7 @@ class LianlianPayGetway extends AbstractGetway
         $converted['userreq_ip'] = str_replace(".", "_", $params['create_ip']);
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
-        $converted['sign']       = $this->signParams($converted);
+        $converted['sign']       = $this->signParams($converted, $setting);
 
         if ($this->isWap) {
             $converted['back_url'] = $params['show_url'];
@@ -193,6 +195,7 @@ class LianlianPayGetway extends AbstractGetway
         $config = $this->biz['payment.platforms']['lianlianpay'];
         return array(
             'secret' => $config['secret'],
+            'accessKey' => $config['accessKey'],
             'oid_partner' => $config['oid_partner'],
         );
     }
