@@ -184,7 +184,7 @@ class LoginController extends LoginBindController
             $validateResult['msg'] = $status;
         }
 
-        if ($oauthUser->mode == 'closed') {
+        if ('closed' == $oauthUser->mode) {
             throw new NotFoundHttpException();
         }
 

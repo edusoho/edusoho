@@ -456,7 +456,7 @@ class UserController extends BaseController
 
         $goto = $this->getTargetPath($request);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
             $authSetting = $this->setting('auth', array());
 

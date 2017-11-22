@@ -7367,10 +7367,12 @@ admin.payment_setting.heepay_api_application_word: 下载接口申请说明文�
 admin.payment_setting.heepay_secret: 商户平台Key
 admin.payment_setting.heepay_tips: 因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
 
-admin.payment_setting.llpay: 连连支付
+admin.payment_setting.llpay: 连连支付-RSA加密
 admin.payment_setting.llpay_api_application_word: 下载接口申请说明文档
 admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
+admin.payment_setting.llpay_public_key: 公钥
+admin.payment_setting.llpay_private_key: 密钥
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档

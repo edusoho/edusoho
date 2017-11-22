@@ -46,7 +46,7 @@ class QqOAuthClient extends AbstractOAuthClient
     {
         $params = array('access_token' => $token['access_token']);
         $result = $this->getRequest(self::OAUTH_ME_URL, $params);
-        if (strpos($result, 'callback') !== false) {
+        if (false !== strpos($result, 'callback')) {
             $lpos = strpos($result, '(');
             $rpos = strrpos($result, ')');
             $result = substr($result, $lpos + 1, $rpos - $lpos - 1);
@@ -71,9 +71,9 @@ class QqOAuthClient extends AbstractOAuthClient
         $userInfo['id'] = $infos['id'];
         $userInfo['name'] = $infos['nickname'];
         $userInfo['avatar'] = empty($infos['figureurl_qq_2']) ? $infos['figureurl_qq_1'] : $infos['figureurl_qq_2'];
-        if ($infos['gender'] == '男') {
+        if ('男' == $infos['gender']) {
             $infos['gender'] = 'male';
-        } elseif ($infos['gender'] == '女') {
+        } elseif ('女' == $infos['gender']) {
             $infos['gender'] = 'female';
         } else {
             $infos['gender'] = 'secret';
