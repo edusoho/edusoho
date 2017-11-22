@@ -3,6 +3,7 @@
 namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Resource\ResourceProxy;
+use ApiBundle\Event\ResourceEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
@@ -36,6 +37,8 @@ class ResourceAuthenticationProviderManager implements ResourceAuthenticationInt
         foreach ($this->providers as $provider) {
             $provider->authenticate($resourceProxy, $method);
         }
+
+        $this->container->get('event_dispatcher')->dispatch(AuthenticationEvents::AFTER_AUTHENTICATE, new ResourceEvent($this->container->get('request'), $resourceProxy));
     }
 
 }

@@ -5,6 +5,7 @@ namespace Biz\User\Service\Impl;
 use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\RegisterTypeUtils;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService
@@ -27,19 +28,26 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-
             $authUser = $this->getAuthProvider()->register($registration);
 
-            if ($type == 'default') {
+            if ('default' == $type) {
                 if (!empty($authUser['id'])) {
                     $registration['token'] = array(
                         'userId' => $authUser['id'],
                     );
                 }
 
-                $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
+                $registration['type'] = $this->getAuthProvider()->getProviderName();
+                $newUser = $this->getUserService()->register(
+                    $registration,
+                    RegisterTypeUtils::getRegisterTypes($registration)
+                );
             } else {
-                $newUser = $this->getUserService()->register($registration, $type);
+                $registration['type'] = $type;
+                $newUser = $this->getUserService()->register(
+                    $registration,
+                    RegisterTypeUtils::getRegisterTypes($registration)
+                );
 
                 if (!empty($authUser['id'])) {
                     $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
@@ -111,7 +119,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function refillFormData($registration, $type = 'default')
     {
-        if ($type == 'default') {
+        if ('default' == $type) {
             $registration = $this->getUserService()->parseRegistration($registration);
         }
 
@@ -123,7 +131,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
 
-        if ($type === 'marketing' && !isset($registration['email'])) {
+        if ('marketing' === $type && !isset($registration['email'])) {
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
         $registration = $this->fillOrgId($registration);
@@ -221,7 +229,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
             }
 
-            if ($result[0] != 'success') {
+            if ('success' != $result[0]) {
                 return $result;
             }
 
@@ -247,7 +255,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
         }
 
-        if ($result[0] != 'success') {
+        if ('success' != $result[0]) {
             return $result;
         }
 
@@ -268,7 +276,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
         }
 
-        if ($result[0] != 'success') {
+        if ('success' != $result[0]) {
             return $result;
         }
 
@@ -346,7 +354,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function hasPartnerAuth()
     {
-        return $this->getAuthProvider()->getProviderName() != 'default';
+        return 'default' != $this->getAuthProvider()->getProviderName();
     }
 
     public function getPartnerName()
@@ -415,6 +423,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     private function isMarketingType($registration)
     {
-        return isset($registration['type']) && $registration['type'] == 'marketing';
+        return isset($registration['type']) && 'marketing' == $registration['type'];
     }
 }
