@@ -306,8 +306,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $nos = array(-1);
 
         $users = $this->getUserService()->searchUsers(
-            array('nickname' => $nickname), 
-            array('id' => 'DESC'), 
+            array('nickname' => $nickname),
+            array('id' => 'DESC'),
             0, PHP_INT_MAX
         );
 
@@ -317,8 +317,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         $userIds = ArrayToolkit::column($users, 'id');
         $localFiles = $this->getUploadFileService()->searchFiles(
-            array('createdUserIds' => $userIds, 'storage' => 'cloud'), 
-            array('createdTime'=> 'DESC'),
+            array('createdUserIds' => $userIds, 'storage' => 'cloud'),
+            array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
 
