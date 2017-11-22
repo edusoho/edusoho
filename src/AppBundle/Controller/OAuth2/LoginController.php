@@ -51,11 +51,7 @@ class LoginController extends LoginBindController
                 );
                 break;
             case 'qq':
-                $token = array(
-                    'openid' => $openid,
-                    'access_token' => $accessToken,
-                );
-                break;
+            case 'weixinmob':
             case 'weixinweb':
                 $token = array(
                     'openid' => $openid,
