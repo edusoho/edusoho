@@ -752,6 +752,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $reason = ArrayToolkit::parts($reason, array('reason', 'reason_type'));
+
         $this->removeMember($member, $reason);
 
         $this->getCourseDao()->update(
@@ -1145,6 +1146,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             'data' => $data,
             'order_id' => $member['orderId'],
             'title' => $course['title'],
+            'course_set_id' => $course['courseSetId'],
+            'parent_id' => $course['parentId'],
         );
 
         $record = array_merge($record, $reason);
