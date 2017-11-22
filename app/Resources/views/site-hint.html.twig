@@ -1,7 +1,3 @@
-{% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) and not app.request.cookies.get('close_set_email_alert') %}
-	
-{% else %}
-	{% cache 'layout/announcement' 600 %}
-		{% include 'announcement/announcement.html.twig' %}
-	{% endcache %}
-{% endif %}
+{% cache 'layout/announcement' 600 %}
+	{% include 'announcement/announcement.html.twig' %}
+{% endcache %}
