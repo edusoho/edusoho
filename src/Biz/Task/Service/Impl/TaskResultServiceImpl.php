@@ -12,6 +12,11 @@ use Biz\Task\Service\TaskService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
+    public function countFinishedTaskNumGroupByUserId($startTime, $endTime)
+    {
+         return $this->getTaskResultDao()->countFinishedTaskNumGroupByUserId($startTime, $endTime);
+    }
+
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
         return $this->getTaskResultDao()->analysisCompletedTaskDataByTime($startTime, $endTime);

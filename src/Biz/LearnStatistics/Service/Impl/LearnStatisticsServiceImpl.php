@@ -63,7 +63,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
 
     public function syncLearnStatisticsByTime($startTime, $endTime)
     {
-              
+        
     }
 
 
