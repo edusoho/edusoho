@@ -64,7 +64,6 @@ class LianlianPayGetway extends AbstractGetway
         ));
 
         $setting = $this->getSetting();
-        $data['sign_type'] = 'RSA';
         if (!SignatureToolkit::signVerify($data, array('accessKey'=>$setting['accessKey']))) {
             return array(
                 array(

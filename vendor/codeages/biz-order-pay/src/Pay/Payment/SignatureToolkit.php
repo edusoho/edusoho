@@ -110,7 +110,6 @@ class SignatureToolkit
         // $pubKey = file_get_contents($pem);
 
         //转换为openssl格式密钥
-        var_dump($options['accessKey']);
         $res = openssl_get_publickey($options['accessKey']);
 
         //调用openssl内置方法验签，返回bool值
@@ -121,7 +120,6 @@ class SignatureToolkit
 //        if (!$result) {
 //            throw new \RuntimeException('连连支付校签名校验失败');
 //        }
-        var_dump($result);
         return $result;
     }
 }
