@@ -12,7 +12,7 @@ class SignatureToolkit
                 $signature = static::md5Sign($signStr, $options);
                 break;
             case 'RSA':
-                $signature = static::rsaSign($signStr);
+                $signature = static::rsaSign($signStr, $options);
                 break;
             default:
                 $signature = '';
@@ -30,7 +30,7 @@ class SignatureToolkit
                 $isSignVerified = static::md5Verify($params, $options);
                 break;
             case 'RSA':
-                $isSignVerified = static::rsaVerify($params);
+                $isSignVerified = static::rsaVerify($params, $options);
                 break;
             default:
                 break;
@@ -64,17 +64,17 @@ class SignatureToolkit
     {
         $signStr .= '&key='.$options['secret'];
 
+
         $sign = md5($signStr);
 
         return $sign;
     }
 
-    private static function rsaSign($signStr)
+    private static function rsaSign($signStr, $options)
     {
-        $pem = __DIR__.'/Key/rsa_private_key.pem';
-        $priKey = file_get_contents($pem);
         //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
-        $res = openssl_get_privatekey($priKey);
+        $res = openssl_get_privatekey($options['secret']);
+
         //调用openssl内置签名方法，生成签名$sign
         openssl_sign($signStr, $sign, $res, OPENSSL_ALGO_MD5);
 
@@ -92,30 +92,22 @@ class SignatureToolkit
         $signature = static::md5Sign($params, $options);
 
         return $signature != $params['sign'];
-//        if () {
-      //  throw new \RuntimeException('连连支付校签名校验失败');
-        //  }
     }
 
-    private static function rsaVerify($params)
+    private static function rsaVerify($params, $options)
     {
         $signStr = static::createLinkString($params);
-        $pem = __DIR__.'/Key/llpay_public_key.pem';
         $sign = $params['sign'];
-        //读取连连支付公钥文件
-        $pubKey = file_get_contents($pem);
 
         //转换为openssl格式密钥
-        $res = openssl_get_publickey($pubKey);
+        $res = openssl_get_publickey($options['accessKey']);
 
         //调用openssl内置方法验签，返回bool值
         $result = (bool) openssl_verify($signStr, base64_decode($sign), $res, OPENSSL_ALGO_MD5);
 
         //释放资源
         openssl_free_key($res);
-//        if (!$result) {
-//            throw new \RuntimeException('连连支付校签名校验失败');
-//        }
+
         return $result;
     }
 }
