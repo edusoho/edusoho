@@ -11,7 +11,7 @@ class DropUserBindIndex extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("ALTER TABLE user_bind DROP INDEX type_2");
+        $connection->exec('ALTER TABLE user_bind DROP INDEX type_2');
     }
 
     /**
@@ -21,6 +21,6 @@ class DropUserBindIndex extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("ALTER TABLE `user_bind` ADD UNIQUE `type_2` (`type`, `toId`);");
+        $connection->exec('ALTER TABLE `user_bind` ADD UNIQUE `type_2` (`type`, `toId`);');
     }
 }
