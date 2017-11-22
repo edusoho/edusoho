@@ -2866,6 +2866,7 @@ user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证�
 user.oauth.register_account: 创建账号
 user.oauth.register_success: 注册成功
 user.oauth.register_account_success: 账号注册成功
+user.oauth.page.closed: 秒后该页面自动关闭
 user.oauth.register.closed: 注册已关闭，请联系管理员
 
 # 用户个人设置
