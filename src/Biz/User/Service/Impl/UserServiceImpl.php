@@ -2159,6 +2159,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     /**
      * @param $type
+     *
      * @return string
      */
     private function convertOAuthType($type)
