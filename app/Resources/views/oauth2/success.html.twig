@@ -1,5 +1,5 @@
 {% extends 'oauth2/layout.html.twig' %}
-{% do script(['app/js/default/message/index.js']) %}
+{% do script(['app/js/oauth2/message/index.js']) %}
 
 {% block page_title %}
   {% if isNewAccount|default('') %}{{ 'user.oauth.register_success'|trans }}{% else %}{{ 'user.oauth.bind_account_success'|trans }}{% endif %}
