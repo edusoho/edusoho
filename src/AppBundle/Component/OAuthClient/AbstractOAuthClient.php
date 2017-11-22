@@ -30,7 +30,7 @@ abstract class AbstractOAuthClient
                 $token = array(
                     'openid' => $openid,
                     'access_token' => $accessToken,
-                    'key' => $appid
+                    'key' => $appid,
                 );
                 break;
             case 'weixinmob':

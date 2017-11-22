@@ -5,7 +5,6 @@ namespace ApiBundle\Security\Firewall;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
 {
