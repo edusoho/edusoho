@@ -22,8 +22,8 @@ abstract class AbstractOAuthClient
         switch ($type) {
             case 'weibo':
                 $token = array(
-                    'uid' => $openid,
-                    'access_token' => $accessToken,
+                    'userId' => $openid,
+                    'token' => $accessToken,
                 );
                 break;
             case 'qq':
