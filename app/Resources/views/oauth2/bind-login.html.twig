@@ -22,12 +22,12 @@
   </div>
 
   <form class="third-party-form clearfix" id="third-party-bind-form" method="post" action="{{ path('oauth2_login_bind_login') }}">
-    <div class="form-group cd-form-group third-party-form__info">
-      <label>{% if oauthUser.accountType == 'email' %}{{ 'user.oauth.login_by_email'|trans }}{% else %}{{ 'user.oauth.login_by_mobile'|trans }}{% endif %}</label>
-      <div class="third-party-form__way">{{ oauthUser.account }}</div>
+    <div class="form-group cd-form-group third-party-form-group">
+      <label class="third-party-form-group__info">{% if oauthUser.accountType == 'email' %}{{ 'user.oauth.login_by_email'|trans }}{% else %}{{ 'user.oauth.login_by_mobile'|trans }}{% endif %}</label>
+      <div class="third-party-form-group__info">{{ oauthUser.account }}</div>
     </div>
     <div class="form-group cd-form-group">
-      <label class="label-required" for="password">{{ 'user.oauth.web_account_password'|trans }}</label>
+      <label class="third-party-form__label" for="password">{{ 'user.oauth.web_account_password'|trans }}</label>
       <input class="form-control" type="password" id="password" name="password">
     </div>
     <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button">{{ 'user.oauth.bind_account_and_go_continue'|trans }}</button>

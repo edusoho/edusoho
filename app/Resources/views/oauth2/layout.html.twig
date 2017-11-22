@@ -1,5 +1,9 @@
-{% import "macro.html.twig" as web_macro %}
 {% extends 'v2/layout.html.twig' %}
+
+
+{% block header %}
+  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+{% endblock %}
 
 {% block full_content %}
   <div class="cd-login-section">
@@ -19,4 +23,8 @@
       {% endblock %}
     </div>
   </div>
+{% endblock %}
+
+{% block footer %}
+  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
 {% endblock %}

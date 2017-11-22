@@ -34,8 +34,8 @@ abstract class RegistDecoder extends BaseRegister
     protected function validate($registration)
     {
         parent::validate($registration);
-        if (!empty($register)) {
-            $register->validateBeforeSave($registration);
+        if (!empty($this->register)) {
+            $this->register->validateBeforeSave($registration);
         }
         $this->validateBeforeSave($registration);
     }
@@ -43,8 +43,8 @@ abstract class RegistDecoder extends BaseRegister
     protected function beforeSave($registration, $user = array())
     {
         $user = parent::beforeSave($registration, $user);
-        if (!empty($register)) {
-            $user = $register->dealDataBeforeSave($registration, $user);
+        if (!empty($this->register)) {
+            $user = $this->register->dealDataBeforeSave($registration, $user);
         }
 
         return $this->dealDataBeforeSave($registration, $user);
@@ -53,8 +53,8 @@ abstract class RegistDecoder extends BaseRegister
     protected function afterSave($registration, $user)
     {
         parent::afterSave($registration, $user);
-        if (!empty($register)) {
-            $register->dealDataAfterSave($registration, $user);
+        if (!empty($this->register)) {
+            $this->register->dealDataAfterSave($registration, $user);
         }
         $this->dealDataAfterSave($registration, $user);
     }

@@ -30,7 +30,7 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
 
                 $remain = $limiter->check($request->getClientIp());
 
-                if ($remain == 0) {
+                if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
                 }
 
@@ -42,14 +42,14 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
                 /** @var RateLimiter $dayLimiter */
                 $dayLimiter = $factory('register.ip.high_max_allow_attempt_period_day', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
                 $remain = $dayLimiter->check($request->getClientIp());
-                if ($remain == 0) {
+                if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
                 }
 
                 /** @var RateLimiter $hourLimiter */
                 $hourLimiter = $factory('register.ip.high_max_allow_attempt_period_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_DAY);
                 $remain = $hourLimiter->check($request->getClientIp());
-                if ($remain == 0) {
+                if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
                 }
 

@@ -452,6 +452,7 @@ settings_binds:
 settings_binds_unbind:
     path: /settings/unbind/{type}
     defaults: { _controller: AppBundle:Settings:unBind  }
+    methods: [POST]
 
 settings_binds_bind:
     path: /settings/bind/{type}
@@ -460,10 +461,6 @@ settings_binds_bind:
 settings_binds_bind_callback:
     path: /settings/bind/{type}/callback
     defaults: { _controller: AppBundle:Settings:bindCallback }
-
-settings_setup:
-    path: /settings/setup
-    defaults: { _controller: AppBundle:Settings:setup }
 
 settings_setup_password:
     path: /settings/setup_password

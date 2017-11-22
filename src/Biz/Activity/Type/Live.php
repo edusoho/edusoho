@@ -13,6 +13,7 @@ class Live extends Activity
     protected function registerListeners()
     {
         return array(
+            'watching' => 'Biz\Activity\Listener\LiveActivityWatchListener',
         );
     }
 

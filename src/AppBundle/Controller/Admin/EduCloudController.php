@@ -224,8 +224,14 @@ class EduCloudController extends BaseController
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
             $storageSetting = array_merge($default, $storageSetting, $set);
+            if (!empty($set['isDeleteMP4'])) {
+                $this->deleteCloudMP4Files();
+                $storageSetting['delete_mp4_status'] = 'waiting';
+            }
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', 'site.save.success');
+
+            return $this->createJsonResponse(true);
         } else {
             $storageSetting = array_merge($default, $storageSetting);
             $this->getSettingService()->set('storage', $storageSetting);
@@ -249,6 +255,28 @@ class EduCloudController extends BaseController
             'headLeader' => $headLeader,
             'video' => $overview['video'],
         ));
+    }
+
+    public function deleteVideoAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $this->deleteCloudMP4Files();
+
+            $setting = $this->getSettingService()->get('storage', array());
+            $setting['delete_mp4_status'] = 'waiting';
+            $this->getSettingService()->set('storage', $setting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        $conditions = array('mcStatus' => 'yes', 'page' => 1);
+        $files = $this->getCloudFileService()->search($conditions, 0, 1);
+
+        if (empty($files['data'])) {
+            return $this->render('admin/edu-cloud/video/video-delete-success-modal.html.twig');
+        }
+
+        return $this->render('admin/edu-cloud/video/video-delete-confirm-modal.html.twig');
     }
 
     public function videoControlAction(Request $request)
@@ -1738,6 +1766,17 @@ class EduCloudController extends BaseController
         return true;
     }
 
+    protected function deleteCloudMP4Files()
+    {
+        $user = $this->getUser();
+
+        $callback = $this->get('request')->getSchemeAndHttpHost().$this->generateUrl('callback', array('type' => 'cloudFile', 'ac' => 'files.notify'));
+
+        $this->getCloudFileService()->deleteCloudMP4Files($user['id'], $callback);
+
+        return true;
+    }
+
     protected function getConsultService()
     {
         return $this->createService('EduCloud:MicroyanConsultService');
@@ -1746,5 +1785,10 @@ class EduCloudController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->createService('CloudFile:CloudFileService');
     }
 }
