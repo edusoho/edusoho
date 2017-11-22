@@ -10,7 +10,7 @@
   {% if oauthUser.accountType == "email" %} {% set accountType = 'user.oauth.login_by_email'|trans %}{% else %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% endif %}
 
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser.avatar) }}">
+    <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
   </div>
   <div class="text-center cd-mb32">
     <div class="third-party-bind-tip">{{ 'user.oauth.register_account_by_ways'|trans({ '%accountType%': accountType }) }}</div>
