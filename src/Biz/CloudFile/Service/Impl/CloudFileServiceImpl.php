@@ -87,7 +87,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function findGlobalIdByUsedCount($conditions)
     {
-        if ($conditions['useStatus'] == 'used') {
+        if ('used' == $conditions['useStatus']) {
             $fileConditions['startCount'] = 1;
         } else {
             $fileConditions['endCount'] = 1;
