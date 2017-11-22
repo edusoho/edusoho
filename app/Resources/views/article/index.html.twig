@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ 'article.channel'|trans({'%article_name%': setting('article.name')|default('article'|trans)}) }} - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('article.name')|default('article'|trans) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-list-page' %}
 {% do script(['app/js/article/list/index.js']) %}

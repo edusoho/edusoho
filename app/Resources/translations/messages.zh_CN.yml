@@ -3587,17 +3587,16 @@ group.buy_attach.purchased_tips: 您已购买该附件
 
 # 资讯
 article: 资讯
-article.channel: %article_name%频道
 article.banner_tips: >
   头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性<a class="mls alert-link" href="%articleUrl%">前往设置</a>
 article.empty: 还没有任何资讯
-article.popular_article: 热门资讯
-article.popular_article_mpty: 暂无热门资讯
+article.popular_article: 热门焦点
+article.popular_article_mpty: 暂无热门焦点
 article.popular_comments: 热门评论
 article.popular_comments_empty: 一个评论都没有！
 article.comment_target: 评论于
-article.recommend_article: 推荐%article_name%
-article.recommend_article_empty: 暂无推荐%article_name%
+article.recommend_article: 编辑推荐
+article.recommend_article_empty: 暂无编辑推荐
 article.detail.text: 正文
 article.detail.source: 文章来源
 article.detail.source_url: 原文链接
