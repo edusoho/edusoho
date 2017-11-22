@@ -95,6 +95,10 @@ class ExerciseController extends BaseController
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
         $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id']);
 
+        $seq = $request->query->get('seq', '');
+
+        $questions = $this->sortQuestions($questions, $seq);
+
         $student = $this->getUserService()->getUser($exerciseResult['userId']);
 
         $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
@@ -124,7 +128,7 @@ class ExerciseController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
 
-            $goto = $this->generateUrl('exercise_result_show', array('resultId' => $paperResult['id']));
+            $goto = $this->generateUrl('exercise_result_show', array('seq' => $formData['seq'], 'resultId' => $paperResult['id']));
 
             return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
@@ -144,6 +148,18 @@ class ExerciseController extends BaseController
             return $count;
         }, 0);
     }
+
+    private function sortQuestions($questions, $order)
+    {
+        usort($questions, function ($a, $b) use ($order) {
+            $pos_a = array_search($a['id'], $order);
+            $pos_b = array_search($b['id'], $order);
+            return $pos_a - $pos_b;
+        });
+
+        return $questions;
+    }
+
 
     /**
      * @return TestpaperService
