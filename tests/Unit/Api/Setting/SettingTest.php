@@ -19,18 +19,16 @@ class SettingTest extends BaseTestCase
         $this->assertArraySubset(array('mode' => 'closed'), $result);
 
         $actual = array(
-            array('register_mode' => 'email', 'email_enabled' => 'closed'),
-            array('register_mode' => 'email', 'email_enabled' => 'opened'),
-            array('register_mode' => 'mobile', 'email_enabled' => 'closed'),
-            array('register_mode' => 'email_or_mobile', 'email_enabled' => 'closed'),
-            array('register_mode' => 'email_or_mobile', 'email_enabled' => 'opened'),
+            array('register_mode' => 'email', 'email_enabled' => 'closed', 'register_protective' => 'none'),
+            array('register_mode' => 'email', 'email_enabled' => 'opened', 'register_protective' => 'low'),
+            array('register_mode' => 'mobile', 'email_enabled' => 'closed', 'register_protective' => 'middle'),
+            array('register_mode' => 'mobile', 'email_enabled' => 'opened', 'register_protective' => 'high'),
         );
         $expected = array(
-            array('mode' => 'email'),
-            array('mode' => 'email_verify'),
-            array('mode' => 'mobile'),
-            array('mode' => 'email_mobile'),
-            array('mode' => 'email_verify_mobile'),
+            array('mode' => 'email', 'emailVerifyEnabled' => false, 'captchaEnabled' => false, 'level' => 'none'),
+            array('mode' => 'email', 'emailVerifyEnabled' => true, 'captchaEnabled' => true, 'level' => 'low'),
+            array('mode' => 'mobile', 'emailVerifyEnabled' => false, 'captchaEnabled' => true, 'level' => 'middle'),
+            array('mode' => 'mobile', 'emailVerifyEnabled' => true, 'captchaEnabled' => true, 'level' => 'high'),
         );
 
         foreach ($actual as $key => $act) {
@@ -39,7 +37,7 @@ class SettingTest extends BaseTestCase
             ));
 
             $result = $api->get($apiRequest, 'register');
-            $this->assertArraySubset($expected[$key], $result);
+            $this->assertEquals($expected[$key], $result);
         }
     }
 }
