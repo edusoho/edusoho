@@ -254,11 +254,6 @@ class SettingsController extends BaseController
     public function securityAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
-        if ($user['setup'] == 0 || stripos($user['email'], '@eduoho.net') != false) {
-            return $this->redirect($this->generateUrl('settings_setup'));
-        }
-
         $hasLoginPassword = strlen($user['password']) > 0;
         $hasPayPassword = $this->getAccountService()->isPayPasswordSetted($user['id']);
         $hasFindPayPasswordQuestion = $this->getAccountService()->isSecurityAnswersSetted($user['id']);
@@ -901,24 +896,6 @@ class SettingsController extends BaseController
 
         response:
         return $this->redirect($this->generateUrl('settings_binds'));
-    }
-
-    public function setupAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        if ($request->getMethod() === 'POST') {
-            $data = $request->request->all();
-
-            $this->getAuthService()->changeEmail($user['id'], null, $data['email']);
-            $this->getAuthService()->changeNickname($user['id'], $data['nickname']);
-            $user = $this->getUserService()->setupAccount($user['id']);
-            $this->authenticateUser($user);
-
-            return $this->createJsonResponse(true);
-        }
-
-        return $this->render('settings/setup.html.twig');
     }
 
     public function setupPasswordAction(Request $request)

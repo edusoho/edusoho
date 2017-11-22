@@ -700,6 +700,7 @@ validate.user_terms.message: Check to agree to this service agreement in order t
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
+validate.mobile_or_email_message: 请输入正确的手机／邮箱
 
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
@@ -825,3 +826,11 @@ cashier.confirm.pick_again: Reissue payment method
 cashier.confirm.desc: |
   Please re-open the page to complete the order payment.<br>
   If you encounter problems in the payment process, please contact the website customer service solution.<br>
+
+oauth.send.validate_message: 发送验证
+oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
+oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
+oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
+oauth.captcha_code_length_tip: 图形码为5位数
+oauth.captcha_code_expired_tip: 图形验证码已过期
+oauth.captcha_code_error_tip: 图形验证码错误

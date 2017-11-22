@@ -729,6 +729,10 @@ admin_cloud_setting_video:
     path:  /setting/cloud/video
     defaults: { _controller: AppBundle:Admin/EduCloud:videoSetting }
 
+admin_cloud_normal_video_delete:
+    path:  /setting/cloud/normal/video/delete
+    defaults: { _controller: AppBundle:Admin/EduCloud:deleteVideo }
+
 admin_setting_cloud:
     path:  /setting/cloud
     defaults: { _controller: AppBundle:Admin/EduCloud:key }
@@ -2180,10 +2184,6 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
-
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
 admin_marketing:
     path: /marketing
