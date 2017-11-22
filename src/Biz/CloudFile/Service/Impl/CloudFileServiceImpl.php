@@ -316,7 +316,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $userIds = ArrayToolkit::column($users, 'id');
         $conditions = array(
             'createdUserIds' => $userIds,
-            'storage' => 'cloud'
+            'storage' => 'cloud',
         );
         if (!empty($globalIds)) {
             $conditions['globalIds'] = $globalIds;
