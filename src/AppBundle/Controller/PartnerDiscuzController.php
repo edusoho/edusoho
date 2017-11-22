@@ -97,13 +97,14 @@ class PartnerDiscuzController extends BaseController
                 'createdTime' => $get['time'],
                 'createdIp' => $request->getClientIp(),
                 'token' => array('userId' => $get['uid']),
+                'type' => 'discuz',
             );
 
             if (!$this->getAuthService()->isRegisterEnabled()) {
                 return API_RETURN_FORBIDDEN;
             }
 
-            $user = $this->getUserService()->register($registration, 'discuz');
+            $user = $this->getUserService()->register($registration);
         } else {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {

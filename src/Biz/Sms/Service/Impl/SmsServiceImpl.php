@@ -5,6 +5,7 @@ namespace Biz\Sms\Service\Impl;
 use Biz\BaseService;
 use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class SmsServiceImpl extends BaseService implements SmsService
 {
@@ -47,17 +48,17 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function sendVerifySms($smsType, $to, $smsLastTime = 0)
     {
         if (!$this->checkPhoneNum($to)) {
-            throw new \RuntimeException(sprintf('手机号错误:%s', $to));
+            throw new ServiceException(sprintf('手机号错误:%s', $to));
         }
 
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException('云短信相关设置未开启!');
+            throw new ServiceException('云短信相关设置未开启!', 30003);
         }
 
         $allowedTime = 120;
         $currentTime = time();
         if ($this->isNeedWaiting($smsLastTime, $currentTime, $allowedTime)) {
-            throw new \RuntimeException('请等待120秒再申请!');
+            throw new ServiceException('请等待120秒再申请!');
         }
         $currentUser = $this->getCurrentUser();
 
@@ -73,11 +74,11 @@ class SmsServiceImpl extends BaseService implements SmsService
             $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
 
             if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])) {
-                throw new \RuntimeException('您已经绑定了该手机号码');
+                throw new ServiceException('您已经绑定了该手机号码');
             }
 
             if (!$this->getUserService()->isMobileUnique($to)) {
-                throw new \RuntimeException('该手机号码已被其他用户绑定');
+                throw new ServiceException('该手机号码已被其他用户绑定');
             }
         }
 
@@ -86,15 +87,15 @@ class SmsServiceImpl extends BaseService implements SmsService
             $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
             if (empty($targetUser)) {
-                throw new \RuntimeException('用户不存在');
+                throw new ServiceException('用户不存在');
             }
 
             if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
-                throw new \RuntimeExceptionarray('用户没有被绑定的手机号');
+                throw new ServiceException('用户没有被绑定的手机号');
             }
 
             if ($targetUser['verifiedMobile'] != $to) {
-                throw new \RuntimeExceptionarray('手机与用户名不匹配');
+                throw new ServiceException('手机与用户名不匹配');
             }
             $to = $targetUser['verifiedMobile'];
         }
@@ -107,18 +108,17 @@ class SmsServiceImpl extends BaseService implements SmsService
             }
 
             if ((!isset($currentUser['verifiedMobile']) || (strlen($currentUser['verifiedMobile']) == 0))) {
-                throw new \RuntimeExceptionarray('用户没有被绑定的手机号');
+                throw new ServiceException('用户没有被绑定的手机号');
             }
 
             if ($currentUser['verifiedMobile'] != $to) {
-                throw new \RuntimeExceptionarray('您输入的手机号，不是已绑定的手机');
+                throw new ServiceException('您输入的手机号，不是已绑定的手机');
             }
 
             $to = $currentUser['verifiedMobile'];
         }
 
         if ($smsType == 'system_remind') {
-            $to = $to;
             $description = '直播公开课';
         }
 

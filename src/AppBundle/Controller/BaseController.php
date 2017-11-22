@@ -335,6 +335,20 @@ class BaseController extends Controller
         return $url;
     }
 
+    protected function createSuccessJsonResponse($data = array())
+    {
+        $data = array_merge(array('success' => 1), $data);
+
+        return $this->createJsonResponse($data);
+    }
+
+    protected function createFailJsonResponse($data = array())
+    {
+        $data = array_merge(array('success' => 0), $data);
+
+        return $this->createJsonResponse($data);
+    }
+
     protected function getWebExtension()
     {
         return $this->get('web.twig.extension');
