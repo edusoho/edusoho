@@ -75,7 +75,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         if (!empty($conditions['nos'])) {
-            $conditions['nos'] = implode(',', $conditions['nos']);
+            if (in_array(-1, $conditions['nos'])) {
+                $conditions['nos'] = -1;
+            } else {
+                $conditions['nos'] = implode(',', $conditions['nos']);
+            }
         }
 
         return $conditions;
@@ -136,55 +140,24 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             return $conditions;
         }
 
+        $nos = empty($conditions['nos']) ? array() : $conditions['nos'];
         $searchType = $conditions['searchType'];
         $keywords = $conditions['keywords'];
-
-        if (!in_array($conditions['searchType'], array('course', 'title', 'user'))) {
-            return $conditions;
-        }
-
-        if ($searchType == 'course') {
-            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
-
-            if (empty($courseSets)) {
-                $conditions['nos'] = array(-1);
-
-                return $conditions;
-            }
-
-            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-            $courseMaterials = $this->getMaterialService()->searchMaterials(
-                array('courseSetIds' => $courseSetIds),
-                array('createdTime' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-
-            $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
-            $fileIds = empty($fileIds) ? array(-1) : $fileIds;
-
-            $files = $this->getUploadFileService()->findFilesByIds($fileIds);
-            if (!$files) {
-                $conditions['nos'] = array(-1);
-
-                return $conditions;
-            }
-
-            $nos = empty($conditions['nos']) ? array() : $conditions['nos'];
-            if ($files) {
-                $conditions['nos'] = array_merge($nos, ArrayToolkit::column($files, 'globalId'));
-            }
-        } elseif ($searchType == 'user') {
-            $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id' => 'DESC'), 0, PHP_INT_MAX);
-
-            $userIds = ArrayToolkit::column($users, 'id');
-
-            $conditions['createdUserIds'] = empty($userIds) ? array(-1) : $userIds;
-        } else {
-            $conditions['filename'] = $conditions['keywords'];
-        }
-
         unset($conditions['searchType'], $conditions['keywords']);
+
+        switch ($searchType) {
+            case 'course':
+                $materialGlobalIds = $this->findGlobalIdsByCourseSetTitle($keywords);
+                $conditions['nos'] = array_merge($nos, $materialGlobalIds);
+                break;
+            case 'user':
+                $userGlobalIds = $this->findGlobalIdsByNickname($keywords);
+                $conditions['nos'] = array_merge($nos, $userGlobalIds);
+                break;
+            default:
+                $conditions['keywords'] = $keywords;
+                break;
+        }
 
         return $conditions;
     }
@@ -308,6 +281,59 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         );
 
         return new ResourceService($config);
+    }
+
+    protected function findGlobalIdsByCourseSetTitle($title)
+    {
+        $nos = array(-1);
+        $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($title);
+
+        if (empty($courseSets)) {
+            return $nos;
+        }
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $courseMaterials = $this->getMaterialService()->searchMaterials(
+            array('courseSetIds' => $courseSetIds),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        if (!$courseMaterials) {
+            return $nos;
+        }
+
+        $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
+        $fileIds = empty($fileIds) ? array(-1) : $fileIds;
+
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+
+        return $files ? ArrayToolkit::column($files, 'globalId') : $nos;
+    }
+
+    protected function findGlobalIdsByNickname($nickname)
+    {
+        $nos = array(-1);
+
+        $users = $this->getUserService()->searchUsers(
+            array('nickname' => $nickname),
+            array('id' => 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$users) {
+            return $nos;
+        }
+
+        $userIds = ArrayToolkit::column($users, 'id');
+        $localFiles = $this->getUploadFileService()->searchFiles(
+            array('createdUserIds' => $userIds, 'storage' => 'cloud'),
+            array('createdTime' => 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        return $localFiles ? ArrayToolkit::column($localFiles, 'globalId') : $nos;
     }
 
     /**
