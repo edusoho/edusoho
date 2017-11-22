@@ -37,17 +37,17 @@ class FinanceSettingController extends BaseController
             'llpay_enabled' => 0,
             'llpay_key' => '',
             'llpay_accessKey' => '',
-            'llpay_secretKey' => ''
+            'llpay_secretKey' => '',
         );
         $default['wxpay_mp_secret'] = $this->getWeixinMpFile();
 
         $payment = array_merge($default, $payment);
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $payment = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
 
             $formerPayment = $this->getSettingService()->get('payment');
-            if ($payment['enabled'] == 0 && $formerPayment['enabled'] == 1) {
+            if (0 == $payment['enabled'] && 1 == $formerPayment['enabled']) {
                 $payment['alipay_enabled'] = 0;
                 $payment['wxpay_enabled'] = 0;
                 $payment['heepay_enabled'] = 0;
@@ -97,7 +97,7 @@ class FinanceSettingController extends BaseController
 
         $refundSetting = array_merge($default, $refundSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
             $this->getLogService()->info('system', 'update_settings', '更新退款设置', $refundSetting);
