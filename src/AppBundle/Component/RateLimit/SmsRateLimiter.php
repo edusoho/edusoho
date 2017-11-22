@@ -27,8 +27,8 @@ class SmsRateLimiter extends AbstractRateLimiter implements RateLimiterInterface
         parent::__construct($biz);
 
         $factory = $biz['ratelimiter.factory'];
-        $this->ipHourRateLimiter = $factory('sms.ip.max_allow_attempt_period_hour', self::IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_HOUR);
-        $this->siteDayRateLimiter = $factory('sms.site.max_allow_attempt_period_day', self::SITE_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
+        $this->ipHourRateLimiter = $factory('sms.ip.one_hour', self::IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_HOUR);
+        $this->siteDayRateLimiter = $factory('sms.site.one_day', self::SITE_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
     }
 
     public function handle(Request $request)
