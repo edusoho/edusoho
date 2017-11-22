@@ -840,29 +840,6 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     */
-    public function testSetupAccountTwice()
-    {
-        $user = null;
-        $result = $this->getUserService()->setupAccount($user['id']);
-    }
-
-    /**
-     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
-     */
-    public function testSetupAccountThird()
-    {
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email' => 'test_email@email.com',
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $result = $this->getUserService()->setupAccount($registeredUser['id']);
-    }
-
-    /**
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangePasswordWithEmptyPassword()

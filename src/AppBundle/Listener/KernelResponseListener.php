@@ -21,7 +21,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+        if (HttpKernelInterface::MASTER_REQUEST != $event->getRequestType()) {
             return;
         }
 
