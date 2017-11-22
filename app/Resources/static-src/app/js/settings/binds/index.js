@@ -9,7 +9,7 @@ $('.js-unbind-btn').on('click', function() {
     confirmText: Translator.trans('site.confirm'),
     cancelText: Translator.trans('site.close'),
     confirm() {
-      $.get(url, function (data) {
+      $.post(url, function (data) {
         notify('success', Translator.trans(data.message));
         setTimeout(function() {
           window.location.reload();
