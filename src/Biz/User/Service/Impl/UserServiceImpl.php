@@ -1218,9 +1218,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
-
         if ($bind) {
-            $bind = $this->getUserBindDao()->delete($bind['id']);
+            $type = $this->convertOAuthType($type);
+            $this->getUserBindDao()->deleteByTypeAndToId($type, $toId);
             $currentUser = $this->getCurrentUser();
             $this->getLogService()->info('user', 'unbind', sprintf('用户名%s解绑成功，操作用户为%s', $user['nickname'], $currentUser['nickname']));
         }
@@ -1230,9 +1230,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserBindByTypeAndFromId($type, $fromId)
     {
-        if ('weixinweb' == $type || 'weixinmob' == $type) {
-            $type = 'weixin';
-        }
+        $type = $this->convertOAuthType($type);
 
         return $this->getUserBindDao()->getByTypeAndFromId($type, $fromId);
     }
@@ -1254,9 +1252,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Type');
         }
 
-        if ('weixinweb' == $type || 'weixinmob' == $type) {
-            $type = 'weixin';
-        }
+        $type = $this->convertOAuthType($type);
 
         return $this->getUserBindDao()->getByToIdAndType($type, $toId);
     }
@@ -1273,9 +1269,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Type');
         }
 
-        if ('weixinweb' == $type || 'weixinmob' == $type) {
-            $type = 'weixin';
-        }
+        $type = $this->convertOAuthType($type);
 
         $this->getUserBindDao()->create(array(
             'type' => $type,
@@ -2146,6 +2140,20 @@ class UserServiceImpl extends BaseService implements UserService
     public function getKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    /**
+     * @param $type
+     *
+     * @return string
+     */
+    private function convertOAuthType($type)
+    {
+        if ('weixinweb' == $type || 'weixinmob' == $type) {
+            $type = 'weixin';
+        }
+
+        return $type;
     }
 }
 
