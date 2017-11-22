@@ -90,7 +90,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     public function getOrderInfoByUserIdAndInviteTime($userId, $inviteTime)
     {
         $user = $this->getCurrentUser();
-        $conditions = array('user_id' => $userId, 'status' => 'success', 'pay_time_GT' => $inviteTime);
+        $conditions = array('user_id' => $userId, 'statuses' => array('success', 'finished'), 'pay_time_GT' => $inviteTime);
 
         return $this->getOrderService()->sumPaidAmount($conditions);
     }

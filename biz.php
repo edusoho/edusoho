@@ -9,8 +9,6 @@ $env = getAppEvn($argv);
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel = new AppKernel($env, true);
-
-$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel->setRequest($request);
 $kernel->boot();
 

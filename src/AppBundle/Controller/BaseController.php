@@ -97,7 +97,7 @@ class BaseController extends Controller
      */
     protected function isWxClient()
     {
-        return $this->isMobileClient() && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
+        return $this->isMobileClient() && false !== strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger');
     }
 
     /**
@@ -137,8 +137,8 @@ class BaseController extends Controller
         if (isset($_SERVER['HTTP_ACCEPT'])) {
             // 如果只支持wml并且不支持html那一定是移动设备
             // 如果支持wml和html但是wml在html之前则是移动设备
-            if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false)
-                && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false
+            if ((false !== strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml'))
+                && (false === strpos($_SERVER['HTTP_ACCEPT'], 'text/html')
                     || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html'))
                 )) {
                 return true;
@@ -176,7 +176,7 @@ class BaseController extends Controller
             $targetPath = $request->headers->get('Referer');
         }
 
-        if (strpos($targetPath, '/register') !== false) {
+        if (false !== strpos($targetPath, '/register')) {
             return $this->generateUrl('homepage');
         }
 
@@ -198,9 +198,9 @@ class BaseController extends Controller
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if (strpos($url[0], 'callback') !== false
-            || strpos($url[0], '/login/bind') !== false
-            || strpos($url[0], 'crontab') !== false
+        if (false !== strpos($url[0], 'callback')
+            || false !== strpos($url[0], '/login/bind')
+            || false !== strpos($url[0], 'crontab')
         ) {
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
@@ -333,6 +333,20 @@ class BaseController extends Controller
         }
 
         return $url;
+    }
+
+    protected function createSuccessJsonResponse($data = array())
+    {
+        $data = array_merge(array('success' => 1), $data);
+
+        return $this->createJsonResponse($data);
+    }
+
+    protected function createFailJsonResponse($data = array())
+    {
+        $data = array_merge(array('success' => 0), $data);
+
+        return $this->createJsonResponse($data);
     }
 
     protected function getWebExtension()

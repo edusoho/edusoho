@@ -257,7 +257,7 @@ class DefaultController extends BaseController
         $days = $this->getDaysDiff($period);
         $timeRange = $this->getTimeRange($period);
 
-        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'statuses' => array('paid', 'success', 'refunded'));
+        $conditions = array('pay_time_GT' => $timeRange['startTime'], 'pay_time_LT' => $timeRange['endTime'], 'statuses' => array('paid', 'success', 'finished', 'refunded'));
         $newOrders = $this->getOrderService()->countGroupByDate($conditions, 'ASC');
         $series['newOrderCount'] = $newOrders;
 
@@ -279,7 +279,7 @@ class DefaultController extends BaseController
             'pay_time_GT' => $startTime,
             'target_type' => 'course',
             'pay_amount_GT' => 0,
-            'statuses' => array('paid', 'success', 'refunded'),
+            'statuses' => array('paid', 'success', 'finished', 'refunded'),
         );
 
         $courseOrdersCount = $this->getOrderService()->countOrderItems($conditions);

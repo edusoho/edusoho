@@ -101,7 +101,7 @@ class Orders extends MarketingBase
         $registration['password'] = $postData['password'];
         $registration['type'] = 'marketing';
 
-        $user = $this->getAuthService()->register($registration, 'marketing');
+        $user = $this->getAuthService()->register($registration);
 
         return $user;
     }
