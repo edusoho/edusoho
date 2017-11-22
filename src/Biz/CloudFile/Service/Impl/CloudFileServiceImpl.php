@@ -294,11 +294,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $fileIds = empty($fileIds) ? array(-1) : $fileIds;
 
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
-        if (!$files) {
-            return $nos;
-        }
 
-        return ArrayToolkit::column($files, 'globalId');
+        return $files ? ArrayToolkit::column($files, 'globalId') : $nos;
     }
 
     protected function findGlobalIdsByNickname($nickname)
@@ -322,11 +319,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             0, PHP_INT_MAX
         );
 
-        if (!$localFiles) {
-            return $nos;
-        }
-
-        return ArrayToolkit::column($localFiles, 'globalId');
+        return $localFiles ? ArrayToolkit::column($localFiles, 'globalId') : $nos;
     }
 
     /**
