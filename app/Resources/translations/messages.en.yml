@@ -5387,11 +5387,11 @@ admin.login_connect.weixin.help_block: 'Please go to<a target="_blank" href="htt
 admin.login_connect.weixin.frist.help_block: 'Application conditions: Resiter at the open platform and get certification.'
 admin.login_connect.other.apply_btn: Apply
 admin.login_connect.other.qq.help_btn: 'Access help'
+admin.login_connect.other.qq.help_title: 'Access Help: Access help'
+admin.login_connect.other.qq.data_content: '1. Your QQ account open platform certification (personal information) need to reach 75%, then you can create an allpication to enable third-party login;<br>2. You need to fill in the callback address as:<br><a><span class=''text-danger''>XXX</span>/login/bind/qq/callback;<span class=''text-danger''>XXX </span>/settings/bind/qq/callback</a><br>,<span class=''text-danger''>XXX</span> is your site URL. For example, the Qiqiuyu''s callback address is:http://www.qiqiuyu.com/login/bind/QQ/callback;http://www.qiqiuyu.com/settings<br>/bind/QQ/callback; don''t forget the "www";<br>3. To enable the QQ Buttons, find the ID and key from your personal information at the open platform, and fill them in the edusoho system to turn on the QQ login. <br> If QQ access audition is failed, prompting "login button is misplaced", check the "system" and "user settings", "login" part at EduSoho system, to turn on the third-party login and QQ login.'
 admin.login_connect.type.weixinweb.help_block: 'APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications'
 admin.login_connect.type.weixinmob.help_block: 'APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".'
 admin.login_connect.type.weixinmob.MP_verify.help_block: 'Please fill in the content of the MP_verify Contents from wechat'
-admin.login_connect.required_email: 'Email required while login'
-admin.login_connect.required_email.help_block: 'Do not turn on this option before %admin_name% aprroved your access application, or your application may be refused.'
 admin.login_connect.type.weibo.help_block: 'The final step , please enter the login interface validation code at the bottom'
 admin.login_connect.verifcation_loging_interface: 'Login interface validation code'
 admin.login_connect.verifcation_code: 'Validation code'
