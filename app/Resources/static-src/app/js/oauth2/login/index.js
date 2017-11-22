@@ -1,26 +1,10 @@
-import { enterSubmit } from 'common/utils';
+import { enterSubmit } from 'common/form';
 
 const $form = $('#third-party-login-form');
 const $btn = $('.js-submit-btn');
 
-let validator;
-
-if ($('#email').length) {
-  validator = $form.validate({
-    rules: {
-      account: {
-        required: true,
-        email: true,
-      },
-    },
-    messages: {
-      required: Translator.trans('validate.valid_email_input.message'),
-    },
-  });
-}
-
-if ($('#mobile').length) {
-  validator = $form.validate({
+const validateMode = {
+  mobile: {
     rules: {
       account: {
         required: true,
@@ -29,12 +13,20 @@ if ($('#mobile').length) {
     },
     messages: {
       required: Translator.trans('validate.phone.message')
+    }
+  },
+  email: {
+    rules: {
+      account: {
+        required: true,
+        email: true,
+      },
     },
-  });
-}
-
-if ($('#mobileOrEmail').length) {
-  validator = $form.validate({
+    messages: {
+      required: Translator.trans('validate.valid_email_input.message')
+    }
+  },
+  email_or_mobile: {
     rules: {
       account: {
         required: true,
@@ -43,10 +35,12 @@ if ($('#mobileOrEmail').length) {
     },
     messages: {
       required: Translator.trans('validate.phone_and_email_input.message')
-    },
-  });
+    }
+  }
 }
 
+const ruleType = $('.js-third-party-type').data('type');
+const validator = $form.validate(validateMode[ruleType]);
 
 enterSubmit($form, $btn);
 
