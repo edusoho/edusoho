@@ -218,7 +218,6 @@ user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
 user.not_login.tips: 'You are not login now, <a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
 user.approve_tips: 'Tips： if your want to change your personal information, please change here.'
-user.email_tips: 'Please fill your email address to ensure your account safty.'
 user.approved: Verified
 user.approving: Verifying
 user.mobile_bind: Binded
