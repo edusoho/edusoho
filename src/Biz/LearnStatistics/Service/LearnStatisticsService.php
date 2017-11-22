@@ -15,4 +15,8 @@ interface LearnStatisticsService
     public function searchLearnStatisticss($conditions, $orders, $start, $limit);
 
     public function countLearnStatistics($conditions);
+
+    public function syncLearnStatistics();
+
+    public function syncLearnStatisticsByTime($startTime, $endTime);
 }
