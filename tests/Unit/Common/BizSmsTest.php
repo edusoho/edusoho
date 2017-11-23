@@ -13,7 +13,7 @@ class BizSmsTest extends BaseTestCase
         $smsType = BizSms::SMS_BIND_TYPE;
         $code = '123456';
         $this->mockBiz('Sms:SmsService', array(
-            array('functionName' => 'sendVerifySms', 'withParams' => array($smsType, $mobile, 0), 'returnValue' => array('captcha_code' => $code))
+            array('functionName' => 'sendVerifySms', 'withParams' => array($smsType, $mobile, 0), 'returnValue' => array('captcha_code' => $code)),
         ));
 
         $options = array(
