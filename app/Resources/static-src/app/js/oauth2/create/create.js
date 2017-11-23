@@ -204,7 +204,7 @@ export default class Create {
         if (response.status === 429) {
           notify('danger', Translator.trans('oauth.register.time_limit'));
         } else {
-          notify('danger', Translator.trans(response.responseJSON.error.message));
+          notify('danger', Translator.trans('oauth.register.error_message'));
         }
       })
     })
