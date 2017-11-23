@@ -243,7 +243,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             'mcStatus' => 'yes',
             'page' => 1,
             'start' => 0,
-            'limit' => 1
+            'limit' => 1,
         );
         $result = $this->getCloudFileImplementor()->search($conditions);
 
