@@ -42,7 +42,7 @@ class PushStatementJob extends AbstractJob
 
             if (is_array($results)) {
                 foreach ($pushData as $key => $data) {
-                    if (!in_array($data['uuid'], $results)) {
+                    if (!in_array($data['id'], $results)) {
                         $this->biz['logger']->info($results);
                         unset($pushData[$key]);
                     }
