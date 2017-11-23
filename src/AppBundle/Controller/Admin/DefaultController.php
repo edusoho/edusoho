@@ -17,7 +17,7 @@ class DefaultController extends BaseController
         $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permission);
         $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
 
-        if (!empty($tabMenu['mode']) && $tabMenu['mode'] == 'capsules') {
+        if (!empty($tabMenu['mode']) && 'capsules' == $tabMenu['mode']) {
             $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
         }
 
@@ -60,7 +60,7 @@ class DefaultController extends BaseController
 
     private function addInspectRole($name, $value)
     {
-        if ($value['status'] == 'ok') {
+        if ('ok' == $value['status']) {
             return array();
         }
 
@@ -440,7 +440,7 @@ class DefaultController extends BaseController
 
     private function getDaysDiff($period)
     {
-        $days = $period == 'week' ? 6 : 29;
+        $days = 'week' == $period ? 6 : 29;
 
         return $days;
     }
