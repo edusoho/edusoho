@@ -111,7 +111,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection = $this->getConnection();
 
         $connection->exec("
-            CREATE TABLE `xapi_statement` (
+            CREATE TABLE IF NOT EXISTS `xapi_statement` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `uuid` varchar(64) NOT NULL,
             `version` varchar(32) NOT NULL DEFAULT '' COMMENT '版本号',
@@ -130,7 +130,7 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         $connection->exec("
-            CREATE TABLE `xapi_statement_archive` (
+            CREATE TABLE IF NOT EXISTS `xapi_statement_archive` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `uuid` varchar(64) NOT NULL,
             `version` varchar(32) NOT NULL DEFAULT '' COMMENT '版本号',
@@ -149,7 +149,7 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         $connection->exec("
-            CREATE TABLE `xapi_activity_watch_log` (
+            CREATE TABLE IF NOT EXISTS `xapi_activity_watch_log` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
             `activity_id` int(11) DEFAULT NULL COMMENT '教学活动ID',
@@ -163,7 +163,13 @@ class EduSohoUpgrade extends AbstractUpdater
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
 
-        $connection->exec('ALTER TABLE user_bind DROP INDEX type_2');
+        if ($this->isIndexExist('user_bind', 'type', 'type_2') || $this->isIndexExist('user_bind', 'toId', 'type_2')) {
+            $connection->exec('ALTER TABLE user_bind DROP INDEX type_2');
+        }
+
+        $this->logger('info', '新建表');
+
+        return 1;
     }
 
     protected function resetCrontabJobNum()
