@@ -196,9 +196,7 @@ class SystemCrontabInitializer
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_AddActivityWatchToStatementJob', 'source' => self::SOURCE_SYSTEM));
 
-
         if (0 == $count) {
-
             self::getSchedulerService()->register(array(
                 'name' => 'Xapi_AddActivityWatchToStatementJob',
                 'pool' => 'default',
@@ -209,7 +207,7 @@ class SystemCrontabInitializer
             ));
         }
 
-        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_ArchiveStatementJob', 'source' => self::SOURCE_SYSTEM));;
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_ArchiveStatementJob', 'source' => self::SOURCE_SYSTEM));
 
         if (0 == $count) {
             self::getSchedulerService()->register(array(
@@ -221,7 +219,6 @@ class SystemCrontabInitializer
                 'args' => array(),
             ));
         }
-
     }
 
     /**
