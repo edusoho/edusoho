@@ -88,7 +88,7 @@ class XapiServiceProvider implements ServiceProviderInterface
         });
 
         $biz[sprintf('xapi.push.%s', AudioListen::TYPE)] = $biz->factory(function ($biz) {
-            $type = new WriteNoteType();
+            $type = new AudioListen();
             $type->setBiz($biz);
 
             return $type;
