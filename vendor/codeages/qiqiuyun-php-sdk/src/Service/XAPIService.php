@@ -10,9 +10,22 @@ class XAPIService extends BaseService
 
     protected $defaultLang = 'zh-CN';
 
-    public function listenAudio($actor, $object, $result, $timestamp = null, $isPush = true)
+    /**
+     * 提交"听音频"的学习记录
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     * @return array|mixed
+     */
+    public function listenAudio($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://activitystrea.ms/schema/1.0/listen',
@@ -55,12 +68,17 @@ class XAPIService extends BaseService
      * @param $actor
      * @param $object
      * @param $result
+     * @param $uuid
+     * @param $timestamp
      * @param bool $isPush
      * @return array|mixed
      */
-    public function watchVideo($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function watchVideo($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/acrossx/verbs/watched',
@@ -100,12 +118,20 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成任务”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function finishActivity($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function finishActivity($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
@@ -147,12 +173,20 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成任务的弹题”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function finishActivityQuestion($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function finishActivityQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/answered',
@@ -201,12 +235,20 @@ class XAPIService extends BaseService
     
     /**
      * 提交“完成作业”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function finishHomework($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function finishHomework($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
@@ -239,12 +281,20 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成练习”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function finishExercise($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function finishExercise($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
@@ -277,12 +327,20 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成考试”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function finishTestpaper($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function finishTestpaper($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
@@ -315,12 +373,20 @@ class XAPIService extends BaseService
 
     /**
      * 提交“记笔记”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function writeNote($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function writeNote($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/adb/verbs/noted',
@@ -356,12 +422,20 @@ class XAPIService extends BaseService
 
     /**
      * 提交“提问题”的学习记录
-     *
-     * @return
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param $uuid
+     * @param $timestamp
+     * @param bool $isPush
+     * @return array|mixed
      */
-    public function askQuestion($actor, $object, $result, $timestamp = null, $isPush = true)
+    public function askQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/asked',
@@ -395,9 +469,22 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    public function watchLive($actor, $object, $result, $timestamp = null, $isPush = true)
+    /**
+     * 提交"观看直播"的记录
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     * @return array|mixed
+     */
+    public function watchLive($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
+        if (!empty($uuid)) {
+            $statement['id'] = $uuid;
+        }
         $statement['actor'] = $actor;
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/acrossx/verbs/watched',

@@ -34,6 +34,6 @@ class DoTestpaperType extends Type
             $result['success'] = ('passed' == $testpaperResult['passedStatus']) ? true : false;
         }
 
-        return $this->createXAPIService()->finishTestpaper($actor, $object, $result, $statement['created_time'], false);
+        return $this->createXAPIService()->finishTestpaper($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
     }
 }

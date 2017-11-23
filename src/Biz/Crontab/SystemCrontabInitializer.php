@@ -180,6 +180,48 @@ class SystemCrontabInitializer
                 'args' => array(),
             ));
         }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_PushStatementsJob', 'source' => self::SOURCE_SYSTEM));
+
+        if (0 == $count) {
+            self::getSchedulerService()->register(array(
+                'name' => 'Xapi_PushStatementsJob',
+                'pool' => 'default',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '30 * * * *',
+                'class' => 'Biz\Xapi\Job\PushStatementJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_AddActivityWatchToStatementJob', 'source' => self::SOURCE_SYSTEM));
+
+
+        if (0 == $count) {
+
+            self::getSchedulerService()->register(array(
+                'name' => 'Xapi_AddActivityWatchToStatementJob',
+                'pool' => 'default',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '35 * * * *',
+                'class' => 'Biz\Xapi\Job\AddActivityWatchToStatementJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_ArchiveStatementJob', 'source' => self::SOURCE_SYSTEM));;
+
+        if (0 == $count) {
+            self::getSchedulerService()->register(array(
+                'name' => 'Xapi_ArchiveStatementJob',
+                'pool' => 'default',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '40 * * * *',
+                'class' => 'Biz\Xapi\Job\ArchiveStatementJob',
+                'args' => array(),
+            ));
+        }
+
     }
 
     /**

@@ -38,12 +38,20 @@ class PushStatementJob extends AbstractJob
             }
 
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
-            $result = $this->createXAPIService()->pushStatements($pushStatements);
+            $results = $this->createXAPIService()->pushStatements($pushStatements);
 
-            if ($result) {
+            if (is_array($results)) {
+                foreach ($pushData as $key => $data)
+                {
+                    if(!in_array($data['uuid'], $results)) {
+                        $this->biz['logger']->info($results);
+                        unset($pushData[$key]);
+                    }
+                }
                 $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
             }
         } catch (\Exception $e) {
+            $this->biz['logger']->error($e);
         }
     }
 

@@ -34,6 +34,6 @@ class AudioListen extends Type
             'duration' => $watchLog['watched_time'],
         );
 
-        return $this->createXAPIService()->listenAudio($actor, $object, $result, $statement['created_time'], false);
+        return $this->createXAPIService()->listenAudio($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
     }
 }

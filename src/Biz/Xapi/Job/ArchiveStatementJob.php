@@ -3,11 +3,12 @@
 namespace Biz\Xapi\Job;
 
 use Biz\System\Service\SettingService;
+use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class PushStatementJob extends AbstractJob
+class ArchiveStatementJob extends AbstractJob
 {
     public function execute()
     {
@@ -20,7 +21,7 @@ class PushStatementJob extends AbstractJob
             1000
         );
 
-        $this->getStatementDao()->batchCreate($statements);
+        $this->getArchiveStatementDao()->batchCreate($statements);
         foreach ($statements as $statement) {
             $this->getStatementDao()->delete($statement['id']);
         }
@@ -48,5 +49,13 @@ class PushStatementJob extends AbstractJob
     protected function getStatementDao()
     {
         return $this->biz->dao('Xapi:XapiDao');
+    }
+
+    /**
+     * @return StatementArchiveDao
+     */
+    protected function getArchiveStatementDao()
+    {
+        return $this->biz->dao('Xapi:StatementArchiveDao');
     }
 }
