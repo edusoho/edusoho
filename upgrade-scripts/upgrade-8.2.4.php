@@ -68,7 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'registerJobs',
+            'createTables',
             'resetCrontabJobNum',
         );
 
@@ -106,37 +106,64 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function registerJobs($page)
+    protected function createTables()
     {
+        $connection = $this->getConnection();
 
-        if (!$this->isJobExist('Xapi_PushStatementsJob')) {
-            $this->getSchedulerService()->register(array(
-                'name' => 'Xapi_PushStatementsJob',
-                'pool' => 'default',
-                'source' => 'MAIN',
-                'expression' => '* * * * *',
-                'class' => 'Biz\Xapi\Job\PushStatementJob',
-                'args' => array(),
-            ));
-        }
+        $connection->exec("
+            CREATE TABLE `xapi_statement` (
+            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+            `uuid` varchar(64) NOT NULL,
+            `version` varchar(32) NOT NULL DEFAULT '' COMMENT '版本号',
+            `push_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上报时间',
+            `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属用户',
+            `verb` varchar(32) NOT NULL DEFAULT '' COMMENT '用户行为',
+            `target_id` int(10) DEFAULT NULL COMMENT '目标Id',
+            `target_type` varchar(32) NOT NULL COMMENT '目标类型',
+            `status` varchar(16) NOT NULL DEFAULT 'created' COMMENT '状态: created, pushing, pushed',
+            `data` text COMMENT '数据',
+            `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+            `occur_time` int(10) unsigned NOT NULL COMMENT '行为发生时间',
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `uuid` (`uuid`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        $this->logger('info', '新增PushStatementJob');
+        $connection->exec("
+            CREATE TABLE `xapi_statement_archive` (
+            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+            `uuid` varchar(64) NOT NULL,
+            `version` varchar(32) NOT NULL DEFAULT '' COMMENT '版本号',
+            `push_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上报时间',
+            `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属用户',
+            `verb` varchar(32) NOT NULL DEFAULT '' COMMENT '用户行为',
+            `target_id` int(10) DEFAULT NULL COMMENT '目标Id',
+            `target_type` varchar(32) NOT NULL COMMENT '目标类型',
+            `status` varchar(16) NOT NULL DEFAULT 'created' COMMENT '状态: created, pushing, pushed',
+            `data` text COMMENT '数据',
+            `occur_time` int(10) unsigned NOT NULL COMMENT '行为发生时间',
+            `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `uuid` (`uuid`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-        if (!$this->isJobExist('Xapi_AddActivityWatchToStatementJob')) {
+        $connection->exec("
+            CREATE TABLE `xapi_activity_watch_log` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
+            `activity_id` int(11) DEFAULT NULL COMMENT '教学活动ID',
+            `course_id` int(11) DEFAULT NULL COMMENT '教学计划ID',
+            `task_id` int(11) DEFAULT NULL COMMENT '任务ID',
+            `watched_time` int(10) unsigned NOT NULL COMMENT '观看时长',
+            `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+            `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
+            `is_push` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否推送',
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
 
-            $this->getSchedulerService()->register(array(
-                'name' => 'Xapi_AddActivityWatchToStatementJob',
-                'pool' => 'default',
-                'source' => 'MAIN',
-                'expression' => '* * * * *',
-                'class' => 'Biz\Xapi\Job\AddActivityWatchToStatementJob',
-                'args' => array(),
-            ));
-        }
-
-        $this->logger('info', '新增AddActivityWatchToStatementJob');
-
-        return 1;
+        $connection->exec('ALTER TABLE user_bind DROP INDEX type_2');
     }
 
     protected function resetCrontabJobNum()

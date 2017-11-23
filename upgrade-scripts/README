@@ -1,3 +1,3 @@
 ```[shell]
-git clone ssh://git@gitlab.howzhi.net:4422/edusoho/upgradescripts.git  scripts
+git clone git@coding.codeages.net:edusoho/upgradescripts.git  scripts
 ```
