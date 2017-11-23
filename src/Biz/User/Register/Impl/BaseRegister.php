@@ -153,6 +153,30 @@ abstract class BaseRegister
         return $this->biz->dao('User:UserProfileDao');
     }
 
+    /**
+     * @return InviteRecordService
+     */
+    protected function getInviteRecordService()
+    {
+        return $this->biz->service('User:InviteRecordService');
+    }
+
+    /**
+     * @return CardService
+     */
+    protected function getCardService()
+    {
+        return $this->biz->service('Card:CardService');
+    }
+
+    /**
+     * @return CouponService
+     */
+    protected function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
+    }
+
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
