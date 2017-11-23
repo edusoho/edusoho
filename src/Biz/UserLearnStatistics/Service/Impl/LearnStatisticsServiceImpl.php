@@ -1,9 +1,9 @@
 <?php
 
-namespace Biz\LearnStatistics\Service\Impl;
+namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
-use Biz\LearnStatistics\Service\LearnStatisticsService;
+use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
@@ -38,19 +38,47 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
          return $this->getDailyStatisticsDao()->count($conditions);
     }
 
-    public function syncLearnStatistics()
+    public function syncLearnStatistics($conditions)
     {
-        $syncStatisticsSetting = $this->getStatisticsSetting();
-        $this->syncLearnStatisticsByTime($syncStatisticsSetting['cursor']-24*60*60, $syncStatisticsSetting['cursor']);
+        try {
+            $this->beginTransaction();
+            $finishedTaskNum = $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions));
+            $userIds = ArrayToolkit::column($finishedTaskNum, 'userId');
+
+            $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
+            $userIds = array_merge($userIds, ArrayToolkit::column($learnedSeconds, 'userId'));
+            $dailyStatistics = array();
+
+            $userIds = array_unique($userIds);
+            if (!empty($conditions['userIds'])) {
+                $userIds = array_unique($conditions['userIds']);
+            }
+            foreach($userIds as $userId) {
+                $dailyStatistic = array();
+                $dailyStatistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
+                $dailyStatistic['finishedTaskNum'] = empty($finishedTaskNum[$userId]) ? 0 : $finishedTaskNum[$userId]['count'];
+                $dailyStatistic['userId'] = $userId;
+                $dailyStatistics[] = $dailyStatistic;
+            }
+
+            $this->getTotalStatisticsDao()->batchCreate($dailyStatistics);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error('learn-statistics:'.$e->getMessage());
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function getStatisticsSetting()
     {
         $syncStatisticsSetting = $this->getSettingService()->get('learn_statistics');
-        $time = time();
-        
+    
         if (empty($syncStatisticsSetting)) {
-            $syncStatisticsSetting['currentTime'] = strtotime(date("Y-m-d"), $time);
+            $syncStatisticsSetting = array();
+            $syncStatisticsSetting['currentTime'] = strtotime(date("Y-m-d"), time());
+            //currentTime 当天升级同步数据的那天的0点0分
             $syncStatisticsSetting['endTime'] = $syncStatisticsSetting['currentTime'] + 24*60*60*365;
             $syncStatisticsSetting['cursor'] = $syncStatisticsSetting['currentTime'];
 
@@ -104,7 +132,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
 
     public function syncTotalLearnStatistics($conditions)
     {
-        
+          
     }
 
     private function updateSettingCursor($time)
@@ -144,7 +172,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
      */
     protected function getDailyStatisticsDao()
     {
-        return $this->biz->dao('LearnStatistics:DailyStatisticsDao');
+        return $this->biz->dao('UserLearnStatistics:DailyStatisticsDao');
     }
 
     /**
@@ -152,6 +180,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
      */
     protected function getTotalStatisticsDao()
     {
-        return $this->biz->dao('LearnStatistics:TotalStatisticsDao');
+        return $this->biz->dao('UserLearnStatistics:TotalStatisticsDao');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\LearnStatistics\Dao\Impl;
+namespace Biz\UserLearnStatistics\Dao\Impl;
 
-use Biz\LearnStatistics\Dao\DailyStatisticsDao;
+use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsDao

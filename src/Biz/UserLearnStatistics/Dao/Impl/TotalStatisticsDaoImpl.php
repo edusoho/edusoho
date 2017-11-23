@@ -1,10 +1,11 @@
 <?php
 
-namespace Biz\LearnStatistics\Dao\Impl;
+namespace Biz\UserLearnStatistics\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Biz\UserLearnStatistics\Dao\TotalStatisticsDao;
 
-class LearnStatisticsDaoImpl extends \Codeages\Biz\Framework\Dao\GeneralDaoImpl
+class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsDao
 {
     protected $table = 'user_learn_statistics_total';
 
@@ -24,18 +25,18 @@ class LearnStatisticsDaoImpl extends \Codeages\Biz\Framework\Dao\GeneralDaoImpl
             ),
             'orderbys' => array(
                 'id',
-                'create_time',
-                'update_time',
+                'createdTime',
+                'updatedTime',
             ),
-            'timestamps' => array('create_time', 'update_time'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'id =: id',
                 'id IN ( :ids)',
                 'id NOT IN ( :excludeIds )',
-                'create_time >= :createTime_GE',
-                'create_time <= :createTime_LE',
-                'update_time >= :updateTime_GE',
-                'update_time <= :updateTime_LE',
+                'createdTime >= :createTime_GE',
+                'createdTime <= :createTime_LE',
+                'updatedTime >= :updateTime_GE',
+                'updatedTime <= :updateTime_LE',
             )
         );
     }

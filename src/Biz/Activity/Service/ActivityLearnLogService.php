@@ -15,5 +15,5 @@ interface ActivityLearnLogService
     public function getLastestLearnLogByActivityIdAndUserId($activityId, $userId);
 
     // 统计时间段内 每个用户的学习时长
-    public function sumLearnTimeGroupByUserId($startTime, $endTime);
+    public function sumLearnTimeGroupByUserId($conditions);
 }

@@ -2267,4 +2267,4 @@ admin_bill:
 
 admin_user_learn_statistics:
     path: /user/learn/statistics
-    defaults: { _controller: AppBundle:Admin/LearnStatistics:show }
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:show }

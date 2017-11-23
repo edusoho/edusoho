@@ -182,6 +182,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'roles = :role',
                 'UPPER(nickname) LIKE :nickname',
                 'id =: id',
+                'id > :id_GT',
                 'loginIp = :loginIp',
                 'createdIp = :createdIp',
                 'approvalStatus = :approvalStatus',

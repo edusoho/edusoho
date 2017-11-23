@@ -34,7 +34,8 @@ class AddUserLearnStatistics extends Migration
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`),
-                KEY  index_user_id (userId)
+                KEY  index_user_id (userId),
+                UNIQUE (`userId`, `recordTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
             CREATE TABLE IF NOT EXISTS `user_learn_statistics_total` (
@@ -54,11 +55,10 @@ class AddUserLearnStatistics extends Migration
                 `paidAmount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '支付金额',
                 `exitAmount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '退款金额',
                 `actualAmount` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '实付金额',
-                `recordTime` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '记录时间',
-                `isStorage` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否存储到total表',
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`),
+                UNIQUE (`userId`),
                 KEY  index_user_id (userId)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");

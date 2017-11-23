@@ -92,11 +92,13 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         return $this->db()->fetchAssoc($sql, array($activityId, $userId));
     }
 
-    public function sumLearnTimeGroupByUserId($startTime, $endTime)
+    public function sumLearnTimeGroupByUserId($conditions)
     {
-        $sql = 'SELECT sum(`learnedTime`) as learnedTime, `userId` FROM `activity_learn_log` where `createdTime` >= ? and `createdTime` < ?  GROUP by `userId`';
-        
-        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('sum(`learnedTime`) as learnedTime, `userId`')
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
     }
 
     public function declares()
@@ -113,6 +115,10 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
                 'event_EQ = :event',
                 'event_NEQ <> :event',
                 'userId = :userId',
+                'userId IN ( :userIds )',
+                'createdTime >= :createdTime_GE',
+                'createdTime <= :createdTime_LE',
+                'createdTime < :createdTime_LT',
             ),
         );
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\LearnStatistics\Service;
+namespace Biz\UserLearnStatistics\Service;
 
 interface LearnStatisticsService
 {
@@ -16,7 +16,5 @@ interface LearnStatisticsService
 
     public function countLearnStatistics($conditions);
 
-    public function syncLearnStatistics();
-
-    public function syncLearnStatisticsByTime($startTime, $endTime);
+    public function syncLearnStatistics($conditions);
 }

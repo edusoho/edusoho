@@ -12,9 +12,9 @@ use Biz\Task\Service\TaskService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
-    public function countFinishedTaskNumGroupByUserId($startTime, $endTime)
+    public function countTaskNumGroupByUserId($conditions)
     {
-         $result = $this->getTaskResultDao()->countFinishedTaskNumGroupByUserId($startTime, $endTime);
+         $result = $this->getTaskResultDao()->countTaskNumGroupByUserId($conditions);
          
          return ArrayToolkit::index($result, 'userId');
     }

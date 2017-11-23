@@ -63,6 +63,5 @@ interface TaskResultService
 
     public function findTaskresultsByTaskId($taskId);
 
-    // 统计时间段内，每个用户学完的任务数
-    public function countFinishedTaskNumGroupByUserId($startTime, $endTime);
+    public function countTaskNumGroupByUserId($conditions);
 }

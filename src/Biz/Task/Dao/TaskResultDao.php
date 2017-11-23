@@ -38,5 +38,5 @@ interface TaskResultDao extends GeneralDaoInterface
 
     public function findTaskresultsByTaskId($taskId);
 
-    public function countFinishedTaskNumGroupByUserId($startTime, $endTime);
+    public function countTaskNumGroupByUserId($conditions);
 }

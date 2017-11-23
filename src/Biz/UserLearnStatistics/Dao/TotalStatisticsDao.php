@@ -1,10 +1,10 @@
 <?php
 
-namespace Biz\LearnStatistics\Dao;
+namespace Biz\UserLearnStatistics\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface LearnStatisticsDao extends GeneralDaoInterface
+interface TotalStatisticsDao extends GeneralDaoInterface
 {
     public function findByIds($ids);
 }
