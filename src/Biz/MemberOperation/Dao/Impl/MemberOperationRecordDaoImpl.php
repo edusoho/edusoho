@@ -20,14 +20,19 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
             'conditions' => array(
                 'id = :id',
                 'user_id IN (:user_ids)',
+                'user_id IN (:userIds)',
                 'operate_type = :operate_type',
                 'operate_time > :operate_time_GT',
                 'operate_time >= :operate_time_GE',
                 'operate_time < :operate_time_LT',
                 'target_type = :target_type',
-                'member_id != exclude_member_id',
-                'member_id = member_id',
+                'member_id != :exclude_member_id',
+                'member_id = :member_id',
                 'target_id = :target_id',
+                'parent_id > :parent_id_GT',
+                'parent_id = :parent_id',
+                'join_course_set = :join_course_set',
+                'exit_course_set = :exit_course_set',
             ),
         );
     }
@@ -43,6 +48,19 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
             ->select('count(distinct(user_id))');
 
         return $builder->execute()->fetchColumn(0) ?: 0;
+    }
+
+    public function countGroupByUserId($field, $conditions)
+    {
+        if (!in_array($field, array('target_id', 'course_set_id'))) {
+            return array();
+        }
+
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(distinct({$field})) as count, user_id")
+            ->groupBy('user_id');
+
+        return $builder->execute()->fetchAll();
     }
 
     public function countGroupByDate($conditions, $sort, $dateColumn = 'operate_time')
