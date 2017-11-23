@@ -3,7 +3,9 @@
 	  {% include 'question/part/question-stem.html.twig' %}
   </div>
 
-	{% if not question.isDeleted|default(0) and (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
+	{% if not question.isDeleted|default(0) and (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted')
+	or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished')
+	or (setting('questions.testpaper_answers_show_mode','submitted') == 'hide'  and paperResult.status|default(null) in ['reviewing', 'finished'] and paperResult.type not in ['testpaper']) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		  	{{'course.question_manage.manage.right_answer'|trans}} <strong class="color-success">
