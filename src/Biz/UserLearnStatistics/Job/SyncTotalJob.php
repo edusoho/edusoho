@@ -16,7 +16,7 @@ class SyncTotalJob extends AbstractJob
         if (empty($users)) {
             $learnSetting['syncTotalDataStatus'] = 1;
             $this->getSettingService()->set('learn_statistics', $learnSetting);
-            $this->getSchedulerService()->deleteJobByName('UserTotalLearnStatisticesJob');
+            $this->getSchedulerService()->disabledJob($this->id);
         }
 
         $userIds = ArrayToolkit::column($users, 'id');
@@ -25,7 +25,8 @@ class SyncTotalJob extends AbstractJob
             'createdTime_LT' => $learnSetting['currentTime'],
             'userIds' => $userIds,
         );
-        $this->getLearnStatisticesService()->syncLearnStatistics($conditions);
+        $this->getLearnStatisticesService()->batchCreateTotalStatistics($conditions);
+            
         $endUser = end($users);
         $learnSetting['lastUserId'] = $endUser['id'];
         $this->getSettingService()->set('learn_statistics', $learnSetting);

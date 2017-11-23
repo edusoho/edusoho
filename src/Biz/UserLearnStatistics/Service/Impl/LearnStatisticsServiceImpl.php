@@ -8,67 +8,42 @@ use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
-    public function getLearnStatistics($id, $lock = false)
-    {
-        return $this->getDailyStatisticsDao()->get($id, array('lock'=>$lock));
-    }
-
-    public function createLearnStatistics($fields)
-    {
-        return $this->getDailyStatisticsDao()->create($fields);
-    }
-
-    public function updateLearnStatistics($id, $fields)
-    {
-         return $this->getDailyStatisticsDao()->update($id, $fields);
-    }
-
-    public function findLearnStatisticsByIds($ids)
-    {
-         return $this->getDailyStatisticsDao()->findByIds($id, $fields);
-    }
-
-    public function searchLearnStatisticss($conditions, $orders, $start, $limit)
-    {
-        return $this->getDailyStatisticsDao()->search($conditions, $orders, $start, $limit);
-    }
-
-    public function countLearnStatistics($conditions)
-    {
-         return $this->getDailyStatisticsDao()->count($conditions);
-    }
-
-    public function syncLearnStatistics($conditions)
+    public function batchCreateTotalStatistics($conditions)
     {
         try {
             $this->beginTransaction();
-            $finishedTaskNum = $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions));
-            $userIds = ArrayToolkit::column($finishedTaskNum, 'userId');
-
-            $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
-            $userIds = array_merge($userIds, ArrayToolkit::column($learnedSeconds, 'userId'));
-            $dailyStatistics = array();
-
-            $userIds = array_unique($userIds);
-            if (!empty($conditions['userIds'])) {
-                $userIds = array_unique($conditions['userIds']);
-            }
-            foreach($userIds as $userId) {
-                $dailyStatistic = array();
-                $dailyStatistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
-                $dailyStatistic['finishedTaskNum'] = empty($finishedTaskNum[$userId]) ? 0 : $finishedTaskNum[$userId]['count'];
-                $dailyStatistic['userId'] = $userId;
-                $dailyStatistics[] = $dailyStatistic;
-            }
-
-            $this->getTotalStatisticsDao()->batchCreate($dailyStatistics);
-
+            $statistics = $this->searchLearnData($conditions);
             $this->commit();
+            $this->getTotalStatisticsDao()->batchCreate($statistics);
         } catch (\Exception $e) {
             $this->getLogger()->error('learn-statistics:'.$e->getMessage());
             $this->rollback();
-            throw $e;
         }
+        
+    }
+
+    public function searchLearnData($conditions)
+    {
+        $finishedTaskNum = $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions));
+        $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
+        $statistics = array();
+
+        if (!empty($conditions['userIds'])) {
+            $userIds = array_unique($conditions['userIds']);
+        } else {
+            $userIds = array_merge($userIds, ArrayToolkit::column($learnedSeconds, 'userId'));
+            $userIds = ArrayToolkit::column($finishedTaskNum, 'userId');
+            $userIds = array_unique($userIds);
+        }
+        foreach($userIds as $userId) {
+            $statistic = array();
+            $statistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
+            $statistic['finishedTaskNum'] = empty($finishedTaskNum[$userId]) ? 0 : $finishedTaskNum[$userId]['count'];
+            $statistic['userId'] = $userId;
+            $statistics[] = $statistic;
+        }
+
+        return $statistics;
     }
 
     public function getStatisticsSetting()
@@ -79,7 +54,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $syncStatisticsSetting = array();
             $syncStatisticsSetting['currentTime'] = strtotime(date("Y-m-d"), time());
             //currentTime 当天升级同步数据的那天的0点0分
-            $syncStatisticsSetting['endTime'] = $syncStatisticsSetting['currentTime'] + 24*60*60*365;
+            $syncStatisticsSetting['endTime'] = $syncStatisticsSetting['currentTime'] - 24*60*60*365;
             $syncStatisticsSetting['cursor'] = $syncStatisticsSetting['currentTime'];
 
             $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
