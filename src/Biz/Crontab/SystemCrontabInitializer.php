@@ -43,7 +43,7 @@ class SystemCrontabInitializer
 
     private static function registerDefaultCrontab()
     {
-        if (System::getOS() === System::OS_LINUX || System::getOS() === System::OS_OSX) {
+        if (System::OS_LINUX === System::getOS() || System::OS_OSX === System::getOS()) {
             try {
                 $crontabRepository = new CrontabRepository(new CrontabAdapter());
                 $command = self::getCrontabJobCommand();
@@ -92,7 +92,7 @@ class SystemCrontabInitializer
     private static function registerDefaultJobs()
     {
         $count = self::getSchedulerService()->countJobs(array('name' => 'Order_FinishSuccessOrdersJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'Order_FinishSuccessOrdersJob',
                 'source' => self::SOURCE_SYSTEM,
@@ -103,7 +103,7 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'Order_CloseOrdersJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'Order_CloseOrdersJob',
                 'source' => self::SOURCE_SYSTEM,
@@ -114,7 +114,7 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'DeleteExpiredTokenJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'DeleteExpiredTokenJob',
                 'source' => self::SOURCE_SYSTEM,
@@ -125,7 +125,7 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'SessionGcJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'SessionGcJob',
                 'source' => self::SOURCE_SYSTEM,
@@ -136,7 +136,7 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'OnlineGcJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'OnlineGcJob',
                 'source' => self::SOURCE_SYSTEM,
@@ -147,7 +147,7 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'MarkExecutingTimeoutJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'Scheduler_MarkExecutingTimeoutJob',
                 'pool' => 'dedicated',
@@ -159,7 +159,7 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'RefreshLearningProgressJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'RefreshLearningProgressJob',
                 'source' => self::SOURCE_SYSTEM,
@@ -171,12 +171,51 @@ class SystemCrontabInitializer
         }
 
         $count = self::getSchedulerService()->countJobs(array('name' => 'UpdateInviteRecordOrderInfoJob', 'source' => self::SOURCE_SYSTEM));
-        if ($count == 0) {
+        if (0 == $count) {
             self::getSchedulerService()->register(array(
                 'name' => 'UpdateInviteRecordOrderInfoJob',
                 'source' => self::SOURCE_SYSTEM,
                 'expression' => '0 * * * *',
                 'class' => 'Biz\User\Job\UpdateInviteRecordOrderInfoJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_PushStatementsJob', 'source' => self::SOURCE_SYSTEM));
+
+        if (0 == $count) {
+            self::getSchedulerService()->register(array(
+                'name' => 'Xapi_PushStatementsJob',
+                'pool' => 'default',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '30 * * * *',
+                'class' => 'Biz\Xapi\Job\PushStatementJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_AddActivityWatchToStatementJob', 'source' => self::SOURCE_SYSTEM));
+
+        if (0 == $count) {
+            self::getSchedulerService()->register(array(
+                'name' => 'Xapi_AddActivityWatchToStatementJob',
+                'pool' => 'default',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '35 * * * *',
+                'class' => 'Biz\Xapi\Job\AddActivityWatchToStatementJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'Xapi_ArchiveStatementJob', 'source' => self::SOURCE_SYSTEM));
+
+        if (0 == $count) {
+            self::getSchedulerService()->register(array(
+                'name' => 'Xapi_ArchiveStatementJob',
+                'pool' => 'default',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '40 * * * *',
+                'class' => 'Biz\Xapi\Job\ArchiveStatementJob',
                 'args' => array(),
             ));
         }

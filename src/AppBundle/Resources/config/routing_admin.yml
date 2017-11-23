@@ -729,6 +729,10 @@ admin_cloud_setting_video:
     path:  /setting/cloud/video
     defaults: { _controller: AppBundle:Admin/EduCloud:videoSetting }
 
+admin_cloud_normal_video_delete:
+    path:  /setting/cloud/normal/video/delete
+    defaults: { _controller: AppBundle:Admin/EduCloud:deleteVideo }
+
 admin_setting_cloud:
     path:  /setting/cloud
     defaults: { _controller: AppBundle:Admin/EduCloud:key }
@@ -2185,10 +2189,6 @@ admin_marketing:
     path: /marketing
     defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
-
 admin_jobs:
     path: /jobs
     defaults: { _controller: AppBundle:Admin/Job:index }
@@ -2223,6 +2223,18 @@ admin_job_fires:
 admin_job_fired_logs:
     path: /job/{id}/fire/{jobFiredId}/logs
     defaults: { _controller: AppBundle:Admin/Job:fireLogs }
+
+admin_xapi_setting:
+    path: /xapi/setting
+    defaults: { _controller: AppBundle:Admin/Xapi:setting }
+
+admin_xapi_statement_list:
+    path: /xapi/statement_list
+    defaults: { _controller: AppBundle:Admin/Xapi:index }
+
+admin_xapi_statement_detail:
+    path: /xapi/statement/{id}/detail
+    defaults: { _controller: AppBundle:Admin/Xapi:detail }
 
 admin_course_task_data_export_prepare:
     path: /course/{courseId}/datas/export/prepare

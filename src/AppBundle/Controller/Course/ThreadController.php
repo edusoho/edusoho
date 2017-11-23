@@ -111,7 +111,7 @@ class ThreadController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        if ($thread['type'] == 'question' && $paginator->getCurrentPage() == 1) {
+        if ('question' == $thread['type'] && 1 == $paginator->getCurrentPage()) {
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
         } else {
             $elitePosts = array();
@@ -159,14 +159,14 @@ class ThreadController extends CourseBaseController
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (empty($course['parentId'])
                 && $this->isVipPluginEnabled()
-                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok'
+                && 'ok' != $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId'])
             ) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (!empty($course['parentId'])) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
                 if (!empty($classroom)
                     && $this->isVipPluginEnabled()
-                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok'
+                    && 'ok' != $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId'])
                 ) {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
                 }
@@ -180,7 +180,7 @@ class ThreadController extends CourseBaseController
             'courseSetId' => $course['courseSetId'],
         ));
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $form->submit($request);
             $formData = $request->request->all();
             if ($form->isValid()) {
@@ -237,7 +237,7 @@ class ThreadController extends CourseBaseController
 
         $form = $this->createThreadForm($thread);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             try {
                 $form->submit($request);
                 $formData = $request->request->all();
@@ -413,7 +413,7 @@ class ThreadController extends CourseBaseController
         ));
         $currentUser = $this->getCurrentUser();
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $form->submit($request);
             $userId = $currentUser->id;
 
@@ -537,7 +537,7 @@ class ThreadController extends CourseBaseController
 
         $form = $this->createPostForm($post);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
             $form->submit($request);
 

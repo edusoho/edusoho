@@ -189,7 +189,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 20005);
+            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 2005);
         }
 
         if ($order['user_id'] != $user['id']) {
@@ -240,7 +240,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $totalDeductAmountExcludeAdjust = 0;
         $adjustDeduct = array();
         foreach ($deducts as $deduct) {
-            if ($deduct['deduct_type'] == self::DEDUCT_TYPE_ADJUST) {
+            if (self::DEDUCT_TYPE_ADJUST == $deduct['deduct_type']) {
                 $adjustDeduct = $deduct;
             } else {
                 $totalDeductAmountExcludeAdjust += $deduct['deduct_amount'];

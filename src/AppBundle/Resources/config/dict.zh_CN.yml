@@ -262,7 +262,6 @@ userType:
     web_email: 网站邮箱注册
     web_mobile: 网站手机注册
     import: 手动导入
-    renren: 人人连接
     qq: QQ登录
     weixin: 微信登录
 

@@ -33,8 +33,12 @@
               <span class="text-muted">{{ 'cashflow.trade_sn'|trans }}：{{ cash.trade_sn|default('--') }}</span><br/>
               <span class="text-muted">{{ 'order.id'|trans }}：{{ cash.order_sn|default('--') }}</span>
             </td>
-            <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
-            {{ user.nickname }}</a></td>
+            {% if has_permission('admin_user_manage') %}
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a></td>
+            {% else %}
+              <td><a target="_blank" href="{{ path('user_show', { id:user.id }) }}">
+              {{ user.nickname }}</a></td>
+            {% endif %}
             <td>{{ cash.created_time|date('Y-m-d H:i') }}</td>
             <td class="text-right prl">
             {% if cash.type =="inflow" %}
