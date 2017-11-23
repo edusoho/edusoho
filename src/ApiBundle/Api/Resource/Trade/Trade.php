@@ -24,7 +24,6 @@ class Trade extends AbstractResource
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
         );
     }
-
     
     /**
      * gateway 支付网关
