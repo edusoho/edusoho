@@ -63,7 +63,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function findGlobalIdByUsedCount(&$conditions)
     {
-        if ($conditions['useStatus'] == 'used') {
+        if ('used' == $conditions['useStatus']) {
             $conditions['startCount'] = 1;
         } else {
             $conditions['endCount'] = 1;
@@ -91,7 +91,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if ($unavailableSearch) {
             return;
         }
-        if ($searchType == 'course') {
+        if ('course' == $searchType) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
             if (empty($courseSets)) {
                 $conditions['ids'] = array(-1);
@@ -114,7 +114,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             }
 
             $conditions['ids'] = array_unique($conditions['ids']);
-        } elseif ($searchType == 'user') {
+        } elseif ('user' == $searchType) {
             $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id' => 'DESC'), 0, PHP_INT_MAX);
 
             $userIds = ArrayToolkit::column($users, 'id');

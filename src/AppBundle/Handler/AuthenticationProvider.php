@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\RegisterTypeUtils;
 
 /**
  * 此Class大部分代码来自DaoAuthenticationProvider.
@@ -113,8 +114,9 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         $registration['token'] = array(
                             'userId' => $partnerUser['id'],
                         );
+                        $registration['type'] = $this->getAuthService()->getPartnerName();
 
-                        $this->getUserService()->register($registration, $this->getAuthService()->getPartnerName());
+                        $this->getUserService()->register($registration, RegisterTypeUtils::getRegisterTypes($registration));
 
                         $user = $this->userProvider->loadUserByUsername($username);
                     }
