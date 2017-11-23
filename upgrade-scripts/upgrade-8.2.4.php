@@ -70,6 +70,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'createTables',
             'resetCrontabJobNum',
+            'disableLianlianPay',
         );
 
         $funcNames = array();
@@ -168,6 +169,15 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->logger('info', '新建表');
+
+        return 1;
+    }
+
+    protected function disableLianlianPay()
+    {
+        $payment = $this->getSettingService()->get('payment', array());
+        $payment['llpay_enabled'] = 0;
+        $this->getSettingService()->set('payment', $payment);
 
         return 1;
     }
