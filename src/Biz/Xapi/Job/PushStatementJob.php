@@ -41,9 +41,9 @@ class PushStatementJob extends AbstractJob
             $results = $this->createXAPIService()->pushStatements($pushStatements);
 
             if (is_array($results)) {
-                foreach ($pushData as $key => $data)
-                {
-                    if(!in_array($data['id'], $results)) {
+
+                foreach ($pushData as $key => $data) {
+                    if (!in_array($data['uuid'], $results)) {
                         $this->biz['logger']->info($results);
                         unset($pushData[$key]);
                     }
