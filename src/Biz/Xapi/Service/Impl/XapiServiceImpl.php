@@ -150,7 +150,7 @@ class XapiServiceImpl extends BaseService implements XapiService
             );
 
             if (empty($statements)) {
-                return ;
+                return;
             }
             $archives = array();
             foreach ($statements as $statement) {
@@ -159,12 +159,12 @@ class XapiServiceImpl extends BaseService implements XapiService
                 ));
             }
             $this->getStatementArchiveDao()->batchCreate($archives);
-             foreach ($statements as $statement) {
-                 $this->getStatementDao()->delete($statement['id']);
-             }
+            foreach ($statements as $statement) {
+                $this->getStatementDao()->delete($statement['id']);
+            }
 
             $this->commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->rollback();
             $this->getLogger()->error($e);
         }
