@@ -16,7 +16,7 @@ class StatementArchiveDaoImpl extends AdvancedDaoImpl
             ),
             'timestamps' => array(
             ),
-            'orderbys' => array('created_time'),
+            'orderbys' => array('created_time', 'push_time'),
             'conditions' => array(),
         );
     }
