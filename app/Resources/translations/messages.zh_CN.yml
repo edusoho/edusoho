@@ -2800,6 +2800,9 @@ user.register.emaill_not_useful_tips: >
   <h5>原邮箱已失效？</h5>
   <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
 user.register.service_protocol: 服务协议
+user.register.agree_terms: 同意服务协议并注册
+user.register.read_detail: 请详细阅读
+user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
 user.register.reset_email.origin_email: 原邮箱地址:
 user.register.reset_email.school_login_password: 网校密码：
@@ -2843,31 +2846,30 @@ user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
 user.oauth.login_by_mobile_or_email: 手机/邮箱
 user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
-user.oauth.bind_account: 绑定账号
-user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%账号
+user.oauth.bind_account: 绑定帐号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%帐号
 user.oauth.validate_password: 验证密码
-user.oauth.bind_success: 账号绑定成功
+user.oauth.bind_success: 帐号绑定成功
 user.oauth.bind_account_success: 绑定成功
-user.oauth.web_account_password: 网校账号密码
+user.oauth.web_account_password: 网校帐号密码
 user.oauth.binding_web_user: 正在绑定网校用户
 user.oauth.bind_account_and_go_continue: 绑定并继续
-user.oauth.bind_other_account: 绑定其他账号？
-user.oauth.bind_existed_account: 绑定已有账号？
+user.oauth.bind_other_account: 绑定其他帐号？
+user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
-user.oauth.register_account_by_ways: 使用%accountType%创建账号
+user.oauth.register_account_by_ways: 使用%accountType%创建帐号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
 user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
 user.oauth.register.send_sms: 发送验证
 user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
-user.oauth.register.agree_terms: 同意服务协议并注册
-user.oauth.register.read_detail: 请详细阅读
-user.oauth.register.user_service_protocol: 用户服务协议
-user.oauth.register_account: 创建账号
+user.oauth.register_account: 创建帐号
 user.oauth.register_success: 注册成功
-user.oauth.register_account_success: 账号注册成功
+user.oauth.register_account_success: 帐号注册成功
+user.oauth.page.closed: 秒后该页面自动关闭
+user.oauth.register.closed: 注册已关闭，请联系管理员
 
 # 用户个人设置
 user.settings: 个人设置
@@ -7365,10 +7367,12 @@ admin.payment_setting.heepay_api_application_word: 下载接口申请说明文�
 admin.payment_setting.heepay_secret: 商户平台Key
 admin.payment_setting.heepay_tips: 因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
 
-admin.payment_setting.llpay: 连连支付
+admin.payment_setting.llpay: 连连支付-RSA加密
 admin.payment_setting.llpay_api_application_word: 下载接口申请说明文档
 admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
+admin.payment_setting.llpay_public_key: 公钥
+admin.payment_setting.llpay_private_key: 密钥
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档

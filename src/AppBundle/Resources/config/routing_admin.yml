@@ -2189,10 +2189,6 @@ admin_marketing:
     path: /marketing
     defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
-
 admin_jobs:
     path: /jobs
     defaults: { _controller: AppBundle:Admin/Job:index }

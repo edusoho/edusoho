@@ -26,7 +26,7 @@ class PasswordResetController extends BaseController
 
         $error = null;
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -36,7 +36,7 @@ class PasswordResetController extends BaseController
                 if (empty($user)) {
                     list($result, $message) = $this->getAuthService()->checkEmail($data['email']);
 
-                    if ($result === 'error_duplicate') {
+                    if ('error_duplicate' === $result) {
                         $error = '请通过论坛找回密码';
 
                         return $this->render('password-reset/index.html.twig', array(
@@ -102,7 +102,7 @@ class PasswordResetController extends BaseController
             ->add('confirmPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -136,7 +136,7 @@ class PasswordResetController extends BaseController
 
     public function resetBySmsAction(Request $request)
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
 
             if ($result) {
@@ -164,11 +164,11 @@ class PasswordResetController extends BaseController
     {
         $host = substr($email, strpos($email, '@') + 1);
 
-        if ($host === 'hotmail.com') {
+        if ('hotmail.com' === $host) {
             return 'http://www.'.$host;
         }
 
-        if ($host === 'gmail.com') {
+        if ('gmail.com' === $host) {
             return 'http://mail.google.com';
         }
 
@@ -180,7 +180,7 @@ class PasswordResetController extends BaseController
         $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
-        if ($result === 'success') {
+        if ('success' === $result) {
             $response = array('success' => false, 'message' => '该手机号码不存在');
         } else {
             $response = array('success' => true, 'message' => '');

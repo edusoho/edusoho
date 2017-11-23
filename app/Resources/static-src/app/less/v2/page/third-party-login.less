@@ -1,3 +1,12 @@
+.third-party-login-section {
+  margin: 40px auto;
+  width: 476px;
+  @media(max-width: @screen-xs-min) {
+    width: 100%;
+    margin: 20px auto;
+  }
+}
+
 .third-party-panel {
   .third-party-panel__heading {
     padding: 27px 24px;
@@ -14,6 +23,9 @@
 .third-party-user {
   font-size: 24px;
   line-height: 1;
+  @media(max-width: @screen-xs-min) {
+    font-size: 18px;
+  }
 }
 
 .third-party-bind-tip {
@@ -25,7 +37,7 @@
 
 .third-party-avatar-wrap {
   position: relative;
-  img {
+  .third-party-avatar-md {
     position: absolute;
     top: 24px;
     left: 107px;
@@ -35,13 +47,23 @@
     @media(max-width: 320px) {
       left: 12%;
     }
-    border: 2px solid #fff;
-    .cd-box-shadow(8px);
   }
 }
 
-.web-avatar-wrap {
-  position: relative;
+.third-party-avatar {
+  width: 128px;
+  height: 128px;
+  border: 4px solid #fff;
+  .cd-box-shadow(8px);
+  .cd-border-radius(50%);
+}
+
+.third-party-avatar-md {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff;
+  .cd-box-shadow(8px);
+  .cd-border-radius(50%);
 }
 
 .third-party-link {
