@@ -201,6 +201,7 @@ export default class Create {
           }
         }
       }).error((response) => {
+        $target.button('reset');
         if (response.status === 429) {
           notify('danger', Translator.trans('oauth.register.time_limit'));
         } else {
