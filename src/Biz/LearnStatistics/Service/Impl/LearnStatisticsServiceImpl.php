@@ -102,6 +102,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         // $refundAmount = array();
     }
 
+    public function syncTotalLearnStatistics($conditions)
+    {
+        
+    }
+
     private function updateSettingCursor($time)
     {
         $syncStatisticsSetting = $this->getSettingService()->get('learn_statistics');
