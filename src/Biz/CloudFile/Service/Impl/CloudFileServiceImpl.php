@@ -87,7 +87,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function findGlobalIdByUsedCount($conditions)
     {
-        if ($conditions['useStatus'] == 'used') {
+        if ('used' == $conditions['useStatus']) {
             $fileConditions['startCount'] = 1;
         } else {
             $fileConditions['endCount'] = 1;
@@ -142,16 +142,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         $nos = empty($conditions['nos']) ? array() : $conditions['nos'];
         $searchType = $conditions['searchType'];
-        $keywords = $conditions['keywords'];
+        $keywords = trim($conditions['keywords']);
         unset($conditions['searchType'], $conditions['keywords']);
 
         switch ($searchType) {
             case 'course':
-                $materialGlobalIds = $this->findGlobalIdsByCourseSetTitle($keywords);
+                $materialGlobalIds = $this->findGlobalIdsByCourseSetTitle($keywords, $nos);
                 $conditions['nos'] = array_merge($nos, $materialGlobalIds);
                 break;
             case 'user':
-                $userGlobalIds = $this->findGlobalIdsByNickname($keywords);
+                $userGlobalIds = $this->findGlobalIdsByNickname($keywords, $nos);
                 $conditions['nos'] = array_merge($nos, $userGlobalIds);
                 break;
             default:
@@ -258,6 +258,20 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getStatistics($options);
     }
 
+    public function deleteCloudMP4Files($userId, $callback)
+    {
+        $tokenFields = array(
+            'userId' => $userId,
+            'duration' => 3600 * 24 * 30,
+            'times' => 1,
+        );
+        $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
+
+        $callback = $callback.'&token='.$token['token'];
+
+        return $this->getCloudFileImplementor()->deleteMP4Files($callback);
+    }
+
     protected function getResourceService()
     {
         $storage = $this->getSettingService()->get('storage', array());
@@ -269,7 +283,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return new ResourceService($config);
     }
 
-    protected function findGlobalIdsByCourseSetTitle($title)
+    protected function findGlobalIdsByCourseSetTitle($title, $globalIds)
     {
         $nos = array(-1);
         $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($title);
@@ -294,11 +308,13 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $fileIds = empty($fileIds) ? array(-1) : $fileIds;
 
         $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $materialGlobalIds = $files ? ArrayToolkit::column($files, 'globalId') : $nos;
+        $materialGlobalIds = empty($globalIds) ? $materialGlobalIds : array_intersect($globalIds, $materialGlobalIds);
 
-        return $files ? ArrayToolkit::column($files, 'globalId') : $nos;
+        return empty($materialGlobalIds) ? $nos : $materialGlobalIds;
     }
 
-    protected function findGlobalIdsByNickname($nickname)
+    protected function findGlobalIdsByNickname($nickname, $globalIds)
     {
         $nos = array(-1);
 
@@ -313,8 +329,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         $userIds = ArrayToolkit::column($users, 'id');
+        $conditions = array(
+            'createdUserIds' => $userIds,
+            'storage' => 'cloud',
+        );
+        if (!empty($globalIds)) {
+            $conditions['globalIds'] = $globalIds;
+        }
+
         $localFiles = $this->getUploadFileService()->searchFiles(
-            array('createdUserIds' => $userIds, 'storage' => 'cloud'),
+            $conditions,
             array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
@@ -370,5 +394,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getMaterialService()
     {
         return ServiceKernel::instance()->createService('Course:MaterialService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

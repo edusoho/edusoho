@@ -23,8 +23,8 @@ class DoHomeworkType extends Type
         $actor = $this->getActor($statement['user_id']);
         $result = array();
 
-        if ($homeworkResult['passedStatus'] != 'none') {
-            $result['success'] = ($homeworkResult['passedStatus'] == 'passed') ? true : false;
+        if ('none' != $homeworkResult['passedStatus']) {
+            $result['success'] = ('passed' == $homeworkResult['passedStatus']) ? true : false;
         }
 
         return $this->createXAPIService()->finishHomework($actor, $object, $result, $statement['created_time'], false);

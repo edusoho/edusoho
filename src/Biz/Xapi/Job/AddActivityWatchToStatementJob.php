@@ -23,7 +23,7 @@ class AddActivityWatchToStatementJob extends AbstractJob
             $activity = $this->getActivityService()->getActivity($watchLog['activity_id']);
             $statement = array(
                 'user_id' => $watchLog['user_id'],
-                'verb' => $activity['mediaType'] == 'audio' ? 'listen' : 'watch',
+                'verb' => 'audio' == $activity['mediaType'] ? 'listen' : 'watch',
                 'target_id' => $watchLog['id'],
                 'target_type' => $activity['mediaType'],
                 'occur_time' => $watchLog['updated_time'],

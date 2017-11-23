@@ -22,10 +22,18 @@
   </div>
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label for="llpay_secret">{{ 'admin.payment_setting.llpay_secret'|trans }}</label>
+      <label for="llpay_accessKey">{{ 'admin.payment_setting.llpay_public_key'|trans }}</label>
     </div>
     <div class="controls col-md-8">
-      <input type="text" id="llpay_secret" name="llpay_secret" class="form-control" value="{{payment.llpay_secret}}">
+      <textarea name="llpay_accessKey" id="llpay_accessKey" rows="5" cols="80">{{payment.llpay_accessKey}}</textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="llpay_secretKey">{{ 'admin.payment_setting.llpay_private_key'|trans }}</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea name="llpay_secretKey" id="llpay_secretKey" rows="5" cols="80">{{payment.llpay_secretKey}}</textarea>
     </div>
   </div>
 </fieldset>
