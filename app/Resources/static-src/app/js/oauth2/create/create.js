@@ -192,15 +192,16 @@ export default class Create {
       }
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
+        $target.button('reset');
         if (response.success === 1) {
           window.location.href = response.url;
         } else {
-          $target.button('reset');
           if (!$('.js-password-error').length) {
             $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">${errorTip}</p>`);
           }
         }
       }).error((response) => {
+        $target.button('reset');
         if (response.status === 429) {
           notify('danger', Translator.trans('oauth.register.time_limit'));
         } else {

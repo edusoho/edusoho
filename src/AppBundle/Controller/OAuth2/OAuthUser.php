@@ -12,6 +12,8 @@ class OAuthUser implements \Serializable
 
     const EMAIL_TYPE = 'email';
 
+    const REGISTER_CLOSED = 'closed';
+
     /**
      * @var string 第三方id
      */
