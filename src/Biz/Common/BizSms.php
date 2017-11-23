@@ -17,11 +17,11 @@ class BizSms extends BizAware
 
     public function send($smsType, $mobile, $options = array())
     {
-        $options = array_merge(array('duration' => TimeMachine::HALF_HOUR, 'verify_times' => 10, 'userId' => 0), $options);
+        $options = array_merge(array('duration' => TimeMachine::HALF_HOUR, 'times' => 10, 'userId' => 0), $options);
         $result = $this->getSmsService()->sendVerifySms($smsType, $mobile, 0);
 
         $smsToken = $this->getTokenService()->makeToken($smsType, array(
-            'times' => $options['verify_times'],
+            'times' => $options['times'],
             'duration' => $options['duration'],
             'userId' => $options['userId'],
             'data' => array(
