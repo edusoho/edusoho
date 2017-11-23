@@ -317,6 +317,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return true;
             }
         }
+
         return $this->getUserService()->verifyPassword($userId, $password);
     }
 
