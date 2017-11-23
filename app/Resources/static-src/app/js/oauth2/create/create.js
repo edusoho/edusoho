@@ -200,6 +200,12 @@ export default class Create {
             $target.prev().addClass('has-error').append(`<p id="password-error" class="form-error-message js-password-error">${errorTip}</p>`);
           }
         }
+      }).error((response) => {
+        if (response.status === 429) {
+          notify('danger', Translator.trans('oauth.register.time_limit'));
+        } else {
+          notify('danger', Translator.trans(response.responseJSON.error.message));
+        }
       })
     })
 
