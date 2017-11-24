@@ -91,30 +91,9 @@ class PushMessageEventSubscriberTest extends BaseTestCase
 
     public function testOnUserFollow()
     {
-        $this->mockBiz(
-            'User:UserService',
-            array(
-                array(
-                    'functionName' => 'getUser',
-                    'returnValue' => array('id' => 1, 'nickname' => '用户1'),
-                    'withParams' => array(1),
-                ),
-                array(
-                    'functionName' => 'getUser',
-                    'returnValue' => array('id' => 2, 'nickname' => '用户2'),
-                    'withParams' => array(2),
-                ),
-            )
-        );
-
+        $this->mockUserInfo();
         $subscriber = $this->getEventSubscriberWithMockedQueue();
-
-        $friendsInfo = array(
-            'fromId' => 1,
-            'toId' => 2,
-        );
-        $event = new Event($friendsInfo);
-        $subscriber->onUserFollow($event);
+        $subscriber->onUserFollow($this->getUserEvent());
 
         $this->assertEquals(
             array(
@@ -133,6 +112,35 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                     'toId' => 2,
                     'title' => '收到一个用户关注',
                     'message' => '用户1已经关注了你！',
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnUserUnFollow()
+    {
+        $this->mockUserInfo();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onUserUnFollow($this->getUserEvent());
+
+        $this->assertEquals(
+            array(
+                'from' => array(
+                    'id' => 1,
+                    'type' => 'user',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => 2,
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'user.unfollow',
+                    'fromId' => 1,
+                    'toId' => 2,
+                    'title' => '用户取消关注',
+                    'message' => '用户1对你已经取消了关注！',
                 ),
             ),
             $this->getQueueService()->getJob()->getBody()
@@ -212,6 +220,35 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                 ),
             )
         );
+    }
+
+    private function mockUserInfo()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 1, 'nickname' => '用户1'),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 2, 'nickname' => '用户2'),
+                    'withParams' => array(2),
+                ),
+            )
+        );
+    }
+
+    private function getUserEvent()
+    {
+        $friendsInfo = array(
+            'fromId' => 1,
+            'toId' => 2,
+        );
+
+        return new Event($friendsInfo);
     }
 
     private function getEventSubscriberWithMockedQueue()
