@@ -27,7 +27,7 @@ class AddUserLearnStatisticsJob extends Migration
               `created_time`
         ) VALUES
         (
-            'SyncUserDailyLeanDataJob',
+            'SyncUserTotalLearnStatisticsJob',
             '*/5 * * * *',
             'Biz\\\\UserLearnStatistics\\\\Job\\\\SyncTotalJob',
             '',

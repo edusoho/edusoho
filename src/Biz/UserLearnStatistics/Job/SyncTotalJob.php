@@ -9,26 +9,54 @@ class SyncTotalJob extends AbstractJob
 {
     public function execute()
     {
-        $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
-        $lastUserId = empty($learnSetting['lastUserId']) ? 0 : $learnSetting['lastUserId'];
-        $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id'=>'asc'), 0, 20000);
-        
-        if (empty($users)) {
-            $learnSetting['syncTotalDataStatus'] = 1;
-            $this->getSettingService()->set('learn_statistics', $learnSetting);
-            $this->getSchedulerService()->disabledJob($this->id);
+        try {
+            $this->biz['db']->beginTransaction();
+            $lastUserId = $this->getLastUserId();
+            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id'=>'asc'), 0, 30000);
+            $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
+            if (empty($users)) {
+                $this->setTotalDataStatus($learnSetting);
+                $this->getSchedulerService()->disabledJob($this->id);
+            }
+
+            $userIds = ArrayToolkit::column($users, 'id');
+            /*
+                skipSyncCourseSetNum，跳过同步 加入课程数和退出课程数
+                退出课程数： 退出课程的最后一个计划
+                加入班级数： 加入的课程第一个计划
+                历史数据统计不了，故，user_learn_statistics_total初始化时，这两个数据不同步
+            */
+            $conditions = array(
+                'createdTime_GE' => 0,
+                'createdTime_LT' => $learnSetting['currentTime'],
+                'userIds' => $userIds,
+                'skipSyncCourseSetNum' => true,
+            );
+            $this->getLearnStatisticesService()->batchCreateTotalStatistics($conditions);
+            $endUser = end($users);
+            $jobArgs['lastUserId'] = $endUser['id'];
+            $this->getJobDao()->update($this->id, array('args' => $jobArgs));
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
         }
 
-        $userIds = ArrayToolkit::column($users, 'id');
-        $conditions = array(
-            'createdTime_GE' => 0,
-            'createdTime_LT' => $learnSetting['currentTime'],
-            'userIds' => $userIds,
-        );
-        $this->getLearnStatisticesService()->batchCreateTotalStatistics($conditions);
-            
-        $endUser = end($users);
-        $learnSetting['lastUserId'] = $endUser['id'];
+    }
+
+    private function getLastUserId()
+    {
+        $jobArgs = $this->args;
+        if (empty($jobArgs)) {
+            $jobArgs = array();
+        }
+
+        return empty($jobArgs['lastUserId']) ? 0 : $jobArgs['lastUserId'];
+    }
+
+    private function setTotalDataStatus($learnSetting)
+    {
+        $learnSetting['syncTotalDataStatus'] = 1;
+
         $this->getSettingService()->set('learn_statistics', $learnSetting);
     }
 
@@ -50,5 +78,10 @@ class SyncTotalJob extends AbstractJob
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getJobDao()
+    {
+        return $this->biz->dao('Scheduler:JobDao');
     }
 }
