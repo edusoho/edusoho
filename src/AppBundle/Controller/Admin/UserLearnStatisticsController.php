@@ -11,10 +11,26 @@ class UserLearnStatisticsController extends BaseController
 {
     public function showAction(Request $request)
     {
-        $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
-        var_dump($learnSetting);   
-        exit;
-        return $this->render('admin/learn-statistices/show.html.twig');
+        $conditions = $request->query->all();
+        $paginator = new Paginator(
+            $request,
+            $this->getLearnStatisticesService()->countTotalStatistics($conditions),
+            20
+        );
+
+        $statistics = $this->getLearnStatisticesService()->searchTotalStatistics(
+            $conditions,
+            array('id' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $userIds = ArrayToolkit::column($statistics, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        return $this->render('admin/learn-statistices/show.html.twig', array(
+            'statistics' => $statistics,
+            'paginator' => $paginator,
+            'users' => $users,
+        ));
     }  
 
     public function syncDailyData()
@@ -30,5 +46,10 @@ class UserLearnStatisticsController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

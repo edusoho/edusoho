@@ -8,6 +8,17 @@ use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
+    public function searchTotalStatistics($conditions, $order, $start, $limit)
+    {
+        return $this->getTotalStatisticsDao()->search($conditions, $order, $start, $limit);
+    }
+
+    public function countTotalStatistics($conditions)
+    {
+        return $this->getTotalStatisticsDao()->count($conditions);
+    }
+
+
     public function batchCreateTotalStatistics($conditions)
     {
         try {

@@ -17,14 +17,34 @@
       <thead>
         <tr>
           <th>用户名</th>
+          <th>加入班级数</th>
+          <th>退出班级数</th>
           <th>加入课程数</th>
+          <th>退出课程数</th>
           <th>加入计划数</th>
           <th>退出计划数</th>
           <th>学完任务数</th>
-          <th>学习时长</th>
+          <th>学习时长(分)</th>
           <th>消费总额(元)</th>
         </tr>
       </thead>
       <tbody>
+        {% for statistic in statistics %}
+          {% set user = users[statistic.userId] %}
+           <tr>
+            <td>{{ user.nickname }}</td>
+            <td>{{ statistic.joinedClassroomNum }}</td>
+            <td>{{ statistic.exitClassroomNum }}</td>
+            <td>{{ statistic.joinedCourseSetNum }}</td>
+            <td>{{ statistic.exitCourseSetNum }}</td>
+            <td>{{ statistic.joinedCourseNum }}</td>
+            <td>{{ statistic.exitCourseNum }}</td>
+            <td>{{ statistic.finishedTaskNum }}</td>
+            <td>{{ statistic.finishedTaskNum }}</td>
+            <td>{{ statistic.actualAmount }}</td>
+          </tr>
+        {% endfor %}
       </tbody>
+    </table>
+    {{ admin_macro.paginator(paginator) }}
 {% endblock %}
