@@ -3,7 +3,6 @@
 namespace Tests\Unit\Common;
 
 use Biz\BaseTestCase;
-use Biz\Common\BizSms;
 use Biz\Common\Logger;
 
 class LoggerTest extends BaseTestCase
@@ -46,8 +45,7 @@ class LoggerTest extends BaseTestCase
         $result = Logger::pluginModuleConfig();
 
         $this->assertEquals(array(
-            'vip' =>
-                array (
+            'vip' => array(
                     'create_member' => '新增会员',
                     'renew_member' => '续费会员',
                     'upgrade_member' => '升级会员',
@@ -61,16 +59,14 @@ class LoggerTest extends BaseTestCase
                     'exportCsv' => '导出',
                     'update_setting' => '更新设置',
                 ),
-            'coupon' =>
-                array (
+            'coupon' => array(
                     'batch_generate' => '生成优惠码',
                     'receive' => '领取优惠码',
                     'use' => '使用优惠码',
                     'batch_delete' => '删除优惠码',
                     'setting' => '更新设置',
                 ),
-            'discount' =>
-                array (
+            'discount' => array(
                     'apply_audit' => '申请打折',
                     'audit_pass' => '审核通过',
                     'audit_reject' => '审核拒绝',
@@ -78,8 +74,7 @@ class LoggerTest extends BaseTestCase
                     'close' => '关闭',
                     'delete' => '删除',
                 ),
-            'money_card' =>
-                array (
+            'money_card' => array(
                     'money_card_use' => '使用',
                     'export' => '导出',
                     'show_password' => '查询密码',
@@ -90,18 +85,15 @@ class LoggerTest extends BaseTestCase
                     'batch_lock' => '批量作废',
                     'batch_delete' => '批量删除',
                 ),
-            'question_plus' =>
-                array (
+            'question_plus' => array(
                     'update_setting' => '更新设置',
                 ),
-            'homework' =>
-                array (
+            'homework' => array(
                     'create' => '新增',
                     'update' => '修改',
                     'delete' => '删除',
                 ),
-            'exercise' =>
-                array (
+            'exercise' => array(
                     'create' => '新增',
                     'update' => '修改',
                     'delete' => '删除',
@@ -113,8 +105,7 @@ class LoggerTest extends BaseTestCase
     {
         $result = Logger::systemModuleConfig();
         $this->assertEquals(array(
-            'course' =>
-                array (
+            'course' => array(
                     'create' => '创建课程',
                     'update' => '修改课程',
                     'update_picture' => '更新课程图片',
@@ -147,8 +138,7 @@ class LoggerTest extends BaseTestCase
                     'sync_when_task_delete' => '同步删除任务',
                     'clone_course_set' => '复制课程',
                 ),
-            'user' =>
-                array (
+            'user' => array(
                     'exportCsv' => '导出',
                     'add' => '新增',
                     'edit' => '修改',
@@ -169,8 +159,7 @@ class LoggerTest extends BaseTestCase
                     'approval_fail' => '实名认证失败',
                     'password-reset' => '重置密码',
                 ),
-            'system' =>
-                array (
+            'system' => array(
                     'email_send_check' => '邮件自检',
                     'setting_email_change' => '更变邮箱',
                     'setting_email-verify' => '邮箱验证',
@@ -181,8 +170,7 @@ class LoggerTest extends BaseTestCase
                     'update_block' => '更新编辑区',
                     'update_app_version' => '更新版本',
                 ),
-            'classroom' =>
-                array (
+            'classroom' => array(
                     'create' => '新增班级',
                     'delete' => '删除班级',
                     'add_course' => '添加课程',
@@ -195,8 +183,7 @@ class LoggerTest extends BaseTestCase
                     'recommend' => '推荐班级',
                     'cancel_recommend' => '取消推荐',
                 ),
-            'article' =>
-                array (
+            'article' => array(
                     'update_settings' => '更新设置',
                     'create' => '新增',
                     'update' => '修改',
@@ -208,61 +195,52 @@ class LoggerTest extends BaseTestCase
                     'publish' => '发布',
                     'unpublish' => '取消发布',
                 ),
-            'notify' =>
-                array (
+            'notify' => array(
                     'create' => '创建',
                     'check_fail' => '检测',
                 ),
-            'order' =>
-                array (
+            'order' => array(
                     'pay_result' => '支付结果',
                     'andit_refund' => '退款审核',
                     'refund_cancel' => '取消退款',
                     'unbind-back' => '解绑银行卡',
                 ),
-            'category' =>
-                array (
+            'category' => array(
                     'create' => '新增',
                     'update' => '修改',
                     'delete' => '删除',
                 ),
-            'content' =>
-                array (
+            'content' => array(
                     'create' => '新增',
                     'update' => '修改',
                     'trash' => '移动到回收站',
                     'delete' => '删除',
                     'publish' => '发布',
                 ),
-            'crontab' =>
-                array (
+            'crontab' => array(
                     'job_start' => '开始任务',
                     'job_end' => '结束任务',
                 ),
-            'upload_file' =>
-                array (
+            'upload_file' => array(
                     'create' => '新增文件',
                     'delete' => '删除文件',
                     'download' => '下载文件',
                     'cloud_convert_callback' => '回调处理',
                     'cloud_convert_error' => '转码失败',
                 ),
-            'marker' =>
-                array (
+            'marker' => array(
                     'create' => '增加驻点',
                     'delete' => '删除驻点',
                     'mediaId_notExist' => '视频不存在',
                     'delete_question' => '删除驻点问题',
                 ),
-            'group' =>
-                array (
+            'group' => array(
                     'create_thread' => '新增话题',
                     'delete_thread' => '删除话题',
                     'close_thread' => '关闭话题',
                     'open_thread' => '开启话题',
                 ),
-            'sms' =>
-                array (
+            'sms' => array(
                     'sms_forget_password' => '登录密码重置',
                     'sms_user_pay' => '使用网站余额支付',
                     'sms_forget_pay_password' => '支付密码重置',
@@ -280,24 +258,20 @@ class LoggerTest extends BaseTestCase
                     'sms_vip_buy_notify' => '会员购买',
                     'sms_coin_buy_notify' => '虚拟币充值',
                 ),
-            'tag' =>
-                array (
+            'tag' => array(
                     'create' => '新增',
                     'update' => '修改',
                     'delete' => '删除',
                 ),
-            'coin' =>
-                array (
+            'coin' => array(
                     'update_settings' => '设置',
                     'add_coin' => '增加',
                     'deduct_coin' => '扣除',
                 ),
-            'announcement' =>
-                array (
+            'announcement' => array(
                     'delete' => '删除公告',
                 ),
-            'open_course' =>
-                array (
+            'open_course' => array(
                     'create_course' => '创建公开课',
                     'update_course' => '更新公开课',
                     'delete_course' => '删除课程',

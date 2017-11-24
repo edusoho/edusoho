@@ -179,6 +179,7 @@ class Logger
 
         if (in_array($module, $modules)) {
             $allModules = array_merge(self::systemModuleConfig(), self::pluginModuleConfig());
+
             return $allModules[$module];
         }
 
