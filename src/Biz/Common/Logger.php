@@ -178,10 +178,11 @@ class Logger
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
 
         if (in_array($module, $modules)) {
-            return $module;
+            $allModules = array_merge(self::systemModuleConfig(), self::pluginModuleConfig());
+            return $allModules[$module];
         }
 
-        return $module;
+        return array();
     }
 
     /**
