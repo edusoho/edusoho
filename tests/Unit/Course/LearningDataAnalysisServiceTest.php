@@ -77,7 +77,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
             array(
                 'functionName' => 'getStatisticDataByCourseIdsAndUserId',
                 'returnValue' => array('learnedCompulsoryTaskNum' => 70, 'compulsoryTaskNum' => 100),
-                'withParams' => array(array(1), 1))
+                'withParams' => array(array(1), 1), ),
         ));
 
         $result = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds(array(1), 1);
@@ -86,7 +86,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
             'finishedCount' => 70,
             'percent' => 70.0,
             'decimal' => 0.7,
-            'total' => 100
+            'total' => 100,
         ), $result);
     }
 

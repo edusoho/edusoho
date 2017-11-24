@@ -24,8 +24,8 @@ class PushMessageEventSubscriberTest extends BaseTestCase
             array(
                 'type' => 'update',
                 'args' => array(
-                    'category' => 'article'
-                )
+                    'category' => 'article',
+                ),
             ),
             $this->getQueueService()->getJob()->getBody()
         );
@@ -51,8 +51,8 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                     'id' => 123,
                     'title' => 'article title',
                     'image' => 'http://test.com/files/thumb.png',
-                    'content' => "article title",
-                    'message' => "article title",
+                    'content' => 'article title',
+                    'message' => 'article title',
                 ),
             ),
             $this->getQueueService()->getJob()->getBody()
@@ -162,7 +162,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
             'id' => 123,
         );
         $event = new Event($article);
-        
+
         return array($subscriber, $event);
     }
 
@@ -184,6 +184,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
     {
         $biz = $this->getBiz();
         $biz['@Queue:QueueService'] = new MockedQueueServiceImpl();
+
         return new PushMessageEventSubscriber($this->biz);
     }
 }
