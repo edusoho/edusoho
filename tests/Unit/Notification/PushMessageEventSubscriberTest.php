@@ -17,8 +17,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
 
     public function testOnArticleCreateWithCloudSearchOn()
     {
-        list($subscriber, $event) = $this->createArticleTestData(true);
-        $subscriber->onArticleCreate($event);
+        $this->createArticleTestData(true);
 
         $this->assertArrayEquals(
             array(
@@ -33,8 +32,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
 
     public function testOnArticleCreateWithCloudSearchOff()
     {
-        list($subscriber, $event) = $this->createArticleTestData(false);
-        $subscriber->onArticleCreate($event);
+        $this->createArticleTestData(false);
 
         $this->assertArrayEquals(
             array(
@@ -53,6 +51,38 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                     'image' => 'http://test.com/files/thumb.png',
                     'content' => 'article title',
                     'message' => 'article title',
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnArticleUpdateWithCloudSearchOn()
+    {
+        $this->enableCloudSearch();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onArticleUpdate($this->getArticleEvent());
+        $this->assertArrayEquals(
+            array(
+                'type' => 'update',
+                'args' => array(
+                    'category' => 'article',
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnArticleDeleteWithCloudSearchOn()
+    {
+        $this->enableCloudSearch();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onArticleDelete($this->getArticleEvent());
+        $this->assertArrayEquals(
+            array(
+                'type' => 'update',
+                'args' => array(
+                    'category' => 'article',
                 ),
             ),
             $this->getQueueService()->getJob()->getBody()
@@ -153,17 +183,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
 
         $subscriber = $this->getEventSubscriberWithMockedQueue();
-
-        $article = array(
-            'thumb' => 'thumb.png',
-            'originalThumb' => 'originalThumb.png',
-            'picture' => 'picture.png',
-            'title' => 'article title',
-            'id' => 123,
-        );
-        $event = new Event($article);
-
-        return array($subscriber, $event);
+        $subscriber->onArticleCreate($this->getArticleEvent());
     }
 
     private function enableIm()
@@ -180,11 +200,38 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
     }
 
+    private function enableCloudSearch()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('search_enabled' => true),
+                    'withParams' => array('cloud_search', array()),
+                ),
+            )
+        );
+    }
+
     private function getEventSubscriberWithMockedQueue()
     {
         $biz = $this->getBiz();
         $biz['@Queue:QueueService'] = new MockedQueueServiceImpl();
 
         return new PushMessageEventSubscriber($this->biz);
+    }
+
+    private function getArticleEvent()
+    {
+        $article = array(
+            'thumb' => 'thumb.png',
+            'originalThumb' => 'originalThumb.png',
+            'picture' => 'picture.png',
+            'title' => 'article title',
+            'id' => 123,
+        );
+
+        return new Event($article);
     }
 }
