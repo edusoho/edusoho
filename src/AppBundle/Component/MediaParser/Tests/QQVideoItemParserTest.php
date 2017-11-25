@@ -45,7 +45,7 @@ class QQVideoItemParserTest extends BaseTestCase
         try {
             return $this->createParser()->parse($url);
         } catch (ParseException $e) {
-            sleep(rand(0, 8));  //延后 0 ~ 8秒
+            sleep(rand(1, 8));  //延后 1 ~ 8秒
             return $this->createParser()->parse($url);
         }
     }
