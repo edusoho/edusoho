@@ -149,7 +149,6 @@ class PushMessageEventSubscriberTest extends BaseTestCase
 
     public function testOnClassroomJoin()
     {
-        $this->enableIm();
         $this->mockClassroomUser();
         $subscriber = $this->getEventSubscriberWithMockedQueue();
         $subscriber->onClassroomJoin($this->getClassroomEvent());
@@ -178,7 +177,6 @@ class PushMessageEventSubscriberTest extends BaseTestCase
 
     public function testOnClassroomQuit()
     {
-        $this->enableIm();
         $this->mockClassroomUser();
         $subscriber = $this->getEventSubscriberWithMockedQueue();
         $subscriber->onClassroomQuit($this->getClassroomEvent());
@@ -199,6 +197,165 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                     'classroomId' => '12',
                     'title' => '《classroom_name》',
                     'message' => '您被admin移出班级《classroom_name》',
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnCourseThreadPostAt()
+    {
+        $this->mockBiz(
+            'Course:ThreadService',
+            array(
+                array(
+                    'functionName' => 'getThread',
+                    'withParams' => array(1111, 1),
+                    'returnValue' => $this->getThread(),
+                ),
+            )
+        );
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseThreadPostAt($this->getCourseThreadPostEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'course',
+                    'id' => '1111',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => '333',
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'course.thread.post.at',
+                    'threadId' => 1,
+                    'threadType' => 'none',
+                    'courseId' => '1111',
+                    'lessonId' => 1234,
+                    'questionTitle' => 'thread title',
+                    'postContent' => 'this is a content',
+                    'title' => '《thread title》',
+                    'message' => '《thread title》回复中@了你',
+                    'questionCreatedTime' => 1511610055,
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnCourseThreadStick()
+    {
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseThreadStick($this->getCourseThreadEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'course',
+                    'id' => '1111',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => 0,
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'course.thread.stick',
+                    'threadId' => 1,
+                    'threadType' => 'none',
+                    'title' => '《thread title》',
+                    'message' => '您的《thread title》被管理员置顶',
+                    'courseId' => 1111,
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnCourseThreadUnStick()
+    {
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseThreadUnStick($this->getCourseThreadEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'course',
+                    'id' => '1111',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => 0,
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'course.thread.unstick',
+                    'threadId' => 1,
+                    'threadType' => 'none',
+                    'title' => '《thread title》',
+                    'message' => '您的《thread title》被管理员取消置顶',
+                    'courseId' => 1111,
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnCourseThreadUnelite()
+    {
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseThreadUnelite($this->getCourseThreadEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'course',
+                    'id' => '1111',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => 0,
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'course.thread.unelite',
+                    'threadId' => 1,
+                    'threadType' => 'none',
+                    'title' => '《thread title》',
+                    'message' => '您的《thread title》被管理员取消加精',
+                    'courseId' => 1111,
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnCourseThreadElite()
+    {
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onCourseThreadElite($this->getCourseThreadEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'course',
+                    'id' => '1111',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => 0,
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'course.thread.elite',
+                    'threadId' => 1,
+                    'threadType' => 'none',
+                    'title' => '《thread title》',
+                    'message' => '您的《thread title》被管理员加精',
+                    'courseId' => 1111,
                 ),
             ),
             $this->getQueueService()->getJob()->getBody()
@@ -369,5 +526,52 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
 
         return new Event($classroom, $memberInfo);
+    }
+
+    private function getCourseThreadPostEvent()
+    {
+        $threadPost = array(
+            'courseId' => '1111',
+            'threadId' => 1,
+            'id' => 1311,
+            'content' => 'this is a content',
+            'userId' => 333,
+            'targetType' => 'course',
+            'targetId' => '1111',
+            'thread' => array(),
+            'createdTime' => 1511610055,
+        );
+
+        $arguments = array(
+            'users' => array(
+                array(
+                    'id' => 333,
+                ),
+            ),
+        );
+
+        return new Event($threadPost, $arguments);
+    }
+
+    private function getCourseThreadEvent()
+    {
+        return new Event($this->getThread());
+    }
+
+    private function getThread()
+    {
+        return array(
+            'courseId' => 1111,
+            'taskId' => 1234,
+            'id' => 1,
+            'targetType' => 'course',
+            'targetId' => 1111,
+            'content' => 'this is a content',
+            'postNum' => 333,
+            'hitNum' => 222,
+            'updateTime' => 1511610055,
+            'createdTime' => 1511610055,
+            'title' => 'thread title',
+        );
     }
 }
