@@ -147,6 +147,64 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
     }
 
+    public function testOnClassroomJoin()
+    {
+        $this->enableIm();
+        $this->mockClassroomUser();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onClassroomJoin($this->getClassroomEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'classroom',
+                    'id' => '12',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => '1233',
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'classroom.join',
+                    'classroomId' => '12',
+                    'title' => '《classroom_name》',
+                    'message' => '您被admin添加到班级《classroom_name》',
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
+    public function testOnClassroomQuit()
+    {
+        $this->enableIm();
+        $this->mockClassroomUser();
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $subscriber->onClassroomQuit($this->getClassroomEvent());
+
+        $this->assertArrayEquals(
+            array(
+                'from' => array(
+                    'type' => 'classroom',
+                    'id' => '12',
+                ),
+                'to' => array(
+                    'type' => 'user',
+                    'id' => '1233',
+                    'convNo' => '',
+                ),
+                'body' => array(
+                    'type' => 'classroom.quit',
+                    'classroomId' => '12',
+                    'title' => '《classroom_name》',
+                    'message' => '您被admin移出班级《classroom_name》',
+                ),
+            ),
+            $this->getQueueService()->getJob()->getBody()
+        );
+    }
+
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -241,6 +299,29 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
     }
 
+    private function mockClassroomUser()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'withParams' => array('1233'),
+                    'returnValue' => array(
+                        'point' => '123',
+                        'roles' => '|ROLE_USER|',
+                        'id' => 1233,
+                        'nickname' => 'user_test',
+                        'title' => 'user_title',
+                        'largeAvatar' => 'largeAvatar.png',
+                        'updatedTime' => time(),
+                        'createdTime' => time(),
+                    ),
+                ),
+            )
+        );
+    }
+
     private function getUserEvent()
     {
         $friendsInfo = array(
@@ -270,5 +351,23 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
 
         return new Event($article);
+    }
+
+    private function getClassroomEvent()
+    {
+        $classroom = array(
+            'smallPicture' => 'smallPicture.png',
+            'middlePicture' => 'middlePicture.png',
+            'largePicture' => 'largePicture.png',
+            'about' => 'about content',
+            'id' => '12',
+            'title' => 'classroom_name',
+        );
+        $memberInfo = array(
+            'userId' => '1233',
+            'member' => array(),
+        );
+
+        return new Event($classroom, $memberInfo);
     }
 }
