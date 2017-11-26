@@ -1022,6 +1022,16 @@ admin:
                             name: 任务日志
                         admin_crontab:
                             name: crontab管理
+                admin_xapi_manage:
+                    name: xAPI
+                    group: 2
+                    visable: false
+                    disable: true
+                    children:
+                        admin_xapi_setting:
+                            name: xAPI
+                        admin_xapi_statement_list:
+                            name: Statements
                 admin_queue_menege:
                     name: 队列
                     group: 2

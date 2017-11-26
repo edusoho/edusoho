@@ -1,3 +1,12 @@
+.third-party-login-section {
+  margin: 40px auto;
+  width: 476px;
+  @media(max-width: @screen-xs-min) {
+    width: 100%;
+    margin: 20px auto;
+  }
+}
+
 .third-party-panel {
   .third-party-panel__heading {
     padding: 27px 24px;
@@ -14,6 +23,9 @@
 .third-party-user {
   font-size: 24px;
   line-height: 1;
+  @media(max-width: @screen-xs-min) {
+    font-size: 18px;
+  }
 }
 
 .third-party-bind-tip {
@@ -25,7 +37,7 @@
 
 .third-party-avatar-wrap {
   position: relative;
-  img {
+  .third-party-avatar-md {
     position: absolute;
     top: 24px;
     left: 107px;
@@ -35,19 +47,33 @@
     @media(max-width: 320px) {
       left: 12%;
     }
-    border: 2px solid #fff;
-    .cd-box-shadow(8px);
   }
 }
 
-.web-avatar-wrap {
-  position: relative;
+.third-party-avatar {
+  width: 128px;
+  height: 128px;
+  border: 4px solid #fff;
+  .cd-box-shadow(8px);
+  .cd-border-radius(50%);
 }
 
+.third-party-avatar-md {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff;
+  .cd-box-shadow(8px);
+  .cd-border-radius(50%);
+}
+
+.third-party-link {
+  font-size: 12px;
+  line-height: 1;
+}
 
 .third-party-form {
   padding: 0 26px;
-  .label-required {
+  .third-party-form__label {
     position: relative;
     &:after {
       margin-left: 4px;
@@ -59,30 +85,32 @@
   }
 }
 
-.third-party-sms-form-group {
-  position: relative;
-  padding-right: 156px;
-  .third-part-action-button {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 140px;
-  }
-}
-
-
-.third-party-form__info {
+.third-party-form-group {
   border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
-  label,
-  .third-party-form__way {
+  .third-party-form-group__info {
     margin-bottom: 8px;
     color: @cd-gray-light;
   }
 }
 
-.third-party-link {
-  font-size: 12px;
-  line-height: 1;
+.third-party-sms-form-group {
+  position: relative;
+  padding-right: 156px;
+  @media(max-width: 320px) {
+    padding-right: 136px;
+  }
+  .third-part-action-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 140px;
+    @media(max-width: 320px) {
+      width: 120px;
+      button {
+        padding: 9px 4px;
+      }
+    }
+  }
 }
 
 .third-party-captcha-form-group {

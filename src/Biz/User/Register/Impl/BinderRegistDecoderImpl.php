@@ -30,7 +30,7 @@ class BinderRegistDecoderImpl extends RegistDecoder
             $user['password'] = '';
         }
 
-        if (in_array($registration['type'], array('weixinmobile', 'weixinweb'))) {
+        if (in_array($registration['type'], array('weixinmob', 'weixinweb'))) {
             $user['type'] = 'weixin';
         }
 

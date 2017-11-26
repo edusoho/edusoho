@@ -26,11 +26,11 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
                 $this->validateCaptcha($request);
                 $factory = $this->biz['ratelimiter.factory'];
                 /** @var RateLimiter $limiter */
-                $limiter = $factory('register.ip.mid_max_allow_attempt_period_day', self::MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
+                $limiter = $factory('register.ip.mid_one_day', self::MID_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
 
                 $remain = $limiter->check($request->getClientIp());
 
-                if ($remain == 0) {
+                if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
                 }
 
@@ -40,16 +40,16 @@ class RegisterRateLimiter extends AbstractRateLimiter implements RateLimiterInte
 
                 $factory = $this->biz['ratelimiter.factory'];
                 /** @var RateLimiter $dayLimiter */
-                $dayLimiter = $factory('register.ip.high_max_allow_attempt_period_day', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
+                $dayLimiter = $factory('register.ip.high_one_day', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_DAY, TimeMachine::ONE_DAY);
                 $remain = $dayLimiter->check($request->getClientIp());
-                if ($remain == 0) {
+                if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
                 }
 
                 /** @var RateLimiter $hourLimiter */
-                $hourLimiter = $factory('register.ip.high_max_allow_attempt_period_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_DAY);
+                $hourLimiter = $factory('register.ip.high_one_hour', self::HIGH_IP_MAX_ALLOW_ATTEMPT_ONE_HOUR, TimeMachine::ONE_DAY);
                 $remain = $hourLimiter->check($request->getClientIp());
-                if ($remain == 0) {
+                if (0 == $remain) {
                     throw $this->createMaxRequestOccurException();
                 }
 

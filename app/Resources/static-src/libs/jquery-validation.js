@@ -484,7 +484,7 @@ $.validator.addMethod('email_or_mobile_check', function (value, element, params)
   if (isEmail || isMobile) {
     result = true;
   }
-  $.validator.messages.email_or_mobile_check = Translator.trans('请输入正确的手机／邮箱');
+  $.validator.messages.email_or_mobile_check = Translator.trans('validate.mobile_or_email_message');
   return this.optional(element) || result;
 }, Translator.trans('validate.email_or_mobile_check.message'));
 

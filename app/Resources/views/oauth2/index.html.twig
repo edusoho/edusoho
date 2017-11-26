@@ -12,23 +12,23 @@
   </div>
 
   <div class="text-center cd-mb32">
-    <img class="cd-avatar cd-avater-circle-lg cd-avatar-lg-shadow" src="{{ asset(oauthUser.avatar) }}">
+    <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
   </div>
 
   <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
     {% if oauthUser.mode == 'mobile' %}
       <div class="form-group cd-form-group">
-        <label class="label-required" for="mobile">{{ 'user.oauth.login_by_mobile'|trans }}</label>
+        <label class="third-party-form__label" for="mobile">{{ 'user.oauth.login_by_mobile'|trans }}</label>
         <input class="form-control" type="number" id="mobile" name="account" required>
       </div>
     {% elseif oauthUser.mode == 'email' %}
       <div class="form-group cd-form-group">
-        <label class="label-required" for="email">{{ 'user.oauth.login_by_email'|trans }}</label>
+        <label class="third-party-form__label" for="email">{{ 'user.oauth.login_by_email'|trans }}</label>
         <input class="form-control" type="email" id="email" name="account" required>
       </div>
     {% else %}
       <div class="form-group cd-form-group">
-        <label class="label-required" for="mobileOrEmail">{{ 'user.oauth.login_by_mobile_or_email'|trans }}</label>
+        <label class="third-party-form__label" for="mobileOrEmail">{{ 'user.oauth.login_by_mobile_or_email'|trans }}</label>
         <input class="form-control" type="text" id="mobileOrEmail" name="account" required>
       </div>
     {% endif %}
@@ -39,4 +39,5 @@
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
+  <input class="js-third-party-type" type="hidden" name="mode" data-type="{{ oauthUser.mode }}">
 {% endblock %}

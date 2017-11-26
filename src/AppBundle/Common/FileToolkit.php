@@ -77,7 +77,7 @@ class FileToolkit
     {
         $ext = strtolower(static::getFileExtension($file));
 
-        return $ext == 'ico' ? true : false;
+        return 'ico' == $ext ? true : false;
     }
 
     public static function generateFilename($ext = '')
@@ -1015,6 +1015,7 @@ class FileToolkit
 
     public static function cropImages($filePath, $options)
     {
+        $fileSystem = new Filesystem();
         $pathinfo = pathinfo($filePath);
         $filesize = filesize($filePath);
 
@@ -1041,8 +1042,7 @@ class FileToolkit
 
                 if ($isCopy) {
                     $filePaths[$key] = $savedFilePath;
-                    $image = $rawImage->copy();
-                    $image->save($savedFilePath);
+                    $fileSystem->copy($filePath, $savedFilePath);
                 } else {
                     $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                     $filePaths[$key] = $savedFilePath;
@@ -1065,7 +1065,7 @@ class FileToolkit
 
         if (in_array($extension, array('jpg', 'jpeg'))) {
             $options['jpeg_quality'] = $level * 10;
-        } elseif ($extension == 'png') {
+        } elseif ('png' == $extension) {
             $options['png_compression_level'] = $level;
         } else {
             return $fullPath;
@@ -1144,7 +1144,7 @@ class FileToolkit
     {
         $angle = 0;
         //只旋转JPEG的图片
-        if (!(extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG)) {
+        if (!(extension_loaded('gd') && extension_loaded('exif') && IMAGETYPE_JPEG == exif_imagetype($path))) {
             return $angle;
         }
 

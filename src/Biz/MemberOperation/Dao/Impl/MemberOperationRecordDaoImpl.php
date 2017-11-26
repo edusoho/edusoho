@@ -33,6 +33,7 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
                 'parent_id = :parent_id',
                 'join_course_set = :join_course_set',
                 'exit_course_set = :exit_course_set',
+                'reason_type != :exclude_reason_type',
             ),
         );
     }
