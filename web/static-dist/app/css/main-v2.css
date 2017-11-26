@@ -2169,6 +2169,12 @@ body.cd-design {
     padding: 16px;
   }
 }
+.cd-panel .cd-panel-title {
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.88);
+}
 .cd-panel .cd-panel-heading-with-steps {
   padding: 24px 12px;
   -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.01), 0 2px 2px 0 rgba(0, 0, 0, 0.04);
@@ -2964,6 +2970,167 @@ body.cd-design {
   .order-center-paid-course__price {
     float: left;
   }
+}
+.third-party-login-section {
+  margin: 40px auto;
+  width: 476px;
+}
+@media (max-width: 480px) {
+  .third-party-login-section {
+    width: 100%;
+    margin: 20px auto;
+  }
+}
+.third-party-panel .third-party-panel__heading {
+  padding: 27px 24px;
+  -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.01), 0 2px 2px 0 rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.01), 0 2px 2px 0 rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.01), 0 2px 2px 0 rgba(0, 0, 0, 0.04);
+}
+.third-party-panel .third-party-panel__body {
+  padding: 32px 24px 40px;
+}
+@media (max-width: 480px) {
+  .third-party-panel .third-party-panel__body {
+    padding: 32px 4px;
+  }
+}
+.third-party-user {
+  font-size: 24px;
+  line-height: 1;
+}
+@media (max-width: 480px) {
+  .third-party-user {
+    font-size: 18px;
+  }
+}
+.third-party-bind-tip {
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.56);
+}
+.third-party-avatar-wrap {
+  position: relative;
+}
+.third-party-avatar-wrap .third-party-avatar-md {
+  position: absolute;
+  top: 24px;
+  left: 107px;
+}
+@media (max-width: 480px) {
+  .third-party-avatar-wrap .third-party-avatar-md {
+    left: 20%;
+  }
+}
+@media (max-width: 320px) {
+  .third-party-avatar-wrap .third-party-avatar-md {
+    left: 12%;
+  }
+}
+.third-party-avatar {
+  width: 128px;
+  height: 128px;
+  border: 4px solid #fff;
+  -webkit-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.01), 0 8px 8px 0 rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.01), 0 8px 8px 0 rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.01), 0 8px 8px 0 rgba(0, 0, 0, 0.04);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.third-party-avatar-md {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff;
+  -webkit-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.01), 0 8px 8px 0 rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.01), 0 8px 8px 0 rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.01), 0 8px 8px 0 rgba(0, 0, 0, 0.04);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.third-party-link {
+  font-size: 12px;
+  line-height: 1;
+}
+.third-party-form {
+  padding: 0 26px;
+}
+.third-party-form .third-party-form__label {
+  position: relative;
+}
+.third-party-form .third-party-form__label:after {
+  margin-left: 4px;
+  position: absolute;
+  top: -1px;
+  content: "*";
+  color: #ffa51f;
+}
+.third-party-form-group {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+.third-party-form-group .third-party-form-group__info {
+  margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.32);
+}
+.third-party-sms-form-group {
+  position: relative;
+  padding-right: 156px;
+}
+@media (max-width: 320px) {
+  .third-party-sms-form-group {
+    padding-right: 136px;
+  }
+}
+.third-party-sms-form-group .third-part-action-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 140px;
+}
+@media (max-width: 320px) {
+  .third-party-sms-form-group .third-part-action-button {
+    width: 120px;
+  }
+  .third-party-sms-form-group .third-part-action-button button {
+    padding: 9px 4px;
+  }
+}
+.third-party-captcha-form-group {
+  position: relative;
+  padding-right: 114px;
+}
+.third-party-captcha {
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  width: 98px;
+}
+.third-party-captcha .third-party-captcha__img {
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+}
+.third-party-feedback {
+  padding-top: 8px;
+  padding-bottom: 0;
+}
+.third-party-feedback .feedback-icon i {
+  font-size: 104px;
+  color: #43bc60;
+}
+.third-party-feedback .feedback-title {
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: #43bc60;
+  line-height: 1;
+}
+.third-party-feedback .feedback-content {
+  margin-bottom: 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.32);
+  line-height: 1;
 }
 .order-pay-list {
   margin-bottom: 24px;

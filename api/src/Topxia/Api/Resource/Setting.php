@@ -89,7 +89,7 @@ class Setting extends BaseResource
             'oauth_enabled' => (string)$loginSetting['enabled'] ?: '0',
             'weibo_enabled' => $loginSetting['weibo_enabled'] ?: '0',
             'qq_enabled' => $loginSetting['qq_enabled'] ?: '0',
-            'renren_enabled' => $loginSetting['renren_enabled'] ?: '0',
+            'renren_enabled' => '0',
             'weixinweb_enabled' => $loginSetting['weixinweb_enabled'] ?: '0',
             'weixinmob_enabled' => $loginSetting['weixinmob_enabled'] ?: '0'
         );

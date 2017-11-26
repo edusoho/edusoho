@@ -741,7 +741,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $this->createSearchJob('update', $args);
         }
         if ($this->isIMEnabled()) {
-            if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
                 return;
             }
 
@@ -785,7 +785,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         }
 
         if ($this->isIMEnabled()) {
-            if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
                 return;
             }
 
@@ -827,7 +827,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $this->createSearchJob('update', $args);
         }
         if ($this->isIMEnabled()) {
-            if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            if ($thread['target']['type'] != 'course' || 'question' != $thread['type']) {
                 return;
             }
 
@@ -929,7 +929,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             //            if ($threadPost['thread']['type'] != 'question') {
             //                return;
             //            }
-            if ($user['id'] == $threadPost['thread']['userId']) {
+            if ($threadPost['thread']['userId'] == $user['id']) {
                 return;
             }
 
@@ -1120,9 +1120,9 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $teacher = $this->getUserService()->getUser($testpaperResult['checkTeacherId']);
 
             $testType = '';
-            if ($testpaperResult['type'] == 'testpaper') {
+            if ('testpaper' == $testpaperResult['type']) {
                 $testType = '试卷';
-            } elseif ($testpaperResult['type'] == 'testpaper') {
+            } elseif ('testpaper' == $testpaperResult['type']) {
                 $testType = '作业';
             }
 
@@ -1163,9 +1163,9 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
 
             $testType = '';
-            if ($testpaperResult['type'] == 'testpaper') {
+            if ('testpaper' == $testpaperResult['type']) {
                 $testType = '试卷';
-            } elseif ($testpaperResult['type'] == 'testpaper') {
+            } elseif ('testpaper' == $testpaperResult['type']) {
                 $testType = '作业';
             }
 
@@ -1208,7 +1208,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     public function onCouponUpdate(Event $event)
     {
         $coupon = $event->getSubject();
-        if ($coupon['status'] != 'receive') {
+        if ('receive' != $coupon['status']) {
             return;
         }
         if ($this->isIMEnabled()) {
@@ -1223,7 +1223,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            if ($coupon['type'] == 'minus') {
+            if ('minus' == $coupon['type']) {
                 $message = '您有一张价值'.$coupon['rate'].'元的优惠券领取成功';
             } else {
                 $message = '您有一张抵扣为'.$coupon['rate'].'折的优惠券领取成功';
@@ -1343,7 +1343,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         $mobileSetting = $this->getSettingService()->get('mobile');
 
-        if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
+        if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && 'live' == $lesson['type']) {
             $this->createJob($lesson);
         }
         if ($this->isCloudSearchEnabled()) {
@@ -1360,11 +1360,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         $oldTask = $event->getArguments();
         $mobileSetting = $this->getSettingService()->get('mobile');
 
-        $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
+        $shouldReCreatePushJOB = 'live' == $lesson['type'] && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
         if ($shouldReCreatePushJOB) {
             $this->deleteJob($lesson);
 
-            if ($lesson['status'] == 'published') {
+            if ('published' == $lesson['status']) {
                 //这个任务要关注，得改
                 $this->createJob($lesson);
             }
@@ -1594,11 +1594,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     protected function convertThread($thread, $eventName)
     {
-        if (strpos($eventName, 'course') === 0) {
+        if (0 === strpos($eventName, 'course')) {
             $thread['targetType'] = 'course';
             $thread['targetId'] = $thread['courseId'];
             $thread['relationId'] = $thread['taskId'];
-        } elseif (strpos($eventName, 'group') === 0) {
+        } elseif (0 === strpos($eventName, 'group')) {
             $thread['targetType'] = 'group';
             $thread['targetId'] = $thread['groupId'];
             $thread['relationId'] = 0;
@@ -1734,14 +1734,14 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     protected function convertThreadPost($threadPost, $eventName)
     {
-        if (strpos($eventName, 'course') === 0) {
+        if (0 === strpos($eventName, 'course')) {
             $threadPost['targetType'] = 'course';
             $threadPost['targetId'] = $threadPost['courseId'];
             $threadPost['thread'] = $this->convertThread(
                 $this->getThreadService('course')->getThread($threadPost['courseId'], $threadPost['threadId']),
                 $eventName
             );
-        } elseif (strpos($eventName, 'group') === 0) {
+        } elseif (0 === strpos($eventName, 'group')) {
             $thread = $this->getThreadService('group')->getThread($threadPost['threadId']);
             $threadPost['targetType'] = 'group';
             $threadPost['targetId'] = $thread['groupId'];
@@ -1945,7 +1945,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         //            $this->getSchedulerService()->register($startJob);
         //        }
 
-        if ($lesson['type'] == 'live') {
+        if ('live' == $lesson['type']) {
             $startJob = array(
                 'name' => 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id'],
                 'expression' => $lesson['startTime'] - 10 * 60,
@@ -2009,11 +2009,11 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     protected function getThreadService($type = '')
     {
-        if ($type == 'course') {
+        if ('course' == $type) {
             return $this->createService('Course:ThreadService');
         }
 
-        if ($type == 'group') {
+        if ('group' == $type) {
             return $this->createService('Group:ThreadService');
         }
 
@@ -2211,7 +2211,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
         );
 
-        if ($to['type'] == 'user') {
+        if ('user' == $to['type']) {
             $params['toId'] = $to['id'];
         }
 

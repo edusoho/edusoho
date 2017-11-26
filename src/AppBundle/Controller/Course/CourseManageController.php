@@ -71,7 +71,7 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
-        if ($course['expiryMode'] == 'end_date') {
+        if ('end_date' == $course['expiryMode']) {
             $course['deadlineType'] = 'end_date';
             $course['expiryMode'] = 'days';
         }
@@ -106,7 +106,7 @@ class CourseManageController extends BaseController
         $liveTasks = array_filter(
             $tasks,
             function ($task) {
-                return $task['type'] === 'live' && $task['status'] === 'published';
+                return 'live' === $task['type'] && 'published' === $task['status'];
             }
         );
 
@@ -148,7 +148,7 @@ class CourseManageController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $fileId = $request->request->get('fileId', 0);
             $this->getActivityService()->updateActivity($activity['id'], array('fileId' => $fileId));
 
@@ -184,7 +184,7 @@ class CourseManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $ids = $request->request->get('visibleReplays');
             $this->getLiveReplayService()->updateReplayShow($ids, $activity['id']);
 
@@ -235,7 +235,7 @@ class CourseManageController extends BaseController
 
         $client = new EdusohoLiveClient();
 
-        if ($task['type'] == 'live') {
+        if ('live' == $task['type']) {
             $result = $client->getMaxOnline($liveId);
             $this->getTaskService()->setTaskMaxOnlineNum($task['id'], $result['onLineNum']);
         }
@@ -434,7 +434,7 @@ class CourseManageController extends BaseController
     protected function getFinishedTaskPerDay($course, $tasks)
     {
         $taskNum = $course['taskNum'];
-        if ($course['expiryMode'] == 'days') {
+        if ('days' == $course['expiryMode']) {
             $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {
             $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
@@ -446,11 +446,11 @@ class CourseManageController extends BaseController
 
     public function prepareExpiryMode($data)
     {
-        if (empty($data['expiryMode']) || $data['expiryMode'] != 'days') {
+        if (empty($data['expiryMode']) || 'days' != $data['expiryMode']) {
             unset($data['deadlineType']);
         }
         if (!empty($data['deadlineType'])) {
-            if ($data['deadlineType'] == 'end_date') {
+            if ('end_date' == $data['deadlineType']) {
                 $data['expiryMode'] = 'end_date';
                 if (isset($data['deadline'])) {
                     $data['expiryEndDate'] = $data['deadline'];
@@ -609,7 +609,7 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         //prepare form data
-        if ($course['expiryMode'] == 'end_date') {
+        if ('end_date' == $course['expiryMode']) {
             $course['deadlineType'] = 'end_date';
             $course['expiryMode'] = 'days';
         }
@@ -750,7 +750,7 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
-        if (count($publishedCourses) == 1) {
+        if (1 == count($publishedCourses)) {
             return $this->createJsonResponse(
                 array('warn' => true, 'message' => "{$course['title']}是课程下唯一发布的教学计划，如果关闭则所在课程也会被关闭。")
             );
@@ -831,7 +831,7 @@ class CourseManageController extends BaseController
         $courseSetting = $this->setting('course');
 
         if (!$this->getCurrentUser()->isAdmin()
-            && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+            && (empty($courseSetting['teacher_search_order']) || 1 != $courseSetting['teacher_search_order'])
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
@@ -910,7 +910,7 @@ class CourseManageController extends BaseController
         $courseSetting = $this->setting('course');
 
         if (!$this->getCurrentUser()->isAdmin()
-            && (empty($courseSetting['teacher_search_order']) || $courseSetting['teacher_search_order'] != 1)
+            && (empty($courseSetting['teacher_search_order']) || 1 != $courseSetting['teacher_search_order'])
         ) {
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
@@ -1001,7 +1001,7 @@ class CourseManageController extends BaseController
 
             $column .= date('Y-n-d H:i:s', $order['createdTime']).',';
 
-            if ($order['paidTime'] != 0) {
+            if (0 != $order['paidTime']) {
                 $column .= date('Y-n-d H:i:s', $order['paidTime']);
             } else {
                 $column .= '-';
@@ -1048,7 +1048,7 @@ class CourseManageController extends BaseController
             $students[$key]['learnTime'] = round($result['time'] / 60);
             $students[$key]['watchTime'] = round($result['watchTime'] / 60);
 
-            if ($activity['mediaType'] == 'testpaper') {
+            if ('testpaper' == $activity['mediaType']) {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
                 $paperResult = $this->getTestpaperService()->getUserFinishedResult(
                     $testpaperActivity['mediaId'],
@@ -1107,7 +1107,7 @@ class CourseManageController extends BaseController
         $order = $request->query->get('order', '');
         if ($order) {
             uasort($stats['questionMarkers'], function ($questionMarker1, $questionMarker2) use ($order) {
-                if ($order == 'desc') {
+                if ('desc' == $order) {
                     return $questionMarker1['pct'] < $questionMarker2['pct'];
                 } else {
                     return $questionMarker1['pct'] > $questionMarker2['pct'];
@@ -1118,7 +1118,7 @@ class CourseManageController extends BaseController
 
     protected function _getLiveReplayMedia(array $task)
     {
-        if ($task['type'] == 'live') {
+        if ('live' == $task['type']) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             if ($activity['ext']['replayStatus'] == 'videoGenerated') {
                 return $this->getUploadFileService()->getFile($activity['ext']['mediaId']);

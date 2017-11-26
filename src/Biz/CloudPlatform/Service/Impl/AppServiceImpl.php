@@ -950,6 +950,16 @@ class AppServiceImpl extends BaseService implements AppService
     }
 
     /**
+     * only for mock
+     *
+     * @param [type] $AppClient [description]
+     */
+    public function setAppClient($AppClient)
+    {
+        return $this->client = $AppClient;
+    }
+
+    /**
      * @return SettingService
      */
     protected function getSettingService()

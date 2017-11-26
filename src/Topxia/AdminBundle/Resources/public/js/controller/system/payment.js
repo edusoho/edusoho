@@ -110,13 +110,19 @@ define(function(require, exports, module) {
                     errormessageRequired: '请输入商户帐号'
                 });
                 validator.addItem({
-                    element: '[name=llpay_secret]',
+                    element: '[name=llpay_accessKey]',
                     required: true,
-                    errormessageRequired: '请输入商户平台Key'
+                    errormessageRequired: '请输入公钥'
+                });
+                validator.addItem({
+                    element: '[name=llpay_secretKey]',
+                    required: true,
+                    errormessageRequired: '请输入密钥'
                 });
             } else {
                 validator.removeItem('[name="llpay_key"]');
-                validator.removeItem('[name="llpay_secret"]');
+                validator.removeItem('[name="llpay_accessKey"]');
+                validator.removeItem('[name="llpay_secretKey"]');
             }
         });
 

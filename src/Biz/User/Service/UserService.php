@@ -118,8 +118,6 @@ interface UserService
      */
     public function register($registration, $type = 'default');
 
-    public function setupAccount($userId);
-
     public function markLoginInfo();
 
     public function markLoginFailed($userId, $ip);
