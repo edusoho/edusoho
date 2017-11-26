@@ -17,8 +17,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     {
         return $this->getTotalStatisticsDao()->count($conditions);
     }
-
-
+    
     public function batchCreateTotalStatistics($conditions)
     {
         try {
@@ -31,6 +30,20 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->rollback();
         }
     }
+
+    public function batchCreateDailyStatistics($conditions)
+    {
+        try {
+            $this->beginTransaction();
+            $statistics = $this->searchLearnData($conditions);
+            $this->getDailyStatisticsDao()->batchCreate($statistics);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error('batchCreateDailyStatistics:'.$e->getMessage());
+            $this->rollback();
+        }
+    }
+
 
     public function searchLearnData($conditions)
     {
@@ -170,25 +183,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $syncStatisticsSetting = array();
             $syncStatisticsSetting['currentTime'] = strtotime(date("Y-m-d"), time());
             //currentTime 当天升级的那天的0点0分
-            $syncStatisticsSetting['endTime'] = $syncStatisticsSetting['currentTime'] - 24*60*60*365;
-            $syncStatisticsSetting['cursor'] = $syncStatisticsSetting['currentTime'];
+            $syncStatisticsSetting['timespan'] = 24*60*60*365;
 
             $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
         }
 
         return $syncStatisticsSetting;
-    }
-
-    public function syncTotalLearnStatistics($conditions)
-    {
-          
-    }
-
-    private function updateSettingCursor($time)
-    {
-        $syncStatisticsSetting = $this->getSettingService()->get('learn_statistics');
-        $syncStatisticsSetting['cursor'] = $time;
-        //$syncStatisticsSetting = $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
     }
 
     protected function getAccountService()
