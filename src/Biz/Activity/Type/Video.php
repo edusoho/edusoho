@@ -65,7 +65,7 @@ class Video extends Activity
 
         if ($fields['finishType'] == 'time') {
             if (empty($fields['finishDetail'])) {
-                throw $this->createAccessDeniedException('finish time can not be emtpy');
+                throw $this->createAccessDeniedException('finish time can not be empty');
             }
         }
         $videoActivity = $this->getVideoActivityDao()->get($activity['mediaId']);
