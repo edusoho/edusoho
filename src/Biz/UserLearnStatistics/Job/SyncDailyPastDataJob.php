@@ -49,13 +49,6 @@ class SyncDailyPastDataJob extends AbstractJob
         return empty($jobArgs['cursor']) ? $learnSetting['currentTime'] : $jobArgs['cursor'];
     }
 
-    private function setTotalDataStatus($learnSetting)
-    {
-        $learnSetting['syncTotalDataStatus'] = 1;
-
-        $this->getSettingService()->set('learn_statistics', $learnSetting);
-    }
-
     protected function getSchedulerService()
     {
         return $this->biz->service('Scheduler:SchedulerService');
