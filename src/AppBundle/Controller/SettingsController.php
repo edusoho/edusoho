@@ -29,7 +29,7 @@ class SettingsController extends BaseController
 
         $profile['title'] = $user['title'];
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $profile = $request->request->get('profile');
 
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
@@ -45,7 +45,7 @@ class SettingsController extends BaseController
 
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
-        if (array_key_exists('idcard', $profile) && $profile['idcard'] == '0') {
+        if (array_key_exists('idcard', $profile) && '0' == $profile['idcard']) {
             $profile['idcard'] = '';
         }
 
@@ -66,7 +66,7 @@ class SettingsController extends BaseController
         $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
         $approval = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], $user['approvalStatus']);
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
 
@@ -97,11 +97,11 @@ class SettingsController extends BaseController
 
         $isNickname = $this->getSettingService()->get('user_partner');
 
-        if ($isNickname['nickname_enabled'] == 0) {
+        if (0 == $isNickname['nickname_enabled']) {
             return $this->redirect($this->generateUrl('settings'));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $nickname = $request->request->get('nickname');
 
             if ($this->getSensitiveService()->scanText($nickname)) {
@@ -110,7 +110,7 @@ class SettingsController extends BaseController
 
             list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-            if ($result !== 'success' && $user['nickname'] != $nickname) {
+            if ('success' !== $result && $user['nickname'] != $nickname) {
                 return $this->createJsonResponse(array('message' => $message), 403);
             }
 
@@ -131,7 +131,7 @@ class SettingsController extends BaseController
 
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-        if ($result === 'success') {
+        if ('success' === $result) {
             $response = array('success' => true, 'message' => '');
         } else {
             $response = array('success' => false, 'message' => $message);
@@ -144,7 +144,7 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $options = $request->request->all();
             $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
             $user = $this->getUserService()->getUser($currentUser['id']);
@@ -170,7 +170,7 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $options = $request->request->all();
             $result = $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
             $image = $this->getWebExtension()->getFpath($result['largeAvatar']);
@@ -237,7 +237,7 @@ class SettingsController extends BaseController
             );
         }
 
-        if (isset($options['deleteOriginFile']) && $options['deleteOriginFile'] == 0) {
+        if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
             $fields[] = array(
                 'type' => 'origin',
                 'id' => $record['id'],
@@ -259,14 +259,14 @@ class SettingsController extends BaseController
         $hasFindPayPasswordQuestion = $this->getAccountService()->isSecurityAnswersSetted($user['id']);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
         $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
-        $hasEmail = strlen($user['email']) > 0 && stripos($user['email'], '@edusoho.net') === false;
+        $hasEmail = strlen($user['email']) > 0 && false === stripos($user['email'], '@edusoho.net');
 
         $email = $hasEmail ? $user['email'] : '';
         $hasVerifiedEmail = $user['emailVerified'];
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
-        $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
-            && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+        $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ('1' == $cloudSmsSetting['sms_enabled'])
+            && (isset($cloudSmsSetting['sms_bind'])) && ('on' == $cloudSmsSetting['sms_bind']);
 
         $itemScore = floor(100.0 / (4.0 + ($showBindMobile ? 1.0 : 0)));
         $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0) + ($hasVerifiedEmail ? $itemScore : 0);
@@ -292,7 +292,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $passwords = $request->request->all();
 
             $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword']);
@@ -318,7 +318,7 @@ class SettingsController extends BaseController
             ->add('confirmPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -349,7 +349,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_reset_pay_password')));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $passwords = $request->request->all();
 
             $validatePassed = $this->getAccountService()->validatePayPassword($user['id'], $passwords['oldPayPassword']);
@@ -398,7 +398,7 @@ class SettingsController extends BaseController
             ->add('currentUserLoginPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -466,8 +466,8 @@ class SettingsController extends BaseController
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
         $canSmsFind = ($hasVerifiedMobile) &&
-            ($this->setting('cloud_sms.sms_enabled') == '1') &&
-            ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
+            ('1' == $this->setting('cloud_sms.sms_enabled')) &&
+            ('on' == $this->setting('cloud_sms.sms_forget_pay_password'));
 
         if ((!$hasSecurityQuestions) && ($canSmsFind)) {
             return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -479,7 +479,7 @@ class SettingsController extends BaseController
             return $this->forward('AppBundle:Settings:securityQuestions');
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $questionKey = $request->request->get('questionKey');
             $answer = $request->request->get('answer');
 
@@ -504,7 +504,7 @@ class SettingsController extends BaseController
     {
         $scenario = 'sms_forget_pay_password';
 
-        if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") !== 'on') {
+        if ('1' != $this->setting('cloud_sms.sms_enabled') || 'on' !== $this->setting("cloud_sms.{$scenario}")) {
             return $this->render('settings/edu-cloud-error.html.twig', array());
         }
 
@@ -521,7 +521,7 @@ class SettingsController extends BaseController
             )));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             if ($currentUser['verifiedMobile'] != $request->request->get('mobile')) {
                 $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.by_mobile.mismatch');
                 SmsToolkit::clearSmsSession($request, $scenario);
@@ -576,7 +576,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_security_questions')));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
                 return $this->createJsonResponse(array('message' => 'user.settings.security.questions.set.incorrect_password'), 403);
             }
@@ -617,7 +617,7 @@ class SettingsController extends BaseController
 
         $scenario = 'sms_bind';
 
-        if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
+        if ('1' != $this->setting('cloud_sms.sms_enabled') || 'on' != $this->setting("cloud_sms.{$scenario}")) {
             return $this->render('settings/edu-cloud-error.html.twig', array());
         }
 
@@ -625,7 +625,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_bind_mobile')));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($user['id'], $password)) {
@@ -690,7 +690,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_password')));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $passwords = $request->request->all();
             $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword']);
 
@@ -716,7 +716,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password', array('targetPath' => 'settings_email')));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
 
             $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
@@ -821,7 +821,7 @@ class SettingsController extends BaseController
         $userBinds = $this->getUserService()->findBindsByUserId($user->id) ?: array();
 
         foreach ($userBinds as $userBind) {
-            if ($userBind['type'] === 'weixin') {
+            if ('weixin' === $userBind['type']) {
                 $userBind['type'] = 'weixinweb';
             }
 
@@ -909,7 +909,7 @@ class SettingsController extends BaseController
             ->add('confirmPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             if (!empty($user['password'])) {
                 return $this->createJsonResponse(array(
                     'message' => 'user.settings.login_password_fail',
@@ -948,7 +948,7 @@ class SettingsController extends BaseController
         } else {
             list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-            if ($result === 'success') {
+            if ('success' === $result) {
                 $response = array('success' => true);
             } else {
                 $response = array('success' => false, 'message' => $message);

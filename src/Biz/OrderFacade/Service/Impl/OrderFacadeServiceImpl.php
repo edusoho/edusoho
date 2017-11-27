@@ -189,7 +189,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 20005);
+            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 2005);
         }
 
         if ($order['user_id'] != $user['id']) {

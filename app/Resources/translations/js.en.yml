@@ -700,6 +700,7 @@ validate.user_terms.message: Check to agree to this service agreement in order t
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
+validate.mobile_or_email_message: 请输入正确的手机／邮箱
 
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
@@ -833,3 +834,5 @@ oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形
 oauth.captcha_code_length_tip: 图形码为5位数
 oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
+oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
+oauth.register.error_message: 注册出现异常，请联系管理员

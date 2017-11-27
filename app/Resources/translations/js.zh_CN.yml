@@ -645,6 +645,7 @@ validate.phone_and_email_input.message: 请输入手机/邮箱
 validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
 validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
+validate.mobile_or_email_message: 请输入正确的手机／邮箱
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -774,3 +775,5 @@ oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形
 oauth.captcha_code_length_tip: 图形码为5位数
 oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
+oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
+oauth.register.error_message: 注册出现异常，请联系管理员

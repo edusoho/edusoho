@@ -210,7 +210,8 @@ class SystemInitializer
             'bank_gateway' => 'none',
             'alipay_enabled' => 0,
             'alipay_key' => '',
-            'alipay_secret' => '',
+            'alipay_accessKey' => '',
+            'alipay_secretKey' => '',
         );
 
         $this->getSettingService()->set('payment', $default);

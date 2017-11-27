@@ -28,6 +28,7 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
                 'member_id != :exclude_member_id',
                 'member_id = :member_id',
                 'target_id = :target_id',
+                'reason_type != :exclude_reason_type',
             ),
         );
     }

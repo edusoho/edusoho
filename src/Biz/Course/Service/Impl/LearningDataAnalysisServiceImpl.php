@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\LearningDataAnalysisDao;
 
@@ -149,14 +148,6 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     private function getTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @return TaskResultService
-     */
-    private function getTaskResultService()
-    {
-        return $this->createService('Task:TaskResultService');
     }
 
     /**

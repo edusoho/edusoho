@@ -173,6 +173,8 @@ class LoginController extends LoginBindController
             'hasError' => false,
         );
 
+        $this->validateRegisterType($request);
+
         $oauthUser = $this->getOauthUser($request);
         if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
             $smsToken = $request->request->get('smsToken');
@@ -184,11 +186,18 @@ class LoginController extends LoginBindController
             $validateResult['msg'] = $status;
         }
 
-        if ($oauthUser->mode == 'closed') {
+        return $validateResult;
+    }
+
+    private function validateRegisterType(Request $request)
+    {
+        $oauthUser = $this->getOauthUser($request);
+        $isCloseRegister = OAuthUser::REGISTER_CLOSED === $oauthUser->mode;
+        $notEmailAccount = OAuthUser::EMAIL_TYPE === $oauthUser->mode && OAuthUser::EMAIL_TYPE !== $oauthUser->accountType;
+        $notMobileAccount = OAuthUser::MOBILE_TYPE === $oauthUser->mode && OAuthUser::MOBILE_TYPE !== $oauthUser->accountType;
+        if ($isCloseRegister || $notEmailAccount || $notMobileAccount) {
             throw new NotFoundHttpException();
         }
-
-        return $validateResult;
     }
 
     private function register(Request $request)
@@ -200,6 +209,7 @@ class LoginController extends LoginBindController
             $oauthUser->accountType => $oauthUser->account,
             'avatar' => $oauthUser->avatar,
             'type' => $oauthUser->type,
+            'registeredWay' => $oauthUser->isApp() ? strtolower($oauthUser->os) : 'web',
             'authid' => $oauthUser->authid,
         );
 
