@@ -5,13 +5,18 @@ namespace Biz\UserLearnStatistics\Job;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
-class SyncTotalJob extends AbstractJob
+class SyncDailyPastDataJob extends AbstractJob
 {
     public function execute()
     {
         try {
             $this->biz['db']->beginTransaction();
-            $cursor = $this->getSyncTime();
+            $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
+            $cursor = $this->getSyncTime($learnSetting);
+
+            if ((time() - $cursor) > $learnSetting['timespan']) {
+                $this->getSchedulerService()->disabledJob($this->id);
+            }
             $nextCursor = $cursor - 24*60*60;
             /*
                 skipSyncCourseSetNum，跳过同步 加入课程数和退出课程数
@@ -23,7 +28,7 @@ class SyncTotalJob extends AbstractJob
                 'createdTime_LT' => $cursor,
                 'skipSyncCourseSetNum' => true,
             );
-            $this->getLearnStatisticesService()->batchCreateDailyStatistics($conditions);
+            $this->getLearnStatisticesService()->batchCreatePastDailyStatistics($conditions);
 
             $jobArgs['cursor'] = $nextCursor;
             $this->getJobDao()->update($this->id, array('args' => $jobArgs));
@@ -34,9 +39,8 @@ class SyncTotalJob extends AbstractJob
 
     }
 
-    private function getSyncTime()
+    private function getSyncTime($learnSetting)
     {
-        $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
         $jobArgs = $this->args;
         if (empty($jobArgs)) {
             $jobArgs = array();

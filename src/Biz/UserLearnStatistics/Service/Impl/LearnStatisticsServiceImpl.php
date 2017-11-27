@@ -28,24 +28,29 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         } catch (\Exception $e) {
             $this->getLogger()->error('batchCreateTotalStatistics:'.$e->getMessage());
             $this->rollback();
+            throw $e;
         }
     }
 
-    public function batchCreateDailyStatistics($conditions)
+    public function batchCreatePastDailyStatistics($conditions)
     {
         try {
             $this->beginTransaction();
-            $statistics = $this->searchLearnData($conditions);
+            $fields = array(
+                'isStorage' => 1,
+                'recordTime' => $conditions['createdTime_LT'],
+            );
+            $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreateDailyStatistics:'.$e->getMessage());
+            $this->getLogger()->error('batchCreatePastDailyStatistics:'.$e->getMessage());
             $this->rollback();
+            throw $e;
         }
     }
 
-
-    public function searchLearnData($conditions)
+    public function searchLearnData($conditions, $fields)
     {
         $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
         $payAmount = $this->findUserPaidAmount($conditions);
@@ -55,6 +60,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         if (!empty($conditions['userIds'])) {
             $userIds = array_unique($conditions['userIds']);
         }
+
         $statisticMap = array(
             'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions)),
             'joinedClassroomNum' => $this->findUserOpertateClassroomNum('join', $conditions),
@@ -65,6 +71,19 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             'joinedCourseNum' => $this->findUserOperateCourseNum('join', $conditions),
             'exitCourseNum' => $this->findUserOperateCourseNum('exit', $conditions),
         );
+
+        if (!isset($userIds)) {
+            $userIds = array();
+            foreach($statisticMap as $key => $data) {
+                $userIds = array_merge($userIds, array_keys($data));
+            }
+            $userIds = array_merge($userIds, array_keys($learnedSeconds));
+            $userIds = array_merge($userIds, array_keys($payAmount));
+            $userIds = array_merge($userIds, array_keys($refundAmount));
+
+            $userIds = array_unique($userIds);
+        }
+
         foreach($userIds as $userId) {
             $statistic = array();
             $statistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
@@ -75,6 +94,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 $statistic[$key] = empty($data[$userId]) ? 0 : $data[$userId]['count'];
             }
             $statistic['userId'] = $userId;
+            $statistic = array_merge($statistic, $fields);
             $statistics[] = $statistic;
         }
 
