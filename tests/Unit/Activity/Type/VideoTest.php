@@ -135,6 +135,22 @@ class VideoTest extends BaseTypeTestCase
         $this->assertEquals($videoActivity1['mediaId'], $syncedActivity['mediaId']);
     }
 
+    public function testGet()
+    {
+        $field = $this->mockField();
+
+        $type = $this->getActivityConfig(self::TYPE);
+        $videoActivity = $type->create($field);
+
+        $result = $type->get($videoActivity['id']);
+
+        $this->assertEquals($videoActivity['mediaId'], $result['mediaId']);
+        $this->assertEquals($videoActivity['mediaSource'], $result['mediaSource']);
+        $this->assertEquals($videoActivity['finishType'], $result['finishType']);
+        $this->assertEquals($videoActivity['finishDetail'], $result['finishDetail']);
+        $this->assertEquals($videoActivity['mediaUri'], $result['mediaUri']);
+    }
+
     /**
      * @param string $finishType
      * @param int    $finishDetail
