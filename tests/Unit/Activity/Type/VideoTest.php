@@ -40,7 +40,6 @@ class VideoTest extends BaseTypeTestCase
         $videoActivity = $type->create($field);
         $activity = $this->mockSimpleActivity($videoActivity['id']);
 
-
         $update = $this->mockField('end', 1, 'self', '', 2);
         $updated = $type->update($videoActivity['id'], $update, $activity);
 
@@ -49,7 +48,6 @@ class VideoTest extends BaseTypeTestCase
         $this->assertEquals('end', $updated['finishType']);
         $this->assertEquals(1, $updated['finishDetail']);
         $this->assertEmpty($updated['mediaUri']);
-
     }
 
     /**
@@ -62,7 +60,6 @@ class VideoTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
         $videoActivity = $type->create($field);
         $activity = $this->mockSimpleActivity($videoActivity['id']);
-
 
         $update = $this->mockField();
         unset($update['media']);
@@ -81,7 +78,6 @@ class VideoTest extends BaseTypeTestCase
         $videoActivity = $type->create($field);
         $activity = $this->mockSimpleActivity($videoActivity['id']);
 
-
         $update = $this->mockField('time', 0, 'self', '', 2);
         $type->update($videoActivity['id'], $update, $activity);
     }
@@ -95,7 +91,7 @@ class VideoTest extends BaseTypeTestCase
         $field = $this->mockField();
         $type = $this->getActivityConfig(self::TYPE);
         $videoActivity = $type->create($field);
-        $activity = $this->mockSimpleActivity($videoActivity['id']+1);
+        $activity = $this->mockSimpleActivity($videoActivity['id'] + 1);
 
         $update = $this->mockField('end', 0, 'self', '', 2);
         $type->update($videoActivity['id'], $update, $activity);
@@ -141,10 +137,11 @@ class VideoTest extends BaseTypeTestCase
 
     /**
      * @param string $finishType
-     * @param int $finishDetail
+     * @param int    $finishDetail
      * @param string $source
      * @param string $uri
-     * @param int $mediaId
+     * @param int    $mediaId
+     *
      * @return array
      */
     private function mockField($finishType = 'end', $finishDetail = 0, $source = 'self', $uri = '', $mediaId = 1)
@@ -162,6 +159,7 @@ class VideoTest extends BaseTypeTestCase
 
     /**
      * @param int $mediaId
+     *
      * @return array
      */
     private function mockSimpleActivity($mediaId = 1)
@@ -171,5 +169,4 @@ class VideoTest extends BaseTypeTestCase
             'mediaId' => $mediaId,
         );
     }
-
 }

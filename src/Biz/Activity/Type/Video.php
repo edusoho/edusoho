@@ -63,7 +63,7 @@ class Video extends Activity
 
         $video = $this->handleFields($fields);
 
-        if ($fields['finishType'] == 'time') {
+        if ('time' == $fields['finishType']) {
             if (empty($fields['finishDetail'])) {
                 throw $this->createAccessDeniedException('finish time can not be empty');
             }
@@ -81,14 +81,14 @@ class Video extends Activity
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        if ($video['finishType'] === 'time') {
+        if ('time' === $video['finishType']) {
             $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
             $result /= 60;
 
             return !empty($result) && $result >= $video['finishDetail'];
         }
 
-        if ($video['finishType'] === 'end') {
+        if ('end' === $video['finishType']) {
             $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
             return !empty($log);
