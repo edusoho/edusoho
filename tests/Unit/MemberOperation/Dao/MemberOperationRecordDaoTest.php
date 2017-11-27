@@ -11,13 +11,18 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
         $expected = array();
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject(array('member_id' => 2, 'operate_time' => 800000));
-        $expected[] = $this->mockDataObject(array('user_id' => 2, 'operate_type' => 'exit'));
+        $expected[] = $this->mockDataObject(array('user_id' => 2, 'operate_type' => 'exit', 'reason_type' => 'buy_join'));
 
         $testConditions = array(
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
                 'expectedCount' => 3,
+            ),
+            array(
+                'condition' => array('id' => 1),
+                'expectedResults' => array($expected[0]),
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('user_ids' => array(1, 2)),
@@ -64,6 +69,11 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
                 'expectedResults' => $expected,
                 'expectedCount' => 3,
             ),
+            array(
+                'condition' => array('exclude_reason_type' => 'buy_join'),
+                'expectedResults' => array($expected[0], $expected[1]),
+                'expectedCount' => 2,
+            ),
         );
 
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
@@ -90,7 +100,7 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
         $expected2 = $this->mockDataObject();
         $expected3 = $this->mockDataObject(array('operate_time' => 800000));
         $result = $this->getDao()->countGroupByDate(array('target_id' => 1), 'ASC');
-        var_dump($result);
+
         $this->assertEquals(2, $result[1]['count']);
     }
 
