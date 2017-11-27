@@ -53,22 +53,21 @@ class AddUserLearnStatisticsJob extends Migration
             '0',
             '{$currentTime}',
             '{$currentTime}'
+        ),
+        (
+            'DeleteUserLearnDailyPastLearnStatisticsJob',
+            '10 0 * * * ',
+            'Biz\\\\UserLearnStatistics\\\\Job\\\\DeletePastDataJob',
+            '',
+            '100',
+            '{$currentTime}',
+            '300',
+            'missed',
+            '1',
+            '0',
+            '{$currentTime}',
+            '{$currentTime}'
         );
-        -- (
-        --     'StorageDailyLeanDataJob',
-        --     '*/5 * * * *',
-        --     'Biz\\\\UserLearnStatistics\\\\Job\\\\SyncTotalJob',
-        --     '',
-        --     '100',
-        --     '{$currentTime}',
-        --     '300',
-        --     'missed',
-        --     '1',
-        --     '0',
-        --     '{$currentTime}',
-        --     '{$currentTime}'
-        -- )
-        
         ");
     }
 

@@ -37,6 +37,9 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'createdTime <= :createTime_LE',
                 'updatedTime >= :updateTime_GE',
                 'updatedTime <= :updateTime_LE',
+                'isStorage = :isStorage',
+                'recordTime <= :recordTime_LE',
+                'recordTime >= :recordTime_GE',
             )
         );
     }

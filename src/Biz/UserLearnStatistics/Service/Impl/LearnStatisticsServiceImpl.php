@@ -50,6 +50,25 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
     }
 
+    public function batchDelatePastDailyStatistics($conditions)
+    {
+        try {
+            $this->beginTransaction();
+            $setting = $this->getStatisticsSetting();
+            $this->getDailyStatisticsDao()->batchDelete(
+                array(
+                    'recordTime_LE' => time()-$setting['currentTime'],
+                    'isStorage' => '1',
+                )
+            );
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error('batchDelatePastDailyStatistics:'.$e->getMessage());
+            $this->rollback();
+            throw $e;
+        }
+    }
+
     public function searchLearnData($conditions, $fields)
     {
         $learnedSeconds = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId($conditions);
