@@ -62,6 +62,7 @@ class ClassroomFileFireWallTest extends BaseTestCase
             'userId' => $userId,
             'targetId' => 1,
         );
+
         return $this->getThreadDao()->create($fields);
     }
 
@@ -72,6 +73,7 @@ class ClassroomFileFireWallTest extends BaseTestCase
             'headTeacherId' => 0,
             'teacherIds' => array(1, 2, 3, 4),
         );
+
         return $this->getClassroomDao()->create($fields);
     }
 
@@ -83,6 +85,7 @@ class ClassroomFileFireWallTest extends BaseTestCase
             'targetId' => 1,
             'threadId' => $threadId,
         );
+
         return $this->getThreadPostDao()->create($fields);
     }
 
