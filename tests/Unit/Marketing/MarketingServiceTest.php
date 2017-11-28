@@ -85,7 +85,7 @@ class MarketingServiceTest extends BaseTestCase
 
         $this->assertEquals('22300', $order['price_amount']);
         $this->assertEquals('12200', $order['pay_amount']); 
-        $this->assertEquals('course', $order['create_extra'])
+        $this->assertEquals('course', $order['create_extra']['targetType']);
     }
 
     protected function getMarketingService()
