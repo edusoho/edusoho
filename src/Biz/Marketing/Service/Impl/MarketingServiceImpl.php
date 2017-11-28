@@ -11,8 +11,6 @@ class MarketingServiceImpl extends BaseService implements MarketingService
 {
     public function addUserToCourse($postData)
     {
-        // file_put_contents('marketing', $postData . "\n", FILE_APPEND);
-
         $logger = $this->biz['logger'];
         $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
         $logger->debug(json_encode($postData));
