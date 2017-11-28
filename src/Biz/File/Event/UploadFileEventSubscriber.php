@@ -154,7 +154,6 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onCourseDelete(Event $event)
     {
         $course = $event->getSubject();
-
     }
 
     public function onCourseLessonCreate(Event $event)

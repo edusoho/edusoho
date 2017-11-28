@@ -15,7 +15,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\User\Service\StatusService;
 use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\System\Service\SettingService;
 use Biz\IM\Service\ConversationService;
