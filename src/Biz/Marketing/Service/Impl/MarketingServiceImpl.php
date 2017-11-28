@@ -65,7 +65,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
     {
         $logger = $this->biz['logger'];
         $token = $this->getTokenService()->makeToken(
-            'marketing', 
+            'marketing',
             array(
                 'data' => array(
                     'type' => 'marketing',
@@ -89,6 +89,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         $registration['type'] = 'marketing';
 
         $user = $this->getAuthService()->register($registration, 'marketing');
+
         return $user;
     }
 
