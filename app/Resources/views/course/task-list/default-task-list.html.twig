@@ -32,22 +32,25 @@
             es-icon-iccheckcircleblack24px color-primary
             {% endif %}
             left-menu"></i>
+          {% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
 
           {% if course.status=='published' and task.status == 'published' %}
-
             {% if member %}
               <a class="title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
-            {% else %}
+            {% elseif not isOvertime %}
               <a class="title" href="#modal" data-toggle="modal"
                 data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                 style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
+            {% else %}
+              <a class="title" href="javascript:;" data-toggle="modal"
+                  style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
             {% endif %}
 
             {% include 'course/task-list/parts/task-length.html.twig' %}
             <span class="right-menu mouse-enter">
-            {% if not member %}
+            {% if not member and not isOvertime %}
               {% if task.isFree %}
                 <a class="btn btn-primary" href="#modal" data-toggle="modal"
                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
@@ -58,19 +61,10 @@
                   style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
               {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
                 {% if course.isFree %}
-                  <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
-                    {% if is_buy_course_from_modal(course.id) %}
-                    href="#modal"
-                    data-toggle="modal"
-                    data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-                  {% else %}
-                    href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-                    {% endif %}>{{ 'course.catalogue.task.join_btn'|trans }}
-                    </a>
-                  {% else %}
-                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
-                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
-                    style="margin-top:-8px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
+                  <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.join_btn'|trans }}
+                  </a>
+                {% else %}
+                  <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
                 {% endif %}
               {% endif %}
 

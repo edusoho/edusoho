@@ -40,9 +40,9 @@
     </form>
   
     <p class="text-muted">
-      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{amounts|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{'coin.recharge'|trans}}：<strong class="inflow-num">{{inflow|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
-      <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{outflow|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{math_format(amounts, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.recharge'|trans}}：<strong class="inflow-num">{{ math_format(inflow, 0.01) |default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{ math_format(outflow, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
     </p>
     <div class="table-responsive">
       <table class="table table-striped" style="word-wrap: break-word;
@@ -57,11 +57,11 @@ word-break: break-all;">
        {% for cash in cashes %}
        <tr>
             <td>{{cash.sn}}</td>
-            <td>{{cash.name}}<br>
-                <span class="text-muted text-sm">{{'coin.order_sn'|trans}}：{{cash.orderSn}}</span></td>
-            <td>   <a target="_blank" href="{{ path('user_show', {id:cash.userId}) }}">
-            {{users[cash.userId].nickname}}</a></td>
-            <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>     
+            <td>{{cash.title}}<br>
+                <span class="text-muted text-sm">{{'coin.order_sn'|trans}}：{{cash.order_sn}}</span></td>
+            <td>   <a target="_blank" href="{{ path('user_show', {id:cash.user_id}) }}">
+            {{users[cash.user_id].nickname}}</a></td>
+            <td>{{cash.created_time|date('Y-m-d H:i:s')}}</td>
             {% if cash.type =="inflow" %}
             <td class="text-right" style="color:#1bb974;padding-right: 50px;">
                {{cash.amount}} 

@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Scheduler\Dao\JobLogDao;
 
 class JobLogDaoImpl extends GeneralDaoImpl implements JobLogDao
 {
-    protected $table = 'job_log';
+    protected $table = 'biz_scheduler_job_log';
 
     public function declares()
     {

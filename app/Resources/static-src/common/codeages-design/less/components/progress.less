@@ -1,0 +1,20 @@
+.cd-progress {
+  width: 63%;
+  @media (max-width: @screen-md-max) {
+    width: 50%;
+  }
+  background-color: rgba(0, 0, 0, .08);;
+  color: #fff;
+  text-align: right;
+  font-weight: bold;
+  font-size: 14px;
+  vertical-align: middle;
+  .cd-border-radius(4px);
+  &.cd-progress-xs {
+    height: 4px;
+  }
+}
+
+.cd-progress-bar {
+  .cd-border-radius(4px);
+}

@@ -9,7 +9,7 @@
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
     <div class="form-group">
-      <label class="ptm" >{{'order.createdTime'|trans}}:</label>
+      <label class="ptm" >{{'order.created_time'|trans}}:</label>
         <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{request.get('startDateTime')}}" placeholder="{{'form.placeholder.start_date'|trans}}">
         -
         <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{request.get('endDateTime')}}" placeholder="{{'form.placeholder.end_date'|trans}}">
@@ -22,7 +22,7 @@
         {{ select_options({ paid: 'admin.order.paid'|trans,created:'admin.order.created'|trans,cancelled:'admin.order.cancelled'|trans}, request.get('status'), 'order.status'|trans) }}
       </select>
       <select class="form-control" name="payment">
-        {{ select_options(dict('payment'), app.request.get('payment'), 'order.payment_pattern'|trans) }}
+        {{ select_options(dict('paymentSelect'), app.request.get('payment'), 'order.payment_pattern'|trans) }}
       </select>
     </div>
    

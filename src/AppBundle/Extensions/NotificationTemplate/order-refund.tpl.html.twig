@@ -1,0 +1,30 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+
+      {% if data.targetType == 'classroom' %}
+        {% set targetUrl = path('classroom_show',{id:data.targetId}) %}
+      {% elseif data.targetType == 'course' %}
+        {% set targetUrl = path('course_show',{id:data.targetId}) %}
+      {% endif %}
+
+      {% if data.type == 'apply_create' %}
+        {% set itemContent = "<a href='" ~ targetUrl ~ "'>" ~ data.title ~ "</a>" %}
+        {{ setting('refund.applyNotification')|replace({'{{item}}':itemContent})|raw }}
+      {% elseif data.type == 'audit_pass' %}
+        {{ 'notification.order_refund.audit_pass'|trans }}
+      {% elseif data.type == 'audit_reject' %}
+        {{ 'notification.order_refund.audit_reject'|trans({'%reason%':data.reason}) }}
+      {% elseif data.type == 'admin_operate' %}
+        {{ 'order.refund.notify_admin'|trans({'%nickname%': data.nickname, '%targetUrl%':targetUrl, '%title%':data.title})|raw }}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }}
+    </div>
+  </div>
+</li>

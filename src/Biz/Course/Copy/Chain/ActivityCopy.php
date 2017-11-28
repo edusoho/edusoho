@@ -44,7 +44,7 @@ class ActivityCopy extends AbstractEntityCopy
                     'newCourseSetId' => $courseSetId,
                     'isCopy' => $isCopy,
                 ));
-                $testId = $testpaper['id'];
+                $testId = empty($testpaper['id']) ? 0 : $testpaper['id'];
             }
 
             //create activity config

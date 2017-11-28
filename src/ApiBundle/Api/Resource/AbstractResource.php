@@ -8,21 +8,18 @@ use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 abstract class AbstractResource
 {
     /**
      * @var Biz
      */
-    private $biz;
+    protected $biz;
 
-    private $container;
+    protected $container;
 
     const METHOD_SEARCH = 'search';
     const METHOD_GET = 'get';
@@ -36,10 +33,10 @@ abstract class AbstractResource
 
     const PREFIX_SORT_DESC = '-';
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz = $container->get('biz');
+        $this->biz = $biz;
     }
 
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
@@ -148,6 +145,15 @@ abstract class AbstractResource
     {
         return $this->container->get('api.plugin.config.manager')->isPluginInstalled($code);
     }
+
+    public function getClientIp()
+    {
+        return $this->container->get('request')->getClientIp();
+    }
+
+    public function invokeResource(ApiRequest $apiRequest) {
+        return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
+    }
     
     protected function makePagingObject($objects, $total, $offset, $limit)
     {
@@ -168,10 +174,5 @@ abstract class AbstractResource
     {
         $biz = $this->getBiz();
         return $biz['user'];
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

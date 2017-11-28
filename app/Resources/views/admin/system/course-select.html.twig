@@ -90,7 +90,7 @@
           {% for course in courses|default(null) %}
           {% include 'admin/course/course-item.html.twig' with {course:course, showDelBtn:true} %}
           {% endfor %}
-          <li class="course-grid related-course-grid" role="add-course" 
+          <li class="course-grid" role="add-course" 
           style="cursor:pointer
           {% if courses|length >= 3 %}
           ;display:none

@@ -33,6 +33,7 @@ class DataExtension extends \Twig_Extension
             new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
             new \Twig_SimpleFunction('isOldSmsUser', array($this, 'getOldSmsUserStatus'), $options),
             new \Twig_SimpleFunction('cloudStatus', array($this, 'getCloudStatus'), $options),
+            new \Twig_SimpleFunction('cloudConsultPath', array($this, 'getCloudConsultPath'), $options),
         );
     }
 
@@ -84,9 +85,42 @@ class DataExtension extends \Twig_Extension
         return $this->getEduCloudService()->isHiddenCloud();
     }
 
+    public function getCloudConsultPath()
+    {
+        $cloudConsult = $this->getSettingService()->get('cloud_consult', array());
+        if (empty($cloudConsult)) {
+            return false;
+        }
+
+        if (!isset($cloudConsult['cloud_consult_expired_time']) || time() > $cloudConsult['cloud_consult_expired_time']) {
+            $account = $this->getConsultService()->getAccount();
+            $cloudConsult['cloud_consult_expired_time'] = time() + 60 * 60 * 1;
+            $cloudConsult['cloud_consult_code'] = empty($account['code']) ? 0 : $account['code'];
+
+            $this->getSettingService()->set('cloud_consult', $cloudConsult);
+        }
+        $cloudConsultEnable = empty($cloudConsult['cloud_consult_code']) && $cloudConsult['cloud_consult_setting_enabled'] && $cloudConsult['cloud_consult_is_buy'];
+
+        if (!$cloudConsultEnable) {
+            return false;
+        }
+
+        return empty($cloudConsult['cloud_consult_js']) ? false : $cloudConsult['cloud_consult_js'];
+    }
+
     private function getEduCloudService()
     {
         return $this->biz->service('CloudPlatform:EduCloudService');
+    }
+
+    protected function getConsultService()
+    {
+        return $this->biz->service('EduCloud:MicroyanConsultService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 
     public function getName()

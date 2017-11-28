@@ -32,8 +32,8 @@ class RateLimiter
             list($allowance, $lastCheckTime) = $this->unpackValue($value);
 
             $timePassed = time() - $lastCheckTime;
-
             $allowance += $timePassed * $rate;
+
             if ($allowance > $this->maxAllowance) {
                 $allowance = $this->maxAllowance;
             }

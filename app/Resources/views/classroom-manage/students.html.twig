@@ -14,7 +14,7 @@
     <div class="panel-bar">
       <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('classroom_manage_student_create', {id:classroom.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'classroom.add_student_btn'|trans}}</button>
       {% if classroom.status == 'published' %}
-        <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
+        <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
       {% else %}
         <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{'classroom.student_import_tips'|trans}}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
       {% endif %}
@@ -36,10 +36,15 @@
         </a>
       </li>
 
-      <li class="{% if submenu == 'record' %}active{% endif %}">
-        <a href="{{ path('classroom_manage_record', {id:classroom.id}) }}">{{ 'classroom.exit_record'|trans }}
+      <li class="{% if submenu == 'join_record' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_record', {id:classroom.id, type: 'join'}) }}">{{ '加入记录'|trans }}
         </a>
       </li>
+
+      <li class="{% if submenu == 'exit_record' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_record', {id:classroom.id, type: 'exit'}) }}">{{ 'classroom.exit_record'|trans }}
+        </a>
+      </li>     
     </ul>
   {% block maincontent %}{% endblock %}
   </div>

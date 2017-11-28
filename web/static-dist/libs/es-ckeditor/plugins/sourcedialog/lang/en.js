@@ -1,9 +1,1 @@
-﻿/*
-Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
-For licensing, see LICENSE.md or http://ckeditor.com/license
-*/
-
-CKEDITOR.plugins.setLang( 'sourcedialog', 'en', {
-	toolbar: 'Source',
-	title: 'Source'
-} );
+﻿CKEDITOR.plugins.setLang("sourcedialog","en",{toolbar:"Source",title:"Source"});

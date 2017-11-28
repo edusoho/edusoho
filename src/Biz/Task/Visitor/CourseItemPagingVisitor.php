@@ -193,12 +193,12 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
 
         if ($this->paging['direction'] == 'down') {
             $conditions['seq_GTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'];
+            $conditions['seq_LTE'] = $this->paging['offsetSeq'] + $this->paging['limit'] - 1;
         }
 
         if ($this->paging['direction'] == 'up') {
             $conditions['seq_LTE'] = $this->paging['offsetSeq'];
-            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'];
+            $conditions['seq_GTE'] = $this->paging['offsetSeq'] - $this->paging['limit'] - 1;
         }
 
         return $conditions;

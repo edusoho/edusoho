@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['app/js/course/user-avatar/index.js']) %}
+{% block title %}
+  {{ 'site.avatar.set_before_learning'|trans }}
+{% endblock %}
+{% block body %}
+	<div class="alert alert-warning">{{ 'course.no_avatar_tips'|trans|raw }}</div>
+{% endblock %}
+
+{% block footer %}
+	<a class="js-course-avatar btn btn-primary"
+	   data-url="{{ path('settings') }}" class="alert-link" target="_blank">{{ 'form.btn.set'|trans }}</a>
+{% endblock %}

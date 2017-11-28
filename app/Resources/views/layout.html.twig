@@ -8,10 +8,14 @@
 <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html> <!--<![endif]-->
-{# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
-{% set mobile = is_show_mobile_page() %}
+
 {% set lang = app.request.getLocale() %}
-<html lang="{{ lang }}" class="{% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %}es-mobile{% endif %}{% if lang == 'en' %}es-en{% endif %}">
+{% set mobile = is_show_mobile_page() %}
+{% set currentTheme = current_theme() %}
+{% set maincolor = currentTheme.confirmConfig.maincolor|default('default') %}
+{% set navigationcolor = currentTheme.confirmConfig.navigationcolor|default('default') %}
+
+<html lang="{{ lang }}" class="{% if lang == 'en' %}es-en{% endif %}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -48,24 +52,13 @@
   <![endif]-->
 
   {% block stylesheets %}
-    {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
-    {% include 'default/stylesheet-webpack.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+    {% include 'default/stylesheet-webpack.html.twig' %}
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}
-
-  {% set currentTheme = current_theme() %}
-  {% if isEditColor|default(0) %}
-    {% set maincolor = currentTheme.config.maincolor|default(currentTheme.config.color|default('default')) %}
-    {% set navigationcolor = currentTheme.config.navigationcolor|default('default') %}
-  {% else %}
-    {% set maincolor = currentTheme.confirmConfig.maincolor|default(currentTheme.confirmConfig.color|default('default')) %}
-    {% set navigationcolor = currentTheme.confirmConfig.navigationcolor|default('default') %}
-  {% endif %}
-
 </head>
-<body class="{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
+<body class="{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}{% endblock %}">
 
 <!--[if lt IE 9]>
 <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
@@ -107,10 +100,10 @@
   {% endblock %}
 
   {% block floatConsult %}
-
-    {% set cloud_consult = setting('cloud_consult', '') %}
-    {% if cloud_consult and cloud_consult.cloud_consult_setting_enabled |default(0) and cloud_consult.cloud_consult_is_buy |default(0) and cloud_consult.cloud_consult_js |default('') %}
-      {{ cloud_consult.cloud_consult_js | raw }}
+  
+    {% set cloudConsultPath = cloudConsultPath() %}
+    {% if cloudConsultPath|default() %}
+      {{ cloudConsultPath | raw }}
     {% endif %}
 
     {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}

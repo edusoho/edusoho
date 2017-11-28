@@ -17,6 +17,18 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    order_subscriber:
+        class: Codeages\Biz\Order\Subscriber\OrderSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    app_order_subscriber:
+        class: Biz\OrderFacade\Event\OrderEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     card_event_subscriber:
         class: Biz\Card\Event\EventSubscriber
         arguments: ['@biz']
@@ -264,6 +276,18 @@ services:
 
     open_course_sms_event_subscriber:
         class: Biz\Sms\Event\OpenCourseSmsEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    statement_event_subscriber:
+        class: Biz\Xapi\Event\StatementEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_account_event_subscriber:
+        class: Codeages\Biz\Pay\Subscriber\AccountSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }

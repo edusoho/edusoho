@@ -65,6 +65,11 @@ export default class QuestionManage{
         notify('danger', Translator.trans('activity.testpaper_manage.setting_pass_score_error_hint', {'passedScore':passedScore, 'totalScore':stats.total.score}));
         return;
       }
+      if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(passedScore)) {
+        notify('danger', Translator.trans('activity.testpaper_manage.pass_score_error_hint'));
+        $(this).focus();
+        return;
+      }
     }
     
     let html='';
@@ -94,7 +99,7 @@ export default class QuestionManage{
         var score = $(this).val();
 
         if (score == '0') {
-            notify('danger','activity.testpaper_manage.question_score_empty_hint');
+            notify('danger',Translator.trans('activity.testpaper_manage.question_score_empty_hint'));
             isOk = false;
         }
 
@@ -161,7 +166,7 @@ export default class QuestionManage{
     }
 
     $target.button('loading').addClass('disabled');
-    
+
     $.post(this.$element.attr('action'),{questions:this.questions,passedScore:passedScore},function(result){
       if (result.goto) {
         window.location.href = result.goto;

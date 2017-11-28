@@ -1,0 +1,63 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_order_manage' %}
+
+{% set script_controller = 'manage/list' %}
+
+{% block main %}
+
+  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="mbm">
+      <div class="form-group">
+        <label class="ptm">{{ 'order.created_time'|trans }}:</label>
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{ request.get('startDateTime') }}"
+          placeholder="{{ 'form.placeholder.start_date'|trans }}">
+        -
+        <input class="form-control mrm" type="text" id="endDate" name="endDateTime" value="{{ request.get('endDateTime') }}"
+          placeholder="{{ 'form.placeholder.end_date'|trans }}">
+      </div>
+      <div class="form-group">
+        <label class="ptm">{{ 'admin.order.screen_condition'|trans }}</label>
+        <select class="form-control" name="orderItemType">
+          {{ select_options(dict('orderItemType'), request.get('orderItemType'), 'order.product_type'|trans) }}
+        </select>
+
+        <select class="form-control" name="displayStatus">
+          {{ select_options(dict('orderDisplayStatus'), request.get('displayStatus'), 'order.status'|trans) }}
+        </select>
+
+        <select class="form-control" name="payment">
+          {{ select_options(dict('paymentSelect'), request.get('payment'), 'order.payment_pattern'|trans) }}
+        </select>
+        <select class="form-control" name="source">
+          {{ select_options(dict('source'), request.get('source'), 'order.source'|trans) }}
+        </select>
+      </div>
+      <div class="form-group" style="display:none;">
+        <input class="form-control" type="text" name="paidTimeRange" , placeholder="{{ 'admin.order.paid_time_range.input_placeholder'|trans }}">
+      </div>
+    </div>
+    <div class="mbm">
+      <div class="form-group">
+        <label class="ptm">{{ 'admin.order.keyword'|trans }}</label>
+        <select class="form-control" name="keywordType">
+          {% set options = {
+            sn: 'order.id'|trans,
+            buyer:'admin.order.buyer'|trans,
+            title_like: 'admin.order.title'|trans}
+          %}
+          {{ select_options(options, request.get('keywordType')) }}
+        </select>
+
+        <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{ 'form.placeholder.keyword'|trans }}">
+      </div>
+
+      <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+      {% include 'export/export-btn.html.twig' with 
+      { 'exportFileName': 'order', 
+        'targetFormId': 'user-search-form'}  
+      %}
+    </div>
+  </form>
+  {% include 'admin/order/order-table.html.twig' %}
+{% endblock %}

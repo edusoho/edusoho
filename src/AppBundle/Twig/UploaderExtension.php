@@ -85,11 +85,11 @@ class UploaderExtension extends \Twig_Extension
             ),
             'cloud_document' => array(
                 'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx'),
-                'mimeTypes' => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel'),
+                'mimeTypes' => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
             ),
             'document' => array(
                 'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'),
-                'mimeTypes' => array('application/vnd.ms-excel', 'application/vnd.ms-outlook', 'application/vnd.ms-pkicertstore', 'application/vnd.ms-pkiseccat', 'application/vnd.ms-pkistl', 'application/vnd.ms-powerpoint', 'application/vnd.ms-project', 'application/vnd.ms-works', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.*'),
+                'mimeTypes' => array('application/vnd.ms-excel', 'application/vnd.ms-outlook', 'application/vnd.ms-pkicertstore', 'application/vnd.ms-pkiseccat', 'application/vnd.ms-pkistl', 'application/vnd.ms-powerpoint', 'application/vnd.ms-project', 'application/vnd.ms-works', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
             ),
             'zip' => array(
                 'extensions' => array('zip', 'rar', 'gz', 'tar', '7z'),

@@ -7,7 +7,7 @@
 <form id="student-remark-form" method="post" action="{{ path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id}) }}" data-user="{{default.user_name|default('site.default.student'|trans)}}">
   <div class="form-group">
     <div class="controls">
-    	<input class="form-control" id="student-remark" name="remark" value="{{member.remark}}" >
+    	<input class="form-control" id="student-remark" name="remark" value="{{ member.remark|trans }}" >
       <div class="help-block">{{'classroom.student_remark_tips'|trans}}</div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% set modal_class = 'cd-modal-dialog' %}
+{% set modalType = 'user' %}
 
 {% block title %}
   {{'user.orders.detail.modal_title'|trans}}
@@ -11,6 +12,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn cd-btn cd-btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
 {% endblock %}
 

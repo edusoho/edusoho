@@ -44,7 +44,7 @@
     window.seajsBoot = function() {
 
         if (typeof seajs !== 'undefined') {
-            app.lazyLoads();
+            app.lazyLoads&&app.lazyLoads();
             return ;
         }
 

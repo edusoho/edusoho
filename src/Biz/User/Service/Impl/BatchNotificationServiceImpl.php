@@ -47,7 +47,9 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         }
         $batchNotification['published'] = 1;
         $batchNotification['sendedTime'] = time();
-        $this->getBatchNotificationDao()->update($id, $batchNotification);
+        $batchNotification = $this->getBatchNotificationDao()->update($id, $batchNotification);
+
+        $this->dispatchEvent('batch_notification.publish', $batchNotification);
 
         return true;
     }

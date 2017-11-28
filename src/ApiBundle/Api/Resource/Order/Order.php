@@ -5,7 +5,9 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Order\Service\OrderFacadeService;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Biz\OrderFacade\Product\Product;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Order extends AbstractResource
@@ -19,12 +21,55 @@ class Order extends AbstractResource
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
+        $this->filterParams($params);
+
+        try {
+            /* @var $product Product */
+            $product = $this->getOrderFacadeService()->getOrderProduct($params['targetType'], $params);
+            $product->setPickedDeduct($params);
+            $order = $this->getOrderFacadeService()->create($product);
+
+            // 优惠卷全额抵扣
+            if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
+                return array(
+                    'id' => $order['id'],
+                    'sn' => $order['sn']
+                );
+            } else {
+                $params['gateway'] = 'Alipay_LegacyWap';
+                $params['type'] = 'purchase';
+                $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
+                $params['orderSn'] = $order['sn'];
+                $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
+                $trade = $this->invokeResource($apiRequest);
+
+                return array(
+                    'id' => $trade['tradeSn'],
+                    'sn' => $trade['tradeSn']
+                );
+            }
+
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
+        }
+    }
+
+    public function filterParams(&$params)
+    {
+        if (isset($params['coinPayAmount'])) {
+            $params['coinAmount'] = $params['coinPayAmount'];
+            unset($params['coinPayAmount']);
+        }
+
         if (isset($params['payPassword'])) {
             $params['payPassword'] = $this->decrypt($params['payPassword']);
         }
 
-        list($order) = $this->getOrderFacadeService()->createOrder($params['targetType'], $params['targetId'], $params);
-        return $order;
+        if (isset($params['unencryptedPayPassword'])) {
+            $params['payPassword'] = $params['unencryptedPayPassword'];
+        }
     }
 
     private function decrypt($payPassword)
@@ -37,6 +82,6 @@ class Order extends AbstractResource
      */
     private function getOrderFacadeService()
     {
-        return $this->service('Order:OrderFacadeService');
+        return $this->service('OrderFacade:OrderFacadeService');
     }
 }

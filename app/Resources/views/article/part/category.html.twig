@@ -3,7 +3,7 @@
   <div class="tab-header">
     <ul class="clearfix">
       <li class="{% if categoryCode is empty %}active{% endif %}"><a
-          href="{{ path('article_show') }}">{{ 'article.channel'|trans({'%article_name%': setting('article.name')|default('article'|trans)}) }}</a></li>
+          href="{{ path('article_show') }}">{{ setting('article.name')|default('article'|trans) }}</a></li>
       {% for cateogory in rootCategories %}
         {% if cateogory.parentId == 0 %}
           <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a

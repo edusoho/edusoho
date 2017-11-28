@@ -47,7 +47,7 @@ class JobPool
         return $this->getJobPoolDao()->getByName($name);
     }
 
-    protected function release($job)
+    public function release($job)
     {
         $jobPool = $this->getJobPool($job['pool']);
 
@@ -93,7 +93,10 @@ class JobPool
     {
         $ids = array($id);
         $diff = array('num' => $diff);
-        $this->getJobPoolDao()->wave($ids, $diff);
+        $jobPool = $this->getJobPoolDao()->get($id);
+        if (!($jobPool['num'] == 0 && $diff < 0)) {
+            $this->getJobPoolDao()->wave($ids, $diff);
+        }
     }
 
     protected function getJobPoolDao()

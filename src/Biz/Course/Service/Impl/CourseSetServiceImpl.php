@@ -443,7 +443,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             )
         );
 
-        if ($fields['tags'] !== null) {
+        if (null !== $fields['tags']) {
             $tags = explode(',', $fields['tags']);
             $tags = $this->getTagService()->findTagsByNames($tags);
             $tagIds = ArrayToolkit::column($tags, 'id');
@@ -523,6 +523,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 'audiences',
             )
         );
+
+        if (isset($fields['summary'])) {
+            $fields['summary'] = $this->purifyHtml($fields['summary'], true);
+        }
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
         $this->dispatchEvent('course-set.update', new Event($courseSet));
@@ -620,15 +624,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $updateFields = array();
         foreach ($fields as $field) {
-            if ($field === 'ratingNum') {
+            if ('ratingNum' === $field) {
                 $ratingFields = $this->getReviewService()->countRatingByCourseSetId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
-            } elseif ($field === 'noteNum') {
+            } elseif ('noteNum' === $field) {
                 $noteNum = $this->getNoteService()->countCourseNoteByCourseSetId($id);
                 $updateFields['noteNum'] = $noteNum;
-            } elseif ($field === 'studentNum') {
+            } elseif ('studentNum' === $field) {
                 $updateFields['studentNum'] = $this->countStudentNumById($id);
-            } elseif ($field === 'materialNum') {
+            } elseif ('materialNum' === $field) {
                 $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(
                     array('courseSetId' => $id, 'source' => 'coursematerial')
                 );
@@ -658,7 +662,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->beginTransaction();
         try {
             // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
-            if (empty($publishedCourses) && $courseSet['type'] === 'live') {
+            if (empty($publishedCourses) && 'live' === $courseSet['type']) {
                 //对于直播课程，有且仅有一个教学计划
                 $course = $courses[0];
                 if (empty($course['maxStudentNum'])) {
@@ -671,7 +675,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if (empty($publishedCourses)) {
                 if (!empty($classroomRef)) {
                     $this->getCourseService()->publishCourse($classroomRef['courseId']);
-                } elseif (count($courses) === 1) {
+                } elseif (1 === count($courses)) {
                     //如果普通课程下仅有一个教学计划且未发布，则级联发布该教学计划
                     $this->getCourseService()->publishCourse($courses[0]['id']);
                 } else {
@@ -694,7 +698,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function closeCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
-        if ($courseSet['status'] !== 'published') {
+        if ('published' !== $courseSet['status']) {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
 
@@ -713,7 +717,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->rollback();
             throw $exception;
         }
-        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
 
         $this->getLogService()->info('course', 'close', "关闭课程《{$courseSet['title']}》(#{$courseSet['id']})");
 
@@ -788,7 +791,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return $courseSet;
         }
 
-        if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
+        if ($courseSet['parentId'] <= 0 || 0 == $courseSet['locked']) {
             throw $this->createAccessDeniedException('Invalid Operation');
         }
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
@@ -802,7 +805,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($id, $fields);
             $this->getCourseDao()->update($courses[0]['id'], $fields);
 
+            $this->dispatchEvent('course-set.unlock', new Event($courseSet));
+
             $this->commit();
+
+            $this->getLogService()->info(
+                'course',
+                'unlock_course',
+                "解除班级课程同步《{$courseSet['title']}》(#{$courseSet['id']})"
+            );
 
             return $courseSet;
         } catch (\Exception $exception) {
@@ -821,7 +832,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         //只有一个计划时，直接同步计划的价格到课程上
-        if (count($courses) === 1) {
+        if (1 === count($courses)) {
             $course = array_shift($courses);
             $price = array('minPrice' => $course['price'], 'maxPrice' => $course['price']);
         } else {
@@ -1098,7 +1109,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return array_filter(
             $fields,
             function ($value) {
-                if ($value === '' || $value === null) {
+                if ('' === $value || null === $value) {
                     return false;
                 }
 

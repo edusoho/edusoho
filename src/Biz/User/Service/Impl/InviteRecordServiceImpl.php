@@ -5,6 +5,7 @@ namespace Biz\User\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\InviteRecordService;
+use AppBundle\Common\MathToolkit;
 
 class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 {
@@ -64,9 +65,10 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
         foreach ($records as $record) {
             $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
-            $fields['amount'] = $orderInfo['totalPrice'];
-            $fields['cashAmount'] = $orderInfo['amount'];
-            $fields['coinAmount'] = $orderInfo['coinAmount'];
+
+            $fields['amount'] = empty($orderInfo['payAmount']) ? 0 : MathToolkit::simple($orderInfo['payAmount'], 0.01);
+            $fields['cashAmount'] = empty($orderInfo['cashAmount']) ? 0 : MathToolkit::simple($orderInfo['cashAmount'], 0.01);
+            $fields['coinAmount'] = empty($orderInfo['coinAmount']) ? 0 : MathToolkit::simple($orderInfo['coinAmount'], 0.01);
             $this->updateOrderInfoById($record['id'], $fields);
         }
 
@@ -88,23 +90,9 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     public function getOrderInfoByUserIdAndInviteTime($userId, $inviteTime)
     {
         $user = $this->getCurrentUser();
-        $conditions = array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime);
+        $conditions = array('user_id' => $userId, 'statuses' => array('success', 'finished'), 'pay_time_GT' => $inviteTime);
 
-        return $this->getOrderService()->analysis($conditions);
-    }
-
-    // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
-    public function getUserOrderDataByUserIdAndTime($userId, $inviteTime)
-    {
-        $coinAmountTotalPrice = $this->getOrderService()->analysisCoinAmount(array('userId' => $userId, 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
-        $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
-        $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
-
-        $coinAmountTotalPrice = round($coinAmountTotalPrice, 2);
-        $amountTotalPrice = round($amountTotalPrice, 2);
-        $totalPrice = round($totalPrice, 2);
-
-        return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
+        return $this->getOrderService()->sumPaidAmount($conditions);
     }
 
     public function getAllUsersByRecords($records)
@@ -115,43 +103,6 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $users;
-    }
-
-    //得到用户的邀请信息
-    public function getInviteInformationsByUsers($users)
-    {
-        $inviteInformations = array();
-        foreach ($users as $key => $user) {
-            $invitedRecords = $this->findRecordsByInviteUserId($user['id']);
-            $payingUserCount = 0;
-            $totalPrice = 0;
-            $totalCoinAmount = 0;
-            $totalAmount = 0;
-
-            foreach ($invitedRecords as $keynum => $invitedRecord) {
-                list($coinAmountTotalPrice, $amountTotalPrice, $tempPrice) = $this->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
-
-                if ($coinAmountTotalPrice || $amountTotalPrice) {
-                    $payingUserCount = $payingUserCount + 1;
-                }
-
-                $totalCoinAmount = $totalCoinAmount + $coinAmountTotalPrice;
-                $totalAmount = $totalAmount + $amountTotalPrice;
-                $totalPrice = $totalPrice + $tempPrice;
-            }
-
-            $inviteInformations[] = array(
-                'id' => $user['id'],
-                'nickname' => $user['nickname'],
-                'payingUserCount' => $payingUserCount,
-                'payingUserTotalPrice' => $totalPrice,
-                'coinAmountPrice' => $totalCoinAmount,
-                'amountPrice' => $totalAmount,
-                'count' => count($invitedRecords),
-            );
-        }
-
-        return $inviteInformations;
     }
 
     public function sumCouponRateByInviteUserId($userId)

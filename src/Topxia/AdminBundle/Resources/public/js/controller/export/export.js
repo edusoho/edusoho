@@ -78,7 +78,7 @@ define(function(require, exports, module) {
             $modal.find('#progress-bar').width('100%').parent().removeClass('active');
             var $title = $modal.find('.modal-title');
             setTimeout(function(){
-                Notify.success($title.data('success'), {delay: 1500});
+                Notify.success($title.data('success'));
                 $modal.modal('hide');
             },500)
 

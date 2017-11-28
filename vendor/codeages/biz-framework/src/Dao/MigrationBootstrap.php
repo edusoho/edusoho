@@ -28,10 +28,9 @@ class MigrationBootstrap
         see: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/mysql-enums.html
         $container['db']->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
-        $db = $this->db;
         $table = $this->table;
-        $container['phpmig.adapter'] = function ($container) use ($db, $table) {
-            return new Adapter\Doctrine\DBAL($db, $table);
+        $container['phpmig.adapter'] = function ($container) use ($table) {
+            return new Adapter\Doctrine\DBAL($container['db'], $table);
         };
 
         $migrations = array();

@@ -14,7 +14,7 @@ use AppBundle\System;
 
 /**
  *  use belong commond
- *  app/console   build:install-package  192.168.9.221  root  root   exam.edusoho.cn  /var/www/exam.edusoho.cn
+ *  app/console   build:install-package  192.168.4.200  root  root   exam.edusoho.cn  /var/www/exam.edusoho.cn
  */
 class BuildCommand extends BaseCommand
 {
@@ -46,8 +46,7 @@ class BuildCommand extends BaseCommand
             ->addArgument('user', InputArgument::REQUIRED, '演示站点数据库用户')
             ->addArgument('password', InputArgument::REQUIRED, '数据库密码')
             ->addArgument('database', InputArgument::REQUIRED, '演示站数据库')
-            ->addArgument('projectPath', InputArgument::OPTIONAL, '演示站项目路径')
-        ;
+            ->addArgument('projectPath', InputArgument::OPTIONAL, '演示站项目路径');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -58,7 +57,6 @@ class BuildCommand extends BaseCommand
 
         $this->buildDatabase();
 
-        $this->buildRootDirectory();
         $this->buildApiDirectory();
         $this->buildAppDirectory();
         $this->buildBootstrapDirectory();
@@ -69,7 +67,7 @@ class BuildCommand extends BaseCommand
         $this->buildPluginsDirectory();
         $this->buildDefaultBlocks();
 
-        $this->cleanMacosDirectory();
+        $this->cleanMacOsDirectory();
         $this->clean();
 
         $this->copyInstallFiles();
@@ -149,7 +147,7 @@ class BuildCommand extends BaseCommand
 
     private function package()
     {
-        $this->output->writeln('packaging...');
+        $this->output->writeln('build installation package  use: tar zcf edusoho-'.System::VERSION.'tar.gz edusoho/');
 
         chdir($this->buildDirectory);
 
@@ -166,12 +164,6 @@ class BuildCommand extends BaseCommand
         exec($command);
         $command = "rm -rf {$this->rootDirectory}/web/install/edusoho_init_*.sql";
         exec($command);
-    }
-
-    private function buildRootDirectory()
-    {
-        $this->output->writeln('build / .');
-        $this->filesystem->copy("{$this->rootDirectory}/README.html", "{$this->distDirectory}/README.html");
     }
 
     private function buildApiDirectory()
@@ -245,18 +237,21 @@ class BuildCommand extends BaseCommand
         $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Command");
         $this->filesystem->mkdir("{$this->distDirectory}/src/AppBundle/Command");
 
-        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/theme-tpl", "{$this->distDirectory}/src/AppBundle/Command/theme-tpl");
         $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/Templates", "{$this->distDirectory}/src/AppBundle/Command/Templates");
+        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/ThemeTemplate", "{$this->distDirectory}/src/AppBundle/Command/ThemeTemplate");
 
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BaseCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeCreateCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeCreateCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ResetPasswordCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/SchedulerCommand.php", "{$this->distDirectory}/src/AppBundle/Command/SchedulerCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CloseCdnCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CloseCdnCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CountOnlineCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CountOnlineCommand.php");
 
         $finder = new Finder();
         $finder->directories()->in("{$this->distDirectory}/src/");
@@ -277,11 +272,15 @@ class BuildCommand extends BaseCommand
     public function buildVendorDirectory()
     {
         $this->output->writeln('build vendor/ .');
-        $buildVendorApps = $this->getApplication()->find('build:vendor');
+
+        $this->filesystem->mirror("{$this->rootDirectory}/vendor", "{$this->distDirectory}/vendor");
+
+        $command = $this->getApplication()->find('build:vendor');
         $input = new ArrayInput(array(
             'command' => 'build:vendor',
+            'folder' => "{$this->distDirectory}/vendor",
         ));
-        $buildVendorApps->run($input, $this->output);
+        $command->run($input, $this->output);
     }
 
     public function buildVendorUserDirectory()
@@ -356,7 +355,7 @@ class BuildCommand extends BaseCommand
         BlockToolkit::init("{$themeDir}/jianmo/block.json", $this->getContainer());
     }
 
-    public function cleanMacosDirectory()
+    public function cleanMacOsDirectory()
     {
         $finder = new Finder();
         $finder->files()->in($this->distDirectory)->ignoreDotFiles(false);

@@ -1,14 +1,14 @@
-<ul class="subfield-list 
-  {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
-    five-subfield 
-  {% else %}
-    four-subfield
-  {% endif %}
-  clearfix">
+<ul class="subfield-list
+{% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+six-subfield
+{% else %}
+five-subfield
+{% endif %}
+clearfix">
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.login_users'|trans }}</div>
-    <span class="number">{{ loginCount| default('0') }}</span>
-    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: {{ onlineCount }}</p>
+    <span class="number"><a href="{{ path('admin_online', {type:'logined'}) }}" target="_blank">{{ loginCount| default('0') }}</a></span>
+    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: <a href="{{ path('admin_online', {type:'online'}) }}" target="_blank">{{ onlineCount }}</a></p>
   </li>
   <li>
     <div class="title">{{ 'admin.homepage.todays_data.new_registration'|trans }}</div>
@@ -16,9 +16,14 @@
     <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalRegisterNum }}</p>
   </li>
   <li>
-    <div class="title">{{ 'admin.homepage.todays_data.new_students'|trans }}</div>
-    <span class="number"> {{ todayCourseMemberNum + todayClassroomMemberNum }}</span>
-    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalCourseMemberNum + totalClassroomMemberNum }}</p>
+    <div class="title">{{ 'admin.homepage.todays_data.new_course_members'|trans }}</div>
+    <span class="number"> {{ todayCourseMemberNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalCourseMemberNum }}</p>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.new_classroom_members'|trans }}</div>
+    <span class="number"> {{ todayClassroomMemberNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalClassroomMemberNum }}</p>
   </li>
   {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
     <li>

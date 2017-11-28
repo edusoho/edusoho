@@ -54,3 +54,5 @@ chunk-manifest.json
 /web/static-dist/**/css/*.js
 deployment-config.json
 .webpack-watch.log
+/web/MP_*
+.webpack-watch.log

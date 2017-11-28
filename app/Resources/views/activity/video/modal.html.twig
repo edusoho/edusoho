@@ -5,12 +5,13 @@
 {% block activity_content %}
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="ext_mediaSource" class="style control-label-required">{{ 'course.plan_task.activity_manage.video'|trans }}</label>
+      <label for="media" class="style control-label-required">{{ 'course.plan_task.activity_manage.video'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null) } %}
-      <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]"
-             value="{{ activity.ext.mediaSource|default(null) }}">
+      {% if activity.ext.mediaSource|default(null) and activity.ext.mediaSource != 'self' %}
+        {% set selectedFile = {'status': 'none', 'source': activity.ext.mediaSource, 'uri': activity.ext.mediaUri } %}
+      {% endif %}
+      {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null), selectedFile: selectedFile|default(null) } %}
     </div>
   </div>
   <div class="form-group for-video-type" id="lesson-length-form-group">
@@ -24,8 +25,6 @@
              value="{{ activity.minute|default(null) }}"><span class="mhs">{{ 'site.date.minute'|trans }}</span><input
           class="form-control width-150 js-length" id="second" type="text" name="second"
           value="{{ activity.second|default(null) }}">{{ 'site.date.second'|trans }}
-      <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
-      <input type="hidden" id="ext_mediaUri" name="ext[mediaUri]" value="{{ activity.ext.mediaUri|default(null) }}">
       <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
     </div>
   </div>
@@ -57,7 +56,7 @@
       <label>{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
     </div>
     <div class="col-sm-4">
-      <select id="finish-condition" name="ext[finishType]" class="form-control">
+      <select id="finish-condition" name="finishType" class="form-control">
         {% set finishType = activity.ext.finishType|default('end') %}
         <option value="end" {% if finishType == 'end' %} selected {% endif %}>{{'course.plan_task.activity_manage.video.last'|trans}}</option>
         <option value="time" {% if finishType == 'time' %} selected {% endif %}>{{'course.plan_task.activity_manage.video.learn_time'|trans}}</option>
@@ -70,7 +69,7 @@
       <label>{{ 'course.plan_task.activity_manage.ppt.lear_at_least_time'|trans }}</label>
     </div>
     <div class="col-sm-4 controls">
-      <input id="condition-detail" class="form-control" type="text" name="ext[finishDetail]" value="{{ activity.ext.finishDetail|default(1) }}">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{% if activity.ext.finishDetail|default(1) != 0  %}{{ activity.ext.finishDetail|default(1) }}{% else %}1{% endif %}">
     </div>
     <div class="col-sm-4 controls">
       <p class="form-control-static">{{'site.date.minute'|trans}}</p>

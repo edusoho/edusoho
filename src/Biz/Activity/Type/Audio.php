@@ -55,8 +55,18 @@ class Audio extends Activity
      */
     public function update($targetId, &$fields, $activity)
     {
-        $audioActivityFields = $fields['ext'];
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+        $media = json_decode($fields['media'], true);
 
+        if (empty($media['id'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+
+        $audioActivityFields = array(
+            'mediaId' => $media['id'],
+        );
         $audioActivity = $this->getAudioActivityDao()->get($fields['mediaId']);
         if (empty($audioActivity)) {
             throw $this->createNotFoundException('教学活动不存在');

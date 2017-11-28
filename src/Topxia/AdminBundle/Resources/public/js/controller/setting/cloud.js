@@ -3,13 +3,15 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
-    var BatchUploader = require('../../../../topxiaweb/js/controller/uploader/batch-uploader');
+    var BatchUploader = require('../uploader/batch-uploader');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
 
         $("[data-toggle='popover']").popover();
+
+        var mobileSupportVal = $('input[name="support_mobile"]:checked').val();
 
         var $form = $("#cloud-setting-form");
         var uploader = new Uploader({
@@ -123,14 +125,27 @@ define(function(require, exports, module) {
         }
 
         var validator = new Validator({
-            element: $form,
-            failSilently: true,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return false;
-                }
-                $('#cloud-video-form-btn').button('submiting').addClass('disabled');
+          element: $form,
+          autoSubmit: false,
+          onFormValidated: function(error, results, $form) {
+            if (error) {
+              return false;
             }
+
+            var updateSupportMobile = $('input[name="support_mobile"]:checked').val();
+
+            if (mobileSupportVal == updateSupportMobile) {
+                $('#cloud-video-form-btn').button('submiting').addClass('disabled');
+                submitForm();
+            } else {
+              if (updateSupportMobile == 1) {
+                $('#change-normal-modal').modal('show');
+              } else {
+                $('#delete-video-modal').modal('show');
+              } 
+              return false;
+            }
+          }
         });
 
         validator.addItem({
@@ -153,6 +168,36 @@ define(function(require, exports, module) {
             }
         })
 
+        $('input[name="support_mobile"]').change(function(){
+          var val = $(this).val();
+          if (val == 1) {
+            $('.js-normal-mode-tip').removeClass('hidden');
+            $('.js-encryption-mode-tip').addClass('hidden');
+            $('.js-delete-video-btn').hide();
+          } else {
+            $('.js-normal-mode-tip').addClass('hidden');
+            $('.js-encryption-mode-tip').removeClass('hidden');
+            $('.js-delete-video-btn').show();
+          }
+        })
+
+        $('#delete-video-modal').on('click', 'button', function(){
+          var isDelete = $(this).data('delete');
+          
+          $form.find('input[name="isDeleteMP4"]').val(isDelete);
+          submitForm();
+        })
+
+        $('#change-normal-modal').on('click', '.js-confirm-submit', function(response){
+          submitForm();
+        })
+
+        function submitForm()
+        {
+          $.post($form.attr('action'), $form.serialize(), function(response){
+            window.location.reload();
+          })
+        }
 
     }
 

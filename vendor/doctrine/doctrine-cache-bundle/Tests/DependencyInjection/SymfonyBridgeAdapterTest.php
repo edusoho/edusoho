@@ -114,6 +114,56 @@ class SymfonyBridgeAdpterTest extends TestCase
         $this->assertTrue($container->hasAlias('doctrine.orm.default_metadata_cache'));
     }
 
+    public function testCacheDriverPrefixSeed()
+    {
+        $container   = $this->createServiceContainer();
+        $definition  = new Definition('%doctrine.orm.cache.apc.class%');
+        $cacheDriver = array(
+            'type' => 'apc',
+            'id'   => 'service_driver'
+        );
+
+        $container->setParameter('cache.prefix.seed', 'foo');
+        $container->setDefinition('service_driver', $definition);
+
+        $this->adapter->loadCacheDriver('metadata_cache', 'default', $cacheDriver, $container);
+
+        $service = $container->findDefinition('doctrine.orm.default_metadata_cache');
+
+        $expectedMethodCalls = array(
+            array(
+                'setNamespace',
+                array('sf_orm_default_8c36a4de0535c77272fc7390a992fb8c6da987c3b940b2f466ea2596aa31abfb')
+            )
+        );
+        $this->assertSame($expectedMethodCalls, $service->getMethodCalls());
+    }
+
+    public function testCacheDriverWithoutPrefixSeed()
+    {
+        $container   = $this->createServiceContainer();
+        $definition  = new Definition('%doctrine.orm.cache.apc.class%');
+        $cacheDriver = array(
+            'type' => 'apc',
+            'id'   => 'service_driver'
+        );
+
+        $container->setDefinition('service_driver', $definition);
+        $container->setParameter('kernel.root_dir', 'test');
+
+        $this->adapter->loadCacheDriver('metadata_cache', 'default', $cacheDriver, $container);
+
+        $service = $container->findDefinition('doctrine.orm.default_metadata_cache');
+
+        $expectedMethodCalls = array(
+            array(
+                'setNamespace',
+                array('sf_orm_default_b94fa67b19b95498aee2fd6ef50b832b056bd8b4826c3e66209a6e975f48e615')
+            )
+        );
+        $this->assertSame($expectedMethodCalls, $service->getMethodCalls());
+    }
+
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage "unrecognized_type" is an unrecognized Doctrine cache driver.

@@ -1,4 +1,5 @@
 site.alipay: Alipay
+site.trade.title: %name%Order
 site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
@@ -217,7 +218,6 @@ user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
 user.not_login.tips: 'You are not login now, <a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
 user.approve_tips: 'Tips： if your want to change your personal information, please change here.'
-user.email_tips: 'Please fill your email address to ensure your account safty.'
 user.approved: Verified
 user.approving: Verifying
 user.mobile_bind: Binded
@@ -268,6 +268,7 @@ form.btn.cancel: Cancel
 form.btn.confirm: Confirm
 form.btn.insert: Insert
 form.btn.delete: Delete
+form.btn.not_delete: Not delete
 form.btn.import: Import
 form.btn.submit_disabled: Submitted
 form.btn.reset_password: 'Reset password'
@@ -319,13 +320,18 @@ form.change_captcha_code: Can't see, click change one
 form.mobile: Mobile
 form.change_mobile: Change mobile
 form.input_mobile: Input mobile
+form.btn.yes: 'Yes'
+form.btn.no: 'No'
+
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
+finance.recover: Recorvey
 finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
 finance.balance: Balance
+finance.net_income: 'Net Income'
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
 finance.CNY_price: 'Price in CNY'
@@ -336,6 +342,7 @@ vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
+plugin.discount: Discount
 plugin.coupon: Coupon
 plugin.coupon.minus: Deduction
 plugin.coupon.minus_tips: 'Coupon for deduct %rate% CNY'
@@ -345,6 +352,7 @@ plugin.coupon.change_btn: 'Change coupon'
 plugin.coupon.use_btn: 'Use coupon'
 plugin.coupon.choose_btn: 'Fill in coupon'
 plugin.coupon.use.input_placeholder: 'Please fill in the coupon code'
+plugin.coupon.use.input_display: 请输入优惠券码
 plugin.coupon.code: 'Coupon code'
 plugin.coupon.amount: 'Coupon price amount'
 coin.online_school_balance: Balance
@@ -367,19 +375,58 @@ coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
 order.name: 'Order name'
-order.createdTime: 'Create time'
+order.product_name: Product name
+order.product_price: Product Price
+order.price_amount: Price payable
+order.paid_amount: Paid price
+order.paid_coin_amount: Paid coin
+order.paid_cash_amount: Paid cash
+order.paid_time_none: None
+order.refund.deal_status: Deal status
+order.refund.deal_time: Deal Time
+order.refund.deal_persion: Deal persion
+order.refund_reason: Refund reason
+order.refund.detail: Refund detail
+order.refund_amount: Refund amount
+order.refund_coin_amount: Refund coin
+order.refund_cash_amount: Refund Cash
+order.refund_limit: Refund limit
+order.redund_deadline: Refund Deadline
+order.refund_deadline_none: None
+order.show_refund_detail: Show refund
+order.refunded_cash_amount: Refunded cash
+order.use_coupon: Use coupon
+order.refund_feedback: feedback
+order.refund.id: Refund id
+order.created_time: 'Create time'
 order.pay_time: 'Payment time'
 order.status: 'Order status'
+order.deduct: Order deduct
+order.item_type: Order type
+order.product_type: Product type
+order.source:  source
 order.status.created: Unfishined
 order.status.paid: Piad
 order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
+order.due_pay: duePay(CNY)
+order.price_amount: PriceAmount
+order.discount_amount: DiscountAmount
 order.real_pay: Paid
 order.buyers: Consumer
+order.deduct_amount: Deduct Amount
+order.coin_amount: Coin Amount
+order.cash_amount: Cash Amount
+order.buyer.username: Username
+order.buyer.true_name: True name
+order.buyer.email: Email
+order.buyer.contact: Contact
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'
+order.platform_sn: Platform SN
+order.use_coupon_tip: Use Coupon
 order.price: 'Price'
 order.paid_time: 'Paid time'
 order.bank_code: 'Bank code'
@@ -401,18 +448,35 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_rmb: 'Price:'
+order.confirm.pay_total: Total
+order.confirm.pay_rmb: 'Price'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
+order.confirm.submit_btn_loading: Submiting...
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
+order.confirm.coupon.hint: 通过优惠券抵扣金额
+order.confirm.coupon.use_loading: 使用中
+order.confirm.coupon.expiry_date_hint: 有效期至
+order.confirm.coupon.select_existed: 选择已有优惠券
+order.confirm.coupon.used_coupon: 已使用优惠券
+order.confirm.coupon.deduction: 抵扣
+order.confirm.rate_change: 1 %coin_name% = %rmb_unit% 元
+order.confirm.current_account_cash_simple: 当前账户余额 %amount% %coin_name%
+order.confirm.current_account_cash: 当前账户余额 %amount% %coin_name%，可抵扣 %rmb% 元（1 %coin_name% = %rmb_unit% 元）
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
+order.confirm.price: Product price
+order.confirm.bought_course_deduction: 已购课程抵扣
+order.adjust_price_btn: 改价
+order.adjust_price_modal_title: 订单改价
+order.adjust_price_modal.hint: 请在折扣和金额框任意输入您想优惠的力度，系统会自动进行换算。
+
 order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
-order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your payment password</a>'
-order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your login password</a>'
-order.confirm.forget_password_btn: 'Forget password？'
+order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your payment password</a>'
+order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="color-warning underline" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%" style="text-decoration:underline;">set your login password</a>'
+order.confirm.forget_password_btn: 'Forget pay password？'
 order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
 order.confirm.top_use_tips: 'The order can use up to '
@@ -423,14 +487,20 @@ order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
 order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
 order.confirm.sms_code.bind_btn: 'Bind'
-order.paid_course.content_title: 'You already bought:'
-order.paid_course.minus: 'Deduct:'
+order.paid_course.title: 已购买课程
+order.paid_course.content: 之前购买过的课程能够抵扣对应金额
+order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
+order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
 order.refund.apply_for_btn: 'Apply for refund'
 order.refund.buy_price: '(you have paid：%amount% CNY）'
+order.refund.refund_is_not_supported: Refund is not supported
+# todo 文案更新
+order.refund.success_tips: You may apply for a refund within %maxRefundDays% days from the date of purchase
 order.refund.failed_tips: 'It''s behind the refund time %maxRefundDays% days. Refund application is refused.'
+
 order.refund.quit_study_btn: 'Quit the course'
 order.refund.quit_study_btn.submiting: Quiting...
 order.vip_order.total_months: Months
@@ -439,11 +509,21 @@ order.vip_order.renew_tips: '%level.name% renew vip x %duration%'
 order.vip_order.buy_tips: 'Buy %level.name% vip x %duration%'
 order.pay: 'Pay the order'
 order.success: 'Order finished'
+#TODO trans
+order.refund.notify_admin: '用户%nickname%申请退款 <a href="%targetUrl%">%title%</a>，请审核'
+
 pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
+pay_center.pay.price: 订单价格
+pay_center.pay.coin.password_not_set.tips: 未设置支付密码前，不能使用%coin_name%抵扣
+pay_center.pay.set_pay_password: 设置支付密码
+pay_center.pay.coin_input_tips: 本次使用
+pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
+pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
 pay_center.pay.mode: 'Payment methods'
+pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 'Deposit card'
 pay_center.pay.credit_card: 'Credit card'
 pay_center.pay.use_new_card: 'Use new bank card'
@@ -452,6 +532,7 @@ pay_center.pay.online_banking_tips: 'If you want to pay through online banking s
 pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile browser, wechat pay is not supported.'
 pay_center.pay.pay_CNY: Price：q
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
+pay_center.pay.confirm_pay_btn_loading: 'Paying'
 pay_center.pay.weixin_pay: 'Wechat pay'
 pay_center.pay.weixin_pay.content_title: 'Payment info'
 pay_center.pay.weixin_pay.pay_btn: 'Pay now'
@@ -459,8 +540,9 @@ pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat <br>scan 
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Scan the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
+pay_center.finish_title: 'Order paid finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
-pay_center.finish_tips: 'Order paid successfully,redirecting in <span class="js-countdown">3</span> seconds</p>'
+pay_center.finish_tips: Redirecting in <span class="js-countdown">3</span> seconds
 pay_center.fee: Fee
 pay_center.remind: 'Click to enter alipay'
 pay_center.remind.content_title: 'Payment notification'
@@ -498,10 +580,14 @@ upload.video_quality_switcher.audio_quality.normal: Normal
 upload.video_quality_switcher.audio_quality.high: High
 import.step_one: 'Step 1: '
 import.check_datas: 'Start check datas'
+import.check_datas_loading: 校验数据中...
+import.finish: 完成导入
+import.finish_loading: 正在完成导入, 请稍等...
+import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 'Import users'
 import.user_import.content_title: 'Import users'
 import.user_import.choose_file: 'Choose the file to import'
-import.user_import.browser_btn: Browse...
+import.user_import.browser_btn: Choose
 import.user_import.download_example_btn: 'Click to download the sample file'
 import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price
@@ -675,7 +761,7 @@ course.is_student_tips: 'You erolled this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
-course.approve_tips: 'You need to verify your id before buying this course.'
+buy.approve_tips: 'You need to verify your id before buying.'
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
@@ -842,19 +928,22 @@ course.members_manage.official_student.add_expiry_day.days: Extend
 course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to extend'
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
 course.members_manage.quit_records: 'Quit history'
-course.members_manage.publish_btn: Publish
-course.members_manage.quit_records.content_title: 'Students'
-course.members_manage.quit_records.name: 'Student name'
+course.members_manage.quit_type: 退出类型
+course.members_manage.is_refunded: 是否退款
+course.members_manage.is_paid: 是否付费
+course.members_manage.records.name: 'Student name'
 course.members_manage.quit_records.reason: 'Quit reason'
 course.members_manage.quit_records.status: 'Refund status'
-course.members_manage.quit_records.cash_count: 'Refund amount'
 course.members_manage.quit_records.date: 'Quit time'
-course.members_manage.quit_records.tips: '<li class="mt10 mb10">only display refund records of students who paid by cash</li><li>please check the refund deatil of class teaching plan in class manage panel</li>'
 course.members_manage.quit_records.empty: 'No data'
 course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
-course.members_manage.quit_records.failed: 'Refund failed'
-course.members_manage.quit_records.cancel: 'Refund cancelled'
+
+course.members_manage.join_records: 加入记录
+course.members_manage.records.join_reason: 加入原因
+course.members_manage.records.join_reason_type: 加入类型
+course.members_manage.join_records.date: 加入日
+
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
@@ -1599,8 +1688,8 @@ testpaper.answer.answer_card: 'Answer card'
 testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
 testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>.\n"
-testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
-testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
+testpaper.answer.answer_card.exam_with_pass_score_tips: ",pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
+testpaper.answer.answer_card.limited_time_tips: ',Please answer in <span class="color-primary">%limitedTime%</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
 testpaper.answer.student: 'Answerer: '
 testpaper.answer.endtime: 'Submit time: '
@@ -2023,7 +2112,6 @@ classroom.student_username: 'Student name'
 classroom.student_exit_reason: 'Quit reason'
 classroom.student_exit_date: 'Quit date'
 classroom.refund_status: 'Refund Status'
-classroom.refund_money: 'Refund Amount'
 classroom.refund_record_tips: 'Only show refund history of students who enrolled via cash'
 classroom.join_time: 'Enroll date'
 classroom.refund_success: 'Refund succeeded'
@@ -2048,6 +2136,9 @@ classroom.manage_btn: Config
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Class title was not unique, please change it.'
+#TODO trans
+classroom.set_assistant_tip: 仅能添加本班级学员
+
 form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
@@ -2110,6 +2201,9 @@ user.register.not_receive_email_tips: "<h5>Not received a confirmation letter?</
 user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Home</a></li>\n</ul>\n"
 user.register.emaill_not_useful_tips: "<h5>original mailbox is invalid?</h5> <a class=\"btn btn-primary\" href=\"%resetEmail%\">Rebind</a>\n"
 user.register.service_protocol: 'Service Agreements'
+user.register.agree_terms: 同意服务协议并注册
+user.register.read_detail: 请详细阅读
+user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 'Reset email'
 user.register.reset_email.origin_email: 'Previous email address:'
 user.register.reset_email.school_login_password: 'Network school password：'
@@ -2145,6 +2239,36 @@ user.register.email_label: Email
 user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload your avatar later'
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
+
+user.oauth.login_by_email: 邮箱
+user.oauth.login_by_mobile: 手机
+user.oauth.login_by_mobile_or_email: 手机/邮箱
+user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
+user.oauth.bind_account: 绑定帐号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%帐号
+user.oauth.validate_password: 验证密码
+user.oauth.bind_success: 帐号绑定成功
+user.oauth.bind_account_success: 绑定成功
+user.oauth.web_account_password: 网校帐号密码
+user.oauth.binding_web_user: 正在绑定网校用户
+user.oauth.bind_account_and_go_continue: 绑定并继续
+user.oauth.bind_other_account: 绑定其他帐号？
+user.oauth.bind_existed_account: 绑定已有帐号？
+user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
+user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
+user.oauth.register_account_by_ways: 使用%accountType%创建帐号
+user.oauth.register.confirm_password_label: 确认密码
+user.oauth.register.confirm_password_placeholder: 再次输入密码
+user.oauth.register.input_sms_code_tips: 输入验证码
+user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
+user.oauth.register.send_sms: 发送验证
+user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
+user.oauth.register_account: 创建帐号
+user.oauth.register_success: 注册成功
+user.oauth.register_account_success: 帐号注册成功
+user.oauth.page.closed: 秒后该页面自动关闭
+user.oauth.register.closed: 注册已关闭，请联系管理员
+
 user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Profile'
@@ -2364,6 +2488,8 @@ user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
 user.account.coin_image: 'Virtual coin icon'
 user.account.my_coin: '%coin_name% coin'
+user.account.my_coin.pay_coin: %coin_name% paid
+user.account.my_coin.refunded_coin: %coin_name% refunded
 user.account.my_coin.inflow: 'Recharge Records'
 user.account.my_coin.outflow: 'Payment Records'
 user.account.my_coin.recharge: 'Learning card recharge'
@@ -2394,9 +2520,14 @@ user.account.my_invite_code.close: 'Invitation code feature is off'
 user.orders: 'My Order'
 user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
+user.order.order_list: Order List
+user.order.refund_list: Refund Manage
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
 user.orders.refunding_status: Refunding
+user.orders.closed_status: Closed
+user.orders.refunded_status: Refunded
+user.orders.no_paid_status: Unpaid
 user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
@@ -2408,6 +2539,7 @@ user.orders.detail.modal_title: 'Order Details'
 user.orders.detail.special_operations: 'Special operation'
 user.orders.detail.log_info: 'Log info'
 user.orders.detail.operator: Operator
+user.orders.detail.Ip: IP
 user.orders.detail.log_createdTime: 'Created at'
 user.orders.detail.empty: 'No transaction log'
 user.orders.refund_record_title: 'Refund record'
@@ -2417,6 +2549,7 @@ user.orders.refund_status: 'Refund Status'
 user.orders.refund_id: 'Refund number：%sn%'
 user.orders.refund_empty: 'No refund record'
 user.orders.placeholder_order_name: 'Input order name'
+user.orders.placeholder_product_name: 'Input product name'
 user.cards: 'My Wallet'
 user.cards.content_title: 'My Wallet'
 user.cards.all: All
@@ -2542,7 +2675,7 @@ cloud_file.process_status.waiting: Converting
 cloud_file.process_status.error: 'Convert failed'
 cloud_file.transcoding_tips: 'Video transcoding is not completed, please wait ...'
 my.teaching.open_course.title: Name
-cloud_file.material_thumbnail_generate: 'Producing screenshots, please wait ...'
+cloud_file.material_thumbnail_generate: 'Producing screenshots...'
 cloud_file.screen_shot_btn: Screenshots
 cloud_file.search_empty: 'Sorry,no rescouce found'
 cloud_file.use_status: 'Using'
@@ -2730,7 +2863,6 @@ group.buy_attach.content_title: 'Download accessaries'
 group.buy_attach.require_coin_name: 'Need %name%'
 group.buy_attach.purchased_tips: 'You have already purchased this attachement'
 article: Article
-article.channel: 'Channel %article_name%'
 article.banner_tips: "headlines banner need to set thumbnail and add headlines attribute in infomation management page first <a class=\"mls alert-link\" href=\"%articleUrl%\">setting</a>\n"
 article.empty: 'No article'
 article.popular_article: 'Popular article'
@@ -3009,6 +3141,7 @@ my.teaching.open_course.lesson.mediaStatus.error: '(format conversion of %mediaT
 my.teaching.open_course.lesson.status.unpublished: Unpublished
 my.teaching.open_course.lesson.material: Material
 my.teaching.open_course.lesson.add_material_btn: 'Add Material'
+my.teaching.open_course.lesson.add_material.title: 添加资料
 my.teaching.open_course.lesson.edit_btn: Edit
 my.teaching.open_course.lesson.more_btn: More
 my.teaching.open_course.lesson.modal.edit: 'Edit Lesson'
@@ -3401,6 +3534,8 @@ contetn.article_list.category: Category
 contetn.article_list.contentCategory: "<span class=\"color-gray\">published at %publishedTime%</span>, belong to <a href=\"#\" class=\"color-gray\">%contentCategoryname%</a> category</span>\n"
 course.block_grid.view_course_btn: View
 course.block_grid.countinue_learn_btn: Continue
+course.block_grid.from_classroom: 'From classroom '
+
 course.block_grid.DRAFT_STATUS: Draft
 course.block_grid.CLOSE_STATUS: Closed
 course.block_grid.SERIALIZE_SERIALIZE_MODE: Serial
@@ -3424,6 +3559,10 @@ course.member.classroom.tips: 'Your purchased class was expired and you have no 
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.operation.quit_deadline_reach: 达到有效期，用户自己退出
+course.member.operation.admin_remove_course_student: 管理员手动移除
+course.member.operation.reason.remove_teachers: 删除老师角色时，退出课程
+
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
 course.widgets.classroom_price.not_free: "Price : %price% CNY \n"
@@ -3938,12 +4077,48 @@ admin.homepage.status_bar.mobile_app_title: 'Mobile APP'
 admin.homepage.status_bar.mobile_app_status.open: Enabled
 admin.homepage.status_bar.mobile_app_status.not_open: 'Not Enabled'
 admin.homepage.todays_data_title: 'Today''s Data Statistics'
-admin.homepage.todays_data.tooltips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">\n    <div class=\"title\">Login User</div>\n    <div class=\"content\">Users who have login and been active in last 15 mins.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Online Number</div>\n    <div class=\"content\">Users who are active in last 15 mins, include user who is not login.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Registered Numbers</div>\n    <div class=\"content\">New user include self-registered、3rd part account registered or imported</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Students</div>\n    <div class=\"content\">Total times that enrolled course or classroom today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Vip Number</div>\n    <div class=\"content\">New Vip enroll number today.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Question without answer number</div>\n    <div class=\"content\">Number of new created question without answer today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Not Answer Question Number</div>\n    <div class=\"content\">Current not answer Question Number</div>\n  </div>\n</div>\n"
+admin.homepage.todays_data.tooltips: >
+  <div class="popover-content hidden">
+    <div class="popover-item">
+      <div class="title">Login User</div>
+      <div class="content">Users who have login and been active in last 15 mins.</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">Online Number</div>
+      <div class="content">Users who are active in last 15 mins, include user who is not login.</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New Registered Numbers</div>
+      <div class="content">New user include self-registered、3rd part account registered or imported</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New course members</div>
+      <div class="content">The course relation count that members joined course or classroom today</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New classroom members</div>
+      <div class="content">The classroom relation count that members joined classroom today</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">New Vip Number</div>
+      <div class="content">New Vip enroll number today.</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">Question without answer number</div>
+      <div class="content">Number of new created question without answer today</div>
+    </div>
+    <div class="popover-item">
+      <div class="title">Not Answer Question Number</div>
+      <div class="content">Current not answer Question Number</div>
+    </div>
+  </div>
 admin.homepage.todays_data.login_users: 'Login Users'
 admin.homepage.todays_data.login_users.online_total: 'Total Online Number'
 admin.homepage.todays_data.new_registration: 'New Registers'
 admin.homepage.todays_data.total: Total
 admin.homepage.todays_data.new_students: 'New Students'
+admin.homepage.todays_data.new_course_members: 'New Course Members'
+admin.homepage.todays_data.new_classroom_members: 'New Classroom Members'
 admin.homepage.todays_data.total_number: 'Total'
 admin.homepage.todays_data.new_vip_members: 'New VIPs'
 admin.homepage.todays_data.thread_un_answer: 'Not Answered'
@@ -4774,10 +4949,15 @@ admin.edu_cloud.edu_video.open_btn: Enabled
 admin.edu_cloud.edu_video.close_btn: Disable
 admin.edu_cloud.edu_video.switch_tips: "Cloud Video provides you with a safe, cost-effective, and high-quality audio-visual experience that allows you to easily create online video lessons. Click <a href=\"%cloudShow%\" target=\"_blank\"> here </a> for more information.\n"
 admin.edu_cloud.edu_video.base_setting: 'Base Setting'
-admin.edu_cloud.edu_video.support_mobile: 'Mobile browser MP4 video'
+admin.edu_cloud.edu_video.support_mobile: 'Mobile browser security'
+admin.edu_cloud.edu_video.normal_mode: Normal
+admin.edu_cloud.edu_video.encryption_mode: Encryption
 admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
-admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different phone models under the use of different phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
+#TODO trans
+admin.edu_cloud.edu_video.normal_mode_tips: '选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>'
+admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
+
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
@@ -4831,6 +5011,20 @@ admin.edu_cloud.edu_video.month_flow: 'Traffic this month'
 admin.edu_cloud.edu_video.no_enable: 'Cloud video is not enabled yet'
 admin.edu_cloud.edu_video.enable: 'Enable Immediately'
 admin.edu_cloud.edu_video.enable_tips: "<P> 1. Focus on education - to provide video with practice, video subtitles, video barrage and many other online education for video teaching methods, so that video teaching more fun. </ P> <P> 2. Stable security - to provide video watermark, video fingerprints and many other security measures to prevent video theft, effectively prevent video piracy and malicious download. Stable and reliable video cloud storage services to protect data security, to prevent physical loss. </ P> <P> 3. Cost-effective - for online education video transcoding technology, as well as browser cache playback, mobile off-line playback and many other features, greatly compressed video traffic costs. </ P> <P> 4. Quality audio-visual experience - using CDN (content distribution network) technology, more than 200 high-quality domestic and foreign nodes, to ensure high-definition smooth audio-visual experience. A variety of clarity free to switch, different network environment can be smooth to watch. Multi-terminal full platform perfect support, anytime, anywhere to watch the wonderful video. </ P> <P> 5. Price ¥ 0.8 / GB, buy cloud video packs to enjoy more offers, and immediately <a href=\"%url%\" target=\"_blank\"> learn more </a>. </ P>\n"
+admin.edu_cloud.edu_video_setting.delete_modal_title: Is delete MP4 videos
+#TODO trans
+admin.edu_cloud.edu_video_setting.delete_modal_content: 您选择了加密模式，删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video_setting.change_normal_title: 转换为普通模式
+admin.edu_cloud.edu_video_setting.change_normal_content: 转换为普通模式能增强视频对手机浏览器的兼容性；但<span class="text-danger">可能降低网校视频的安全性</span>，是否继续？
+admin.edu_cloud.edu_video.delete_btn: Delete MP4 videos
+admin.edu_cloud.edu_video.delete_success: Congratulations
+admin.edu_cloud.edu_video.delete_ok_confirm: Congratulations,your cloud videos are all security.
+admin.edu_cloud.edu_video.delete_ok_btn: OK
+#TOFO trans
+admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
+admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+
+
 admin.edu_cloud.edu_live.student_num: 'Number of live participants (last 7 days)'
 admin.edu_cloud.edu_live.locked_tips: 'Your education cloud service has been locked, please contact customer service 4008041114.'
 admin.edu_cloud.edu_live.service_suspend: 'Your cloud live service has been suspended, can not be used, please contact customer service 4008041114.'
@@ -4838,11 +5032,16 @@ admin.edu_cloud.edu_live.edu_live_enable: 'Enable Cloud Live'
 admin.edu_cloud.edu_live.edu_live_enable_btn: Enabled
 admin.edu_cloud.edu_live.edu_live_close_btn: Disable
 admin.edu_cloud.edu_live.edu_live_tips: 'G class, small class, one to one counseling class, cloud live to live classroom more exciting. <a href="%showUrl%" target="_blank"> click here </a> for more information.'
-admin.edu_cloud.edu_live.base_setting: 'Base Setting'
-admin.edu_cloud.edu_live.live_logo: 'Live Logo'
+admin.edu_cloud.edu_live.base_setting: 'Live Logo Setting'
+admin.edu_cloud.edu_live.live_logo_web: 'Live Logo web'
+admin.edu_cloud.edu_live.live_logo_app: 'Live Logo Huantuo client'
 admin.edu_cloud.edu_live.upload_btn: Upload
 admin.edu_cloud.edu_live.delete_btn: Delete
-admin.edu_cloud.edu_live.upload_tips: '<B> Only for live new programs. </ B> <br> Please upload png, gif, jpg format image file. LOGO pictures suggest not to exceed 100 * 23.'
+admin.edu_cloud.edu_live.upload_web_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 60.'
+admin.edu_cloud.edu_live.upload_app_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 40.'
+#TODO trans
+admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
+admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: Upgrade
 admin.edu_cloud.edu_live.renew: Renew
 admin.edu_cloud.edu_live.renewed: Renewed
@@ -5216,8 +5415,6 @@ admin.login_connect.other.qq.data_content: '1. Your QQ account open platform cer
 admin.login_connect.type.weixinweb.help_block: 'APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications'
 admin.login_connect.type.weixinmob.help_block: 'APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".'
 admin.login_connect.type.weixinmob.MP_verify.help_block: 'Please fill in the content of the MP_verify Contents from wechat'
-admin.login_connect.required_email: 'Email required while login'
-admin.login_connect.required_email.help_block: 'Do not turn on this option before %admin_name% aprroved your access application, or your application may be refused.'
 admin.login_connect.type.weibo.help_block: 'The final step , please enter the login interface validation code at the bottom'
 admin.login_connect.verifcation_loging_interface: 'Login interface validation code'
 admin.login_connect.verifcation_code: 'Validation code'
@@ -5358,6 +5555,7 @@ admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: 
 admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
+admin.developer_xapi_address: XAPI address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
 admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
@@ -5525,7 +5723,8 @@ admin.cdn.status.close: Close
 admin.cdn.input_placeholder: 'If leave empty, then it will be default URL'
 admin.order.paid_time_range.input_placeholder: 'Payment time'
 admin.order.keyword: Keywords
-admin.order.buyer: 'Buyer''s user name'
+admin.order.buyer: 'Buyer'
+admin.order.title: Order title
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name
 admin.order.buyer_mobile: 'Buyer''s phone number'
@@ -5545,6 +5744,9 @@ admin.bill.time_option.last_three_month: 'Last 90 days'
 admin.coin.type_option.default: 'All records'
 admin.coin.type_option.inflow: 'Recharges'
 admin.coin.type_option.outflow: 'Consumers'
+admin.coin.school_out_amount: School total out amount
+admin.coin.school_in_amount: School total in amount
+admin.coin.school_wait_in_amount: School total wait in amount
 admin.coin.created_time_option.all: 'All records'
 admin.coin.created_time_option.oneWeek: 'Last 7 days'
 admin.coin.created_time_option.oneMonth: 'Last 30 days'
@@ -5557,6 +5759,7 @@ admin.coin.datagrid.filter.oneMonth: 'This month'
 admin.coin.datagrid.filter.threeMonths: 'Three months'
 admin.coin.datagrid.filter.all_history: 'All history'
 admin.coin.datagrid.filter.default: Default
+admin.coin.datagrid.filter.balance: Balance
 admin.coin.datagrid.filter.consume: Consumption
 admin.coin.datagrid.filter.recharge: Recharge
 admin.coin.datagrid.filter.asc: 'In ascending order'
@@ -5663,10 +5866,12 @@ admin.payment_setting.heepay: 'Heepay-online bank payments'
 admin.payment_setting.heepay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.heepay_secret: 'Business platform Key'
 admin.payment_setting.heepay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'
-admin.payment_setting.llpay: 'Lianlian Pay'
+admin.payment_setting.llpay: 'Lianlian Pay-RSA encryption'
 admin.payment_setting.llpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.llpay_key: 'Merchant account'
 admin.payment_setting.llpay_secret: 'Business platform Key'
+admin.payment_setting.llpay_public_key: Public Key
+admin.payment_setting.llpay_private_key: Private Key
 admin.payment_setting.quickpay: 'Meeting fubao-quick pay'
 admin.payment_setting.quickpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.quickpay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'
@@ -5717,13 +5922,14 @@ admin.coin_model.currency_tips: "1, Could not manually update the user's virtual
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
+admin.order_refund.title.placeholder: Product name
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
-admin.order_refund.title.type_course_input_placeholder: 'Course title'
-admin.order_refund.title.type_classroom_input_placeholder: 'Class title'
 admin.order_refund.title: 'Refund order'
+admin.order_refund.sn: sn
 admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'
 admin.order_refund.refund_status: 'Refund status'
+admin.order_refund.refund_created_time: 申请时间
 admin.order_refund.operator: Operator
 admin.order_refund.operation: Action
 admin.order_refund.reason: 'Refund reason'
@@ -5734,14 +5940,20 @@ admin.order_refund.approve.content_title: 'Approve refund application'
 admin.order_refund.audit_refund_btn: Approve
 admin.order_refund.audit.content_title: 'Review refund requests'
 admin.order_refund.audit.result: 'Review result'
-admin.order_refund.audit.refund_actual_amount: 'Actual refund amount'
 admin.order_refund.audit.description: 'Review comment'
-admin.order_refund.audit.tips: 'System dosen''t support automatic refund,please contact the student to acquire relevant account and process the refund mannualy.'
+admin.order_cash_refund.audit.tips: 'System dosen''t support automatic refund,please contact the student to acquire relevant account and process the refund mannualy.'
+admin.order_cash_coin_refund.audit.tips: Virtual currency money will be automatically refunded after clicking "submit". Payments online do not support automatic refund. If you agree to refund, it is recommended that you first process the refund online and then submit it.
 admin.order.logs.content_title: 'Order detail'
 admin.order.logs.info: Log
 admin.order.logs.operator: Operator
 admin.order.logs.created_time: 'Create time'
 admin.order.logs.empty_hint: 'No transaction log'
+admin.order_coin.refund.success.tips: Automatic refund after submission
+admin.order_cash.refund.success.tips: Manual refund under line
+admin.order_refund_handle.success: Successful refund request operation
+#TODO trans
+admin.order_refund.audit.tip: 用户支付的虚拟币实时返回账户，支付的现金需线下人工联系退款，此处仅作为记录。
+
 admin.cloud_setting.trial_hint: 'You are using a trail version and cannot proceed with this operation. Please contact our business manager to purchase a licence.'
 admin.cloud_setting.package_info: 'Package info'
 admin.cloud_setting.package_name: 'Package name'
@@ -5802,6 +6014,7 @@ admin.app_center.buy_btn: Purchase
 admin.app_center.price: Price：
 admin.app_center.free: Free
 admin.app_center.ontrial_btn: Trial
+admin.app_center.expired_btn: Expired Trial
 admin.app_center.buyed_btn: Bought
 admin.app_center.tria_btn: Trial
 admin.app_center.show_detail_btn: 'View Detail'
@@ -6089,6 +6302,7 @@ testpaper.do_gagin: 'Test again'
 testpaper.redo_countdown: 'Redo countdown'
 question_task.empty_tips: 'There is no problem with this task'
 payment.useless_tips: 'The payment method is not open. Please contact the administrator'
+payment.unusable_tips: 暂无可用的支付的支付方式,请尝试在微信外支付。
 open_course.live_label: Live
 open_course.lesson_num: 'The course No.%num%'
 open_course.student_num: '%num% peoples learning'
@@ -6194,6 +6408,9 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
+#TODO trans
+notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn
 status.become_student.classroom.simple: Enroll to learn
@@ -6397,3 +6614,236 @@ task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
+
+
+cashier.order.status.changed_tips: The order status has been changed, please reorder.
+cashflow.title: Name
+cashflow.sn: sn
+cashflow.user_name: username
+cashflow.created_time: createdTime
+cashflow.amount: amount
+cashflow.number: number
+cashflow.inflow: 收入
+cashflow.platform: platform
+cashflow.trade_sn: 交易号
+cashflow.user_truename: truename
+cashflow.user_email: emial
+cashflow.user_mobile: mobile
+cashflow.refund: 网校退款
+
+admin.cashflow.keyword: keyword
+
+order.pay_check_msg.parameters_error: parameters_error
+order.pay_check_msg.coupon_had_been_used: Coupon had been used.
+order.pay_check_msg.unpurchasable_product: Unpurchasable Product
+order.pay_check_msg.order_not_exist: Order not exist
+order.pay_check_msg.user_not_login: User not login
+order.pay_check_msg.not_same_user: Not your order
+order.pay_check_msg.missing_pay_password: Missing payPassword
+order.pay_check_msg.incorrect_pay_password: Incorrect payPassword
+order.pay_check_msg.balance_not_enough: Your balance is insufficient
+order.pay_check_msg.pay_password_not_set: Pay password not set
+order.pay_check_msg.out_of_max_coin: Out of max allow pay coin amount
+
+site.join_by_free: Join by free
+site.join_by_purchase: Join by purchase
+site.remove_by_manual: Manual remove
+site.join_to_learn: Join to learn
+site.fill_user_info_tip: Fill user info
+
+site.join_by_import: 导入课程
+site.join_by_vip: 会员加入
+site.join_by_auditor: 旁听生加入
+site.join_by_assistant: 助教加入
+site.avatar.set_before_learning: Please set avatar first
+site_yes: 'Yes'
+site_no: 'No'
+admin.cloud_live.manage.logo_set.modal_title: Crop Live LOGO
+
+
+
+log.module.user: 用户
+log.module.course: 课程
+log.module.classroom: 班级
+log.module.group: 小组话题
+log.module.upload_file: 文件
+log.module.order: 订单
+log.module.article: 资讯
+log.module.category: 栏目
+log.module.content: 资讯内容
+log.module.notify: 通知
+log.module.sms: 短信
+log.module.tag: 标签
+log.module.system: 系统设置
+log.module.crontab: 定时任务
+log.module.marker: 驻点
+log.module.vip: 会员
+log.module.coin: 虚拟币
+log.module.coupon: 优惠码
+log.module.money_card: 学习卡
+log.module.discount: 打折活动
+log.module.exercise: 练习
+log.module.homework: 作业
+log.module.question_plus: 题库增强版
+log.module.announcement: 公告
+log.module.open_course: 公开课
+
+log.action.course.create: 创建课程
+log.action.course.update: 修改课程
+log.action.course.update_picture: 更新课程图片
+log.action.course.publish: 发布课程
+log.action.course.close: 关闭课程
+log.action.course.delete: 删除课程
+log.action.course.add_task: 添加学习任务
+log.action.course.update_task: 更新学习任务
+log.action.course.delete_task: 删除学习任务
+log.action.course.add_student: 添加课程学员
+log.action.course.remove_student: 移除课程学员
+log.action.course.update_teacher: 更新课程教师
+log.action.course.cancel_teachers_all: 取消用户的教师身份
+log.action.course.delete_taskLearn: 删除任务学习记录
+log.action.course.delete_chapter: 删除章节
+log.action.course.delete_favorite: 删除收藏
+log.action.course.delete_note: 删除笔记
+log.action.course.delete_thread: 删除话题
+log.action.course.delete_review: 删除评价
+log.action.course.delete_announcement: 删除公告
+log.action.course.delete_status: 删除动态
+log.action.course.recommend: 课程推荐
+log.action.course.cancel_recommend: 取消课程推荐
+log.action.course.delete_material: 移除资料
+log.action.course.add_testpaper: 新增试卷
+log.action.course.publish_testpaper: 发布试卷
+log.action.course.close_testpaper: 关闭试卷
+log.action.course.delete_testpaper: 删除试卷
+log.action.course.add_question: 新增题目
+log.action.course.delete_question: 删除题目
+log.action.course.refresh_learning_progress: 刷新学习进度
+log.action.course.sync_when_task_create: 同步创建任务
+log.action.course.sync_when_task_update: 同步更新任务
+log.action.course.sync_when_task_delete: 同步删除任务
+log.action.course.clone_course_set: 复制课程
+log.action.course.unlock_course: 解除课程同步
+log.action.user.exportCsv: 导出
+log.action.user.add: 新增
+log.action.user.edit: 修改
+log.action.user.send_email_verify: 邮箱验证
+log.action.user.nickname_change: 修改昵称
+log.action.user.password-changed: 重置密码
+log.action.user.pay-password-changed: 重置支付密码
+log.action.user.verifiedMobile-changed: 重置手机
+log.action.user.change_role: 修改角色
+log.action.user.unbind: 解绑用户
+log.action.user.login_success: 登录成功
+log.action.user.login_fail: 登录失败
+log.action.user.lock: 禁封用户
+log.action.user.unlock: 解禁用户
+log.action.user.recommend: 推荐用户
+log.action.user.cancel_recommend: 取消推荐用户
+log.action.user.approved: 实名认证成功
+log.action.user.approval_fail: 实名认证失败
+log.action.user.password-reset: 重置密码邮件发送
+log.action.system.email_send_check: 邮件自检
+log.action.system.setting_email_change: 更变邮箱
+log.action.system.setting_email-verify: 邮箱验证
+log.action.system.update_settings: 更新设置
+log.action.system.questions_settings: 题库设置
+log.action.system.customerServiceSetting: 客服管理
+log.action.system.setting_userCenter: 用户中心设置
+log.action.system.update_block: 更新编辑区
+log.action.system.update_app_version: 更新版本
+log.action.classroom.create: 新增班级
+log.action.classroom.delete: 删除班级
+log.action.classroom.add_course: 添加课程
+log.action.classroom.add_student: 添加学员
+log.action.classroom.delete_course: 移除课程
+log.action.classroom.delete_review: 删除评价
+log.action.classroom.delete_thread: 删除话题
+log.action.classroom.update_picture: 更新图片
+log.action.classroom.remove_student: 移除学员
+log.action.classroom.recommend: 推荐班级
+log.action.classroom.cancel_recommend: 取消推荐
+log.action.article.update_settings: 更新设置
+log.action.article.create: 新增
+log.action.article.update: 修改
+log.action.article.update_property: 更新属性
+log.action.article.cancel_property: 取消属性
+log.action.article.trash: 移动到回收站
+log.action.article.removeThumb: 移除图片
+log.action.article.delete: 删除
+log.action.article.publish: 发布
+log.action.article.unpublish: 取消发布
+log.action.notify.create: 创建
+log.action.notify.check_fail: 检测
+log.action.order.pay_result: 支付结果
+log.action.order.andit_refund: 退款审核
+log.action.order.refund_cancel: 取消退款
+log.action.order.unbind-back: 解绑银行卡
+log.action.order.course_callback: 课程回调
+log.action.order.classroom_callback: 班级回调
+log.action.order.adjust_price: 价格调整
+log.action.category.create: 新增
+log.action.category.update: 修改
+log.action.category.delete: 删除
+log.action.content.create: 新增
+log.action.content.update: 修改
+log.action.content.trash: 移动到回收站
+log.action.content.delete: 删除
+log.action.content.publish: 发布
+log.action.crontab.job_start: 开始任务
+log.action.crontab.job_end: 结束任务
+log.action.upload_file.create: 新增文件
+log.action.upload_file.delete: 删除文件
+log.action.upload_file.download: 下载文件
+log.action.upload_file.cloud_convert_callback: 回调处理
+log.action.upload_file.cloud_convert_error: 转码失败
+log.action.marker.create: 增加驻点
+log.action.marker.delete: 删除驻点
+log.action.marker.mediaId_notExist: 视频不存在
+log.action.marker.delete_question: 删除驻点问题
+log.action.group.create_thread: 新增话题
+log.action.group.delete_thread: 删除话题
+log.action.group.close_thread: 关闭话题
+log.action.group.open_thread: 开启话题
+log.action.sms.sms_forget_password: 登录密码重置
+log.action.sms.sms_user_pay: 使用网站余额支付
+log.action.sms.sms_forget_pay_password: 支付密码重置
+log.action.sms.sms_bind: 手机绑定
+log.action.sms.sms_classroom_publish: 新班级发布
+log.action.sms.sms_course_publish: 新课程发布
+log.action.sms.sms_normal_lesson_publish: 学习任务发布通知（普通课程）
+log.action.sms.sms_live_lesson_publish: 学习任务发布通知（直播）
+log.action.sms.sms_live_play_one_day: 直播开播前通知（提前1天）
+log.action.sms.sms_live_play_one_hour: 直播开播前通知（提前1小时）
+log.action.sms.sms_homework_check: 作业完成批阅
+log.action.sms.sms_testpaper_check: 试卷完成批阅
+log.action.sms.sms_course_buy_notify: 课程购买
+log.action.sms.sms_classroom_buy_notify: 班级购买
+log.action.sms.sms_vip_buy_notify: 会员购买
+log.action.sms.sms_coin_buy_notify: 虚拟币充值
+log.action.tag.create: 新增
+log.action.tag.update: 修改
+log.action.tag.delete: 删除
+log.action.coin.update_settings: 设置
+log.action.coin.add_coin: 增加
+log.action.coin.deduct_coin: 扣除
+log.action.announcement.delete: 删除公告
+log.action.open_course.create_course: 创建公开课
+log.action.open_course.update_course: 更新公开课
+log.action.open_course.delete_course: 删除课程
+log.action.open_course.pulish_course: 发布公开课
+log.action.open_course.close_course: 关闭公开课
+log.action.open_course.update_picture: 更新公开课图片
+log.action.open_course.add_lesson: 添加公开课课时
+log.action.open_course.update_lesson: 更新公开课课时
+log.action.open_course.delete_lesson: 删除课时
+log.action.open_course.delete_member: 删除学员
+log.action.open_course.add_material: 新增资料
+log.action.open_course.delete_material: 移除资料
+log.action.open_course.update_teacher: 更新公开课教师
+log.action.open_course.delete_recommend_course: 删除推荐课程
+order.course_callback.fail: 订单处理成功，但是用户加入课程失败
+order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
+crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
+cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
+log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.

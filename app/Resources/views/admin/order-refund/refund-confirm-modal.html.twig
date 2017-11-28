@@ -1,17 +1,41 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import "admin/macro.html.twig" as admin_macro %}
 
 {% block title %}{{'admin.order_refund.audit.content_title'|trans}}{% endblock %}
 
 {% block body %}
-
-  <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {id:order.id}) }}">
-
-    <div class="form-group">
-      <label class="col-md-3 control-label">{{'admin.order_refund.order_amount'|trans}}</label>
-      <div class="col-md-8 controls">
-        <span class="control-text">{{ order.amount }}{{'site.currency.CNY'|trans}}</span>
-      </div>
-    </div>
+  {% set coinSetting = setting('coin') %}
+  <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">
+    <table class="table cd-table table-striped order-detail-table">
+      <tr>
+        <td width="25%">{{ 'admin.order_refund.nickname.input_placeholder'|trans }}</td>
+        <td width="75%">{{ web_macro.user_link(user) }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'user.orders.refund_apply_time'|trans }}</td>
+        <td width="75%">{{ refund.created_time|date('Y-n-d H:i:s') }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'admin.order_refund.reason'|trans }}</td>
+        <td width="75%">{{ refund.reason }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'order.product_name'|trans }}</td>
+        <td width="75%">{{ order.title }}</td>
+      </tr>
+      <tr>
+        <td width="25%">{{ 'order.paid_amount'|trans }}</td>
+        <td width="75%"><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+      <tr>
+        <td width="25%" class="text-muted" style="padding-left: 32px;">{{ 'order.paid_coin_amount'|trans }}</td>
+        <td width="75%"><span class="color-warning">{{ order.paid_coin_amount|to_coin(0) }}</span></td>
+      </tr>
+      <tr>
+        <td width="25%" class="text-muted" style="padding-left: 32px;">{{ 'order.paid_cash_amount'|trans }}</td>
+        <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|to_coin(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+      </tr>
+    </table>
 
     <div class="form-group">
       <label class="col-md-3 control-label">{{'admin.order_refund.audit.result'|trans}}</label>
@@ -21,9 +45,25 @@
     </div>
 
     <div class="form-group amount-form-group" style="display:none;">
-      <label class="col-md-3 control-label" for="refund-amount-field">{{'admin.order_refund.audit.refund_actual_amount'|trans}}</label>
+      <label class="col-md-3 control-label">{{'order.refund_amount'|trans}}</label>
       <div class="col-md-8 controls">
-        <input id="refund-amount-field" class="form-control" type="text" name="amount">
+        <span class="control-text" id="amount-display">{{ refund.amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
+      </div>
+    </div>
+
+    <div class="form-group amount-form-group" style="display:none;">
+      <label class="col-md-3 control-label" for="refund-coin-amount-field">{{'order.refund_coin_amount'|trans}}</label>
+      <div class="col-md-8 controls">
+        <input id="refund-coin-amount-field" data-rate="{{ trade.rate }}" data-max-coin-amount="{{ order.paid_coin_amount|to_coin(0) }}" class="form-control width-input" type="text" name="refund_coin_amount" value="{{ refund.refund_coin_amount|to_coin(0) }}">
+        等于<span class="color-warning" id="coin-to-rmb">{{ (refund.refund_coin_amount/trade.rate)|to_cash(0) }}</span>{{ 'site.currency.CNY'|trans }}
+      </div>
+    </div>
+
+    <div class="form-group amount-form-group" style="display:none;">
+      <label class="col-md-3 control-label" for="refund-cash-amount-field">{{'order.refund_cash_amount'|trans}}</label>
+      <div class="col-md-8 controls">
+        <input id="refund-cash-amount-field" data-max-cash-amount="{{ order.paid_cash_amount|to_cash(0) }}" class="form-control width-input" type="text" name="refund_cash_amount" value="{{ refund.refund_cash_amount|to_cash(0) }}">
+        {{ 'site.currency.CNY'|trans }}
       </div>
     </div>
 
@@ -35,8 +75,10 @@
     </div>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <div class="alert alert-info text-center">
-      <strong>{{ 'admin.order_refund.audit.tips'|trans }}</strong>
+    <div class="alert alert-danger">
+      <strong>
+        {{ 'admin.order_refund.audit.tip'|trans }}
+      </strong>
     </div>
   </form>
 {% endblock %}

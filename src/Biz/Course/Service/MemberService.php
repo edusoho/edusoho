@@ -79,7 +79,7 @@ interface MemberService
     /**
      * 退学.
      */
-    public function removeStudent($courseId, $userId);
+    public function removeStudent($courseId, $userId, $info = array());
 
     /**
      * 封锁学员，封锁之后学员不能再查看该课程.
@@ -140,4 +140,6 @@ interface MemberService
     public function findMembersByCourseIdAndRole($courseId, $role);
 
     public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d');
+
+    public function findMembersByIds($ids);
 }

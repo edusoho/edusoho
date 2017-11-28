@@ -129,8 +129,15 @@ class AppServiceImpl extends BaseService implements AppService
         } else {
             $extInfos = array('_t' => (string) time());
         }
+        $apps = $this->createAppClient()->checkUpgradePackages($args, $extInfos);
+        $canUpgradeApps = array_filter($apps, function ($app) {
+            $userAccess = isset($app['userAccess']) ? $app['userAccess'] : null;
+            $purchased = isset($app['purchased']) ? $app['purchased'] : null;
 
-        return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
+            return !($userAccess == 'fail' && $purchased == false);
+        });
+
+        return $canUpgradeApps;
     }
 
     public function getMessages()
@@ -704,13 +711,15 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        if (!file_exists($packageDir.'/Upgrade.php')) {
+        if (file_exists($packageDir.'/EduSohoPluginUpgrade.php')) {
+            include_once $packageDir.'/EduSohoPluginUpgrade.php';
+            $upgrade = new \EduSohoPluginUpgrade($this->biz);
+        } elseif (file_exists($packageDir.'/Upgrade.php')) {
+            include_once $packageDir.'/Upgrade.php';
+            $upgrade = new \EduSohoUpgrade($this->biz);
+        } else {
             return;
         }
-
-        include_once $packageDir.'/Upgrade.php';
-
-        $upgrade = new \EduSohoUpgrade($this->biz);
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
@@ -888,9 +897,11 @@ class AppServiceImpl extends BaseService implements AppService
 
         if (file_exists($packageDir.'/ThemeApp')) {
             $newApp['type'] = AppService::THEME_TYPE;
-        } else {
-            $newApp['type'] = AppService::PLUGIN_TYPE;
         }
+
+        // else {
+        //     $newApp['type'] = AppService::PLUGIN_TYPE;
+        // }
 
         $app = $this->getAppDao()->getByCode($package['product']['code']);
 
@@ -936,6 +947,16 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         return $this->client;
+    }
+
+    /**
+     * only for mock
+     *
+     * @param [type] $AppClient [description]
+     */
+    public function setAppClient($AppClient)
+    {
+        return $this->client = $AppClient;
     }
 
     /**

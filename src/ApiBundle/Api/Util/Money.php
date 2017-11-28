@@ -34,7 +34,7 @@ class Money
         }
 
         if ($setting['cash_model'] != 'none') {
-            $money['coinAmount'] = strval(floatval($price) * floatval($setting['cash_rate']));
+            $money['coinAmount'] = strval(round(floatval($price) * floatval($setting['cash_rate']), 2));
             $money['coinName'] = $setting['coin_name'];
         }
 

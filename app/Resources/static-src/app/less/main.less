@@ -10,6 +10,8 @@
 @import '~common/variable.less';
 @img-src: "/static-dist/app/img/";
 
+@import '~common/mixins.less';
+
 // 图标
 @import '../css/es-icon.css';
 
@@ -28,12 +30,9 @@
 // 插件
 @import "plugin/select2.less";         //下拉框
 @import "plugin/vip.less";             //会员插件
-@import "plugin/bootstrap-notify.less"; //消息提醒插件
-@import "plugin/materiallib.less";     //教学资料库
 @import "plugin/sortable.less";        //拖动排序
 @import "plugin/homework.less";        //作业练习
-@import "plugin/autocomplete.less";    //自动补全
-@import "plugin/slider.less";
+@import "plugin/sider.less"; 
 @import "plugin/ckeditor.less"; 
 @import "plugin/swiper.less";
 @import "plugin/video-player.less";
@@ -68,15 +67,13 @@
 @import "component/popover.less";       // popover
 @import "component/modal.less";         // modal
 @import "component/nav.less";           // nav
-@import "component/course-price.less";  // 课程价格
 @import "component/table.less";         // 表格
 @import "component/qrcode.less";        // 二维码
 @import "component/qrcode-popover.less";// hover二维码
-@import "component/dot.less";           // 小圆点
 @import "component/well.less";          // well
 @import "component/user-status.less";   // 用户属性
 @import "component/es-step.less";       // 步骤进度
-@import "component/search-with-btn.less"; // 步骤进度
+@import "component/search-with-btn.less"; // 带按钮的搜索
 @import "component/tabs-wrapper.less";
 @import "component/uploader.less";
 
@@ -84,10 +81,7 @@
 @import 'component/color-lump.less';
 @import 'component/drag.less';
 @import 'component/notify.less';
-@import 'component/ul.less';
 @import 'component/infinite.less';
-
-@import '~common/codeages-design/less/codeages-design.less';
 
 // 模块---------------------------------------------------------------//
 @import "module/class-serve.less";    // 班级服务
@@ -99,47 +93,33 @@
 @import "module/es-bar.less";         // 侧边栏快捷操作
 @import "module/card.less";           // 名片
 @import "module/class-sigin.less";    // 签到
-@import "module/nav-flow.less";       // 流程导航
 @import "module/es-filter.less";      // 删选条
 @import "module/card-pack.less";      // 卡包
 @import 'module/task-list.less';      // 任务列表
+@import 'module/alert-notice.less';   // 全站公告
+@import 'module/aside-notice.less';   // 站内公告
 
 // 页面---------------------------------------------------------------//
 @import "page/index.less";                //首页
 
 @import "page/article/index.less";        //资讯
-// @import "page/course-detail.less";        //课程页
-
 @import "page/class/index.less";          //班级
 
 @import "page/lesson.less";               //课时播放页
 @import "page/search.less";               //班级列表页
 @import "page/teacher.less";              //教师列表页
-@import "page/page.less";                 //自定义页面
 @import "page/error.less";                //404、500等页面
-@import "page/order.less";                //订单
 @import "page/question.less";             //问题
-@import "page/pay-center.less";           //支付中心
-@import "page/pay-state.less";            //支付状态
 @import "page/login.less";                //登录页
-@import "page/mobile.less";               //app下载页
-@import "page/wxpay.less";                //微信支付页
-@import "page/coin.less";                 //账户
+@import "page/mobile.less";               //app宣传页
 @import "page/invite-code.less";          //邀请码
-@import "page/question-tr.less";
+@import "page/question-tr.less";          
 @import "page/text-track.less";
-// @import "page/settings.less"              //用户设置页
-// @import "page/user.less"                  //用户主页
 @import "page/user-center.less";          //用户主页
 @import "page/group.less";                //小组
-// @import "page/settings.less";             //用户设置页
-// @import "page/live.less";                 //直播课程页
-// @import "page/message.less";              //私信
-// @import "page/notification.less";         //通知  
 
 @import "page/live-course.less";             //直播页面            
 @import "page/open-course.less";             //公开课页面            
-// @import "page/create-course.less";           //创建课程页            
 @import "page/material.less";         
 @import "page/media-preview.less";         
 
@@ -148,15 +128,10 @@
 @import "page/course-detail/index.less";      //课程详情
 @import "page/reward-point/index.less";       //积分商城
 
-// 改版
-@import "v2.less";
+@import "page/wxpay.less";                //微信支付页
+@import "page/order.less";                //订单
+@import "page/pay-center.less";           //支付中心
+@import "page/pay-state.less";            //支付状态
 
 // 针对国际化的样式修改
 @import "es-en/es-en.less";
-
-//移动端
-@import "mobile/course.less";       
-@import "mobile/index.less";  
-@import "mobile/footer-tool-bar.less";  
-@import "mobile/app-download.less";  
-@import "mobile/search-mobile.less";

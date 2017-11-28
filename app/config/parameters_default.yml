@@ -6,8 +6,6 @@ parameters:
         ROLE_ADMIN:       [ROLE_TEACHER, ROLE_BACKEND]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
-    keyword.filter: Biz\Common\EsKeywordFilter
-
     security_disabled_uri_prefixs:
         - anon
         - callback
@@ -40,3 +38,4 @@ parameters:
         - '/bddServer/callback'
         - '/pay/center/pay/llpay/return'
         - '/pay/center/pay/llpay/notify'
+        - '/cashier/wechat/notify'

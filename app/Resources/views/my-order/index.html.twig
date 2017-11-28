@@ -4,7 +4,7 @@
 
 {% set side_nav = 'my-orders' %}
 
-{% do script(['libs/jquery-confirm.js', 'app/js/my/order/index.js']) %}
+{% do script(['app/js/my/order/index.js']) %}
 
 {% block page_title %}
   {{ 'user.orders.content_title'|trans }}
@@ -12,24 +12,25 @@
 
 {% block main_body %}
   <ul class="cd-tabs">
-    <li {% if app.request.query.get('status')=='' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{status:''})}}">{{'user.orders.all_orders'|trans}}</a>
+    <li {% if app.request.query.get('display_status')=='' %}class="active"{% endif %}>
+      <a href="{{path('my_orders',{display_status:''})}}">{{'user.orders.all_orders'|trans}}</a>
     </li>
-    <li {% if app.request.query.get('status')=='created' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{status:'created'})}}">{{'user.orders.created_status'|trans}}
+    <li {% if app.request.query.get('display_status')=='no_paid' %}class="active"{% endif %}>
+      <a href="{{path('my_orders',{display_status:'no_paid'})}}">{{'user.orders.no_paid_status'|trans}}
         {% if createdOrderCount > 0 %}<span class="number">{{createdOrderCount}}</span>{% endif %}
       </a>
     </li>
-    <li {% if app.request.query.get('status')=='refunding' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}
-      {% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}
+    <li {% if app.request.query.get('display_status')=='refunding' %}class="active"{% endif %}>
+      <a href="{{path('my_orders',{display_status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}
+        {% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}
       </a>
     </li>
+
   </ul>
   <form class="form-inline cd-form-inline" action="" method="get">
     <div class="form-group cd-form-group cd-form-group-button">
       <input name="status" type="hidden" class="hidden" value="{{app.request.get('status')}}">
-      <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.orders.placeholder_order_name'|trans }}">
+      <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.orders.placeholder_product_name'|trans }}">
       <button type="submit"><i class="cd-icon cd-icon-search"></i></button>
     </div>
   </form>

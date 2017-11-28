@@ -5,75 +5,48 @@
 {% block main %}
 
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="mbm">
+      <div class="form-group">
+        <label class="ptm">{{ 'form.placeholder.keyword'|trans }}:</label>
+        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.nickname'|trans}}">
 
-    <input value="{{ condition.type }}" name="flowType" type="hidden"/>
-    <input value="{{ condition.timeType }}" name="timeType" type="hidden"/>
-    <div class="form-group">
-      <select class="form-control" name="searchType">
-        {% set options = {'nickname':'admin.coin.search_type_option.nickname'|trans,'email':'admin.coin.search_type_option.email'|trans} %}
-        {{ select_options(options, app.request.get('searchType')) }}
-      </select>
+        <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+      </div>
     </div>
-
-    <div class="form-group">
-      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
-             placeholder="{{'form.placeholder.keyword'|trans}}">
-    </div>
-
-    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>
-
-  <div class="well">
-    <div>
-      {{'time'|trans}}：
-      <a type="button"
-         class="btn btn-default btn-sm {% if condition.timeType != "threeMonths" and  condition.timeType != "oneMonth" and  condition.timeType != "all" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{timeType:"oneWeek",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'admin.coin.datagrid.filter.oneWeek'|trans}}</a>
-      <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "oneMonth" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{timeType:"oneMonth",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'admin.coin.datagrid.filter.oneMonth'|trans}}</a>
-      <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "threeMonths" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{timeType:"threeMonths",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'admin.coin.datagrid.filter.threeMonths'|trans}}</a>
-      <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "all" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{timeType:"all",searchType:condition.searchType,keyword:condition.keyword}) }}">{{'admin.coin.datagrid.filter.all_history'|trans}}</a>
-      <span class="mll"></span>
-      {{'type'|trans}}：
-      <a type="button"
-         class="btn btn-default btn-sm {% if condition.flowType != "out" and  condition.flowType != "in" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{flowType:"",timeType:condition.timeType,sort:condition.sort}) }}">{{'admin.coin.datagrid.filter.default'|trans}}</a>
-      <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "out" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{flowType:"out",timeType:condition.timeType,sort:condition.sort}) }}">{{'admin.coin.datagrid.filter.consume'|trans}}</a>
-      <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "in" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{flowType:"in",timeType:condition.timeType,sort:condition.sort}) }}">{{'admin.coin.datagrid.filter.recharge'|trans}}</a>
-      <span class="mll"></span>
-      {{'admin.coin.sort'|trans}}：
-      <a type="button" class="btn btn-default btn-sm {% if condition.sort == "up" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"up"}) }}">{{'admin.coin.datagrid.filter.asc'|trans}}</a>
-      <a type="button" class="btn btn-default btn-sm {% if condition.sort == "down" %}btn-info{% endif %}"
-         href="{{ path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"down"}) }}">{{'admin.coin.datagrid.filter.desc'|trans}}</a>
-    </div>
-  </div>
-
+  
+  <p class="text-muted">
+    <span class="mrl">{{ 'admin.coin.school_out_amount'|trans }}：<strong class="color-success">{{ schoolBalance.purchase_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_in_amount'|trans }}：<strong class="color-warning">{{ schoolBalance.recharge_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_wait_in_amount'|trans }}：<strong class="color-info">{{ (schoolBalance.purchase_amount-schoolBalance.recharge_amount)|to_coin(0) }}</strong></span>
+  </p>
   <div class="table-responsive">
     <table class="table table-striped">
+      {% set querySort = app.request.query.get('sort', 'amount') %}
+      {% set direction = app.request.query.get('direction', 'desc') %}
       <tr>
         <th width="30%">{{'user'|trans}}</th>
-        <th>{{'coin.recharge'|trans}}</th>
-        <th>{{'coin.consume'|trans}}</th>
-        <th>{{'finance.balance'|trans}}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'purchase_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'amount', path: 'admin_coin_user_records'} %}</th>
         <th>{{'admin.coin.operation'|trans}}</th>
       </tr>
 
-      {% if userIds %}
-        {% for userId in userIds %}
+      {% if balances %}
+        {% for balance in balances %}
           <tr>
-            <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
-            <td style="color:#1bb974;"> {{ userInCash(userId,condition.timeType)|default("0.00") }}</td>
-            <td style="color:#ff7b0e;"> {{ userOutCash(userId,condition.timeType)|default("0.00") }}</td>
-            <td style="color:blue;"> {{ user_account(userId).cash|default(0) }}</td>
+            {% if has_permission('admin_user_manage') %}
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></td>
+            {% else %}
+              <td><span><a target="_blank" href="{{ path('user_show', {id: balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></span></td>
+            {% endif %}
+            <td class="color-success"> {{ balance.recharge_amount|to_coin(0) }}</td>
+            <td class="color-warning"> {{ balance.purchase_amount|default(0)|to_coin(0) }}</td>
+            <td style="color:blue;"> {{ balance.amount|default(0)|to_coin(0) }}</td>
             <td>
-              <a class= {% if user_account(userId) %} "btn btn-default" {% else %} "btn btn-default disabled"  {% endif %}
+              <a {% if balance.amount <= 0 %}class="disabled"{% endif %}
               data-toggle="modal" data-target="#modal"
-              data-url="{{ path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType}) }}"
+              data-url="{{ path('admin_coin_flow_detail',{userId:balance.user_id}) }}"
               href="javascript:;">{{'form.btn.view'|trans}}</a>
             </td>
           </tr>
@@ -81,7 +54,7 @@
       {% endif %}
 
     </table>
-    {% if not userIds %}
+    {% if not balances %}
       <div class="empty">{{'site.datagrid.empty'|trans}}</div>{% endif %}
     {% if paginator|default(null) %}
       {{ admin_macro.paginator(paginator) }}

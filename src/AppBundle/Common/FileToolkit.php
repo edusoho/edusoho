@@ -20,19 +20,19 @@ class FileToolkit
 
         $whitelist = array_unique(explode(' ', trim($extensions)));
 
-// Split the filename up by periods. The first part becomes the basename
+        // Split the filename up by periods. The first part becomes the basename
         // the last part the final extension.
         $fileNameParts = explode('.', $fileName);
         $newFilename = array_shift($fileNameParts); // Remove file basename.
         $finalExtension = array_pop($fileNameParts);
 
-// Remove final extension.
+        // Remove final extension.
 
-// Loop through the middle parts of the name and add an underscore to the
+        // Loop through the middle parts of the name and add an underscore to the
 
-// end of each section that could be a file extension but isn't in the list
+        // end of each section that could be a file extension but isn't in the list
 
-// of allowed extensions.
+        // of allowed extensions.
         foreach ($fileNameParts as $fileNamePart) {
             $newFilename .= '.'.$fileNamePart;
             if (!in_array($fileNamePart, $whitelist) && preg_match("/^[a-zA-Z]{2,5}\d?$/", $fileNamePart)) {
@@ -77,7 +77,7 @@ class FileToolkit
     {
         $ext = strtolower(static::getFileExtension($file));
 
-        return $ext == 'ico' ? true : false;
+        return 'ico' == $ext ? true : false;
     }
 
     public static function generateFilename($ext = '')
@@ -1015,6 +1015,7 @@ class FileToolkit
 
     public static function cropImages($filePath, $options)
     {
+        $fileSystem = new Filesystem();
         $pathinfo = pathinfo($filePath);
         $filesize = filesize($filePath);
 
@@ -1023,6 +1024,8 @@ class FileToolkit
         $rawImage = $imagine->open($filePath);
 
         $naturalSize = $rawImage->getSize();
+        $naturalWidth = $naturalSize->getWidth();
+        $naturalHeight = $naturalSize->getHeight();
         $rate = $naturalSize->getWidth() / $options['width'];
 
         $options['w'] = $rate * $options['w'];
@@ -1033,10 +1036,14 @@ class FileToolkit
         $filePaths = array();
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
-                if (($options['w'] == $value[0]) && ($options['h'] == $value[1]) && ($filesize < 102400)) {
-                    $filePaths[$key] = $filePath;
+                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                //原始尺寸等于要求的尺寸 并且 裁切的范围等于原始尺寸，不做裁切
+                $isCopy = ($naturalWidth == $value[0] && $options['w'] == $value[0]) && ($naturalHeight == $value[1] && $options['h'] == $value[1]) && ($filesize < 102400);
+
+                if ($isCopy) {
+                    $filePaths[$key] = $savedFilePath;
+                    $fileSystem->copy($filePath, $savedFilePath);
                 } else {
-                    $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
                     $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                     $filePaths[$key] = $savedFilePath;
                 }
@@ -1058,7 +1065,7 @@ class FileToolkit
 
         if (in_array($extension, array('jpg', 'jpeg'))) {
             $options['jpeg_quality'] = $level * 10;
-        } elseif ($extension == 'png') {
+        } elseif ('png' == $extension) {
             $options['png_compression_level'] = $level;
         } else {
             return $fullPath;
@@ -1091,31 +1098,16 @@ class FileToolkit
     public static function imagerotatecorrect($path)
     {
         try {
-            //只旋转JPEG的图片
-            if (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG) {
-                $exif = @exif_read_data($path);
-                if (!empty($exif['Orientation'])) {
-                    $image = imagecreatefromstring(file_get_contents($path));
-                    switch ($exif['Orientation']) {
-                        case 8:
-                            $image = imagerotate($image, 90, 0);
-                            break;
-                        case 3:
-                            $image = imagerotate($image, 180, 0);
-                            break;
-                        case 6:
-                            $image = imagerotate($image, -90, 0);
-                            break;
-                    }
+            $angle = static::getImagerotateAngle($path);
+            if (!empty($angle)) {
+                $image = imagecreatefromstring(file_get_contents($path));
+                $image = imagerotate($image, $angle, 0);
+                imagejpeg($image, $path);
+                imagedestroy($image);
 
-                    imagejpeg($image, $path);
-                    imagedestroy($image);
-
-                    return $path;
-                }
+                return $path;
             }
         } catch (\Exception $e) {
-            //报错了不旋转，保证不影响上传流程
         }
 
         return false;
@@ -1146,5 +1138,32 @@ class FileToolkit
         fclose($tp);
 
         return $savePath;
+    }
+
+    private static function getImagerotateAngle($path)
+    {
+        $angle = 0;
+        //只旋转JPEG的图片
+        if (!(extension_loaded('gd') && extension_loaded('exif') && IMAGETYPE_JPEG == exif_imagetype($path))) {
+            return $angle;
+        }
+
+        $exif = @exif_read_data($path);
+        if (empty($exif['Orientation'])) {
+            return $angle;
+        }
+        switch ($exif['Orientation']) {
+            case 8:
+                $angle = 90;
+                break;
+            case 3:
+                $angle = 180;
+                break;
+            case 6:
+                $angle = -90;
+                break;
+        }
+
+        return $angle;
     }
 }

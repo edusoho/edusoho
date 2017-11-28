@@ -107,10 +107,9 @@ class PluginRegister
     public function refreshInstalledPluginConfiguration()
     {
         $plugins = $this->biz->service('CodeagesPluginBundle:AppService')->findAllPlugins();
-
         $installeds = array();
         foreach ($plugins as $plugin) {
-            if ($plugin['code'] == 'MAIN' || $plugin['protocol'] < 3) {
+            if ($plugin['protocol'] < 3) {
                 continue;
             }
             $installeds[$plugin['code']] = array(

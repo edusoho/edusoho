@@ -12,6 +12,8 @@ interface TaskService
 
     public function getCourseTask($courseId, $id);
 
+    public function getCourseTaskByCourseIdAndCopyId($courseId, $copyId);
+
     public function preCreateTaskCheck($task);
 
     public function createTask($task);

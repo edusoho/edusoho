@@ -191,7 +191,9 @@
 }
 
 .loading-background  {
-  background: #fff url('@{img-src}old/loader.gif') no-repeat center center;
+  @media(min-width: @screen-sm-min) {
+    background: #fff url('@{img-src}old/loader.gif') no-repeat center center;
+  }
 }
 
 .slide-player-watermark {
@@ -270,6 +272,9 @@
   text-align: center;
   width: 100%;
   top: 0px;
+  @media(max-width: @screen-xs-min) {
+    top: 25%;
+  }
   bottom: 50px;
 }
 

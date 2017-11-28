@@ -12,7 +12,6 @@ parameters:
     # redis_timeout: 1
     # redis_reserved: null
     # redis_retry_interval: 100
-    # session.service_id: session.handler.redis
 
     #扩展参数
     #oauth2_clients: #oauth2客户端配置

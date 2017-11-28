@@ -122,6 +122,15 @@ uploader.filelist.head.operation: Operating
 uploader.select_one_file: Please upload one files
 uploader.file.exist: This file exist
 
+importer.import_verify_tips_start: 校验成功！一共包含
+importer.import_verify_tips_end: 条数据
+importer.import_back_btn: 返回
+importer.import_reselect_btn: 重新导入
+importer.import_confirm_btn: 确定导入
+importer.import_error: 导入出错
+importer.import_progress_data: 已经导入%number%条数据
+importer.import_finish_data: 导入成功, 总共导入%number%条数据
+
 subtitle.delete_success_hint: Delete subtitle success
 subtitle.no_subtitle_hint: None subtitle
 subtitle.upload_srt_hint: Please upload srt file format
@@ -156,6 +165,11 @@ activity.audio_manage.finish_detail_digits_error_hint: The completion condition 
 
 activity.download_manage.link_error_hint: The link address is incorrect
 activity.download_manage.materials_error_hint: Please upload or select the resource
+activity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
+activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
+activity.download_manage.materials_or_link_success: 资料添加成功
+activity.download_manage.materials_or_link_delete: 资料已删除
+activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
 activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
 activity.download_manage.materials_delete_btn: Delete
 activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
@@ -290,6 +304,7 @@ activity.testpaper_manage.generate_mode_hint: Please select the generation metho
 activity.testpaper_manage.max_error_hint: The maximum value can not exceed 1000000000
 activity.testpaper_manage.pass_score_hint: 'Criteria Score: pass score: % passScore%'
 activity.testpaper_manage.setting_pass_score_error_hint: Pass score (% passedScore%) can not be higher than the total score (% totalScore%).
+activity.testpaper_manage.pass_score_error_hint: Pass score is greater than 0 and less than 1000, keep a decimal
 activity.testpaper_manage.question_required_error_hint: Please select the question
 activity.testpaper_manage.question_score_empty_hint: question score can not be zero
 activity.testpaper_manage.question_score_error_hint: question score can only be numbers, and within 3 digits, keep a decimal
@@ -364,6 +379,8 @@ classroom_manage.student_create_add_failed_hint: Add failed!
 classroom_manage.student_manage_remove_hint: Do you really want to remove the %username%?
 classroom_manage.student_manage_remove_success_hint: Remove %username% successful!
 classroom_manage.student_manage_remove_failed_hint: Remove %username% failed, please try again!
+#TODO trans
+classroom_manage.student_manage_remove_assistant_hint: '%username%是班级的助教，请先取消Ta的助教权限'
 
 classroom.member_signed: Checked in
 classroom.sign_keep_days: Continuous %keepDays% day
@@ -401,6 +418,7 @@ course_manage.student_remark_success_hint: Remarks %username% succeed
 course_manage.student_remark_failed_hint: Remarks %username% failed, please try again!
 
 course_manage.student_create.field_required_error_hint: Please enter student email / mobile number / username
+course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
 course_set.show.time_finish_hint: Activity times up. Refreshing page, please wait ...
@@ -575,6 +593,9 @@ open_course.unpublish_success_hint: Lesson unpublished!
 
 open_course.lesson_delete_success_hint: Lesson deleted!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
+order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: Coupon is not available
 order.create.use_discount_coupon_hint: Coupon is available, and you are currently using coupons with %rate% discount.
 order.create.use_price_coupon_hint: Coupon is available, and you are currently using coupons with %rate% yuan deduction.
@@ -678,6 +699,8 @@ validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
+validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
+validate.mobile_or_email_message: 请输入正确的手机／邮箱
 
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
@@ -731,6 +754,7 @@ json_response.must_choose_question.message: Please select the title first
 json_response.cannot_send_message_self.message: Can not send yourself a private message!
 json_response.receiver_not_exist.message: The receiver does not exist
 
+validate_old.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
 validate_old.required.message: Please enter {{display}}
 validate_old.valid_email_input.message: %display% is not formatted correctly
 validate_old.valid_url_input.message: %display% is not formatted correctly
@@ -749,6 +773,7 @@ validate_old.date_and_time_check.message: The end time can not be earlier than o
 validate_old.date_and_time.message: Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: The start time must be less than or equal to the end time
 validate_old.not_all_digital.message: %display% can not be all numbers
+validate_old.es_version.message: Please input correct es version，correct is XX.XX.XX
 validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
 validate_old.chinese.message: %display% must be Chinese
@@ -759,7 +784,7 @@ validate_old.reg_invite_code.message: %display% must be a 5-digit alphabet
 validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and underlined
 validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
 validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
-validate_old.date_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
+validate_old.currency_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
 validate_old.currency.message: %display% must be less than or equal to% max%, and one Chinese word is 2 characters
 validate_old.idcard.message: %display% is not formatted correctly
 validate_old.password.message: %display% can only be composed of 4-20 characters
@@ -767,7 +792,7 @@ validate_old.second_range.message: Seconds can only be between 0-59
 validate_old.date.message: Please enter the correct date in the format XXXX-MM-DD
 validate_old.qq.message: %display% is not formatted correctly
 validate_old.integer.message: %display% must be an integer
-validate_old.date_check.message: Please enter the correct decimal, only to two decimal places
+validate_old.float_check.message: Please enter the correct decimal, only to two decimal places
 validate_old.float.message: Please enter the correct decimal number, only to a fraction
 validate_old.int.message: %display% must be an integer, up to 9 digits
 validate_old.positive_integer.message: %display% must be a positive integer
@@ -787,3 +812,27 @@ notify.course_set_clone_start.message: Start copying the course and check the no
 notify.job_redo_warning.hint: This course is already copied, please do not repeat it
 notify.course_set_copy_error.hint: There was an error in the copy course
 progress.copy_course_set.message: Copy done!
+
+confirm.warn: 警告
+confirm.exit.tip: 您确定要退出学习吗？
+
+cashier.wechat_pay: Wechat pay
+cashier.wechat_pay.scan_qcode_pay_tips: Plase scan with wechat, scan the QR code to pay
+cashier.confirm.fail_message: Payment unsuccessful, please check or repay
+cashier.pay.error_message: Payment has been abnormal, please contact the administrator
+cashier.confirm.title: Order payment
+cashier.confirm.success: Payment is done
+cashier.confirm.pick_again: Reissue payment method
+cashier.confirm.desc: |
+  Please re-open the page to complete the order payment.<br>
+  If you encounter problems in the payment process, please contact the website customer service solution.<br>
+
+oauth.send.validate_message: 发送验证
+oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
+oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
+oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
+oauth.captcha_code_length_tip: 图形码为5位数
+oauth.captcha_code_expired_tip: 图形验证码已过期
+oauth.captcha_code_error_tip: 图形验证码错误
+oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
+oauth.register.error_message: 注册出现异常，请联系管理员

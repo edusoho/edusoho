@@ -41,9 +41,9 @@
                <tr>
                    <td>{{ inviteUser.nickname }}</td>
                    <td>{{ invitedUser.nickname }}</td>
-                   <td>{{ record.amount|round(2) }}</td>
-                   <td>{{ record.coinAmount|round(2) }}</td>
-                   <td>{{ record.cashAmount|round(2) }}</td>
+                   <td>{{ record.amount }}</td>
+                   <td>{{ record.coinAmount }}</td>
+                   <td>{{ record.cashAmount }}</td>
                    <td>{{ inviteUser.inviteCode|default('-') }}</td>
                    <td width="10%">{{ record.inviteTime|date('Y-m-d H:i:s') }}</td>
                </tr>

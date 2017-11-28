@@ -27,13 +27,13 @@ class EnvWriteCommand extends Command
         $value = $input->getArgument('value');
 
         if (!file_exists($file)) {
-            throw new \InvalidArgumentException("Environment file is not exist.");
+            throw new \InvalidArgumentException('Environment file is not exist.');
         }
 
         $env = require $file;
 
         if (!is_array($env)) {
-            throw new \RuntimeException("Environment file must return array.");
+            throw new \RuntimeException('Environment file must return array.');
         }
 
         $env[$key] = $value;

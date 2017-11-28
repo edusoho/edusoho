@@ -266,7 +266,7 @@ class TestpaperController extends BaseController
                 $response = array('result' => true, 'message' => '');
             } elseif ($testpaperActivity['finishCondition']['type'] === 'score'
                 && $paperResult['status'] === 'finished'
-                && $paperResult['score'] > $testpaperActivity['finishCondition']['finishScore']) {
+                && $paperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
                 $response = array('result' => true, 'message' => '');
             } else {
                 $response = array('result' => false, 'message' => '');

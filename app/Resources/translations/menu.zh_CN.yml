@@ -15,8 +15,7 @@ admin.tab.setting_tab: 设置
 admin.nav.user: 用户
 admin.nav.course: 课程
 admin.nav.operation: 运营
-admin.nav.order: 订单
-admin.nav.finance: 账务
+admin.nav.finance: 交易
 admin.nav.cloud: 教育云
 admin.nav.system: 系统
 
@@ -28,6 +27,7 @@ admin.user.message_menu: 私信管理
 
 ##用户管理模块
 admin.user.basic.basic_tab: 用户管理
+admin.user.basic.online: 在线用户
 admin.user.basic.login_record_tab: 登录日志
 
 admin.user.basic.basic_tab.create_btn: '添加新用户'
@@ -203,25 +203,11 @@ admin.operation.reward_point_mall.product_tab: 商品管理
 
 admin.operation.reward_point_mall.product_tab.create_btn: 添加商品
 
-#订单管理模块
-admin.order.course_menu: 课程订单
-admin.order.coin_menu: 虚拟币订单
-admin.order.classroom_menu: 班级订单
-
-##课程订单模块
-admin.order.course.basic_tab: 课程订单
-
-##虚拟币订单模块
-admin.order.coin.basic_tab: 虚拟币订单
-
-##班级订单模板
-admin.order.classroom.basic_tab: 班级订单
-
 #账务管理模块
-admin.finance.bills_menu: 账单管理
+admin.finance.order_menu: 用户订单
+admin.finance.bills_menu: 网校账单
 admin.finance.coin_menu: 虚拟币管理
-admin.finance.course_refunds_menu: 课程退款管理
-admin.finance.classroom_refunds_menu: 班级退款管理
+admin.finance.refunds_menu: 退款管理
 
 ##账单管理模块
 admin.finance.bills.cash_records_tab: 现金账单
@@ -230,11 +216,8 @@ admin.finance.bills.coin_records_tab: 虚拟币账单
 ##虚拟币管理
 admin.finance.coin.basic_tab: 虚拟币管理
 
-##课程退款管理模块
-admin.finance.course_refunds.basic_tab: 课程退款管理
-
-##班级退款管理模块
-admin.finance.classroom_refunds.basic_tab: 班级退款管理
+##退款管理模块
+admin.finance.refunds.basic_tab: 退款管理
 
 #教育云模块
 admin.cloud.overview_menu: 概览
@@ -363,7 +346,7 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
-##营销平台模块
+##微营销模块
 admin.marketing.menu: 微营销
 
 #web模块

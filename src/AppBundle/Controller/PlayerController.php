@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $context = array())
+    public function showAction(Request $request, $id, $isPart = false, $context = array())
     {
         $ssl = $request->isSecure() ? true : false;
 
@@ -59,7 +59,7 @@ class PlayerController extends BaseController
             if ($agentInWhiteList) {
                 //手机浏览器不弹题
                 $context['hideQuestion'] = 1;
-                if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                if ($this->setting('storage.support_mobile', 0) == 1 && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
                     $player = 'local-video-player';
                     $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
                     $isEncryptionPlus = false;
@@ -68,14 +68,20 @@ class PlayerController extends BaseController
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
-        return $this->render('player/show.html.twig', array(
+        $params = array(
             'file' => $file,
             'url' => isset($url) ? $url : null,
             'context' => $context,
             'player' => $player,
             'agentInWhiteList' => $agentInWhiteList,
             'isEncryptionPlus' => $isEncryptionPlus,
-        ));
+        );
+
+        if ($isPart) {
+            return $this->render('player/play.html.twig', $params);
+        }
+
+        return $this->render('player/show.html.twig', $params);
     }
 
     public function localMediaAction(Request $request, $id, $token)

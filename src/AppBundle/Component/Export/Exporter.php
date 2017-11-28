@@ -2,8 +2,14 @@
 
 namespace AppBundle\Component\Export;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+
 abstract class Exporter implements ExporterInterface
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
     protected $conditions;
     protected $parameter;
@@ -16,17 +22,22 @@ abstract class Exporter implements ExporterInterface
         $this->conditions = $this->buildCondition($conditions);
     }
 
+    //定义导出标题
     abstract public function getTitles();
 
+    //获得导出正文内容
     abstract public function getContent($start, $limit);
 
+    //下载权限判断
     abstract public function canExport();
 
+    //获得导出总条数
     abstract public function getCount();
 
+    //构建查询条件
     abstract public function buildCondition($conditions);
 
-    public function export($name)
+    public function export($name = '')
     {
         if (!$this->canExport()) {
             return array(
@@ -46,6 +57,7 @@ abstract class Exporter implements ExporterInterface
         $endPage = $start + $limit;
 
         $count = $this->getCount();
+
         $endStatus = $endPage >= $count;
 
         $status = $endStatus ? 'finish' : 'continue';
@@ -59,6 +71,7 @@ abstract class Exporter implements ExporterInterface
         );
     }
 
+    //获得导出分页参数
     public function buildParameter($conditions)
     {
         $parameter = array();
@@ -121,8 +134,13 @@ abstract class Exporter implements ExporterInterface
     private function exportFileRootPath()
     {
         $biz = $this->getBiz();
+        $filesystem = new Filesystem();
+        $rootPath = $biz['topxia.upload.private_directory'].'/';
+        if (!$filesystem->exists($rootPath)) {
+            $filesystem->mkdir($rootPath);
+        }
 
-        return $biz['topxia.upload.private_directory'].'/';
+        return  $rootPath;
     }
 
     public function getUser()

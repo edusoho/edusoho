@@ -3,11 +3,13 @@ import notify from 'common/notify';
 $('.js-unbind-btn').on('click', function() {
   let $this = $(this);
   let url = $this.data('url');
-  $.confirm({
+  cd.confirm({
     title: Translator.trans('user.settings.unbind_title'),
-    text: Translator.trans('user.settings.unbind_content'),
+    content: Translator.trans('user.settings.unbind_content'),
+    confirmText: Translator.trans('site.confirm'),
+    cancelText: Translator.trans('site.close'),
     confirm() {
-      $.get(url, function (data) {
+      $.post(url, function (data) {
         notify('success', Translator.trans(data.message));
         setTimeout(function() {
           window.location.reload();

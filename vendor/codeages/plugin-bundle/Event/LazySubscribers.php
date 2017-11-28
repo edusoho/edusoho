@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LazySubscribers
 {
-
     const DEFAULT_PRIORITY = 0;
     /**
      * @var ContainerInterface

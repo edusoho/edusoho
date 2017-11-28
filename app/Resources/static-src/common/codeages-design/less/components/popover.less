@@ -1,19 +1,19 @@
 .cd-design {
   .popover {
-    border: none;
+    border-color: @cd-bg;
     padding: 0;
-    .cd-box-shadow(8px, 0.1, 0.2);
+    .cd-box-shadow(8px, 0.01, 0.04);
     &.top > .arrow {
-      border-top-color: #fff;
+      border-top-color: @cd-bg;
     }
     &.right > .arrow {
-      border-right-color: #fff;
+      border-right-color: @cd-bg;
     }
     &.bottom > .arrow {
-      border-bottom-color: #fff;
+      border-bottom-color: @cd-bg;
     }
     &.left > .arrow {
-      border-left-color: #fff;
+      border-left-color: @cd-bg;
     }
   }
   .popover-title {

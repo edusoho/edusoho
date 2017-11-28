@@ -28,7 +28,7 @@ class CrontabSubscriber extends EventSubscriber implements EventSubscriberInterf
     public function onSchedulerJobExecuting(Event $event)
     {
         $jobFired = $event->getSubject();
-        $job = $jobFired['job'];
+        $job = $jobFired['job_detail'];
         if (!empty($job['next_fire_time'])) {
             $this->getCrontabService()->setNextExcutedTime($job['next_fire_time']);
         }

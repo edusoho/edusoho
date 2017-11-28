@@ -2,11 +2,13 @@
 
 namespace Biz\Course\Service\Impl;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Exception\UnableJoinException;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Visitor\CourseItemPagingVisitor;
@@ -201,10 +203,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $newCourse = $this->validateExpiryMode($newCourse);
 
-        // $entityCopy = new CourseCopy($this->biz);
-
-        // return $entityCopy->copy($sourceCourse, $newCourse);
-
         return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
@@ -316,7 +314,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ($courseSet['status'] == 'published') {
@@ -1828,6 +1825,23 @@ class CourseServiceImpl extends BaseService implements CourseService
             $member['id'],
             array('learnedNum' => $learnedNum, 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum)
         );
+    }
+
+    public function tryFreeJoin($courseId)
+    {
+        $access = $this->canJoinCourse($courseId);
+
+        if ($access['code'] != AccessorInterface::SUCCESS) {
+            throw new UnableJoinException($access['msg'], $access['code']);
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if ($course['isFree'] == 1 || $course['originPrice'] == 0) {
+            $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId());
+        }
+
+        $this->dispatch('course.try_free_join', $course);
     }
 
     protected function hasAdminRole()

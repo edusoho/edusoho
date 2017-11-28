@@ -36,7 +36,7 @@ class PushNotificationOneHourJob extends AbstractJob
                 'type' => 'live.notify',
                 'id' => $lesson['id'],
                 'lessonType' => $lesson['type'],
-                'title' => '直播通知',
+                'title' => "《{$lesson['title']}》",
                 'message' => "直播课《{$lesson['title']}》即将开课",
             );
 

@@ -44,7 +44,11 @@
         <th>{{ 'user.fileds.realname'|trans }}</th>
         <th>{{ 'admin.user.fields.idcard'|trans }}</th>
         <th>{{ 'admin.user.approval.fields.email'|trans }}</th>
-        <th>{{ 'admin.user.approval.fields.application_date_label'|trans }}</th>
+        {% if approvalStatus == 'approving' %}
+          <th>{{ 'admin.user.approval.fields.application_date_label'|trans }}</th>
+        {% elseif approvalStatus == 'approved' %}
+          <th>{{ 'admin.user.approval.fields.approval_date_label'|trans }}</th>
+        {% endif %}
         <th>{{ 'admin.user.fields.operation_label'|trans }}</th>
       </tr>
       </thead>

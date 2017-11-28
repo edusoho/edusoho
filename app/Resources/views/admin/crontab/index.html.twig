@@ -5,38 +5,34 @@
 {% set script_controller='crontab/index' %}
 
 {% block main %}
-
-  {% if crontabJobs %}
-    <table id="crontab-table" class="table table-striped table-hover">
-      <thead>
+  <table id="crontab-table" class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th>{{'命令'}}</th>
+      <th>{{'状态'}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for crontabJob in crontabJobs %}
       <tr>
-        <th>{{'命令'}}</th>
-        <th>{{'状态'}}</th>
+
+        <td>
+          {{ crontabJob.formatCrontabLine() }}
+        </td>
+
+        <td>
+          {% if crontabJob.enabled %}
+            启用
+          {% else %}
+            禁用
+          {% endif %}
+        </td>
+
       </tr>
-      </thead>
-      <tbody>
-      {% for crontabJob in crontabJobs %}
-        <tr>
+    {% endfor %}
+    </tbody>
 
-          <td>
-            {{ crontabJob.formatCrontabLine() }}
-          </td>
-
-          <td>
-            {% if crontabJob.enabled %}
-              启用
-            {% else %}
-              禁用
-            {% endif %}
-          </td>
-
-        </tr>
-      {% endfor %}
-      </tbody>
-
-    </table>
-  {% else %}
-    <div class="empty">没有定时任务在执行，<a href="javascript:" class="js-restore-btn" data-url="{{ path('admin_crontab_resotre') }}">请点击重新初始化</a>。</div>
-  {% endif %}
+  </table>
+  <div class="empty"><a href="javascript:" class="js-restore-btn" data-url="{{ path('admin_crontab_resotre') }}">点击重新初始化</a></div>
 
 {% endblock %}

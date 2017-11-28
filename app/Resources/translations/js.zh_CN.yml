@@ -141,6 +141,16 @@ uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
 
+
+importer.import_verify_tips_start: 校验成功！一共包含
+importer.import_verify_tips_end: 条数据
+importer.import_back_btn: 返回
+importer.import_reselect_btn: 重新导入
+importer.import_confirm_btn: 确定导入
+importer.import_error: 导入出错
+importer.import_progress_data: 已经导入%number%条数据
+importer.import_finish_data: 导入成功, 总共导入%number%条数据
+
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕
 subtitle.upload_srt_hint: 请上传srt格式的文件
@@ -184,6 +194,12 @@ activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数�
 
 activity.download_manage.link_error_hint: 链接地址不正确
 activity.download_manage.materials_error_hint: 请上传或选择资料
+activity.download_manage.materials_or_link_error_hint: 请先上传文件或添加资料网络链接
+activity.download_manage.materials_or_link_fail: 资料添加失败，请重试
+activity.download_manage.materials_or_link_success: 资料添加成功
+activity.download_manage.materials_or_link_delete: 资料已删除
+activity.download_manage.materials_or_link_confirm_delete: 真的要删除该资料吗？
+
 activity.download_manage.materials_exist_error_hint: 该文件已添加，请重新选择
 activity.download_manage.materials_delete_btn: 删除
 activity.download_manage.materials_add_success_hint: 添加成功，可继续选择资料添加或点击下一步
@@ -232,9 +248,10 @@ activity.testpaper_manage.generate_mode_hint: 请选择生成方式
 activity.testpaper_manage.max_error_hint: 最大值不能超过1000000000
 activity.testpaper_manage.pass_score_hint: 达标分数：%passScore%分
 activity.testpaper_manage.setting_pass_score_error_hint: 及格分数（%passedScore%）不能高于总分（%totalScore%）。
+activity.testpaper_manage.pass_score_error_hint: 及格分数必须大于0且小于1000，最多保留一位小数
 activity.testpaper_manage.question_required_error_hint: 请选择题目
 activity.testpaper_manage.question_score_empty_hint: 题目分值不能为0
-activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，并且在3位数以内，保留一位小数
+activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，大于0且小于1000，最多保留一位小数
 activity.testpaper_manage.marking_validate_error_hint: 分数只能是<=题目分数、且>=0的整数或者1位小数
 activity.testpaper_manage.question_total_score: 总计
 activity.testpaper_manage.simple_percentage: 简单%simplePercentage%%
@@ -306,6 +323,7 @@ classroom_manage.student_create_add_failed_hint: 添加失败!
 classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
 classroom_manage.student_manage_remove_success_hint: 移除%username%成功！
 classroom_manage.student_manage_remove_failed_hint: 移除%username%失败，请重试！
+classroom_manage.student_manage_remove_assistant_hint: '%username%是班级的助教，请先取消Ta的助教权限'
 
 classroom.member_signed: 已签到
 classroom.sign_keep_days: 连续%keepDays%天
@@ -346,6 +364,7 @@ course_manage.student_remark_success_hint: 备注%username%成功
 course_manage.student_remark_failed_hint: 备注%username%失败，请重试！
 
 course_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+course_manage.student_create.price_max_error_hint: 购买价格不能大于课程原价!
 
 course_set.show.count_down_format_hint: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
 course_set.show.time_finish_hint: 活动时间到，正在刷新网页，请稍等...
@@ -519,6 +538,9 @@ open_course.unpublish_success_hint: 课时已取消发布!
 
 open_course.lesson_delete_success_hint: 课时已删除!
 
+order.create.minus: 抵扣
+order.create.discount.minus: 打折活动抵扣
+order.create.coupon_deduction: 优惠券抵扣
 order.create.useless_hint: 优惠券不可用
 order.create.use_discount_coupon_hint: 优惠券可用，您当前使用的是打%rate%折的优惠券
 order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵价%rate%元的优惠券
@@ -622,6 +644,8 @@ validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
 validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 validate.visible_character.message: 不允许输入不可见字符，如空格等
+validate.valid_score_input.message: 请输入正确的分数格式，最多保留一位小数
+validate.mobile_or_email_message: 请输入正确的手机／邮箱
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -674,6 +698,7 @@ json_response.must_choose_question.message: 请先选择题目
 json_response.cannot_send_message_self.message: 不能给自己发私信哦！
 json_response.receiver_not_exist.message: 该收件人不存在
 
+validate_old.positive_currency.message: 请输入大于等于0的有效价格，最多两位小数，整数位不超过8位！
 validate_old.required.message: 请输入{{display}}
 validate_old.valid_email_input.message: %display%的格式不正确
 validate_old.valid_url_input.message: %display%的格式不正确
@@ -692,6 +717,7 @@ validate_old.date_and_time_check.message: 结束时间不能早于或等于开�
 validate_old.date_and_time.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss
 validate_old.date_check.message: 开始时间必须小于或等于结束时间
 validate_old.not_all_digital.message: %display%不能全为数字
+validate_old.es_version.message: 请输入正确的%display%，正确格式是XX.XX.XX
 validate_old.visible_character.message: %display%请输入可见性字符
 validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
 validate_old.chinese.message: %display%必须是中文字
@@ -702,7 +728,7 @@ validate_old.reg_invite_code.message: %display%必须是5位数字、英文字�
 validate_old.alphanumeric.message: %display%必须是英文字母、数字及下划线组成
 validate_old.alphabet_underline.message: %display%必须以英文字母或下划线开头
 validate_old.byte_minlength.message: %display%的长度必须大于等于%min%，一个中文字算2个字符
-validate_old.date_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
+validate_old.currency_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
 validate_old.currency.message: %display%的长度必须小于等于%max%，一个中文字算2个字符
 validate_old.idcard.message: %display%格式不正确
 validate_old.password.message: %display%只能由4-20个字符组成
@@ -710,7 +736,7 @@ validate_old.second_range.message: 秒数只能在0-59之间
 validate_old.date.message: 请输入正确的日期,格式如XXXX-MM-DD
 validate_old.qq.message: %display%格式不正确
 validate_old.integer.message: %display%必须为整数
-validate_old.date_check.message: 请输入正确的小数,只保留到两位小数
+validate_old.float_check.message: 请输入正确的小数,只保留到两位小数
 validate_old.float.message: 请输入正确的小数,只保留到一位小数
 validate_old.int.message: %display%必须为整数,最大到9位整数
 validate_old.positive_integer.message: %display%必须为正整数
@@ -727,3 +753,27 @@ notify.course_set_clone_start.message: 开始复制课程，复制成功后请�
 notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制
 notify.course_set_copy_error.hint: 复制课程发生了错误
 progress.copy_course_set.message: 复制完成!
+
+confirm.warn: 警告
+confirm.exit.tip: 您确定要退出学习吗？
+
+cashier.wechat_pay: 微信支付
+cashier.wechat_pay.scan_qcode_pay_tips: 请使用微信扫描二维码支付
+cashier.confirm.fail_message: 支付未成功，请检查或重新支付
+cashier.pay.error_message: 支付发生异常，请联系管理员
+cashier.confirm.title: 订单支付中
+cashier.confirm.success: 支付完成
+cashier.confirm.pick_again: 重选支付方式
+cashier.confirm.desc: |
+  请在新开页面中完成订单支付。<br>
+  如在支付过程中遇到问题，请联系网站客服解决。<br>
+
+oauth.send.validate_message: 发送验证
+oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
+oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
+oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
+oauth.captcha_code_length_tip: 图形码为5位数
+oauth.captcha_code_expired_tip: 图形验证码已过期
+oauth.captcha_code_error_tip: 图形验证码错误
+oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
+oauth.register.error_message: 注册出现异常，请联系管理员

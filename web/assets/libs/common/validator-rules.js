@@ -15,6 +15,11 @@ define(function(require, exports, module) {
 
     var rules = [
         [
+            'es_version',
+            /(^\d{1,2}\.\d{1,2}\.\d{1,2})+$/,
+            Translator.trans('validate_old.es_version.message', {display:'{{display}}'})
+        ],
+        [
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             Translator.trans('validate_old.not_all_digital.message', {display:'{{display}}'})
@@ -88,8 +93,15 @@ define(function(require, exports, module) {
         [
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
-            Translator.trans('validate_old.date_check.message', {display: '{{display}}'})
-        ],      
+            Translator.trans('validate_old.currency_check.message', {display: '{{display}}'})
+        ],
+        [
+            'positive_currency',
+            /^[0-9]{0,8}(\.\d{0,2})?$/i,
+            Translator.trans('validate.positive_currency.message')
+
+        ],
+
         [
             'byte_maxlength',
             function(options) {
@@ -171,7 +183,7 @@ define(function(require, exports, module) {
         [
             'float',
             /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
-            Translator.trans('validate_old.date_check.message')
+            Translator.trans('validate_old.float_check.message')
         ],
         [
             'decimal',

@@ -20,11 +20,18 @@ class StudentAdd {
               }
             }
           }
+        },
+        price: {
+          positive_price: true,
+          max: $('#buy-price').data('price'),
         }
       },
       messages: {
         queryfield: {
           remote: Translator.trans('course_manage.student_create.field_required_error_hint')
+        },
+        price: {
+          max: Translator.trans('course_manage.student_create.price_max_error_hint'),
         }
       }
     });

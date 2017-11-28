@@ -12,7 +12,7 @@
 
 <form id="approve-form" class="form-horizontal" method="post" action="{{ path('admin_approval_approve', {id:user.id}) }}">
 
-  {% include 'admin/user/user-approval-form-content.html.twig' %}
+  {% include 'admin/user/user-approval-form-content.html.twig' with {'status':'approving'} %}
 
   <div class="row form-group">
     <div class="col-md-3 control-label">

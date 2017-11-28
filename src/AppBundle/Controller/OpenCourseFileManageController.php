@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +40,7 @@ class OpenCourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        return $this->render('courseset-manage/file/index.html.twig', array(
+        return $this->render('open-course-manage/material-list.html.twig', array(
             'courseSet' => $course,
             'course' => $course,
             'files' => $files,
@@ -94,52 +95,22 @@ class OpenCourseFileManageController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    public function uploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
-            'course' => $course,
-            'storageSetting' => $this->setting('storage', array()),
-            'targetType' => $targetType,
-            'targetId' => $id,
-        ));
-    }
-
-    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        if ('materiallib' != $targetType) {
-            $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        } else {
-            $course = null;
-        }
-
-        $fileExts = '';
-
-        if ('opencourselesson' == $targetType) {
-            $fileExts = '*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf';
-        }
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course' => $course,
-            'storageSetting' => $this->setting('storage', array()),
-            'targetType' => $targetType,
-            'targetId' => $id,
-            'fileExts' => $fileExts,
-        ));
-    }
-
     public function deleteCourseFilesAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
 
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
+            $deletedMaterials = $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
 
-            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
-                foreach ($formData['ids'] as $key => $fileId) {
+            if (empty($deletedMaterials)) {
+                return $this->createJsonResponse(true);
+            }
+
+            if (!empty($formData['isDeleteFile'])) {
+                $fileIds = array_unique(ArrayToolkit::column($deletedMaterials, 'fileId'));
+                foreach ($fileIds as $fileId) {
                     if ($this->getUploadFileService()->canManageFile($fileId)) {
                         $this->getUploadFileService()->deleteFile($fileId);
                     }
@@ -230,6 +201,9 @@ class OpenCourseFileManageController extends BaseController
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');

@@ -149,7 +149,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        if ($activity['mediaType'] !== 'live') {
+        if ('live' !== $activity['mediaType']) {
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_live'));
         }
         $now = time();
@@ -161,12 +161,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
             $eventName = $request->query->get('eventName');
+            $data = $request->query->get('data');
             if (!empty($eventName)) {
-                $this->getTaskService()->trigger($task['id'], $eventName);
+                $this->getTaskService()->trigger($task['id'], $eventName, $data);
             }
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
-            if ($taskResult['status'] == 'start') {
+            if ('start' == $taskResult['status']) {
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
                 $this->getTaskService()->finishTaskResult($task['id']);
             }
@@ -224,7 +225,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->createJsonResponse(array(
             'url' => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null,
-            'error' => $result['error'],
+            'error' => isset($result['error']) ? $result['error'] : null,
         ));
     }
 

@@ -1,7 +1,0 @@
-{% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) and not app.request.cookies.get('close_set_email_alert') %}
-<div class="alert alert-success set-email-alert hidden-xs">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  {{'user.email_tips'|trans}}
-  <a href="/settings/setup">{{'site.btn.setup'|trans}}</a>
-</div>
-{% endif %}

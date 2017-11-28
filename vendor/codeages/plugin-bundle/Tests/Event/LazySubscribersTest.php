@@ -48,19 +48,19 @@ class LazySubscribersTest extends TestCase
             0 => array(
                 0 => 'test_two_event_subscribers',
                 1 => 'onTest1',
-                2 => 0
+                2 => 0,
             ),
             1 => array(
                 0 => 'test_one_event_subscribers',
                 1 => 'onTest1',
-                2 => 0
+                2 => 0,
             ),
         );
         $test2 = array(
             0 => array(
                 0 => 'test_two_event_subscribers',
                 1 => 'onTest2',
-                2 => 0
+                2 => 0,
             ),
             1 => array(
                 0 => 'test_one_event_subscribers',

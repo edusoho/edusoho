@@ -187,6 +187,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'sync_when_task_update',
                 'sync_when_task_delete',
                 'clone_course_set',
+                'unlock_course',
             ),
 
             self::USER => array(
@@ -256,6 +257,9 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'andit_refund',
                 'refund_cancel',
                 'unbind-back',
+                'course_callback',
+                'classroom_callback',
+                'adjust_price',
             ),
             self::CATEGORY => array(
                 'create',

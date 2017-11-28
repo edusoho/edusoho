@@ -70,6 +70,14 @@ class AnnouncementDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
+    public function testDeleteByTargetIdAndTargetType()
+    {
+        $announcement = $this->getDao()->create($this->getDefaultMockFields());
+        $result = $this->getDao()->deleteByTargetIdAndTargetType(1, 'varchar');
+
+        $this->assertEquals(1, $result);
+    }
+
     protected function getDefaultMockFields()
     {
         return array(

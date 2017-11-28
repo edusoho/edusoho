@@ -36,6 +36,7 @@ class ApiAuth
             ));
 
             $decoded = $this->decodeKeysign($token);
+            $this->onlineSample($request, $token, 0);
         } else {
             $whilelist = isset($this->whilelist[$request->getMethod()]) ? $this->whilelist[$request->getMethod()] : array();
 
@@ -71,7 +72,20 @@ class ApiAuth
             }
 
             $this->setCurrentUser($user);
+            $this->onlineSample($request, $token['token'], $user['id']);
         }
+    }
+
+    protected function onlineSample($request, $token, $userId)
+    {
+        $online = array(
+            'sess_id' => $token,
+            'user_id' => $userId,
+            'ip' => $request->getClientIp(),
+            'user_agent' => $request->headers->get('User-Agent', ''),
+            'source' => 'App',
+        );
+        $this->getOnlineService()->saveOnline($online);
     }
 
     public function decodeKeysign($token)
@@ -138,6 +152,11 @@ class ApiAuth
     private function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    private function getOnlineService()
+    {
+        return ServiceKernel::instance()->createService('Session:OnlineService');
     }
 
     private function getUserService()

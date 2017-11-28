@@ -1,0 +1,142 @@
+{% extends 'order/layout.html.twig' %}
+{% block title %} {{ 'pay_center.pay'|trans }} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/jquery-validation.js' ,'app/js/cashier/index.js']) %}
+
+{% set step = '2' %}
+{% block order_body %}
+  <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
+    {{ 'pay_center.pay.submit_tips'|trans }}
+  </div>
+
+  <div class="order-center-card clearfix">
+    <div class="order-center-card__img">
+      {% if product.cover and product.cover.middle|default('') starts with '/assets' %}
+        <img src="{{ asset(product.cover.middle) }}" alt="{{ order.title }}">
+      {% else %}
+        <img src="{{ filepath(product.cover.middle|default(''), product.targetType ~ '.png') }}" alt="{{ order.title }}">
+      {% endif %}
+    </div>
+    <div class="order-center-card__info">
+      <div class="order-center-product-info">
+        <div class="order-center-product-info__title">
+          {{'order.id'|trans}}
+        </div>
+        <div class="order-center-product-info__content">
+          {{ order.sn }}
+        </div>
+      </div>
+      <div class="order-center-product-info">
+        <div class="order-center-product-info__title">
+          {{'order.name'|trans}}
+        </div>
+        <div class="order-center-product-info__content">
+          {{ order.title }}
+        </div>
+      </div>
+      <div class="order-center-product-info">
+        <div class="order-center-product-info__title">
+          {{'order.price'|trans}}
+        </div>
+        <div class="order-center-product-info__content">
+          <span class="cd-text-danger">{{ order.pay_amount|price_format }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="form-paytype" id="cashier-form" method="post" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}"  data-coin-name="{{ setting('coin.coin_name') }}">
+
+    <input type="hidden" name="orderSn" value="{{ order.sn }}"/>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="isMobile" value="{{ is_mobile_client() }}">
+    <input type="hidden" name="isWechat" value="{{ is_micro_messenger() }}">
+    <input type="hidden" name="type" value="purchase">
+
+    {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
+
+    <div class="order-center-deduction">
+      <span class="order-center-deduction__title">
+        {{ 'pay_center.pay.mode'|trans }}
+      </span>
+      <span class="order-center-deduction__content">
+        {% if payments %}
+          {{ 'pay_center.pay.mode.tips'|trans }}
+        {% else %}
+          {{ 'payment.useless_tips'|trans }}
+        {% endif %}
+      </span>
+    </div>
+
+    {% if payments %}
+      <div class="order-pay-list">
+        {% for type, payment in payments if not (type == 'alipay' and is_micro_messenger()) %}
+          <div class="order-pay-type js-pay-type {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
+            <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"
+              srcset="{{ asset('assets/img/order/' ~ type ~ '.png') }} 1x, {{ asset('assets/img/order/' ~ type ~ '@2x.png') }} 2x"/>
+          </div>
+
+          {% if loop.index == 1 %}
+            <input type="hidden" name="payment" value="{{ type }}">
+          {% endif %}
+          {% else %}
+            {% set payments = false %}
+            <span class="order-center-deduction__content">
+                {{ 'payment.unusable_tips'|trans }}
+            </span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="order-center-line"></div>
+
+    {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+
+    <div class="cd-pv16" id="order-center-price-list">
+      <div class="order-center-price">
+        <div class="order-center-price__title">
+          {{ 'pay_center.pay.price'|trans }}
+        </div>
+        <div class="order-center-price__content">{{ order.pay_amount|price_format }}</div>
+      </div>
+    </div>
+
+    <div class="order-center-line"></div>
+
+    <div class="cd-pv16">
+      {% if currency == 'coin' %}
+        <div class="order-center-price">
+          <div class="order-center-price__title">
+            {{ 'order.confirm.pay_total'|trans }}
+          </div>
+          <div class="order-center-price__content">
+            <span class="js-pay-coin">{{ order.pay_amount|price_format }}</span>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="order-center-price">
+        <div class="order-center-price__title">
+          {% if currency == 'coin' %}
+            <i class="cd-icon cd-icon-help cd-text-xs cd-text-gray-light" data-toggle="tooltip" data-placement="top"
+              title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
+            </i>
+          {% endif %}
+          {{'order.confirm.pay_rmb'|trans}}
+        </div>
+        <div class="order-center-price__content">
+          <span class="cd-text-danger js-pay-price" style="font-size: 16px">{{ order.pay_amount|major_currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    {% if payments %}
+      <div class="text-right">
+        <button class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
+          {{ 'pay_center.pay.confirm_pay_btn'|trans }}
+        </button>
+      </div>
+    {% endif %}
+
+  </form>
+{% endblock %}

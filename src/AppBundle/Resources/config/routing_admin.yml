@@ -533,9 +533,9 @@ admin_courses_data:
     defaults: { _controller: AppBundle:Admin/Course:coursesData }
     permissions: [admin_course_set_data]
 
-admin_course_order_manage:
-    path: /course/order/manage
-    defaults: { _controller: AppBundle:Admin/CourseOrder:manage }
+admin_order_manage:
+    path: /order/manage
+    defaults: { _controller: AppBundle:Admin/Order:manage }
 
 admin_course_search:
     path: /course/search
@@ -562,22 +562,26 @@ admin_live_get_max_online:
     permissions: [admin_live_course_manage]
 
 admin_order_detail:
-    path: /order/{id}/detail_admin
+    path: /order/{id}/detail
     defaults: { _controller: AppBundle:Admin/Order:detail }
 
+admin_order_adjust_price:
+    path: /order/{id}/adjust_price
+    defaults: { _controller: AppBundle:Admin/Order:adjustPrice }
+    permissions: [admin_finance]
+
 admin_order_refunds:
-    path: /order/refunds/{targetType}
+    path: /order/refunds
     defaults: { _controller: AppBundle:Admin/OrderRefund:refunds }
     permissions: [admin_finance]
 
-admin_order_cancel_refund:
-    path: /order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:Admin/OrderRefund:cancelRefund }
-    methods: [POST]
+admin_order_refund_detail:
+    path: /order/refund/{id}/detail
+    defaults: { _controller: AppBundle:Admin/OrderRefund:refundDetail }
     permissions: [admin_finance]
 
 admin_order_audit_refund:
-    path: /order/{id}/audit_refund
+    path: /order/{refundId}/audit_refund
     defaults: { _controller: AppBundle:Admin/OrderRefund:auditRefund }
     permissions: [admin_finance]
 
@@ -682,12 +686,6 @@ admin_setting_live_logo_upload:
     methods: [POST]
     permissions: [admin_setting_live_course]
 
-admin_setting_live_logo_remove:
-    path:  /setting/live/logo/remove
-    defaults: { _controller: AppBundle:Admin/Setting:liveLogoRemove }
-    methods: [POST]
-    permissions: [admin_setting_live_course]
-
 admin_setting_favicon_upload:
     path: /setting/favicon/upload
     defaults: { _controller: AppBundle:Admin/Setting:faviconUpload }
@@ -730,6 +728,10 @@ admin_cloud_video_overview:
 admin_cloud_setting_video:
     path:  /setting/cloud/video
     defaults: { _controller: AppBundle:Admin/EduCloud:videoSetting }
+
+admin_cloud_normal_video_delete:
+    path:  /setting/cloud/normal/video/delete
+    defaults: { _controller: AppBundle:Admin/EduCloud:deleteVideo }
 
 admin_setting_cloud:
     path:  /setting/cloud
@@ -1766,46 +1768,9 @@ admin_coin_records:
     path:     /coin/records
     defaults: { _controller: AppBundle:Admin/Coin:records }
 
-admin_coin_orders:
-    path:     /coin/orders
-    defaults: { _controller: AppBundle:Admin/CoinOrder:orders }
-
-admin_coin_orders_log:
-    path:     /coin/orders/log/{id}
-    defaults: { _controller: AppBundle:Admin/CoinOrder:logs }
-
-# admin_coin_admin:
-#     path:     /coin/admin
-#     defaults: { _controller: AppBundle:Admin/Coin:admin }
-
-# admin_coin_admin_edit:
-#     path:     /coin/admin/edit/{id}
-#     defaults: { _controller: AppBundle:Admin/Coin:edit }
-
-# admin_coin_give:
-#     path:     /coin/give
-#     defaults: { _controller: AppBundle:Admin/Coin:giveCoin }
-
-# admin_coin_give_check_nickname:
-#     path:     /coin/give/check_nickname
-#     defaults: { _controller: AppBundle:Admin/Coin:checkNickname }
-
-admin_bill:
-    path: /coin/bill
-    defaults: { _controller: AppBundle:Admin/Coin:cashBill }
-
-admin_bill_export_csv:
-    path: /coin/bill/export/{cashType}
-    defaults: { _controller: AppBundle:Admin/Coin:exportCsv}
-    permissions: [admin_bill,admin_coin_records]
-
 admin_order_manage_export_csv:
-    path: /order/manage/export/{targetType}
+    path: /order/manage/export
     defaults: { _controller: AppBundle:Admin/Order:exportCsv }
-
-admin_order_manage_export_coin_csv:
-    path: /order/manage/coin
-    defaults: { _controller: AppBundle:Admin/CoinOrder:exportCsv }
 
 # admin_account_center:
 #     path:     /account/center
@@ -2041,6 +2006,10 @@ admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: AppBundle:Admin/EduCloud:liveSetting }
 
+admin_cloud_edulive_logo_crop:
+    path:  /cloud/edulive/{type}/logo/crop
+    defaults: { _controller: AppBundle:Admin/EduCloud:logoCrop }
+
 #sensitive
 admin_keyword:
     path:  /keyword/
@@ -2097,11 +2066,7 @@ admin_classroom_delete:
 admin_classroom_category:
     path: /classroom/category
     defaults: { _controller: AppBundle:Admin/ClassroomCategory:index }
-
-admin_classroom_order:
-    path:     /classroom/order
-    defaults: { _controller: AppBundle:Admin/ClassroomOrderAdmin:manage }
-
+    
 admin_classroom_thread:
     path:     /classroom/thread
     defaults: { _controller: AppBundle:Admin/ClassroomThreadAdmin:index }
@@ -2224,10 +2189,6 @@ admin_marketing:
     path: /marketing
     defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
-
 admin_jobs:
     path: /jobs
     defaults: { _controller: AppBundle:Admin/Job:index }
@@ -2263,6 +2224,18 @@ admin_job_fired_logs:
     path: /job/{id}/fire/{jobFiredId}/logs
     defaults: { _controller: AppBundle:Admin/Job:fireLogs }
 
+admin_xapi_setting:
+    path: /xapi/setting
+    defaults: { _controller: AppBundle:Admin/Xapi:setting }
+
+admin_xapi_statement_list:
+    path: /xapi/statement_list
+    defaults: { _controller: AppBundle:Admin/Xapi:index }
+
+admin_xapi_statement_detail:
+    path: /xapi/statement/{id}/detail
+    defaults: { _controller: AppBundle:Admin/Xapi:detail }
+
 admin_course_task_data_export_prepare:
     path: /course/{courseId}/datas/export/prepare
     defaults: { _controller: AppBundle:Admin/Course:prepareForExportTasksDatas}
@@ -2296,3 +2269,10 @@ admin_queue_failed_log_modal:
     path: /queue/failed_log/{id}
     defaults: { _controller: AppBundle:Admin/Queue:failedJob }
 
+admin_online:
+    path: /online
+    defaults: { _controller: AppBundle:Online:index }
+
+admin_bill:
+    path: /bill/{type}
+    defaults: { _controller: AppBundle:Admin/Bill:bill } 

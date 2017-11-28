@@ -28,11 +28,8 @@ module.exports = {
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/jquery-raty.js'],
     'echarts': ['echarts'],
-    'select2': ['libs/select2.js'],
-    'jquery-confirm': ['libs/jquery-confirm.js'],
-
-    // 即将删除
-    'app-bootstrap': ['app/less/bootstrap.less']
+    'select2': ['libs/select2/index.js'],
+    'handlebars': ['handlebars']
   },
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
@@ -52,7 +49,8 @@ module.exports = {
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
     'jquery-waypoints/waypoints.js',
-    'echarts/dist/echarts.js'
+    'echarts/dist/echarts.js',
+    'handlebars/dist/handlebars.min.js'
   ],  
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -73,6 +71,6 @@ module.exports = {
     }
   ],
   vendorName: 'libs/base,libs/vendor',
-  extryCssName: '{main,header,index,bootstrap}',
+  extryCssName: '{main,header,bootstrap,mobile,admin}',
 }
 

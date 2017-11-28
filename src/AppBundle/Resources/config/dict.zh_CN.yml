@@ -26,6 +26,7 @@ couponType:
 
 couponStatus:
     used: 已使用
+    using: 使用中
     unused: 未使用
     receive: 已领取
 
@@ -40,30 +41,90 @@ fileType:
     
 orderStatus:
     created: 未付款
+    paying: 付款中
     paid: 已付款
     refunding: 退款中
     refunded: 已退款
-    cancelled: 已关闭
+    success: 购买成功
+    fail: 交易失败
+    finished: 交易成功
+    closed: 已关闭
+
+orderItemType:
+    course: 教学计划
+    classroom: 班级
+    vip: 会员
+
+refundItemType:
+    course: 教学计划
+    classroom: 班级
+
+orderDisplayStatus:
+    notPaid: 未付款
+    paid: 已付款
+    closed: 交易关闭
+    finished: 交易成功
+    refunded: 已退款
+
+orderLogStatus:
+    order.created: 未付款
+    order.paying: 付款中
+    order.paid: 已付款
+    order.refunding: 退款中
+    order.refunded: 已退款
+    order.success: 交易成功
+    order.fail: 交易失败
+    order.closed: 已关闭
+    order_refund.auditing: 退款审核中
+    order_refund.cancel: 退款被拒绝
+    order.adjust_price: 改价
 
 refundStatus:
-    created: 已申请
-    success: 退款成功
-    failed: 退款失败
-    cancelled: 已取消
+    auditing: 已申请
+    refunding: 退款中
+    refunded: 退款成功
+    refused: 退款关闭
+    cancel: 已取消
+
+refundDisplayStatus:
+    auditing: 退款待处理
+    refunded: 退款成功
+    refused: 退款关闭
+    cancel: 退款撤销
 
 payment:
-    none: --
     alipay: 支付宝
-    wxpay: 微信支付
-    heepay: 网银支付
-    quickpay: 快捷支付
-    iosiap: 苹果应用内支付
-    outside: 站外支付
+    wechat: 微信
+    heepay: 网银支付（汇付宝）
+    quickpay: 快捷支付（汇付宝）
+    iap: 苹果应用内支付
+    lianlianpay: 连连支付
     coin: 虚拟币
-    llpay: 连连支付
-    marketing: 营销平台
-   
-    
+    none: 其他
+
+paymentSelect:
+    alipay: 支付宝
+    wechat: 微信
+    iap: 苹果应用内支付
+    lianlianpay: 连连支付
+    coin: 虚拟币
+    none: 其他
+
+orderSource:
+    self: 站内支付
+    marketing: 微营销支付
+    outside: 站外支付
+
+orderDeductType:
+    discount: 打折
+    coupon: 优惠券
+    paidCourse: 班级课程抵扣
+    adjust_price: 改价
+
+source:
+    self: 本站
+    outside: 站外
+    marketing: 微营销
 
 moneyRecordType:
     income: 充值
@@ -201,7 +262,6 @@ userType:
     web_email: 网站邮箱注册
     web_mobile: 网站手机注册
     import: 手动导入
-    renren: 人人连接
     qq: QQ登录
     weixin: 微信登录
 
@@ -357,6 +417,19 @@ refund_reason:
     bad_teacher_attitude: 老师服务态度不好
     other: 其他
 
+exit_reason:
+    refund: 退款成功
+    remove: 移除
+    exit: 主动退出
+
+join_reason:
+    vip_join: 会员加入
+    free_join: 免费加入
+    buy_join: 购买加入
+    import_join: 导入用户
+    assistant_join: 助教加入
+    auditor_join: 旁听加入
+    
 exchangeType:
     nickName: 用户名
     sn: 订单号

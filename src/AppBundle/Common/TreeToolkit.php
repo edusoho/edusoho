@@ -5,35 +5,34 @@ namespace AppBundle\Common;
 class TreeToolkit
 {
     /**
-     * [maketree description].
+     * @param array $data 需要排序的数组,本身要支持层级关系
+     * @param $sort
+     * @param int    $parentId
+     * @param string $parentKey
      *
-     * @param array    $data     需要排序的数组,本身要支持层级关系
-     * @param [string] $parentId
-     * @param string   $sort     排序的字段
-     *
-     * @return [array] tree data
+     * @return array
      */
-    public static function makeTree(array $data, $sort, $parentId = 0)
+    public static function makeTree(array $data, $sort, $parentId = 0, $parentKey = 'parentId')
     {
-        $tree = self::makeParentTree($data, $sort, $parentId);
+        $tree = self::makeParentTree($data, $sort, $parentId, $parentKey);
 
         foreach ($tree as $key => $value) {
-            $tree[$key]['children'] = self::maketree($data, $sort, $value['id']);
+            $tree[$key]['children'] = self::makeTree($data, $sort, $value['id'], $parentKey);
         }
 
         return $tree;
     }
 
-    private static function makeParentTree(array $data, $sort, $parentId)
+    private static function makeParentTree(array $data, $sort, $parentId, $parentKey)
     {
         $filtered = array();
 
         if (empty($parentId)) {
-            $parentIds = self::generateParentId($data);
+            $parentIds = self::generateParentId($data, $parentKey);
         }
 
         foreach ($data as $value) {
-            if ($value['parentId'] == $parentId) {
+            if ($value[$parentKey] == $parentId) {
                 $filtered[] = $value;
             }
         }
@@ -45,9 +44,9 @@ class TreeToolkit
         return $filtered;
     }
 
-    private static function generateParentId($data)
+    private static function generateParentId($data, $parentKey)
     {
-        $parentIds = ArrayToolkit::column($data, 'parentId');
+        $parentIds = ArrayToolkit::column($data, $parentKey);
         sort($parentIds);
 
         return array_shift($parentIds);

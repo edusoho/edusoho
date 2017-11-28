@@ -15,7 +15,7 @@ class SystemCrontabInitializerTest extends BaseTestCase
 
             $crontabJobs = SystemCrontabInitializer::findCrontabJobs();
 
-            $this->assertCount(10, $crontabJobs);
+            $this->assertCount(SystemCrontabInitializer::MAX_CRONTAB_NUM, $crontabJobs);
 
             $this->assertGreaterThanOrEqual(1, $this->getSchedulerService()->countJobs(array()));
         } catch (\Exception $e) {

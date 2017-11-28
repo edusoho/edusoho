@@ -7,7 +7,6 @@ bindOperation($favorite, $unfavorite);
 discountCountdown();
 ancelRefund();
 
-
 function ancelRefund() {
 	$(".cancel-refund").on('click', function () {
 		if (!confirm(Translator.trans('course_set.refund_cancel_hint'))) {

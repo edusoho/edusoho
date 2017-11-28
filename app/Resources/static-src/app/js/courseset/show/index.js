@@ -2,10 +2,9 @@ import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import ESInfiniteScroll from 'common/es-infinite-scroll';
+import { buyBtn } from 'app/common/widget/btn-util';
 
-let infiniteScroll = new ESInfiniteScroll();
-infiniteScroll.on('up-infinite.loaded', function () {
-});
+new ESInfiniteScroll();
 
 echo.init();
 chapterAnimate();
@@ -16,6 +15,9 @@ remainTime();
 if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));
 }
+
+buyBtn($('.js-buy-btn'));
+buyBtn($('.js-task-buy-btn'));
 
 function initTaskLearnChart() {
   let colorPrimary = $('.color-primary').css('color');

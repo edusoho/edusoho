@@ -1,0 +1,204 @@
+.order-center {
+  // margin-bottom: 24px;
+  &-card {
+    position: relative;
+    background: #fafafa;
+    .cd-border-radius(4px);
+    height: 108px;
+    @media(max-width: @screen-xs-max) {
+      height: auto;
+    }
+    // margin-bottom: 24px;
+    &__img {
+      float: left;
+      height: 100%;
+      @media(max-width: @screen-xs-max) {
+        height: auto;
+        width: 100%;
+      }
+      img {
+        height: 100%;
+        width: auto;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        @media(max-width: @screen-xs-max) {
+          width: 100%;
+          height: auto;
+          border-bottom-left-radius: 0;
+          border-top-right-radius: 4px;
+        }
+      }
+    }
+    &__info {
+      overflow: hidden;
+      padding: 16px 24px;
+      @media(max-width: @screen-xs-max) {
+        padding: 16px;
+      }
+    }
+    &__title {
+      font-size: 16px;
+      color: @cd-gray-dark;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      line-height: 24px;
+      font-weight: 500;
+      .cd-text-overflow;
+    }
+    &__price {
+      line-height: 1;
+      font-size: 12px;
+      color: @brand-danger;
+      margin-bottom: 8px;
+    }
+  }
+
+  &-product-info {
+    font-size: 12px;
+    height: 22px;
+    margin-bottom: 4px;
+    &__title {
+      width: 54px;
+      text-align: right;
+      display: inline-block;
+      color: @cd-gray;
+      vertical-align: top;
+    }
+    &__content {
+      margin-left: 4px;
+      color: @cd-gray-dark;
+      max-width: 300px;
+      .cd-text-overflow(inline-block);
+      @media(max-width: @screen-xs-max) {
+        max-width: 160px;
+      }
+    }
+    + &-product-info {
+      margin-top: 16px;
+    }
+  }
+  
+  &-deduction {
+    vertical-align: middle;
+    margin-bottom: 24px;
+    margin-top: 24px;
+    line-height: 14px;
+    font-size: 14px;
+    &__title {
+      color: @cd-gray-dark;
+      float: left;
+      width: 88px;
+      font-weight: 500;
+    }
+    &__content {
+      color: @cd-gray;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    &__action {
+      float: right;
+      font-size: 12px;
+    }
+  }
+  &-line {
+    height: 1px;
+    .cd-box-shadow-inset(0 -1px 0 0);
+  }
+  &-coupon {
+    .cd-form-group-action {
+      padding-right: 78px;
+      @media(max-width: @screen-xs-max) {
+        padding-right: 68px;
+      }
+    }
+    .form-control {
+      width: 176px;
+      @media(max-width: @screen-xs-max) {
+        width: 108px;
+      }
+    }
+    .action-button {
+      width: 70px;
+      @media(max-width: @screen-xs-max) {
+        width: 60px;
+      }
+    }
+    .popover {
+      max-width: 300px;
+    }
+    .popover-content {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    &__selected {
+      font-size: 12px;
+      padding-top: 6px;
+      margin-bottom: 32px;
+    }
+  }
+  &-price {
+    text-align: right;
+    font-size: 12px;
+    line-height: 20px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    &__title {
+      color: @cd-gray;
+      display: inline-block;
+    }
+    &__content {
+      width: 128px;
+      color: @cd-gray-dark;
+      display: inline-block;
+    }
+  }
+  &-coin-use {
+    .form-group {
+      width: 176px;
+      display: inline-block;
+      margin-bottom: 24px;
+      @media(max-width: @screen-xs-max) {
+        width: 49%;
+      }
+      + .form-group {
+        margin-left: 40px;
+        @media(max-width: @screen-xs-max) {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+  &-paid-course {
+    vertical-align: middle;
+    margin-bottom: 24px;
+    line-height: 54px;
+    @media(max-width: @screen-xs-max) {
+      line-height: 22px;
+    }
+    &__img {
+      float: left;
+      width: 96px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 8px;
+      }
+    }
+    &__title {
+      float: left;
+      margin-left: 16px;
+      font-size: 12px;
+      color: @cd-gray-dark;
+      width: 60%;
+      @media(max-width: @screen-xs-max) {
+        margin-left: 0;
+      }
+    }
+    &__price {
+      float: right;
+      font-size: 12px;
+      color: @cd-gray;
+      @media(max-width: @screen-xs-max) {
+        float: left;
+      }
+    }
+  }
+}

@@ -65,7 +65,7 @@
         {% if thread.status=='open' %}
           <li><a href="javascript:" class="close-thread" title="{{'admin.operation_group.thread.close_btn'|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_close',{threadId:thread.id})}}"><span class="glyphicon glyphicon-off"></span> {{'admin.operation_group.thread.close_btn'|trans}}</a></li>
         {% else %}
-          <li><a href="javascript:" class="open-thread" title="{{ admin.operation_group.thread.open_btn|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_open',{threadId:thread.id})}}">
+          <li><a href="javascript:" class="open-thread" title="{{ 'admin.operation_group.thread.open_btn'|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_open',{threadId:thread.id})}}">
             <span class="glyphicon glyphicon-ok"></span> {{'admin.operation_group.thread.open_btn'|trans }}</a>
           </li>
           <li><a href="javascript:" class="delete-thread" title="{{'admin.operation_group.thread.delete_title'|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_delete',{threadId:thread.id})}}">

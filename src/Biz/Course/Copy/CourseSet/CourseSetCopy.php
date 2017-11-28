@@ -28,8 +28,6 @@ class CourseSetCopy extends AbstractCopy
             'recommended',
             'recommendedSeq',
             'recommendedTime',
-            'discountId',
-            'discount',
             'orgId',
             'orgCode',
             'teacherIds',

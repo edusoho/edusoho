@@ -1,0 +1,65 @@
+{% extends 'order/layout.html.twig' %}
+
+{% block title %} {{'order.confirm'|trans}} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/order/show/index.js']) %}
+
+{% block order_body %}
+  {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+
+  <div class="order-center">
+    <form id="order-create-form" method="post" action="{{path('order_create')}}" 
+    data-price-calculate="{{ path('order_calculate_price') }}"
+    data-price-type="{{ currency }}"
+    data-coin-rate="{{ setting('coin.cash_rate') }}"
+    data-coin-name="{{ setting('coin.coin_name') }}">
+      {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
+      {% include product.showTemplate %}
+
+      {{ slot('order.show.deducts', {'product': product}) }}
+      {% include 'order/show/coupon-item.html.twig' %}
+
+      <div class="cd-pv16" id="order-center-price-list">
+        <div class="order-center-price">
+          <div class="order-center-price__title">{{'order.confirm.price'|trans}}</div>
+          <div class="order-center-price__content">{{ product.originPrice|price_format }}</div>
+        </div>
+        {% if product.availableDeducts.paidCourses|default(null) %}
+          {% set paidCourses = product.availableDeducts.paidCourses %}
+          {% set totolPaidPrice = 0 %}
+          {% for paidCourse in paidCourses %}
+            {% set totolPaidPrice = totolPaidPrice + paidCourse.paidPrice %}
+          {% endfor %}
+          <div class="order-center-price">
+            <div class="order-center-price__title">
+              {{ 'order.confirm.bought_course_deduction'|trans }}
+            </div>
+            <div class="order-center-price__content">
+              -{{ totolPaidPrice|price_format }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <div class="order-center-line"></div>
+
+      <div class="cd-pv16">
+        <div class="order-center-price">
+          <div class="order-center-price__title">{{'order.confirm.pay_rmb'|trans}}</div>
+          <div class="order-center-price__content">
+            <span class="cd-text-danger" id="realpay-price" style="font-size: 16px">
+              {{ product.originPrice|price_format }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button class="btn cd-btn cd-btn-primary cd-btn-lg" id="order-create-btn" type="submit" data-loading-text="{{ 'order.confirm.submit_btn_loading'|trans }}">
+          {{'order.confirm.submit_btn'|trans}}
+        </button>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+{% endblock %}

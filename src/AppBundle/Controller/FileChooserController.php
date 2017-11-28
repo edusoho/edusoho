@@ -134,12 +134,15 @@ class FileChooserController extends BaseController
 
     protected function findCourseMaterials($request, $courseId)
     {
-        $query = $request->query->all();
-        $course = $this->getCourseService()->getCourse($courseId);
-        $conditions = array(
-            'type' => empty($query['courseType']) ? null : $query['courseType'],
-            'courseSetId' => $course['courseSetId'],
-        );
+        $courseType = $request->query->get('courseType', 'course');
+
+        $conditions = array('type' => $courseType);
+        if ($courseType == 'openCourse') {
+            $conditions['courseId'] = $courseId;
+        } else {
+            $course = $this->getCourseService()->getCourse($courseId);
+            $conditions['courseSetId'] = $course['courseSetId'];
+        }
 
         //FIXME 同一个courseId下文件可能存在重复，所以需考虑去重，但没法直接根据groupbyFileId去重（sql_mode）
         $courseMaterials = $this->getMaterialService()->searchMaterials(

@@ -11,12 +11,7 @@
     {% for m in permissions if not m.visable is defined or eval_expression(m.visable) %}
       {# {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %} #}
       {% if m.code != 'admin_homepage' %}
-        <li
-        {% if menu and  m.code == rootMenu.code|default(null) %}class="active"{% endif %}
-        {% if m.name == 'admin.marketing.menu' %}
-              class="marketing-li"
-              {% endif %}>
-
+        <li {% if menu and  m.code == rootMenu.code|default(null) %}class="active"{% endif %}>
           {% set tabMenu = first_child_permission(first_child_permission(m)) %}
           {% if tabMenu.mode|default('') == 'capsules' %}
             {% set tabMenu = first_child_permission(tabMenu) %}

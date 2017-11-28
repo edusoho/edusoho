@@ -456,7 +456,7 @@ class UserController extends BaseController
 
         $goto = $this->getTargetPath($request);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
             $authSetting = $this->setting('auth', array());
 
@@ -493,7 +493,29 @@ class UserController extends BaseController
 
         $this->saveUserInfo($request, $user);
 
-        return $this->redirect($request->get('targetUrl'));
+        /**
+         * 这里要重构,这段代码是多余了，为了兼容点击任务预览跳转支付页面
+         * TODO
+         */
+        $courseId = $request->request->get('courseId', 0);
+        if ($courseId) {
+            $this->getCourseService()->tryFreeJoin($courseId);
+            $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
+            if ($member) {
+                return $this->createJsonResponse(array(
+                    'url' => $this->generateUrl('my_course_show', array('id' => $courseId)),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'url' => $this->generateUrl('order_show', array('targetId' => $courseId, 'targetType' => 'course')),
+                ));
+            }
+        }
+        /* end todo */
+
+        return $this->createJsonResponse(array(
+            'msg' => 'success',
+        ));
     }
 
     protected function saveUserInfo($request, $user)
@@ -519,10 +541,6 @@ class UserController extends BaseController
 
         if (isset($formData['email']) && !empty($formData['email'])) {
             $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-
-            if (!$user['setup']) {
-                $this->getUserService()->setupAccount($user['id']);
-            }
         }
 
         $authSetting = $this->setting('auth', array());

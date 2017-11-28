@@ -5,6 +5,7 @@ namespace Biz\Course\Copy;
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Service\CourseSetService;
 use Biz\Question\Dao\QuestionDao;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
@@ -25,20 +26,32 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'], null);
 
+        $defaultCourseId = 0;
+        $newCourses = array();
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
             $newCourse['courseSetId'] = $newCourseSet['id'];
             $newCourse['creator'] = $user['id'];
             $newCourse['parentId'] = $originCourse['id'];
+            $newCourse['price'] = $originCourse['originPrice'];
             $newCourse = $this->getCourseDao()->create($newCourse);
+
+            $newCourses[] = $newCourse;
             if ($newCourse['courseType'] == 'default') {
-                $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
+                $defaultCourseId = $newCourse['id'];
             }
 
             $options['newCourse'] = $newCourse;
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
         }
+
+        // 原课程defaultCourse被删除时，复制后defaultCourseId为课程下第一个计划的ID
+        $defaultCourseId = empty($defaultCourseId) ? $newCourses[0]['id'] : $defaultCourseId;
+        $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $defaultCourseId));
+
+        $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($newCourseSet['id']);
+
         $this->updateQuestionsCourseId($newCourseSet['id']);
         $this->updateQuestionsLessonId($newCourseSet['id']);
         $this->updateExerciseRange($newCourseSet['id']);
@@ -176,7 +189,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             'goals',
             'audiences',
             'maxStudentNum',
-            'isFree',
+            //'isFree',
             'price',
             // 'vipLevelId',
             'buyable',
@@ -263,5 +276,13 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getTestpaperDao()
     {
         return $this->biz->dao('Testpaper:TestpaperDao');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->biz->dao('Course:CourseSetService');
     }
 }

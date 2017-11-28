@@ -22,10 +22,7 @@ class Video extends Activity
             throw $this->createInvalidArgumentException('参数不正确');
         }
 
-        $videoActivity = json_decode($fields['media'], true);
-        $videoActivity['mediaId'] = empty($videoActivity['id']) ? 0 : $videoActivity['id'];
-        $videoActivity['mediaSource'] = empty($videoActivity['source']) ? '' : $videoActivity['source'];
-        $videoActivity = ArrayToolkit::parts($videoActivity, array('mediaId', 'mediaUrl', 'mediaSource'));
+        $videoActivity = $this->handleFields($fields);
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
 
         return $videoActivity;
@@ -60,9 +57,14 @@ class Video extends Activity
 
     public function update($activityId, &$fields, $activity)
     {
-        $video = $fields['ext'];
-        if ($video['finishType'] == 'time') {
-            if (empty($video['finishDetail'])) {
+        if (empty($fields['media'])) {
+            throw $this->createInvalidArgumentException('参数不正确');
+        }
+
+        $video = $this->handleFields($fields);
+
+        if ($fields['finishType'] == 'time') {
+            if (empty($fields['finishDetail'])) {
                 throw $this->createAccessDeniedException('finish time can not be emtpy');
             }
         }
@@ -145,6 +147,20 @@ class Video extends Activity
     public function materialSupported()
     {
         return true;
+    }
+
+    private function handleFields($fields)
+    {
+        $result = json_decode($fields['media'], true);
+        $result['mediaId'] = empty($result['id']) ? 0 : $result['id'];
+        $result['mediaSource'] = empty($result['source']) ? '' : $result['source'];
+        $result['mediaUri'] = empty($result['uri']) ? '' : $result['uri'];
+
+        $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
+        $result = array_merge($result, $finishInfo);
+        $result = ArrayToolkit::parts($result, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
+
+        return $result;
     }
 
     /**

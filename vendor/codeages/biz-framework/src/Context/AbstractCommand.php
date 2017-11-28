@@ -36,4 +36,25 @@ class AbstractCommand extends Command
 
         return true;
     }
+
+    protected function existMigration($directory, $name)
+    {
+        $finder = new Finder();
+        $finder->files()->in($directory);
+
+        foreach ($finder as $file) {
+            $path = $file->getRelativePathname();
+            if (substr(substr($path, 19), 0, -4) == $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function generateMigration($directory, $migrateName, $stubFullName)
+    {
+        $filepath = $this->generateMigrationPath($directory, $migrateName);
+        file_put_contents($filepath, file_get_contents($stubFullName));
+    }
 }

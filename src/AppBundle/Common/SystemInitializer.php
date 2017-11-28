@@ -10,14 +10,15 @@ use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Dictionary\Service\DictionaryService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
+use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
+use Biz\User\CurrentUser;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\System\Service\SettingService;
-use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
 
 class SystemInitializer
 {
@@ -42,6 +43,7 @@ class SystemInitializer
         $this->_initOrg();
         $this->_initRole();
         $this->_initDictionary();
+        $this->_initUserBalance();
 
         $this->_initDefaultSetting();
         $this->_initMagicSetting();
@@ -208,7 +210,8 @@ class SystemInitializer
             'bank_gateway' => 'none',
             'alipay_enabled' => 0,
             'alipay_key' => '',
-            'alipay_secret' => '',
+            'alipay_accessKey' => '',
+            'alipay_secretKey' => '',
         );
 
         $this->getSettingService()->set('payment', $default);
@@ -683,11 +686,27 @@ EOD;
     }
 
     /**
+     * 创建系统用户
+     */
+    private function _initUserBalance()
+    {
+        $this->getAccountService()->createUserBalance(array('user_id' => 0));
+    }
+
+    /**
      * @return TagService
      */
     protected function getTagService()
     {
         return ServiceKernel::instance()->getBiz()->service('Taxonomy:TagService');
+    }
+
+    /**
+     * @return AccountService
+     */
+    protected function getAccountService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('Pay:AccountService');
     }
 
     /**

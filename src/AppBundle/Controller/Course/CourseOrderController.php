@@ -79,6 +79,7 @@ class CourseOrderController extends BaseController
             'course/order/buy-modal.html.twig',
             array(
                 'course' => $course,
+                'courseId' => $course['id'],
                 'courseSet' => $courseSet,
                 'user' => $userInfo,
                 'userFields' => $userFields,

@@ -4,15 +4,15 @@
   {% if member.locked|default("0") == "1" %}
   <div class="alert alert-warning">
     {{ 'my.course.refund_tips'|trans }}
-    <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:course.id, targetType:"course"}) }}">{{ 'my.course.cancle_refund_btn'|trans }}</button>
+    <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {orderId: member.orderId}) }}">{{ 'my.course.cancle_refund_btn'|trans }}</button>
   </div>
   {% endif %}
 {% endblock %}
 
 {% block course_member_exit %}
-	{% if member.id|default(false) and member.role != 'teacher' and not course.parentId|default(0) %}
+	{% if member and not member.locked and member.role != 'teacher' and course.parentId == 0 %}
 		<li>
-		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('order_refund', {id: course.id, targetType:'course' }) }}" ><i class="es-icon es-icon-exit"></i>
+		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('course_exit_modal', {action:path('course_exit', {id:course.id})}) }}" ><i class="es-icon es-icon-exit"></i>
 		  </a>
 		</li>
 	{% endif %}

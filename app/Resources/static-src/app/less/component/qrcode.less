@@ -1,10 +1,10 @@
 .es-qrcode {
   position: relative;
   text-align: center;
-  @media(max-width:@screen-xs-max) {
+  @media(max-width: @screen-xs-max) {
     display: none;
   }
-  >i {
+  > i {
     font-size: 24px;
     color: @gray;
   }
@@ -15,7 +15,6 @@
     background: #fff;
     color: @gray-darker;
     .es-box-shadow;
-    display: none \9;
     .opacity(0);
     .es-transform(0,0);
     .es-transition;
@@ -58,7 +57,6 @@
   }
   &.open {
     .qrcode-popover {
-      display: block \9;
       .es-transform(1,1);
       .opacity(1);
     }

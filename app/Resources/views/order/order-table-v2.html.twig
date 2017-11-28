@@ -4,11 +4,10 @@
 
 <thead>
   <tr>
-    <th width="25%">{{'order.name'|trans}}</th>
+    <th width="25%">{{'order.product_name'|trans}}</th>
     <th>{{'order.id'|trans}}</th>
-    <th class="text-right">{{'order.real_pay'|trans}}</th>
-    <th>{{'order.payment_pattern'|trans}}</th>
-    <th>{{'order.createdTime'|trans}}</th>
+    <th class="text-right">{{'order.price'|trans}}</th>
+    <th>{{'order.created_time'|trans}}</th>
     <th>{{'order.status'|trans}}</th>
     <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
   </tr>
@@ -18,46 +17,64 @@
   {% for order in orders %}
     <tr id="order-table-{{order.id}}">
       <td>
-        {% if order.targetType == 'course' %}
-          <a class="cd-link-gray-dark" href="{{ path('course_show', {id:order.targetId}) }}" target="_blank">{{order.title}}</a>
-        {% elseif order.targetType == 'vip' %}
-          <a class="cd-link-gray-dark" href="{{ path('vip', {id:order.targetId}) }}" target="_blank">{{order.title}}</a>
-        {% elseif order.targetType == 'classroom' %}
-          <a class="cd-link-gray-dark" href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank">{{order.title}}</a>
+        {% if order.item.target_type == 'course' %}
+          <a class="cd-link-gray-dark" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+        {% elseif order.item.target_type == 'vip' %}
+          <a class="cd-link-gray-dark" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+        {% elseif order.item.target_type == 'classroom' %}
+          <a class="cd-link-gray-dark" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
         {% else %}
           {{order.title}}
         {% endif %}
       </td>
       <td>{{order.sn}}</td>
-      <td class="text-right">{{order.amount}}</td>
+      <td class="text-right">{{ order.pay_amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
+      <td>{{ order.created_time|date('Y-n-d') }}</td>
       <td>
-        {{ dict_text('payment', order.payment)|default('--') }}
+        {{ display_order_status(order.status, 0) }}
+
       </td>
-      <td>{{ order.createdTime|date('Y-n-d H:i:s') }}</td>
-      <td>{{ dict_macro.orderStatusV2(order.status) }}</td>
       <td>
         <div class="table-action">
-          <div class="table-action__item">
-            <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-          </div>
-          {% if order.status == 'refunding' or  order.status == 'created' %}
+          {% if order.status in ['created', 'paying'] %}
+            <div class="table-action__item">
+              <a href="{{path('cashier_show', {sn:order.sn})}}" class="cd-link-primary">{{'user.orders.pay'|trans}}</a>
+            </div>
             <div class="table-action__item dropdown">
               <a href="javascript:;" class="cd-link-primary" data-toggle="dropdown">
                 更多<i class="cd-text-xs cd-icon cd-icon-arrow-down"></i>
               </a>
-
               <ul class="dropdown-menu cd-dropdown-menu">
-                {% if order.status == 'refunding' %}
-                  <li><a href="javascript:;" class="js-cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.orders.cancel_refund'|trans}}</a></li>
-                {% endif %}
-                {% if order.status == 'created' %}
-                  <li>
-                    <a href="{{path('pay_center_show', {sn:order.sn, targetType:order.targetType})}}">{{'user.orders.pay'|trans}}</a>
-                  </li>
-                  <li><a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a></li>
-                {% endif %}
+                <li>
+                  <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'order.content_title'|trans}}</a>
+                </li>
+                <li>
+                  <a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a>
+                </li>
               </ul>
             </div>
+          {% endif %}
+          {% if order.status in ['paid', 'refunding', 'refunded', 'closed', 'success', 'finished'] %}
+            <div class="table-action__item">
+              <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'order.content_title'|trans}}</a>
+            </div>
+
+            {% if order.pay_amount != 0 and order.status in ['success'] and order.refund.status|default('') in ['cancel', ''] %}
+              {% if order.refund_deadline != 0 and order.item.target_type in ['course', 'classroom'] %}
+                {% if order.refund_deadline > date().timestamp %}
+                  <br>
+                  <div class="table-action__item">
+                    <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'order.refund.apply_for_btn'|trans}}</a>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            {% if order.status in ['refunded', 'refunding', 'success', 'closed', 'finished'] and order.refund.status|default('') in ['auditing', 'refunding', 'refunded', 'refused'] %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'order.show_refund_detail'|trans}}</a>
+              </div>
+            {% endif %}
           {% endif %}
         </div>
       </td>

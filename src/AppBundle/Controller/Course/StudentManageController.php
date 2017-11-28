@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\SimpleValidator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
@@ -13,13 +12,14 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -39,7 +39,7 @@ class StudentManageController extends BaseController
         );
 
         if (!empty($keyword)) {
-            $conditions['userIds'] = $this->getUserIds($keyword);
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($keyword);
         }
 
         $paginator = new Paginator(
@@ -80,49 +80,17 @@ class StudentManageController extends BaseController
         return array();
     }
 
-    public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)
+    public function studentRecordsAction(Request $request, $courseSetId, $courseId, $type)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $fields = $request->query->all();
-        $condition = array();
-
-        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $condition['userIds'] = $this->getUserIds($fields['keyword']);
-        }
-
-        $condition['targetId'] = $courseId;
-        $condition['targetType'] = 'course';
-        $condition['status'] = 'success';
-
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->countRefunds($condition),
-            20
-        );
-
-        $refunds = $this->getOrderService()->searchRefunds(
-            $condition,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($refunds as $key => $refund) {
-            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-
-            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
-        }
-
         return $this->render(
-            'course-manage/student/quit-records.html.twig',
+            'course-manage/student/records.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'refunds' => $refunds,
-                'paginator' => $paginator,
-                'role' => 'student',
+                'type' => $type,
             )
         );
     }
@@ -137,8 +105,10 @@ class StudentManageController extends BaseController
                 $data['isAdminAdded'] = true;
             }
 
+            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
+
             $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
@@ -162,24 +132,7 @@ class StudentManageController extends BaseController
     public function removeCourseStudentAction($courseSetId, $courseId, $userId)
     {
         $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $user = $this->getCurrentUser();
 
-        $condition = array(
-            'targetType' => 'course',
-            'targetId' => $courseId,
-            'userId' => $userId,
-            'status' => 'paid',
-        );
-        $orders = $this->getOrderService()->searchOrders($condition, array('createdTime' => 'DESC'), 0, 1);
-        if (!empty($orders)) {
-            $order = array_shift($orders);
-            $reason = array(
-                'type' => 'other',
-                'note' => '"'.$user['nickname'].'"'.' 手动移除',
-                'operator' => $user['id'],
-            );
-            $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
-        }
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
 
         return $this->createJsonResponse(array('success' => true));
@@ -381,17 +334,7 @@ class StudentManageController extends BaseController
             'secret' => $this->getServiceKernel()->trans('秘密'),
         );
 
-        $userinfoFields = array();
-
         $course = $this->getCourseService()->getCourse($id);
-        $courseSetting = $this->setting('course', array());
-
-        if (isset($courseSetting['userinfoFields'])) {
-            $userinfoFields = array_diff(
-                $courseSetting['userinfoFields'],
-                array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin')
-            );
-        }
 
         $condition = array(
             'courseId' => $course['id'],
@@ -416,14 +359,6 @@ class StudentManageController extends BaseController
 
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
-        }
-
-        $userinfoFields = array_flip($userinfoFields);
-
-        $fields = array_intersect_key($fields, $userinfoFields);
-
-        if (empty($courseSetting['buy_fill_userinfo'])) {
-            $fields = array();
         }
 
         $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
@@ -643,36 +578,6 @@ class StudentManageController extends BaseController
         return false;
     }
 
-    private function getUserIds($keyword)
-    {
-        if (SimpleValidator::email($keyword)) {
-            $user = $this->getUserService()->getUserByEmail($keyword);
-
-            return $user ? array($user['id']) : array(-1);
-        }
-        if (SimpleValidator::mobile($keyword)) {
-            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers = $this->getUserService()->searchUserProfiles(
-                array('tel' => $keyword),
-                array('id' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-            $mobileNameUser = $this->getUserService()->getUserByNickname($keyword);
-            $userIds = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-            $userIds = array_unique($userIds);
-
-            return $userIds ? $userIds : array(-1);
-        }
-        $user = $this->getUserService()->getUserByNickname($keyword);
-
-        return $user ? array($user['id']) : array(-1);
-    }
-
     /**
      * @return OrderService
      */
@@ -775,6 +680,14 @@ class StudentManageController extends BaseController
     protected function getLearningDataAnalysisService()
     {
         return $this->createService('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    protected function getMemberOperationService()
+    {
+        return $this->createService('MemberOperation:MemberOperationService');
     }
 
     protected function getServiceKernel()

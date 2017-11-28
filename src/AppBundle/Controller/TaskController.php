@@ -393,9 +393,14 @@ class TaskController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
         $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
 
+        $message = "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。";
+        if ($exception->getMessage() == 'the Task is Locked') {
+            $message = '先解锁上一任务才能继续学习';
+        }
+
         return $this->createMessageResponse(
             'info',
-            "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。",
+            $message,
             '提示消息',
             3,
             $this->generateUrl(

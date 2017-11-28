@@ -126,13 +126,6 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
         return $this->db()->fetchAll($sql, array($classroomId, $role));
     }
 
-    public function findMemberIdsByClassroomId($classroomId)
-    {
-        $sql = "SELECT userId FROM {$this->table} WHERE classroomId = ?";
-
-        return $this->db()->executeQuery($sql, array($classroomId))->fetchAll(\PDO::FETCH_COLUMN);
-    }
-
     public function findByUserId($userId)
     {
         return $this->findByFields(array(
@@ -162,6 +155,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'createdTime >= :createdTime_GE',
                 'createdTime < :startTimeLessThan',
                 'updatedTime >= :updatedTime_GE',
+                'userId NOT IN ( :excludeUserIds )',
             ),
         );
     }

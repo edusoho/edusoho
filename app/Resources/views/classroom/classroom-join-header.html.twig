@@ -15,7 +15,7 @@
     {% if member.locked|default("0") == "1" %}
       <div class="alert alert-warning">
         {{ 'classroom.refund_tips'|trans }}
-        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">
+        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {orderId:member.orderId}) }}">
           {{ 'classroom.cancle_refund_btn'|trans }}
         </button>
       </div>
@@ -29,8 +29,7 @@
           {% if classroom.price > 0 %}
             {{ 'classroom.not_vip_member_and_become_vip_tips'|trans({'%vipUrl%': path('vip')})|raw }}
           {% else %}
-            <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}"
-              data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
+            <a class="alert-link js-exit" href="javascript:;" data-url="{{ path('classroom_exit', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
           {% endif %}！
         {% elseif vipChecked == 'member_expired' %}
           {{ 'classroom.vip_member_expired_tips'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans), '%vipRenewUrl%': path('vip_renew')})|raw }}
@@ -38,9 +37,7 @@
           {{ 'classroom.vip_member_level_low_tips'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans), '%vipUpgrade%': path('vip_upgrade')})|raw }}
         {% else %}
           {{ 'classroom.vip_checked_fail_tips'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans)})|raw }}
-          <a class="alert-link js-exit" href="javascript:;"
-          data-url="{{ path('classroom_exit', { id:classroom.id }) }}"
-          data-go="{{ path('classroom_show', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
+          <a class="alert-link js-exit" href="javascript:" data-url="{{ path('classroom_exit', { id:classroom.id }) }}">{{ 'classroom.exit'|trans }}</a>
         {% endif %}
       </div>
     {% endif %}
@@ -177,30 +174,13 @@
             <i class="es-icon es-icon-setting"></i>
           </a>
         {% endif %}
-        {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) and not member.locked %}
-          {% if 'headTeacher' not in member.role %}
-            <a type="button"
-              {% if  'student' in member.role and member.orderId > 0 %}
-                class="btn btn-default setting hidden-xs hidden-sm"
-                href="#modal"
-                data-toggle="modal"
-                data-url="{{ path('order_refund', {id:classroom.id, targetType:'classroom'}) }}"
-              {% else %}
-                class="btn btn-default setting hidden-xs hidden-sm"
-                href="{{ path('classroom_exit', {id:classroom.id}) }}" id="quit"
-              {% endif %}
-            >
-              <i class="es-icon es-icon-exit"></i>
-            </a>
-          {% endif %}
+        {% if 'student' in member.role or 'auditor' in member.role %}
+          <a type="button" class="btn btn-default setting hidden-xs hidden-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_exit_modal', {action:path('classroom_exit', {id:classroom.id})}) }}">
+            <i class="es-icon es-icon-exit"></i>
+          </a>
         {% endif %}
+
       </div>
     </div>
   </div>
 </section>
-
-
-{# {% if is_plugin_installed('ClassroomPlan') %}
-  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
-{% endif %}
- #}

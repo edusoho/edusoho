@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'pay_center.pay.weixin_pay'|trans }} - {{ parent() }}{% endblock %}
+{% block esBar %}{% endblock %}
+{% do script(['app/js/pay/wxpay-h5/index.js'])%}
+
+{% block content %}
+  <div class="panel panel-default panel-wxpay ">
+    <div class="panel-heading">
+      {{'pay_center.pay.weixin_pay.content_title'|trans}}
+    </div>
+    <div class="panel-body">
+      <p>{{'pay_center.order.id'|trans({'%sn%':trade.trade_sn})}}</p>
+      <p>{{'pay_center.order.detail'|trans({'%title%':trade.title})}}</p>
+      <p>{{'pay_center.order.price'|trans}}<span class="text-danger text-lg">{{ (trade.cash_amount)|to_cash(2) }}</span></p>
+      <div class="pull-right mtm">
+        <button class="btn btn-primary js-wxpay">{{'pay_center.pay.weixin_pay.pay_btn'|trans}}</button>
+      </div>
+      <div id="jsApiParameters" data-value="{{ trade.platform_created_result|json_encode }}"
+           data-goto="{{ path('cashier_pay_return', {payment:'wechat', tradeSn: trade.trade_sn}) }}">
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

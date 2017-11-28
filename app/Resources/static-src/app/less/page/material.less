@@ -1,3 +1,4 @@
+// 待整理
 .materiallib-stats .stats-summary {
     padding: 15px;
 }
@@ -450,7 +451,7 @@
   height: 150px;
   .detail-img {
     height: 100%;
-    width: 267px;
+    width: auto;
     margin-right: 20px;
     overflow: hidden;
     text-align: center;
@@ -464,22 +465,34 @@
   .btn {
     margin-top: 58px;
   }
-  @media(max-width:@screen-md-max) {
-    height: auto;
+  &.video-detail-img {
+    height: 250px;
+    @media(max-width: @screen-xs-max) {
+      height: 200px;
+    }
+    .detail-img {
+      width: 444px;
+    }
+    .btn {
+      margin-top: 100px;
+    }
   }
-  @media(max-width:@screen-xs-min) {
+  
+  @media(max-width: @screen-xs-max) {
     height: auto;
     .detail-img {
       float: none;
+      height: 150px !important;
+      width: 267px !important;
     }
     .btn {
-      margin-top: 10px;
+      margin-top: 10px !important;
+      display: block;
     }
   }
 }
 
 .material-detail-save {
-  text-align: center;
   padding-top: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #dddddd;

@@ -5,7 +5,7 @@ export const initEditor = ($item, validator) => {
     filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
     filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
     allowedContent: true,
-    height: 280,
+    height: 300,
   });
   
   editor.on('change', () => {

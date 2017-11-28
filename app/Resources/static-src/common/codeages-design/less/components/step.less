@@ -1,103 +1,152 @@
-.cd-step {
+.cd-steps {
   margin-bottom: 0;
-  padding: 24px 0;
-  li {
-    float: left;
-    width: 25%;
-    @media(max-width: @screen-xs-max) {
-      width: 32%;
-    }
-    list-style-type: none;
-    color: @cd-bg-dark;
-    font-size: 14px;
-    text-align: center;
-    .number {
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-      display: inline-block;
-      margin-right: 8px;
-      font-size: 12px;
-      border: 1px solid @cd-bg-dark;
-      background-color: #fff;
-      color: @cd-gray-light;
-      .border-radius(50%);
-      &.pass-icon {
-        color: #fff !important;
-        background-color: @brand-primary;
+  padding-left: 0;
+  list-style: none;
+  &.cd-steps-4 {
+    .cd-steps-item {
+      &:not(:last-child) {
+        margin-right: -39px;
+        width: 33.3%;
+      }
+      .cd-steps-tail {
+        padding-right: 39px;
       }
     }
-    .info {
-      color: @cd-gray-light;
-      font-size: 14px;
-      letter-spacing: 0;
-      line-height: 1;
+  }
+
+  &.cd-steps-3 {
+    .cd-steps-item {
+      &:not(:last-child) {
+        margin-right: -75px;
+        width: 50%;
+      }
+      .cd-steps-tail {
+        padding-right: 75px;
+      }
     }
+  }
+
+  &.cd-steps-2 {
+    .cd-steps-item {
+      &:not(:last-child) {
+        margin-right: -50px;
+        width: 90%;
+        @media(max-width: @screen-xs-max) {
+          width: 70%;
+        }
+      }
+      .cd-steps-tail {
+        padding-right: 50px;
+      }
+    }
+  }
+
+  .cd-steps-item {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+
+    &:first-child {
+      .cd-steps-step {
+        .step-wrap {
+          .step-number {
+            @media(min-width: @screen-sm-min) {
+              margin-left: 36px;
+            }
+          }
+        }
+      }
+    }
+
+    &:last-child {
+      .cd-steps-tail {
+        padding-right: 0;
+        display: none;
+      }
+      .cd-steps-step {
+        .step-wrap {
+          & + .step-wrap {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+
+    .cd-steps-tail {
+      position: absolute;
+      left: 0;
+      top: 11px;
+      padding: 0 10px;
+      width: 100%;
+      i {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        width: 100%;
+        height: 2px;
+        .cd-border-radius(2px);
+        background: @cd-bg-dark;
+      }
+    }
+
+    .cd-steps-step {
+      .step-wrap {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        background-color: #fff;
+        & + .step-wrap {
+          margin-left: -4px;
+          padding-right: 16px;
+          font-size: 14px;
+          line-height: 24px;
+        }
+      }
+
+      .step-number {
+        margin-left: 14px;
+        margin-right: 8px;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        line-height: 24px;
+        text-align: center;
+        border: 1px solid @cd-bg-dark;
+        background-color: #fff;
+        color: @cd-gray-light;
+        .cd-border-radius(50%);
+      }
+
+      .step-info {
+        font-size: 14px;
+        line-height: 1;
+        color: @cd-gray-light;
+      }
+    }
+
     &.done,
     &.doing {
-      border-color: @brand-primary;
-      .number {
+      .step-number {
         color: @brand-primary;
         border-color: @brand-primary;
       }
-      .info {
+      .step-icon {
+        background-color: @brand-primary;
+        color: #fff !important;
+      }
+      .step-info {
         color: @cd-gray-dark;
       }
     }
+
     &.doing {
-      color: @cd-bg-dark;
-    }
-  }
-  .cd-step__one {
-    @media(max-width: @screen-xs-max) {
-      width: 35%;
-    }
-  }
-  .cd-step__three {
-    float: right;
-    @media(min-width: @screen-xs-max) {
-      padding-left: 28px;
-    }
-    .number {
-      @media(min-width: @screen-xs-max) {
-        margin-left: 16px;
+      @media(max-width: @screen-xs-max) {
+        width: 100% !important;
+        text-align: center;
+        .cd-steps-tail {
+          display: none;
+        }
       }
-    }
-  }
-  .cd-step__two {
-    @media(min-width: @screen-xs-max) {
-      width: 50%;
-    }
-    width: 32%;
-  }
-}
-
-
-.cd-step__divided {
-  @media(min-width: @screen-xs-max) {
-    &:after {
-      content: "";
-      height: 2px;
-      position: absolute;
-      top: 50%;
-      right: 18%;
-      width: 24%;
-      background-color: @cd-bg-dark;
-    }
-    &.done:after {
-      background-color: @brand-primary;
-    }
-    &:before {
-      content: "";
-      height: 2px;
-      position: absolute;
-      top: 50%;
-      left: 22%;
-      width: 20%;
-      background-color: @cd-bg-dark;
-    }
-    &.doing:before {
-      background-color: @brand-primary;
     }
   }
 }

@@ -15,11 +15,11 @@
         <div class="card-icon"><i class="cd-icon cd-icon-money"></i></div>
         <div class="card-body">
           <p>{{'finance.balance'|trans}}</p>
-          <p><span class="card-money">{{account.cash|default(0)}}</span></p>
+          <p><span class="card-money">{{ balance.amount|default(0)|to_coin(0) }}</span></p>
         </div>
         {% if setting('coin.coin_enabled') %}
           <div class="card-action">
-            {{ slot('my.coin.card_action') }}
+            {{ slot('my.coin.card_action', {}) }}
           </div>
         {% endif %}
       </div>
@@ -28,11 +28,11 @@
       <div class="cd-data-card">
         <div class="card-item">
           <div class="card-item-label">{{'finance.total_income'|trans}}</div>
-          <div class="card-item-value"><span>{% if amountInflow %}+{% endif %}{{ amountInflow }}</span></div>
+          <div class="card-item-value"><span>{% if amountInflow %}+{% endif %}{{ amountInflow|to_coin(0) }}</span></div>
         </div>
         <div class="card-item">
           <div class="card-item-label">{{'finance.total_expense'|trans}}</div>
-          <div class="card-item-value"><span>{% if amountOutflow %}-{% endif %}{{ amountOutflow }}</span></div>
+          <div class="card-item-value"><span>{% if amountOutflow %}-{% endif %}{{ amountOutflow|to_coin(0) }}</span></div>
         </div>
       </div>
     </div>
@@ -41,10 +41,10 @@
     <table class="table cd-table">
       <thead>
         <tr>
-          <th width="30%">{{'order.name'|trans}}</th>
+          <th width="30%">{{'cashflow.title'|trans}}</th>
           <th>{{'order.sn'|trans}}</th>
           <th>{{'order.id'|trans}}</th>
-          <th>{{'order.paid_time'|trans}}</th>
+          <th>{{'交易时间'|trans}}</th>
           <th class="text-right">{{'finance.income_expense'|trans}}</th>
         </tr>
       </thead>
@@ -52,21 +52,21 @@
         {% if cashes %}
           {% for cash in cashes %}
             <tr>
-              <td>{{cash.name}}</td>
+              <td>{{cash.title}}</td>
               <td>{{cash.sn}}</td>
               <td>
-                {% if cash.orderSn %}
-                  {{cash.orderSn}}
+                {% if cash.order_sn %}
+                  {{cash.order_sn}}
                 {% else %}
                   --
                 {% endif %}
               </td>
-              <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
+              <td>{{cash.created_time|date('Y-m-d H:i:s')}}</td>
               <td class="text-right">
                 {% if cash.type == "inflow" %}
-                  +{{cash.amount}}
+                  +{{ cash.amount|to_coin(0) }}
                 {% elseif cash.type == "outflow" %}
-                  -{{cash.amount}}
+                  -{{ cash.amount|to_coin(0) }}
                 {% endif %}
               </td>
             </tr>

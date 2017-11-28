@@ -1,0 +1,25 @@
+{
+    "name": "codeages/biz-order-pay",
+    "description": "order, pay module",
+    "type": "library",
+    "require": {
+        "codeages/biz-framework": "^0.9",
+        "wenqinruan/omnipay-alipay": "^2.3",
+        "canuonifeng/omnipay-wechatpay": "^1.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Codeages\\Biz\\Order\\": "src/Order/",
+            "Codeages\\Biz\\Pay\\": "src/Pay/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.9"
+    }
+}

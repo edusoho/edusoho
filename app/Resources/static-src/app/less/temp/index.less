@@ -1,75 +1,20 @@
 @import "group.less";      //小组
-@import "userpage.less";   //用户中心
 @import "course.less";     //课程
 @import "thread.less";     //话题
 @import "live.less";       //直播课程
-@import "lesson.less";     //课时
 @import "float-consult.less"; //在线客服
 @import "notification.less"; //通知
 @import "media.less";        //私信
 @import "notebook.less";    //我的笔记
 @import "es-row-wrap.less"; //组件
-@import "course-grid.less"; //课程块
 @import "course-wide-list.less"; //课程长条
 @import "message.less"; //未知
 
 
 // 用于其它主题
 @import "promoted-teacher.less";   //名师风采
-@import "vip.less";                //会员
-@import "homepage.less";           //首页
 @import "navbar.less";             //导航
-@import "latest-review-list.less"; //学员评价
 
-
-
-
-
-
-// bootstrap-extends
-
-a.link-muted {
-  color: #919191;
-}
-
-.btn-muted {
-  color: #999999;
-}
-
-.clear-modal-dialog .modal-body {
-  padding: 30px;
-}
-
-.clear-modal-dialog .close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  float: none;
-  z-index: 1060;
-}
-
-// // 兼容性
-// .lesson-manage-panel .panel-heading {
-//   z-index: 1;
-// }
-
-.homepage-feature-slides {
-  z-index: 0;
-}
-
-.question-set-item:first-child {
-  border: none;
-}
-
-.list-group-panel .list-group-item.active, 
-.list-group-panel .list-group-item.active:hover {
-  background: #f3f3f3;
-  color: @brand-primary;
-  font-weight: bold;
-  border-left: 3px solid @brand-primary;
-}
-
-// 动态，用于老的主题
 .status-side ul {
   padding-left: 0;
   list-style: none;
@@ -84,78 +29,7 @@ a.link-muted {
   height: 50px;
 }
 
-.page-header {
-  .badge {
-    margin-left: 5px;
-    color: #fff;
-    background-color: @brand-primary;
-  }
-}
-
-// 轮播
-.homepage-feature {
-  .border-radius;
-  // .es-box-shadow;
-  border: 1px solid @border-color;
-}
-
-// 不知道用于何处
-.watermark.active {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  text-align: center;
-  display: none; 
-  position: absolute;
-  width: 500px;
-  height: 20px;
-  vertical-align: middle;
-  opacity: 0.8;
-}
-
-.page {
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  .border-radius;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  font-size: 13px;
-}
-
-.rmb {
-  color: #f40;
-  font-weight: bold;
-  font-style: normal;
-}
-
-// 即将删除
-.tags {
-  line-height: 30px;
-  a {
-    font-size: 12px;
-  }
-}
-
-.comment-list {
-  .comment .comment-delete-btn {
-    visibility: hidden;
-  }
-  .comment-operated:hover .comment-delete-btn {
-    visibility: visible;
-  }
-}
-
-// .lesson-manage-panel .panel-heading.sticky {
-//   margin: 0;
-//   background: #fff;
-//   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
-//   z-index: 1000;
-// }
-
+// 需要
 .text-list {
   list-style: none;
   padding: 0;
@@ -166,115 +40,13 @@ a.link-muted {
   }
 }
 
+// 待删
 .money {
   color: #f40;
   font-size: 22px;
 }
 
-.avatar-small {
-  width: 50px;
-  height: 50px;
-}
-
-.avatar-medium {
-  width: 120px;
-  height: 120px;
-}
-
+// 待删
 .origin-price {
   font-size: 12px;
-}
-
-// .article-list .media-object {
-//   max-width: 200px;
-//   max-height: 200px;
-// }
-
-.nav-course-buy-btn{
-  padding-bottom: 8px;
-  padding-top: 8px;
-}
-.question-num {
-  display:inline-block;
-  width: 25px;
-}
-
-.panel.testpaper-question-block .testpaper-question{
-  position: relative;
-
-}
-.panel.testpaper-question-block .panel-body{
-  position:relative;
-  z-index:1;
-}
-
-.lt-ie8 .hidden-lt-ie8 {
-  display: none !important;
-}
-
-.visible-lt-ie8 {
-  display: none !important;
-}
-
-.lt-ie8 .visible-lt-ie8 {
-  display: block !important;
-}
-
-// 小组
-.user-simple-list .media-body {
-  vertical-align: middle;
-  line-height: 48px;
-}
-
-.user-avatar-link img {
-  width: 48px;
-  height: 48px;
-}
-
-.user-grids {
-  letter-spacing:-4px;
-  zoom:1;
-  margin: 0;
-  padding: 0;
-}
-
-.user-grids li {
-  list-style: none;
-  text-align: center;
-  display: inline-block;
-  letter-spacing:0;
-  width: 23%;
-  margin: 8px 1%;
-  font-size: 12px;
-  vertical-align:top;
-  height: 40px;
-  overflow: hidden;
-}
-
-.user-grids li p {
-  margin-bottom: 0;
-  word-wrap: break-word;
-  word-break: normal;
-}
-
-.user-grids .user-avatar-link {
-  margin-bottom: 5px;
-}
-
-.user-grids .user-link {
-  display: block;
-  width:100%;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-// 待换地方
-.container .vjs-default-skin .vjs-big-play-button {
-  top: 50%;
-  left: 50%;
-  margin-top: -40px;
-  margin-left: -50px;
-  width: 100px;
-  height: 80px;
 }

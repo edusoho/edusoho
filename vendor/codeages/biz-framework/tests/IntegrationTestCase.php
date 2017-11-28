@@ -2,10 +2,12 @@
 
 namespace Tests;
 
+use Codeages\Biz\Framework\Dao\ArrayStorage;
 use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
+use Codeages\Biz\Framework\Provider\SessionServiceProvider;
 use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
 use Codeages\Biz\Framework\Provider\TokenServiceProvider;
 use Codeages\Biz\Framework\Provider\SettingServiceProvider;
@@ -42,6 +44,7 @@ class IntegrationTestCase extends TestCase
     {
         $this->biz = $this->createBiz();
         $this->db = $this->biz['db'];
+
         $this->redis = $this->biz['redis'];
 
         $this->db->beginTransaction();
@@ -86,6 +89,7 @@ class IntegrationTestCase extends TestCase
         $biz->register(new SchedulerServiceProvider());
         $biz->register(new SettingServiceProvider());
         $biz->register(new QueueServiceProvider());
+        $biz->register(new SessionServiceProvider());
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
@@ -103,8 +107,8 @@ class IntegrationTestCase extends TestCase
         }
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
-            $biz['dao.cache.array_storage'] = function () {
-                return new Codeages\Biz\Framework\Dao\ArrayStorage();
+            $biz['dao.cache.array_storage'] = function() {
+                return new ArrayStorage();
             };
         }
 
@@ -122,7 +126,6 @@ class IntegrationTestCase extends TestCase
         $biz['lock.flock.directory'] = sys_get_temp_dir();
 
         $biz->boot();
-
         return $biz;
     }
 

@@ -29,95 +29,82 @@ let utils = {
   }
 }
 
+
 class OrderCreate {
   constructor(props) {
     this.element = $(props.element);
-    this.cashRateElement = $('[role="cash-rate"]');
     this.submitBtn = '#order-create-btn';
     this.validator = null;
-    // 兑换比例
-    this.cashRate = 1;
+    this.coinSetting = JSON.parse(this.element.find('.js-coin-setting ').text());
     this.init();
   }
 
   init() {
     this.initEvent();
-    this.initCashRate();
-
     this.validator = this.element.validate({
       currentDom: this.submitBtn,
     });
 
     let couponDefaultSelect = $('#coupon-select').val();
-		if(couponDefaultSelect != "") {
-		  let	couponCode = $('[role="coupon-code-input"]');
-			couponCode.val(couponDefaultSelect);
-			$('button[role="coupon-use"]').trigger('click');
-		}
+    if (couponDefaultSelect != "") {
+      let couponCode = $('[role="coupon-code-input"]');
+      couponCode.val(couponDefaultSelect);
+      $('button[role="coupon-use"]').trigger('click');
+    }
 
     let totalPrice = parseFloat($('[role="total-price"]').text());
     let _this = this;
     if ($('[role="coinNum"]').length > 0) {
- 			let coinNum = $('[role="coinNum"]').val();
- 			if (isNaN(coinNum) || coinNum <= 0) {
-				$(this).val("0.00");
-				_this.coinPriceZero();
-			} else {
-				_this.showPayPassword();
-			}
-      
-			if(_this.cashRateElement.data("priceType") == "RMB") {
-	 			let discount = utils.divition(coinNum, _this.cashRate);
-	 			if(totalPrice < discount){
-	 				discount = totalPrice;
-	 			}
-	 			$('[role="cash-discount"]').text(utils.moneyFormatFloor(discount));
-	 			totalPrice = utils.subtract(totalPrice, discount);
- 			} else {
- 				$('[role="cash-discount"]').text(utils.moneyFormatFloor(coinNum));
- 				totalPrice = utils.subtract(totalPrice, coinNum);
- 			}
- 		} else {
- 			$('[role="cash-discount"]').text("0.00");
- 		}
+      let coinNum = $('[role="coinNum"]').val();
+      if (isNaN(coinNum) || coinNum <= 0) {
+        $(this).val("0.00");
+        _this.coinPriceZero();
+      } else {
+        _this.showPayPassword();
+      }
+
+      if (_this.coinSetting.price_type == "RMB") {
+        let discount = utils.divition(coinNum, _this.coinSetting.cash_rate);
+        if (totalPrice < discount) {
+          discount = totalPrice;
+        }
+        $('[role="cash-discount"]').text(utils.moneyFormatFloor(discount));
+        totalPrice = utils.subtract(totalPrice, discount);
+      } else {
+        $('[role="cash-discount"]').text(utils.moneyFormatFloor(coinNum));
+        totalPrice = utils.subtract(totalPrice, coinNum);
+      }
+    } else {
+      $('[role="cash-discount"]').text("0.00");
+    }
 
     this.shouldPay(totalPrice);
 
-    if($('#js-order-create-sms-btn').length > 0){
+    if ($('#js-order-create-sms-btn').length > 0) {
       let self = this;
 
-	 		$('#js-order-create-sms-btn').click(function(e) {
-        
-	 			let coinToPay = $('#coinPayAmount').val();
-	 			if (coinToPay && (coinToPay.length > 0) && (!isNaN(coinToPay)) && (coinToPay > 0) && ($("#js-order-create-sms-btn").length > 0)) {
-	 				$("#payPassword").trigger("change");
-	 				if ($('[role="password-input"]').find('span[class="text-danger"]').length > 0) {
-	 					e.stopPropagation();
-	 				}
+      $('#js-order-create-sms-btn').click(function(e) {
 
-          if(self.validator && self.validator.form()) {
+        let coinToPay = $('#coinPayAmount').val();
+        if (coinToPay && (coinToPay.length > 0) && (!isNaN(coinToPay)) && (coinToPay > 0) && ($("#js-order-create-sms-btn").length > 0)) {
+          $("#payPassword").trigger("change");
+          if ($('[role="password-input"]').find('span[class="text-danger"]').length > 0) {
+            e.stopPropagation();
+          }
+
+          if (self.validator && self.validator.form()) {
             let $this = $(this);
             let url = $this.data('url');
             let $target = $($this.attr('data-target'));
             $target.modal().load(url);
           }
 
-	 			} else {
-	 				e.stopPropagation();
-	 				$("#order-create-form").submit();
-	 			}
-	 		});
-		}
-    
-  }
-
-  // 初始化虚拟币兑换比例
-  initCashRate() {
-    const $cashRate = this.element.find('[role="cash-rate"]');
-    if ($cashRate.val() != "") {
-			this.cashRate = $cashRate.val();
-			this.cashRate = parseInt(this.cashRate * 100) / 100;
-		}
+        } else {
+          e.stopPropagation();
+          $("#order-create-form").submit();
+        }
+      });
+    }
   }
 
   initEvent() {
@@ -131,19 +118,19 @@ class OrderCreate {
   }
 
   formSubmitEvent(event) {
-    if(this.validator && this.validator.form()) {
+    if (this.validator && this.validator.form()) {
       this.element.submit();
     }
   }
-  
+
   couponSelectEvent(event) {
     const $this = $(event.currentTarget);
-    const coupon = $this .children('option:selected');
+    const coupon = $this.children('option:selected');
     if (coupon.data('code') == "") {
       $('[role=no-use-coupon-code]').show();
       $('[role="cancel-coupon"]').trigger('click');
       return;
-    } else { 
+    } else {
       $('[role=no-use-coupon-code]').hide();
     }
     let couponCode = $('[role="coupon-code-input"]');
@@ -157,22 +144,22 @@ class OrderCreate {
     let couponCode = $('[role="coupon-code-input"]');
     data.code = couponCode.val();
 
-    if(data.code == ""){
+    if (data.code == "") {
       $('[role="coupon-price-input"]').find("[role='price']").text("0.00");
       return;
     }
-    
+
     data.targetType = couponCode.data("targetType");
     data.targetId = couponCode.data("targetId");
 
     let totalPrice = parseFloat($('[role="total-price"]').text());
-    
+
     data.amount = totalPrice;
     let _this = this;
     $.post('/' + data.targetType + '/' + data.targetId + '/coupon/check', data, function(data) {
-      $('[role="code-notify"]').css("display","inline-block");
+      $('[role="code-notify"]').css("display", "inline-block");
       if (data.useable == "no") {
-        
+
         $('[role=no-use-coupon-code]').show();
         $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(Translator.trans('order.create.useless_hint'));
 
@@ -180,9 +167,9 @@ class OrderCreate {
         $('[role=no-use-coupon-code]').hide();
 
         if (data['type'] == 'discount') {
-          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_discount_coupon_hint', {rate:data['rate']}));
+          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_discount_coupon_hint', { rate: data['rate'] }));
         } else {
-          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_price_coupon_hint', {rate:data['rate']}));
+          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_price_coupon_hint', { rate: data['rate'] }));
         }
 
         $('[role="coupon-price"]').find("[role='price']").text(utils.moneyFormatFloor(data.decreaseAmount));
@@ -195,7 +182,7 @@ class OrderCreate {
   }
 
   couponCancelEvent(event) {
-    if($('#coupon-select').val() != "") {
+    if ($('#coupon-select').val() != "") {
       let couponDefaultSelect = $('#coupon-select').val();
       let couponCode = $('[role="coupon-code-input"]');
       couponCode.val(couponDefaultSelect);
@@ -223,7 +210,7 @@ class OrderCreate {
     coinNum = Math.round(coinNum * 100) / 100;
     $this.val(coinNum);
 
-    if(isNaN(coinNum) || coinNum <= 0){
+    if (isNaN(coinNum) || coinNum <= 0) {
       $this.val("0.00");
       this.coinPriceZero();
     } else {
@@ -274,9 +261,9 @@ class OrderCreate {
 
     let coin = Math.round(accountCash * 1000) > Math.round(coinNum * 1000) ? coinNum : accountCash;
 
-    if (this.cashRateElement.data("priceType") == "RMB") {
+    if (this.coinSetting.price_type == "RMB") {
       let totalPrice = parseFloat($('[role="total-price"]').text());
-      let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.cashRate)) * 100) / 100;
+      let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.coinSetting.cash_rate)) * 100) / 100;
 
       if (totalPrice < cashDiscount) {
         cashDiscount = totalPrice;
@@ -287,17 +274,17 @@ class OrderCreate {
       $('[role="cash-discount"]').text(utils.moneyFormatFloor(coin));
     }
     return coin;
-    
+
   }
 
   getMaxCoinCanPay(totalCoinPrice) {
     let maxCoin = parseFloat($('[role="maxCoin"]').text());
-    let maxCoinCanPay = totalCoinPrice < maxCoin ? totalCoinPrice: maxCoin;
+    let maxCoinCanPay = totalCoinPrice < maxCoin ? totalCoinPrice : maxCoin;
     let myCashAccount = $('[role="accountCash"]');
 
     if (myCashAccount.length > 0) {
       let myCash = parseFloat(myCashAccount.text() * 100) / 100;
-      maxCoinCanPay = maxCoinCanPay < myCash ? maxCoinCanPay: myCash;
+      maxCoinCanPay = maxCoinCanPay < myCash ? maxCoinCanPay : myCash;
     }
 
     return maxCoinCanPay;
@@ -306,13 +293,13 @@ class OrderCreate {
   shouldPay(totalPrice) {
     totalPrice = Math.round(totalPrice * 1000) / 1000;
 
-    if (this.cashRateElement.data("priceType") == "RMB") {
+    if (this.coinSetting.price_type == "RMB") {
       totalPrice = utils.moneyFormatCeil(totalPrice);
       $('[role="pay-rmb"]').text(totalPrice);
       $('input[name="shouldPayMoney"]').val(totalPrice);
 
     } else {
-      let payRmb = utils.moneyFormatCeil(utils.divition(totalPrice, this.cashRate));
+      let payRmb = utils.moneyFormatCeil(utils.divition(totalPrice, this.coinSetting.cash_rate));
       let shouldPayMoney = Math.round(payRmb * 100) / 100;
 
       $('[role="pay-coin"]').text(totalPrice);
@@ -325,16 +312,16 @@ class OrderCreate {
     let totalPrice = parseFloat($('[role="total-price"]').text());
 
     totalPrice = this.afterCouponPay(totalPrice);
-    
-    let cashModel = this.cashRateElement.data('cashModel');
 
-    switch(cashModel) {
+    let cashModel = this.coinSetting.cash_model;
+
+    switch (cashModel) {
       case 'none':
         totalPrice = totalPrice >= 0 ? totalPrice : 0;
         this.shouldPay(totalPrice);
         break;
       case 'deduction':
-        var totalCoinPrice = utils.multiple(totalPrice, this.cashRate);
+        var totalCoinPrice = utils.multiple(totalPrice, this.coinSetting.cash_rate);
         totalCoinPrice = utils.moneyFormatCeil(totalCoinPrice);
         var maxCoinCanPay = this.getMaxCoinCanPay(totalCoinPrice);
         var coinNumPay = $('[role="coinNum"]').val();
@@ -396,12 +383,12 @@ class OrderCreate {
     $('[role="coinNum"]').val(0);
     $('[role="cash-discount"]').data('defaultValue');
     $("[role='password-input']").hide();
-    $('[name="payPassword"]').rules('remove','required passwordCheck');
+    $('[name="payPassword"]').rules('remove', 'required es_remote');
   }
 
   showPayPassword() {
     $("[role='password-input']").show();
-    $('[name="payPassword"]').rules('add', { required: true,passwordCheck: true});
+    $('[name="payPassword"]').rules('add', { required: true, es_remote: true });
   }
 }
 

@@ -52,33 +52,35 @@ login_bind_callback:
     path:  /login/bind/{type}/callback
     defaults: { _controller: AppBundle:LoginBind:callback }
 
-login_bind_choose:
-    path:  /login/bind/{type}/choose
-    defaults: { _controller: AppBundle:LoginBind:choose }
+oauth2_login_index:
+    path:  /oauth2/login/main
+    defaults: { _controller: AppBundle:OAuth2/Login:main }
+
+oauth2_login_app:
+    path:  /oauth2/login/app
+    defaults: { _controller: AppBundle:OAuth2/Login:app }
+
+oauth2_login_bind_account:
+    path:  /oauth2/login/bind_account
+    defaults: { _controller: AppBundle:OAuth2/Login:bindAccount }
+    methods: [POST]
+
+oauth2_login_bind_login:
+    path:  /oauth2/login/bind_login
+    defaults: { _controller: AppBundle:OAuth2/Login:bindLogin }
+
+oauth2_login_create:
+    path:  /oauth2/login/create
+    defaults: { _controller: AppBundle:OAuth2/Login:create }
+
+oauth2_login_success:
+    path:  /oauth2/login/success
+    defaults: { _controller: AppBundle:OAuth2/Login:success }
 
 login_bind_new:
     path:  /login/bind/{type}/new
     defaults: { _controller: AppBundle:LoginBind:new }
     methods: [POST]
-
-login_bind_newset:
-    path:  /login/bind/{type}/newset
-    defaults: { _controller: AppBundle:LoginBind:newSet }
-    methods: [POST]
-
-login_bind_exist:
-    path:  /login/bind/{type}/exist
-    defaults: { _controller: AppBundle:LoginBind:exist }
-    methods: [POST]
-
-login_bind_existbind:
-    path:  /login/bind/weixinmob/existbind
-    defaults: { _controller: AppBundle:LoginBind:existBind }
-    methods: [POST]
-
-login_bind_weixin:
-    path:  /login/weixinmob
-    defaults: { _controller: AppBundle:LoginBind:weixinIndex }
 
 login_check_email:
     path:  /login/check/email
@@ -278,17 +280,13 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-course_order_detail:
-   path:  /order/{id}/detail_course
-   defaults: { _controller: AppBundle:Order:detail }
-
-order_refund:
-    path:  /target/{id}/order/refund
-    defaults: { _controller: AppBundle:OrderRefund:refund }
+order_detail:
+   path:  /order/{id}/detail
+   defaults: { _controller: AppBundle:Order/Order:detail }
 
 order_cancel_refund:
-    path:  /target/{id}/order/cancel_refund
-    defaults: { _controller: AppBundle:OrderRefund:cancelRefund }
+    path:  /order/{orderId}/cancel_refund
+    defaults: { _controller: AppBundle:Order/OrderRefund:cancelRefund }
     methods: [POST]
 
 media_play:
@@ -362,14 +360,6 @@ settings:
     path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
 
-settings_avatar:
-    path:  /settings/avatar
-    defaults: { _controller: AppBundle:Settings:avatar }
-
-settings_avatar_crop:
-    path:  /settings/avatar/crop
-    defaults: { _controller: AppBundle:Settings:avatarCrop }
-
 settings_avatar_crop_modal:
     path:  /settings/avatar/crop/modal
     defaults: { _controller: AppBundle:Settings:avatarCropModal }
@@ -386,10 +376,6 @@ settings_avatar_fetch_partner:
 settings_security:
     path:  /settings/security
     defaults: { _controller: AppBundle:Settings:security }
-
-settings_set_pay_password:
-    path:  /settings/set_pay_password
-    defaults: { _controller: AppBundle:Settings:setPayPassword }
 
 settings_set_password:
     path:  /settings/set_password
@@ -443,6 +429,7 @@ settings_binds:
 settings_binds_unbind:
     path: /settings/unbind/{type}
     defaults: { _controller: AppBundle:Settings:unBind  }
+    methods: [POST]
 
 settings_binds_bind:
     path: /settings/bind/{type}
@@ -451,10 +438,6 @@ settings_binds_bind:
 settings_binds_bind_callback:
     path: /settings/bind/{type}/callback
     defaults: { _controller: AppBundle:Settings:bindCallback }
-
-settings_setup:
-    path: /settings/setup
-    defaults: { _controller: AppBundle:Settings:setup }
 
 settings_setup_password:
     path: /settings/setup_password
@@ -589,6 +572,18 @@ my_orders:
     path: /my/orders
     defaults: { _controller: AppBundle:My/Order:index }
 
+my_order_refunds:
+    path: /my/order_refunds
+    defaults: { _controller: AppBundle:My/OrderRefund:index }
+
+my_order_refund_detail:
+    path: /my/order_refund/{id}/detail
+    defaults: { _controller: AppBundle:My/OrderRefund:detail }
+
+my_order_refund_apply:
+    path: /my/order_refund/{id}/apply
+    defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
+
 my_order_cancel:
     path: /my/order/{id}/cancel
     defaults: { _controller: AppBundle:My/Order:cancel }
@@ -597,11 +592,6 @@ my_order_cancel:
 web_user_order_detail:
     path: /my/order/{id}/detail
     defaults: { _controller: AppBundle:My/Order:detail }
-
-my_order_cancel_refund:
-    path: /my/order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:My/Order:cancelRefund }
-    methods: [POST]
 
 my_refunds:
     path: /my/refunds
@@ -960,9 +950,6 @@ group_thread_post_reply:
 group_thread_adopt:
     path:  /thread/{postId}/adopt
     defaults: { _controller: AppBundle:GroupThread:adopt }
-group_thread_hide:
-    path:  /thread/{threadId}/hide
-    defaults: { _controller: AppBundle:GroupThread:hide }
 group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }
@@ -992,9 +979,6 @@ receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
-coin_pay:
-    path:     /my/coin/pay
-    defaults: { _controller: AppBundle:My/Coin:pay }
 coin_show:
     path:     /my/coin/show
     defaults: { _controller: AppBundle:My/Coin:show }
@@ -1003,14 +987,43 @@ user_password_check:
     path:   /user/password/check
     defaults: { _controller: AppBundle:User:checkPassword }
 
-pay_center_show:
-    path:   /pay/center
-    defaults: { _controller: AppBundle:PayCenter:show }
+cashier_show:
+    path:   /cashier/standard
+    defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
-pay_center_pay:
-    path:   /pay/center/pay
-    defaults: { _controller: AppBundle:PayCenter:pay }
+cashier_redirect:
+    path:   /cashier/redirect
+    defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
+
+cashier_wechat_js_pay:
+    path:   /pay/center/wxpay
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
+
+cashier_password_check:
+    path:  /cashier/password/check
+    defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
+
+cashier_pay_price:
+    path:   /cashier/{sn}/price
+    defaults: { _controller: AppBundle:Cashier/Cashier:price }
     methods: [POST]
+
+cashier_pay_success:
+    path:   /cashier/pay/success
+    defaults: { _controller: AppBundle:Cashier/Cashier:success }
+
+cashier_pay_notify:
+    path: /callback/{payment}/notify
+    defaults: { _controller: AppBundle:Cashier/Callback:notify}
+    methods: [POST]
+
+cashier_pay_return_for_app:
+    path: /callback/{payment}/return_for_app
+    defaults: { _controller: AppBundle:Cashier/Callback:returnForApp}
+
+cashier_pay_return:
+    path: /callback/{payment}/return
+    defaults: { _controller: AppBundle:Cashier/Callback:return}
 
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind
@@ -1053,17 +1066,13 @@ wxpay_roll:
     path: /pay/wxpay/roll
     defaults: {_controller: AppBundle:PayCenter:wxpayRoll }
 
-pay_center_wxpay:
-    path:   /pay/center/wxpay
-    defaults: { _controller: AppBundle:PayCenter:wxpay }
-
 order_show:
     path:  /order/show
-    defaults: { _controller: AppBundle:Order:show }
+    defaults: { _controller: AppBundle:Order/Order:show }
 
 order_create:
     path:  /order/create
-    defaults: { _controller: AppBundle:Order:create }
+    defaults: { _controller: AppBundle:Order/Order:create }
     methods: [POST]
 
 thread_jump:
@@ -1186,10 +1195,6 @@ settings_find_pay_password_by_sms:
 settings_find_pay_password_by_question:
     path:  /settings/find_pay_password_by_question
     defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
-
-order_pay_sms_verification:
-    path:  /order/sms_verification
-    defaults: { _controller: AppBundle:Order:smsVerification }
 
 edu_cloud_sms_callback:
     path:  /edu_cloud/sms_callback
@@ -1329,14 +1334,6 @@ open_course_manage_file_convert:
 open_course_manage_file_status:
    path:  /open/course/manage/file/status
    defaults: { _controller: AppBundle:OpenCourseFileManage:fileStatus }
-
-open_course_manage_files_batch_upload:
-    path:  /open/course/{id}/manage/files/batch/upload/{targetType}
-    defaults: { _controller: AppBundle:OpenCourseFileManage:batchUploadCourseFiles }
-
-open_course_manage_files_upload:
-    path:  /open/course/{id}/manage/files/upload/{targetType}
-    defaults: { _controller: AppBundle:OpenCourseFileManage:uploadCourseFiles }
 
 open_course_manage_delete_materials_show:
     path:  /open/course/{id}/manage/show/delete/materials
@@ -1786,9 +1783,9 @@ course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
   defaults: {_controller: AppBundle:Course/StudentManage:students}
 
-course_set_manage_course_quit_records:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
-  defaults: {_controller: AppBundle:Course/StudentManage:studentQuitRecords}
+course_set_manage_course_records:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/{type}/records
+  defaults: {_controller: AppBundle:Course/StudentManage:studentRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
@@ -1960,6 +1957,11 @@ course_set_unfavorite:
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
+  methods: [POST]
+
+course_exit_modal:
+  path: /course/show_exit_modal
+  defaults: {_controller: AppBundle:Course/Course:exitModal}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
@@ -2404,8 +2406,8 @@ classroom_manage_aduitor:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
 
 classroom_manage_record:
-    path: /classroom/{id}/manage/refund_record
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:refundRecord }
+    path: /classroom/{id}/manage/record/{type}
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:record }
 
 classroom_manage_service:
     path: /classroom/{id}/manage/service
@@ -2549,7 +2551,8 @@ classroom_introductions:
 
 classroom_buy:
     path: /classroom/{id}/buy
-    defaults: { _controller: AppBundle:Classroom/Classroom:buy }
+    defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
+    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2596,10 +2599,6 @@ classroom_thread_update:
 classroom_vip_buy:
     path: /classroom/{id}/vip_buy
     defaults: { _controller: AppBundle:Classroom/Classroom:becomeStudent }
-
-classroom_member_ids:
-    path: /classroom/{id}/member_ids
-    defaults: { _controller: AppBundle:Classroom/Classroom:memberIds }
 
 classroom_thread_members_become:
     path: /classroom/{classroomId}/thread/{threadId}/members/become
@@ -2797,8 +2796,8 @@ org_tree:
 #todo:只为展示页面
 
 coupon_check:
-    path:  /{type}/{id}/coupon/check
-    defaults: { _controller: AppBundle:Order:couponCheck }
+    path: /coupon/check
+    defaults: { _controller: AppBundle:Order/Order:couponCheck }
 
 my_course_show:
     path:  /my/course/{id}/{tab}
@@ -2814,7 +2813,8 @@ course_member_deadline_reach:
 
 course_buy:
     path: /course/{id}/buy
-    defaults: { _controller: AppBundle:Course/CourseOrder:buy }
+    defaults: { _controller: AppBundle:Course/CourseBuy:buy }
+    methods: [POST]
 
 course_order_repay:
     path:  /course/order/repay
@@ -2935,6 +2935,10 @@ export:
     path: /export/{name}/{type}
     defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
+online_sample:
+    path: /online/sample
+    defaults: { _controller: AppBundle:Online:sample}
+
 pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
@@ -2943,10 +2947,19 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
+member_operation_record:
+    path: /member/{operatType}/record/{targetType}/{targetId}
+    defaults: { _controller: AppBundle:MemberOperationRecord:showRecord }
+
 v2_demo:
-    path: /v2/demo
-    defaults: { _controller: AppBundle:V2:demo }
+   path: /v2/demo
+   defaults: { _controller: AppBundle:V2:demo }
 
 v2_demo_modal:
-    path: /v2/demo/modal
-    defaults: { _controller: AppBundle:V2:modal }
+   path: /v2/demo/modal
+   defaults: { _controller: AppBundle:V2:modal }
+
+order_calculate_price:
+    path: /order/price/calculate
+    defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+

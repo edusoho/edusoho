@@ -16,6 +16,16 @@ interface CategoryDao extends GeneralDaoInterface
 
     public function findByGroupIdAndParentId($groupId, $parentId);
 
+    /**
+     * @deprecated  即将废弃不建议使用
+     *
+     * @param $parentId
+     * @param $orderBy
+     * @param $start
+     * @param $limit
+     *
+     * @return mixed
+     */
     public function findByParentId($parentId, $orderBy, $start, $limit);
 
     public function findAllByParentId($parentId);

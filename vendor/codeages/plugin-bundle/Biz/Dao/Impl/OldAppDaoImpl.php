@@ -3,9 +3,9 @@
 namespace Codeages\PluginBundle\Biz\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\PluginBundle\Biz\Dao\AppDao;
+use Codeages\PluginBundle\Biz\Dao\OldAppDao;
 
-class OldAppDaoImpl extends GeneralDaoImpl implements AppDao
+class OldAppDaoImpl extends GeneralDaoImpl implements OldAppDao
 {
     protected $table = 'cloud_app';
 

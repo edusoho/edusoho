@@ -9,10 +9,14 @@ $list.on('click', '.student-remove', function () {
     return;
   }
 
-  $.post($(this).data('url'), function () {
+  $.post($(this).data('url'), function (response) {
     var user_name = $('.student-remove').data('user');
-    notify('success',Translator.trans('classroom_manage.student_manage_remove_success_hint', { username: user_name }));
-    $tr.remove();
+    if (response.code == 'error') {
+      notify('danger',Translator.trans(response.message, {username: user_name}));
+    } else {
+      notify('success',Translator.trans('classroom_manage.student_manage_remove_success_hint', { username: user_name }));
+      $tr.remove();
+    }
   }).error(function () {
     var user_name = $('.student-remove').data('user');
     notify('danger',Translator.trans('classroom_manage.student_manage_remove_failed_hint', { username: user_name }));

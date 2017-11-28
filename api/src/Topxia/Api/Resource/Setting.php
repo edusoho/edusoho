@@ -73,7 +73,7 @@ class Setting extends BaseResource
             'enabled' => '0',
             'convNo' => null
         );
-        
+
         $res = array_merge($default, $res);
 
         return ArrayToolkit::filter($res, $default);
@@ -89,12 +89,48 @@ class Setting extends BaseResource
             'oauth_enabled' => (string)$loginSetting['enabled'] ?: '0',
             'weibo_enabled' => $loginSetting['weibo_enabled'] ?: '0',
             'qq_enabled' => $loginSetting['qq_enabled'] ?: '0',
-            'renren_enabled' => $loginSetting['renren_enabled'] ?: '0',
+            'renren_enabled' => '0',
             'weixinweb_enabled' => $loginSetting['weixinweb_enabled'] ?: '0',
             'weixinmob_enabled' => $loginSetting['weixinmob_enabled'] ?: '0'
         );
 
         return $default;
+    }
+
+    protected function filterCloud_video()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        $fingerPrintSetting = array(
+            'video_fingerprint' => '0'
+        );
+        $watermarkSetting = array(
+            'video_watermark' => '0'
+        );
+
+        if (!empty($storageSetting)) {
+            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
+                'video_fingerprint',
+                'video_fingerprint_time'
+            ));
+
+            $watermarkSetting = ArrayToolkit::parts($storageSetting, array(
+                'video_watermark',
+                'video_watermark_image',
+                'video_embed_watermark_image',
+                'video_watermark_position',
+            ));
+
+            foreach ($watermarkSetting as $key => &$value) {
+                if (in_array($key, array('video_watermark_image', 'video_embed_watermark_image'))) {
+                    $value = $this->getFileUrl($value);
+                }
+            }
+        }
+
+        return array(
+            'watermarkSetting' => $watermarkSetting,
+            'fingerPrintSetting' => $fingerPrintSetting,
+        );
     }
 
     protected function filterKeys(array $input, array $notAllowed)
@@ -120,7 +156,10 @@ class Setting extends BaseResource
             ),
             'user' => array(
                 'needToken' => false,
-            )
+            ),
+            'cloud_video' => array(
+                'needToken' => false,
+            ),
         );
     }
 
@@ -130,5 +169,10 @@ class Setting extends BaseResource
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->getBiz()->offsetGet('web.twig.extension');
     }
 }

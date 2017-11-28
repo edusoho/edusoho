@@ -11,7 +11,7 @@ class Lock
         $this->biz = $biz;
     }
 
-    public function get($lockName, $lockTime)
+    public function get($lockName, $lockTime=30)
     {
         $result = $this->getConnection()->fetchAssoc("SELECT GET_LOCK('locker_{$lockName}', {$lockTime}) AS getLock");
 

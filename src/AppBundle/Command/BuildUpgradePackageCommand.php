@@ -2,7 +2,9 @@
 
 namespace AppBundle\Command;
 
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +26,12 @@ class BuildUpgradePackageCommand extends BaseCommand
      * @var OutputInterface
      */
     protected $output;
+    /**
+     * @var SymfonyStyle
+     */
+    protected $style;
 
+    protected $packageDir;
     protected $fromVersion;
     protected $version;
 
@@ -49,31 +56,27 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->filesystem = new Filesystem();
         $this->output = $output;
         $this->input = $input;
+        $this->style = new SymfonyStyle($input, $output);
         $this->fromVersion = $fromVersion;
         $this->version = $version;
-
-        $this->ignoreDevelopVendor();
+        $this->packageDir = $this->createDirectory();
 
         $this->generateDiffFile();
 
-        $submoduleDiffs = $this->generateSubmodulesDiffFile(array());
+        $this->generateFiles($diffFile);
 
-        $this->diffFilePrompt($diffFile, $submoduleDiffs);
+        $this->copyUpgradeScript();
 
-        $packageDirectory = $this->createDirectory();
+        $this->buildVendor();
 
-        $this->generateFiles($diffFile, $submoduleDiffs, $packageDirectory);
+        $this->zipPackage();
 
-        $this->copyUpgradeScript($packageDirectory);
+        $this->printChangeLog();
 
-        $this->zipPackage($packageDirectory);
-
-        $this->recoveryDevelopVendor();
-
-        $this->output->writeln('<question>编制升级包完毕</question>');
+        $this->style->success('  编制升级包完毕');
     }
 
-    private function generateFiles($diffFile, array $submoduleDiffFiles, $packageDirectory)
+    private function generateFiles($diffFile)
     {
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
 
@@ -83,118 +86,16 @@ class BuildUpgradePackageCommand extends BaseCommand
             $this->output->writeln("<error>差异文件 {$diffFile}, 不存在,无法制作升级包</error>");
             exit;
         }
+        $fileLines = $this->processFiles($diffFile);
 
-        $moduleFiles = array_merge(array(
-            '' => $diffFile,
-        ), $submoduleDiffFiles);
-
-        foreach ($moduleFiles as $module => $filePath) {
-            $file = @fopen($filePath, 'r');
-            while (!feof($file)) {
-                $line = fgets($file);
-
-                $splitLine = preg_split('/\s+/', $line);
-
-                if (empty($splitLine) || count($splitLine) === 1) {
-                    continue;
-                }
-
-                list($op, $opFile, $newFile) = $splitLine;
-                $op = $line[0];
-                if (empty($line)) {
-                    continue;
-                }
-
-                if (!in_array($line[0], array('M', 'A', 'D', 'R'))) {
-                    echo "无法处理该文件：{$line}";
-                    continue;
-                }
-
-                if (empty($opFile)) {
-                    echo "无法处理该文件：{$line}";
-                    continue;
-                }
-
-                if (!empty($module)) {
-                    $opFile = $module.DIRECTORY_SEPARATOR.$opFile;
-                    $newFile = $module.DIRECTORY_SEPARATOR.$newFile;
-                }
-
-                if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-
-                if (strpos($opFile, 'tests') === 0 || strpos($newFile, 'tests') === 0) {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-
-                if (strpos($opFile, 'migrations') === 0) {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-
-                if (strpos($opFile, 'plugins') === 0 || strpos($newFile, 'plugins')) {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-
-                if (strpos($opFile, 'web/install') === 0) {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-
-                if (strpos($opFile, 'doc') === 0) {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-                //注意，为了本地视频播放问题，忽略该文件，如果有版本改动，还是要先第一次修复，之后再改动
-                if ($opFile === 'vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php') {
-                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
-                    continue;
-                }
-
-                $opBundleFile = $this->getBundleFile($opFile);
-                $newBundleFile = $this->getBundleFile($newFile);
-
-                if ($op == 'R') {
-                    $this->output->writeln("<info>文件重命名：{$opFile} -> {$newFile}</info>");
-                    $this->insertDelete($opFile, $packageDirectory);
-                    $this->copyFileAndDir($newFile, $packageDirectory);
-
-                    if ($opBundleFile) {
-                        $this->output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
-                        $this->insertDelete($opBundleFile, $packageDirectory);
-                    }
-
-                    if ($newBundleFile) {
-                        $this->output->writeln("<comment>增加更新文件：[BUNDLE]        {$newBundleFile}</comment>");
-                        $this->copyFileAndDir($newBundleFile, $packageDirectory);
-                    }
-                }
-
-                if ($op == 'M' || $op == 'A') {
-                    $this->output->writeln("<info>增加更新文件：{$opFile}</info>");
-                    $this->copyFileAndDir($opFile, $packageDirectory);
-
-                    if ($opBundleFile) {
-                        $this->output->writeln("<info>增加更新文件：[BUNDLE]        {$opBundleFile}</info>");
-                        $this->copyFileAndDir($opBundleFile, $packageDirectory);
-                    }
-                }
-
-                if ($op == 'D') {
-                    $this->output->writeln("<comment>增加删除文件：{$opFile}</comment>");
-                    $this->insertDelete($opFile, $packageDirectory);
-
-                    if ($opBundleFile) {
-                        $this->output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
-                        $this->insertDelete($opBundleFile, $packageDirectory);
-                    }
-                }
-            }
-        }
+        $this->migrationFiles($fileLines);
+        $this->webAssetsFiles($fileLines);
+        $this->invalidFiles($fileLines);
+        $this->ingoredFiles($fileLines);
+        $this->renamedFiles($fileLines);
+        $this->addedFiles($fileLines);
+        $this->updatedFiles($fileLines);
+        $this->deletedFiles($fileLines);
     }
 
     private function insertDelete($opFile, $packageDirectory)
@@ -271,10 +172,9 @@ class BuildUpgradePackageCommand extends BaseCommand
         return null;
     }
 
-    private function copyUpgradeScript($dir)
+    private function copyUpgradeScript()
     {
-        $this->output->writeln("\n\n");
-        $this->output->write('<info>拷贝升级脚本：</info>');
+        $this->output->writeln('<info>  拷贝升级脚本：</info>');
 
         $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
         $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../')."/scripts/{$this->version}";
@@ -282,12 +182,12 @@ class BuildUpgradePackageCommand extends BaseCommand
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');
         } else {
-            $targetPath = realpath($dir).'/Upgrade.php';
-            $this->output->writeln($path." -> {$targetPath}");
+            $targetPath = realpath($this->packageDir).'/Upgrade.php';
+            $this->output->writeln("    - $path .  -> {$targetPath}");
             $this->filesystem->copy($path, $targetPath, true);
 
             if (is_dir($upgradesDir)) {
-                $this->filesystem->mirror($upgradesDir, realpath($dir).'/source/scripts/'.$this->version, null, array(
+                $this->filesystem->mirror($upgradesDir, realpath($this->packageDir).'/source/scripts/'.$this->version, null, array(
                     'override' => true,
                     'copy_on_windows' => true,
                 ));
@@ -295,16 +195,16 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
     }
 
-    private function zipPackage($distDir)
+    private function zipPackage()
     {
-        $buildDir = dirname($distDir);
-        $filename = basename($distDir);
+        $buildDir = dirname($this->packageDir);
+        $filename = basename($this->packageDir);
 
         if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
             $this->filesystem->remove("{$buildDir}/{$filename}.zip");
         }
 
-        $this->output->writeln("<info>使用 zip -r {$filename}.zip {$filename}/  制作ZIP包：{$buildDir}/{$filename}.zip</info>");
+        $this->output->writeln("<info>  使用 zip -r {$filename}.zip {$filename}/  制作ZIP包：{$buildDir}/{$filename}.zip</info>");
 
         chdir($buildDir);
         $command = "zip -r {$filename}.zip {$filename}/";
@@ -312,19 +212,19 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $zipPath = "{$buildDir}/{$filename}.zip";
 
-        $this->output->writeln('<comment>ZIP包大小：'.$this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
+        $this->output->writeln('    - ZIP包大小：'.$this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
     }
 
     private function printChangeLog()
     {
         $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
         if (!$this->filesystem->exists($changeLogPath)) {
-            $this->output->writeln('<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>');
+            $this->output->writeln('<error> CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>');
 
             return false;
         }
 
-        $this->output->writeln('<info>输出changelog,请确认changelog是否正确</info>');
+        $this->output->writeln('<info>  输出changelog,请确认changelog是否正确</info>');
         $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', 'r');
         $print = false;
         $askPrint = false;
@@ -343,9 +243,9 @@ class BuildUpgradePackageCommand extends BaseCommand
             }
             if ($print) {
                 if (empty($line)) {
-                    $this->output->writeln(sprintf("<comment>$line</comment>"));
+                    $this->output->writeln(sprintf("<comment>   $line</comment>"));
                 } else {
-                    $this->output->writeln(sprintf('<comment>%s<br/></comment>', $line));
+                    $this->output->writeln(sprintf('<comment>   %s<br/></comment>', $line));
                 }
             }
         }
@@ -353,6 +253,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function generateDiffFile()
     {
+        $this->output->writeln('<info>  生成git 差异文件 </info>  ');
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
 
         if (!$this->filesystem->exists($rootDir.'build')) {
@@ -371,121 +272,11 @@ class BuildUpgradePackageCommand extends BaseCommand
             exit(1);
         }
 
-        $this->output->writeln("<info>  使用 git  diff --name-status  v{$this->fromVersion} release{$this->version} > build/diff-{$this->version} 生成差异文件：build/diff-{$this->version}</info>");
+        $this->output->writeln("    - 使用 git  diff --name-status  v{$this->fromVersion} release{$this->version} > build/diff-{$this->version} 生成差异文件：build/diff-{$this->version}");
 
         chdir($rootDir);
         $command = "git diff --name-status v{$this->fromVersion} release/{$this->version} > build/diff-{$this->version}";
         exec($command);
-    }
-
-    private function generateSubmodulesDiffFile(array $submodules)
-    {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
-
-        $submoduleDiffs = array();
-
-        foreach ($submodules as $submodule) {
-            $lastCommitHash = exec("git ls-tree v{$this->fromVersion} {$submodule} | awk '{print $3}'");
-            if (empty($lastCommitHash)) {
-                $lastCommitHash = 'v7.3.1'; //vendor的上次单独发布的时候的tag
-            }
-
-            $currentCommitHash = exec("git ls-tree release/{$this->version} {$submodule} | awk '{print $3}'");
-
-            $submoduleDir = $rootDir.$submodule;
-            chdir($submoduleDir);
-            $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
-            exec($command);
-            $submoduleDiffs[$submodule] = $rootDir."build/diff-{$submodule}-{$this->version}";
-        }
-
-        return $submoduleDiffs;
-    }
-
-    private function diffFilePrompt($diffFile, $submoduleDiffFiles)
-    {
-        $askDiffFile = false;
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
-        $this->output->writeln("<info>确认build/diff-{$this->version}差异文件</info>");
-
-        $file = @fopen($rootDir.$diffFile, 'r');
-        while (!feof($file)) {
-            $line = fgets($file);
-            $opFile = trim(substr($line, 1));
-            if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
-                echo "异常的文件更新模式：{$line}";
-                $askDiffFile = true;
-                continue;
-            }
-        }
-        fclose($file);
-
-        $question = "请手动检查build/diff-{$this->version}文件是否需要编辑,继续请输入y (y/n)";
-        if ($askDiffFile && $this->input->isInteractive() && !$this->askConfirmation($question)) {
-            $this->output->writeln('<error>制作升级包终止!</error>');
-            exit;
-        }
-
-        $askDiffFile = false;
-        foreach ($submoduleDiffFiles as $submodule => $diff) {
-            $file = @fopen($diff, 'r');
-            while (!feof($file)) {
-                $line = fgets($file);
-                $opFile = trim(substr($line, 1));
-                if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
-                    echo "异常的文件更新模式：{$line}";
-                    $askDiffFile = true;
-                    continue;
-                }
-            }
-            fclose($file);
-            $question = "请手动检查build/diff-{$submodule}-{$this->version}文件是否需要编辑,继续请输入y (y/n)";
-            if ($askDiffFile && $this->input->isInteractive() && !$this->askConfirmation($question)) {
-                $this->output->writeln('<error>制作升级包终止!</error>');
-                exit;
-            }
-            $askDiffFile = false;
-        }
-
-        $askAssetsLibs = false;
-        $this->output->writeln('<info>确认web/assets/libs目录文件</info>');
-        $file = @fopen($rootDir.$diffFile, 'r');
-        while (!feof($file)) {
-            $line = fgets($file);
-            $opFile = trim(substr($line, 1));
-
-            if (strpos($opFile, 'web/assets/libs') === 0) {
-                $askAssetsLibs = true;
-                $this->output->writeln("<comment>web/assets/libs文件：{$line}</comment>");
-            }
-        }
-        $question = 'web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)';
-        if ($askAssetsLibs && $this->input->isInteractive() && !$this->askConfirmation($question)) {
-            $this->output->writeln('<error>制作升级包终止!</error>');
-            exit;
-        }
-        fclose($file);
-
-        $submoduleDiffFiles = array_merge(array('' => $rootDir.$diffFile), $submoduleDiffFiles);
-        $askSqlUpgrade = false;
-        foreach ($submoduleDiffFiles as $submodule => $diffFilePath) {
-            $file = @fopen($diffFilePath, 'r');
-            while (!feof($file)) {
-                $line = fgets($file);
-                $opFile = trim(substr($line, 1));
-                if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
-                    $askSqlUpgrade = true;
-                    $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
-                }
-            }
-            $question = "请根据以上sql脚本完成 scripts/upgrade-{$this->version}.php,完成后输入y (y/n)";
-            fclose($file);
-        }
-
-        if ($askSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question)) {
-            $this->output->writeln('<error>制作升级包终止!</error>');
-            exit;
-        }
     }
 
     /**
@@ -498,28 +289,265 @@ class BuildUpgradePackageCommand extends BaseCommand
         return $this->getHelper('question')->ask($this->input, $this->output, new ConfirmationQuestion($question));
     }
 
-    /**
-     * @return string
-     */
-    protected function ignoreDevelopVendor()
+    protected function buildVendor()
     {
-        $fileSystem = new Filesystem();
-        $biz = $this->getContainer()->get('biz');
+        $this->output->writeln('<info>  清理vendor：</info>');
+        $dir = $this->packageDir.'source/vendor/';
 
-        $rootDir = $biz['kernel.root_dir'].'/../';
-        $fileSystem->remove($rootDir.'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
-        exec('composer install --no-dev');
-        exec('git add vendor');
+        $command = $this->getApplication()->find('build:vendor');
+        $input = new ArrayInput(array(
+            'command' => 'build:vendor',
+            'folder' => $dir,
+        ));
+        $command->run($input, $this->output);
     }
 
-    protected function recoveryDevelopVendor()
+    /**
+     * @param $diffFile
+     *
+     * @return array
+     */
+    private function processFiles($diffFile)
     {
-        $biz = $this->getContainer()->get('biz');
-        $rootDir = $biz['kernel.root_dir'].'/../';
-        $this->printChangeLog();
-        chdir($rootDir);
-        exec('git reset HEAD vendor');
-        exec('composer install');
-        exec('git checkout vendor');
+        $fileLines = array();
+        $handle = fopen($diffFile, 'r');
+        while (($line = fgets($handle)) !== false) {
+            array_push($fileLines, $line);
+        }
+        fclose($handle);
+
+        return $fileLines;
+    }
+
+    private function invalidFiles($fileLines)
+    {
+        $this->output->writeln('<comment>  本次升级需要注意一下文件</comment>');
+        $invalidFiles = array();
+        foreach ($fileLines as $key => $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            if (empty($opFile) || !in_array($op, array('M', 'A', 'D', 'R'))) {
+                array_push($invalidFiles, $op.' '.$opFile.' -> '.$newFile);
+                continue;
+            }
+        }
+
+        $this->printLog($invalidFiles, 'invalid');
+    }
+
+    private function ingoredFiles($fileLines)
+    {
+        $this->output->writeln('<info>  本次升级将忽略以下文件</info>');
+        $ignoreFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+
+            if (strpos($opFile, 'tests') === 0 || strpos($newFile, 'tests') === 0) {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+
+            if (strpos($opFile, 'migrations') === 0) {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+
+            if (strpos($opFile, 'plugins') === 0 || strpos($newFile, 'plugins')) {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+
+            if (strpos($opFile, 'web/install') === 0) {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+
+            if (strpos($opFile, 'doc') === 0) {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+            //注意，为了本地视频播放问题，忽略该文件，如果有版本改动，还是要先第一次修复，之后再改动
+            if ($opFile === 'vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php') {
+                array_push($ignoreFiles, $opFile);
+                continue;
+            }
+        }
+
+        $this->printLog($ignoreFiles, 'ignore');
+    }
+
+    private function renamedFiles($fileLines)
+    {
+        $this->output->writeln('<info>  本次升级将重命名以下文件</info>');
+        $renamedFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            if (strpos($op, 'R') === 0) {
+                $this->insertDelete($opFile, $this->packageDir);
+                $this->copyFileAndDir($newFile, $this->packageDir);
+                array_push($renamedFiles, "{$op}  : {$opFile} -> {$newFile}");
+            }
+        }
+
+        $this->printLog($renamedFiles, 'rename');
+    }
+
+    private function addedFiles($fileLines)
+    {
+        $this->output->writeln('<info>  本次升级将增加以下文件</info>');
+        $addedFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            $opBundleFile = $this->getBundleFile($opFile);
+            $newBundleFile = $this->getBundleFile($newFile);
+
+            if ($op == 'A') {
+                $this->copyFileAndDir($opFile, $this->packageDir);
+                array_push($addedFiles, $opFile);
+                if ($opBundleFile) {
+                    $this->copyFileAndDir($opBundleFile, $this->packageDir);
+                    array_push($addedFiles, $opBundleFile);
+                }
+            }
+
+            if (strpos($op, 'R') === 0) {
+                if ($newBundleFile) {
+                    $this->copyFileAndDir($newBundleFile, $this->packageDir);
+                    array_push($addedFiles, $newBundleFile);
+                }
+            }
+        }
+
+        $this->printLog($addedFiles, 'add');
+    }
+
+    private function updatedFiles($fileLines)
+    {
+        $this->output->writeln('<info>  本次升级将更新以下文件</info>');
+        $updatedFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            $opBundleFile = $this->getBundleFile($opFile);
+
+            if ($op == 'M') {
+                $this->copyFileAndDir($opFile, $this->packageDir);
+                array_push($updatedFiles, $opFile);
+                if ($opBundleFile) {
+                    $this->copyFileAndDir($opBundleFile, $this->packageDir);
+                    array_push($updatedFiles, $opBundleFile);
+                }
+            }
+        }
+
+        $this->printLog($updatedFiles, 'update');
+    }
+
+    private function deletedFiles($fileLines)
+    {
+        $this->output->writeln('<info>  本次升级将删除以下文件</info>');
+        $deletedFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            $opBundleFile = $this->getBundleFile($opFile);
+
+            if ($op == 'D') {
+                $this->insertDelete($opFile, $this->packageDir);
+                array_push($deletedFiles, $opFile);
+                if ($opBundleFile) {
+                    $this->insertDelete($opBundleFile, $this->packageDir);
+                    array_push($deletedFiles, $opFile);
+                }
+            }
+
+            if (strpos($op, 'R') === 0) {
+                if ($opBundleFile) {
+                    $this->insertDelete($opBundleFile, $this->packageDir);
+                    array_push($deletedFiles, $opFile);
+                }
+            }
+        }
+
+        $this->printLog($deletedFiles, 'delete');
+    }
+
+    private function migrationFiles($fileLines)
+    {
+        $this->output->writeln('<info>  正在检测migrations目录文件</info>');
+        $migrationFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+
+            if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
+                array_push($migrationFiles, $opFile);
+            }
+        }
+
+        $this->printLog($migrationFiles, 'migration');
+        if (count($migrationFiles)) {
+            if ($this->input->isInteractive() && !$this->askConfirmation("<comment>请根据以上sql脚本完成 scripts/upgrade-{$this->version}.php,完成后输入y (y/n)</comment>")) {
+                $this->output->writeln('<error> 制作升级包终止!</error>');
+                exit;
+            }
+        }
+    }
+
+    private function webAssetsFiles($fileLines)
+    {
+        $this->output->writeln('<info>  正在检测web/assets/libs目录文件</info>');
+
+        $webAssetsFiles = array();
+        foreach ($fileLines as $line) {
+            list($op, $opFile, $newFile) = $this->parseFileLine($line);
+            if (strpos($opFile, 'web/assets/libs') === 0) {
+                array_push($webAssetsFiles, $op.' '.$opFile);
+            }
+        }
+
+        $this->printLog($webAssetsFiles, 'web/assets/libs');
+
+        if (count($webAssetsFiles)) {
+            if ($this->input->isInteractive() && !$this->askConfirmation('<comment> web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)</comment>')) {
+                $this->output->writeln('<error>制作升级包终止!</error>');
+                exit;
+            }
+        }
+    }
+
+    /**
+     * @param $migrationFiles
+     * @param $operation
+     */
+    private function printLog($migrationFiles, $operation)
+    {
+        foreach ($migrationFiles as $file) {
+            $this->output->writeln("    - {$operation} file: {$file}");
+        }
+        if (!count($migrationFiles)) {
+            $this->output->writeln('    - --');
+        }
+    }
+
+    /**
+     * format:  file mode  | file name
+     *
+     * @param $line
+     *
+     * @return array
+     */
+    private function parseFileLine($line)
+    {
+        $splitLine = preg_split('/\s+/', $line);
+        list($op, $opFile, $newFile) = $splitLine;
+
+        return array($op, $opFile, $newFile);
     }
 }

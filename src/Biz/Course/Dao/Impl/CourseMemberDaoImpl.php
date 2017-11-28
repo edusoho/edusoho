@@ -120,7 +120,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
+
+        $sql = $this->sql($sql, array('createdTime' => 'DESC'), $start, $limit);
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
@@ -129,10 +130,11 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
         $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= ' WHERE ';
+        $sql .= ' WHERE c.compulsoryTaskNum > 0 AND ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
+        $sql = $this->sql($sql);
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -141,17 +143,19 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
         $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= ' WHERE ';
+        $sql .= ' WHERE c.compulsoryTaskNum > 0 AND ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
+
+        $sql = $this->sql($sql, array('createdTime' => 'DESC'), $start, $limit);
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$groupBy}, COUNT(id) AS count")
             ->groupBy($groupBy)
@@ -217,13 +221,15 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             $sql .= " AND c.status = 'published' ";
         }
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
     public function searchMemberIds($conditions, $orderBys, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
         $builder = $this->createQueryBuilder($conditions);
         $declares = $this->declares();
         foreach ($orderBys ?: array() as $order => $sort) {
@@ -328,7 +334,9 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role, $isLearned));
     }
@@ -349,14 +357,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
     }
 
-    public function findMembersNotInClassroomByUserIdAndRoleAndType(
-        $userId,
-        $role,
-        $type,
-        $start,
-        $limit,
-        $onlyPublished = true
-    ) {
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true)
+    {
         $sql = "SELECT m.* FROM {$this->table} m ";
 
         $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
@@ -366,7 +368,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
             $sql .= " AND c.status = 'published' ";
         }
 
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= ' ORDER BY createdTime DESC';
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($userId, $role, $type));
     }
@@ -464,6 +467,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNumLT',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
+                'deadline <= :deadlineLessThen',
                 'deadline >= :deadlineGreaterThan',
                 'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
@@ -472,6 +476,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
                 'lastLearnTime <= :lastLearnTime_LE',
+                'deadlineNotified = :deadlineNotified',
             ),
         );
     }

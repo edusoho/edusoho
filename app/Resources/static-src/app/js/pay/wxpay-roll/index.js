@@ -5,6 +5,6 @@ function wxpay_roll() {
   $.get($img.data('url'), function (response) {
     if (response) {
       window.location.href = $img.data('goto');
-    };
+    }
   });
 }

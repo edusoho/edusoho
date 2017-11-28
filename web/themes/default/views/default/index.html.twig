@@ -169,7 +169,7 @@
                         <div class="vip-img col-sm-3 ">
                           <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
                             <img class="img-responsive"
-                              src="{{ level.icon|default(asset('assets/img/default/vip-default.png')) }}"
+                              src="{{ level.icon|default(asset('assets/img/default/vip.png')) }}"
                               alt="{{ level.name }}">
                           </a>
                         </div>
@@ -343,28 +343,28 @@
           {% else %}
             <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
           {% endif %}
-        </div>
 
-        <div class="course-footer clearfix">
+          <div class="course-footer clearfix">
 
-          {% set teacher = courseSet.teachers|first|default(null) %}
-          {% if teacher %}
-            <div class="teacher">{{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
-              <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">
-                {{ teacher.nickname }}
-              </a>
-              <span class="teacher-title ellipsis">{{ teacher.title }}</span>
-            </div>
-          {% endif %}
-          <div class="course-metas">
-            <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
-            {% if setting('course.show_student_num_enabled', '1') == 1 %}
-              <span class="divider"></span>
-              <span class="text-muted mrm mls">
-                <strong>{{ courseSet.studentNum }}</strong>
-                {{ setting('default.user_name', '学员'|trans) }}
-              </span>
+            {% set teacher = courseSet.teachers|first|default(null) %}
+            {% if teacher %}
+              <div class="teacher">{{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
+                <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">
+                  {{ teacher.nickname }}
+                </a>
+                <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+              </div>
             {% endif %}
+            <div class="course-metas">
+              <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
+              {% if setting('course.show_student_num_enabled', '1') == 1 %}
+                <span class="divider"></span>
+                <span class="text-muted mrm mls">
+                  <strong>{{ courseSet.studentNum }}</strong>
+                  {{ setting('default.user_name', '学员'|trans) }}
+                </span>
+              {% endif %}
+            </div>
           </div>
         </div>
       </li>

@@ -38,6 +38,39 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(1, $updated);
     }
 
+    public function testFindCoursesByCourseSetIds()
+    {
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
+
+        $result = $this->getCourseService()->createCourse($course);
+        $this->assertNotNull($result);
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array(1));
+        $this->assertEquals(sizeof($courses), 1);
+    }
+
+    public function testGetDefaultCoursesByCourseSetIds()
+    {
+        $course = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $course['isDefault'] = '1';
+        $result = $this->getCourseService()->createCourse($course);
+        $this->assertNotNull($result);
+
+        $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds(array(1));
+        $this->assertEquals(sizeof($courses), 1);
+        $defaultCourse = reset($courses);
+
+        $this->assertEquals($defaultCourse['title'], $course['title']);
+    }
+
+    public function testCreateCourse()
+    {
+        $course = $this->defaultCourse('默认教学计划', array('id' => 1));
+        $result = $this->getCourseService()->createCourse($course);
+
+        $this->assertEquals($result['title'], $course['title']);
+        $this->assertEquals($result['courseType'], $course['courseType']);
+    }
+
     /**
      * @group current
      */

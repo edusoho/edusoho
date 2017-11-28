@@ -116,7 +116,10 @@ class DaoProxy
         }
 
         $rows = $this->callRealDao($method, $arguments);
-        $this->unserializes($rows);
+
+        if(!empty($rows)) {
+            $this->unserializes($rows);
+        }
 
         if ($strategy) {
             $strategy->afterQuery($this->dao, $method, $arguments, $rows);

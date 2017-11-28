@@ -1,39 +1,31 @@
 {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId == 0) %}
   {{ 'course.course_limited_tips'|trans }}
+{% elseif course.status != 'published' or courseSet.status != 'published' %}
+  {{ 'course.unbuyable.unpublished_tips'|trans }}
+{% elseif course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
+  {{ 'course.unbuyable.over_buy_expiry_time_tips'|trans }}
+{% elseif (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %}
+  {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
 {% else %}
-  {% if course.status != 'published' or courseSet.status != 'published' %}
-    {{ 'course.unbuyable.unpublished_tips'|trans }}
-  {% else %}
-    {% if course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
-      {{ 'course.unbuyable.over_buy_expiry_time_tips'|trans }}
-    {% elseif (course.expiryMode in ['end_date', 'date'] and course.expiryEndDate < 'now'|date('U')) %}
-      {{ 'course.unbuyable.over_expiry_end_date_tips'|trans }}
-    {% else %}
-      {{ slot('course.purchase.extension', {'course':course}) }}
-      {# 插件重写课程购买按钮 #}
-      {% if slot('course.buy-btn.extension', {'course': course})|trim %}
-        {{ slot('course.buy-btn.extension', {'course': course}) }}
-      {% else %}
-        {% if course.buyable|default(true) %}
-          <a class="btn btn-primary btn-lg {% if previewAs|default() %}disabled{% endif %}"
-            {% if is_buy_course_from_modal(course.id) %}
-              href="#modal"
-              data-toggle="modal"
-              data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-            {% else %}
-              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-            {% endif %}
-          >
-            {% if course.price > 0 %}
-              {{ 'course.btn.buy'|trans }}
-            {% else %}
-              {{ 'course.btn.join'|trans }}
-            {% endif %}
-          </a>
-        {% endif %}
-      {% endif %}
+  {{ slot('course.purchase.extension', {'course':course}) }}
 
-    {% endif %}
+
+  {% set noVipText = 1  %}
+  {% if slot('course.buy-btn.extension', {'course': course})|trim %}
+    {% set btnText = slot('course.buy-btn.extension', {'course': course}) %}
+    {% set noVipText = 0 %}
+  {% elseif course.originPrice == 0 or course.isFree %}
+    {% set btnText = 'course.btn.join' %}
+  {% else  %}
+    {% set btnText = 'course.btn.buy' %}
+  {% endif %}
+
+  {# 特殊业务逻辑 #}
+  {% if course.buyable|default(true) == false and ( is_plugin_installed('Vip') and  course.vipLevelId > 0) and noVipText %}
+  {% else %}
+    <a class="btn btn-primary js-buy-btn btn-lg {% if previewAs|default() %}disabled{% endif %}" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
+      {{ btnText|trans }}
+    </a>
   {% endif %}
 
 

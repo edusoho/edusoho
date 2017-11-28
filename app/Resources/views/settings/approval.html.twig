@@ -35,14 +35,14 @@
     </div>
   {% elseif  app.user.approvalStatus == 'unapprove' %}
     <div class="alert cd-alert cd-alert-warning">
-       {{'user.settings.verification.unapprove_tips'|trans}} 
+      {{'user.settings.verification.unapprove_tips'|trans}}
     </div>
   {% elseif app.user.approvalStatus == 'approve_fail' %}
     <div class="alert cd-alert cd-alert-danger">
       {% if approval.note|default() %}
-        {{'user.settings.verification.approve_failed_reason_tips'|trans({'%reason%':  approval.note})}}  
+        {{'user.settings.verification.approve_failed_reason_tips'|trans({'%reason%':  approval.note})}}
       {% else %}
-        {{'user.settings.verification.approve_failed_tips'|trans}}       
+        {{'user.settings.verification.approve_failed_tips'|trans}}
       {% endif %}
     </div>
   {% endif %}
@@ -69,7 +69,7 @@
           <div class="card-title">{{'user.fields.idcard_front_title'|trans }}</div>
           <label for="faceImg" class="card-label">
             <input id="faceImg" type="file" name="faceImg" accept="image/bmp,image/jpeg,image/png"
-            data-toggle="local-upload" data-target="#id-card-front">
+            class="js-upload-input" data-target="#id-card-front">
           </label>
         </div>
       </div>
@@ -81,7 +81,7 @@
           <div class="card-title">{{'user.fields.idcard_back_title'|trans }}</div>
           <label for="backImg" class="card-label">
             <input id="backImg" type="file" name="backImg" accept="image/bmp,image/jpeg,image/png"
-            data-toggle="local-upload" data-target="#id-card-back">
+            class="js-upload-input" data-target="#id-card-back">
           </label>
         </div>
       </div>
@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="col-md-5">
-        <button type="submit" class="btn cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
+        <button type="submit" class="btn cd-btn cd-btn-primary cd-btn-lg" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>

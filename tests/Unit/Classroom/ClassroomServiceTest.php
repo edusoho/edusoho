@@ -23,7 +23,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id'], $info = array());
 
         $time = time();
         $deadline = ClassroomToolkit::buildMemberDeadline(array(
@@ -34,6 +34,52 @@ class ClassroomServiceTest extends BaseTestCase
             'deadline' => $deadline,
         ));
         $this->assertEquals($time, $student['deadline']);
+    }
+
+    public function testFindWillOverdueClassrooms()
+    {
+        $user = $this->getCurrentUser();
+        $deadline = time() + 1000;
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findMembersByUserId',
+                    'returnValue' => array(array('classroomId' => 11, 'deadlineNotified' => 0, 'deadline' => $deadline)),
+                    'withParams' => array($user['id']),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'returnValue' => array(array('id' => 11, 'expiryValue' => 1)),
+                    'withParams' => array(array(11)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->findWillOverdueClassrooms();
+
+        $this->assertEquals(array(array('id' => 11, 'expiryValue' => 1)), $result[0]);
+    }
+
+    public function testBatchUpdateOrg()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array(),
+                    'withParams' => array(11, array()),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->batchUpdateOrg(11, 'testCode');
+
+        $this->assertNull($result);
     }
 
     public function testUpdateMembersDeadlineByClassroomId()
@@ -56,6 +102,32 @@ class ClassroomServiceTest extends BaseTestCase
         $updated = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
 
         $this->assertEquals(1, $updated);
+    }
+
+    public function testIsClassroomOverDue()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('expiryMode' => 'date', 'expiryValue' => 222222),
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('expiryMode' => 'test', 'expiryValue' => 222222),
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result1 = $this->getClassroomService()->isClassroomOverDue(1);
+        $result2 = $this->getClassroomService()->isClassroomOverDue(1);
+
+        $this->assertTrue($result1);
+        $this->assertFalse($result2);
     }
 
     public function testAddClassroom()
@@ -129,10 +201,108 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testRecommendClassroom()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin3',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array('id' => 1, 'recommended' => 1, 'title' => 'title'),
+                    'withParams' => array(
+                        1,
+                        array(
+                            'recommended' => 1,
+                            'recommendedSeq' => 11,
+                            'recommendedTime' => time(),
+                        ),
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'System:LogService',
+            array(
+                array(
+                    'functionName' => 'info',
+                    'withParams' => array(
+                        'classroom',
+                        'recommend',
+                        '推荐班级《title》(#1),序号为11',
+                    ),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->recommendClassroom(1, 11);
+
+        $this->getLogService()->shouldHaveReceived('info');
+        $this->assertEquals(array('id' => 1, 'recommended' => 1, 'title' => 'title'), $result);
     }
 
     public function testCancelRecommendClassroom()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin3',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array('id' => 1, 'recommended' => 0, 'title' => 'title'),
+                    'withParams' => array(
+                        1,
+                        array(
+                            'recommended' => 0,
+                            'recommendedTime' => 0,
+                            'recommendedSeq' => 100,
+                        ),
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'System:LogService',
+            array(
+                array(
+                    'functionName' => 'info',
+                    'withParams' => array(
+                        'classroom',
+                        'cancel_recommend',
+                        '取消推荐班级《title》(#1)',
+                    ),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->cancelRecommendClassroom(1, 11);
+
+        $this->getLogService()->shouldHaveReceived('info');
+        $this->assertEquals(array('id' => 1, 'recommended' => 0, 'title' => 'title'), $result);
     }
 
     public function testGetClassroomCourse()
@@ -220,6 +390,54 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals('test12333', $classroom['title']);
     }
 
+    public function testGetClassroomByCourseId()
+    {
+        $result1 = $this->getClassroomService()->getClassroomByCourseId(1);
+
+        $this->assertEquals(array(), $result1);
+
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'findClassroomIdsByCourseId',
+                    'returnValue' => array(array('classroomId' => 1)),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'titile' => 'title'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result2 = $this->getClassroomService()->getClassroomByCourseId(1);
+
+        $this->assertEquals(array('id' => 1, 'titile' => 'title'), $result2);
+    }
+
+    public function testGetClassroomCourseByCourseSetId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'getByCourseSetId',
+                    'returnValue' => array('id' => 1, 'classroomId' => 1),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->getClassroomCourseByCourseSetId(1);
+
+        $this->assertEquals(array('id' => 1, 'classroomId' => 1), $result);
+    }
+
     public function testFindClassroomByCourseId()
     {
         $textClassroom = array(
@@ -291,6 +509,19 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testWaveClassroom()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'wave',
+                    'returnValue' => array('id' => 1, 'noteNum' => 2),
+                    'withParams' => array(array(1), array('noteNum' => 1)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->waveClassroom(1, 'noteNum', +1);
+
+        $this->assertEquals(array('id' => 1, 'noteNum' => 2), $result);
     }
 
     public function testDeleteClassroom()
@@ -307,6 +538,19 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testIsClassroomTeacher()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'role' => array('teacher')),
+                    'withParams' => array(1, 1),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->isClassroomTeacher(1, 1);
+
+        $this->assertTrue($result);
     }
 
     public function testUpdateClassroomTeachers()
@@ -381,6 +625,102 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testChangePicture()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                        'title' => 'title',
+                        'smallPicture' => 'smallPicture',
+                        'middlePicture' => 'middlePicture',
+                        'largePicture' => 'largePicture',
+                    ),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(
+                        1,
+                        array('smallPicture' => 'uri1', 'middlePicture' => 'uri2', 'largePicture' => 'uri3'),
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Content:FileService',
+            array(
+                array(
+                    'functionName' => 'getFilesByIds',
+                    'returnValue' => array(
+                        array('id' => 1, 'uri' => 'uri1'),
+                        array('id' => 2, 'uri' => 'uri2'),
+                        array('id' => 3, 'uri' => 'uri3'),
+                    ),
+                    'withParams' => array(array(1, 2, 3)),
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                    'returnValue' => array(),
+                    'withParams' => array('smallPicture'),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                    'returnValue' => array(),
+                    'withParams' => array('middlePicture'),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'deleteFileByUri',
+                    'returnValue' => array(),
+                    'withParams' => array('largePicture'),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'System:LogService',
+            array(
+                array(
+                    'functionName' => 'info',
+                    'returnValue' => array(),
+                    'withParams' => array(
+                        'classroom',
+                        'update_picture',
+                        '更新课程《title》(#1)图片',
+                        array(
+                            'smallPicture' => 'uri1',
+                            'middlePicture' => 'uri2',
+                            'largePicture' => 'uri3',
+                        ),
+                    ),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'info',
+                    'returnValue' => array(),
+                    'withParams' => array(
+                        'classroom',
+                        'update',
+                        '更新班级《title》(#1)',
+                    ),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->changePicture(
+            1,
+            array(
+                array('id' => 1, 'type' => 'small'),
+                array('id' => 2, 'type' => 'middle'),
+                array('id' => 3, 'type' => 'large'),
+            )
+        );
+
+        $this->assertEquals(array('id' => 1, 'title' => 'title'), $result);
     }
 
     public function testIsCourseInClassroom()
@@ -432,8 +772,49 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(false, $enabled);
     }
 
+    public function testCountMobileFilledMembersByClassroomId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'countMobileFilledMembersByClassroomId',
+                    'returnValue' => 1,
+                    'withParams' => array(1, 0),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->countMobileFilledMembersByClassroomId(1, 0);
+
+        $this->assertEquals(1, $result);
+    }
+
     public function testFindMembersByUserIdAndClassroomIds()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findByUserIdAndClassroomIds',
+                    'returnValue' => array(),
+                    'withParams' => array(1, array(1, 2)),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'findByUserIdAndClassroomIds',
+                    'returnValue' => array(array('classroomId' => 1)),
+                    'withParams' => array(1, array(1, 2)),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result1 = $this->getClassroomService()->findMembersByUserIdAndClassroomIds(1, array(1, 2));
+
+        $this->assertEquals(array(), $result1);
+
+        $result2 = $this->getClassroomService()->findMembersByUserIdAndClassroomIds(1, array(1, 2));
+
+        $this->assertEquals(array('classroomId' => 1), $result2[1]);
     }
 
     public function testFindClassroomsByIds()
@@ -452,10 +833,66 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testSearchMemberCount()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'count',
+                    'returnValue' => 1,
+                    'withParams' => array(array('userId' => 1)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->searchMemberCount(array('userId' => 1));
+
+        $this->assertEquals(1, $result);
     }
 
     public function testSearchMembers()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 111, 'role' => 'teacher')),
+                    'withParams' => array(
+                        array('role' => '%teacher%', 'userId' => 111, 'categoryIds' => array(1, 2)),
+                        array(),
+                        0,
+                        5,
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserByNickname',
+                    'returnValue' => array('id' => 111),
+                    'withParams' => array('name'),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Taxonomy:CategoryService',
+            array(
+                array(
+                    'functionName' => 'findCategoryChildrenIds',
+                    'returnValue' => array(2),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->searchMembers(
+            array('role' => 'teacher', 'nickname' => 'name', 'categoryId' => 1),
+            array(),
+            0,
+            5
+        );
+
+        $this->assertEquals(array(array('id' => 111, 'role' => 'teacher')), $result);
     }
 
     public function testGetClassroomMember()
@@ -473,14 +910,60 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testGetClassroomMembersByCourseId()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'findClassroomIdsByCourseId',
+                    'returnValue' => array(array(1)),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findByUserIdAndClassroomIds',
+                    'returnValue' => array(),
+                    'withParams' => array(1, array(array(1))),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->getClassroomMembersByCourseId(1, 1);
+        $this->assertEquals(array(), $result);
     }
 
     public function testFindClassroomMembersByRole()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findByClassroomIdAndRole',
+                    'returnValue' => array(array('userId' => 1, 'role' => array('student'))),
+                    'withParams' => array(1, 'student', 0, 5),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->findClassroomMembersByRole(1, 'student', 0, 5);
+        $this->assertEquals(array(1 => array('userId' => 1, 'role' => array('student'))), $result);
     }
 
     public function testFindMembersByClassroomIdAndUserIds()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findByClassroomIdAndUserIds',
+                    'returnValue' => array(array('userId' => 1, 'role' => array('student'))),
+                    'withParams' => array(1, array(1)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->findMembersByClassroomIdAndUserIds(1, array(1));
+        $this->assertEquals(array(1 => array('userId' => 1, 'role' => array('student'))), $result);
     }
 
     public function testBecomeStudent()
@@ -593,18 +1076,122 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testRemarkStudent()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1),
+                    'withParams' => array(1, 1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array('id' => 1, 'remark' => 'test'),
+                    'withParams' => array(1, array('remark' => 'test')),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->remarkStudent(1, 1, 'test');
+
+        $this->assertEquals(array('id' => 1, 'remark' => 'test'), $result);
     }
 
     public function testFindClassroomStudents()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findByClassroomIdAndRole',
+                    'returnValue' => array(array('userId' => 1, 'role' => array('student'))),
+                    'withParams' => array(1, 'student', 0, 5),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->findClassroomStudents(1, 0, 5);
+        $this->assertEquals(array(array('userId' => 1, 'role' => array('student'))), $result);
     }
 
     public function testLockStudent()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'locked' => 1, 'role' => array('student')),
+                    'withParams' => array(1, 1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'locked' => 0, 'role' => array('student')),
+                    'withParams' => array(1, 1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(1, array('locked' => 1)),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result1 = $this->getClassroomService()->lockStudent(1, 1);
+        $this->assertNull($result1);
+
+        $result2 = $this->getClassroomService()->lockStudent(1, 1);
+        $this->getClassroomMemberDao()->shouldHaveReceived('update');
     }
 
     public function testUnlockStudent()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'locked' => 0, 'role' => array('student')),
+                    'withParams' => array(1, 1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'locked' => 1, 'role' => array('student')),
+                    'withParams' => array(1, 1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(1, array('locked' => 0)),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result1 = $this->getClassroomService()->unlockStudent(1, 1);
+        $this->assertNull($result1);
+
+        $result2 = $this->getClassroomService()->unlockStudent(1, 1);
+        $this->getClassroomMemberDao()->shouldHaveReceived('update');
     }
 
     public function testBecomeAssistant()
@@ -633,6 +1220,53 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(1, count($assistants));
     }
 
+    public function testBecomeTeacher()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'returnValue' => array('id' => 3, 'roles' => array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'create',
+                    'returnValue' => array('id' => 1, 'userId' => 3),
+                    'withParams' => array(
+                        array(
+                            'classroomId' => 1,
+                            'userId' => 3,
+                            'orderId' => 0,
+                            'levelId' => 0,
+                            'role' => array('teacher'),
+                            'remark' => '',
+                            'createdTime' => time(),
+                        ),
+                    ),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->becomeTeacher(1, 3);
+
+        $this->assertEquals(array('id' => 1, 'userId' => 3), $result);
+    }
+
     public function testFindAssistants()
     {
         $textClassroom = array(
@@ -653,6 +1287,45 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->becomeAssistant($classroom['id'], $user2['id']);
         $assistants = $this->getClassroomService()->findAssistants($classroom['id']);
         $this->assertEquals(1, count($assistants));
+    }
+
+    public function testFindTeachers()
+    {
+        $result1 = $this->getClassroomService()->findTeachers(1);
+
+        $this->assertEquals(array(), $result1);
+
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findTeachersByClassroomId',
+                    'returnValue' => array(array('userId' => 11)),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('teacherIds' => array(22)),
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result2 = $this->getClassroomService()->findTeachers(1);
+        $result3 = $this->getClassroomService()->findTeachers(1);
+
+        $this->assertEquals(array(11), $result2);
+        $this->assertEquals(array(11), $result3);
     }
 
     public function testisClassroomAssistant()
@@ -683,6 +1356,62 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testUpdateAssistants()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title', 'assistantIds' => array()),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(1, array('assistantIds' => array(1, 2))),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findAssistantsByClassroomId',
+                    'returnValue' => array(array('userId' => 2), array('userId' => 3)),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'findByClassroomIdAndUserIds',
+                    'returnValue' => array(array('id' => 1, 'userId' => 1, 'role' => array('student'))),
+                    'withParams' => array(1, array(1)),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'findByClassroomIdAndUserIds',
+                    'returnValue' => array(array('id' => 3, 'userId' => 3, 'role' => array('student', 'assistant'))),
+                    'withParams' => array(1, array(1 => 3)),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(1, array('role' => array('student', 'assistant'))),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(3, array('role' => array('student'))),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->getClassroomService()->updateAssistants(1, array(1, 2));
+        $this->getClassroomMemberDao()->shouldHaveReceived(
+            'update',
+            array(1, array('role' => array('student', 'assistant')))
+        );
+        $this->getClassroomMemberDao()->shouldHaveReceived(
+            'update',
+            array(3, array('role' => array('student')))
+        );
+        $this->getClassroomDao()->shouldHaveReceived('update');
     }
 
     public function testBecomeAuditor()
@@ -857,6 +1586,29 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testTryAdminClassroom()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin3',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->tryAdminClassroom(1);
+
+        $this->assertEquals(array('id' => 1, 'title' => 'title'), $result);
     }
 
     public function testCanManageClassroom()
@@ -1108,7 +1860,7 @@ class ClassroomServiceTest extends BaseTestCase
         $result = $this->getClassroomService()->canJoinClassroom($classroom['id']);
         $this->assertEquals($result['code'], 'success');
 
-        sleep(3);
+        sleep(1);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
         $this->assertEquals($result1['code'], 'classroom.expired');
     }
@@ -1153,47 +1905,72 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testCanHandleClassroom()
     {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(),
+                    'withParams' => array(1),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'title'),
+                    'withParams' => array(1),
+                    'runTimes' => 3,
+                ),
+            )
+        );
+        $result1 = $this->getClassroomService()->canHandleClassroom(1);
+        $this->assertFalse($result1);
+
+        $user = $this->getUserService()->register(array(
+            'id' => 2,
+            'nickname' => 'test',
+            'email' => 'test@test.com',
+            'password' => 'test123',
+            'roles' => array('ROLE_USER', 'ROLE_SUPER_ADMIN'),
+        ));
+
+        $currentUser = new CurrentUser();
+        $user['currentIp'] = '127.0.0.1';
+        $currentUser->fromArray($user);
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array(),
+                    'withParams' => array(1, $user['id']),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'role' => array('teacher')),
+                    'withParams' => array(1, $user['id']),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1, 'role' => array('student')),
+                    'withParams' => array(1, $user['id']),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result2 = $this->getClassroomService()->canHandleClassroom(1);
+        $this->assertFalse($result1);
+        $result3 = $this->getClassroomService()->canHandleClassroom(1);
+        $this->assertTrue($result3);
+        $result4 = $this->getClassroomService()->canHandleClassroom(1);
+        $this->assertFalse($result4);
     }
 
     public function testTryHandleClassroom()
     {
-    }
-
-    public function testExitClassroom()
-    {
-        $user = $this->createUser();
-        $textClassroom = array(
-            'title' => 'test',
-        );
-
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-
-        $currentUser = $this->getCurrentUser();
-
-        $this->getClassroomService()->publishClassroom($classroom['id']);
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 2,
-            'nickname' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => 'admin',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER'),
-        ));
-
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $this->getClassroomService()->becomeStudent($classroom['id'], 2);
-
-        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
-        $this->assertEquals(true, $enabled);
-
-        $this->getClassroomService()->exitClassroom($classroom['id'], 2);
-
-        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
-        $this->assertEquals(true, $enabled);
     }
 
     public function testFindCoursesByClassroomId()
@@ -1221,25 +1998,24 @@ class ClassroomServiceTest extends BaseTestCase
         $teacher2 = $this->createTeacher('2');
         $teacher3 = $this->createTeacher('3');
         $teacher4 = $this->createTeacher('4');
-        $teacher5 = $this->createTeacher('5');
-        $teacher6 = $this->createTeacher('6');
-        $teacher7 = $this->createTeacher('7');
-        $teacher8 = $this->createTeacher('8');
+
         $textClassroom = array(
             'title' => 'test',
         );
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher2['id']);
-        $teacherIds = array($teacher1['id'], $teacher2['id'], $teacher3['id'], $teacher4['id']);
+
+        $this->getClassroomService()->becomeStudent($classroom['id'], $teacher1['id']);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $teacher3['id']);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $teacher4['id']);
+
+        $teacherIds = array($teacher3['id'], $teacher4['id']);
         $this->getClassroomService()->updateAssistants($classroom['id'], $teacherIds);
         $assitantIds = $this->getClassroomService()->findAssistants($classroom['id']);
-        $this->assertEquals(count($assitantIds), 4);
-        $teacherIds = array($teacher1['id'], $teacher3['id'], $teacher5['id'], $teacher7['id']);
-        $this->getClassroomService()->updateAssistants($classroom['id'], $teacherIds);
-        $assitantIds = $this->getClassroomService()->findAssistants($classroom['id']);
-        $this->assertEquals(count($assitantIds), 4);
+        $this->assertEquals(2, count($assitantIds));
     }
 
     /**
@@ -1344,6 +2120,40 @@ class ClassroomServiceTest extends BaseTestCase
         //$this->assertEquals(count($teachers), 4);
     }
 
+    public function testFindClassroomsByCoursesIds()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'findByCoursesIds',
+                    'returnValue' => array(array('id' => 1, 'classroomId' => 1)),
+                    'withParams' => array(array(1, 2)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->findClassroomsByCoursesIds(array(1, 2));
+
+        $this->assertEquals(array(array('id' => 1, 'classroomId' => 1)), $result);
+    }
+
+    public function testFindClassroomsByCourseSetIds()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'findByCourseSetIds',
+                    'returnValue' => array(array('id' => 1, 'courseSetId' => 1)),
+                    'withParams' => array(array(1, 2)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->findClassroomsByCourseSetIds(array(1, 2));
+
+        $this->assertEquals(array(array('id' => 1, 'courseSetId' => 1)), $result);
+    }
+
     public function testCanCreateThreadEvent()
     {
         $textClassroom = array(
@@ -1399,11 +2209,194 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertCount(1, $members);
     }
 
+    public function testUpdateMember()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array('id' => 1, 'userId' => 2),
+                    'withParams' => array(1, array('userId' => 2)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->updateMember(1, array('userId' => 2));
+        $this->assertEquals(array('id' => 1, 'userId' => 2), $result);
+    }
+
+    public function testUpdateLearndNumByClassroomIdAndUserId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'findByClassroomId',
+                    'returnValue' => array(array('courseId' => 1)),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'findCoursesByIds',
+                    'returnValue' => array(array('id' => 1)),
+                    'withParams' => array(array(1)),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Task:TaskResultService',
+            array(
+                array(
+                    'functionName' => 'countTaskResults',
+                    'returnValue' => 1,
+                    'withParams' => array(array(
+                        'userId' => 1,
+                        'courseIds' => array(1),
+                        'status' => 'finish',
+                    )),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'getByClassroomIdAndUserId',
+                    'returnValue' => array('id' => 1),
+                    'withParams' => array(1, 1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => array('id' => 1, 'userId' => 1),
+                    'withParams' => array(1, array('lastLearnTime' => time(), 'learnedNum' => 1)),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->updateLearndNumByClassroomIdAndUserId(1, 1);
+
+        $this->assertEquals(array('id' => 1, 'userId' => 1), $result);
+    }
+
+    public function testCountCoursesByClassroomId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'count',
+                    'returnValue' => 1,
+                    'withParams' => array(array(
+                        'classroomId' => 1,
+                        'disabled' => 0,
+                    )),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->countCoursesByClassroomId(1);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCountCourseTasksByClassroomId()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomCourseDao',
+            array(
+                array(
+                    'functionName' => 'countCourseTasksByClassroomId',
+                    'returnValue' => 1,
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result = $this->getClassroomService()->countCourseTasksByClassroomId(1);
+        $this->assertEquals(1, $result);
+    }
+
     public function testFindClassroomCourseByCourseSetIds()
     {
         $result = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array(-1, -2));
 
         $this->assertCount(0, $result);
+    }
+
+    public function testFindUserPaidCoursesInClassroom()
+    {
+        $textClassroom = array(
+            'title' => 'test',
+        );
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $course1 = $this->createCourse('Test Course 1');
+        $course2 = $this->createCourse('Test Course 2');
+        $course3 = $this->createCourse('Test Course 3');
+
+        $courseIds = array($course1['id'], $course2['id'], $course3['id']);
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'findCoursesByStudentIdAndCourseIds', 'returnValue' => array(array('id' => 1, 'courseId' => $course1['id'], 'orderId' => 1))),
+        ));
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'searchOrderItems', 'returnValue' => array(array('id' => 1, 'order_id' => 1))),
+        ));
+
+        list($paidCourses, $orderItems) = $this->getClassroomService()->findUserPaidCoursesInClassroom(1, $classroom['id']);
+
+        $this->assertEquals(1, count($paidCourses));
+        $this->assertEquals(1, count($orderItems));
+    }
+
+    public function testTryFreeJoin()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(
+                        'id' => 1,
+                        'title' => 'title',
+                        'status' => 'published',
+                        'buyable' => 1,
+                        'expiryMode' => 'forever',
+                        'price' => 0,
+                        'expiryValue' => 0,
+                        'middlePicture' => 'middlePicture',
+                        'about' => 'test',
+                        'showable' => 1,
+                    ),
+                    'withParams' => array(1),
+                ),
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(1, array('studentNum' => '1', 'auditorNum' => '0')),
+                ),
+            )
+        );
+        $this->getClassroomService()->tryFreeJoin(1);
+    }
+
+    public function testFindMembersByMemberIds()
+    {
+        $this->mockBiz(
+            'Classroom:ClassroomMemberDao',
+            array(
+                array(
+                    'functionName' => 'findMembersByMemberIds',
+                    'withParams' => array(array(1)),
+                ),
+            )
+        );
+        $this->getClassroomService()->findMembersByMemberIds(array(1));
+
+        $this->getClassroomMemberDao()->shouldHaveReceived('findMembersByMemberIds');
     }
 
     protected function mockCourse($title = 'Test Course 1')
@@ -1509,5 +2502,29 @@ class ClassroomServiceTest extends BaseTestCase
         $user['roles'] = array('ROLE_USER', 'ROLE_TEACHER');
 
         return $this->getUserService()->register($user);
+    }
+
+    /**
+     * @return ClassroomMemberDao
+     */
+    protected function getClassroomMemberDao()
+    {
+        return $this->createDao('Classroom:ClassroomMemberDao');
+    }
+
+    /**
+     * @return ClassroomDao
+     */
+    protected function getClassroomDao()
+    {
+        return $this->createDao('Classroom:ClassroomDao');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

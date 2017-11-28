@@ -65,6 +65,8 @@ security:
         - { path: ^/task, role: ROLE_USER }
         - { path: ^/my, role: ROLE_USER }
         - { path: ^/settings, role: ROLE_USER }
+        - { path: ^/cashier, role: ROLE_USER }
+        - { path: ^/order, role: ROLE_USER }
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }
         - { path: ^/classroom/\d+/manage/, role: ROLE_USER }

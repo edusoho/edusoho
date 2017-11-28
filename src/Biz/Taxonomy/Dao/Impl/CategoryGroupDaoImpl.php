@@ -18,8 +18,9 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
 
     public function find($start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table()} LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table()}";
+
+        $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array()) ?: array();
     }
@@ -33,13 +34,6 @@ class CategoryGroupDaoImpl extends GeneralDaoImpl implements CategoryGroupDao
 
     public function declares()
     {
-        return array(
-        );
-    }
-
-    protected function filterStartLimit(&$start, &$limit)
-    {
-        $start = (int) $start;
-        $limit = (int) $limit;
+        return array();
     }
 }

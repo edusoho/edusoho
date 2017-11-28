@@ -1,16 +1,31 @@
 .cd-panel {
-  min-height: 518px;
-  .border-radius;
   background-color: #fff;
   .cd-box-shadow;
+  .cd-border-radius;
   .cd-panel-heading {
-    position: relative;
-    padding: 24px 0;
-    .border-bottom-left-radius(0);
-    .border-bottom-right-radius(0);
-    .cd-box-shadow(2px);
+    padding: 24px 32px;
+    .cd-box-shadow-inset(0 -1px 0 0);
+    @media(max-width: @screen-xs-max) {
+      padding: 16px;
+    }
+  }
+  .cd-panel-title {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 500;
+    color: @cd-gray-dark;
+  }
+  .cd-panel-heading-with-steps {
+    padding: 24px 12px;
+    .cd-box-shadow(2px, 0.01, 0.04);
+    @media(max-width: @screen-xs-max) {
+      padding: 16px;
+    }
   }
   .cd-panel-body {
-    padding-top: 24px;
+    padding: 32px;
+    @media(max-width: @screen-xs-max) {
+      padding: 16px;
+    }
   }
 }

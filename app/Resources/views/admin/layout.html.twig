@@ -34,10 +34,7 @@
   
   {% block stylesheets %}
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
-  <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
-  <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
-  <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+  <link href="{{ asset('static-dist/app/css/admin.css') }}" rel="stylesheet" />
   {% endblock %}
 
   {% block javascripts %}{% endblock %}
@@ -160,6 +157,20 @@
         </a>
       </div>
     {% endif %}
+
+    {% block faqSDK %}
+      {% if setting('copyright.thirdCopyright')|default(0) != 1 %}
+        <script aysnc="aysnc" src="{{ 'http://service-cdn.qiqiuyun.net/js-sdk/faq/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
+        <script aysnc="aysnc">
+          {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : 'http://www.qiqiuyu.com' %}
+          new FaqSDK({
+            id: 'faq-sdk',
+            apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&host={{ app.request.getHost() }}&url={{ app.request.getRequestUri() }}',
+            color: '#43bc60',
+          });
+        </script>
+      {% endif %}
+    {% endblock %}
   </body>
 {% endblock %}
 </html>

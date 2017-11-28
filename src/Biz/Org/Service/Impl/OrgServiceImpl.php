@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Org\Dao\OrgDao;
 use Biz\Org\Service\OrgService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Org\Service\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
@@ -102,7 +101,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $data = $user->toArray();
         $data['selectOrg'] = $this->checkBeforeProccess($id);
         $user->fromArray($data);
-        $this->getKernel()->setCurrentUser($user);
+        $this->biz['user'] = $user;
     }
 
     public function getOrgByOrgCode($orgCode)
@@ -223,19 +222,10 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->createDao('Org:OrgDao');
     }
 
-    public function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getModuleService($module)
     {
         $moduleService = OrgBatchUpdateFactory::getModuleService($module);
 
-        if (is_array($moduleService) && $moduleService['protocol'] === 'biz') {
-            return ServiceKernel::instance()->createService($moduleService['service']);
-        }
-
-        return $this->createService($moduleService);
+        return $this->createService($moduleService['service']);
     }
 }

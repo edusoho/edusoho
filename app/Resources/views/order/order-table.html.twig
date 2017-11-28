@@ -1,107 +1,52 @@
 {#
     mode的取值有:
-      my:该模式下不显示购买者
       admin:该模式下详情无下拉菜单
       course:该模式下详情无下拉菜单
 #}
-{% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% import "macro.html.twig" as web_macro %}
-{% set mode = mode|default(['my']) %}
   <thead>
     <tr>
-      <th width="20%">{{'order.name'|trans}}</th>
-      <th>{{'order.createdTime'|trans}}</th>
+      <th width="30%">{{'order.product_name'|trans}}</th>
       <th>{{'order.status'|trans}}</th>
-      <th>{{'order.real_pay'|trans}}</th>
-      {% if mode in ['course', 'admin'] %}
-        <th width="10%">{{'order.buyers'|trans}}</th>
-      {% endif %}
-      <th>{{'order.payment_pattern'|trans}}
-      <span data-toggle="popover" data-trigger="hover" data-placement="bottom" data-container="body" data-content="
-       {{ 'order.tips'|trans }}" class="glyphicon glyphicon-question-sign color-gray text-sm js-pay-way-popover"></span>
-      </th>
+      <th>{{'order.product_price'|trans }}</th>
+      <th>{{'order.price'|trans}}</th>
+      <th width="10%">{{'order.buyers'|trans}}</th>
       <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
     </tr>
   </thead>
   <tbody>
     {% for order in orders %}
-      {% set buyer = users[order.userId]|default(null) %}
+      {% set buyer = users[order.user_id]|default(null) %}
         <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
           <td>
-            {% if order.targetType == 'course' %}
-              <a  class="link-primary" href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
-            {% elseif order.targetType == 'vip' %}
-              <a class="link-primary" href="{{ path('vip', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
-            {% elseif order.targetType == 'classroom' %}
-              <a class="link-primary" href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% if order.item.target_type|default('') == 'course' %}
+              <a  class="link-primary" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.item.target_type|default('') == 'vip' %}
+              <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.item.target_type|default('') == 'classroom' %}
+              <a class="link-primary" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
             {% else %}
               <strong>{{order.title}}</strong>
             {% endif %}
             <br>
             <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
-            {# {% if order.targetType == 'course' %}
-              <br>
-              <span class="color-gray text-sm">
-                {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
-                  {% set courseSet = courseSets[courses[order.targetId].courseSetId] %}
-                  {{'user.orders.target_course'|trans}}<a class="link-primary" href="{{ path('course_show', {id:courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
-                {% else %}
-                  {{'user.orders.target_course_deleted'|trans}}
-                {% endif %}
-              </span>
-            {% endif %} #}
+            <br>
+            <span class="color-gray text-sm">{{'order.created_time'|trans}}：{{ order.created_time|date('Y-n-d H:i:s') }}</span>
           </td>
-          <td><span class="color-gray text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
-          <td>{{ dict_macro.orderStatus(order.status) }}</td>
-          <td><span class="color-warning">{{order.amount}}</span></td>
-          {% if mode in ['admin', 'course'] %}
+          <td>{{ display_order_status(order.status, 0) }}</td>
+          <td><span class="color-warning">{{ order.price_amount|to_cash(0) }}</span></td>
+          <td><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span></td>
+          {% if has_permission('admin_user_manage') %}
             <td>
-              {{ web_macro.user_link(buyer) }}
+              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:buyer.id}) }}">{{ buyer.nickname|default('--') }}</a>
+            </td>
+          {% else %}
+            <td>
+              <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
             </td>
           {% endif %}
           <td>
-            {% if order.paidTime > 0 %}
-              {{ dict_text('payment', order.payment)|default('--') }}
-              <br>
-              <span class="color-gray text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
-            {% else %}
-              --
-            {% endif %}
-          </td>
-          <td>
-            {% if 'admin' == mode  %}
-                <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-              {% endif %}
-            {% if 'course' == mode %}
-            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('course_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-            {% endif %}
-
-            {% if 'my' == mode %}
-              <div class="btn-group">
-                <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
-                {% if order.status == 'refunding' or  order.status == 'created' %}
-                  <a href="#" type="button" class="link-primary ml10 dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu pull-right {# text-right #}" style="min-width: 120px;" >
-
-                  {# <div class="actions"> #}
-                    {% if order.status == 'refunding' %}
-                      <li><a href="javascript:;" class="cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.orders.cancel_refund'|trans}}</a></li>
-                    {% endif %}
-                    {% if order.status == 'created' %}
-
-                      <li>
-                        <a href="{{path('pay_center_show', {sn:order.sn,targetType:order.targetType})}}"  style="display:block" >{{'user.orders.pay'|trans}}</a>
-                      </li>
-                      <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a></li>
-
-                    {% endif %}
-                   {#  </div> #}
-                  </ul>
-                {% endif %}
-              </div>
-            {% endif %}
+            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
           </td>
         </tr>
     {% else %}

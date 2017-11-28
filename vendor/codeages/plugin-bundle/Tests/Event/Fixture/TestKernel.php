@@ -1,6 +1,7 @@
 <?php
 
 namespace Codeages\PluginBundle\Tests\Event\Fixture;
+
 use Symfony\Component\HttpKernel\Kernel;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 use Codeages\PluginBundle\FrameworkBundle;
@@ -11,7 +12,7 @@ class TestKernel extends Kernel implements PluginableHttpKernelInterface
 {
     public function getCacheDir()
     {
-        return dirname(__DIR__)."/app/cache";
+        return dirname(__DIR__).'/app/cache';
     }
 
     public function registerBundles()
@@ -32,5 +33,4 @@ class TestKernel extends Kernel implements PluginableHttpKernelInterface
     {
         return new PluginConfigurationManager(__DIR__);
     }
-    
 }

@@ -1,13 +1,13 @@
 <span class="input-group js-file-name-group mb10">
   <input name="file-filter-by-file-name" class="form-control js-course-file-name" type="text" placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
   <span class="input-group-btn">
-    <button type="button" class="btn btn-default js-course-browser-search" data-url="{{ path('media_course_file_choose', {courseId:courseId, type: fileType|default('') , courseType:'course'}) }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
+    <button type="button" class="btn btn-default js-course-browser-search" data-url="{{ path('media_course_file_choose', {courseId:courseId, type: fileType|default('') , courseType:courseType|default('course')}) }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
   </span>
 </span>
 
 
 <div class="course-file-browser " data-role="course-file-browser"
-     data-url="{{ path('media_course_file_choose', {courseId:courseId, type: fileType|default('') , courseType:'course'}) }}">
+     data-url="{{ path('media_course_file_choose', {courseId:courseId, type: fileType|default('') , courseType:courseType|default('course')}) }}">
 
 </div>
 

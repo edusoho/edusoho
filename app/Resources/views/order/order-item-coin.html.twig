@@ -26,10 +26,9 @@
     <input style="display:none">{# Prevent autocompleting #}
     <input type="password" style="display:none">{# Prevent autocompleting #}
     {% if not hasPayPassword %}
-    <div  class="alert alert-warning alert-xs mtm inline-block" style="line-height:20px">
-        {{'order.confirm.safety_tips'|trans}}
+    <div  class="alert cd-alert cd-alert-warning inline-block">
         {% if hasPassword %}
-          {{'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_set_pay_password')})|raw}}
+          {{'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_pay_password')})|raw}}
         {% else %}
           {{'order.confirm.setup_login_password_tips'|trans({'%setupUrl%':path('settings_set_password')})|raw}}
         {% endif %}

@@ -15,8 +15,7 @@ admin.tab.setting_tab: Setting
 admin.nav.user: User
 admin.nav.course: Course
 admin.nav.operation: Operation
-admin.nav.order: Order
-admin.nav.finance: Account
+admin.nav.finance: 交易
 admin.nav.cloud:  ES Cloud
 admin.nav.system: System
 
@@ -28,6 +27,7 @@ admin.user.message_menu: Messages
 
 ##用户管理模块
 admin.user.basic.basic_tab: Users
+admin.user.basic.online: Online
 admin.user.basic.login_record_tab: System Log
 
 admin.user.basic.basic_tab.create_btn: 'Add'
@@ -201,25 +201,11 @@ admin.operation.reward_point_mall.product_tab: Product Manage
 
 admin.operation.reward_point_mall.product_tab.create_btn: Add Product
 
-#订单管理模块
-admin.order.course_menu: Course Orders
-admin.order.coin_menu: Coin Orders
-admin.order.classroom_menu: Class Orders
-
-##课程订单模块
-admin.order.course.basic_tab: Course Orders
-
-##虚拟币订单模块
-admin.order.coin.basic_tab: Coin Orders
-
-##班级订单模板
-admin.order.classroom.basic_tab: Class Orders
-
 #账务管理模块
+admin.finance.order_menu: Order
 admin.finance.bills_menu: Account
 admin.finance.coin_menu: Coins
-admin.finance.course_refunds_menu: Course Refunds
-admin.finance.classroom_refunds_menu: Class Refunds
+admin.finance.refunds_menu: Refunds
 
 ##账单管理模块
 admin.finance.bills.cash_records_tab: Cash bills
@@ -228,11 +214,8 @@ admin.finance.bills.coin_records_tab: Coin bills
 ##虚拟币管理
 admin.finance.coin.basic_tab: Coin
 
-##课程退款管理模块
-admin.finance.course_refunds.basic_tab: Course refunds
-
-##班级退款管理模块
-admin.finance.classroom_refunds.basic_tab: Class refunds
+##退款管理模块
+admin.finance.refunds.basic_tab: Course refunds
 
 #教育云模块
 admin.cloud.overview_menu: Overview
@@ -362,7 +345,7 @@ admin.system.logs.logs_prod_tab: Program Log
 ##组织机构管理模块
 admin.system.org.basic_tab: Organization
 
-##营销平台模块
+##微营销模块
 admin.marketing.menu: Marketing
 
 #web模块

@@ -12,7 +12,7 @@ class EnvTest extends TestCase
         putenv('foo1=bar');
         putenv('foo2=true');
         putenv('foo3=false');
-        
+
         $this->assertEquals(Env::get('foo1'), 'bar');
         $this->assertTrue(Env::get('foo2'));
         $this->assertFalse(Env::get('foo3'));

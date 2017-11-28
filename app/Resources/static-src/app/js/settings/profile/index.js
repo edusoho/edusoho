@@ -1,4 +1,6 @@
 import notify from 'common/notify';
+import InputEdit from 'app/common/input-edit';
+import 'app/common/local-image/upload';
 
 let editor = CKEDITOR.replace('profile_about', {
   toolbar: 'Simple',
@@ -56,29 +58,16 @@ $("#user-profile-form").validate({
   }
 });
 
-$('#form-nickname-submit').on('click', function() {
-  let $this = $(this);
-  let url = $this.data('url');
-  let nickname = $('#nickname').val();
-  let data = {
-    nickname: nickname
-  };
-
-  $this.button('loading');
-
-  $.post(url, data).done(function(data) {
-    $this.button('reset');
+new InputEdit({
+  el: '#nickname-form-group',
+  success(data) {
     notify('success', Translator.trans(data.message));
-    $this.closest('.cd-form-group').find('[data-target="form-static-text"] span').text(nickname);
-    $('#nickname').data('save-value', $('#nickname').val());
-    $this.siblings('[data-dismiss="form-editable-cancel"]').click();
-
-  }).fail(function(data) {
-    $this.button('reset');
+  },
+  fail(data) {
     if (data.responseJSON.message) {
       notify('danger', Translator.trans(data.responseJSON.message));
     } else {
       notify('danger', Translator.trans('user.settings.basic_info.nickname_change_fail'));
     }
-  })
-})
+  }
+});

@@ -11,28 +11,28 @@
   <tbody>
   {% if paidCourseDetail %}
     {% for data in paidCourseDetail %}
-      {% if courses[data.targetId].title|default(null) %}
+      {% if courses[data.course_id].title|default(null) %}
         <tr>
           <td>
-            <a href="{{ path('course_show', {id:data.targetId}) }}" target="_blank">
+            <a href="{{ path('course_show', {id:data.course_id}) }}" target="_blank">
               <strong>
-                {{ courseSets[courses[data.targetId].courseSetId].title ~ '-' ~ courses[data.targetId].title }}
+                {{ courseSets[courses[data.course_id].courseSetId].title ~ '-' ~ courses[data.course_id].title }}
               </strong><br>
               <span class="text-muted text-sm">{{ 'admin.operation_analysis.paid_course.order'|trans }}：{{ data.sn }}</span>
             </a>
           </td>
-          <td>{{ admin_macro.user_link(users[data.userId]) }}</td>
-          <td class="text-danger">{{ data.totalPrice }}</td>
-          <td class="text-danger">{{ data.amount }}</td>
-          <td>{{ data.createdTime|date("Y-m-d H:i:s") }}<br>{{ data.paidTime|date("Y-m-d H:i:s") }}</td>
+          <td>{{ admin_macro.user_link(users[data.user_id]) }}</td>
+          <td class="text-danger">{{ data.price_amount }}</td>
+          <td class="text-danger">{{ data.pay_amount }}</td>
+          <td>{{ data.created_time|date("Y-m-d H:i:s") }}<br>{{ data.pay_time|date("Y-m-d H:i:s") }}</td>
         </tr>
       {% else %}
         <tr class="danger">
           <td> <strong>{{ 'admin.operation_analysis.paid_course.empty'|trans }}</strong><br><span class="text-muted text-sm">{{ 'admin.operation_analysis.paid_course.order'|trans }}：{{ data.sn }}</span></td>
-          <td>{{ admin_macro.user_link(users[data.userId]) }}</td>
+          <td>{{ admin_macro.user_link(users[data.user_id]) }}</td>
           <td class="text-danger">--</td>
-          <td class="text-danger">{{ data.amount }}</td>
-          <td>{{ data.createdTime|date("Y-m-d H:i:s") }}<br>{{ data.paidTime|date("Y-m-d H:i:s") }}</td>
+          <td class="text-danger">{{ data.pay_amount }}</td>
+          <td>{{ data.created_time|date("Y-m-d H:i:s") }}<br>{{ data.pay_time|date("Y-m-d H:i:s") }}</td>
         </tr>
       {% endif %}
     {% endfor %}

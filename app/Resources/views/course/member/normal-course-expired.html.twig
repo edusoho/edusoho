@@ -7,14 +7,14 @@
       course: course,
       member: member
     }) %}
-    {% if not message | trim is empty %}
-      {{ message|raw }}
-    {% else %}
+    {% if  member.deadline < timestamp() %}
       {% if course.expiryMode == 'date' %}
         {{ 'course.member.course.tips'|trans }}
       {% else %}
         {{ 'course.member.course.allow_buy.tips'|trans }}
       {% endif %}
+    {% elseif message|trim is not empty  %}
+       {{ message|raw }}
     {% endif %}
   </div>
 {% endblock %}

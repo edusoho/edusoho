@@ -13,7 +13,9 @@ use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
+use Biz\Account\Service\AccountProxyService;
 use Codeages\Biz\Framework\Context\Biz;
+use DeviceDetector\DeviceDetector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
@@ -25,6 +27,7 @@ class WebExtension extends \Twig_Extension
      * @var ContainerInterface
      */
     protected $container;
+
     /**
      * @var Biz
      */
@@ -119,12 +122,9 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('convert_ip', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
-            new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
-            new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
+            new \Twig_SimpleFunction('user_coin_amount', array($this, 'userCoinAmount')),
 
-            //todo covertIP 要删除
-            new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-            new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
+            new \Twig_SimpleFunction('user_balance', array($this, 'getBalance')),
 
             new \Twig_SimpleFunction('blur_user_name', array($this, 'blurUserName')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
@@ -160,6 +160,20 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
             new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
+            new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
+            new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
+            new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
+        );
+    }
+
+    public function parseUserAgent($userAgent)
+    {
+        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector->parse();
+
+        return array(
+            'client' => $deviceDetector->getClient(),
+            'os' => $deviceDetector->getOs(),
         );
     }
 
@@ -244,11 +258,11 @@ class WebExtension extends \Twig_Extension
 
     public function timeFormatterFilter($time)
     {
-        if ($time < 60) {
+        if ($time <= 60) {
             return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => 0));
         }
 
-        if ($time < 3600) {
+        if ($time <= 3600) {
             return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => round($time / 60)));
         }
 
@@ -493,61 +507,44 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId, $timeType = 'oneWeek')
+    public function userCoinAmount($type, $userId, $startDateTime = null, $endDateTime = null)
     {
-        $time = $this->filterTime($timeType);
-        $condition = array(
-            'userId' => $userId,
-            'type' => 'outflow',
-            'cashType' => 'Coin',
-            'startTime' => $time,
-        );
+        if (!empty($endDateTime)) {
+            $condition['created_time_LTE'] = strtotime($endDateTime);
+        }
 
-        return $this->createService('Cash:CashService')->analysisAmount($condition);
+        if (!empty($startDateTime)) {
+            $condition['created_time_GTE'] = strtotime($startDateTime);
+        }
+
+        $condition = array(
+            'user_id' => $userId,
+            'type' => $type,
+            'amount_type' => 'coin',
+        );
+        $amount = $this->getAccountProxyService()->sumColumnByConditions('amount', $condition);
+
+        return $amount;
     }
 
-    public function getInCash($userId, $timeType = 'oneWeek')
+    public function getBalance($userId)
     {
-        $time = $this->filterTime($timeType);
-        $condition = array(
-            'userId' => $userId,
-            'type' => 'inflow',
-            'cashType' => 'Coin',
-            'startTime' => $time,
-        );
+        $balance = $this->getAccountProxyService()->getUserBalanceByUserId($userId);
 
-        return $this->createService('Cash:CashService')->analysisAmount($condition);
+        return $balance;
+    }
+
+    /**
+     * @return AccountProxyService
+     */
+    protected function getAccountProxyService()
+    {
+        return $this->createService('Account:AccountProxyService');
     }
 
     private function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    public function getAccount($userId)
-    {
-        return $this->createService('Cash:CashAccountService')->getAccountByUserId($userId);
-    }
-
-    private function filterTime($type)
-    {
-        $time = 0;
-
-        switch ($type) {
-            case 'oneWeek':
-                $time = time() - 7 * 3600 * 24;
-                break;
-            case 'oneMonth':
-                $time = time() - 30 * 3600 * 24;
-                break;
-            case 'threeMonths':
-                $time = time() - 90 * 3600 * 24;
-                break;
-            default:
-                break;
-        }
-
-        return $time;
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)
@@ -631,6 +628,7 @@ class WebExtension extends \Twig_Extension
 
         $names[] = 'customweb';
         $names[] = 'customadmin';
+        $names[] = 'custom';
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
@@ -1625,6 +1623,13 @@ class WebExtension extends \Twig_Extension
 
             return $head.'************'.$tail;
         }
+    }
+
+    public function mathFormat($number, $multiplicator)
+    {
+        $number *= $multiplicator;
+
+        return $number;
     }
 
     protected function createService($alias)

@@ -1,0 +1,20 @@
+{% extends 'my-order/layout.html.twig' %}
+
+{% set my_order_side_nav = 'refund_list' %}
+
+{% do script(['app/js/my/order-refund/index.js']) %}
+
+{% block myorder_content %}
+  <form class="form-inline cd-form-inline" action="" method="get">
+    <div class="form-group cd-form-group cd-form-group-button">
+      <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.orders.placeholder_product_name'|trans }}">
+      <button type="submit"><i class="cd-icon cd-icon-search"></i></button>
+    </div>
+  </form>
+  <div class="table-responsive cd-table-responsive">
+    <table class="table cd-table" id="orders-table">
+      {% include 'my-order/order-refund/list.html.twig' %}
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+{% endblock %}

@@ -47,7 +47,6 @@ class Manage {
       $.ajax({
         url: data.url,
         type: 'GET',
-        notSetHeader: true,
       }).done(_this.showSubtitleContent);
     });
     select.on('deleteoption', function(data) {

@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Codeages\Biz\Framework\Scheduler\Service\JobPool;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
 
 class JobController extends BaseController
@@ -24,6 +26,8 @@ class JobController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $this->checkPoolHealth();
 
         return $this->render('admin/jobs/index.html.twig', array(
             'jobs' => $jobs,
@@ -53,6 +57,18 @@ class JobController extends BaseController
             'logs' => $logs,
             'paginator' => $paginator,
         ));
+    }
+
+    private function checkPoolHealth()
+    {
+        $jobPool = new JobPool($this->get('biz'));
+        $defPool = $jobPool->getJobPool('default');
+        $dedPool = $jobPool->getJobPool('dedicated');
+
+        if (($defPool && $defPool['num'] >= $defPool['max_num'])
+            || ($dedPool && $dedPool['num'] >= $dedPool['max_num'])) {
+            $this->setFlashMessage('danger', 'There some pool is full, please go to restore.');
+        }
     }
 
     public function enabledAction(Request $request, $id)
@@ -126,6 +142,9 @@ class JobController extends BaseController
         ));
     }
 
+    /**
+     * @return SchedulerService
+     */
     protected function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');

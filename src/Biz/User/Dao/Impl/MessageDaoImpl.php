@@ -85,6 +85,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
         return array(
             'orderbys' => array('createdTime'),
             'conditions' => array(
+                'isDelete = :isDelete',
                 'fromId = :fromId',
                 'toId = :toId',
                 'createdTime = :createdTime',
