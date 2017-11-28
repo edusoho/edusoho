@@ -20,7 +20,6 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
             'conditions' => array(
                 'id = :id',
                 'user_id IN (:user_ids)',
-                'user_id IN (:userIds)',
                 'operate_type = :operate_type',
                 'operate_time > :operate_time_GT',
                 'operate_time >= :operate_time_GE',
@@ -34,6 +33,9 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
                 'join_course_set = :join_course_set',
                 'exit_course_set = :exit_course_set',
                 'reason_type != :exclude_reason_type',
+                'created_time >= :created_time_GE',
+                'created_time <= :created_time_LE',
+                'created_time < :created_time_LT',
             ),
         );
     }

@@ -67,6 +67,20 @@ class AddUserLearnStatisticsJob extends Migration
             '0',
             '{$currentTime}',
             '{$currentTime}'
+        ),
+        (
+            'SyncUserLearnDailyLearnStatisticsJob',
+            '0 1 * * *',
+            'Biz\\\\UserLearnStatistics\\\\Job\\\\SyncDaily',
+            '',
+            '100',
+            '{$currentTime}',
+            '300',
+            'missed',
+            '1',
+            '0',
+            '{$currentTime}',
+            '{$currentTime}'
         );
         ");
     }

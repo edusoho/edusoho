@@ -9,6 +9,7 @@ class SyncTotalJob extends AbstractJob
 {
     public function execute()
     {
+        //生成用户总量学习数据
         try {
             $this->biz['db']->beginTransaction();
             $lastUserId = $this->getLastUserId();
