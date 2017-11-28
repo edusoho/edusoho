@@ -186,7 +186,7 @@ class AnonymousUserTest extends BaseTestCase
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->isEqualTo($this->getCurrentUser());
-        
+
         $this->assertFalse($result);
     }
 
@@ -194,7 +194,7 @@ class AnonymousUserTest extends BaseTestCase
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->isLogin();
-        
+
         $this->assertFalse($result);
     }
 
@@ -202,7 +202,7 @@ class AnonymousUserTest extends BaseTestCase
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->isAdmin();
-        
+
         $this->assertFalse($result);
     }
 
@@ -210,7 +210,7 @@ class AnonymousUserTest extends BaseTestCase
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->isSuperAdmin();
-        
+
         $this->assertFalse($result);
     }
 
@@ -218,7 +218,7 @@ class AnonymousUserTest extends BaseTestCase
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->isTeacher();
-        
+
         $this->assertFalse($result);
     }
 
@@ -226,7 +226,7 @@ class AnonymousUserTest extends BaseTestCase
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->getCurrentOrgId();
-        
+
         $this->assertEquals(0, $result);
     }
 

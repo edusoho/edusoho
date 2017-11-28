@@ -21,7 +21,7 @@ class AnnouncementProcessorFactoryTest extends BaseTestCase
         $processor = new AnnouncementProcessorFactory($this->getBiz());
         $result = $processor->create('course');
         $className = get_class($result);
-        
+
         $this->assertEquals('Biz\Announcement\Processor\CourseAnnouncementProcessor', $className);
     }
 }
