@@ -154,12 +154,12 @@ class ExerciseController extends BaseController
         usort($questions, function ($a, $b) use ($order) {
             $pos_a = array_search($a['id'], $order);
             $pos_b = array_search($b['id'], $order);
+
             return $pos_a - $pos_b;
         });
 
         return $questions;
     }
-
 
     /**
      * @return TestpaperService
