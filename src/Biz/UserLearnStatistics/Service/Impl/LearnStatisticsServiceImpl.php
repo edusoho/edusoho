@@ -18,6 +18,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $this->getTotalStatisticsDao()->count($conditions);
     }
     
+    public function searchDailyStatistics($conditions, $order, $start, $limit)
+    {
+        return $this->getDailyStatisticsDao()->search($conditions, $order, $start, $limit);
+    }
+
     public function batchCreateTotalStatistics($conditions)
     {
         try {
@@ -138,6 +143,79 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $statistics;
     }
 
+    public function storageDailyStatistics($limit = 1000)
+    {
+        try {
+            $this->beginTransaction();
+            $dailyData = $this->searchDailyStatistics(
+                array('isStorage' => 0),
+                array('id' => 'asc'),
+                0,
+                $limit
+            );
+            $learnSetting = $this->getStatisticsSetting();
+            if (empty($dailyData) || empty($learnSetting['syncTotalDataStatus'])) {
+                return;
+            }
+            
+            $dailyUserIds = ArrayToolkit::column($dailyData, 'userId');
+
+            $totalData = $this->searchTotalStatistics(array('userIds' => $dailyUserIds), array(), 0, PHP_INT_MAX);
+            $totalData = ArrayToolkit::index($totalData, 'userId');
+            $totalUserIds = array_keys($totalData);
+
+            $addTotalData = $updateTotalData = array();
+            $updateColumn = array(
+                'joinedClassroomNum',
+                'joinedClassroomCourseSetNum',
+                'joinedClassroomCourseNum',
+                'joinedCourseSetNum',
+                'joinedCourseNum',
+                'exitClassroomNum',
+                'exitClassroomCourseSetNum',
+                'exitCourseSetNum',
+                'exitCourseNum',
+                'exitClassroomCourseNum',
+                'learnedSeconds',
+                'finishedTaskNum',
+                'paidAmount',
+                'refundAmount',
+                'actualAmount',
+            );
+            foreach($dailyData as $data) {
+                unset($data['recordTime']);
+                unset($data['isStorage']);
+                if (in_array($data['userId'], $totalUserIds)) {
+                    $userId = $data['userId'];
+                    if (!isset($updateTotalData[$userId])) {
+                        $updateTotalData[$userId] = $totalData[$userId];
+                    }    
+                    //有数据，做累加 
+                    foreach($updateColumn as $column){
+                        $updateTotalData[$userId][$column] += $data[$column];
+                    }
+                } else {
+                    //无数据，做新增
+                    unset($data['id']);
+                    $addTotalData[] = $data;
+                }
+            }
+            if (!empty($addTotalData)) {
+                $this->getTotalStatisticsDao()->batchCreate($addTotalData);
+            }
+
+            if (!empty($updateTotalData)) {
+                $this->getTotalStatisticsDao()->batchUpdate(array_keys($updateTotalData), $updateTotalData, 'userId');
+            }
+            $this->updateStorageByIds(ArrayToolkit::column($dailyData, 'id'));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage(), $conditions);
+            $this->rollback();
+            throw $e;
+        }
+    }
+
     private function findUserOperateClassroomNum($operation, $conditions)
     {
         $conditions = $this->buildMemberOperationConditions($conditions);
@@ -246,6 +324,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         return $newConditions;
+    }
+
+    public function updateStorageByIds($ids)
+    {
+        return $this->getDailyStatisticsDao()->updateStorageByIds($ids);
     }
 
     public function getStatisticsSetting()

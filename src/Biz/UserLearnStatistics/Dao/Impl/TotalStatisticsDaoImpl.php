@@ -30,9 +30,11 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
-                'id =: id',
+                'id = :id',
                 'id IN ( :ids)',
                 'id NOT IN ( :excludeIds )',
+                'userId IN ( :userIds )',
+                'userId = :userId',
                 'createdTime >= :createTime_GE',
                 'createdTime <= :createTime_LE',
                 'updatedTime >= :updateTime_GE',

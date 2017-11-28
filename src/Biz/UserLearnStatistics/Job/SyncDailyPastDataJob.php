@@ -19,6 +19,7 @@ class SyncDailyPastDataJob extends AbstractJob
 
                 return;
             }
+            
             $this->biz['db']->beginTransaction();
             $nextCursor = $cursor - 24*60*60;
             /*
