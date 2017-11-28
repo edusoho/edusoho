@@ -57,6 +57,8 @@ class ArticleThreadFirewallTest extends BaseTestCase
         );
         $fireWall = new ArticleThreadFirewall();
         $result1 = $fireWall->accessPostDelete(array('id' => 111));
+        $currentUser->__set('id', 0);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $result2 = $fireWall->accessPostDelete(array('id' => 111));
 
         $this->assertTrue($result1);
