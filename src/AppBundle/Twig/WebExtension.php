@@ -19,7 +19,6 @@ use DeviceDetector\DeviceDetector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class WebExtension extends \Twig_Extension
 {
@@ -1715,8 +1714,8 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
-        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ? : 'service-cdn.qiqiuyun.net';
-        
+        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ?: 'service-cdn.qiqiuyun.net';
+
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
