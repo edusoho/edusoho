@@ -11,15 +11,17 @@ class SyncTotalJob extends AbstractJob
     {
         //生成用户总量学习数据
         try {
-            $this->biz['db']->beginTransaction();
             $lastUserId = $this->getLastUserId();
-            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id'=>'asc'), 0, 30000);
+            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id'=>'asc'), 0, 100000);
             $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
+
             if (empty($users)) {
                 $this->setTotalDataStatus($learnSetting);
                 $this->getSchedulerService()->disabledJob($this->id);
-            }
 
+                return true;
+            }
+            $this->biz['db']->beginTransaction();
             $userIds = ArrayToolkit::column($users, 'id');
             /*
                 skipSyncCourseSetNum，跳过同步 加入课程数和退出课程数
@@ -39,6 +41,7 @@ class SyncTotalJob extends AbstractJob
             $this->getJobDao()->update($this->id, array('args' => $jobArgs));
             $this->biz['db']->commit();
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
             $this->biz['db']->rollback();
         }
 
