@@ -12,7 +12,6 @@ use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Deduct\CouponDeduct;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
-use Biz\OrderFacade\Product\MarketingCourseProduct;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
@@ -39,13 +38,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
     {
         $biz[sprintf('order.product.%s', CourseProduct::TYPE)] = $biz->factory(function ($biz) {
             $product = new CourseProduct();
-            $product->setBiz($biz);
-
-            return $product;
-        });
-
-        $biz[sprintf('order.product.%s', 'marketingCourse')] = $biz->factory(function ($biz) {
-            $product = new MarketingCourseProduct();
             $product->setBiz($biz);
 
             return $product;

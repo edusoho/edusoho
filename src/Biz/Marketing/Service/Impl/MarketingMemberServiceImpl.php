@@ -9,13 +9,13 @@ class MarketingMemberServiceImpl extends MemberServiceImpl
     protected function createOrder($courseId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct(
-            'marketingCourse', 
+            'course',
             array(
                 'targetId' => $courseId,
-                'originPrice' => $data['originPrice'],
             )
         );
 
+        $courseProduct->originPrice = $data['originPrice'];
         $data['targetType'] = 'course';
         $params = array(
             'created_reason' => $data['remark'],
