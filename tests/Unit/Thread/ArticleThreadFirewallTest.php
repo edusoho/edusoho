@@ -10,17 +10,9 @@ class ArticleThreadFirewallTest extends BaseTestCase
 {
     public function testaccessPostCreate()
     {
-        $user = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $fireWall = new ArticleThreadFirewall();
-        $result1 = $fireWall->accessPostCreate('');
-        $this->assertTrue($result1);
-
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 0,
+            'id' => 2,
             'nickname' => 'admin1',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
@@ -28,15 +20,28 @@ class ArticleThreadFirewallTest extends BaseTestCase
             'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
+        $fireWall = new ArticleThreadFirewall();
+        $result1 = $fireWall->accessPostCreate('');
+        $this->assertTrue($result1);
+
+        $currentUser->__set('id', 0);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $result2 = $fireWall->accessPostCreate('');
         $this->assertFalse($result2);
     }
 
     public function testaccessPostDelete()
     {
-        $user = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $currentUser->setPermissions(array('admin' => 1));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->mockBiz(
             'Thread:ThreadService',
@@ -55,11 +60,11 @@ class ArticleThreadFirewallTest extends BaseTestCase
                 ),
             )
         );
-        $fireWall = new ArticleThreadFirewall();
-        $result1 = $fireWall->accessPostDelete(array('id' => 111));
+        $articleThreadFirewall = new ArticleThreadFirewall();
+        $result1 = $articleThreadFirewall->accessPostDelete(array('id' => 111));
         $currentUser->__set('id', 0);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $result2 = $fireWall->accessPostDelete(array('id' => 111));
+        $result2 = $articleThreadFirewall->accessPostDelete(array('id' => 111));
 
         $this->assertTrue($result1);
         $this->assertFalse($result2);
@@ -67,17 +72,9 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     public function testaccessPostVote()
     {
-        $user = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $fireWall = new ArticleThreadFirewall();
-        $result1 = $fireWall->accessPostVote('');
-        $this->assertTrue($result1);
-
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 0,
+            'id' => 2,
             'nickname' => 'admin1',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
@@ -85,21 +82,14 @@ class ArticleThreadFirewallTest extends BaseTestCase
             'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
+        $fireWall = new ArticleThreadFirewall();
+        $result1 = $fireWall->accessPostVote('');
+        $this->assertTrue($result1);
+
+        $currentUser->__set('id', 0);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $result2 = $fireWall->accessPostVote('');
         $this->assertFalse($result2);
-    }
-
-    protected function createUser()
-    {
-        $user = array();
-        $user['email'] = 'user@user.com';
-        $user['nickname'] = 'user';
-        $user['password'] = 'user';
-        $user = $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-
-        return $user;
     }
 
     public function getCurrentUser()
@@ -110,5 +100,10 @@ class ArticleThreadFirewallTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getThreadDao()
+    {
+        return $this->createDao('Thread:ThreadDao');
     }
 }
