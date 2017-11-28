@@ -11,18 +11,20 @@ class SyncDaily extends AbstractJob
     {
         //每天生成学习数据
         try {
-            $this->biz['db']->beginTransaction();
             $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
             $cursor = $this->getSyncTime($learnSetting);
-
             $nextCursor = $cursor + 24*60*60;
+
             if (time() < $nextCursor) {
                 return;
             }
+
+            $this->biz['db']->beginTransaction();
             $conditions = array(
                 'createdTime_GE' => $cursor,
                 'createdTime_LT' => $nextCursor,
             );
+       
             if ($cursor == $learnSetting['currentTime']) {
                 //当天升级的数据为了准确性，不统计加入退出课程数
                 $conditions['skipSyncCourseSetNum'] = true;

@@ -119,6 +119,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         foreach($userIds as $userId) {
+            if ($userId == 0) {
+                continue;
+            }
             $statistic = array();
             $statistic['learnedSeconds'] = empty($learnedSeconds[$userId]) ? 0 : $learnedSeconds[$userId]['learnedTime'];
             $statistic['paidAmount'] = empty($payAmount[$userId]) ? 0 : $payAmount[$userId]['amount'];

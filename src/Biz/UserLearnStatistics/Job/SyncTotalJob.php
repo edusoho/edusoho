@@ -19,7 +19,7 @@ class SyncTotalJob extends AbstractJob
                 $this->setTotalDataStatus($learnSetting);
                 $this->getSchedulerService()->disabledJob($this->id);
 
-                return true;
+                return;
             }
             $this->biz['db']->beginTransaction();
             $userIds = ArrayToolkit::column($users, 'id');

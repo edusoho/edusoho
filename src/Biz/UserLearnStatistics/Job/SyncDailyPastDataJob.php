@@ -11,13 +11,15 @@ class SyncDailyPastDataJob extends AbstractJob
     {
         //生成一年内的用户学习数据
         try {
-            $this->biz['db']->beginTransaction();
             $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
             $cursor = $this->getSyncTime($learnSetting);
 
             if (($learnSetting['currentTime'] - $cursor) > $learnSetting['timespan']) {
                 $this->getSchedulerService()->disabledJob($this->id);
+
+                return;
             }
+            $this->biz['db']->beginTransaction();
             $nextCursor = $cursor - 24*60*60;
             /*
                 skipSyncCourseSetNum，跳过同步 加入课程数和退出课程数
