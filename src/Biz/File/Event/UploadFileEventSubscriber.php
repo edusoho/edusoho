@@ -155,20 +155,6 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     {
         $course = $event->getSubject();
 
-        /**
-         * @TODO 教学计划删除时需要使文件使用数减少
-         */
-        $lessons = $this->getCourseService()->getCourse($course['id']);
-
-        if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, 'mediaId');
-
-            if (!empty($fileIds)) {
-                foreach ($fileIds as $fileId) {
-                    $this->getUploadFileService()->waveUsedCount($fileId, -1);
-                }
-            }
-        }
     }
 
     public function onCourseLessonCreate(Event $event)
