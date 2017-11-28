@@ -31,6 +31,18 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array(), 0);
     }
 
+    public function findByMobileNotEmpty($start, $limit, $needVerified)
+    {
+        $sql = "SELECT * FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != '' AND type <> 'system'";
+        if ($needVerified) {
+            $sql .= " AND `verifiedMobile` != ''";
+        }
+
+        $sql = $this->sql($sql, array('createdTime' => 'ASC'), $start, $limit);
+
+        return $this->db()->fetchAll($sql);
+    }
+
     public function getByVerifiedMobile($mobile)
     {
         return $this->getByFields(array('verifiedMobile' => $mobile));
