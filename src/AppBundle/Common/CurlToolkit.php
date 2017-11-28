@@ -8,7 +8,8 @@ class CurlToolkit
 {
     public static function request($method, $url, $params = array(), $conditions = array())
     {
-        if (!in_array(parse_url($url), self::whiteList())) {
+        $parseUrl = parse_url($url);
+        if (!in_array($parseUrl['host'], self::whiteList())) {
             throw new AccessDeniedException('url is not allowed!');
         }
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
