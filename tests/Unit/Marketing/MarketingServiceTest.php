@@ -61,7 +61,7 @@ class MarketingServiceTest extends BaseTestCase
                         'deduct_type' => 'type1',
                         'deduct_amount' => 200,
                         'user_id' => '3',
-                    )
+                    ),
                 ),
                 'originPrice' => 223,
                 'price' => 122,
@@ -77,14 +77,14 @@ class MarketingServiceTest extends BaseTestCase
                 'is_new' => true,
                 'user_id' => '3',
                 'code' => 'success',
-                'msg' => '把用户,3添加到课程成功,课程ID：12,memberId:12222,订单Id:' . $order['id'],
+                'msg' => '把用户,3添加到课程成功,课程ID：12,memberId:12222,订单Id:'.$order['id'],
             ),
             $result,
             array('is_new', 'user_id', 'code', 'msg')
         );
 
         $this->assertEquals('22300', $order['price_amount']);
-        $this->assertEquals('12200', $order['pay_amount']); 
+        $this->assertEquals('12200', $order['pay_amount']);
         $this->assertEquals('course', $order['create_extra']['targetType']);
     }
 
