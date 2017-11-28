@@ -103,6 +103,32 @@ Unit Test With PHP 7.0 For Develop:
 #      - master
 #      - trigger
 
+
+AT With Java And Selenium:
+  stage: test
+  image: codeages/ci-php:5.5-5
+  services:
+    - mysql:5.5
+    - redis:latest
+    - selenium/standalone-chrome:latest
+  script:
+   # 修改配置文件
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+
+    # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
+    - composer config repo.packagist composer https://packagist.phpcomposer.com
+    - composer require "codeception/codeception:*" --ignore-platform-reqs
+
+    # 启动web服务
+    - app/console server:start
+
+    # 执行codeception的A PI 单元测试
+    - bin/codecept run api
+    - git clone -b feature/remote-driver branch $CI_BUILD_REPO/edusoho/GUIAutomation2.git
+    - cd GUIAutomation2
+    - mvn clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+
 Api Test With 5.5:
   stage: test
   image: ruanwenqin/ci-php:5.5-7
