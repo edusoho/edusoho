@@ -51,6 +51,7 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
                     continue;
                 }
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
+                $this->getTaskService()->finishTask($task['id']);
             }
         }
     }
