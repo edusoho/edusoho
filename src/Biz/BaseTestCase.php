@@ -256,7 +256,11 @@ class BaseTestCase extends TestCase
             }
         } else {
             foreach (array_keys($ary1) as $key) {
-                $this->assertEquals($ary1[$key], $ary2[$key]);
+                if (is_array($ary1[$key])) {
+                    $this->assertArrayEquals($ary1[$key], $ary2[$key]);
+                } else {
+                    $this->assertEquals($ary1[$key], $ary2[$key]);
+                }
             }
         }
     }
