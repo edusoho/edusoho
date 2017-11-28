@@ -50,19 +50,19 @@ class UserDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $this->getUserDao()->countByMobileNotEmpty());
     }
 
-    public function testFindByMobileNotEmpty()
+    public function testFindUnlockedUsersWithMobile()
     {
         $defaultUser = $this->getDefaultMockFields();
         $defaultUser['type'] = 'default';
         $this->getUserDao()->create($defaultUser);
-        $this->assertEmpty($this->getUserDao()->findByMobileNotEmpty(0, 10, false));
-        $this->assertEmpty($this->getUserDao()->findByMobileNotEmpty(0, 10, true));
+        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, false));
+        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, true));
         $this->getUserProfileDao()->create(array(
             'id' => '3',
             'mobile' => '13967340627',
         ));
-        $this->assertNotEmpty($this->getUserDao()->findByMobileNotEmpty(0, 10, false));
-        $this->assertEmpty($this->getUserDao()->findByMobileNotEmpty(0, 10, true));
+        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, false));
+        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, true));
         $this->getUserDao()->create(array(
             'id' => '5',
             'nickname' => 'test2',
@@ -77,8 +77,8 @@ class UserDaoTest extends BaseDaoTestCase
             'id' => '5',
             'mobile' => '13967340628',
         ));
-        $this->assertNotEmpty($this->getUserDao()->findByMobileNotEmpty(0, 10, false));
-        $this->assertNotEmpty($this->getUserDao()->findByMobileNotEmpty(0, 10, true));
+        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, false));
+        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, true));
     }
 
     public function testGetByVerifiedMobile()
