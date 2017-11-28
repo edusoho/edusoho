@@ -31,7 +31,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array(), 0);
     }
 
-    public function findByMobileNotEmpty($start, $limit, $needVerified)
+    public function findUnlockedUsersWithMobile($start, $limit, $needVerified)
     {
         $sql = "SELECT * FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != '' AND type <> 'system'";
         if ($needVerified) {

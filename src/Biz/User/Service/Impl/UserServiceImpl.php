@@ -226,7 +226,18 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findUsersHasMobile($start, $limit, $needVerified = false)
     {
-        return $this->getUserDao()->findByMobileNotEmpty($start, $limit, $needVerified);
+        $conditions = array(
+            'locked' => 0,
+        );
+        $orderBy = array('createdTime' => 'ASC');
+        if ($needVerified) {
+            $conditions['hasVerifiedMobile'] = true;
+            $users = $this->searchUsers($conditions, $orderBy, $start, $limit);
+        } else {
+            $users = $this->getUserDao()->findUnlockedUsersWithMobile($start, $limit, $needVerified);
+        }
+
+        return $users;
     }
 
     public function getUserByEmail($email)
