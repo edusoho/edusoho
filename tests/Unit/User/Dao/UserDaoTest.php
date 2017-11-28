@@ -55,30 +55,12 @@ class UserDaoTest extends BaseDaoTestCase
         $defaultUser = $this->getDefaultMockFields();
         $defaultUser['type'] = 'default';
         $this->getUserDao()->create($defaultUser);
-        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, false));
-        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, true));
+        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10));
         $this->getUserProfileDao()->create(array(
             'id' => '3',
             'mobile' => '13967340627',
         ));
-        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, false));
-        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, true));
-        $this->getUserDao()->create(array(
-            'id' => '5',
-            'nickname' => 'test2',
-            'roles' => array('ROLE_ADMIN'),
-            'password' => '3DMYb8GyEXk32ruFzw4lxy2elz6/aoPtA5X8vCTWezg=',
-            'salt' => 'qunt972ow5c48k4wc8k0ss448os0oko',
-            'email' => '800@qq.com',
-            'type' => 'default',
-            'verifiedMobile' => '13967340628',
-        ));
-        $this->getUserProfileDao()->create(array(
-            'id' => '5',
-            'mobile' => '13967340628',
-        ));
-        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, false));
-        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10, true));
+        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10));
     }
 
     public function testGetByVerifiedMobile()

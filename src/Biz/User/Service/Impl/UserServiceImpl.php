@@ -234,7 +234,7 @@ class UserServiceImpl extends BaseService implements UserService
             $conditions['hasVerifiedMobile'] = true;
             $users = $this->searchUsers($conditions, $orderBy, $start, $limit);
         } else {
-            $users = $this->getUserDao()->findUnlockedUsersWithMobile($start, $limit, $needVerified);
+            $users = $this->getUserDao()->findUnlockedUsersWithMobile($start, $limit);
         }
 
         return $users;

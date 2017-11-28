@@ -14,7 +14,7 @@ interface UserDao extends GeneralDaoInterface
 
     public function countByMobileNotEmpty();
 
-    public function findUnlockedUsersWithMobile($start, $limit, $needVerified);
+    public function findUnlockedUsersWithMobile($start, $limit);
 
     public function getByVerifiedMobile($mobile);
 

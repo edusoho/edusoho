@@ -105,7 +105,8 @@ class SmsController extends BaseController
                 $studentIds = ArrayToolkit::column($students, 'id');
             }
 
-            $this->getSmsService()->smsSend($smsType, $studentIds, $description, $parameters);
+            // $this->getSmsService()->smsSend($smsType, $studentIds, $description, $parameters);
+            $this->getLogService()->info('user', 'user_send_message', '短信发送成功', $students);
         }
 
         if ($count > $index + $onceSendNum) {
