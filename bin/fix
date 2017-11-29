@@ -4,7 +4,7 @@ echo '### 如果不存在app/data目录，则新建'
 mkdir -p app/data
 
 echo '### 通过 git diff --name-only 命令，检查所列文件是否符合规范'
-php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only` > app/data/php-cs-fixer-problems
+php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB` > app/data/php-cs-fixer-problems
 cat app/data/php-cs-fixer-problems
 
 echo '### 自动修复规范问题'
