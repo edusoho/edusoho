@@ -55,7 +55,7 @@ class CloudFileServiceTest extends BaseTestCase
         $this->assertEquals(2, count($result['data']));
         $this->assertEquals(2, count($result['createdUsers']));
 
-        $conditions = array('keywords' => 'nickname', 'searchType' => 'user','ids'=>array(-1));
+        $conditions = array('keywords' => 'nickname', 'searchType' => 'user', 'ids' => array(-1));
         $result = $this->getCloudFileService()->search($conditions, 0, 5);
         $this->assertEquals(2, count($result['data']));
         $this->assertEquals(2, count($result['createdUsers']));
@@ -292,7 +292,7 @@ class CloudFileServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'makeToken',
-                    'returnValue' => array('id'=>1, 'token' => '123456'),
+                    'returnValue' => array('id' => 1, 'token' => '123456'),
                 ),
             )
         );
@@ -385,7 +385,7 @@ class CloudFileServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'deleteMP4Files',
                     'returnValue' => array('success' => true),
-                )
+                ),
             )
         );
     }
