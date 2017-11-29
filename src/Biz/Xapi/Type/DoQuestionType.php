@@ -59,7 +59,7 @@ class DoQuestionType extends Type
             'success' => ('right' == $questionMarkerResult['status']) ? true : false,
         );
 
-        return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
+        return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 
     public function convertQuestionType($questionType)

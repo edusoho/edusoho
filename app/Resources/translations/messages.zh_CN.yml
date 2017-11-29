@@ -241,6 +241,9 @@ date.month: 月
 date.day: 日
 date.format: Y年m月d日
 
+#符号通用
+word.seperator: '、'
+
 #分页
 paginator.firstPage: 首页
 paginator.endPage: 尾页
@@ -983,7 +986,7 @@ course.marketing_setup.preview.set_task: 设置免费学习任务
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
@@ -7373,6 +7376,11 @@ admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
 admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
+admin.payment_setting.llpay_application_tips: >
+ 使用前提：
+  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看</a>操作。</p>
+  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
@@ -8292,5 +8300,4 @@ site.avatar.set_before_learning: 请先设置头像
 site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
-
 

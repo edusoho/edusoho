@@ -1,6 +1,6 @@
 {% extends 'testpaper/testpaper-layout.html.twig' %}
 
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','app/js/testpaper/do-test/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','app/js/testpaper/do-test/normal/index.js']) %}
 
 {% block paper_description %}
   <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
