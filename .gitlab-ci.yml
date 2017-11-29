@@ -6,7 +6,7 @@ stages:
   - test
 
 variables:
-  MAVEN_OPTS: "-q -Dmaven.repo.local=.m2"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2"
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
@@ -131,10 +131,10 @@ AT With Java And Selenium:
     # 安装插件
     - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - cd GUIAutomation2
-    - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_OPTS compile
-    - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_OPTS exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
+    - /opt/apache-maven-3.5.2/bin/mvn -B $MAVEN_OPTS compile
+    - /opt/apache-maven-3.5.2/bin/mvn -B $MAVEN_OPTS exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
     - cd .. && app/console server:start && cd GUIAutomation2
-    - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+    - /opt/apache-maven-3.5.2/bin/mvn -B $MAVEN_clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
 
 Api Test With 5.5:
   stage: test
