@@ -101,9 +101,4 @@ class ArticleThreadFirewallTest extends BaseTestCase
     {
         return $this->createService('User:UserService');
     }
-
-    protected function getThreadDao()
-    {
-        return $this->createDao('Thread:ThreadDao');
-    }
 }
