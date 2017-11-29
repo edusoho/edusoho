@@ -19,50 +19,58 @@ class ClassroomFileFireWallTest extends BaseTestCase
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
         ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $fireWall = new ClassroomFileFireWall($this->getBiz());
+        $result = $fireWall->canAccess(array('targetType' => '', 'targetId' => 111));
+        $this->assertFalse($result);
+    }
+
+    public function testCanAccessWithAdminUser()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
         $currentUser->setPermissions(array('admin' => 1));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ClassroomFileFireWall($this->getBiz());
-        $result1 = $fireWall->canAccess(array());
-        $this->assertTrue($result1);
+        $result = $fireWall->canAccess(array());
+        $this->assertTrue($result);
+    }
 
+    public function testCanAccessWithThreadCreaterAndThreadType()
+    {
+        $fireWall = new ClassroomFileFireWall($this->getBiz());
         $this->mockBiz(
             'Thread:ThreadService',
             array(
                 array(
                     'functionName' => 'getThread',
-                    'returnValue' => array('id' => 111, 'userId' => 2),
+                    'returnValue' => array('id' => 111, 'userId' => 1),
                     'withParams' => array(111),
-                    'runTimes' => 1,
                 ),
+            )
+        );
+
+        $result = $fireWall->canAccess(array('targetType' => 'thread', 'targetId' => 111));
+        $this->assertTrue($result);
+    }
+
+    public function testCanAccessWithTeacherAndThreadType()
+    {
+        $fireWall = new ClassroomFileFireWall($this->getBiz());
+        $this->mockBiz(
+            'Thread:ThreadService',
+            array(
                 array(
                     'functionName' => 'getThread',
                     'returnValue' => array('id' => 111, 'userId' => 3, 'targetId' => 111),
                     'withParams' => array(111),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'getThread',
-                    'returnValue' => array('id' => 111, 'userId' => 2),
-                    'withParams' => array(111),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'getThread',
-                    'returnValue' => array('id' => 111, 'userId' => 3, 'targetId' => 111),
-                    'withParams' => array(111),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'getPost',
-                    'returnValue' => array('id' => 111, 'userId' => 2),
-                    'withParams' => array(111),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'getPost',
-                    'returnValue' => array('id' => 111, 'userId' => 3, 'threadId' => 111),
-                    'withParams' => array(111),
-                    'runTimes' => 2,
                 ),
             )
         );
@@ -71,30 +79,88 @@ class ClassroomFileFireWallTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getClassroom',
-                    'returnValue' => array('id' => 111, 'headTeacherId' => 2, 'teacherIds' => array(1, 2, 3)),
+                    'returnValue' => array('id' => 111, 'headTeacherId' => 1, 'teacherIds' => array(1, 2, 3)),
                     'withParams' => array(111),
                 ),
             )
         );
-        $currentUser->setPermissions(array());
-        $this->getServiceKernel()->setCurrentUser($currentUser);
 
-        $result2 = $fireWall->canAccess(array('targetType' => 'thread', 'targetId' => 111));
-        $this->assertTrue($result2);
+        $result = $fireWall->canAccess(array('targetType' => 'thread', 'targetId' => 111));
+        $this->assertTrue($result);
+    }
 
-        $result3 = $fireWall->canAccess(array('targetType' => 'thread', 'targetId' => 111));
-        $this->assertTrue($result3);
+    public function testCanAccessWithPostCreaterAndPostType()
+    {
+        $fireWall = new ClassroomFileFireWall($this->getBiz());
 
-        $result4 = $fireWall->canAccess(array('targetType' => 'post', 'targetId' => 111));
-        $this->assertTrue($result4);
+        $this->mockBiz(
+            'Thread:ThreadService',
+            array(
+                array(
+                    'functionName' => 'getPost',
+                    'returnValue' => array('id' => 111, 'userId' => 1),
+                    'withParams' => array(111),
+                ),
+            )
+        );
 
-        $result5 = $fireWall->canAccess(array('targetType' => 'post', 'targetId' => 111));
-        $this->assertTrue($result5);
+        $result = $fireWall->canAccess(array('targetType' => 'post', 'targetId' => 111));
+        $this->assertTrue($result);
+    }
 
-        $result6 = $fireWall->canAccess(array('targetType' => 'post', 'targetId' => 111));
-        $this->assertTrue($result6);
+    public function testCanAccessWithThreadCreaterAndPostType()
+    {
+        $fireWall = new ClassroomFileFireWall($this->getBiz());
+        $this->mockBiz(
+            'Thread:ThreadService',
+            array(
+                array(
+                    'functionName' => 'getThread',
+                    'returnValue' => array('id' => 111, 'userId' => 1),
+                    'withParams' => array(111),
+                ),
+                array(
+                    'functionName' => 'getPost',
+                    'returnValue' => array('id' => 111, 'userId' => 2, 'threadId' => 111),
+                    'withParams' => array(111),
+                ),
+            )
+        );
 
-        $result7 = $fireWall->canAccess(array('targetType' => '', 'targetId' => 111));
-        $this->assertFalse($result7);
+        $result = $fireWall->canAccess(array('targetType' => 'post', 'targetId' => 111));
+        $this->assertTrue($result);
+    }
+
+    public function testCanAccessTeacherAndPostType()
+    {
+        $fireWall = new ClassroomFileFireWall($this->getBiz());
+        $this->mockBiz(
+            'Thread:ThreadService',
+            array(
+                array(
+                    'functionName' => 'getThread',
+                    'returnValue' => array('id' => 111, 'userId' => 3, 'targetId' => 111),
+                    'withParams' => array(111),
+                ),
+                array(
+                    'functionName' => 'getPost',
+                    'returnValue' => array('id' => 111, 'userId' => 3, 'threadId' => 111),
+                    'withParams' => array(111),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Classroom:ClassroomService',
+            array(
+                array(
+                    'functionName' => 'getClassroom',
+                    'returnValue' => array('id' => 111, 'headTeacherId' => 1, 'teacherIds' => array(1, 2, 3)),
+                    'withParams' => array(111),
+                ),
+            )
+        );
+
+        $result = $fireWall->canAccess(array('targetType' => 'post', 'targetId' => 111));
+        $this->assertTrue($result);
     }
 }

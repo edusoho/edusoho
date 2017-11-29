@@ -10,9 +10,16 @@ class ArticleThreadFirewallTest extends BaseTestCase
 {
     public function testaccessPostCreate()
     {
+        $fireWall = new ArticleThreadFirewall();
+        $result = $fireWall->accessPostCreate('');
+        $this->assertTrue($result);
+    }
+
+    public function testaccessPostCreateWithNotLoginUser()
+    {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 2,
+            'id' => 0,
             'nickname' => 'admin1',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
@@ -21,60 +28,49 @@ class ArticleThreadFirewallTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ArticleThreadFirewall();
-        $result1 = $fireWall->accessPostCreate('');
-        $this->assertTrue($result1);
-
-        $currentUser->__set('id', 0);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $result2 = $fireWall->accessPostCreate('');
-        $this->assertFalse($result2);
+        $result = $fireWall->accessPostCreate('');
+        $this->assertFalse($result);
     }
 
     public function testaccessPostDelete()
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 2,
+            'id' => 0,
             'nickname' => 'admin1',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
         ));
-        $currentUser->setPermissions(array('admin' => 1));
         $this->getServiceKernel()->setCurrentUser($currentUser);
+        $articleThreadFirewall = new ArticleThreadFirewall();
+        $result = $articleThreadFirewall->accessPostDelete(array('id' => 111));
+        $this->assertFalse($result);
+    }
+
+    public function testaccessPostDeleteWithPostCreater()
+    {
         $this->mockBiz(
             'Thread:ThreadService',
             array(
                 array(
                     'functionName' => 'getPost',
-                    'returnValue' => array('id' => 111, 'userId' => 2),
+                    'returnValue' => array('id' => 111, 'userId' => 1),
                     'withParams' => array(111),
-                    'runTimes' => 1,
-                ),
-                array(
-                    'functionName' => 'getPost',
-                    'returnValue' => array('id' => 111, 'userId' => 3),
-                    'withParams' => array(111),
-                    'runTimes' => 1,
                 ),
             )
         );
         $articleThreadFirewall = new ArticleThreadFirewall();
-        $result1 = $articleThreadFirewall->accessPostDelete(array('id' => 111));
-        $currentUser->__set('id', 0);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $result2 = $articleThreadFirewall->accessPostDelete(array('id' => 111));
-
-        $this->assertTrue($result1);
-        $this->assertFalse($result2);
+        $result = $articleThreadFirewall->accessPostDelete(array('id' => 111));
+        $this->assertTrue($result);
     }
 
     public function testaccessPostVote()
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 2,
+            'id' => 0,
             'nickname' => 'admin1',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
@@ -83,12 +79,14 @@ class ArticleThreadFirewallTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ArticleThreadFirewall();
-        $result1 = $fireWall->accessPostVote('');
-        $this->assertTrue($result1);
+        $result = $fireWall->accessPostVote('');
+        $this->assertFalse($result);
+    }
 
-        $currentUser->__set('id', 0);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $result2 = $fireWall->accessPostVote('');
-        $this->assertFalse($result2);
+    public function testaccessPostVoteWithLoginUser()
+    {
+        $fireWall = new ArticleThreadFirewall();
+        $result = $fireWall->accessPostVote('');
+        $this->assertTrue($result);
     }
 }
