@@ -91,14 +91,4 @@ class ArticleThreadFirewallTest extends BaseTestCase
         $result2 = $fireWall->accessPostVote('');
         $this->assertFalse($result2);
     }
-
-    public function getCurrentUser()
-    {
-        return $this->getServiceKernel()->getCurrentUser();
-    }
-
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
-    }
 }
