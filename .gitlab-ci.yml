@@ -106,7 +106,8 @@ Unit Test With PHP 7.0 For Develop:
 
 AT With Java And Selenium:
   stage: test
-  image: codeages/ci-php:5.5-5
+  image: ruanwenqin/ci:php5.5-jdk8
+
   services:
     - mysql:5.5
     - redis:latest
