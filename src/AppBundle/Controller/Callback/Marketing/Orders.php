@@ -14,7 +14,7 @@ class Orders extends MarketingBase
         $logger->debug('微营销通知处理订单');
         $content = $request->getContent();
         $postData = json_decode($content, true);
-  
+
         $keyProvider = new AuthKeyProvider();
         $authentication = new Authentication($keyProvider);
         try {
