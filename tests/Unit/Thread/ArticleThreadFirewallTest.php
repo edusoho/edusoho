@@ -8,14 +8,14 @@ use Biz\Thread\Firewall\ArticleThreadFirewall;
 
 class ArticleThreadFirewallTest extends BaseTestCase
 {
-    public function testaccessPostCreate()
+    public function testAccessPostCreate()
     {
         $fireWall = new ArticleThreadFirewall();
         $result = $fireWall->accessPostCreate('');
         $this->assertTrue($result);
     }
 
-    public function testaccessPostCreateWithNotLoginUser()
+    public function testAccessPostCreateWithNotLoginUser()
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
@@ -32,7 +32,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testaccessPostDelete()
+    public function testAccessPostDelete()
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
@@ -49,7 +49,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testaccessPostDeleteWithPostCreater()
+    public function testAccessPostDeleteWithPostCreater()
     {
         $this->mockBiz(
             'Thread:ThreadService',
@@ -66,7 +66,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testaccessPostVote()
+    public function testAccessPostVote()
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
@@ -83,7 +83,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testaccessPostVoteWithLoginUser()
+    public function testAccessPostVoteWithLoginUser()
     {
         $fireWall = new ArticleThreadFirewall();
         $result = $fireWall->accessPostVote('');

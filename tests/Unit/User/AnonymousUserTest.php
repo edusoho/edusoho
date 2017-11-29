@@ -25,7 +25,7 @@ class AnonymousUserTest extends BaseTestCase
         $this->assertEquals('游客', $anonymousUser->__get('nickname'));
     }
 
-    public function test__set()
+    public function testSet()
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->__set('nickname', 'testname');
@@ -33,7 +33,7 @@ class AnonymousUserTest extends BaseTestCase
         $this->assertEquals('testname', $anonymousUser->__get('nickname'));
     }
 
-    public function test__get()
+    public function testGet()
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result1 = $anonymousUser->__get('password');
@@ -45,7 +45,7 @@ class AnonymousUserTest extends BaseTestCase
         $this->assertEquals('游客', $result2);
     }
 
-    public function test__isset()
+    public function testIsset()
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $result = $anonymousUser->__isset('nickname');
@@ -53,7 +53,7 @@ class AnonymousUserTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function test__unset()
+    public function testUnset()
     {
         $anonymousUser = new AnonymousUser('127.0.0.1');
         $anonymousUser->__unset('nickname');
