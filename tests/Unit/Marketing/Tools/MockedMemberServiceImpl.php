@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Marketing\Tools;
 
-use Biz\BaseTestCase;
 use Biz\Marketing\Service\Impl\MarketingMemberServiceImpl;
 
 class MockedMemberServiceImpl extends MarketingMemberServiceImpl
@@ -12,7 +11,6 @@ class MockedMemberServiceImpl extends MarketingMemberServiceImpl
         $this->userId = $userId;
         $this->courseId = $courseId;
         $this->data = $data;
-
 
         if ($data['price'] > 0) {
             $order = $this->createOrder($userId, $userId, $data);
@@ -29,7 +27,7 @@ class MockedMemberServiceImpl extends MarketingMemberServiceImpl
             ),
             array(
                 'id' => $order['id'],
-            )
+            ),
         );
     }
 
