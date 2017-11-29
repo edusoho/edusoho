@@ -21,7 +21,7 @@ class Orders extends MarketingBase
             $logger->debug('准备验证auth');
             $authentication->auth($request);
 
-            return $this->getMarketingService()->addUserToCourse();
+            return $this->getMarketingService()->addUserToCourse($postData);
         } catch (\Exception $e) {
             $logger->error($e);
 
