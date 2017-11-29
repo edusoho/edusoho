@@ -49,6 +49,16 @@ class CloudFileServiceTest extends BaseTestCase
         $result = $this->getCloudFileService()->search($conditions, 0, 5);
         $this->assertEquals(2, count($result['data']));
         $this->assertEquals(2, count($result['createdUsers']));
+
+        $conditions = array('keywords' => 'nickname', 'searchType' => 'user1');
+        $result = $this->getCloudFileService()->search($conditions, 0, 5);
+        $this->assertEquals(2, count($result['data']));
+        $this->assertEquals(2, count($result['createdUsers']));
+
+        $conditions = array('keywords' => 'nickname', 'searchType' => 'user','ids'=>array(-1));
+        $result = $this->getCloudFileService()->search($conditions, 0, 5);
+        $this->assertEquals(2, count($result['data']));
+        $this->assertEquals(2, count($result['createdUsers']));
     }
 
     public function testSearchByResType()
@@ -173,8 +183,10 @@ class CloudFileServiceTest extends BaseTestCase
         );
 
         $result = $this->getCloudFileService()->batchDelete(array('56b1b123fe5847719b7234d96ba8af69'));
-
         $this->assertTrue($result);
+
+        $result = $this->getCloudFileService()->batchDelete(array());
+        $this->assertFalse($result);
     }
 
     public function testGetByGlobalId()
@@ -271,6 +283,56 @@ class CloudFileServiceTest extends BaseTestCase
         $this->assertArrayHasKey('video', $result);
     }
 
+    public function testDeleteCloudMP4Files()
+    {
+        $this->_mockCloudFileImplementor();
+
+        $this->mockBiz(
+            'User:TokenService',
+            array(
+                array(
+                    'functionName' => 'makeToken',
+                    'returnValue' => array('id'=>1, 'token' => '123456'),
+                ),
+            )
+        );
+        $result = $this->getCloudFileService()->deleteCloudMP4Files(1, 'callback');
+
+        $this->assertTrue($result['success']);
+    }
+
+    public function testHasMp4Video()
+    {
+        $this->mockBiz(
+            'File:CloudFileImplementor',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array('data' => array(array('id' => 1, 'no' => 'fbb5c6ef413f4cbbb425d70793a23703'), array('id' => 2, 'no' => '56b1b123fe5847719b7234d96ba8af69'))),
+                ),
+            )
+        );
+        $result = $this->getCloudFileService()->hasMp4Video();
+
+        $this->assertTrue($result);
+    }
+
+    public function testNoMp4Video()
+    {
+        $this->mockBiz(
+            'File:CloudFileImplementor',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(),
+                ),
+            )
+        );
+        $result = $this->getCloudFileService()->hasMp4Video();
+
+        $this->assertFalse($result);
+    }
+
     private function _mockCloudFileImplementor()
     {
         $this->mockBiz(
@@ -320,6 +382,10 @@ class CloudFileServiceTest extends BaseTestCase
                     'functionName' => 'getStatistics',
                     'returnValue' => array('storage' => array(), 'video' => array()),
                 ),
+                array(
+                    'functionName' => 'deleteMP4Files',
+                    'returnValue' => array('success' => true),
+                )
             )
         );
     }
