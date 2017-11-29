@@ -6102,7 +6102,7 @@ admin.edu_cloud.account.arrears_tips: 您已欠费%arrearageDays%天，教育云
 admin.edu_cloud.account.balance_not_enough: 你的余额不足50元，请尽快充值，以免影响正常使用。
 admin.edu_cloud.overview.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.overview.disabled_tips: 您的教育云服务已被禁用
-admin.edu_cloud.overview.disabled_recharge_tips: '您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细'
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 若有疑问，请联系客服人员：4008041114
 admin.edu_cloud.overview.balance: 余额
 admin.edu_cloud.overview.recharge: 充值

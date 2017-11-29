@@ -4896,8 +4896,7 @@ admin.edu_cloud.account.arrears_tips: 'Your account is overdue for %arrearageDay
 admin.edu_cloud.account.balance_not_enough: 'Your account balance is less than 50 CNY. Please recharge as soon as possilbe to avoid outage.'
 admin.edu_cloud.overview.locked_tips: 'Your education cloud service has been locked, please contact customer service'
 admin.edu_cloud.overview.disabled_tips: 'Your educational cloud service has been disabled'
-//TODO trans
-admin.edu_cloud.overview.disabled_recharge_tips: '您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细'
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 'If you have any questions, please contact customer service 4008041114.'
 admin.edu_cloud.overview.balance: Balance
 admin.edu_cloud.overview.recharge: Recharge
