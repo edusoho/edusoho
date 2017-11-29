@@ -67,20 +67,20 @@ class MemberOperationServiceTest extends BaseTestCase
                     'functionName' => 'create',
                     'returnValue' => array('id' => 111, 'title' => 'title'),
                     'withParams' => array(array(
-                        'id' => 111, 
-                        'title' => 'title', 
-                        'member_id' => 1, 
-                        'target_type' => 'course', 
+                        'id' => 111,
+                        'title' => 'title',
+                        'member_id' => 1,
+                        'target_type' => 'course',
                         'operate_type' => 'join',
                     )),
                 ),
             )
         );
         $result = $this->getMemberOperationService()->createRecord(array(
-            'id' => 111, 
-            'title' => 'title', 
-            'member_id' => 1, 
-            'target_type' => 'course', 
+            'id' => 111,
+            'title' => 'title',
+            'member_id' => 1,
+            'target_type' => 'course',
             'operate_type' => 'join',
         ));
         $this->assertEquals(array('id' => 111, 'title' => 'title'), $result);
@@ -102,8 +102,8 @@ class MemberOperationServiceTest extends BaseTestCase
                     'withParams' => array(
                         111,
                         array(
-                            'refund_id' => 1, 
-                        )
+                            'refund_id' => 1,
+                        ),
                     ),
                 ),
             )
@@ -111,8 +111,8 @@ class MemberOperationServiceTest extends BaseTestCase
         $result = $this->getMemberOperationService()->updateRefundInfoByOrderId(
             111,
             array(
-                'refund_id' => 1, 
-                'reason' => 'site.join_by_free', 
+                'refund_id' => 1,
+                'reason' => 'site.join_by_free',
                 'reason_type' => 'free_join',
             )
         );
