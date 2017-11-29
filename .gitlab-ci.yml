@@ -128,7 +128,7 @@ AT With Java And Selenium:
     - bin/codecept run api
     - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - cd GUIAutomation2
-    - mvn clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+    - /opt/apache-maven-3.5.2/bin/mvn clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
 
 Api Test With 5.5:
   stage: test
