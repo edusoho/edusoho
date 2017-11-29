@@ -2,7 +2,28 @@ import DoTestBase from 'app/js/testpaper/widget/do-test-base';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import ActivityEmitter from "app/js/activity/activity-emitter";
 
+import {
+  initScrollbar,
+  testpaperCardFixed,
+  testpaperCardLocation,
+  initWatermark,
+  onlyShowError
+} from 'app/js/testpaper/widget/part';
+
 class DoExercise extends DoTestBase {
+
+  constructor($container) {
+    super($container);
+    this._init();
+  }
+
+  _init() {
+    initScrollbar();
+    initWatermark();
+    testpaperCardFixed();
+    testpaperCardLocation();
+    onlyShowError();
+  }
 
   _getSeq() {
     let seq = [];
