@@ -55,7 +55,7 @@ class ArticleFileFireWallTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testCanAccessArticlePublisher()
+    public function testCanAccessWithArticlePublisher()
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(

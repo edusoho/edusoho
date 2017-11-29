@@ -131,7 +131,7 @@ class ClassroomFileFireWallTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testCanAccessTeacherAndPostType()
+    public function testCanAccessWithTeacherAndPostType()
     {
         $fireWall = new ClassroomFileFireWall($this->getBiz());
         $this->mockBiz(
