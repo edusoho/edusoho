@@ -1,8 +1,8 @@
-import DoTestpaper from 'app/js/testpaper/do-test/do-test';
+import DoTestBase from 'app/js/testpaper/widget/do-test-base';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import ActivityEmitter from "app/js/activity/activity-emitter";
 
-class DoExercise extends DoTestpaper {
+class DoExercise extends DoTestBase {
 
   _getSeq() {
     let seq = [];
