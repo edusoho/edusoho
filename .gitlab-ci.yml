@@ -1,7 +1,12 @@
+cache:
+  paths:
+    - .m2/
+
 stages:
   - test
 
 variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2"
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
