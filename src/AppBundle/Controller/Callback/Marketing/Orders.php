@@ -14,14 +14,14 @@ class Orders extends MarketingBase
         $logger->debug('微营销通知处理订单');
         $content = $request->getContent();
         $postData = json_decode($content, true);
-
+  
         $keyProvider = new AuthKeyProvider();
         $authentication = new Authentication($keyProvider);
         try {
             $logger->debug('准备验证auth');
             $authentication->auth($request);
 
-            return $this->getMarketingService()->addUserToCourse();
+            return $this->getMarketingService()->addUserToCourse($postData);
         } catch (\Exception $e) {
             $logger->error($e);
 
