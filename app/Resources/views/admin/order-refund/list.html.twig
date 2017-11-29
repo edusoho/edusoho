@@ -68,7 +68,11 @@
             </td>
             <td>{{ refund.amount|to_cash(0) }}</td>
             <td>
-              {{ admin_macro.user_link(user) }}
+              {% if has_permission('admin_user_manage') %}
+                <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
+              {% else %}
+                <span><a target="_blank" href="{{ path('user_show', {id: user.id}) }}">{{ user.nickname|default('--') }}</a></span>
+              {% endif %}
             </td>
             <td>
               {{ refund.created_time|date('Y-n-d H:i') }}
@@ -78,7 +82,11 @@
             </td>
             <td>
               {% if refund.deal_user_id != 0 %}
-                {{ admin_macro.user_link(users[refund.deal_user_id]) }}
+                {% if has_permission('admin_user_manage') %}
+                  <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:refund.deal_user_id}) }}">{{ users[refund.deal_user_id].nickname|default('--') }}</a>
+                {% else %}
+                  <span><a target="_blank" href="{{ path('user_show', {id: refund.deal_user_id}) }}">{{ users[refund.deal_user_id].nickname|default('--') }}</a></span>
+                {% endif %}
               {% else %}
                 --
               {% endif %}

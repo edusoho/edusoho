@@ -1,0 +1,42 @@
+#! /bin/bash
+echo '------------------------------------------------------------>'
+echo '### 如果不存在app/data目录，则新建'
+mkdir -p app/data
+
+echo '### 通过 git diff --name-only 命令，检查所列文件是否符合规范'
+php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB` > app/data/php-cs-fixer-problems
+cat app/data/php-cs-fixer-problems
+
+echo '### 自动修复规范问题'
+while read line
+do
+    if [[ $line = *\(* ]]; then  ## 错误类，会显示成 1）....  2) ..., 即包含反括号 (
+      
+        ## 处理字符串， 将字符串用 / 分割，取出第一个/后的内容，再将生成的内容用 空格 分割，取出第一个空格前面的内容
+        ##   如 1) edusoho/src/Biz/User/Service/Impl/UserServiceImpl.php (blank_line_before_statement) 
+        ##   会被处理为 src/Biz/User/Service/Impl/UserServiceImpl.php
+        i=1  
+        slashSplitedStr=''
+        while((1==1))  
+        do  
+            split=`echo $line|cut -d "/" -f$i`  ## 以/分割
+            if [ "$split" != "" ]; then
+                if [ "$i" != 1 ]; then
+                    if [ "$i" == 2 ]; then
+                        slashSplitedStr="${split}"
+                    else
+                        slashSplitedStr="${slashSplitedStr}/${split}"
+                    fi
+                fi
+                ((i++))
+            else  
+                break
+            fi
+        done
+        fixedClass=`echo $slashSplitedStr|cut -d " " -f1`
+        php-cs-fixer fix $fixedClass
+    fi
+done < app/data/php-cs-fixer-problems
+
+echo '### 结束'
+echo '<------------------------------------------------------------'

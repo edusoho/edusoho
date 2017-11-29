@@ -2897,6 +2897,9 @@ input.LargeInput {
 .subfield-list.five-subfield > li {
   width: 20%;
 }
+.subfield-list.six-subfield > li {
+  width: 16%;
+}
 .status-card-warp {
   position: relative;
 }

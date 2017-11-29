@@ -456,7 +456,7 @@ class UserController extends BaseController
 
         $goto = $this->getTargetPath($request);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
             $authSetting = $this->setting('auth', array());
 
@@ -541,10 +541,6 @@ class UserController extends BaseController
 
         if (isset($formData['email']) && !empty($formData['email'])) {
             $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
-
-            if (!$user['setup']) {
-                $this->getUserService()->setupAccount($user['id']);
-            }
         }
 
         $authSetting = $this->setting('auth', array());

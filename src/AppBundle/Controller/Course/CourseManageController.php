@@ -627,9 +627,21 @@ class CourseManageController extends BaseController
 
     private function findCanFreeTasks($course)
     {
+        $types = array();
+        $activities = $this->getActivityConfig();
+        foreach ($activities as $type => $activity) {
+            if (isset($activity['canFree']) && $activity['canFree']) {
+                $types[] = $type;
+            }
+        }
+
+        if (empty($types)) {
+            return array();
+        }
+
         $conditions = array(
             'courseId' => $course['id'],
-            'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
+            'types' => $types,
             'isOptional' => 0,
         );
 
@@ -1289,5 +1301,10 @@ class CourseManageController extends BaseController
     protected function getPayService()
     {
         return $this->createService('Pay:PayService');
+    }
+
+    protected function getActivityConfig()
+    {
+        return $this->get('extension.manager')->getActivities();
     }
 }
