@@ -69,7 +69,7 @@ class JoinCourseMemberAccessorTest extends BaseTestCase
         ));
         $accessor = new JoinCourseMemberAccessor($this->getBiz());
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        
+
         $result = $accessor->access(array());
         $this->assertEquals('user.locked', $result['code']);
     }
