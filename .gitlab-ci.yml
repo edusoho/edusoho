@@ -113,7 +113,6 @@ AT With Java And Selenium:
     - redis:latest
     - selenium/standalone-chrome:latest
   script:
-    - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@coding.codeages.net/edusoho/GUIAutomation2.git
    # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
@@ -127,7 +126,7 @@ AT With Java And Selenium:
 
     # 执行codeception的A PI 单元测试
     - bin/codecept run api
-    - git clone -b feature/remote-driver ${CI_BUILD_REPO/edusoho\/edusoho\.git\/GUIAutomation2\.git}
+    - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - cd GUIAutomation2
     - mvn clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
 
