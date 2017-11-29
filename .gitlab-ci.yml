@@ -6,7 +6,7 @@ stages:
   - test
 
 variables:
-  MAVEN_OPTS: "-B -Dmaven.repo.local=.m2"
+  MAVEN_OPTS: "-q -Dmaven.repo.local=.m2"
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
@@ -134,7 +134,7 @@ AT With Java And Selenium:
     - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_OPTS compile
     - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_OPTS exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
     - cd .. && app/console server:start && cd GUIAutomation2
-    - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_OPTS clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+    - /opt/apache-maven-3.5.2/bin/mvn $MAVEN_clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
 
 Api Test With 5.5:
   stage: test
