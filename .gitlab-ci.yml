@@ -113,21 +113,22 @@ AT With Java And Selenium:
     - redis:latest
     - selenium/standalone-chrome:latest
   script:
-   # 修改配置文件
+    # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
-
-    # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
-    - composer config repo.packagist composer https://packagist.phpcomposer.com
-    - composer require "codeception/codeception:*" --ignore-platform-reqs
-
     # 启动web服务
-    - app/console server:start
-
-    # 执行codeception的A PI 单元测试
-    - bin/codecept run api
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
+    # 安装插件
     - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - cd GUIAutomation2
+    - /opt/apache-maven-3.5.2/bin/mvn compile
+    - /opt/apache-maven-3.5.2/bin/mvn exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
+    - app/console server:start
     - /opt/apache-maven-3.5.2/bin/mvn clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
 
 Api Test With 5.5:
