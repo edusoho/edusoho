@@ -213,7 +213,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                     {% endfor %}
                   </ul>
                   {% set can_free_activity_types = can_free_activity_types() %}
-                  <div class="help-block ">{{'course.marketing_setup.preview.set_task.free_tips'|trans}}{{ can_free_activity_types|join('、') }}
+                  <div class="help-block ">{{'course.marketing_setup.preview.set_task.free_tips'|trans}}{{ can_free_activity_types|join('word.seperator'|trans) }}
                   </div>
                 </div>
               </div>
