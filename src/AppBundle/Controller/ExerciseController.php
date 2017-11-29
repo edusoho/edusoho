@@ -95,7 +95,7 @@ class ExerciseController extends BaseController
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
 
         $seq = $request->query->get('seq', array());
-        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id'], $seq);
+        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id'], array('orders' => $seq));
 
         $student = $this->getUserService()->getUser($exerciseResult['userId']);
 

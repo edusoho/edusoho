@@ -40,9 +40,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         }
     }
 
-    public function showTestItems($testId, $resultId = 0, $orders = array())
+    public function showTestItems($testId, $resultId = 0, $options = array())
     {
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'exercise');
+        $orders = empty($options['orders']) ? array() : $options['orders'];
 
         $itemResults = array();
         if ($resultId) {
@@ -108,7 +109,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 0,
                 $count
             );
-            if (!empty($orders)) {
+            if (empty($orders)) {
                 shuffle($questions);
             }
 
