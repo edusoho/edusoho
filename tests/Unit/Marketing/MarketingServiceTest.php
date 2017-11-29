@@ -15,14 +15,24 @@ class MarketingServiceTest extends BaseTestCase
             'nickname' => 'test_user',
             'client_ip' => '127.2.3.21',
             'order_id' => 111,
-            'order_price_amount' => 223,
-            'order_pay_amount' => 122,
+            'order_price_amount' => 11000,
+            'order_pay_amount' => 1,
             'activity_id' => 81,
             'activity_name' => '营销活动A',
             'deduct' => array(
-                'detail' => '促销活动',
-                'deduct_type' => 'type1',
-                'deduct_amount' => 200,
+                'id' => '2863',
+                'order_id' => '2874',
+                'detail' => '订单A',
+                'item_id' => '2873',
+                'deduct_type' => 'cut',
+                'deduct_id' => '129555',
+                'deduct_amount' => '10999',
+                'status' => 'paid',
+                'user_id' => '10000',
+                'seller_id' => '1',
+                'snapshot' => array(),
+                'created_time' => '1511948304',
+                'updated_time' => '1511948322',
             ),
             'target_type' => 'course',
             'target_id' => 12,
@@ -51,20 +61,20 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertArrayEquals(
             array(
                 'marketingOrderId' => 111,
-                'marketingOrderPriceAmount' => 223,
-                'marketingOrderPayAmount' => 122,
+                'marketingOrderPriceAmount' => 110,
+                'marketingOrderPayAmount' => 0.01,
                 'marketingActivityId' => 81,
                 'marketingActivityName' => '营销活动A',
                 'deducts' => array(
                     array(
-                        'detail' => '促销活动',
-                        'deduct_type' => 'type1',
-                        'deduct_amount' => 200,
+                        'detail' => '订单A',
+                        'deduct_type' => 'cut',
+                        'deduct_amount' => 10999,
                         'user_id' => '3',
                     ),
                 ),
-                'originPrice' => 223,
-                'price' => 122,
+                'originPrice' => 110,
+                'price' => 0.01,
                 'source' => 'marketing',
                 'remark' => '来自微营销',
                 'orderTitleRemark' => '(来自微营销)',
@@ -83,8 +93,8 @@ class MarketingServiceTest extends BaseTestCase
             array('is_new', 'user_id', 'code', 'msg')
         );
 
-        $this->assertEquals('22300', $order['price_amount']);
-        $this->assertEquals('12200', $order['pay_amount']);
+        $this->assertEquals('11000', $order['price_amount']);
+        $this->assertEquals('1', $order['pay_amount']);
         $this->assertEquals('course', $order['create_extra']['targetType']);
     }
 

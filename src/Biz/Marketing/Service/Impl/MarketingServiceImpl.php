@@ -9,6 +9,37 @@ use Biz\Marketing\Service\MarketingService;
 
 class MarketingServiceImpl extends BaseService implements MarketingService
 {
+    /**
+     * @param $postData  (价格单位均为分)
+     * {
+     *      "activity_id": "123815",
+     *      "activity_name": "打折活动A",
+     *      "client_ip": "127.0.0.1",
+     *      "deduct": {
+     *          "id":"2863",
+     *          "order_id":"2874",
+     *          "detail":"打折活动详情",
+     *          "item_id":"2873",
+     *          "deduct_type": "cut",
+     *          "deduct_id": "129555",
+     *          "deduct_amount": "10999",
+     *          "status": "paid",
+     *          "user_id": "10000",
+     *          "seller_id": "1",
+     *          "snapshot":[],
+     *          "created_time": "1511948304",
+     *          "updated_time":"1511948322"
+     *      },
+     *      "mobile": "18812345678",
+     *      "nickname":"Drrrug.",
+     *      "order_id":"2874",
+     *      "order_pay_amount":"1",
+     *      "order_price_amount":"11000",
+     *      "target_id":"19",
+     *      "target_type":"course",
+     *      "user_id":"10000"
+     *  }
+     */
     public function addUserToCourse($postData)
     {
         $logger = $this->biz['logger'];
@@ -56,7 +87,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         return array(array(
             'detail' => $deduct['detail'],
             'deduct_type' => $deduct['deduct_type'],
-            'deduct_amount' => $deduct['deduct_amount'] / 100,
+            'deduct_amount' => $deduct['deduct_amount'],
             'user_id' => $userId,
         ));
     }
