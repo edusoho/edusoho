@@ -27,7 +27,7 @@ class DoExercise extends DoTestBase {
 
   _getSeq() {
     let seq = [];
-    $('.js-testpaper-question').each(function () {
+    $('.js-testpaper-question,.js-testpaper-question-stem-material').each(function () {
       seq.push($(this).attr('id').replace(/[^0-9]/ig,""));
     });
     return seq;

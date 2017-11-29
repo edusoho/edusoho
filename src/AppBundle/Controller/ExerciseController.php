@@ -93,11 +93,9 @@ class ExerciseController extends BaseController
         }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
-        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id']);
 
-        $seq = $request->query->get('seq', '');
-
-        $questions = $this->sortQuestions($questions, $seq);
+        $seq = $request->query->get('seq', array());
+        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id'], $seq);
 
         $student = $this->getUserService()->getUser($exerciseResult['userId']);
 
@@ -147,18 +145,6 @@ class ExerciseController extends BaseController
 
             return $count;
         }, 0);
-    }
-
-    private function sortQuestions($questions, $order)
-    {
-        usort($questions, function ($a, $b) use ($order) {
-            $pos_a = array_search($a['id'], $order);
-            $pos_b = array_search($b['id'], $order);
-
-            return $pos_a - $pos_b;
-        });
-
-        return $questions;
     }
 
     /**

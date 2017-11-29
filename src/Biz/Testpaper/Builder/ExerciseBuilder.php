@@ -40,7 +40,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         }
     }
 
-    public function showTestItems($testId, $resultId = 0)
+    public function showTestItems($testId, $resultId = 0, $orders = array())
     {
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'exercise');
 
@@ -108,12 +108,14 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 0,
                 $count
             );
-            shuffle($questions);
+            if (!empty($orders)) {
+                shuffle($questions);
+            }
 
             $questions = array_slice($questions, 0, $exercise['itemCount']);
         }
 
-        return $this->formatQuestions($questions, $itemResults);
+        return $this->formatQuestions($questions, $itemResults, $orders);
     }
 
     public function filterFields($fields, $mode = 'create')
@@ -171,8 +173,12 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
     }
 
-    protected function formatQuestions($questions, $questionResults)
+    protected function formatQuestions($questions, $questionResults, $orders = array())
     {
+        if (!empty($orders)) {
+            $questions = $this->sortQuestions($questions, $orders);
+        }
+
         $formatQuestions = array();
         $index = 1;
 
@@ -201,6 +207,18 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $formatQuestions;
     }
 
+    protected function sortQuestions($questions, $order)
+    {
+        usort($questions, function ($a, $b) use ($order) {
+            $pos_a = array_search($a['id'], $order);
+            $pos_b = array_search($b['id'], $order);
+
+            return $pos_a - $pos_b;
+        });
+
+        return ArrayToolkit::index($questions, 'id');
+    }
+
     protected function getQuestions($options)
     {
         $conditions = array();
@@ -209,7 +227,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $options['range'] = (array) json_decode($options['range']);
         }
 
-        if (!empty($options['range']) && $options['range'] == 'lesson') {
+        if (!empty($options['range']) && 'lesson' == $options['range']) {
             $conditions['lessonId'] = $options['range'];
         }
 
