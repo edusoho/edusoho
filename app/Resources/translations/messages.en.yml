@@ -856,7 +856,7 @@ course.marketing_setup.preview.set_task: 'Free tasks'
 course.marketing_setup.preview.set_task.task: Task
 course.marketing_setup.preview.set_task.task_name: 'Task %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support text, video, audio, flash, docs and ppt'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'

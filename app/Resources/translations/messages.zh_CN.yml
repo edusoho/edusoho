@@ -983,7 +983,7 @@ course.marketing_setup.preview.set_task: 设置免费学习任务
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
