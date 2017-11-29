@@ -81,6 +81,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-graphicclass',
                 ),
                 'controller' => 'AppBundle:Activity/Text',
+                'canFree' => true,
                 'visible' => function ($courseSet, $course) {
                     return $courseSet['type'] != 'live';
                 },
@@ -91,6 +92,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-videoclass',
                 ),
                 'controller' => 'AppBundle:Activity/Video',
+                'canFree' => true,
                 'visible' => function ($courseSet, $course) {
                     return $courseSet['type'] != 'live';
                 },
@@ -101,6 +103,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-audioclass',
                 ),
                 'controller' => 'AppBundle:Activity/Audio',
+                'canFree' => true,
                 'visible' => function ($courseSet, $course) {
                     return $courseSet['type'] != 'live';
                 },
@@ -111,6 +114,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-videocam',
                 ),
                 'controller' => 'AppBundle:Activity/Live',
+                'canFree' => false,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     $storage = $biz->service('System:SettingService')->get('course');
 
@@ -123,6 +127,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-comment',
                 ),
                 'controller' => 'AppBundle:Activity/Discuss',
+                'canFree' => false,
                 'visible' => function ($courseSet, $course) {
                     return true;
                 },
@@ -134,6 +139,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-flashclass',
                 ),
                 'controller' => 'AppBundle:Activity/Flash',
+                'canFree' => true,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     $storage = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
@@ -147,6 +153,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-description',
                 ),
                 'controller' => 'AppBundle:Activity/Doc',
+                'canFree' => true,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     $storage = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
@@ -160,6 +167,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-pptclass',
                 ),
                 'controller' => 'AppBundle:Activity/Ppt',
+                'canFree' => true,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     $storage = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
@@ -173,6 +181,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-kaoshi',
                 ),
                 'controller' => 'AppBundle:Activity/Testpaper',
+                'canFree' => false,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     return true;
                 },
@@ -183,6 +192,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-zuoye',
                 ),
                 'controller' => 'AppBundle:Activity/Homework',
+                'canFree' => false,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     return true;
                 },
@@ -193,6 +203,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-mylibrarybooks',
                 ),
                 'controller' => 'AppBundle:Activity/Exercise',
+                'canFree' => false,
                 'visible' => function ($courseSet, $course) use ($biz) {
                     return true;
                 },
@@ -203,6 +214,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-filedownload',
                 ),
                 'controller' => 'AppBundle:Activity/Download',
+                'canFree' => false,
                 'visible' => function ($courseSet, $course) {
                     return true;
                 },
