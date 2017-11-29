@@ -174,6 +174,7 @@ date.year: Year
 date.month: Month
 date.day: Day
 date.format: Y/m/d
+word.seperator: ','
 paginator.firstPage: 'First'
 paginator.endPage: 'End'
 paginator.nextPage: 'Next'
@@ -856,7 +857,7 @@ course.marketing_setup.preview.set_task: 'Free tasks'
 course.marketing_setup.preview.set_task.task: Task
 course.marketing_setup.preview.set_task.task_name: 'Task %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support text, video, audio, flash, docs and ppt'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'
@@ -2244,28 +2245,28 @@ user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
 user.oauth.login_by_mobile_or_email: 手机/邮箱
 user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
-user.oauth.bind_account: 绑定账号
-user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%账号
+user.oauth.bind_account: 绑定帐号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%帐号
 user.oauth.validate_password: 验证密码
-user.oauth.bind_success: 账号绑定成功
+user.oauth.bind_success: 帐号绑定成功
 user.oauth.bind_account_success: 绑定成功
-user.oauth.web_account_password: 网校账号密码
+user.oauth.web_account_password: 网校帐号密码
 user.oauth.binding_web_user: 正在绑定网校用户
 user.oauth.bind_account_and_go_continue: 绑定并继续
-user.oauth.bind_other_account: 绑定其他账号？
-user.oauth.bind_existed_account: 绑定已有账号？
+user.oauth.bind_other_account: 绑定其他帐号？
+user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
-user.oauth.register_account_by_ways: 使用%accountType%创建账号
+user.oauth.register_account_by_ways: 使用%accountType%创建帐号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
 user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
 user.oauth.register.send_sms: 发送验证
 user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
-user.oauth.register_account: 创建账号
+user.oauth.register_account: 创建帐号
 user.oauth.register_success: 注册成功
-user.oauth.register_account_success: 账号注册成功
+user.oauth.register_account_success: 帐号注册成功
 user.oauth.page.closed: 秒后该页面自动关闭
 user.oauth.register.closed: 注册已关闭，请联系管理员
 
@@ -5872,6 +5873,7 @@ admin.payment_setting.llpay_key: 'Merchant account'
 admin.payment_setting.llpay_secret: 'Business platform Key'
 admin.payment_setting.llpay_public_key: Public Key
 admin.payment_setting.llpay_private_key: Private Key
+admin.payment_setting.llpay_application_tips: ''
 admin.payment_setting.quickpay: 'Meeting fubao-quick pay'
 admin.payment_setting.quickpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.quickpay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'

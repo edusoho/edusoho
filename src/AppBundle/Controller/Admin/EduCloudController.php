@@ -269,10 +269,9 @@ class EduCloudController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $conditions = array('mcStatus' => 'yes', 'page' => 1);
-        $files = $this->getCloudFileService()->search($conditions, 0, 1);
+        $hasMp4Video = $this->getCloudFileService()->hasMp4Video();
 
-        if (empty($files['data'])) {
+        if (!$hasMp4Video) {
             return $this->render('admin/edu-cloud/video/video-delete-success-modal.html.twig');
         }
 

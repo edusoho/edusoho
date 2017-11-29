@@ -17,7 +17,7 @@ class DefaultController extends BaseController
         $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($permission);
         $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
 
-        if (!empty($tabMenu['mode']) && $tabMenu['mode'] == 'capsules') {
+        if (!empty($tabMenu['mode']) && 'capsules' == $tabMenu['mode']) {
             $tabMenu = $this->container->get('permission.twig.permission_extension')->getFirstChild($tabMenu);
         }
 
@@ -60,7 +60,7 @@ class DefaultController extends BaseController
 
     private function addInspectRole($name, $value)
     {
-        if ($value['status'] == 'ok') {
+        if ('ok' == $value['status']) {
             return array();
         }
 
@@ -173,10 +173,10 @@ class DefaultController extends BaseController
         $totalRegisterNum = $this->getUserService()->countUsers(array());
 
         $todayCourseMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'course', 'operate_type' => 'join'));
-        $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom', 'operate_type' => 'join'));
+        $todayClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('operate_time_GE' => $todayTimeStart, 'operate_time_LT' => $todayTimeEnd, 'target_type' => 'classroom', 'operate_type' => 'join', 'exclude_reason_type' => 'auditor_join'));
 
         $totalCourseMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'course', 'operate_type' => 'join'));
-        $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom', 'operate_type' => 'join'));
+        $totalClassroomMemberNum = $this->getMemberOperationService()->countRecords(array('target_type' => 'classroom', 'operate_type' => 'join', 'exclude_reason_type' => 'auditor_join'));
 
         $todayVipNum = 0;
         $totalVipNum = 0;
@@ -440,7 +440,7 @@ class DefaultController extends BaseController
 
     private function getDaysDiff($period)
     {
-        $days = $period == 'week' ? 6 : 29;
+        $days = 'week' == $period ? 6 : 29;
 
         return $days;
     }

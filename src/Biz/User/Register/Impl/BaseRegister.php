@@ -104,10 +104,11 @@ abstract class BaseRegister
         $user['type'] = $registration['type'];
         $user['createdTime'] = time();
 
-        if (in_array($registration['type'], array('default', 'phpwind', 'discuz'))) {
+        $type = empty($registration['providerType']) ? $registration['type'] : $registration['providerType'];
+        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-        } elseif ('marketing' === $registration['type']) {
+        } elseif ('marketing' === $type) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
         } else {
@@ -151,6 +152,30 @@ abstract class BaseRegister
     protected function getProfileDao()
     {
         return $this->biz->dao('User:UserProfileDao');
+    }
+
+    /**
+     * @return InviteRecordService
+     */
+    protected function getInviteRecordService()
+    {
+        return $this->biz->service('User:InviteRecordService');
+    }
+
+    /**
+     * @return CardService
+     */
+    protected function getCardService()
+    {
+        return $this->biz->service('Card:CardService');
+    }
+
+    /**
+     * @return CouponService
+     */
+    protected function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
     }
 
     protected function getPasswordEncoder()

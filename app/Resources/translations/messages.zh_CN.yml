@@ -241,6 +241,9 @@ date.month: 月
 date.day: 日
 date.format: Y年m月d日
 
+#符号通用
+word.seperator: '、'
+
 #分页
 paginator.firstPage: 首页
 paginator.endPage: 尾页
@@ -983,7 +986,7 @@ course.marketing_setup.preview.set_task: 设置免费学习任务
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
@@ -2846,28 +2849,28 @@ user.oauth.login_by_email: 邮箱
 user.oauth.login_by_mobile: 手机
 user.oauth.login_by_mobile_or_email: 手机/邮箱
 user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
-user.oauth.bind_account: 绑定账号
-user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%账号
+user.oauth.bind_account: 绑定帐号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%帐号
 user.oauth.validate_password: 验证密码
-user.oauth.bind_success: 账号绑定成功
+user.oauth.bind_success: 帐号绑定成功
 user.oauth.bind_account_success: 绑定成功
-user.oauth.web_account_password: 网校账号密码
+user.oauth.web_account_password: 网校帐号密码
 user.oauth.binding_web_user: 正在绑定网校用户
 user.oauth.bind_account_and_go_continue: 绑定并继续
-user.oauth.bind_other_account: 绑定其他账号？
-user.oauth.bind_existed_account: 绑定已有账号？
+user.oauth.bind_other_account: 绑定其他帐号？
+user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
-user.oauth.register_account_by_ways: 使用%accountType%创建账号
+user.oauth.register_account_by_ways: 使用%accountType%创建帐号
 user.oauth.register.confirm_password_label: 确认密码
 user.oauth.register.confirm_password_placeholder: 再次输入密码
 user.oauth.register.input_sms_code_tips: 输入验证码
 user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
 user.oauth.register.send_sms: 发送验证
 user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
-user.oauth.register_account: 创建账号
+user.oauth.register_account: 创建帐号
 user.oauth.register_success: 注册成功
-user.oauth.register_account_success: 账号注册成功
+user.oauth.register_account_success: 帐号注册成功
 user.oauth.page.closed: 秒后该页面自动关闭
 user.oauth.register.closed: 注册已关闭，请联系管理员
 
@@ -7373,6 +7376,11 @@ admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
 admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
+admin.payment_setting.llpay_application_tips: >
+ 使用前提：
+  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看</a>操作。</p>
+  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
@@ -8292,5 +8300,4 @@ site.avatar.set_before_learning: 请先设置头像
 site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
-
 
