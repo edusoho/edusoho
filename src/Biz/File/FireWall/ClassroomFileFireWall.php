@@ -51,11 +51,11 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
 
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Thread:ThreadService');
+        return $this->biz->service('Thread:ThreadService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getKernel()->createService('Classroom:ClassroomService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }
