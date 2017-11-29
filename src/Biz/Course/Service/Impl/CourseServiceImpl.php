@@ -504,9 +504,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $result = $this->getCourseDeleteService()->deleteCourse($id);
 
-        $this->dispatchEvent('course.delete', new Event($course));
-
         $this->getCourseDao()->delete($id);
+
+        $this->dispatchEvent('course.delete', new Event($course));
 
         return $result;
     }
