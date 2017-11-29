@@ -159,7 +159,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
             new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
-            new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
         );
