@@ -63,7 +63,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         $logger->debug("准备把用户,{$user['id']}添加到课程");
         $orderInfo = array(
             'marketingOrderId' => $postData['order_id'],
-            'marketingOrderPriceAmount' => $postData['order_price_amount'] / 100,
+            'marketingOrderPriceAmount' => $postData['order_price_amount'] / 100,  //原价和现价 都需要除以 100，deduct不需要除以 100
             'marketingOrderPayAmount' => $postData['order_pay_amount'] / 100,
             'marketingActivityId' => $postData['activity_id'],
             'marketingActivityName' => $postData['activity_name'],
@@ -87,7 +87,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         return array(array(
             'detail' => $deduct['detail'],
             'deduct_type' => $deduct['deduct_type'],
-            'deduct_amount' => $deduct['deduct_amount'],
+            'deduct_amount' => $deduct['deduct_amount'],  //原价和现价 都需要除以 100，deduct不需要除以 100
             'user_id' => $userId,
         ));
     }
