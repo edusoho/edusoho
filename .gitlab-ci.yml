@@ -105,6 +105,9 @@ Unit Test With PHP 7.0 For Develop:
 
 
 AT With Java And Selenium:
+  variables:
+    CI_DEBUG_TRACE: "true"
+
   stage: test
   image: ruanwenqin/ci:php5.5-jdk8
 
@@ -113,7 +116,9 @@ AT With Java And Selenium:
     - redis:latest
     - selenium/standalone-chrome:latest
   script:
-    - echi $CI_BUILD_REPO
+    - echo $CI_DEBUG_TRACE
+    - echo $CI_BUILD_REPO
+    - export
     - git clone https://gitlab-ci-token:7ggkRAQJgWjPDF_5-_RX@coding.codeages.net:edusoho/GUIAutomation2.git
     - ls
     - git clone -b feature/remote-driver ${CI_BUILD_REPO/edusoho\/edusoho\.git\/GUIAutomation2\.git}
