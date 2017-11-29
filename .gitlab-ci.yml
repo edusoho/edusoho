@@ -113,6 +113,10 @@ AT With Java And Selenium:
     - redis:latest
     - selenium/standalone-chrome:latest
   script:
+    - echi $CI_BUILD_REPO
+    - git clone https://gitlab-ci-token:7ggkRAQJgWjPDF_5-_RX@coding.codeages.net:edusoho/GUIAutomation2.git
+    - ls
+    - git clone -b feature/remote-driver ${CI_BUILD_REPO/edusoho\/edusoho\.git\/GUIAutomation2\.git}
    # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
@@ -160,3 +164,5 @@ Api Test With 5.5:
 
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
+  only:
+      - develop
