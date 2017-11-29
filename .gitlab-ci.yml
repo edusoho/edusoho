@@ -113,7 +113,7 @@ AT With Java And Selenium:
     - redis:latest
     - selenium/standalone-chrome:latest
   script:
-    - git clone -b feature/remote-driver http://gitlab-ci-token:7ggkRAQJgWjPDF_5-_RX@coding.codeages.net:edusoho/GUIAutomation2.git
+    - git clone -b feature/remote-driver http://gitlab-ci-token:7ggkRAQJgWjPDF_5-_RX@coding.codeages.net/edusoho/GUIAutomation2.git
    # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
