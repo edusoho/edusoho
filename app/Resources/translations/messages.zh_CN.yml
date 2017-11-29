@@ -241,6 +241,9 @@ date.month: 月
 date.day: 日
 date.format: Y年m月d日
 
+#符号通用
+word.seperator: '、'
+
 #分页
 paginator.firstPage: 首页
 paginator.endPage: 尾页
@@ -8293,5 +8296,3 @@ site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
-
-word.seperator: '、'
