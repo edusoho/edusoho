@@ -3,7 +3,6 @@
   {% if courseItems and courseItems[0]['seq'] != 1 %}
     <a class="js-up-more-link link-gray center-block text-center" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">{{ 'my.learning.course.click_loading_more'|trans }}</a>
   {% endif %}
-
   <ul class="task-list task-list-md task-list-hover js-task-list-ul infinite-container">
     {# 选修任务不显示 #}
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
@@ -19,6 +18,7 @@
         </li>
       {% elseif item.itemType == 'task' %}
         {% set task = item %}
+        {% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
         {% if member is empty %}
           {% set task_lock = (course.learnMode == 'lockMode') %}
         {% else %}
@@ -67,9 +67,10 @@
                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
                 {% elseif (not task.isFree) and course.parentId | default(0) == 0 %}
                   {% if course.isFree %}
-                    <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.join_btn'|trans }}
-                    </a>
-                  {% else %}
+                    {% if not isOvertime %}
+                      <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.join_btn'|trans }}</a>
+                    {% endif %}
+                  {% elseif not isOvertime %}
                     <a class="btn btn-primary" href="#modal" data-toggle="modal"
                       data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
                   {% endif %}

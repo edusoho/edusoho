@@ -209,6 +209,7 @@ class LoginController extends LoginBindController
             $oauthUser->accountType => $oauthUser->account,
             'avatar' => $oauthUser->avatar,
             'type' => $oauthUser->type,
+            'registeredWay' => $oauthUser->isApp() ? strtolower($oauthUser->os) : 'web',
             'authid' => $oauthUser->authid,
         );
 

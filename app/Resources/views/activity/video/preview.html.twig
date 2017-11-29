@@ -7,7 +7,7 @@
       <div class="task-preview-modal-content" id="task-preview-player">
         <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content">
           {#如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx#}
-          {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, context:context})) }}
+          {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, isPart: true, context: context})) }}
         </div>
       </div>
     {% else %}

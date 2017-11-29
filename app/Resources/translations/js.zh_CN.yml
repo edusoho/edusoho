@@ -425,6 +425,7 @@ course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
 course.manage.task_unpublish_fail_hint: 取消发布失败
 course.manage.live_replay_generate_success: 生成录制回放成功
+course.manage.live_replay_generate_error: 未开启直播回放或视频正在转码中，请稍后再试
 course.manage.live_replay_upload_error_hint: 请上传录像文件
 course.manage.buy_expiry_time_required_error_hint: 请输入加入截止日期
 course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期

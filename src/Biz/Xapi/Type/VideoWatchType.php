@@ -34,6 +34,6 @@ class VideoWatchType extends Type
             'duration' => $watchLog['watched_time'],
         );
 
-        return $this->createXAPIService()->watchVideo($actor, $object, $result, $statement['created_time'], false);
+        return $this->createXAPIService()->watchVideo($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
     }
 }
