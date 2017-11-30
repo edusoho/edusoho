@@ -176,6 +176,62 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
         );
     }
 
+    public function testCreateMaterials()
+    {
+        $material = $this->getMaterialDao()->create(
+            array(
+                'title' => 'old title',
+                'description' => 'old description',
+                'link' => 'old link',
+                'fileId' => '111',
+                'fileUri' => 'old url',
+                'fileMime' => 'mp4',
+                'fileSize' => 333,
+                'source' => 'old source',
+                'userId' => 1,
+                'type' => 'material',
+                'lessonId' => 1111,
+                'courseId' => 2222,
+            )
+        );
+
+        $job = new CourseTaskCreateSyncJob();
+        ReflectionUtils::setProperty($job, 'biz', $this->biz);
+
+        ReflectionUtils::invokeMethod(
+            $job, 'createMaterials', array(
+                array('id' => 999),
+                array('id' => 1111, 'fromCourseId' => 2222),
+                array('courseSetId' => 77, 'id' => 88),
+            )
+        );
+
+        $oldMaterials = $this->getMaterialDao()->search(
+            array('lessonId' => 1111, 'courseId' => 2222),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        $newMaterials = $this->getMaterialDao()->search(
+            array('lessonId' => 999, 'courseId' => 88),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        $this->assertEquals(1, count($oldMaterials));
+        $this->assertEquals(1, count($newMaterials));
+    }
+
+    /**
+     * @return CourseMaterialDao
+     */
+    protected function getMaterialDao()
+    {
+        return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
     /**
      * @return TaskService
      */
