@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\AuthService;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserLearnStatisticsController extends BaseController
@@ -26,16 +25,22 @@ class UserLearnStatisticsController extends BaseController
         );
         $userIds = ArrayToolkit::column($statistics, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
+
         return $this->render('admin/learn-statistices/show.html.twig', array(
             'statistics' => $statistics,
             'paginator' => $paginator,
             'users' => $users,
         ));
-    }  
+    }
+
+    public function detailAction(Request $request, $userId)
+    {
+        return $this->render('admin/learn-statistices/detail.html.twig', array(
+        ));
+    }
 
     public function syncDailyData()
     {
-        
     }
 
     protected function getLearnStatisticesService()
