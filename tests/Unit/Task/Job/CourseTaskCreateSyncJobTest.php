@@ -7,7 +7,7 @@ use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
 use Tests\Unit\Task\Job\Tools\MockedText;
 
-class CourseTaskUpdateSyncJobTest extends BaseTestCase
+class CourseTaskCreateSyncJobTest extends BaseTestCase
 {
     public function testExecute()
     {
