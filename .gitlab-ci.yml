@@ -93,8 +93,7 @@ AT With Java And Selenium:
   image: ruanwenqin/ci:php5.5-jdk8
 
   services:
-    - mysql:5.5
-    - redis:latest
+    - mysql:5.7
     - selenium/standalone-chrome:latest
   script:
     # 修改配置文件
@@ -116,6 +115,9 @@ AT With Java And Selenium:
     - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
   only:
       - schedules
+      - triggers
+      - web
+      - api
 
 Api Test With 5.5:
   stage: test
