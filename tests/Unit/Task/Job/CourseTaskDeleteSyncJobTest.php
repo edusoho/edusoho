@@ -41,7 +41,7 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
                         array(3331, 3332),
                     ),
                     'returnValue' => array(
-                        array('id' => 231, 'courseId' => 3331), 
+                        array('id' => 231, 'courseId' => 3331),
                         array('id' => 232, 'courseId' => 3332),
                     ),
                 ),
@@ -49,7 +49,7 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
                     'functionName' => 'get',
                     'withParams' => array(231),
                     'returnValue' => array(
-                        'id' => 231, 
+                        'id' => 231,
                         'courseId' => 3331,
                     ),
                 ),
@@ -57,7 +57,7 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
                     'functionName' => 'get',
                     'withParams' => array(232),
                     'returnValue' => array(
-                        'id' => 232, 
+                        'id' => 232,
                         'courseId' => 3332,
                     ),
                 ),
@@ -75,7 +75,7 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
         $this->assertEquals(
             array(
                 array('id' => 231, 'courseId' => 3331),
-                array('id' => 232, 'courseId' => 3332), 
+                array('id' => 232, 'courseId' => 3332),
             ),
             $strategy->getDeletedTasks()
         );
