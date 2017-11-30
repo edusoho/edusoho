@@ -24,17 +24,17 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
     {
         $thread = $event->getSubject();
         $this->getLogger('ThreadSubscriber')->debug('onThreadCreate : ', $thread);
-        $this->triggerActivitiesByCourseId($thread['courseId']);
+        $this->triggerActivitiesAndFinishTaskByCourseId($thread['courseId']);
     }
 
     public function onPostCreate(Event $event)
     {
         $post = $event->getSubject();
         $this->getLogger('ThreadSubscriber')->debug('onPostCreate : ', $event->getSubject());
-        $this->triggerActivitiesByCourseId($post['courseId']);
+        $this->triggerActivitiesAndFinishTaskByCourseId($post['courseId']);
     }
 
-    protected function triggerActivitiesByCourseId($courseId)
+    protected function triggerActivitiesAndFinishTaskByCourseId($courseId)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'discuss');
         if (empty($activities)) {
