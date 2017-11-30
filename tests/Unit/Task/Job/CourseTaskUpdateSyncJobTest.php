@@ -26,7 +26,7 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
                         'id' => 110,
                         'courseId' => 3330,
                     ),
-                )
+                ),
             )
         );
         $this->mockBiz(
@@ -39,7 +39,7 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
                         array('id' => 3331),
                         array('id' => 3332),
                     ),
-                )
+                ),
             )
         );
         $this->mockBiz(
@@ -78,7 +78,7 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
                     'withParams' => array(44441),
                     'returnValue' => array(
                         'id' => 44441,
-                        'copyId' => 44451, 
+                        'copyId' => 44451,
                         'mediaType' => 'text',
                     ),
                 ),
@@ -87,7 +87,7 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
                     'withParams' => array(44442),
                     'returnValue' => array(
                         'id' => 44442,
-                        'copyId' => 44452, 
+                        'copyId' => 44452,
                         'mediaType' => 'text',
                     ),
                 ),
@@ -96,7 +96,7 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
                     'withParams' => array(44451),
                     'returnValue' => array(
                         'id' => 44451,
-                        'copyId' => 0, 
+                        'copyId' => 0,
                         'mediaType' => 'text',
                     ),
                 ),
@@ -105,27 +105,26 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
                     'withParams' => array(44452),
                     'returnValue' => array(
                         'id' => 44452,
-                        'copyId' => 0, 
+                        'copyId' => 0,
                         'mediaType' => 'text',
                     ),
                 ),
                 array(
                     'functionName' => 'update',
                     'withParams' => array(
-                        44441, 
+                        44441,
                         array('id' => 44441, 'copyId' => 44451, 'mediaType' => 'text', 'mediaId' => 2222222),
-                    )
+                    ),
                 ),
                 array(
                     'functionName' => 'update',
                     'withParams' => array(
-                        44442, 
+                        44442,
                         array('id' => 44442, 'copyId' => 44452, 'mediaType' => 'text', 'mediaId' => 2222222),
-                    )
+                    ),
                 ),
             )
         );
-
 
         $job->execute();
 

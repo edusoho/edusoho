@@ -10,6 +10,7 @@ class MockedText extends Text
     {
         $this->sourceActivity = $sourceActivity;
         $this->activity = $activity;
+
         return array('id' => 2222222);
     }
 
