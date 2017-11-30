@@ -28,11 +28,11 @@ class TestpaperController extends BaseController
             throw $this->createResourceNotFoundException('testpaper', $testId);
         }
 
-        if ($testpaper['status'] === 'draft') {
+        if ('draft' === $testpaper['status']) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷未发布，如有疑问请联系老师！'));
         }
 
-        if ($testpaper['status'] === 'closed') {
+        if ('closed' === $testpaper['status']) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
         }
 
@@ -79,7 +79,7 @@ class TestpaperController extends BaseController
         $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        if ($testpaperActivity['testMode'] === 'realTime') {
+        if ('realTime' === $testpaperActivity['testMode']) {
             $testpaperResult['usedTime'] = time() - $activity['startTime'];
         }
 
@@ -114,7 +114,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', '该试卷已删除，不能查看结果');
         }
 
-        if ($testpaperResult['status'] === 'doing') {
+        if ('doing' === $testpaperResult['status']) {
             return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
         }
 
@@ -169,7 +169,7 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        if ($testPaper['limitedTime'] == 0) {
+        if (0 == $testPaper['limitedTime']) {
             $response = array(
                 'success' => false,
                 'message' => $this->getServiceKernel()->trans('该试卷考试时间未限制,请选择其他限制时长的试卷'),
@@ -208,7 +208,7 @@ class TestpaperController extends BaseController
             throw new AccessDeniedException($this->getServiceKernel()->trans('不可以访问其他学生的试卷哦~'));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
             $answers = !empty($data['data']) ? $data['data'] : array();
             $attachments = empty($data['attachments']) ? array() : $data['attachments'];
@@ -228,7 +228,7 @@ class TestpaperController extends BaseController
 
     public function submitTestAction(Request $request, $resultId)
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
             $answers = !empty($data['data']) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
@@ -250,7 +250,7 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => '试卷已提交，不能再修改答案！'));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
             $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
@@ -269,7 +269,7 @@ class TestpaperController extends BaseController
             if ($testpaperActivity['finishCondition']['type'] === 'submit') {
                 $response = array('result' => true, 'message' => '');
             } elseif ($testpaperActivity['finishCondition']['type'] === 'score'
-                && $paperResult['status'] === 'finished'
+                && 'finished' === $paperResult['status']
                 && $paperResult['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
                 $response = array('result' => true, 'message' => '');
             } else {
@@ -339,7 +339,7 @@ class TestpaperController extends BaseController
             $testpaper['type']
         );
 
-        if ($testpaperActivity['doTimes'] && $testpaperResult && $testpaperResult['status'] === 'finished') {
+        if ($testpaperActivity['doTimes'] && $testpaperResult && 'finished' === $testpaperResult['status']) {
             return array('result' => false, 'message' => $this->getServiceKernel()->trans('该试卷只能考一次，不能再考！'));
         }
 

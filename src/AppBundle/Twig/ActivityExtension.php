@@ -82,7 +82,7 @@ class ActivityExtension extends \Twig_Extension
 
     public function lengthFormat($len, $type = null)
     {
-        if (empty($len) || $len == 0) {
+        if (empty($len) || 0 == $len) {
             return null;
         }
 

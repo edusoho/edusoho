@@ -163,7 +163,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
         $fields = array(
             'status' => 'finished',
-            'metas' => array('orders' => $orders)
+            'metas' => array('orders' => $orders),
         );
 
         $accuracy = $this->getTestpaperService()->sumScore($itemResults);
