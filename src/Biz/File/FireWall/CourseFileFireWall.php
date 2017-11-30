@@ -2,8 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class CourseFileFireWall extends BaseFireWall implements FireWallInterface
 {
     public function canAccess($attachment)
@@ -15,6 +13,7 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
 
         $targetTypes = explode('.', $attachment['targetType']);
         $type = array_pop($targetTypes);
+
         if ($type === 'thread') {
             $thread = $this->getThreadService()->getThread($courseId = null, $attachment['targetId']);
 
@@ -23,7 +22,7 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
             }
             $course = $this->getCourseService()->getCourse($thread['courseId']);
 
-            if (array_key_exists($user['id'], $course['teacherIds'])) {
+            if (is_array($course['teacherIds']) && in_array($user['id'], $course['teacherIds'])) {
                 return true;
             }
         } elseif ($type === 'post') {
@@ -36,7 +35,7 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
                 return true;
             }
             $course = $this->getCourseService()->getCourse($thread['courseId']);
-            if (array_key_exists($user['id'], $course['teacherIds'])) {
+            if (is_array($course['teacherIds']) && in_array($user['id'], $course['teacherIds'])) {
                 return true;
             }
         }
@@ -44,18 +43,13 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
         return false;
     }
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Course:ThreadService');
+        return $this->biz->service('Course:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return $this->getKernel()->createService('Course:CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 }
