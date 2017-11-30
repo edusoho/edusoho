@@ -14,11 +14,11 @@ class UserLearnStatisticsController extends BaseController
         $conditions = $request->query->all();
         $paginator = new Paginator(
             $request,
-            $this->getLearnStatisticesService()->countTotalStatistics($conditions),
+            $this->getLearnStatisticsService()->countTotalStatistics($conditions),
             20
         );
 
-        $statistics = $this->getLearnStatisticesService()->searchTotalStatistics(
+        $statistics = $this->getLearnStatisticsService()->searchTotalStatistics(
             $conditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -26,7 +26,7 @@ class UserLearnStatisticsController extends BaseController
         );
         $userIds = ArrayToolkit::column($statistics, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render('admin/learn-statistices/show.html.twig', array(
+        return $this->render('admin/learn-Statistics/show.html.twig', array(
             'statistics' => $statistics,
             'paginator' => $paginator,
             'users' => $users,
@@ -38,7 +38,7 @@ class UserLearnStatisticsController extends BaseController
         
     }
 
-    protected function getLearnStatisticesService()
+    protected function getLearnStatisticsService()
     {
         return $this->createService('UserLearnStatistics:LearnStatisticsService');
     }

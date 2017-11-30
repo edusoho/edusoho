@@ -12,14 +12,14 @@ class StorageDailyJob extends AbstractJob
         //学习数据固化
         try {
             $this->biz['db']->beginTransaction();
-            $this->getLearnStatisticesService();
+            $this->getLearnStatisticsService();
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
         }
     }
 
-    protected function getLearnStatisticesService()
+    protected function getLearnStatisticsService()
     {
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');
     }
