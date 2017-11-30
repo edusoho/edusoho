@@ -1,6 +1,6 @@
 stages:
-  - test
   - automation
+  - test
 
 variables:
   MYSQL_DATABASE: edusoho_test
