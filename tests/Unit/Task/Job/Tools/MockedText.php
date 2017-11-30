@@ -9,9 +9,16 @@ class MockedText extends Text
     public function sync($sourceActivity, $activity)
     {
         $this->sourceActivity = $sourceActivity;
-        $this->activity = $activity;
+        $this->syncActivity = $activity;
 
         return array('id' => 2222222);
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $this->copiedActivity = $activity;
+
+        return array();
     }
 
     public function getSourceActivity()
@@ -19,8 +26,13 @@ class MockedText extends Text
         return $this->sourceActivity;
     }
 
-    public function getActivity()
+    public function getSyncActivity()
     {
-        return $this->activity;
+        return $this->syncActivity;
+    }
+
+    public function getCopiedActivity()
+    {
+        return $this->copiedActivity;
     }
 }

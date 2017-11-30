@@ -128,6 +128,13 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
 
         $job->execute();
 
+        $this->getTaskService()->shouldHaveReceived('getTask')->times(1);
+        $this->getCourseDao()->shouldHaveReceived('findCoursesByParentIdAndLocked')->times(1);
+        $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(1);
+        $this->getTaskDao()->shouldHaveReceived('batchUpdate')->times(1);
+        $this->getActivityDao()->shouldHaveReceived('get')->times(4);
+        $this->getActivityDao()->shouldHaveReceived('update')->times(2);
+
         $mockedText = $this->biz['activity_type.text'];
 
         $this->assertArrayEquals(
@@ -137,7 +144,7 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
 
         $this->assertArrayEquals(
             array('id' => 44442, 'copyId' => 44452, 'mediaType' => 'text'),
-            $mockedText->getActivity()
+            $mockedText->getSyncActivity()
         );
     }
 
