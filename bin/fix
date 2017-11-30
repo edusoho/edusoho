@@ -17,17 +17,13 @@ do
     ## ?? tests/Unit/Task/Job/Test.php      -- 新增
     ## ?? tests/Unit/Task/JobTest/Test.php  -- 新增
     if [[ $line != *\D* ]]; then ## 包含 
-      
-        ## 处理字符串， 将字符串用 / 分割，取出第一个/后的内容，再将生成的内容用 空格 分割，取出第一个空格前面的内容
-        ##   如 1) edusoho/src/Biz/User/Service/Impl/UserServiceImpl.php (blank_line_before_statement) 
-        ##   会被处理为 src/Biz/User/Service/Impl/UserServiceImpl.php 
         i=1
         fixedClass=''
         while((1==1))  
         do  
             split=`echo $line|cut -d " " -f$i`  ## 以空格分割
             if [ "$split" != "" ]; then
-                fixedClass="${split}"
+                fixedClass="${split}"  # 取最后一个空格的后面的内容
             else  
                 break
             fi
