@@ -99,7 +99,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $fields = $questionConfig->filter($fields);
 
         if (!empty($question['parentId'])) {
-            $parentQuestion = $this->get($fields['parentId']);
+            $parentQuestion = $this->get($question['parentId']);
             $fields['courseId'] = $parentQuestion['courseId'];
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }

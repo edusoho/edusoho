@@ -77,6 +77,9 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals($time, $createdTime);
     }
 
+    /**
+     * @expectedException AppBundle\Common\Exception\ResourceNotFoundException
+     */
     public function testUpdate()
     {
         $question = $this->createQuestion();
@@ -91,6 +94,91 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals($update['stem'], $questionUpdate['stem']);
         $this->assertEquals($update['score'], $questionUpdate['score']);
         $this->assertArrayEquals($update['answer'], $questionUpdate['answer']);
+
+        $questionUpdate = $this->getQuestionService()->update(123, $update);
+    }
+
+    public function testChildUpdate()
+    {
+        $material = array(
+            'type' => 'material',
+            'stem' => 'test material question.',
+            'content' => 'question material content',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 2,
+            'answer' => array(),
+            'target' => 'course-1',
+        );
+        $questionParent = $this->getQuestionService()->create($material);
+
+        $single = array(
+            'type' => 'single_choice',
+            'stem' => 'test material-single choice question.',
+            'content' => 'question material-single_choice content',
+            'courseSetId' => 1,
+            'choices' => array(
+                'question 1 -> choice 1',
+                'question 1 -> choice 2',
+                'question 1 -> choice 3',
+                'question 1 -> choice 4',
+            ),
+            'answer' => array(1),
+            'target' => 'course-1',
+            'parentId' => $questionParent['id'],
+        );
+
+        $subQuestion1 = $this->getQuestionService()->create($single);
+
+        $update = array(
+            'stem' => 'update test child single choice question.',
+            'answer' => array('2'),
+            'score' => '2',
+        );
+
+        $questionUpdate = $this->getQuestionService()->update($subQuestion1['id'], $update);
+
+        $this->assertEquals($update['stem'], $questionUpdate['stem']);
+        $this->assertEquals($update['score'], $questionUpdate['score']);
+        $this->assertArrayEquals($update['answer'], $questionUpdate['answer']);
+        $this->assertEquals(1, $questionUpdate['courseId']);
+        $this->assertEquals(2, $questionUpdate['lessonId']);
+    }
+
+    public function testUpdateCopyQuestionsSubCount()
+    {
+        $material = array(
+            'type' => 'material',
+            'stem' => 'test material question.',
+            'content' => 'question material content',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 2,
+            'answer' => array(),
+            'target' => 'course-1',
+            'subCount' => 5,
+        );
+        $questionParent = $this->getQuestionService()->create($material);
+
+        $copyMaterial = array(
+            'type' => 'material',
+            'stem' => 'test material question.',
+            'content' => 'question material content',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 2,
+            'answer' => array(),
+            'target' => 'course-1',
+            'subCount' => 4,
+            'copyId' => $questionParent['id']
+        );
+        $copy = $this->getQuestionService()->create($copyMaterial);
+
+        $this->getQuestionService()->updateCopyQuestionsSubCount($questionParent['id'], $questionParent['subCount']);
+
+        $result = $this->getQuestionService()->get($copy['id']);
+
+        $this->assertEquals(5, $result['subCount']);
     }
 
     public function testDelete()
@@ -328,6 +416,7 @@ class QuestionServiceTest extends BaseTestCase
         $question = array(
             'type' => 'single_choice',
             'stem' => 'test single choice question 1.',
+            'content' => 'question content',
             'courseId' => 1,
             'courseSetId' => 1,
             'lessonId' => 0,
@@ -349,6 +438,7 @@ class QuestionServiceTest extends BaseTestCase
         $question = array(
             'type' => 'determine',
             'stem' => 'test material-determine question.',
+            'content' => 'question determine content',
             'courseId' => 1,
             'courseSetId' => 1,
             'lessonId' => 0,
@@ -364,6 +454,7 @@ class QuestionServiceTest extends BaseTestCase
         $question = array(
             'type' => 'fill',
             'stem' => 'fill[[a|b]]',
+            'content' => 'question fill content2',
             'courseId' => 1,
             'courseSetId' => 1,
             'lessonId' => 0,
@@ -379,6 +470,7 @@ class QuestionServiceTest extends BaseTestCase
         $question = array(
             'type' => 'fill',
             'stem' => 'fill[[a|b]]',
+            'content' => 'question fill content',
             'courseId' => 2,
             'courseSetId' => 2,
             'lessonId' => 0,
@@ -394,6 +486,7 @@ class QuestionServiceTest extends BaseTestCase
         $material = array(
             'type' => 'material',
             'stem' => 'test material question.',
+            'content' => 'question material content',
             'courseId' => 1,
             'courseSetId' => 1,
             'lessonId' => 0,
@@ -405,6 +498,7 @@ class QuestionServiceTest extends BaseTestCase
         $single = array(
             'type' => 'single_choice',
             'stem' => 'test material-single choice question.',
+            'content' => 'question material-single_choice content',
             'courseId' => 1,
             'courseSetId' => 1,
             'lessonId' => 0,
@@ -424,6 +518,7 @@ class QuestionServiceTest extends BaseTestCase
         $determine = array(
             'type' => 'determine',
             'stem' => 'test material-determine question.',
+            'content' => 'question material-determine content',
             'courseId' => 1,
             'courseSetId' => 1,
             'lessonId' => 0,
