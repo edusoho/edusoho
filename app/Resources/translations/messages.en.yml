@@ -174,6 +174,7 @@ date.year: Year
 date.month: Month
 date.day: Day
 date.format: Y/m/d
+word.seperator: ','
 paginator.firstPage: 'First'
 paginator.endPage: 'End'
 paginator.nextPage: 'Next'
@@ -856,7 +857,7 @@ course.marketing_setup.preview.set_task: 'Free tasks'
 course.marketing_setup.preview.set_task.task: Task
 course.marketing_setup.preview.set_task.task_name: 'Task %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support text, video, audio, flash, docs and ppt'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'
@@ -4896,6 +4897,7 @@ admin.edu_cloud.account.arrears_tips: 'Your account is overdue for %arrearageDay
 admin.edu_cloud.account.balance_not_enough: 'Your account balance is less than 50 CNY. Please recharge as soon as possilbe to avoid outage.'
 admin.edu_cloud.overview.locked_tips: 'Your education cloud service has been locked, please contact customer service'
 admin.edu_cloud.overview.disabled_tips: 'Your educational cloud service has been disabled'
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 'If you have any questions, please contact customer service 4008041114.'
 admin.edu_cloud.overview.balance: Balance
 admin.edu_cloud.overview.recharge: Recharge
@@ -5872,6 +5874,7 @@ admin.payment_setting.llpay_key: 'Merchant account'
 admin.payment_setting.llpay_secret: 'Business platform Key'
 admin.payment_setting.llpay_public_key: Public Key
 admin.payment_setting.llpay_private_key: Private Key
+admin.payment_setting.llpay_application_tips: ''
 admin.payment_setting.quickpay: 'Meeting fubao-quick pay'
 admin.payment_setting.quickpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.quickpay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'

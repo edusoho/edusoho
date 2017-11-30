@@ -212,11 +212,15 @@ class TestpaperController extends BaseController
             $data = $request->request->all();
             $answers = !empty($data['data']) ? $data['data'] : array();
             $attachments = empty($data['attachments']) ? array() : $data['attachments'];
+            $orders = empty($data['seq']) ? array() : $data['seq'];
             $usedTime = $data['usedTime'];
 
             $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, $attachments);
 
-            $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array('usedTime' => ($testpaperResult['usedTime'] + $usedTime)));
+            $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array(
+                'usedTime' => ($testpaperResult['usedTime'] + $usedTime),
+                'metas' => array('orders' => $orders),
+            ));
 
             return $this->createJsonResponse(true);
         }

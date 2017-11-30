@@ -5,7 +5,7 @@
 {% block body %}
   <div class="audio-content" id="audio-content" data-role="audio-content">
     {% if audio.file|default(null) %}
-      {{ render(controller('AppBundle:Player:show', {id: audio.mediaId})) }}
+      {{ render(controller('AppBundle:Player:show', {id: audio.mediaId, isPart: true})) }}
     {% else %}
       {% include 'activity/file-not-found.html.twig' with {type:'audio'} %}
     {% endif %}

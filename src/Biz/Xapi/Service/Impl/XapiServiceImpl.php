@@ -149,18 +149,17 @@ class XapiServiceImpl extends BaseService implements XapiService
                 1000
             );
 
-            if (empty($statements)) {
-                return;
-            }
-            $archives = array();
-            foreach ($statements as $statement) {
-                $archives[] = ArrayToolkit::parts($statement, array(
-                    'uuid', 'version', 'push_time', 'user_id', 'verb', 'target_id', 'target_type', 'status', 'data', 'occur_time', 'created_time',
-                ));
-            }
-            $this->getStatementArchiveDao()->batchCreate($archives);
-            foreach ($statements as $statement) {
-                $this->getStatementDao()->delete($statement['id']);
+            if (!empty($statements)) {
+                $archives = array();
+                foreach ($statements as $statement) {
+                    $archives[] = ArrayToolkit::parts($statement, array(
+                        'uuid', 'version', 'push_time', 'user_id', 'verb', 'target_id', 'target_type', 'status', 'data', 'occur_time', 'created_time',
+                    ));
+                }
+                $this->getStatementArchiveDao()->batchCreate($archives);
+                foreach ($statements as $statement) {
+                    $this->getStatementDao()->delete($statement['id']);
+                }
             }
 
             $this->commit();

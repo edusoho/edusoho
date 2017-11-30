@@ -15,7 +15,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\User\Service\StatusService;
 use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\System\Service\SettingService;
 use Biz\IM\Service\ConversationService;
@@ -33,7 +32,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->beginTransaction();
 
             //delete course_material
-            $this->getMaterialDao()->deleteByCourseSetId($courseSetId, 'course');
+            $this->getMaterialService()->deleteMaterialsByCourseSetId($courseSetId, 'course');
 
             //delete courses
             $courses = $this->getCourseDao()->findByCourseSetIds(array($courseSetId));
@@ -82,7 +81,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->beginTransaction();
 
             //delete course_material
-            $this->getMaterialDao()->deleteByCourseId($courseId, 'course');
+            $this->getMaterialService()->deleteMaterialsByCourseId($courseId, 'course');
 
             //delete course_chapter
             $this->getChapterDao()->deleteChaptersByCourseId($courseId);
@@ -193,11 +192,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     }
 
     /**
-     * @return CourseMaterialDao
+     * @return MaterialService
      */
-    protected function getMaterialDao()
+    protected function getMaterialService()
     {
-        return $this->createDao('Course:CourseMaterialDao');
+        return $this->createService('Course:MaterialService');
     }
 
     /**
