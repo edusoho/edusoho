@@ -29,6 +29,6 @@ class LiveWatchType extends Type
             'duration' => $watchLog['watched_time'],
         );
 
-        return $this->createXAPIService()->watchLive($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
+        return $this->createXAPIService()->watchLive($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 }

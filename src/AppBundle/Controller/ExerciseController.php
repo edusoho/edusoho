@@ -30,7 +30,7 @@ class ExerciseController extends BaseController
 
         $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
-        if ($result['status'] == 'doing') {
+        if ('doing' == $result['status']) {
             return $this->redirect($this->generateUrl('exercise_show', array(
                 'resultId' => $result['id'],
             )));
@@ -93,7 +93,9 @@ class ExerciseController extends BaseController
         }
 
         $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
-        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id']);
+
+        $seq = $request->query->get('seq', array());
+        $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id'], array('orders' => $seq));
 
         $student = $this->getUserService()->getUser($exerciseResult['userId']);
 
@@ -119,12 +121,12 @@ class ExerciseController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.exercise_cannot_submit_answer.message'));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
 
-            $goto = $this->generateUrl('exercise_result_show', array('resultId' => $paperResult['id']));
+            $goto = $this->generateUrl('exercise_result_show', array('seq' => $formData['seq'], 'resultId' => $paperResult['id']));
 
             return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
@@ -135,7 +137,7 @@ class ExerciseController extends BaseController
     protected function getActureQuestionNum($questions)
     {
         return array_reduce($questions, function ($count, $question) {
-            if ($question['type'] == 'material' && isset($question['subs'])) {
+            if ('material' == $question['type'] && isset($question['subs'])) {
                 $count += count($question['subs']);
             } else {
                 $count += 1;

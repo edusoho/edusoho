@@ -52,10 +52,6 @@ login_bind_callback:
     path:  /login/bind/{type}/callback
     defaults: { _controller: AppBundle:LoginBind:callback }
 
-login_bind_choose:
-    path:  /login/bind/{type}/choose
-    defaults: { _controller: AppBundle:LoginBind:choose }
-
 oauth2_login_index:
     path:  /oauth2/login/main
     defaults: { _controller: AppBundle:OAuth2/Login:main }
@@ -85,25 +81,6 @@ login_bind_new:
     path:  /login/bind/{type}/new
     defaults: { _controller: AppBundle:LoginBind:new }
     methods: [POST]
-
-login_bind_newset:
-    path:  /login/bind/{type}/newset
-    defaults: { _controller: AppBundle:LoginBind:newSet }
-    methods: [POST]
-
-login_bind_exist:
-    path:  /login/bind/{type}/exist
-    defaults: { _controller: AppBundle:LoginBind:exist }
-    methods: [POST]
-
-login_bind_existbind:
-    path:  /login/bind/weixinmob/existbind
-    defaults: { _controller: AppBundle:LoginBind:existBind }
-    methods: [POST]
-
-login_bind_weixin:
-    path:  /login/weixinmob
-    defaults: { _controller: AppBundle:LoginBind:weixinIndex }
 
 login_check_email:
     path:  /login/check/email

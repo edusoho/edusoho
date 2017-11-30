@@ -13,6 +13,6 @@ $('.js-generate-replay').on('click', (event) => {
       const error = JSON.parse(response.responseText);
       const code = error.code;
       const message = error.error;
-      notify('danger', '发生了异常，请稍后重试');
+      notify('danger', Translator.trans('course.manage.live_replay_generate_error'));
     });
 });
