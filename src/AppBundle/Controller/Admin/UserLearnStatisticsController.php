@@ -11,27 +11,60 @@ class UserLearnStatisticsController extends BaseController
 {
     public function showAction(Request $request)
     {
+        $defaultCondition = array(
+            'startDate' => '',
+            'endDate' => '',
+            'nickname' => '',
+            'isDefault' => 'false'
+        );
         $conditions = $request->query->all();
+        list($conditions, $orderBy, $isDefault) = $this->prepareConditions($conditions);
+
+        $conditions = array_merge($defaultCondition, $conditions);
         $paginator = new Paginator(
             $request,
-            $this->getLearnStatisticesService()->countTotalStatistics($conditions),
+            $this->getUserService()->countUsers(array()),
             20
         );
-
-        $statistics = $this->getLearnStatisticesService()->searchTotalStatistics(
-            $conditions,
+        $users = $this->getUserService()->searchUsers(
+            array('nickname' => $conditions['nickname']),
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userIds = ArrayToolkit::column($statistics, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        
+        $conditions = array_merge($conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
+        
+        $statistics = $this->getLearnStatisticesService()->statisticsDataSearch(
+            $conditions,
+            $orderBy
+        );
+
+        $timespan = $this->getLearnStatisticesService()->getTimespan();
+        
         return $this->render('admin/learn-statistices/show.html.twig', array(
-            'statistics' => $statistics,
+            'statistics' => ArrayToolkit::index($statistics, 'userId'),
             'paginator' => $paginator,
             'users' => $users,
+            'timespan' => $timespan,
+            'isDefault' => $conditions['isDefault']
         ));
-    }  
+    }
+
+    protected function prepareConditions($fields)
+    {
+        if (!empty($fields['isDefault']) && $fields['isDefault'] == 'true') {
+            $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
+            $isDefault = 'true';
+            $conditions = array();
+        } else {
+            $orderBy = array('id' => 'DESC');
+            $isDefault = false;
+            $conditions = $fields;
+        }
+        
+        return array($conditions, $orderBy, $isDefault);
+    }
 
     public function syncDailyData()
     {

@@ -8,6 +8,18 @@ use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
+    public function statisticsDataSearch($conditions, $order)
+    {
+        list($conditions, $daoType) = $this->analysisCondition($conditions);
+        return $this->getStatisticsDao($daoType)->statisticSearch($conditions, $order);
+    }
+
+    public function statisticsDataCount($conditions)
+    {
+        list($conditions, $daoType) = $this->analysisCondition($conditions);
+        return $this->getStatisticsDao($daoType)->statisticCount($conditions);
+    }
+
     public function searchTotalStatistics($conditions, $order, $start, $limit)
     {
         return $this->getTotalStatisticsDao()->search($conditions, $order, $start, $limit);
@@ -136,6 +148,32 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         return $statistics;
+    }
+
+    private function analysisCondition($conditions)
+    {
+        $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $daoType = 'Daily';
+            $conditions['createTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
+            $conditions['createTime_LE'] = !empty($conditions['endDate']) ? strtotime("+1 day", strtotime($conditions['endDate'])) : time();
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        } else {
+            $daoType = 'Total';
+        }
+
+        return array($conditions, $daoType);
+    }
+
+    public function getTimespan()
+    {
+        $settings = $this->getSettingService()->get('learn_statistics');
+        if (!empty($settings) && $settings['timespan'] == strtotime('1971/1/1 8:0:0')) {
+            $settings['timespan'] = 24*60*60*365;
+        }
+
+        return date('Y-m-d', time() - $settings['timespan']);
     }
 
     private function findUserOperateClassroomNum($operation, $conditions)
@@ -298,5 +336,15 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getTotalStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:TotalStatisticsDao');
+    }
+
+    protected function getStatisticsDao($daoType)
+    {
+        return $this->createDao("UserLearnStatistics:{$daoType}StatisticsDao");
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
