@@ -10,6 +10,17 @@ class DailyStatisticsDaoTest extends BaseTestCase
     {
         $defaultMockFields = $this->getDefaultMockFields();
         $this->getDailyStatisticsDao()->create($defaultMockFields);
+        $this->getDailyStatisticsDao()->create(
+            array(
+                'userId' => '3',
+                'joinedClassroomNum' => 1,
+                'joinedClassroomCourseSetNum' => 1,
+                'joinedClassroomCourseNum' => 1,
+                'joinedCourseSetNum' => 1,
+                'paidAmount' => 11,
+                'recordTime' => 223334
+            )
+        );
 
         $result = $this->getDailyStatisticsDao()->statisticSearch(
             array(
@@ -21,6 +32,7 @@ class DailyStatisticsDaoTest extends BaseTestCase
 
         $this->assertNotNull($result);
         $this->assertEquals($result[0]['userId'], $defaultMockFields['userId']);
+        $this->assertEquals($result[0]['joinedClassroomNum'], 2);
     }
 
     public function testStatisticCount()
