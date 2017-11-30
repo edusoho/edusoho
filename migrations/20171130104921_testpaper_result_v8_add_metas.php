@@ -23,6 +23,6 @@ class TestpaperResultV8AddMetas extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE `testpaper_result_v8` DROP COLUMN `metas`;");
+        $db->exec('ALTER TABLE `testpaper_result_v8` DROP COLUMN `metas`;');
     }
 }
