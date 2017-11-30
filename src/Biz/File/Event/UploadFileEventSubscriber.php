@@ -88,7 +88,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     protected function deleteAttachment($targetType, $targetId)
     {
         $conditions = array('targetId' => $targetId, 'type' => 'attachment');
-        if (strpos($targetType, ',') === false) {
+        if (false === strpos($targetType, ',')) {
             $conditions['targetType'] = $targetType;
         } else {
             $conditions['targetTypes'] = explode(',', $targetType);
@@ -256,7 +256,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     {
         $attachment = $event->getSubject();
 
-        if ($attachment['type'] != 'attachment' || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
+        if ('attachment' != $attachment['type'] || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
             return;
         }
 

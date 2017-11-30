@@ -83,7 +83,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 'controller' => 'AppBundle:Activity/Text',
                 'canFree' => true,
                 'visible' => function ($courseSet, $course) {
-                    return $courseSet['type'] != 'live';
+                    return 'live' != $courseSet['type'];
                 },
             ),
             'video' => array(
@@ -94,7 +94,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 'controller' => 'AppBundle:Activity/Video',
                 'canFree' => true,
                 'visible' => function ($courseSet, $course) {
-                    return $courseSet['type'] != 'live';
+                    return 'live' != $courseSet['type'];
                 },
             ),
             'audio' => array(
@@ -105,7 +105,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 'controller' => 'AppBundle:Activity/Audio',
                 'canFree' => true,
                 'visible' => function ($courseSet, $course) {
-                    return $courseSet['type'] != 'live';
+                    return 'live' != $courseSet['type'];
                 },
             ),
             'live' => array(
@@ -144,7 +144,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     $storage = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
 
-                    return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
+                    return 'cloud' == $uploadMode && 'live' != $courseSet['type'];
                 },
             ),
             'doc' => array(
@@ -158,7 +158,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     $storage = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
 
-                    return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
+                    return 'cloud' == $uploadMode && 'live' != $courseSet['type'];
                 },
             ),
             'ppt' => array(
@@ -172,7 +172,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     $storage = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
 
-                    return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
+                    return 'cloud' == $uploadMode && 'live' != $courseSet['type'];
                 },
             ),
             'testpaper' => array(
