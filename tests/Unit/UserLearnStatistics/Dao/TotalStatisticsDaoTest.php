@@ -13,11 +13,11 @@ class TotalStatisticsDaoTest extends BaseTestCase
 
         $result = $this->getTotalStatisticsDao()->statisticSearch(
             array(
-                'userIds' => array(3)
+                'userIds' => array(3),
             ),
             array(
-                'id' => 'DESC'
-            )   
+                'id' => 'DESC',
+            )
         );
 
         $this->assertNotNull($result);
@@ -43,7 +43,7 @@ class TotalStatisticsDaoTest extends BaseTestCase
             'joinedClassroomCourseSetNum' => 1,
             'joinedClassroomCourseNum' => 1,
             'joinedCourseSetNum' => 1,
-            'paidAmount' => 11
+            'paidAmount' => 11,
         );
     }
 

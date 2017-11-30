@@ -18,14 +18,14 @@ class DailyStatisticsDaoTest extends BaseTestCase
                 'joinedClassroomCourseNum' => 1,
                 'joinedCourseSetNum' => 1,
                 'paidAmount' => 11,
-                'recordTime' => 223334
+                'recordTime' => 223334,
             )
         );
 
         $result = $this->getDailyStatisticsDao()->statisticSearch(
             array(
                 'createTime_LE' => time(),
-                'userIds' => array(3)
+                'userIds' => array(3),
             ),
             array('id' => 'DESC')
         );
@@ -55,7 +55,7 @@ class DailyStatisticsDaoTest extends BaseTestCase
             'joinedClassroomCourseNum' => 1,
             'joinedCourseSetNum' => 1,
             'paidAmount' => 11,
-            'recordTime' => time()
+            'recordTime' => time(),
         );
     }
 
