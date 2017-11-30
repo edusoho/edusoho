@@ -10,5 +10,5 @@ interface TestpaperBuilderInterface
 
     public function showTestItems($testId, $resultId = 0, $options = array());
 
-    public function updateSubmitedResult($resultId, $usedTime);
+    public function updateSubmitedResult($resultId, $usedTime, $options = array());
 }

@@ -391,12 +391,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
         $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
+        $orders = empty($formData['seq']) ? array() : $formData['seq'];
 
         $this->submitAnswers($result['id'], $answers, $attachments);
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
             $result['id'],
-            $formData['usedTime']
+            $formData['usedTime'],
+            array('orders' => $orders)
         );
 
         $this->dispatchEvent('exam.finish', new Event($paperResult));
