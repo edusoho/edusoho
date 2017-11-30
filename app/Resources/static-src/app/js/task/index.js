@@ -9,8 +9,8 @@ new TaskShow({
 if (Browser.ie10 || Browser.ie11 || Browser.edge) {
   const iframeDom = document.getElementById('task-content-iframe');
   iframeDom.onload = () => {
-    const contentIframe = iframeDom.contentWindow;
-    const iframeHtml = contentIframe.document.getElementsByTagName('html')[0];
+    const iframeContent = iframeDom.contentWindow;
+    const iframeHtml = iframeContent.document.getElementsByTagName('html')[0];
     iframeHtml.style.width = "100%";
   }
 }
