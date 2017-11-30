@@ -1,5 +1,6 @@
 stages:
   - test
+  - automation
 
 variables:
   MYSQL_DATABASE: edusoho_test
@@ -105,7 +106,7 @@ Unit Test With PHP 7.0 For Develop:
 
 
 AT With Java And Selenium:
-  stage: test
+  stage: automation
   image: ruanwenqin/ci:php5.5-jdk8
 
   services:
@@ -130,7 +131,9 @@ AT With Java And Selenium:
     - /opt/apache-maven-3.5.2/bin/mvn -q -Dmaven.repo.local=/cache/.m2 exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
     - cd .. && app/console server:start && cd GUIAutomation2
     - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
-
+  only:
+      - trigger
+      
 Api Test With 5.5:
   stage: test
   image: ruanwenqin/ci-php:5.5-7
@@ -161,5 +164,3 @@ Api Test With 5.5:
 
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
-  only:
-      - develop
