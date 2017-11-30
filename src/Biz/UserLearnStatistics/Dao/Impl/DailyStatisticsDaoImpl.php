@@ -55,6 +55,11 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
         return $this->findInField('id', $ids);
     }
 
+    public function updateStorageByIds($ids)
+    {
+        return $this->update($ids, array('isStorage' => 1));
+    }
+
     public function declares()
     {
         return array(
@@ -70,7 +75,8 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'id = :id',
                 'id IN ( :ids)',
                 'id NOT IN ( :excludeIds )',
-                'userId IN ( :userIds)',
+                'userId IN ( :userIds )',
+                'userId = :userId',
                 'createdTime >= :createTime_GE',
                 'createdTime <= :createTime_LE',
                 'updatedTime >= :updateTime_GE',

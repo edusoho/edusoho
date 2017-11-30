@@ -35,14 +35,14 @@ class UserLearnStatisticsController extends BaseController
         
         $conditions = array_merge($conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
         
-        $statistics = $this->getLearnStatisticesService()->statisticsDataSearch(
+        $statistics = $this->getLearnStatisticsService()->statisticsDataSearch(
             $conditions,
             $orderBy
         );
 
-        $timespan = $this->getLearnStatisticesService()->getTimespan();
+        $timespan = $this->getLearnStatisticsService()->getTimespan();
         
-        return $this->render('admin/learn-statistices/show.html.twig', array(
+        return $this->render('admin/learn-statistics/show.html.twig', array(
             'statistics' => ArrayToolkit::index($statistics, 'userId'),
             'paginator' => $paginator,
             'users' => $users,
@@ -71,7 +71,7 @@ class UserLearnStatisticsController extends BaseController
         
     }
 
-    protected function getLearnStatisticesService()
+    protected function getLearnStatisticsService()
     {
         return $this->createService('UserLearnStatistics:LearnStatisticsService');
     }

@@ -11,7 +11,7 @@ class SyncDaily extends AbstractJob
     {
         //每天生成学习数据
         try {
-            $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
+            $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
             $cursor = $this->getSyncTime($learnSetting);
             $nextCursor = $cursor + 24*60*60;
 
@@ -29,7 +29,7 @@ class SyncDaily extends AbstractJob
                 //当天升级的数据为了准确性，不统计加入退出课程数
                 $conditions['skipSyncCourseSetNum'] = true;
             }
-            $this->getLearnStatisticesService()->batchCreateDailyStatistics($conditions);
+            $this->getLearnStatisticsService()->batchCreateDailyStatistics($conditions);
 
             $jobArgs['cursor'] = $nextCursor;
             $this->getJobDao()->update($this->id, array('args' => $jobArgs));
@@ -54,7 +54,7 @@ class SyncDaily extends AbstractJob
         return $this->biz->service('Scheduler:SchedulerService');
     }
 
-    protected function getLearnStatisticesService()
+    protected function getLearnStatisticsService()
     {
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');
     }

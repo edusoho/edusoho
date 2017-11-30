@@ -56,7 +56,7 @@
               <td>{{ statistic.joinedCourseNum|default(0) }}</td>
               <td>{{ statistic.exitCourseNum|default(0) }}</td>
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
-              <td>{{ statistic.learnedSeconds|default(0)/60 }}</td>
+              <td>{{ (statistic.learnedSeconds|default(0)/60)|number_format(2, '.', ',') }}</td>
               <td>{{ statistic.actualAmount|default(0)|to_cash(0) }}</td>
             </tr>
           {% endfor %}

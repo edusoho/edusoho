@@ -11,7 +11,7 @@ class SyncDailyPastDataJob extends AbstractJob
     {
         //生成一年内的用户学习数据
         try {
-            $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
+            $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
             $cursor = $this->getSyncTime($learnSetting);
 
             if (($learnSetting['currentTime'] - $cursor) > $learnSetting['timespan']) {
@@ -19,6 +19,7 @@ class SyncDailyPastDataJob extends AbstractJob
 
                 return;
             }
+            
             $this->biz['db']->beginTransaction();
             $nextCursor = $cursor - 24*60*60;
             /*
@@ -31,7 +32,7 @@ class SyncDailyPastDataJob extends AbstractJob
                 'createdTime_LT' => $cursor,
                 'skipSyncCourseSetNum' => true,
             );
-            $this->getLearnStatisticesService()->batchCreatePastDailyStatistics($conditions);
+            $this->getLearnStatisticsService()->batchCreatePastDailyStatistics($conditions);
 
             $jobArgs['cursor'] = $nextCursor;
             $this->getJobDao()->update($this->id, array('args' => $jobArgs));
@@ -57,7 +58,7 @@ class SyncDailyPastDataJob extends AbstractJob
         return $this->biz->service('Scheduler:SchedulerService');
     }
 
-    protected function getLearnStatisticesService()
+    protected function getLearnStatisticsService()
     {
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');
     }

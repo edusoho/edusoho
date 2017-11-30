@@ -58,7 +58,7 @@ class UserLearnStatisticsExporter extends Exporter
                 $member[] = $statistic['joinedCourseNum'];
                 $member[] = $statistic['exitCourseNum'];
                 $member[] = $statistic['finishedTaskNum'];
-                $member[] = $statistic['learnedSeconds'] / 60;
+                $member[] =  number_format($statistic['learnedSeconds'] / 60, 2, '.', ',');
                 $member[] = MathToolkit::simple($statistic['actualAmount'], 0.01);
             } else {
                 $member = array($user['nickname'], 0, 0, 0, 0, 0, 0, 0);
