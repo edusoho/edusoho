@@ -21,7 +21,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
             }
             $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
 
-            if (array_key_exists($user['id'], $classroom['teacherIds']) || $user['id'] = $classroom['headTeacherId']) {
+            if (in_array($user['id'], $classroom['teacherIds']) || $user['id'] = $classroom['headTeacherId']) {
                 return true;
             }
         } elseif ('post' === $type) {
@@ -34,7 +34,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
                 return true;
             }
             $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
-            if (array_key_exists($user['id'], $classroom['teacherIds'])) {
+            if (in_array($user['id'], $classroom['teacherIds'])) {
                 return true;
             }
         }
