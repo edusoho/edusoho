@@ -290,7 +290,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
     }
 
-    public function filterQuestionFields($conditions)
+    protected function filterQuestionFields($conditions)
     {
         if (!empty($conditions['range']) && $conditions['range'] == 'lesson') {
             $conditions['lessonId'] = 0;
@@ -370,13 +370,5 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 }

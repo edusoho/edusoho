@@ -28,6 +28,9 @@ class QuestionServiceTest extends BaseTestCase
 
     public function testBatchCreateQuestions()
     {
+        $result = $this->getQuestionService()->batchCreateQuestions(array());
+        $this->assertEmpty($result);
+
         $questions[] = array(
             'type' => 'single_choice',
             'stem' => 'test single choice question 1.',
@@ -82,9 +85,10 @@ class QuestionServiceTest extends BaseTestCase
      */
     public function testUpdate()
     {
-        $question = $this->createQuestion();
+        $question = $this->createQuestion1();
         $update = array(
             'stem' => 'update test single choice question 1.',
+            'content' => 'question content',
             'answer' => array('2'),
             'score' => '2',
         );
@@ -183,13 +187,57 @@ class QuestionServiceTest extends BaseTestCase
 
     public function testDelete()
     {
-        $question = $this->createQuestion();
+        $result = $this->getQuestionService()->delete(123);
+        $this->assertFalse($result);
 
+        $question = $this->createQuestion1();
         $this->getQuestionService()->delete($question['id']);
-
         $question = $this->getQuestionService()->get($question['id']);
 
         $this->assertNull($question);
+    }
+
+    public function testDeleteMaterial()
+    {
+        $material = $this->createMaterialQuestion();
+        $this->assertEquals(2, $material['subCount']);
+
+        $this->getQuestionService()->delete($material['id']);
+        $subQuestions = $this->getQuestionService()->findQuestionsByParentId($material['id']);
+        $material = $this->getQuestionService()->get($material['id']);
+
+        $this->assertEquals(0, count($subQuestions));
+        $this->assertNull($material);
+    }
+
+    public function testDeleteSubQuestion()
+    {
+        $material = $this->createMaterialQuestion();
+        $this->assertEquals(2, $material['subCount']);
+
+        $subQuestions = $this->getQuestionService()->findQuestionsByParentId($material['id']);
+
+        $this->getQuestionService()->delete($subQuestions[0]['id']);
+
+        $question = $this->getQuestionService()->get($material['id']);
+        $subQuestion = $this->getQuestionService()->get($subQuestions[0]['id']);
+
+        $this->assertEquals(1, $question['subCount']);
+        $this->assertNull($subQuestion);
+    }
+
+    public function testBatchDeletes()
+    {
+        $result = $this->getQuestionService()->batchDeletes(array());
+        $this->assertFalse($result);
+
+        $question1 = $this->createQuestion1();
+        $question2 = $this->createQuestion2();
+
+        $ids = array($question1['id'], $question2['id']);
+        $result = $this->getQuestionService()->batchDeletes($ids);
+
+        $this->assertTrue($result);
     }
 
     public function testDeleteSubQuestions()
@@ -236,6 +284,52 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals(2, count($questions));
     }
 
+    public function testFindQuestionsByCopyId()
+    {
+        $question = $this->createQuestion();
+        $copy1 = array(
+            'type' => 'single_choice',
+            'stem' => 'test single choice question 1.',
+            'content' => 'question content',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 0,
+            'choices' => array(
+                'question 1 -> choice 1',
+                'question 1 -> choice 2',
+                'question 1 -> choice 3',
+                'question 1 -> choice 4',
+            ),
+            'answer' => array(1),
+            'target' => 'course-1',
+            'copyId' => $question['id']
+        );
+        $this->getQuestionService()->create($copy1);
+
+        $copy2 = array(
+            'type' => 'single_choice',
+            'stem' => 'test single choice question 1.',
+            'content' => 'question content',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 0,
+            'choices' => array(
+                'question 1 -> choice 1',
+                'question 1 -> choice 2',
+                'question 1 -> choice 3',
+                'question 1 -> choice 4',
+            ),
+            'answer' => array(1),
+            'target' => 'course-1',
+            'copyId' => $question['id']
+        );
+        $this->getQuestionService()->create($copy2);
+
+        $questions = $this->getQuestionService()->findQuestionsByCopyId($question['id']);
+
+        $this->assertEquals(2, count($questions));
+    }
+
     public function testSearch()
     {
         $question1 = $this->createQuestion();
@@ -253,6 +347,12 @@ class QuestionServiceTest extends BaseTestCase
 
         $questions = $this->getQuestionService()->search(array('parentId' => $question4['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $this->assertEquals(2, count($questions));
+
+        $questions = $this->getQuestionService()->search(array('keyword' => 'fill','range' => 'lesson'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $this->assertEquals(1, count($questions));
+
+        $questions = $this->getQuestionService()->search(array('keyword' => 'determine','excludeIds' => $question2['id'].','.$question1['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $this->assertEquals(1, count($questions));
     }
 
     public function testSearchCount()
@@ -283,11 +383,23 @@ class QuestionServiceTest extends BaseTestCase
 
     public function testJudgeQuestion()
     {
-        $question = $this->createQuestion();
-        $myAnswer = array(2);
+        $result = $this->getQuestionService()->judgeQuestion(array(), array(2));
+        $this->assertEquals('notFound', $result['status']);
+        $this->assertEquals(0, $result['score']);
 
-        $result = $this->getQuestionService()->judgeQuestion($question, $myAnswer);
+        $question = $this->createQuestion();
+
+        $result = $this->getQuestionService()->judgeQuestion($question, array());
+        $this->assertEquals('noAnswer', $result['status']);
+        $this->assertEquals(0, $result['score']);
+
+        $result = $this->getQuestionService()->judgeQuestion($question, array(2));
         $this->assertEquals('wrong', $result['status']);
+        $this->assertEquals(0, $result['score']);
+
+        $result = $this->getQuestionService()->judgeQuestion($question, array(1));
+        $this->assertEquals('right', $result['status']);
+        $this->assertEquals('2.0', $result['score']);
     }
 
     public function testHasEssay()
@@ -300,6 +412,21 @@ class QuestionServiceTest extends BaseTestCase
         $result = $this->getQuestionService()->hasEssay($questionIds);
 
         $this->assertFalse($result);
+
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'essay question stem',
+            'content' => 'essay question content',
+            'courseId' => 2,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'answer' => array('essay question answer'),
+            'target' => 'course-2',
+        );
+        $essay = $this->getQuestionService()->create($question);
+
+        $result = $this->getQuestionService()->hasEssay(array($essay['id']));
+        $this->assertTrue($result);
     }
 
     public function testGetQuestionCountGroupByTypes()
@@ -397,7 +524,7 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals(3, count($userFavorites));
     }
 
-    public function deleteFavoriteByQuestionId($questionId)
+    public function testDeleteFavoriteByQuestionId()
     {
         $favorite = $this->createFavorite1();
 
@@ -409,6 +536,38 @@ class QuestionServiceTest extends BaseTestCase
         $favorite = $this->getQuestionService()->getFavoriteQuestion($findFavorite['id']);
 
         $this->assertNull($favorite);
+    }
+
+    public function testFindAttachments()
+    {
+        $result = $this->getQuestionService()->findAttachments(array());
+        $this->assertEmpty($result);
+
+        $this->mockBiz(
+            'File:UploadFileService', 
+            array(
+                array(
+                    'functionName' => 'searchUseFiles',
+                    'returnValue' => array(array('id' => 1,'targetType'=>'question.stem','targetId'=>1), array('id' => 2,'targetType'=>'question.analysis','targetId'=>1))
+                ),
+            )
+        );
+
+        $results = $this->getQuestionService()->findAttachments(array('1','2'));
+
+        $this->assertEquals(2, count($results));
+        $this->assertArrayHasKey('question.stem1', $results);
+        $this->assertArrayHasKey('question.analysis1', $results);
+    }
+
+    public function testHasStemImg()
+    {
+        $question = array(
+            'stem' => '123<img src="/file/123.jpg">456',
+        );
+        $result = $this->getQuestionService()->hasStemImg($question);
+
+        $this->assertTrue($result['includeImg']);
     }
 
     protected function createQuestion()
@@ -428,6 +587,7 @@ class QuestionServiceTest extends BaseTestCase
             ),
             'answer' => array(1),
             'target' => 'course-1',
+            'score' => '2.0'
         );
 
         return $this->getQuestionService()->create($question);
@@ -444,6 +604,7 @@ class QuestionServiceTest extends BaseTestCase
             'lessonId' => 0,
             'answer' => array(1),
             'target' => 'course-1',
+            'metas' => array('mediaId' => 1),
         );
 
         return $this->getQuestionService()->create($question);
@@ -525,6 +686,7 @@ class QuestionServiceTest extends BaseTestCase
             'answer' => array(1),
             'target' => 'course-1',
             'parentId' => $questionParent['id'],
+            'metas' => array('mediaId' => 1)
         );
 
         $subQuestion2 = $this->getQuestionService()->create($determine);
