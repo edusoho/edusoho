@@ -55,11 +55,14 @@ class OrderRefundController extends BaseController
         $dealUser = empty($orderRefund['deal_user_id']) ? null : $this->getUserService()->getUser($orderRefund['deal_user_id']);
         $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
 
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
         return $this->render('admin/order-refund/detail-modal.html.twig', array(
             'orderRefund' => $orderRefund,
             'order' => $order,
             'applyUser' => $applyUser,
             'dealUser' => $dealUser,
+            'paymentTrade' => $paymentTrade,
         ));
     }
 
