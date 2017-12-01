@@ -3,7 +3,6 @@
 namespace Biz\UserLearnStatistics\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class StorageDailyJob extends AbstractJob
 {
