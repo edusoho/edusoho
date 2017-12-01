@@ -103,7 +103,7 @@ class OrderRefundController extends BaseController
 
         $user = $this->getUserService()->getUser($refund['user_id']);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $pass = $request->request->get('result');
             $fields = $request->request->all();
 
@@ -134,7 +134,7 @@ class OrderRefundController extends BaseController
 
     protected function sendAuditRefundNotification($product, $order, $data)
     {
-        if (isset($data['result']) && $data['result'] == 'pass') {
+        if (isset($data['result']) && 'pass' == $data['result']) {
             $message = $this->setting('refund.successNotification');
         } else {
             $message = $this->setting('refund.failedNotification');
