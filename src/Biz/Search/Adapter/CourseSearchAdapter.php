@@ -3,7 +3,6 @@
 namespace Biz\Search\Adapter;
 
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class CourseSearchAdapter extends AbstractSearchAdapter
 {
@@ -80,7 +79,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
     protected function isOpenCourse($course)
     {
-        return strpos($course['type'], 'public_') === 0;
+        return 0 === strpos($course['type'], 'public_');
     }
 
     protected function getCourseService()

@@ -30,7 +30,6 @@ class CourseSearchAdapterTest extends BaseTestCase
         $this->assertEquals(0, $course['ratingNum']);
         $this->assertEquals(0, $course['studentNum']);
         $this->assertEquals('', $course['middlePicture']);
-
     }
 
     public function testAdaptWithOpenCourse()
@@ -98,7 +97,7 @@ class CourseSearchAdapterTest extends BaseTestCase
         );
         $course = $this->getOpenCourseService()->createCourse($course);
 
-        return $this->getOpenCourseService()->updateCourse($course['id'], array('middlePicture' => 'http://picture.com/i.jpg'));;
+        return $this->getOpenCourseService()->updateCourse($course['id'], array('middlePicture' => 'http://picture.com/i.jpg'));
     }
 
     /**

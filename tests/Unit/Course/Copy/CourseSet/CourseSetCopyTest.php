@@ -14,7 +14,7 @@ class CourseSetCopyTest extends BaseTestCase
         $copy = new CourseSetCopy($this->biz, array(
             'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
             'priority' => 100,
-        ),false);
+        ), false);
 
         $this->assertNull($copy->preCopy(array(), array()));
     }
@@ -28,10 +28,9 @@ class CourseSetCopyTest extends BaseTestCase
             'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
             'isCopy' => 1,
             'priority' => 100,
-        ),false);
+        ), false);
         $newCourseSet = $copy->doCopy($courseSet, array('params' => array('title' => '复制出来的courseSet')));
         $this->assertEquals('复制出来的courseSet', $newCourseSet['newCourseSet']['title']);
-
     }
 
     protected function createNewCourse($courseSetId)

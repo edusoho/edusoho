@@ -89,6 +89,7 @@ class CourseSetTestpaperCopyTest extends BaseTestCase
             'pattern' => 'questionType',
             'type' => 'testpaper',
         );
+
         return $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
     }
 
