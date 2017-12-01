@@ -35,6 +35,8 @@ seajs.config({
         'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
         'upload': 'arale/upload/1.1.0/upload',
         'bootstrap.validator': 'common/validator',
+        'emitter': 'common/component-emitter',
+        'bootstrap.daterangepicker': 'common/bootstrap-daterangepicker',
         'class': 'arale/class/1.1.0/class',
         'base': 'arale/base/1.1.1/base',
         'widget': 'arale/widget/1.1.1/widget',
@@ -90,7 +92,10 @@ seajs.config({
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
         'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
-        'g2':'g2/1.2.4/index.js'
+        'g2':'g2/1.2.4/index.js',
+        'moment2': 'jquery-plugin/bootstrap-daterangepicker/moment.min.js',
+        'bootstrap-daterangepicker.css': 'jquery-plugin/bootstrap-daterangepicker/daterangepicker.css',
+        'bootstrap-daterangepicker': 'jquery-plugin/bootstrap-daterangepicker/daterangepicker.js'
     },
 
     // 预加载项
