@@ -2,10 +2,16 @@
 
 namespace AppBundle\Common;
 
+use AppBundle\Common\Exception\AccessDeniedException;
+
 class CurlToolkit
 {
     public static function request($method, $url, $params = array(), $conditions = array())
     {
+        $parseUrl = parse_url($url);
+        if (!in_array($parseUrl['host'], self::whiteList())) {
+            throw new AccessDeniedException('url is not allowed!');
+        }
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
         $conditions['timeout'] = isset($conditions['timeout']) ? $conditions['timeout'] : 10;
@@ -19,17 +25,17 @@ class CurlToolkit
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
-        if ($method == 'POST') {
+        if ('POST' == $method) {
             curl_setopt($curl, CURLOPT_POST, 1);
             //TODO
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        } elseif ($method == 'PUT') {
+        } elseif ('PUT' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'DELETE') {
+        } elseif ('DELETE' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'PATCH') {
+        } elseif ('PATCH' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
@@ -53,12 +59,24 @@ class CurlToolkit
             return array();
         }
 
-        if (isset($conditions['contentType']) && $conditions['contentType'] == 'plain') {
+        if (isset($conditions['contentType']) && 'plain' == $conditions['contentType']) {
             return $body;
         }
 
         $body = json_decode($body, true);
 
         return $body;
+    }
+
+    private static function whiteList()
+    {
+        return array(
+            'formula.edusoho.net', //公式编辑器
+            'www.edusoho.com', //官网
+            'open.edusoho.com', //open站
+            'kzedu.cc', //eduCloud短链
+            'dwz.cn', //百度短链
+            'qqurl.com', //qq短链
+        );
     }
 }

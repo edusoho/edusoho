@@ -31,6 +31,6 @@ class WriteNoteType extends Type
 
         $result = $note;
 
-        return $this->createXAPIService()->writeNote($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
+        return $this->createXAPIService()->writeNote($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 }
