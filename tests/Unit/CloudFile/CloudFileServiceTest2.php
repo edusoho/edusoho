@@ -6,7 +6,7 @@ use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\TimeMachine;
 use Biz\BaseTestCase;
 
-class CloudFileServiceTest extends BaseTestCase
+class CloudFileServiceTest2 extends BaseTestCase
 {
     public function testSearch()
     {
