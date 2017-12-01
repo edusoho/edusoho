@@ -111,7 +111,7 @@ AT With Java And Selenium:
     - cd GUIAutomation2
     - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 compile
     - /opt/apache-maven-3.5.2/bin/mvn -q -Dmaven.repo.local=/cache/.m2 exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
-    - mysql -uroot --password="" edusoho_test -e "select * from user"
+    - mysql -h mysql -uroot --password="" edusoho_test -e "select * from user"
     - while true; do echo 'Hit CTRL+C'; sleep 1; done
     #- cd .. && app/console server:start && cd GUIAutomation2
     #- /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
