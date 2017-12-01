@@ -81,7 +81,7 @@ class QuestionServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException AppBundle\Common\Exception\ResourceNotFoundException
+     * @expectedException \AppBundle\Common\Exception\ResourceNotFoundException
      */
     public function testUpdate()
     {
@@ -174,7 +174,7 @@ class QuestionServiceTest extends BaseTestCase
             'answer' => array(),
             'target' => 'course-1',
             'subCount' => 4,
-            'copyId' => $questionParent['id']
+            'copyId' => $questionParent['id'],
         );
         $copy = $this->getQuestionService()->create($copyMaterial);
 
@@ -302,7 +302,7 @@ class QuestionServiceTest extends BaseTestCase
             ),
             'answer' => array(1),
             'target' => 'course-1',
-            'copyId' => $question['id']
+            'copyId' => $question['id'],
         );
         $this->getQuestionService()->create($copy1);
 
@@ -321,7 +321,7 @@ class QuestionServiceTest extends BaseTestCase
             ),
             'answer' => array(1),
             'target' => 'course-1',
-            'copyId' => $question['id']
+            'copyId' => $question['id'],
         );
         $this->getQuestionService()->create($copy2);
 
@@ -348,10 +348,10 @@ class QuestionServiceTest extends BaseTestCase
         $questions = $this->getQuestionService()->search(array('parentId' => $question4['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $this->assertEquals(2, count($questions));
 
-        $questions = $this->getQuestionService()->search(array('keyword' => 'fill','range' => 'lesson'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $questions = $this->getQuestionService()->search(array('keyword' => 'fill', 'range' => 'lesson'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $this->assertEquals(1, count($questions));
 
-        $questions = $this->getQuestionService()->search(array('keyword' => 'determine','excludeIds' => $question2['id'].','.$question1['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $questions = $this->getQuestionService()->search(array('keyword' => 'determine', 'excludeIds' => $question2['id'].','.$question1['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $this->assertEquals(1, count($questions));
     }
 
@@ -544,16 +544,16 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEmpty($result);
 
         $this->mockBiz(
-            'File:UploadFileService', 
+            'File:UploadFileService',
             array(
                 array(
                     'functionName' => 'searchUseFiles',
-                    'returnValue' => array(array('id' => 1,'targetType'=>'question.stem','targetId'=>1), array('id' => 2,'targetType'=>'question.analysis','targetId'=>1))
+                    'returnValue' => array(array('id' => 1, 'targetType' => 'question.stem', 'targetId' => 1), array('id' => 2, 'targetType' => 'question.analysis', 'targetId' => 1)),
                 ),
             )
         );
 
-        $results = $this->getQuestionService()->findAttachments(array('1','2'));
+        $results = $this->getQuestionService()->findAttachments(array('1', '2'));
 
         $this->assertEquals(2, count($results));
         $this->assertArrayHasKey('question.stem1', $results);
@@ -587,7 +587,7 @@ class QuestionServiceTest extends BaseTestCase
             ),
             'answer' => array(1),
             'target' => 'course-1',
-            'score' => '2.0'
+            'score' => '2.0',
         );
 
         return $this->getQuestionService()->create($question);
@@ -686,7 +686,7 @@ class QuestionServiceTest extends BaseTestCase
             'answer' => array(1),
             'target' => 'course-1',
             'parentId' => $questionParent['id'],
-            'metas' => array('mediaId' => 1)
+            'metas' => array('mediaId' => 1),
         );
 
         $subQuestion2 = $this->getQuestionService()->create($determine);
