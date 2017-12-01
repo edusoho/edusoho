@@ -2,8 +2,133 @@
 
 {% set menu = 'admin_user_learn_statistics' %}
 
-{% set script_controller = '' %}
+{% set script_controller = 'user-data/index' %}
+
+
+{% block page_title %}
+  <div class="mbm">
+    <img class="user-data-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+    <span class="mlm">{{ app.user.nickname }}</span>
+  </div>
+{% endblock %}
+{% block page_buttons %}
+  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:app.user.id}) }}" target="_blank">个人主页</a>
+{% endblock %}
 
 {% block main %}
-  这里写User的统计  O(∩_∩)O哈哈~
+
+  <div class="user-data-count">
+    <div class="row">
+      <div class="col-sm-4 col-xs-4">
+        <label>在学课程</label>
+        <strong class="inflow-num mll">10</strong>
+      </div>
+      <div class="col-sm-4 col-xs-4">
+        <label>在学计划</label>
+        <strong class="inflow-num mll">10</strong>
+      </div>
+      <div class="col-sm-4 col-xs-4">
+        <label>平均计划进度</label>
+        <strong class="inflow-num mll mrs">10%</strong>
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-user-data-popover" data-original-title="" title=""></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="content">
+              {{ '平均计划进度为所有计划的平均数'|trans }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 col-xs-4">
+        <label>笔记数</label>
+        <strong class="inflow-num mll">10</strong>
+      </div>
+      <div class="col-sm-4 col-xs-4">
+        <label>参与话题</label>
+        <strong class="inflow-num mll">10</strong>
+      </div>
+      <div class="col-sm-4 col-xs-4">
+        <label>评论数</label>
+        <strong class="inflow-num mll">10</strong>
+      </div>
+    </div>
+  </div>
+  <hr class="user-data-line">
+
+  <div class="user-data-chart js-learn-data-trendency">
+    <div class="user-data-title mbm">活跃度</div>
+
+    <div id="date-range-picker">
+      <span class="select-content">
+        <input class="select-time-input js-date-range-input" type="text" name="course-datetime" value="{{ '-6 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
+        <i class="es-icon es-icon-arrowdropdown"></i>
+      </span>
+      <a href="javascript:;" class="date-change is-date-change js-quick-day-pick week" data-days="7">{{ 'course.dashboard.student_trend_seven_days'|trans }}</a>
+      <a href="javascript:;" class="date-change is-date-change js-quick-day-pick month" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
+      <a href="javascript:;" class="date-change is-date-change js-quick-day-pick three-month" data-days="90">{{ '90天'|trans }}</a>
+    </div>
+
+    <div class="learn-data-chart-container js-chart-container mtl mbl" id="js-learn-data-trendency-chart" style="height:360px;"></div>
+  </div>
+
+  <hr class="user-data-line">
+
+  {% set courses =
+    [
+      {
+        "couseSet": '随风飘天涯',
+        "plan": '勿念桑梓地',
+        "time": '2017-10-25',
+        "price": '100',
+        "percent": '50%'
+      },
+      {
+        "couseSet": '新人入门之基础篇',
+        "plan": 'Sketch 设计基础',
+        "time": '2017-09-25',
+        "price": '10',
+        "percent": '20%'
+      },
+      {
+        "couseSet": '壮士入门之基础篇',
+        "plan": 'Photoshop 设计基础',
+        "time": '2017-08-25',
+        "price": '20',
+        "percent": '70%'
+      },
+      {
+        "couseSet": '壮士入门之基础篇',
+        "plan": 'Photoshop 设计基础',
+        "time": '2017-08-25',
+        "price": '20',
+        "percent": '10%'
+      }
+    ]
+  %}
+
+  <div class="user-data-detail">
+    <div class="user-data-title">学习详情</div>
+
+    {% for course in courses %}
+      <div class="user-teaching-plan clearfix">
+        <div class="user-teaching-plan__info">
+          <div class="user-teaching-plan__title text-overflow"><a href="#">{{ course.couseSet }}-{{ course.plan }}</a></div>
+          <div class="user-teaching-plan__time">加入时间：<span>{{ course.plan }}</span></div>
+          <div class="user-teaching-plan__money">价格：<span>{{ course.price }}</span>元</div>
+        </div>
+        <div class="user-teaching-plan__progress">
+          <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
+          <div class="plan-progress plan-progress-xs">
+            <div class="progress-bar plan-progress-bar progress-bar-success" style="width: {{ course.percent }};"></div>
+          </div>
+          <span>{{ course.percent }}</span>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  {#  分页 {{ admin_macro.paginator(paginator) }} #}
 {% endblock %}
