@@ -4,6 +4,8 @@ namespace Tests\Unit\Course\Copy;
 
 use Biz\BaseTestCase;
 use Biz\Course\Copy\CourseMemberCopy;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Service\CourseService;
 
 class CourseMemberCopyTest extends BaseTestCase
 {
@@ -19,27 +21,22 @@ class CourseMemberCopyTest extends BaseTestCase
 
     public function testDoCopy()
     {
-        $courseMembers = array(
-            array(
-                'courseId' => 1,
-                'courseSetId' => 1,
-                'userId' => 1,
-                'role' => 'teacher',
-                'seq' => 1,
-                'isVisible' => 1,
-                'createdTime' => time(),
-            )
-        );
-        $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'findByCourseIdAndRole', 'returnValue' => $courseMembers)
+        $course = $this->getCourseService()->createCourse($this->mockCourse());
+        $user = $this->getCurrentUser();
+        $this->mockBiz('Course:CourseDao', array(
+            array('functionName' => 'update', 'returnValue' => array()),
         ));
-
-        $this->
 
         $copy = new CourseMemberCopy($this->biz, array(
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
         ),false);
+
+        $copy->doCopy(array(), array('originCourse' => array('id' => $course['id'], 'courseSetId' => $course['courseSetId']), 'newCourse' => array('id' => $course['id'] + 2, 'courseSetId' => $course['id'] + 2)));
+
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'] + 2, $user->getId());
+
+        $this->assertNotEmpty($member);
     }
 
     public function testAfterCopy()
@@ -66,5 +63,21 @@ class CourseMemberCopyTest extends BaseTestCase
             'learnMode' => 'freeMode',
             'courseType' => 'normal',
         );
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return CourseMemberDao
+     */
+    protected function getMemberDao()
+    {
+        return $this->biz->dao('Course:CourseMemberDao');
     }
 }
