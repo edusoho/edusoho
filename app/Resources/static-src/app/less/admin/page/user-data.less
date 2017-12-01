@@ -1,0 +1,115 @@
+.user-data-avatar {
+  width: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.user-data-count {
+  label {
+    width: 90px;
+  }
+}
+
+.user-data-title {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.user-data-line {
+  border-top: 2px solid #eee;
+}
+
+.user-data-chart__title {
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
+}
+
+.select-content {
+  display: inline-block;
+  position: relative;
+  margin-right: 20px;
+  i {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    color: rgba(0, 0, 0, 0.3);
+    background: #fff;
+    font-size: 18px;
+  }
+}
+
+.select-time-input {
+  padding: 6px 12px;
+  width: 189px;
+  height: 34px;
+  border: 0;
+  opacity: 0.4;
+  font-size: 14px;
+  color: #000;
+  letter-spacing: 0;
+  line-height: 16px;
+  background: #fff;
+  border-bottom: 1px solid #ccc;
+  &:focus {
+    outline: 0;
+  }
+}
+
+.date-change {
+  color: rgba(0,0,0,0.3);
+  padding-left: 15px;
+  &:hover,
+  &:focus {
+    color: #000;
+  }
+}
+
+
+.user-teaching-plan {
+  padding: 40px;
+  .admin-box-shadow;
+}
+
+
+.user-teaching-plan__info {
+  float: left;
+  width: 50%;
+}
+
+.user-teaching-plan__progress {
+  float: right;
+  margin-top: 16px;
+  width: 50%;
+  .plan-progress {
+    margin-left: 16px;
+    margin-right: 12px;
+    display: inline-block;
+  }
+}
+
+.user-teaching-plan__title {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.plan-progress {
+  width: 63%;
+  background-color: rgba(0, 0, 0, .08);;
+  color: #fff;
+  text-align: right;
+  font-weight: bold;
+  font-size: 14px;
+  vertical-align: middle;
+  &.plan-progress-xs {
+    height: 4px;
+  }
+}
+
+.admin-box-shadow(@level: 4px, @opacity1: 0.01, @opacity2: 0.04) {
+  -webkit-box-shadow: 0 0 @level 0 rgba(0, 0, 0, @opacity1), 0 @level @level 0 rgba(0, 0, 0, @opacity2);
+  -moz-box-shadow: 0 0 @level 0 rgba(0, 0, 0, @opacity1), 0 @level @level 0 rgba(0, 0, 0, @opacity2);
+  box-shadow: 0 0 @level 0 rgba(0, 0, 0, @opacity1), 0 @level @level 0 rgba(0, 0, 0, @opacity2);
+}
