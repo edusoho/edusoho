@@ -481,6 +481,7 @@ course.manage.task_publish_fail_hint:  Publish failed
 course.manage.task_unpublish_success_hint:  Publish cancelled successful
 course.manage.task_unpublish_fail_hint: Cancel publish failed
 course.manage.live_replay_generate_success: Generated playback succeed
+course.manage.live_replay_generate_error: 未开启直播回放或视频正在转码中，请稍后再试
 course.manage.live_replay_upload_error_hint: Please upload the video file
 course.manage.buy_expiry_time_required_error_hint: Please enter the entry deadline
 course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline

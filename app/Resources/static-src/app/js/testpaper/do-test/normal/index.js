@@ -1,5 +1,5 @@
-import DoTestBase from 'app/js/testpaper/widget/do-test-base';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
+import DoTestBase from 'app/js/testpaper/widget/do-test-base';
 
 import {
   initScrollbar,
@@ -75,3 +75,5 @@ class DoTestpaper extends DoTestBase {
 
 new DoTestpaper($('.js-task-testpaper-body'));
 new AttachmentActions($('.js-task-testpaper-body'));
+
+

@@ -34,6 +34,6 @@ class AskQuestionType extends Type
 
         $result = $thread;
 
-        return $this->createXAPIService()->askQuestion($actor, $object, $result, $statement['uuid'], $statement['created_time'], false);
+        return $this->createXAPIService()->askQuestion($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 }

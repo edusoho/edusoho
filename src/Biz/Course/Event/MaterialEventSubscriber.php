@@ -34,7 +34,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
             return;
         }
 
-        if ($task['type'] != 'download') {
+        if ('download' != $task['type']) {
             return;
         }
 
@@ -124,7 +124,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
         $lesson = $event->getSubject();
         $activity = $this->getActivityService()->getActivity($lesson['lessonId']);
         $this->getCourseService()->updateCourseStatistics($activity['fromCourseId'], array('materialNum'));
-        if (!empty($material['courseSetId'])) {
+        if (!empty($activity['fromCourseSetId'])) {
             $this->getCourseSetService()->updateCourseSetStatistics($activity['fromCourseSetId'], array('materialNum'));
         }
     }

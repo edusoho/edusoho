@@ -83,43 +83,61 @@
 
     validator.addItem({
         element: '#sitename-field',
-        required: true
+        required: true,
+        errormessageRequired:'请输入网站名称'
     });
 
     validator.addItem({
         element: '#email-field',
         required: true,
-        rule: 'email'
+        rule: 'email',
+        errormessageRequired:'请输入Email地址',
+        errormessageEmail:'Email地址格式不正确'
     });
 
     validator.addItem({
         element: '#nickname-field',
         required: true,
-        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18}'
+        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18}',
+        errormessageRequired:'请输入管理员用户名',
+        errormessageChinese_alphanumeric:'用户名支持中文字、英文字母、数字及_ . ·',
+        errormessageByte_minlength:'用户名的长度必须大于等于4，一个中文字算2个字符',
+        errormessageByte_maxlength:'用户名的长度必须小于等于18，一个中文字算2个字符'
     });
 
     validator.addItem({
         element: '#password-field',
         required: true,
-        rule: 'minlength{min:5} maxlength{max:20}'
+        rule: 'minlength{min:5} maxlength{max:20}',
+        errormessageRequired:'请输入管理员密码',
+        errormessageByte_minlength:'用户名的长度必须大于等于5，一个中文字算2个字符',
+        errormessageByte_maxlength:'用户名的长度必须小于等于20，一个中文字算2个字符'
     });
 
     validator.addItem({
         element: '#truename-field',
         required: true,
-        rule:'chinese minlength{min:2} maxlength{max:12}'
+        rule:'chinese minlength{min:2} maxlength{max:12}',
+        errormessageRequired:'请输入网站负责人姓名',
+        errormessageChinese:'姓名必须是中文字',
+        errormessageByte_minlength:'姓名的长度必须大于等于2，一个中文字算2个字符',
+        errormessageByte_maxlength:'姓名的长度必须小于等于12，一个中文字算2个字符'
     });
 
     validator.addItem({
         element: '#mobile-field',
         required: true,
-        rule: 'mobile'
+        rule: 'mobile',
+        errormessageRequired:'请输入手机号码',
+        errormessageMobile:'请输入有效的手机号码（仅支持中国大陆手机号）'
     });
 
     validator.addItem({
         element: '#qq-field',
         required: true,
-        rule: 'qq'
+        rule: 'qq',
+        errormessageRequired:'请输入QQ号码',
+        errormessageQq:'QQ号码格式不正确'
     });
 
 

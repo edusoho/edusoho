@@ -4,6 +4,7 @@ namespace Biz;
 
 use Codeages\Biz\Framework\UnitTests\DatabaseDataClearer;
 use Codeages\PluginBundle\Event\LazyDispatcher;
+use CustomBundle\Biz\CustomServiceProvider;
 use Mockery;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
@@ -18,6 +19,9 @@ class BaseTestCase extends TestCase
     /** @var $appKernel \AppKernel */
     protected static $appKernel;
 
+    /**
+     * @var Biz
+     */
     protected $biz;
 
     /** @var $db \Doctrine\DBAL\Connection */
@@ -95,10 +99,14 @@ class BaseTestCase extends TestCase
     protected function initBiz()
     {
         $container = self::$appKernel->getContainer();
+        $oldBiz = $container->get('biz');
         $biz = new Biz($container->getParameter('biz_config'));
         self::$appKernel->initializeBiz($biz);
         $biz['db'] = self::$db;
         $biz['redis'] = self::$redis;
+        $biz['migration.directories'] = $oldBiz['migration.directories'];
+        $biz['autoload.aliases'] = $oldBiz['autoload.aliases'];
+        $biz->register(new CustomServiceProvider());
 
         $this->biz = $biz;
         $biz['dispatcher'] = function () use ($container, $biz) {
@@ -248,7 +256,11 @@ class BaseTestCase extends TestCase
             }
         } else {
             foreach (array_keys($ary1) as $key) {
-                $this->assertEquals($ary1[$key], $ary2[$key]);
+                if (is_array($ary1[$key])) {
+                    $this->assertArrayEquals($ary1[$key], $ary2[$key]);
+                } else {
+                    $this->assertEquals($ary1[$key], $ary2[$key]);
+                }
             }
         }
     }
