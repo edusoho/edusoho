@@ -100,18 +100,18 @@ AT With Java And Selenium:
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     # 启动web服务
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
     # 安装插件
     - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - cd GUIAutomation2
-    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/.m2 compile
-    - /opt/apache-maven-3.5.2/bin/mvn -q -Dmaven.repo.local=/.m2 exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
-    - mysql -h mysql -uroot --password="" edusoho_test -e "show tables;"
+    #- /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/.m2 compile
+    #- /opt/apache-maven-3.5.2/bin/mvn -q -Dmaven.repo.local=/.m2 exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
+    - mysql -uroot --password="" -h mysql edusoho_test < src/main/resources/fixtures/try3.sql
     - while true; do echo 'Hit CTRL+C'; sleep 1; done
     #- cd .. && app/console server:start && cd GUIAutomation2
     #- /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
