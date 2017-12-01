@@ -21,7 +21,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
             }
             $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
 
-            if (in_array($user['id'], $classroom['teacherIds']) || $user['id'] = $classroom['headTeacherId']) {
+            if (in_array($user['id'], $classroom['teacherIds']) || $user['id'] == $classroom['headTeacherId']) {
                 return true;
             }
         } elseif ('post' === $type) {
