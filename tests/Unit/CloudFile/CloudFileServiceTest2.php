@@ -11,7 +11,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     public function testSearch()
     {
         $conditions = array(
-            'resType' => 'video'
+            'resType' => 'video',
         );
 
         $mockRemoteResources = array(
@@ -30,7 +30,7 @@ class CloudFileServiceTest2 extends BaseTestCase
             array('functionName' => 'findUsersByIds', 'withParams' => array(array(1, 2, 3)), 'returnValue' => array()),
         ));
 
-        $result = $this->getCloudFileService()->search($conditions,1, 2);
+        $result = $this->getCloudFileService()->search($conditions, 1, 2);
 
         $this->assertArraySubset($mockRemoteResources, $result['data']);
     }
@@ -46,17 +46,17 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $globalId = '1234566799';
         $this->mockBiz('File:UploadFileService', array(
-            array('functionName' => 'getFileByGlobalId', 'withParams' => array($globalId), 'returnValue' => null)
+            array('functionName' => 'getFileByGlobalId', 'withParams' => array($globalId), 'returnValue' => null),
         ));
 
         $fields = array(
             'name' => 'learning',
             'tags' => 'tag1,tag2',
-            'description' => 'just a desc'
+            'description' => 'just a desc',
         );
 
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'updateFile', 'withParams' => array($globalId, $fields), 'returnValue' => true)
+            array('functionName' => 'updateFile', 'withParams' => array($globalId, $fields), 'returnValue' => true),
         ));
 
         $result = $this->getCloudFileService()->edit($globalId, $fields);
@@ -90,12 +90,11 @@ class CloudFileServiceTest2 extends BaseTestCase
         $result = $this->getCloudFileService()->delete($globalId);
         $this->assertEquals(array('success' => true), $result);
 
-
         $this->mockBiz('File:UploadFileService', array(
-            array('functionName' => 'getFileByGlobalId', 'withParams' => array($globalId), 'returnValue' => null)
+            array('functionName' => 'getFileByGlobalId', 'withParams' => array($globalId), 'returnValue' => null),
         ));
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'deleteFile', 'withParams' => array(array('globalId' => $globalId)), 'returnValue' => true)
+            array('functionName' => 'deleteFile', 'withParams' => array(array('globalId' => $globalId)), 'returnValue' => true),
         ));
         $result = $this->getCloudFileService()->delete($globalId);
         $this->assertTrue($result);
@@ -114,7 +113,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $globalId = '1234566799';
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'getFileByGlobalId', 'withParams' => array($globalId), 'returnValue' => true)
+            array('functionName' => 'getFileByGlobalId', 'withParams' => array($globalId), 'returnValue' => true),
         ));
         $result = $this->getCloudFileService()->getByGlobalId($globalId);
         $this->assertTrue($result);
@@ -125,17 +124,16 @@ class CloudFileServiceTest2 extends BaseTestCase
         $globalId = '1234566799';
         $ssl = false;
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'player', 'withParams' => array($globalId, $ssl), 'returnValue' => null)
+            array('functionName' => 'player', 'withParams' => array($globalId, $ssl), 'returnValue' => null),
         ));
         $result = $this->getCloudFileService()->player($globalId, $ssl);
         $this->assertEmpty($result);
 
-
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'player', 'withParams' => array($globalId, $ssl), 'returnValue' => array('id' => 123))
+            array('functionName' => 'player', 'withParams' => array($globalId, $ssl), 'returnValue' => array('id' => 123)),
         ));
         $this->mockBiz('System:SettingService', array(
-           array('functionName' => 'get', 'returnValue' => array('cloud_access_key' => 1, 'cloud_secret_key' => 2))
+           array('functionName' => 'get', 'returnValue' => array('cloud_access_key' => 1, 'cloud_secret_key' => 2)),
         ));
         $result = $this->getCloudFileService()->player($globalId, $ssl);
         $this->assertArrayHasKey('token', $result);
@@ -145,7 +143,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $globalId = '1234566799';
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'download', 'withParams' => array($globalId), 'returnValue' => true)
+            array('functionName' => 'download', 'withParams' => array($globalId), 'returnValue' => true),
         ));
         $result = $this->getCloudFileService()->download($globalId);
         $this->assertTrue($result);
@@ -171,7 +169,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $globalId = '1234566799';
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'getDefaultHumbnails', 'withParams' => array($globalId), 'returnValue' => true)
+            array('functionName' => 'getDefaultHumbnails', 'withParams' => array($globalId), 'returnValue' => true),
         ));
         $result = $this->getCloudFileService()->getDefaultHumbnails($globalId);
         $this->assertTrue($result);
@@ -182,7 +180,7 @@ class CloudFileServiceTest2 extends BaseTestCase
         $globalId = '1234566799';
         $options = array();
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'getThumbnail', 'withParams' => array($globalId, $options), 'returnValue' => true)
+            array('functionName' => 'getThumbnail', 'withParams' => array($globalId, $options), 'returnValue' => true),
         ));
         $result = $this->getCloudFileService()->getThumbnail($globalId, $options);
         $this->assertTrue($result);
@@ -192,7 +190,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $options = array();
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'getStatistics', 'withParams' => array($options), 'returnValue' => true)
+            array('functionName' => 'getStatistics', 'withParams' => array($options), 'returnValue' => true),
         ));
         $result = $this->getCloudFileService()->getStatistics($options);
         $this->assertTrue($result);
@@ -206,12 +204,12 @@ class CloudFileServiceTest2 extends BaseTestCase
             array(
                 'functionName' => 'makeToken',
                 'withParams' => array('mp4_delete.callback', array('userId' => $userId, 'duration' => TimeMachine::ONE_MONTH, 'times' => 1)),
-                'returnValue' => array('token' => '1234'))
+                'returnValue' => array('token' => '1234'), ),
         ));
 
         $callbackParams = $callback.'&token=1234';
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'deleteMP4Files', 'withParams' => array($callbackParams), 'returnValue' => true)
+            array('functionName' => 'deleteMP4Files', 'withParams' => array($callbackParams), 'returnValue' => true),
         ));
 
         $result = $this->getCloudFileService()->deleteCloudMP4Files($userId, $callback);
@@ -228,13 +226,13 @@ class CloudFileServiceTest2 extends BaseTestCase
             'limit' => 1,
         );
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'search', 'withParams' => array($params), 'returnValue' => array('data' => 124))
+            array('functionName' => 'search', 'withParams' => array($params), 'returnValue' => array('data' => 124)),
         ));
         $result = $this->getCloudFileService()->hasMp4Video();
         $this->assertTrue($result);
 
         $this->mockBiz('File:CloudFileImplementor', array(
-            array('functionName' => 'search', 'withParams' => array($params), 'returnValue' => array())
+            array('functionName' => 'search', 'withParams' => array($params), 'returnValue' => array()),
         ));
         $result = $this->getCloudFileService()->hasMp4Video();
         $this->assertFalse($result);
@@ -258,7 +256,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     public function testFindGlobalIdsByTags()
     {
         $conditions = array(
-            'tags' => 'tag1,tag2'
+            'tags' => 'tag1,tag2',
         );
         $mockFiles = array(
             array('fileId' => 1),
@@ -266,7 +264,7 @@ class CloudFileServiceTest2 extends BaseTestCase
             array('fileId' => 3),
         );
         $this->mockBiz('File:UploadFileTagService', array(
-            array('functionName' => 'findByTagId', 'withParams' => array($conditions['tags']), 'returnValue' => $mockFiles)
+            array('functionName' => 'findByTagId', 'withParams' => array($conditions['tags']), 'returnValue' => $mockFiles),
         ));
 
         $cloudFileService = $this->getCloudFileService();
@@ -278,28 +276,27 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $conditions = array(
             'searchType' => 'course',
-            'keywords' => 'asdasdasd'
+            'keywords' => 'asdasdasd',
         );
 
         // not find courses
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'findCourseSetsLikeTitle', 'withParams' => array($conditions['keywords']), 'returnValue' => array())
+            array('functionName' => 'findCourseSetsLikeTitle', 'withParams' => array($conditions['keywords']), 'returnValue' => array()),
         ));
         $cloudFileService = $this->getCloudFileService();
         ReflectionUtils::invokeMethod($cloudFileService, 'findGlobalIdsByKeyWords', array(&$conditions));
         $this->assertEquals(array(-1), $conditions['ids']);
 
-
         $conditions2 = array(
             'searchType' => 'course',
-            'keywords' => 'asdasdasd'
+            'keywords' => 'asdasdasd',
         );
         // find courses
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'findCourseSetsLikeTitle', 'withParams' => array($conditions2['keywords']), 'returnValue' => array(array('id' => 1)))
+            array('functionName' => 'findCourseSetsLikeTitle', 'withParams' => array($conditions2['keywords']), 'returnValue' => array(array('id' => 1))),
         ));
         $this->mockBiz('Course:MaterialService', array(
-            array('functionName' => 'searchMaterials', 'returnValue' => array(array('fileId' => 99), array('fileId' => 100)))
+            array('functionName' => 'searchMaterials', 'returnValue' => array(array('fileId' => 99), array('fileId' => 100))),
         ));
         $cloudFileService = $this->getCloudFileService();
         ReflectionUtils::invokeMethod($cloudFileService, 'findGlobalIdsByKeyWords', array(&$conditions2));
@@ -310,12 +307,12 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $conditions = array(
             'searchType' => 'user',
-            'keywords' => 'asdasdasd'
+            'keywords' => 'asdasdasd',
         );
 
         // not find courses
         $this->mockBiz('User:UserService', array(
-            array('functionName' => 'searchUsers', 'returnValue' => array(array('id' => 1)))
+            array('functionName' => 'searchUsers', 'returnValue' => array(array('id' => 1))),
         ));
         $cloudFileService = $this->getCloudFileService();
         ReflectionUtils::invokeMethod($cloudFileService, 'findGlobalIdsByKeyWords', array(&$conditions));
@@ -326,7 +323,7 @@ class CloudFileServiceTest2 extends BaseTestCase
     {
         $conditions = array(
             'searchType' => 'title',
-            'keywords' => 'asdasdasd'
+            'keywords' => 'asdasdasd',
         );
 
         $cloudFileService = $this->getCloudFileService();
