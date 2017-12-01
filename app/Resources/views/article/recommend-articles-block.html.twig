@@ -1,7 +1,7 @@
 <div class="panel panel-default recommend-article">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <i class="es-icon es-icon-language"></i>{{'article.recommend_article'|trans({'%article_name%': setting('article.name')|default('article'|trans)})}}
+      <i class="es-icon es-icon-language"></i>{{ 'article.recommend_article'|trans }}
     </h3>
   </div>
   <div class="panel-body">
@@ -17,7 +17,7 @@
         </div>
       {% endfor %}
     {% else %}
-      <div class="empty">{{'article.recommend_article_empty'|trans({'%article_name%': setting('article.name')|default('article'|trans)})}}</div>
+      <div class="empty">{{ 'article.recommend_article_empty'|trans }}</div>
     {% endif %}
   </div>
 </div>

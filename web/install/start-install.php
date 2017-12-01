@@ -171,7 +171,8 @@ function install_step3($init_data = 0)
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
         $initializer = new \AppBundle\Common\SystemInitializer($output);
         $biz['user'] = new \Biz\User\AnonymousUser('127.0.0.1');
-
+        $biz['user.register'] = new \Biz\User\Register\RegisterFactory($biz);
+        $biz['user.register.email'] = new \Biz\User\Register\Impl\EmailRegistDecoderImpl($biz);
         try {
             if (!empty($init_data)) {
                 $biz['db']->exec('delete from `user` where id=1;');
@@ -230,7 +231,7 @@ function install_step5($init_data = 0)
     } catch (\Exception $e) {
     }
 
-    header('Location: ../app.php/');
+    header('Location: ../');
     exit();
 }
 

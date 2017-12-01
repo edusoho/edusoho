@@ -3,7 +3,7 @@
 {% block title %}{{ 'course.teach_plan_manage'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'plan' %}
 
-{% do script(['app/js/course-manage/index.js','app/js/course-manage/list/index.js']) %}
+{% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default" role="courseset-manage-courses" >
