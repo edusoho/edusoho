@@ -47,7 +47,7 @@ class CourseFileFireWallTest extends BaseTestCase
                 array(
                     'functionName' => 'getThread',
                     'returnValue' => array('id' => 111, 'userId' => 2),
-                    'withParams' => array(null, 3)
+                    'withParams' => array(null, 3),
                 ),
             )
         );
@@ -86,7 +86,7 @@ class CourseFileFireWallTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getCourse',
-                    'returnValue' => array('id' => 111, 'teacherIds' => array(1,2)),
+                    'returnValue' => array('id' => 111, 'teacherIds' => array(1, 2)),
                     'withParams' => array(111),
                 ),
             )
@@ -124,14 +124,14 @@ class CourseFileFireWallTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getCourse',
-                    'returnValue' => array('id' => 111, 'teacherIds' => array(1,3,4)),
+                    'returnValue' => array('id' => 111, 'teacherIds' => array(1, 3, 4)),
                     'withParams' => array(111),
                 ),
             )
         );
 
         $this->assertNotTrue($fireWall->canAccess($attachment));
-    }   
+    }
 
     public function testCanAccessByPostAuthorAndPost()
     {
@@ -155,7 +155,7 @@ class CourseFileFireWallTest extends BaseTestCase
                 array(
                     'functionName' => 'getPost',
                     'returnValue' => array('id' => 111, 'userId' => 2),
-                    'withParams' => array(null, 3)
+                    'withParams' => array(null, 3),
                 ),
             )
         );
@@ -236,11 +236,11 @@ class CourseFileFireWallTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getCourse',
-                    'returnValue' => array('id' => 111, 'teacherIds' => array(1,2)),
+                    'returnValue' => array('id' => 111, 'teacherIds' => array(1, 2)),
                     'withParams' => array(111),
                 ),
             )
-        ); 
+        );
 
         $this->assertTrue($fireWall->canAccess($attachment));
     }
@@ -286,7 +286,7 @@ class CourseFileFireWallTest extends BaseTestCase
                     'withParams' => array(111),
                 ),
             )
-        ); 
+        );
 
         $this->assertNotTrue($fireWall->canAccess($attachment));
     }

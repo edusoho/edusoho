@@ -3,7 +3,6 @@
 namespace Tests\Unit\File\FireWall;
 
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
 use Biz\File\FireWall\FireWallFactory;
 
 class FireWallFactoryTest extends BaseTestCase
@@ -18,10 +17,10 @@ class FireWallFactoryTest extends BaseTestCase
             'article.test',
             'group.test',
             'question.test',
-            'course'
+            'course',
         );
 
-        foreach($fireWalls as $fireWall) {
+        foreach ($fireWalls as $fireWall) {
             $fireWall = $fireWallFactory->create($fireWall);
             $this->assertNotNull($fireWall);
         }
