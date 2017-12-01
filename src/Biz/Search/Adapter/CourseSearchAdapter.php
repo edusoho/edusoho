@@ -83,11 +83,6 @@ class CourseSearchAdapter extends AbstractSearchAdapter
         return strpos($course['type'], 'public_') === 0;
     }
 
-    protected function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User:UserService');
-    }
-
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
