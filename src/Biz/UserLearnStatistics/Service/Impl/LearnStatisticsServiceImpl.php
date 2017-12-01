@@ -3,6 +3,8 @@
 namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Service\CourseService;
+use Biz\User\Service\UserService;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -216,6 +218,18 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
     }
 
+    public function getUserOverview($userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if (empty($user)) {
+            throw $this->createNotFoundException('用户不存在！');
+        }
+
+        $learningCoursesCount = $this->getCourseService()->countUserLearningCourses($userId);
+
+    }
+
     private function findUserOperateClassroomNum($operation, $conditions)
     {
         $conditions = $this->buildMemberOperationConditions($conditions);
@@ -381,5 +395,21 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getTotalStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:TotalStatisticsDao');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }
