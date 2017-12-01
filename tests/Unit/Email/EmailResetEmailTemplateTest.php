@@ -12,7 +12,7 @@ class EmailResetEmailTemplateTest extends BaseTestCase
         $template = new EmailResetEmailTemplate();
         $template->setBiz($this->getBiz());
         $result = $template->parse(array(
-            'params' => array('nickname' => 'test')
+            'params' => array('nickname' => 'test'),
         ));
 
         $this->assertArrayHasKey('title', $result);
