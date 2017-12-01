@@ -36,7 +36,7 @@ class AccountProxyServiceTest extends BaseTestCase
             'nickname' => 'nickname',
             'buyerNickname' => 'nickname',
             'platform_sn' => '2017112210340968430',
-            'platform' => 'none'
+            'platform' => 'none',
         ));
 
         $this->assertEquals('2017112210340978420', $result['trade_sn']);
@@ -52,7 +52,7 @@ class AccountProxyServiceTest extends BaseTestCase
             'nickname' => 'nickname',
             'buyerNickname' => 'nickname',
             'platform_sn' => '2017112210340968430',
-            'platform' => 'coin'
+            'platform' => 'coin',
         ));
 
         $this->assertEquals('inflow', $result['type']);
@@ -87,7 +87,7 @@ class AccountProxyServiceTest extends BaseTestCase
             'nickname' => 'nickname',
             'buyerNickname' => 'nickname',
             'platform_sn' => '2017112210340968430',
-            'platform' => 'coin'
+            'platform' => 'coin',
         ));
 
         $this->assertEquals(10, $result);
@@ -122,7 +122,7 @@ class AccountProxyServiceTest extends BaseTestCase
             'nickname' => 'nickname',
             'buyerNickname' => 'nickname',
             'platform_sn' => '2017112210340968430',
-            'platform' => 'coin'
+            'platform' => 'coin',
         ));
 
         $this->assertEquals(10, $result);
@@ -163,7 +163,7 @@ class AccountProxyServiceTest extends BaseTestCase
                 'nickname' => 'nickname',
                 'buyerNickname' => 'nickname',
                 'platform_sn' => '2017112210340968430',
-                'platform' => 'coin'
+                'platform' => 'coin',
             ),
             array(),
             0,
@@ -207,7 +207,7 @@ class AccountProxyServiceTest extends BaseTestCase
                 'nickname' => 'nickname',
                 'buyerNickname' => 'nickname',
                 'platform_sn' => '2017112210340968430',
-                'platform' => 'coin'
+                'platform' => 'coin',
             )
         );
 

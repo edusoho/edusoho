@@ -71,7 +71,7 @@ class AccountProxyServiceImpl extends AccountServiceImpl implements AccountProxy
         }
 
         if (isset($conditions['platform']) && !empty($conditions['platform'])) {
-            if($conditions['platform'] == 'none') {
+            if ('none' == $conditions['platform']) {
                 $conditions['type'] = 'outflow';
                 unset($conditions['platform']);
             } else {
