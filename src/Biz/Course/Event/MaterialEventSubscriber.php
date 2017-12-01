@@ -34,7 +34,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
             return;
         }
 
-        if ($task['type'] != 'download') {
+        if ('download' != $task['type']) {
             return;
         }
 

@@ -33,6 +33,17 @@ class DoExercise extends DoTestBase {
     return seq;
   }
 
+  _suspendSubmit(url) {
+    let values = this._getAnswers();
+    let attachments = this._getAttachments();
+    let seq = this._getSeq();
+    $.post(url,{data:values,seq:seq,usedTime:this.usedTime,attachments:attachments})
+      .done((response) => {})
+      .error(function (response) {
+        notify('error', response.error.message);
+      });
+  }
+
   _submitTest(url,toUrl='') {
     let values = this._getAnswers();
     let seq = this._getSeq();

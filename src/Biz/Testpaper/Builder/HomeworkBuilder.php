@@ -119,7 +119,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         return $fields;
     }
 
-    public function updateSubmitedResult($resultId, $usedTime)
+    public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
         $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);

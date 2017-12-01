@@ -145,7 +145,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         return $fields;
     }
 
-    public function updateSubmitedResult($resultId, $usedTime)
+    public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);

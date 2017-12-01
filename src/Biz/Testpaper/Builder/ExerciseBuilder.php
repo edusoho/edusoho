@@ -48,6 +48,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         $itemResults = array();
         if ($resultId) {
             $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+            $orders = empty($exerciseResult['metas']['orders']) ? $orders : $exerciseResult['metas']['orders'];
 
             $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id'], true);
             $itemResults = ArrayToolkit::index($itemResults, 'questionId');
@@ -154,13 +155,15 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $fields;
     }
 
-    public function updateSubmitedResult($resultId, $usedTime)
+    public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+        $orders = empty($options['orders']) ? array() : $options['orders'];
 
         $fields = array(
             'status' => 'finished',
+            'metas' => array('orders' => $orders),
         );
 
         $accuracy = $this->getTestpaperService()->sumScore($itemResults);
