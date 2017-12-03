@@ -52,37 +52,39 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
 
     public function declares()
     {
-        $declares['orderbys'] = array(
-            'id',
-            'testId',
-            'courseId',
-            'lessonId',
-            'beginTime',
-            'endTime',
-            'checkedTime',
-            'updateTime',
+        return array(
+            'orderbys' => array(
+                'id',
+                'testId',
+                'courseId',
+                'lessonId',
+                'beginTime',
+                'endTime',
+                'checkedTime',
+                'updateTime',
+            ),
+            'conditions' => array(
+                'id = :id',
+                'checkTeacherId = :checkTeacherId',
+                'paperName = :paperName',
+                'testId = :testId',
+                'testId IN ( :testIds )',
+                'courseId = :courseId',
+                'userId = :userId',
+                'userId IN (:userIds)',
+                'score = :score',
+                'objectiveScore = :objectiveScore',
+                'subjectiveScore = :subjectiveScore',
+                'rightItemCount = :rightItemCount',
+                'status = :status',
+                'courseId IN ( :courseIds)',
+                'type = :type',
+                'type IN ( :types )',
+                'lessonId = :lessonId',
+            ),
+            'serializes' => array(
+                'metas' => 'json',
+            ),
         );
-
-        $declares['conditions'] = array(
-            'id = :id',
-            'checkTeacherId = :checkTeacherId',
-            'paperName = :paperName',
-            'testId = :testId',
-            'testId IN ( :testIds )',
-            'courseId = :courseId',
-            'userId = :userId',
-            'userId IN (:userIds)',
-            'score = :score',
-            'objectiveScore = :objectiveScore',
-            'subjectiveScore = :subjectiveScore',
-            'rightItemCount = :rightItemCount',
-            'status = :status',
-            'courseId IN ( :courseIds)',
-            'type = :type',
-            'type IN ( :types )',
-            'lessonId = :lessonId',
-        );
-
-        return $declares;
     }
 }
