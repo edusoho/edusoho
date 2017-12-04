@@ -28,7 +28,7 @@ class AddUserLearnStatistics extends Migration
                 `paidAmount` INT(10) NOT NULL DEFAULT 0 COMMENT '支付金额',
                 `refundAmount` INT(10) NOT NULL DEFAULT 0 COMMENT '退款金额',
                 `actualAmount` INT(10) NOT NULL DEFAULT 0 COMMENT '实付金额',
-                `recordTime` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '记录时间',
+                `recordTime` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '记录时间, 当天同步时间的0点',
                 `isStorage` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否存储到total表',
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',

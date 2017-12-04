@@ -43,7 +43,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->beginTransaction();
             $fields = array(
                 'isStorage' => 1,
-                'recordTime' => $conditions['createdTime_LT'],
+                'recordTime' => $conditions['createdTime_GE'],
             );
             $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
@@ -60,7 +60,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         try {
             $this->beginTransaction();
             $fields = array(
-                'recordTime' => $conditions['createdTime_LT'],
+                'recordTime' => $conditions['createdTime_GE'],
             );
             $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
