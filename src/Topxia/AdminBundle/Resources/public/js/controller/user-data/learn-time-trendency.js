@@ -1,7 +1,6 @@
 define(function (require, exports, module) {
   var OverviewDateRangePicker = require('./date-range-picker');
   var Widget = require('widget');
-  require('moment2');
   require('echarts');
 
   var LearnTimeTrendency = Widget.extend({
