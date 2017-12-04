@@ -1,6 +1,5 @@
 define(function (require, exports, module) {
   var eventEmitter = require('emitter');
-  require('moment2');
   var DateRangePicker = require('bootstrap.daterangepicker');
 
   var OverviewDateRangePicker = function() {

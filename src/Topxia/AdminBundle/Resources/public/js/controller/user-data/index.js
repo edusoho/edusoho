@@ -1,14 +1,7 @@
 define(function (require, exports, module) {
 
-  var Notify = require('common/bootstrap-notify');
-  var Validator = require('bootstrap.validator');
-  require('moment2');
-  require('bootstrap-daterangepicker.css');
-  require('bootstrap-daterangepicker');
-  require('common/validator-rules').inject(Validator);
   var DateRangePicker = require('bootstrap.daterangepicker');
   require('echarts');
-  var OverviewDateRangePicker = require('./date-range-picker');
   var LearnTimeTrendency = require('./learn-time-trendency');
 
   exports.run = function() {

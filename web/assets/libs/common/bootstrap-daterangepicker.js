@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-  require('jquery-plugin/bootstrap-daterangepicker/moment.min');
   require('jquery-plugin/bootstrap-daterangepicker/daterangepicker');
   require('jquery-plugin/bootstrap-daterangepicker/daterangepicker.css');
 

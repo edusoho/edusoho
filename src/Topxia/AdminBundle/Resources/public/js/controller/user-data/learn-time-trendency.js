@@ -1,7 +1,6 @@
 define(function (require, exports, module) {
   var OverviewDateRangePicker = require('./date-range-picker');
   var Widget = require('widget');
-  require('moment2');
   require('echarts');
 
   var LearnTimeTrendency = Widget.extend({
@@ -14,31 +13,27 @@ define(function (require, exports, module) {
 
     init: function() {
       var self = this;
-      console.log('222');
       this.dateRangePicker = new OverviewDateRangePicker('.js-user-data-chart');
-      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
+      // 静态数据
       this.dateArr = ["2017-11-01", "2017-11-26", "2017-11-27", "2017-11-28", "2017-11-29", "2017-11-30", "2017-12-01"];
       this.learnTime = [10, 12, 21, 54, 260, 830, 710];
       this.dateRangePicker.on('date-picked', function(data) {
-        console.log('3333');
-        console.log(data.startDate);
-        console.log(data.endDate);
         var dateArr = [];
         var learnTime = [];
         for (var i = 0; i < 7; i++) {
           dateArr.push(data.startDate + i);
           learnTime.push(i);
         }
-        // 先这么测试着
+        // 先这么测试着 静态数据
         this.dateArr = dateArr;
         this.learnTime = learnTime;
-        console.log(this.dateArr);
         self.data(data.startDate, data.endDate, this.learnTime, this.dateArr);
       });
       this.data(this.dateRangePicker.getStartDate(), this.dateRangePicker.getEndDate(), this.learnTime, this.dateArr);
     },
 
     data: function(startDate, endDate, time, date) {
+      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
       this.learnTimeTrendencyChart.showLoading();
       var self = this;
       self.show(time, date);
@@ -47,18 +42,18 @@ define(function (require, exports, module) {
     show: function(time, data) {
       var option = {
           tooltip: {
-              trigger: 'axis'
+            trigger: 'axis'
           },
           grid: {
-              left: '3%',
-              right: '6%',
-              bottom: '3%',
-              containLabel: true
+            left: '3%',
+            right: '6%',
+            bottom: '3%',
+            containLabel: true
           },
           toolbox: {
-              feature: {
-                  saveAsImage: {}
-              }
+            feature: {
+              saveAsImage: {}
+            }
           },
           xAxis: {
             type: 'category',
