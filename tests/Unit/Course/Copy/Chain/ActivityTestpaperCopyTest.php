@@ -3,6 +3,9 @@
 namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
+use Biz\Activity\Dao\TestpaperActivityDao;
+use Biz\Activity\Dao\ActivityDao;
+use Biz\Testpaper\Service\TestpaperService;
 use AppBundle\Common\ReflectionUtils;
 
 class ActivityTestpaperCopyTest extends BaseTestCase
