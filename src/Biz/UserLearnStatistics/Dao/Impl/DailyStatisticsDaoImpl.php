@@ -14,7 +14,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
         if (empty($ids)) {
             return array();
         }
-        
+
         return $this->findInField('id', $ids);
     }
 
@@ -47,8 +47,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'isStorage = :isStorage',
                 'recordTime < :recordTime_LT',
                 'recordTime >= :recordTime_GE',
-            )
+            ),
         );
     }
 }
-

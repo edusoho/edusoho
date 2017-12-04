@@ -16,10 +16,10 @@ class TotalStatisticsDaoTest extends BaseTestCase
         $statistic['userId'] = 2;
         $statistic = $this->getDailyStatisticsDao()->create($statistic);
 
-        $this->assertEquals(2, count($this->getDailyStatisticsDao()->findByIds(array(1,2))));
+        $this->assertEquals(2, count($this->getDailyStatisticsDao()->findByIds(array(1, 2))));
         $this->assertEquals(1, count($this->getDailyStatisticsDao()->findByIds(array(1))));
         $this->assertEquals(0, count($this->getDailyStatisticsDao()->findByIds(array())));
-        $this->assertEquals(0, count($this->getDailyStatisticsDao()->findByIds(array(3,4))));
+        $this->assertEquals(0, count($this->getDailyStatisticsDao()->findByIds(array(3, 4))));
     }
 
     protected function getDailyStatisticsDao()
