@@ -3,9 +3,6 @@
 namespace Tests\Unit\Course\Copy;
 
 use Biz\BaseTestCase;
-use Biz\Course\Copy\CourseMemberCopy;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Copy\CourseChapterCopy;
 
 class CourseChapterCopyTest extends BaseTestCase
@@ -42,13 +39,13 @@ class CourseChapterCopyTest extends BaseTestCase
 
         $this->assertEquals(1, count($chapterMap));
         $chaptersByCourseId = $this->getChapterDao()->findChaptersByCourseId(1);
-        $this->assertEquals(1, count($chaptersByCourseId)); 
+        $this->assertEquals(1, count($chaptersByCourseId));
 
         $chapterMap = reset($chapterMap);
-        foreach($this->getDefaultFields() as $column) {
-            $this->assertEquals($chapter[$column], $chapterMap[$column]); 
+        foreach ($this->getDefaultFields() as $column) {
+            $this->assertEquals($chapter[$column], $chapterMap[$column]);
         }
-    } 
+    }
 
     private function getDefaultFields()
     {
