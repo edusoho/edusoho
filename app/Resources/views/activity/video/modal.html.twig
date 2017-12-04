@@ -1,6 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
-{% do script([get_upload_sdk(), 'libs/perfect-scrollbar.js','app/js/activity-manage/video/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js','app/js/activity-manage/video/index.js']) %}
 
 {% block activity_content %}
   <div class="form-group">

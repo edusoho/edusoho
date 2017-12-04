@@ -3,7 +3,7 @@
 {% block title %}{{ 'my.teaching.open_course.lesson.add_material.title'|trans }}{% endblock %}
 
 
-{% do script([get_upload_sdk(), 'libs/jquery-validation.js', 'app/js/open-course-manage/add-material/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'libs/jquery-validation.js', 'app/js/open-course-manage/add-material/index.js']) %}
 
 {% block body %}
 
