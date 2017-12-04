@@ -18,7 +18,6 @@ class UserLearnStatisticsController extends BaseController
             'isDefault' => 'false'
         );
         $conditions = $request->query->all();
-        list($conditions, $orderBy, $isDefault) = $this->prepareConditions($conditions);
 
         $conditions = array_merge($defaultCondition, $conditions);
         $paginator = new Paginator(
@@ -35,10 +34,7 @@ class UserLearnStatisticsController extends BaseController
         
         $conditions = array_merge($conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
         
-        $statistics = $this->getLearnStatisticsService()->statisticsDataSearch(
-            $conditions,
-            $orderBy
-        );
+        $statistics = $this->getLearnStatisticsService()->statisticsDataSearch($conditions);
 
         $timespan = $this->getLearnStatisticsService()->getTimespan();
         
@@ -49,21 +45,6 @@ class UserLearnStatisticsController extends BaseController
             'timespan' => $timespan,
             'isDefault' => $conditions['isDefault']
         ));
-    }
-
-    protected function prepareConditions($fields)
-    {
-        if (!empty($fields['isDefault']) && $fields['isDefault'] == 'true') {
-            $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
-            $isDefault = 'true';
-            $conditions = array();
-        } else {
-            $orderBy = array('id' => 'DESC');
-            $isDefault = false;
-            $conditions = $fields;
-        }
-        
-        return array($conditions, $orderBy, $isDefault);
     }
 
     public function syncDailyData()

@@ -8,15 +8,15 @@ use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
-    public function statisticsDataSearch($conditions, $order)
+    public function statisticsDataSearch($conditions)
     {
-        list($conditions, $daoType) = $this->analysisCondition($conditions);
+        list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
         return $this->getStatisticsDao($daoType)->statisticSearch($conditions, $order);
     }
 
     public function statisticsDataCount($conditions)
     {
-        list($conditions, $daoType) = $this->analysisCondition($conditions);
+        list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
         return $this->getStatisticsDao($daoType)->statisticCount($conditions);
     }
 
@@ -157,18 +157,24 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
 
     private function analysisCondition($conditions)
     {
+        if (!empty($conditions['isDefault']) && $conditions['isDefault'] == 'true') {
+            $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
+        } else {
+            $orderBy = array('id' => 'DESC');
+        }
+
         $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
         if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
             $daoType = 'Daily';
-            $conditions['createTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
-            $conditions['createTime_LE'] = !empty($conditions['endDate']) ? strtotime("+1 day", strtotime($conditions['endDate'])) : time();
+            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
+            $conditions['recordTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : strtotime(date('Y-m-d', time()));
             unset($conditions['startDate']);
             unset($conditions['endDate']);
         } else {
             $daoType = 'Total';
         }
 
-        return array($conditions, $daoType);
+        return array($conditions,  $orderBy, $daoType);
     }
 
     public function getTimespan()

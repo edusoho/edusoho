@@ -4,6 +4,7 @@ namespace Biz\UserLearnStatistics\Dao\Impl;
 
 use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Codeages\Biz\Framework\Dao\DaoException;
 
 class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsDao
 {
@@ -20,6 +21,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($order, $sort);
         }
+
         $result = $builder->execute()->fetchAll();
         
         return $result;
@@ -28,12 +30,12 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
     private function checkOrderBy($order, $sort, $allowOrderBys)
     {
         if (!in_array($order, $allowOrderBys, true)) {
-            throw $this->createDaoException(
+            throw new DaoException(
                 sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
             );
         }
         if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
-            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+            throw new DaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
     }
 
@@ -69,6 +71,9 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'id',
                 'createdTime',
                 'updatedTime',
+                'userId',
+                'joinedCourseNum',
+                'actualAmount',
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
@@ -83,6 +88,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'updatedTime <= :updateTime_LE',
                 'isStorage = :isStorage',
                 'recordTime < :recordTime_LT',
+                'recordTime <= :recordTime_LE',
                 'recordTime >= :recordTime_GE',
             )
         );

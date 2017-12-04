@@ -86,14 +86,9 @@ class UserLearnStatisticsExporter extends Exporter
             );
 
             $conditions['userIds'] = ArrayToolkit::column($users, 'id');
+            unset($conditions['nickname']);
         } else {
             $conditions['userIds'] = array();
-        }
-
-        if (!empty($conditions['isDefault']) && $conditions['isDefault'] == 'true') {
-            $this->orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
-        } else {
-            $this->orderBy = array('id' => 'DESC');
         }
 
         return $conditions;

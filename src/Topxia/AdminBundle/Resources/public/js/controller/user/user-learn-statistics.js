@@ -5,8 +5,6 @@ define(function(require, exports, module){
   exports.run = function(){
     $form = $("#user-search");
     $form.on('click', '#default-search', function () {
-      $("[name='startDate']").val('');
-      $("[name='endDate']").val('');
       $("[name='nickname']").val('');
       $("[name='isDefault']").val('true');
       $form.submit();

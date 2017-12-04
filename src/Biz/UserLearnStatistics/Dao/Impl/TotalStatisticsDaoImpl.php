@@ -4,6 +4,7 @@ namespace Biz\UserLearnStatistics\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Biz\UserLearnStatistics\Dao\TotalStatisticsDao;
+use Codeages\Biz\Framework\Dao\DaoException;
 
 class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsDao
 {
@@ -27,12 +28,12 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
     private function checkOrderBy($order, $sort, $allowOrderBys)
     {
         if (!in_array($order, $allowOrderBys, true)) {
-            throw $this->createDaoException(
+            throw new DaoException(
                 sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
             );
         }
         if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
-            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+            throw new DaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
     }
 
