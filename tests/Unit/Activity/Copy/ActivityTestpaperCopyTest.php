@@ -3,9 +3,6 @@
 namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
-use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ReflectionUtils;
 
 class ActivityTestpaperCopyTest extends BaseTestCase
@@ -41,8 +38,8 @@ class ActivityTestpaperCopyTest extends BaseTestCase
         );
 
         $this->assertEquals(
-            array('courseId' => '2', 'copyId' => '22', 'type'=> 'testpaper'),
-            array('courseId' => $newTestpaper['courseId'], 'copyId' => $newTestpaper['copyId'], 'type'=> $newTestpaper['type'])
+            array('courseId' => '2', 'copyId' => '22', 'type' => 'testpaper'),
+            array('courseId' => $newTestpaper['courseId'], 'copyId' => $newTestpaper['copyId'], 'type' => $newTestpaper['type'])
         );
     }
 
@@ -84,6 +81,7 @@ class ActivityTestpaperCopyTest extends BaseTestCase
             'type' => 'testpaper',
             'courseSetId' => 1,
         );
+
         return $this->getTestpaperService()->createTestpaper($testpaperFields);
     }
 
@@ -101,5 +99,4 @@ class ActivityTestpaperCopyTest extends BaseTestCase
     {
         return $this->createService('Testpaper:TestpaperService');
     }
-
 }
