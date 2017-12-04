@@ -104,7 +104,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions)),
             'joinedClassroomNum' => $this->findUserOperateClassroomNum('join', $conditions),
             'exitClassroomNum' => $this->findUserOperateClassroomNum('exit', $conditions),
-            'joinedClassroomCourseNum' =>  $this->findUserOperateClassroomPlanNum('join', $conditions),
             'joinedCourseSetNum' => $this->findUserOperateCourseSetNum('join', $conditions),
             'exitCourseSetNum' => $this->findUserOperateCourseSetNum('exit', $conditions),
             'joinedCourseNum' => $this->findUserOperateCourseNum('join', $conditions),
@@ -167,8 +166,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $addTotalData = $updateTotalData = array();
             $updateColumn = array(
                 'joinedClassroomNum',
-                'joinedClassroomCourseSetNum',
-                'joinedClassroomCourseNum',
                 'joinedCourseSetNum',
                 'joinedCourseNum',
                 'exitClassroomNum',
@@ -227,21 +224,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             )
         );
         return $this->getMemberOperationService()->countGroupByUserId('target_id', $conditions);
-    }
-
-    private function findUserOperateClassroomPlanNum($operation, $conditions)
-    {
-        $conditions = $this->buildMemberOperationConditions($conditions);
-        $conditions = array_merge(
-            $conditions,
-            array(
-                'target_type' => 'course', 
-                'operate_type' => $operation, 
-                'parent_id_GT' => 0,
-            )
-        );
-
-        return $this->getMemberOperationService()->countGroupByUserId('target_id', $conditions); 
     }
 
     private function findUserOperateCourseSetNum($operation, $conditions)
