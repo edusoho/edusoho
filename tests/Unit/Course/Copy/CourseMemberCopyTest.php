@@ -14,7 +14,7 @@ class CourseMemberCopyTest extends BaseTestCase
         $copy = new CourseMemberCopy($this->biz, array(
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
-        ),false);
+        ), false);
 
         $this->assertNull($copy->preCopy($this->mockCourse(), array()));
     }
@@ -30,7 +30,7 @@ class CourseMemberCopyTest extends BaseTestCase
         $copy = new CourseMemberCopy($this->biz, array(
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
-        ),false);
+        ), false);
 
         $copy->doCopy(array(), array('originCourse' => array('id' => $course['id'], 'courseSetId' => $course['courseSetId']), 'newCourse' => array('id' => $course['id'] + 2, 'courseSetId' => $course['id'] + 2)));
 
@@ -44,14 +44,9 @@ class CourseMemberCopyTest extends BaseTestCase
         $copy = new CourseMemberCopy($this->biz, array(
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
-        ),false);
+        ), false);
 
         $this->assertNull($copy->afterCopy($this->mockCourse(), array()));
-    }
-
-    protected function mockCopyCourses()
-    {
-    
     }
 
     protected function mockCourse($title = '测试课程', $courseSet = array())
