@@ -11,12 +11,14 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     public function statisticsDataSearch($conditions)
     {
         list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
+
         return $this->getStatisticsDao($daoType)->statisticSearch($conditions, $order);
     }
 
     public function statisticsDataCount($conditions)
     {
         list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
+
         return $this->getStatisticsDao($daoType)->statisticCount($conditions);
     }
 
@@ -135,7 +137,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         foreach ($userIds as $userId) {
-            if ($userId == 0) {
+            if (0 == $userId) {
                 continue;
             }
             $statistic = array();
@@ -156,7 +158,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
 
     private function analysisCondition($conditions)
     {
-        if (!empty($conditions['isDefault']) && $conditions['isDefault'] == 'true') {
+        if (!empty($conditions['isDefault']) && 'true' == $conditions['isDefault']) {
             $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
         } else {
             $orderBy = array('id' => 'DESC');
@@ -180,12 +182,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     {
         $settings = $this->getSettingService()->get('learn_statistics');
         if (!empty($settings) && $settings['timespan'] == strtotime('1971/1/1 8:0:0')) {
-            $settings['timespan'] = 24*60*60*365;
+            $settings['timespan'] = 24 * 60 * 60 * 365;
         }
 
         return date('Y-m-d', time() - $settings['timespan']);
     }
-    
+
     public function storageDailyStatistics($limit = 1000)
     {
         try {
@@ -286,7 +288,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 'parent_id' => 0,
             )
         );
-        $operation == 'join' ? $conditions['join_course_set'] = 1 : $conditions['exit_course_set'] = 1;
+        'join' == $operation ? $conditions['join_course_set'] = 1 : $conditions['exit_course_set'] = 1;
 
         return $this->getMemberOperationService()->countGroupByUserId('course_set_id', $conditions);
     }

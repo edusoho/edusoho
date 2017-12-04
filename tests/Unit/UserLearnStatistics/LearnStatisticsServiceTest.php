@@ -13,10 +13,10 @@ class LearnStatisticsServiceTest extends BaseTestCase
             'endDate' => '',
             'nickname' => '',
             'isDefault' => 'false',
-            'userIds' => array(3)
+            'userIds' => array(3),
         );
         $order = array(
-            'id' => 'DESC'
+            'id' => 'DESC',
         );
         $preResult = array(
             array(
@@ -24,8 +24,8 @@ class LearnStatisticsServiceTest extends BaseTestCase
                 'joinedClassroomNum' => 2,
                 'joinedClassroomCourseSetNum' => 2,
                 'joinedClassroomCourseNum' => 2,
-                'joinedCourseSetNum' => 2
-            )
+                'joinedCourseSetNum' => 2,
+            ),
         );
 
         $this->mockBiz('UserLearnStatistics:DailyStatisticsDao');
@@ -43,7 +43,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
             'endDate' => '',
             'nickname' => '',
             'isDefault' => 'false',
-            'userIds' => array(3)
+            'userIds' => array(3),
         );
 
         $this->mockBiz('UserLearnStatistics:TotalStatisticsDao');
@@ -67,5 +67,4 @@ class LearnStatisticsServiceTest extends BaseTestCase
     {
         return $this->createDao('UserLearnStatistics:DailyStatisticsDao');
     }
-
 }
