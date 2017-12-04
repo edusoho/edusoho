@@ -6,7 +6,7 @@
           <span class="tag-open-live"></span>
         </span>
       {% endif %}
-      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+      {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive', course.title) }}
     </a>
     {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
     {% if course.type == 'liveOpen' %}

@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/classroom/introduction/index"],{"2dc3b32b8a3c4f49cb2d":function(c,t,a){"use strict";!function(){var c=$("#event-report"),t=c.data();$.post(c.data("url"),t)}()}},["2dc3b32b8a3c4f49cb2d"]);
+webpackJsonp(["app/js/classroom/introduction/index"],{"2dc3b32b8a3c4f49cb2d":function(c,b,d){"use strict"}},["2dc3b32b8a3c4f49cb2d"]);

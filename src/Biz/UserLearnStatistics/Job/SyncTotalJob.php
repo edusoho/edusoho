@@ -12,8 +12,8 @@ class SyncTotalJob extends AbstractJob
         //生成用户总量学习数据
         try {
             $lastUserId = $this->getLastUserId();
-            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id'=>'asc'), 0, 100);
-            $learnSetting = $this->getLearnStatisticesService()->getStatisticsSetting();
+            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id' => 'asc'), 0, 100);
+            $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
 
             if (empty($users)) {
                 $this->setTotalDataStatus($learnSetting);
@@ -35,7 +35,7 @@ class SyncTotalJob extends AbstractJob
                 'userIds' => $userIds,
                 'skipSyncCourseSetNum' => true,
             );
-            $this->getLearnStatisticesService()->batchCreateTotalStatistics($conditions);
+            $this->getLearnStatisticsService()->batchCreateTotalStatistics($conditions);
             $endUser = end($users);
             $jobArgs['lastUserId'] = $endUser['id'];
             $this->getJobDao()->update($this->id, array('args' => $jobArgs));
@@ -43,7 +43,6 @@ class SyncTotalJob extends AbstractJob
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
         }
-
     }
 
     private function getLastUserId()
@@ -68,7 +67,7 @@ class SyncTotalJob extends AbstractJob
         return $this->biz->service('Scheduler:SchedulerService');
     }
 
-    protected function getLearnStatisticesService()
+    protected function getLearnStatisticsService()
     {
         return $this->biz->service('UserLearnStatistics:LearnStatisticsService');
     }

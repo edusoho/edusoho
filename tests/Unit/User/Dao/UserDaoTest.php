@@ -50,6 +50,19 @@ class UserDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $this->getUserDao()->countByMobileNotEmpty());
     }
 
+    public function testFindUnlockedUsersWithMobile()
+    {
+        $defaultUser = $this->getDefaultMockFields();
+        $defaultUser['type'] = 'default';
+        $this->getUserDao()->create($defaultUser);
+        $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10));
+        $this->getUserProfileDao()->create(array(
+            'id' => '3',
+            'mobile' => '13967340627',
+        ));
+        $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10));
+    }
+
     public function testGetByVerifiedMobile()
     {
         $defaultUser = $this->getDefaultMockFields();
