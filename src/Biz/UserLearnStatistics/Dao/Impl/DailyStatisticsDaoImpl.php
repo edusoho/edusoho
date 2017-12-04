@@ -23,7 +23,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
         }
 
         $result = $builder->execute()->fetchAll();
-        
+
         return $result;
     }
 
