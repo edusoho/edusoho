@@ -916,6 +916,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    public function findUserLearnCourseIds($userId)
+    {
+        return $this->getMemberDao()->findUserLearnCourseIds($userId);
+    }
+
+    public function countUserLearnCourses($userId)
+    {
+        return $this->getMemberDao()->countUserLearnCourses($userId);
+    }
+
     // Refactor: countLearnedCourses
     public function countUserLearnedCourses($userId, $filters = array())
     {

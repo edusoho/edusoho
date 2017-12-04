@@ -3,7 +3,11 @@
 namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
@@ -226,7 +230,23 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             throw $this->createNotFoundException('用户不存在！');
         }
 
-        $learningCoursesCount = $this->getCourseService()->countUserLearningCourses($userId);
+        $learnCourseIds = $this->getCourseService()->findUserLearnCourseIds($userId);
+
+        $learningCourseSetCount = $this->getCourseSetService()->countUserLearnCourseSets($userId);
+        $learningCoursesCount = $this->getCourseService()->countUserLearnCourses($userId);
+        $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
+        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds));
+        $learningCourseThreadsCount = $this->getCourseThreadService()->countThreads(array('courseIds' => $learnCourseIds));
+        $learningCourseThreadPostsCount = $this->getCourseThreadService()->searchThreadPostsCount(array('courseIds' => $learnCourseIds));
+
+        return array(
+            'learningCourseSetCount' => $learningCourseSetCount,
+            'learningCoursesCount' => $learningCoursesCount,
+            'learningProcess' => $learningProcess,
+            'learningCourseNotesCount' => $learningCourseNotesCount,
+            'learningCourseThreadsCount' => $learningCourseThreadsCount,
+            'learningCourseThreadPostsCount' => $learningCourseThreadPostsCount,
+        );
     }
 
     private function findUserOperateClassroomNum($operation, $conditions)
@@ -410,5 +430,37 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getCourseNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
     }
 }
