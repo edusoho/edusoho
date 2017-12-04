@@ -130,18 +130,6 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'renren'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
-        ) {
-            $targetPath = $this->generateUrl('homepage');
-        }
-
         return $targetPath;
     }
 
