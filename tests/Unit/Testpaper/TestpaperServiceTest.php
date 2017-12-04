@@ -16,6 +16,25 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals($testpaper['type'], $findTestpaper['type']);
     }
 
+    public function testGetTestpaperByIdAndType()
+    {
+        $testpaper = $this->createTestpaper1();
+        $result = $this->getTestpaperService()->getTestpaperByIdAndType($testpaper['id'], 'testpaper');
+
+        $this->assertArrayEquals($testpaper, $result);
+    }
+
+    public function testFindTestpapersByIdsAndType()
+    {
+        $testpaper1 = $this->createTestpaper1();
+        $testpaper2 = $this->createHomework();
+
+        $results = $this->getTestpaperService()->findTestpapersByIdsAndType(array($testpaper1['id'],$testpaper2['id']), 'testpaper');
+
+        $this->assertEquals(1, count($results));
+        $this->assertArrayEquals($testpaper1, $results[0]);
+    }
+
     public function testGetTestpaperByCopyIdAndCourseSetId()
     {
         $testpaper = $this->createTestpaper1();
@@ -45,8 +64,47 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals($testpaper['type'], $findTestpaper['type']);
     }
 
+    public function testBatchCreateTestpaper()
+    {
+        $result = $this->getTestpaperService()->batchCreateTestpaper(array());
+        $this->assertNull($result);
+
+        $testpapers = array(
+            array(
+                'name' => 'testpaper1',
+                'description' => 'testpaper description',
+                'courseSetId' => 1,
+                'courseId' => 0,
+                'pattern' => 'questionType',
+                'metas' => array(
+                    'ranges' => array('courseId' => 0),
+                ),
+                'type' => 'testpaper',
+            ),
+            array(
+                'name' => 'testpaper2',
+                'description' => 'testpaper2 description',
+                'courseSetId' => 1,
+                'courseId' => 0,
+                'pattern' => 'questionType',
+                'metas' => array(
+                    'ranges' => array('courseId' => 0),
+                ),
+                'type' => 'testpaper',
+            )
+        );
+
+        $result = $this->getTestpaperService()->batchCreateTestpaper($testpapers);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
     public function testUpdateTestpaper()
     {
+        $result = $this->getTestpaperService()->updateTestpaper('123', array());
+
         $testpaper = $this->createTestpaper1();
 
         $findTestpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
@@ -63,6 +121,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals($fields['description'], $testpaperUpdate['description']);
     }
 
+
     public function testDeleteTestpaper()
     {
         $testpaper = $this->createTestpaper1();
@@ -77,15 +136,29 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertNull($findTestpaper);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testDeleteEmptyTestpaper()
+    {
+        $result = $this->getTestpaperService()->deleteTestpaper(123, true);
+        $this->assertEmpty($result);
+
+        $this->getTestpaperService()->deleteTestpaper(123);
+    }
+
     public function testDeleteTestpapers()
     {
+        $result = $this->getTestpaperService()->deleteTestpapers(array());
+        $this->assertFalse($result);
+
         $testpaper = $this->createTestpaper1();
         $homework = $this->createHomework();
         $exercise = $this->createExercise();
 
         $ids = array($testpaper['id'], $homework['id'], $exercise['id']);
 
-        $this->getTestpaperService()->deleteTestpapers($ids);
+        $result = $this->getTestpaperService()->deleteTestpapers($ids);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
         $homework = $this->getTestpaperService()->getTestpaper($homework['id']);
@@ -94,6 +167,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertNull($testpaper);
         $this->assertNull($homework);
         $this->assertNull($exercise);
+        $this->assertTrue($result);
     }
 
     public function testFindTestpapersByIds()
@@ -142,8 +216,13 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
     public function testPublishTestpaper()
     {
+        $this->getTestpaperService()->publishTestpaper(123);
+
         $testpaper = $this->createTestpaper1();
 
         $this->assertEquals('draft', $testpaper['status']);
@@ -152,8 +231,34 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('open', $testpaper['status']);
     }
 
-    public function closeTestpaper($id)
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testPublishTestpaperStatus()
     {
+        $fields = array(
+            'name' => 'testpaper',
+            'description' => 'testpaper description',
+            'courseSetId' => 1,
+            'courseId' => 0,
+            'pattern' => 'questionType',
+            'metas' => array(
+                'ranges' => array('courseId' => 0),
+            ),
+            'type' => 'testpaper',
+            'status' => 'published'
+        );
+        $testpaper = $this->getTestpaperService()->createTestpaper($fields);
+        $this->getTestpaperService()->publishTestpaper($testpaper['id']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testCloseTestpaper()
+    {
+        $this->getTestpaperService()->closeTestpaper(123);
+
         $testpaper = $this->createTestpaper1();
 
         $this->assertEquals('draft', $testpaper['status']);
@@ -163,6 +268,15 @@ class TestpaperServiceTest extends BaseTestCase
 
         $testpaper = $this->getTestpaperService()->closeTestpaper($testpaper['id']);
         $this->assertEquals('closed', $testpaper['status']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testCloseTestpaperStatus()
+    {
+        $testpaper = $this->createTestpaper1();
+        $this->getTestpaperService()->closeTestpaper($testpaper['id']);
     }
 
     /**
@@ -190,6 +304,9 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testBatchCreateItems()
     {
+        $result = $this->getTestpaperService()->batchCreateItems(array());
+        $this->assertEmpty($result);
+
         $testpaper = $this->createTestpaper1();
 
         $total = 4100;
@@ -282,6 +399,30 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(count($items), count($testpaperItems));
     }
 
+    public function testFindItemsByTestIds()
+    {
+        $testpaper = $this->createTestpaper1();
+        $this->createTestpaperItem($testpaper);
+
+        $fields = array(
+            'name' => 'testpaper',
+            'description' => 'testpaper description',
+            'courseSetId' => 1,
+            'courseId' => 0,
+            'pattern' => 'questionType',
+            'metas' => array(
+                'ranges' => array('courseId' => 0),
+            ),
+            'type' => 'testpaper',
+        );
+        $testpaper2 = $this->getTestpaperService()->createTestpaper($fields);
+        $this->createTestpaperItem($testpaper2);
+
+        $testpaperItems = $this->getTestpaperService()->findItemsByTestIds(array($testpaper['id'], $testpaper2['id']));
+
+        $this->assertEquals(6, count($testpaperItems));
+    }
+
     public function testSearchItems()
     {
         $testpaper = $this->createTestpaper1();
@@ -310,6 +451,24 @@ class TestpaperServiceTest extends BaseTestCase
     /*
      * testpaper_item_result
      */
+    
+    public function testGetItemResult()
+    {
+        $fields = array(
+            'itemId' => 1,
+            'testId' => 1,
+            'resultId' => 1,
+            'userId' => 1,
+            'questionId' => 123,
+            'answer' => array(1),
+            'status' => 'wrong',
+            'score' => 0,
+        );
+        $item = $this->getTestpaperService()->createItemResult($fields);
+
+        $result = $this->getTestpaperService()->getItemResult($item['id']);
+        $this->assertArrayEquals($item, $result);
+    }
 
     public function testCreateItemResult()
     {
@@ -463,6 +622,9 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testFindPaperResultsStatusNumGroupByStatus()
     {
+        $result = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus(1, array(1));
+        $this->assertEmpty($result);
+
         $testpaper = $this->createTestpaper1();
 
         $paperResult1 = $this->createTestpaperResult1($testpaper);
@@ -509,6 +671,9 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testSearchTestpaperResultsCount()
     {
+        $result = $this->getTestpaperService()->searchTestpaperResultsCount(array());
+        $this->assertEmpty($result);
+
         $testpaper = $this->createTestpaper1();
         $testpaperResult1 = $this->createTestpaperResult1($testpaper);
         $testpaperResult2 = $this->createTestpaperResult2($testpaper);
@@ -648,9 +813,14 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('yes', $result['status']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
     public function testStartTestpaper()
     {
         $testpaper = $this->createTestpaper1();
+
+        $this->getTestpaperService()->startTestpaper($testpaper['id'], array());
 
         $fields = array(
             'lessonId' => 1,
@@ -662,6 +832,9 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals($testpaper['id'], $testpaperResult['testId']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
     public function testFinishTest()
     {
         $choiceQuestions = $this->generateChoiceQuestions(1, 2);
@@ -703,6 +876,30 @@ class TestpaperServiceTest extends BaseTestCase
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
         $this->assertEquals('finished', $result['status']);
+
+        $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
+    }
+
+    public function testCountQuestionTypes()
+    {
+        $result = $this->getTestpaperService()->countQuestionTypes(array('type' => 'homework'), array());
+        $this->assertEmpty($result);
+
+        $testpaper = array(
+            'type' => 'testpaper',
+            'metas' => array('counts' => array('single_choice' => 1, 'fill' => 0, 'material' => 1))
+        );
+        $items = array(
+            'single_choice' => array(array('score' => '2.0','missScore' => 0)),
+            'material' => array(array('subs' => array('score' => '5.0','missScore' => 0))),
+        );
+
+        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $items);
+
+        $this->assertEquals(1, $total['single_choice']['number']);
+        $this->assertEquals(1, $total['material']['number']);
+        $this->assertEquals(0, $total['single_choice']['missScore']);
+        $this->assertEquals(0, $total['material']['missScore']);
     }
 
     public function testShowTestpaperItems()
@@ -766,14 +963,30 @@ class TestpaperServiceTest extends BaseTestCase
         $fillQuestions = $this->generateFillQuestions(1, 2);
         $determineQuestions = $this->generateDetermineQuestions(1, 2);
         $essayQuestions = $this->generateEssayQuestions(1, 2);
+        $materialQuestions = $this->generateMaterialQuestions(1,1);
+        $question = array(
+            'type' => 'choice',
+            'stem' => 'test single choice question.',
+            'choices' => array(
+                'question -> choice 1',
+                'question -> choice 2',
+                'question -> choice 3',
+                'question -> choice 4',
+            ),
+            'answer' => array(1, 2),
+            'courseSetId' => 1,
+            'target' => 'course/1',
+            'parentId' => $materialQuestions[0]['id']
+        );
+        $this->getQuestionService()->create($question);
 
         $fields1 = array(
             'name' => 'testpaper',
             'description' => 'testpaper description',
             'mode' => 'range',
             'ranges' => array('courseId' => 0),
-            'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1),
-            'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2),
+            'counts' => array('choice' => 2, 'fill' => 2, 'determine' => 1,'material' => 1),
+            'scores' => array('choice' => 2, 'fill' => 2, 'determine' => 2, 'material' => 5),
             'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
             'courseSetId' => 1,
             'courseId' => 0,
@@ -890,16 +1103,32 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
+        $alreadyItemResult = array(
+            'itemId' => 10,
+            'testId' => $testpaper['id'],
+            'resultId' => 1,
+            'userId' => 1,
+            'questionId' => $fillQuestions[0]['id'],
+            'answer' => array(1),
+            'status' => 'wrong',
+            'score' => 0,
+        );
+        $this->getTestpaperService()->createItemResult($alreadyItemResult);
+
+        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], array(), array());
+        $this->assertEmpty($itemResults);
+
         $answers = array(
             $choiceQuestions[0]['id'] => array(2, 3),
             $fillQuestions[0]['id'] => array('fill answer'),
+            123 => array(1),
         );
 
         $answers = json_encode($answers);
 
         $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array());
 
-        $this->assertEquals(2, count($itemResults));
+        $this->assertEquals(3, count($itemResults));
     }
 
     public function testSumScore()
@@ -961,6 +1190,9 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testUpdateTestpaperItems()
     {
+        $result = $this->getTestpaperService()->updateTestpaperItems(123, array('questions'=>array()));
+        $this->assertFalse($result);
+
         $choiceQuestions = $this->generateChoiceQuestions(1, 4);
         $fillQuestions = $this->generateFillQuestions(1, 2);
         $determineQuestions = $this->generateDetermineQuestions(1, 2);
@@ -991,6 +1223,14 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaper = $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
 
         $this->assertEquals(count($items['questions']), $testpaper['itemCount']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testUpdateTestpaperItemsEmptyTestpaper()
+    {
+        $this->getTestpaperService()->updateTestpaperItems(123, array('questions'=>array(array('id' => 1))));
     }
 
     protected function createTestpaper1()

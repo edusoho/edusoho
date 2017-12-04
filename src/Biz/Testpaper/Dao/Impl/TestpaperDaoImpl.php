@@ -45,13 +45,6 @@ class TestpaperDaoImpl extends AdvancedDaoImpl implements TestpaperDao
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE copyId = ?  AND target IN {$lockedTarget}";
-
-        return $this->db()->fetchAll($sql, array($copyId));
-    }
-
     public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId)
     {
         return $this->getByFields(array('copyId' => $copyId, 'courseSetId' => $courseSetId));
