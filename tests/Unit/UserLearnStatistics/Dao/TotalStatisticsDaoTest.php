@@ -40,8 +40,6 @@ class TotalStatisticsDaoTest extends BaseTestCase
         return array(
             'userId' => '3',
             'joinedClassroomNum' => 1,
-            'joinedClassroomCourseSetNum' => 1,
-            'joinedClassroomCourseNum' => 1,
             'joinedCourseSetNum' => 1,
             'paidAmount' => 11,
         );

@@ -22,8 +22,6 @@ class LearnStatisticsServiceTest extends BaseTestCase
             array(
                 'userId' => 3,
                 'joinedClassroomNum' => 2,
-                'joinedClassroomCourseSetNum' => 2,
-                'joinedClassroomCourseNum' => 2,
                 'joinedCourseSetNum' => 2,
             ),
         );

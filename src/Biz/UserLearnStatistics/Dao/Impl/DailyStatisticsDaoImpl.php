@@ -13,7 +13,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
     public function statisticSearch($conditions, $orderBys)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('userId, sum(joinedClassroomNum) as joinedClassroomNum, sum(joinedClassroomCourseSetNum) as joinedClassroomCourseSetNum, sum(joinedClassroomCourseNum) as joinedClassroomCourseNum, sum(joinedCourseSetNum) as joinedCourseSetNum, sum(joinedCourseNum) as joinedCourseNum, sum(exitClassroomNum) as exitClassroomNum, max(createdTime), sum(exitCourseNum) as exitCourseNum, sum(finishedTaskNum) as finishedTaskNum, sum(learnedSeconds) as learnedSeconds, sum(actualAmount) as actualAmount')
+            ->select('userId, sum(joinedClassroomNum) as joinedClassroomNum, sum(joinedCourseSetNum) as joinedCourseSetNum, sum(joinedCourseNum) as joinedCourseNum, sum(exitClassroomNum) as exitClassroomNum, max(createdTime), sum(exitCourseNum) as exitCourseNum, sum(finishedTaskNum) as finishedTaskNum, sum(learnedSeconds) as learnedSeconds, sum(actualAmount) as actualAmount')
             ->groupBy('userId');
 
         $declares = $this->declares();

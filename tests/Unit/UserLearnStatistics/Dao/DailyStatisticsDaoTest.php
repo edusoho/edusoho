@@ -14,8 +14,6 @@ class DailyStatisticsDaoTest extends BaseTestCase
             array(
                 'userId' => '3',
                 'joinedClassroomNum' => 1,
-                'joinedClassroomCourseSetNum' => 1,
-                'joinedClassroomCourseNum' => 1,
                 'joinedCourseSetNum' => 1,
                 'paidAmount' => 11,
                 'recordTime' => 223334,
@@ -51,8 +49,6 @@ class DailyStatisticsDaoTest extends BaseTestCase
         return array(
             'userId' => '3',
             'joinedClassroomNum' => 1,
-            'joinedClassroomCourseSetNum' => 1,
-            'joinedClassroomCourseNum' => 1,
             'joinedCourseSetNum' => 1,
             'paidAmount' => 11,
             'recordTime' => time(),
