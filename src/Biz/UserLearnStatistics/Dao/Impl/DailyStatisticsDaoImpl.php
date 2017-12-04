@@ -53,13 +53,13 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
         if (empty($ids)) {
             return array();
         }
-        
+
         return $this->findInField('id', $ids);
     }
 
     public function updateStorageByIds($ids)
     {
-        return $this->update($ids, array('isStorage' => 1));
+        return $this->update(array('ids' => $ids), array('isStorage' => 1));
     }
 
     public function declares()
@@ -90,8 +90,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'recordTime < :recordTime_LT',
                 'recordTime <= :recordTime_LE',
                 'recordTime >= :recordTime_GE',
-            )
+            ),
         );
     }
 }
-
