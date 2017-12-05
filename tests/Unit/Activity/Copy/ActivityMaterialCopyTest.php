@@ -6,8 +6,8 @@ use Biz\BaseTestCase;
 use Biz\Course\Dao\CourseMaterialDao;
 
 /**
-* ActivityMaterialCopyTest
-*/
+ * ActivityMaterialCopyTest
+ */
 class ActivityMaterialCopyTest extends BaseTestCase
 {
     public function testDoCopy()
@@ -15,7 +15,7 @@ class ActivityMaterialCopyTest extends BaseTestCase
         $source = array();
         $options = array(
             'params' => array(
-                'title' => 'course by copy'
+                'title' => 'course by copy',
             ),
             'originActivity' => array(
                 'id' => 1,
@@ -33,11 +33,11 @@ class ActivityMaterialCopyTest extends BaseTestCase
             ),
             'newCourse' => array(
                 'id' => 2,
-                'courseSetId' => 2
+                'courseSetId' => 2,
             ),
             'newCourseSet' => array(
                 'id' => 2,
-                'title' => 'course by copy'
+                'title' => 'course by copy',
             ),
         );
         $this->mockBiz(
@@ -60,10 +60,10 @@ class ActivityMaterialCopyTest extends BaseTestCase
                             'source' => 'courseactivity',
                             'fileSize' => 100,
                             'userId' => 1,
-                            'type' => 'course'
+                            'type' => 'course',
                         ),
                     ),
-                    'withParams' => array($options['originActivity']['id'], 'courseactivity')
+                    'withParams' => array($options['originActivity']['id'], 'courseactivity'),
                 ),
                 array(
                     'functionName' => 'batchCreate',
@@ -82,7 +82,7 @@ class ActivityMaterialCopyTest extends BaseTestCase
                                 'source' => 'courseactivity',
                                 'fileSize' => '100',
                                 'userId' => 1,
-                                'type' => 'course'
+                                'type' => 'course',
                             ),
                         ),
                     ),
