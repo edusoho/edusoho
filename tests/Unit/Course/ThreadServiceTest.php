@@ -3,6 +3,7 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
+use Biz\Course\Service\ThreadService;
 
 class ThreadServiceTest extends BaseTestCase
 {
@@ -391,6 +392,19 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals($createdPost, array_shift($result));
     }
 
+    public function testCountPartakeThreadsByUserId()
+    {
+        $this->mockBiz('Course:ThreadDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1, 2, 3)),
+        ));
+
+        $this->mockBiz('Course:ThreadPostDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(3, 4, 5)),
+        ));
+
+        $this->assertEquals(5, $this->getThreadService()->countPartakeThreadsByUserId(1));
+    }
+
     protected function createDemoCourse()
     {
         $course = array(
@@ -409,6 +423,9 @@ class ThreadServiceTest extends BaseTestCase
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
