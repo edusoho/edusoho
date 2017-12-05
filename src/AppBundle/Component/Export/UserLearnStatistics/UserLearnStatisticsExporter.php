@@ -73,7 +73,7 @@ class UserLearnStatisticsExporter extends Exporter
 
     public function getTitles()
     {
-        return array('用户名', '加入班级数', '退出班级数', '加入计划数', '退出计划数', '学完任务数', '学习时长(分)', '消费总额(元)');
+        return array('user.learn.statistics.nickname', 'user.learn.statistics.join.classroom.num', 'user.learn.statistics.exit.classroom.num', 'user.learn.statistics.join.course.num', 'user.learn.statistics.exit.course.num', 'user.learn.statistics.finished.task.num', 'user.learn.statistics.learned.econds', 'user.learn.statistics.actual.amount');
     }
 
     public function buildCondition($conditions)
