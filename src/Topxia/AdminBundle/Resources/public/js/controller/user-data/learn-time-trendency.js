@@ -8,7 +8,7 @@ define(function (require, exports, module) {
       this.$container = $('.js-learn-data-trendency');
       this.dateArr = [];
       this.learnTime = [];
-      this.dateRangePicker = new OverviewDateRangePicker('.js-user-data-chart');
+      this.dateRangePicker = new OverviewDateRangePicker();
       this.init();
       this.initDateRangePicker();
     },

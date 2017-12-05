@@ -61,16 +61,16 @@
     <div class="user-data-title mbm">活跃度</div>
 
     <div id="date-range-picker">
-      <span class="select-content">
-        <input class="select-time-input js-date-range-input" type="text" name="course-datetime" value="{{ '-6 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
+      <span class="user-date-select">
+        <input class="user-date-select__range js-date-range-input" type="text" name="course-datetime" value="{{ '-6 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
         <i class="es-icon es-icon-arrowdropdown"></i>
       </span>
-      <a href="javascript:;" class="date-change is-date-change js-quick-day-pick week" data-days="7">{{ 'course.dashboard.student_trend_seven_days'|trans }}</a>
-      <a href="javascript:;" class="date-change is-date-change js-quick-day-pick month" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
-      <a href="javascript:;" class="date-change is-date-change js-quick-day-pick three-month" data-days="90">{{ '90天'|trans }}</a>
+      <a href="javascript:;" class="user-date-select__link js-quick-day-pick week" data-days="7">{{ 'course.dashboard.student_trend_seven_days'|trans }}</a>
+      <a href="javascript:;" class="user-date-select__link js-quick-day-pick month" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
+      <a href="javascript:;" class="user-date-select__link js-quick-day-pick three-month" data-days="90">{{ '90天'|trans }}</a>
     </div>
 
-    <div class="learn-data-chart-container js-chart-container mtl mbl" id="js-learn-data-trendency-chart" style="height:360px;"></div>
+    <div class="mtl mbl" id="js-learn-data-trendency-chart" style="height:360px;"></div>
   </div>
 
   <hr class="user-data-line">
@@ -100,5 +100,5 @@
 
   </div>
 
-{{ admin_macro.paginator(paginator) }}
+  {{ admin_macro.paginator(paginator) }}
 {% endblock %}

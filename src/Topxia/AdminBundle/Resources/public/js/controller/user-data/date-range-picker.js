@@ -29,7 +29,6 @@ define(function (require, exports, module) {
   OverviewDateRangePicker.prototype = new eventEmitter;
 
   OverviewDateRangePicker.prototype.getStartDate = function() {
-    console.log(this.$drp.data('daterangepicker').startDate);
     return this.$drp.data('daterangepicker').startDate.format('YYYY-MM-DD');
   },
 
