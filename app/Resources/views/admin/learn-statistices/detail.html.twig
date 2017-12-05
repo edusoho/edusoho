@@ -96,6 +96,8 @@
           <span>{{ course.process.percent }}%</span>
         </div>
       </div>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
     {% endfor %}
 
   </div>
