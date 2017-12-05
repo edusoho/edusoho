@@ -10,6 +10,10 @@ interface LearnStatisticsService
 
     public function getDailyLearnData($userId, $startTime, $endTime);
 
+    public function statisticsDataSearch($conditions);
+
+    public function statisticsDataCount($conditions);
+
     public function searchTotalStatistics($conditions, $order, $start, $limit);
 
     public function countTotalStatistics($conditions);
@@ -22,7 +26,7 @@ interface LearnStatisticsService
 
     public function batchCreateDailyStatistics($conditions);
 
-    public function batchDelatePastDailyStatistics($conditions);
+    public function batchDeletePastDailyStatistics($conditions);
 
     public function searchLearnData($conditions, $fields);
 

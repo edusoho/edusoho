@@ -160,6 +160,68 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(1, count($members));
     }
 
+    public function testSearchTotalStatistics()
+    {
+        $this->getTotalStatisticsDao()->create(array('userId' => 1));
+        $this->getTotalStatisticsDao()->create(array('userId' => 2));
+
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array(), array(), 0, 2);
+        $this->assertEquals(2, count($result));
+
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array('userId' => 1), array(), 0, 2);
+        $this->assertEquals(1, count($result));
+
+        $result = $this->getLearnStatisticsService()->searchTotalStatistics(array(), array(), 0, 1);
+        $this->assertEquals(1, count($result));
+    }
+
+    public function testCountTotalStatistics()
+    {
+        $this->getTotalStatisticsDao()->create(array('userId' => 1));
+        $this->getTotalStatisticsDao()->create(array('userId' => 2));
+
+        $count = $this->getLearnStatisticsService()->countTotalStatistics(array());
+        $this->assertEquals(2, $count);
+
+        $count = $this->getLearnStatisticsService()->countTotalStatistics(array('userId' => 1));
+        $this->assertEquals(1, $count);
+    }
+
+    public function testSearchDailyStatistics()
+    {
+        $this->getDailyStatisticsDao()->create(array('userId' => 1));
+        $this->getDailyStatisticsDao()->create(array('userId' => 2));
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, 2);
+        $this->assertEquals(2, count($result));
+
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array('userId' => 1), array(), 0, 2);
+        $this->assertEquals(1, count($result));
+
+        $result = $this->getLearnStatisticsService()->searchDailyStatistics(array(), array(), 0, 1);
+        $this->assertEquals(1, count($result));
+    }
+
+    public function batchDeletePastDailyStatistics()
+    {
+        $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 2));
+        $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 3));
+        $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 10));
+        $this->getDailyStatisticsDao()->create(array('userId' => 2, 'recordTime' => 3));
+
+        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(array('recordTime_GE' => 10));
+        $this->assertEquals(3, $this->getDailyStatisticsDao()->count(array()));
+        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(array('userIds' => array('1')));
+        $this->assertEquals(1, $this->getDailyStatisticsDao()->count(array()));
+    }
+
+    public function getStatisticsSetting()
+    {
+        $setting = $this->getLearnStatisticsService()->getStatisticsSetting();
+        $this->assertNotEmpty($setting);
+        $this->assertNotEmpty($setting['timespan']);
+        $this->assertNotEmpty($setting['currentTime']);
+    }
+
     /**
      * @return LearnStatisticsService
      */

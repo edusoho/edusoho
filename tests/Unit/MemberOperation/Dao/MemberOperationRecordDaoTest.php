@@ -3,6 +3,7 @@
 namespace Tests\Unit\MemberOperation\Dao;
 
 use Tests\Unit\Base\BaseDaoTestCase;
+use AppBundle\Common\ArrayToolkit;
 
 class MemberOperationRecordDaoTest extends BaseDaoTestCase
 {
@@ -102,6 +103,46 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
         $result = $this->getDao()->countGroupByDate(array('target_id' => 1), 'ASC');
 
         $this->assertEquals(2, $result[1]['count']);
+    }
+
+    public function testCountGroupByUserId()
+    {
+        $expected1 = $this->mockDataObject();
+        $expected2 = $this->mockDataObject(array('user_id' => '2'));
+        $expected3 = $this->mockDataObject(array('user_id' => '2', 'target_type' => 'classroom', 'target_id' => 3));
+        $expected4 = $this->mockDataObject(array('user_id' => '2', 'target_type' => 'classroom', 'target_id' => 3));
+        $expected5 = $this->mockDataObject(array('user_id' => '2', 'target_type' => 'classroom', 'target_id' => 5));
+
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join'));
+        $result = ArrayToolkit::index( $result, 'user_id');
+        $this->assertEquals(3, $result[2]['count']);
+        $this->assertEquals(1, $result[1]['count']);
+
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'exit'));
+        $this->assertEmpty($result);
+
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'user_id' => 1));
+        $result = ArrayToolkit::index( $result, 'user_id');
+
+        $this->assertTrue(empty($result[2]));
+        $this->assertEquals(1, $result[1]['count']);   
+
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'user_id' => 1));
+        $result = ArrayToolkit::index( $result, 'user_id');
+        $this->assertTrue(empty($result[2]));
+        $this->assertEquals(1, $result[1]['count']);  
+
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join','target_type' => 'classroom'));
+        $result = ArrayToolkit::index( $result, 'user_id');
+        $this->assertTrue(empty($result[1]));
+        $this->assertEquals(2, $result[2]['count']); 
+
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'user_ids' => array(1)));
+        $result = ArrayToolkit::index($result, 'user_id');
+        $this->assertTrue(empty($result[2]));
+
+        $result = $this->getDao()->countGroupByUserId('id', array('operate_type' => 'join', 'user_ids' => array(1)));
+        $this->assertTrue(empty($result));
     }
 
     protected function getDefaultMockFields()

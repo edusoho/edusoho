@@ -14,7 +14,7 @@
         <input class="form-control" type="text" name="nickname" placeholder="用户名" value="{{ app.request.query.get('nickname') }}">
         <input type="hidden" name="isDefault" value="{{ isDefault|default(false) }}">
       </div>
-      <a class="btn btn-primary" id="default-search">默认搜索</a>
+      <a class="btn btn-primary" id="default-search">默认排序</a>
       <a class="btn btn-primary" id="search">搜索</a>
       {% include 'export/export-btn.html.twig' with 
       { 'exportFileName': 'user-learn-statistics', 
