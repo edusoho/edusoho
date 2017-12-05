@@ -9,6 +9,7 @@ define(function (require, exports, module) {
       this.dateArr = [];
       this.learnTime = [];
       this.totalTime = 0;
+      this.learnTimeTrendencyChart = null;
       this.dateRangePicker = new OverviewDateRangePicker();
       this.init();
     },
