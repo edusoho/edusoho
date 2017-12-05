@@ -57,7 +57,7 @@ class UserLearnStatisticsController extends BaseController
             empty($overview['learningCoursesCount']) ? 0 : $overview['learningCoursesCount'],
             10
         );
-        list($courses, $courseSets, $members) = $this->getLearnStatisticsService()->getLearningCourseDetails(
+        list($courses, $courseSets, $members) = $this->getLearnStatisticsService()->findLearningCourseDetails(
             $userId,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()

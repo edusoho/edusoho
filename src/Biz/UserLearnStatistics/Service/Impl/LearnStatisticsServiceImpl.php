@@ -303,7 +303,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         );
     }
 
-    public function getLearningCourseDetails($userId, $start, $limit)
+    public function findLearningCourseDetails($userId, $start, $limit)
     {
         $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId, 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         if (empty($members)) {
