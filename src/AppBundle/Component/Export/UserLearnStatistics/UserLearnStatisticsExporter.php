@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Export\UserLearnStatistics;
 
 use AppBundle\Common\MathToolkit;
@@ -33,7 +34,7 @@ class UserLearnStatisticsExporter extends Exporter
         $conditions = array_merge($this->conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
 
         $statistics = $this->getLearnStatisticsService()->statisticsDataSearch(
-            $conditions, 
+            $conditions,
             $this->orderBy
         );
 
@@ -50,7 +51,7 @@ class UserLearnStatisticsExporter extends Exporter
         foreach ($users as $key => $user) {
             $member = array();
             $statistic = !empty($statistics[$user['id']]) ? $statistics[$user['id']] : false;
-            
+
             if ($statistic) {
                 $member[] = $user['nickname'];
                 $member[] = $statistic['joinedClassroomNum'];
@@ -58,12 +59,12 @@ class UserLearnStatisticsExporter extends Exporter
                 $member[] = $statistic['joinedCourseNum'];
                 $member[] = $statistic['exitCourseNum'];
                 $member[] = $statistic['finishedTaskNum'];
-                $member[] =  number_format($statistic['learnedSeconds'] / 60, 2, '.', ',');
+                $member[] = number_format($statistic['learnedSeconds'] / 60, 2, '.', ',');
                 $member[] = MathToolkit::simple($statistic['actualAmount'], 0.01);
             } else {
                 $member = array($user['nickname'], 0, 0, 0, 0, 0, 0, 0);
             }
-            
+
             $statisticsContent[] = $member;
         }
 
