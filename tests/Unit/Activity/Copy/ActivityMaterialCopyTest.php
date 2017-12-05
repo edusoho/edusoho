@@ -3,6 +3,7 @@
 namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
+use Biz\Course\Dao\CourseMaterialDao;
 
 /**
 * ActivityMaterialCopyTest
