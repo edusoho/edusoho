@@ -51,7 +51,7 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
         if (empty($ids)) {
             return array();
         }
-        
+
         return $this->findInField('id', $ids);
     }
 
@@ -66,7 +66,7 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
                 'updatedTime',
                 'userId',
                 'joinedCourseNum',
-                'actualAmount'
+                'actualAmount',
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
@@ -79,8 +79,7 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
                 'createdTime <= :createTime_LE',
                 'updatedTime >= :updateTime_GE',
                 'updatedTime <= :updateTime_LE',
-            )
+            ),
         );
     }
 }
-

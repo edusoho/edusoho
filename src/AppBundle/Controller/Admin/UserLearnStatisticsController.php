@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\AuthService;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserLearnStatisticsController extends BaseController
@@ -15,7 +14,7 @@ class UserLearnStatisticsController extends BaseController
             'startDate' => '',
             'endDate' => '',
             'nickname' => '',
-            'isDefault' => 'false'
+            'isDefault' => 'false',
         );
         $conditions = $request->query->all();
 
@@ -31,25 +30,24 @@ class UserLearnStatisticsController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $conditions = array_merge($conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
-        
+
         $statistics = $this->getLearnStatisticsService()->statisticsDataSearch($conditions);
 
         $timespan = $this->getLearnStatisticsService()->getTimespan();
-        
+
         return $this->render('admin/learn-statistics/show.html.twig', array(
             'statistics' => ArrayToolkit::index($statistics, 'userId'),
             'paginator' => $paginator,
             'users' => $users,
             'timespan' => $timespan,
-            'isDefault' => $conditions['isDefault']
+            'isDefault' => $conditions['isDefault'],
         ));
     }
 
     public function syncDailyData()
     {
-        
     }
 
     protected function getLearnStatisticsService()
