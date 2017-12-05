@@ -4,6 +4,10 @@ namespace Biz\UserLearnStatistics\Service;
 
 interface LearnStatisticsService
 {
+    public function statisticsDataSearch($conditions);
+
+    public function statisticsDataCount($conditions);
+    
     public function searchTotalStatistics($conditions, $order, $start, $limit);
 
     public function countTotalStatistics($conditions);
