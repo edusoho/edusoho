@@ -86,14 +86,14 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
     }
 
-    public function batchDelatePastDailyStatistics($conditions)
+    public function batchDeletePastDailyStatistics($conditions)
     {
         try {
             $this->beginTransaction();
             $this->getDailyStatisticsDao()->batchDelete($conditions);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchDelatePastDailyStatistics:'.$e->getMessage());
+            $this->getLogger()->error('batchDeletePastDailyStatistics:'.$e->getMessage());
             $this->rollback();
             throw $e;
         }
