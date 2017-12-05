@@ -5,7 +5,6 @@ namespace ApiBundle\EventListener;
 use ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
-use Topxia\Service\Common\ServiceKernel;
 
 class AuthenticateListener
 {
@@ -39,9 +38,13 @@ class AuthenticateListener
         $this->getOnlineService()->saveOnline($online);
     }
 
+    /**
+     * @return \Codeages\Biz\Framework\Session\Service\OnlineService
+     */
     private function getOnlineService()
     {
-        return ServiceKernel::instance()->createService('Session:OnlineService');
+        $biz = $this->container->get('biz');
+        return $biz->createService('Session:OnlineService');
     }
 
 }
