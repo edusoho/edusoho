@@ -15,7 +15,7 @@ define(function (require, exports, module) {
 
     init: function() {
       var self = this;
-      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
+      this.learnTimeTrendencyChart = echarts.init(document.getElementById('learn-data-trendency-chart'));
       this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
       self.dateRangePicker.on('date-picked', function(data) {
         self.showData(data);

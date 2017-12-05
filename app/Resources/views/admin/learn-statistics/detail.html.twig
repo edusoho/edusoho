@@ -4,6 +4,7 @@
 
 {% set script_controller = 'user-data/index' %}
 
+{% set body_class = 'user-data' %}
 
 {% block page_title %}
   <div class="mbm">
@@ -67,7 +68,7 @@
       <a href="javascript:;" class="user-date-select__link js-quick-day-pick month gray-darker" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
       <a href="javascript:;" class="user-date-select__link js-quick-day-pick three-month" data-days="90">{{ 'admin.user.statistics.data_detail.student_trend_ninety_days'|trans }}</a>
     </div>
-    <div class="mtl mbl" id="js-learn-data-trendency-chart" style="height:360px;"></div>
+    <div class="mtl mbl" id="learn-data-trendency-chart" style="height:360px;"></div>
   </div>
 
   <hr class="user-data-line">
