@@ -104,8 +104,14 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
 
         $result = $this->getDao()->sumLearnTimeGroupByUserId(array('createdTime_GE' => $time + 10 * 3600));
         $result = ArrayToolkit::index($result, 'userId');
-
         $this->assertEmpty($result);
+
+        $result = $this->getDao()->sumLearnTimeGroupByUserId(array('userIds' => array(3)));
+        $this->assertEmpty($result);
+
+        $result = $this->getDao()->sumLearnTimeGroupByUserId(array('userIds' => array(2)));
+        $result = ArrayToolkit::index($result, 'userId');
+        $this->assertEquals('11', $result[2]['learnedTime']);
     }
 
     protected function fetchAndAssembleIds(array $rawInput)
