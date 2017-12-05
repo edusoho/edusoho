@@ -8,6 +8,20 @@ use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
+    public function statisticsDataSearch($conditions)
+    {
+        list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
+
+        return $this->getStatisticsDao($daoType)->statisticSearch($conditions, $order);
+    }
+
+    public function statisticsDataCount($conditions)
+    {
+        list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
+
+        return $this->getStatisticsDao($daoType)->statisticCount($conditions);
+    }
+
     public function searchTotalStatistics($conditions, $order, $start, $limit)
     {
         return $this->getTotalStatisticsDao()->search($conditions, $order, $start, $limit);
@@ -123,7 +137,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         foreach ($userIds as $userId) {
-            if ($userId == 0) {
+            if (0 == $userId) {
                 continue;
             }
             $statistic = array();
@@ -140,6 +154,38 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         return $statistics;
+    }
+
+    private function analysisCondition($conditions)
+    {
+        if (!empty($conditions['isDefault']) && 'true' == $conditions['isDefault']) {
+            $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
+        } else {
+            $orderBy = array('id' => 'DESC');
+        }
+
+        $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $daoType = 'Daily';
+            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
+            $conditions['recordTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : strtotime(date('Y-m-d', time()));
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        } else {
+            $daoType = 'Total';
+        }
+
+        return array($conditions,  $orderBy, $daoType);
+    }
+
+    public function getTimespan()
+    {
+        $settings = $this->getSettingService()->get('learn_statistics');
+        if (!empty($settings) && $settings['timespan'] == strtotime('1971/1/1 8:0:0')) {
+            $settings['timespan'] = 24 * 60 * 60 * 365;
+        }
+
+        return date('Y-m-d', time() - $settings['timespan']);
     }
 
     public function storageDailyStatistics($limit = 1000)
@@ -242,7 +288,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 'parent_id' => 0,
             )
         );
-        $operation == 'join' ? $conditions['join_course_set'] = 1 : $conditions['exit_course_set'] = 1;
+        'join' == $operation ? $conditions['join_course_set'] = 1 : $conditions['exit_course_set'] = 1;
 
         return $this->getMemberOperationService()->countGroupByUserId('course_set_id', $conditions);
     }
@@ -363,5 +409,15 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getTotalStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:TotalStatisticsDao');
+    }
+
+    protected function getStatisticsDao($daoType)
+    {
+        return $this->createDao("UserLearnStatistics:{$daoType}StatisticsDao");
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

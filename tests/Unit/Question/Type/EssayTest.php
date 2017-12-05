@@ -4,7 +4,6 @@ namespace Tests\Unit\Question;
 
 use Biz\Question\Type\Essay;
 use Biz\BaseTestCase;
-use Biz\Common\HTMLHelper;
 
 class EssayTest extends BaseTestCase
 {
@@ -53,7 +52,7 @@ class EssayTest extends BaseTestCase
         $typeObj = $this->creatQuestionType();
 
         $fields = array(
-            'answer' => array('this is answer')
+            'answer' => array('this is answer'),
         );
 
         $filter = $typeObj->filter($fields);

@@ -4,7 +4,6 @@ namespace Tests\Unit\Question;
 
 use Biz\Question\Type\Choice;
 use Biz\BaseTestCase;
-use Biz\Common\HTMLHelper;
 
 class ChoiceTest extends BaseTestCase
 {
@@ -35,12 +34,12 @@ class ChoiceTest extends BaseTestCase
         $result = $typeObj->get(1);
         $this->assertNull($result);
     }
-    
+
     public function testJudgeRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array('1','2'),'score'=>'2.0','missScore'=>'1.0');
-        $answer = array('1','2');
+        $question = array('answer' => array('1', '2'), 'score' => '2.0', 'missScore' => '1.0');
+        $answer = array('1', '2');
 
         $result = $typeObj->judge($question, $answer);
 
@@ -51,7 +50,7 @@ class ChoiceTest extends BaseTestCase
     public function testJudgePartRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array('1','2'),'score'=>'2.0','missScore'=>'1.0');
+        $question = array('answer' => array('1', '2'), 'score' => '2.0', 'missScore' => '1.0');
         $answer = array('1');
 
         $result = $typeObj->judge($question, $answer);
@@ -64,7 +63,7 @@ class ChoiceTest extends BaseTestCase
     public function testJudgeWrong()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array('1','2'),'score'=>'2.0','missScore'=>'1.0');
+        $question = array('answer' => array('1', '2'), 'score' => '2.0', 'missScore' => '1.0');
         $answer = array('3');
 
         $result = $typeObj->judge($question, $answer);
@@ -78,7 +77,7 @@ class ChoiceTest extends BaseTestCase
         $typeObj = $this->creatQuestionType();
 
         $fields = array(
-            'choices' => array('choice1','choice2','choice3','choice4')
+            'choices' => array('choice1', 'choice2', 'choice3', 'choice4'),
         );
 
         $filter = $typeObj->filter($fields);
@@ -94,5 +93,4 @@ class ChoiceTest extends BaseTestCase
 
         return $choice;
     }
-
 }
