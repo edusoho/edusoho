@@ -1,7 +1,5 @@
 define(function (require, exports, module) {
 
-  var DateRangePicker = require('bootstrap.daterangepicker');
-  require('echarts');
   var LearnTimeTrendency = require('./learn-time-trendency');
 
   exports.run = function() {
