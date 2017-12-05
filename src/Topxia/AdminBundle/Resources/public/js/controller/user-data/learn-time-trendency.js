@@ -85,7 +85,7 @@ define(function (require, exports, module) {
           },
           series: [
             {
-              name: '总时长',
+              name: '时长',
               type: 'line',
               smooth: true,
               itemStyle: {
