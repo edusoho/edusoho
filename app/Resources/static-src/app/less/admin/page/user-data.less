@@ -10,16 +10,11 @@
   }
 }
 
-.user-data-title {
-  font-size: 18px;
-  line-height: 1;
-}
-
 .user-data-line {
   border-top: 2px solid #eee;
 }
 
-.user-date-select {
+.user-data-select {
   position: relative;
   margin-right: 20px;
   display: inline-block;
@@ -33,7 +28,7 @@
   }
 }
 
-.user-date-select__range {
+.user-data-select__range {
   position: relative;
   padding: 6px 12px;
   width: 189px;
@@ -52,7 +47,7 @@
   }
 }
 
-.user-date-select__link {
+.user-data-select__link {
   padding-left: 15px;
   color: rgba(0, 0, 0, 0.3);
   &:hover,
@@ -61,45 +56,33 @@
   }
 }
 
-.user-teaching-plan {
+.user-data-teaching-plan {
   padding: 40px;
-  -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.01), 0 4px 4px 0 rgba(0, 0, 0, 0.04);
-  -moz-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.01), 0 4px 4px 0 rgba(0, 0, 0, 0.04);
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.01), 0 4px 4px 0 rgba(0, 0, 0, 0.04);
+  .admin-box-shadow;
 }
 
-.user-teaching-plan__info {
+.user-data-teaching-plan__info {
   float: left;
-  width: 50%;
+  width: 48%;
 }
 
-.user-teaching-plan__progress {
-  float: right;
-  margin-top: 16px;
-  width: 50%;
-  .plan-progress {
-    margin-left: 16px;
-    margin-right: 12px;
-    display: inline-block;
-  }
-}
-
-.user-teaching-plan__title {
+.user-data-teaching-plan__title {
   margin-bottom: 8px;
   font-size: 18px;
-  font-weight: 500;
   line-height: 1;
 }
 
-.plan-progress {
-  width: 63%;
-  color: #fff;
-  background-color: rgba(0, 0, 0, .08);
-  text-align: right;
-  font-weight: bold;
-  font-size: 14px;
-  vertical-align: middle;
-  &.plan-progress-xs {
-    height: 4px;
+.user-data-teaching-plan__money {
+  margin-left: 28px;
+}
+
+.user-data-teaching-plan__progress {
+  float: right;
+  margin-top: 16px;
+  width: 50%;
+  .es-admin-progress {
+    margin-left: 16px;
+    margin-right: 12px;
+    display: inline-block;
   }
 }
