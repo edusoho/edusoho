@@ -130,11 +130,35 @@ class LearnStatisticsServiceTest extends BaseTestCase
 
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'searchMembers', 'returnValue' => array(
-                1 => array('courseId' => )
+                1 => array('courseId' => 2, 'orderId' => 2),
             )),
         ));
-    }
 
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'findOrdersByIds', 'returnValue' => array()),
+        ));
+
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'searchCourses', 'returnValue' => array(
+                1 => array('id' => 1, 'courseSetId' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'findCourseSetsByIds', 'returnValue' => array(
+                1 => array('id' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Course:LearningDataAnalysisService', array(
+            array('functionName' => 'getUserLearningProgress', 'returnValue' => array('percent' => 90)),
+        ));
+
+        list($learnCourses, $courseSets, $members) = $this->getLearnStatisticsService()->getLearningCourseDetails($user->getId(), 1, 10);
+        $this->assertEquals(1, count($learnCourses));
+        $this->assertEquals(1, count($courseSets));
+        $this->assertEquals(1, count($members));
+    }
 
     /**
      * @return LearnStatisticsService
