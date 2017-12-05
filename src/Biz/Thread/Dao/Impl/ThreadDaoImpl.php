@@ -10,7 +10,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 {
     protected $table = 'thread';
 
-    public function findThreadIds($conditions)
+    public function searchThreadIds($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('id');
