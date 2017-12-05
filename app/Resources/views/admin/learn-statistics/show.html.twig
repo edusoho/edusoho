@@ -11,7 +11,7 @@
         <input class="form-control" type="text" id="startDate" name="startDate" value="{{ app.request.query.get('startDate') }}" data-min-time="{{ timespan }}" placeholder="{{ 'user.learn.statistics.start_time'|trans }}">
         -
         <input class="form-control" type="text" id="endDate" name="endDate" value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'user.learn.statistics.end_time'|trans }}">
-        <input class="form-control" type="text" name="nickname" placeholder="用户名" value="{{ app.request.query.get('nickname') }}">
+        <input class="form-control" type="text" name="nickname" placeholder="{{'user.learn.statistics.nickname'|trans}}" value="{{ app.request.query.get('nickname') }}">
         <input type="hidden" name="isDefault" value="{{ isDefault|default(false) }}">
       </div>
       <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a>
