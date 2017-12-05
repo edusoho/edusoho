@@ -174,9 +174,9 @@ class ReviewServiceTest extends BaseTestCase
     {
         $this->mockBiz('Course:CourseService', array(
             array(
-                'functionName' => 'tryTakeCourse', 
-                'returnValue' => array(array(), array())
-            )
+                'functionName' => 'tryTakeCourse',
+                'returnValue' => array(array(), array()),
+            ),
         ));
 
         $fields = array(
@@ -198,9 +198,9 @@ class ReviewServiceTest extends BaseTestCase
     {
         $this->mockBiz('Course:CourseService', array(
             array(
-                'functionName' => 'tryTakeCourse', 
-                'returnValue' => array(array('id' => 1, 'courseSetId' => 1,'status' => 'published'), array('learnedNum' => 1))
-            )
+                'functionName' => 'tryTakeCourse',
+                'returnValue' => array(array('id' => 1, 'courseSetId' => 1, 'status' => 'published'), array('learnedNum' => 1)),
+            ),
         ));
 
         $fields = array(
@@ -283,7 +283,7 @@ class ReviewServiceTest extends BaseTestCase
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',
-            'roles' => array('ROLE_USER','ROLE_TEACHER')
+            'roles' => array('ROLE_USER', 'ROLE_TEACHER'),
         ));
         $user = new CurrentUser();
         $user->fromArray($user1);

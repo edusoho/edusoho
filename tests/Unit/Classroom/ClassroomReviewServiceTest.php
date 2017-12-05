@@ -172,7 +172,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
             'content' => 'test_content',
             'classroomId' => 123,
             'rating' => 6,
-            'userId' => 1
+            'userId' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
     }
@@ -215,12 +215,12 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $classroom = array(
             'title' => 'test',
         );
-        
+
         $this->mockBiz('Classroom:ClassroomService', array(
             array(
-                'functionName' => 'tryTakeClassroom', 
-                'returnValue' => array()
-            )
+                'functionName' => 'tryTakeClassroom',
+                'returnValue' => array(),
+            ),
         ));
 
         $fields1 = array(
@@ -364,7 +364,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
             'createdIp' => '127.0.0.1',
             'orgCode' => '1.',
             'orgId' => '1',
-            'roles' => array('ROLE_USER','ROLE_TEACHER')
+            'roles' => array('ROLE_USER', 'ROLE_TEACHER'),
         ));
         $user = new CurrentUser();
         $user->fromArray($user1);
