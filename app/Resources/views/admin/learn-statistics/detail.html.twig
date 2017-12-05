@@ -84,7 +84,8 @@
       {% set member = members[course.id] %}
       <div class="user-teaching-plan clearfix">
         <div class="user-teaching-plan__info">
-          <div class="user-teaching-plan__title text-overflow"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ courseSet.title }}-{{ course.title }}</a></div>
+          <div class="user-teaching-plan__title text-overflow">{{ 'admin.course_manage.statistics.name'|trans }}：{{ courseSet.title }}</div>
+          <div class="user-teaching-plan__title text-overflow">{{ 'admin.user.statistics.data_detail.teaching_plan_name'|trans }}：<a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a></div>
           <div class="user-teaching-plan__time">{{ 'join.time'|trans }}：<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
           <div class="user-teaching-plan__money">{{ 'course.price'|trans }}：<span>{{ member.order.pay_amount|default(0)|to_cash(1) }}</span></div>
         </div>
