@@ -55,7 +55,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
     {
         $this->getTotalStatisticsDao()->create(array('userId' => 1));
         $this->getTotalStatisticsDao()->create(array('userId' => 2));
-       
+
         $result = $this->getLearnStatisticsService()->searchTotalStatistics(array(), array(), 0, 2);
         $this->assertEquals(2, count($result));
 
@@ -70,7 +70,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
     {
         $this->getTotalStatisticsDao()->create(array('userId' => 1));
         $this->getTotalStatisticsDao()->create(array('userId' => 2));
-       
+
         $count = $this->getLearnStatisticsService()->countTotalStatistics(array());
         $this->assertEquals(2, $count);
 
