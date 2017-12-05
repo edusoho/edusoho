@@ -108,14 +108,13 @@ AT With Java And Selenium:
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
     # 安装插件
     - git clone -b feature/remote-driver http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
-    #- /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/.m2 compile
-    #- /opt/apache-maven-3.5.2/bin/mvn -q -Dmaven.repo.local=/.m2 exec:java -Dexec.mainClass="com.eduosho.InitEnv" -Dfile.encoding=UTF-8 -Duser.language=zh -Duser.country=CN -Dexec.args="mysql"
     - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
     - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
-    - app/console server:start
+    - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
+    - app/console server:start $SERVICE_IP:8000
     - cd GUIAutomation2
+    - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
     - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
-    #- while true; do echo 'Hit CTRL+C'; sleep 1; done
   only:
       - schedules
       - triggers
