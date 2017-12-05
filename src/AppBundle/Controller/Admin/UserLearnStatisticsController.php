@@ -37,6 +37,7 @@ class UserLearnStatisticsController extends BaseController
 
     public function detailAction(Request $request, $userId)
     {
+        $user = $this->getUserService()->getUser($userId);
         $overview = $this->getLearnStatisticsService()->getUserOverview($userId);
         $paginator = new Paginator(
             $request,
@@ -55,6 +56,7 @@ class UserLearnStatisticsController extends BaseController
             'courseSets' => $courseSets,
             'paginator' => $paginator,
             'members' => $members,
+            'user' => $user,
         ));
     }
 

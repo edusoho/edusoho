@@ -7,12 +7,12 @@
 
 {% block page_title %}
   <div class="mbm">
-    <img class="user-data-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
-    <span class="mlm">{{ app.user.nickname }}</span>
+    <img class="user-data-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+    <span class="mlm">{{ user.nickname }}</span>
   </div>
 {% endblock %}
 {% block page_buttons %}
-  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:app.user.id}) }}" target="_blank">个人主页</a>
+  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
 {% endblock %}
 
 {% block main %}
@@ -57,7 +57,7 @@
   </div>
   <hr class="user-data-line">
 
-  <div class="user-data-chart js-learn-data-trendency" data-url={{ path('admin_user_learn_chart', {userId: app.request.get('userId')}) }}>
+  <div class="user-data-chart js-learn-data-trendency" data-url={{ path('admin_user_learn_chart', {userId: user.id}) }}>
     <div class="user-data-title mbm">活跃度</div>
 
     <div id="date-range-picker">
