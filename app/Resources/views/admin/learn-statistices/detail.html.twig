@@ -12,7 +12,7 @@
   </div>
 {% endblock %}
 {% block page_buttons %}
-  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
+  <a class="btn btn-success btn-sm" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ 'admin.user.fields.personal_menu_label'|trans }}</a>
 {% endblock %}
 
 {% block main %}
@@ -34,7 +34,7 @@
         <div class="popover-content hidden">
           <div class="popover-item">
             <div class="content">
-              {{ '平均计划进度为所有计划的平均数'|trans }}
+              {{ 'admin.user.statistics.data_detail.plan_progress_tip'|trans }}
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@
       </span>
       <a href="javascript:;" class="user-date-select__link js-quick-day-pick week" data-days="7">{{ 'course.dashboard.student_trend_seven_days'|trans }}</a>
       <a href="javascript:;" class="user-date-select__link js-quick-day-pick month gray-darker" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
-      <a href="javascript:;" class="user-date-select__link js-quick-day-pick three-month" data-days="90">{{ '90天'|trans }}</a>
+      <a href="javascript:;" class="user-date-select__link js-quick-day-pick three-month" data-days="90">{{ 'admin.user.statistics.data_detail.student_trend_ninety_days'|trans }}</a>
     </div>
 
     <div class="mtl mbl" id="js-learn-data-trendency-chart" style="height:360px;"></div>

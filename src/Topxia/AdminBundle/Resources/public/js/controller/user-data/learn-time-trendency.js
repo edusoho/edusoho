@@ -49,6 +49,16 @@ define(function (require, exports, module) {
 
     show: function(time, data) {
       var option = {
+          title: {
+            text: Translator.trans('admin.user.statistics.data.learn_total_time') +':' + this.totalTime,
+            x: "41%",
+            y: "60%",
+            textStyle: {
+              fontSize: 18,
+              fontWeight: 'normal',
+              color: 'rgba(0, 0, 0, 0.3)'
+            },
+          },
           tooltip: {
             trigger: 'axis'
           },
@@ -66,18 +76,17 @@ define(function (require, exports, module) {
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            // 日期
             data: data
           },
           yAxis: {
-            name: '学习时长/分钟',
+            name: Translator.trans('admin.user.statistics.data.learn_time'),
             type: 'value',
             min: 0,
             splitNumber: 1,
           },
           series: [
             {
-              name: '时长',
+              name: Translator.trans('admin.user.statistics.data.time'),
               type: 'line',
               smooth: true,
               itemStyle: {
@@ -87,7 +96,6 @@ define(function (require, exports, module) {
                   }
                 }
               },
-              // 学习时间
               data: time
             }
           ],
