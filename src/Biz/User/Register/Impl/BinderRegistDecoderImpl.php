@@ -19,9 +19,6 @@ class BinderRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataBeforeSave($registration, $user)
     {
-        $type = $registration['type'];
-        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-
         if (!empty($registration['password'])) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
@@ -39,6 +36,9 @@ class BinderRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataAfterSave($registration, $user)
     {
+        if (empty($registration['authid']) && !empty($registration['token']['userId'])) {
+            $registration['authid'] = $registration['token']['userId'];
+        }
         $this->getUserService()->bindUser(
             $registration['type'],
             $registration['authid'],

@@ -4,11 +4,7 @@
     var paths = [
       {% for path in script() %}
         {% if '//' in path %}
-          {% if 'js-sdk' in path %}
-            "{{ path ~ '?' ~ (date().timestamp / 100)|round }}",
-          {% else %}
-            "{{ path ~ '?' ~ asset_version('')}}",
-          {% endif %}
+          "{{ path ~ '?' ~ asset_version('')}}",
         {% else %}
           "{{ asset('static-dist/' ~ path) }}",
         {% endif %}

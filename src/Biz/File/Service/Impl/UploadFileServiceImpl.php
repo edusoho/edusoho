@@ -1365,21 +1365,3 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->biz['file_fire_wall_factory'];
     }
 }
-
-class FileFilter
-{
-    public static function filters($files)
-    {
-        $filterResult = array();
-
-        if (empty($files)) {
-            return $filterResult;
-        }
-
-        foreach ($files as $index => $file) {
-            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
-        }
-
-        return $filterResult;
-    }
-}

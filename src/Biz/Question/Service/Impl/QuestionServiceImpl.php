@@ -3,7 +3,6 @@
 namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
@@ -99,7 +98,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $fields = $questionConfig->filter($fields);
 
         if (!empty($question['parentId'])) {
-            $parentQuestion = $this->get($fields['parentId']);
+            $parentQuestion = $this->get($question['parentId']);
             $fields['courseId'] = $parentQuestion['courseId'];
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
@@ -290,7 +289,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($questionId);
     }
 
-    public function filterQuestionFields($conditions)
+    protected function filterQuestionFields($conditions)
     {
         if (!empty($conditions['range']) && $conditions['range'] == 'lesson') {
             $conditions['lessonId'] = 0;
@@ -370,13 +369,5 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 }

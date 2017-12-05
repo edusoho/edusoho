@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Common;
+namespace AppBundle\Twig;
 
 use Asm89\Twig\CacheExtension\CacheProviderInterface;
 use Asm89\Twig\CacheExtension\CacheStrategyInterface;

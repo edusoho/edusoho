@@ -36,6 +36,8 @@ class WebExtension extends \Twig_Extension
 
     protected $locale;
 
+    protected $defaultCloudSdkHost;
+
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
@@ -156,7 +158,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
             new \Twig_SimpleFunction('get_login_email_address', array($this, 'getLoginEmailAddress')),
-            new \Twig_SimpleFunction('get_upload_sdk', array($this, 'getUploadSdk')),
+            new \Twig_SimpleFunction('cloud_sdk_url', array($this, 'getCloudSdkUrl')),
             new \Twig_SimpleFunction('math_format', array($this, 'mathFormat')),
             new \Twig_SimpleFunction('parse_user_agent', array($this, 'parseUserAgent')),
         );
@@ -1709,8 +1711,26 @@ class WebExtension extends \Twig_Extension
         return 'http://mail.'.$dress;
     }
 
-    public function getUploadSdk()
+    public function getCloudSdkUrl($type)
     {
-        return '//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v2.js';
+        $cdnHost = $this->getSetting('developer.cloud_sdk_cdn') ?: 'service-cdn.qiqiuyun.net';
+
+        $paths = array(
+            'player' => 'js-sdk/sdk-v1.js',
+            'video' => 'js-sdk/video-player/sdk-v1.js',
+            'uploader' => 'js-sdk/uploader/sdk-v2.js',
+            'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
+            'old_document' => 'js-sdk/document-player/v7/viewer.html',
+        );
+
+        if (isset($paths[$type])) {
+            $path = $paths[$type];
+        } else {
+            $path = $type;
+        }
+
+        $timestamp = round(time() / 100);
+
+        return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
     }
 }
