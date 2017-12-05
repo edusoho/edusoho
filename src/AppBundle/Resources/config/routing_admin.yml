@@ -2281,3 +2281,6 @@ admin_user_learn_statistics:
     path: /user/learn/statistics
     defaults: { _controller: AppBundle:Admin/UserLearnStatistics:show }
 
+admin_user_learn_statistics_info:
+    path: /user/learn/statistics/info
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }
