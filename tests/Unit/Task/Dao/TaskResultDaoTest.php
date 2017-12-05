@@ -35,11 +35,11 @@ class TaskResultDaoTest extends BaseDaoTestCase
     {
         $taskResult1 = $this->mockTaskResult(array(
             'userId' => 1,
-            'status' => 'finish'
+            'status' => 'finish',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,
-            'status' => 'start'
+            'status' => 'start',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,

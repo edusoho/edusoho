@@ -45,17 +45,17 @@ class DailyStatisticsDaoTest extends BaseTestCase
         $this->assertEquals($result, 1);
     }
 
-
     public function testFindUserDailyLearnTimeByDate()
     {
         $defaultMockFields = $this->getDefaultMockFields();
         $this->getDailyStatisticsDao()->create($defaultMockFields);
 
-        $result = $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(array('userId' => 3, 'recordTime_GE' => time() - 24*3600));
+        $result = $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(array('userId' => 3, 'recordTime_GE' => time() - 24 * 3600));
         $this->assertEquals(1, count($result));
         $statistics = reset($result);
         $this->assertEquals(10, $statistics['learnedTime']);
     }
+
     public function testUpdateStorageByIds()
     {
         $time = time();
