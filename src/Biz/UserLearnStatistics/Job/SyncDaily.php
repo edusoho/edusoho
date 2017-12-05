@@ -3,7 +3,6 @@
 namespace Biz\UserLearnStatistics\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class SyncDaily extends AbstractJob
 {
@@ -13,7 +12,7 @@ class SyncDaily extends AbstractJob
         try {
             $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
             $cursor = $this->getSyncTime($learnSetting);
-            $nextCursor = $cursor + 24*60*60;
+            $nextCursor = $cursor + 24 * 60 * 60;
 
             if (time() < $nextCursor) {
                 return;
@@ -24,7 +23,7 @@ class SyncDaily extends AbstractJob
                 'createdTime_GE' => $cursor,
                 'createdTime_LT' => $nextCursor,
             );
-       
+
             if ($cursor == $learnSetting['currentTime']) {
                 //当天升级的数据为了准确性，不统计加入退出课程数
                 $conditions['skipSyncCourseSetNum'] = true;
