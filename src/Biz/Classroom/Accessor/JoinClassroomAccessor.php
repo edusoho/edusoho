@@ -12,11 +12,11 @@ class JoinClassroomAccessor extends AccessorAdapter
             return $this->buildResult('classroom.not_found');
         }
 
-        if ($classroom['status'] === 'draft') {
+        if ('draft' === $classroom['status']) {
             return $this->buildResult('classroom.unpublished', array('classroomId' => $classroom['id']));
         }
 
-        if ($classroom['status'] === 'closed') {
+        if ('closed' === $classroom['status']) {
             return $this->buildResult('classroom.closed', array('classroomId' => $classroom['id']));
         }
 
@@ -35,7 +35,7 @@ class JoinClassroomAccessor extends AccessorAdapter
     {
         $expiryMode = $classroom['expiryMode'];
 
-        if ($expiryMode === 'date') {
+        if ('date' === $expiryMode) {
             return time() > $classroom['expiryValue'];
         }
 
