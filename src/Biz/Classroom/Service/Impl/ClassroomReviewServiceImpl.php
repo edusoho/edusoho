@@ -94,13 +94,18 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
         $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
 
+        if (!empty($fields['content'])){
+            $fields['content'] = $this->purifyHtml($fields['content']);
+            $fields['content'] = $this->getSensitiveService()->sensitiveCheck($fields['content'], 'review');
+        }
+
         $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getClassroomReviewDao()->create(array(
                 'userId' => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
                 'rating' => $fields['rating'],
-                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'content' => !isset($fields['content']) ? '' : $fields['content'],
                 'title' => empty($fields['title']) ? '' : $fields['title'],
                 'parentId' => $fields['parentId'],
                 'createdTime' => time(),
@@ -195,5 +200,10 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     private function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService('Sensitive:SensitiveService');
     }
 }

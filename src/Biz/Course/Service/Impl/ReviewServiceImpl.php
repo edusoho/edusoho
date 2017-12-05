@@ -131,6 +131,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $meta = $fields['parentId'] > 0 ? array() : array('learnedNum' => $member['learnedNum'], 'lessonNum' => $taskCount);
 
+        if (!empty($fields['content'])){
+            $fields['content'] = $this->purifyHtml($fields['content']);
+            $fields['content'] = $this->getSensitiveService()->sensitiveCheck($fields['content'], 'review');
+        }
+
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->create(array(
                 'userId' => $fields['userId'],
@@ -139,7 +144,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'rating' => $fields['rating'],
                 'private' => $course['status'] == 'published' ? 0 : 1,
                 'parentId' => $fields['parentId'],
-                'content' => !isset($fields['content']) ? '' : $this->purifyHtml($fields['content']),
+                'content' => !isset($fields['content']) ? '' : $fields['content'],
                 'createdTime' => time(),
                 'meta' => $meta,
             ));
@@ -271,5 +276,10 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService('Sensitive:SensitiveService');
     }
 }
