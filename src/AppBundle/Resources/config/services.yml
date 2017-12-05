@@ -55,10 +55,6 @@ services:
         tags:
             - { name: extension }
 
-    authentication_handler:
-        class: Biz\Common\LoginListener
-        arguments: ["@biz"]
-
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
 

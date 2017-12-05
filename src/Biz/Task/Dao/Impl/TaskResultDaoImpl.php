@@ -139,6 +139,16 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
     }
 
+
+    public function countTaskNumGroupByUserId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(id) as count, userId')
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return array(
@@ -158,6 +168,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'courseTaskId = :courseTaskId',
                 'createdTime >= :createdTime_GE',
                 'createdTime <= :createdTime_LE',
+                'createdTime < :createdTime_LT',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
                 'finishedTime < :finishedTime_LT',

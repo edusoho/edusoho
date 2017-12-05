@@ -71,6 +71,25 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         );
     }
 
+    public function testGetUserLearningProgressByCourseIds()
+    {
+        $this->mockBiz('Course:LearningDataAnalysisDao', array(
+            array(
+                'functionName' => 'getStatisticDataByCourseIdsAndUserId',
+                'returnValue' => array('learnedCompulsoryTaskNum' => 70, 'compulsoryTaskNum' => 100),
+                'withParams' => array(array(1), 1), ),
+        ));
+
+        $result = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds(array(1), 1);
+
+        $this->assertEquals(array(
+            'finishedCount' => 70,
+            'percent' => 70.0,
+            'decimal' => 0.7,
+            'total' => 100,
+        ), $result);
+    }
+
     /**
      * @return LearningDataAnalysisService
      */

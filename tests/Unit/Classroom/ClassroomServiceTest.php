@@ -222,14 +222,6 @@ class ClassroomServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'update',
                     'returnValue' => array('id' => 1, 'recommended' => 1, 'title' => 'title'),
-                    'withParams' => array(
-                        1,
-                        array(
-                            'recommended' => 1,
-                            'recommendedSeq' => 11,
-                            'recommendedTime' => time(),
-                        ),
-                    ),
                 ),
             )
         );

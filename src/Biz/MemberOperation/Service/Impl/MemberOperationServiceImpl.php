@@ -23,6 +23,13 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->create($record);
     }
 
+    public function countGroupByUserId($field, $conditions)
+    {
+        $result = $this->getRecordDao()->countGroupByUserId($field, $conditions);
+
+        return ArrayToolkit::index($result, 'user_id');
+    }
+
     public function updateRefundInfoByOrderId($orderId, $info)
     {
         $record = $this->getRecordByOrderIdAndType($orderId, 'exit');

@@ -2,8 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
 {
     public function canAccess($attachment)
@@ -15,7 +13,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
 
         $targetTypes = explode('.', $attachment['targetType']);
         $type = array_pop($targetTypes);
-        if ($type === 'thread') {
+        if ('thread' === $type) {
             $thread = $this->getThreadService()->getThread($attachment['targetId']);
 
             if ($user['id'] == $thread['userId']) {
@@ -23,10 +21,10 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
             }
             $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
 
-            if (array_key_exists($user['id'], $classroom['teacherIds']) || $user['id'] = $classroom['headTeacherId']) {
+            if (in_array($user['id'], $classroom['teacherIds']) || $user['id'] == $classroom['headTeacherId']) {
                 return true;
             }
-        } elseif ($type === 'post') {
+        } elseif ('post' === $type) {
             $post = $this->getThreadService()->getPost($attachment['targetId']);
             if ($user['id'] == $post['userId']) {
                 return true;
@@ -36,7 +34,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
                 return true;
             }
             $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
-            if (array_key_exists($user['id'], $classroom['teacherIds'])) {
+            if (in_array($user['id'], $classroom['teacherIds'])) {
                 return true;
             }
         }
@@ -44,18 +42,13 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
         return false;
     }
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Thread:ThreadService');
+        return $this->biz->service('Thread:ThreadService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getKernel()->createService('Classroom:ClassroomService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 }

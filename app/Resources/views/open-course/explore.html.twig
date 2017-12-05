@@ -40,7 +40,7 @@
             <span class="tag-live"></span>
           </span>
                 {% endif %}
-                {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+                {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive', course.title) }}
               </a>
               {% if course.type == 'liveOpen' and lessons %}
                 <div class="mask">

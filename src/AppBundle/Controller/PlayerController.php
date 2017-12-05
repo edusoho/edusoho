@@ -31,7 +31,7 @@ class PlayerController extends BaseController
         $agentInWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
 
         $isEncryptionPlus = false;
-        if ($file['type'] == 'video' && $file['storage'] == 'cloud') {
+        if ('video' == $file['type'] && 'cloud' == $file['storage']) {
             $storageSetting = $this->getSettingService()->get('storage');
 
             $isEncryptionPlus = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
@@ -39,7 +39,7 @@ class PlayerController extends BaseController
             if (!$this->isHiddenVideoHeader()) {
                 // 加入片头信息
                 $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
-                if (!empty($videoHeaderFile) && $videoHeaderFile['convertStatus'] == 'success') {
+                if (!empty($videoHeaderFile) && 'success' == $videoHeaderFile['convertStatus']) {
                     $context['videoHeaderLength'] = $videoHeaderFile['length'];
                 }
             }
@@ -59,7 +59,7 @@ class PlayerController extends BaseController
             if ($agentInWhiteList) {
                 //手机浏览器不弹题
                 $context['hideQuestion'] = 1;
-                if ($this->setting('storage.support_mobile', 0) == 1 && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                if (1 == $this->setting('storage.support_mobile', 0) && isset($file['mcStatus']) && 'yes' == $file['mcStatus']) {
                     $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
                     $isEncryptionPlus = false;
                 }
@@ -238,7 +238,7 @@ class PlayerController extends BaseController
 
     protected function getPlayUrl($file, $context, $ssl)
     {
-        if ($file['storage'] == 'cloud') {
+        if ('cloud' == $file['storage']) {
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
@@ -306,7 +306,7 @@ class PlayerController extends BaseController
             case 'audio':
                 return 'audio-player';
             case 'video':
-                return $file['storage'] == 'local' ? 'local-video-player' : 'balloon-cloud-video-player';
+                return 'local' == $file['storage'] ? 'local-video-player' : 'balloon-cloud-video-player';
             default:
                 return null;
         }

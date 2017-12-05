@@ -3,7 +3,7 @@
 
 {% block title %}{{'upload.content_title'|trans}}{% endblock %}
 
-{% do script([get_upload_sdk(), 'libs/jquery-sortable.js', 'app/js/batch-upload/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'libs/jquery-sortable.js', 'app/js/batch-upload/index.js']) %}
 
 {% block body %}
   {% set mediaType = 'video' %}

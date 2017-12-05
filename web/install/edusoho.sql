@@ -286,6 +286,283 @@ CREATE TABLE `biz_online` (
   KEY `active_time` (`active_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_order` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
+  `sn` varchar(64) NOT NULL COMMENT '订单号',
+  `price_amount` bigint(16) unsigned NOT NULL COMMENT '订单总价',
+  `price_type` varchar(32) NOT NULL COMMENT '订单总价的类型，现金支付or虚拟币；money, coin',
+  `pay_amount` bigint(16) unsigned NOT NULL COMMENT '应付金额',
+  `user_id` int(10) unsigned NOT NULL COMMENT '购买者',
+  `seller_id` int(10) unsigned DEFAULT '0' COMMENT '卖家id',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '订单状态',
+  `trade_sn` varchar(64) DEFAULT NULL COMMENT '支付交易号，支付成功后记录',
+  `paid_cash_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '付款的现金金额，支付成功后记录',
+  `paid_coin_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '付款的虚拟币金额，支付成功后记录',
+  `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间，支付成功后记录',
+  `payment` varchar(32) NOT NULL DEFAULT '' COMMENT '支付类型，支付成功后记录',
+  `finish_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间',
+  `close_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+  `close_data` text COMMENT '交易关闭描述',
+  `close_user_id` int(10) unsigned DEFAULT '0' COMMENT '关闭交易的用户',
+  `expired_refund_days` int(10) unsigned DEFAULT '0' COMMENT '退款的到期天数',
+  `refund_deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款截止日期',
+  `success_data` text COMMENT '交易成功的扩展信息字段',
+  `fail_data` text COMMENT '交易失败的扩展信息字段',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的创建者',
+  `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
+  `created_reason` text COMMENT '订单创建原因, 例如：导入，购买等',
+  `callback` text COMMENT '商品中心的异步回调信息',
+  `device` varchar(32) DEFAULT NULL COMMENT '下单设备（pc、mobile、app）',
+  `source` varchar(16) NOT NULL DEFAULT 'self' COMMENT '订单来源：网校本身、微营销、第三方系统',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_order_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_order_item` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(1024) NOT NULL COMMENT '商品名称',
+  `detail` text COMMENT '商品描述',
+  `sn` varchar(64) NOT NULL COMMENT '编号',
+  `order_id` int(10) unsigned NOT NULL COMMENT '订单id',
+  `num` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '数量',
+  `unit` varchar(16) DEFAULT NULL COMMENT '单位',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
+  `refund_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新退款id',
+  `refund_status` varchar(32) NOT NULL DEFAULT '' COMMENT '退款状态',
+  `price_amount` bigint(16) unsigned NOT NULL COMMENT '商品总价格',
+  `pay_amount` bigint(16) unsigned NOT NULL COMMENT '商品应付金额',
+  `target_id` int(10) unsigned NOT NULL COMMENT '商品id',
+  `target_type` varchar(32) NOT NULL COMMENT '商品类型',
+  `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
+  `finish_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易成功时间',
+  `close_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易关闭时间',
+  `user_id` int(10) unsigned NOT NULL COMMENT '购买者',
+  `seller_id` int(10) unsigned DEFAULT '0' COMMENT '卖家id',
+  `snapshot` text COMMENT '商品快照',
+  `create_extra` text COMMENT '创建时的自定义字段，json方式存储',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_order_item_deduct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_order_item_deduct` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) unsigned NOT NULL COMMENT '订单id',
+  `detail` text COMMENT '描述',
+  `item_id` int(10) unsigned NOT NULL COMMENT '商品id',
+  `deduct_type` varchar(32) NOT NULL DEFAULT '' COMMENT '促销类型',
+  `deduct_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '对应的促销活动id',
+  `deduct_amount` bigint(16) unsigned NOT NULL COMMENT '扣除的价格',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '商品状态',
+  `user_id` int(10) unsigned NOT NULL COMMENT '购买者',
+  `seller_id` int(10) unsigned DEFAULT '0' COMMENT '卖家id',
+  `snapshot` text COMMENT '促销快照',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_order_item_refund`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_order_item_refund` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `order_refund_id` int(10) unsigned NOT NULL COMMENT '退款订单id',
+  `order_id` int(10) unsigned NOT NULL COMMENT '订单id',
+  `order_item_id` int(10) unsigned NOT NULL COMMENT '订单中的商品的id',
+  `target_id` int(10) unsigned NOT NULL COMMENT '商品id',
+  `target_type` varchar(32) NOT NULL COMMENT '商品类型',
+  `user_id` int(10) unsigned NOT NULL COMMENT '退款人',
+  `amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '涉及金额',
+  `coin_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '涉及虚拟币金额',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+  `created_user_id` int(10) unsigned NOT NULL COMMENT '申请者',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_order_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_order_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
+  `status` varchar(32) NOT NULL COMMENT '订单状态',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户',
+  `deal_data` text COMMENT '处理数据',
+  `order_refund_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款id',
+  `ip` varchar(32) NOT NULL DEFAULT '' COMMENT 'ip',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_order_refund`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_order_refund` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '退款单标题',
+  `order_id` int(10) unsigned NOT NULL COMMENT '订单id',
+  `order_item_id` int(10) unsigned NOT NULL COMMENT '退款商品的id',
+  `sn` varchar(64) NOT NULL COMMENT '退款订单编号',
+  `user_id` int(10) unsigned NOT NULL COMMENT '退款人',
+  `reason` text COMMENT '退款的理由',
+  `amount` bigint(16) unsigned NOT NULL COMMENT '退款总金额',
+  `currency` varchar(32) NOT NULL DEFAULT 'money' COMMENT '货币类型: coin, money',
+  `deal_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理时间',
+  `deal_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理人',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '退款状态',
+  `deal_reason` text COMMENT '处理理由',
+  `refund_cash_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款的现金金额',
+  `refund_coin_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '退款的虚拟币金额',
+  `created_user_id` int(10) unsigned NOT NULL COMMENT '申请者',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_pay_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_pay_account` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '所属用户',
+  `password` varchar(64) NOT NULL DEFAULT '' COMMENT '密码',
+  `salt` varchar(64) NOT NULL DEFAULT '',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_pay_cashflow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_pay_cashflow` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '标题',
+  `sn` varchar(64) NOT NULL COMMENT '账目流水号',
+  `parent_sn` varchar(64) DEFAULT NULL COMMENT '本次交易的上一个账单的流水号',
+  `user_id` int(10) unsigned NOT NULL COMMENT '账号ID，即用户ID',
+  `user_balance` bigint(16) NOT NULL DEFAULT '0' COMMENT '账单生成后的对应账户的余额，若amount_type为coin，对应的是虚拟币账户，amount_type为money，对应的是现金庄户余额',
+  `buyer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家',
+  `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
+  `action` varchar(32) NOT NULL DEFAULT '' COMMENT 'refund, purchase, recharge',
+  `amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '金额',
+  `amount_type` varchar(32) NOT NULL COMMENT 'ammount的类型：coin, money',
+  `currency` varchar(32) NOT NULL COMMENT '支付的货币: coin, CNY...',
+  `order_sn` varchar(64) NOT NULL COMMENT '订单号',
+  `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
+  `platform` varchar(32) NOT NULL DEFAULT 'none' COMMENT '支付平台：none, alipay, wxpay...',
+  `created_time` int(10) unsigned NOT NULL,
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帐目流水';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_pay_security_answer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_pay_security_answer` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '所属用户',
+  `question_key` varchar(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',
+  `answer` varchar(64) NOT NULL DEFAULT '',
+  `salt` varchar(64) NOT NULL DEFAULT '',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`question_key`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_pay_trade`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_pay_trade` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(1024) NOT NULL COMMENT '标题',
+  `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
+  `order_sn` varchar(64) NOT NULL COMMENT '客户订单号',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT '交易状态',
+  `amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '订单的需支付金额',
+  `price_type` varchar(32) NOT NULL COMMENT '标价类型，现金支付or虚拟币；money, coin',
+  `currency` varchar(32) NOT NULL DEFAULT '' COMMENT '支付的货币类型',
+  `coin_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '虚拟币支付金额',
+  `cash_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '现金支付金额',
+  `rate` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '虚拟币和现金的汇率',
+  `type` varchar(32) NOT NULL DEFAULT 'purchase' COMMENT '交易类型：purchase，recharge，refund',
+  `seller_id` int(10) unsigned DEFAULT '0' COMMENT '卖家id',
+  `user_id` int(10) unsigned NOT NULL COMMENT '买家id',
+  `pay_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '交易时间',
+  `apply_refund_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '申请退款时间',
+  `refund_success_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功退款时间',
+  `notify_data` text,
+  `platform` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方支付平台',
+  `platform_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方支付平台的交易号',
+  `platform_type` text COMMENT '在第三方系统中的支付方式',
+  `platform_created_result` text,
+  `platform_created_params` text COMMENT '在第三方系统创建支付订单时的参数信息',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `trade_sn` (`trade_sn`),
+  KEY `type` (`type`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_pay_user_balance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_pay_user_balance` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户',
+  `amount` bigint(16) NOT NULL DEFAULT '0' COMMENT '账户的虚拟币余额',
+  `cash_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '现金余额',
+  `locked_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '冻结虚拟币金额',
+  `recharge_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '充值总额',
+  `purchase_amount` bigint(16) unsigned NOT NULL DEFAULT '0' COMMENT '消费总额',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `migrate_id` int(10) NOT NULL DEFAULT '0' COMMENT '数据迁移原表id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  KEY `migrate_id` (`migrate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_queue_failed_job`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -728,6 +1005,7 @@ CREATE TABLE `classroom_member` (
   `learnedNum` int(10) DEFAULT NULL COMMENT '已学课时数',
   `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间',
+  `refundDeadline` int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间',
   `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -863,7 +1141,7 @@ CREATE TABLE `coupon` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(255) NOT NULL COMMENT '优惠码',
   `type` enum('minus','discount') NOT NULL COMMENT '优惠方式',
-  `status` enum('used','unused','receive') NOT NULL COMMENT '使用状态',
+  `status` enum('used','unused','receive','using') NOT NULL DEFAULT 'unused',
   `rate` float(10,2) unsigned NOT NULL COMMENT '若优惠方式为打折，则为打折率，若为抵价，则为抵价金额',
   `batchId` int(10) unsigned DEFAULT NULL COMMENT '批次号',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用者',
@@ -874,7 +1152,8 @@ CREATE TABLE `coupon` (
   `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
   `createdTime` int(10) unsigned NOT NULL,
   `receiveTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '接收时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠码表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course`;
@@ -1171,6 +1450,7 @@ CREATE TABLE `course_member` (
   `userId` int(10) unsigned NOT NULL COMMENT '学员ID',
   `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员购买课程时的订单ID',
   `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习最后期限',
+  `refundDeadline` int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间',
   `levelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户以会员的方式加入课程学员时的会员ID',
   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学课时数',
   `learnedCompulsoryTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学习的必修任务数量',
@@ -1863,6 +2143,31 @@ CREATE TABLE `marker` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='驻点';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `member_operation_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_operation_record` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(1024) NOT NULL DEFAULT '' COMMENT '标题',
+  `member_id` int(10) unsigned NOT NULL COMMENT '成员ID',
+  `member_type` varchar(32) NOT NULL DEFAULT 'student' COMMENT '成员身份',
+  `target_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类型ID',
+  `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型（classroom, course）',
+  `operate_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型（join, exit）',
+  `operate_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
+  `operator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户ID',
+  `data` text COMMENT 'extra data',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户Id',
+  `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
+  `refund_id` int(11) NOT NULL DEFAULT '0' COMMENT '退款ID',
+  `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '加入理由或退出理由',
+  `reason_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户退出或加入的类型：refund, remove, exit',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `operate_type` (`operate_type`),
+  KEY `order_id` (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -3147,8 +3452,7 @@ CREATE TABLE `user_bind` (
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'token过期时间',
   `createdTime` int(10) unsigned NOT NULL COMMENT '绑定时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `type` (`type`,`fromId`),
-  UNIQUE KEY `type_2` (`type`,`toId`)
+  UNIQUE KEY `type` (`type`,`fromId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_field`;
@@ -3286,5 +3590,61 @@ CREATE TABLE `user_token` (
   `createdTime` int(10) unsigned NOT NULL COMMENT 'TOKEN创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`(60))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `xapi_activity_watch_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xapi_activity_watch_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
+  `activity_id` int(11) DEFAULT NULL COMMENT '教学活动ID',
+  `course_id` int(11) DEFAULT NULL COMMENT '教学计划ID',
+  `task_id` int(11) DEFAULT NULL COMMENT '任务ID',
+  `watched_time` int(10) unsigned NOT NULL COMMENT '观看时长',
+  `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
+  `is_push` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否推送',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `xapi_statement`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xapi_statement` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(64) NOT NULL,
+  `version` varchar(32) NOT NULL DEFAULT '' COMMENT '版本号',
+  `push_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上报时间',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属用户',
+  `verb` varchar(32) NOT NULL DEFAULT '' COMMENT '用户行为',
+  `target_id` int(10) DEFAULT NULL COMMENT '目标Id',
+  `target_type` varchar(32) NOT NULL COMMENT '目标类型',
+  `status` varchar(16) NOT NULL DEFAULT 'created' COMMENT '状态: created, pushing, pushed',
+  `data` text COMMENT '数据',
+  `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `occur_time` int(10) unsigned NOT NULL COMMENT '行为发生时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `xapi_statement_archive`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xapi_statement_archive` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(64) NOT NULL,
+  `version` varchar(32) NOT NULL DEFAULT '' COMMENT '版本号',
+  `push_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上报时间',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属用户',
+  `verb` varchar(32) NOT NULL DEFAULT '' COMMENT '用户行为',
+  `target_id` int(10) DEFAULT NULL COMMENT '目标Id',
+  `target_type` varchar(32) NOT NULL COMMENT '目标类型',
+  `status` varchar(16) NOT NULL DEFAULT 'created' COMMENT '状态: created, pushing, pushed',
+  `data` text COMMENT '数据',
+  `occur_time` int(10) unsigned NOT NULL COMMENT '行为发生时间',
+  `created_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
