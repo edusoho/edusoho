@@ -11,20 +11,19 @@ define(function (require, exports, module) {
       this.totalTime = 0;
       this.dateRangePicker = new OverviewDateRangePicker();
       this.init();
-      this.initDateRangePicker();
     },
 
     init: function() {
-      this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
-    },
-
-    initDateRangePicker: function() {
       var self = this;
+      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
+      this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
       self.dateRangePicker.on('date-picked', function(data) {
         self.showData(data);
       });
     },
+
     showData: function(data) {
+      this.learnTimeTrendencyChart.showLoading();
       var self = this;
       $.ajax({
         type: "GET",
@@ -43,16 +42,9 @@ define(function (require, exports, module) {
           self.dateArr = dateArr;
           self.learnTime = learnTime;
           self.totalTime = totalTime;
-          self.data(data.startDate, data.endDate, self.learnTime, self.dateArr);
+          self.show(self.learnTime, self.dateArr);
         }
       });
-    },
-
-    data: function(startDate, endDate, time, date) {
-      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
-      this.learnTimeTrendencyChart.showLoading();
-      var self = this;
-      self.show(time, date);
     },
 
     show: function(time, data) {
