@@ -117,14 +117,14 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEmpty($result);
     }
 
-    public function testGetLearningCourseDetailsWithNoData()
+    public function testFindLearningCourseDetailsWithNoData()
     {
         $user = $this->getCurrentUser();
-        $result = $this->getLearnStatisticsService()->getLearningCourseDetails($user->getId(), 1, 10);
+        $result = $this->getLearnStatisticsService()->findLearningCourseDetails($user->getId(), 1, 10);
         $this->assertEquals(3, count($result));
     }
 
-    public function testGetLearningCourseDetails()
+    public function testFindLearningCourseDetails()
     {
         $user = $this->getCurrentUser();
 
@@ -154,7 +154,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
             array('functionName' => 'getUserLearningProgress', 'returnValue' => array('percent' => 90)),
         ));
 
-        list($learnCourses, $courseSets, $members) = $this->getLearnStatisticsService()->getLearningCourseDetails($user->getId(), 1, 10);
+        list($learnCourses, $courseSets, $members) = $this->getLearnStatisticsService()->findLearningCourseDetails($user->getId(), 1, 10);
         $this->assertEquals(1, count($learnCourses));
         $this->assertEquals(1, count($courseSets));
         $this->assertEquals(1, count($members));
