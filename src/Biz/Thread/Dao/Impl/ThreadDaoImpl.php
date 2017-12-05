@@ -2,12 +2,23 @@
 
 namespace Biz\Thread\Dao\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\Dao\ThreadDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 {
     protected $table = 'thread';
+
+    public function findThreadIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('id');
+
+        $result = $builder->execute()->fetchAll(0);
+
+        return !empty($result) ? ArrayToolkit::column($result, 'id') : array();
+    }
 
     public function declares()
     {

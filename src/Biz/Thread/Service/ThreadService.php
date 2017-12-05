@@ -69,6 +69,8 @@ interface ThreadService
 
     public function searchMemberCount($conditions);
 
+    public function countPartakeThreadsByUserIdAndTargetType($userId, $targetType);
+
     /**
      * thread_vote.
      */

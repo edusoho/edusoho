@@ -290,6 +290,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
         $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds));
         $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
+        $learningClassroomThreadCount = $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType($userId, 'classroom');
         $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
         $learningClassroomReviewCount = $this->getClassroomReviewService()->searchReviewCount(array('userId' => $userId));
 
@@ -298,7 +299,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             'learningCoursesCount' => $learningCoursesCount,
             'learningProcess' => $learningProcess,
             'learningCourseNotesCount' => $learningCourseNotesCount,
-            'learningCourseThreadsCount' => $learningCourseThreadsCount,
+            'learningCourseThreadsCount' => $learningCourseThreadsCount + $learningClassroomThreadCount,
             'learningReviewCount' => $learningCourseReviewCount + $learningClassroomReviewCount,
         );
     }
@@ -536,6 +537,14 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getCourseThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return \Biz\Thread\Service\ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->createService('Thread:ThreadService');
     }
 
     /**

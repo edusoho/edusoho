@@ -2,6 +2,7 @@
 
 namespace Biz\Thread\Dao\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\Dao\ThreadPostDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -17,6 +18,16 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function deletePostsByParentId($parentId)
     {
         return $this->db()->delete($this->table, array('parentId' => $parentId));
+    }
+
+    public function findThreadIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('threadId');
+
+        $result = $builder->execute()->fetchAll(0);
+
+        return !empty($result) ? ArrayToolkit::column($result, 'threadId') : array();
     }
 
     public function declares()
