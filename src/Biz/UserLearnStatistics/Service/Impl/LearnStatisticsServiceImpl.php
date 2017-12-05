@@ -17,6 +17,20 @@ use AppBundle\Common\ArrayToolkit;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
+    public function statisticsDataSearch($conditions)
+    {
+        list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
+
+        return $this->getStatisticsDao($daoType)->statisticSearch($conditions, $order);
+    }
+
+    public function statisticsDataCount($conditions)
+    {
+        list($conditions, $order, $daoType) = $this->analysisCondition($conditions);
+
+        return $this->getStatisticsDao($daoType)->statisticCount($conditions);
+    }
+
     public function searchTotalStatistics($conditions, $order, $start, $limit)
     {
         return $this->getTotalStatisticsDao()->search($conditions, $order, $start, $limit);
@@ -52,7 +66,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->beginTransaction();
             $fields = array(
                 'isStorage' => 1,
-                'recordTime' => $conditions['createdTime_LT'],
+                'recordTime' => $conditions['createdTime_GE'],
             );
             $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
@@ -69,7 +83,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         try {
             $this->beginTransaction();
             $fields = array(
-                'recordTime' => $conditions['createdTime_LT'],
+                'recordTime' => $conditions['createdTime_GE'],
             );
             $statistics = $this->searchLearnData($conditions, $fields);
             $this->getDailyStatisticsDao()->batchCreate($statistics);
@@ -113,7 +127,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(array('status' => 'finish'), $conditions)),
             'joinedClassroomNum' => $this->findUserOperateClassroomNum('join', $conditions),
             'exitClassroomNum' => $this->findUserOperateClassroomNum('exit', $conditions),
-            'joinedClassroomCourseNum' => $this->findUserOperateClassroomPlanNum('join', $conditions),
             'joinedCourseSetNum' => $this->findUserOperateCourseSetNum('join', $conditions),
             'exitCourseSetNum' => $this->findUserOperateCourseSetNum('exit', $conditions),
             'joinedCourseNum' => $this->findUserOperateCourseNum('join', $conditions),
@@ -152,6 +165,38 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $statistics;
     }
 
+    private function analysisCondition($conditions)
+    {
+        if (!empty($conditions['isDefault']) && 'true' == $conditions['isDefault']) {
+            $orderBy = array('userId' => 'DESC', 'joinedCourseNum' => 'DESC', 'actualAmount' => 'DESC');
+        } else {
+            $orderBy = array('id' => 'DESC');
+        }
+
+        $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $daoType = 'Daily';
+            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
+            $conditions['recordTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : strtotime(date('Y-m-d', time()));
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        } else {
+            $daoType = 'Total';
+        }
+
+        return array($conditions,  $orderBy, $daoType);
+    }
+
+    public function getTimespan()
+    {
+        $settings = $this->getSettingService()->get('learn_statistics');
+        if (!empty($settings) && $settings['timespan'] == strtotime('1971/1/1 8:0:0')) {
+            $settings['timespan'] = 24 * 60 * 60 * 365;
+        }
+
+        return date('Y-m-d', time() - $settings['timespan']);
+    }
+
     public function storageDailyStatistics($limit = 1000)
     {
         try {
@@ -176,8 +221,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $addTotalData = $updateTotalData = array();
             $updateColumn = array(
                 'joinedClassroomNum',
-                'joinedClassroomCourseSetNum',
-                'joinedClassroomCourseNum',
                 'joinedCourseSetNum',
                 'joinedCourseNum',
                 'exitClassroomNum',
@@ -282,21 +325,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             array(
                 'target_type' => 'classroom',
                 'operate_type' => $operation,
-            )
-        );
-
-        return $this->getMemberOperationService()->countGroupByUserId('target_id', $conditions);
-    }
-
-    private function findUserOperateClassroomPlanNum($operation, $conditions)
-    {
-        $conditions = $this->buildMemberOperationConditions($conditions);
-        $conditions = array_merge(
-            $conditions,
-            array(
-                'target_type' => 'course',
-                'operate_type' => $operation,
-                'parent_id_GT' => 0,
             )
         );
 
@@ -506,5 +534,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getStatisticsDao($daoType)
+    {
+        return $this->createDao("UserLearnStatistics:{$daoType}StatisticsDao");
     }
 }

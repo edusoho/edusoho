@@ -12,26 +12,39 @@ class UserLearnStatisticsController extends BaseController
 {
     public function showAction(Request $request)
     {
+        $defaultCondition = array(
+            'startDate' => '',
+            'endDate' => '',
+            'nickname' => '',
+            'isDefault' => 'false',
+        );
         $conditions = $request->query->all();
+
+        $conditions = array_merge($defaultCondition, $conditions);
         $paginator = new Paginator(
             $request,
-            $this->getLearnStatisticsService()->countTotalStatistics($conditions),
+            $this->getUserService()->countUsers(array()),
             20
         );
-
-        $statistics = $this->getLearnStatisticsService()->searchTotalStatistics(
-            $conditions,
+        $users = $this->getUserService()->searchUsers(
+            array('nickname' => $conditions['nickname']),
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userIds = ArrayToolkit::column($statistics, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('admin/learn-Statistics/show.html.twig', array(
-            'statistics' => $statistics,
+        $conditions = array_merge($conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
+
+        $statistics = $this->getLearnStatisticsService()->statisticsDataSearch($conditions);
+
+        $timespan = $this->getLearnStatisticsService()->getTimespan();
+
+        return $this->render('admin/learn-statistics/show.html.twig', array(
+            'statistics' => ArrayToolkit::index($statistics, 'userId'),
             'paginator' => $paginator,
             'users' => $users,
+            'timespan' => $timespan,
+            'isDefault' => $conditions['isDefault'],
         ));
     }
 
@@ -66,6 +79,7 @@ class UserLearnStatisticsController extends BaseController
         $timeRange = $this->getTimeRange($conditions);
         $learnData = $this->getLearnStatisticsService()->getDailyLearnData($userId, $timeRange['startTime'], $timeRange['endTime']);
         $learnData = $this->fillAnalysisData($timeRange, $learnData);
+
         return $this->createJsonResponse($learnData);
     }
 
@@ -93,7 +107,7 @@ class UserLearnStatisticsController extends BaseController
 
     protected function getTimeRange($fields)
     {
-        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m-d', time() -7 * 24 * 60 * 60);
+        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m-d', time() - 7 * 24 * 60 * 60);
         $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date('Y-m-d', time());
 
         return array(
@@ -101,8 +115,6 @@ class UserLearnStatisticsController extends BaseController
             'endTime' => strtotime($endTime) + 24 * 3600 - 1,
         );
     }
-
-
 
     public function syncDailyData()
     {

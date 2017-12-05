@@ -2,6 +2,7 @@
 
 namespace Biz\CloudFile\Service\Impl;
 
+use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
@@ -10,7 +11,6 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
-use Topxia\Service\Common\ServiceKernel;
 use QiQiuYun\SDK\Service\ResourceService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
@@ -103,7 +103,6 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                     0,
                     PHP_INT_MAX
                 );
-
                 $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
                 $fileIds = empty($fileIds) ? array(-1) : $fileIds;
                 if (isset($conditions['ids'])) {
@@ -227,7 +226,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         $tokenFields = array(
             'userId' => $userId,
-            'duration' => 3600 * 24 * 30,
+            'duration' => TimeMachine::ONE_MONTH,
             'times' => 1,
         );
         $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
@@ -310,9 +309,12 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->createService('File:CloudFileImplementor');
     }
 
+    /**
+     * @return \Biz\Course\Service\MaterialService
+     */
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getTokenService()

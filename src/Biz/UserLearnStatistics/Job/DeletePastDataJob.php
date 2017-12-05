@@ -12,7 +12,7 @@ class DeletePastDataJob extends AbstractJob
         $setting = $this->getLearnStatisticsService()->getStatisticsSetting();
         $this->getLearnStatisticsService()->batchDelatePastDailyStatistics(
             array(
-            'recordTime_LT' => strtotime(date('Y-m-d'), time()) - 5 * 24 * 60 * 60,
+            'recordTime_LT' => strtotime(date('Y-m-d'), time()) - 365 * 24 * 60 * 60,
             'isStorage' => '1',
         ));
     }

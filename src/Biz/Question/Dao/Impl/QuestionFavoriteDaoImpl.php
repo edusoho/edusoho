@@ -16,7 +16,7 @@ class QuestionFavoriteDaoImpl extends GeneralDaoImpl implements QuestionFavorite
 
     public function deleteFavoriteByQuestionId($questionId)
     {
-        return $this->getConnection()->delete($this->table, array('questionId' => $questionId));
+        return $this->db()->delete($this->table, array('questionId' => $questionId));
     }
 
     public function declares()

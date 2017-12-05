@@ -2,7 +2,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% do script([get_upload_sdk(), 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','app/js/course-manage/live-replay/upload/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','app/js/course-manage/live-replay/upload/index.js']) %}
 
 {% block title %}
   {% if lesson.replayStatus == 'videoGenerated' %}{{ 'course.live.replay_manage.lesson_edit_content_title'|trans }}{% else %}{{'course.live.replay_manage.lesson_add_content_title'|trans}}{% endif %}

@@ -1,6 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
-{% do script([get_upload_sdk(), 'app/js/activity-manage/audio/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/activity-manage/audio/index.js']) %}
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('audio') %}
   {% set fileType = 'audio' %}

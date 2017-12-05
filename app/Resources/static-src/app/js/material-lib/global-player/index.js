@@ -3,6 +3,7 @@ import EsMessenger from 'app/common/messenger';
 
 let play = new QiQiuYun.Player({
   id: 'global-player',
+  playServer: app.cloudPlayServer,
   resNo: $element.data('resNo'),
   token: $element.data('token'),
   user: {

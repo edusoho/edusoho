@@ -9,4 +9,6 @@ interface DailyStatisticsDao extends GeneralDaoInterface
     public function findByIds($ids);
 
     public function findUserDailyLearnTimeByDate($conditions);
+
+    public function updateStorageByIds($ids);
 }
