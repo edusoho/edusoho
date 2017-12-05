@@ -63,7 +63,7 @@ class UserLearnStatisticsController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('admin/learn-statistices/detail.html.twig', array(
+        return $this->render('admin/learn-statistics/detail.html.twig', array(
             'overview' => $overview,
             'courses' => $courses,
             'courseSets' => $courseSets,
