@@ -6,6 +6,22 @@ use Biz\BaseTestCase;
 
 class TotalStatisticsDaoTest extends BaseTestCase
 {
+    public function testFindByIds()
+    {
+        $time = time();
+        $statistic = array(
+            'userId' => 1,
+        );
+        $this->getTotalStatisticsDao()->create($statistic);
+        $statistic['userId'] = 2;
+        $statistic = $this->getTotalStatisticsDao()->create($statistic);
+
+        $this->assertEquals(2, count($this->getTotalStatisticsDao()->findByIds(array(1, 2))));
+        $this->assertEquals(1, count($this->getTotalStatisticsDao()->findByIds(array(1))));
+        $this->assertEquals(0, count($this->getTotalStatisticsDao()->findByIds(array())));
+        $this->assertEquals(0, count($this->getTotalStatisticsDao()->findByIds(array(3, 4))));
+    }
+
     public function testStatisticSearch()
     {
         $defaultMockFields = $this->getDefaultMockFields();

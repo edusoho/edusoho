@@ -10,7 +10,7 @@ class DeletePastDataJob extends AbstractJob
     {
         //删除一年之外的用户学习数据
         $setting = $this->getLearnStatisticsService()->getStatisticsSetting();
-        $this->getLearnStatisticsService()->batchDelatePastDailyStatistics(
+        $this->getLearnStatisticsService()->batchDeletePastDailyStatistics(
             array(
             'recordTime_LT' => strtotime(date('Y-m-d'), time()) - 365 * 24 * 60 * 60,
             'isStorage' => '1',
