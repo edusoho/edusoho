@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+  <div class="container mtl">
+<div class="cd-table-responsive">
+  <table class="cd-table table">
+    <thead>
+      <tr>
+        <th>升级时间</th>
+        <th>历史数据生成范围</th>
+        <th>total表历史数据同步状态</th>
+        <th>daily表历史数据同步状态</th>
+        <th>新增daily表状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ data.setting.currentTime|date('Y-m-d H:i:s') }}</td>
+        <td>{{ (data.setting.timespan) / (60 * 24 * 60) }}天</td>
+        <td>
+          目前同步到的用户Id: {{ data.totalJob.args.lastUserId }}<br/>
+          是否同步完成: {% if data.totalJob.enabled == 0 %}是{% else %}否{% endif %}
+        </td>
+        <td>
+          目前同步到的时间: {{ data.pastDailyJob.args.cursor|date('Y-m-d H:i:s') }}<br/>
+          是否同步完成: {% if data.pastDailyJob.enabled == 0 %}是{% else %}否{% endif %}      
+        </td>
+        <td>
+          目前同步到的时间: {{ data.dailyJob.args.cursor|date('Y-m-d H:i:s') }}<br/>    
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  </div>
+{% endblock %}
+
+
+{% block header %}
+{% endblock %}
+{% block esBar %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

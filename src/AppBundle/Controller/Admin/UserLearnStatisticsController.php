@@ -116,8 +116,22 @@ class UserLearnStatisticsController extends BaseController
         );
     }
 
-    public function syncDailyData()
+    public function syncInfoAction(Request $request)
     {
+        $setting = $this->getLearnStatisticsService()->getStatisticsSetting();
+        $data['setting'] = $setting;
+        $totalJob = $this->getSchedulerService()->searchJobs(array('name' => 'SyncUserTotalLearnStatisticsJob'), array(), 0, 1);
+        $data['totalJob'] = reset($totalJob);
+
+        $pastDailyJob = $this->getSchedulerService()->searchJobs(array('name' => 'SyncUserLearnDailyPastLearnStatisticsJob'), array(), 0, 1);
+        $data['pastDailyJob'] = reset($pastDailyJob);
+
+        $dailyJob = $this->getSchedulerService()->searchJobs(array('name' => 'SyncUserLearnDailyLearnStatisticsJob'), array(), 0, 1);
+        $data['dailyJob'] = reset($dailyJob);
+
+        return $this->render('admin/learn-statistics/sync-info.html.twig', array(
+            'data' => $data,
+        ));
     }
 
     /**
@@ -136,5 +150,10 @@ class UserLearnStatisticsController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

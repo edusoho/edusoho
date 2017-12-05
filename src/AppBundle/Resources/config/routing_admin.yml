@@ -2289,3 +2289,6 @@ admin_user_learn_chart:
     path: /user/learn/{userId}/chart
     defaults: { _controller: AppBundle:Admin/UserLearnStatistics:learnChart }
 
+admin_user_learn_statistics_info:
+    path: /user/learn/statistics/info
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }
