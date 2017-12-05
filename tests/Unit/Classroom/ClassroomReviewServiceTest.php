@@ -4,6 +4,7 @@ namespace Tests\Unit\Classroom;
 
 use Biz\BaseTestCase;
 use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\User\CurrentUser;
 
 class ClassroomReviewServiceTest extends BaseTestCase
 {
@@ -57,6 +58,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
         $results = $this->getClassRoomReviewService()->searchReviews(array('classroomId' => $classroom['id']), array('rating' => 'DESC'), 0, 5);
         $this->assertCount(2, $results);
+
+        $results = $this->getClassRoomReviewService()->searchReviews(array('author' => $user1['nickname']), array('rating' => 'DESC'), 0, 5);
+        $this->assertCount(1, $results);
     }
 
     public function testSearchReviewCount()
@@ -159,6 +163,22 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage 参数不正确，评价数太大
+     */
+    public function testSaveReviewRatingError()
+    {
+        $fields1 = array(
+            'title' => 'test1',
+            'content' => 'test_content',
+            'classroomId' => 123,
+            'rating' => 6,
+            'userId' => 1
+        );
+        $this->getClassRoomReviewService()->saveReview($fields1);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testSaveReviewWithoutUserId()
     {
@@ -185,7 +205,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage 班级(123)不存在，评价失败！
      */
     public function testSaveReviewWithNotExistClassroom()
     {
@@ -194,13 +215,19 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $classroom = array(
             'title' => 'test',
         );
-        $classroom = $this->getClassroomService()->addClassroom($classroom);
-        $this->getClassroomService()->publishClassroom($classroom['id']);
+        
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array(
+                'functionName' => 'tryTakeClassroom', 
+                'returnValue' => array()
+            )
+        ));
+
         $fields1 = array(
             'title' => 'test1',
             'content' => 'test_content',
             'userId' => $user1['id'],
-            'classroomId' => $classroom['id'] + 100,
+            'classroomId' => 123,
             'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
@@ -285,6 +312,65 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $this->getClassRoomReviewService()->deleteReview(100);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedExceptionMessage not login
+     */
+    public function testDeleteReviewUserUnlogin()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+        $biz = $this->getBiz();
+        $biz['user'] = $currentUser;
+
+        $this->getClassRoomReviewService()->deleteReview(123);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedExceptionMessage review is not exsits.
+     */
+    public function testDeleteReviewPermisstion()
+    {
+        $biz = $this->getBiz();
+        $currentUser = $this->getCurrentuser();
+
+        $classroom = array(
+            'title' => 'test',
+        );
+        $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $fields1 = array(
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $currentUser['id'],
+            'classroomId' => $classroom['id'],
+            'rating' => 1,
+        );
+        $review = $this->getClassRoomReviewService()->saveReview($fields1);
+
+        $user1 = $this->getUserService()->register(array(
+            'nickname' => 'student',
+            'email' => 'student@admin.com',
+            'password' => 'student',
+            'createdIp' => '127.0.0.1',
+            'orgCode' => '1.',
+            'orgId' => '1',
+            'roles' => array('ROLE_USER','ROLE_TEACHER')
+        ));
+        $user = new CurrentUser();
+        $user->fromArray($user1);
+        $biz['user'] = $user;
+
+        $this->getClassRoomReviewService()->deleteReview($review['id']);
     }
 
     protected function getClassroomService()

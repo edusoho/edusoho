@@ -3,6 +3,7 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
+use Biz\User\CurrentUser;
 
 class ReviewServiceTest extends BaseTestCase
 {
@@ -57,6 +58,26 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertArrayEquals($review1, $result);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage User is not Exist!
+     */
+    public function testGetUserCourseReviewEmptyUser()
+    {
+        $result = $this->getReviewService()->getUserCourseReview(123, 1);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage Course is not Exist!
+     */
+    public function testGetUserCourseReviewEmptyCourse()
+    {
+        $user = $this->getCurrentUser();
+
+        $result = $this->getReviewService()->getUserCourseReview($user['id'], 123);
+    }
+
     public function testSearchReviews()
     {
         $course1 = $this->createCourse();
@@ -68,10 +89,14 @@ class ReviewServiceTest extends BaseTestCase
         $conditions = array(
             'courseId' => $course1['id'],
         );
-
         $reviews = $this->getReviewService()->searchReviews($conditions, array('createdTime' => 'DESC'), 0, 10);
-
         $this->assertEquals(1, count($reviews));
+
+        $reviews = $this->getReviewService()->searchReviews(array('content' => 'review content'), 'latest', 0, 10);
+        $this->assertEquals(2, count($reviews));
+
+        $reviews = $this->getReviewService()->searchReviews(array('author' => 'nickname'), 'rating', 0, 10);
+        $this->assertEquals(0, count($reviews));
     }
 
     public function testSearchReviewsCount()
@@ -110,6 +135,86 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($fields['rating'], $review['rating']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage 参数不正确，评价失败！
+     */
+    public function testSaveReviewFieldsError()
+    {
+        $fields = array(
+            'courseId' => 123,
+            'rating' => 3,
+        );
+        $this->getReviewService()->saveReview($fields);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage 参数不正确，评价数太大
+     */
+    public function testSaveReviewFieldsRatingError()
+    {
+        $fields = array(
+            'courseId' => 123,
+            'rating' => 6,
+            'parentId' => 0,
+            'userId' => $this->getCurrentUser()->getId(),
+            'content' => 'review content',
+            'courseSetId' => 1,
+            'createdTime' => time(),
+        );
+        $this->getReviewService()->saveReview($fields);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage course(#123) not found
+     */
+    public function testSaveReviewFieldsCourseEmpty()
+    {
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'tryTakeCourse', 
+                'returnValue' => array(array(), array())
+            )
+        ));
+
+        $fields = array(
+            'courseId' => 123,
+            'rating' => 3,
+            'parentId' => 0,
+            'userId' => $this->getCurrentUser()->getId(),
+            'content' => 'review content',
+            'courseSetId' => 1,
+            'createdTime' => time(),
+        );
+        $this->getReviewService()->saveReview($fields);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testSaveReviewFieldsUserEmpty()
+    {
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'tryTakeCourse', 
+                'returnValue' => array(array('id' => 1, 'courseSetId' => 1,'status' => 'published'), array('learnedNum' => 1))
+            )
+        ));
+
+        $fields = array(
+            'courseId' => 1,
+            'rating' => 3,
+            'parentId' => 0,
+            'userId' => 123,
+            'content' => 'review content',
+            'courseSetId' => 1,
+            'createdTime' => time(),
+        );
+        $this->getReviewService()->saveReview($fields);
+    }
+
     public function testDeleteReview()
     {
         $course = $this->createCourse();
@@ -120,6 +225,71 @@ class ReviewServiceTest extends BaseTestCase
         $result = $this->getReviewService()->getReview($review['id']);
 
         $this->assertNull($result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedExceptionMessage not login
+     */
+    public function testDeleteReviewUserUnlogin()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+        $biz = $this->getBiz();
+        $biz['user'] = $currentUser;
+
+        $this->getReviewService()->deleteReview(123);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage course review(#123) not found
+     */
+    public function testDeleteReviewEmpty()
+    {
+        $this->getReviewService()->deleteReview(123);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedExceptionMessage 无权限删除评价
+     */
+    public function testDeleteReviewPermisstion()
+    {
+        $biz = $this->getBiz();
+        $currentUser = $this->getCurrentuser();
+
+        $course1 = $this->createCourse();
+        $fields = array(
+            'courseId' => $course1['id'],
+            'rating' => 3,
+            'parentId' => 0,
+            'content' => 'review content',
+            'userId' => $currentUser['id'],
+            'createdTime' => time(),
+        );
+        $review = $this->getReviewService()->saveReview($fields);
+
+        $user1 = $this->getUserService()->register(array(
+            'nickname' => 'student',
+            'email' => 'student@admin.com',
+            'password' => 'student',
+            'createdIp' => '127.0.0.1',
+            'orgCode' => '1.',
+            'orgId' => '1',
+            'roles' => array('ROLE_USER','ROLE_TEACHER')
+        ));
+        $user = new CurrentUser();
+        $user->fromArray($user1);
+        $biz['user'] = $user;
+
+        $this->getReviewService()->deleteReview($review['id']);
     }
 
     public function testCountRatingByCourseId()
@@ -208,5 +378,10 @@ class ReviewServiceTest extends BaseTestCase
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
