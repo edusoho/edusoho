@@ -11,7 +11,7 @@ class ThreadDaoTest extends BaseDaoTestCase
         $this->mockDataObject();
         $this->mockDataObject();
         $this->mockDataObject(array('userId' => 2));
-        $this->assertEquals(2, count($this->getDao()->findThreadIds(array('userId' => 1, 'targetType' => 'classroom'))));
+        $this->assertEquals(2, count($this->getDao()->foundThreadIds(array('userId' => 1, 'targetType' => 'classroom'))));
     }
 
     protected function mockDataObject($fields = array())

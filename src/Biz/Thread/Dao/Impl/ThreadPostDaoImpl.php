@@ -20,7 +20,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         return $this->db()->delete($this->table, array('parentId' => $parentId));
     }
 
-    public function findThreadIds($conditions)
+    public function foundThreadIds($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('threadId');

@@ -10,7 +10,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
 {
     protected $table = 'thread';
 
-    public function findThreadIds($conditions)
+    public function foundThreadIds($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('id');
@@ -18,6 +18,19 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         $result = $builder->execute()->fetchAll(0);
 
         return !empty($result) ? ArrayToolkit::column($result, 'id') : array();
+    }
+
+    protected function createQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['title'] = "%{$conditions['title']}%";
+        }
+
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
+        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()

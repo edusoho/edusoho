@@ -406,11 +406,11 @@ class ThreadServiceTest extends BaseTestCase
     public function testCountPartakeThreadsByUserIdAndTargetType()
     {
         $this->mockBiz('Thread:ThreadDao', array(
-            array('functionName' => 'findThreadIds', 'returnValue' => array(1, 2, 3)),
+            array('functionName' => 'foundThreadIds', 'returnValue' => array(1, 2, 3)),
         ));
 
         $this->mockBiz('Thread:ThreadPostDao', array(
-            array('functionName' => 'findThreadIds', 'returnValue' => array(3, 4, 5)),
+            array('functionName' => 'foundThreadIds', 'returnValue' => array(3, 4, 5)),
         ));
 
         $this->assertEquals(5, $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType(1, 'classroom'));
