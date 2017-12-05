@@ -11,20 +11,19 @@ define(function (require, exports, module) {
       this.totalTime = 0;
       this.dateRangePicker = new OverviewDateRangePicker();
       this.init();
-      this.initDateRangePicker();
     },
 
     init: function() {
-      this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
-    },
-
-    initDateRangePicker: function() {
       var self = this;
+      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
+      this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
       self.dateRangePicker.on('date-picked', function(data) {
         self.showData(data);
       });
     },
+
     showData: function(data) {
+      this.learnTimeTrendencyChart.showLoading();
       var self = this;
       $.ajax({
         type: "GET",
@@ -43,20 +42,23 @@ define(function (require, exports, module) {
           self.dateArr = dateArr;
           self.learnTime = learnTime;
           self.totalTime = totalTime;
-          self.data(data.startDate, data.endDate, self.learnTime, self.dateArr);
+          self.show(self.learnTime, self.dateArr);
         }
       });
     },
 
-    data: function(startDate, endDate, time, date) {
-      this.learnTimeTrendencyChart = echarts.init(document.getElementById('js-learn-data-trendency-chart'));
-      this.learnTimeTrendencyChart.showLoading();
-      var self = this;
-      self.show(time, date);
-    },
-
     show: function(time, data) {
       var option = {
+          title: {
+            text: Translator.trans('admin.user.statistics.data.learn_total_time') +':' + this.totalTime,
+            x: "41%",
+            y: "60%",
+            textStyle: {
+              fontSize: 18,
+              fontWeight: 'normal',
+              color: 'rgba(0, 0, 0, 0.3)'
+            },
+          },
           tooltip: {
             trigger: 'axis'
           },
@@ -74,18 +76,17 @@ define(function (require, exports, module) {
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            // 日期
             data: data
           },
           yAxis: {
-            name: '学习时长/分钟',
+            name: Translator.trans('admin.user.statistics.data.learn_time'),
             type: 'value',
             min: 0,
             splitNumber: 1,
           },
           series: [
             {
-              name: '时长',
+              name: Translator.trans('admin.user.statistics.data.time'),
               type: 'line',
               smooth: true,
               itemStyle: {
@@ -95,7 +96,6 @@ define(function (require, exports, module) {
                   }
                 }
               },
-              // 学习时间
               data: time
             }
           ],
