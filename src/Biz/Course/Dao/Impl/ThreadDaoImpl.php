@@ -65,7 +65,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
     public function findThreadIds($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("id");
+            ->select('id');
 
         $result = $builder->execute()->fetchAll(0);
 

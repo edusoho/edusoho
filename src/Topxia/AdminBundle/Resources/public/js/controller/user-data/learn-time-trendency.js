@@ -41,6 +41,7 @@ define(function (require, exports, module) {
           }
           self.dateArr = dateArr;
           self.learnTime = learnTime;
+          totalTime = (Math.floor(totalTime/60) + Translator.trans('site.date.hour') + (totalTime%60) + Translator.trans('site.date.minute') );
           self.totalTime = totalTime;
           self.show(self.learnTime, self.dateArr);
         }
@@ -50,13 +51,13 @@ define(function (require, exports, module) {
     show: function(time, data) {
       var option = {
           title: {
-            text: Translator.trans('admin.user.statistics.data.learn_total_time') +':' + this.totalTime,
+            text: Translator.trans('admin.user.statistics.data.learn_total_time') +': ' + this.totalTime,
             x: "41%",
             y: "60%",
             textStyle: {
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: 'normal',
-              color: 'rgba(0, 0, 0, 0.3)'
+              color: '#79BEE7'
             },
           },
           tooltip: {
