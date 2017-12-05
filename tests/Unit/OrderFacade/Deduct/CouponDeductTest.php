@@ -50,7 +50,7 @@ class CouponDeductTest extends BaseTestCase
 
         $user = $this->getCurrentUser();
 
-        $result = $deduct->onPaid(array('deduct_id' => $coupon['id'],'user_id' => $user['id'],'order_id' => 1,'item' => array('target_type'=>'course','target_id' => 1)));
+        $result = $deduct->onPaid(array('deduct_id' => $coupon['id'], 'user_id' => $user['id'], 'order_id' => 1, 'item' => array('target_type' => 'course', 'target_id' => 1)));
 
         $this->assertEquals(OrderStatusCallback::SUCCESS, $result);
     }

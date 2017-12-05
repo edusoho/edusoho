@@ -15,15 +15,15 @@ class CouponCheckCommandTest extends BaseTestCase
         $this->mockBiz('Order:OrderService', array(
             array(
                 'functionName' => 'findOrderItemDeductsByItemId',
-                'returnValue' => array(array('id'=>1,'deduct_type' => 'coupon','deduct_id' => 2))
-            )
+                'returnValue' => array(array('id' => 1, 'deduct_type' => 'coupon', 'deduct_id' => 2)),
+            ),
         ));
 
         $this->mockBiz('Coupon:CouponService', array(
             array(
                 'functionName' => 'getCoupon',
-                'returnValue' => array('status' => 'using')
-            )
+                'returnValue' => array('status' => 'using'),
+            ),
         ));
 
         $result = $command->execute(array('id' => 1), array());
@@ -32,7 +32,7 @@ class CouponCheckCommandTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedException \Biz\OrderFacade\Exception\OrderPayCheckException
      * @expectedExceptionMessage order.pay_check_msg.coupon_had_been_used
      */
     public function testExecuteCoinAmountNegative()
@@ -43,15 +43,15 @@ class CouponCheckCommandTest extends BaseTestCase
         $this->mockBiz('Order:OrderService', array(
             array(
                 'functionName' => 'findOrderItemDeductsByItemId',
-                'returnValue' => array(array('id'=>1,'deduct_type' => 'coupon','deduct_id' => 2))
-            )
+                'returnValue' => array(array('id' => 1, 'deduct_type' => 'coupon', 'deduct_id' => 2)),
+            ),
         ));
 
         $this->mockBiz('Coupon:CouponService', array(
             array(
                 'functionName' => 'getCoupon',
-                'returnValue' => array('status' => 'unuse')
-            )
+                'returnValue' => array('status' => 'unuse'),
+            ),
         ));
 
         $result = $command->execute(array('id' => 1), array());
