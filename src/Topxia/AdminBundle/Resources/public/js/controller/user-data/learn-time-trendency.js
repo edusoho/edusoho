@@ -8,6 +8,7 @@ define(function (require, exports, module) {
       this.$container = $('.js-learn-data-trendency');
       this.dateArr = [];
       this.learnTime = [];
+      this.totalTime = 0;
       this.dateRangePicker = new OverviewDateRangePicker();
       this.init();
       this.initDateRangePicker();
@@ -32,13 +33,16 @@ define(function (require, exports, module) {
         success: function(resp) {
 
           var dateArr = [],
+            totalTime = 0,
             learnTime = [];
           for (var value of resp) {
             dateArr.push(value.date);
-            learnTime.push(value.learnedTime);
+            learnTime.push(parseInt(value.learnedTime/60));
+            totalTime += parseInt(value.learnedTime/60);
           }
           self.dateArr = dateArr;
           self.learnTime = learnTime;
+          self.totalTime = totalTime;
           self.data(data.startDate, data.endDate, self.learnTime, self.dateArr);
         }
       });
@@ -74,8 +78,10 @@ define(function (require, exports, module) {
             data: data
           },
           yAxis: {
-            name: '学习时长',
+            name: '学习时长/分钟',
             type: 'value',
+            min: 0,
+            splitNumber: 1,
           },
           series: [
             {

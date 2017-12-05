@@ -3814,6 +3814,18 @@ admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
 admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
+
+## 用户数据统计
+admin.user.statistics.data_detail.note_number: Note Number
+admin.user.statistics.data_detail.learning_course_sets: Learning CourseSet
+admin.user.statistics.data_detail.learning_courses: Learning Course
+admin.user.statistics.data_detail.average_process: Average Process
+admin.user.statistics.data_detail.thread_number: Thread Number
+admin.user.statistics.data_detail.post_number: Post Number
+admin.user.statistics.data_detail.active_chart: Active
+admin.user.statistics.data_detail.learn_detail: Learn Detail
+
+
 admin.comment_manage.title: 'Comments'
 admin.comment_manage.monitor: 'Comment monitor'
 admin.comment_manage.id: ID

@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Dao\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\ThreadPostDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -41,6 +42,16 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function deleteByCourseId($courseId)
     {
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
+    public function findThreadIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("threadId");
+
+        $result = $builder->execute()->fetchAll(0);
+
+        return !empty($result) ? ArrayToolkit::column($result, 'threadId') : array();
     }
 
     public function declares()

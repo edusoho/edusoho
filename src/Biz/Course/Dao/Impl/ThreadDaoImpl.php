@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Dao\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\ThreadDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -59,6 +60,16 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         $sql = $this->sql($sql, array(), $start, $limit);
 
         return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
+    }
+
+    public function findThreadIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("id");
+
+        $result = $builder->execute()->fetchAll(0);
+
+        return !empty($result) ? ArrayToolkit::column($result, 'id') : array();
     }
 
     public function declares()

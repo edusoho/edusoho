@@ -20,15 +20,15 @@
   <div class="user-data-count">
     <div class="row">
       <div class="col-sm-4 col-xs-4">
-        <label>在学课程</label>
-        <strong class="inflow-num mll">{{ overview.learningCourseSetCount }}</strong>
+        <label>{{ 'admin.user.statistics.data_detail.learning_course_sets'|trans }}</label>
+        <strong class="inflow-num mll">{{ overview.learningCourseSetCount|default(0) }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
-        <label>在学计划</label>
-        <strong class="inflow-num mll">{{ overview.learningCoursesCount }}</strong>
+        <label>{{ 'admin.user.statistics.data_detail.learning_courses'|trans }}</label>
+        <strong class="inflow-num mll">{{ overview.learningCoursesCount|default(0) }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
-        <label>平均计划进度</label>
+        <label>{{ 'admin.user.statistics.data_detail.average_process'|trans }}</label>
         <strong class="inflow-num mll mrs">{{ overview.learningProcess.percent|default(0) }}%</strong>
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-user-data-popover" data-original-title="" title=""></span>
         <div class="popover-content hidden">
@@ -42,31 +42,31 @@
     </div>
     <div class="row">
       <div class="col-sm-4 col-xs-4">
-        <label>笔记数</label>
-        <strong class="inflow-num mll">{{ overview.learningCourseNotesCount }}</strong>
+        <label>{{ 'admin.user.statistics.data_detail.note_number'|trans }}</label>
+        <strong class="inflow-num mll">{{ overview.learningCourseNotesCount|default(0) }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
-        <label>参与话题</label>
-        <strong class="inflow-num mll">{{ overview.learningCourseThreadsCount }}</strong>
+        <label>{{ 'admin.user.statistics.data_detail.thread_number'|trans }}</label>
+        <strong class="inflow-num mll">{{ overview.learningCourseThreadsCount|default(0) }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
-        <label>评论数</label>
-        <strong class="inflow-num mll">{{ overview.learningCourseThreadPostsCount }}</strong>
+        <label>{{ 'admin.user.statistics.data_detail.post_number'|trans }}</label>
+        <strong class="inflow-num mll">{{ overview.learningReviewCount|default(0) }}</strong>
       </div>
     </div>
   </div>
   <hr class="user-data-line">
 
   <div class="user-data-chart js-learn-data-trendency" data-url={{ path('admin_user_learn_chart', {userId: user.id}) }}>
-    <div class="user-data-title mbm">活跃度</div>
+    <div class="user-data-title mbm">{{ 'admin.user.statistics.data_detail.active_chart'|trans }}</div>
 
     <div id="date-range-picker">
       <span class="user-date-select">
-        <input class="user-date-select__range js-date-range-input" type="text" name="course-datetime" value="{{ '-6 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
+        <input class="user-date-select__range js-date-range-input" type="text" name="course-datetime" value="{{ '-29 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
         <i class="es-icon es-icon-arrowdropdown"></i>
       </span>
       <a href="javascript:;" class="user-date-select__link js-quick-day-pick week" data-days="7">{{ 'course.dashboard.student_trend_seven_days'|trans }}</a>
-      <a href="javascript:;" class="user-date-select__link js-quick-day-pick month" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
+      <a href="javascript:;" class="user-date-select__link js-quick-day-pick month gray-darker" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
       <a href="javascript:;" class="user-date-select__link js-quick-day-pick three-month" data-days="90">{{ '90天'|trans }}</a>
     </div>
 
@@ -77,7 +77,7 @@
 
 
   <div class="user-data-detail">
-    <div class="user-data-title">学习详情</div>
+    <div class="user-data-title">{{ 'admin.user.statistics.data_detail.learn_detail'|trans }}</div>
 
     {% for course in courses %}
       {% set courseSet = courseSets[course.courseSetId] %}
@@ -85,8 +85,8 @@
       <div class="user-teaching-plan clearfix">
         <div class="user-teaching-plan__info">
           <div class="user-teaching-plan__title text-overflow"><a href="#">{{ courseSet.title }}-{{ course.title }}</a></div>
-          <div class="user-teaching-plan__time">加入时间：<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
-          <div class="user-teaching-plan__money">价格：<span>{{ course.price }}</span>元</div>
+          <div class="user-teaching-plan__time">{{ 'join.time'|trans }}：<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
+          <div class="user-teaching-plan__money">{{ 'course.price'|trans }}：<span>{{ member.order.pay_amount|default(0)|to_cash(1) }}</span></div>
         </div>
         <div class="user-teaching-plan__progress">
           <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>

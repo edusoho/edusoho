@@ -54,7 +54,7 @@ class UserLearnStatisticsController extends BaseController
         $overview = $this->getLearnStatisticsService()->getUserOverview($userId);
         $paginator = new Paginator(
             $request,
-            $overview['learningCoursesCount'],
+            empty($overview['learningCoursesCount']) ? 0 : $overview['learningCoursesCount'],
             10
         );
         list($courses, $courseSets, $members) = $this->getLearnStatisticsService()->getLearningCourseDetails(
@@ -107,7 +107,7 @@ class UserLearnStatisticsController extends BaseController
 
     protected function getTimeRange($fields)
     {
-        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m-d', time() - 7 * 24 * 60 * 60);
+        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m-d', time() - 29 * 24 * 60 * 60);
         $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date('Y-m-d', time());
 
         return array(

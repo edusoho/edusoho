@@ -3,17 +3,21 @@
 namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\ThreadService;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Order\Service\OrderService;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
@@ -54,7 +58,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getTotalStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreateTotalStatistics:'.$e->getMessage(), $conditions);
+            $this->getLogger()->error('batchCreateTotalStatistics:' . $e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -72,7 +76,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreatePastDailyStatistics:'.$e->getMessage(), $conditions);
+            $this->getLogger()->error('batchCreatePastDailyStatistics:' . $e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -89,7 +93,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreateDailyStatistics:'.$e->getMessage(), $conditions);
+            $this->getLogger()->error('batchCreateDailyStatistics:' . $e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -102,7 +106,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getDailyStatisticsDao()->batchDelete($conditions);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchDelatePastDailyStatistics:'.$e->getMessage());
+            $this->getLogger()->error('batchDelatePastDailyStatistics:' . $e->getMessage());
             $this->rollback();
             throw $e;
         }
@@ -184,7 +188,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $daoType = 'Total';
         }
 
-        return array($conditions,  $orderBy, $daoType);
+        return array($conditions, $orderBy, $daoType);
     }
 
     public function getTimespan()
@@ -262,7 +266,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->updateStorageByIds(ArrayToolkit::column($dailyData, 'id'));
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage(), $conditions);
+            $this->getLogger()->error('storageDailyStatistics:' . $e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -278,29 +282,43 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
 
         $learnCourseIds = $this->getCourseService()->findUserLearnCourseIds($userId);
 
+        if (empty($learnCourseIds)) {
+            return array();
+        }
+
         $learningCourseSetCount = $this->getCourseSetService()->countUserLearnCourseSets($userId);
         $learningCoursesCount = $this->getCourseService()->countUserLearnCourses($userId);
         $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
         $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds));
-        $learningCourseThreadsCount = $this->getCourseThreadService()->countThreads(array('courseIds' => $learnCourseIds));
-        $learningCourseThreadPostsCount = $this->getCourseThreadService()->searchThreadPostsCount(array('courseIds' => $learnCourseIds));
-
+        $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
+        $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
+        $learningClassroomReviewCount = $this->getClassroomReviewService()->searchReviewCount(array('userId' => $userId));
         return array(
             'learningCourseSetCount' => $learningCourseSetCount,
             'learningCoursesCount' => $learningCoursesCount,
             'learningProcess' => $learningProcess,
             'learningCourseNotesCount' => $learningCourseNotesCount,
             'learningCourseThreadsCount' => $learningCourseThreadsCount,
-            'learningCourseThreadPostsCount' => $learningCourseThreadPostsCount,
+            'learningReviewCount' => $learningCourseReviewCount + $learningClassroomReviewCount,
         );
     }
 
     public function getLearningCourseDetails($userId, $start, $limit)
     {
-        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId, 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        if (empty($members)) {
+            return array(array(), array(), array());
+        }
         $members = ArrayToolkit::index($members, 'courseId');
-        $learnCourseIds = ArrayToolkit::column($members, 'courseId');
 
+        $orderIds = ArrayToolkit::column($members, 'orderId');
+
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+
+        foreach ($members as &$member) {
+            $member['order'] = empty($orders[$member['orderId']]) ? array() : $orders[$member['orderId']];
+        }
+        $learnCourseIds = ArrayToolkit::column($members, 'courseId');
         $learnCourses = $this->getCourseService()->searchCourses(array('courseIds' => $learnCourseIds), array('createdTime' => 'desc'), $start, $limit);
         $courseSetIds = array_filter(ArrayToolkit::column($learnCourses, 'courseSetId'));
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
@@ -539,5 +557,29 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getStatisticsDao($daoType)
     {
         return $this->createDao("UserLearnStatistics:{$daoType}StatisticsDao");
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getCourseReviewService()
+    {
+        return $this->createService('Course:ReviewService');
+    }
+
+    /**
+     * @return ClassroomReviewService
+     */
+    protected function getClassroomReviewService()
+    {
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 }
