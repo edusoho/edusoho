@@ -94,7 +94,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
         $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
 
-        if (!empty($fields['content'])){
+        if (!empty($fields['content'])) {
             $fields['content'] = $this->purifyHtml($fields['content']);
             $fields['content'] = $this->getSensitiveService()->sensitiveCheck($fields['content'], 'review');
         }

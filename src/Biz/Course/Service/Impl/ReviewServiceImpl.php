@@ -131,7 +131,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $meta = $fields['parentId'] > 0 ? array() : array('learnedNum' => $member['learnedNum'], 'lessonNum' => $taskCount);
 
-        if (!empty($fields['content'])){
+        if (!empty($fields['content'])) {
             $fields['content'] = $this->purifyHtml($fields['content']);
             $fields['content'] = $this->getSensitiveService()->sensitiveCheck($fields['content'], 'review');
         }
