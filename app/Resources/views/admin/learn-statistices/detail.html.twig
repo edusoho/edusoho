@@ -21,15 +21,15 @@
     <div class="row">
       <div class="col-sm-4 col-xs-4">
         <label>在学课程</label>
-        <strong class="inflow-num mll">10</strong>
+        <strong class="inflow-num mll">{{ overview.learningCourseSetCount }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
         <label>在学计划</label>
-        <strong class="inflow-num mll">10</strong>
+        <strong class="inflow-num mll">{{ overview.learningCoursesCount }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
         <label>平均计划进度</label>
-        <strong class="inflow-num mll mrs">10%</strong>
+        <strong class="inflow-num mll mrs">{{ overview.learningProcess.percent|default(0) }}%</strong>
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-user-data-popover" data-original-title="" title=""></span>
         <div class="popover-content hidden">
           <div class="popover-item">
@@ -43,21 +43,21 @@
     <div class="row">
       <div class="col-sm-4 col-xs-4">
         <label>笔记数</label>
-        <strong class="inflow-num mll">10</strong>
+        <strong class="inflow-num mll">{{ overview.learningCourseNotesCount }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
         <label>参与话题</label>
-        <strong class="inflow-num mll">10</strong>
+        <strong class="inflow-num mll">{{ overview.learningCourseThreadsCount }}</strong>
       </div>
       <div class="col-sm-4 col-xs-4">
         <label>评论数</label>
-        <strong class="inflow-num mll">10</strong>
+        <strong class="inflow-num mll">{{ overview.learningCourseThreadPostsCount }}</strong>
       </div>
     </div>
   </div>
   <hr class="user-data-line">
 
-  <div class="user-data-chart js-learn-data-trendency">
+  <div class="user-data-chart js-learn-data-trendency" data-url={{ path('admin_user_learn_chart', {userId: app.request.get('userId')}) }}>
     <div class="user-data-title mbm">活跃度</div>
 
     <div id="date-range-picker">
@@ -75,60 +75,30 @@
 
   <hr class="user-data-line">
 
-  {% set courses =
-    [
-      {
-        "couseSet": '随风飘天涯',
-        "plan": '勿念桑梓地',
-        "time": '2017-10-25',
-        "price": '100',
-        "percent": '50%'
-      },
-      {
-        "couseSet": '新人入门之基础篇',
-        "plan": 'Sketch 设计基础',
-        "time": '2017-09-25',
-        "price": '10',
-        "percent": '20%'
-      },
-      {
-        "couseSet": '壮士入门之基础篇',
-        "plan": 'Photoshop 设计基础',
-        "time": '2017-08-25',
-        "price": '20',
-        "percent": '70%'
-      },
-      {
-        "couseSet": '壮士入门之基础篇',
-        "plan": 'Photoshop 设计基础',
-        "time": '2017-08-25',
-        "price": '20',
-        "percent": '10%'
-      }
-    ]
-  %}
 
   <div class="user-data-detail">
     <div class="user-data-title">学习详情</div>
 
     {% for course in courses %}
+      {% set courseSet = courseSets[course.courseSetId] %}
+      {% set member = members[course.id] %}
       <div class="user-teaching-plan clearfix">
         <div class="user-teaching-plan__info">
-          <div class="user-teaching-plan__title text-overflow"><a href="#">{{ course.couseSet }}-{{ course.plan }}</a></div>
-          <div class="user-teaching-plan__time">加入时间：<span>{{ course.plan }}</span></div>
+          <div class="user-teaching-plan__title text-overflow"><a href="#">{{ courseSet.title }}-{{ course.title }}</a></div>
+          <div class="user-teaching-plan__time">加入时间：<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
           <div class="user-teaching-plan__money">价格：<span>{{ course.price }}</span>元</div>
         </div>
         <div class="user-teaching-plan__progress">
           <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
           <div class="plan-progress plan-progress-xs">
-            <div class="progress-bar plan-progress-bar progress-bar-success" style="width: {{ course.percent }};"></div>
+            <div class="progress-bar plan-progress-bar progress-bar-success" style="width: {{ course.process.percent }}%;"></div>
           </div>
-          <span>{{ course.percent }}</span>
+          <span>{{ course.process.percent }}%</span>
         </div>
       </div>
     {% endfor %}
 
   </div>
 
-  {#  分页 {{ admin_macro.paginator(paginator) }} #}
+{{ admin_macro.paginator(paginator) }}
 {% endblock %}

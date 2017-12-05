@@ -7,8 +7,11 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -249,6 +252,28 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         );
     }
 
+    public function getLearningCourseDetails($userId, $start, $limit)
+    {
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'courseId');
+        $learnCourseIds = ArrayToolkit::column($members, 'courseId');
+
+        $learnCourses = $this->getCourseService()->searchCourses(array('courseIds' => $learnCourseIds), array('createdTime' => 'desc'), $start, $limit);
+        $courseSetIds = array_filter(ArrayToolkit::column($learnCourses, 'courseSetId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        foreach ($learnCourses as &$course) {
+            $course['process'] = $this->getLearningDataAnalysisService()->getUserLearningProgress($course['id'], $userId);
+        }
+
+        return array($learnCourses, $courseSets, $members);
+    }
+
+    public function getDailyLearnData($userId, $startTime, $endTime)
+    {
+        return $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(array('userId' => $userId, 'recordTime_GE' => $startTime, 'recordTime_LT' => $endTime));
+    }
+
     private function findUserOperateClassroomNum($operation, $conditions)
     {
         $conditions = $this->buildMemberOperationConditions($conditions);
@@ -406,6 +431,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $this->createService('MemberOperation:MemberOperationService');
     }
 
+    /**
+     * @return DailyStatisticsDao
+     */
     protected function getDailyStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:DailyStatisticsDao');
@@ -462,5 +490,21 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getCourseThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

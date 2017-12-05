@@ -8,28 +8,40 @@ define(function (require, exports, module) {
       this.$container = $('.js-learn-data-trendency');
       this.dateArr = [];
       this.learnTime = [];
+      this.dateRangePicker = new OverviewDateRangePicker('.js-user-data-chart');
       this.init();
+      this.initDateRangePicker();
     },
 
     init: function() {
+      this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
+    },
+
+    initDateRangePicker: function() {
       var self = this;
-      this.dateRangePicker = new OverviewDateRangePicker('.js-user-data-chart');
-      // 静态数据
-      this.dateArr = ["2017-11-01", "2017-11-26", "2017-11-27", "2017-11-28", "2017-11-29", "2017-11-30", "2017-12-01"];
-      this.learnTime = [10, 12, 21, 54, 260, 830, 710];
-      this.dateRangePicker.on('date-picked', function(data) {
-        var dateArr = [];
-        var learnTime = [];
-        for (var i = 0; i < 7; i++) {
-          dateArr.push(data.startDate + i);
-          learnTime.push(i);
-        }
-        // 先这么测试着 静态数据
-        this.dateArr = dateArr;
-        this.learnTime = learnTime;
-        self.data(data.startDate, data.endDate, this.learnTime, this.dateArr);
+      self.dateRangePicker.on('date-picked', function(data) {
+        self.showData(data);
       });
-      this.data(this.dateRangePicker.getStartDate(), this.dateRangePicker.getEndDate(), this.learnTime, this.dateArr);
+    },
+    showData: function(data) {
+      var self = this;
+      $.ajax({
+        type: "GET",
+        data: {startTime: data.startDate, endTime: data.endDate},
+        url: self.$container.data('url'),
+        success: function(resp) {
+
+          var dateArr = [],
+            learnTime = [];
+          for (var value of resp) {
+            dateArr.push(value.date);
+            learnTime.push(value.learnedTime);
+          }
+          self.dateArr = dateArr;
+          self.learnTime = learnTime;
+          self.data(data.startDate, data.endDate, self.learnTime, self.dateArr);
+        }
+      });
     },
 
     data: function(startDate, endDate, time, date) {

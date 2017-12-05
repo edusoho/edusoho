@@ -23,6 +23,15 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
         return $this->update($ids, array('isStorage' => 1));
     }
 
+    public function findUserDailyLearnTimeByDate($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("learnedSeconds as learnedTime ,from_unixtime(recordTime,'%Y-%m-%d') date")
+            ->groupBy("date ASC");
+
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
     public function declares()
     {
         return array(
