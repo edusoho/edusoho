@@ -11,7 +11,6 @@ use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\ThreadService;
-use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
@@ -58,7 +57,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getTotalStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreateTotalStatistics:' . $e->getMessage(), $conditions);
+            $this->getLogger()->error('batchCreateTotalStatistics:'.$e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -76,7 +75,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreatePastDailyStatistics:' . $e->getMessage(), $conditions);
+            $this->getLogger()->error('batchCreatePastDailyStatistics:'.$e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -93,7 +92,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getDailyStatisticsDao()->batchCreate($statistics);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchCreateDailyStatistics:' . $e->getMessage(), $conditions);
+            $this->getLogger()->error('batchCreateDailyStatistics:'.$e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -106,7 +105,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->getDailyStatisticsDao()->batchDelete($conditions);
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('batchDelatePastDailyStatistics:' . $e->getMessage());
+            $this->getLogger()->error('batchDelatePastDailyStatistics:'.$e->getMessage());
             $this->rollback();
             throw $e;
         }
@@ -266,7 +265,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->updateStorageByIds(ArrayToolkit::column($dailyData, 'id'));
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('storageDailyStatistics:' . $e->getMessage(), $conditions);
+            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage(), $conditions);
             $this->rollback();
             throw $e;
         }
@@ -293,6 +292,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
         $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
         $learningClassroomReviewCount = $this->getClassroomReviewService()->searchReviewCount(array('userId' => $userId));
+
         return array(
             'learningCourseSetCount' => $learningCourseSetCount,
             'learningCoursesCount' => $learningCoursesCount,

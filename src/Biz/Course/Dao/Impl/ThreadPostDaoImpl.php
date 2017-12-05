@@ -47,7 +47,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function findThreadIds($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("threadId");
+            ->select('threadId');
 
         $result = $builder->execute()->fetchAll(0);
 
