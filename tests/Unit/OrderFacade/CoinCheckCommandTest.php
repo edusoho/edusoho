@@ -21,6 +21,7 @@ class CoinCheckCommandTest extends BaseTestCase
 
     /**
      * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedExceptionMessage order.pay_check_msg.parameters_error
      */
     public function testExecuteCoinAmountNegative()
     {
@@ -31,6 +32,7 @@ class CoinCheckCommandTest extends BaseTestCase
 
     /**
      * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedExceptionMessage order.pay_check_msg.missing_pay_password
      */
     public function testExecuteEmptyPayPassword()
     {
@@ -41,6 +43,7 @@ class CoinCheckCommandTest extends BaseTestCase
 
     /**
      * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedExceptionMessage order.pay_check_msg.balance_not_enough
      */
     public function testExecuteBalanceAmount()
     {
@@ -54,11 +57,12 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $command->execute(array(), array('coinAmount' => 10));
+        $result = $command->execute(array(), array('coinAmount' => 10, 'payPassword' => '123456'));
     }
 
     /**
      * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedExceptionMessage order.pay_check_msg.pay_password_not_set
      */
     public function testExecutePayPasswordSetted()
     {
@@ -76,11 +80,12 @@ class CoinCheckCommandTest extends BaseTestCase
             ),
         ));
 
-        $result = $command->execute(array(), array('coinAmount' => 10));
+        $result = $command->execute(array(), array('coinAmount' => 10,'payPassword' => '123456'));
     }
 
     /**
      * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedExceptionMessage order.pay_check_msg.incorrect_pay_password
      */
     public function testExecuteValidatePayPassword()
     {
@@ -146,6 +151,7 @@ class CoinCheckCommandTest extends BaseTestCase
 
     /**
      * @expectedException Biz\OrderFacade\Exception\OrderPayCheckException
+     * @expectedExceptionMessage order.pay_check_msg.out_of_max_coin
      */
     public function testExecuteCoinAmountError()
     {
