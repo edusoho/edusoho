@@ -12,14 +12,14 @@ class TotalStatisticsDaoTest extends BaseTestCase
         $statistic = array(
             'userId' => 1,
         );
-        $this->getDailyStatisticsDao()->create($statistic);
+        $this->getTotalStatisticsDao()->create($statistic);
         $statistic['userId'] = 2;
-        $statistic = $this->getDailyStatisticsDao()->create($statistic);
+        $statistic = $this->getTotalStatisticsDao()->create($statistic);
 
-        $this->assertEquals(2, count($this->getDailyStatisticsDao()->findByIds(array(1, 2))));
-        $this->assertEquals(1, count($this->getDailyStatisticsDao()->findByIds(array(1))));
-        $this->assertEquals(0, count($this->getDailyStatisticsDao()->findByIds(array())));
-        $this->assertEquals(0, count($this->getDailyStatisticsDao()->findByIds(array(3, 4))));
+        $this->assertEquals(2, count($this->getTotalStatisticsDao()->findByIds(array(1, 2))));
+        $this->assertEquals(1, count($this->getTotalStatisticsDao()->findByIds(array(1))));
+        $this->assertEquals(0, count($this->getTotalStatisticsDao()->findByIds(array())));
+        $this->assertEquals(0, count($this->getTotalStatisticsDao()->findByIds(array(3, 4))));
     }
 
     public function testStatisticSearch()
