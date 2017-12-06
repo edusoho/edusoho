@@ -114,7 +114,7 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
         $expected5 = $this->mockDataObject(array('user_id' => '2', 'target_type' => 'classroom', 'target_id' => 5));
 
         $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join'));
-        $result = ArrayToolkit::index( $result, 'user_id');
+        $result = ArrayToolkit::index($result, 'user_id');
         $this->assertEquals(3, $result[2]['count']);
         $this->assertEquals(1, $result[1]['count']);
 
@@ -122,20 +122,20 @@ class MemberOperationRecordDaoTest extends BaseDaoTestCase
         $this->assertEmpty($result);
 
         $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'user_id' => 1));
-        $result = ArrayToolkit::index( $result, 'user_id');
+        $result = ArrayToolkit::index($result, 'user_id');
 
         $this->assertTrue(empty($result[2]));
-        $this->assertEquals(1, $result[1]['count']);   
+        $this->assertEquals(1, $result[1]['count']);
 
         $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'user_id' => 1));
-        $result = ArrayToolkit::index( $result, 'user_id');
+        $result = ArrayToolkit::index($result, 'user_id');
         $this->assertTrue(empty($result[2]));
-        $this->assertEquals(1, $result[1]['count']);  
+        $this->assertEquals(1, $result[1]['count']);
 
-        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join','target_type' => 'classroom'));
-        $result = ArrayToolkit::index( $result, 'user_id');
+        $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'target_type' => 'classroom'));
+        $result = ArrayToolkit::index($result, 'user_id');
         $this->assertTrue(empty($result[1]));
-        $this->assertEquals(2, $result[2]['count']); 
+        $this->assertEquals(2, $result[2]['count']);
 
         $result = $this->getDao()->countGroupByUserId('target_id', array('operate_type' => 'join', 'user_ids' => array(1)));
         $result = ArrayToolkit::index($result, 'user_id');

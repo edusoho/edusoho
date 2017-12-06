@@ -3,8 +3,20 @@
 namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\ThreadService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Order\Service\OrderService;
 
 class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsService
 {
@@ -180,7 +192,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $daoType = 'Total';
         }
 
-        return array($conditions,  $orderBy, $daoType);
+        return array($conditions, $orderBy, $daoType);
     }
 
     public function getTimespan()
@@ -262,6 +274,71 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function getUserOverview($userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if (empty($user)) {
+            throw $this->createNotFoundException('用户不存在！');
+        }
+
+        $learnCourseIds = $this->getCourseService()->findUserLearnCourseIds($userId);
+
+        if (empty($learnCourseIds)) {
+            return array();
+        }
+
+        $learningCourseSetCount = $this->getCourseSetService()->countUserLearnCourseSets($userId);
+        $learningCoursesCount = $this->getCourseService()->countUserLearnCourses($userId);
+        $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
+        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds));
+        $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
+        $learningClassroomThreadCount = $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType($userId, 'classroom');
+        $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
+        $learningClassroomReviewCount = $this->getClassroomReviewService()->searchReviewCount(array('userId' => $userId));
+
+        return array(
+            'learningCourseSetCount' => $learningCourseSetCount,
+            'learningCoursesCount' => $learningCoursesCount,
+            'learningProcess' => $learningProcess,
+            'learningCourseNotesCount' => $learningCourseNotesCount,
+            'learningCourseThreadsCount' => $learningCourseThreadsCount + $learningClassroomThreadCount,
+            'learningReviewCount' => $learningCourseReviewCount + $learningClassroomReviewCount,
+        );
+    }
+
+    public function findLearningCourseDetails($userId, $start, $limit)
+    {
+        $members = $this->getCourseMemberService()->searchMembers(array('userId' => $userId, 'role' => 'student'), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        if (empty($members)) {
+            return array(array(), array(), array());
+        }
+        $members = ArrayToolkit::index($members, 'courseId');
+
+        $orderIds = ArrayToolkit::column($members, 'orderId');
+
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+
+        foreach ($members as &$member) {
+            $member['order'] = empty($orders[$member['orderId']]) ? array() : $orders[$member['orderId']];
+        }
+        $learnCourseIds = ArrayToolkit::column($members, 'courseId');
+        $learnCourses = $this->getCourseService()->searchCourses(array('courseIds' => $learnCourseIds), array('createdTime' => 'desc'), $start, $limit);
+        $courseSetIds = array_filter(ArrayToolkit::column($learnCourses, 'courseSetId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        foreach ($learnCourses as &$course) {
+            $course['process'] = $this->getLearningDataAnalysisService()->getUserLearningProgress($course['id'], $userId);
+        }
+
+        return array($learnCourses, $courseSets, $members);
+    }
+
+    public function getDailyLearnData($userId, $startTime, $endTime)
+    {
+        return $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(array('userId' => $userId, 'recordTime_GE' => $startTime, 'recordTime_LT' => $endTime));
     }
 
     private function findUserOperateClassroomNum($operation, $conditions)
@@ -406,6 +483,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $this->createService('MemberOperation:MemberOperationService');
     }
 
+    /**
+     * @return DailyStatisticsDao
+     */
     protected function getDailyStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:DailyStatisticsDao');
@@ -416,13 +496,104 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $this->createDao('UserLearnStatistics:TotalStatisticsDao');
     }
 
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getCourseNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return ThreadService
+     */
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return \Biz\Thread\Service\ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->createService('Thread:ThreadService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     protected function getStatisticsDao($daoType)
     {
         return $this->createDao("UserLearnStatistics:{$daoType}StatisticsDao");
     }
 
-    protected function getUserService()
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
     {
-        return $this->createService('User:UserService');
+        return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return ReviewService
+     */
+    protected function getCourseReviewService()
+    {
+        return $this->createService('Course:ReviewService');
+    }
+
+    /**
+     * @return ClassroomReviewService
+     */
+    protected function getClassroomReviewService()
+    {
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 }

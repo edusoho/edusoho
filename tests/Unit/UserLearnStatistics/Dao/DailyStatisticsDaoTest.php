@@ -3,6 +3,7 @@
 namespace Tests\Unit\UserLearnStatistics\Dao;
 
 use Biz\BaseTestCase;
+use Biz\UserLearnStatistics\Dao\DailyStatisticsDao;
 
 class DailyStatisticsDaoTest extends BaseTestCase
 {
@@ -42,6 +43,17 @@ class DailyStatisticsDaoTest extends BaseTestCase
 
         $this->assertNotNull($result);
         $this->assertEquals($result, 1);
+    }
+
+    public function testFindUserDailyLearnTimeByDate()
+    {
+        $defaultMockFields = $this->getDefaultMockFields();
+        $this->getDailyStatisticsDao()->create($defaultMockFields);
+
+        $result = $this->getDailyStatisticsDao()->findUserDailyLearnTimeByDate(array('userId' => 3, 'recordTime_GE' => time() - 24 * 3600));
+        $this->assertEquals(1, count($result));
+        $statistics = reset($result);
+        $this->assertEquals(10, $statistics['learnedTime']);
     }
 
     public function testUpdateStorageByIds()
@@ -88,10 +100,14 @@ class DailyStatisticsDaoTest extends BaseTestCase
             'joinedClassroomNum' => 1,
             'joinedCourseSetNum' => 1,
             'paidAmount' => 11,
+            'learnedSeconds' => 10,
             'recordTime' => time(),
         );
     }
 
+    /**
+     * @return DailyStatisticsDao
+     */
     protected function getDailyStatisticsDao()
     {
         return $this->createDao('UserLearnStatistics:DailyStatisticsDao');

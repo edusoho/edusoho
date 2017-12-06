@@ -4,6 +4,12 @@ namespace Biz\UserLearnStatistics\Service;
 
 interface LearnStatisticsService
 {
+    public function getUserOverview($userId);
+
+    public function findLearningCourseDetails($userId, $start, $limit);
+
+    public function getDailyLearnData($userId, $startTime, $endTime);
+
     public function statisticsDataSearch($conditions);
 
     public function statisticsDataCount($conditions);

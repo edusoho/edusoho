@@ -136,6 +136,10 @@ interface CourseService
 
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
+    public function findUserLearnCourseIds($userId);
+
+    public function countUserLearnCourses($userId);
+
     /**
      * @param array $ids
      *

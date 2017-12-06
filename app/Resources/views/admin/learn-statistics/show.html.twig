@@ -34,6 +34,7 @@
           <th>{{'user.learn.statistics.finished.task.num'|trans}}</th>
           <th>{{'user.learn.statistics.learned.econds'|trans}}</th>
           <th>{{'user.learn.statistics.actual.amount'|trans}}</th>
+          <th>{{ 'operation'|trans }}</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +59,7 @@
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
               <td>{{ (statistic.learnedSeconds|default(0)/60)|number_format(2, '.', ',') }}</td>
               <td>{{ statistic.actualAmount|default(0)|to_cash(0) }}</td>
+              <td><a href="{{ path('admin_user_learn_detail', {userId:user.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
             </tr>
           {% endfor %}
         {% else %}

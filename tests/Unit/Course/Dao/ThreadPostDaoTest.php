@@ -75,6 +75,15 @@ class ThreadPostDaoTest extends BaseDaoTestCase
         $this->assertEquals(0, $this->getDao()->deleteByThreadId(2));
     }
 
+    public function testFindThreadIds()
+    {
+        $res[0] = $this->mockDataObject(array('userId' => 1));
+        $res[1] = $this->mockDataObject(array('userId' => 1));
+        $res[2] = $this->mockDataObject(array('userId' => 2));
+
+        $this->assertEquals(2, count($this->getDao()->findThreadIds(array('userId' => 1))));
+    }
+
     protected function searchByGroupTestUtil($testConditons, $testFields, $groupBy = null)
     {
         foreach ($testConditons as $testConditon) {
