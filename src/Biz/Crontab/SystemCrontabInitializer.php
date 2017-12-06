@@ -107,7 +107,7 @@ class SystemCrontabInitializer
             'SessionGcJob' => array(
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Session\Job\SessionGcJob',
-            ),  
+            ),
             'OnlineGcJob' => array(
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Session\Job\OnlineGcJob',
@@ -115,7 +115,7 @@ class SystemCrontabInitializer
             'Scheduler_MarkExecutingTimeoutJob' => array(
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\MarkExecutingTimeoutJob',
-            ),    
+            ),
             'RefreshLearningProgressJob' => array(
                 'expression' => '0 2 * * *',
                 'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
@@ -163,14 +163,14 @@ class SystemCrontabInitializer
             'args' => array(),
         );
 
-        foreach($jobMap as $key => $job) {
+        foreach ($jobMap as $key => $job) {
             $count = self::getSchedulerService()->countJobs(array('name' => $key, 'source' => self::SOURCE_SYSTEM));
             if (0 == $count) {
                 $job = array_merge($defaultJob, $job);
                 $job['name'] = $key;
                 self::getSchedulerService()->register($job);
-            }  
-        } 
+            }
+        }
     }
 
     /**
