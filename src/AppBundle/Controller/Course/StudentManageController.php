@@ -236,7 +236,7 @@ class StudentManageController extends BaseController
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
-            return $this->createMessageResponse('error',sprintf('学员#%s不属于教学计划#%s的学员', $userId, $courseId));
+            return $this->createMessageResponse('error', sprintf('学员#%s不属于教学计划#%s的学员', $userId, $courseId));
         }
 
         return $this->forward('AppBundle:Student:definedShow', array(
