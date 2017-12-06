@@ -1,6 +1,7 @@
 {% do script(['app/js/default/header/index.js']) %}
 
 <header class="es-header navbar">
+  {# logo显示 #}
   <div class="navbar-header">
     <div class="visible-xs  navbar-mobile">
       <a href="javascript:;" class="navbar-more js-navbar-more">
@@ -34,18 +35,24 @@
       {% endif %}
     </a>
   </div>
+
+  
   <nav class="collapse navbar-collapse">
+    {# 导航栏模块 #}
     <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
       {% include 'default/top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: false} %}
     </ul>
+
+    {# 个人操作模块 #}
     <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
+
       <ul class="nav user-nav">
         {% if app.user %}
-        <li class="user-avatar-li nav-hover">
+       {#  <li class="user-avatar-li nav-hover">
           <a href="javascript:;" class="dropdown-toggle">
             <img class="avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
-          <ul class="dropdown-menu" role="menu">
+          <ul class="dropdown-menu cd-dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'homepage.header.personal_menu'|trans}}</a></li>
             <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
@@ -71,8 +78,24 @@
             {% endif %}
             <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
           </ul>
+        </li> #}
+
+        <li class="user-manage-li nav-hover">
+          {% if has_permission('admin') or 'ROLE_TEACHER' in app.user.roles %}
+            <button class="dropdown-toggle btn cd-btn cd-btn-sm cd-btn-ghost-primary">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></button>
+            <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-manage-dropdown" role="menu">
+              {% if has_permission('admin') %}<li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
+              {% endif %}
+              <li class="active"><a href="javascript:;">{{ 'homepage.header.my_learning'|trans }}</a></li>
+              <li><a href="javascript:;">{{ 'homepage.header.my_course'|trans }}</a></li>
+            </ul>
+          {% else %}
+            <a class="btn cd-btn cd-btn-sm cd-btn-ghost-primary user-student-manage" href="{{ path('my') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+          {% endif %}
         </li>
-        <li class="visible-lg">
+
+        {# 我的教学／我的学习 #}
+        {# <li class="visible-lg">
           <a href="{{ path('my') }}">
             {% if 'ROLE_TEACHER' in app.user.roles %}
               {{'homepage.header.my_course'|trans}}
@@ -80,8 +103,10 @@
               {{'homepage.header.my_learning'|trans}}
             {% endif %}
           </a>
-        </li>
-        <li class="visible-lg nav-hover">
+        </li> #}
+
+
+       {#  <li class="visible-lg nav-hover">
           {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
             <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
           {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
@@ -106,7 +131,7 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> #}
         {% else %}
         <li class="user-avatar-li nav-hover visible-xs">
           <a href="javascript:;" class="dropdown-toggle">
@@ -134,17 +159,20 @@
              {% endif %}
           </ul>
         </li>
+
         <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
         <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
         {% endif %}
         {#{% include 'default/switch-language.html.twig' %}#}
       </ul>
-      <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
+
+      {# 搜索框 #}
+     {#  <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
           <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{'homepage.header.search'|trans}}">
           <button class="button es-icon es-icon-search"></button>
         </div>
-      </form>
+      </form> #}
     </div>
   </nav>
 </header>
