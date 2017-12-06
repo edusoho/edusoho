@@ -2,7 +2,6 @@
 
 namespace Biz\Thread\Dao\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\Dao\ThreadPostDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
