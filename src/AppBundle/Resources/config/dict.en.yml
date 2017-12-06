@@ -425,3 +425,10 @@ exchangeStatus:
 rewardPointUserType:
     nickname: Nickname
     truename: Truename
+
+deviceType:
+    desktop: desktop
+    smartphone: smartphone
+    tablet: tablet
+    feature phone: feature phone
+    tv: tv

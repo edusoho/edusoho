@@ -21,14 +21,7 @@ class OnlineController extends BaseController
         $uuid = $request->cookies->get($cookieName, $this->generateGuid());
 
         if (!empty($sessionId)) {
-            $online = array(
-                'sess_id' => $uuid,
-                'ip' => $request->getClientIp(),
-                'user_agent' => $request->headers->get('User-Agent', ''),
-                'source' => DeviceToolkit::isMobileClient() ? '手机浏览器' : 'PC',
-            );
-            $this->getOnlineService()->saveOnline($online);
-            //            $request->getSession()->set('online_flush_time', time());
+            $this->get('user.online_track')->track($uuid);
         }
 
         $response = new Response('true');
@@ -113,13 +106,19 @@ class OnlineController extends BaseController
         ));
     }
 
+    /**
+     * @return \Codeages\Biz\Framework\Session\Service\OnlineService
+     */
     protected function getOnlineService()
     {
-        return $this->getBiz()->service('Session:OnlineService');
+        return $this->createService('Session:OnlineService');
     }
 
+    /**
+     * @return \Biz\User\Service\UserService
+     */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

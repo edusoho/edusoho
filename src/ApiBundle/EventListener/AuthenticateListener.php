@@ -17,34 +17,10 @@ class AuthenticateListener
 
     public function onAuthenticate(AuthenticationEvent $event)
     {
-        $token = $event->getAuthenticationToken();
         $request = $this->container->get('request');
         $authToken = $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER);
         if (!empty($authToken)) {
-            $this->onlineSample($request, $token);
+            $this->container->get('user.online_track')->track($request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER));
         }
     }
-
-    protected function onlineSample($request, $token)
-    {
-        $user = $token->getUser();
-        $online = array(
-            'sess_id' => $request->headers->get(XAuthTokenAuthenticationListener::TOKEN_HEADER),
-            'user_id' => $user['id'],
-            'ip' => $request->getClientIp(),
-            'user_agent' => $request->headers->get('User-Agent', ''),
-            'source' => 'App',
-        );
-        $this->getOnlineService()->saveOnline($online);
-    }
-
-    /**
-     * @return \Codeages\Biz\Framework\Session\Service\OnlineService
-     */
-    private function getOnlineService()
-    {
-        $biz = $this->container->get('biz');
-        return $biz->createService('Session:OnlineService');
-    }
-
 }
