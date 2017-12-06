@@ -370,13 +370,20 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $syncStatisticsSetting = $this->getSettingService()->get('learn_statistics');
 
         if (empty($syncStatisticsSetting)) {
-            $syncStatisticsSetting = array();
-            $syncStatisticsSetting['currentTime'] = strtotime(date('Y-m-d'), time());
-            //currentTime 当天升级的那天的0点0分
-            $syncStatisticsSetting['timespan'] = 24 * 60 * 60 * 365;
-
-            $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
+            $syncStatisticsSetting = $this->setStatisticsSetting();
         }
+
+        return $syncStatisticsSetting;
+    }
+
+    public function setStatisticsSetting()
+    {
+        //currentTime 当天升级的那天的0点0分
+        $syncStatisticsSetting = array(
+            'currentTime' => strtotime(date('Y-m-d')),
+            'timespan' => 24 * 60 * 60 * 365,
+        );
+        $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
 
         return $syncStatisticsSetting;
     }
