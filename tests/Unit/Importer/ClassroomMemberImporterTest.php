@@ -144,12 +144,12 @@ class ClassroomMemberImporterTest extends BaseTestCase
             array(
                 'classroomId' => 111,
                 'price' => 10,
-                'remark' => '通过批量导入添加'
+                'remark' => '通过批量导入添加',
             ),
             array(),
             array(),
             array(
-                'excel' => new UploadedFile(__DIR__.'/File/classmember_import.xls', 'classmember_import.xls')
+                'excel' => new UploadedFile(__DIR__.'/File/classmember_import.xls', 'classmember_import.xls'),
             )
         );
         $user = array('email' => 'test@qq.com', 'password' => 'password', 'salt' => 'salt', 'nickname' => 'test', 'type' => 'default', 'roles' => array('ROLE_USER'));
@@ -166,12 +166,12 @@ class ClassroomMemberImporterTest extends BaseTestCase
             array(
                 'classroomId' => 111,
                 'price' => 10,
-                'remark' => '通过批量导入添加'
+                'remark' => '通过批量导入添加',
             ),
             array(),
             array(),
             array(
-                'excel' => array()
+                'excel' => array(),
             )
         );
         $result = $importer->check($request);
@@ -186,12 +186,12 @@ class ClassroomMemberImporterTest extends BaseTestCase
             array(
                 'classroomId' => 111,
                 'price' => 10,
-                'remark' => '通过批量导入添加'
+                'remark' => '通过批量导入添加',
             ),
             array(),
             array(),
             array(
-                'excel' => new UploadedFile(__DIR__.'/File/classmember_import.xls', 'classmember_import.xls')
+                'excel' => new UploadedFile(__DIR__.'/File/classmember_import.xls', 'classmember_import.xls'),
             )
         );
         $result = $importer->check($request);
@@ -329,8 +329,8 @@ class ClassroomMemberImporterTest extends BaseTestCase
         $expect = array('用户名', '邮箱', '手机');
         $importer = new ClassroomMemberImporter($this->getBiz());
         $result = ReflectionUtils::invokeMethod(
-            $importer, 
-            'excelAnalyse', 
+            $importer,
+            'excelAnalyse',
             array(new UploadedFile(__DIR__.'/File/classmember_import.xls', 'classmember_import.xls'))
         );
         $this->assertEquals($expect, $result[2]);
@@ -341,8 +341,8 @@ class ClassroomMemberImporterTest extends BaseTestCase
         $expect = array('用户名');
         $importer = new ClassroomMemberImporter($this->getBiz());
         $result = ReflectionUtils::invokeMethod(
-            $importer, 
-            'checkNecessaryFields', 
+            $importer,
+            'checkNecessaryFields',
             array($expect)
         );
         $this->assertTrue($result);
