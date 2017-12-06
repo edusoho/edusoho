@@ -61,6 +61,7 @@ class UserLearnStatisticsController extends BaseController
 
         $data['dailyNotStorageDataNum'] = $this->getLearnStatisticsService()->countDailyStatistics(array('isStorage' => 0));
         $data['dailyDataNum'] = $this->getLearnStatisticsService()->countDailyStatistics(array());
+
         return $this->render('admin/learn-statistics/sync-info.html.twig', array(
             'data' => $data,
         ));
