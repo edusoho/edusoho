@@ -51,9 +51,7 @@
               <td style="vertical-align: middle;">
                 <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
                 {% if app.user.isAdmin() %}
-                <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>
-                {% elseif setting("course.buy_fill_userinfo") %}
-                   <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>
+                  <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>
                 {% endif %}
                 <div class="btn-group vertical-top">
                   <a href="#" class="mrm link-primary dropdown-toggle" data-toggle="dropdown">
