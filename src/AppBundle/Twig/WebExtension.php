@@ -9,13 +9,13 @@ use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
+use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Codeages\Biz\Framework\Context\Biz;
-use DeviceDetector\DeviceDetector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
@@ -166,10 +166,10 @@ class WebExtension extends \Twig_Extension
 
     public function parseUserAgent($userAgent)
     {
-        $deviceDetector = new DeviceDetector($userAgent);
-        $deviceDetector->parse();
+        $deviceDetector = new DeviceDetectorAdapter($userAgent);
 
         return array(
+            'device' => $deviceDetector->getDevice(),
             'client' => $deviceDetector->getClient(),
             'os' => $deviceDetector->getOs(),
         );
@@ -221,10 +221,10 @@ class WebExtension extends \Twig_Extension
             $result = !(
                 isset($copyright['owned'])
                 && isset($copyright['thirdCopyright'])
-                && $copyright['thirdCopyright'] != 2
+                && 2 != $copyright['thirdCopyright']
                 && isset($copyright['licenseDomains'])
                 && in_array($host, explode(';', $copyright['licenseDomains']))
-                || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2)
+                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright'])
             );
 
             return $result;
@@ -273,14 +273,14 @@ class WebExtension extends \Twig_Extension
         $apps = $this->getAppService()->findApps(0, $count);
 
         $apps = array_filter($apps, function ($app) {
-            return $app['developerName'] == 'EduSoho官方';
+            return 'EduSoho官方' == $app['developerName'];
         });
         $notifies = array_reduce(
             $apps,
             function ($notifies, $app) {
                 if (!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
                     $notifies[$app['type']][] = $app['name'];
-                } elseif ($app['code'] !== 'MAIN' && $app['protocol'] < 3) {
+                } elseif ('MAIN' !== $app['code'] && $app['protocol'] < 3) {
                     $notifies[$app['type']][] = $app['name'];
                 }
 
@@ -315,7 +315,7 @@ class WebExtension extends \Twig_Extension
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
             if ($imgs) {
                 foreach ($imgs[1] as $img) {
-                    if (strpos($img, $publicUrlPath) === 0) {
+                    if (0 === strpos($img, $publicUrlPath)) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -427,7 +427,7 @@ class WebExtension extends \Twig_Extension
 
     public function isMicroMessenger()
     {
-        return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
+        return false !== strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger');
     }
 
     public function renameLocale($locale)
@@ -435,7 +435,7 @@ class WebExtension extends \Twig_Extension
         $locale = strtolower($locale);
         $locale = str_replace('_', '-', $locale);
 
-        return $locale == 'zh-cn' ? '' : '-'.$locale;
+        return 'zh-cn' == $locale ? '' : '-'.$locale;
     }
 
     public function getFingerprint()
@@ -610,11 +610,11 @@ class WebExtension extends \Twig_Extension
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
-                if ($plugin['type'] != 'plugin') {
+                if ('plugin' != $plugin['type']) {
                     continue;
                 }
 
-                if (isset($plugin['protocol']) && $plugin['protocol'] == 3) {
+                if (isset($plugin['protocol']) && 3 == $plugin['protocol']) {
                     $newPluginNames[] = $plugin['code'].'plugin';
                 } else {
                     $names[] = $plugin['code'];
@@ -707,7 +707,7 @@ class WebExtension extends \Twig_Extension
         if (!empty($ip)) {
             $location = ConvertIpToolkit::convertIp($ip);
 
-            if ($location === 'INNA') {
+            if ('INNA' === $location) {
                 return '未知区域';
             }
 
@@ -738,7 +738,7 @@ class WebExtension extends \Twig_Extension
             return $this->trans('site.twig.extension.smarttime.future');
         }
 
-        if ($diff == 0) {
+        if (0 == $diff) {
             return $this->trans('site.twig.extension.smarttime.hardly');
         }
 
@@ -828,7 +828,7 @@ class WebExtension extends \Twig_Extension
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
 
-        if ($minutes === 0) {
+        if (0 === $minutes) {
             return $seconds.$this->trans('site.date.second');
         }
 
@@ -879,7 +879,7 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        if (!empty($url[0]) && ($url[0] == '/')) {
+        if (!empty($url[0]) && ('/' == $url[0])) {
             return $url;
         }
 
@@ -972,13 +972,13 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        if (strpos($uri, 'http://') !== false) {
+        if (false !== strpos($uri, 'http://')) {
             return $uri;
         }
 
         $uri = $this->parseFileUri($uri);
 
-        if ($uri['access'] == 'public') {
+        if ('public' == $uri['access']) {
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$uri['path'];
             $url = ltrim($url, ' /');
             $url = $assets->getUrl($url);
@@ -1006,7 +1006,7 @@ class WebExtension extends \Twig_Extension
             $fileName = $key.'FileName';
 
             if (array_key_exists($key, $defaultSetting) && array_key_exists($fileName, $defaultSetting)) {
-                if ($defaultSetting[$key] == 1) {
+                if (1 == $defaultSetting[$key]) {
                     $url = $assets->getUrl($publicUrlpath.$size.$defaultSetting[$fileName]);
                 }
             } elseif (array_key_exists($key, $defaultSetting) && $defaultSetting[$key]) {
@@ -1038,7 +1038,7 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
-        if (strpos($uri, 'http://') !== false || strpos($uri, 'https://') !== false) {
+        if (false !== strpos($uri, 'http://') || false !== strpos($uri, 'https://')) {
             return $uri;
         }
 
@@ -1049,7 +1049,7 @@ class WebExtension extends \Twig_Extension
             $uri = $this->parseFileUri($uri);
             $url = '';
 
-            if ($uri['access'] == 'public') {
+            if ('public' == $uri['access']) {
                 $url = $uri['path'];
             }
         } else {
@@ -1148,14 +1148,14 @@ class WebExtension extends \Twig_Extension
         if (empty($path)) {
             $defaultSetting = $this->getSetting('default', array());
 
-            if ((($defaultKey == 'course.png' && array_key_exists(
+            if ((('course.png' == $defaultKey && array_key_exists(
                             'defaultCoursePicture',
                             $defaultSetting
-                        ) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists(
+                        ) && 1 == $defaultSetting['defaultCoursePicture'])
+                    || ('avatar.png' == $defaultKey && array_key_exists(
                             'defaultAvatar',
                             $defaultSetting
-                        ) && $defaultSetting['defaultAvatar'] == 1))
+                        ) && 1 == $defaultSetting['defaultAvatar']))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1495,8 +1495,8 @@ class WebExtension extends \Twig_Extension
             $coinSettings['coin_enabled'] = 0;
         }
 
-        if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
-            if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
+        if (1 != $coinSettings['coin_enabled'] || 'coin' != $coinSettings['price_type']) {
+            if ($order['coinAmount'] > 0 && 0 == $order['amount']) {
                 $default = '余额支付';
             } else {
                 $dictExtension = $this->container->get('codeages_plugin.dict_twig_extension');
@@ -1520,7 +1520,7 @@ class WebExtension extends \Twig_Extension
 
     public function calculatePercent($number, $total)
     {
-        if ($number == 0 || $total == 0) {
+        if (0 == $number || 0 == $total) {
             return '0%';
         }
 

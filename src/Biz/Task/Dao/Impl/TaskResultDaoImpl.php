@@ -139,7 +139,6 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
     }
 
-
     public function countTaskNumGroupByUserId($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)

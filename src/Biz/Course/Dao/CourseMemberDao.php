@@ -30,6 +30,10 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findLearnedMembers($conditions, $start, $limit);
 
+    public function countUserLearnCourses($userId);
+
+    public function findUserLearnCourseIds($userId);
+
     public function findByIds($ids);
 
     public function findLearnedByCourseIdAndUserId($courseId, $userId);
