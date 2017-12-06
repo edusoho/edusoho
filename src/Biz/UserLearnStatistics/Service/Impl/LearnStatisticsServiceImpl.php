@@ -184,7 +184,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
         if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
             $daoType = 'Daily';
-            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
+            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getRecordEndTime());
             $conditions['recordTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : strtotime(date('Y-m-d', time()));
             unset($conditions['startDate']);
             unset($conditions['endDate']);
@@ -195,12 +195,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return array($conditions, $orderBy, $daoType);
     }
 
-    public function getTimespan()
+    public function getRecordEndTime()
     {
-        $settings = $this->getSettingService()->get('learn_statistics');
-        if (!empty($settings) && $settings['timespan'] == strtotime('1971/1/1 8:0:0')) {
-            $settings['timespan'] = 24 * 60 * 60 * 365;
-        }
+        $settings = $this->getStatisticsSetting();
 
         return date('Y-m-d', time() - $settings['timespan']);
     }

@@ -37,13 +37,13 @@ class UserLearnStatisticsController extends BaseController
 
         $statistics = $this->getLearnStatisticsService()->statisticsDataSearch($conditions);
 
-        $timespan = $this->getLearnStatisticsService()->getTimespan();
+        $recordEndTime = $this->getLearnStatisticsService()->getRecordEndTime();
 
         return $this->render('admin/learn-statistics/show.html.twig', array(
             'statistics' => ArrayToolkit::index($statistics, 'userId'),
             'paginator' => $paginator,
             'users' => $users,
-            'timespan' => $timespan,
+            'recordEndTime' => $recordEndTime,
             'isDefault' => $conditions['isDefault'],
         ));
     }
