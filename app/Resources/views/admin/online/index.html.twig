@@ -35,7 +35,7 @@
               <th>{{'设备'|trans}}</th>
               <th>{{'客户端'|trans}}</th>
               <th>{{'操作系统'|trans}}</th>
-              <th>{{'客户端IP'|trans}}</th>
+              <th>{{'IP'|trans}}</th>
               <th>{{'最后访问时间'|trans}}</th>
             </tr>
             </thead>
@@ -52,7 +52,6 @@
                     <td>
                       {{ dict_text('deviceType', parse_user_agent(online.user_agent).device, '未知') }}
                     </td>
-
                     <td>
                       {% if online.source == 'App' %}
                         App
@@ -60,7 +59,6 @@
                         {{ parse_user_agent(online.user_agent).client.name }}: {{ parse_user_agent(online.user_agent).client.version }}
                       {% endif %}
                     </td>
-                  
                     <td>
                       {{ parse_user_agent(online.user_agent).os.name }}: {{ parse_user_agent(online.user_agent).os.version }}
                     </td>
