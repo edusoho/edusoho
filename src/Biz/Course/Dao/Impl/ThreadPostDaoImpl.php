@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Dao\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\ThreadPostDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -49,9 +48,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('threadId');
 
-        $result = $builder->execute()->fetchAll(0);
-
-        return !empty($result) ? ArrayToolkit::column($result, 'threadId') : array();
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function declares()

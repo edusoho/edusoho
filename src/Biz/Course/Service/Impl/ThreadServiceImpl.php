@@ -42,10 +42,24 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $thread;
     }
 
+    public function findThreadIds($conditions)
+    {
+        $threadIds = $threadIds = $this->getThreadDao()->findThreadIds($conditions);
+
+        return ArrayToolkit::column($threadIds, 'id');
+    }
+
+    public function findPostThreadIds($conditions)
+    {
+        $postThreadIds = $this->getThreadPostDao()->findThreadIds($conditions);
+
+        return ArrayToolkit::column($postThreadIds, 'threadId');
+    }
+
     public function countPartakeThreadsByUserId($userId)
     {
-        $threadIds = $this->getThreadDao()->findThreadIds(array('userId' => $userId));
-        $postThreadIds = $this->getThreadPostDao()->findThreadIds(array('userId' => $userId));
+        $threadIds = $this->findThreadIds(array('userId' => $userId));
+        $postThreadIds = $this->findPostThreadIds(array('userId' => $userId));
 
         return count(array_unique(array_merge($threadIds, $postThreadIds)));
     }

@@ -77,6 +77,10 @@ class LearnStatisticsServiceTest extends BaseTestCase
             array('functionName' => 'countPartakeThreadsByUserId', 'returnValue' => 2),
         ));
 
+        $this->mockBiz('Thread:ThreadService', array(
+            array('functionName' => 'countPartakeThreadsByUserIdAndTargetType', 'returnValue' => 2),
+        ));
+
         $this->mockBiz('Course:ReviewService', array(
             array('functionName' => 'searchReviewsCount', 'returnValue' => 7),
         ));
@@ -90,7 +94,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals('5', $result['learningCourseSetCount']);
         $this->assertEquals('90', $result['learningProcess']['percent']);
         $this->assertEquals('6', $result['learningCourseNotesCount']);
-        $this->assertEquals('2', $result['learningCourseThreadsCount']);
+        $this->assertEquals('4', $result['learningCourseThreadsCount']);
         $this->assertEquals('10', $result['learningReviewCount']);
     }
 
