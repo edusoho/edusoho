@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Dao\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
@@ -137,9 +136,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function findUserLearnCourseIds($userId)
     {
         $sql = "SELECT DISTINCT courseId FROM {$this->table()} WHERE userId = ? and role = 'student'";
-        $result = $this->db()->fetchAll($sql, array($userId));
 
-        return !empty($result) ? ArrayToolkit::column($result, 'courseId') : array();
+        return $this->db()->fetchAll($sql, array($userId)) ?: array();
     }
 
     public function countLearnedMembers($conditions)

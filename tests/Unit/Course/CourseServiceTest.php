@@ -239,12 +239,12 @@ class CourseServiceTest extends BaseTestCase
     public function testFindUserLearnCourseIds()
     {
         $this->mockBiz('Course:CourseMemberDao', array(
-            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array(1, 2, 3)),
+            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array(1 => array('courseId' => 1), 2 => array('courseId' => 2), 3 => array('courseId' => 3))),
         ));
 
         $result = $this->getCourseService()->findUserLearnCourseIds(1);
 
-        $this->assertEquals(array(1, 2, 3), $result);
+        $this->assertEquals(3, count($result));
     }
 
     public function testCountUserLearnCourseIds()
