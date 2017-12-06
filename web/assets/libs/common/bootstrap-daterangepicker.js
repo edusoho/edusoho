@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
-  require('bootstrap-daterangepicker.css');
-  require('bootstrap-daterangepicker');
+  require('jquery-plugin/bootstrap-daterangepicker/daterangepicker.css');
+  require('jquery-plugin/bootstrap-daterangepicker/daterangepicker');
 
   var BootstrapDateRangePicker = function(element, options, locale) {
     var options = options || {};
