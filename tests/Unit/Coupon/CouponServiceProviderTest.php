@@ -4,13 +4,9 @@ namespace Tests\Unit\Coupon;
 
 use Biz\BaseTestCase;
 use Biz\Coupon\CouponServiceProvider;
-use Biz\Coupon\Type\VipCoupon;
-use Biz\Coupon\Type\CourseCoupon;
-use Biz\Coupon\Type\ClassroomCoupon;
 
 class CouponServiceProviderTest extends BaseTestCase
 {
-    
     public function testGetCouponClass()
     {
         $biz = $this->getBiz();
@@ -41,5 +37,4 @@ class CouponServiceProviderTest extends BaseTestCase
 
         $couponObj = $couponFactory('abc');
     }
-    
 }

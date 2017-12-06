@@ -73,22 +73,22 @@ class CommentDaoTest extends BaseDaoTestCase
     private function _createDatas()
     {
         $expected = array();
-        $expected[] = $this->mockDataObject(array('objectType' => 'course', 'objectId' => 1, 'userId' => 1, 'content'=>'content1'));
+        $expected[] = $this->mockDataObject(array('objectType' => 'course', 'objectId' => 1, 'userId' => 1, 'content' => 'content1'));
         $expected[] = $this->mockDataObject(array('objectType' => 'classroom', 'objectId' => 2, 'userId' => 1));
         $expected[] = $this->mockDataObject(array('objectType' => 'course', 'objectId' => 1, 'userId' => 2));
         $expected[] = $this->mockDataObject(array('objectType' => 'course', 'objectId' => 2, 'userId' => 2));
 
         return $expected;
     }
-    
+
     protected function getDefaultMockFields()
     {
         return array(
             'objectType' => 'course',
             'objectId' => 1,
-            'userId' => 1, 
+            'userId' => 1,
             'content' => 'comment content',
-            'createdTime' => time()
+            'createdTime' => time(),
         );
     }
 }
