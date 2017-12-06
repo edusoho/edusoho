@@ -3,7 +3,6 @@
 namespace Biz\UserLearnStatistics\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class SyncDailyPastDataJob extends AbstractJob
 {
@@ -19,9 +18,9 @@ class SyncDailyPastDataJob extends AbstractJob
 
                 return;
             }
-            
+
             $this->biz['db']->beginTransaction();
-            $nextCursor = $cursor - 24*60*60;
+            $nextCursor = $cursor - 24 * 60 * 60;
             /*
                 skipSyncCourseSetNum，跳过同步 加入课程数和退出课程数
                 退出课程数： 退出课程的最后一个计划
@@ -40,7 +39,6 @@ class SyncDailyPastDataJob extends AbstractJob
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
         }
-
     }
 
     private function getSyncTime($learnSetting)

@@ -4,7 +4,6 @@ namespace Tests\Unit\Question;
 
 use Biz\Question\Type\SingleChoice;
 use Biz\BaseTestCase;
-use Biz\Common\HTMLHelper;
 
 class SingleChoiceTest extends BaseTestCase
 {
@@ -39,7 +38,7 @@ class SingleChoiceTest extends BaseTestCase
     public function testJudgeRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array('1'),'score'=>'2.0');
+        $question = array('answer' => array('1'), 'score' => '2.0');
         $answer = array('1');
 
         $result = $typeObj->judge($question, $answer);
@@ -51,7 +50,7 @@ class SingleChoiceTest extends BaseTestCase
     public function testJudgeWrong()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array('1'),'score'=>'2.0');
+        $question = array('answer' => array('1'), 'score' => '2.0');
         $answer = array('2');
 
         $result = $typeObj->judge($question, $answer);
@@ -65,7 +64,7 @@ class SingleChoiceTest extends BaseTestCase
         $typeObj = $this->creatQuestionType();
 
         $fields = array(
-            'choices' => array('choice1','choice2','choice3','choice4')
+            'choices' => array('choice1', 'choice2', 'choice3', 'choice4'),
         );
 
         $filter = $typeObj->filter($fields);

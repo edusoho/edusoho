@@ -94,6 +94,15 @@ class ThreadDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
+    public function testFindThreadIds()
+    {
+        $res[0] = $this->mockDataObject();
+        $res[1] = $this->mockDataObject();
+        $res[2] = $this->mockDataObject(array('userId' => 2));
+
+        $this->assertEquals(2, count($this->getDao()->findThreadIds(array('userId' => 1))));
+    }
+
     protected function mockDataObject($fields = array())
     {
         return $this->getDao()->create(array_merge($this->getDefaultMockFields(), $fields));

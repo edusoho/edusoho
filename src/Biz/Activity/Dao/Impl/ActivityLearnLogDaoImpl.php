@@ -113,8 +113,8 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             ),
             'conditions' => array(
                 'activityId = :activityId',
-                'event_EQ = :event',
-                'event_NEQ <> :event',
+                'event = :event_EQ',
+                'event <> :event_NEQ',
                 'userId = :userId',
                 'userId IN ( :userIds )',
                 'learnedTime >= :learnedTime_GE',
