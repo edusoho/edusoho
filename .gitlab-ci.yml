@@ -111,6 +111,7 @@ AT With Java And Selenium:
     - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
     - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
     - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
+    - bin/phpmig migrate
     - app/console server:start $SERVICE_IP:8000
     - cd GUIAutomation2
     - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
