@@ -107,7 +107,7 @@ AT With Java And Selenium:
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
     # 安装插件
-    - git clone -b develop http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
     - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
     - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
