@@ -92,6 +92,15 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(1, count($result));
     }
 
+    public function testCountDailyStatistics()
+    {
+        $this->getDailyStatisticsDao()->create(array('userId' => 1));
+        $this->getDailyStatisticsDao()->create(array('userId' => 2));
+        $count = $this->getLearnStatisticsService()->countDailyStatistics(array());
+
+        $this->assertEquals(2, $count);
+    }
+
     public function batchDeletePastDailyStatistics()
     {
         $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 2));

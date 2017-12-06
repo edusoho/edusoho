@@ -37,6 +37,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return $this->getDailyStatisticsDao()->search($conditions, $order, $start, $limit);
     }
 
+    public function countDailyStatistics($conditions)
+    {
+        return $this->getDailyStatisticsDao()->count($conditions);
+    }
+
     public function batchCreateTotalStatistics($conditions)
     {
         try {
