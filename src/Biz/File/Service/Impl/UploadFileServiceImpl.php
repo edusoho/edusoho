@@ -55,6 +55,34 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
+    public function batchConvertByIds($ids)
+    {
+        if (empty($ids)) {
+            return false;
+        }
+
+        $conditions = array(
+            'ids' => $ids,
+            'type' => 'video',
+            'storage' => 'cloud',
+            'inAudioConvertStatus' => array('none', 'error'),
+        );
+
+        $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
+
+        $filesCount = $this->getUploadFileDao()->count($conditions);
+        for ($start = 0; $start < $filesCount; $start = $start + 20) {
+            $preConvertFile = $this->getUploadFileDao()->search(
+                $conditions,
+                null,
+                $start,
+                20
+            );
+
+            $this->getFileImplementor('cloud')->batchConvert(ArrayToolkit::column($preConvertFile, 'globalId'));
+        }
+    }
+
     public function getUploadFileInit($id)
     {
         return $this->getUploadFileInitDao()->get($id);

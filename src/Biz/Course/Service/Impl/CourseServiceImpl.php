@@ -208,7 +208,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $originCourse = $this->tryManageCourse($id);
 
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
@@ -226,6 +226,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'maxStudentNum',
                 'locked',
+                'isAudioOn'
             )
         );
 
@@ -237,10 +238,29 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
         }
 
-        $course = $this->getCourseDao()->update($id, $fields);
+        try {
+            $this->beginTransaction();
+
+            $course = $this->getCourseDao()->update($id, $fields);
+            if (empty($originCourse['isAudioOn']) && $course['isAudioOn']) {
+                $this->vedioConvertAudio($course);
+            }
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
         $this->dispatchEvent('course.update', new Event($course));
 
         return $course;
+    }
+
+    //视频转音频
+    protected function vedioConvertAudio($course)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'video', true);
+        $medias = ArrayToolkit::column($activities, 'ext');
+        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
     public function recommendCourseByCourseSetId($courseSetId, $fields)
@@ -1993,6 +2013,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 
     /**
