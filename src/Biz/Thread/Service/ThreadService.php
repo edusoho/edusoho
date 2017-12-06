@@ -71,6 +71,10 @@ interface ThreadService
 
     public function countPartakeThreadsByUserIdAndTargetType($userId, $targetType);
 
+    public function findThreadIds($conditions);
+
+    public function findPostThreadIds($conditions);
+
     /**
      * thread_vote.
      */

@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ThreadDao extends GeneralDaoInterface
 {
-    public function foundThreadIds($conditions);
+    public function findThreadIds($conditions);
 }

@@ -10,5 +10,5 @@ interface ThreadPostDao extends GeneralDaoInterface
 
     public function deletePostsByParentId($parentId);
 
-    public function foundThreadIds($conditions);
+    public function findThreadIds($conditions);
 }

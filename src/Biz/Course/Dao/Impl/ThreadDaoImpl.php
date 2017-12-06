@@ -67,9 +67,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('id');
 
-        $result = $builder->execute()->fetchAll(0);
-
-        return !empty($result) ? ArrayToolkit::column($result, 'id') : array();
+        return $builder->execute()->fetchAll(0) ?: array();
     }
 
     public function declares()

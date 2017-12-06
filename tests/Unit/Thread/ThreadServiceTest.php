@@ -403,14 +403,32 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
+    public function testFindThreadIds()
+    {
+        $this->mockBiz('Thread:ThreadDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2), 3 => array('id' => 3))),
+        ));
+
+        $this->assertEquals(3, count($this->getThreadService()->findThreadIds(array('userId' => 1))));
+    }
+
+    public function testFindPostThreadIds()
+    {
+        $this->mockBiz('Thread:ThreadPostDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('threadId' => 3), 2 => array('threadId' => 4), 3 => array('threadId' => 5))),
+        ));
+
+        $this->assertEquals(3, count($this->getThreadService()->findPostThreadIds(array('userId' => 1))));
+    }
+
     public function testCountPartakeThreadsByUserIdAndTargetType()
     {
         $this->mockBiz('Thread:ThreadDao', array(
-            array('functionName' => 'foundThreadIds', 'returnValue' => array(1, 2, 3)),
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2), 3 => array('id' => 3))),
         ));
 
         $this->mockBiz('Thread:ThreadPostDao', array(
-            array('functionName' => 'foundThreadIds', 'returnValue' => array(3, 4, 5)),
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('threadId' => 3), 2 => array('threadId' => 4), 3 => array('threadId' => 5))),
         ));
 
         $this->assertEquals(5, $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType(1, 'classroom'));

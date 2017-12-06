@@ -104,4 +104,8 @@ interface ThreadService
     public function deletePost($courseId, $id);
 
     public function countPartakeThreadsByUserId($userId);
+
+    public function findThreadIds($conditions);
+
+    public function findPostThreadIds($conditions);
 }
