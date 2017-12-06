@@ -8317,7 +8317,7 @@ admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
 user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间
-user.learn.statistics.default.search: 默认搜索
+user.learn.statistics.default.search: 默认排序
 user.learn.statistics.search: 搜索
 user.learn.statistics.nickname: 用户名
 user.learn.statistics.join.classroom.num: 加入班级数
