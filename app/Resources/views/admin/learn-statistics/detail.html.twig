@@ -6,7 +6,7 @@
 
 {% block page_title %}
   <div class="mbm">
-    <img class="user-data-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+    <img class="es-admin-avatar-sm" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
     <span class="mlm">{{ user.nickname }}</span>
   </div>
 {% endblock %}
@@ -15,18 +15,18 @@
 {% endblock %}
 
 {% block main %}
-  <div class="user-data-count">
+  <div class="user-data-section">
     <div class="row">
-      <div class="col-sm-4 col-xs-4">
-        <label>{{ 'admin.user.statistics.data_detail.learning_course_sets'|trans }}</label>
+      <div class="col-xs-4">
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.learning_course_sets'|trans }}</label>
         <strong class="inflow-num mll">{{ overview.learningCourseSetCount|default(0) }}</strong>
       </div>
-      <div class="col-sm-4 col-xs-4">
-        <label>{{ 'admin.user.statistics.data_detail.learning_courses'|trans }}</label>
+      <div class="col-xs-4">
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.learning_courses'|trans }}</label>
         <strong class="inflow-num mll">{{ overview.learningCoursesCount|default(0) }}</strong>
       </div>
-      <div class="col-sm-4 col-xs-4">
-        <label>{{ 'admin.user.statistics.data_detail.average_process'|trans }}</label>
+      <div class="col-xs-4">
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.average_process'|trans }}</label>
         <strong class="inflow-num mll mrs">{{ overview.learningProcess.percent|default(0) }}%</strong>
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-user-data-popover" data-original-title="" title=""></span>
         <div class="popover-content hidden">
@@ -39,23 +39,22 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-4 col-xs-4">
-        <label>{{ 'admin.user.statistics.data_detail.note_number'|trans }}</label>
+      <div class="col-xs-4">
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.note_number'|trans }}</label>
         <strong class="inflow-num mll">{{ overview.learningCourseNotesCount|default(0) }}</strong>
       </div>
-      <div class="col-sm-4 col-xs-4">
-        <label>{{ 'admin.user.statistics.data_detail.thread_number'|trans }}</label>
+      <div class="col-xs-4">
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.thread_number'|trans }}</label>
         <strong class="inflow-num mll">{{ overview.learningCourseThreadsCount|default(0) }}</strong>
       </div>
-      <div class="col-sm-4 col-xs-4">
-        <label>{{ 'admin.user.statistics.data_detail.post_number'|trans }}</label>
+      <div class="col-xs-4">
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.post_number'|trans }}</label>
         <strong class="inflow-num mll">{{ overview.learningReviewCount|default(0) }}</strong>
       </div>
     </div>
   </div>
-  <hr class="user-data-line">
 
-  <div class="js-learn-data-trendency" data-url="{{ path('admin_user_learn_chart', {userId: user.id}) }}">
+  <div class="user-data-section js-learn-data-trendency" data-url="{{ path('admin_user_learn_chart', {userId: user.id}) }}">
     <div class="text-lg mbm">{{ 'admin.user.statistics.data_detail.active_chart'|trans }}</div>
     <div id="date-range-picker">
       <span class="user-data-select">
@@ -68,7 +67,6 @@
     </div>
     <div class="mtl mbl" id="learn-data-trendency-chart" style="height:360px;"></div>
   </div>
-  <hr class="user-data-line">
 
   <div class="user-data-detail">
     <div class="text-lg">{{ 'admin.user.statistics.data_detail.learn_detail'|trans }}</div>

@@ -31,7 +31,6 @@ define(function (require, exports, module) {
         data: {startTime: data.startDate, endTime: data.endDate},
         url: self.$container.data('url'),
         success: function(resp) {
-
           var dateArr = [],
             totalTime = 0,
             learnTime = [];
@@ -53,12 +52,11 @@ define(function (require, exports, module) {
       var option = {
           title: {
             text: Translator.trans('admin.user.statistics.data.learn_total_time') +': ' + this.totalTime,
-            x: "41%",
-            y: "60%",
+            x: "9%",
+            y: "6.5%",
             textStyle: {
               fontSize: 14,
-              fontWeight: 'normal',
-              color: '#79BEE7'
+              fontWeight: '500',
             },
           },
           tooltip: {
