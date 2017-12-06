@@ -217,6 +217,8 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             );
             $learnSetting = $this->getStatisticsSetting();
             if (empty($dailyData) || empty($learnSetting['syncTotalDataStatus'])) {
+                $this->commit();
+
                 return;
             }
 
@@ -232,10 +234,8 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 'joinedCourseSetNum',
                 'joinedCourseNum',
                 'exitClassroomNum',
-                'exitClassroomCourseSetNum',
                 'exitCourseSetNum',
                 'exitCourseNum',
-                'exitClassroomCourseNum',
                 'learnedSeconds',
                 'finishedTaskNum',
                 'paidAmount',
