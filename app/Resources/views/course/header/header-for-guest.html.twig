@@ -111,23 +111,33 @@
 				{% endif %}
 				
 				{% if course.showServices | default(1) %}
-          <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
-					{% set serviceTags = services(course.services|default([])) %}
-					{% for tag in serviceTags %}
-            <span
-                class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
-                data-container="body"
-                data-trigger="hover"
-                data-placement="top"
-                data-toggle="popover"
-                title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
-                data-content="{{ tag.summary }}">
-              {{ tag.shortName }}
-            </span>
-					{% endfor %}
+          <div class="mb15">
+            <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
+  					{% set serviceTags = services(course.services|default([])) %}
+  					{% for tag in serviceTags %}
+              <span
+                  class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
+                  data-container="body"
+                  data-trigger="hover"
+                  data-placement="top"
+                  data-toggle="popover"
+                  title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
+                  data-content="{{ tag.summary }}">
+                {{ tag.shortName }}
+              </span>
+  					{% endfor %}
+          </div>
 				{% endif %}
-      
+        
+        {% if setting('mobile.enabled')|default(false) and course.isAudioOn|default(0) %}
+          <div class="">
+            <span class="lump-sm color-lump bg-primary">{{ '听' }}</span>
+            {{ '手机端支持一键听课' }}
+            <a href="{{ path('mobile') }}" target="__blank">（试一试）</a>
+          </div>
+        {% endif %}
       </div>
+
       <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
         <ul class="clearfix">
           <!--营销页显示-->
