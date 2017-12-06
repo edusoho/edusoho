@@ -80,7 +80,8 @@
           <div class="user-data-teaching-plan__title text-overflow" title="{{ courseSet.title }}">{{ 'admin.course_manage.statistics.name'|trans }}：{{ courseSet.title }}</div>
           <div class="user-data-teaching-plan__title text-overflow" title="{{ course.title }}">{{ 'admin.user.statistics.data_detail.teaching_plan_name'|trans }}：<a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a></div>
           <div class="user-data-teaching-plan__time">{{ 'join.time'|trans }}：<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
-          <div class="user-data-teaching-plan__money">{{ 'course.price'|trans }}：<span>{{ member.order.pay_amount|default(0)|to_cash(1) }}</span></div>
+          <div class="user-data-teaching-plan__money">{{ 'course.price'|trans }}：<span>{{ member.order.paid_cash_amount|default(0)|to_cash(1) }}</span>
+            {% if member.order.paid_cash_amount|default(0) != 0 %}<span>，{{ member.order.paid_cash_amount|default(0)|to_coin(1) }}</span>{% endif %}</div>
         </div>
         <div class="user-data-teaching-plan__progress">
           <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
