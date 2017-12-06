@@ -9,13 +9,13 @@ use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\PluginVersionToolkit;
+use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
 use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Codeages\Biz\Framework\Context\Biz;
-use DeviceDetector\DeviceDetector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\SimpleValidator;
@@ -166,10 +166,10 @@ class WebExtension extends \Twig_Extension
 
     public function parseUserAgent($userAgent)
     {
-        $deviceDetector = new DeviceDetector($userAgent);
-        $deviceDetector->parse();
+        $deviceDetector = new DeviceDetectorAdapter($userAgent);
 
         return array(
+            'device' => $deviceDetector->getDevice(),
             'client' => $deviceDetector->getClient(),
             'os' => $deviceDetector->getOs(),
         );
