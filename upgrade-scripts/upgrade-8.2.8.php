@@ -71,6 +71,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addMemberOperationRecordColumn',
             'updateMemberOperationRecord',
             'addUserLearnStatistics',
+            'addUserLearnStatisticsSetting',
             'addUserLearnStatisticsJob',
         );
 
@@ -135,6 +136,17 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         return $page + 1;
+    }
+
+    protected function addUserLearnStatisticsSetting()
+    {
+        $statisticsSetting = $this->getSettingService()->get('learn_statistics');
+        if (!empty($statisticsSetting)) {
+            return 1;
+        }
+        $this->getLearnStatisticsService()->setStatisticsSetting();
+
+        return 1; 
     }
 
     protected function addUserLearnStatisticsJob()
@@ -325,6 +337,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
+    }
+
+    protected function getLearnStatisticsService()
+    {
+        return $this->createService('UserLearnStatistics:LearnStatisticsService');
     }
 
     private function getSettingService()
