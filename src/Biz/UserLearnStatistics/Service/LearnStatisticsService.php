@@ -14,6 +14,8 @@ interface LearnStatisticsService
 
     public function searchDailyStatistics($conditions, $order, $start, $limit);
 
+    public function countDailyStatistics($conditions);
+
     public function batchCreateTotalStatistics($conditions);
 
     public function batchCreatePastDailyStatistics($conditions);
