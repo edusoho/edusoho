@@ -318,7 +318,6 @@ class OrderRefundServiceTest extends BaseTestCase
                 ),
             )
         );
-
         $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyAdmins', array($courseProduct));
         $this->getNotificationService()->shouldHaveReceived('notify');
         $this->assertNull($result);
