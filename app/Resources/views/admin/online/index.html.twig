@@ -46,11 +46,11 @@
                         {% if users[online.user_id]['nickname']|default(false) %}
                             {{ users[online.user_id]['nickname'] }}
                         {% else %}
-                            <p class="help-block">游客</p>
+                            <span class="text-muted">游客</span>
                         {% endif %}
                     </td>
                     <td>
-                      {{ dict_text('deviceType', parse_user_agent(online.user_agent).device, '未知') }}
+                      {{ parse_user_agent(online.user_agent).device }}
                     </td>
                     <td>
                       {% if online.source == 'App' %}
