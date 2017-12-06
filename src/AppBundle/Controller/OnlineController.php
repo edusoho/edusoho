@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,9 +71,9 @@ class OnlineController extends BaseController
         }
 
         $type = $request->query->get('type', 'online');
-        if ($type == 'logined') {
+        if ('logined' == $type) {
             $conditions['is_login'] = 1;
-        } elseif ($type == 'anonymous') {
+        } elseif ('anonymous' == $type) {
             $conditions['is_login'] = 0;
         }
 

@@ -32,6 +32,7 @@ class UserOnlineTrack
 
     /**
      * @todo api 和 web 的sessionId 应该统一
+     *
      * @param $sessionId
      */
     public function track($sessionId)
@@ -56,7 +57,8 @@ class UserOnlineTrack
     private function isFromApp()
     {
         $pathInfo = $this->getRequest()->getPathInfo();
-        return strpos($pathInfo, '/api') === 0;
+
+        return 0 === strpos($pathInfo, '/api');
     }
 
     private function getRequest()
