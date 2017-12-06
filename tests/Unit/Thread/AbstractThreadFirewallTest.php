@@ -10,7 +10,7 @@ use Biz\BaseTestCase;
 class AbstractThreadFirewallTest extends BaseTestCase
 {
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessThreadRead is not implement
      */
     public function testAccessThreadRead()
@@ -20,7 +20,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessThreadDelete is not implement
      */
     public function testAccessThreadDelete()
@@ -30,7 +30,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessThreadUpdate is not implement
      */
     public function testAccessThreadUpdate()
@@ -40,7 +40,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessThreadSticky is not implement
      */
     public function testAccessThreadSticky()
@@ -50,7 +50,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessThreadNice is not implement
      */
     public function testAccessThreadNice()
@@ -60,7 +60,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessPostCreate is not implement
      */
     public function testAccessPostCreate()
@@ -70,7 +70,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessPostUpdate is not implement
      */
     public function testAccessPostUpdate()
@@ -80,7 +80,7 @@ class AbstractThreadFirewallTest extends BaseTestCase
     }
 
     /**
-     * @expectedException UnderflowException
+     * @expectedException \UnderflowException
      * @expectedExceptionMessage Method accessPostDelete is not implement
      */
     public function testAccessPostDelete()
