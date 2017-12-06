@@ -14,8 +14,8 @@
         <input class="form-control" type="text" name="nickname" placeholder="{{'user.learn.statistics.nickname'|trans}}" value="{{ app.request.query.get('nickname') }}">
         <input type="hidden" name="isDefault" value="{{ isDefault|default(false) }}">
       </div>
-      <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a>
       <a class="btn btn-primary" id="search">{{'user.learn.statistics.search'|trans}}</a>
+      <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a>
       {% include 'export/export-btn.html.twig' with 
       { 'exportFileName': 'user-learn-statistics', 
         'targetFormId': 'user-search'}  
