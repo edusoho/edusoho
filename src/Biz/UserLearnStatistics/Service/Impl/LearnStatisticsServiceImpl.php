@@ -218,6 +218,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $learnSetting = $this->getStatisticsSetting();
             if (empty($dailyData) || empty($learnSetting['syncTotalDataStatus'])) {
                 $this->commit();
+
                 return;
             }
 
