@@ -119,6 +119,7 @@ class SystemCrontabInitializer
             'RefreshLearningProgressJob' => array(
                 'expression' => '0 2 * * *',
                 'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
+                'misfire_policy' => 'executing',
             ),
             'UpdateInviteRecordOrderInfoJob' => array(
                 'expression' => '0 * * * *',
