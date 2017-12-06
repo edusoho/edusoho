@@ -63,7 +63,7 @@ class OrderRefundServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time()+1000),
+                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000),
                     'withParams' => array(11),
                 ),
                 array(
@@ -117,7 +117,7 @@ class OrderRefundServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time()+1000, 'user_id' => 1),
+                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1),
                     'withParams' => array(11),
                 ),
                 array(
@@ -148,7 +148,7 @@ class OrderRefundServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time()+1000, 'user_id' => 1),
+                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1),
                     'withParams' => array(11),
                 ),
                 array(
@@ -179,7 +179,7 @@ class OrderRefundServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time()+1000, 'user_id' => 1),
+                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1),
                     'withParams' => array(11),
                 ),
                 array(
@@ -304,7 +304,7 @@ class OrderRefundServiceTest extends BaseTestCase
                         array('roles' => 'ADMIN'),
                         array('id' => 'DESC'),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                 ),
             )
