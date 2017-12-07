@@ -213,6 +213,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+        $this->validatie($fields);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -247,14 +248,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.update', new Event($course));
 
         return $course;
-    }
-
-    //视频转音频
-    protected function vedioConvertAudio($course)
-    {
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'video', true);
-        $medias = ArrayToolkit::column($activities, 'ext');
-        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
     public function recommendCourseByCourseSetId($courseSetId, $fields)
@@ -421,6 +414,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
+    //视频转音频
+    protected function vedioConvertAudio($course)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'video', true);
+        $medias = ArrayToolkit::column($activities, 'ext');
+        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
+    }
+
     protected function isTeacherAllowToSetRewardPoint()
     {
         $rewardPointSetting = $this->getSettingService()->get('reward_point', array());
@@ -456,6 +457,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return array($price, $coinPrice);
+    }
+
+    private function validatie($fields)
+    {
+        if ($fields['enableAudio'] == '1') {
+            $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
+            if ($audioPerssion != 'open') {
+                $this->createInvalidArgumentException('需要先申请为商业用户!');
+            }
+        }
     }
 
     public function updateCourseStatistics($id, $fields)

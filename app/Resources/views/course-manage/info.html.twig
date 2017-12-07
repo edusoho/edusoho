@@ -44,23 +44,25 @@
             </label>
           </div>
         </div>
-        <div class="form-group">
-          <label for="" class="col-sm-2 control-label">{{ '音频听课（试用）' }}</label>
-          <div class="col-sm-8 radios">
-            <label>
-              <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
-              {{ '开启' }}
-            </label>
-            <label>
-              <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
-              {{ '关闭' }}
-            </label>
-            <div>
-              <label>1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</label>
-              <label>2.计划内全部视频转音频完成（成功率达到80%），学生端才能拥有听课模式。当前转码完成（成功率12/39）<a href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}">查看详情</a></label>
+        {% if setting('storage.upload_mode') == 'cloud' and audioPerssion != 'unopen' %}
+          <div class="form-group" id="cc">
+            <label for="" class="col-sm-2 control-label">{{ '音频听课（试用）' }}</label>
+            <div class="col-sm-8 radios" data-value="{{ audioPerssion }}" id="course-audio-mode">
+              <label>
+                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %} id="aa">
+                {{ '开启' }}
+              </label>
+              <label>
+                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %} id="bb">
+                {{ '关闭' }}
+              </label>
+              <div>
+                <label>1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</label>
+                <label>2.当前转音频完成情况：{{ vedio_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'查看详情'}}</a></label>
+              </div>
             </div>
           </div>
-        </div>
+        {% endif %}
         {#移动到营销设置#}
         {#<div class="form-group">
           <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
