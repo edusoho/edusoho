@@ -19,15 +19,15 @@ class UserLearnStatisticsController extends BaseController
             'isDefault' => 'false',
         );
         $conditions = $request->query->all();
-
         $conditions = array_merge($defaultCondition, $conditions);
+        $userConditions = array('nickname' => $conditions['nickname']);
         $paginator = new Paginator(
             $request,
-            $this->getUserService()->countUsers(array()),
+            $this->getUserService()->countUsers($userConditions),
             20
         );
         $users = $this->getUserService()->searchUsers(
-            array('nickname' => $conditions['nickname']),
+            $userConditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
