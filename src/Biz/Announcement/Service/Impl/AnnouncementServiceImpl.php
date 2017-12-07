@@ -4,7 +4,6 @@ namespace Biz\Announcement\Service\Impl;
 
 use Biz\BaseService;
 use Biz\System\Service\LogService;
-use Biz\Course\Service\CourseService;
 use Biz\Announcement\Dao\AnnouncementDao;
 use Biz\Announcement\Service\AnnouncementService;
 use AppBundle\Common\ArrayToolkit;

@@ -25,7 +25,7 @@ class AnnouncementServiceTest extends BaseTestCase
             'startTime' => time(),
             'endTime' => time() + 3600 * 1000,
             'url' => 'http://www.baidu.com',
-            'notify' => 1
+            'notify' => 1,
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
