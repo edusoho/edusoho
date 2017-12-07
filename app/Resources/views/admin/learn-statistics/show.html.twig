@@ -15,7 +15,7 @@
         <input type="hidden" name="isDefault" value="{{ isDefault|default(false) }}">
       </div>
       <a class="btn btn-primary" id="search">{{'user.learn.statistics.search'|trans}}</a>
-      <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a>
+      {# <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a> #}
       {% include 'export/export-btn.html.twig' with 
       { 'exportFileName': 'user-learn-statistics', 
         'targetFormId': 'user-search'}  
@@ -57,7 +57,7 @@
               <td>{{ statistic.joinedCourseNum|default(0) }}</td>
               <td>{{ statistic.exitCourseNum|default(0) }}</td>
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
-              <td>{{ (statistic.learnedSeconds|default(0)/60)|number_format(2, '.', ',') }}</td>
+              <td>{{ (statistic.learnedSeconds|default(0)/60)|number_format(0) }}</td>
               <td>{{ statistic.actualAmount|default(0)|to_cash(0) }}</td>
               <td><a href="{{ path('admin_user_learn_detail', {userId:user.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
             </tr>
