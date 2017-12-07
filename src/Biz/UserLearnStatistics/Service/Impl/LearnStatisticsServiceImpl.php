@@ -318,12 +318,12 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $orderIds = ArrayToolkit::column($members, 'orderId');
 
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
-        $orders = ArrayToolkit::index($orders, 'id');
+        $orders = empty($orders) ? array() : ArrayToolkit::index($orders, 'id');
 
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-        $classrooms = ArrayToolkit::index($classrooms, 'id');
+        $classrooms = empty($classrooms) ? array() : ArrayToolkit::index($classrooms, 'id');
 
         foreach ($members as &$member) {
             $member['order'] = empty($orders[$member['orderId']]) ? array() : $orders[$member['orderId']];
