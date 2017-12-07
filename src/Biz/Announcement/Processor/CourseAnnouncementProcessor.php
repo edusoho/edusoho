@@ -97,14 +97,6 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         $this->getQueueService()->pushJob($pushJob);
     }
 
-    private function getConvNo()
-    {
-        $imSetting = $this->getSettingService()->get('app_im', array());
-        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-
-        return $convNo;
-    }
-
     public function isIMEnabled()
     {
         $setting = $this->getSettingService()->get('app_im', array());
@@ -144,12 +136,12 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Course:CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     protected function getCourseMemberService()
     {
-        return ServiceKernel::instance()->getBiz()->service('Course:MemberService');
+        return $this->biz->service('Course:MemberService');
     }
 
     /**
@@ -157,7 +149,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->biz->service('User:NotificationService');
     }
 
     /**
@@ -165,7 +157,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     /**
@@ -173,11 +165,11 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getQueueService()
     {
-        return ServiceKernel::instance()->createService('Queue:QueueService');
+        return $this->biz->service('Queue:QueueService');
     }
 
     protected function getConversationService()
     {
-        return ServiceKernel::instance()->createService('IM:ConversationService');
+        return $this->biz->service('IM:ConversationService');
     }
 }

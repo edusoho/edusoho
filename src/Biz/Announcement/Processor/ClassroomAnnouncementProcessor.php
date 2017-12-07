@@ -92,14 +92,6 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         $this->getQueueService()->pushJob($pushJob);
     }
 
-    private function getConvNo()
-    {
-        $imSetting = $this->getSettingService()->get('app_im', array());
-        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-
-        return $convNo;
-    }
-
     public function isIMEnabled()
     {
         $setting = $this->getSettingService()->get('app_im', array());
@@ -140,7 +132,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 
     /**
@@ -156,7 +148,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getQueueService()
     {
-        return ServiceKernel::instance()->createService('Queue:QueueService');
+        return $this->biz->service('Queue:QueueService');
     }
 
     /**
@@ -164,11 +156,11 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getConversationService()
     {
-        return ServiceKernel::instance()->createService('IM:ConversationService');
+        return $this->biz->service('IM:ConversationService');
     }
 }
