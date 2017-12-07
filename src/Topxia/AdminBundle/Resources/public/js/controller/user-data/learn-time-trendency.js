@@ -52,7 +52,7 @@ define(function (require, exports, module) {
       var option = {
           title: {
             text: Translator.trans('admin.user.statistics.data.learn_total_time') +': ' + this.totalTime,
-            x: "9%",
+            x: "center",
             y: "6.5%",
             textStyle: {
               fontSize: 14,
