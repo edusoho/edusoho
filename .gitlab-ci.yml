@@ -115,7 +115,7 @@ AT With Java And Selenium:
     - app/console server:start $SERVICE_IP:8000
     - cd GUIAutomation2
     - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
-    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
   only:
       - schedules
       - triggers
