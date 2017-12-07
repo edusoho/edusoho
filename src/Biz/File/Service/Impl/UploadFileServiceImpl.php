@@ -57,6 +57,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function batchConvertByIds($ids)
     {
+        var_dump($ids);exit();
         if (empty($ids)) {
             return false;
         }
@@ -67,9 +68,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'storage' => 'cloud',
             'inAudioConvertStatus' => array('none', 'error'),
         );
-
+        $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
         $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, PHP_INT_MAX);
-        // $this->getFileImplementor('cloud')->batchConvert(ArrayToolkit::column($videofiles, 'globalId'));
+        $this->getFileImplementor('cloud')->batchConvert(ArrayToolkit::column($videofiles, 'globalId'));
     }
 
     public function getUploadFileInit($id)

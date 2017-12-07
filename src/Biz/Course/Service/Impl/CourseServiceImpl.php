@@ -238,16 +238,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['summary'] = $this->purifyHtml($fields['summary'], true);
         }
 
-        try {
-            $this->beginTransaction();
-
-            $course = $this->getCourseDao()->update($id, $fields);
-            if (empty($originCourse['enableAudio']) && $course['enableAudio']) {
-                $this->vedioConvertAudio($course);
-            }
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
+        $course = $this->getCourseDao()->update($id, $fields);
+        
+        if (empty($originCourse['enableAudio']) && $course['enableAudio']) {
+            $this->vedioConvertAudio($course);
         }
 
         $this->dispatchEvent('course.update', new Event($course));
