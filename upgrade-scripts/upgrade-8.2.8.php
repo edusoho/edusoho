@@ -75,6 +75,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'resetCrontabJobNum',
             'downloadPlugin',
             'updatePlugin',
+            'updateAdminRoles',
         );
 
         $funcNames = array();
@@ -109,6 +110,23 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function updateAdminRoles()
+    {
+        $roles = array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN');
+        $connection = $this->getConnection();
+
+        foreach ($roles as $role) {
+            $sql = "select * from role where code='{$role}';";
+            $result = $connection->fetchAssoc($sql);
+            if ($result) {
+                $data = array_merge(json_decode($result['data']), array('admin_user_learn_statistics_manage', 'admin_user_learn_statistics'));
+                $connection->exec("update role set data='".json_encode($data)."' where code='{$role}';");
+            }
+        }
+
+        return 1;
     }
 
     protected function addMemberOperationRecordColumn()
