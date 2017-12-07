@@ -4,6 +4,13 @@ define(function(require, exports, module){
 
   exports.run = function(){
     $form = $("#user-search");
+
+    $(document).keyup(function(event){
+      if(event.keyCode ==13){
+        $("#search").trigger("click");
+      }
+    });
+
     $form.on('click', '#default-search', function () {
       $("[name='nickname']").val('');
       $("[name='isDefault']").val('true');
