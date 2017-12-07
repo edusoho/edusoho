@@ -7,6 +7,7 @@ use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Announcement\Dao\AnnouncementDao;
 use Biz\Announcement\Service\AnnouncementService;
+use AppBundle\Common\ArrayToolkit;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
@@ -29,16 +30,8 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function createAnnouncement($announcement)
     {
-        if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException('公告内容不能为空！');
-        }
-
-        if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException('发布时间不能为空！');
-        }
-
-        if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException('结束时间不能为空！');
+        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'))) {
+            throw $this->createInvalidArgumentException('Arguments invalid');
         }
 
         if (isset($announcement['notify'])) {
@@ -60,17 +53,10 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function updateAnnouncement($id, $announcement)
     {
-        if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException('公告内容不能为空！');
+        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'))) {
+            throw $this->createInvalidArgumentException('Arguments invalid');
         }
 
-        if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException('发布时间不能为空！');
-        }
-
-        if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException('结束时间不能为空！');
-        }
         $announcement = $this->fillOrgId($announcement);
         $announcement['updatedTime'] = time();
 
@@ -85,7 +71,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $announcement = $this->getAnnouncement($id);
         if (empty($announcement)) {
-            $this->createNotFoundException(sprintf('公告#%id%不存在。', $id));
+            throw $this->createNotFoundException(sprintf('公告#%s不存在。', $id));
         }
 
         $this->getAnnouncementDao()->delete($id);
@@ -126,14 +112,6 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         }
 
         return $conditions;
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 
     /**

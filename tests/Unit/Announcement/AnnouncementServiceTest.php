@@ -7,15 +7,25 @@ use Biz\BaseTestCase;
 
 class AnnouncementServiceTest extends BaseTestCase
 {
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Arguments invalid
+     */
+    public function testCreateAnnouncementArgumentError()
+    {
+        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement(array());
+    }
+
     public function testCreateAnnouncement()
     {
         $announcementInfo = array(
-            'targetType' => 'course',
+            'targetType' => 'global',
             'targetId' => '1',
             'content' => 'test_announcement',
             'startTime' => time(),
             'endTime' => time() + 3600 * 1000,
             'url' => 'http://www.baidu.com',
+            'notify' => 1
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -41,6 +51,15 @@ class AnnouncementServiceTest extends BaseTestCase
         $this->assertEquals($this->getCurrentUser()->id, $getedAnnouncement['userId']);
         $this->assertEquals(1, $getedAnnouncement['targetId']);
         $this->assertEquals('test_announcement', $getedAnnouncement['content']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage targetType不正确！
+     */
+    public function testSearchAnnouncementsConditionError()
+    {
+        $this->getAnnouncementService()->searchAnnouncements(array('targetType' => 'abc'), array('createdTime' => 'DESC'), 0, 1);
     }
 
     public function testSearchAnnouncements()
@@ -71,6 +90,15 @@ class AnnouncementServiceTest extends BaseTestCase
         $this->assertContains($announcement2, $resultAnnouncements);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage 公告#123不存在。
+     */
+    public function testDeleteAnnouncementEmpty()
+    {
+        $this->getAnnouncementService()->deleteAnnouncement(123);
+    }
+
     public function testDeleteAnnouncement()
     {
         $announcementInfo = array(
@@ -87,6 +115,15 @@ class AnnouncementServiceTest extends BaseTestCase
         $getAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);
 
         $this->assertNull($getAnnouncement);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage Arguments invalid
+     */
+    public function testUpdateAnnouncementArgumentError()
+    {
+        $this->getAnnouncementService()->updateAnnouncement(1, array());
     }
 
     public function testUpdateAnnouncement()
