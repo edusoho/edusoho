@@ -73,6 +73,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'addUserLearnStatistics',
             'addUserLearnStatisticsSetting',
             'resetCrontabJobNum',
+            'downloadPlugin',
+            'updatePlugin',
         );
 
         $funcNames = array();
@@ -111,14 +113,117 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function addMemberOperationRecordColumn()
     {
-        $this->getConnection()->exec("
-            ALTER TABLE `member_operation_record` ADD COLUMN `join_course_set` tinyint(1) NOT NULL default 0 COMMENT '加入的课程的第一个教学计划，算加入课程' after `operate_type`;
-            ALTER TABLE `member_operation_record` ADD COLUMN `exit_course_set` tinyint(1) NOT NULL default 0 COMMENT '退出的课程的最后教学计划，算退出课程' after `operate_type`;
-            ALTER TABLE `member_operation_record` ADD COLUMN `course_set_id` int(10) NOT NULL default 0 COMMENT '课程Id' after `target_id`;
-            ALTER TABLE `member_operation_record` ADD COLUMN `parent_id` int(10) NOT NULL default 0 COMMENT '班级课程的被复制的计划Id' after `target_id`;
-        ");
+        if (!$this->isFieldExist('member_operation_record', 'join_course_set')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `member_operation_record` ADD COLUMN `join_course_set` tinyint(1) NOT NULL default 0 COMMENT '加入的课程的第一个教学计划，算加入课程' after `operate_type`;
+            ");
+        }
+        if (!$this->isFieldExist('member_operation_record', 'exit_course_set')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `member_operation_record` ADD COLUMN `exit_course_set` tinyint(1) NOT NULL default 0 COMMENT '退出的课程的最后教学计划，算退出课程' after `operate_type`;
+            ");
+        }
+        if (!$this->isFieldExist('member_operation_record', 'course_set_id')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `member_operation_record` ADD COLUMN `course_set_id` int(10) NOT NULL default 0 COMMENT '课程Id' after `target_id`;
+            ");
+        }
+        if (!$this->isFieldExist('member_operation_record', 'parent_id')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `member_operation_record` ADD COLUMN `parent_id` int(10) NOT NULL default 0 COMMENT '班级课程的被复制的计划Id' after `target_id`;
+            ");
+        }
 
         return 1;
+    }
+
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger( 'warning', '升级'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger( 'warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install', 0);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger( 'info', '升级完毕');
+        return $page + 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            array(
+                'Vip', 
+                1192
+            ),           
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
     }
 
     protected function updateMemberOperationRecord($page)
@@ -132,7 +237,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = ($page - 1) * $count;
         $limit = $page * $count;
         $this->getConnection()->exec("
-            `member_operation_record` as r, `course_v8` as c set r.`course_set_id` = c.courseSetId,r.`parent_id` = c.`parentId` where r.`target_id`=c.id and r.`target_type` = 'course' and r.id >= {$start} and r.id < {$limit};
+            update `member_operation_record` as r, `course_v8` as c set r.`course_set_id` = c.courseSetId,r.`parent_id` = c.`parentId` where r.`target_id`=c.id and r.`target_type` = 'course' and r.id >= {$start} and r.id < {$limit};
         ");
 
         return $page + 1;
