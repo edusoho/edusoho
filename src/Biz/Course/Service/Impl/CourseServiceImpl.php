@@ -226,7 +226,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'maxStudentNum',
                 'locked',
-                'isAudioOn'
+                'enableAudio'
             )
         );
 
@@ -242,7 +242,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->beginTransaction();
 
             $course = $this->getCourseDao()->update($id, $fields);
-            if (empty($originCourse['isAudioOn']) && $course['isAudioOn']) {
+            if (empty($originCourse['enableAudio']) && $course['enableAudio']) {
                 $this->vedioConvertAudio($course);
             }
         } catch (\Exception $e) {

@@ -48,11 +48,11 @@
           <label for="" class="col-sm-2 control-label">{{ '音频听课（试用）' }}</label>
           <div class="col-sm-8 radios">
             <label>
-              <input type="radio" name="isAudioOn" value="1" {% if course.isAudioOn|default('0') == 1 %}checked{% endif %}>
+              <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
               {{ '开启' }}
             </label>
             <label>
-              <input type="radio" name="isAudioOn" value="0" {% if course.isAudioOn|default('0') == 0 %}checked{% endif %}>
+              <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
               {{ '关闭' }}
             </label>
             <div>

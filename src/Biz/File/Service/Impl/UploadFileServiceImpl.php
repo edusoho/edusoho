@@ -69,7 +69,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         );
 
         $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, PHP_INT_MAX);
-        $this->getFileImplementor('cloud')->batchConvert(ArrayToolkit::column($videofiles, 'globalId'));
+        // $this->getFileImplementor('cloud')->batchConvert(ArrayToolkit::column($videofiles, 'globalId'));
     }
 
     public function getUploadFileInit($id)

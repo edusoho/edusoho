@@ -12,8 +12,8 @@ class AlterAddCourseV8Field extends Migration
         $container = $this->getContainer();
         $db = $container['db'];
 
-        if (!$this->isFieldExist('course_v8', 'isAudioOn')) {
-            $db->exec("ALTER TABLE `course_v8` ADD `isAudioOn` int(1) NOT NULL DEFAULT '0';");
+        if (!$this->isFieldExist('course_v8', 'enableAudio')) {
+            $db->exec("ALTER TABLE `course_v8` ADD `enableAudio` int(1) NOT NULL DEFAULT '0';");
         }
     }
 
@@ -25,8 +25,8 @@ class AlterAddCourseV8Field extends Migration
         $container = $this->getContainer();
         $db = $container['db'];
 
-        if ($this->isFieldExist('course_v8', 'isAudioOn')) {
-            $db->exec("ALTER TABLE `course_v8` DROP `isAudioOn`");
+        if ($this->isFieldExist('course_v8', 'enableAudio')) {
+            $db->exec("ALTER TABLE `course_v8` DROP `enableAudio`");
         }
     }
 
