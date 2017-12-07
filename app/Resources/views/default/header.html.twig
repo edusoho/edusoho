@@ -48,14 +48,35 @@
 
       <ul class="nav user-nav">
         {% if app.user %}
-       {#  <li class="user-avatar-li nav-hover">
-          <a href="javascript:;" class="dropdown-toggle">
-            <img class="avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+        <li class="user-avatar-li nav-hover">
+          <a href="javascript:;" class="dropdown-toggle user-avatar-toggle">
+            <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
-          <ul class="dropdown-menu cd-dropdown-menu" role="menu">
-            <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
-            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'homepage.header.personal_menu'|trans}}</a></li>
-            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
+          <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-dropdown">
+            <div class="user-dropdown__info cd-mb24">
+              <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
+                <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+              </a>
+              <div class="user-dropdown__profile">
+                <div class="user-dropdown__nickname"><span>{{ app.user.nickname }}</span>{% if is_plugin_installed('Vip')%}<img class="user-dropdown__vip-icon" src="{{ asset('static-dist/app/img/vip/vip_icon_gold.png') }}">{% endif %}</div>
+                {% if is_plugin_installed('Vip') %}
+                  <div class="user-dropdown__rank cd-mv8">网校超级黄金会员</div>
+                {% endif %}
+                {% if is_plugin_installed('RewardPoint') %}
+                  <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">899</span></div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="user-dropdown__link cd-mb24">
+              <a class="cd-link-gray" href="{{ path('my_orders') }}"><i class="cd-icon cd-icon-payment"></i>{{ 'homepage.header.account_menu'|trans }}</a>
+              <a class="cd-link-gray" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
+            </div>
+            <div class="user-dropdown__logout"><a class="cd-link-gray" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
+
+
+            {# <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li> #}
+          {#   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'homepage.header.personal_menu'|trans}}</a></li> #}
+            {# <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
             <li class="hidden-lg user-nav-li-my">
               <a href="{{ path('my') }}">
                 <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'homepage.header.my_teaching_menu'|trans}}{% else %}{{'homepage.header.my_learning_menu'|trans}}{% endif %}
@@ -76,22 +97,8 @@
                 <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
               </li>
             {% endif %}
-            <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
-          </ul>
-        </li> #}
-
-        <li class="user-manage-li nav-hover">
-          {% if has_permission('admin') or 'ROLE_TEACHER' in app.user.roles %}
-            <button class="dropdown-toggle btn cd-btn cd-btn-sm cd-btn-ghost-default user-manage-li__button">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></button>
-            <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-manage-dropdown" role="menu">
-              {% if has_permission('admin') %}<li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
-              {% endif %}
-              <li class="active"><a href="javascript:;">{{ 'homepage.header.my_learning'|trans }}</a></li>
-              <li><a href="javascript:;">{{ 'homepage.header.my_course'|trans }}</a></li>
-            </ul>
-          {% else %}
-            <a class="btn cd-btn cd-btn-sm cd-btn-ghost-primary user-student-manage" href="{{ path('my') }}">{{ 'homepage.header.my_learning'|trans }}</a>
-          {% endif %}
+            <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li> #}
+          </div>
         </li>
 
         {# 我的教学／我的学习 #}

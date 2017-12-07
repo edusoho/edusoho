@@ -1,13 +1,6 @@
-.cd-design {
-  .es-header {
-    .cd-box-shadow;
-  }
-}
-
-
 .es-header {
-  height: 56px;
   padding: 0 64px;
+  height: 56px;
   .cd-box-shadow;
   .navbar-header {
     .navbar-brand {
@@ -23,32 +16,23 @@
   .nav.user-nav {
     > li {
       height: 56px;
-      > a {
-        // padding: 18px 15px;
+      .user-avatar-toggle {
+        padding: 12px 0;
+        img {
+          .cd-box-shadow-z(8px);
+        }
+      }
+      .user-dropdown {
+        padding: 24px 0;
+        width: 264px;
+        height: 208px;
+        .cd-border-radius;
+        .cd-box-shadow-z(8px);
       }
     }
   }
-  .user-manage-li {
-    padding: 14px 0;
-    button {
-      padding-left: 12px !important;
-      padding-right: 6px !important;
-    }
-  }
-  .user-manage-dropdown {
-    padding: 0;
-    width: 96px;
-    top: 42px;
-    text-align: center;
-    .cd-border-radius;
-    > li > a {
-      padding: 16px 24px;
-    }
-    .user-student-manage {
-      color: #fff;
-    }
-  }
-  .nav.navbar-nav {
+  .nav.navbar-nav,
+  .nav.user-nav {
     > li {
       > a {
         padding: 22px 20px 20px;
@@ -58,10 +42,6 @@
       }
     }
   }
-  .navbar-form {
-    margin: 15px 10px;
-
-  }
   .nav > li.nav-more {
     > a {
       i {
@@ -70,4 +50,73 @@
     }
   }
 
+}
+
+// 头像下拉
+.user-dropdown__avatar {
+  display: inline-block;
+  img {
+    .cd-box-shadow-z(8px);
+  }
+}
+
+.user-dropdown__info {
+  padding: 0 32px;
+  height: 80px;
+  display: table;
+}
+
+.user-dropdown__nickname {
+  width: 96px;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+  color: @cd-gray-dark;
+  span {
+    vertical-align: text-top;
+  }
+}
+
+.user-dropdown__vip-icon {
+  margin-left: 4px;
+  width: 16px;
+  height: 16px;
+  vertical-align: unset;
+}
+
+.user-dropdown__profile {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.user-dropdown__rank {
+  font-size: 12px;
+  line-height: 1;
+  color: @cd-gray;
+}
+
+.user-dropdown__link {
+  padding: 0 32px;
+  font-size: 12px;
+  line-height: 1;
+  i {
+    margin-right: 4px;
+    font-size: 12px;
+  }
+  a {
+    padding-right: 34px;
+    & + a {
+      padding-left: 34px;
+      padding-right: 0;
+      .cd-box-shadow-inset;
+    }
+  }
+}
+
+.user-dropdown__logout {
+  padding: 16px 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1;
+  .cd-box-shadow-inset(0 1px 0 0);
 }
