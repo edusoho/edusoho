@@ -78,7 +78,7 @@ Unit Test With PHP 7.0 For Develop:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.xm
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
     - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
@@ -107,10 +107,11 @@ AT With Java And Selenium:
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
     - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
     # 安装插件
-    - git clone -b develop http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
     - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
     - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
     - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
+    - bin/phpmig migrate
     - app/console server:start $SERVICE_IP:8000
     - cd GUIAutomation2
     - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
