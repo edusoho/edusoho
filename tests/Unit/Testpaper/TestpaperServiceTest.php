@@ -218,11 +218,15 @@ class TestpaperServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage Testpaper(#123) not found
      */
-    public function testPublishTestpaper()
+    public function testPublishTestpaperEmpty()
     {
         $this->getTestpaperService()->publishTestpaper(123);
+    }
 
+    public function testPublishTestpaper()
+    {
         $testpaper = $this->createTestpaper1();
 
         $this->assertEquals('draft', $testpaper['status']);
@@ -233,6 +237,7 @@ class TestpaperServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage 试卷状态不合法!
      */
     public function testPublishTestpaperStatus()
     {
@@ -254,11 +259,15 @@ class TestpaperServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage Testpaper(#123) not found
      */
-    public function testCloseTestpaper()
+    public function testCloseTestpaperEmpty()
     {
         $this->getTestpaperService()->closeTestpaper(123);
+    }
 
+    public function testCloseTestpaper()
+    {
         $testpaper = $this->createTestpaper1();
 
         $this->assertEquals('draft', $testpaper['status']);
@@ -272,10 +281,23 @@ class TestpaperServiceTest extends BaseTestCase
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedExceptionMessage 试卷状态不合法!
      */
     public function testCloseTestpaperStatus()
     {
-        $testpaper = $this->createTestpaper1();
+        $fields = array(
+            'name' => 'testpaper',
+            'description' => 'testpaper description',
+            'courseSetId' => 1,
+            'courseId' => 0,
+            'pattern' => 'questionType',
+            'metas' => array(
+                'ranges' => array('courseId' => 0),
+            ),
+            'type' => 'testpaper',
+            'status' => 'closed'
+        );
+        $testpaper = $this->getTestpaperService()->createTestpaper($fields);
         $this->getTestpaperService()->closeTestpaper($testpaper['id']);
     }
 

@@ -241,7 +241,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         if (!in_array($testpaper['status'], array('open'))) {
-            throw $this->createAccessDeniedException('试卷状态不合法!');
+            throw $this->createServiceException('试卷状态不合法!');
         }
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
