@@ -4,6 +4,7 @@ namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -319,8 +320,14 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
 
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
+
         foreach ($members as &$member) {
             $member['order'] = empty($orders[$member['orderId']]) ? array() : $orders[$member['orderId']];
+            $member['classroom'] = empty($classrooms[$member['classroomId']]) ? array() : $classrooms[$member['classroomId']];
         }
         $learnCourseIds = ArrayToolkit::column($members, 'courseId');
         $learnCourses = $this->getCourseService()->searchCourses(array('courseIds' => $learnCourseIds), array('createdTime' => 'desc'), $start, $limit);
@@ -600,5 +607,13 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

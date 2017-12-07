@@ -4818,6 +4818,7 @@ admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
 admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.from_classroom: 来自班级
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
