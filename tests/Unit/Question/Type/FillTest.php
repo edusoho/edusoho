@@ -4,7 +4,6 @@ namespace Tests\Unit\Question;
 
 use Biz\Question\Type\Fill;
 use Biz\BaseTestCase;
-use Biz\Common\HTMLHelper;
 
 class FillTest extends BaseTestCase
 {
@@ -39,8 +38,8 @@ class FillTest extends BaseTestCase
     public function testJudgeRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array(array('2','两'),array('1','一')),'score'=>'2.0');
-        $answer = array('2','1');
+        $question = array('answer' => array(array('2', '两'), array('1', '一')), 'score' => '2.0');
+        $answer = array('2', '1');
 
         $result = $typeObj->judge($question, $answer);
 
@@ -51,8 +50,8 @@ class FillTest extends BaseTestCase
     public function testJudgePartRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array(array('2','两'),array('1','一')),'score'=>'2.0');
-        $answer = array('2','3');
+        $question = array('answer' => array(array('2', '两'), array('1', '一')), 'score' => '2.0');
+        $answer = array('2', '3');
 
         $result = $typeObj->judge($question, $answer);
 
@@ -64,14 +63,14 @@ class FillTest extends BaseTestCase
     public function testJudgeWrong()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array(array('2','两'),array('1','一')),'score'=>'2.0');
-        
+        $question = array('answer' => array(array('2', '两'), array('1', '一')), 'score' => '2.0');
+
         $answer1 = array('2');
         $result = $typeObj->judge($question, $answer1);
         $this->assertEquals('wrong', $result['status']);
         $this->assertEquals(0, $result['score']);
 
-        $answer2 = array('3','4');
+        $answer2 = array('3', '4');
         $result = $typeObj->judge($question, $answer2);
         $this->assertEquals('wrong', $result['status']);
         $this->assertEquals(0, $result['score']);
@@ -85,7 +84,7 @@ class FillTest extends BaseTestCase
         $typeObj = $this->creatQuestionType();
 
         $fields = array(
-            'stem' => '123456'
+            'stem' => '123456',
         );
 
         $filter = $typeObj->filter($fields);
@@ -97,7 +96,7 @@ class FillTest extends BaseTestCase
 
         $fields = array(
             'stem' => '这是填空题[[1|一]]或[[2|二]]',
-            'answer' => array(array('1|一','2|二'))
+            'answer' => array(array('1|一', '2|二')),
         );
 
         $filter = $typeObj->filter($fields);

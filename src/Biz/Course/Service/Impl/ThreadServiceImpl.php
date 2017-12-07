@@ -42,9 +42,31 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $thread;
     }
 
+    public function findThreadIds($conditions)
+    {
+        $threadIds = $threadIds = $this->getThreadDao()->findThreadIds($conditions);
+
+        return ArrayToolkit::column($threadIds, 'id');
+    }
+
+    public function findPostThreadIds($conditions)
+    {
+        $postThreadIds = $this->getThreadPostDao()->findThreadIds($conditions);
+
+        return ArrayToolkit::column($postThreadIds, 'threadId');
+    }
+
+    public function countPartakeThreadsByUserId($userId)
+    {
+        $threadIds = $this->findThreadIds(array('userId' => $userId));
+        $postThreadIds = $this->findPostThreadIds(array('userId' => $userId));
+
+        return count(array_unique(array_merge($threadIds, $postThreadIds)));
+    }
+
     public function findThreadsByType($courseId, $type, $sort, $start, $limit)
     {
-        if ($sort === 'latestPosted') {
+        if ('latestPosted' === $sort) {
             $orderBy = array('latestPosted' => 'DESC');
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -54,7 +76,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $type = 'all';
         }
 
-        if ($type === 'all') {
+        if ('all' === $type) {
             return $this->getThreadDao()->search(array('courseId' => $courseId), $orderBy, $start, $limit);
         }
 
@@ -90,7 +112,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         if (is_array($sort)) {
             $orderBy = $sort;
-        } elseif ($sort === 'createdTimeByAsc') {
+        } elseif ('createdTimeByAsc' === $sort) {
             $orderBy = array('createdTime' => 'ASC');
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -138,7 +160,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
         $thread['latestPostTime'] = $thread['createdTime'];
-        $thread['private'] = $course['status'] === 'published' ? 0 : 1;
+        $thread['private'] = 'published' === $course['status'] ? 0 : 1;
 
         $thread = $this->getThreadDao()->create($thread);
 
@@ -147,7 +169,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 continue;
             }
 
-            if ($thread['type'] !== 'question') {
+            if ('question' !== $thread['type']) {
                 continue;
             }
 
@@ -293,9 +315,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             return array();
         }
 
-        if ($sort === 'best') {
+        if ('best' === $sort) {
             $orderBy = array('score' => 'DESC');
-        } elseif ($sort === 'elite') {
+        } elseif ('elite' === $sort) {
             $orderBy = array('createdTime' => 'DESC', 'isElite' => 'ASC');
         } else {
             $orderBy = array('createdTime' => 'ASC');

@@ -60,7 +60,6 @@ class PlayerController extends BaseController
                 //手机浏览器不弹题
                 $context['hideQuestion'] = 1;
                 if (1 == $this->setting('storage.support_mobile', 0) && isset($file['mcStatus']) && 'yes' == $file['mcStatus']) {
-                    $player = 'local-video-player';
                     $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
                     $isEncryptionPlus = false;
                 }

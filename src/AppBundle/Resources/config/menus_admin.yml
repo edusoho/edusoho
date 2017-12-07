@@ -109,6 +109,11 @@ admin:
                             name: admin.user.basic.online
                         admin_login_record:
                             name: admin.user.basic.login_record_tab
+                admin_user_learn_statistics_manage:
+                    name: 用户数据统计
+                    children:
+                      admin_user_learn_statistics:
+                        name: 用户数据统计
                 admin_teacher:
                     name: admin.user.teacher_menu
                     children:

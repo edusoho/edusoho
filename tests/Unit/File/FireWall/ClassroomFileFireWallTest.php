@@ -45,13 +45,23 @@ class ClassroomFileFireWallTest extends BaseTestCase
 
     public function testCanAccessWithThreadCreaterAndThreadType()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ClassroomFileFireWall($this->getBiz());
         $this->mockBiz(
             'Thread:ThreadService',
             array(
                 array(
                     'functionName' => 'getThread',
-                    'returnValue' => array('id' => 111, 'userId' => 1),
+                    'returnValue' => array('id' => 111, 'userId' => 2),
                     'withParams' => array(111),
                 ),
             )
@@ -63,6 +73,16 @@ class ClassroomFileFireWallTest extends BaseTestCase
 
     public function testCanAccessWithTeacherAndThreadType()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ClassroomFileFireWall($this->getBiz());
         $this->mockBiz(
             'Thread:ThreadService',
@@ -91,6 +111,16 @@ class ClassroomFileFireWallTest extends BaseTestCase
 
     public function testCanAccessWithPostCreaterAndPostType()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ClassroomFileFireWall($this->getBiz());
 
         $this->mockBiz(
@@ -98,7 +128,7 @@ class ClassroomFileFireWallTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getPost',
-                    'returnValue' => array('id' => 111, 'userId' => 1),
+                    'returnValue' => array('id' => 111, 'userId' => 2),
                     'withParams' => array(111),
                 ),
             )
@@ -110,18 +140,28 @@ class ClassroomFileFireWallTest extends BaseTestCase
 
     public function testCanAccessWithThreadCreaterAndPostType()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ClassroomFileFireWall($this->getBiz());
         $this->mockBiz(
             'Thread:ThreadService',
             array(
                 array(
                     'functionName' => 'getThread',
-                    'returnValue' => array('id' => 111, 'userId' => 1),
+                    'returnValue' => array('id' => 111, 'userId' => 2),
                     'withParams' => array(111),
                 ),
                 array(
                     'functionName' => 'getPost',
-                    'returnValue' => array('id' => 111, 'userId' => 2, 'threadId' => 111),
+                    'returnValue' => array('id' => 111, 'userId' => 3, 'threadId' => 111),
                     'withParams' => array(111),
                 ),
             )
@@ -133,6 +173,16 @@ class ClassroomFileFireWallTest extends BaseTestCase
 
     public function testCanAccessWithTeacherAndPostType()
     {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $fireWall = new ClassroomFileFireWall($this->getBiz());
         $this->mockBiz(
             'Thread:ThreadService',
