@@ -138,11 +138,11 @@ class SystemCrontabInitializer
                 'class' => 'Biz\Xapi\Job\ArchiveStatementJob',
             ),
             'SyncUserTotalLearnStatisticsJob' => array(
-                'expression' => '*/3 1-7 * * *',
+                'expression' => '*/3 1-6 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\SyncTotalJob',
             ),
             'SyncUserLearnDailyPastLearnStatisticsJob' => array(
-                'expression' => '*/3 1-7 * * *',
+                'expression' => '*/3 1-6 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\SyncDailyPastDataJob',
             ),
             'DeleteUserLearnDailyPastLearnStatisticsJob' => array(
