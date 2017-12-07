@@ -4809,13 +4809,15 @@ admin.user.statistics.data_detail.note_number: 笔记数
 admin.user.statistics.data_detail.learning_course_sets: 在学课程
 admin.user.statistics.data_detail.learning_courses: 在学计划
 admin.user.statistics.data_detail.average_process: 平均计划进度
+admin.user.statistics.data_detail.task_rate: 任务完成比
 admin.user.statistics.data_detail.thread_number: 参与话题
-admin.user.statistics.data_detail.post_number: 评论数
+admin.user.statistics.data_detail.review_number: 评价数
 admin.user.statistics.data_detail.active_chart: 活跃度
 admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
 
 ## 评论管理
 admin.comment_manage.title: 评论管理

@@ -3820,13 +3820,15 @@ admin.user.statistics.data_detail.note_number: Note Number
 admin.user.statistics.data_detail.learning_course_sets: Learning CourseSet
 admin.user.statistics.data_detail.learning_courses: Learning Course
 admin.user.statistics.data_detail.average_process: Average Process
+admin.user.statistics.data_detail.task_rate: TaskRate
 admin.user.statistics.data_detail.thread_number: Thread Number
-admin.user.statistics.data_detail.post_number: Post Number
+admin.user.statistics.data_detail.review_number: Review Number
 admin.user.statistics.data_detail.active_chart: Active
 admin.user.statistics.data_detail.learn_detail: Learn Detail
 admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
 
 
 admin.comment_manage.title: 'Comments'
