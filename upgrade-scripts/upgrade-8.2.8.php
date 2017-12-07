@@ -229,13 +229,13 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function updateMemberOperationRecord($page)
     {
         $count = 10000;
-        $recordLastCount = $this->getRecordDao()->count(array('id_GT' => $page * $count));
+        $start = ($page - 1) * $count;
+        $limit = $page * $count;
+        $recordLastCount = $this->getRecordDao()->count(array('id_GT' => $start));
         if (empty($recordLastCount)) {
             return 1;
         }
 
-        $start = ($page - 1) * $count;
-        $limit = $page * $count;
         $this->getConnection()->exec("
             update `member_operation_record` as r, `course_v8` as c set r.`course_set_id` = c.courseSetId,r.`parent_id` = c.`parentId` where r.`target_id`=c.id and r.`target_type` = 'course' and r.id >= {$start} and r.id < {$limit};
         ");
