@@ -3303,6 +3303,7 @@ homepage.header.settings_menu: 个人设置
 homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
+homepage.header.reward: 积分
 homepage.header.admin_menu: 管理后台
 homepage.header.switch_pc: 切换电脑版
 homepage.header.switch_mobile: 切换触屏版

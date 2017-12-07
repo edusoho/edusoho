@@ -2622,6 +2622,7 @@ homepage.header.settings_menu: 'Profile Setting'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
+homepage.header.reward: 积分
 homepage.header.admin_menu: 'Admin'
 homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
