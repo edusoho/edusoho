@@ -6,7 +6,6 @@ use Biz\CloudPlatform\QueueJob\PushJob;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\NotificationService;
 
 class CourseAnnouncementProcessor extends AnnouncementProcessor
