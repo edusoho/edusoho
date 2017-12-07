@@ -72,7 +72,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'updateMemberOperationRecord',
             'addUserLearnStatistics',
             'addUserLearnStatisticsSetting',
-            'addUserLearnStatisticsJob',
+            'resetCrontabJobNum',
         );
 
         $funcNames = array();
@@ -149,93 +149,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1; 
     }
 
-    protected function addUserLearnStatisticsJob()
+    protected function resetCrontabJobNum()
     {
-        $currentTime = time();
-        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
-              `name`,
-              `expression`,
-              `class`,
-              `args`,
-              `priority`,
-              `next_fire_time`,
-              `misfire_threshold`,
-              `misfire_policy`,
-              `enabled`,
-              `creator_id`,
-              `updated_time`,
-              `created_time`
-        ) VALUES
-        (
-            'SyncUserTotalLearnStatisticsJob',
-            '*/5 * * * *',
-            'Biz\\\\UserLearnStatistics\\\\Job\\\\SyncTotalJob',
-            '',
-            '100',
-            '{$currentTime}',
-            '300',
-            'missed',
-            '1',
-            '0',
-            '{$currentTime}',
-            '{$currentTime}'
-        ),
-        (
-            'SyncUserLearnDailyPastLearnStatisticsJob',
-            '*/5 * * * *',
-            'Biz\\\\UserLearnStatistics\\\\Job\\\\SyncDailyPastDataJob',
-            '',
-            '100',
-            '{$currentTime}',
-            '300',
-            'missed',
-            '1',
-            '0',
-            '{$currentTime}',
-            '{$currentTime}'
-        ),
-        (
-            'DeleteUserLearnDailyPastLearnStatisticsJob',
-            '0 2 * * *',
-            'Biz\\\\UserLearnStatistics\\\\Job\\\\DeletePastDataJob',
-            '',
-            '100',
-            '{$currentTime}',
-            '300',
-            'missed',
-            '1',
-            '0',
-            '{$currentTime}',
-            '{$currentTime}'
-        ),
-        (
-            'SyncUserLearnDailyLearnStatisticsJob',
-            '0 1 * * *',
-            'Biz\\\\UserLearnStatistics\\\\Job\\\\SyncDaily',
-            '',
-            '100',
-            '{$currentTime}',
-            '300',
-            'missed',
-            '1',
-            '0',
-            '{$currentTime}',
-            '{$currentTime}'
-        ),
-        (
-            'StorageDailyLearnStatisticsJob',
-            '0 3 * * *',
-            'Biz\\\\UserLearnStatistics\\\\Job\\\\StorageDailyJob',
-            '',
-            '100',
-            '{$currentTime}',
-            '300',
-            'missed',
-            '1',
-            '0',
-            '{$currentTime}',
-            '{$currentTime}'
-        );");
+        \Biz\Crontab\SystemCrontabInitializer::init();
 
         return 1;
     }
