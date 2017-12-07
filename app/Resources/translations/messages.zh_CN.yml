@@ -3291,6 +3291,7 @@ homepage.reviewer_comment_course: 说：
 homepage.switch_language.chinese: 中文
 homepage.switch_language.english: English
 homepage.header.search: 搜索
+homepage.header.search_course: 搜索你感兴趣的课程...
 homepage.header.login: 登录
 homepage.header.logout: 退出登录
 homepage.header.register: 注册

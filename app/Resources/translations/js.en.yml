@@ -11,6 +11,7 @@ site.upload_fail_retry_hint: Upload failed, please try again
 site.save_success_hint: Saved successfully
 site.searching_hint: Search ...
 site.search_hint: Search
+site.search_course_hint: 搜索你感兴趣的课程...
 site.choose_gender_hint: Please select gender
 site.captcha_code.required: Please enter the verification code
 site.data.create: Add

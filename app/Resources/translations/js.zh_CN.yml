@@ -12,6 +12,7 @@ site.save_success_hint: 保存成功
 site.save_error_hint: 保存失败
 site.searching_hint: 搜索中...
 site.search_hint: 搜索
+site.search_course_hint: 搜索你感兴趣的课程...
 site.choose_gender_hint: 请选择性别
 site.captcha_code.required: 请输入验证码
 site.data.create: 添加

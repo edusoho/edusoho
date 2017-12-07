@@ -116,7 +116,7 @@ if (!isMobileDevice()) {
 $('.js-search').focus(function () {
   $(this).prop('placeholder', '').addClass('active');
 }).blur(function () {
-  $(this).prop('placeholder', Translator.trans('site.search_hint')).removeClass('active');
+  $(this).prop('placeholder', Translator.trans('site.search_course_hint')).removeClass('active');
 });
 
 $("select[name='language']").change(function () {

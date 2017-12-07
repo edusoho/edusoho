@@ -2610,6 +2610,7 @@ homepage.reviewer_comment_course: 'Say'
 homepage.switch_language.chinese: Chinese
 homepage.switch_language.english: English
 homepage.header.search: Search
+homepage.header.search_course: 搜索你感兴趣的课程...
 homepage.header.login: Log In
 homepage.header.logout: Log Out
 homepage.header.register: Sign Up
