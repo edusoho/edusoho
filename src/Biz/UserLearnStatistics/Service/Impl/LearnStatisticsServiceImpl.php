@@ -290,7 +290,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $learningCourseSetCount = $this->getCourseSetService()->countUserLearnCourseSets($userId);
         $learningCoursesCount = $this->getCourseService()->countUserLearnCourses($userId);
         $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
-        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds));
+        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds, 'userId' => $userId));
         $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
         $learningClassroomThreadCount = $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType($userId, 'classroom');
         $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
