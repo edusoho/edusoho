@@ -16,12 +16,12 @@ class CourseMemberImporterTest extends BaseTestCase
             array(
                 'importData' => array(),
                 'courseId' => 1,
-                'price' => 1
+                'price' => 1,
             )
         );
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'withParams' => array(1), 'returnValue' => array())
+            array('functionName' => 'getCourse', 'withParams' => array(1), 'returnValue' => array()),
         ));
 
         $importer = new CourseMemberImporter($this->biz);
@@ -59,8 +59,8 @@ class CourseMemberImporterTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'withParams' => array(1), 'returnValue' => array(
                 'id' => 1,
-                'price' => 100
-            ))
+                'price' => 100,
+            )),
         ));
 
         $importer = new CourseMemberImporter($this->biz);
@@ -83,12 +83,12 @@ class CourseMemberImporterTest extends BaseTestCase
 
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'isCourseStudent', 'andReturnValues' => array(
-                false, false, true
+                false, false, true,
             )),
             array('functionName' => 'isCourseTeacher', 'andReturnValues' => array(
-                true, false, false
+                true, false, false,
             )),
-            array('functionName' => 'becomeStudentAndCreateOrder', 'returnValue' => array())
+            array('functionName' => 'becomeStudentAndCreateOrder', 'returnValue' => array()),
         ));
 
         $importer = new CourseMemberImporter($this->biz);
