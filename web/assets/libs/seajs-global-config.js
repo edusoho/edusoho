@@ -35,6 +35,8 @@ seajs.config({
         'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
         'upload': 'arale/upload/1.1.0/upload',
         'bootstrap.validator': 'common/validator',
+        'emitter': 'common/component-emitter',
+        'bootstrap.daterangepicker': 'common/bootstrap-daterangepicker',
         'class': 'arale/class/1.1.0/class',
         'base': 'arale/base/1.1.1/base',
         'widget': 'arale/widget/1.1.1/widget',
@@ -78,9 +80,9 @@ seajs.config({
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
-        'player-new': __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/sdk-v1.js',
-        'video-player-new': __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/video-player/sdk-v1.js',
-        'new-uploader':  __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/uploader/sdk-v1.js',
+        'player-new': __URL_PROTOCOL + ':' + app.cloudPlayerSdkUrl,
+        'video-player-new': __URL_PROTOCOL + ':' + app.cloudVideoPlayerSdkUrl,
+        'new-uploader':  __URL_PROTOCOL + ':' + app.cloudOldUploaderSdkUrl,
         'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
@@ -130,15 +132,6 @@ seajs.on('fetch', function(data) {
         return ;
     }
 
-    if (data.uri.indexOf('js-sdk/video-player') > 0) {
-        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
-        return ;
-    }
-
-    if (data.uri.indexOf('js-sdk/uploader') > 0) {
-        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
-        return ;
-    }
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 });
 

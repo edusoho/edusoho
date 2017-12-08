@@ -90,8 +90,35 @@ class ActivityLearnLogServiceTest extends BaseTestCase
         $this->assertEquals(array('id' => 111, 'event' => 'finish'), $result);
     }
 
+    public function testSumLearnTimeGroupByUserId()
+    {
+        $time = time();
+        $this->getActivityLearnLogDao()->create(array('userId' => 1, 'learnedTime' => 100, 'event' => 'doing', 'mediaType' => 'ppt'));
+        $this->getActivityLearnLogDao()->create(array('userId' => 1, 'learnedTime' => 12, 'event' => 'start', 'mediaType' => 'ppt'));
+        $this->getActivityLearnLogDao()->create(array('userId' => 2, 'learnedTime' => 11, 'event' => 'finish', 'mediaType' => 'ppt'));
+
+        $result = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId(array());
+
+        $this->assertEquals('112', $result[1]['learnedTime']);
+        $this->assertEquals('11', $result[2]['learnedTime']);
+
+        $result = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId(array('createdTime_GE' => $time + 10 * 3600));
+        $this->assertEmpty($result);
+
+        $result = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId(array('userIds' => array(3)));
+        $this->assertEmpty($result);
+
+        $result = $this->getActivityLearnLogService()->sumLearnTimeGroupByUserId(array('userIds' => array(2)));
+        $this->assertEquals('11', $result[2]['learnedTime']);
+    }
+
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
+    }
+
+    protected function getActivityLearnLogDao()
+    {
+        return $this->createDao('Activity:ActivityLearnLogDao');
     }
 }

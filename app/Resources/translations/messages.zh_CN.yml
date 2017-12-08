@@ -241,6 +241,9 @@ date.month: 月
 date.day: 日
 date.format: Y年m月d日
 
+#符号通用
+word.seperator: '、'
+
 #分页
 paginator.firstPage: 首页
 paginator.endPage: 尾页
@@ -983,7 +986,7 @@ course.marketing_setup.preview.set_task: 设置免费学习任务
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
@@ -4801,6 +4804,22 @@ admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分�
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
 
+## 用户数据统计
+admin.user.statistics.data_detail.note_number: 笔记数
+admin.user.statistics.data_detail.learning_course_sets: 在学课程
+admin.user.statistics.data_detail.learning_courses: 在学计划
+admin.user.statistics.data_detail.average_process: 平均计划进度
+admin.user.statistics.data_detail.task_rate: 任务完成比
+admin.user.statistics.data_detail.thread_number: 参与话题
+admin.user.statistics.data_detail.review_number: 评价数
+admin.user.statistics.data_detail.active_chart: 活跃度
+admin.user.statistics.data_detail.teaching_plan_name: 计划名
+admin.user.statistics.data_detail.learn_detail: 学习详情
+admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.from_classroom: 来自班级
+
 ## 评论管理
 admin.comment_manage.title: 评论管理
 admin.comment_manage.monitor: 评论监控
@@ -6102,6 +6121,7 @@ admin.edu_cloud.account.arrears_tips: 您已欠费%arrearageDays%天，教育云
 admin.edu_cloud.account.balance_not_enough: 你的余额不足50元，请尽快充值，以免影响正常使用。
 admin.edu_cloud.overview.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.overview.disabled_tips: 您的教育云服务已被禁用
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 若有疑问，请联系客服人员：4008041114
 admin.edu_cloud.overview.balance: 余额
 admin.edu_cloud.overview.recharge: 充值
@@ -7373,6 +7393,11 @@ admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
 admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
+admin.payment_setting.llpay_application_tips: >
+ 使用前提：
+  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看</a>操作。</p>
+  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
@@ -8293,4 +8318,16 @@ site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
-
+user.learn.statistics.start_time: 起始时间
+user.learn.statistics.end_time: 结束时间
+user.learn.statistics.default.search: 默认排序
+user.learn.statistics.search: 搜索
+user.learn.statistics.nickname: 用户名
+user.learn.statistics.join.classroom.num: 加入班级数
+user.learn.statistics.exit.classroom.num: 退出班级数
+user.learn.statistics.join.course.num: 加入计划数
+user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.finished.task.num: 学完任务数
+user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.actual.amount: 消费总额(元)
+user.learn.statistics.empty: 暂无用户统计数据

@@ -29,7 +29,11 @@
   app.uploadUrl = '{{ path("file_upload") }}';
   app.imgCropUrl = '{{ path("file_img_crop") }}';
   app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
-  app.cloudSdkCdn = '{{ setting("developer.cloud_sdk_cdn") }}';
+  app.cloudPlayerSdkUrl = '{{ cloud_sdk_url("player") }}';
+  app.cloudPlayServer = '{{ setting("developer.cloud_play_server", "") }}';
+  app.cloudVideoPlayerSdkUrl = '{{ cloud_sdk_url("video") }}';
+  app.cloudOldUploaderSdkUrl = '{{ cloud_sdk_url("old_uploader") }}';
+  app.cloudOldDocumentSdkUrl = '{{ cloud_sdk_url("old_document") }}';
   app.lang = '{{ app.request.locale }}';
 </script>
 

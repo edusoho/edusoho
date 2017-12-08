@@ -88,7 +88,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     protected function deleteAttachment($targetType, $targetId)
     {
         $conditions = array('targetId' => $targetId, 'type' => 'attachment');
-        if (strpos($targetType, ',') === false) {
+        if (false === strpos($targetType, ',')) {
             $conditions['targetType'] = $targetType;
         } else {
             $conditions['targetTypes'] = explode(',', $targetType);
@@ -154,21 +154,6 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onCourseDelete(Event $event)
     {
         $course = $event->getSubject();
-
-        /**
-         * @TODO 教学计划删除时需要使文件使用数减少
-         */
-        $lessons = $this->getCourseService()->getCourse($course['id']);
-
-        if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, 'mediaId');
-
-            if (!empty($fileIds)) {
-                foreach ($fileIds as $fileId) {
-                    $this->getUploadFileService()->waveUsedCount($fileId, -1);
-                }
-            }
-        }
     }
 
     public function onCourseLessonCreate(Event $event)
@@ -271,7 +256,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     {
         $attachment = $event->getSubject();
 
-        if ($attachment['type'] != 'attachment' || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
+        if ('attachment' != $attachment['type'] || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
             return;
         }
 

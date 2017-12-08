@@ -2275,4 +2275,20 @@ admin_online:
 
 admin_bill:
     path: /bill/{type}
-    defaults: { _controller: AppBundle:Admin/Bill:bill } 
+    defaults: { _controller: AppBundle:Admin/Bill:bill }
+
+admin_user_learn_statistics:
+    path: /user/learn/statistics
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:show }
+
+admin_user_learn_detail:
+    path: /user/learn/{userId}/detail
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:detail }
+
+admin_user_learn_chart:
+    path: /user/learn/{userId}/chart
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:learnChart }
+
+admin_user_learn_statistics_info:
+    path: /user/learn/statistics/info
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }

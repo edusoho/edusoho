@@ -4,7 +4,7 @@
 
 {% set courseId = course.id %}
 
-{% do script([get_upload_sdk(), 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','app/js/course-manage/live-replay/upload/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','app/js/course-manage/live-replay/upload/index.js']) %}
 
 {% block title %}
   {% if activity.ext.replayStatus == 'videoGenerated' %}{{ 'course.replay_manage.upload_modal.edit_replay'|trans }}{% else %}{{ 'course.replay_manage.upload_modal.add_replay'|trans }}{% endif %}

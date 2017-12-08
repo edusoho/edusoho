@@ -36,6 +36,9 @@ class BinderRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataAfterSave($registration, $user)
     {
+        if (empty($registration['authid']) && !empty($registration['token']['userId'])) {
+            $registration['authid'] = $registration['token']['userId'];
+        }
         $this->getUserService()->bindUser(
             $registration['type'],
             $registration['authid'],

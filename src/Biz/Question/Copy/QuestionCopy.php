@@ -4,7 +4,6 @@ namespace Biz\Question\Copy;
 
 use Biz\AbstractCopy;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class QuestionCopy extends AbstractCopy
 {
@@ -94,18 +93,6 @@ class QuestionCopy extends AbstractCopy
         }
 
         $this->getQuestionDao()->batchCreate($newChildQuestions);
-    }
-
-    /**
-     * @return BatchUpdateHelper
-     */
-    protected function getQuestionBatchUpdateHelper()
-    {
-        $questionDao = $this->getQuestionDao();
-
-        $questionUpdateHelper = new BatchUpdateHelper($questionDao);
-
-        return $questionUpdateHelper;
     }
 
     /**

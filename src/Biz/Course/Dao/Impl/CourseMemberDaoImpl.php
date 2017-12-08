@@ -126,6 +126,20 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
+    public function countUserLearnCourses($userId)
+    {
+        $sql = "SELECT COUNT(DISTINCT courseId) FROM {$this->table()} WHERE userId = ? and role = 'student'";
+
+        return $this->db()->fetchColumn($sql, array($userId));
+    }
+
+    public function findUserLearnCourseIds($userId)
+    {
+        $sql = "SELECT DISTINCT courseId FROM {$this->table()} WHERE userId = ? and role = 'student'";
+
+        return $this->db()->fetchAll($sql, array($userId)) ?: array();
+    }
+
     public function countLearnedMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
@@ -409,7 +423,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')
     {
         $conditions = array_filter($conditions, function ($value) {
-            if ($value === '' || $value === null) {
+            if ('' === $value || null === $value) {
                 return false;
             }
 

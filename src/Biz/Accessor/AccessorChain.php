@@ -5,9 +5,14 @@ namespace Biz\Accessor;
 class AccessorChain
 {
     /**
-     * @var array
+     * @var \ArrayIterator
      */
     private $accessors;
+
+    public function __construct()
+    {
+        $this->accessors = new \ArrayIterator();
+    }
 
     /**
      * @param $accessor
@@ -15,14 +20,31 @@ class AccessorChain
      */
     public function add(AccessorInterface $accessor, $priority)
     {
-        $this->accessors[] = array(
+        $this->accessors->append(array(
+            'name' => substr(strrchr(get_class($accessor), '\\'), 1),
             'accessor' => $accessor,
             'priority' => $priority,
-        );
+        ));
 
-        uasort($this->accessors, function ($a1, $a2) {
+        $this->accessors->uasort(function ($a1, $a2) {
             return $a1['priority'] < $a2['priority'];
         });
+    }
+
+    /**
+     * @param $name
+     *
+     * @return \Biz\Accessor\AccessorAdapter|null
+     */
+    public function getAccessor($name)
+    {
+        foreach ($this->accessors as $accessor) {
+            if ($accessor['name'] == $name) {
+                return $accessor['accessor'];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -34,15 +56,12 @@ class AccessorChain
      */
     public function process($bean)
     {
-        $accessors = $this->accessors;
-        if (empty($accessors)) {
-            return array('code' => AccessorInterface::SUCCESS);
-        }
+        foreach ($this->accessors as $accessorArr) {
+            /** @var \Biz\Accessor\AccessorAdapter $realAccessor */
+            $realAccessor = $accessorArr['accessor'];
+            $result = $realAccessor->process($bean);
 
-        foreach ($accessors as $accessor) {
-            $result = $accessor['accessor']->access($bean);
-
-            if ($result !== null) {
+            if (null !== $result) {
                 return $result;
             }
         }

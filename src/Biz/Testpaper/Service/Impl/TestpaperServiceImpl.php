@@ -391,12 +391,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
         $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
+        $orders = empty($formData['seq']) ? array() : $formData['seq'];
 
         $this->submitAnswers($result['id'], $answers, $attachments);
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
             $result['id'],
-            $formData['usedTime']
+            $formData['usedTime'],
+            array('orders' => $orders)
         );
 
         $this->dispatchEvent('exam.finish', new Event($paperResult));
@@ -408,7 +410,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $total = array();
 
-        if ($testpaper['type'] == 'homework') {
+        if ('homework' == $testpaper['type']) {
             return $total;
         }
 
@@ -417,7 +419,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            if ($type == 'material') {
+            if ('material' == $type) {
                 $materialScore = 0;
 
                 foreach ($items[$type] as $material) {
@@ -522,7 +524,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($items as $item) {
             $itemResult = empty($itemResults[$item['questionId']]) ? array() : $itemResults[$item['questionId']];
 
-            if ($item['parentId'] > 0 || $item['questionType'] == 'material') {
+            if ($item['parentId'] > 0 || 'material' == $item['questionType']) {
                 $accuracy['material'] = empty($accuracy['material']) ? array() : $accuracy['material'];
 
                 $accuracy['material'] = $this->countItemResultStatus($accuracy['material'], $item, $itemResult);
@@ -567,7 +569,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $answerFilter = str_replace('""', '', $userAnswer['answer'][0]);
 
                 if (!empty($answerFilter)) {
-                    if ($paperResult['type'] == 'homework') {
+                    if ('homework' == $paperResult['type']) {
                         $checkedFields['status'] = 'right';
                     } else {
                         $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
@@ -677,7 +679,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($itemResults as $itemResult) {
             $score += $itemResult['score'];
 
-            if ($itemResult['status'] == 'right') {
+            if ('right' == $itemResult['status']) {
                 ++$rightItemCount;
             }
         }
@@ -740,7 +742,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $filter['seq'] = $index;
 
-            if ($question['type'] != 'material') {
+            if ('material' != $question['type']) {
                 ++$index;
             }
 
@@ -773,17 +775,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $type = array();
             $typesCount = array();
             foreach ($items as $item) {
-                if ($item['questionType'] != 'material') {
+                if ('material' != $item['questionType']) {
                     $totalScore += $item['score'];
                 }
 
-                if (!in_array($item['questionType'], $type) && $item['parentId'] != 0) {
+                if (!in_array($item['questionType'], $type) && 0 != $item['parentId']) {
                     $type[] = $item['questionType'];
                 }
 
-                if (isset($typesCount[$item['questionType']]) && $item['parentId'] == 0) {
+                if (isset($typesCount[$item['questionType']]) && 0 == $item['parentId']) {
                     ++$typesCount[$item['questionType']];
-                } elseif ($item['parentId'] == 0) {
+                } elseif (0 == $item['parentId']) {
                     $typesCount[$item['questionType']] = 1;
                 }
             }
@@ -819,23 +821,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             ++$resultStatus['all'];
         }
 
-        if ($item['questionType'] == 'material') {
+        if ('material' == $item['questionType']) {
             return $resultStatus;
         }
 
-        if ($status == 'right') {
+        if ('right' == $status) {
             ++$resultStatus['right'];
         }
 
-        if ($status == 'partRight') {
+        if ('partRight' == $status) {
             ++$resultStatus['partRight'];
         }
 
-        if ($status == 'wrong') {
+        if ('wrong' == $status) {
             ++$resultStatus['wrong'];
         }
 
-        if ($status == 'noAnswer') {
+        if ('noAnswer' == $status) {
             ++$resultStatus['noAnswer'];
         }
 
@@ -870,7 +872,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createNotFoundException('试卷不存在!');
         }
 
-        if ($paperResult['status'] === 'doing' && ($paperResult['userId'] != $user['id'])) {
+        if ('doing' === $paperResult['status'] && ($paperResult['userId'] != $user['id'])) {
             throw $this->createNotFoundException('无权查看此试卷');
         }
 
@@ -881,7 +883,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $course = $this->getCourseService()->getCourse($paperResult['courseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-        if ($member['role'] === 'teacher') {
+        if ('teacher' === $member['role']) {
             return true;
         }
 
@@ -965,7 +967,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     private function getUserMaxScore($userResults)
     {
-        if (count($userResults) === 1) {
+        if (1 === count($userResults)) {
             return $userResults[0]['score'];
         }
 

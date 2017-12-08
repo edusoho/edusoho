@@ -59,7 +59,7 @@ class DocPlayer {
   initPDFJSViewer() {
     $("html").attr('dir', 'ltr');
 
-    let src = '//service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#' + this.pdfUrl;
+    let src = app.cloudOldDocumentSdkUrl + '#' + this.pdfUrl;
 
     if (!this.canCopy) {
       src += '#false';
