@@ -105,7 +105,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $api = CloudAPIFactory::create('root');
             $params = array('nos' => $globalIds);
 
-            return $api->post("/resources/transcode_retry", $params);
+            return $api->post('/resources/transcode_retry', $params);
         }
 
         return false;
