@@ -8,14 +8,14 @@
 {% block main %}
     <form id="user-search" class="form-inline well well-sm" action="" method="get" novalidate="">
       <div class="form-group ">
-        <input class="form-control" type="text" id="startDate" name="startDate" value="{{ app.request.query.get('startDate') }}" data-min-time="{{ timespan }}" placeholder="{{ 'user.learn.statistics.start_time'|trans }}">
+        <input class="form-control" type="text" id="startDate" name="startDate" value="{{ app.request.query.get('startDate') }}" data-min-time="{{ recordEndTime }}" placeholder="{{ 'user.learn.statistics.start_time'|trans }}">
         -
         <input class="form-control" type="text" id="endDate" name="endDate" value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'user.learn.statistics.end_time'|trans }}">
         <input class="form-control" type="text" name="nickname" placeholder="{{'user.learn.statistics.nickname'|trans}}" value="{{ app.request.query.get('nickname') }}">
         <input type="hidden" name="isDefault" value="{{ isDefault|default(false) }}">
       </div>
-      <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a>
       <a class="btn btn-primary" id="search">{{'user.learn.statistics.search'|trans}}</a>
+      {# <a class="btn btn-primary" id="default-search">{{ 'user.learn.statistics.default.search'|trans }}</a> #}
       {% include 'export/export-btn.html.twig' with 
       { 'exportFileName': 'user-learn-statistics', 
         'targetFormId': 'user-search'}  
@@ -57,7 +57,7 @@
               <td>{{ statistic.joinedCourseNum|default(0) }}</td>
               <td>{{ statistic.exitCourseNum|default(0) }}</td>
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
-              <td>{{ (statistic.learnedSeconds|default(0)/60)|number_format(2, '.', ',') }}</td>
+              <td>{{ (statistic.learnedSeconds|default(0)/60)|number_format(0) }}</td>
               <td>{{ statistic.actualAmount|default(0)|to_cash(0) }}</td>
               <td><a href="{{ path('admin_user_learn_detail', {userId:user.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
             </tr>
