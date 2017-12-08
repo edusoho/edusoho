@@ -46,9 +46,6 @@ class CourseMemberImporterTest extends BaseTestCase
         $importer->tryImport($request);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testGetTemplate()
     {
         $request = new Request(
@@ -64,7 +61,8 @@ class CourseMemberImporterTest extends BaseTestCase
         ));
 
         $importer = new CourseMemberImporter($this->biz);
-        $importer->getTemplate($request);
+        $result = $importer->getTemplate($request);
+        $this->assertNotNull($result);
     }
 
     public function testExcelDataImporting()
