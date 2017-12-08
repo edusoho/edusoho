@@ -47,7 +47,7 @@ class Fill extends BaseQuestion implements TypeInterface
             }
         }
 
-        if ($rightCount == 0) {
+        if (0 == $rightCount) {
             return array('status' => 'wrong', 'score' => 0);
         } elseif ($rightCount < count($questionAnswers)) {
             $percentage = intval($rightCount / count($questionAnswers) * 100);

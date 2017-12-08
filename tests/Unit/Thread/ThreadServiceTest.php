@@ -3,6 +3,7 @@
 namespace Tests\Unit\Thread;
 
 use Biz\BaseTestCase;
+use Biz\Thread\Service\ThreadService;
 use Biz\User\CurrentUser;
 
 class ThreadServiceTest extends BaseTestCase
@@ -402,6 +403,37 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
+    public function testFindThreadIds()
+    {
+        $this->mockBiz('Thread:ThreadDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2), 3 => array('id' => 3))),
+        ));
+
+        $this->assertEquals(3, count($this->getThreadService()->findThreadIds(array('userId' => 1))));
+    }
+
+    public function testFindPostThreadIds()
+    {
+        $this->mockBiz('Thread:ThreadPostDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('threadId' => 3), 2 => array('threadId' => 4), 3 => array('threadId' => 5))),
+        ));
+
+        $this->assertEquals(3, count($this->getThreadService()->findPostThreadIds(array('userId' => 1))));
+    }
+
+    public function testCountPartakeThreadsByUserIdAndTargetType()
+    {
+        $this->mockBiz('Thread:ThreadDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2), 3 => array('id' => 3))),
+        ));
+
+        $this->mockBiz('Thread:ThreadPostDao', array(
+            array('functionName' => 'findThreadIds', 'returnValue' => array(1 => array('threadId' => 3), 2 => array('threadId' => 4), 3 => array('threadId' => 5))),
+        ));
+
+        $this->assertEquals(5, $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType(1, 'classroom'));
+    }
+
     /**
      * thread_vote.
      */
@@ -571,6 +603,9 @@ class ThreadServiceTest extends BaseTestCase
         return $this->getThreadService()->createMember($fields);
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');

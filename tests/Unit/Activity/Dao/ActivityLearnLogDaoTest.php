@@ -4,6 +4,7 @@ namespace Tests\Unit\Activity\Dao;
 
 use Biz\Activity\Dao\ActivityDao;
 use Tests\Unit\Base\BaseDaoTestCase;
+use AppBundle\Common\ArrayToolkit;
 
 class ActivityLearnLogDaoTest extends BaseDaoTestCase
 {
@@ -87,6 +88,30 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $result = $this->getDao()->getLastestByActivityIdAndUserId(1, 1);
 
         $this->assertEquals('finish', $result['event']);
+    }
+
+    public function testSumLearnTimeGroupByUserId()
+    {
+        $time = time();
+        $this->getDao()->create(array('userId' => 1, 'learnedTime' => 100, 'event' => 'doing', 'mediaType' => 'ppt'));
+        $this->getDao()->create(array('userId' => 1, 'learnedTime' => 12, 'event' => 'start', 'mediaType' => 'ppt'));
+        $this->getDao()->create(array('userId' => 2, 'learnedTime' => 11, 'event' => 'finish', 'mediaType' => 'ppt'));
+
+        $result = $this->getDao()->sumLearnTimeGroupByUserId(array());
+        $result = ArrayToolkit::index($result, 'userId');
+        $this->assertEquals('112', $result[1]['learnedTime']);
+        $this->assertEquals('11', $result[2]['learnedTime']);
+
+        $result = $this->getDao()->sumLearnTimeGroupByUserId(array('createdTime_GE' => $time + 10 * 3600));
+        $result = ArrayToolkit::index($result, 'userId');
+        $this->assertEmpty($result);
+
+        $result = $this->getDao()->sumLearnTimeGroupByUserId(array('userIds' => array(3)));
+        $this->assertEmpty($result);
+
+        $result = $this->getDao()->sumLearnTimeGroupByUserId(array('userIds' => array(2)));
+        $result = ArrayToolkit::index($result, 'userId');
+        $this->assertEquals('11', $result[2]['learnedTime']);
     }
 
     protected function fetchAndAssembleIds(array $rawInput)

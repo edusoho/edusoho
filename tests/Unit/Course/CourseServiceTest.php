@@ -162,7 +162,7 @@ class CourseServiceTest extends BaseTestCase
 
         $closed = $this->getCourseService()->getCourse($result['id']);
 
-        $this->assertTrue($closed['status'] == 'closed');
+        $this->assertTrue('closed' == $closed['status']);
     }
 
     public function testPublishCourse()
@@ -234,6 +234,28 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
+    }
+
+    public function testFindUserLearnCourseIds()
+    {
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array(1 => array('courseId' => 1), 2 => array('courseId' => 2), 3 => array('courseId' => 3))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnCourseIds(1);
+
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testCountUserLearnCourseIds()
+    {
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'countUserLearnCourses', 'returnValue' => 3),
+        ));
+
+        $result = $this->getCourseService()->countUserLearnCourses(1);
+
+        $this->assertEquals(3, $result);
     }
 
     protected function createNewCourseSet()
