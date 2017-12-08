@@ -135,14 +135,13 @@ class CourseTaskCreateSyncJob extends AbstractJob
             if ($material['lessonId'] > 0) {
                 $newMaterial['lessonId'] = $activity['id'];
             }
-
             $this->getMaterialDao()->create($newMaterial);
         }
     }
 
     private function syncTestpaper($activity, $copiedCourse)
     {
-        if ($activity['mediaType'] != 'testpaper') {
+        if ('testpaper' != $activity['mediaType']) {
             return array();
         }
 

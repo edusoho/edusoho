@@ -188,8 +188,6 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         );
         $result = $this->getSensitiveDao()->create($conditions);
 
-        $this->getKeywordFilter()->add($result);
-
         return $result;
     }
 
@@ -197,7 +195,6 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     {
         $keyword = $this->getSensitiveDao()->get($id);
         $result = $this->getSensitiveDao()->delete($id);
-        $this->getKeywordFilter()->remove($keyword['name']);
 
         return $result;
     }
@@ -205,8 +202,6 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     public function updateKeyword($id, $conditions)
     {
         $result = $this->getSensitiveDao()->update($id, $conditions);
-
-        $this->getKeywordFilter()->update($result);
 
         return $result;
     }
@@ -312,13 +307,6 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     private function getEnvVariable()
     {
         return ServiceKernel::instance()->getEnvVariable();
-    }
-
-    protected function getKeywordFilter()
-    {
-        $filter = ServiceKernel::instance()->getParameter('keyword.filter');
-
-        return new $filter();
     }
 
     protected function getSensitiveDao()

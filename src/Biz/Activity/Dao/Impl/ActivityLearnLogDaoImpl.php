@@ -92,6 +92,17 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         return $this->db()->fetchAssoc($sql, array($activityId, $userId));
     }
 
+    public function sumLearnTimeGroupByUserId($conditions)
+    {
+        $conditions['learnedTime_GE'] = 0;
+        $conditions['learnedTime_LE'] = 24 * 60 * 60;
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('sum(`learnedTime`) as learnedTime, `userId`')
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return array(
@@ -103,9 +114,15 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             ),
             'conditions' => array(
                 'activityId = :activityId',
-                'event_EQ = :event',
-                'event_NEQ <> :event',
+                'event = :event_EQ',
+                'event <> :event_NEQ',
                 'userId = :userId',
+                'userId IN ( :userIds )',
+                'learnedTime >= :learnedTime_GE',
+                'learnedTime <= :learnedTime_LE',
+                'createdTime >= :createdTime_GE',
+                'createdTime <= :createdTime_LE',
+                'createdTime < :createdTime_LT',
             ),
         );
     }

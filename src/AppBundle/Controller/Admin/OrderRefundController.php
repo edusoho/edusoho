@@ -55,11 +55,14 @@ class OrderRefundController extends BaseController
         $dealUser = empty($orderRefund['deal_user_id']) ? null : $this->getUserService()->getUser($orderRefund['deal_user_id']);
         $order = $this->getOrderService()->getOrder($orderRefund['order_id']);
 
+        $paymentTrade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
+
         return $this->render('admin/order-refund/detail-modal.html.twig', array(
             'orderRefund' => $orderRefund,
             'order' => $order,
             'applyUser' => $applyUser,
             'dealUser' => $dealUser,
+            'paymentTrade' => $paymentTrade,
         ));
     }
 
@@ -100,7 +103,7 @@ class OrderRefundController extends BaseController
 
         $user = $this->getUserService()->getUser($refund['user_id']);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $pass = $request->request->get('result');
             $fields = $request->request->all();
 
@@ -131,7 +134,7 @@ class OrderRefundController extends BaseController
 
     protected function sendAuditRefundNotification($product, $order, $data)
     {
-        if (isset($data['result']) && $data['result'] == 'pass') {
+        if (isset($data['result']) && 'pass' == $data['result']) {
             $message = $this->setting('refund.successNotification');
         } else {
             $message = $this->setting('refund.failedNotification');
