@@ -229,6 +229,10 @@ class BaseTestCase extends TestCase
                 $expectation->andReturn($param['returnValue']);
             }
 
+            if (!empty($param['andReturnValues'])) {
+                $expectation->andReturnValues($param['andReturnValues']);
+            }
+
             if (!empty($param['throwException'])) {
                 $expectation->andThrow($param['throwException']);
             }
@@ -236,6 +240,8 @@ class BaseTestCase extends TestCase
 
         $biz = $this->getBiz();
         $biz['@'.$alias] = $mockObj;
+
+        return $mockObj;
     }
 
     protected static function getContainer()

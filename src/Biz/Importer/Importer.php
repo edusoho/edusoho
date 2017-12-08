@@ -25,8 +25,6 @@ abstract class Importer
 
     abstract public function import(Request $request);
 
-    abstract public function check(Request $request);
-
     abstract public function getTemplate(Request $request);
 
     abstract public function tryImport(Request $request);
@@ -347,6 +345,37 @@ abstract class Importer
         }
 
         return $errorInfo;
+    }
+
+    public function check(Request $request)
+    {
+        $file = $request->files->get('excel');
+        $danger = $this->validateExcelFile($file);
+        if (!empty($danger)) {
+            return $danger;
+        }
+
+        $repeatInfo = $this->checkRepeatData();
+        if (!empty($repeatInfo)) {
+            return $this->createErrorResponse($repeatInfo);
+        }
+
+        $importData = $this->getUserData();
+
+        if (empty($importData['errorInfo'])) {
+            $passedRepeatInfo = $this->checkPassedRepeatData();
+            if ($passedRepeatInfo) {
+                return $this->createErrorResponse($passedRepeatInfo);
+            }
+        } else {
+            return $this->createErrorResponse($importData['errorInfo']);
+        }
+
+        return $this->createSuccessResponse(
+            $importData['allUserData'],
+            $importData['checkInfo'],
+            $request->request->all()
+        );
     }
 
     /**

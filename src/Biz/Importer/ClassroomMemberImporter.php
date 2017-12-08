@@ -60,43 +60,6 @@ class ClassroomMemberImporter extends Importer
         return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
     }
 
-    public function check(Request $request)
-    {
-        $file = $request->files->get('excel');
-        $classroomId = $request->request->get('classroomId');
-        $price = $request->request->get('price');
-        $remark = $request->request->get('remark');
-        $danger = $this->validateExcelFile($file);
-        if (!empty($danger)) {
-            return $danger;
-        }
-
-        $repeatInfo = $this->checkRepeatData();
-        if (!empty($repeatInfo)) {
-            return $this->createErrorResponse($repeatInfo);
-        }
-
-        $importData = $this->getUserData();
-
-        if (empty($importData['errorInfo'])) {
-            $passedRepeatInfo = $this->checkPassedRepeatData();
-            if ($passedRepeatInfo) {
-                return $this->createErrorResponse($passedRepeatInfo);
-            }
-        } else {
-            return $this->createErrorResponse($importData['errorInfo']);
-        }
-
-        return $this->createSuccessResponse(
-            $importData['allUserData'],
-            $importData['checkInfo'],
-            array(
-                'classroomId' => $classroomId,
-                'price' => $price,
-                'remark' => $remark,
-            ));
-    }
-
     public function getTemplate(Request $request)
     {
         $classroomId = $request->query->get('classroomId');
