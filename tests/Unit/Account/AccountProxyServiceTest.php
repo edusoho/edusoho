@@ -45,7 +45,7 @@ class AccountProxyServiceTest extends BaseTestCase
     public function testPrepareConditionsWithCoinPlatform()
     {
         $result = $this->getAccountProxyService()->prepareConditions(array(
-            'platform' => 'none'
+            'platform' => 'none',
         ));
 
         $this->assertEquals(0, $result['amount_GT']);
