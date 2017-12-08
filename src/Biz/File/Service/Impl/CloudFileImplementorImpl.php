@@ -104,14 +104,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         // $permissions = array('open', 'potential', 'unopen');
 
         // return $permissions[rand(0, 2)];
-        return 'potential';
+        return 'open';
     }
 
     public function batchConvert($globalIds)
     {
         $api = CloudAPIFactory::create('root');
 
-        return $api->post("/v1/resources/transcode_retry", array('nos' => $globalIds));
+        return $api->post("/resources/transcode_retry", array('nos' => $globalIds));
     }
 
     public function deleteFile($file)
