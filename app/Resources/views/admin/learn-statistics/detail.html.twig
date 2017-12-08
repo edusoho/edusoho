@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <div class="user-data-section js-learn-data-trendency" data-url="{{ path('admin_user_learn_chart', {userId: user.id}) }}">
+  <div class="user-data-section js-learn-data-tendency" data-url="{{ path('admin_user_learn_chart', {userId: user.id}) }}">
     <div class="text-lg mbm">{{ 'admin.user.statistics.data_detail.active_chart'|trans }}</div>
     <div id="date-range-picker">
       <span class="user-data-select">
@@ -65,7 +65,7 @@
       <a href="javascript:;" class="user-data-select__link js-quick-day-pick month gray-darker" data-days="30">{{ 'course.dashboard.student_trend_thirty_days'|trans }}</a>
       <a href="javascript:;" class="user-data-select__link js-quick-day-pick three-month" data-days="90">{{ 'admin.user.statistics.data_detail.student_trend_ninety_days'|trans }}</a>
     </div>
-    <div class="mtl mbl" id="learn-data-trendency-chart" style="height:360px;"></div>
+    <div class="mtl mbl" id="learn-data-tendency-chart" style="height:360px;"></div>
   </div>
 
   <div class="user-data-detail">

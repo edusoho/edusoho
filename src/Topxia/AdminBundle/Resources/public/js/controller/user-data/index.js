@@ -1,6 +1,6 @@
 define(function (require, exports, module) {
 
-  var LearnTimeTrendency = require('./learn-time-trendency');
+  var LearnTimeTendency = require('./learn-time-tendency');
 
   exports.run = function() {
     popover();
@@ -8,8 +8,8 @@ define(function (require, exports, module) {
   };
 
   var learnTimeChart = function() {
-    new LearnTimeTrendency({
-      element: '.js-learn-data-trendency'
+    new LearnTimeTendency({
+      element: '.js-learn-data-tendency'
     });
   }
 
