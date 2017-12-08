@@ -145,8 +145,44 @@ class AccountServiceTest extends IntegrationTestCase
         $this->assertEquals(0, $userBalance['cash_amount']);
     }
 
+    public function testSumAmountGroupByUserId()
+    {
+        $time = time();
+        $cashFlow = array(
+            'user_id' => 1,
+            'sn' => '123',
+            'amount_type' => 'money',
+            'amount' => '3',
+            'currency' => 'RMB',
+            'order_sn' => 111,
+            'trade_sn' => 111,
+        );        
+        $this->getCashflowDao()->create($cashFlow);
+        $result = $this->getAccountService()->sumAmountGroupByUserId(array());
+        $this->assertEquals(3, $result[1]['amount']);
+
+        $result = $this->getAccountService()->sumAmountGroupByUserId(array('created_time_GT' => $time+1000));
+        $this->assertTrue(empty($result));
+
+        $cashFlow['user_id'] = 2;
+        $cashFlow['amount'] = 4;
+        $cashFlow = array_merge($cashFlow, array('user_id' => 2, 'amount' => 4, 'order_sn' => 222, 'trade_sn' => 222, 'sn' => 44));
+        $this->getCashflowDao()->create($cashFlow);
+        $result = $this->getAccountService()->sumAmountGroupByUserId(array());
+        $this->assertEquals(4, $result[2]['amount']);
+
+        $result = $this->getAccountService()->sumAmountGroupByUserId(array('user_ids' => array('1', '3', '5', '6')));
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(3, $result[1]['amount']);
+    }
+
     protected function getAccountService()
     {
         return $this->biz->service('Pay:AccountService');
+    }
+
+    protected function getCashflowDao()
+    {
+        return $this->biz->dao('Pay:CashflowDao');
     }
 }

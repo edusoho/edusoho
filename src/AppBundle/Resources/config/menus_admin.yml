@@ -111,6 +111,7 @@ admin:
                             name: admin.user.basic.login_record_tab
                 admin_user_learn_statistics_manage:
                     name: 用户数据统计
+                    visable: false
                     children:
                       admin_user_learn_statistics:
                         name: 用户数据统计

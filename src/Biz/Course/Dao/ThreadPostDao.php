@@ -11,4 +11,6 @@ interface ThreadPostDao
     public function deleteByThreadId($threadId);
 
     public function deleteByCourseId($courseId);
+
+    public function findThreadIds($conditions);
 }

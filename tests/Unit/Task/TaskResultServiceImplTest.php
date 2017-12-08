@@ -2,15 +2,8 @@
 
 namespace Tests\Unit\Task;
 
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
 
 class TaskResultServiceImplTest extends BaseTestCase
 {
@@ -18,11 +11,11 @@ class TaskResultServiceImplTest extends BaseTestCase
     {
         $taskResult1 = $this->mockTaskResult(array(
             'userId' => 1,
-            'status' => 'finish'
+            'status' => 'finish',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,
-            'status' => 'start'
+            'status' => 'start',
         ));
         $taskResult2 = $this->mockTaskResult(array(
             'userId' => 2,
@@ -42,7 +35,7 @@ class TaskResultServiceImplTest extends BaseTestCase
 
         $result = $this->getTaskResultService()->countTaskNumGroupByUserId(array('status' => 'start'));
         $this->assertTrue(empty($result[1]));
-        $this->assertEquals(1, $result[2]['count']);  
+        $this->assertEquals(1, $result[2]['count']);
     }
 
     protected function getTaskResultService()

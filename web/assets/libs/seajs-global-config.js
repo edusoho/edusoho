@@ -35,6 +35,8 @@ seajs.config({
         'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
         'upload': 'arale/upload/1.1.0/upload',
         'bootstrap.validator': 'common/validator',
+        'emitter': 'common/component-emitter',
+        'bootstrap.daterangepicker': 'common/bootstrap-daterangepicker',
         'class': 'arale/class/1.1.0/class',
         'base': 'arale/base/1.1.1/base',
         'widget': 'arale/widget/1.1.1/widget',

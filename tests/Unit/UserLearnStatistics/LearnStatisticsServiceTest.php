@@ -3,6 +3,7 @@
 namespace Tests\Unit\UserLearnStatistics;
 
 use Biz\BaseTestCase;
+use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 
 class LearnStatisticsServiceTest extends BaseTestCase
 {
@@ -51,6 +52,124 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals($result, 1);
     }
 
+    public function testGetUserOverview()
+    {
+        $user = $this->getCurrentUser();
+
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array(1, 2)),
+            array('functionName' => 'countUserLearnCourses', 'returnValue' => 10),
+        ));
+
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'countUserLearnCourseSets', 'returnValue' => 5),
+        ));
+
+        $this->mockBiz('Course:LearningDataAnalysisService', array(
+            array('functionName' => 'getUserLearningProgressByCourseIds', 'returnValue' => array('percent' => 90)),
+        ));
+
+        $this->mockBiz('Course:CourseNoteService', array(
+            array('functionName' => 'countCourseNotes', 'returnValue' => 6),
+        ));
+
+        $this->mockBiz('Course:ThreadService', array(
+            array('functionName' => 'countPartakeThreadsByUserId', 'returnValue' => 2),
+        ));
+
+        $this->mockBiz('Thread:ThreadService', array(
+            array('functionName' => 'countPartakeThreadsByUserIdAndTargetType', 'returnValue' => 2),
+        ));
+
+        $this->mockBiz('Course:ReviewService', array(
+            array('functionName' => 'searchReviewsCount', 'returnValue' => 7),
+        ));
+
+        $this->mockBiz('Classroom:ClassroomReviewService', array(
+            array('functionName' => 'searchReviewCount', 'returnValue' => 3),
+        ));
+
+        $result = $this->getLearnStatisticsService()->getUserOverview($user->getId());
+        $this->assertEquals('10', $result['learningCoursesCount']);
+        $this->assertEquals('5', $result['learningCourseSetCount']);
+        $this->assertEquals('90', $result['learningProcess']['percent']);
+        $this->assertEquals('6', $result['learningCourseNotesCount']);
+        $this->assertEquals('4', $result['learningCourseThreadsCount']);
+        $this->assertEquals('10', $result['learningReviewCount']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage 用户不存在！
+     */
+    public function testGetUserOverviewWithUserNotFound()
+    {
+        $user = $this->getCurrentUser();
+        $this->getLearnStatisticsService()->getUserOverview($user->getId() + 1);
+    }
+
+    public function testGetUserOverviewWithEmpty()
+    {
+        $user = $this->getCurrentUser();
+
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array()),
+            array('functionName' => 'countUserLearnCourses', 'returnValue' => 10),
+        ));
+
+        $result = $this->getLearnStatisticsService()->getUserOverview($user->getId());
+        $this->assertEmpty($result);
+    }
+
+    public function testFindLearningCourseDetailsWithNoData()
+    {
+        $user = $this->getCurrentUser();
+        $result = $this->getLearnStatisticsService()->findLearningCourseDetails($user->getId(), 1, 10);
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testFindLearningCourseDetails()
+    {
+        $user = $this->getCurrentUser();
+
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'searchMembers', 'returnValue' => array(
+                1 => array('courseId' => 2, 'orderId' => 2, 'classroomId' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Order:OrderService', array(
+            array('functionName' => 'findOrdersByIds', 'returnValue' => array()),
+        ));
+
+        $this->mockBiz('Course:CourseService', array(
+            array('functionName' => 'searchCourses', 'returnValue' => array(
+                1 => array('id' => 1, 'courseSetId' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'findClassroomsByIds', 'returnValue' => array(
+                1 => array('id' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Course:CourseSetService', array(
+            array('functionName' => 'findCourseSetsByIds', 'returnValue' => array(
+                1 => array('id' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Course:LearningDataAnalysisService', array(
+            array('functionName' => 'getUserLearningProgress', 'returnValue' => array('percent' => 90)),
+        ));
+
+        list($learnCourses, $courseSets, $members) = $this->getLearnStatisticsService()->findLearningCourseDetails($user->getId(), 1, 10);
+        $this->assertEquals(1, count($learnCourses));
+        $this->assertEquals(1, count($courseSets));
+        $this->assertEquals(1, count($members));
+    }
+
     public function testSearchTotalStatistics()
     {
         $this->getTotalStatisticsDao()->create(array('userId' => 1));
@@ -92,6 +211,15 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(1, count($result));
     }
 
+    public function testCountDailyStatistics()
+    {
+        $this->getDailyStatisticsDao()->create(array('userId' => 1));
+        $this->getDailyStatisticsDao()->create(array('userId' => 2));
+        $count = $this->getLearnStatisticsService()->countDailyStatistics(array());
+
+        $this->assertEquals(2, $count);
+    }
+
     public function batchDeletePastDailyStatistics()
     {
         $this->getDailyStatisticsDao()->create(array('userId' => 1, 'recordTime' => 2));
@@ -113,6 +241,9 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertNotEmpty($setting['currentTime']);
     }
 
+    /**
+     * @return LearnStatisticsService
+     */
     protected function getLearnStatisticsService()
     {
         return $this->createService('UserLearnStatistics:LearnStatisticsService');
