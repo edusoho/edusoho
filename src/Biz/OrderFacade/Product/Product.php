@@ -161,7 +161,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
                 $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:targetType:{$this->targetType}, targetId:{$this->targetId}", $e->getMessage());
+            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", $e->getMessage());
         }
     }
 
