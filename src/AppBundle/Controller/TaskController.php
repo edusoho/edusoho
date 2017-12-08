@@ -142,8 +142,13 @@ class TaskController extends BaseController
         }
 
         //课程关闭
-        if ((!empty($course['status']) && $course['status'] == 'closed') || (!empty($courseSet['status']) && $courseSet['status'] == 'closed')) {
+        if ((!empty($courseSet['status']) && $courseSet['status'] != 'published')) {
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $courseSet));
+        }
+        
+        //教学计划关闭
+        if ((!empty($course['status']) && $course['status'] == 'closed')) {
+            return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
 
         //课时不免费并且不满足：
