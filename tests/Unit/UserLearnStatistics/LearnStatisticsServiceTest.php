@@ -134,7 +134,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
 
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'searchMembers', 'returnValue' => array(
-                1 => array('courseId' => 2, 'orderId' => 2),
+                1 => array('courseId' => 2, 'orderId' => 2, 'classroomId' => 1),
             )),
         ));
 
@@ -145,6 +145,12 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'searchCourses', 'returnValue' => array(
                 1 => array('id' => 1, 'courseSetId' => 1),
+            )),
+        ));
+
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'findClassroomsByIds', 'returnValue' => array(
+                1 => array('id' => 1),
             )),
         ));
 

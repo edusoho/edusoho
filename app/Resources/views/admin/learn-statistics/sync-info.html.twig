@@ -18,15 +18,15 @@
         <td>{{ data.setting.currentTime|date('Y-m-d H:i:s') }}</td>
         <td>{{ (data.setting.timespan) / (60 * 24 * 60) }}天</td>
         <td>
-          目前同步到的用户Id: {{ data.totalJob.args.lastUserId }}<br/>
+          目前同步到的用户Id: {{ data.totalJob.args.lastUserId|default(0) }}<br/>
           是否同步完成: {% if data.totalJob.enabled == 0 %}是{% else %}否{% endif %}
         </td>
         <td>
-          目前同步到的时间: {{ data.pastDailyJob.args.cursor|date('Y-m-d H:i:s') }}<br/>
-          是否同步完成: {% if data.pastDailyJob.enabled == 0 %}是{% else %}否{% endif %}      
+          目前同步到的时间: {{ data.pastDailyJob.args.cursor|default(0)|date('Y-m-d H:i:s') }}<br/>
+          是否同步完成: {% if data.pastDailyJob.enabled == 0 %}是{% else %}否{% endif %}
         </td>
         <td>
-          目前同步到的时间: {{ data.dailyJob.args.cursor|date('Y-m-d H:i:s') }}<br/>  
+          目前同步到的时间: {{ data.dailyJob.args.cursor|default(0)|date('Y-m-d H:i:s') }}<br/>  
           总数:    {{ data.dailyDataNum }}<br/> 
           未同步到总表的条数:    {{ data.dailyNotStorageDataNum }}<br/> 
         </td>
