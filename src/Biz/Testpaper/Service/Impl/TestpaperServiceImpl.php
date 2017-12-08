@@ -479,24 +479,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaperResult;
     }
 
-    protected function completeQuestion($items, $questions)
-    {
-        foreach ($items as $item) {
-            if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))) {
-                $questions[$item['questionId']] = array(
-                    'id' => $item['questionId'],
-                    'isDeleted' => true,
-                    'stem' => '此题已删除',
-                    'score' => 0,
-                    'answer' => '',
-                    'type' => $item['questionType'],
-                );
-            }
-        }
-
-        return $questions;
-    }
-
     public function showTestpaperItems($testId, $resultId = 0)
     {
         $testpaper = $this->getTestpaper($testId);
@@ -926,9 +908,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function findTestResultsByTestpaperIdAndUserIds($userIds, $testpaperId)
     {
         $conditions = array(
-        'userIds' => $userIds,
-        'testId' => $testpaperId,
-    );
+            'userIds' => $userIds,
+            'testId' => $testpaperId,
+        );
 
         $results = $this->searchTestpaperResults(
             $conditions,
@@ -1055,13 +1037,5 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

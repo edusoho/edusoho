@@ -4,6 +4,7 @@ namespace Biz\Testpaper\Tests;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\CurrentUser;
 
 class TestpaperServiceTest extends BaseTestCase
 {
@@ -584,8 +585,22 @@ class TestpaperServiceTest extends BaseTestCase
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
-
         $this->assertEquals(2, count($itemResults));
+        $this->assertArrayNotHasKey('attachment', $itemResults[0]);
+
+        $this->mockBiz('File:UploadFileService', array(
+            array(
+                'functionName' => 'searchUseFiles',
+                'returnValue' => array(array('id' => 1,'targetId' => $itemResults[0]['id']), array('id'=>2,'targetId'=>2))
+            )
+        ));
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id'], true);
+        $this->assertEquals(2, count($itemResults));
+        $this->assertArrayHasKey('attachment', $itemResults[0]);
+
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id'], true);
+        $this->assertEquals(0, count($itemResults));
     }
 
     /**
@@ -693,7 +708,7 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testSearchTestpaperResultsCount()
     {
-        $result = $this->getTestpaperService()->searchTestpaperResultsCount(array());
+        $result = $this->getTestpaperService()->searchTestpaperResultsCount(array('courseIds' => array()));
         $this->assertEmpty($result);
 
         $testpaper = $this->createTestpaper1();
@@ -717,6 +732,9 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testSearchTestpaperResults()
     {
+        $results = $this->getTestpaperService()->searchTestpaperResults(array('courseIds' => array()), array('endTime' => 'DESC'), 0, 10);
+        $this->assertEmpty($results);
+
         $testpaper = $this->createTestpaper1();
         $testpaperResult1 = $this->createTestpaperResult1($testpaper);
         $testpaperResult2 = $this->createTestpaperResult2($testpaper);
@@ -902,6 +920,30 @@ class TestpaperServiceTest extends BaseTestCase
         $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedExceptionMessage 无权修改其他学员的试卷！
+     */
+    public function testFinishTestUserError()
+    {
+        $fields = array(
+            'paperName' => 'paper name',
+            'testId' => 1,
+            'userId' => 2,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'doing',
+            'usedTime' => 0,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->getTestpaperService()->finishTest($result['id'], array());
+    }
+
     public function testCountQuestionTypes()
     {
         $result = $this->getTestpaperService()->countQuestionTypes(array('type' => 'homework'), array());
@@ -1024,8 +1066,9 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         $answers = array(
-            $choiceQuestions[0]['id'] => array(2, 3),
-                $fillQuestions[0]['id'] => array('fill answer'),
+            $choiceQuestions[0]['id'] => array(2),
+            $fillQuestions[0]['id'] => array('fill answer'),
+            $determineQuestions[0]['id'] => array(0)
         );
         $formData = array(
             'usedTime' => 5,
@@ -1038,6 +1081,23 @@ class TestpaperServiceTest extends BaseTestCase
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
 
         $this->assertArrayEquals(array_keys($fields1['counts']), array_keys($accuracy));
+        $this->assertEquals(1, $accuracy['choice']['partRight']);
+        $this->assertEquals(1, $accuracy['choice']['noAnswer']);
+        $this->assertEquals(1, $accuracy['choice']['score']);
+        $this->assertEquals(2, $accuracy['choice']['all']);
+
+        $this->assertEquals(1, $accuracy['fill']['wrong']);
+        $this->assertEquals(1, $accuracy['fill']['noAnswer']);
+        $this->assertEquals(0, $accuracy['fill']['score']);
+        $this->assertEquals(2, $accuracy['fill']['all']);
+
+        $this->assertEquals(1, $accuracy['determine']['noAnswer']);
+        $this->assertEquals(0, $accuracy['determine']['score']);
+        $this->assertEquals(1, $accuracy['determine']['all']);
+        
+        $this->assertEquals(1, $accuracy['material']['noAnswer']);
+        $this->assertEquals(0, $accuracy['material']['score']);
+        $this->assertEquals(1, $accuracy['material']['all']);
     }
 
     public function testCheckFinish()
@@ -1071,7 +1131,7 @@ class TestpaperServiceTest extends BaseTestCase
 
         $answers = array(
             $choiceQuestions[0]['id'] => array(2, 3),
-            $fillQuestions[0]['id'] => array('fill answer'),
+            $essayQuestions[0]['id'] => array('essay answer'),
         );
         $formData = array(
             'usedTime' => 5,
@@ -1098,6 +1158,9 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['subjectiveScore']);
     }
 
+    /**
+     * @expectedException \Exception
+     */
     public function testSubmitAnswers()
     {
         $choiceQuestions = $this->generateChoiceQuestions(1, 2);
@@ -1148,9 +1211,23 @@ class TestpaperServiceTest extends BaseTestCase
 
         $answers = json_encode($answers);
 
-        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array());
+        $this->mockBiz('File:UploadFileService', array(
+            array(
+                'functionName' => 'createUseFiles',
+                'returnValue' => array()
+            )
+        ));
+        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array(array($choiceQuestions[0]['id'] => array(1,2))));
 
         $this->assertEquals(3, count($itemResults));
+
+        $this->mockBiz('Testpaper:TestpaperItemResultDao', array(
+            array(
+                'functionName' => 'db',
+                'throwException' => new \Exception()
+            )
+        ));
+        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array(array($choiceQuestions[0]['id'] => array(1,2))));
     }
 
     public function testSumScore()
@@ -1183,7 +1260,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('doing', $testpaperResult['status']);
 
         $answers = array(
-            $choiceQuestions[0]['id'] => array(2),
+            $choiceQuestions[0]['id'] => array(1,2),
             $fillQuestions[0]['id'] => array('fill answer'),
         );
         $formData = array(
@@ -1196,8 +1273,8 @@ class TestpaperServiceTest extends BaseTestCase
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
 
         $scoreResult = $this->getTestpaperService()->sumScore($itemResults);
-        $this->assertEquals(1, $scoreResult['sumScore']);
-        $this->assertEquals(0, $scoreResult['rightItemCount']);
+        $this->assertEquals(2, $scoreResult['sumScore']);
+        $this->assertEquals(1, $scoreResult['rightItemCount']);
     }
 
     public function testFindAttachments()
@@ -1208,8 +1285,339 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEmpty($attachments);
     }
 
-    //public function canLookTestpaper($resultId);
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedExceptionMessage 未登录用户，无权操作！
+     */
+    public function testCanLookTestpaperUnlogin()
+    {
+        $biz = $this->getBiz();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
+        ));
+        $biz['user'] = $currentUser;
 
+        $this->getTestpaperService()->canLookTestpaper(123);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage 试卷结果不存在!
+     */
+    public function testCanLookTestpaperResultEmpty()
+    {
+        $this->getTestpaperService()->canLookTestpaper(123);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage 试卷不存在!
+     */
+    public function testCanLookTestpaperEmpty()
+    {
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 1,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'doing',
+            'usedTime' => 0,
+            'courseId' => 0,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->getTestpaperService()->canLookTestpaper($result['id']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage 无权查看此试卷
+     */
+    public function testCanLookTestpaperStatusError()
+    {
+        $testpaper = $this->createTestpaper1();
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => 123,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'doing',
+            'usedTime' => 0,
+            'courseId' => 0,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->getTestpaperService()->canLookTestpaper($result['id']);
+    }
+
+    public function testAdminLookTestpaper()
+    {
+        $testpaper = $this->createTestpaper1();
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => 123,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 0,
+            'courseId' => 1,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $canLook = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        $this->assertTrue($canLook);
+    }
+
+    public function testTeacherLookTestpaper()
+    {
+        $this->_setCurrentUser();
+        $testpaper = $this->createTestpaper1();
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => 123,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 0,
+            'courseId' => 1,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 1)
+            )
+        ));
+
+        $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'getCourseMember',
+                'returnValue' => array('role' => 'teacher')
+            )
+        ));
+
+        $canLook = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        $this->assertTrue($canLook);
+    }
+
+    public function testLookTestpaperSameUser()
+    {
+        $this->_setCurrentUser();
+        $testpaper = $this->createTestpaper1();
+
+        $user = $this->getCurrentuser();
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => $user['id'],
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 0,
+            'courseId' => 1,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 1)
+            )
+        ));
+
+        $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'getCourseMember',
+                'returnValue' => array('role' => 'student')
+            )
+        ));
+
+        $canLook = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        $this->assertTrue($canLook);
+    }
+
+    public function testLookTestpaperClassroomCourse()
+    {
+        $this->_setCurrentUser();
+        $testpaper = $this->createTestpaper1();
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => 123,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 0,
+            'courseId' => 2,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 2, 'parentId' => 1)
+            )
+        ));
+
+        $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'getCourseMember',
+                'returnValue' => array('role' => 'student')
+            )
+        ));
+
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array(
+                'functionName' => 'getClassroomByCourseId',
+                'returnValue' => array('id' => 1)
+            ),
+            array(
+                'functionName' => 'getClassroomMember',
+                'returnValue' => array('role' => array('teacher'))
+            ),
+        ));
+
+        $canLook = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        $this->assertTrue($canLook);
+    }
+
+    public function testNotLookTestpaper()
+    {
+        $this->_setCurrentUser();
+        $testpaper = $this->createTestpaper1();
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => 123,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 0,
+            'courseId' => 2,
+            'courseSetId' => 2,
+            'lessonId' => 0,
+            'type' => 'testpaper',
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $this->mockBiz('Course:CourseService', array(
+            array(
+                'functionName' => 'getCourse',
+                'returnValue' => array('id' => 2,'parentId'=>0)
+            )
+        ));
+
+        $this->mockBiz('Course:MemberService', array(
+            array(
+                'functionName' => 'getCourseMember',
+                'returnValue' => array('role' => 'student')
+            )
+        ));
+
+        $canLook = $this->getTestpaperService()->canLookTestpaper($result['id']);
+        $this->assertFalse($canLook);
+    }
+
+    public function testFindTestResultsByTestpaperIdAndUserIds()
+    {
+        $results = $this->getTestpaperService()->findTestResultsByTestpaperIdAndUserIds(array(1,2,3), 1);
+        $this->assertEmpty($results);
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 1,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'finished',
+            'usedTime' => 30,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 1
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 2,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'finished',
+            'usedTime' => 20,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 2
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 1,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'finished',
+            'usedTime' => 10,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 3
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $results = $this->getTestpaperService()->findTestResultsByTestpaperIdAndUserIds(array(1,2), 1);
+
+        $this->assertEquals(2, count($results));
+
+        $this->assertEquals(0.5, $results[1]['usedTime']);
+        $this->assertEquals(1, $results[1]['firstScore']);
+        $this->assertEquals(3, $results[1]['maxScore']);
+
+        $this->assertEquals(0.3, $results[2]['usedTime']);
+        $this->assertEquals(2, $results[2]['firstScore']);
+        $this->assertEquals(2, $results[2]['maxScore']);
+    }
+
+    
     public function testUpdateTestpaperItems()
     {
         $result = $this->getTestpaperService()->updateTestpaperItems(123, array('questions'=>array()));
@@ -1242,9 +1650,46 @@ class TestpaperServiceTest extends BaseTestCase
                 array('id' => $choiceQuestions[2]['id'], 'score' => 4, 'missScores' => 2, 'type' => 'choice'),
             ),
         );
-        $testpaper = $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
+        $this->getQuestionService()->delete($choiceQuestions[2]['id']);
 
-        $this->assertEquals(count($items['questions']), $testpaper['itemCount']);
+        $testpaper = $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
+        $this->assertEquals(2, $testpaper['itemCount']);
+
+        $result = $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], array('questions' => array()));
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testUpdateTestpaperItemsException()
+    {
+        $testpaper = $this->createTestpaper1();
+
+        $this->mockBiz('Testpaper:TestpaperItemDao', array(
+            array(
+                'functionName' => 'deleteItemsByTestpaperId',
+                'throwException' => new \Exception(),
+            )
+        ));
+        $result = $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], array('questions' => array(array('id' =>1))));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedExceptionMessage Testpaper(#123) not found
+     */
+    public function testUpdateTestpaperItemsTestpaperEmpty()
+    {
+        $items = array(
+            'questions' => array(
+                array('id' => 1),
+                array('id' => 2),
+                array('id' => 3),
+            ),
+        );
+
+        $this->getTestpaperService()->updateTestpaperItems(123, $items);
     }
 
     /**
@@ -1511,6 +1956,22 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
+    private function _setCurrentUser()
+    {
+        $biz = $this->getBiz();
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'user1',
+            'email' => 'user1@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER'),
+        ));
+        $biz['user'] = $currentUser;
+    }
+
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
@@ -1519,5 +1980,15 @@ class TestpaperServiceTest extends BaseTestCase
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    protected function getTestpaperResultDao()
+    {
+        return $this->createDao('Testpaper:TestpaperResultDao');
     }
 }
