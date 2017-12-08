@@ -21,9 +21,9 @@ class AccessorChain
     public function add(AccessorInterface $accessor, $priority)
     {
         $this->accessors->append(array(
-            'name' => substr(strrchr(get_class($accessor), "\\"), 1),
+            'name' => substr(strrchr(get_class($accessor), '\\'), 1),
             'accessor' => $accessor,
-            'priority' => $priority
+            'priority' => $priority,
         ));
 
         $this->accessors->uasort(function ($a1, $a2) {
@@ -33,6 +33,7 @@ class AccessorChain
 
     /**
      * @param $name
+     *
      * @return \Biz\Accessor\AccessorAdapter|null
      */
     public function getAccessor($name)
@@ -60,7 +61,7 @@ class AccessorChain
             $realAccessor = $accessorArr['accessor'];
             $result = $realAccessor->process($bean);
 
-            if ($result !== null) {
+            if (null !== $result) {
                 return $result;
             }
         }

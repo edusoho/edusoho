@@ -45,17 +45,14 @@ class AccountProxyServiceTest extends BaseTestCase
     public function testPrepareConditionsWithCoinPlatform()
     {
         $result = $this->getAccountProxyService()->prepareConditions(array(
-            'startTime' => '2017-12-02 07:30',
-            'endTime' => '2017-12-02 07:30',
-            'keyword' => '201711221034096',
-            'keywordType' => 'sn',
-            'nickname' => 'nickname',
-            'buyerNickname' => 'nickname',
-            'platform_sn' => '2017112210340968430',
-            'platform' => 'coin',
+            'platform' => 'none',
         ));
 
-        $this->assertEquals('inflow', $result['type']);
+        $this->assertEquals(0, $result['amount_GT']);
+        $this->assertEquals('outflow', $result['type']);
+        $this->assertEquals('refund', $result['action']);
+        $this->assertEquals('refund', $result['action']);
+        $this->assertTrue(empty($result['platform']));
     }
 
     public function testCountUsersByConditions()
@@ -74,7 +71,6 @@ class AccountProxyServiceTest extends BaseTestCase
                         'user_id' => -1,
                         'buyer_id' => -1,
                         'trade_sn' => 0,
-                        'type' => 'inflow',
                     )),
                 ),
             )
@@ -109,7 +105,6 @@ class AccountProxyServiceTest extends BaseTestCase
                         'user_id' => -1,
                         'buyer_id' => -1,
                         'trade_sn' => 0,
-                        'type' => 'inflow',
                     )),
                 ),
             )
@@ -145,7 +140,6 @@ class AccountProxyServiceTest extends BaseTestCase
                             'user_id' => -1,
                             'buyer_id' => -1,
                             'trade_sn' => 0,
-                            'type' => 'inflow',
                         ),
                         array(),
                         0,
@@ -191,7 +185,6 @@ class AccountProxyServiceTest extends BaseTestCase
                             'user_id' => -1,
                             'buyer_id' => -1,
                             'trade_sn' => 0,
-                            'type' => 'inflow',
                         ),
                     ),
                 ),
