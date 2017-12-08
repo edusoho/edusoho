@@ -101,7 +101,7 @@ abstract class AbstractCopy
     protected function processChainsDoClone($chains, $source, $options)
     {
         foreach ($chains as  $currentNode) {
-            $class = new $currentNode['class']($this->biz);
+            $class = new $currentNode['class']($this->biz, $currentNode);
             $class->copy($source, $options);
         }
     }
