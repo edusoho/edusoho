@@ -4809,13 +4809,16 @@ admin.user.statistics.data_detail.note_number: 笔记数
 admin.user.statistics.data_detail.learning_course_sets: 在学课程
 admin.user.statistics.data_detail.learning_courses: 在学计划
 admin.user.statistics.data_detail.average_process: 平均计划进度
+admin.user.statistics.data_detail.task_rate: 任务完成比
 admin.user.statistics.data_detail.thread_number: 参与话题
-admin.user.statistics.data_detail.post_number: 评论数
+admin.user.statistics.data_detail.review_number: 评价数
 admin.user.statistics.data_detail.active_chart: 活跃度
 admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.from_classroom: 来自班级
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
@@ -8317,7 +8320,7 @@ admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
 user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间
-user.learn.statistics.default.search: 默认搜索
+user.learn.statistics.default.search: 默认排序
 user.learn.statistics.search: 搜索
 user.learn.statistics.nickname: 用户名
 user.learn.statistics.join.classroom.num: 加入班级数

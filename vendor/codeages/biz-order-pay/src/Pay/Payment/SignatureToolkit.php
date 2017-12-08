@@ -4,15 +4,15 @@ namespace Codeages\Biz\Pay\Payment;
 
 class SignatureToolkit
 {
-    public static function signParams($params, $options)
+    public function signParams($params, $options)
     {
-        $signStr = static::createLinkString($params);
+        $signStr = $this->createLinkString($params);
         switch (trim(strtoupper($params['sign_type']))) {
             case 'MD5':
-                $signature = static::md5Sign($signStr, $options);
+                $signature = $this->md5Sign($signStr, $options);
                 break;
             case 'RSA':
-                $signature = static::rsaSign($signStr, $options);
+                $signature = $this->rsaSign($signStr, $options);
                 break;
             default:
                 $signature = '';
@@ -22,15 +22,15 @@ class SignatureToolkit
         return $signature;
     }
 
-    public static function signVerify($params, $options)
+    public function signVerify($params, $options)
     {
         $isSignVerified = false;
         switch (trim(strtoupper($params['sign_type']))) {
             case 'MD5':
-                $isSignVerified = static::md5Verify($params, $options);
+                $isSignVerified = $this->md5Verify($params, $options);
                 break;
             case 'RSA':
-                $isSignVerified = static::rsaVerify($params, $options);
+                $isSignVerified = $this->rsaVerify($params, $options);
                 break;
             default:
                 break;
@@ -39,7 +39,7 @@ class SignatureToolkit
         return $isSignVerified;
     }
 
-    private static function createLinkString($params)
+    private function createLinkString($params)
     {
         ksort($params);
         reset($params);
@@ -60,7 +60,7 @@ class SignatureToolkit
         return $signStr;
     }
 
-    private static function md5Sign($signStr, $options)
+    private function md5Sign($signStr, $options)
     {
         $signStr .= '&key='.$options['secret'];
 
@@ -70,7 +70,7 @@ class SignatureToolkit
         return $sign;
     }
 
-    private static function rsaSign($signStr, $options)
+    private function rsaSign($signStr, $options)
     {
         //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
         $res = openssl_get_privatekey($options['secret']);
@@ -87,16 +87,16 @@ class SignatureToolkit
         return $sign;
     }
 
-    private static function md5Verify($params, $options)
+    private function md5Verify($params, $options)
     {
-        $signature = static::md5Sign($params, $options);
+        $signature = $this->md5Sign($params, $options);
 
         return $signature != $params['sign'];
     }
 
-    private static function rsaVerify($params, $options)
+    private function rsaVerify($params, $options)
     {
-        $signStr = static::createLinkString($params);
+        $signStr = $this->createLinkString($params);
         $sign = $params['sign'];
 
         //转换为openssl格式密钥

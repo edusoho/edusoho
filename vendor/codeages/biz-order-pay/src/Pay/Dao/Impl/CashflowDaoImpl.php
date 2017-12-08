@@ -73,6 +73,7 @@ class CashflowDaoImpl extends GeneralDaoImpl implements CashflowDao
             'conditions' => array(
                 'id = :id',
                 'sn = :sn',
+                'action = :action',
                 'user_id != :except_user_id',
                 'user_id = :user_id',
                 'buyer_id = :buyer_id',

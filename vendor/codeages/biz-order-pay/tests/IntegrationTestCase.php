@@ -64,6 +64,23 @@ class IntegrationTestCase extends TestCase
         unset($this->biz);
     }
 
+    protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())
+    {
+        if (count($keyAry) >= 1) {
+            foreach ($keyAry as $key) {
+                $this->assertEquals($ary1[$key], $ary2[$key]);
+            }
+        } else {
+            foreach (array_keys($ary1) as $key) {
+                if (is_array($ary1[$key])) {
+                    $this->assertArrayEquals($ary1[$key], $ary2[$key]);
+                } else {
+                    $this->assertEquals($ary1[$key], $ary2[$key]);
+                }
+            }
+        }
+    }
+
     protected function createBiz(array $options = array())
     {
         $defaultOptions = array(
@@ -112,7 +129,7 @@ class IntegrationTestCase extends TestCase
         }
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
-            $biz['dao.cache.array_storage'] = function() {
+            $biz['dao.cache.array_storage'] = function () {
                 return new ArrayStorage();
             };
         }

@@ -35,4 +35,6 @@ interface LearnStatisticsService
     public function storageDailyStatistics($limit = 1000);
 
     public function getStatisticsSetting();
+
+    public function setStatisticsSetting();
 }
