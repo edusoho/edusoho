@@ -26,13 +26,13 @@
         <strong class="inflow-num mll">{{ overview.learningCoursesCount|default(0) }}</strong>
       </div>
       <div class="col-xs-4">
-        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.average_process'|trans }}</label>
-        <strong class="inflow-num mll mrs">{{ overview.learningProcess.percent|default(0) }}%</strong>
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.task_rate'|trans }}</label>
+        <strong class="inflow-num mll mrs">{{ overview.learningProcess.finishedCount|default(0) }}/{{ overview.learningProcess.total|default(0) }}</strong>
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-user-data-popover" data-original-title="" title=""></span>
         <div class="popover-content hidden">
           <div class="popover-item">
             <div class="content">
-              {{ 'admin.user.statistics.data_detail.plan_progress_tip'|trans }}
+              {{ 'admin.user.statistics.data_detail.task_progress_tip'|trans }}
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
         <strong class="inflow-num mll">{{ overview.learningCourseThreadsCount|default(0) }}</strong>
       </div>
       <div class="col-xs-4">
-        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.post_number'|trans }}</label>
+        <label class="user-data-section__label">{{ 'admin.user.statistics.data_detail.review_number'|trans }}</label>
         <strong class="inflow-num mll">{{ overview.learningReviewCount|default(0) }}</strong>
       </div>
     </div>
@@ -78,8 +78,14 @@
           <div class="user-data-teaching-plan__title text-overflow" title="{{ courseSet.title }}">{{ 'admin.course_manage.statistics.name'|trans }}：{{ courseSet.title }}</div>
           <div class="user-data-teaching-plan__title text-overflow" title="{{ course.title }}">{{ 'admin.user.statistics.data_detail.teaching_plan_name'|trans }}：<a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a></div>
           <div class="user-data-teaching-plan__time">{{ 'join.time'|trans }}：<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
-          <div class="user-data-teaching-plan__money">{{ 'course.price'|trans }}：<span>{{ member.order.paid_cash_amount|default(0)|to_cash(1) }}</span>
-            {% if member.order.paid_cash_amount|default(0) != 0 %}<span>，{{ member.order.paid_cash_amount|default(0)|to_coin(1) }}</span>{% endif %}</div>
+          {% if member.joinedType == 'course' %}
+            <div class="user-data-teaching-plan__money">
+                {{ 'course.price'|trans }}：<span>{{ member.order.paid_cash_amount|default(0)|to_cash(1) }}</span>
+                {% if member.order.paid_coin_amount|default(0) != 0 %}<span>+{{ member.order.paid_coin_amount|default(0)|to_coin(1) }}</span>{% endif %}
+            </div>
+          {% elseif member.joinedType == 'classroom' %}
+            <span class="text-muted">{{ 'admin.user.statistics.data_detail.from_classroom'|trans }} {{ member.classroom.title|default('')  }}</span>
+          {% endif %}
         </div>
         <div class="user-data-teaching-plan__progress">
           <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>

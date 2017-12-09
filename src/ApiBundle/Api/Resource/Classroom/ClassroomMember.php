@@ -39,7 +39,7 @@ class ClassroomMember extends AbstractResource
         try {
             $this->getClassroomService()->tryFreeJoin($classroom['id']);
         } catch (UnableJoinException $e) {
-            throw new BadRequestHttpException($e->getMessage(), $e);
+            throw new BadRequestHttpException($e->getMessage(), $e, $e->getCode());
         }
 
         return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());

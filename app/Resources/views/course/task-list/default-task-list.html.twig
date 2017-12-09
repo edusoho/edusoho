@@ -50,7 +50,7 @@
 
             {% include 'course/task-list/parts/task-length.html.twig' %}
             <span class="right-menu mouse-enter">
-            {% if not member and not isOvertime %}
+            {% if not member and not isOvertime and courseSet.status | default('published') == 'published' %}
               {% if task.isFree %}
                 <a class="btn btn-primary" href="#modal" data-toggle="modal"
                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
