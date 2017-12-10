@@ -3,26 +3,22 @@
 namespace Tests\Unit\Xapi;
 
 use Biz\BaseTestCase;
-use Biz\Xapi\Type\AskQuestionType;
+use Biz\Xapi\Type\AudioListen;
 
-class AskQuestionTypeTest extends BaseTestCase
+class AudioListenTest extends BaseTestCase
 {
     public function testPackage()
     {
-        $threadService = $this->mockBiz(
-            'Course:ThreadService',
+        $this->mockBiz(
+            'Xapi:XapiService',
             array(
                 array(
-                    'functionName' => 'getThread',
-                    'withParams' => array(0, 121),
+                    'functionName' => 'getWatchLog',
+                    'withParams' => array(121),
                     'returnValue' => array(
-                        'id' => 6758221,
-                        'courseId' => 2221,
-                        'courseSetId' => 2222,
-                        'type' => 'question',
-                        'taskId' => 2223,
-                        'title' => 'thread title',
-                        'content' => 'trhead content',
+                        'task_id' => 2223,
+                        'course_id' => 2221,
+                        'watched_time' => 1231,
                     ),
                 ),
             )
@@ -37,6 +33,7 @@ class AskQuestionTypeTest extends BaseTestCase
                     'returnValue' => array(
                         'activityId' => 2224,
                         'type' => 'video',
+                        'title' => 'task_title',
                     ),
                 ),
             )
@@ -50,6 +47,7 @@ class AskQuestionTypeTest extends BaseTestCase
                     'withParams' => array(2221),
                     'returnValue' => array(
                         'title' => 'course title',
+                        'courseSetId' => 2222,
                     ),
                 ),
             )
@@ -76,6 +74,7 @@ class AskQuestionTypeTest extends BaseTestCase
                     'functionName' => 'getActivity',
                     'withParams' => array(2224, true),
                     'returnValue' => array(
+                        'id' => 2224,
                         'mediaType' => 'video',
                         'ext' => array(
                             'mediaId' => 333333,
@@ -98,7 +97,7 @@ class AskQuestionTypeTest extends BaseTestCase
             )
         );
 
-        $type = new AskQuestionType();
+        $type = new AudioListen();
         $type->setBiz($this->biz);
         $packageInfo = $type->package(array(
             'target_id' => 121,
@@ -107,7 +106,6 @@ class AskQuestionTypeTest extends BaseTestCase
             'occur_time' => time(),
         ));
 
-        $threadService->shouldHaveReceived('getThread');
         $taskService->shouldHaveReceived('getTask');
         $courseService->shouldHaveReceived('getCourse');
         $courseSetService->shouldHaveReceived('getCourseSet');
@@ -115,8 +113,8 @@ class AskQuestionTypeTest extends BaseTestCase
         $uploadFileService->shouldHaveReceived('getFile');
 
         $this->assertEquals('123123123dse', $packageInfo['id']);
-        $this->assertEquals('http://adlnet.gov/expapi/verbs/asked', $packageInfo['verb']['id']);
-        $this->assertEquals(6758221, $packageInfo['object']['id']);
+        $this->assertEquals('http://activitystrea.ms/schema/1.0/listen', $packageInfo['verb']['id']);
+        $this->assertEquals(2224, $packageInfo['object']['id']);
         $this->assertArrayEquals(
             array('title' => 'course set title-course title', 'description' => 'course set subtitle'),
             $packageInfo['object']['definition']['extensions']['http://xapi.edusoho.com/extensions/course']
