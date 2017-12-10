@@ -71,7 +71,6 @@ class AudioTest extends BaseTypeTestCase
         unset($update['media']);
         $update['mediaId'] = $activity['mediaId'];
         $type->update($audioActivity['id'], $update, $activity);
-
     }
 
     public function testRegisterListeners()
@@ -96,7 +95,6 @@ class AudioTest extends BaseTypeTestCase
         $update = $this->mockField(0);
         $update['mediaId'] = $activity['mediaId'];
         $type->update($audioActivity['id'], $update, $activity);
-
     }
 
     /**
@@ -110,7 +108,7 @@ class AudioTest extends BaseTypeTestCase
         $audioActivity = $type->create($field);
         $activity = $this->mockSimpleActivity($audioActivity['id'] + 1);
 
-        $update = $this->mockField( 2);
+        $update = $this->mockField(2);
         $update['mediaId'] = $activity['mediaId'];
         $type->update($audioActivity['id'], $update, $activity);
     }
@@ -134,13 +132,13 @@ class AudioTest extends BaseTypeTestCase
         $field1 = $this->mockField();
         $audioActivity1 = $type->create($field1);
         $activity1 = $this->mockSimpleActivity($audioActivity1['id']);
-        $field2 = $this->mockField( 3);
+        $field2 = $this->mockField(3);
         $audioActivity2 = $type->create($field2);
         $activity2 = $this->mockSimpleActivity($audioActivity2['id']);
 
         $syncedActivity = $type->sync($activity1, $activity2);
         $this->assertNotEquals($audioActivity1['mediaId'], $audioActivity2['mediaId']);
-        
+
         $this->assertEquals($audioActivity1['mediaId'], $syncedActivity['mediaId']);
     }
 

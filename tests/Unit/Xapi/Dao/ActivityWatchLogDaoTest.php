@@ -10,7 +10,7 @@ class ActivityWatchLogDaoTest extends BaseDaoTestCase
     {
         $defaultLog = $this->getDao()->create($this->getDefaultMockFields());
 
-        $result = $this->getDao()->getLatestWatchLogByUserIdAndActivityId(1,1,0);
+        $result = $this->getDao()->getLatestWatchLogByUserIdAndActivityId(1, 1, 0);
 
         $this->assertEquals($defaultLog['id'], $result['id']);
     }
@@ -23,7 +23,7 @@ class ActivityWatchLogDaoTest extends BaseDaoTestCase
             'course_id' => 1,
             'task_id' => 1,
             'watched_time' => 100,
-            'is_push' => 0
+            'is_push' => 0,
         );
     }
 }

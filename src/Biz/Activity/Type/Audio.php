@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\AudioActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
-use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ArrayToolkit;
 
 class Audio extends Activity

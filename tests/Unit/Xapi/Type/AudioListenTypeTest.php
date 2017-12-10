@@ -71,6 +71,6 @@ class AudioListenTypeTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return $this->createService("System:SettingService");
+        return $this->createService('System:SettingService');
     }
 }

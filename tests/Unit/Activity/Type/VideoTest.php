@@ -178,7 +178,6 @@ class VideoTest extends BaseTypeTestCase
         $result = $type->get($videoActivity['id']);
         $this->assertEmpty($result['file']);
         $this->assertTrue(empty($result['id']));
-
     }
 
     public function testRegisterListeners()

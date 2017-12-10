@@ -6,5 +6,4 @@ use Biz\BaseTestCase;
 
 class ActivityCopyTest extends BaseTestCase
 {
-
 }
