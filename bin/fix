@@ -16,7 +16,9 @@ do
     ##  M bin/fix    -- 修改
     ## ?? tests/Unit/Task/Job/Test.php      -- 新增
     ## ?? tests/Unit/Task/JobTest/Test.php  -- 新增
-    if [[ $line != *\D* ]]; then ## 包含 
+    ignoreStartLines=' D';  ## 以 空格 + D 开头的，不检查
+
+    if [ ${line:0:2} != $ignoreStartLines ]; then
         i=1
         fixedClass=''
         while((1==1))  
