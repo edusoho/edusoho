@@ -142,14 +142,6 @@ class Audio extends Activity
     }
 
     /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
-    }
-
-    /**
      * @return UploadFileService
      */
     protected function getUploadFileService()

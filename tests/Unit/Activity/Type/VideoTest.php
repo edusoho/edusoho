@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Activity\Type;
 
+use AppBundle\Common\ReflectionUtils;
+
 class VideoTest extends BaseTypeTestCase
 {
     const TYPE = 'video';
@@ -149,6 +151,64 @@ class VideoTest extends BaseTypeTestCase
         $this->assertEquals($videoActivity['finishType'], $result['finishType']);
         $this->assertEquals($videoActivity['finishDetail'], $result['finishDetail']);
         $this->assertEquals($videoActivity['mediaUri'], $result['mediaUri']);
+    }
+
+    public function testFind()
+    {
+        $field = $this->mockField();
+
+        $type = $this->getActivityConfig(self::TYPE);
+        $audioActivity = $type->create($field);
+
+        $results = $type->find(array($audioActivity['id']));
+
+        $this->assertEquals(1, count($results));
+    }
+
+    public function testDelete()
+    {
+        $field = $this->mockField();
+
+        $type = $this->getActivityConfig(self::TYPE);
+        $videoActivity = $type->create($field);
+        $pre = $type->get($videoActivity['id']);
+        $this->assertFalse(empty($pre['id']));
+
+        $type->delete($videoActivity['id']);
+        $result = $type->get($videoActivity['id']);
+        $this->assertEmpty($result['file']);
+        $this->assertTrue(empty($result['id']));
+
+    }
+
+    public function testRegisterListeners()
+    {
+        $type = $this->getActivityConfig(self::TYPE);
+        $return = ReflectionUtils::invokeMethod($type, 'registerListeners');
+
+        $this->assertEquals(array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener'), $return);
+    }
+
+    public function testMaterialSupported()
+    {
+        $type = $this->getActivityConfig(self::TYPE);
+
+        $this->assertEquals(true, $type->materialSupported());
+    }
+
+    public function testIsFinished()
+    {
+        $field = $this->mockField();
+        $type = $this->getActivityConfig(self::TYPE);
+        $videoActivity = $type->create($field);
+        $activity = $this->mockSimpleActivity($videoActivity['id']);
+
+        $this->mockBiz('Activity:ActivityService', array(
+            array('functionName' => 'getActivity', 'returnValue' => $activity),
+        ));
+
+        $result = $type->isFinished(1);
+        $this->assertFalse($result);
     }
 
     /**
