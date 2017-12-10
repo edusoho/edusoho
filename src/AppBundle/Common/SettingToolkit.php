@@ -41,7 +41,7 @@ class SettingToolkit
 
     protected static function getSettingService()
     {
-        return self::getServiceKernel()->createService('System:SettingService');
+        return self::getServiceKernel()->getBiz()->service('System:SettingService');
     }
 
     protected static function getServiceKernel()
