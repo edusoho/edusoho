@@ -6,7 +6,6 @@ use Biz\BaseTestCase;
 
 class ActivityCopyTest extends BaseTestCase
 {
-
     public function testPreCopy()
     {
         $result = $this->getActivityCopy()->preCopy(array(), array());
@@ -55,7 +54,6 @@ class ActivityCopyTest extends BaseTestCase
                     'startTime' => time() - 3600,
                     'endTime' => time(),
                 ),
-
             )),
             array('functionName' => 'get', 'returnValue' => array(
                 'mediaSource' => 'self',
@@ -96,11 +94,10 @@ class ActivityCopyTest extends BaseTestCase
                 'requireCredit' => 0,
                 'testMode' => 'normal',
             )),
-
         ));
 
         $this->mockBiz('Activity:VideoActivityDao', array(
-            array('functionName' => 'get', 'returnValue' =>array(
+            array('functionName' => 'get', 'returnValue' => array(
                 'mediaSource' => 'self',
                 'mediaId' => 1,
                 'mediaUri' => '',
@@ -118,7 +115,7 @@ class ActivityCopyTest extends BaseTestCase
         ));
 
         $result = $this->getActivityCopy()->doCopy(array(), array(
-            'originCourse' => array('id' => 1,),
+            'originCourse' => array('id' => 1),
             'newCourse' => array('id' => 2),
             'newCourseSet' => array('id' => 2),
             'newActivity' => array('id' => 2),
@@ -126,7 +123,6 @@ class ActivityCopyTest extends BaseTestCase
         ));
 
         $this->assertNull($result);
-
     }
 
     protected function getActivityCopy($params = array())

@@ -2,7 +2,6 @@
 
 namespace Biz\Xapi\Job;
 
-use Biz\System\Service\SettingService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 

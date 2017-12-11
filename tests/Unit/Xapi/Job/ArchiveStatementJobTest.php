@@ -13,6 +13,6 @@ class ArchiveStatementJobTest extends BaseTestCase
         $this->mockBiz('Xapi:XapiService', array(
             array('functionName' => 'archiveStatement', 'returnValue' => null),
         ));
-        $this->assertNull( $job->execute());
+        $this->assertNull($job->execute());
     }
 }
