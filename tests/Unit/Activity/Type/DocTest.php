@@ -47,7 +47,7 @@ class DocTest extends BaseTypeTestCase
         $docActivity = $type->create($field);
         $activity = $this->mockSimpleActivity($docActivity['id']);
 
-        $update = $this->mockField('end', 1,  2);
+        $update = $this->mockField('end', 1, 2);
         $updated = $type->update($docActivity['id'], $update, $activity);
 
         $this->assertEquals(2, $updated['mediaId']);
@@ -163,7 +163,7 @@ class DocTest extends BaseTypeTestCase
             'mediaId' => $mediaId,
             'media' => json_encode(array(
                 'id' => $mediaId,
-            ))
+            )),
         );
     }
 

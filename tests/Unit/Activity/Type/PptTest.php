@@ -38,7 +38,7 @@ class PptTest extends BaseTypeTestCase
         $pptActivity = $type->create($field);
         $activity = $this->mockSimpleActivity($pptActivity['id']);
 
-        $update = $this->mockField('end', 1,  2);
+        $update = $this->mockField('end', 1, 2);
         $updated = $type->update($pptActivity['id'], $update, $activity);
 
         $this->assertEquals(2, $updated['mediaId']);
@@ -162,7 +162,7 @@ class PptTest extends BaseTypeTestCase
             'mediaId' => $mediaId,
             'media' => json_encode(array(
                 'id' => $mediaId,
-            ))
+            )),
         );
     }
 
