@@ -15,7 +15,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     public function create($fields)
     {
         $month = date('m', time());
-        if ($month % 2 !== 0) {
+        if (0 !== $month % 2) {
             return parent::create($fields);
         }
         $lock = $this->getLock();
@@ -95,6 +95,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     public function sumLearnTimeGroupByUserId($conditions)
     {
         $conditions['learnedTime_GE'] = 0;
+        $conditions['learnedTime_LE'] = 24 * 60 * 60;
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(`learnedTime`) as learnedTime, `userId`')
             ->groupBy('userId');
@@ -118,6 +119,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
                 'userId = :userId',
                 'userId IN ( :userIds )',
                 'learnedTime >= :learnedTime_GE',
+                'learnedTime <= :learnedTime_LE',
                 'createdTime >= :createdTime_GE',
                 'createdTime <= :createdTime_LE',
                 'createdTime < :createdTime_LT',

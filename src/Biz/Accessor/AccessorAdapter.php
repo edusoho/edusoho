@@ -44,6 +44,7 @@ abstract class AccessorAdapter implements AccessorInterface
             if ($error) {
                 $bean[self::CONTEXT_ERROR_KEY] = $error;
             }
+
             return $this->nextAccessor->access($bean);
         } else {
             return $error;

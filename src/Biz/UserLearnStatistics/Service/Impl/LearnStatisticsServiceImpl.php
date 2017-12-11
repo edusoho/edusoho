@@ -4,6 +4,7 @@ namespace Biz\UserLearnStatistics\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -184,7 +185,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $conditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate', 'userIds'));
         if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
             $daoType = 'Daily';
-            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getTimespan());
+            $conditions['recordTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getRecordEndTime());
             $conditions['recordTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : strtotime(date('Y-m-d', time()));
             unset($conditions['startDate']);
             unset($conditions['endDate']);
@@ -195,12 +196,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         return array($conditions, $orderBy, $daoType);
     }
 
-    public function getTimespan()
+    public function getRecordEndTime()
     {
-        $settings = $this->getSettingService()->get('learn_statistics');
-        if (!empty($settings) && $settings['timespan'] == strtotime('1971/1/1 8:0:0')) {
-            $settings['timespan'] = 24 * 60 * 60 * 365;
-        }
+        $settings = $this->getStatisticsSetting();
 
         return date('Y-m-d', time() - $settings['timespan']);
     }
@@ -217,6 +215,8 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             );
             $learnSetting = $this->getStatisticsSetting();
             if (empty($dailyData) || empty($learnSetting['syncTotalDataStatus'])) {
+                $this->commit();
+
                 return;
             }
 
@@ -232,10 +232,8 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 'joinedCourseSetNum',
                 'joinedCourseNum',
                 'exitClassroomNum',
-                'exitClassroomCourseSetNum',
                 'exitCourseSetNum',
                 'exitCourseNum',
-                'exitClassroomCourseNum',
                 'learnedSeconds',
                 'finishedTaskNum',
                 'paidAmount',
@@ -293,7 +291,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $learningCourseSetCount = $this->getCourseSetService()->countUserLearnCourseSets($userId);
         $learningCoursesCount = $this->getCourseService()->countUserLearnCourses($userId);
         $learningProcess = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($learnCourseIds, $userId);
-        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds));
+        $learningCourseNotesCount = $this->getCourseNoteService()->countCourseNotes(array('courseIds' => $learnCourseIds, 'userId' => $userId));
         $learningCourseThreadsCount = $this->getCourseThreadService()->countPartakeThreadsByUserId($userId);
         $learningClassroomThreadCount = $this->getThreadService()->countPartakeThreadsByUserIdAndTargetType($userId, 'classroom');
         $learningCourseReviewCount = $this->getCourseReviewService()->searchReviewsCount(array('userId' => $userId));
@@ -320,9 +318,16 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $orderIds = ArrayToolkit::column($members, 'orderId');
 
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = empty($orders) ? array() : ArrayToolkit::index($orders, 'id');
+
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classrooms = empty($classrooms) ? array() : ArrayToolkit::index($classrooms, 'id');
 
         foreach ($members as &$member) {
             $member['order'] = empty($orders[$member['orderId']]) ? array() : $orders[$member['orderId']];
+            $member['classroom'] = empty($classrooms[$member['classroomId']]) ? array() : $classrooms[$member['classroomId']];
         }
         $learnCourseIds = ArrayToolkit::column($members, 'courseId');
         $learnCourses = $this->getCourseService()->searchCourses(array('courseIds' => $learnCourseIds), array('createdTime' => 'desc'), $start, $limit);
@@ -447,13 +452,20 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         $syncStatisticsSetting = $this->getSettingService()->get('learn_statistics');
 
         if (empty($syncStatisticsSetting)) {
-            $syncStatisticsSetting = array();
-            $syncStatisticsSetting['currentTime'] = strtotime(date('Y-m-d'), time());
-            //currentTime 当天升级的那天的0点0分
-            $syncStatisticsSetting['timespan'] = 24 * 60 * 60 * 365;
-
-            $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
+            $syncStatisticsSetting = $this->setStatisticsSetting();
         }
+
+        return $syncStatisticsSetting;
+    }
+
+    public function setStatisticsSetting()
+    {
+        //currentTime 当天升级的那天的0点0分
+        $syncStatisticsSetting = array(
+            'currentTime' => strtotime(date('Y-m-d')),
+            'timespan' => 24 * 60 * 60 * 365,
+        );
+        $this->getSettingService()->set('learn_statistics', $syncStatisticsSetting);
 
         return $syncStatisticsSetting;
     }
@@ -595,5 +607,13 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

@@ -431,10 +431,13 @@ class CourseController extends CourseBaseController
 
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
 
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
         return $this->render(
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
+                'courseSet' => $courseSet,
                 'courseItems' => $courseItems,
                 'nextOffsetSeq' => $nextOffsetSeq,
                 'member' => $member,
@@ -448,6 +451,7 @@ class CourseController extends CourseBaseController
         $offsetSeq = $request->query->get('offsetSeq');
         $direction = $request->query->get('direction', 'down');
         $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseId);
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq, 'direction' => $direction));
 
@@ -455,6 +459,7 @@ class CourseController extends CourseBaseController
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
+                'courseSet' => $courseSet,
                 'member' => $member,
                 'nextOffsetSeq' => $nextOffsetSeq,
                 'courseItems' => $courseItems,
