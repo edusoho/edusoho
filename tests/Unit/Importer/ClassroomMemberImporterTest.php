@@ -261,7 +261,7 @@ class ClassroomMemberImporterTest extends BaseTestCase
         $this->assertEquals('', $result);
 
         $result = ReflectionUtils::invokeMethod($importer, 'validExcelFieldValue', array($userData, 3, 0));
-        $this->assertEquals('第 3行的信息有误，用户数据不存在，请检查', $result);
+        $this->assertEquals('第3行的信息有误，用户数据不存在，请检查。', $result);
     }
 
     public function testValidExcelFieldValueWithNotEmptyEmail()
@@ -279,7 +279,7 @@ class ClassroomMemberImporterTest extends BaseTestCase
             )
         );
         $result = ReflectionUtils::invokeMethod($importer, 'validExcelFieldValue', array($userData, 2, 0));
-        $this->assertEquals('第 2行的信息有误，用户数据不存在，请检查', $result);
+        $this->assertEquals('第2行的信息有误，用户数据不存在，请检查。', $result);
     }
 
     public function testValidExcelFieldValueWithNotEmptyVerifiedMobile()
@@ -297,7 +297,7 @@ class ClassroomMemberImporterTest extends BaseTestCase
             )
         );
         $result = ReflectionUtils::invokeMethod($importer, 'validExcelFieldValue', array($userData, 2, 0));
-        $this->assertEquals('第 2行的信息有误，用户数据不存在，请检查', $result);
+        $this->assertEquals('第2行的信息有误，用户数据不存在，请检查。', $result);
     }
 
     public function testCheckRepeatData()
@@ -363,14 +363,6 @@ class ClassroomMemberImporterTest extends BaseTestCase
         );
         $result = $importer->tryImport($request);
         $this->getClassroomService()->shouldHaveReceived('tryManageClassroom');
-    }
-
-    public function testGetNecessaryFields()
-    {
-        $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
-        $importer = new ClassroomMemberImporter($this->getBiz());
-        $result = $importer->getNecessaryFields();
-        $this->assertEquals($necessaryFields, $result);
     }
 
     protected function getClassroomService()
