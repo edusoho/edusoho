@@ -427,9 +427,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     );*/
     }
 
-    public function convertToAudio(array $globalIds)
+    public function retryTranscode(array $globalIds)
     {
-        return $this->getFileImplementor('cloud')->convertToAudio($globalIds);
+        return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
     }
 
     public function collectFile($userId, $fileId)
