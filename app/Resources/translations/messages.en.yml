@@ -1084,6 +1084,7 @@ course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
+course.courseSet_closed_tips: 'Sorry, this courseSet %title% has been closed.'
 course.unbuyable.unpublished_tips: 'You are not allowed to enroll before the course published.'
 course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to enroll, since it‘s expired.'
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, since it''s expired.'

@@ -129,6 +129,7 @@ class TaskController extends BaseController
     public function previewAction($courseId, $id)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $task = $this->getTaskService()->getTask($id);
 
@@ -144,7 +145,12 @@ class TaskController extends BaseController
         }
 
         //课程关闭
-        if (!empty($course['status']) && 'closed' == $course['status']) {
+        if ((!empty($courseSet['status']) && $courseSet['status'] != 'published')) {
+            return $this->render('task/preview-notice-modal.html.twig', array('courseSet' => $courseSet));
+        }
+
+        //教学计划关闭
+        if ((!empty($course['status']) && $course['status'] != 'published')) {
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
 
