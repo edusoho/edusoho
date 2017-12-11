@@ -617,6 +617,9 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         return $this->createDao('MoneyCard:MoneyCardDao');
     }
 
+    /**
+     * @return \Biz\Card\Service\CardService
+     */
     protected function getCardService()
     {
         return $this->createService('Card:CardService');
