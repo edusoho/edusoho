@@ -50,7 +50,9 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
     public function onPaid($orderItem)
     {
-        $this->smsCallback($orderItem);
+        $classroomSet = $this->getSettingService()->get('classroom');
+        $targetName = empty($classroomSet['name']) ? '班级' : $classroomSet['name'];
+        $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
@@ -114,5 +116,10 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }
