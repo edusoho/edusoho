@@ -14,14 +14,6 @@ class ArchiveStatementJob extends AbstractJob
     }
 
     /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
-
-    /**
      * @return XapiService
      */
     protected function getXapiService()

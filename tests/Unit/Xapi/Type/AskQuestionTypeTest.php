@@ -14,7 +14,7 @@ class AskQuestionTypeTest extends BaseTestCase
         $obj = $biz['xapi.push.asked_question'];
 
         $this->mockBiz('Course:ThreadService', array(
-            array('functionName' => 'getThread', 'returnValue' => array('id' => 1, 'type' => 'question', 'title' => 'thread title', 'content' => 'thread content',  'taskId' => 1, 'course_id' => 1, 'courseSetId' => 1)),
+            array('functionName' => 'getThread', 'returnValue' => array('id' => 1, 'type' => 'question', 'title' => 'thread title', 'content' => 'thread content',  'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1)),
         ));
 
         $this->mockBiz('Task:TaskService', array(
