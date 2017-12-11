@@ -28,6 +28,7 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $defaultCourseId = 0;
         $newCourses = array();
+ 
         foreach ($courses as $originCourse) {
             $newCourse = $this->partsFields($originCourse);
             $newCourse['courseSetId'] = $newCourseSet['id'];
@@ -283,6 +284,6 @@ class CourseSetCoursesCopy extends AbstractCopy
      */
     protected function getCourseSetService()
     {
-        return $this->biz->dao('Course:CourseSetService');
+        return $this->biz->service('Course:CourseSetService');
     }
 }
