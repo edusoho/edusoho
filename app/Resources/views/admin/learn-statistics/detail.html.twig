@@ -5,7 +5,6 @@
 {% set script_controller = 'user-data/index' %}
 {% set bodyClass = 'user-data' %}
 
-
 {% block page_title %}
   <div class="mbm">
     <img class="es-admin-avatar-sm" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
@@ -85,14 +84,14 @@
           {% if member.joinedType == 'course' %}
             <div class="user-data-course__money">
               <span>{{ member.order.paid_cash_amount|default(0)|to_cash(1) }}</span>
-              {% if member.order.paid_coin_amount|default(0) != 0 %}<span>{{ '+' ~ member.order.paid_coin_amount|default(0)|to_coin(1) }}</span>{% endif %}
+              {% if member.order.paid_coin_amount|default(0) != 0 %}<span>{{ '+ ' ~ member.order.paid_coin_amount|default(0)|to_coin(1) }}</span>{% endif %}
             </div>
           {% elseif member.joinedType == 'classroom' %}
             <div class="user-data-course__text">{{ 'admin.user.statistics.data_detail.from_classroom'|trans }} {{ member.classroom.title|default('')  }}</div>
           {% endif %}
         </div>
         <div class="user-data-course__status">
-          <div class="user-data-course__time">{{ 'join.time'|trans }}<span>{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
+          <div><span class="mrs">{{ 'join.time'|trans }}</span><span class="mlm">{{ member.createdTime|date('Y-m-d H:i:s') }}</span></div>
           <div class="user-data-course__progress">
             <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
             <div class="es-admin-progress es-admin-progress-xs">
