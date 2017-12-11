@@ -20,6 +20,7 @@ class ActivityMaterialCopy extends AbstractCopy
         $originActivity = $options['originActivity'];
         $mediaSource = $originActivity['mediaType'] === 'download' ? 'coursematerial' : 'courseactivity';
         $materials = $this->getMaterialDao()->findMaterialsByLessonIdAndSource($originActivity['id'], $mediaSource);
+
         if (empty($materials)) {
             return;
         }

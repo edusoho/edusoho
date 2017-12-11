@@ -337,6 +337,30 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         }
     }
 
+    public function testCountUserLearnCourses()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('userId' => 2, 'courseSetId' => 2));
+        $expected[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
+
+        $res = $this->getDao()->countUserLearnCourses(2);
+
+        $this->assertEquals(1, $res);
+    }
+
+    public function testFindUserLearnCourseIds()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('userId' => 2, 'courseSetId' => 2));
+        $expected[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
+
+        $res = $this->getDao()->countUserLearnCourses(2);
+
+        $this->assertEquals(1, count($res));
+    }
+
     // Todo 跨表
     public function testCountThreadsByCourseIdAndUserId()
     {

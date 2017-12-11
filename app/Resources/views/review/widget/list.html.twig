@@ -21,7 +21,7 @@
       </div>
       <div class="media-body thread-post">
         <div class="title">{{ web_macro.user_link(user) }}
-          {% if review.meta %}<span>{{(courseMap[review.courseId].title|default('course.reviews.teaching_plan')) ~ ' ' ~ ('course.reviews.teaching_plan_progress'|trans)}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
+          {% if review.meta %}<span>{{(courseMap[review.courseId].title|default('course.reviews.teaching_plan')|trans) ~ ' ' ~ ('course.reviews.teaching_plan_progress'|trans)}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
           {{ review.createdTime|date('Y-m-d') }}
         </div>
         <div class="score">

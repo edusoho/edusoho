@@ -4,7 +4,6 @@ namespace Tests\Unit\Question;
 
 use Biz\Question\Type\Determine;
 use Biz\BaseTestCase;
-use Biz\Common\HTMLHelper;
 
 class DetermineTest extends BaseTestCase
 {
@@ -39,7 +38,7 @@ class DetermineTest extends BaseTestCase
     public function testJudgeRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array(1),'score'=>'2.0');
+        $question = array('answer' => array(1), 'score' => '2.0');
         $answer = array(1);
 
         $result = $typeObj->judge($question, $answer);
@@ -51,7 +50,7 @@ class DetermineTest extends BaseTestCase
     public function testJudgeWrong()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array(1),'score'=>'2.0');
+        $question = array('answer' => array(1), 'score' => '2.0');
         $answer = array(0);
 
         $result = $typeObj->judge($question, $answer);

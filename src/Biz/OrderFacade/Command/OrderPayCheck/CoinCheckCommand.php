@@ -57,12 +57,4 @@ class CoinCheckCommand extends OrderPayCheckCommand
     {
         return $this->biz->service('Pay:AccountService');
     }
-
-    /**
-     * @return OrderFacadeService
-     */
-    private function getOrderFacadeService()
-    {
-        return $this->biz->service('OrderFacade:OrderFacadeService');
-    }
 }

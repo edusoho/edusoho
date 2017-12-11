@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\AudioActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
-use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ArrayToolkit;
 
 class Audio extends Activity
@@ -139,14 +138,6 @@ class Audio extends Activity
     protected function getAudioActivityDao()
     {
         return $this->getBiz()->dao('Activity:AudioActivityDao');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**

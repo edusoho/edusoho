@@ -60,11 +60,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
-    public function convertToAudio(array $globalIds)
-    {
-        return $this->getFileImplementor('cloud')->convertToAudio($globalIds);
-    }
-
     public function batchConvertByIds($ids)
     {
         if (empty($ids)) {
@@ -77,14 +72,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'storage' => 'cloud',
             'inAudioConvertStatus' => array('none', 'error'),
         );
-        $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
 
         $count = $this->getUploadFileDao()->count($conditions);
         for ($start = 0; $start < $count; $start = $start + 100) {
             $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, $start);
 
-            $this->convertToAudio(ArrayToolkit::column($videofiles, 'globalId'));
+            $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
         }
+
+        $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
     }
 
     //视频转音频的完成情况
@@ -233,7 +229,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileInitDao()->get($params['id']);
             $initParams = $implementor->resumeUpload($file, $params);
 
-            if ($initParams['resumed'] == 'ok' && $file && $file['status'] != 'ok') {
+            if ('ok' == $initParams['resumed'] && $file && 'ok' != $file['status']) {
                 $this->getUploadFileInitDao()->update($file['id'], array(
                     'filename' => $params['fileName'],
                     'fileSize' => $params['fileSize'],
@@ -250,7 +246,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $params = array_merge($params, $file);
         $initParams = $implementor->initUpload($params);
 
-        if ($params['storage'] == 'cloud') {
+        if ('cloud' == $params['storage']) {
             $file = $this->getUploadFileInitDao()->update($file['id'], array('globalId' => $initParams['globalId']));
         }
 
@@ -299,7 +295,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $this->getLogger()->info("finishedUpload 添加文件：#{$file['id']}");
 
-            if ($file['targetType'] == 'headLeader') {
+            if ('headLeader' == $file['targetType']) {
                 $headLeaders = $this->getUploadFileDao()->findHeadLeaderFiles();
 
                 foreach ($headLeaders as $headLeader) {
@@ -396,15 +392,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array('error' => 'file_not_found', 'message' => sprintf('文件%s，不存在。', $id));
         }
 
-        if ($file['storage'] != 'cloud') {
+        if ('cloud' != $file['storage']) {
             return array('error' => 'not_cloud_file', 'message' => sprintf('文件%s，不是云文件。', $id));
         }
 
-        if ($file['type'] != 'video') {
+        if ('video' != $file['type']) {
             return array('error' => 'not_video_file', 'message' => sprintf('文件%s，不是视频文件。', $id));
         }
 
-        if ($file['targetType'] != 'courselesson') {
+        if ('courselesson' != $file['targetType']) {
             return array('error' => 'not_course_file', 'message' => sprintf('文件%s，不是课时文件。', $id));
         }
 
@@ -474,6 +470,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     'courseId'    => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
     'lessonId'    => empty($subTarget['id']) ? 0 : $subTarget['id']
     );*/
+    }
+
+    public function retryTranscode(array $globalIds)
+    {
+        return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
     }
 
     public function collectFile($userId, $fileId)
@@ -601,7 +602,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
             foreach ($files as $key => $file) {
-                if ($file['storage'] == 'cloud') {
+                if ('cloud' == $file['storage']) {
                     $files[$key] = $cloudFiles[$file['id']];
                 }
             }
@@ -657,7 +658,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         try {
             $file = $this->getFileImplementor($implemtor)->addFile($targetType, $targetId, $fileInfo, $originalFile);
 
-            if ($implemtor == 'cloud') {
+            if ('cloud' == $implemtor) {
                 $fileInit = $this->getUploadFileInitDao()->create($file);
                 $file['id'] = $fileInit['id'];
             }
@@ -698,7 +699,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         //1. 可能由于异常或脏数据、事务回滚导致资源不存在的情况，对edusoho来说，不应影响本地文件记录的删除
         //2. 云API没有针对上述错误提供错误码，因此根据返回的错误信息进行判断，以后应当优化
         if ((isset($result['success']) && $result['success'])
-          || (!empty($result['error']) && $result['error'] == '资源不存在，或已删除！')
+          || (!empty($result['error']) && '资源不存在，或已删除！' == $result['error'])
         ) {
             $result = $this->getUploadFileDao()->delete($id);
         }
@@ -749,7 +750,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $file = $this->getFileImplementor($file['storage'])->saveConvertResult($file, $result);
 
-        if ($file['convertStatus'] == 'success') {
+        if ('success' == $file['convertStatus']) {
             $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
             $fileNeedUpdateFields['metas2'] = json_encode($file['metas2']);
             $fileNeedUpdateFields['updatedTime'] = time();
@@ -797,6 +798,27 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fields = array(
             'convertStatus' => 'waiting',
             'convertHash' => $convertHash,
+            'updatedTime' => time(),
+        );
+        $this->getUploadFileDao()->update($id, $fields);
+
+        return $this->getFile($id);
+    }
+
+    public function setAudioConvertStatus($id, $status)
+    {
+        $file = $this->getFile($id);
+
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        if (!in_array($status, array('none', 'doing', 'success', 'error'))) {
+            throw $this->createServiceException('status not exist.');
+        }
+
+        $fields = array(
+            'audioConvertStatus' => $status,
             'updatedTime' => time(),
         );
         $this->getUploadFileDao()->update($id, $fields);
@@ -884,7 +906,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        if ($file['isPublic'] == 1) {
+        if (1 == $file['isPublic']) {
             return $file;
         }
 
@@ -1041,11 +1063,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['endDate'] = strtotime($conditions['endDate']);
         }
 
-        if (!empty($conditions['useStatus']) && $conditions['useStatus'] == 'unused') {
+        if (!empty($conditions['useStatus']) && 'unused' == $conditions['useStatus']) {
             $conditions['endCount'] = 1;
         }
 
-        if (!empty($conditions['useStatus']) && $conditions['useStatus'] == 'used') {
+        if (!empty($conditions['useStatus']) && 'used' == $conditions['useStatus']) {
             $conditions['startCount'] = 1;
         }
 

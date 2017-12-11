@@ -99,7 +99,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $api->post("/resources/{$globalId}/processes", $options);
     }
 
-    public function convertToAudio(array $globalIds)
+    public function retryTranscode(array $globalIds)
     {
         if (!empty($globalIds)) {
             $api = CloudAPIFactory::create('root');

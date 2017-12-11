@@ -75,7 +75,7 @@ class CourseMember extends AbstractResource
         try {
             $this->getCourseService()->tryFreeJoin($course['id']);
         } catch (UnableJoinException $e) {
-            throw new BadRequestHttpException($e->getMessage(), $e);
+            throw new BadRequestHttpException($e->getMessage(), $e, $e->getCode());
         }
 
         return $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
