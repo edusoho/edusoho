@@ -29,7 +29,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function createAnnouncement($announcement)
     {
-        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'))) {
+        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'), true)) {
             throw $this->createInvalidArgumentException('Arguments invalid');
         }
 
@@ -52,7 +52,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function updateAnnouncement($id, $announcement)
     {
-        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'))) {
+        if (!ArrayToolkit::requireds($announcement, array('content', 'startTime', 'endTime'),true)) {
             throw $this->createInvalidArgumentException('Arguments invalid');
         }
 
