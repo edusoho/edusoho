@@ -13,7 +13,7 @@ class AnnouncementServiceTest extends BaseTestCase
      */
     public function testCreateAnnouncementArgumentError()
     {
-        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement(array('content' => '','startTime' => '','endTime' => ''));
+        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement(array('content' => '', 'startTime' => '', 'endTime' => ''));
     }
 
     public function testCreateAnnouncement()
@@ -123,7 +123,7 @@ class AnnouncementServiceTest extends BaseTestCase
      */
     public function testUpdateAnnouncementArgumentError()
     {
-        $this->getAnnouncementService()->updateAnnouncement(1, array('content' => '','startTime' => '','endTime' => ''));
+        $this->getAnnouncementService()->updateAnnouncement(1, array('content' => '', 'startTime' => '', 'endTime' => ''));
     }
 
     public function testUpdateAnnouncement()
