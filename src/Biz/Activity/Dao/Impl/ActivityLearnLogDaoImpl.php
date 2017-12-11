@@ -15,7 +15,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     public function create($fields)
     {
         $month = date('m', time());
-        if ($month % 2 !== 0) {
+        if (0 !== $month % 2) {
             return parent::create($fields);
         }
         $lock = $this->getLock();

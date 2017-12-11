@@ -213,6 +213,7 @@ class Lesson extends BaseResource
                 $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {
                     $lesson['mediaConvertStatus'] = $file['convertStatus'];
+                    $lesson['audioUri'] = !empty($file['audioUri']) ? $file['audioUri'] : '';
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
