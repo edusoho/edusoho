@@ -60,6 +60,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
+    public function convertToAudio(array $globalIds)
+    {
+        return $this->getFileImplementor('cloud')->convertToAudio($globalIds);
+    }
+
     public function batchConvertByIds($ids)
     {
         if (empty($ids)) {
@@ -77,7 +82,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $count = $this->getUploadFileDao()->count($conditions);
         for ($start = 0; $start < $count; $start = $start + 100) {
             $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, $start);
-            $this->getFileImplementor('cloud')->batchConvert(ArrayToolkit::column($videofiles, 'globalId'));
+
+            $this->convertToAudio(ArrayToolkit::column($videofiles, 'globalId'));
         }
     }
 

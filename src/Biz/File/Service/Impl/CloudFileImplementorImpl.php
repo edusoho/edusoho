@@ -99,19 +99,24 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $api->post("/resources/{$globalId}/processes", $options);
     }
 
+    public function convertToAudio(array $globalIds)
+    {
+        if (!empty($globalIds)) {
+            $api = CloudAPIFactory::create('root');
+            $params = array('nos' => $globalIds);
+
+            return $api->post('/resources/transcode_retry', $params);
+        }
+
+        return false;
+    }
+
     public function convertPermission()
     {
         // $permissions = array('open', 'potential', 'unopen');
 
         // return $permissions[rand(0, 2)];
         return 'open';
-    }
-
-    public function batchConvert($globalIds)
-    {
-        $api = CloudAPIFactory::create('root');
-
-        return $api->post("/resources/transcode_retry", array('nos' => $globalIds));
     }
 
     public function deleteFile($file)
