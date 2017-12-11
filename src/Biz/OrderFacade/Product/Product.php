@@ -3,6 +3,7 @@
 namespace Biz\OrderFacade\Product;
 
 use AppBundle\Common\StringToolkit;
+use Biz\AppLoggerConstant;
 use Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Currency;
@@ -144,19 +145,23 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     protected function smsCallback($orderItem, $targetName)
     {
-        $smsType = 'sms_'.$this->targetType.'_buy_notify';
+        try {
+            $smsType = 'sms_'.$this->targetType.'_buy_notify';
 
-        if ($this->getSmsService()->isOpen($smsType)) {
-            $userId = $orderItem['user_id'];
-            $parameters = array();
-            $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
-            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
-            $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
-            $parameters['totalPrice'] = $price.'元';
+            if ($this->getSmsService()->isOpen($smsType)) {
+                $userId = $orderItem['user_id'];
+                $parameters = array();
+                $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
+                $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
+                $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
+                $parameters['totalPrice'] = $price.'元';
 
-            $description = $parameters['order_title'].'成功回执';
+                $description = $parameters['order_title'].'成功回执';
 
-            $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+            }
+        } catch (\Exception $e) {
+            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", $e->getMessage());
         }
     }
 
