@@ -19,15 +19,15 @@ class UserLearnStatisticsController extends BaseController
             'isDefault' => 'false',
         );
         $conditions = $request->query->all();
-
         $conditions = array_merge($defaultCondition, $conditions);
+        $userConditions = array('nickname' => $conditions['nickname']);
         $paginator = new Paginator(
             $request,
-            $this->getUserService()->countUsers(array()),
+            $this->getUserService()->countUsers($userConditions),
             20
         );
         $users = $this->getUserService()->searchUsers(
-            array('nickname' => $conditions['nickname']),
+            $userConditions,
             array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -37,13 +37,13 @@ class UserLearnStatisticsController extends BaseController
 
         $statistics = $this->getLearnStatisticsService()->statisticsDataSearch($conditions);
 
-        $timespan = $this->getLearnStatisticsService()->getTimespan();
+        $recordEndTime = $this->getLearnStatisticsService()->getRecordEndTime();
 
         return $this->render('admin/learn-statistics/show.html.twig', array(
             'statistics' => ArrayToolkit::index($statistics, 'userId'),
             'paginator' => $paginator,
             'users' => $users,
-            'timespan' => $timespan,
+            'recordEndTime' => $recordEndTime,
             'isDefault' => $conditions['isDefault'],
         ));
     }

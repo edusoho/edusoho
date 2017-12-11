@@ -3,20 +3,20 @@ define(function (require, exports, module) {
   var Widget = require('widget');
   require('echarts');
 
-  var LearnTimeTrendency = Widget.extend({
+  var LearnTimeTendency = Widget.extend({
     setup: function() {
-      this.$container = $('.js-learn-data-trendency');
+      this.$container = $('.js-learn-data-tendency');
       this.dateArr = [];
       this.learnTime = [];
       this.totalTime = 0;
-      this.learnTimeTrendencyChart = null;
+      this.learnTimeTendencyChart = null;
       this.dateRangePicker = new OverviewDateRangePicker();
       this.init();
     },
 
     init: function() {
       var self = this;
-      this.learnTimeTrendencyChart = echarts.init(document.getElementById('learn-data-trendency-chart'));
+      this.learnTimeTendencyChart = echarts.init(document.getElementById('learn-data-tendency-chart'));
       this.showData({startDate: this.dateRangePicker.getStartDate(),endDate:this.dateRangePicker.getEndDate()});
       self.dateRangePicker.on('date-picked', function(data) {
         self.showData(data);
@@ -24,7 +24,7 @@ define(function (require, exports, module) {
     },
 
     showData: function(data) {
-      this.learnTimeTrendencyChart.showLoading();
+      this.learnTimeTendencyChart.showLoading('default', { maskColor: '#fcfcfc' });
       var self = this;
       $.ajax({
         type: "GET",
@@ -52,7 +52,7 @@ define(function (require, exports, module) {
       var option = {
           title: {
             text: Translator.trans('admin.user.statistics.data.learn_total_time') +': ' + this.totalTime,
-            x: "9%",
+            x: "center",
             y: "6.5%",
             textStyle: {
               fontSize: 14,
@@ -101,10 +101,10 @@ define(function (require, exports, module) {
           ],
           color: ['#46C37B', '#428BCA']
       };
-      this.learnTimeTrendencyChart.hideLoading();
-      this.learnTimeTrendencyChart.setOption(option);
+      this.learnTimeTendencyChart.hideLoading();
+      this.learnTimeTendencyChart.setOption(option);
     }
   })
 
-  module.exports = LearnTimeTrendency;
+  module.exports = LearnTimeTendency;
 })
