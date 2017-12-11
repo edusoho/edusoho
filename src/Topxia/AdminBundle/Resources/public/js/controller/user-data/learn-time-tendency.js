@@ -24,7 +24,7 @@ define(function (require, exports, module) {
     },
 
     showData: function(data) {
-      this.learnTimeTendencyChart.showLoading();
+      this.learnTimeTendencyChart.showLoading('default', { maskColor: '#fcfcfc' });
       var self = this;
       $.ajax({
         type: "GET",
