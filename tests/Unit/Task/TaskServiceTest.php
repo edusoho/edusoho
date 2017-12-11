@@ -801,16 +801,16 @@ class TaskServiceTest extends BaseTestCase
         $this->getSettingService()->shouldReceive('get')->andReturn(array('upload_mode' => 'cloud'));
 
         $this->getUploadFileService()->shouldReceive('getFile')->andReturn(array('id' => 1, 'globalId' => 'f9bda3613f8447c39e96975629bff701', 'storage' => 'cloud', 'audioConvertStatus' => 'none'));
-        $this->getUploadFileService()->shouldReceive('convertToAudio');
-        $this->getUploadFileService()->shouldReceive('update');
+        $this->getUploadFileService()->shouldReceive('retryTranscode');
+        $this->getUploadFileService()->shouldReceive('setAudioConvertStatus');
 
         $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'vedioConverAudio', array(1, 1));
 
         $this->getCourseService()->shouldHaveReceived('tryManageCourse');
         $this->getSettingService()->shouldHaveReceived('get');
         $this->getUploadFileService()->shouldHaveReceived('getFile');
-        $this->getUploadFileService()->shouldHaveReceived('convertToAudio');
-        $this->getUploadFileService()->shouldHaveReceived('update');
+        $this->getUploadFileService()->shouldHaveReceived('retryTranscode');
+        $this->getUploadFileService()->shouldHaveReceived('setAudioConvertStatus');
     }
 
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)

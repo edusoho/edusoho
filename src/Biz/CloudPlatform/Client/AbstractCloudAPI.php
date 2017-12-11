@@ -16,7 +16,7 @@ class AbstractCloudAPI
 
     protected $timeout = 15;
 
-    protected $apiUrl = 'http://api.edusoho.net';
+    protected $apiUrl = 'http://root-api-a.dev.qiqiuyun.cn:8098';
 
     protected $debug = false;
 
@@ -123,16 +123,16 @@ class AbstractCloudAPI
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
-        if ($method == 'POST') {
+        if ('POST' == $method) {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'PUT') {
+        } elseif ('PUT' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'DELETE') {
+        } elseif ('DELETE' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'PATCH') {
+        } elseif ('PATCH' == $method) {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
@@ -141,7 +141,7 @@ class AbstractCloudAPI
             }
         }
 
-        $headers[] = 'Auth-Token: '.$this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
+        $headers[] = 'Auth-Token: '.$this->_makeAuthToken($url, 'GET' == $method ? array() : $params);
         $headers[] = 'API-REQUEST-ID: '.$requestId;
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);

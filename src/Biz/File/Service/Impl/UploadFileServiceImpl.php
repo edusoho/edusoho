@@ -111,8 +111,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 unset($fields['name']);
             }
 
-            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId', 'useType', 'usedCount', 'audioConvertStatus'));
-            
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId', 'useType', 'usedCount'));
+
             if (!empty($fields)) {
                 return $this->getUploadFileDao()->update($file['id'], $fields);
             }
@@ -427,9 +427,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     );*/
     }
 
-    public function convertToAudio(array $globalIds)
+    public function retryTranscode(array $globalIds)
     {
-        return $this->getFileImplementor('cloud')->convertToAudio($globalIds);
+        return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
     }
 
     public function collectFile($userId, $fileId)
@@ -753,6 +753,27 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fields = array(
             'convertStatus' => 'waiting',
             'convertHash' => $convertHash,
+            'updatedTime' => time(),
+        );
+        $this->getUploadFileDao()->update($id, $fields);
+
+        return $this->getFile($id);
+    }
+
+    public function setAudioConvertStatus($id, $status)
+    {
+        $file = $this->getFile($id);
+
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        if (!in_array($status, array('none', 'doing', 'success', 'error'))) {
+            throw $this->createServiceException('status not exist.');
+        }
+
+        $fields = array(
+            'audioConvertStatus' => $status,
             'updatedTime' => time(),
         );
         $this->getUploadFileDao()->update($id, $fields);
