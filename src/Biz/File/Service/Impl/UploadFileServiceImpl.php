@@ -111,8 +111,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 unset($fields['name']);
             }
 
-            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId', 'useType', 'usedCount'));
-
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId', 'useType', 'usedCount', 'audioConvertStatus'));
+            
             if (!empty($fields)) {
                 return $this->getUploadFileDao()->update($file['id'], $fields);
             }
@@ -425,6 +425,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     'courseId'    => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
     'lessonId'    => empty($subTarget['id']) ? 0 : $subTarget['id']
     );*/
+    }
+
+    public function convertToAudio(array $globalIds)
+    {
+        return $this->getFileImplementor('cloud')->convertToAudio($globalIds);
     }
 
     public function collectFile($userId, $fileId)
