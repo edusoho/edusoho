@@ -5,7 +5,6 @@ namespace Tests\Unit\Xapi\Type;
 use Biz\BaseTestCase;
 use Biz\System\Service\SettingService;
 use QiQiuYun\SDK\Auth;
-
 use Biz\Xapi\Type\AskQuestionType;
 
 class AskQuestionTypeTest extends BaseTestCase
