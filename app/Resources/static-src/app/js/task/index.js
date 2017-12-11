@@ -1,5 +1,6 @@
 import TaskShow from './task';
 import { Browser } from 'common/utils';
+import Cookies from 'js-cookie';
 
 new TaskShow({
   element: $('body'),
@@ -13,4 +14,12 @@ if (Browser.ie10 || Browser.ie11 || Browser.edge) {
     const iframeHtml = iframeContent.document.getElementsByTagName('html')[0];
     iframeHtml.style.width = "100%";
   }
+}
+
+let $adBtn = $('.js-audio-convert-ad');
+if ($adBtn.length > 0) {
+  $adBtn.on('click', function(event) {
+    Cookies.set($adBtn.data('cookie'), 'true', {expires: 360, path: "/"});
+    $adBtn.parents('.js-audio-convert-box').remove();
+  });
 }
