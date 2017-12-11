@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\Pay\Payment;
 
-
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -57,14 +56,14 @@ class LianlianPayGetway extends AbstractGetway
             'oid_paybill',
             'money_order',
             'result_pay',
-            'settle_date',
+            'settle_date',   //此属性出账日期，用于对账用，对账时才能返回付款时间或退款时间
             'info_order',
             'pay_type',
             'bank_code'
         ));
 
         $setting = $this->getSetting();
-        if (!SignatureToolkit::signVerify($data, array('accessKey'=>$setting['accessKey']))) {
+        if (!$setting['signatureToolkit']->signVerify($data, array('accessKey'=>$setting['accessKey']))) {
             return array(
                 array(
                     'status' => 'failture',
@@ -77,7 +76,7 @@ class LianlianPayGetway extends AbstractGetway
         return array(array(
                 'status' => 'paid',
                 'cash_flow' => $data['oid_paybill'],
-                'paid_time' => $data['settle_date'],
+                'paid_time' => time(),
                 'pay_amount' => (int)($data['money_order']*100),
                 'cash_type' => 'CNY',
                 'trade_sn' => $data['no_order'],
@@ -108,7 +107,8 @@ class LianlianPayGetway extends AbstractGetway
 
     protected function signParams($params, $options)
     {
-        return SignatureToolkit::signParams($params, $options);
+        $setting = $this->getSetting();
+        return $setting['signatureToolkit']->signParams($params, $options);
     }
 
     protected function convertParams($params)
@@ -157,7 +157,7 @@ class LianlianPayGetway extends AbstractGetway
         unset($converted['userreq_ip'], $converted['bank_code'], $converted['pay_type'], $converted['timestamp'], $converted['version'], $converted['sign']);
         $converted['version'] = '1.2';
         $converted['app_request'] = 3;
-        $converted['sign'] = $this->signParams($converted);
+        $converted['sign'] = $this->signParams($converted, $this->getSetting());
         return array('req_data'=>json_encode($converted));
     }
 
@@ -183,6 +183,7 @@ class LianlianPayGetway extends AbstractGetway
             'secret' => $config['secret'],
             'accessKey' => $config['accessKey'],
             'oid_partner' => $config['oid_partner'],
+            'signatureToolkit' => $config['signatureToolkit'],
         );
     }
 }

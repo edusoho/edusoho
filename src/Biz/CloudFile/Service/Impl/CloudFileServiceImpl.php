@@ -11,7 +11,6 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
-use Topxia\Service\Common\ServiceKernel;
 use QiQiuYun\SDK\Service\ResourceService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService

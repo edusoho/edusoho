@@ -268,6 +268,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
         $ids = ArrayToolkit::column($sets, 'id');
+
+        if (empty($ids)) {
+            return 0;
+        }
+
         $count = $this->countCourseSets(
             array(
                 'ids' => $ids,

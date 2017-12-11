@@ -37,7 +37,7 @@ interface UploadFileService
 
     public function reconvertOldFile($id, $convertCallback, $pipeline);
 
-    public function convertToAudio(array $globalIds);
+    public function retryTranscode(array $globalIds);
 
     public function collectFile($userId, $fileId);
 

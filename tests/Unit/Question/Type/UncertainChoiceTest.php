@@ -4,7 +4,6 @@ namespace Tests\Unit\Question;
 
 use Biz\Question\Type\UncertainChoice;
 use Biz\BaseTestCase;
-use Biz\Common\HTMLHelper;
 
 class UncertainChoiceTest extends BaseTestCase
 {
@@ -40,14 +39,14 @@ class UncertainChoiceTest extends BaseTestCase
     {
         $typeObj = $this->creatQuestionType();
 
-        $question = array('answer'=>array('1','2'),'score'=>'2.0','missScore'=>'1.0');
-        $answer = array('1','2');
+        $question = array('answer' => array('1', '2'), 'score' => '2.0', 'missScore' => '1.0');
+        $answer = array('1', '2');
         $result = $typeObj->judge($question, $answer);
 
         $this->assertEquals('right', $result['status']);
         $this->assertEquals($question['score'], $result['score']);
 
-        $question = array('answer'=>array('1'),'score'=>'2.0','missScore'=>'1.0');
+        $question = array('answer' => array('1'), 'score' => '2.0', 'missScore' => '1.0');
         $answer = array('1');
         $result = $typeObj->judge($question, $answer);
 
@@ -58,7 +57,7 @@ class UncertainChoiceTest extends BaseTestCase
     public function testJudgePartRight()
     {
         $typeObj = $this->creatQuestionType();
-        $question = array('answer'=>array('1','2'),'score'=>'2.0','missScore'=>'1.0');
+        $question = array('answer' => array('1', '2'), 'score' => '2.0', 'missScore' => '1.0');
         $answer = array('1');
 
         $result = $typeObj->judge($question, $answer);
@@ -72,14 +71,14 @@ class UncertainChoiceTest extends BaseTestCase
     {
         $typeObj = $this->creatQuestionType();
 
-        $question = array('answer'=>array('1','2'),'score'=>'2.0','missScore'=>'1.0');
+        $question = array('answer' => array('1', '2'), 'score' => '2.0', 'missScore' => '1.0');
         $answer = array('3');
         $result = $typeObj->judge($question, $answer);
 
         $this->assertEquals('wrong', $result['status']);
         $this->assertEquals(0, $result['score']);
 
-        $question = array('answer'=>array('1'),'score'=>'2.0','missScore'=>'1.0');
+        $question = array('answer' => array('1'), 'score' => '2.0', 'missScore' => '1.0');
         $answer = array('3');
         $result = $typeObj->judge($question, $answer);
 
@@ -92,7 +91,7 @@ class UncertainChoiceTest extends BaseTestCase
         $typeObj = $this->creatQuestionType();
 
         $fields = array(
-            'choices' => array('choice1','choice2','choice3','choice4')
+            'choices' => array('choice1', 'choice2', 'choice3', 'choice4'),
         );
 
         $filter = $typeObj->filter($fields);
@@ -108,5 +107,4 @@ class UncertainChoiceTest extends BaseTestCase
 
         return $uncertainChoice;
     }
-
 }

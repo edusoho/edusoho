@@ -34,6 +34,8 @@ class Course extends BaseResource
         $course['userId'] = $course['creator'];
         $course['tryLookTime'] = $course['tryLookLength'];
         $course['createdTime'] = date('c', $course['createdTime']);
+        $course['isAudioOn'] = $course['enableAudio'];
+        
         return $course;
     }
 

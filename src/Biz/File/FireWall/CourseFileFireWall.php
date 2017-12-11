@@ -14,7 +14,7 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
         $targetTypes = explode('.', $attachment['targetType']);
         $type = array_pop($targetTypes);
 
-        if ($type === 'thread') {
+        if ('thread' === $type) {
             $thread = $this->getThreadService()->getThread($courseId = null, $attachment['targetId']);
 
             if ($user['id'] == $thread['userId']) {
@@ -25,7 +25,7 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
             if (is_array($course['teacherIds']) && in_array($user['id'], $course['teacherIds'])) {
                 return true;
             }
-        } elseif ($type === 'post') {
+        } elseif ('post' === $type) {
             $post = $this->getThreadService()->getPost($courseId = null, $attachment['targetId']);
             if ($user['id'] == $post['userId']) {
                 return true;

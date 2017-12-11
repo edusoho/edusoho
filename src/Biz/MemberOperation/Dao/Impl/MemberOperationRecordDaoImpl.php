@@ -19,6 +19,8 @@ class MemberOperationRecordDaoImpl extends GeneralDaoImpl implements MemberOpera
             'orderbys' => array('id', 'created_time', 'operate_time'),
             'conditions' => array(
                 'id = :id',
+                'id > :id_GT',
+                'user_id = :user_id',
                 'user_id IN (:user_ids)',
                 'operate_type = :operate_type',
                 'operate_time > :operate_time_GT',

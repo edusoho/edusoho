@@ -735,9 +735,6 @@ a:hover {
 .select2-dropdown-open.select2-drop-above .select2-choices {
   border: 1px solid #fd5f56 !important;
 }
-.vip-new-member .member-list img:hover {
-  border-color: #fd5f56;
-}
 .noUi-horizontal .noUi-handle {
   border: 2px solid #fd5f56;
 }

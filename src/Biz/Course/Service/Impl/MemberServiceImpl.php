@@ -1155,7 +1155,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userId' => $member['userId'],
             'role' => 'student',
         ));
-        
+
         if (empty($otherMemberCount)) {
             'join' == $operateType ? $record['join_course_set'] = 1 : $record['exit_course_set'] = 1;
         }

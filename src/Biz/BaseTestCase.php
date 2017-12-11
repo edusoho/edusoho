@@ -198,6 +198,7 @@ class BaseTestCase extends TestCase
      *      array(
      *          'functionName' => 'tryManageCourse',　//必填
      *          'returnValue' => array('id' => 1),　// 非必填，填了表示有相应的返回结果
+     *          'throwException' => new \Exception(), //object Exception or string Exception ，和returnValue 只能二选一，否则throwException优先
      *          'withParams' => array('param1', array('arrayParamKey1' => '123')),　
      *                          //非必填，表示填了相应参数才会有相应返回结果
      *                          //参数必须要用一个数组包含
@@ -227,10 +228,20 @@ class BaseTestCase extends TestCase
             if (!empty($param['returnValue'])) {
                 $expectation->andReturn($param['returnValue']);
             }
+
+            if (!empty($param['andReturnValues'])) {
+                $expectation->andReturnValues($param['andReturnValues']);
+            }
+
+            if (!empty($param['throwException'])) {
+                $expectation->andThrow($param['throwException']);
+            }
         }
 
         $biz = $this->getBiz();
         $biz['@'.$alias] = $mockObj;
+
+        return $mockObj;
     }
 
     protected static function getContainer()
