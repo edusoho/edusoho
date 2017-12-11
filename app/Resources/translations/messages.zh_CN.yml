@@ -1584,6 +1584,7 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+course.course_files.re_try_convert_video_to_audio: 重转音频
 
 course.plan_overview: 计划概览
 

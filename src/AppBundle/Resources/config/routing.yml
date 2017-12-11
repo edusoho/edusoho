@@ -2060,6 +2060,11 @@ course_set_manage_delete_materials:
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
    methods: [POST]
 
+course_set_manage_video_to_audio_convert:
+   path:  /course_set/{id}/manage/file/{fileId}/convert_to_audio
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:convertToAudio }
+   methods: [POST]
+
 
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish

@@ -135,6 +135,24 @@ class CourseSetFileManageController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    public function convertToAudioAction($id, $fileId)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($id);
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException('File Not Found');
+        }
+
+        if (in_array($file['audioConvertStatus'], array('none', 'error'))) {
+            $this->getUploadFileService()->convertToAudio(array($file['globalId']));
+            $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
+        }
+
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
     public function deleteMaterialsAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
