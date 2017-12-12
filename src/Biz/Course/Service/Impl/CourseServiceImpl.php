@@ -208,7 +208,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourse($id, $fields)
     {
-        $originCourse = $this->tryManageCourse($id);
+        $this->tryManageCourse($id);
 
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
@@ -240,10 +240,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
-        
-        if (empty($originCourse['enableAudio']) && $course['enableAudio']) {
-            $this->vedioConvertAudio($course);
-        }
 
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -414,10 +410,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
-    //视频转音频
-    protected function vedioConvertAudio($course)
+    public function batchConvertAudio($courseId)
     {
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'video', true);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
         $medias = ArrayToolkit::column($activities, 'ext');
         $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
