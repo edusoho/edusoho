@@ -140,7 +140,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isFree',
                 'serializeMode',
                 'courseType',
-                'type'
+                'type',
+                'enableAudio',
             )
         );
 
@@ -227,7 +228,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'maxStudentNum',
                 'locked',
-                'enableAudio'
+                'enableAudio',
             )
         );
 
@@ -483,7 +484,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         if (!empty($fields['enableAudio'])) {
             $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
-            if ($audioPerssion != 'open') {
+            if ('open' != $audioPerssion) {
                 $this->createInvalidArgumentException('需要先申请为商业用户!');
             }
         }
