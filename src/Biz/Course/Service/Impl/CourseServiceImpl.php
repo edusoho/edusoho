@@ -213,6 +213,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+        $this->validatie($fields);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -226,6 +227,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'maxStudentNum',
                 'locked',
+                'enableAudio'
             )
         );
 
@@ -238,6 +240,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
+
         $this->dispatchEvent('course.update', new Event($course));
 
         return $course;
@@ -432,6 +435,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $result;
     }
 
+    public function batchConvertAudio($courseId)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
+        $medias = ArrayToolkit::column($activities, 'ext');
+        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
+    }
+
     protected function isTeacherAllowToSetRewardPoint()
     {
         $rewardPointSetting = $this->getSettingService()->get('reward_point', array());
@@ -467,6 +477,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return array($price, $coinPrice);
+    }
+
+    private function validatie($fields)
+    {
+        if ($fields['enableAudio'] == '1') {
+            $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
+            if ($audioPerssion != 'open') {
+                $this->createInvalidArgumentException('需要先申请为商业用户!');
+            }
+        }
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -2030,6 +2050,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 
     /**

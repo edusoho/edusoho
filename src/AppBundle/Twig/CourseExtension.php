@@ -9,6 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use AppBundle\Common\ArrayToolkit;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -41,7 +42,17 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'needApproval')),
             new \Twig_SimpleFunction('is_member_expired', array($this, 'isMemberExpired')),
             new \Twig_SimpleFunction('course_chapter_alias', array($this, 'getCourseChapterAlias')),
+            //课程视频转音频完成率
+            new \Twig_SimpleFunction('vedio_convert_completion', array($this, 'vedioConvertCompletion')),
         );
+    }
+
+    public function vedioConvertCompletion($courseId)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
+        $medias = ArrayToolkit::column($activities, 'ext');
+
+        return $this->getUploadFileService()->vedioConvertCompletion(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
     public function getCourseChapterAlias($type)
@@ -153,6 +164,22 @@ class CourseExtension extends \Twig_Extension
     protected function getMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->biz->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return 
+     */
+    protected function getUploadFileService()
+    {
+        return $this->biz->service('File:UploadFileService');
     }
 
     public function getName()

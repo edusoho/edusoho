@@ -479,6 +479,7 @@ class CourseManageController extends BaseController
 
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             if (!empty($data['goals'])) {
@@ -487,7 +488,11 @@ class CourseManageController extends BaseController
             if (!empty($data['audiences'])) {
                 $data['audiences'] = json_decode($data['audiences'], true);
             }
-            $this->getCourseService()->updateCourse($courseId, $data);
+            $updatedCourse = $this->getCourseService()->updateCourse($courseId, $data);
+            if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
+                $this->getCourseService()->batchConvertAudio($course['id']);
+            }
+
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
@@ -511,13 +516,14 @@ class CourseManageController extends BaseController
             );
         }
 
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
 
         return $this->render(
             'course-manage/info.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
+                'audioPerssion' => $audioPerssion,
             )
         );
     }

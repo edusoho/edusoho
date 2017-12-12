@@ -143,7 +143,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return round(($this->maxRate / 100) * $this->getCurrency()->convertToCoin($this->originPrice), 2);
     }
 
-    protected function smsCallback($orderItem)
+    protected function smsCallback($orderItem, $targetName)
     {
         try {
             $smsType = 'sms_'.$this->targetType.'_buy_notify';
@@ -151,7 +151,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
             if ($this->getSmsService()->isOpen($smsType)) {
                 $userId = $orderItem['user_id'];
                 $parameters = array();
-                $parameters['order_title'] = $orderItem['title'];
+                $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
                 $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
                 $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
                 $parameters['totalPrice'] = $price.'元';
