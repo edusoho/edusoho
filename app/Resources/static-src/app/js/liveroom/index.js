@@ -28,9 +28,10 @@ class Live {
           if (data.roomUrl) {
             let provider = $("#entry").data('provider');
             let $uapraser = new UAParser(navigator.userAgent);
-            console.log($uapraser.getBrowser());
-            let version = navigator.userAgent.match(/Version\/(.*?)\s/) || navigator.userAgent.match(/Chrome\/(\d+)/);
-            if (document.location.protocol ==='http:' && provider === 8 && version && version[1] >= 60) {
+            let browser = $uapraser.getBrowser();
+            let os = $uapraser.getOS();
+
+            if (document.location.protocol ==='http:' && provider === 8 && os.name !== ('Android'||'iOS'||'Windows Phone'||'Windows Mobile') &&  browser.name === 'Chrome' && browser.major >= 60) {
               window.location.href = data.roomUrl;
             }
 

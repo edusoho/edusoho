@@ -245,7 +245,7 @@ Activity.live.ended_notice: Live is finshished
 Activity.live.content_title: Live description
 Activity.live.entry_live_room: Enter the live classroom
 Activity.live.count_down_title: Countdown
-Activity.liva.not_created_notice: Live classroom not yet created
+Activity.live.not_created_notice: Live classroom not yet created
 
 Activity.audio_manage.length_required_error_hint: Please enter the duration
 Activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
