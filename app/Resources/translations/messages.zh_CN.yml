@@ -1243,7 +1243,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -1945,7 +1946,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
