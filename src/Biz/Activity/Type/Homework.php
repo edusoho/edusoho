@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use AppBundle\Common\Exception\InvalidArgumentException;
 
 class Homework extends Activity
 {
@@ -122,7 +121,7 @@ class Homework extends Activity
             'finishCondition',
         ))
         ) {
-            throw new InvalidArgumentException('homework fields is invalid');
+            throw $this->createInvalidArgumentException('homework fields is invalid');
         }
 
         $filterFields = ArrayToolkit::parts($fields, array(
