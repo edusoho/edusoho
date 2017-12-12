@@ -106,7 +106,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $media = json_decode($fields['media'], true);
             $fields['mediaSource'] = $media['source'];
 
-            $this->getCourseService()->converAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
+            $this->getCourseService()->convertAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
         }
 
         return $fields;

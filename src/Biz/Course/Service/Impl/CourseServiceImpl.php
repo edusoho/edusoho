@@ -378,12 +378,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
-    public function converAudioByCourseIdAndMediaId($courseId, $mediaId)
+    public function convertAudioByCourseIdAndMediaId($courseId, $mediaId)
     {
         $course = $this->tryManageCourse($courseId);
         $storage = $this->getSettingService()->get('storage', array('upload_mode' => 'local'));
 
-        if ('0' == $course['enableAudio'] || 'local' == $storage['upload_mode']) {
+        if (empty($course['enableAudio']) || 'local' == $storage['upload_mode']) {
             return false;
         }
 
@@ -481,7 +481,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     private function validatie($fields)
     {
-        if ($fields['enableAudio'] == '1') {
+        if (!empty($fields['enableAudio'])) {
             $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
             if ($audioPerssion != 'open') {
                 $this->createInvalidArgumentException('需要先申请为商业用户!');
