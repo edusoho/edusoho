@@ -3,7 +3,6 @@
 namespace Tests\Unit\Component\Export;
 
 use Biz\BaseTestCase;
-use AppBundle\Component\Export\Factory;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\Exporter;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,7 +40,7 @@ class ExporterTest extends BaseTestCase
         $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
         $titles = ReflectionUtils::invokeMethod($expoter, 'transTitles');
 
-        $this->assertArrayEquals(array('标题'), $titles);  
+        $this->assertArrayEquals(array('标题'), $titles);
     }
 
     public function testGetPageConditions()
@@ -80,21 +79,17 @@ class ExpoertWrap extends Exporter
 
     public function getContent($start, $limit)
     {
-
     }
 
     public function canExport()
     {
-
     }
 
     public function getCount()
     {
-
     }
 
     public function buildCondition($conditions)
     {
-
     }
 }
