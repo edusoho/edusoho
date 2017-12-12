@@ -6,6 +6,7 @@
   <ul class="task-list task-list-md task-list-hover js-task-list-ul infinite-container">
     {# 选修任务不显示 #}
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
+      {% set file = item.activity.ext.file|default() %}
       {% if item.itemType == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter infinite-item">
           <i class="es-icon es-icon-menu left-menu"></i>
