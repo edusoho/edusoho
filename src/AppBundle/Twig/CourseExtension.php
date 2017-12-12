@@ -43,16 +43,16 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_member_expired', array($this, 'isMemberExpired')),
             new \Twig_SimpleFunction('course_chapter_alias', array($this, 'getCourseChapterAlias')),
             //课程视频转音频完成率
-            new \Twig_SimpleFunction('video_convert_completion', array($this, 'videoConvertCompletion')),
+            new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
         );
     }
 
-    public function videoConvertCompletion($courseId)
+    public function getAudioConvertionStatus($courseId)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
         $medias = ArrayToolkit::column($activities, 'ext');
 
-        return $this->getUploadFileService()->videoConvertCompletion(array_unique(ArrayToolkit::column($medias, 'mediaId')));
+        return $this->getUploadFileService()->getAudioConvertionStatus(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
     public function getCourseChapterAlias($type)

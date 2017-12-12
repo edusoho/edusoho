@@ -84,7 +84,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     //视频转音频的完成情况
-    public function videoConvertCompletion($ids)
+    public function getAudioConvertionStatus($ids)
     {   
         if (empty($ids)) {
             return '0';
