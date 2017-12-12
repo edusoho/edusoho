@@ -19,7 +19,7 @@ class Factory
      *
      * @return Exporter
      */
-    public function create($name, $conditions)
+    public function create($name, $conditions = array())
     {
         $export = $this->exportMap($name);
 
