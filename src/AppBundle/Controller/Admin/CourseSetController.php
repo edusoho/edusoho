@@ -61,7 +61,7 @@ class CourseSetController extends BaseController
                 'classrooms' => $classroomCourses,
                 'filter' => $filter,
                 'courseSetStatusNum' => $courseSetStatusNum,
-                'coursesCount' => $coursesCount
+                'coursesCount' => $coursesCount,
             )
         );
     }
@@ -77,7 +77,7 @@ class CourseSetController extends BaseController
             'total' => empty($total) ? 0 : $total,
             'published' => empty($published) ? 0 : $published,
             'closed' => empty($closed) ? 0 : $closed,
-            'draft' => empty($draft) ? 0 : $draft
+            'draft' => empty($draft) ? 0 : $draft,
         );
     }
 
@@ -576,7 +576,7 @@ class CourseSetController extends BaseController
     public function courseListAction(Request $request, $id)
     {
         $conditions = array(
-            'courseSetId' => $id
+            'courseSetId' => $id,
         );
 
         $paginator = new Paginator(
@@ -598,7 +598,7 @@ class CourseSetController extends BaseController
         return $this->render('admin/course-set/course-list-modal.html.twig', array(
             'courses' => $courses,
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
@@ -620,7 +620,7 @@ class CourseSetController extends BaseController
             $conditions['categoryIds'] = $categorIds;
             unset($conditions['categoryId']);
         }
-        
+
         return $conditions;
     }
 
@@ -631,18 +631,16 @@ class CourseSetController extends BaseController
 
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         if ($filter == 'classroom') {
-            
             $classroomCourses = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
 
             $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
             $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
             $classrooms = ArrayToolkit::index($classrooms, 'id');
 
-            array_walk($classroomCourses, function(&$course, $key) use ($classrooms) {
+            array_walk($classroomCourses, function (&$course, $key) use ($classrooms) {
                 $course['classroomTitle'] = empty($classrooms[$course['classroomId']]) ? '' : $classrooms[$course['classroomId']]['title'];
             });
             $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseSetId');
-
         } elseif ($filter == 'vip') {
             $courseSets = $this->_fillVipCourseSetLevels($courseSets);
         } else {
