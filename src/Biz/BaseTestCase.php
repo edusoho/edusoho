@@ -205,6 +205,7 @@ class BaseTestCase extends TestCase
      *          'runTimes' => 1 //非必填，表示跑第几次会出相应结果, 不填表示无论跑多少此，结果都一样
      *      )
      *  )
+     *
      * @return \Mockery\MockInterface
      */
     protected function mockBiz($alias, $params = array())

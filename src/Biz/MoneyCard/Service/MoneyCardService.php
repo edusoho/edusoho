@@ -58,4 +58,8 @@ interface MoneyCardService
     public function unlockBatch($id);
 
     public function deleteBatch($id);
+
+    public function useMoneyCard($id, $fields);
+
+    public function receiveMoneyCard($token, $userId);
 }

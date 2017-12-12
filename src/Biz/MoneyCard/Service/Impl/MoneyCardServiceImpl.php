@@ -138,8 +138,8 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
 
-        if ($moneyCard['cardStatus'] == 'normal' || $moneyCard['cardStatus'] == 'receive') {
-            if ($moneyCard['cardStatus'] == 'receive') {
+        if ('normal' == $moneyCard['cardStatus'] || 'receive' == $moneyCard['cardStatus']) {
+            if ('receive' == $moneyCard['cardStatus']) {
                 $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
                 $batch = $this->getBatch($moneyCard['batchId']);
@@ -171,11 +171,11 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
         $batch = $this->getBatch($moneyCard['batchId']);
 
-        if ($batch['batchStatus'] == 'invalid') {
+        if ('invalid' == $batch['batchStatus']) {
             throw $this->createServiceException('批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！');
         }
 
-        if ($moneyCard['cardStatus'] == 'invalid') {
+        if ('invalid' == $moneyCard['cardStatus']) {
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
             if (!empty($card)) {
@@ -295,7 +295,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         foreach ($moneyCards as $moneyCard) {
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
-            if (!empty($card) && $card['status'] == 'invalid') {
+            if (!empty($card) && 'invalid' == $card['status']) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
                 $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
                 $message = "您的一张价值为{$batch['coin']}{$this->getSettingService()->get('coin.coin_name', '虚拟币')}的学习卡已经被管理员启用。";
@@ -409,7 +409,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             $password = $this->blendCrc32($uuid);
             $moneyCard = $this->getMoneyCardByPassword($password);
 
-            if (($moneyCard == null) && (!isset($this->tmpPasswords[$password]))) {
+            if ((null == $moneyCard) && (!isset($this->tmpPasswords[$password]))) {
                 break;
             }
         }
@@ -430,16 +430,11 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
     public function useMoneyCard($id, $fields)
     {
         try {
-            $user = $this->getCurrentUser();
-            if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException('user is not login.');
-            }
-
             $this->beginTransaction();
 
             $moneyCard = $this->getMoneyCard($id, true);
 
-            if ($moneyCard['cardStatus'] == 'recharged') {
+            if ('recharged' == $moneyCard['cardStatus']) {
                 $this->rollback();
 
                 return $moneyCard;
@@ -515,7 +510,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 );
             }
 
-            if ($batch['batchStatus'] == 'invalid') {
+            if ('invalid' == $batch['batchStatus']) {
                 $this->biz['db']->commit();
 
                 return array(
