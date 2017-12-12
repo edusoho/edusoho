@@ -86,16 +86,7 @@
       <!-- Tab panes -->
       <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_themes_config',{uri:themeUri}) }}">
         {% include 'admin/theme/tab-panel/left.html.twig' %}
-
-        <div class="tab-pane" id="top">
-          <div class="panel panel-default">
-              <div class="panel-heading">导航栏设置</div>
-              <div class="panel-body ">
-                  导航个数超过 <input type="text" class="form-control" style="display:inline;width: auto;"/> 个时，会通过"..." 收起，避免导航错位。
-              </div>
-          </div>
-        </div>
-
+        {% include 'admin/theme/tab-panel/nav.html.twig' with {navigation: themeConfig.navigation|default() }%}
         {% include 'admin/theme/tab-panel/maincolor.html.twig' %}
       </div>
     </div>

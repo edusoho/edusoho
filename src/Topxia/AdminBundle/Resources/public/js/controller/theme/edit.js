@@ -61,6 +61,12 @@ define(function(require, exports, module) {
             event.stopPropagation();
             themeManage.getElement().trigger('save_config');
         });
+
+        $("#theme-edit-content").on("change", 'input[type="text"]', function(event){
+            themeManage.getElement().trigger('save_config');
+            return false;
+        });
+
     };
 
     var sortList = function($list) {
