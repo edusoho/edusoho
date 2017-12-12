@@ -4684,8 +4684,8 @@ admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
-admin.course_manage.manage.status: 状态
-admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.status: 课程状态
+admin.course_manage.manage.creator: 创建者/时间
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -4703,6 +4703,11 @@ admin.course_manage.manage.auth_user: 核实用户
 admin.course_manage.manage.user_passwd: 用户密码
 admin.course_manage.manage.input_passwd_placeholder: 请输入你的登录密码
 admin.course_manage.manage.week_excellent_courses: 每周精品课程
+admin.course_manage.manage.course_num: 计划数
+admin.course_manage.manage.course_list.block_title: 计划详情
+admin.course_manage.manage.course_list.status: 计划状态
+admin.course_manage.manage.course_list.creator: 创建者
+admin.course_manage.manage.course_list.createdTime: 创建时间
 
 # 文件管理
 admin.course_manage.file.name_title: 文件管理
