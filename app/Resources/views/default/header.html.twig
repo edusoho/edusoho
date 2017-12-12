@@ -36,7 +36,6 @@
     </a>
   </div>
 
-  
   <nav class="collapse navbar-collapse">
     {# 导航栏模块 #}
     <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
@@ -45,130 +44,192 @@
 
     {# 个人操作模块 #}
     <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
-
       <ul class="nav user-nav">
         {% if app.user %}
-        <li class="user-avatar-li nav-hover cd-ml24">
-          <a href="javascript:;" class="dropdown-toggle user-avatar-toggle">
-            <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-          </a>
-          <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-dropdown hidden-sm hidden-xs hidden-md">
-            <div class="user-dropdown__info cd-mb24">
-              <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
-                <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-              </a>
-              <div class="user-dropdown__profile">
-                <div class="user-dropdown__nickname"><span>{{ app.user.nickname }}</span>{% if is_plugin_installed('Vip')%}<img class="user-dropdown__vip-icon" src="{{ asset('static-dist/app/img/vip/vip_icon_gold.png') }}">{% endif %}</div>
-                {% if is_plugin_installed('Vip') %}
-                  <div class="user-dropdown__rank cd-mv8">网校超级黄金会员</div>
-                {% endif %}
-                {% if is_plugin_installed('RewardPoint') %}
-                  <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">899</span></div>
-                {% endif %}
+          <li class="user-inform-li hidden-xs hidden-sm nav-hover">
+            {# 消息导航显示 #}
+            <a class="cd-inform"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
+            {# 消息导航下拉 #}
+            <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right inform-dropdown" role="menu">
+              {# tab切换 #}
+              <div class="clearfix inform-dropdown-head" role="tablist">
+                <a class="inform-dropdown-head__tab" href="#notification" role="tab" data-toggle="tab">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="new-info-dot"></span>{% endif %}</a>
+                <a class="inform-dropdown-head__tab" href="#message" role="tab" data-toggle="tab">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="new-info-dot"></span>{% endif %}</a>
+              </div>
+              {# tab切换内容 #}
+              <div class="tab-content">
+                {# 通知 #}
+                <div class="notification-content tab-pane active" role="tabpanel" id="notification">
+                  <div class="inform-dropdown-body">
+                    {% if app.user.newNotificationNum > 0 %}
+                      <a class="inform-dropdown-body__item notification-text" href="#">用户 <span class="color-primary">红木头</span> 已经关注了你</a>
+                      <a class="inform-dropdown-body__item notification-text" href="#">您有一张价值 1.00 元的优惠券领取成功</a>
+                      <a class="inform-dropdown-body__item notification-text" href="#">你正在学习的 E周在线教育发布了一个新的公告，快去看看吧。</a>
+                      <a class="inform-dropdown-body__item notification-text" href="#">系统通知： 你有一张优惠券可以领取</a>
+                      <a class="inform-dropdown-body__item notification-text" href="#">你正在学习的 UED 成长计划 发布了一个新的课程，快去学习吧。</a>
+                      <a class="inform-dropdown-body__item notification-text" href="#">你正在学习的 UED 成长计划 发布了一个新的课程，快去学习吧。</a>
+                    {% else %}
+                      <div class="inform-empty-status">
+                        <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
+                      srcset="{{ asset('static-dist/app/img/notice/null-notice.png') }} 1x, {{ asset('static-dist/app/img/notice/null-notice@2x.png') }} 2x"/>
+                        <div class="inform-empty-status__tip">暂无新的通知～</div>
+                      </div>
+                    {% endif %}
+
+                  </div>
+                  <div class="inform-dropdown-foot">
+                    <a href="{{ path('notification') }}">查看全部通知</a>
+                  </div>
+                </div>
+                {# 私信 #}
+                <div class="message-content tab-pane" role="tabpanel" id="message">
+                  <div class="inform-dropdown-body">
+                    {% if app.user.newMessageNum > 0 %}
+                      <a class="inform-dropdown-body__item clearfix" href="#">
+                        <div class="message-item__avatar">
+                          <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                        </div>
+                        <div class="message-item__info">
+                          <div class="text-overflow cd-mb8 cd-text-gray" title="">杨文云</div>
+                          <div class="text-overflow cd-text-gray-dark" title="">你好，能否请教一下如何在课中来没打开了</div>
+                        </div>
+                      </a>
+                      <a class="inform-dropdown-body__item clearfix" href="#">
+                        <div class="message-item__avatar">
+                          <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                        </div>
+                        <div class="message-item__info">
+                          <div class="text-overflow cd-mb8 cd-text-gray" title="">杨文云</div>
+                          <div class="text-overflow cd-text-gray-dark" title="">你好，能否请教一下如何在课中来没打开了</div>
+                        </div>
+                      </a>
+                      <a class="inform-dropdown-body__item clearfix" href="#">
+                        <div class="message-item__avatar">
+                          <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                        </div>
+                        <div class="message-item__info">
+                          <div class="text-overflow cd-mb8 cd-text-gray" title="">杨铁</div>
+                          <div class="text-overflow cd-text-gray-dark" title="">老师您讲得太棒了！</div>
+                        </div>
+                      </a>
+                      <a class="inform-dropdown-body__item clearfix" href="#">
+                        <div class="message-item__avatar">
+                          <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                        </div>
+                        <div class="message-item__info">
+                          <div class="text-overflow cd-mb8 cd-text-gray" title="">文云</div>
+                          <div class="text-overflow cd-text-gray-dark" title="">老师您讲得太棒了！</div>
+                        </div>
+                      </a>
+                      <a class="inform-dropdown-body__item clearfix" href="#">
+                        <div class="message-item__avatar">
+                          <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                        </div>
+                        <div class="message-item__info">
+                          <div class="text-overflow cd-mb8 cd-text-gray" title="">文云</div>
+                          <div class="text-overflow cd-text-gray-dark" title="">老师您康复科萨芬讲得太棒了！</div>
+                        </div>
+                      </a>
+                    {% else %}
+                      <div class="inform-empty-status">
+                        <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"
+                    srcset="{{ asset('static-dist/app/img/notice/null-message.png') }} 1x, {{ asset('static-dist/app/img/notice/null-message@2x.png') }} 2x"/>
+                        <div class="inform-empty-status__tip">暂无新的私信～</div>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="inform-dropdown-foot">
+                    <a href="{{ path('message') }}">查看全部私信</a>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="user-dropdown__link cd-mb24">
-              <a class="cd-link-gray" href="{{ path('my_orders') }}"><i class="cd-icon cd-icon-payment"></i>{{ 'homepage.header.account_menu'|trans }}</a>
-              <a class="cd-link-gray" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
+          </li>
+          <li class="user-avatar-li nav-hover cd-ml24">
+            <a href="javascript:;" class="dropdown-toggle user-avatar-toggle">
+              <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+            </a>
+            <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-dropdown hidden-sm hidden-xs hidden-md">
+              <div class="user-dropdown__info cd-mb24">
+                <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
+                  <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                </a>
+                <div class="user-dropdown__profile">
+                  <div class="user-dropdown__nickname"><span>{{ app.user.nickname }}</span>{% if is_plugin_installed('Vip')%}<img class="user-dropdown__vip-icon" src="{{ asset('static-dist/app/img/vip/vip_icon_gold.png') }}">{% endif %}</div>
+                  {% if is_plugin_installed('Vip') %}
+                    <div class="user-dropdown__rank cd-mv8">网校超级黄金会员</div>
+                  {% endif %}
+                  {% if is_plugin_installed('RewardPoint') %}
+                    <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">899</span></div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="user-dropdown__link cd-mb24">
+                <a class="cd-link-gray" href="{{ path('my_orders') }}"><i class="cd-icon cd-icon-payment"></i>{{ 'homepage.header.account_menu'|trans }}</a>
+                <a class="cd-link-gray" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
+              </div>
+              <div class="user-dropdown__logout"><a class="cd-link-gray" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
             </div>
-            <div class="user-dropdown__logout"><a class="cd-link-gray" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
-          </div>
-          <ul class="dropdown-menu hidden-lg" role="menu">
-            <div class="dropdown-header"><a class="cd-link-gray" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
-            <li><a href="{{path('my_orders')}}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
-            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
-            {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>
-            {% endif %}
-            {% if 'ROLE_TEACHER' in app.user.roles %}<li class="hidden-lg user-nav-li-my"><a href="{{ path('my') }}"><i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_teaching_menu'|trans}}</a></li>
-            {% endif %}
-            <li class="hidden-lg user-nav-li-my">
-              <a href="{{ path('my_courses_learning') }}">
-                <i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_learning_menu'|trans}}
-              </a>
-            </li>
-            <li class="hidden-lg hidden-md"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
-            <li class="hidden-lg hidden-md"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
-            {% if mobile %}
-              <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
-                <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a></li>
-            {% elseif setting('wap.enabled') == 1  %}
-              <li class="mobile-switch js-switch-mobile visible-xs"><a href="javascript:;">
-                <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
-              </li>
-            {% endif %}
-            <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
-          </ul>
-        </li>
-
-       {#  <li class="visible-lg nav-hover">
-          {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
-            <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
-          {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
-            <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
-          {% else %}
-            <a><i class="es-icon es-icon-mail"></i></a>
-          {% endif %}
-
-          <ul class="dropdown-menu" role="menu">
-            {% if not setting('esBar.enabled', 0) %}
-              <li>
-                <a href="{{ path('notification') }}">
-                  <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
-                  <i class="es-icon es-icon-notificationson"></i>{{'notification.user_notification'|trans}}
+            <ul class="dropdown-menu hidden-lg" role="menu">
+              <div class="dropdown-header"><a class="cd-link-gray" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
+              <li><a href="{{path('my_orders')}}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
+              <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
+              {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>
+              {% endif %}
+              {% if 'ROLE_TEACHER' in app.user.roles %}<li class="hidden-lg user-nav-li-my"><a href="{{ path('my') }}"><i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_teaching_menu'|trans}}</a></li>
+              {% endif %}
+              <li class="hidden-lg user-nav-li-my">
+                <a href="{{ path('my_courses_learning') }}">
+                  <i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_learning_menu'|trans}}
                 </a>
               </li>
-            {% endif %}
-            <li>
-              <a href="{{ path('message') }}">
-                <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
-                <i class="es-icon es-icon-mail"></i>{{'user.btn.send_message'|trans}}
-              </a>
-            </li>
-          </ul>
-        </li> #}
+              <li class="hidden-lg hidden-md"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
+              <li class="hidden-lg hidden-md"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
+              {% if mobile %}
+                <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
+                  <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a></li>
+              {% elseif setting('wap.enabled') == 1  %}
+                <li class="mobile-switch js-switch-mobile visible-xs"><a href="javascript:;">
+                  <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
+                </li>
+              {% endif %}
+              <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
+            </ul>
+          </li>
         {% else %}
-
-        {# 未登录状态 #}
-        <li class="user-avatar-li nav-hover visible-xs">
-          <a href="javascript:;" class="user-avatar-toggle">
-            <img class="cd-avatar cd-avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
-          </a>
-          <ul class="dropdown-menu" role="menu">
-            <li class="user-nav-li-login">
-              <a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
-                <i class="es-icon es-icon-denglu"></i>{{'homepage.header.login'|trans}}
-              </a>
-            </li>
-            <li class="user-nav-li-register">
-              <a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
-                <i class="es-icon es-icon-zhuce"></i>{{'homepage.header.register'|trans}}
-              </a>
-            </li>
-            {% if mobile %}
-              <li class="mobile-switch js-switch-pc"><a href="javascript:;">
-                <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a>
+          {# 未登录状态 #}
+          <li class="user-avatar-li nav-hover visible-xs">
+            <a href="javascript:;" class="user-avatar-toggle">
+              <img class="cd-avatar cd-avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="user-nav-li-login">
+                <a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
+                  <i class="es-icon es-icon-denglu"></i>{{'homepage.header.login'|trans}}
+                </a>
               </li>
-            {% elseif setting('wap.enabled') == 1  %}
-              <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
-                <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
+              <li class="user-nav-li-register">
+                <a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
+                  <i class="es-icon es-icon-zhuce"></i>{{'homepage.header.register'|trans}}
+                </a>
               </li>
-             {% endif %}
-          </ul>
-        </li>
+              {% if mobile %}
+                <li class="mobile-switch js-switch-pc"><a href="javascript:;">
+                  <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a>
+                </li>
+              {% elseif setting('wap.enabled') == 1  %}
+                <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
+                  <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
+                </li>
+               {% endif %}
+            </ul>
+          </li>
 
-        <li class="hidden-xs visitor-li visitor-login-li"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
-        <li class="hidden-xs visitor-li"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
+          <li class="hidden-xs visitor-li visitor-login-li"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
+          <li class="hidden-xs visitor-li"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
         {% endif %}
         {#{% include 'default/switch-language.html.twig' %}#}
       </ul>
-
-      {# 搜索框 #}
-     {#  <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
-        <div class="form-group">
-          <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{'homepage.header.search'|trans}}">
-          <button class="button es-icon es-icon-search"></button>
-        </div>
-      </form> #}
     </div>
   </nav>
 </header>
