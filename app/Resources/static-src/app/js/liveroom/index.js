@@ -1,3 +1,5 @@
+import UAParser from 'ua-parser-js';
+
 class Live {
   constructor() {
     this.init();
@@ -25,6 +27,8 @@ class Live {
 
           if (data.roomUrl) {
             let provider = $("#entry").data('provider');
+            let $uapraser = new UAParser(navigator.userAgent);
+            console.log($uapraser.getBrowser());
             let version = navigator.userAgent.match(/Version\/(.*?)\s/) || navigator.userAgent.match(/Chrome\/(\d+)/);
             if (document.location.protocol ==='http:' && provider === 8 && version && version[1] >= 60) {
               window.location.href = data.roomUrl;
