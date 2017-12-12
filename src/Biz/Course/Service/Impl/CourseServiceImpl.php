@@ -371,6 +371,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $newCourse;
     }
 
+    public function batchConvertAudio($courseId)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
+        $medias = ArrayToolkit::column($activities, 'ext');
+        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
+    }
+
     public function converAudioByCourseIdAndMediaId($courseId, $mediaId)
     {
         $course = $this->tryManageCourse($courseId);
@@ -433,13 +440,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $result;
-    }
-
-    public function batchConvertAudio($courseId)
-    {
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
-        $medias = ArrayToolkit::column($activities, 'ext');
-        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
     protected function isTeacherAllowToSetRewardPoint()
@@ -2050,14 +2050,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return UploadFileService
-     */
-    protected function getUploadFileService()
-    {
-        return $this->createService('File:UploadFileService');
     }
 
     /**

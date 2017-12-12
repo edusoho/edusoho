@@ -113,10 +113,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function convertPermission()
     {
-        // $permissions = array('open', 'potential', 'unopen');
+        $permissions = array('open', 'potential', 'unopen');
 
-        // return $permissions[rand(0, 2)];
-        return 'open';
+        return $permissions[rand(0, 2)];
     }
 
     public function deleteFile($file)
