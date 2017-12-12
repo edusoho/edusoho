@@ -41,22 +41,30 @@
         line-height: 1;
       }
       .cd-inform {
-        padding: 16px;
+        padding: 16px 0 16px 16px;
         i {
           font-size: 24px;
         }
       }
       .cd-inform-num {
         position: absolute;
-        top: 0;
+        top: 12px;
+        right: -4px;
         width: 16px;
         height: 16px;
+        text-align: center;
         background-color: @brand-danger;
         font-size: 12px;
         line-height: 1;
         .cd-border-radius(50%);
         color: #fff;
         border: 2px solid #fff;
+      }
+      .inform-dropdown {
+        padding: 0;
+        width: 280px;
+        height: 400px;
+        .cd-border-radius;
       }
     }
   }
@@ -145,3 +153,85 @@
 }
 
 // 通知信息
+.inform-dropdown-head {
+  .cd-box-shadow-inset(0 -1px 0 0);
+}
+.inform-dropdown-head__tab {
+  float: left;
+  padding: 16px 0;
+  width: 140px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  color: @cd-gray;
+  &:first-child {
+    .cd-box-shadow-inset(-1px 0 0 0);
+  }
+}
+
+.inform-dropdown-body {
+  height: 310px;
+  overflow: scroll;
+}
+
+.inform-dropdown-body__item {
+  padding: 16px 24px;
+  display: inline-block;
+  width: 100%;
+  .cd-box-shadow-inset(0 -1px 0 0);
+  &:hover {
+    background-color: @cd-bg-light;
+  }
+}
+.new-info-dot {
+  margin-left: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 4px;
+  height: 4px;
+  .cd-border-radius(100%);
+  background-color: @brand-danger;
+}
+.notificationson-text {
+  font-size: 12px;
+  line-height: 20px;
+  color: @cd-gray;
+  &:hover {
+    color: @cd-gray;
+  }
+}
+
+.message-item__info {
+  float: right;
+  width: 184px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.message-item__avatar {
+  display: inline-block;
+  img {
+    width: 32px;
+    height: 32px;
+    .cd-border-radius(50%);
+  }
+}
+
+.inform-dropdown-foot {
+  padding: 16px 0;
+  z-index: 10;
+  text-align: center;
+  .cd-box-shadow-inset(0 1px 0 0);
+}
+
+.inform-empty-status {
+  padding: 64px 0;
+  text-align: center;
+}
+
+.inform-empty-status__tip {
+  font-size: 14px;
+  line-height: 16px;
+  color: @cd-gray-light;
+}
