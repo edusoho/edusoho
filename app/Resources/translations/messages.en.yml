@@ -3716,7 +3716,7 @@ admin.course_manage.manage.name: Name
 admin.course_manage.manage.price: Price
 admin.course_manage.manage.serialize_mode: 'Serialize Status'
 admin.course_manage.manage.status: Status
-admin.course_manage.manage.creator: Creator
+admin.course_manage.manage.creator: Creator/Date
 admin.course_manage.manage.manage_btn: Config
 admin.course_manage.manage.empty: 'No record'
 admin.course_manage.manage.category: Category
