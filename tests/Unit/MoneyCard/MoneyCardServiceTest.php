@@ -430,7 +430,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testMakeRandsWithBadArgs()
     {
         ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'makeRands', array(
-            1, 1, 1, 1
+            1, 1, 1, 1,
         ));
     }
 
@@ -452,7 +452,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testUUidWithNoSplit()
     {
         $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'uuid', array(
-            10, 'pre', false
+            10, 'pre', false,
         ));
 
         $this->assertEquals(13, strlen($result));
@@ -462,7 +462,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testUUidWithSplit()
     {
         $result = ReflectionUtils::invokeMethod($this->getMoneyCardService(), 'uuid', array(
-            10, 'pre', true
+            10, 'pre', true,
         ));
 
         $this->assertEquals(39, strlen($result));
@@ -516,7 +516,7 @@ class MoneyCardServiceTest extends BaseTestCase
         $moneyCard = $this->getFakeMoneyCard();
         $moneyCard['cardStatus'] = 'recharged';
         $this->mockBiz('MoneyCard:MoneyCardDao', array(
-            array('functionName' => 'get', 'returnValue' => $moneyCard)
+            array('functionName' => 'get', 'returnValue' => $moneyCard),
         ));
         $result = $this->getMoneyCardService()->useMoneyCard(1, array());
         $this->assertEquals($result, $moneyCard);
@@ -534,11 +534,11 @@ class MoneyCardServiceTest extends BaseTestCase
             array('functionName' => 'update'),
         ));
         $this->mockBiz('Pay:AccountService', array(
-            array('functionName' => 'transferCoin')
+            array('functionName' => 'transferCoin'),
         ));
         $this->mockBiz('Card:CardService', array(
             array('functionName' => 'getCardByCardIdAndCardType', 'returnValue' => null),
-            array('functionName' => 'addCard')
+            array('functionName' => 'addCard'),
         ));
         $result = $this->getMoneyCardService()->useMoneyCard(1, array('rechargeUserId' => 1));
         $this->assertEquals($moneyCard, $result);
@@ -556,11 +556,11 @@ class MoneyCardServiceTest extends BaseTestCase
             array('functionName' => 'update'),
         ));
         $this->mockBiz('Pay:AccountService', array(
-            array('functionName' => 'transferCoin')
+            array('functionName' => 'transferCoin'),
         ));
         $this->mockBiz('Card:CardService', array(
             array('functionName' => 'getCardByCardIdAndCardType', 'returnValue' => array('id' => 1)),
-            array('functionName' => 'updateCardByCardIdAndCardType')
+            array('functionName' => 'updateCardByCardIdAndCardType'),
         ));
         $result = $this->getMoneyCardService()->useMoneyCard(1, array('rechargeUserId' => 1));
         $this->assertEquals($moneyCard, $result);
@@ -572,7 +572,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testUseMoneyCardWithException()
     {
         $this->mockBiz('MoneyCard:MoneyCardDao', array(
-            array('functionName' => 'get', 'throwException' => new \Exception),
+            array('functionName' => 'get', 'throwException' => new \Exception()),
         ));
         $this->getMoneyCardService()->useMoneyCard(1, array());
     }
@@ -580,7 +580,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardWithEmptyToken()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => null)
+            array('functionName' => 'verifyToken', 'returnValue' => null),
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 1);
         $this->assertEquals(array(
@@ -592,7 +592,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardWithEmptyBatch()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1))
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
         ));
         $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
             array('functionName' => 'getBatchByToken', 'returnValue' => null),
@@ -607,7 +607,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardWithBadBatchStatus()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1))
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
         ));
         $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
             array('functionName' => 'getBatchByToken', 'returnValue' => array('batchStatus' => 'invalid')),
@@ -622,7 +622,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardWithHasReceived()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1))
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
         ));
         $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
             array('functionName' => 'getBatchByToken', 'returnValue' => array('id' => 1, 'batchStatus' => 'ok')),
@@ -640,7 +640,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardWithEmptyCards()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1))
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
         ));
         $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
             array('functionName' => 'getBatchByToken', 'returnValue' => array('id' => 1, 'batchStatus' => 'ok')),
@@ -658,7 +658,7 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardSuccess()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1))
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
         ));
         $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
             array('functionName' => 'getBatchByToken', 'returnValue' => array('id' => 1, 'batchStatus' => 'ok')),
@@ -667,7 +667,7 @@ class MoneyCardServiceTest extends BaseTestCase
 
         $moneyCard = $this->getFakeMoneyCard();
         $moneyCards = array(
-            $moneyCard
+            $moneyCard,
         );
         $this->mockBiz('MoneyCard:MoneyCardDao', array(
             array('functionName' => 'search', 'andReturnValues' => array(null, $moneyCards)),
@@ -677,7 +677,7 @@ class MoneyCardServiceTest extends BaseTestCase
         ));
         $this->mockBiz('Card:CardService', array(
             array('functionName' => 'addCard'),
-            array('functionName' => 'updateCardByCardIdAndCardType')
+            array('functionName' => 'updateCardByCardIdAndCardType'),
         ));
         $result = $this->getMoneyCardService()->receiveMoneyCard('', 1);
         $this->assertEquals(array(
@@ -693,10 +693,10 @@ class MoneyCardServiceTest extends BaseTestCase
     public function testReceiveMoneyCardWithException()
     {
         $this->mockBiz('User:TokenService', array(
-            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1))
+            array('functionName' => 'verifyToken', 'returnValue' => array('token' => 1)),
         ));
         $this->mockBiz('MoneyCard:MoneyCardBatchDao', array(
-            array('functionName' => 'getBatchByToken', 'throwException' => new \Exception),
+            array('functionName' => 'getBatchByToken', 'throwException' => new \Exception()),
         ));
         $this->getMoneyCardService()->receiveMoneyCard('', 1);
     }
