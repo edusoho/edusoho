@@ -6868,3 +6868,18 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+
+user.learn.statistics.start_time: 起始时间
+user.learn.statistics.end_time: 结束时间
+user.learn.statistics.default.search: 默认排序
+user.learn.statistics.search: 搜索
+user.learn.statistics.nickname: 用户名
+user.learn.statistics.join.classroom.num: 加入班级数
+user.learn.statistics.exit.classroom.num: 退出班级数
+user.learn.statistics.join.course.num: 加入计划数
+user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.finished.task.num: 学完任务数
+user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.actual.amount: 消费总额(元)
+user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 用户统计数据生成中(数据量越大, 生成周期越久，一般3-4天左右)

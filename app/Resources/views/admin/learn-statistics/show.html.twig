@@ -38,10 +38,11 @@
         </tr>
       </thead>
       <tbody>
+      {% if isInit|default() %}
         {% if users is not empty %}
           {% for user in users %}
             {% set statistic = statistics[user.id]|default(null) %}
-             <tr>
+              <tr>
               <td>
                 {% if has_permission('admin_user_manage') %}
                   <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:user.id}) }}">{{ user.nickname|default('--') }}</a>
@@ -64,8 +65,14 @@
           {% endfor %}
         {% else %}
           <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.empty'|trans}}</div></td></tr>
-        {% endif %}
+        {% endif %}   
+      {% else %}
+        <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.init'|trans}}</div></td></tr>   
+      {% endif %}
       </tbody>
     </table>
-    {{ admin_macro.paginator(paginator) }}
+
+    {% if isInit|default() %}
+      {{ admin_macro.paginator(paginator) }}
+    {% endif %}
 {% endblock %}
