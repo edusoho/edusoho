@@ -1899,7 +1899,7 @@ course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
-activity.liva.not_created_notice: 直播教室尚未创建！
+activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
 course.cover_image: 封面图片
