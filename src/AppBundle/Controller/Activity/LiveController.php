@@ -128,24 +128,23 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $params['nickname'] = $user['nickname'];
 
         /**
-         * @var int $provider
-         * last record: 2017-12-12
-         * '1'=>'vhall',
-         * '2'=>'soooner',
-         * '3'=>'sanmang',
-         * '4'=>'gensee',
-         * '5'=>'longinus',
-         * '6'=>'training',
-         * '7'=>'talkFun',
-         * '8'=>'athena', //ES直播
+         * @var int
+         *          last record: 2017-12-12
+         *          '1'=>'vhall',
+         *          '2'=>'soooner',
+         *          '3'=>'sanmang',
+         *          '4'=>'gensee',
+         *          '5'=>'longinus',
+         *          '6'=>'training',
+         *          '7'=>'talkFun',
+         *          '8'=>'athena', //ES直播
          */
-        $provider = empty($activity['ext']['liveId']) ? 0 : $activity['ext']['liveId'];
+        $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
 
         return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId' => $activity['ext']['liveId'],
             'params' => array('courseId' => $courseId, 'activityId' => $activityId, 'provider' => $provider),
         ), $params);
-
     }
 
     public function liveReplayAction($courseId, $activityId)

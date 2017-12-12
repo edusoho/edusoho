@@ -24,6 +24,12 @@ class Live {
           }
 
           if (data.roomUrl) {
+            let provider = $("#entry").data('provider');
+            let version = navigator.userAgent.match(/Version\/(.*?)\s/) || navigator.userAgent.match(/Chrome\/(\d+)/);
+            if (document.location.protocol ==='http:' && provider === 8 && version && version[1] >= 60) {
+              window.location.href = data.roomUrl;
+            }
+
             clearInterval(intervalId);
             self.isLiveRoomOpened = true;
             let html = '<iframe name="classroom" src="' + data.roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
