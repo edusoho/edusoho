@@ -89,7 +89,7 @@ class ExerciseTest extends BaseTypeTestCase
                 array(
                     'functionName' => 'searchTasks',
                     'returnValue' => array(array('id' => 12, 'title' => 'title')),
-                    'withParams' => array(array('courseId' => 11, 'copyId' => 11,), array(), 0, 1),
+                    'withParams' => array(array('courseId' => 11, 'copyId' => 11), array(), 0, 1),
                 ),
             )
         );
@@ -107,7 +107,7 @@ class ExerciseTest extends BaseTypeTestCase
                 array(
                     'functionName' => 'searchTasks',
                     'returnValue' => array(array('id' => 12, 'title' => 'title')),
-                    'withParams' => array(array('courseId' => 11, 'copyId' => 11,), array(), 0, 1),
+                    'withParams' => array(array('courseId' => 11, 'copyId' => 11), array(), 0, 1),
                 ),
             )
         );

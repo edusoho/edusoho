@@ -252,8 +252,8 @@ class ExerciseTest extends BaseTypeTestCase
             )
         );
         $result = ReflectionUtils::invokeMethod($type, 'findQuestionsByCopydIdsAndCourseSetId', array(
-            array(2), 
-            2
+            array(2),
+            2,
         ));
         $this->assertEquals(array('id' => 2, 'courseSetId' => 2), $result);
     }
