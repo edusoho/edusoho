@@ -57,8 +57,8 @@
                 {{ '关闭' }}
               </label>
               <div>
-                <label>1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</label>
-                <label>2.当前转音频完成情况：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'查看详情'}}</a></label>
+                <label>1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</label>
+                <label>2.{{ 'course.video.convert.audio.status'|trans }}：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'course.video.convert.audio.detail'|trans }}</a></label>
               </div>
             </div>
           </div>

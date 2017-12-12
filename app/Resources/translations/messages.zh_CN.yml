@@ -8331,3 +8331,9 @@ user.learn.statistics.finished.task.num: 学完任务数
 user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
+
+course.to_be.biz.user.first: 需要先申请为商业用户!
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+

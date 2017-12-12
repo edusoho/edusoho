@@ -484,7 +484,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!empty($fields['enableAudio'])) {
             $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
             if ('open' != $audioPerssion) {
-                $this->createInvalidArgumentException('需要先申请为商业用户!');
+                $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
             }
         }
     }
