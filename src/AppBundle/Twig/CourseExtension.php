@@ -117,7 +117,7 @@ class CourseExtension extends \Twig_Extension
             return false;
         }
 
-        return $course['approval'] && $user['approvalStatus'] !== 'approved';
+        return $course['approval'] && 'approved' !== $user['approvalStatus'];
     }
 
     protected function isUserAvatarEmpty()
@@ -175,7 +175,7 @@ class CourseExtension extends \Twig_Extension
     }
 
     /**
-     * @return 
+     * @return
      */
     protected function getUploadFileService()
     {
