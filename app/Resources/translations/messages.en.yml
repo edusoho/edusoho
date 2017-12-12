@@ -1650,6 +1650,7 @@ course.live.replay_manage.lesson_add_content_title: 'Add playback video'
 course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, pleas wait ...'
+activity.live.not_created_notice: Live classroom not yet created!
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'
