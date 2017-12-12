@@ -371,7 +371,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $newCourse;
     }
 
-    public function batchConvertAudio($courseId)
+    public function batchConvert($courseId)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
         $medias = ArrayToolkit::column($activities, 'ext');
