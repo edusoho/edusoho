@@ -57,7 +57,8 @@ class CourseProduct extends Product implements OrderStatusCallback
 
     public function onPaid($orderItem)
     {
-        $this->smsCallback($orderItem);
+        $targetName = '课程';
+        $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
