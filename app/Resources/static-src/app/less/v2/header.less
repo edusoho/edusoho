@@ -60,6 +60,36 @@
   }
   .nav.navbar-nav,
   .nav.user-nav {
+    .user-manage-li {
+      padding: 14px 0;
+      a.user-manage-li__white-button {
+        padding-left: 12px !important;
+        padding-right: 6px !important;
+        background: #fff;
+        &:hover,
+        &:focus {
+          background-color: #fff;
+        }
+      }
+    }
+    .user-manage-dropdown {
+      padding: 0;
+      width: 96px;
+      top: 42px;
+      text-align: center;
+      .cd-border-radius;
+      > li > a {
+        padding: 16px 24px;
+        &:hover {
+          .cd-border-radius;
+        }
+      }
+      .user-student-manage {
+        color: #fff;
+      }
+    }
+  }
+  .nav.navbar-nav {
     > li {
       > a {
         padding: 22px 20px 20px;
@@ -101,7 +131,6 @@
       }
     }
   }
-
 }
 
 
