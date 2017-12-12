@@ -4,7 +4,7 @@ namespace Tests\Unit\Activity\Type;
 
 use AppBundle\Common\ReflectionUtils;
 
-class ExerciseTest extends BaseTypeTestCase
+class HomeworkTest extends BaseTypeTestCase
 {
     const TYPE = 'homework';
 
