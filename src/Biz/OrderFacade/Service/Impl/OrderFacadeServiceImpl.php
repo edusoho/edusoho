@@ -126,7 +126,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
         $price = empty($orderFields['create_extra']['price']) ? 0 : $orderFields['create_extra']['price'];
-        
+
         if ($price > 0 && !MathToolkit::isEqual($order['pay_amount'], MathToolkit::simple($price, 100))) {
             $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
         }
