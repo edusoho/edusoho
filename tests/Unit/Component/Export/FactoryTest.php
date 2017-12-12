@@ -26,7 +26,7 @@ class FactoryTest extends BaseTestCase
             'user-learn-statistics',
         );
 
-        foreach($map as $value) {
+        foreach ($map as $value) {
             $result = ReflectionUtils::invokeMethod($factory, 'exportMap', array($value));
             $this->assertNotEmpty($result);
         }
