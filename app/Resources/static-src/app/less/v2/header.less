@@ -39,6 +39,31 @@
         line-height: 20px;
         font-size: 14px;
         line-height: 1;
+        @media (max-width: @screen-sm-max) {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    }
+    > .visitor-li {
+      &.visitor-login-li {
+        margin-right: 40px;
+        @media (max-width: @screen-sm-max) {
+          margin-right: 20px;
+        }
+      }
+      > a {
+        padding: 22px 0 20px;
+      }
+    }
+  }
+  .nav.navbar-nav {
+    > li {
+      > a {
+        @media (max-width: @screen-sm-max) {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
       }
     }
   }
@@ -50,6 +75,25 @@
     }
   }
 
+}
+
+// 头部用户信息
+.navbar-user {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  @media(min-width: @screen-lg-min) {
+    right: 64px;
+  }
+  @media(max-width: @screen-xs-max) {
+    right: 5px;
+  }
+  &.left {
+    @media(min-width: @screen-sm-min) {
+      right: 50px;
+    }
+  }
 }
 
 // 头像下拉

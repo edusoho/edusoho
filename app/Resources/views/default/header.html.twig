@@ -48,11 +48,11 @@
 
       <ul class="nav user-nav">
         {% if app.user %}
-        <li class="user-avatar-li nav-hover">
+        <li class="user-avatar-li nav-hover cd-ml24">
           <a href="javascript:;" class="dropdown-toggle user-avatar-toggle">
             <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
-          <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-dropdown">
+          <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-dropdown hidden-sm hidden-xs hidden-md">
             <div class="user-dropdown__info cd-mb24">
               <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
                 <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
@@ -72,23 +72,22 @@
               <a class="cd-link-gray" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
             </div>
             <div class="user-dropdown__logout"><a class="cd-link-gray" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
-
-
-            {# <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li> #}
-          {#   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'homepage.header.personal_menu'|trans}}</a></li> #}
-            {# <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
-            <li class="hidden-lg user-nav-li-my">
-              <a href="{{ path('my') }}">
-                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'homepage.header.my_teaching_menu'|trans}}{% else %}{{'homepage.header.my_learning_menu'|trans}}{% endif %}
-              </a>
-            </li>
+          </div>
+          <ul class="dropdown-menu hidden-lg" role="menu">
+            <div class="dropdown-header"><a class="cd-link-gray" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
             <li><a href="{{path('my_orders')}}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
-
+            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
             {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>
             {% endif %}
-
-            <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
-            <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
+            {% if 'ROLE_TEACHER' in app.user.roles %}<li class="hidden-lg user-nav-li-my"><a href="{{ path('my') }}"><i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_teaching_menu'|trans}}</a></li>
+            {% endif %}
+            <li class="hidden-lg user-nav-li-my">
+              <a href="{{ path('my_courses_learning') }}">
+                <i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_learning_menu'|trans}}
+              </a>
+            </li>
+            <li class="hidden-lg hidden-md"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
+            <li class="hidden-lg hidden-md"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
             {% if mobile %}
               <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
                 <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a></li>
@@ -97,21 +96,9 @@
                 <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
               </li>
             {% endif %}
-            <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li> #}
-          </div>
+            <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
+          </ul>
         </li>
-
-        {# 我的教学／我的学习 #}
-        {# <li class="visible-lg">
-          <a href="{{ path('my') }}">
-            {% if 'ROLE_TEACHER' in app.user.roles %}
-              {{'homepage.header.my_course'|trans}}
-            {% else %}
-              {{'homepage.header.my_learning'|trans}}
-            {% endif %}
-          </a>
-        </li> #}
-
 
        {#  <li class="visible-lg nav-hover">
           {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
@@ -140,9 +127,11 @@
           </ul>
         </li> #}
         {% else %}
+
+        {# 未登录状态 #}
         <li class="user-avatar-li nav-hover visible-xs">
-          <a href="javascript:;" class="dropdown-toggle">
-            <img class="avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
+          <a href="javascript:;" class="user-avatar-toggle">
+            <img class="cd-avatar cd-avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">
             <li class="user-nav-li-login">
@@ -167,8 +156,8 @@
           </ul>
         </li>
 
-        <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
-        <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
+        <li class="hidden-xs visitor-li visitor-login-li"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
+        <li class="hidden-xs visitor-li"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
         {% endif %}
         {#{% include 'default/switch-language.html.twig' %}#}
       </ul>
