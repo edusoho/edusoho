@@ -293,7 +293,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @exceptedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testValidatie()
     {

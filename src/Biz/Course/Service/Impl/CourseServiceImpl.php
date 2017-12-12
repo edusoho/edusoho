@@ -480,12 +480,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
-    private function validatie($fields)
+    protected function validatie($fields)
     {
         if (!empty($fields['enableAudio'])) {
             $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
             if ('open' != $audioPerssion) {
-                $this->createInvalidArgumentException('需要先申请为商业用户!');
+                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
             }
         }
     }
