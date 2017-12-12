@@ -85,11 +85,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     //视频转音频的完成情况
     public function getAudioConvertionStatus($ids)
-    {   
+    {
         if (empty($ids)) {
             return '0';
         }
-        
+
         $completedCount = $this->getUploadFileDao()->count(array(
             'ids' => $ids,
             'type' => 'video',
@@ -97,7 +97,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'audioConvertStatus' => 'success',
         ));
 
-        return sprintf("%d/%d", $completedCount, count($ids));
+        return sprintf('%d/%d', $completedCount, count($ids));
     }
 
     public function getUploadFileInit($id)
