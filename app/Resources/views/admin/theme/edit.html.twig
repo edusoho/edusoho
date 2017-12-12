@@ -64,276 +64,39 @@
 
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
+      <div class="col-md-12">
         <a class="navbar-brand">{{'admin.setting.theme.manage.theme_edit'|trans}}</a>
         <ul class="nav navbar-nav navbar-right">
         <li><a href="{{ path('admin_setting_theme') }}"><i class="glyphicon glyphicon-remove"></i>{{'admin.setting.theme.manage.theme_cancel'|trans}}</a></li>
         <li><a href="{{ path('admin_confirm_themes_config',{uri:themeUri}) }}"><i class="glyphicon glyphicon-ok"></i> {{'admin.setting.theme.manage.theme_ok'|trans}}</a></li>
         </ul>
       </div>
-      <div class="col-md-1"></div>
     </div>
   </nav>
   <div class="container">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
+    <div class="col-md-12">
        <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#left" role="tab" data-toggle="tab">{{'admin.setting.theme.manage.components'|trans}}</a></li>
+        <li><a href="#top" role="tab" data-toggle="tab">{{'顶部'|trans}}</a></li>
         <li><a href="#maincolor" role="tab" data-toggle="tab">{{'admin.setting.theme.manage.coloring_scheme_btn'|trans}}</a></li>
         <a href="{{ path('admin_reset_currentTheme_config', {uri:themeUri}) }}" class="btn btn-primary pull-right">{{'admin.setting.theme.manage.all_reset'|trans}}</a>
       </ul>
 
       <!-- Tab panes -->
       <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_themes_config',{uri:themeUri}) }}">
-        <div class="tab-pane active" id="left">
-            <div class="panel panel-default">
-              <!-- Default panel contents -->
-              <div class="panel-heading clearfix">
-                <div class="col-md-4 ">
-                  {{'admin.setting.theme.manage.component_name'|trans}}
-                </div>
-                <div class="col-md-4">
-                  {{'admin.setting.theme.manage.custom_name'|trans}}
-                </div>
+        {% include 'admin/theme/tab-panel/left.html.twig' %}
 
-              </div>
-              <!-- List group -->
-              <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
-                {% for pendant in themeConfig.blocks.left|default([]) %}
-
-                  {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced:true,uri:themeUri} %}
-
-                {% endfor %}
-
-                {% for pendant in allConfig.blocks.left|default([]) %}
-                  {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
-
-                    {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced:false,uri:themeUri} %}
-
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-        </div>
-
-
-        <div class="tab-pane" id="maincolor">
+        <div class="tab-pane" id="top">
           <div class="panel panel-default">
-            <div class="panel-heading">{{'admin.setting.theme.manage.main_color'|trans}}</div>
-            <form class="panel-body form-inline radios theme-custom-color-block">
-              <div class="form-group">
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" checked="checked" name="maincolor" value="default">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#46c37b; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" checked="checked" name="maincolor" value="green-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#81d867; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="purple">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#773cec; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="purple-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#9e9abd; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="orange">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#ff7200; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="orange-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#f9b469; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="blue">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#0081e6; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="blue-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#4bbbfa; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="red">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#cf010e; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="maincolor" value="red-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#fd5f56; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
+              <div class="panel-heading">导航栏设置</div>
+              <div class="panel-body ">
+                  导航个数超过 <input type="text" class="form-control" style="display:inline;width: auto;"/> 个时，会通过"..." 收起，避免导航错位。
               </div>
-            </form>
-          </div>
-
-          <div class="panel panel-default">
-            <div class="panel-heading">{{'admin.setting.theme.manage.navigation_color_scheme'|trans}}</div>
-            <form class="panel-body form-inline radios theme-custom-navigationcolor-block">
-              <div class="form-group">
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" checked="checked" name="navigationcolor" value="default">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#212121; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="white">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#fff; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="green">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#46c37b; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="green-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#81d867; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="purple">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#773cec; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="purple-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#9e9abd; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="orange">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#ff7200; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="orange-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#f9b469; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="blue">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#0081e6; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="blue-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#4bbbfa; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="red">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#cf010e; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-                <div class="col-lg-3">
-                  <label class="input-group check-box">
-                    <span class="input-group-addon">
-                      <input type="radio" name="navigationcolor" value="red-light">
-                    </span>
-                    <div class="mod-cpanel-basic-color" style="background:#fd5f56; display:table-cell;height:35px"></div>
-                  </label>
-                </div>
-
-              </div>
-            </form>
           </div>
         </div>
+
+        {% include 'admin/theme/tab-panel/maincolor.html.twig' %}
       </div>
     </div>
   </div>
@@ -343,8 +106,6 @@
     </iframe>
     <div class="pm-iframe"></div>
   </div>
-
-  <div class="col-md-1"></div>
 
     {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
 
