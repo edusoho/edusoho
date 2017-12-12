@@ -140,7 +140,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isFree',
                 'serializeMode',
                 'courseType',
-                'type',
+                'type'
             )
         );
 
@@ -366,6 +366,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    public function converAudioByCourseIdAndMediaId($courseId, $mediaId)
+    {
+        $course = $this->tryManageCourse($courseId);
+        $storage = $this->getSettingService()->get('storage', array('upload_mode' => 'local'));
+
+        if ('0' == $course['enableAudio'] || 'local' == $storage['upload_mode']) {
+            return false;
+        }
+
+        $media = $this->getUploadFileService()->getFile($mediaId);
+
+        if (empty($media)) {
+            throw $this->createNotFoundException("No exist the media ID#{$mediaId}");
+        }
+
+        if ('cloud' != $media['storage'] || in_array($media['audioConvertStatus'], array('doing', 'success'))) {
+            return false;
+        }
+
+        $this->getUploadFileService()->retryTranscode(array($media['globalId']));
+        $this->getUploadFileService()->setAudioConvertStatus($media['id'], 'doing');
+
+        return true;
     }
 
     public function updateCourseRewardPoint($id, $fields)
@@ -2013,6 +2038,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 
     /**

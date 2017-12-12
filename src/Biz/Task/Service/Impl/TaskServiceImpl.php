@@ -106,28 +106,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             $media = json_decode($fields['media'], true);
             $fields['mediaSource'] = $media['source'];
 
-            $this->vedioConverAudio($activity['fromCourseId'], $media['id']);
+            $this->getCourseService()->converAudioByCourseIdAndMediaId($activity['fromCourseId'], $media['id']);
         }
 
         return $fields;
-    }
-
-    protected function vedioConverAudio($courseId, $mediaId)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $storage = $this->getSettingService()->get('storage', array('upload_mode' => 'local'));
-
-        if ('0' == $course['enableAudio'] || 'local' == $storage['upload_mode']) {
-            return false;
-        }
-
-        $media = $this->getUploadFileService()->getFile($mediaId);
-        if ('cloud' != $media['storage'] || in_array($media['audioConvertStatus'], array('doing', 'success'))) {
-            return false;
-        }
-
-        $this->getUploadFileService()->retryTranscode(array($media['globalId']));
-        $this->getUploadFileService()->setAudioConvertStatus($media['id'], 'doing');
     }
 
     protected function invalidTask($task)
@@ -1181,13 +1163,5 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
-    }
-
-    /**
-     * @return UploadFileService
-     */
-    protected function getUploadFileService()
-    {
-        return $this->createService('File:UploadFileService');
     }
 }

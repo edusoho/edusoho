@@ -11,7 +11,6 @@ use Biz\Task\Service\TaskResultService;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
-use AppBundle\Common\ReflectionUtils;
 
 class TaskServiceTest extends BaseTestCase
 {
@@ -742,75 +741,6 @@ class TaskServiceTest extends BaseTestCase
 
         $this->assertNotEmpty($result);
         $this->assertEquals(1, count($result));
-    }
-
-    public function testVedioConverAudioConditionOne()
-    {
-        $this->mockBiz('Course:CourseService');
-
-        $this->getCourseService()->shouldReceive('tryManageCourse')->andReturn(array(
-            'id' => 2,
-            'title' => '计划名称',
-            'enableAudio' => '0',
-        ));
-
-        $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'vedioConverAudio', array(1, 1));
-
-        $this->getCourseService()->shouldReceive('tryManageCourse');
-
-        $this->assertEquals($result, false);
-    }
-
-    public function testVedioConverAudioConditionTwo()
-    {
-        $this->mockBiz('Course:CourseService');
-        $this->mockBiz('System:SettingService');
-        $this->mockBiz('File:UploadFileService');
-
-        $this->getCourseService()->shouldReceive('tryManageCourse')->andReturn(array(
-            'id' => 2,
-            'title' => '计划名称',
-            'enableAudio' => '1',
-        ));
-
-        $this->getSettingService()->shouldReceive('get')->andReturn(array('upload_mode' => 'cloud'));
-
-        $this->getUploadFileService()->shouldReceive('getFile')->andReturn(array('id' => 1, 'storage' => 'local'));
-
-        $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'vedioConverAudio', array(1, 1));
-
-        $this->getCourseService()->shouldHaveReceived('tryManageCourse');
-        $this->getSettingService()->shouldHaveReceived('get');
-        $this->getUploadFileService()->shouldHaveReceived('getFile');
-
-        $this->assertEquals($result, false);
-    }
-
-    public function testVedioConverAudio()
-    {
-        $this->mockBiz('Course:CourseService');
-        $this->mockBiz('System:SettingService');
-        $this->mockBiz('File:UploadFileService');
-
-        $this->getCourseService()->shouldReceive('tryManageCourse')->andReturn(array(
-            'id' => 2,
-            'title' => '计划名称',
-            'enableAudio' => '1',
-        ));
-
-        $this->getSettingService()->shouldReceive('get')->andReturn(array('upload_mode' => 'cloud'));
-
-        $this->getUploadFileService()->shouldReceive('getFile')->andReturn(array('id' => 1, 'globalId' => 'f9bda3613f8447c39e96975629bff701', 'storage' => 'cloud', 'audioConvertStatus' => 'none'));
-        $this->getUploadFileService()->shouldReceive('retryTranscode');
-        $this->getUploadFileService()->shouldReceive('setAudioConvertStatus');
-
-        $result = ReflectionUtils::invokeMethod($this->getTaskService(), 'vedioConverAudio', array(1, 1));
-
-        $this->getCourseService()->shouldHaveReceived('tryManageCourse');
-        $this->getSettingService()->shouldHaveReceived('get');
-        $this->getUploadFileService()->shouldHaveReceived('getFile');
-        $this->getUploadFileService()->shouldHaveReceived('retryTranscode');
-        $this->getUploadFileService()->shouldHaveReceived('setAudioConvertStatus');
     }
 
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)
