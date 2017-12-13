@@ -38,9 +38,8 @@
         </tr>
       </thead>
       <tbody>
-      {% if isInit|default() %}
-        {% if users is not empty %}
-          {% for user in users %}
+      {% if isInit %}
+          {% for user in users|default() %}
             {% set statistic = statistics[user.id]|default(null) %}
               <tr>
               <td>
@@ -63,16 +62,16 @@
               <td><a href="{{ path('admin_user_learn_detail', {userId:user.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
             </tr>
           {% endfor %}
-        {% else %}
-          <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.empty'|trans}}</div></td></tr>
-        {% endif %}   
+          {% if users is empty %}
+            <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.empty'|trans}}</div></td></tr>
+          {% endif %}  
       {% else %}
         <tr><td colspan="20"><div class="empty">{{'user.learn.statistics.init'|trans}}</div></td></tr>   
       {% endif %}
       </tbody>
     </table>
 
-    {% if isInit|default() %}
+    {% if isInit %}
       {{ admin_macro.paginator(paginator) }}
     {% endif %}
 {% endblock %}
