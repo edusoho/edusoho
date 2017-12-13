@@ -19,20 +19,16 @@
             }
           %}
           <div class="user-dropdown__profile">
-            <div class="user-dropdown__nickname"><span>{{ app.user.nickname }}</span>{% if is_plugin_installed('Vip') and userVip|default(false) %}<img class="user-dropdown__vip-icon" src="{{ asset('static-dist/app/img/vip/vip_icon_bronze.png') }}">{% endif %}</div>
-            {% if is_plugin_installed('Vip') %}
-              {% if userVip|default(false) %}
-                <div class="user-dropdown__rank cd-mv8">{{ vip.rank|sub_text(15) }}</div>
-              {% else %}
-                <div class="user-dropdown__rank cd-mv8">普通会员</div>
-              {% endif %}
-            {% endif %}
-
-            {# 静态积分 #}
+            <div class="user-dropdown__nickname">
+              <span>{{ app.user.nickname }}</span>
+              {{ slot('header.user.logo', {user: app.user}) }}
+            </div>
+            {{ slot('header.user.info', {user: app.user}) }}
+             {# 静态积分 
             {% set reward = 899 %}
             {% if is_plugin_installed('RewardPoint') %}
               <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">{{ reward }}</span></div>
-            {% endif %}
+            {% endif %} #}
           </div>
         </div>
         <div class="user-dropdown__link cd-mb24">
