@@ -12,23 +12,12 @@
           <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
             <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
-          {# 静态会员等级，会员等级图标 #}
-          {% set userVip = true %}
-          {% set vip = {
-              'rank': '网校超级黄金开挂无敌乱入纵横捭阖江湖无敌手独孤求败会员',
-            }
-          %}
           <div class="user-dropdown__profile">
             <div class="user-dropdown__nickname">
               <span>{{ app.user.nickname }}</span>
               {{ slot('header.user.logo', {user: app.user}) }}
             </div>
             {{ slot('header.user.info', {user: app.user}) }}
-             {# 静态积分 
-            {% set reward = 899 %}
-            {% if is_plugin_installed('RewardPoint') %}
-              <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">{{ reward }}</span></div>
-            {% endif %} #}
           </div>
         </div>
         <div class="user-dropdown__link cd-mb24">
