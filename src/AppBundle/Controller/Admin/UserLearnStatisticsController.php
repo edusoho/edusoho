@@ -45,6 +45,7 @@ class UserLearnStatisticsController extends BaseController
             'users' => $users,
             'recordEndTime' => $recordEndTime,
             'isDefault' => $conditions['isDefault'],
+            'isInit' => $this->getInitStatus(),
         ));
     }
 
@@ -114,6 +115,23 @@ class UserLearnStatisticsController extends BaseController
             'startTime' => strtotime($startTime),
             'endTime' => strtotime($endTime) + 24 * 3600 - 1,
         );
+    }
+
+    private function getInitStatus()
+    {
+        $totalJob = $this->getSchedulerService()->searchJobs(array('name' => 'SyncUserTotalLearnStatisticsJob'), array(), 0, 1);
+        if (empty($totalJob)) {
+            return false;
+        }
+        $totalJob = reset($totalJob);
+
+        $pastDailyJob = $this->getSchedulerService()->searchJobs(array('name' => 'SyncUserLearnDailyPastLearnStatisticsJob'), array(), 0, 1);
+        if (empty($pastDailyJob)) {
+            return false;
+        }
+        $pastDailyJob = reset($pastDailyJob);
+
+        return (0 == $totalJob['enabled'] && 0 == $pastDailyJob['enabled']) ? true : false;
     }
 
     public function syncInfoAction(Request $request)
