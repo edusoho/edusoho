@@ -1,0 +1,6 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.page_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-live-calendar' %}

@@ -532,6 +532,10 @@ my_teaching_classrooms:
     path: /my/teaching/classrooms
     defaults: { _controller: AppBundle:My/Classroom:teaching }
 
+my_teaching_live_calendar:
+    path: /my/teaching/live/calendar
+    defaults: { _controller: AppBundle:My/CourseSet:teachingLivesCalendar }
+
 my_live_courses_learning:
     path: /my/learning/live
     defaults: { _controller: AppBundle:My/CourseSet:lives }

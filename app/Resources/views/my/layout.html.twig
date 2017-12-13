@@ -31,6 +31,11 @@
               <a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a>
             </li>
 
+            <li class="list-group-heading">直播课表</li>
+            <li class="list-group-item {% if side_nav == 'my-teaching-live-calendar' %} active {% endif %}">
+              <a href="{{ path('my_teaching_live_calendar') }}">直播课表</a>
+            </li>
+
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
               <a href="{{ path('my_teaching_classrooms') }}">{{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("classroom"|trans)}) }}
               </a>
