@@ -39,7 +39,7 @@ class LiveroomController extends BaseController
             'roomId' => $roomId,
             'params' => $params,
             'ticket' => $ticket,
-            'isSpeaker' => !empty($user['role']) ? ('speaker' == $user['role']) : false,
+            'liveRole' => !empty($user['role']) ? $user['role'] : 'student',
         ));
     }
 
