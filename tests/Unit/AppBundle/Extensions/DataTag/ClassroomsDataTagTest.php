@@ -10,5 +10,6 @@ class ClassroomsDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new ClassroomsDataTag();
+        $this->assertTrue(true);
     }
 }
