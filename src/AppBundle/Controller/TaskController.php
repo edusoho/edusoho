@@ -28,7 +28,8 @@ class TaskController extends BaseController
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            if (!empty($activity['ext'])) {
+            
+            if (!empty($activity['ext']) && !empty($activity['ext']['mediaId'])) {
                 $media = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
             }
 
