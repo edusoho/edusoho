@@ -9,6 +9,16 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ExporterTest extends BaseTestCase
 {
+    public function testExport()
+    {
+        $filesystem = new Filesystem();
+        $biz = $this->getBiz();
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array()); 
+        $result = $expoter->export();
+        $this->assertEquals(0, $result['success']);
+        $this->assertEquals('export.not_allowed', $result['message']);
+    }
+
     public function testAddContent()
     {
         $filesystem = new Filesystem();
@@ -112,6 +122,7 @@ class ExpoertWrap extends Exporter
 
     public function canExport()
     {
+        
     }
 
     public function getCount()
