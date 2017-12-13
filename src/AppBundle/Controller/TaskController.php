@@ -28,7 +28,11 @@ class TaskController extends BaseController
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            $media = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+            if (!empty($activity['ext'])) {
+                $media = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+            }
+
+            $media = !empty($media) ? $media : array();
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (ServiceAccessDeniedException $deniedException) {

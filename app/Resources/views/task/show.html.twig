@@ -43,7 +43,7 @@
 
       <div class="dashboard-footer">
         <div class="pull-left">
-          {% if setting('mobile.enabled')|default(false) and media.type == 'video' and media.storage == 'cloud' and media.audioConvertStatus == 'success' %}
+          {% if media is not empty and setting('mobile.enabled')|default(false) and media.type == 'video' and media.storage == 'cloud' and media.audioConvertStatus == 'success' %}
             {{ '手机端支持一键听课，快去试试...' }}
             <a href="{{ path('mobile') }}">（试一试）</a>
           {% endif %}
