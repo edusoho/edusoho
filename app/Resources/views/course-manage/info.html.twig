@@ -44,10 +44,11 @@
             </label>
           </div>
         </div>
-        {% if setting('storage.upload_mode') == 'cloud' and audioPerssion != 'unopen' %}
-          <div class="form-group" id="cc">
+        
+        {% if setting('storage.upload_mode') == 'cloud' and audioService != 'notAllowed' %}
+          <div class="form-group" id="audio-modal-id">
             <label for="" class="col-sm-2 control-label">{{ '音频听课（试用）' }}</label>
-            <div class="col-sm-8 radios" data-value="{{ audioPerssion }}" id="course-audio-mode">
+            <div class="col-sm-8 radios" data-value="{{ audioService }}" id="course-audio-mode">
               <label>
                 <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %} id="aa">
                 {{ '开启' }}

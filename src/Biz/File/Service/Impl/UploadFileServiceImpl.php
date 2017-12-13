@@ -29,9 +29,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         'cloud' => 'File:CloudFileImplementor',
     );
 
-    public function getAudioPerssion()
+    /**
+     * @return (opened, needOpen, notAllowed)
+     */
+    public function getAudioService()
     {
-        return $this->getFileImplementor('cloud')->convertPermission();
+        $audioService = $this->getFileImplementor('cloud')->getAudioService();
+
+        return 'opened';
     }
 
     public function getFile($id)

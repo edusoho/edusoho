@@ -516,14 +516,14 @@ class CourseManageController extends BaseController
             );
         }
 
-        $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
+        $audioService = $this->getUploadFileService()->getAudioService();
 
         return $this->render(
             'course-manage/info.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
-                'audioPerssion' => $audioPerssion,
+                'audioService' => $audioService,
             )
         );
     }
