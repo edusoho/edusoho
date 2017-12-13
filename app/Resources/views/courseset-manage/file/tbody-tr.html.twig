@@ -8,6 +8,8 @@
   {% set convertUrl = path('course_set_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
 {% endif %}
 
+{% set canRetryTranscode = (uploadFile.storage == 'cloud' and uploadFile.type == 'video') and (uploadFile.audioConvertStatus in ['error', 'none'] or uploadFile.convertStatus in ['error', 'none']) %}
+
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
   <td>
@@ -73,8 +75,8 @@
         {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
       {% endif %}
     <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">{{'course.course_files.subtitle_manage_btn'|trans}}</a>
-      {% if courseSet.enableAudio|default(true) and uploadFile.audioConvertStatus in ['error', 'none'] %}
-        <a href="javascript:;" class="convert-file-btn" data-url="{{ path('course_set_manage_video_to_audio_convert', {id:courseSet.id, fileId:uploadFile.id}) }}">{{'course.course_files.re_try_convert_video_to_audio'|trans}}</a>
+      {% if courseSet.enableAudio|default(true) and canRetryTranscode %}
+        <a href="javascript:;" class="convert-file-btn" data-url="{{ path('course_set_manage_retry_transcode', {id:courseSet.id, fileId:uploadFile.id}) }}">{{'course.course_files.re_try_convert_video_to_audio'|trans}}</a>
       {% endif %}
     {% endif %}
   </td>

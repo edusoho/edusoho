@@ -135,7 +135,7 @@ class CourseSetFileManageController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    public function convertToAudioAction($id, $fileId)
+    public function retryTranscodeAction($id, $fileId)
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
 
@@ -146,7 +146,7 @@ class CourseSetFileManageController extends BaseController
         }
 
         if (in_array($file['audioConvertStatus'], array('none', 'error'))) {
-            $this->getUploadFileService()->convertToAudio(array($file['globalId']));
+            $this->getUploadFileService()->retryTranscode(array($file['globalId']));
             $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
         }
 
