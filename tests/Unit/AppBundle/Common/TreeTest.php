@@ -49,7 +49,7 @@ class TreeTest extends BaseTestCase
         $tree = Tree::buildWithArray($this->getTestArray());
         $expect = array(2, 3, 4, 5, 6, 7);
         $tree = $tree->find(function ($tree) {
-            return $tree->data['id'] === 2;
+            return 2 === $tree->data['id'];
         });
 
         $this->assertArrayEquals($tree->column('id'), $expect);
