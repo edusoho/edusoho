@@ -55,6 +55,11 @@ Unit Test With PHP 5.5:
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit -c app/
+  only:
+    - tags
+    - master
+    - release
+    - trigger
 
 Unit Test With PHP 7.0 For Non-Develop:
   stage: test
@@ -85,8 +90,6 @@ Unit Test With PHP 7.0 For Develop:
     - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
     - /opt/sonar-scanner/bin/sonar-scanner
-  only:
-    - develop
 
 AT With Java And Selenium:
   stage: automation
