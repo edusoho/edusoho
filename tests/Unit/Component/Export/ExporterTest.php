@@ -9,6 +9,35 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ExporterTest extends BaseTestCase
 {
+    public function testAddContent()
+    {
+        $filesystem = new Filesystem();
+        $biz = $this->getBiz();
+        $filePath = $biz['topxia.upload.private_directory'].'/testcsv';
+        $filesystem->remove($filePath);
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array()); 
+        ReflectionUtils::invokeMethod($expoter, 'addContent', array(array('test' => '123'), 0, $filePath));
+
+        $result = file_get_contents($filePath.'0');
+        $result = unserialize($result);
+        $this->assertEquals('标题', $result[0][0]);
+        $this->assertEquals('123', $result['test']);
+    }
+
+    public function testUpdateFilePaths()
+    {
+        $filesystem = new Filesystem();
+        $biz = $this->getBiz();
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
+        $filePath = $biz['topxia.upload.private_directory'].'/testcsv';
+        $filesystem->remove($filePath);
+        $path = ReflectionUtils::invokeMethod($expoter, 'updateFilePaths', array($filePath, 1));
+        $this->assertEquals($biz['topxia.upload.private_directory'].'/testcsv1', $path);
+        $result = file_get_contents($filePath);
+        $result = unserialize($result);
+        $this->assertEquals($biz['topxia.upload.private_directory'].'/testcsv1', $result[0]);
+    }
+
     public function testBuildParameter()
     {
         $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
