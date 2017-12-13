@@ -72,13 +72,13 @@
                       <div class="inform-empty-status">
                         <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
                       srcset="{{ asset('static-dist/app/img/notice/null-notice.png') }} 1x, {{ asset('static-dist/app/img/notice/null-notice@2x.png') }} 2x"/>
-                        <div class="inform-empty-status__tip">暂无新的通知～</div>
+                        <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_notification'|trans }}</div>
                       </div>
                     {% endif %}
 
                   </div>
                   <div class="inform-dropdown-foot">
-                    <a href="{{ path('notification') }}">查看全部通知</a>
+                    <a href="{{ path('notification') }}">{{ 'homepage.header.check_all_notifications'|trans }}</a>
                   </div>
                 </div>
                 {# 私信 #}
@@ -134,12 +134,12 @@
                       <div class="inform-empty-status">
                         <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"
                     srcset="{{ asset('static-dist/app/img/notice/null-message.png') }} 1x, {{ asset('static-dist/app/img/notice/null-message@2x.png') }} 2x"/>
-                        <div class="inform-empty-status__tip">暂无新的私信～</div>
+                        <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_messages'|trans }}</div>
                       </div>
                     {% endif %}
                   </div>
                   <div class="inform-dropdown-foot">
-                    <a href="{{ path('message') }}">查看全部私信</a>
+                    <a href="{{ path('message') }}">{{ 'homepage.header.check_all_messages'|trans }}</a>
                   </div>
                 </div>
               </div>
