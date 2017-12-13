@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Common\Tests;
+namespace Tests\Unit\AppBundle\Common\Tests;
 
 use AppBundle\Common\ConvertIpToolkit;
 use Biz\BaseTestCase;
