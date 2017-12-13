@@ -57,13 +57,26 @@
               <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
                 <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
               </a>
+              {# 静态会员等级，会员等级图标 #}
+              {% set userVip = true %}
+              {% set vip = {
+                  'rank': '网校超级黄金开挂无敌乱入纵横捭阖江湖无敌手独孤求败会员',
+                }
+              %}
               <div class="user-dropdown__profile">
-                <div class="user-dropdown__nickname"><span>{{ app.user.nickname }}</span>{% if is_plugin_installed('Vip')%}<img class="user-dropdown__vip-icon" src="{{ asset('static-dist/app/img/vip/vip_icon_gold.png') }}">{% endif %}</div>
+                <div class="user-dropdown__nickname"><span>{{ app.user.nickname }}</span>{% if is_plugin_installed('Vip') and userVip|default(false) %}<img class="user-dropdown__vip-icon" src="{{ asset('static-dist/app/img/vip/vip_icon_bronze.png') }}">{% endif %}</div>
                 {% if is_plugin_installed('Vip') %}
-                  <div class="user-dropdown__rank cd-mv8">网校超级黄金会员</div>
+                  {% if userVip|default(false) %}
+                    <div class="user-dropdown__rank cd-mv8">{{ vip.rank|sub_text(15) }}</div>
+                  {% else %}
+                    <div class="user-dropdown__rank cd-mv8">普通会员</div>
+                  {% endif %}
                 {% endif %}
+
+                {# 静态积分 #}
+                {% set reward = 899 %}
                 {% if is_plugin_installed('RewardPoint') %}
-                  <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">899</span></div>
+                  <div class="user-dropdown__rank">{{ 'homepage.header.reward'|trans }}：<span class="color-warning">{{ reward }}</span></div>
                 {% endif %}
               </div>
             </div>
@@ -100,7 +113,7 @@
           </ul>
         </li>
 
-       {#  <li class="visible-lg nav-hover">
+        {# <li class="visible-lg nav-hover">
           {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
             <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
           {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
