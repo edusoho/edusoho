@@ -6875,6 +6875,11 @@ course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
 course.video.convert.audio.status: 当前转音频完成情况
 course.video.convert.audio.detail: 查看详情
+course.video.convert.client.listen: 听
+course.video.convert.client.click.listen: 手机端支持一键听课
+course.video.convert.client.try: '（试一试）'
+course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
+course.task.show.video.convert.client.notify: 不再提醒
 
 user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间
