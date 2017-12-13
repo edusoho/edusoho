@@ -79,8 +79,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
         }
-
         $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
+
+        return true;
     }
 
     //视频转音频的完成情况

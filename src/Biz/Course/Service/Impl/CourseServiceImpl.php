@@ -141,6 +141,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'courseType',
                 'type',
+                'enableAudio',
             )
         );
 
@@ -479,12 +480,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
-    private function validatie($fields)
+    protected function validatie($fields)
     {
         if (!empty($fields['enableAudio'])) {
             $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
             if ('open' != $audioPerssion) {
-                $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
+                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
             }
         }
     }
