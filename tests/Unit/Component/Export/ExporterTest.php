@@ -17,6 +17,12 @@ class ExporterTest extends BaseTestCase
         $result = $expoter->export();
         $this->assertEquals(0, $result['success']);
         $this->assertEquals('export.not_allowed', $result['message']);
+
+        $expoter->setCanExport(true);
+        $result = $expoter->export();
+        $this->assertEquals('finish', $result['status']);
+        $this->assertEquals('1000', $result['start']);
+        $this->assertEquals('1', $result['success']);
     }
 
     public function testAddContent()
@@ -118,11 +124,16 @@ class ExpoertWrap extends Exporter
 
     public function getContent($start, $limit)
     {
+        return array('test' => 'test1');
     }
 
     public function canExport()
     {
-        
+        if (empty($this->canExport)) {
+            return false;
+        }
+
+        return $this->canExport;
     }
 
     public function getCount()
@@ -131,5 +142,10 @@ class ExpoertWrap extends Exporter
 
     public function buildCondition($conditions)
     {
+    }
+
+    public function setCanExport($value)
+    {
+        $this->canExport = $value;
     }
 }
