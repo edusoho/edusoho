@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Common;
+namespace Tests\Unit\AppBundle\Common;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
-use Tests\Unit\Common\Tool\ReflectionTester;
+use Tests\Unit\AppBundle\Common\Tool\ReflectionTester;
 
 class ReflectionUtilsTest extends BaseTestCase
 {

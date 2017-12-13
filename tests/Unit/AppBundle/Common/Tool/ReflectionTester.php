@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Common\Tool;
+namespace Tests\Unit\AppBundle\Common\Tool;
 
 class ReflectionTester
 {
