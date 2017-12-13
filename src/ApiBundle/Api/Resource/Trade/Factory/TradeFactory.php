@@ -19,6 +19,9 @@ class TradeFactory
             case 'WechatPay_Js':
                 $tradeInstance = new WechatPayJsTrade();
                 break;
+            case 'WechatPay_App':
+                $tradeInstance = new WechatPayAppTrade();
+                break;
             case 'Alipay_LegacyExpress':
                 $tradeInstance = new AlipayLegacyExpressTrade();
                 break;

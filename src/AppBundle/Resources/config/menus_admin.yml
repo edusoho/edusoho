@@ -110,11 +110,10 @@ admin:
                         admin_login_record:
                             name: admin.user.basic.login_record_tab
                 admin_user_learn_statistics_manage:
-                    name: 用户数据统计
-                    visable: false
+                    name: admin.user.statistics_manage
                     children:
                       admin_user_learn_statistics:
-                        name: 用户数据统计
+                        name: admin.user.statistics_manage
                 admin_teacher:
                     name: admin.user.teacher_menu
                     children:
