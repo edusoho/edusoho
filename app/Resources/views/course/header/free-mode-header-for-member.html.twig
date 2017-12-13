@@ -36,12 +36,12 @@
           {% endfor %}
         </li>
       </ul>
-      {% if setting('mobile.enabled')|default(false) and course.isAudioOn|default(0) %}
+      {% if setting('mobile.enabled')|default(false) and course.enableAudio|default(0) %}
         <ul class="clearfix text-12 course-learn-list mt10">
           <li>
-            <span class="lump-sm color-lump bg-primary">{{ '听' }}</span>
-            {{ '手机端支持一键听课' }}
-            <a href="{{ path('mobile') }}" target="__blank">（试一试）</a>
+            <span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span>
+            {{ 'course.video.convert.client.click.listen'|trans }}
+            <a href="{{ path('mobile') }}" target="__blank">{{ 'course.video.convert.client.try'|trans }}</a>
           </li>
         </ul>
       {% endif %}

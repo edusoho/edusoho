@@ -44,9 +44,9 @@
       <div class="dashboard-footer">
         <div class="pull-left js-audio-convert-box">
           {% if media is not empty and setting('mobile.enabled')|default(false) and media.type == 'video' and media.storage == 'cloud' and media.audioConvertStatus == 'success' and not app.request.cookies.get('close-convert-audio-ad', false) %}
-            {{ '手机端支持一键听课，快去试试...' }}
-            <a href="{{ path('mobile') }}">（试一试）</a>
-            <a class="js-audio-convert-ad" href="javascript:;" data-cookie="close-convert-audio-ad"><i class="es-icon es-icon-icon_close_circle text-xlg"></i>不再提醒</a>
+            {{ 'course.task.show.video.convert.client.try'|trans }}
+            <a href="{{ path('mobile') }}">{{ 'course.video.convert.client.try'|trans }}</a>
+            <a class="js-audio-convert-ad" href="javascript:;" data-cookie="close-convert-audio-ad"><i class="es-icon es-icon-icon_close_circle text-xlg"></i>{{ 'course.task.show.video.convert.client.notify'|trans }}</a>
           {% endif %}
         </div>
         <div class="btn-group pull-left visible-xs js-mobile-btn" role="group">
