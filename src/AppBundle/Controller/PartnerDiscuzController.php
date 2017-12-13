@@ -104,7 +104,7 @@ class PartnerDiscuzController extends BaseController
                 return API_RETURN_FORBIDDEN;
             }
 
-            $user = $this->getUserService()->register($registration);
+            $user = $this->getUserService()->register($registration, array('email', 'binder'));
         } else {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
