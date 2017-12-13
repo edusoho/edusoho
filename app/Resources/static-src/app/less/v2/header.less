@@ -13,6 +13,7 @@
       }
     }
   }
+
   .nav.user-nav {
     > li {
       height: 56px;
@@ -57,38 +58,39 @@
         .cd-box-shadow-z(8px);
       }
     }
-  }
-  .nav.navbar-nav,
-  .nav.user-nav {
     .user-manage-li {
       padding: 14px 0;
-      a.user-manage-li__white-button {
-        padding-left: 12px !important;
-        padding-right: 6px !important;
-        background: #fff;
+      .user-manage-toggle {
+        padding-left: 12px;
+        padding-right: 6px;
+        background-color: #fff;
         &:hover,
         &:focus {
           background-color: #fff;
+          border-color: rgba(0, 0, 0, 0.16);
         }
       }
-    }
-    .user-manage-dropdown {
-      padding: 0;
-      width: 96px;
-      top: 42px;
-      text-align: center;
-      .cd-border-radius;
-      > li > a {
-        padding: 16px 24px;
-        &:hover {
-          .cd-border-radius;
-        }
+      .user-white-manage-toggle {
+        padding-left: 12px;
+        padding-right: 6px;
       }
-      .user-student-manage {
-        color: #fff;
+      .user-manage-dropdown {
+        padding: 0;
+        width: 96px;
+        top: 42px;
+        text-align: center;
+        .cd-border-radius;
+        .cd-box-shadow-z(8px);
+        > li > a {
+          padding: 16px 24px;
+          &:hover {
+            .cd-border-radius;
+          }
+        }
       }
     }
   }
+
   .nav.navbar-nav {
     > li {
       > a {
@@ -114,21 +116,10 @@
       }
     }
   }
-  .nav.navbar-nav {
-    > li {
-      > a {
-        @media (max-width: @screen-sm-max) {
-          padding-left: 10px;
-          padding-right: 10px;
-        }
-      }
-    }
-  }
+
   .nav > li.nav-more {
-    > a {
-      i {
-        font-size: 14px;
-      }
+    > a > i {
+      font-size: 14px;
     }
   }
 }

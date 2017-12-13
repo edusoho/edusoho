@@ -46,19 +46,23 @@
     <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
       <ul class="nav user-nav">
         {% if app.user %}
-          <li class="user-manage-li nav-hover visible-lg">
-            {% if has_permission('admin') or 'ROLE_TEACHER' in app.user.roles %}
-              <a class="dropdown-toggle btn cd-btn cd-btn-sm cd-btn-ghost-default {% if navigationcolor == 'white' %}user-manage-li__button{% else %}user-manage-li__white-button{% endif %}" href="javascript:;">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></a>
+          {% if has_permission('admin') or 'ROLE_TEACHER' in app.user.roles %}
+            <li class="user-manage-li nav-hover visible-lg">
+              <a class="btn cd-btn cd-btn-sm{% if navigationcolor == 'white' %} cd-btn-primary user-white-manage-toggle {% else %} user-manage-toggle cd-btn-default {% endif %}" href="javascript:;">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></a>
               <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-manage-dropdown" role="menu">
                 {% if has_permission('admin') %}<li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
                 {% endif %}
                 <li class="active"><a href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a></li>
                 <li><a href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a></li>
               </ul>
-            {% else %}
-              <a class="btn cd-btn cd-btn-sm cd-btn-ghost-primary user-student-manage js-student-manage" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
-            {% endif %}
-          </li>
+            </li>
+          {% else %}
+            <li class="user-manage-li visible-lg">
+              <a class="btn cd-btn cd-btn-sm{% if navigationcolor == 'white' %} cd-btn-primary user-white-manage-toggle{% else %} cd-btn-default {% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+            </li>
+          {% endif %}
+
+
           <li class="user-inform-li hidden-xs hidden-sm nav-hover cd-ml24">
             {# 消息导航显示 #}
             <a class="cd-inform"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
