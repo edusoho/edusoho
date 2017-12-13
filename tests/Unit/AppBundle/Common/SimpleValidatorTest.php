@@ -120,8 +120,8 @@ class SimpleValidatorTest extends BaseTestCase
         $this->assertEquals(true, $result);
         $result = SimpleValidator::phone('021-12345678');
         $this->assertEquals(true, $result);
-            //手机号
-            $result = SimpleValidator::phone('15757125300');
+        //手机号
+        $result = SimpleValidator::phone('15757125300');
         $this->assertEquals(false, $result);
         $result = SimpleValidator::phone('15757-125301');
         $this->assertEquals(false, $result);
