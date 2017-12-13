@@ -1,11 +1,47 @@
+@import '~common/variable.less';
+@import '~common/mixins.less';
+
+.navbar {
+  margin-bottom: 0;
+  z-index: 99;
+  .cd-border-radius(0);
+}
+
+.navbar-collapse {
+  border-top: none;
+}
+
 .es-header {
-  padding: 0 64px;
+  padding: 0 20px;
+  @media(min-width: @screen-lg-min) {
+    padding: 0 64px;
+  }
   height: 56px;
+  background: #212121;
+  border: none;
+  .container {
+    position: relative;
+  }
+  .collapse {
+    display: block;
+  }
   .cd-box-shadow;
   .navbar-header {
+    @media (max-width: @screen-xs-max) {
+      text-align: center;
+      float: none;
+      .navbar-brand {
+        display: inline-block;
+        float: none;
+      }
+    }
     .navbar-brand {
       padding: 13px 20px 13px 0;
+      @media (max-width: @screen-sm-max) {
+        padding: 13px 10px 13px 0;
+      }
       height: 56px;
+      line-height: 30px;
       color: #fff;
       img {
         height: 30px;
@@ -14,8 +50,12 @@
     }
   }
 
+  // 添加颜色
+
   .nav.user-nav {
+    float: right;
     > li {
+      float: left;
       height: 56px;
       .user-avatar-toggle {
         padding: 12px 0;
@@ -57,22 +97,31 @@
         .cd-border-radius;
         .cd-box-shadow-z(8px);
       }
+      > a {
+        color: @gray-medium;
+        .es-transition;
+        &:hover,
+        &:focus {
+          color: #fff;
+          background: none;
+          .es-transition;
+        }
+      }
     }
     .user-manage-li {
       padding: 14px 0;
       .user-manage-toggle {
         padding-left: 12px;
         padding-right: 6px;
+      }
+      .user-manage-toggle--color {
+        color: rgba(0, 0, 0, 0.88);
         background-color: #fff;
         &:hover,
         &:focus {
           background-color: #fff;
           border-color: rgba(0, 0, 0, 0.16);
         }
-      }
-      .user-white-manage-toggle {
-        padding-left: 12px;
-        padding-right: 6px;
       }
       .user-manage-dropdown {
         padding: 0;
@@ -89,22 +138,7 @@
         }
       }
     }
-  }
-
-  .nav.navbar-nav {
-    > li {
-      > a {
-        padding: 22px 20px 20px;
-        line-height: 20px;
-        font-size: 14px;
-        line-height: 1;
-        @media (max-width: @screen-sm-max) {
-          padding-left: 10px;
-          padding-right: 10px;
-        }
-      }
-    }
-    > .visitor-li {
+    .visitor-li {
       &.visitor-login-li {
         margin-right: 40px;
         @media (max-width: @screen-sm-max) {
@@ -113,11 +147,67 @@
       }
       > a {
         padding: 22px 0 20px;
+        line-height: 1;
+      }
+    }
+
+  }
+
+  // 添加颜色
+  .nav.navbar-nav {
+    @media (max-width: @screen-sm-max) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    > li {
+      > a {
+        padding: 22px 20px 20px;
+        font-size: 14px;
+        line-height: 1;
+        background: none;
+        color: @gray-medium;
+        .es-transition;
+        @media (max-width: @screen-sm-max) {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+      &.open.active >a,
+      &.open>a:hover, 
+      &.open>a:focus,
+      &.open>a,
+      &.active >a,
+      >a:hover, 
+      >a:focus {
+        background: none;
+        color: #fff;
+        // .es-transition;
+      }
+    }
+    .navbar-toggle {
+      padding: 5px 15px;
+      background: #1abc9c;
+      .icon-bar {
+        background: #fff;
       }
     }
   }
 
   .nav > li.nav-more {
+    li .dropdown-menu {
+      left: 100%;
+      top: 0;
+    }
+    &.open li:hover .dropdown-menu {
+      display: block;
+    }
+    .open > a,
+    .open.active >a,
+    .open > a:hover,
+    .open > a:focus {
+      background: @brand-primary !important;
+      color: #fff !important;
+    }
     > a > i {
       font-size: 14px;
     }

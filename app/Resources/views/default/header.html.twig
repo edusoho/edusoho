@@ -48,7 +48,7 @@
         {% if app.user %}
           {% if has_permission('admin') or 'ROLE_TEACHER' in app.user.roles %}
             <li class="user-manage-li nav-hover visible-lg">
-              <a class="btn cd-btn cd-btn-sm{% if navigationcolor == 'white' %} cd-btn-primary user-white-manage-toggle {% else %} user-manage-toggle cd-btn-default {% endif %}" href="javascript:;">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></a>
+              <a class="btn cd-btn cd-btn-sm user-manage-toggle{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white {% else %} user-manage-toggle--color cd-btn-default {% endif %}" href="javascript:;">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></a>
               <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-manage-dropdown" role="menu">
                 {% if has_permission('admin') %}<li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
                 {% endif %}
@@ -58,7 +58,7 @@
             </li>
           {% else %}
             <li class="user-manage-li visible-lg">
-              <a class="btn cd-btn cd-btn-sm{% if navigationcolor == 'white' %} cd-btn-primary user-white-manage-toggle{% else %} cd-btn-default {% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+              <a class="btn cd-btn cd-btn-sm user-manage-toggle{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white{% else %} cd-btn-default user-manage-toggle--color{% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
             </li>
           {% endif %}
 
