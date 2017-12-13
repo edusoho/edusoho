@@ -13,7 +13,7 @@ class ExporterTest extends BaseTestCase
     {
         $filesystem = new Filesystem();
         $biz = $this->getBiz();
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array()); 
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
         $result = $expoter->export();
         $this->assertEquals(0, $result['success']);
         $this->assertEquals('export.not_allowed', $result['message']);
@@ -31,7 +31,7 @@ class ExporterTest extends BaseTestCase
         $biz = $this->getBiz();
         $filePath = $biz['topxia.upload.private_directory'].'/testcsv';
         $filesystem->remove($filePath);
-        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array()); 
+        $expoter = new ExpoertWrap(self::$appKernel->getContainer(), array());
         ReflectionUtils::invokeMethod($expoter, 'addContent', array(array('test' => '123'), 0, $filePath));
 
         $result = file_get_contents($filePath.'0');
