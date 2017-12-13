@@ -8338,3 +8338,4 @@ user.learn.statistics.finished.task.num: 学完任务数
 user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
