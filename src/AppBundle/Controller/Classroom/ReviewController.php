@@ -97,7 +97,7 @@ class ReviewController extends BaseController
         } catch (\Exception $e) {
             $response = array('code' => 'error', 'message' => $e->getMessage());
         }
-        
+
         return $this->createJsonResponse($response);
     }
 
