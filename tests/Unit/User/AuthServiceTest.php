@@ -4,6 +4,8 @@ namespace Tests\Unit\User;
 
 use AppBundle\Common\SimpleValidator;
 use Biz\BaseTestCase;
+use Biz\User\CurrentUser;
+use AppBundle\Common\ReflectionUtils;
 
 // TODO
 
@@ -34,6 +36,94 @@ class AuthServiceTest extends BaseTestCase
         $this->assertEquals($user['email'], 'test@edusoho.com');
     }
 
+    public function testRegisterLimitValidator()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 2,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER'),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $condition = array(
+            'startTime' => time() - 24 * 3600,
+            'createdIp' => '127.0.0.1', 
+        );
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'countUsers',
+                    'returnValue' => 40,
+                    'withParams' => array($condition),
+                ),
+            )
+        );
+        $value = array('register_mode' => 'default', 'register_protective' => 'middle');
+        $this->getSettingService()->set('auth', $value);
+        $service = $this->getAuthService();
+        $result = ReflectionUtils::invokeMethod($service, 'registerLimitValidator', array(array('createdIp' => '127.0.0.1')));
+        $this->assertTrue($result);
+    }
+
+    public function testProtectiveRule()
+    {
+        $condition = array(
+            'startTime' => time() - 24 * 3600,
+            'createdIp' => '127.0.0.1', 
+        );
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'countUsers',
+                    'returnValue' => 40,
+                    'withParams' => array($condition),
+                    'runTimes' => 2,
+                ),
+                array(
+                    'functionName' => 'countUsers',
+                    'returnValue' => 5,
+                    'withParams' => array($condition),
+                    'runTimes' => 3,
+                ),
+                array(
+                    'functionName' => 'countUsers',
+                    'returnValue' => 2,
+                    'withParams' => array(array('startTime' => time() - 3600, 'createdIp' => '127.0.0.1')),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'countUsers',
+                    'returnValue' => 0,
+                    'withParams' => array(array('startTime' => time() - 3600, 'createdIp' => '127.0.0.1')),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $service = $this->getAuthService();
+        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('middle', '127.0.0.1'));
+        $this->assertFalse($result);
+
+        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
+        $this->assertFalse($result);
+
+        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('middle', '127.0.0.1'));
+        $this->assertTrue($result);
+
+        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
+        $this->assertFalse($result);
+
+        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('high', '127.0.0.1'));
+        $this->assertTrue($result);
+
+        $result = ReflectionUtils::invokeMethod($service, 'protectiveRule', array('default', '127.0.0.1'));
+        $this->assertTrue($result);
+    }
+
     //同步功能需要Discuz的安装支持，暂时不能测
     // public function testSyncLogin()
     // {
@@ -50,6 +140,58 @@ class AuthServiceTest extends BaseTestCase
     //     $this->getAuthService()->syncLogin($user['id']);
     //     $this->getSettingService()->delete('user_partner');
     // }
+
+    public function testSyncLoginWithDefaultAuthProvider()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserBindByTypeAndUserId',
+                    'returnValue' => array(),
+                    'withParams' => array('default', 2),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'getUserBindByTypeAndUserId',
+                    'returnValue' => array('id' => 2, 'fromId' => 2),
+                    'withParams' => array('default', 2),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result = $this->getAuthService()->syncLogin(2);
+        $this->assertEquals('', $result);
+
+        $result = $this->getAuthService()->syncLogin(2);
+        $this->assertTrue($result);
+    }
+
+    public function testSyncLogoutWithDefaultAuthProvider()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserBindByTypeAndUserId',
+                    'returnValue' => array(),
+                    'withParams' => array('default', 2),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'getUserBindByTypeAndUserId',
+                    'returnValue' => array('id' => 2, 'fromId' => 2),
+                    'withParams' => array('default', 2),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $result = $this->getAuthService()->syncLogin(2);
+        $this->assertEquals('', $result);
+
+        $result = $this->getAuthService()->syncLogin(2);
+        $this->assertTrue($result);
+    }
 
     public function testChangeNickname()
     {
@@ -165,6 +307,12 @@ class AuthServiceTest extends BaseTestCase
     {
         $result = SimpleValidator::nickname('11111111111');
         $this->assertEquals(false, $result);
+    }
+
+    public function testCheckUserNameWithWrongUserName()
+    {
+        $result = $this->getAuthService()->checkUserName('11111111111');
+        $this->assertEquals(array('error_mismatching', '用户名不允许以1开头的11位纯数字!'), $result);
     }
 
     public function testCheckEmailWithUnexistEmail()
@@ -348,6 +496,46 @@ class AuthServiceTest extends BaseTestCase
 
         $result = $this->getAuthService()->checkPartnerLoginByEmail($user['id'], 'test@edusoho.com');
         $this->assertFalse($result);
+    }
+
+    public function testGetPartnerAvatar()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserBindByTypeAndUserId',
+                    'returnValue' => array(),
+                    'withParams' => array('default', 2),
+                ),
+            )
+        );
+        $result = $this->getAuthService()->getPartnerAvatar(2);
+        $this->assertNull($result);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetPartnerAvatarWithBind()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserBindByTypeAndUserId',
+                    'returnValue' => array('id' => 2, 'fromId' => 2),
+                    'withParams' => array('default', 2),
+                ),
+            )
+        );
+        $result = $this->getAuthService()->getPartnerAvatar(2);
+    }
+
+    public function testGetPartnerName()
+    {
+        $result = $this->getAuthService()->getPartnerName();
+        $this->assertEquals('default', $result);
     }
 
     public function testIsRegisterEnabledWithOtherTypeByTrue()
