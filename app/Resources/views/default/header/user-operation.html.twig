@@ -2,7 +2,24 @@
 <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
   <ul class="nav user-nav">
     {% if app.user %}
-      <li class="user-inform-li hidden-xs hidden-sm nav-hover">
+      {% if has_permission('admin') or 'ROLE_TEACHER' in app.user.roles %}
+        <li class="user-manage-li nav-hover visible-lg">
+          <a class="btn cd-btn cd-btn-sm user-manage-toggle{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white {% else %} user-manage-toggle--color cd-btn-default {% endif %}" href="javascript:;">{% if has_permission('admin') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-xs"></i></a>
+          <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-manage-dropdown" role="menu">
+            {% if has_permission('admin') %}<li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
+            {% endif %}
+            <li class="active"><a href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a></li>
+            <li><a href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a></li>
+          </ul>
+        </li>
+      {% else %}
+        <li class="user-manage-li visible-lg">
+          <a class="btn cd-btn cd-btn-sm user-manage-toggle{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white{% else %} cd-btn-default user-manage-toggle--color{% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+        </li>
+      {% endif %}
+
+
+      <li class="user-inform-li hidden-xs hidden-sm nav-hover cd-ml24">
         {# 消息导航显示 #}
         <a class="cd-inform"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
         {# 消息导航下拉 #}
@@ -28,13 +45,12 @@
                   <div class="inform-empty-status">
                     <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
                   srcset="{{ asset('static-dist/app/img/notice/null-notice.png') }} 1x, {{ asset('static-dist/app/img/notice/null-notice@2x.png') }} 2x"/>
-                    <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_notification'|trans }}</div>
+                    <div class="inform-empty-status__tip">暂无新的通知～</div>
                   </div>
                 {% endif %}
-
               </div>
               <div class="inform-dropdown-foot">
-                <a href="{{ path('notification') }}">{{ 'homepage.header.check_all_notifications'|trans }}</a>
+                <a href="{{ path('notification') }}">查看全部通知</a>
               </div>
             </div>
             {# 私信 #}
@@ -90,12 +106,12 @@
                   <div class="inform-empty-status">
                     <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"
                 srcset="{{ asset('static-dist/app/img/notice/null-message.png') }} 1x, {{ asset('static-dist/app/img/notice/null-message@2x.png') }} 2x"/>
-                    <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_messages'|trans }}</div>
+                    <div class="inform-empty-status__tip">暂无新的私信～</div>
                   </div>
                 {% endif %}
               </div>
               <div class="inform-dropdown-foot">
-                <a href="{{ path('message') }}">{{ 'homepage.header.check_all_messages'|trans }}</a>
+                <a href="{{ path('message') }}">查看全部私信</a>
               </div>
             </div>
           </div>
