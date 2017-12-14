@@ -29,6 +29,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         'cloud' => 'File:CloudFileImplementor',
     );
 
+    public function getAudioPerssion()
+    {
+        return $this->getFileImplementor('cloud')->convertPermission();
+    }
+
     public function getFile($id)
     {
         $file = $this->getUploadFileDao()->get($id);
@@ -53,6 +58,47 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         return $this->getFileImplementor($file['storage'])->getFullFile($file);
+    }
+
+    public function batchConvertByIds($ids)
+    {
+        if (empty($ids)) {
+            return false;
+        }
+
+        $conditions = array(
+            'ids' => $ids,
+            'type' => 'video',
+            'storage' => 'cloud',
+            'inAudioConvertStatus' => array('none', 'error'),
+        );
+
+        $count = $this->getUploadFileDao()->count($conditions);
+        for ($start = 0; $start < $count; $start = $start + 100) {
+            $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, $start);
+
+            $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
+        }
+        $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
+
+        return true;
+    }
+
+    //视频转音频的完成情况
+    public function getAudioConvertionStatus($ids)
+    {
+        if (empty($ids)) {
+            return '0';
+        }
+
+        $completedCount = $this->getUploadFileDao()->count(array(
+            'ids' => $ids,
+            'type' => 'video',
+            'storage' => 'cloud',
+            'audioConvertStatus' => 'success',
+        ));
+
+        return sprintf('%d/%d', $completedCount, count($ids));
     }
 
     public function getUploadFileInit($id)

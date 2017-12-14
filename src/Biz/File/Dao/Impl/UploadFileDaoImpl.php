@@ -138,6 +138,8 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'createdUserId IN ( :createdUserIds )',
                 'createdUserId = :createdUserId',
                 'id IN ( :idsOr )',
+                'audioConvertStatus = :audioConvertStatus',
+                'audioConvertStatus IN ( :inAudioConvertStatus )',
             ),
             'serializes' => array(
                 'metas2' => 'json',

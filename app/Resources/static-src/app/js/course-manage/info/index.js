@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
+import notify from 'common/notify';
 
 class courseInfo {
 
@@ -18,6 +19,7 @@ class courseInfo {
     this.initCkeidtor();
     this.initValidator();
     this.checkBoxChange();
+    this.changeAudioMode();
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
     this.renderMultiGroupComponent('course-goals', 'goals');
@@ -29,6 +31,17 @@ class courseInfo {
       allowedContent: true,
       toolbar: 'Detail',
       filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
+    });
+  }
+
+  changeAudioMode() {
+    $('#cc').on('change', "input[name='enableAudio']", function(){
+      let mode = $("#course-audio-mode").data('value');
+      if (mode == 'potential') {
+        notify('info', '听课模式需要先申请为商业用户!');
+        $("[name='enableAudio']")[1].checked = true;
+        $("[name='enableAudio']")[0].checked = false;
+      }
     });
   }
 
