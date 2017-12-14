@@ -58,6 +58,23 @@ class UploadFileServiceTest extends BaseTestCase
         unset($biz['@File:FileUploadFileDao']);
     }
 
+    public function testGetAudioServiceStatus()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getAudioServiceStatus',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'audioService' => 'opened',
+                ),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $status = $this->getUploadFileService()->getAudioServiceStatus();
+        $this->assertEquals($status, 'opened');
+    }
+
     public function testGetFullFile()
     {
         $fileId = 1;
