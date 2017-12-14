@@ -1,7 +1,7 @@
 module.exports = {
   output: {
-    path: 'web/static-dist/',       // 用于生产环境下的输出目录
-    publicPath: '/static-dist/',    // 用于开发环境下的输出目录
+    path: 'web/static-dist/', // 用于生产环境下的输出目录
+    publicPath: '/static-dist/', // 用于开发环境下的输出目录
   },
   libs: {
     'base': ['libs/base.js'], //可以是一个js文件,
@@ -11,7 +11,7 @@ module.exports = {
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
     'jquery-nouislider': ['libs/jquery-nouislider.js'],
     'jquery-sortable': ['jquery-sortable'],
-    'swiper':['swiper'],
+    'swiper': ['swiper'],
     'perfect-scrollbar': ['libs/perfect-scrollbar/index.js'],
     'jquery-validation': ['libs/jquery-validation.js'],
     'jquery-intro': ['libs/jquery-intro/index.js'],
@@ -24,12 +24,13 @@ module.exports = {
     'jquery-cycle2': ['jquery-cycle2'],
     'excanvas-compiled': ['libs/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
-    'jquery-blurr':['jquery-blurr'],
+    'jquery-blurr': ['jquery-blurr'],
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/jquery-raty.js'],
     'echarts': ['echarts'],
     'select2': ['libs/select2/index.js'],
-    'handlebars': ['handlebars']
+    'handlebars': ['handlebars'],
+    'fullcalendar': ['libs/fullcalendar.js']
   },
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
@@ -50,8 +51,9 @@ module.exports = {
     'echo-js/dist/echo.js',
     'jquery-waypoints/waypoints.js',
     'echarts/dist/echarts.js',
-    'handlebars/dist/handlebars.min.js'
-  ],  
+    'handlebars/dist/handlebars.min.js',
+    'fullcalendar/dist/fullcalendar.min.js'
+  ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
       name: 'es-ckeditor',
@@ -73,4 +75,3 @@ module.exports = {
   vendorName: 'libs/base,libs/vendor',
   extryCssName: '{main,header,bootstrap,mobile,admin}',
 }
-
