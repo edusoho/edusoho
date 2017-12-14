@@ -5304,6 +5304,11 @@ admin.setting.theme.manage.theme_edit: 主题编辑
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+admin.setting.theme.manage.navigation_num_validation: 请输入1-99以内的整数
 admin.setting.theme.manage.coloring_scheme_btn: 配色方案
 admin.setting.theme.manage.all_reset: 全部重置
 admin.setting.theme.manage.component_name: 挂件名称
@@ -5329,6 +5334,8 @@ admin.setting.theme.manage.modal.student_comment: 学员评价
 admin.setting.theme.manage.modal.student_dynamic: 学员动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
+
+
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
