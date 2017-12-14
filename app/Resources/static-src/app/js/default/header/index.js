@@ -24,3 +24,13 @@ $('.js-back').click(() => {
     location.href = '/';
   }
 });
+
+$('body').on('click', '.js-user-nav-dropdown', function (event) {
+  event.stopPropagation();
+});
+
+
+$('.js-inform-tab').click(function(e) {
+  e.preventDefault();
+  $(this).tab('show');
+})

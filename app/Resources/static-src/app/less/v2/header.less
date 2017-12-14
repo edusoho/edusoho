@@ -338,6 +338,12 @@
   &:first-child {
     .cd-box-shadow-inset(-1px 0 0 0);
   }
+  .es-transition;
+  &:focus,
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
 }
 
 .new-info-dot {
@@ -420,11 +426,9 @@
 }
 
 .navbar-form {
-  margin: 10px;
-  @media (max-width: @screen-sm-max) {
-    margin-right: 0;
-    padding-right: 0;
-  }
+  margin: 10px 0;
+  padding-left: 0;
+  padding-right: 0;
   .box-shadow(none);
   .form-group {
     position: relative;
