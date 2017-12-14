@@ -407,3 +407,48 @@
   line-height: 16px;
   color: @cd-gray-light;
 }
+
+// 搜索框
+.navbar-mobile {
+  .navbar-form {
+    width: 80%;
+    margin: 60px 10px 20px 10px;
+    .form-control {
+      width: 100%;
+    }
+  }
+}
+
+.navbar-form {
+  margin: 10px;
+  @media (max-width: @screen-sm-max) {
+    margin-right: 0;
+    padding-right: 0;
+  }
+  .box-shadow(none);
+  .form-group {
+    position: relative;
+  }
+  .form-control {
+    padding: 12px 16px;
+    width: 120px;
+    @media (max-width: @screen-sm-max) {
+      width: 100px;
+    }
+    height: 36px;
+    background-color: #fafafa;
+    color: @cd-gray-light;
+    border: none;
+  }
+  .button {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    border: none;
+    background: none;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
