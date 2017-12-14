@@ -121,9 +121,9 @@ class InviteRecordServiceTest extends BaseTestCase
             )
         );
         $result = $this->getInviteRecordService()->searchRecords(
-            array('invitedUserId' => 22), 
-            array(), 
-            0, 
+            array('invitedUserId' => 22),
+            array(),
+            0,
             5
         );
         $this->assertEquals(array('id' => 12, 'inviteUserId' => 22, 'invitedUserId' => 33), $result[0]);

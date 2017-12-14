@@ -50,7 +50,7 @@ class AuthServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $condition = array(
             'startTime' => time() - 24 * 3600,
-            'createdIp' => '127.0.0.1', 
+            'createdIp' => '127.0.0.1',
         );
         $this->mockBiz(
             'User:UserService',
@@ -73,7 +73,7 @@ class AuthServiceTest extends BaseTestCase
     {
         $condition = array(
             'startTime' => time() - 24 * 3600,
-            'createdIp' => '127.0.0.1', 
+            'createdIp' => '127.0.0.1',
         );
         $this->mockBiz(
             'User:UserService',
