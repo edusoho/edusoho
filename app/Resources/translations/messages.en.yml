@@ -2618,12 +2618,17 @@ homepage.header.register: Sign Up
 homepage.header.my_course: 'My Courses'
 homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
+homepage.header.check_all_notifications: 查看全部通知
+homepage.header.no_new_notifications: 暂无新的通知～
 homepage.header.message: Message
+homepage.header.check_all_messages: 查看全部私信
+homepage.header.no_new_messages: 暂无新的私信～
 homepage.header.personal_menu: 'My Home'
 homepage.header.settings_menu: 'Profile Setting'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
+homepage.header.reward: 积分
 homepage.header.admin_menu: 'Admin'
 homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
