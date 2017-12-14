@@ -13,8 +13,8 @@
           </ul>
         </li>
       {% else %}
-        <li class="user-manage-li visible-lg">
-          <a class="btn cd-btn cd-btn-sm user-manage-toggle{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white{% else %} cd-btn-default user-manage-toggle--color{% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+        <li class="user-manage-li visible-lg cd-ml24">
+          <a class="btn cd-btn cd-btn-sm user-manage-toggle user-student-manage{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white{% else %} cd-btn-default user-manage-toggle--color{% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
         </li>
       {% endif %}
 
@@ -22,7 +22,7 @@
         {# 消息导航显示 #}
         <a class="cd-inform dropdown-toggle" data-toggle="dropdown"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
         {# 消息导航下拉 #}
-        <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right inform-dropdown js-user-nav-dropdown" role="menu">
+        <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
           {# tab切换 #}
           <div class="clearfix inform-dropdown-head" role="tablist">
             <a class="inform-dropdown-head__tab js-inform-tab" href="#notification" role="tab" data-toggle="tab">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="new-info-dot"></span>{% endif %}</a>
@@ -121,7 +121,7 @@
         <a href="javascript:;" class="dropdown-toggle user-avatar-toggle" data-toggle="dropdown">
           <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
         </a>
-        <div class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-dropdown hidden-sm hidden-xs hidden-md js-user-nav-dropdown">
+        <div class="dropdown-menu user-dropdown hidden-sm hidden-xs hidden-md js-user-nav-dropdown">
           <div class="user-dropdown__info cd-mb24">
             <a class="user-dropdown__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
               <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
