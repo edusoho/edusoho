@@ -38,7 +38,7 @@ class Homework extends Activity
 
         if ($config['isCopy']) {
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
-            
+
             $copyIds = ArrayToolkit::column($items, 'questionId');
             $questions = $this->findQuestionsByCopydIdsAndCourseSetId($copyIds, $newActivity['fromCourseSetId']);
             $questionIds = ArrayToolkit::column($questions, 'id');
