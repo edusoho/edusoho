@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\MaterialLib;
 
-use Biz\MaterialLib\Service\Impl\MaterialLibServiceImpl;
 use Biz\BaseTestCase;
 
 class MaterialLibServiceTest extends BaseTestCase
@@ -23,7 +22,7 @@ class MaterialLibServiceTest extends BaseTestCase
     public function testGetByGlobalId()
     {
         $biz = $this->getBiz();
-        $params =array(
+        $params = array(
             array(
                 'functionName' => 'getFileByGlobalId',
                 'returnValue' => array('id' => '3', 'storage' => 'cloud'),
@@ -46,7 +45,7 @@ class MaterialLibServiceTest extends BaseTestCase
                     'returnValue' => array(
                         array('player' => 'video', 'token' => 'GQW4Fw47TrlCzwQj:1513216884:4pc2y0qZGuknpMmJlhhK-WMbxyQ='),
                     ),
-                )
+                ),
             )
         );
         $player = $this->getMaterialLibService()->player('098f6bcd4621d373cade4e832627b4f6', false);
@@ -95,7 +94,7 @@ class MaterialLibServiceTest extends BaseTestCase
                 ),
             )
         );
-        $result = $this->getMaterialLibService()->batchDelete(array(1,2,3,4));
+        $result = $this->getMaterialLibService()->batchDelete(array(1, 2, 3, 4));
         $this->assertArrayEquals($result, array('success' => true));
     }
 
@@ -107,7 +106,7 @@ class MaterialLibServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'update'
+                    'functionName' => 'update',
                 ),
             )
         );
@@ -121,7 +120,7 @@ class MaterialLibServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'update'
+                    'functionName' => 'update',
                 ),
             )
         );
@@ -136,7 +135,7 @@ class MaterialLibServiceTest extends BaseTestCase
             'File:UploadFileService',
             array(
                 array(
-                    'functionName' => 'update'
+                    'functionName' => 'update',
                 ),
             )
         );
@@ -155,7 +154,7 @@ class MaterialLibServiceTest extends BaseTestCase
                     'returnValue' => array(
                         'id' => '3',
                         'hashId' => 'course-task-14/20171212114426-njm92j6bgw0wgooo',
-                        'filename' => 'test'
+                        'filename' => 'test',
                     ),
                     'withParams' => array(3),
                 ),
@@ -177,7 +176,7 @@ class MaterialLibServiceTest extends BaseTestCase
             )
         );
 
-        $params =array(
+        $params = array(
             array(
                 'functionName' => 'getFileByGlobalId',
                 'returnValue' => array('id' => '3', 'storage' => 'cloud'),

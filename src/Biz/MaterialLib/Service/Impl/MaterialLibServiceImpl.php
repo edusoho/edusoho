@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\CloudFile\Service\CloudFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {

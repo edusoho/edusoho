@@ -42,16 +42,6 @@ class MaterialCopyTest extends BaseTestCase
         $this->assertEquals($materials[0]['source'], 'coursematerial');
     }
 
-    private function getDefaultFields()
-    {
-        return array(
-            'type',
-            'number',
-            'seq',
-            'title',
-        );
-    }
-
     protected function getMaterialDao()
     {
         return $this->createDao('Course:CourseMaterialDao');
