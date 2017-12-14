@@ -17,7 +17,7 @@ class OverviewStudentExporterTest extends BaseTestCase
             $this->getTaskDao()->create(array('title' => 'test'.$i, 'type' => 'vedio','courseId' => 1, 'isOptional' => 0, 'status' => 'published', 'createdUserId' => 1));
         }
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
-            'courseId' => 1,
+            'courseId' => 1
         ));
 
         $title = $expoter->getTitles();
@@ -37,7 +37,7 @@ class OverviewStudentExporterTest extends BaseTestCase
     public function testCanExport()
     {
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
-            'courseId' => 1,
+            'courseId' => 1
         ));
         $result = $expoter->canExport();
         $this->assertEquals(false, $result);
@@ -143,7 +143,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                             'start' => 1,
                         )
                     ),
-                ),                
+                ),
             )
         );
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
@@ -159,6 +159,168 @@ class OverviewStudentExporterTest extends BaseTestCase
         $this->assertEquals('', $parameter['fileName']);
         $this->assertEquals(1, $parameter['courseId']);
         $this->assertEquals('createdTime', $parameter['orderBy']);
+    }
+
+    public function testBuildCondition()
+    {
+        self::$appKernel->getContainer()->set('biz', $this->getBiz());
+        $this->mockBiz(
+            'Course:ReportService',
+            array(
+                array(
+                    'functionName' => 'buildStudentDetailConditions',
+                    'returnValue' => array('role' => 'student', 'courseId' => 1),
+                    'withParams' => array(
+                      array(
+                            'courseId' => 1,
+                            'start' => 1,
+                        ),
+                        1
+                    ),
+                ),
+                array(
+                    'functionName' => 'buildStudentDetailOrderBy',
+                    'returnValue' => 'createdTime',
+                    'withParams' => array(
+                      array(
+                            'courseId' => 1,
+                            'start' => 1,
+                        )
+                    ),
+                ),
+            )
+        );
+        $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
+            'courseId' => 1,
+            'start' => 1,
+        )); 
+
+        $conditions = $expoter->buildCondition(array(
+            'courseId' => 1,
+            'start' => 1,
+        )); 
+
+        $this->assertArrayEquals(array('role' => 'student', 'courseId' => 1), $conditions);
+    }
+
+    public function testGetContent()
+    {
+        self::$appKernel->getContainer()->set('biz', $this->getBiz());
+        $this->mockBiz(
+            'Course:ReportService',
+            array(
+                array(
+                    'functionName' => 'buildStudentDetailConditions',
+                    'returnValue' => array('role' => 'student', 'courseId' => 1),
+                    'withParams' => array(
+                      array(
+                            'courseId' => 1,
+                            'start' => 1,
+                        ),
+                        1
+                    ),
+                ),
+                array(
+                    'functionName' => 'buildStudentDetailOrderBy',
+                    'returnValue' => 'createdTime',
+                    'withParams' => array(
+                      array(
+                            'courseId' => 1,
+                            'start' => 1,
+                        )
+                    ),
+                ),
+                array(
+                    'functionName' => 'getStudentDetail',
+                    'returnValue' => array(
+                        array(
+                            1 => array(
+                                'id' => 1,
+                                'nickname' => 'test1'
+                            ),
+                            2 => array(
+                                'id' => 2,
+                                'nickname' => 'test2'
+                            ),
+                        ),
+                        array(
+                            3 => array(
+                                'id' => 3
+                            ),
+                            4 => array(
+                                'id' => 4
+                            ),
+                        ),
+                        array(
+                            1 => array(
+                                 3 => array(
+                                     'status' => 'start'
+                                 ),
+                            ),
+                            2 => array(
+                                 4 => array(
+                                     'status' => 'finish'
+                                 ),
+                                 
+                            ),
+                        )),
+                ),
+            )
+        );
+        
+
+        $this->mockBiz(
+            'Course:MemberService',
+            array(
+                array(
+                    'functionName' => 'searchMembers',
+                    'returnValue' => array(
+                        array('userId' => 1, 'learnedCompulsoryTaskNum' => 1),
+                        array('userId' => 2, 'learnedCompulsoryTaskNum' => 2),
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'countTasks',
+                    'returnValue' => 10,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'tryManageCourse',
+                    'returnValue' => true,
+                ),
+                array(
+                    'functionName' => 'getCourse',
+                    'returnValue' => array('id' => 1, 'compulsoryTaskNum' => 2),
+                ),
+            )
+        );
+        $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
+            'courseId' => 1,
+            'start' => 1,
+        ));
+
+        $data = $expoter->getContent(0, 10);
+
+        $this->assertArrayEquals(
+            array(
+                'test1', '50%', '学习中', '未开始'
+            )
+            , $data[0]
+        );
+        $this->assertArrayEquals(
+            array(
+                'test2', '100%', '未开始', '已完成'
+            ), $data[1]
+        );
     }
 
     protected function getCourseService()
