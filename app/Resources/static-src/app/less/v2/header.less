@@ -97,6 +97,31 @@
         .cd-border-radius;
         .cd-box-shadow-z(8px);
       }
+      .dropdown-menu {
+        left: auto;
+        right: 0;
+        > li {
+          > a {
+            &:hover {
+              .num {
+                background: #fff;
+                color:@brand-primary;
+                .es-transition;
+              }
+            }
+          }
+          .num {
+            background: #999;
+            padding: 0 10px;
+            border-radius: 20px;
+            color: #fff;
+            .es-transition;
+          }
+          i {
+            padding: 0 10px;
+          }
+        }
+      }
       > a {
         color: @gray-medium;
         .es-transition;
@@ -173,22 +198,15 @@
         }
       }
       &.open.active >a,
-      &.open>a:hover, 
+      &.open>a:hover,
       &.open>a:focus,
       &.open>a,
       &.active >a,
-      >a:hover, 
+      >a:hover,
       >a:focus {
         background: none;
         color: #fff;
-        // .es-transition;
-      }
-    }
-    .navbar-toggle {
-      padding: 5px 15px;
-      background: #1abc9c;
-      .icon-bar {
-        background: #fff;
+        .es-transition;
       }
     }
   }
