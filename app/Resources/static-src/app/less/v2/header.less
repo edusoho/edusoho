@@ -430,11 +430,11 @@
     position: relative;
   }
   .form-control {
-    padding: 12px 16px;
-    width: 120px;
-    @media (max-width: @screen-sm-max) {
-      width: 100px;
+    padding: 12px 28px 12px 8px;
+    @media (min-width: @screen-lg-min) {
+      width: 150px;
     }
+    width: 100px;
     height: 36px;
     background-color: #fafafa;
     color: @cd-gray-light;
@@ -443,7 +443,7 @@
   .button {
     position: absolute;
     top: 6px;
-    right: 12px;
+    right: 4px;
     border: none;
     background: none;
     &:focus {
