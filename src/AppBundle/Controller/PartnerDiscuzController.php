@@ -106,7 +106,7 @@ class PartnerDiscuzController extends BaseController
             }
 
             $user = $this->getUserService()->register(
-                $registration, 
+                $registration,
                 RegisterTypeUtils::getRegisterTypes($registration)
             );
         } else {
