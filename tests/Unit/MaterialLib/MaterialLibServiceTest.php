@@ -54,7 +54,6 @@ class MaterialLibServiceTest extends BaseTestCase
 
     public function testEdit()
     {
-        $file = $this->mockUploadFile();
         $this->mockBiz(
             'File:UploadFileService',
             array(
