@@ -103,15 +103,8 @@ class HomeworkTest extends BaseTypeTestCase
             ),
             array(
                 'functionName' => 'findItemsByTestId',
-                'returnValue' => array(array('questionId' => 1))
+                'returnValue' => array(array('id'=>1))
             )
-        ));
-
-        $this->mockBiz('Question:QuestionService', array(
-            array(
-                'functionName' => 'search',
-                'returnValue' => array()
-            ),
         ));
 
         $config = array(
@@ -131,22 +124,18 @@ class HomeworkTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
 
         $fields = $this->mockField();
-        $metas = array('metas' => array('range' => array('courseId' => 1,'lessonId' => 10)));
+        $this->_mockQuestionService();
         
-        $exercise = $type->create(array_merge($fields, $metas));
-        $exercise2 = $type->create(array_merge($fields, array('copyId' => $exercise['id'],'metas' => array(), 'fromCourseId' => 3)));
+        $homework = $type->create($fields);
+        $homework2 = $type->create(array_merge($fields, array('copyId' => $homework['id'],'fromCourseId' => 3, 'name' => 'homework2 name', 'description' => 'homework2 description')));
 
-        $this->mockBiz('Task:TaskService', array(
-            array(
-                'functionName' => 'searchTasks',
-                'returnValue' => array(array('id' => 9))
-            )
-        ));
-        $syncedActivity = $type->sync(array('mediaId' => $exercise['id']), array('mediaId' => $exercise2['id']));
+
+        $syncedActivity = $type->sync(array('mediaId' => $homework['id']), array('mediaId' => $homework2['id']));
         
-        $activity = $type->get($exercise2['id']);
+        $activity = $type->get($homework2['id']);
 
-        $this->assertArrayEquals(array('range' => array('courseId' => 3, 'lessonId' => 9)), $activity['metas']);
+        $this->assertEquals($homework['name'], $activity['name']);
+        $this->assertEquals($homework['description'], $activity['description']);
     }
 
     /**
@@ -157,15 +146,16 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
+        $this->_mockQuestionService();
         $fields = $this->mockField();
         $activity = $type->create($fields);
 
-        $update = array('metas' => array('ranges' => array('courseId' => 1,'lessonId' => 10)));
+        $update = array('title' => 'homework update name', 'finishCondition' => 'submit');
   
         $updated = $type->update($activity['id'], $update, array());
-
         $activity = $type->get($updated['id']);
-        $this->assertArrayEquals($update['metas'], $activity['metas']);
+
+        $this->assertEquals($update['title'], $activity['name']);
 
         $type->update(123, $update, array());
     }
@@ -174,10 +164,12 @@ class HomeworkTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
+        $this->_mockQuestionService();
         $fields = $this->mockField();
         $activity = $type->create($fields);
 
         $this->assertNotNull($activity);
+        $this->assertEquals($fields['title'], $activity['name']);
 
         $type->delete($activity['id']);
         $result = $type->get($activity['id']);
@@ -236,7 +228,7 @@ class HomeworkTest extends BaseTypeTestCase
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array('mediaId' => 1)
+                'returnValue' => array('mediaId' => 1, 'passedCondition' => array('type' => 'submit'))
             ),
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
@@ -288,6 +280,16 @@ class HomeworkTest extends BaseTypeTestCase
         ));
     }
 
+    private function _mockQuestionService()
+    {
+        $this->mockBiz('Question:QuestionService', array(
+            array(
+                'functionName' => 'findQuestionsByIds',
+                'returnValue' => array(array('id' => 1, 'type' => 'choice', 'parentId' => 0))
+            )
+        ));
+    }
+
     private function _mockActivityService()
     {
         $this->mockBiz('Activity:ActivityService', array(
@@ -308,12 +310,13 @@ class HomeworkTest extends BaseTypeTestCase
     private function mockField()
     {
         return array(
-            'name' => 'homework',
+            'title' => 'homework',
             'description' => 'homework description',
+            'questionIds' => array(1),
             'courseSetId' => 1,
             'courseId' => 2,
             'pattern' => 'questionType',
-            'passedCondition' => array('type' => 'submit'),
+            'finishCondition' => 'submit',
             'itemCount' => 5,
             'metas' => array(),
             'type' => 'homework',
