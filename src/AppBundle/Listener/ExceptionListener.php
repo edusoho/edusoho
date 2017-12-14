@@ -61,7 +61,7 @@ class ExceptionListener
             $error['message'] = $exception->getMessage();
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         } else {
-            $error['message'] = 'Request occurs and error';
+            $error['message'] = 'Request occurs an error';
         }
 
         if ($statusCode === 403) {
