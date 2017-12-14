@@ -23,8 +23,10 @@ class AuthServiceTest extends BaseTestCase
 
     public function testRegisterWithOtherType()
     {
-        $makeToken = $this->getUserService()->makeToken('discuz');
+        $user = $this->getCurrentuser();
+        $makeToken = $this->getUserService()->makeToken('discuz', $user['id']);
         $getToken = $this->getUserService()->getToken('discuz', $makeToken);
+
         $user = $this->getAuthService()->register(array(
             'email' => 'test@edusoho.com',
             'nickname' => 'test',
