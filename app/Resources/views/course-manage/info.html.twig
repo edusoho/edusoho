@@ -45,10 +45,10 @@
           </div>
         </div>
         
-        {% if setting('storage.upload_mode') == 'cloud' and audioService != 'notAllowed' %}
+        {% if setting('storage.upload_mode') == 'cloud' and audioServiceStatus != 'notAllowed' %}
           <div class="form-group" id="audio-modal-id">
             <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
-            <div class="col-sm-8 radios" data-value="{{ audioService }}" id="course-audio-mode">
+            <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
               <label>
                 <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %} id="aa">
                 {{ 'course.info.video.convert.audio.start'|trans }}

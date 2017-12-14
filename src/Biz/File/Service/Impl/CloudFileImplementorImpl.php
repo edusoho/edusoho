@@ -111,7 +111,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return false;
     }
     
-    public function getAudioService()
+    public function getAudioServiceStatus()
     {
         $api = CloudAPIFactory::create('root');
 
