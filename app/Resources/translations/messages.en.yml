@@ -4231,6 +4231,11 @@ admin.setting.theme.manage.modal.student_comment: 'Student Comments'
 admin.setting.theme.manage.modal.student_dynamic: 'Latest updates'
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 'Class Capacity Setting'
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 'Teacher Count Setting'
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
 admin.setting.mailer.cloud_email_crm.status.open: Enabled
