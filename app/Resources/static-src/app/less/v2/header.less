@@ -13,9 +13,6 @@
 
 .es-header {
   padding: 0 20px;
-  @media(min-width: @screen-lg-min) {
-    padding: 0 64px;
-  }
   height: 56px;
   background: #212121;
   border: none;
@@ -37,8 +34,11 @@
     }
     .navbar-brand {
       padding: 13px 20px 13px 0;
-      @media (max-width: @screen-sm-max) {
+      @media (max-width: @screen-md-max) {
         padding: 13px 10px 13px 0;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding-right: 8px;
       }
       height: 56px;
       line-height: 30px;
@@ -168,9 +168,15 @@
     }
     .visitor-li {
       &.visitor-login-li {
+        margin-left: 40px;
         margin-right: 40px;
-        @media (max-width: @screen-sm-max) {
+        @media (max-width: @screen-md-max) {
+          margin-left: 20px;
           margin-right: 20px;
+        }
+        @media (max-width: @screen-sm-max) {
+          margin-left: 16px;
+          margin-right: 16px;
         }
       }
       > a {
@@ -195,10 +201,15 @@
         background: none;
         color: @gray-medium;
         .es-transition;
-        @media (max-width: @screen-sm-max) {
+        @media (max-width: @screen-md-max) {
           padding-left: 10px;
           padding-right: 10px;
         }
+        @media (max-width: @screen-sm-max) {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+
       }
       &.open.active >a,
       &.open>a:hover,
@@ -242,9 +253,6 @@
   position: absolute;
   top: 0;
   right: 20px;
-  @media(min-width: @screen-lg-min) {
-    right: 64px;
-  }
   @media(max-width: @screen-xs-max) {
     right: 5px;
   }
@@ -441,8 +449,11 @@
   }
   .form-control {
     padding: 12px 28px 12px 8px;
-    @media (min-width: @screen-lg-min) {
+    @media (min-width: @screen-md-min) {
       width: 150px;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 60px;
     }
     width: 100px;
     height: 36px;
