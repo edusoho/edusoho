@@ -31,11 +31,13 @@ $('body').on('click', '.js-user-nav-dropdown', function (event) {
 
 
 $('.js-inform-tab').click(function(e) {
+  const $this = $(this);
   e.preventDefault();
-  $(this).tab('show');
+  $this.addClass('active').siblings().removeClass('active');
+  $this.tab('show');
 })
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);
-  window.location.href = $item.data('url');
+  window.open($item.data('url'));
 })
