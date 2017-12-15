@@ -20,7 +20,7 @@
 
       <li class="user-inform-li js-user-inform hidden-xs hidden-sm cd-ml24">
         {# 消息导航显示 #}
-        <a class="cd-inform dropdown-toggle" data-toggle="dropdown"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
+        <a class="cd-inform dropdown-toggle inform-dropdown-toggle" data-toggle="dropdown"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
         {# 消息导航下拉 #}
         <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
           {# tab切换 #}
