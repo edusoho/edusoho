@@ -48,6 +48,5 @@ class AddConvertStatusJob extends Migration
      */
     public function down()
     {
-
     }
 }

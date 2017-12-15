@@ -18,7 +18,7 @@ class ConvertStatus extends AbstractJob
                 if (empty($file)) {
                     continue;
                 }
-                $successNum++;
+                ++$successNum;
             }
 
             $this->getJobDao()->update($this->id, array('args' => $results['next']));
