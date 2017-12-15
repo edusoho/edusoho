@@ -24,6 +24,12 @@ const ajax = (options) => {
     })
   }
 
+  if (options.success) {
+    Object.assign(parameter, {
+      success: options.success
+    })
+  }
+
   if (options.promise) {
     return Promise.resolve($.ajax(parameter));
   } else {
