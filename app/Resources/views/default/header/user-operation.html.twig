@@ -38,8 +38,6 @@
                   <a class="inform-dropdown-body__item notification-text" href="#">您有一张价值 1.00 元的优惠券领取成功</a>
                   <a class="inform-dropdown-body__item notification-text" href="#">你正在学习的 E周在线教育发布了一个新的公告，快去看看吧。</a>
                   <a class="inform-dropdown-body__item notification-text" href="#">系统通知： 你有一张优惠券可以领取</a>
-                  <a class="inform-dropdown-body__item notification-text" href="#">你正在学习的 UED 成长计划 发布了一个新的课程，快去学习吧。</a>
-                  <a class="inform-dropdown-body__item notification-text" href="#">你正在学习的 UED 成长计划 发布了一个新的课程，快去学习吧。</a>
                 {% else %}
                   <div class="inform-empty-status">
                     <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
@@ -61,44 +59,8 @@
                       <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
                     </div>
                     <div class="message-item__info">
-                      <div class="text-overflow cd-mb8 cd-text-gray" title="">杨文云</div>
-                      <div class="text-overflow cd-text-gray-dark" title="">你好，能否请教一下如何在课中来没打开了</div>
-                    </div>
-                  </a>
-                  <a class="inform-dropdown-body__item clearfix" href="#">
-                    <div class="message-item__avatar">
-                      <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-                    </div>
-                    <div class="message-item__info">
-                      <div class="text-overflow cd-mb8 cd-text-gray" title="">杨文云</div>
-                      <div class="text-overflow cd-text-gray-dark" title="">你好，能否请教一下如何在课中来没打开了</div>
-                    </div>
-                  </a>
-                  <a class="inform-dropdown-body__item clearfix" href="#">
-                    <div class="message-item__avatar">
-                      <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-                    </div>
-                    <div class="message-item__info">
-                      <div class="text-overflow cd-mb8 cd-text-gray" title="">杨铁</div>
-                      <div class="text-overflow cd-text-gray-dark" title="">老师您讲得太棒了！</div>
-                    </div>
-                  </a>
-                  <a class="inform-dropdown-body__item clearfix" href="#">
-                    <div class="message-item__avatar">
-                      <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-                    </div>
-                    <div class="message-item__info">
-                      <div class="text-overflow cd-mb8 cd-text-gray" title="">文云</div>
-                      <div class="text-overflow cd-text-gray-dark" title="">老师您讲得太棒了！</div>
-                    </div>
-                  </a>
-                  <a class="inform-dropdown-body__item clearfix" href="#">
-                    <div class="message-item__avatar">
-                      <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-                    </div>
-                    <div class="message-item__info">
-                      <div class="text-overflow cd-mb8 cd-text-gray" title="">文云</div>
-                      <div class="text-overflow cd-text-gray-dark" title="">老师您康复科萨芬讲得太棒了！</div>
+                      <div class="cd-mb8 cd-text-gray">杨文云</div>
+                      <div class="cd-text-gray-dark" title="你好，能否请教一下如何在课中心空坎坎坷坷">{{'你好，能否请教一下如何在课中心'|sub_text(14) }}</div>
                     </div>
                   </a>
                 {% else %}
