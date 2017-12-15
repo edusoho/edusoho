@@ -1243,7 +1243,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -1899,7 +1900,7 @@ course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
-activity.liva.not_created_notice: 直播教室尚未创建！
+activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
 course.cover_image: 封面图片
@@ -1945,7 +1946,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -4682,8 +4684,8 @@ admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
-admin.course_manage.manage.status: 状态
-admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.status: 课程状态
+admin.course_manage.manage.creator: 创建者/时间
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -4701,6 +4703,11 @@ admin.course_manage.manage.auth_user: 核实用户
 admin.course_manage.manage.user_passwd: 用户密码
 admin.course_manage.manage.input_passwd_placeholder: 请输入你的登录密码
 admin.course_manage.manage.week_excellent_courses: 每周精品课程
+admin.course_manage.manage.course_num: 计划数
+admin.course_manage.manage.course_list.block_title: 计划详情
+admin.course_manage.manage.course_list.status: 计划状态
+admin.course_manage.manage.course_list.creator: 创建者
+admin.course_manage.manage.course_list.createdTime: 创建时间
 
 # 文件管理
 admin.course_manage.file.name_title: 文件管理
@@ -8331,3 +8338,4 @@ user.learn.statistics.finished.task.num: 学完任务数
 user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）

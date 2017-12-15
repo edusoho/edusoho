@@ -15,9 +15,14 @@ class ReviewController extends BaseController
         $fields = $request->request->all();
         $fields['courseId'] = $id;
         $fields['userId'] = $this->getCurrentUser()->getId();
-        $this->getReviewService()->saveReview($fields);
+        try {
+            $this->getReviewService()->saveReview($fields);
+            $response = array('code' => 'success', 'message' => '');
+        } catch (\Exception $e) {
+            $response = array('code' => 'error', 'message' => $e->getMessage());
+        }
 
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse($response);
     }
 
     public function postAction(Request $request, $courseId, $reviewId)

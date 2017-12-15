@@ -6,7 +6,7 @@
   {% include 'org/parts/table-body-checkbox.html.twig' %}
   <td>{{ courseSet.id }}</td>
   <td>
-    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}"
+    <a href="{{ path('course_set_show', {id: courseSet.id}) }}"
        target="_blank"><strong>{{ courseSet.title }}</strong></a>
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[courseSet.id]|default(null) %}
@@ -23,12 +23,20 @@
       <span class="label label-default">{{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': courseSet.recommendedTime|date('Y-m-d'), '%recommendedSeq%': courseSet.recommendedSeq}) }}</span>
     {% endif %}
   </td>
-  <td>{{ courseSet.minCoursePrice|default() }}</td>
+  <td>
+    {% if courseSet.maxCoursePrice|default(0) == 0 or courseSet.maxCoursePrice|default(0) == courseSet.minCoursePrice|default(0) %}
+      {{ courseSet.maxCoursePrice|default(0) }}
+    {% else %}
+      {{ courseSet.minCoursePrice|default() }}-{{ courseSet.maxCoursePrice|default() }}
+    {% endif %}
+  </td>
+  {% if filter == 'normal' %}
+    <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum }}</a></td>
+  {% endif %}
+  <td>{{ dict_macro.courseStatus( courseSet.status) }}</td>
+
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode} %}
   {% if filter != 'open' and filter != 'liveOpen' %}
-    <td>
-      <span class="text-info">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
-    </td>
     {% if filter == 'classroom' %}
       <td>
         {% set classroom = classrooms[courseSet.id]|default(null) %}
@@ -55,13 +63,17 @@
       {% endif %}
     {% endif %}
   {% endif %}
-
-  <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
+  
   <td>
     {{ admin_macro.user_link(user) }}
     <br>
     <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
   </td>
+  {% if filter != 'open' and filter != 'liveOpen' %}
+    <td>
+      <span class="text-info">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
+    </td>
+  {% endif %}
   <td>
     <div class="btn-group">
 

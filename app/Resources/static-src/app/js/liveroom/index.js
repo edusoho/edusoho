@@ -1,3 +1,5 @@
+import UAParser from 'ua-parser-js';
+
 class Live {
   constructor() {
     this.init();
@@ -24,6 +26,16 @@ class Live {
           }
 
           if (data.roomUrl) {
+            let provider = $("#entry").data('provider');
+            let role = $("#entry").data('role');
+            let $uapraser = new UAParser(navigator.userAgent);
+            let browser = $uapraser.getBrowser();
+            let os = $uapraser.getOS();
+
+            if (document.location.protocol ==='http:' && role === 'student' && provider === 8 && os.name !== ('Android'||'iOS'||'Windows Phone'||'Windows Mobile') &&  browser.name === 'Chrome' && browser.major >= 60) {
+              window.location.href = data.roomUrl;
+            }
+
             clearInterval(intervalId);
             self.isLiveRoomOpened = true;
             let html = '<iframe name="classroom" src="' + data.roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
