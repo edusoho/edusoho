@@ -84,7 +84,7 @@ export default class CustomFullCalendar {
       eventLimit: true, // allow "more" link when too many events
       locale: this.options['locale']
     };
-    if (typeof this.options['data'] != undefined) {
+    if (typeof this.options['data'] != 'undefined') {
       calendarOptions['events'] = this.options['data'];
     }
 
@@ -92,12 +92,12 @@ export default class CustomFullCalendar {
       require('libs/fullcalendar/locale/' + this.options['locale']);
     }
 
-    if (typeof this.options['dataUrl'] != undefined) {
+    if (typeof this.options['dataUrl'] != 'undefined') {
       calendarOptions['lazyFetching'] = true;
       calendarOptions['events'] = this._ajaxLoading;
     }
 
-    if (typeof this.options['tooltip'] != undefined) {
+    if (typeof this.options['tooltipParams'] != 'undefined') {
       calendarOptions['eventMouseover'] = this._dealShowTip;
       calendarOptions['eventMouseout'] = this._dealHideTip;
     }
@@ -108,7 +108,6 @@ export default class CustomFullCalendar {
   }
 
   _ajaxLoading(start, end, timezone, callback) {
-    console.log('start: ' + start.unix() + ' end: ' + end.unix() + ' now: ' + Math.round(new Date().getTime() / 1000));
     let startTimeAttr = currentFullCalendar.options['dateParams']['start'];
     let endTimeAttr = currentFullCalendar.options['dateParams']['end'];
     let params = {};
@@ -131,31 +130,37 @@ export default class CustomFullCalendar {
 
   _generateEvent(singleResult) {
     let copiedFields = ['title', 'start', 'end'];
+    copiedFields = copiedFields.concat(this._generateTooltipParamsNames());
     let singleEvent = {};
     for (let i = 0; i < copiedFields.length; i++) {
       let fieldName = copiedFields[i];
-      singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
+      if (typeof this.options['attrs'][fieldName] != 'undefined') {
+        singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
+      } else {
+        let tooltipName = this._getTooltipOriginalParamName(fieldName);
+        singleEvent[fieldName] = singleResult[tooltipName];
+      }
     }
     return singleEvent;
   }
 
   _verifyNeccessaryFields() {
-    if (typeof this.options['data'] == undefined && typeof this.options['dataUrl'] == undefined) {
+    if (typeof this.options['data'] == 'undefined' && typeof this.options['dataUrl'] == 'undefined') {
       console.log('custom-full-calendar: no "data" or "dataUrl" in options');
       return false;
     }
 
-    if (typeof this.options['dataUrl'] != undefined && typeof this.options['attrs'] == undefined) {
+    if (typeof this.options['dataUrl'] != 'undefined' && typeof this.options['attrs'] == 'undefined') {
       console.log('custom-full-calendar: no "attrs" in options');
       return false;
     }
 
-    if (typeof this.options['calendarContainer'] == undefined) {
+    if (typeof this.options['calendarContainer'] == 'undefined') {
       console.log('custom-full-calendar: no "calendarContainer" in options');
       return false;
     }
 
-    if (typeof this.options['currentTime'] == undefined) {
+    if (typeof this.options['currentTime'] == 'undefined') {
       console.log('custom-full-calendar: no "currentTime" in options');
       return false;
     }
@@ -173,7 +178,7 @@ export default class CustomFullCalendar {
   }
 
   _fillIfEmpty(key, defaultValue) {
-    if (typeof this.options[key] == undefined || this.options[key] == null) {
+    if (typeof this.options[key] == 'undefined' || this.options[key] == null) {
       this.options[key] = defaultValue;
     }
   }
@@ -186,15 +191,21 @@ export default class CustomFullCalendar {
   }
 
   _getStartUnixTime(start) {
-    return start.unix();
+    let result = moment.unix(start.unix());
+    let dateStr = result.format('YYYY-MM-DD');
+
+    return moment(dateStr).unix();
   }
 
   _getEndUnixTime(end) {
-    return end.unix();
+    let result = moment.unix(end.unix());
+    let dateStr = result.format('YYYY-MM-DD');
+
+    return moment(dateStr).unix();
   }
 
   _dealShowTip(event, jsEvent, view) {
-    let params = currentFullCalendar._generateParams(event);
+    let params = currentFullCalendar._generateTooltipParams(event);
     if (currentFullCalendar.options['showTipFormatFunc']) {
       currentFullCalendar.options['showTipFormatFunc'](params, event, jsEvent);
     } else {
@@ -203,7 +214,7 @@ export default class CustomFullCalendar {
   }
 
   _dealHideTip(event, jsEvent, view) {
-    let params = currentFullCalendar._generateParams(event);
+    let params = currentFullCalendar._generateTooltipParams(event);
     if (currentFullCalendar.options['hideTipFormatFunc']) {
       currentFullCalendar.options['hideTipFormatFunc'](params, event, jsEvent);
     } else {
@@ -220,26 +231,35 @@ export default class CustomFullCalendar {
   }
 
   _generateTooltipParamsNames() {
-    if (this.options['paramNames'] == undefined) {
+    if (typeof this.options['paramNames'] == 'undefined') {
       let unformatedParamsNames = this.options['tooltipParams'].split(',');
       let paramNames = [];
       for (let i = 0; i < unformatedParamsNames.length; i++) {
         let paramName = unformatedParamsNames[i].split('{')[1].split('}')[0];
-        paramNames.push(paramName);
+        paramNames.push(this._getTooltipFormatedParamName(paramName));
       }
       this.options['paramNames'] = paramNames;
     }
-    return paramNames;
+    return this.options['paramNames'];
   }
 
-  _generateParams(event) {
+  _generateTooltipParams(event) {
     let params = {};
     let paramNames = this._generateTooltipParamsNames();
     for (let i = 0; i < paramNames.length; i++) {
       let paramName = paramNames[i];
-      params[paramName] = event[paramName];
+      let tooltipName = this._getTooltipOriginalParamName(paramName);
+      params[tooltipName] = event[paramName];
     }
     return params;
+  }
+
+  _getTooltipOriginalParamName(paramName) {
+    return paramName.split('tooltip_')[1];
+  }
+
+  _getTooltipFormatedParamName(paramName) {
+    return 'tooltip_' + paramName;
   }
 
 }
