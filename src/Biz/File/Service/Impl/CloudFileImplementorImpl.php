@@ -111,6 +111,17 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return false;
     }
 
+    public function getResourcesStatuses($options)
+    {
+        if (isset($options['cursor']) && !empty($options['cursor'])) {
+            $api = CloudAPIFactory::create('root');
+
+            return $api->get('/resources_statuses', $options);
+        }
+
+        return array();
+    }
+
     public function convertPermission()
     {
         $permissions = array('open', 'potential', 'unopen');

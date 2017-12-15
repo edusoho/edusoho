@@ -39,6 +39,8 @@ interface UploadFileService
 
     public function retryTranscode(array $globalIds);
 
+    public function getResourcesStatuses(array $options);
+
     public function collectFile($userId, $fileId);
 
     public function findCollectionsByUserIdAndFileIds($fileIds, $userId);

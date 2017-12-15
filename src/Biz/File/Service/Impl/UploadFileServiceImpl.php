@@ -478,6 +478,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
     }
 
+    public function getResourcesStatuses(array $options)
+    {
+        return $this->getFileImplementor('cloud')->getResourcesStatuses($options);
+    }
+
     public function collectFile($userId, $fileId)
     {
         if (empty($userId) || empty($fileId)) {
