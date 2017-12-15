@@ -302,11 +302,11 @@ class CourseServiceTest extends BaseTestCase
         );
 
         $this->mockBiz('File:UploadFileService');
-        $this->getUploadFileService()->shouldReceive('getAudioPerssion')->andReturn('unopen');
+        $this->getUploadFileService()->shouldReceive('getAudioServiceStatus')->andReturn('notAllowed');
 
         ReflectionUtils::invokeMethod($this->getCourseService(), 'validatie', array($fileds));
 
-        $this->getUploadFileService()->shouldReceive('getAudioPerssion');
+        $this->getUploadFileService()->shouldReceive('getAudioServiceStatus');
     }
 
     public function testConverAudioByCourseIdAndMediaIdunableAudio()

@@ -122,11 +122,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return array();
     }
 
-    public function convertPermission()
+    public function getAudioServiceStatus()
     {
-        $permissions = array('open', 'potential', 'unopen');
+        $api = CloudAPIFactory::create('root');
 
-        return $permissions[rand(0, 2)];
+        return $api->get('/me/profile');
     }
 
     public function deleteFile($file)

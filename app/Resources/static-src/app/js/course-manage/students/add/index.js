@@ -23,7 +23,7 @@ class StudentAdd {
         },
         price: {
           positive_price: true,
-          max: parseInt($('#buy-price').data('price')),
+          max: parseFloat($('#buy-price').data('price')),
         }
       },
       messages: {

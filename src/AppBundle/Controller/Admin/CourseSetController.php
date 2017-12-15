@@ -31,119 +31,54 @@ class CourseSetController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        $conditions = $this->filterCourseSetConditions($filter, $conditions);
 
-        if ($filter == 'normal') {
-            $conditions['parentId'] = 0;
-        }
-
-        if ($filter == 'classroom') {
-            $conditions['parentId_GT'] = 0;
-        }
-
-        if ($filter == 'vip') {
-            $conditions['isVip'] = 1;
-            $conditions['parentId'] = 0;
-        }
-
-        $conditions = $this->fillOrgCode($conditions);
-
-        $count = $this->getCourseSetService()->countCourseSets($conditions);
-
-        if (!empty($conditions['categoryId'])) {
-            $conditions['categoryIds'] = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-            $conditions['categoryIds'][] = $conditions['categoryId'];
-            unset($conditions['categoryId']);
-        }
-
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseSetService()->countCourseSets($conditions),
+            20
+        );
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
             array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
 
-        list($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum) = $this->getDifferentCourseSetsNum(
-            $conditions
-        );
-
-        $classrooms = array();
-        if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
-            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
-
-            foreach ($classrooms as $key => $classroom) {
-                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-            }
-        }
-
-        if ($filter == 'vip') {
-            $courseSets = $this->_fillVipCourseSetLevels($courseSets);
-        }
+        list($courseSets, $coursesCount, $classroomCourses) = $this->findRelatedOptions($filter, $courseSets);
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
-
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        if (!isset($courseSetting['live_course_enabled'])) {
-            $courseSetting['live_course_enabled'] = '';
-        }
-
-        $default = $this->getSettingService()->get('default', array());
+        $courseSetStatusNum = $this->getDifferentCourseSetsNum($conditions);
 
         return $this->render(
             'admin/course-set/index.html.twig',
             array(
-                'conditions' => $conditions,
                 'courseSets' => $courseSets,
                 'users' => $users,
                 'categories' => $categories,
                 'paginator' => $paginator,
-                'liveSetEnabled' => $courseSetting['live_course_enabled'],
-                'default' => $default,
-                'classrooms' => $classrooms,
+                'classrooms' => $classroomCourses,
                 'filter' => $filter,
-                'searchCourseSetsNum' => $searchCourseSetsNum,
-                'publishedCourseSetsNum' => $publishedCourseSetsNum,
-                'closedCourseSetsNum' => $closedCourseSetsNum,
-                'unPublishedCourseSetsNum' => $unPublishedCourseSetsNum,
+                'courseSetStatusNum' => $courseSetStatusNum,
+                'coursesCount' => $coursesCount,
             )
         );
     }
 
     protected function getDifferentCourseSetsNum($conditions)
     {
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            array(),
-            0,
-            PHP_INT_MAX
+        $total = $this->getCourseSetService()->countCourseSets($conditions);
+        $published = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'published')));
+        $closed = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'closed')));
+        $draft = $this->getCourseSetService()->countCourseSets(array_merge($conditions, array('status' => 'draft')));
+
+        return array(
+            'total' => empty($total) ? 0 : $total,
+            'published' => empty($published) ? 0 : $published,
+            'closed' => empty($closed) ? 0 : $closed,
+            'draft' => empty($draft) ? 0 : $draft,
         );
-
-        $publishedCourseSetsNum = 0;
-        $closedCourseSetsNum = 0;
-        $unPublishedCourseSetsNum = 0;
-        $searchCourseSetsNum = count($courseSets);
-
-        foreach ($courseSets as $courseSet) {
-            if ($courseSet['status'] == 'published') {
-                ++$publishedCourseSetsNum;
-            }
-
-            if ($courseSet['status'] == 'closed') {
-                ++$closedCourseSetsNum;
-            }
-
-            if ($courseSet['status'] == 'draft') {
-                ++$unPublishedCourseSetsNum;
-            }
-        }
-
-        return array($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum);
     }
 
     public function closeAction(Request $request, $id)
@@ -636,6 +571,84 @@ class CourseSetController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    public function courseListAction(Request $request, $id)
+    {
+        $conditions = array(
+            'courseSetId' => $id,
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->countCourses($conditions),
+            10
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($courses, 'creator');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('admin/course-set/course-list-modal.html.twig', array(
+            'courses' => $courses,
+            'users' => $users,
+            'paginator' => $paginator,
+        ));
+    }
+
+    protected function filterCourseSetConditions($filter, $conditions)
+    {
+        if ($filter == 'classroom') {
+            $conditions['parentId_GT'] = 0;
+        } elseif ($filter == 'vip') {
+            $conditions['isVip'] = 1;
+            $conditions['parentId'] = 0;
+        } else {
+            $conditions['parentId'] = 0;
+        }
+
+        $conditions = $this->fillOrgCode($conditions);
+
+        if (!empty($conditions['categoryId'])) {
+            $categorIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $conditions['categoryIds'] = $categorIds;
+            unset($conditions['categoryId']);
+        }
+
+        return $conditions;
+    }
+
+    protected function findRelatedOptions($filter, $courseSets)
+    {
+        $classroomCourses = array();
+        $coursesCount = array();
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        if ($filter == 'classroom') {
+            $classroomCourses = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
+
+            $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
+            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+            $classrooms = ArrayToolkit::index($classrooms, 'id');
+
+            array_walk($classroomCourses, function (&$course, $key) use ($classrooms) {
+                $course['classroomTitle'] = empty($classrooms[$course['classroomId']]) ? '' : $classrooms[$course['classroomId']]['title'];
+            });
+            $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseSetId');
+        } elseif ($filter == 'vip') {
+            $courseSets = $this->_fillVipCourseSetLevels($courseSets);
+        } else {
+            $coursesCount = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
+            $coursesCount = ArrayToolkit::index($coursesCount, 'courseSetId');
+        }
+
+        return array($courseSets, $coursesCount, $classroomCourses);
     }
 
     private function _fillVipCourseSetLevels($courseSets)

@@ -483,8 +483,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function validatie($fields)
     {
         if (!empty($fields['enableAudio'])) {
-            $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
-            if ('open' != $audioPerssion) {
+            $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
+            if ('opened' != $audioServiceStatus) {
                 throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
             }
         }
