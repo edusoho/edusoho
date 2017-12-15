@@ -34,3 +34,8 @@ $('.js-inform-tab').click(function(e) {
   e.preventDefault();
   $(this).tab('show');
 })
+
+$('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
+  const $item = $(event.currentTarget);
+  window.location.href = $item.data('url');
+})
