@@ -25,8 +25,8 @@
         <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
           {# tab切换 #}
           <div class="clearfix inform-dropdown-head" role="tablist">
-            <a class="inform-dropdown-head__tab js-inform-tab" href="#notification" role="tab" data-toggle="tab">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="new-info-dot"></span>{% endif %}</a>
-            <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="new-info-dot"></span>{% endif %}</a>
+            <a class="inform-dropdown-head__tab js-inform-tab" href="#notification" role="tab" data-toggle="tab">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="cd-ml4 cd-inform-dot"></span>{% endif %}</a>
+            <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="cd-ml4 cd-inform-dot"></span>{% endif %}</a>
           </div>
           {# tab切换内容 #}
           <div class="tab-content">
