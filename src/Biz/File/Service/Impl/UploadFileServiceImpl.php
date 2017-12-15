@@ -832,6 +832,45 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFile($id);
     }
 
+    public function setResourceConvertStatus($globalId, array $result)
+    {
+        $file = $this->getFileByGlobalId($globalId);
+
+        if (empty($file)) {
+            return array();
+        }
+
+        $videoStatusMap = array(
+            'none' => 'none',
+            'waiting' => 'waiting',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+
+        $audioStatusMap = array(
+            'none' => 'none',
+            'waiting' => 'doing',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+
+        $fields = array(
+            'updatedTime' => time(),
+        );
+
+        if ($result['mp4']) {
+            $fields['convertStatus'] = $videoStatusMap[$result['status']];
+        }
+
+        if ($result['audio']) {
+            $fields['audioConvertStatus'] = $audioStatusMap[$result['status']];
+        }
+
+        return $this->getUploadFileDao()->update($file['id'], $fields);
+    }
+
     public function makeUploadParams($params)
     {
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);

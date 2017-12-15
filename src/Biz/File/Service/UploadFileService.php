@@ -79,6 +79,8 @@ interface UploadFileService
 
     public function setAudioConvertStatus($id, $status);
 
+    public function setResourceConvertStatus($globalId, array $result);
+
     public function makeUploadParams($params);
 
     public function getFileByTargetType($targetType);
