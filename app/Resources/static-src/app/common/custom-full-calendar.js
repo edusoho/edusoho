@@ -1,4 +1,4 @@
-import ajax from '../../common/api/ajax'
+import ajax from 'common/api/ajax'
 
 /**
  * @param options 
@@ -117,14 +117,15 @@ export default class CustomFullCalendar {
     ajax({
       url: currentFullCalendar.options['dataUrl'],
       type: 'GET',
-      data: params,
-      success: function(result) {
-        let calEvents = [];
-        for (let i = 0; i < result['data'].length; i++) {
-          calEvents.push(currentFullCalendar._generateEvent(result['data'][i]));
-        }
-        callback(calEvents);
+      data: params
+    }).then((result) => {
+      let calEvents = [];
+      for (let i = 0; i < result['data'].length; i++) {
+        calEvents.push(currentFullCalendar._generateEvent(result['data'][i]));
       }
+      callback(calEvents);
+    }, () => {
+      console.log('error callback')
     });
   }
 
@@ -169,17 +170,21 @@ export default class CustomFullCalendar {
   }
 
   _fillDefaultFields() {
-    this._fillIfEmpty('locale', 'zh-cn');
-    this._fillIfEmpty('display', 'month');
-    this._fillIfEmpty('dateParams', {
-      'start': 'createdTime_GE',
-      'end': 'createdTime_LT'
+    this._fillIfEmpty({
+      'locale': 'zh-cn',
+      'display': 'month',
+      'dateParams': {
+        'start': 'createdTime_GE',
+        'end': 'createdTime_LT'
+      }
     });
   }
 
-  _fillIfEmpty(key, defaultValue) {
-    if (typeof this.options[key] == 'undefined' || this.options[key] == null) {
-      this.options[key] = defaultValue;
+  _fillIfEmpty(params) {
+    for (const key in params) {
+      if (typeof this.options[key] == 'undefined' || this.options[key] == null) {
+        this.options[key] = params[key];
+      }
     }
   }
 
