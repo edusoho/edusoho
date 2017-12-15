@@ -2,8 +2,6 @@
 
 namespace Tests\Unit\Activity\Type;
 
-use AppBundle\Common\ReflectionUtils;
-
 class ExerciseTest extends BaseTypeTestCase
 {
     const TYPE = 'exercise';
@@ -11,7 +9,7 @@ class ExerciseTest extends BaseTypeTestCase
     public function testGet()
     {
         $type = $this->getActivityConfig(self::TYPE);
-        
+
         $this->_mockTestpaper();
 
         $result = $type->get(1);
@@ -25,7 +23,7 @@ class ExerciseTest extends BaseTypeTestCase
 
         $this->_mockTestpaper();
 
-        $results = $type->find(array(1,2));
+        $results = $type->find(array(1, 2));
 
         $this->assertEquals(1, count($results));
         $this->assertEquals(1, $results[0]['id']);
@@ -41,7 +39,7 @@ class ExerciseTest extends BaseTypeTestCase
             'title' => 'exercise activity',
             'questionTypes' => array('single_choice'),
             'fromCourseId' => 1,
-            'fromCourseSetId' => 1
+            'fromCourseSetId' => 1,
         );
         $activity = $type->create($fields);
 
@@ -57,10 +55,10 @@ class ExerciseTest extends BaseTypeTestCase
         $config = array(
             'newActivity' => array(
                 'fromCourseId' => 1,
-                'fromCourseSetId' => 1
+                'fromCourseSetId' => 1,
             ),
             'isSync' => 1,
-            'isCopy' => 0
+            'isCopy' => 0,
         );
         $copy = $type->copy(array('mediaId' => 1), $config);
         $this->assertEquals(2, $copy['id']);
@@ -68,10 +66,10 @@ class ExerciseTest extends BaseTypeTestCase
         $config = array(
             'newActivity' => array(
                 'fromCourseId' => 1,
-                'fromCourseSetId' => 1
+                'fromCourseSetId' => 1,
             ),
             'isSync' => 0,
-            'isCopy' => 1
+            'isCopy' => 1,
         );
         $copy = $type->copy(array('mediaId' => 1), $config);
         $this->assertEquals(2, $copy['id']);
@@ -79,10 +77,10 @@ class ExerciseTest extends BaseTypeTestCase
         $config = array(
             'newActivity' => array(
                 'fromCourseId' => 1,
-                'fromCourseSetId' => 1
+                'fromCourseSetId' => 1,
             ),
             'isSync' => 0,
-            'isCopy' => 0
+            'isCopy' => 0,
         );
         $copy = $type->copy(array('mediaId' => 1), $config);
         $this->assertEquals(2, $copy['id']);
@@ -93,19 +91,19 @@ class ExerciseTest extends BaseTypeTestCase
         $type = $this->getActivityConfig(self::TYPE);
 
         $fields = $this->mockField();
-        $metas = array('metas' => array('range' => array('courseId' => 1,'lessonId' => 10)));
-        
+        $metas = array('metas' => array('range' => array('courseId' => 1, 'lessonId' => 10)));
+
         $exercise = $type->create(array_merge($fields, $metas));
-        $exercise2 = $type->create(array_merge($fields, array('copyId' => $exercise['id'],'metas' => array(), 'fromCourseId' => 3)));
+        $exercise2 = $type->create(array_merge($fields, array('copyId' => $exercise['id'], 'metas' => array(), 'fromCourseId' => 3)));
 
         $this->mockBiz('Task:TaskService', array(
             array(
                 'functionName' => 'searchTasks',
-                'returnValue' => array(array('id' => 9))
-            )
+                'returnValue' => array(array('id' => 9)),
+            ),
         ));
         $syncedActivity = $type->sync(array('mediaId' => $exercise['id']), array('mediaId' => $exercise2['id']));
-        
+
         $activity = $type->get($exercise2['id']);
 
         $this->assertArrayEquals(array('range' => array('courseId' => 3, 'lessonId' => 9)), $activity['metas']);
@@ -122,8 +120,8 @@ class ExerciseTest extends BaseTypeTestCase
         $fields = $this->mockField();
         $activity = $type->create($fields);
 
-        $update = array('metas' => array('ranges' => array('courseId' => 1,'lessonId' => 10)));
-  
+        $update = array('metas' => array('ranges' => array('courseId' => 1, 'lessonId' => 10)));
+
         $updated = $type->update($activity['id'], $update, array());
 
         $activity = $type->get($updated['id']);
@@ -156,12 +154,12 @@ class ExerciseTest extends BaseTypeTestCase
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array('mediaId' => 1)
+                'returnValue' => array('mediaId' => 1),
             ),
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
         $result = $type->isFinished(1);
@@ -198,11 +196,11 @@ class ExerciseTest extends BaseTypeTestCase
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getTestpaperByIdAndType',
-                'returnValue' => array('mediaId' => 1)
+                'returnValue' => array('mediaId' => 1),
             ),
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array('status' => 'doing')
+                'returnValue' => array('status' => 'doing'),
             ),
         ));
 
@@ -228,21 +226,21 @@ class ExerciseTest extends BaseTypeTestCase
                     'name' => 'exercise name',
                     'itemCount' => 5,
                     'passedCondition' => array('type' => 'submit'),
-                    'metas' => array('range' => array('lessonId' =>3, 'courseId' => 1))
-                )
+                    'metas' => array('range' => array('lessonId' => 3, 'courseId' => 1)),
+                ),
             ),
             array(
                 'functionName' => 'findTestpapersByIdsAndType',
-                'returnValue' => array(array('id'=>1))
+                'returnValue' => array(array('id' => 1)),
             ),
             array(
                 'functionName' => 'buildTestpaper',
-                'returnValue' => array('id' => 2, 'name' => 'testpaper name')
+                'returnValue' => array('id' => 2, 'name' => 'testpaper name'),
             ),
             array(
                 'functionName' => 'updateTestpaper',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
     }
 
@@ -251,8 +249,8 @@ class ExerciseTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1,'mediaId' => 1,'fromCourseId' => 1)
-            )
+                'returnValue' => array('id' => 1, 'mediaId' => 1, 'fromCourseId' => 1),
+            ),
         ));
     }
 
