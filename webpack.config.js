@@ -30,7 +30,7 @@ module.exports = {
     'echarts': ['echarts'],
     'select2': ['libs/select2/index.js'],
     'handlebars': ['handlebars'],
-    'fullcalendar': ['libs/fullcalendar.js']
+    'fullcalendar': ['libs/fullcalendar/index.js']
   },
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
