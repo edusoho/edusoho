@@ -28,7 +28,7 @@ class TaskController extends BaseController
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-            
+
             if (!empty($activity['ext']) && !empty($activity['ext']['mediaId'])) {
                 $media = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
             }
@@ -150,12 +150,12 @@ class TaskController extends BaseController
         }
 
         //课程关闭
-        if (!empty($courseSet['status']) && $courseSet['status'] != 'published') {
+        if (!empty($courseSet['status']) && 'published' != $courseSet['status']) {
             return $this->render('task/preview-notice-modal.html.twig', array('courseSet' => $courseSet));
         }
 
         //教学计划关闭
-        if (!empty($course['status']) && $course['status'] != 'published') {
+        if (!empty($course['status']) && 'published' != $course['status']) {
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
 
