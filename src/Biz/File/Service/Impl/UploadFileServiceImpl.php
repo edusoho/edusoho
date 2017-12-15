@@ -483,9 +483,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
     }
 
-    public function getResourcesStatuses(array $options)
+    public function getResourcesStatus(array $options)
     {
-        return $this->getFileImplementor('cloud')->getResourcesStatuses($options);
+        return $this->getFileImplementor('cloud')->getResourcesStatus($options);
     }
 
     public function collectFile($userId, $fileId)
@@ -862,12 +862,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         );
 
         $fields = array(
+            'convertStatus' => $videoStatusMap[$result['status']],
             'updatedTime' => time(),
         );
-
-        if ($result['mp4']) {
-            $fields['convertStatus'] = $videoStatusMap[$result['status']];
-        }
 
         if ($result['audio']) {
             $fields['audioConvertStatus'] = $audioStatusMap[$result['status']];

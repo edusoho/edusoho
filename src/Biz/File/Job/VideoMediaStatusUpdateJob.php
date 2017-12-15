@@ -4,11 +4,11 @@ namespace Biz\File\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class ConvertStatus extends AbstractJob
+class VideoMediaStatusUpdateJob extends AbstractJob
 {
     public function execute()
     {
-        $results = $this->getUploadFileService()->getResourcesStatuses(array('cursor' => $this->getNextTime()));
+        $results = $this->getUploadFileService()->getResourcesStatus(array('cursor' => $this->getNextTime()));
 
         if (isset($results['data']) && !empty($results['data'])) {
             $successNum = 0;
