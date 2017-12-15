@@ -3797,6 +3797,7 @@ customer_service.customer_email: 反馈邮件
 # 我的教学
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
+my.teaching.live_schedule_menu: 直播课表
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: 学员问题
 my.teaching.discussion_menu: 学员话题
