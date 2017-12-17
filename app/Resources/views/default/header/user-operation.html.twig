@@ -32,11 +32,11 @@
           <div class="tab-content">
             {# 通知 #}
             <div class="notification-content tab-pane active" role="tabpanel" id="notification">
-              <div class="inform-dropdown-body">
+              <div class="inform-dropdown-body infinite-container">
                 {% if app.user.newNotificationNum > 0 %}
                   <div class="inform-loading js-inform-loading hidden"></div>
                  {% for i in 0..3 %}
-                    <div class="inform-dropdown-body__item inform-notification-item js-inform-notification" data-url="{{ path('notification') }}"><span>你正在学习的 E周在线教育发布了一个新的公告，快去看看吧。</span></div>
+                    <div class="inform-dropdown-body__item inform-notification-item infinite-item js-inform-notification" data-url="{{ path('notification') }}"><span>你正在学习的 E周在线教育发布了一个新的公告，快去看看吧。</span></div>
                   {% endfor %}
                 {% else %}
                   <div class="inform-empty-status">
@@ -46,17 +46,18 @@
                   </div>
                 {% endif %}
               </div>
+              <a class="infinite-more-link" href="#next-page"></a>
               <div class="inform-dropdown-foot">
                 <a href="{{ path('notification') }}" target="_blank">{{ 'homepage.header.check_all_notifications'|trans }}</a>
               </div>
             </div>
             {# 私信 #}
             <div class="message-content tab-pane" role="tabpanel" id="message">
-              <div class="inform-dropdown-body">
+              <div class="inform-dropdown-body infinite-container">
                 {% if app.user.newMessageNum > 0 %}
                   <div class="inform-loading js-inform-loading hidden"></div>
                   {% for i in 0..4 %}
-                    <a class="inform-dropdown-body__item clearfix inform-message-item" href="#" target="_blank">
+                    <a class="inform-dropdown-body__item infinite-item clearfix inform-message-item" href="#" target="_blank">
                       <div class="inform-message-item__avatar">
                         <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
                       </div>
@@ -74,6 +75,7 @@
                   </div>
                 {% endif %}
               </div>
+               <a class="infinite-more-link" href="#next-page"></a>
               <div class="inform-dropdown-foot">
                 <a href="{{ path('message') }}" target="_blank">{{ 'homepage.header.check_all_messages'|trans }}</a>
               </div>
