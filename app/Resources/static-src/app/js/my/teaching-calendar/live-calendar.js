@@ -1,4 +1,6 @@
-import CustomFullCalendar from 'app/common/custom-full-calendar'
+import CustomFullCalendar from 'app/common/calendar/custom-full-calendar'
+import LiveTooltipComp from 'app/common/calendar/comp/tooltip/live-tooltip-comp'
+import ClickComp from 'app/common/calendar/comp/click-comp'
 
 new CustomFullCalendar({
   'calendarContainer': '#calendar',
@@ -9,5 +11,9 @@ new CustomFullCalendar({
     'end': 'updatedTime'
   },
   'currentTime': $("#todayDateStr").html(),
-  'tooltipParams': '{id},{title}'
+  'components': [
+    new LiveTooltipComp(),
+    new ClickComp('/course/{id}') //routing course_show
+  ],
+  'defaultView': 'month'
 });
