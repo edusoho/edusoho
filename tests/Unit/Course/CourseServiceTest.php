@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Classroom\Service\ClassroomService;
+use AppBundle\Common\ReflectionUtils;
 
 class CourseServiceTest extends BaseTestCase
 {
@@ -162,7 +163,7 @@ class CourseServiceTest extends BaseTestCase
 
         $closed = $this->getCourseService()->getCourse($result['id']);
 
-        $this->assertTrue($closed['status'] == 'closed');
+        $this->assertTrue('closed' == $closed['status']);
     }
 
     public function testPublishCourse()
@@ -234,6 +235,204 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
+    }
+
+    public function testFindUserLearnCourseIds()
+    {
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'findUserLearnCourseIds', 'returnValue' => array(1 => array('courseId' => 1), 2 => array('courseId' => 2), 3 => array('courseId' => 3))),
+        ));
+
+        $result = $this->getCourseService()->findUserLearnCourseIds(1);
+
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testCountUserLearnCourseIds()
+    {
+        $this->mockBiz('Course:CourseMemberDao', array(
+            array('functionName' => 'countUserLearnCourses', 'returnValue' => 3),
+        ));
+
+        $result = $this->getCourseService()->countUserLearnCourses(1);
+
+        $this->assertEquals(3, $result);
+    }
+
+    public function testBatchConvert()
+    {
+        $activities = array(
+            array(
+                'id' => 1,
+                'title' => 'activity111',
+                'mediaType' => 'video',
+                'ext' => array(
+                    'id' => 2,
+                    'mediaSource' => 'self',
+                    'mediaId' => '22',
+                    'mediaUri' => '',
+                    'file' => array(
+                        'id' => 4,
+                        'globalId' => '8270bc5fa3f94d29afd957d42bb5393b',
+                        'hashId' => 'course-activity-1409/20171204024002-feoht1gxeko4k8g0',
+                        'targetType' => 'course-activity',
+                    ),
+                ),
+            ),
+        );
+
+        $this->mockBiz('Activity:ActivityService');
+        $this->getActivityService()->shouldReceive('findActivitiesByCourseIdAndType')->andReturn($activities);
+        $this->mockBiz('File:UploadFileService');
+        $this->getUploadFileService()->shouldReceive('batchConvertByIds');
+
+        $this->getCourseService()->batchConvert(1);
+
+        $this->getActivityService()->shouldHaveReceived('findActivitiesByCourseIdAndType');
+        $this->getUploadFileService()->shouldHaveReceived('batchConvertByIds');
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testValidatie()
+    {
+        $fileds = array(
+            'enableAudio' => '1',
+        );
+
+        $this->mockBiz('File:UploadFileService');
+        $this->getUploadFileService()->shouldReceive('getAudioServiceStatus')->andReturn('notAllowed');
+
+        ReflectionUtils::invokeMethod($this->getCourseService(), 'validatie', array($fileds));
+
+        $this->getUploadFileService()->shouldReceive('getAudioServiceStatus');
+    }
+
+    public function testConverAudioByCourseIdAndMediaIdunableAudio()
+    {
+        $fields = array(
+            'id' => 2,
+            'courseSetId' => 2,
+            'title' => '计划名称',
+            'enableAudio' => '0',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($fields);
+
+        $result = $this->getCourseService()->convertAudioByCourseIdAndMediaId($course['id'], 1);
+
+        $this->assertEquals($result, false);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testConverAudioByCourseIdAndMediaIdEmptyMedia()
+    {
+        $fields = array(
+            'id' => 2,
+            'courseSetId' => 2,
+            'title' => '计划名称',
+            'enableAudio' => '1',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($fields);
+
+        $this->mockBiz('System:SettingService');
+        $this->getSettingService()->shouldReceive('get')->andReturn(array(
+            'upload_mode' => 'cloud',
+        ));
+
+        $this->mockBiz('File:UploadFileService');
+        $this->getUploadFileService()->shouldReceive('getFile')->andReturn(array());
+
+        $result = $this->getCourseService()->convertAudioByCourseIdAndMediaId($course['id'], 1);
+
+        $this->getSettingService()->shouldHaveReceived('get');
+        $this->getUploadFileService()->shouldHaveReceived('getFile');
+    }
+
+    public function testConverAudioByCourseIdAndMediaIdLocal()
+    {
+        $fields = array(
+            'id' => 2,
+            'courseSetId' => 2,
+            'title' => '计划名称',
+            'enableAudio' => '1',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($fields);
+
+        $this->mockBiz('System:SettingService');
+        $this->getSettingService()->shouldReceive('get')->andReturn(array(
+            'upload_mode' => 'cloud',
+        ));
+
+        $this->mockBiz('File:UploadFileService');
+        $this->getUploadFileService()->shouldReceive('getFile')->andReturn(array(
+            'id' => 1,
+            'globalId' => 'f9bda3613f8447c39e96975629bff701',
+            'targetType' => 'courselesson',
+            'storage' => 'local',
+        ));
+
+        $result = $this->getCourseService()->convertAudioByCourseIdAndMediaId($course['id'], 1);
+
+        $this->getSettingService()->shouldHaveReceived('get');
+        $this->getUploadFileService()->shouldHaveReceived('getFile');
+
+        $this->assertEquals($result, false);
+    }
+
+    public function testConverAudioByCourseIdAndMediaId()
+    {
+        $fields = array(
+            'id' => 2,
+            'courseSetId' => 2,
+            'title' => '计划名称',
+            'enableAudio' => '1',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($fields);
+
+        $this->mockBiz('System:SettingService');
+        $this->getSettingService()->shouldReceive('get')->andReturn(array(
+            'upload_mode' => 'cloud',
+        ));
+
+        $this->mockBiz('File:UploadFileService');
+        $this->getUploadFileService()->shouldReceive('getFile')->andReturn(array(
+            'id' => 1,
+            'globalId' => 'f9bda3613f8447c39e96975629bff701',
+            'targetType' => 'courselesson',
+            'storage' => 'cloud',
+            'audioConvertStatus' => 'none',
+        ));
+
+        $this->getUploadFileService()->shouldReceive('retryTranscode');
+        $this->getUploadFileService()->shouldReceive('setAudioConvertStatus');
+
+        $result = $this->getCourseService()->convertAudioByCourseIdAndMediaId($course['id'], 1);
+
+        $this->getSettingService()->shouldHaveReceived('get');
+        $this->getUploadFileService()->shouldHaveReceived('getFile');
+        $this->getUploadFileService()->shouldHaveReceived('retryTranscode');
+        $this->getUploadFileService()->shouldHaveReceived('setAudioConvertStatus');
+
+        $this->assertEquals($result, true);
     }
 
     protected function createNewCourseSet()
@@ -339,5 +538,21 @@ class CourseServiceTest extends BaseTestCase
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }

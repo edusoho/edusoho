@@ -58,14 +58,14 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
             return $reason;
         }
 
-        if ($order['source'] === 'markting') {
+        if ('markting' === $order['source']) {
             return array(
                 'reason' => 'site.join_by_markting',
                 'reason_type' => 'markting_join',
             );
         }
 
-        if ($order['source'] === 'outside') {
+        if ('outside' === $order['source']) {
             return array(
                 'reason' => 'site.join_by_import',
                 'reason_type' => 'import_join',

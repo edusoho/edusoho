@@ -35,4 +35,6 @@ interface ThreadDao extends GeneralDaoInterface
      * @return mixed
      */
     public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit);
+
+    public function findThreadIds($conditions);
 }

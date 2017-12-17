@@ -376,6 +376,12 @@ convertStatus:
     success: Success
     error: Error
 
+audioConvertStatus:
+    none: Audio transcoding not start
+    doing: Audio transcoding
+    success: Audio transcoding success
+    error: Audio transcoding error
+
 state:
     banned: Disable
     replaced: Forbidden

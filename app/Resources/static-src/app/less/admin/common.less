@@ -156,6 +156,11 @@
 	background-position:0 -80px;
 }
 
+.admin-box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+     -moz-box-shadow: @box-shadow;
+          box-shadow: @box-shadow;
+}
 //上传专用btn; 可用于后台，现在整个系统上传图片按钮的可点范围都存在问题，可加改样式修复
 .upload-picture-btn  {
   position: relative;

@@ -58,6 +58,23 @@ class UploadFileServiceTest extends BaseTestCase
         unset($biz['@File:FileUploadFileDao']);
     }
 
+    public function testGetAudioServiceStatus()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getAudioServiceStatus',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'audioService' => 'opened',
+                ),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $status = $this->getUploadFileService()->getAudioServiceStatus();
+        $this->assertEquals($status, 'opened');
+    }
+
     public function testGetFullFile()
     {
         $fileId = 1;
@@ -99,6 +116,81 @@ class UploadFileServiceTest extends BaseTestCase
 
         $biz = $this->getBiz();
         unset($biz['@File:CloudFileImplementor']);
+        unset($biz['@File:UploadFileDao']);
+    }
+
+    public function testBatchConvertByIdsWithEmpty()
+    {
+        $ids = array();
+
+        $result = $this->getUploadFileService()->batchConvertByIds($ids);
+
+        $this->assertEquals($result, false);
+    }
+
+    public function testBatchConvertByIds()
+    {
+        $ids = array(1, 2);
+
+        $this->mockBiz('File:UploadFileDao');
+        $this->getUploadFileDao()->shouldReceive('count')->andReturn(2);
+
+        $this->getUploadFileDao()->shouldReceive('search')->andReturn(array(
+            array(
+                'id' => 1,
+                'globalId' => 'edc25dbecfee41cf9726882535995ac3',
+            ),
+            array(
+                'id' => 2,
+                'globalId' => 'a6d07c5223fc4976bec4d842709e0a8b',
+            ),
+        ));
+
+        $params = array(
+            array(
+                'functionName' => 'retryTranscode',
+                'runTimes' => 1,
+                'returnValue' => true,
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
+        $this->getUploadFileDao()->shouldReceive('update');
+
+        $result = $this->getUploadFileService()->batchConvertByIds($ids);
+
+        $this->assertEquals($result, true);
+
+        $biz = $this->getBiz();
+        unset($biz['@File:CloudFileImplementor']);
+        unset($biz['@File:UploadFileDao']);
+    }
+
+    public function testGetAudioConvertionStatusWithEmpty()
+    {
+        $ids = array();
+        $result = $this->getUploadFileService()->getAudioConvertionStatus($ids);
+
+        $this->assertEquals($result, '0');
+    }
+
+    public function testGetAudioConvertionStatus()
+    {
+        $ids = array(1, 2, 3, 4);
+
+        $params = array(
+            array(
+                'functionName' => 'count',
+                'runTimes' => 1,
+                'returnValue' => 2,
+            ),
+        );
+        $this->mockBiz('File:UploadFileDao', $params);
+
+        $result = $this->getUploadFileService()->getAudioConvertionStatus($ids);
+
+        $this->assertEquals($result, '2/4');
+
+        $biz = $this->getBiz();
         unset($biz['@File:UploadFileDao']);
     }
 
@@ -787,5 +879,13 @@ class UploadFileServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return UploadFileDao
+     */
+    protected function getUploadFileDao()
+    {
+        return $this->createDao('File:UploadFileDao');
     }
 }

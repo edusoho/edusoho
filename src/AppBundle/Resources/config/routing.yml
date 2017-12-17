@@ -2060,6 +2060,11 @@ course_set_manage_delete_materials:
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
    methods: [POST]
 
+course_set_manage_retry_transcode:
+   path:  /course_set/{id}/manage/file/{fileId}/retry_transcode
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:retryTranscode }
+   methods: [POST]
+
 
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish

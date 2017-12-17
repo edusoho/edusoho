@@ -14,9 +14,17 @@ class DeviceDetectorAdapter implements DeviceDetectorInterface
         $this->deviceDetector->parse();
     }
 
+    /**
+     * @return bool
+     */
     public function isMobile()
     {
         return $this->deviceDetector->isMobile();
+    }
+
+    public function getDevice()
+    {
+        return $this->deviceDetector->getDeviceName();
     }
 
     /**
@@ -25,5 +33,18 @@ class DeviceDetectorAdapter implements DeviceDetectorInterface
     public function getOs()
     {
         return $this->deviceDetector->getOs();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBot()
+    {
+        return $this->deviceDetector->isBot();
+    }
+
+    public function getClient()
+    {
+        return $this->deviceDetector->getClient();
     }
 }

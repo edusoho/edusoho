@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,14 +20,7 @@ class OnlineController extends BaseController
         $uuid = $request->cookies->get($cookieName, $this->generateGuid());
 
         if (!empty($sessionId)) {
-            $online = array(
-                'sess_id' => $uuid,
-                'ip' => $request->getClientIp(),
-                'user_agent' => $request->headers->get('User-Agent', ''),
-                'source' => DeviceToolkit::isMobileClient() ? '手机浏览器' : 'PC',
-            );
-            $this->getOnlineService()->saveOnline($online);
-            //            $request->getSession()->set('online_flush_time', time());
+            $this->get('user.online_track')->track($uuid);
         }
 
         $response = new Response('true');
@@ -79,9 +71,9 @@ class OnlineController extends BaseController
         }
 
         $type = $request->query->get('type', 'online');
-        if ($type == 'logined') {
+        if ('logined' == $type) {
             $conditions['is_login'] = 1;
-        } elseif ($type == 'anonymous') {
+        } elseif ('anonymous' == $type) {
             $conditions['is_login'] = 0;
         }
 
@@ -113,13 +105,19 @@ class OnlineController extends BaseController
         ));
     }
 
+    /**
+     * @return \Codeages\Biz\Framework\Session\Service\OnlineService
+     */
     protected function getOnlineService()
     {
-        return $this->getBiz()->service('Session:OnlineService');
+        return $this->createService('Session:OnlineService');
     }
 
+    /**
+     * @return \Biz\User\Service\UserService
+     */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

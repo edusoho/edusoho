@@ -152,7 +152,7 @@ activity.live.ended_notice: Live is finshished
 activity.live.content_title: Live description
 activity.live.entry_live_room: Enter the live classroom
 activity.live.count_down_title: Countdown
-activity.liva.not_created_notice: Live classroom not yet created
+activity.live.not_created_notice: Live classroom not yet created
 
 activity.audio_manage.length_required_error_hint: Please enter the durations
 activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
@@ -245,7 +245,7 @@ Activity.live.ended_notice: Live is finshished
 Activity.live.content_title: Live description
 Activity.live.entry_live_room: Enter the live classroom
 Activity.live.count_down_title: Countdown
-Activity.liva.not_created_notice: Live classroom not yet created
+Activity.live.not_created_notice: Live classroom not yet created
 
 Activity.audio_manage.length_required_error_hint: Please enter the duration
 Activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
@@ -837,3 +837,8 @@ oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
 oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
 oauth.register.error_message: 注册出现异常，请联系管理员
+
+## 用户数据统计
+admin.user.statistics.data.learn_total_time: 学习总时长
+admin.user.statistics.data.learn_time: 学习时长/分钟
+admin.user.statistics.data.time: 时长

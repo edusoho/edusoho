@@ -5,6 +5,7 @@ namespace Codeages\Biz\Pay;
 use Codeages\Biz\Pay\Status\PayTradeContext;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Codeages\Biz\Pay\Payment\SignatureToolkit;
 
 class PayServiceProvider implements ServiceProviderInterface
 {
@@ -16,7 +17,6 @@ class PayServiceProvider implements ServiceProviderInterface
         $biz['payment.options'] = null;
 
         $biz['payment.final_options'] =  function () use ($biz) {
-
             $options = array(
                 'closed_by_notify' => false,
                 'refunded_by_notify' => false,
@@ -63,6 +63,7 @@ class PayServiceProvider implements ServiceProviderInterface
                 'class' => '\Codeages\Biz\Pay\Payment\LianlianPayGetway',
                 'secret' => '',
                 'oid_partner' => '',
+                'signatureToolkit' => new SignatureToolkit(),
             )
         );
 

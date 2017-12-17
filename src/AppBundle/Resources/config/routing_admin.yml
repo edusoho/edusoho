@@ -429,6 +429,11 @@ admin_course_set:
     defaults: { _controller: AppBundle:Admin/CourseSet:index, filter:'normal' }
     permissions: [admin_course_manage]
 
+admin_course_list:
+    path:  /course_set/{id}/course/list
+    defaults: { _controller: AppBundle:Admin/CourseSet:courseList }
+    permissions: [admin_course_manage]
+
 admin_course_set_clone_by_web:
     path:  /course_set/{courseSetId}/clone_by_web
     defaults: { _controller: AppBundle:Admin/CourseSet:cloneByWeb }
@@ -2280,3 +2285,15 @@ admin_bill:
 admin_user_learn_statistics:
     path: /user/learn/statistics
     defaults: { _controller: AppBundle:Admin/UserLearnStatistics:show }
+
+admin_user_learn_detail:
+    path: /user/learn/{userId}/detail
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:detail }
+
+admin_user_learn_chart:
+    path: /user/learn/{userId}/chart
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:learnChart }
+
+admin_user_learn_statistics_info:
+    path: /user/learn/statistics/info
+    defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }

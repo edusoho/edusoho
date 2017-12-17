@@ -105,6 +105,7 @@ class ThemeController extends BaseController
             'admin/theme/default/index.html.twig',
             array(
                 'friendlyLinks' => $friendlyLinks,
+                'isEditColor' => true,
             )
         );
     }

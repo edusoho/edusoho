@@ -1630,7 +1630,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $reason = array(
             'reason' => 'course.member.operation.reason.classroom_exit',
-            'reason_type' => 'classroom_exit'
+            'reason_type' => 'classroom_exit',
         );
         foreach ($courseIds as $key => $courseId) {
             $count = 0;
