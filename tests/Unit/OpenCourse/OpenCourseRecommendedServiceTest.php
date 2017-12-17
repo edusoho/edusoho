@@ -4,6 +4,7 @@ namespace Tests\Unit\OpenCourse;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ReflectionUtils;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
@@ -112,6 +113,63 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $randomCourses = $this->getCourseRecommendedService()->findRandomRecommendCourses($openCourse['id'], $needNum);
 
         $this->assertEquals(count($randomCourses), $needNum);
+    }
+
+    public function testDeleteBatchRecommendCoursesWithEmpty()
+    {
+        $result = ReflectionUtils::invokeMethod(
+            $this->getCourseRecommendedService(),
+            'deleteBatchRecommendCourses',
+            array(array())
+        );
+        $this->assertTrue($result);
+    }
+
+    public function testAddRecommendeds()
+    {
+        $recommendedCourseDao = $this->mockBiz(
+            'OpenCourse:RecommendedCourseDao',
+            array(
+                array(
+                    'functionName' => 'create',
+                    'withParamms' => array(
+                        array(
+                            'recommendCourseId' => 12,
+                            'openCourseId' => 123,
+                            'type' => 'live',
+                        ),
+                    ),
+                    'times' => 1,
+                ),
+            )
+        );
+
+        $result = ReflectionUtils::invokeMethod(
+            $this->getCourseRecommendedService(),
+            'addRecommendeds',
+            array(array(12), 123, 'live')
+        );
+        $this->assertTrue($result);
+        $recommendedCourseDao->shouldHaveReceived('create')->times(1);
+    }
+
+    public function testGetTypeCourseService()
+    {
+        $result = ReflectionUtils::invokeMethod(
+            $this->getCourseRecommendedService(),
+            'getTypeCourseService',
+            array('live')
+        );
+        $this->assertEquals('CustomBundle\Biz\Course\Service\Impl\CourseServiceImpl', get_class($result));
+    }
+
+    public function testGetOpenCourseService()
+    {
+        $result = ReflectionUtils::invokeMethod(
+            $this->getCourseRecommendedService(),
+            'getOpenCourseService'
+        );
+        $this->assertEquals('Biz\OpenCourse\Service\Impl\OpenCourseServiceImpl', get_class($result));
     }
 
     protected function createCourse($title)
