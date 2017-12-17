@@ -28,16 +28,3 @@ $('.js-back').click(() => {
 $('body').on('click', '.js-user-nav-dropdown', function (event) {
   event.stopPropagation();
 });
-
-
-$('.js-inform-tab').click(function(e) {
-  const $this = $(this);
-  e.preventDefault();
-  $this.addClass('active').siblings().removeClass('active');
-  $this.tab('show');
-})
-
-$('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
-  const $item = $(event.currentTarget);
-  window.open($item.data('url'));
-})
