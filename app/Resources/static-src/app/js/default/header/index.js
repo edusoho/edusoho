@@ -35,6 +35,16 @@ $('.js-inform-tab').click(function(e) {
   e.preventDefault();
   $this.addClass('active').siblings().removeClass('active');
   $this.tab('show');
+
+  $.ajax({
+    type : "post",
+    url : $this.data('url'),
+    beforeSend() {
+      $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
+    },
+  }).done(() => {
+    $('.js-inform-loading').addClass('hidden');
+  });
 })
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {

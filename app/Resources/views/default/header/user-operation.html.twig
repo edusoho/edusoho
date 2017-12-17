@@ -34,6 +34,7 @@
             <div class="notification-content tab-pane active" role="tabpanel" id="notification">
               <div class="inform-dropdown-body">
                 {% if app.user.newNotificationNum > 0 %}
+                  <div class="inform-loading js-inform-loading hidden"></div>
                  {% for i in 0..3 %}
                     <div class="inform-dropdown-body__item inform-notification-item js-inform-notification" data-url="{{ path('notification') }}"><span>你正在学习的 E周在线教育发布了一个新的公告，快去看看吧。</span></div>
                   {% endfor %}
@@ -53,6 +54,7 @@
             <div class="message-content tab-pane" role="tabpanel" id="message">
               <div class="inform-dropdown-body">
                 {% if app.user.newMessageNum > 0 %}
+                  <div class="inform-loading js-inform-loading hidden"></div>
                   {% for i in 0..4 %}
                     <a class="inform-dropdown-body__item clearfix inform-message-item" href="#" target="_blank">
                       <div class="inform-message-item__avatar">
