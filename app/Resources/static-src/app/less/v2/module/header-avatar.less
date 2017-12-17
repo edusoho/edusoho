@@ -22,20 +22,25 @@
   }
 }
 
-.user-dropdown__avatar {
+.user-dropdown-info {
+  padding: 0 32px;
+  height: 80px;
+  display: table;
+}
+
+.user-dropdown-info__avatar {
   display: inline-block;
   img {
     .cd-box-shadow-z(8px);
   }
 }
 
-.user-dropdown__info {
-  padding: 0 32px;
-  height: 80px;
-  display: table;
+.user-dropdown-profile {
+  display: table-cell;
+  vertical-align: middle;
 }
 
-.user-dropdown__nickname {
+.user-dropdown-profile__nickname {
   width: 108px;
   font-size: 18px;
   line-height: 1;
@@ -46,19 +51,14 @@
   }
 }
 
-.user-dropdown__vip-icon {
+.user-dropdown-profile__vip-icon {
   margin-left: 4px;
   width: 16px;
   height: 16px;
   vertical-align: unset;
 }
 
-.user-dropdown__profile {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.user-dropdown__rank {
+.user-dropdown-profile__rank {
   font-size: 12px;
   line-height: 1;
   color: @cd-gray;
@@ -72,13 +72,12 @@
     margin-right: 4px;
     font-size: 12px;
   }
-  a {
+  a:first-child {
     padding-right: 34px;
-    & + a {
-      padding-left: 34px;
-      padding-right: 0;
-      .cd-box-shadow-inset;
-    }
+  }
+  a:last-child {
+    padding-left: 34px;
+    .cd-box-shadow-inset;
   }
 }
 
