@@ -109,11 +109,11 @@
           <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
           {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>
           {% endif %}
-          {% if 'ROLE_TEACHER' in app.user.roles %}<li class="hidden-lg user-nav-li-my"><a href="{{ path('my') }}"><i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_teaching_menu'|trans}}</a></li>
+          {% if 'ROLE_TEACHER' in app.user.roles %}<li class="hidden-lg user-nav-li-my"><a href="{{ path('my') }}"><i class="edusoho-icon edusoho-icon-event"></i>{{'homepage.header.my_teaching_menu'|trans}}</a></li>
           {% endif %}
           <li class="hidden-lg user-nav-li-my">
             <a href="{{ path('my_courses_learning') }}">
-              <i class="es-icon es-icon-eventnote"></i>{{'homepage.header.my_learning_menu'|trans}}
+              <i class="edusoho-icon edusoho-icon-book"></i>{{'homepage.header.my_learning_menu'|trans}}
             </a>
           </li>
           <li class="hidden-lg hidden-md"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
