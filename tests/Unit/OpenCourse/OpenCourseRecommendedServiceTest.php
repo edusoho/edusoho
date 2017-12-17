@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Unit\OpenCourseRecommendedServiceTest;
+namespace Tests\Unit\OpenCourse;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ArrayToolkit;
-use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
