@@ -159,7 +159,6 @@ class OpenCourseDeleteServiceTest extends BaseTestCase
         $openCourseLessonDao->shouldHaveReceived('search');
         $openCourseLessonDao->shouldHaveReceived('delete');
         $uploadFileService->shouldHaveReceived('waveUploadFile');
-        $uploadFileService->shouldHaveReceived('getFile');
         $materialService->shouldHaveReceived('searchMaterials');
         $logService->shouldHaveReceived('info');
 
