@@ -56,6 +56,6 @@ export default class Comp {
   }
 
   _getParamPrefix() {
-    alert('Comp：_getParamPrefix not implemented');
+    alert('Comp: _getParamPrefix not implemented');
   }
 }

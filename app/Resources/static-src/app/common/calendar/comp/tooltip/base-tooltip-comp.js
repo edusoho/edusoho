@@ -14,11 +14,11 @@ export default class BaseTooltipComp extends Comp {
   }
 
   _showTip(params, event, jsEvent) {
-    alert('BaseTooltip: showTip not implemented');
+    alert('BaseTooltip: _showTip not implemented');
   }
 
   _hideTip(params, event, jsEvent) {
-    alert('BaseTooltip: hideTip not implemented');
+    alert('BaseTooltip: _hideTip not implemented');
   }
 
   _getParamPrefix() {
