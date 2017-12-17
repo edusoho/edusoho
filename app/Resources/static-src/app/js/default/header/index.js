@@ -25,6 +25,6 @@ $('.js-back').click(() => {
   }
 });
 
-$('body').on('click', '.js-user-nav-dropdown', function (event) {
+$('body').on('click', '.js-user-nav-dropdown', (event) => {
   event.stopPropagation();
 });

@@ -40,22 +40,6 @@
   &.cd-btn-ghost-warning {
     .cd-btn-ghost(@brand-warning);
   }
-  &.cd-btn-ghost-default {
-    background: #fff;
-    border-color: rgba(0,0,0,0.16);
-    color: @cd-gray-dark;
-    .cd-transition;
-    &:hover,
-    &:focus {
-      .cd-box-shadow(6px);
-      .cd-transition;
-      background: rgba(red(#fff), green(#fff), blue(#fff), 0.1);
-    }
-    &:active {
-      background: @cd-bg;
-      .cd-transition;
-    }
-  }
 }
 
 .btn.cd-btn {
@@ -104,5 +88,20 @@
   }
   &.cd-btn-warning {
     .cd-btn-raised(@brand-warning);
+  }
+  &.cd-btn-default {
+    background: #fff;
+    border-color: rgba(0,0,0,0.16);
+    color: @cd-gray-dark;
+    .cd-transition;
+    &:hover,
+    &:focus {
+      .cd-box-shadow(6px);
+      .cd-transition;
+    }
+    &:active {
+      background: @cd-bg;
+      .cd-transition;
+    }
   }
 }
