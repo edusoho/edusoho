@@ -3,9 +3,6 @@
 namespace Tests\Unit\Component\Export;
 
 use Biz\BaseTestCase;
-use AppBundle\Common\ReflectionUtils;
-use AppBundle\Component\Export\Exporter;
-use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Component\Export\Course\OverviewStudentExporter;
 
 class OverviewStudentExporterTest extends BaseTestCase
@@ -13,22 +10,22 @@ class OverviewStudentExporterTest extends BaseTestCase
     public function testGetTitles()
     {
         $biz = $this->getBiz();
-        for ($i=0; $i <= 4; $i++) {
-            $this->getTaskDao()->create(array('title' => 'test'.$i, 'type' => 'vedio','courseId' => 1, 'isOptional' => 0, 'status' => 'published', 'createdUserId' => 1));
+        for ($i = 0; $i <= 4; ++$i) {
+            $this->getTaskDao()->create(array('title' => 'test'.$i, 'type' => 'vedio', 'courseId' => 1, 'isOptional' => 0, 'status' => 'published', 'createdUserId' => 1));
         }
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
-            'courseId' => 1
+            'courseId' => 1,
         ));
 
         $title = $expoter->getTitles();
         $result = array(
-            "task.learn_data_detail.nickname",
-            "task.learn_data_detail.finished_rate",
-            "test0",
-            "test1",
-            "test2",
-            "test3",
-            "test4",
+            'task.learn_data_detail.nickname',
+            'task.learn_data_detail.finished_rate',
+            'test0',
+            'test1',
+            'test2',
+            'test3',
+            'test4',
         );
 
         $this->assertArrayEquals($result, $title);
@@ -37,7 +34,7 @@ class OverviewStudentExporterTest extends BaseTestCase
     public function testCanExport()
     {
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
-            'courseId' => 1
+            'courseId' => 1,
         ));
         $result = $expoter->canExport();
         $this->assertEquals(false, $result);
@@ -50,14 +47,14 @@ class OverviewStudentExporterTest extends BaseTestCase
                     'functionName' => 'tryManageCourse',
                     'returnValue' => true,
                     'withParams' => array(
-                        1
+                        1,
                     ),
                 ),
                 array(
                     'functionName' => 'getCourse',
                     'returnValue' => array('id' => 1),
                     'withParams' => array(
-                        1
+                        1,
                     ),
                 ),
             )
@@ -83,7 +80,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                       array(
                             'courseId' => 1,
                         ),
-                        1
+                        1,
                     ),
                 ),
                 array(
@@ -92,9 +89,9 @@ class OverviewStudentExporterTest extends BaseTestCase
                     'withParams' => array(
                       array(
                             'courseId' => 1,
-                        )
+                        ),
                     ),
-                ),                
+                ),
             )
         );
         $this->mockBiz(
@@ -104,9 +101,8 @@ class OverviewStudentExporterTest extends BaseTestCase
                     'functionName' => 'countMembers',
                     'returnValue' => 10,
                     'withParams' => array(
-                       
                     ),
-                )
+                ),
             )
         );
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
@@ -131,7 +127,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                             'courseId' => 1,
                             'start' => 1,
                         ),
-                        1
+                        1,
                     ),
                 ),
                 array(
@@ -141,7 +137,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                       array(
                             'courseId' => 1,
                             'start' => 1,
-                        )
+                        ),
                     ),
                 ),
             )
@@ -175,7 +171,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                             'courseId' => 1,
                             'start' => 1,
                         ),
-                        1
+                        1,
                     ),
                 ),
                 array(
@@ -185,7 +181,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                       array(
                             'courseId' => 1,
                             'start' => 1,
-                        )
+                        ),
                     ),
                 ),
             )
@@ -193,12 +189,12 @@ class OverviewStudentExporterTest extends BaseTestCase
         $expoter = new OverviewStudentExporter(self::$appKernel->getContainer(), array(
             'courseId' => 1,
             'start' => 1,
-        )); 
+        ));
 
         $conditions = $expoter->buildCondition(array(
             'courseId' => 1,
             'start' => 1,
-        )); 
+        ));
 
         $this->assertArrayEquals(array('role' => 'student', 'courseId' => 1), $conditions);
     }
@@ -217,7 +213,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                             'courseId' => 1,
                             'start' => 1,
                         ),
-                        1
+                        1,
                     ),
                 ),
                 array(
@@ -227,7 +223,7 @@ class OverviewStudentExporterTest extends BaseTestCase
                       array(
                             'courseId' => 1,
                             'start' => 1,
-                        )
+                        ),
                     ),
                 ),
                 array(
@@ -236,38 +232,36 @@ class OverviewStudentExporterTest extends BaseTestCase
                         array(
                             1 => array(
                                 'id' => 1,
-                                'nickname' => 'test1'
+                                'nickname' => 'test1',
                             ),
                             2 => array(
                                 'id' => 2,
-                                'nickname' => 'test2'
+                                'nickname' => 'test2',
                             ),
                         ),
                         array(
                             3 => array(
-                                'id' => 3
+                                'id' => 3,
                             ),
                             4 => array(
-                                'id' => 4
+                                'id' => 4,
                             ),
                         ),
                         array(
                             1 => array(
                                  3 => array(
-                                     'status' => 'start'
+                                     'status' => 'start',
                                  ),
                             ),
                             2 => array(
                                  4 => array(
-                                     'status' => 'finish'
+                                     'status' => 'finish',
                                  ),
-                                 
                             ),
-                        )),
+                        ), ),
                 ),
             )
         );
-        
 
         $this->mockBiz(
             'Course:MemberService',
@@ -312,13 +306,12 @@ class OverviewStudentExporterTest extends BaseTestCase
 
         $this->assertArrayEquals(
             array(
-                'test1', '50%', '学习中', '未开始'
-            )
-            , $data[0]
+                'test1', '50%', '学习中', '未开始',
+            ), $data[0]
         );
         $this->assertArrayEquals(
             array(
-                'test2', '100%', '未开始', '已完成'
+                'test2', '100%', '未开始', '已完成',
             ), $data[1]
         );
     }
