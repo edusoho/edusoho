@@ -2,6 +2,7 @@
   <ul class="nav user-nav">
     {% if app.user %}
       {% include 'default/header/part/user-role-manage.html.twig' %}
+      {% include 'default/header/part/user-inform.html.twig' %}
       {% include 'default/header/part/user-avatar.html.twig' %}
     {% else %}
       {% include 'default/header/part/visitor-login.html.twig' %}
