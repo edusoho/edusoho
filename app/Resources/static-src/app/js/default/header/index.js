@@ -25,15 +25,6 @@ $('.js-back').click(() => {
   }
 });
 
-
-// ajax({
-//   url: '/api/newNotifications',
-//   type: 'GET'
-// }).then((result) => {
-//   console.log(result);
-// }, () => {
-// });
-
 $('body').on('click', '.js-user-nav-dropdown', function (event) {
   event.stopPropagation();
 });
@@ -55,6 +46,18 @@ $('.js-inform-tab').click(function(e) {
     $('.js-inform-loading').addClass('hidden');
   });
 })
+
+ajax({
+  url: '/api/newNotifications',
+  type: 'GET',
+  beforeSend() {
+    $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
+  },
+}).then((result) => {
+  $('.js-inform-loading').addClass('hidden');
+  $('.js-inform-notification').append(result);
+}, () => {
+});
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);

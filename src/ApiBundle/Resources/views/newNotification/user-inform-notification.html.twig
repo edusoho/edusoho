@@ -1,0 +1,8 @@
+{% for notification in notifications %}
+  {% set notification = render_notification(notification) %}
+  <div class="inform-dropdown-body__item inform-notification-item js-inform-notification" data-url="{{ path('notification') }}">
+  {{ notification.message|raw }}
+  </div>
+{% else %}
+  <li class="empty">{{'site.datagrid.empty'|trans}}</li>
+{% endfor %}

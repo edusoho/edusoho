@@ -16,13 +16,15 @@ class NewNotification extends AbstractResource
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
-        $newNotification = $this->getNotificationService()->searchNotifications(
-            array('userId' => $user->id, 'isRead' => 0),
+        $newNotifications = $this->getNotificationService()->searchNotifications(
+            array('userId' => 2, 'isRead' => 0),
             array('createdTime' => 'DESC'),
             0,
             5
         );
-        return $newNotification;
+        return $this->renderView("ApiBundle:newNotification:user-inform-notification.html.twig", array(
+            'notifications' => $newNotifications,
+        ));
     }
 
     protected function getNotificationService()
