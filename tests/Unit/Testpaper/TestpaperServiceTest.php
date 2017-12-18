@@ -1024,7 +1024,7 @@ class TestpaperServiceTest extends BaseTestCase
     {
         $choiceQuestions = $this->generateChoiceQuestions(1, 2);
         $fillQuestions = $this->generateFillQuestions(1, 2);
-        $determineQuestions = $this->generateDetermineQuestions(1, 2);
+        $determineQuestions = $this->generateDetermineQuestions(1, 1);
         $essayQuestions = $this->generateEssayQuestions(1, 2);
         $materialQuestions = $this->generateMaterialQuestions(1, 1);
         $question = array(
@@ -1090,8 +1090,8 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(0, $accuracy['fill']['score']);
         $this->assertEquals(2, $accuracy['fill']['all']);
 
-        $this->assertEquals(1, $accuracy['determine']['noAnswer']);
-        $this->assertEquals(0, $accuracy['determine']['score']);
+        $this->assertEquals(1, $accuracy['determine']['right']);
+        $this->assertEquals(2, $accuracy['determine']['score']);
         $this->assertEquals(1, $accuracy['determine']['all']);
 
         $this->assertEquals(1, $accuracy['material']['noAnswer']);
@@ -1157,9 +1157,60 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['subjectiveScore']);
     }
 
-    /**
-     * @expectedException \Exception
-     */
+    public function testCheckHomeworkFinish()
+    {
+        $choiceQuestions = $this->generateChoiceQuestions(1, 2);
+        $fillQuestions = $this->generateFillQuestions(1, 1);
+        $determineQuestions = $this->generateDetermineQuestions(1, 1);
+        $essayQuestions = $this->generateEssayQuestions(1, 1);
+
+        $fields2 = array(
+            'name' => 'homework',
+            'description' => 'homework description',
+            'itemCount' => 3,
+            'questionIds' => array($choiceQuestions[0]['id'], $fillQuestions[0]['id'], $determineQuestions[0]['id'], $essayQuestions[0]['id']),
+            'courseSetId' => 1,
+            'courseId' => 0,
+            'pattern' => 'questionType',
+            'type' => 'homework',
+        );
+        $homework = $this->getTestpaperService()->buildTestpaper($fields2, 'homework');
+
+        $fields = array(
+            'lessonId' => 1,
+            'courseId' => 1,
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($homework['id'], $fields);
+        $this->assertEquals('doing', $testpaperResult['status']);
+
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2, 3),
+            $essayQuestions[0]['id'] => array('essay answer'),
+        );
+        $formData = array(
+            'usedTime' => 5,
+            'data' => json_encode($answers),
+            'attachments' => array(),
+        );
+
+        $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
+        $this->assertEquals('reviewing', $result['status']);
+
+        $fields = array(
+            'result' => array(
+                $essayQuestions[0]['id'] => array(
+                    'teacherSay' => 'question check teacher say',
+                ),
+            ),
+            'teacherSay' => 'teacher say content',
+            'passedStatus' => 'passed',
+        );
+        $result = $this->getTestpaperService()->checkFinish($testpaperResult['id'], $fields);
+
+        $this->assertEquals('finished', $result['status']);
+        $this->assertEquals(0, $result['subjectiveScore']);
+    }
+    
     public function testSubmitAnswers()
     {
         $choiceQuestions = $this->generateChoiceQuestions(1, 2);
@@ -1216,17 +1267,56 @@ class TestpaperServiceTest extends BaseTestCase
                 'returnValue' => array(),
             ),
         ));
-        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array(array($choiceQuestions[0]['id'] => array(1, 2))));
+        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array($choiceQuestions[0]['id'] => array(1, 2)));
 
         $this->assertEquals(3, count($itemResults));
+    }
 
-        $this->mockBiz('Testpaper:TestpaperItemResultDao', array(
+    /**
+     * @expectedException \Exception
+     */
+    public function testSubmitAnswersException()
+    {
+        $choiceQuestions = $this->generateChoiceQuestions(1, 2);
+        $fillQuestions = $this->generateFillQuestions(1, 2);
+        $determineQuestions = $this->generateDetermineQuestions(1, 2);
+        $essayQuestions = $this->generateEssayQuestions(1, 1);
+
+        $fields1 = array(
+            'name' => 'testpaper',
+            'description' => 'testpaper description',
+            'mode' => 'range',
+            'ranges' => array('courseId' => 0),
+            'counts' => array('choice' => 2, 'fill' => 2),
+            'scores' => array('choice' => 2, 'fill' => 2),
+            'missScores' => array('choice' => 1, 'uncertain_choice' => 1),
+            'courseSetId' => 1,
+            'courseId' => 0,
+            'pattern' => 'questionType',
+            'type' => 'testpaper',
+        );
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields = array(
+            'lessonId' => 1,
+            'courseId' => 1,
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
+
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2, 3),
+            $fillQuestions[0]['id'] => array('fill answer'),
+            123 => array(1),
+        );
+
+        $answers = json_encode($answers);
+
+        $this->mockBiz('File:UploadFileService', array(
             array(
-                'functionName' => 'db',
+                'functionName' => 'createUseFiles',
                 'throwException' => new \Exception(),
             ),
         ));
-        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array(array($choiceQuestions[0]['id'] => array(1, 2))));
+        $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, array($choiceQuestions[0]['id'] => array(1, 2)));
     }
 
     public function testSumScore()
