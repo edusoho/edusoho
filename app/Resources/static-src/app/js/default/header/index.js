@@ -54,9 +54,11 @@ ajax({
     $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
   },
 }).then((result) => {
+  console.log(result);
   $('.js-inform-loading').addClass('hidden');
   $('.js-inform-notification').append(result);
 }, () => {
+  console.log('3333');
 });
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {

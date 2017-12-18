@@ -17,7 +17,7 @@ class NewNotification extends AbstractResource
     {
         $user = $this->getCurrentUser();
         $newNotifications = $this->getNotificationService()->searchNotifications(
-            array('userId' => 2, 'isRead' => 0),
+            array('userId' => $user->id, 'isRead' => 0),
             array('createdTime' => 'DESC'),
             0,
             5
