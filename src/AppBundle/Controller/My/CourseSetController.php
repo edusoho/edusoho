@@ -50,7 +50,7 @@ class CourseSetController extends CourseBaseController
             'parentId' => 0,
         );
 
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $conditions['parentId_GT'] = 0;
             unset($conditions['type']);
             unset($conditions['parentId']);
@@ -83,7 +83,7 @@ class CourseSetController extends CourseBaseController
 
         $classrooms = array();
 
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $classrooms = $this->getClassroomService()->findClassroomsByCourseSetIds(
                 ArrayToolkit::column($courseSets, 'id')
             );
@@ -103,6 +103,13 @@ class CourseSetController extends CourseBaseController
                 'paginator' => $paginator,
                 'filter' => $filter,
             )
+        );
+    }
+
+    public function teachingLivesCalendarAction(Request $request)
+    {
+        return $this->render(
+            'my/teaching/lives-calendar.html.twig'
         );
     }
 

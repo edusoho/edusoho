@@ -33,6 +33,7 @@
         "es5-shim": "4.5.9",
         "es6-promise": "4.0.5",
         "font-awesome": "4.6.3",
+        "fullcalendar": "^3.7.0",
         "handlebars": "4.0.11",
         "html5shiv": "3.7.3",
         "iframe-resizer": "3.5.5",
@@ -64,6 +65,7 @@
         "subtitle": "0.1.5",
         "swiper": "2.7.6",
         "typeahead.js": "0.11.1",
+        "ua-parser-js": "^0.7.17",
         "video.js": "4.10.2",
         "waypoints": "4.0.1",
         "weixin-js-sdk": "1.2.0"

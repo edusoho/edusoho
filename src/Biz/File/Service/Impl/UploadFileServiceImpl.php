@@ -29,9 +29,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         'cloud' => 'File:CloudFileImplementor',
     );
 
-    public function getAudioPerssion()
+    /**
+     * @return (opened, needOpen, notAllowed)
+     */
+    public function getAudioServiceStatus()
     {
-        return $this->getFileImplementor('cloud')->convertPermission();
+        $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
+
+        return $audioService['audioService'];
     }
 
     public function getFile($id)
@@ -79,8 +84,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
         }
-
         $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
+
+        return true;
     }
 
     //视频转音频的完成情况

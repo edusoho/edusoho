@@ -490,7 +490,7 @@ class CourseManageController extends BaseController
             }
             $updatedCourse = $this->getCourseService()->updateCourse($courseId, $data);
             if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
-                $this->getCourseService()->batchConvertAudio($course['id']);
+                $this->getCourseService()->batchConvert($course['id']);
             }
 
             $this->setFlashMessage('success', 'site.save.success');
@@ -516,14 +516,14 @@ class CourseManageController extends BaseController
             );
         }
 
-        $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
+        $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
 
         return $this->render(
             'course-manage/info.html.twig',
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
-                'audioPerssion' => $audioPerssion,
+                'audioServiceStatus' => $audioServiceStatus,
             )
         );
     }

@@ -140,7 +140,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isFree',
                 'serializeMode',
                 'courseType',
-                'type'
+                'type',
+                'enableAudio',
             )
         );
 
@@ -227,7 +228,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'maxStudentNum',
                 'locked',
-                'enableAudio'
+                'enableAudio',
             )
         );
 
@@ -371,19 +372,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $newCourse;
     }
 
-    public function batchConvertAudio($courseId)
+    public function batchConvert($courseId)
     {
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
         $medias = ArrayToolkit::column($activities, 'ext');
         $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
-    public function converAudioByCourseIdAndMediaId($courseId, $mediaId)
+    public function convertAudioByCourseIdAndMediaId($courseId, $mediaId)
     {
         $course = $this->tryManageCourse($courseId);
         $storage = $this->getSettingService()->get('storage', array('upload_mode' => 'local'));
 
-        if ('0' == $course['enableAudio'] || 'local' == $storage['upload_mode']) {
+        if (empty($course['enableAudio']) || 'local' == $storage['upload_mode']) {
             return false;
         }
 
@@ -479,12 +480,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
-    private function validatie($fields)
+    protected function validatie($fields)
     {
-        if ($fields['enableAudio'] == '1') {
-            $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
-            if ($audioPerssion != 'open') {
-                $this->createInvalidArgumentException('需要先申请为商业用户!');
+        if (!empty($fields['enableAudio'])) {
+            $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
+            if ('opened' != $audioServiceStatus) {
+                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
             }
         }
     }
