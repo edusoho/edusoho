@@ -1,9 +1,7 @@
-import ajax from 'common/api/ajax'
-
 /**
  * @param options 
     {
-        data: [   //与dataUrl有一个必填
+        data: [   //与dataApi有一个必填
             {
                 title: 'Meeting',
                 start: '2017-11-12 10:30:00',
@@ -11,14 +9,15 @@ import ajax from 'common/api/ajax'
             }
         ],
 
-        dataUrl: 'teacher/live/schedules', 
+        dataApi: Api.course.search, 
             //与data有一个必填, 用于获取数据，每次获取数据时，会带上开始和结束时间，见 dateParams
+            // 需要使用 common/api/index.js 指定的路由
 
         calendarContainer: '#calendar',  
             //必填，日历控件容器
 
         attrs: {'title': 'name', 'start': 'createdTime', 'end': 'finishedTime'},
-            //当 dataUrl有值时，必填， 用于处理接口返回的数据，
+            //当 dataApi有值时，必填， 用于处理接口返回的数据，
             //  例子的意思为将返回json中的
             //    name ==> 标题，
             //    createdTime ==> 开始时间,
@@ -26,7 +25,7 @@ import ajax from 'common/api/ajax'
             //    时间格式必须为 yyyy-MM-dd HH:mm:ss
 
         dateParams: {'start': 'createdTime_GE', 'end': 'createdTime_LT'},
-            //当 dataUrl有值时，可指定请求url中的时间参数名字
+            //当 dataApi有值时，可指定请求url中的时间参数名字
             // start 是当前页日历开始时间， 例子中使用 startTime_GE 属性
             // end 是当前页日历结束时间， 例子中使用 createdTime_LT 属性
             // 后台搜索的数据需符合 start <= 时间 < end
@@ -89,7 +88,7 @@ export default class CustomFullCalendar {
       require('libs/fullcalendar/locale/' + this.options['locale']);
     }
 
-    if (typeof this.options['dataUrl'] != 'undefined') {
+    if (typeof this.options['dataApi'] != 'undefined') {
       calendarOptions['lazyFetching'] = true;
       calendarOptions['events'] = this._ajaxLoading;
     } else if (typeof this.options['data'] != 'undefined') {
@@ -108,9 +107,7 @@ export default class CustomFullCalendar {
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
 
-    ajax({
-      url: current.options['dataUrl'],
-      type: 'GET',
+    current.options['dataApi']({
       data: params
     }).then((result) => {
       let calEvents = [];
@@ -119,7 +116,7 @@ export default class CustomFullCalendar {
       }
       calEvents = current._generateEventOtherAttrs(calEvents, result['data']);
       callback(calEvents);
-    }, () => {
+    }).catch((res) => {
       console.log('error callback')
     });
   }
@@ -147,12 +144,12 @@ export default class CustomFullCalendar {
   }
 
   _verifyNeccessaryFields() {
-    if (typeof this.options['data'] == 'undefined' && typeof this.options['dataUrl'] == 'undefined') {
-      console.log('custom-full-calendar: no "data" or "dataUrl" in options');
+    if (typeof this.options['data'] == 'undefined' && typeof this.options['dataApi'] == 'undefined') {
+      console.log('custom-full-calendar: no "data" or "dataApi" in options');
       return false;
     }
 
-    if (typeof this.options['dataUrl'] != 'undefined' && typeof this.options['attrs'] == 'undefined') {
+    if (typeof this.options['dataApi'] != 'undefined' && typeof this.options['attrs'] == 'undefined') {
       console.log('custom-full-calendar: no "attrs" in options');
       return false;
     }
