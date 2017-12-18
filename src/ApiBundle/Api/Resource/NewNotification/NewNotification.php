@@ -22,7 +22,7 @@ class NewNotification extends AbstractResource
             0,
             5
         );
-        return json_encode($newNotification, true);
+        return $newNotification;
     }
 
     protected function getNotificationService()
