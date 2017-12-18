@@ -2,9 +2,14 @@
 
 namespace Biz\Xapi\Type;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
@@ -15,16 +20,24 @@ abstract class Type extends BizAware
 {
     abstract public function package($statement);
 
+    abstract public function packages($statements);
+
     protected function createService($alias)
     {
         return $this->biz->service($alias);
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
@@ -54,6 +67,9 @@ abstract class Type extends BizAware
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -72,11 +88,17 @@ abstract class Type extends BizAware
         return $this->createService('Xapi:XapiService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
