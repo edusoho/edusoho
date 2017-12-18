@@ -6,10 +6,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var $themeEditContent = $('#theme-edit-content');
-        // $("#middle-banner-edit").on('click',function(){
-        //     window.open($(this).data('url'));
-        //     return;
-        // });
 
         var $list = $(".module-item-list").sortable({
             distance: 20,
@@ -25,7 +21,7 @@ define(function(require, exports, module) {
         });
 
         $("#iframepage").load(function(){
-            var mainheight = $(this).contents().find("body").height();
+            var mainheight = $(this).contents().find("body").outerHeight();
             $(this).height(mainheight);
         }); 
 
@@ -91,22 +87,6 @@ define(function(require, exports, module) {
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids:data}, function(response){
                 var lessonNum = chapterNum = unitNum = 0;
-
-                // $list.find('.item-lesson, .item-chapter').each(function() {
-                //     var $item = $(this);
-                //     if ($item.hasClass('item-lesson')) {
-                //         lessonNum ++;
-                //         $item.find('.number').text(lessonNum);
-                //     } else if ($item.hasClass('item-chapter-unit')) {
-                //         unitNum ++;
-                //         $item.find('.number').text(unitNum);
-                //     } else if ($item.hasClass('item-chapter')) {
-                //         chapterNum ++;
-                //         unitNum = 0;
-                //         $item.find('.number').text(chapterNum);
-                //     }
-
-                // });
             });
         };
 

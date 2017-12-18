@@ -1,8 +1,8 @@
+{% set script_controller = 'topxiaadminbundle/controller/theme/edit' %}
 {% extends 'admin/layout.html.twig' %}
     {% block title %}
         主题管理
     {% endblock %}
-{% set script_controller = 'topxiaadminbundle/controller/theme/edit' %}
 {% block body %}
   <style>
     body {
@@ -13,32 +13,22 @@
       overflow:auto;
     }
 
-    .mod-preview-mask {
-      width: 100%;
-      min-height: 100%;
-      position: relative;
-      border-top: 1px solid #ddd;
-    }
-
     iframe {
       z-index: 1024;
+    }
+
+    .iframepage:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
     }
 
     .radios, .checkboxs {
       padding-top: 20px;
       vertical-align: middle;
-    }
-
-    .mod-preview-mask .pm-iframe {
-      position: absolute;
-      z-index: 1023;
-      left: 0;
-      top: 0;
-      border: none;
-      opacity: 0;
-      filter: alpha(opacity=0);
-      width: 100%;
-      height: 100%;
     }
 
     .mod-cpanel-basic-color {
@@ -92,16 +82,13 @@
     </div>
   </div>
 
-  <div class="mod-preview-mask">
-    {% set iframeUrl = path('admin_themes_show') %}
-    <iframe data-src="{{ iframeUrl }}" src="{{ iframeUrl }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage">
+  {% set iframeUrl = path('admin_themes_show') %}
+  <div class="iframepage">
+    <iframe src="{{ iframeUrl }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" id="iframepage" name="iframepage">
     </iframe>
-    <div class="pm-iframe"></div>
   </div>
-
-    {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
-
-  <div id="modal" class="modal"></div>
-
+  
+  {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+  <div id="modal" class="modal" ></div>
   </body>
 {% endblock %}

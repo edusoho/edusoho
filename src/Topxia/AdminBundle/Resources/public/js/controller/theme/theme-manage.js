@@ -114,7 +114,7 @@ define(function(require, exports, module) {
         },
 
         _send: function() {
-            var $iframe = this.get('currentIframe');
+            var self = this;
             var currentData = $('#'+$(this.get('currentItem')).attr('id')).data('config');
             var isChoiced = $('#'+$(this.get('currentItem')).attr('id')).find('.check-block').prop('checked');
 
@@ -126,17 +126,16 @@ define(function(require, exports, module) {
                     $('#'+$(html).attr('id')).find('.check-block').prop('checked', true);
                     $('#'+$(html).attr('id')).find('.item-edit-btn,.item-set-btn').show();
                 }
-                var src = $iframe.attr('src') + "?t=" + Date.parse(new Date());
-                $iframe.attr('src', src);
+                
+                self._flushIframe();
             });
         },
 
         _sendSort: function() {
-            var $iframe = this.get('currentIframe');
+            var self = this;
 
             $.post(this.element.data('url'), {config:this.get('config')}, function(html){
-                var src = $iframe.attr('src') + "?t=" + Date.parse(new Date());
-                $iframe.attr('src', src);
+                 self._flushIframe();
             });
         },
 
@@ -146,10 +145,18 @@ define(function(require, exports, module) {
                     return allConfig[itemConfig];
                 }
             }
+        },
+
+        _flushIframe: function(){
+          var $iframe = this.get('currentIframe');
+          if (!this.get('iframeSrc')) {
+              this.set('iframeSrc', $iframe.attr('src'));
+          }
+          var src = this.get('iframeSrc') + "?t=" + Date.parse(new Date());
+          $iframe.attr('src', src);
         }
     })
 
     module.exports = ThemeManage;
-
 })
 
