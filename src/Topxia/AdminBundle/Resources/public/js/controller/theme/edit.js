@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var ThemeManage = require('./theme-manage');
 
     exports.run = function() {
-
+        var $themeEditContent = $('#theme-edit-content');
         // $("#middle-banner-edit").on('click',function(){
         //     window.open($(this).data('url'));
         //     return;
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
             themeManage.setCurrentItem($(this).parents('li.theme-edit-item'));
         });
 
-        $("#theme-edit-content").on("click", '.check-block', function(event){
+        $themeEditContent.on("click", '.check-block', function(event){
             event.stopPropagation();
             themeManage.setCurrentItem($(this).parents('li.theme-edit-item'));
            
@@ -57,11 +57,35 @@ define(function(require, exports, module) {
             themeManage.getElement().trigger('save_config');
         });
 
-        $("#theme-edit-content").on("click", '.check-box', function(event){
+        $themeEditContent.on("click", '.check-box', function(event){
             event.stopPropagation();
             themeManage.getElement().trigger('save_config');
         });
+
+        $themeEditContent.on("change", '#topNavNum', function(event){
+            if (!validateTopNavNum($(this))) {
+              return;
+            }
+
+            themeManage.getElement().trigger('save_config');
+            return false;
+        });
+
+        
     };
+
+    var validateTopNavNum = function($elment) {
+        var value = $elment.val();
+        if (value && (/(^[1-9]\d*$)/.test(value)) && value >= 1 && value <= 99) {
+          $elment.parent().removeClass('has-error');
+          $elment.next().addClass('hide');
+          return true;
+        } else {
+           $elment.parent().addClass('has-error');
+          $elment.next().removeClass('hide');
+        }  
+        return false;
+    }
 
     var sortList = function($list) {
             var data = $list.sortable("serialize").get();

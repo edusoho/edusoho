@@ -21,6 +21,7 @@ admin.nav.system: 系统
 
 #用户模块
 admin.user.basic_menu: 用户管理
+admin.user.statistics_manage: 用户数据统计
 admin.user.teacher_menu: 教师管理
 admin.user.approval_menu: 实名认证管理
 admin.user.message_menu: 私信管理

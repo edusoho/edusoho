@@ -874,10 +874,26 @@ class TaskServiceTest extends BaseTestCase
     }
 
     /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
      * @return TaskDao
      */
     protected function getTaskDao()
     {
         return $this->createDao('Task:TaskDao');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }

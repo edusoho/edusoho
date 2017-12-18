@@ -19,9 +19,11 @@ interface MoneyCardService
      **/
     public function createMoneyCard(array $moneyCardData);
 
-    public function getMoneyCard($id);
+    public function getMoneyCard($id, $lock = false);
 
     public function getMoneyCardByIds($ids);
+
+    public function getMoneyCardByPassword($password);
 
     public function getBatch($id);
 
@@ -56,4 +58,8 @@ interface MoneyCardService
     public function unlockBatch($id);
 
     public function deleteBatch($id);
+
+    public function useMoneyCard($id, $fields);
+
+    public function receiveMoneyCard($token, $userId);
 }

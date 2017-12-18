@@ -111,6 +111,13 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return false;
     }
 
+    public function getAudioServiceStatus()
+    {
+        $api = CloudAPIFactory::create('root');
+
+        return $api->get('/me/profile');
+    }
+
     public function deleteFile($file)
     {
         if (!empty($file['globalId'])) {
