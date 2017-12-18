@@ -62,6 +62,11 @@ class DoQuestionType extends Type
         return $this->createXAPIService()->finishActivityQuestion($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 
+    public function packages($statements)
+    {
+        // TODO: Implement packages() method.
+    }
+
     public function convertQuestionType($questionType)
     {
         $types = array(

@@ -25,4 +25,9 @@ class DoExerciseType extends Type
 
         return $this->createXAPIService()->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
+
+    public function packages($statements)
+    {
+        // TODO: Implement packages() method.
+    }
 }

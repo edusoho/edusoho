@@ -33,4 +33,9 @@ class WriteNoteType extends Type
 
         return $this->createXAPIService()->writeNote($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
+
+    public function packages($statements)
+    {
+        // TODO: Implement packages() method.
+    }
 }

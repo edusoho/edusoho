@@ -32,4 +32,9 @@ class FinishActivityType extends Type
 
         return $this->createXAPIService()->finishActivity($actor, $object, array(), $statement['uuid'], $statement['occur_time'], false);
     }
+
+    public function packages($statements)
+    {
+        // TODO: Implement packages() method.
+    }
 }

@@ -70,11 +70,11 @@ class AskQuestionType extends Type
         }
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activitys = $this->getActivityService()->findActivities($activityIds, true);
-        $activitys = ArrayToolkit::index($activitys, 'id');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
 
         $resourceIds = array();
-        foreach ($activitys as $activity) {
+        foreach ($activities as $activity) {
             if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
                 if (!empty($activity['ext']['mediaId'])) {
                     $resourceIds[] = $activity['ext']['mediaId'];
@@ -91,7 +91,7 @@ class AskQuestionType extends Type
                 $thread = $threads[$statement['target_id']];
                 $course = $courses[$thread['courseId']];
                 $task = $tasks[$thread['taskId']];
-                $activity = $activitys[$task['activityId']];
+                $activity = $activities[$task['activityId']];
                 $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
                 $object = array(
                     'id' => $thread['id'],
