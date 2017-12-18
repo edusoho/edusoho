@@ -47,7 +47,7 @@ $('.js-inform-tab').click(function(e) {
   });
 })
 
-ajax({
+$.ajax({
   url: '/api/newNotifications',
   type: 'GET',
   beforeSend() {
@@ -56,7 +56,10 @@ ajax({
 }).then((result) => {
   console.log(result);
   $('.js-inform-loading').addClass('hidden');
-  $('.js-inform-notification').append(result);
+  const $notificationDom = $('.js-inform-notification');
+  $notificationDom.append(result);
+  $notificationDom.find('.pull-left').addClass('hidden');
+  $notificationDom.find('.notification-footer').addClass('hidden');
 }, () => {
   console.log('3333');
 });
