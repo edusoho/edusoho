@@ -9,15 +9,6 @@
           padding-right: 12px;
         }
       }
-      .user-manage-toggle--color {
-        color: @cd-gray-dark;
-        background-color: #fff;
-        &:hover,
-        &:focus {
-          background-color: #fff;
-          border-color: rgba(0, 0, 0, 0.16);
-        }
-      }
       .user-manage-dropdown {
         padding: 0;
         width: 96px;
@@ -25,10 +16,21 @@
         text-align: center;
         .cd-border-radius;
         .cd-box-shadow-z(8px);
-        > li > a {
-          padding: 16px 24px;
-          &:hover {
-            .cd-border-radius;
+        > li {
+          &:first-child {
+            > a {
+              .border-top-left-radius;
+              .border-top-right-radius;
+            }
+          }
+          &:last-child {
+            > a {
+              .border-bottom-left-radius;
+              .border-bottom-right-radius;
+            }
+          }
+          > a {
+            padding: 16px 24px;
           }
         }
       }
