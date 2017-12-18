@@ -134,11 +134,11 @@ export default class CustomFullCalendar {
   }
 
   _addDateClassToEvent(event) {
-    let currentUnixTime = moment(this.options['currentTime']);
+    let currentUnixTime = moment(this.options['currentTime']).unix();
     let startUnixTime = this._getDateStartUnixTime(moment(event['start']));
     if (startUnixTime < currentUnixTime) {
       event['className'].push('calendar-before');
-    } else if (startUnixTime = currentUnixTime) {
+    } else if (startUnixTime == currentUnixTime) {
       event['className'].push('calendar-today');
     } else {
       event['className'].push('calendar-future');

@@ -10,7 +10,7 @@ new CustomFullCalendar({
     'start': 'createdTime',
     'end': 'updatedTime'
   },
-  'currentTime': $("#todayDateStr").html(),
+  'currentTime': $('#todayDateStr').html(),
   'components': [
     new LiveTooltipComp(),
     new ClickComp('/course/{id}') //routing course_show
