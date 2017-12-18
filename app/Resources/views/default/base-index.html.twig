@@ -4,17 +4,20 @@
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
 {% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null) and is_show_mobile_page() %}
-{% if appDownload %}
-  {% set bodyClass = 'homepage has-app' %}
-{% else %}
-  {% set bodyClass = 'homepage' %}
-{% endif %}
+{% set bodyClass = appDownload ? 'homepage has-app' : 'homepage' %}
 {% set siteNav = '/' %}
 
 {% set _target_path = path('homepage') %}
 
 {% set currentTheme = current_theme() %}
-{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
+{% if envionment.themeEditing|default(false) %}
+  {% set themeConfig =  currentTheme.config  %}
+  {% set isEditColor =  true  %}
+{% else %}
+  {% set themeConfig =  currentTheme.confirmConfig  %}
+  {% set isEditColor =  false  %}
+{% endif %}
+
 {% set allConfig = currentTheme.allConfig %}
 
 {% set isIndex = true %}

@@ -97,17 +97,12 @@ class ThemeController extends BaseController
         );
     }
 
-    public function showAction(Request $request, $uri)
+    public function showAction(Request $request)
     {
-        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-
-        return $this->render(
-            'admin/theme/default/index.html.twig',
-            array(
-                'friendlyLinks' => $friendlyLinks,
-                'isEditColor' => true,
-            )
-        );
+        $request->request->set('themeEditing', 1);
+        return $this->forward('AppBundle:Default:index', array(
+            'request' => $request,
+        ));
     }
 
     public function themeConfigEditAction(Request $request, $uri)
