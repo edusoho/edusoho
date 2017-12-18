@@ -8,7 +8,7 @@ use AppBundle\Common\ReflectionUtils;
 
 class FactoryTest extends BaseTestCase
 {
-    private  $map = array(
+    private $map = array(
         'invite-records',
         'user-invite-records',
         'order',
@@ -25,7 +25,7 @@ class FactoryTest extends BaseTestCase
     {
         $container = self::$appKernel->getContainer();
         $factory = new Factory($container);
-    
+
         $this->assertNotEmpty($factory->create('invite-records'));
     }
 
@@ -58,8 +58,6 @@ class FactoryTest extends BaseTestCase
         $container->set('faq_export_map', new ExportMap());
         ReflectionUtils::invokeMethod($factory, 'exportMap', array($faqPluginExport));
     }
-
-    
 }
 
 class ExportMap
