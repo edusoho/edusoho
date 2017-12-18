@@ -1210,7 +1210,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('finished', $result['status']);
         $this->assertEquals(0, $result['subjectiveScore']);
     }
-    
+
     public function testSubmitAnswers()
     {
         $choiceQuestions = $this->generateChoiceQuestions(1, 2);
