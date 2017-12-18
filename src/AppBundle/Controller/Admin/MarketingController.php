@@ -16,7 +16,7 @@ class MarketingController extends BaseController
         $client = $this->createMarketingClient();
 
         $siteInfo = $this->getSiteInfo();
-        $entry =  $request->query->get('entry');
+        $entry = $request->query->get('entry');
 
         try {
             $login = $client->post('/login', array(
@@ -25,8 +25,9 @@ class MarketingController extends BaseController
                 'user_id' => $user['id'],
                 'user_name' => $user['nickname'],
                 'user_avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
-                'entry' => $entry
+                'entry' => $entry,
             ));
+
             return  $this->redirect($login['url']);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
