@@ -793,6 +793,8 @@ admin:
                             _marketing_page:
                                 name: admin.marketing.menu
                                 router_name: admin_marketing
+                                router_params:
+                                  entry: wyx
 
         admin_system:
             name: admin.nav.system
