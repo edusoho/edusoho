@@ -43,7 +43,7 @@ import ajax from 'common/api/ajax'
             //默认显示为月, 范围为 month,agendaWeek,agendaDay,listWeek
 
         switchers: 'month,agendaWeek',  
-            //显示到日历顶部左侧，用于切换
+            //显示到日历顶部中间，用于切换
             // 范围为 month,agendaWeek,agendaDay,listWeek
             // 显示分为 月，周，日，日程，如果要显示多个，以逗号分割即可，如month,listweek
         
@@ -66,8 +66,8 @@ export default class CustomFullCalendar {
   _init() {
     let calendarOptions = {
       header: {
-        left: '',
-        center: 'title',
+        left: 'title',
+        center: '',
         right: 'prev,today,next'
       },
       defaultDate: this.options['currentTime'],
@@ -77,7 +77,7 @@ export default class CustomFullCalendar {
     };
 
     if (typeof this.options['switcher'] != 'undefined') {
-      calendarOptions['headers']['left'] = this.options['switchers'];
+      calendarOptions['headers']['center'] = this.options['switchers'];
     }
 
     if (typeof this.options['data'] != 'undefined') {
