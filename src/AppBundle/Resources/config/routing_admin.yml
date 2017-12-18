@@ -853,7 +853,7 @@ admin_confirm_themes_config:
     permissions: [admin_setting_theme]
 
 admin_themes_show:
-    path:  /theme/{uri}/show
+    path:  /theme/show
     defaults: { _controller: AppBundle:Admin/Theme:show }
     permissions: [admin_setting_theme]
 

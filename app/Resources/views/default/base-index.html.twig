@@ -9,17 +9,6 @@
 
 {% set _target_path = path('homepage') %}
 
-{% set currentTheme = current_theme() %}
-{% if envionment.themeEditing|default(false) %}
-  {% set themeConfig =  currentTheme.config  %}
-  {% set isEditColor =  true  %}
-{% else %}
-  {% set themeConfig =  currentTheme.confirmConfig  %}
-  {% set isEditColor =  false  %}
-{% endif %}
-
-{% set allConfig = currentTheme.allConfig %}
-
 {% set isIndex = true %}
 {% set consultDisplay = true %}
 

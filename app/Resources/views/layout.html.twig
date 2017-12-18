@@ -11,9 +11,12 @@
 
 {% set lang = app.request.getLocale() %}
 {% set mobile = is_show_mobile_page() %}
+
 {% set currentTheme = current_theme() %}
-{% set maincolor = currentTheme.confirmConfig.maincolor|default('default') %}
-{% set navigationcolor = currentTheme.confirmConfig.navigationcolor|default('default') %}
+{% set themeConfig = app.request.get('themeEditing')|default(false) ? currentTheme.config  : currentTheme.confirmConfig %}
+{% set allConfig = currentTheme.allConfig %}
+{% set maincolor = themeConfig.maincolor|default('default') %}
+{% set navigationcolor = themeConfig.navigationcolor|default('default') %}
 
 <html lang="{{ lang }}" class="{% if lang == 'en' %}es-en{% endif %}">
 <head>

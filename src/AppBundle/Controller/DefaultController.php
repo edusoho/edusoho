@@ -29,9 +29,8 @@ class DefaultController extends BaseController
 
         $custom = $this->isCustom();
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        $envionment = $request->request->all();
 
-        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom, 'envionment' => $envionment));
+        return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
     }
 
     public function appDownloadAction()

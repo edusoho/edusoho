@@ -97,7 +97,7 @@ class ThemeController extends BaseController
         );
     }
 
-    public function showAction(Request $request)
+    public function showAction(Request $request, $uri)
     {
         $request->request->set('themeEditing', 1);
         return $this->forward('AppBundle:Default:index', array(
