@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-
+import ajax from '../../../../common/api/ajax';
 
 const PCSwitcher = $('.js-switch-pc');
 const MobileSwitcher = $('.js-switch-mobile');
@@ -23,4 +23,12 @@ $('.js-back').click(() => {
   } else {
     location.href = '/';
   }
+});
+
+ajax({
+  url: '/api/newNotifications',
+  type: 'GET'
+}).then((result) => {
+  console.log(result);
+}, () => {
 });
