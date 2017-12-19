@@ -65,18 +65,24 @@ export default class CustomFullCalendar {
   _init() {
     let calendarOptions = {
       header: {
-        left: 'title',
-        center: '',
+        left: '',
+        center: 'title',
         right: 'prev,today,next'
       },
       defaultDate: this.options['currentTime'],
       eventLimit: true, // allow "more" link when too many events
       locale: this.options['locale'],
-      defaultView: this.options['defaultView']
+      defaultView: this.options['defaultView'],
+      allDaySlot: false,
+      scrollTime: '08:00:00', //默认移动到　８点位置
     };
 
+    if (calendarOptions['defaultView'] == 'agendaWeek') {
+      calendarOptions['columnFormat'] = 'ddd DD';
+    }
+
     if (typeof this.options['switcher'] != 'undefined') {
-      calendarOptions['headers']['center'] = this.options['switchers'];
+      calendarOptions['headers']['left'] = this.options['switchers'];
     }
 
     if (typeof this.options['data'] != 'undefined') {
@@ -98,6 +104,7 @@ export default class CustomFullCalendar {
     calendarOptions = this._registerCompActions(calendarOptions);
 
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
+    this._formatHeadColIfNeed(calendarOptions);
   }
 
   _ajaxLoading(start, end, timezone, callback) {
@@ -220,6 +227,21 @@ export default class CustomFullCalendar {
       $.extend(singleEvent, this.options['components'][i].generateEventValues(singleResult));
     }
     return singleEvent;
+  }
+
+  _formatHeadColIfNeed(calendarOptions) {
+    if (calendarOptions['defaultView'] == 'agendaWeek') {
+      $('.fc-day-header span').each(
+        function() {
+          let text = $(this).html();
+          let segs = text.split(' ');
+          $(this).html(
+            '<div class="week">' + segs[0] + '</div>' +
+            '<div class="day">' + segs[1] + '</div>'
+          );
+        }
+      );
+    }
   }
 
 }
