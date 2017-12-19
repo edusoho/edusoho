@@ -13,7 +13,7 @@ class MobileDeviceServicelTest extends BaseTestCase
             'platform' => 'iOS iPhone8,1',
             'version' => '10.1.1',
             'screenresolution' => '750*1334',
-            'kernel' => ''
+            'kernel' => '',
         );
 
         $result = $this->getMobileDeviceService()->addMobileDevice($fields);
@@ -41,7 +41,7 @@ class MobileDeviceServicelTest extends BaseTestCase
             'platform' => 'iOS iPhone8,1',
             'version' => '10.1.1',
             'screenresolution' => '750*1334',
-            'kernel' => ''
+            'kernel' => '',
         );
 
         return $this->getMobileDeviceDao()->addMobileDevice($fields);

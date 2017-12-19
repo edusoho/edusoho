@@ -50,7 +50,7 @@ class MobileDeviceDaoTest extends BaseDaoTestCase
             'platform' => 'iOS iPhone8,1',
             'version' => '10.1.1',
             'screenresolution' => '750*1334',
-            'kernel' => ''
+            'kernel' => '',
         );
     }
 
