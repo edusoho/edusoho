@@ -114,13 +114,16 @@ class QuestionCopyTest extends BaseTestCase
             'target' => 'course-1',
         );
         $questionParent = $this->getQuestionService()->create($material);
-        $attachments = array(
-            'type' => 'attachment',
-            'fileId' => 1,
-            'targetType' => 'question.stem',
-            'targetId' => $questionParent['id'],
-        );
-        $this->getFileUsedDao()->create($attachments);
+
+        if ($withAttachments) {
+            $attachments = array(
+                'type' => 'attachment',
+                'fileId' => 1,
+                'targetType' => 'question.stem',
+                'targetId' => $questionParent['id'],
+            );
+            $this->getFileUsedDao()->create($attachments);
+        }
 
         if ($isCreateChild) {
             $single = array(
