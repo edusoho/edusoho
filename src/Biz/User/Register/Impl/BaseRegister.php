@@ -24,18 +24,23 @@ abstract class BaseRegister
 
         $this->validate($registration);
 
-        $authUser = $this->getAuthService()->getAuthProvider()->register($registration);
+        $authUser = array();
+        if ('default' != $this->getAuthService()->getAuthProvider()->getProviderName()) {
+            if (!empty($registration['token']['userId'])) {
+                $authUser = array('id' => $registration['token']['userId']);
+            } else {
+                $authUser = $this->getAuthService()->getAuthProvider()->register($registration);
+            }
+        }
 
         $user = $this->createUser($registration);
         $this->createUserProfile($registration, $user);
 
         //　绑定 discuz　用户
-
-        if ('default' != $this->getAuthService()->getAuthProvider()->getProviderName()
-                && !empty($authUser['id'])) {
+        if (!empty($authUser['id'])) {
             $this->getUserService()->bindUser(
                 $this->getAuthService()->getPartnerName(),
-                $authUser['id'],
+                $registration['authid'],
                 $user['id'],
                 null
             );
