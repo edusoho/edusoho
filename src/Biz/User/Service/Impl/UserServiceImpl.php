@@ -1943,6 +1943,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $user ? array($user['id']) : array(-1);
     }
 
+    public function updateUserNewMessageNum($id, $newMessageNum)
+    {
+        $this->getUserDao()->update($id, array('newMessageNum' => $newMessageNum));
+    }
+
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && 'truename' == $conditions['keywordType']) {
