@@ -10,49 +10,46 @@ define(function(require, exports, module) {
             currentIframe: null
         },
 
-        events: {
-            "save_config": "_saveBlock",
-            "save_sort": "_saveSort"
+        setup: function() {
+          this._initEvent();
+          // this._setupBlockConfig();
+          this._setupBottomConfig();
+          this._setupColorConfig();
         },
 
-        setup: function() {
-            this._setupBlockConfig();
-            this._setupBottomConfig();
-            this._setupColorConfig();
+        _initEvent: function() {
+          var self = this;
+          this.getElement().on('save_config', function(e, data){
+            self._saveBlock(data)
+          });
+          this.getElement().on('save_sort',  function(e, data){
+            self._saveSort(data)
+          });
         },
 
         getElement: function() {
             return $(this.element);
         },
 
-        setCurrentItem: function($item) {
-            this.set('currentItem', $item,{override: true});
-        },
-
-        getCurrentItem: function() {
-            return this.get('currentItem');
-        },
-
-        _saveBlock: function() {
-            this._saveConfig();
+        _saveBlock: function(data) {
+            this._saveConfig(data);
             this._send();
         },
 
-        _saveSort: function() {
-            this._saveConfig();
+        _saveSort: function(data) {
+            this._saveConfig(data);
             this._sendSort();
         },
 
-        _saveConfig: function() {
-            var configs = {maincolor: '',navigationcolor:'', blocks:{left:[], right:[]}, bottom: ''};
-
-            configs.blocks.left = this._getBlockConfig(this.$('.theme-custom-left-block'));
+        _saveConfig: function(data) {
+            var configs = this.get('config');
             configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
             configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
-            configs.navigation = this._getNavigation();
+            // configs.navigation = this._getNavigation();
             configs.maincolor = this._getColorConfig(this.$('.theme-custom-color-block'));
             configs.navigationcolor = this._getColorConfig(this.$('.theme-custom-navigationcolor-block'));
-            this.set('config', configs,{override: true});
+            configs = $.extend(configs, data);
+            this.set('config', configs, {override: true});
         },
 
         _setupBlockConfig: function() {
@@ -97,14 +94,6 @@ define(function(require, exports, module) {
             return config;
         },
 
-        _getNavigation: function($block){
-          var topNum = this.getElement().find('#topNavNum').val();
-          var config = {};
-          config.topNavNum = topNum;
-          
-          return config;
-        },
-
         _getBottomConfig: function($block) {
             return $($block).find('input[type=radio]:checked').val();
         },
@@ -134,7 +123,7 @@ define(function(require, exports, module) {
         _sendSort: function() {
             var self = this;
 
-            $.post(this.element.data('url'), {config:this.get('config')}, function(html){
+            $.post(this.element.data('url'), {config: this.get('config')}, function(html){
                  self._flushIframe();
             });
         },
@@ -148,11 +137,12 @@ define(function(require, exports, module) {
         },
 
         _flushIframe: function(){
+          var time = Date.parse(new Date());
           var $iframe = this.get('currentIframe');
           if (!this.get('iframeSrc')) {
               this.set('iframeSrc', $iframe.attr('src'));
           }
-          var src = this.get('iframeSrc') + "?t=" + Date.parse(new Date());
+          var src = this.get('iframeSrc') + "?t=" + time;
           $iframe.attr('src', src);
         }
     })
