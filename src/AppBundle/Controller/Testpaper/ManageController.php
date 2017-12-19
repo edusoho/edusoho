@@ -113,16 +113,20 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type, $testpaperIds = array())
+    public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
-        if (empty($testpaperIds)) {
-            $testpaperIds = array(0);
+        $courseIds = array($targetId);
+        if ($targetType === 'classroom') {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+            $courseIds = ArrayToolkit::column($courses, 'id');
         }
+
+        list($activities, $testpaperIds) = $this->findTestpaperIds($courseIds, $type);
 
         $conditions = array(
             'status' => 'open',
             'type' => $type,
-            'ids' => $testpaperIds,
+            'ids' => empty($testpaperIds) ? array(-1) : $testpaperIds,
         );
 
         $paginator = new Paginator(
@@ -138,12 +142,6 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $courseIds = array($targetId);
-        if ($targetType === 'classroom') {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-        }
-
         foreach ($testpapers as $key => $testpaper) {
             $testpapers[$key]['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
         }
@@ -153,6 +151,7 @@ class ManageController extends BaseController
             'paginator' => $paginator,
             'targetId' => $targetId,
             'targetType' => $targetType,
+            'activities' => $activities
         ));
     }
 
@@ -565,6 +564,27 @@ class ManageController extends BaseController
         return $courseTasks;
     }
 
+    protected function findTestpaperIds($courseIds, $type)
+    {
+        $conditions = array(
+            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
+            'mediaType' => $type,
+        );
+        $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);
+
+        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
+        $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
+
+        array_walk($activities, function($key, &$activity) use ($testpaperActivities) {
+            $activity['testpaperId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
+        });
+
+        $testpaperIds = ArrayToolkit::column($testpaperActivities, 'mediaId');
+
+        return array($activities, $testpaperIds);
+    }
+
     /**
      * @return CourseService
      */
@@ -611,6 +631,14 @@ class ManageController extends BaseController
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
