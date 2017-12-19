@@ -41,7 +41,7 @@ $('.js-inform-tab').click(function(e) {
   if (id === 'conversation' && !isEmpty) {
     Api.conversation.search().then((res) => {
       $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
-      $('.js-inform-newNotification').empty();
+      $('.js-inform-conversation').empty();
       $('.js-inform-conversation').append(res);
      }).catch((res) => {
       // 异常捕获
