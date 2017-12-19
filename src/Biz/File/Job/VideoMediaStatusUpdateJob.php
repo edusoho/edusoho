@@ -24,8 +24,8 @@ class VideoMediaStatusUpdateJob extends AbstractJob
             $this->getJobDao()->update($this->id, array('args' => $results['next']));
             $this->getLogService()->info(
                 'upload_file',
-                'check_convert_status',
-                '刷新音视频转码状态的定时任务执行成功',
+                'update',
+                'video media status update success',
                 array(
                     'success' => round($successNum / count($results['data']) * 100, 2).'%',
                 ));
