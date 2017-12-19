@@ -40,7 +40,7 @@ abstract class BaseRegister
         if (!empty($authUser['id'])) {
             $this->getUserService()->bindUser(
                 $this->getAuthService()->getPartnerName(),
-                $registration['authid'],
+                $authUser['id'],
                 $user['id'],
                 null
             );
