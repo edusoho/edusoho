@@ -16,5 +16,5 @@ new CustomFullCalendar({
     new LiveTooltipComp(),
     new ClickComp('/course/{id}') //routing course_show
   ],
-  'defaultView': 'agendaWeek'
+  'defaultView': 'agendaWeek' // 'agendaWeek'
 });
