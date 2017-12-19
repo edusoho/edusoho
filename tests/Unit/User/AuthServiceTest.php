@@ -602,10 +602,11 @@ class AuthServiceTest extends BaseTestCase
      */
     public function testGetAuthProviderWithErrorMode()
     {
+        ReflectionUtils::setProperty($this->getAuthService(), 'partner', null);
         $value = array('mode' => 'testNotTrue');
         $this->getSettingService()->set('user_partner', $value);
-        $result = $this->getAuthService()->getPartnerName();
-        $this->getSettingService()->delete('auth');
+        $this->getAuthService()->getPartnerName();
+        $this->assertFalse(true);
     }
 
     protected function getAuthService()
