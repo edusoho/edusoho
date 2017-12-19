@@ -160,7 +160,7 @@
 
     {% block faqSDK %}
       {% if setting('copyright.thirdCopyright')|default(0) != 1 %}
-        <script aysnc="aysnc" src="{{ 'http://service-cdn.qiqiuyun.net/js-sdk/faq/sdk-v1.js' ~ '?' ~ (date().timestamp / 100)|round}}"></script>
+        <script aysnc="aysnc" src="{{ cloud_sdk_url('faq') }}"></script>
         <script aysnc="aysnc">
           {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : 'http://www.qiqiuyu.com' %}
           new FaqSDK({
