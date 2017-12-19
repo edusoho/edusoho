@@ -863,7 +863,7 @@ admin_themes_show:
     permissions: [admin_setting_theme]
 
 admin_themes_config_edit:
-    path:  /theme/{uri}/config/edit
+    path:  /theme/config/edit
     defaults: { _controller: AppBundle:Admin/Theme:themeConfigEdit }
     permissions: [admin_setting_theme]
 

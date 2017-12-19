@@ -105,11 +105,9 @@ class ThemeController extends BaseController
         ));
     }
 
-    public function themeConfigEditAction(Request $request, $uri)
+    public function themeConfigEditAction(Request $request)
     {
         $config = $request->query->get('config');
-
-        //$code = "edit".$this->fiterCode($config['code']);
 
         return $this->edit($config['code'], $config);
     }
