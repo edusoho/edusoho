@@ -32,7 +32,7 @@ abstract class BaseRegister
         //　绑定 discuz　用户
         if (!empty($authUser['id'])) {
             $this->getUserService()->bindUser(
-                $this->getPartnerName(),
+                $this->getAuthService()->getPartnerName(),
                 $authUser['id'],
                 $user['id'],
                 null
