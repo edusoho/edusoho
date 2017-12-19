@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
-import ajax from '../../../../common/api/ajax';
+import notify from 'common/notify';
+import Api from 'common/api';
 
 const PCSwitcher = $('.js-switch-pc');
 const MobileSwitcher = $('.js-switch-mobile');
@@ -35,34 +36,47 @@ $('.js-inform-tab').click(function(e) {
   e.preventDefault();
   $this.addClass('active').siblings().removeClass('active');
   $this.tab('show');
-
-  $.ajax({
-    type : "post",
-    url : $this.data('url'),
-    beforeSend() {
-      $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
-    },
-  }).done(() => {
-    $('.js-inform-loading').addClass('hidden');
-  });
+  const id = $this[0].id;
+  const isEmpty = $('.tab-pane.active').find('.js-inform-empty').length;
+  if (id === 'conversation' && !isEmpty) {
+    Api.conversation.search().then((res) => {
+      $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
+      $('.js-inform-newNotification').empty();
+      $('.js-inform-conversation').append(res);
+     }).catch((res) => {
+      // 异常捕获
+      console.log('catch', res.responseJSON.error.message);
+    })
+  }
+  if (id === 'newNotification' && !isEmpty) {
+    Api.newNotification.search().then((res) => {
+      $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
+      $('.js-inform-newNotification').empty();
+      $('.js-inform-newNotification').append(res);
+     }).catch((res) => {
+      // 异常捕获
+      console.log('catch', res.responseJSON.error.message);
+    })
+  }
 })
 
-$.ajax({
-  url: '/api/newNotifications',
-  type: 'GET',
-  beforeSend() {
-    $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
-  },
-}).then((result) => {
-  console.log(result);
-  $('.js-inform-loading').addClass('hidden');
-  const $notificationDom = $('.js-inform-notification');
-  $notificationDom.append(result);
-  $notificationDom.find('.pull-left').addClass('hidden');
-  $notificationDom.find('.notification-footer').addClass('hidden');
-}, () => {
-  console.log('3333');
+$(document).ajaxSend(() => {
+  // 加载loading效果
+  const $dom = $('.js-inform-loading');
+  const loading = cd.loading();
+  $dom.removeClass('hidden');
+  $dom.html(loading);
 });
+
+Api.newNotification.search().then((res) => {
+  $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
+  $('.js-inform-newNotification').append(res);
+ }).catch((res) => {
+  // 异常捕获
+  console.log('catch', res.responseJSON.error.message);
+})
+
+
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);
