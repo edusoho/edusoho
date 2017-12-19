@@ -4,7 +4,7 @@
     <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right user-manage-dropdown" role="menu">
       {% if has_permission('admin') %}<li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
       {% endif %}
-      <li class="active"><a href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a></li>
+      <li><a href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a></li>
       <li><a href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a></li>
     </ul>
   </li>
