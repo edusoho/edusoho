@@ -24,12 +24,15 @@
 }
 
 .es-header {
-  .nav.user-nav > li {
-    .user-manage-toggle--white {
-      &:hover,
-      &:focus {
-        background-color: @brand-primary !important;
-        border-color: @brand-primary !important;
+  .nav.user-nav {
+    .user-manage-li {
+      .user-manage-toggle.nav-manage-white {
+        .cd-btn-raised(@brand-primary);
+        &:hover,
+        &:focus {
+          background-color: @brand-primary !important;
+          border-color: @brand-primary !important;
+        }
       }
     }
   }

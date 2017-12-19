@@ -4,6 +4,23 @@
       padding: 11px 0;
       .user-manage-toggle {
         padding: 9px 12px;
+        border-color: #fff;
+        color: #fff;
+        .cd-transition;
+        &:hover,
+        &:focus {
+          border-color: #fff;
+          background: rgba(255, 255, 255, 0.2);
+          .cd-transition;
+        }
+        &.nav-manage-white {
+          .cd-btn-raised(@brand-primary);
+          &:hover,
+          &:focus {
+            background-color: @brand-primary !important;
+            border-color: @brand-primary !important;
+          }
+        }
       }
       .user-manage-dropdown {
         padding: 0;
