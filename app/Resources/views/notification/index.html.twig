@@ -13,7 +13,13 @@
       <ul class="media-list notification-list">
         {% for notification in notifications %}
           {% set notification = render_notification(notification) %}
-          {{ notification.message|raw }}
+          {% if notification.highLight|default(false)%}
+            <div class="notification-list__media active">
+              {{ notification.message|raw }}
+            </div>
+          {% else %}
+            {{ notification.message|raw }}
+          {% endif %}
         {% else %}
           <li class="empty">{{'site.datagrid.empty'|trans}}</li>
         {% endfor %}

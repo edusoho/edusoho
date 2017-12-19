@@ -9,10 +9,10 @@
       <div class="notification-content tab-pane active" role="tabpanel" id="notification">
         <div class="inform-dropdown-body">
           {% if app.user.newNotificationNum > 0 %}
-            <div class="inform-loading js-inform-loading hidden"></div>
+            <div class="inform-loading js-inform-loading"></div>
             <div class="js-inform-newNotification"></div>
           {% else %}
-            <div class="inform-empty-status">
+            <div class="inform-empty-status js-inform-empty">
               <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
             srcset="{{ asset('static-dist/app/img/notice/null-notice.png') }} 1x, {{ asset('static-dist/app/img/notice/null-notice@2x.png') }} 2x"/>
               <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_notifications'|trans }}</div>
@@ -20,16 +20,16 @@
           {% endif %}
         </div>
         <div class="inform-dropdown-foot">
-          <a href="{{ path('notification') }}" target="_blank">{{ 'homepage.header.check_all_notifications'|trans }}</a>
+          <a class="cd-link-gray" href="{{ path('notification') }}" target="_blank">{{ 'homepage.header.check_all_notifications'|trans }}</a>
         </div>
       </div>
       <div class="message-content tab-pane" role="tabpanel" id="message">
         <div class="inform-dropdown-body">
           {% if app.user.newMessageNum > 0 %}
-            <div class="inform-loading js-inform-loading hidden"></div>
+            <div class="inform-loading js-inform-loading"></div>
             <div class="js-inform-conversation"></div>
           {% else %}
-            <div class="inform-empty-status">
+            <div class="inform-empty-status js-inform-empty">
               <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"
           srcset="{{ asset('static-dist/app/img/notice/null-message.png') }} 1x, {{ asset('static-dist/app/img/notice/null-message@2x.png') }} 2x"/>
               <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_messages'|trans }}</div>
@@ -37,7 +37,7 @@
           {% endif %}
         </div>
         <div class="inform-dropdown-foot">
-          <a href="{{ path('message') }}" target="_blank">{{ 'homepage.header.check_all_messages'|trans }}</a>
+          <a class="cd-link-gray" href="{{ path('message') }}" target="_blank">{{ 'homepage.header.check_all_messages'|trans }}</a>
         </div>
       </div>
     </div>

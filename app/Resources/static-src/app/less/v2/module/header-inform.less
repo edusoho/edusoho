@@ -3,7 +3,10 @@
     .user-inform-li {
       .inform-dropdown-toggle {
         padding: 16px 0;
-        color: #fff;
+        color: rgba(255, 255, 255, 0.7);
+        &:hover {
+          color: #fff;
+        }
       }
       .inform-dropdown {
         padding: 0;
@@ -101,47 +104,5 @@
 }
 
 .inform-loading {
-  padding: 128px 0;
-  &:after {
-    animation: circle 1s infinite linear;
-    -webkit-animation: circle 1s infinite linear;
-    font-family: 'es-icon';
-    content: "\e6e0";
-    display: block;
-    color: @gray;
-    font-size: 32px;
-    padding: 0 10px;
-    text-align: center;
-  }
+  padding: 85px 0;
 }
-
-@keyframes circle {
-  0% {
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes circle {
-  0% {
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-

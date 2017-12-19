@@ -36,47 +36,47 @@ $('.js-inform-tab').click(function(e) {
   e.preventDefault();
   $this.addClass('active').siblings().removeClass('active');
   $this.tab('show');
-  var id = $this[0].id;
-  if (id == 'conversation') {
-    Api.conversation.search({
-      beforeSend() {
-        $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
-      },
-     }).then((res) => {
+  const id = $this[0].id;
+  const isEmpty = $('.tab-pane.active').find('.js-inform-empty').length;
+  if (id === 'conversation' && !isEmpty) {
+    Api.conversation.search().then((res) => {
+      $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
+      $('.js-inform-newNotification').empty();
       $('.js-inform-conversation').append(res);
-      // $('.js-inform-loading').addClass('hidden');
      }).catch((res) => {
       // 异常捕获
       console.log('catch', res.responseJSON.error.message);
     })
   }
-  if (id == 'newNotification') {
-    Api.newNotification.search({
-      beforeSend() {
-        $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
-      },
-     }).then((res) => {
+  if (id === 'newNotification' && !isEmpty) {
+    Api.newNotification.search().then((res) => {
+      $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
       $('.js-inform-newNotification').empty();
       $('.js-inform-newNotification').append(res);
-      // $('.js-inform-loading').addClass('hidden');
      }).catch((res) => {
       // 异常捕获
-      console.log('catch', res.responseJSON.message);
+      console.log('catch', res.responseJSON.error.message);
     })
   }
 })
 
-Api.newNotification.search({
-  beforeSend() {
-    $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
-  },
- }).then((res) => {
+$(document).ajaxSend(() => {
+  // 加载loading效果
+  const $dom = $('.js-inform-loading');
+  const loading = cd.loading();
+  $dom.removeClass('hidden');
+  $dom.html(loading);
+});
+
+Api.newNotification.search().then((res) => {
+  $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
   $('.js-inform-newNotification').append(res);
-  $('.js-inform-loading').addClass('hidden');
  }).catch((res) => {
   // 异常捕获
   console.log('catch', res.responseJSON.error.message);
 })
+
+
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);
