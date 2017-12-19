@@ -2,15 +2,15 @@
   <a class="cd-inform dropdown-toggle inform-dropdown-toggle" data-toggle="dropdown"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
   <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
     <div class="clearfix inform-dropdown-head" role="tablist">
-      <a class="inform-dropdown-head__tab js-inform-tab active" href="#notification" role="tab" data-toggle="tab">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="cd-ml4 cd-inform-dot"></span>{% endif %}</a>
-      <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="cd-ml4 cd-inform-dot"></span>{% endif %}</a>
+      <a class="inform-dropdown-head__tab js-inform-tab active" href="#notification" role="tab" data-toggle="tab" id="newNotification">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="cd-ml4 cd-inform-dot"></span>{% endif %}</a>
+      <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab" id="conversation">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="cd-ml4 cd-inform-dot"></span>{% endif %}</a>
     </div>
     <div class="tab-content">
       <div class="notification-content tab-pane active" role="tabpanel" id="notification">
         <div class="inform-dropdown-body">
-          {% if app.user.newNotificationNum == 0 %}
+          {% if app.user.newNotificationNum > 0 %}
             <div class="inform-loading js-inform-loading hidden"></div>
-            <div class="js-inform-notification"></div>
+            <div class="js-inform-newNotification"></div>
           {% else %}
             <div class="inform-empty-status">
               <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
@@ -27,17 +27,7 @@
         <div class="inform-dropdown-body">
           {% if app.user.newMessageNum > 0 %}
             <div class="inform-loading js-inform-loading hidden"></div>
-            {% for i in 0..4 %}
-              <a class="inform-dropdown-body__item clearfix inform-message-item" href="#" target="_blank">
-                <div class="inform-message-item__avatar">
-                  <img src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-                </div>
-                <div class="inform-message-item__info">
-                  <div class="cd-mb8 cd-text-gray">杨文云</div>
-                  <div class="cd-text-gray-dark" title="你好，能否请教一下如何在课中心空坎坎坷坷">{{'你好，能否请教一下如何在课中心'|sub_text(13) }}</div>
-                </div>
-              </a>
-            {% endfor %}
+            <div class="js-inform-conversation"></div>
           {% else %}
             <div class="inform-empty-status">
               <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"

@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
-import ajax from '../../../../common/api/ajax';
+import notify from 'common/notify';
+import Api from 'common/api';
 
 const PCSwitcher = $('.js-switch-pc');
 const MobileSwitcher = $('.js-switch-mobile');
@@ -35,29 +36,47 @@ $('.js-inform-tab').click(function(e) {
   e.preventDefault();
   $this.addClass('active').siblings().removeClass('active');
   $this.tab('show');
-
-  $.ajax({
-    type : "post",
-    url : $this.data('url'),
-    beforeSend() {
-      $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
-    },
-  }).done(() => {
-    $('.js-inform-loading').addClass('hidden');
-  });
+  var id = $this[0].id;
+  if (id == 'conversation') {
+    Api.conversation.search({
+      beforeSend() {
+        $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
+      },
+     }).then((res) => {
+      $('.js-inform-conversation').append(res);
+      // $('.js-inform-loading').addClass('hidden');
+     }).catch((res) => {
+      // 异常捕获
+      // console.log('catch', res.responseJSON.error.message);
+    })
+  }
+  if (id == 'newNotification') {
+    Api.newNotification.search({
+      beforeSend() {
+        $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
+      },
+     }).then((res) => {
+      $('.js-inform-newNotification').empty();
+      $('.js-inform-newNotification').append(res);
+      // $('.js-inform-loading').addClass('hidden');
+     }).catch((res) => {
+      // 异常捕获
+      // console.log('catch', res.responseJSON.message);
+    })
+  }
 })
 
-ajax({
-  url: '/api/newNotifications',
-  type: 'GET',
+Api.newNotification.search({
   beforeSend() {
     $('.tab-pane.active').find('.js-inform-loading').removeClass('hidden');
   },
-}).then((result) => {
+ }).then((res) => {
+  $('.js-inform-newNotification').append(res);
   $('.js-inform-loading').addClass('hidden');
-  $('.js-inform-notification').append(result);
-}, () => {
-});
+ }).catch((res) => {
+  // 异常捕获
+  // console.log('catch', res.responseJSON.message);
+})
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);

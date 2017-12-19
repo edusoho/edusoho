@@ -18,7 +18,10 @@ class Conversation extends AbstractResource
         $user = $this->getCurrentUser();
         $conversations = $this->getMessageService()->findNewUserConversations($user->id, 0, 5);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
-        return json_encode(array('conversations' => $conversations, 'users' => $users), true);
+        return $this->renderView("ApiBundle:message:user-inform-message.html.twig", array(
+            'conversations' => $conversations,
+            'users' => $users,
+        ));
     }
 
     protected function getMessageService()
