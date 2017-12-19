@@ -10,6 +10,6 @@
   </li>
 {% else %}
   <li class="user-manage-li visible-lg cd-ml24">
-    <a class="btn cd-btn user-manage-toggle user-student-manage{% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white{% else %} cd-btn-ghost-light {% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+    <a class="btn cd-btn user-manage-toggle {% if navigationcolor == 'white' %} cd-btn-primary user-manage-toggle--white{% else %} cd-btn-ghost-light {% endif %}" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
   </li>
 {% endif %}
