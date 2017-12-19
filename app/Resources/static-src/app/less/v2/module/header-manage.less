@@ -13,14 +13,6 @@
           background: rgba(255, 255, 255, 0.2);
           .cd-transition;
         }
-        &.nav-manage-white {
-          .cd-btn-raised(@brand-primary);
-          &:hover,
-          &:focus {
-            background-color: @brand-primary !important;
-            border-color: @brand-primary !important;
-          }
-        }
       }
       .user-manage-dropdown {
         padding: 0;
@@ -44,6 +36,23 @@
           }
           > a {
             padding: 16px 24px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.es-nav-white {
+  .es-header {
+    .nav.user-nav {
+      .user-manage-li {
+        .user-manage-toggle {
+          .cd-btn-raised(@brand-primary);
+          &:hover,
+          &:focus {
+            background-color: @brand-primary !important;
+            border-color: @brand-primary !important;
           }
         }
       }
