@@ -34,11 +34,11 @@ $('body').on('click', '.js-user-nav-dropdown', (event) => {
 $('.js-inform-tab').click(function(e) {
   const $this = $(this);
   e.preventDefault();
-  $this.addClass('active').siblings().removeClass('active');
   $this.tab('show');
   const id = $this[0].id;
   const isEmpty = $('.tab-pane.active').find('.js-inform-empty').length;
-  if (id === 'conversation' && !isEmpty) {
+  const isActive = $this.hasClass('active');
+  if (id === 'conversation' && !isEmpty && !isActive) {
     Api.conversation.search().then((res) => {
       $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
       $('.js-inform-conversation').empty();
@@ -48,7 +48,7 @@ $('.js-inform-tab').click(function(e) {
       console.log('catch', res.responseJSON.error.message);
     })
   }
-  if (id === 'newNotification' && !isEmpty) {
+  if (id === 'newNotification' && !isEmpty && !isActive) {
     Api.newNotification.search().then((res) => {
       $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
       $('.js-inform-newNotification').empty();
@@ -58,6 +58,7 @@ $('.js-inform-tab').click(function(e) {
       console.log('catch', res.responseJSON.error.message);
     })
   }
+  $this.addClass('active').siblings().removeClass('active');
 })
 
 $(document).ajaxSend(() => {
