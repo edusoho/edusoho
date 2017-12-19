@@ -295,5 +295,5 @@ interface UserService
 
     public function getUserIdsByKeyword($word);
 
-    public function updateUserNewMessageNum($id, $newMessageNum);
+    public function updateUserNewMessageNum($id, $num);
 }

@@ -62,10 +62,9 @@ class MessageController extends BaseController
             $this->getMessageService()->countConversationMessages($conversationId),
             10
         );
-        $num = ($user['newMessageNum'] - $conversation['unreadNum']) >= 0 ?: 0;
+
         $this->getMessageService()->markConversationRead($conversationId);
-        $this->getUserService()->updateUserNewMessageNum($user['id'], $num);
-        $user->__set('newMessageNum', $num);
+        $this->getUserService()->updateUserNewMessageNum($user['id'], $conversation['unreadNum']);
 
         $messages = $this->getMessageService()->findConversationMessages(
             $conversation['id'],
