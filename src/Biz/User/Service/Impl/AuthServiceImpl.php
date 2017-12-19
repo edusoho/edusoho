@@ -25,35 +25,14 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
 
         //FIXME 应该调用GeneralDaoImpl里的事务
-        $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-            $authUser = $this->getAuthProvider()->register($registration);
+            $registration['type'] = $type;
 
-            if ('default' == $type) {
-                if (!empty($authUser['id'])) {
-                    $registration['token'] = array(
-                        'userId' => $authUser['id'],
-                    );
-                }
-
-                $registration['type'] = $this->getAuthProvider()->getProviderName();
-
-                $newUser = $this->getUserService()->register(
-                    $registration,
-                    RegisterTypeUtils::getRegisterTypes($registration)
-                );
-            } else {
-                $registration['type'] = $type;
-                $newUser = $this->getUserService()->register(
-                    $registration,
-                    RegisterTypeUtils::getRegisterTypes($registration)
-                );
-
-                if (!empty($authUser['id'])) {
-                    $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
-                }
-            }
+            $newUser = $this->getUserService()->register(
+                $registration,
+                RegisterTypeUtils::getRegisterTypes($registration)
+            );
 
             $this->getKernel()->getConnection()->commit();
 
@@ -374,7 +353,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         return true;
     }
 
-    protected function getAuthProvider()
+    public function getAuthProvider()
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
