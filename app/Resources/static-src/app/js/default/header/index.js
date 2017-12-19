@@ -24,3 +24,7 @@ $('.js-back').click(() => {
     location.href = '/';
   }
 });
+
+$('body').on('click', '.js-user-nav-dropdown', (event) => {
+  event.stopPropagation();
+});

@@ -44,7 +44,21 @@
       color: @gray-darker;
     }
   }
+  .nav.user-nav > li {
+    .user-manage-toggle--white {
+      color: #fff;
+      &:hover,
+      &:focus {
+        color: #fff;
+        background-color: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
+  }
 }
-.navbar-form .form-control {
-  border-color: @gray-light;
+
+.navbar-form {
+  .form-control {
+    color: rgba(0, 0, 0, 0.32);
+  }
 }

@@ -1,0 +1,39 @@
+.es-header {
+  .nav.user-nav {
+    .user-manage-li {
+      padding: 14px 0;
+      .user-manage-toggle {
+        padding-left: 12px;
+        padding-right: 6px;
+        &.user-student-manage {
+          padding-right: 12px;
+        }
+      }
+      .user-manage-dropdown {
+        padding: 0;
+        width: 96px;
+        top: 42px;
+        text-align: center;
+        .cd-border-radius;
+        .cd-box-shadow-z(8px);
+        > li {
+          &:first-child {
+            > a {
+              .border-top-left-radius;
+              .border-top-right-radius;
+            }
+          }
+          &:last-child {
+            > a {
+              .border-bottom-left-radius;
+              .border-bottom-right-radius;
+            }
+          }
+          > a {
+            padding: 16px 24px;
+          }
+        }
+      }
+    }
+  }
+}

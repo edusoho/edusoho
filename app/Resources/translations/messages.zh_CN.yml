@@ -3300,12 +3300,17 @@ homepage.header.register: 注册
 homepage.header.my_course: 我的教学
 homepage.header.my_learning: 我的学习
 homepage.header.notice: 通知
+homepage.header.check_all_notifications: 查看全部通知
+homepage.header.no_new_notifications: 暂无新的通知～
 homepage.header.message: 私信
+homepage.header.check_all_messages: 查看全部私信
+homepage.header.no_new_messages: 暂无新的私信～
 homepage.header.personal_menu: 个人主页
 homepage.header.settings_menu: 个人设置
 homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
+homepage.header.reward: 积分
 homepage.header.admin_menu: 管理后台
 homepage.header.switch_pc: 切换电脑版
 homepage.header.switch_mobile: 切换触屏版
