@@ -47,7 +47,7 @@ $('.js-inform-tab').click(function(e) {
       // $('.js-inform-loading').addClass('hidden');
      }).catch((res) => {
       // 异常捕获
-      // console.log('catch', res.responseJSON.error.message);
+      console.log('catch', res.responseJSON.error.message);
     })
   }
   if (id == 'newNotification') {
@@ -61,7 +61,7 @@ $('.js-inform-tab').click(function(e) {
       // $('.js-inform-loading').addClass('hidden');
      }).catch((res) => {
       // 异常捕获
-      // console.log('catch', res.responseJSON.message);
+      console.log('catch', res.responseJSON.message);
     })
   }
 })
@@ -75,7 +75,7 @@ Api.newNotification.search({
   $('.js-inform-loading').addClass('hidden');
  }).catch((res) => {
   // 异常捕获
-  // console.log('catch', res.responseJSON.message);
+  console.log('catch', res.responseJSON.error.message);
 })
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
