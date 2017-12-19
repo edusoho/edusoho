@@ -270,6 +270,24 @@ class AuthServiceTest extends BaseTestCase
         $this->assertNotEquals($user['payPassword'], $newUser['payPassword']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testChangePayPasswordWithErrorPassword()
+    {
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'verifyPassword',
+                    'returnValue' => false,
+                    'withParams' => array(2, 'password'),
+                ),
+            )
+        );
+        $this->getAuthService()->changePayPassword(2, 'password', 'newPassword');
+    }
+
     public function testRefillFormDataWithoutNicknameAndEmail()
     {
         $value = array('register_mode' => 'email_or_mobile');
@@ -395,6 +413,20 @@ class AuthServiceTest extends BaseTestCase
         $result = $this->getAuthService()->checkEmailOrMobile('test@edusoho.com');
         // $this->assertEquals('error_duplicate', $result[0]);
         // $this->assertEquals('Email已存在!', $result[1]);
+        $this->getSettingService()->delete('auth');
+    }
+
+    public function testCheckEmailOrMobileWithErrorEmail()
+    {
+        $value = array('register_mode' => 'email_or_mobile');
+        $this->getSettingService()->set('auth', $value);
+        $user = $this->getAuthService()->register(array(
+            'password' => '123456',
+            'emailOrMobile' => '18989492142',
+            'nickname' => 'test',
+        ));
+        $result = $this->getAuthService()->checkEmailOrMobile('1898949');
+        $this->assertEquals('error_dateInput', $result[0]);
         $this->getSettingService()->delete('auth');
     }
 
@@ -563,6 +595,17 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->delete('auth');
         $result = $this->getAuthService()->isRegisterEnabled();
         $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testGetAuthProviderWithErrorMode()
+    {
+        $value = array('mode' => 'testNotTrue');
+        $this->getSettingService()->set('user_partner', $value);
+        $result = $this->getAuthService()->getPartnerName();
+        $this->getSettingService()->delete('auth');
     }
 
     protected function getAuthService()
