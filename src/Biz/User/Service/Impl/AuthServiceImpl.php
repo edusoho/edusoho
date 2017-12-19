@@ -26,6 +26,8 @@ class AuthServiceImpl extends BaseService implements AuthService
 
         //FIXME 应该调用GeneralDaoImpl里的事务
         try {
+            $this->getKernel()->getConnection()->beginTransaction();
+            
             $registration = $this->refillFormData($registration, $type);
             $registration['type'] = $type;
 
