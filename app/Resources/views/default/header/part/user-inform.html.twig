@@ -1,30 +1,3 @@
-<<<<<<< HEAD
-<li class="visible-lg visible-md nav-hover cd-ml24">
-  {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
-    <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
-  {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
-    <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
-  {% else %}
-    <a><i class="es-icon es-icon-mail"></i></a>
-  {% endif %}
-
-  <ul class="dropdown-menu" role="menu">
-    {% if not setting('esBar.enabled', 0) %}
-      <li>
-        <a href="{{ path('notification') }}">
-          <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
-          <i class="es-icon es-icon-notificationson"></i>{{'notification.user_notification'|trans}}
-        </a>
-      </li>
-    {% endif %}
-    <li>
-      <a href="{{ path('message') }}">
-        <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
-        <i class="es-icon es-icon-mail"></i>{{'user.btn.send_message'|trans}}
-      </a>
-    </li>
-  </ul>
-=======
 <li class="user-inform-li js-user-inform hidden-xs hidden-sm cd-ml24">
   <a class="cd-inform dropdown-toggle inform-dropdown-toggle" data-toggle="dropdown"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="cd-inform-num">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
   <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
@@ -69,5 +42,4 @@
       </div>
     </div>
   </div>
->>>>>>> 284d9e5ec13a5f4a28111cbc2bbba55ff031afbf
 </li>
