@@ -30,7 +30,9 @@ abstract class BaseRegister
         $this->createUserProfile($registration, $user);
 
         //　绑定 discuz　用户
-        if (!empty($authUser['id'])) {
+
+        if ('default' != $this->getAuthService()->getAuthProvider()->getProviderName()
+                && !empty($authUser['id'])) {
             $this->getUserService()->bindUser(
                 $this->getAuthService()->getPartnerName(),
                 $authUser['id'],
