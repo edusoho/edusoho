@@ -90,11 +90,11 @@ class Homework extends BaseResource
 
         $canCheckHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
         if (empty($currentUser) || (!$canCheckHomework && $homeworkResult['userId'] != $currentUser['id'])) {
-            return $this->error('500', '不能查看该作业结果');
+            return $this->error('500', '不能查看该作业结果！');
         }
 
         if (!in_array($homeworkResult['status'], array('finished', 'reviewing'))) {
-            return $this->error('500', '作业还未做完');
+            return $this->error('500', '作业还未做完！');
         }
 
         $course = $this->getCourseService()->getCourse($homework['courseId']);
