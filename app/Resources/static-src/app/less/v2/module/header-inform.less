@@ -4,8 +4,13 @@
       .inform-dropdown-toggle {
         padding: 16px 0;
         color: rgba(255, 255, 255, 0.7);
+        position: relative;
+        cursor: pointer;
         &:hover {
           color: #fff;
+        }
+        i {
+          font-size: 24px;
         }
       }
       .inform-dropdown {
@@ -18,6 +23,17 @@
     }
   }
 }
+
+.inform-dropdown-toggle__num {
+  position: absolute;
+  top: 8px;
+  right: -6px;
+}
+
+.inform-dropdown-toggle__num--big {
+  right: -8px;
+}
+
 
 .inform-dropdown-head {
   .cd-box-shadow-inset(0 -1px 0 0);
