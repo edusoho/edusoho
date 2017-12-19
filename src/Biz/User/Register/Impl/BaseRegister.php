@@ -26,9 +26,11 @@ abstract class BaseRegister
 
         $authUser = array();
         if ('default' != $this->getAuthService()->getAuthProvider()->getProviderName()) {
+            // 从discuz中注册过来
             if (!empty($registration['token']['userId'])) {
+                $registration['type'] = 'discuz';
                 $authUser = array('id' => $registration['token']['userId']);
-            } else {
+            } else { // 非discuz注册
                 $authUser = $this->getAuthService()->getAuthProvider()->register($registration);
             }
         }
@@ -123,7 +125,7 @@ abstract class BaseRegister
         $user['type'] = $registration['type'];
         $user['createdTime'] = time();
 
-        $type = empty($registration['providerType']) ? $registration['type'] : $registration['providerType'];
+        $type = $registration['type'];
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
