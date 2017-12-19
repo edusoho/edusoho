@@ -101,6 +101,13 @@ class MessageServiceImpl extends BaseService implements MessageService
         return true;
     }
 
+    public function findNewUserConversations($userId, $start, $limit)
+    {
+        $conditions = array('toId' => $userId, 'lessUnreadNum' => 0);
+
+        return $this->getConversationDao()->search($conditions, array('latestMessageTime' => 'DESC'), $start, $limit);
+    }
+
     public function findUserConversations($userId, $start, $limit)
     {
         $conditions = array('toId' => $userId);

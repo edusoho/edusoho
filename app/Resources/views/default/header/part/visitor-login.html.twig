@@ -25,5 +25,10 @@
   </ul>
 </li>
 
+<<<<<<< HEAD
 <li class="visitor-li visitor-login-li hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
 <li class="visitor-li hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
+=======
+<li class="hidden-xs visitor-li visitor-login-li"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
+<li class="hidden-xs visitor-li"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
+>>>>>>> 284d9e5ec13a5f4a28111cbc2bbba55ff031afbf

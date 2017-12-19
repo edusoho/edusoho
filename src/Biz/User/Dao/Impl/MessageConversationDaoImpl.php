@@ -20,6 +20,7 @@ class MessageConversationDaoImpl extends GeneralDaoImpl implements MessageConver
             'orderbys' => array('latestMessageTime'),
             'conditions' => array(
                 'toId = :toId',
+                'unreadNum > :lessUnreadNum',
             ),
         );
     }
