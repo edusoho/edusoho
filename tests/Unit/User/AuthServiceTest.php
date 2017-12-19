@@ -188,10 +188,10 @@ class AuthServiceTest extends BaseTestCase
                 ),
             )
         );
-        $result = $this->getAuthService()->syncLogin(2);
+        $result = $this->getAuthService()->syncLogout(2);
         $this->assertEquals('', $result);
 
-        $result = $this->getAuthService()->syncLogin(2);
+        $result = $this->getAuthService()->syncLogout(2);
         $this->assertTrue($result);
     }
 
