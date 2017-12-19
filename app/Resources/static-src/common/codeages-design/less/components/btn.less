@@ -40,6 +40,16 @@
   &.cd-btn-ghost-warning {
     .cd-btn-ghost(@brand-warning);
   }
+  &.cd-btn-ghost-light {
+    border-color: #fff;
+    color: #fff;
+    .cd-transition;
+    &:hover,
+    &:focus {
+      background: rgba(255, 255, 255, 0.2);
+      .cd-transition;
+    }
+  }
 }
 
 .btn.cd-btn {
@@ -102,20 +112,6 @@
     &:active {
       background: @cd-bg;
       .cd-transition;
-    }
-  }
-  &.cd-btn-white {
-    border-color: #fff;
-    color: #fff;
-    .cd-transition;
-    &:hover {
-      .cd-box-shadow(6px);
-    }
-    &:hover,
-    &:focus {
-      .cd-transition;
-      border-color: #fff;
-      background: rgba(255, 255, 255, .2);
     }
   }
 }
