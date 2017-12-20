@@ -15,10 +15,14 @@ class Conversation extends AbstractResource
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
+        $newMessageNum = $user['newMessageNum'];
+        if ($newMessageNum > 5) {
+            $newMessageNum = 5;
+        }
         $conversations = $this->getMessageService()->findNewUserConversations(
             $user->id,
             0,
-            5
+            $newMessageNum
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
 

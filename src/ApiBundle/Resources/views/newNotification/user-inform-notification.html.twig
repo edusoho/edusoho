@@ -3,10 +3,4 @@
   <div class="inform-dropdown-body__item inform-notification-item js-inform-notification" data-url="{{ path('notification', {id:notification.id }) }}">
   {{ notification.message|raw }}
   </div>
-{% else %}
-  <div class="inform-empty-status">
-    <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
-  srcset="{{ asset('static-dist/app/img/notice/null-notice.png') }} 1x, {{ asset('static-dist/app/img/notice/null-notice@2x.png') }} 2x"/>
-    <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_notifications'|trans }}</div>
-  </div>
 {% endfor %}
