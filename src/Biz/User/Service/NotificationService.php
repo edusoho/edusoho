@@ -24,6 +24,8 @@ interface NotificationService
      */
     public function searchNotificationsByUserId($userId, $start, $limit);
 
+    public function isHighLight($notifications, $id);
+
     public function countNotificationsByUserId($userId);
 
     public function clearUserNewNotificationCounter($userId);
