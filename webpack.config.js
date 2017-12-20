@@ -30,27 +30,27 @@ module.exports = {
     'select2': ['libs/select2/index.js'],
     'handlebars': ['handlebars']
   },
-  noParseDeps: [ // 不解析依赖，加快编译速度
-    'jquery/dist/jquery.js',
-    'bootstrap/dist/js/bootstrap.js',
-    'jquery-validation/dist/jquery.validate.js',
-    'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
-    'bootstrap-notify/bootstrap-notify.js',
-    'store/store.js',
-    'respond.js/dest/respond.src.js', // '.'会被转换成'-'
-    'console-polyfill/index.js',
-    'html5shiv/dist/html5shiv.js',
-    'bootstrap-daterangepicker/daterangepicker.js',
-    'moment/moment.js',
-    'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
-    'jquery-sortable/source/js/jquery-sortable.js',
-    'jquery.cycle2/src/jquery.cycle2.min.js',
-    'nouislider/distribute/nouislider.js',
-    'echo-js/dist/echo.js',
-    'jquery-waypoints/waypoints.js',
-    'echarts/dist/echarts.js',
-    'handlebars/dist/handlebars.min.js'
-  ],  
+  noParseDeps: { // 不解析依赖，加快编译速度
+    'jquery': 'jquery/dist/jquery.js',
+    'bootstrap': 'bootstrap/dist/js/bootstrap.js',
+    'jquery-validation': 'jquery-validation/dist/jquery.validate.js',
+    'perfect-scrollbar': 'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
+    'bootstrap-notify': 'bootstrap-notify/bootstrap-notify.js',
+    'store': 'store/store.js',
+    'respond-js': 'respond.js/dest/respond.src.js',
+    'console-polyfill': 'console-polyfill/index.js',
+    'html5shiv': 'html5shiv/dist/html5shiv.js',
+    'bootstrap-daterangepicker': 'bootstrap-daterangepicker/daterangepicker.js',
+    'moment': 'moment/moment.js',
+    'bootstrap-datetime-picker': 'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
+    'jquery-sortable': 'jquery-sortable/source/js/jquery-sortable.js',
+    'jquery-cycle2': 'jquery.cycle2/src/jquery.cycle2.min.js',
+    'nouislider': 'nouislider/distribute/nouislider.js',
+    'echo-js': 'echo-js/dist/echo.js',
+    'jquery-waypoints': 'jquery-waypoints/waypoints.js',
+    'echarts': 'echarts/dist/echarts.js',
+    'handlebars': 'handlebars/dist/handlebars.min.js'
+  }, 
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
       name: 'es-ckeditor',
