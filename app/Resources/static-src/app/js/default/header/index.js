@@ -91,10 +91,9 @@ const informShow = ($dom, res, flag) => {
     $dom.find('.notification-footer').addClass('hidden');
     $dom.find('.pull-left').addClass('hidden');
   }
-
 }
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);
-  window.open($item.data('url'));
+  window.location.href = $item.data('url');
 })
