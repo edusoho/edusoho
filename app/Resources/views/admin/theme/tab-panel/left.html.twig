@@ -1,5 +1,5 @@
 {# 主题管理-分类挂件管理 #}
-{% set allConfigLeft = themeConfig.blocks.left|default()|merge(allConfig.blocks.left|default()) %}
+{% set allConfigLeft = allConfig.blocks.left|default()|merge(themeConfig.blocks.left|default()) %}
 {% set allConfigLeft = array_index(allConfigLeft, 'code') %}
 {% set configLeft = array_index(themeConfig.blocks.left|default(), 'code')  %}
 <div class="hide" id="componet-setting">

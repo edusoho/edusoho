@@ -54,5 +54,6 @@ define(function(require, exports, module) {
         $("#"+ componentSetting[data.code]['id']).find('.col-md-4').eq(1).text(componentSetting[data.code].title);
         $themeEditContent.trigger('save_sort', getConfig());
       });
+
     }
 });
