@@ -3,6 +3,7 @@
 namespace AppBundle\Component\Activity;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
@@ -15,9 +16,11 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
 
     private static $instance;
 
-    public $activityDir;
+    public $activitiesDir;
 
     public $activityProxy;
+
+    public $activityConfig;
 
     /**
      * @var \Symfony\Component\HttpFoundation\Request
@@ -28,13 +31,35 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     {
         $this->container = $container;
         $this->biz = $container->get('biz');
-        $this->activityDir = implode(DIRECTORY_SEPARATOR, array($container->getParameter('kernel.root_dir'), '..', 'activities'));
+        $this->activitiesDir = $container->getParameter('edusoho.activities_dir');
         $this->request = $container->get('request');
     }
 
     public function show($activity)
     {
+        $activityProxy = $this->createActivityProxy($activity);
+        $activityProxy->setRouteName(ActivityRuntimeContainerInterface::ROUTE_SHOW);
+        return $this->renderRoute($activityProxy, array(
+            'activity' => $activity,
+        ));
+    }
 
+    private function renderRoute(ActivityProxy $activityProxy, $parameters = array())
+    {
+        $routeInfo = $activityProxy->getRouteInfo();
+        switch ($routeInfo['extension']) {
+            case 'php':
+                $resp = $this->renderPhp($routeInfo['realPath']);
+                break;
+            case 'html':
+            case 'twig':
+                $resp = $this->render($routeInfo['realPath'], $parameters);
+                break;
+            default:
+                throw new \RuntimeException('Bad route info in activity');
+        }
+
+        return $resp;
     }
 
     public function create()
@@ -58,24 +83,18 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
         return $this->activityProxy;
     }
 
-    public function invoke($activityType, $action)
+    public function renderPhp($realPath)
     {
-        $actionFile = implode(DIRECTORY_SEPARATOR, array(
-            $this->activityDir, $activityType, 'src', $action
-        ));
-
-        if (!file_exists($actionFile)) {
-            throw new BadRequestHttpException('The activity not found.');
+        if (!file_exists($realPath)) {
+            throw new \RuntimeException('The activity not found.');
         }
 
-        return require $actionFile;
+        return require $realPath;
     }
 
-    public function initActivityProxy($task)
+    private function createActivityProxy($activity)
     {
-        $activityProxy = new ActivityProxy();
-        $activityProxy->task = $task;
-        $this->activityProxy = $activityProxy;
+        return new ActivityProxy($activity, $this->activitiesDir.DIRECTORY_SEPARATOR.$activity['mediaType']);
     }
 
     /**
@@ -86,8 +105,22 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
         return $this->biz['db'];
     }
 
-    public function render($template)
+    public function render($view, array $parameters = array(), Response $response = null)
     {
+        if ($this->container->has('templating')) {
+            return $this->container->get('templating')->renderResponse($view, $parameters, $response);
+        }
 
+        if (!$this->container->has('twig')) {
+            throw new \LogicException('You can not use the "render" method if the Templating Component or the Twig Bundle are not available.');
+        }
+
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        $response->setContent($this->container->get('twig')->render($view, $parameters));
+
+        return $response;
     }
 }

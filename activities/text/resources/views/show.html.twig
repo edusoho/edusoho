@@ -7,7 +7,7 @@
 {% do script(['libs/perfect-scrollbar.js','app/js/activity/text/index.js']) %}
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% block body %}
-  <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ text.finishDetail }}" data-disable-copy="{{ enableCopy }}">
-    <div class="text-activity-content">{{activity.content|raw}}</div>
+  <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ activity.ext.finishDetail }}" data-disable-copy="{{ enableCopy }}">
+    <div class="text-activity-content">{{ activity.content|raw }}</div>
   </div>
 {% endblock %}
