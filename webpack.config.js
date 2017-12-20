@@ -4,8 +4,7 @@ module.exports = {
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
   },
   libs: {
-    'base': ['libs/base.js'], //可以是一个js文件,
-    'vendor': ['libs/vendor.js'], // 即将废弃,请使用base.js
+    'base': ['libs/base.js'], // 基础类库
     'html5shiv': ['html5shiv'],
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
@@ -70,7 +69,6 @@ module.exports = {
       name: 'easy-pie-chart/dist/jquery.easypiechart.js',
     }
   ],
-  vendorName: 'libs/base,libs/vendor',
   extryCssName: '{main,header,bootstrap,mobile,admin}',
 }
 
