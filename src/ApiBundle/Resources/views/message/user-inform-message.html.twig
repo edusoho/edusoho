@@ -9,10 +9,4 @@
       <div class="cd-text-gray-dark">{{ conversation.latestMessageContent|sub_text(13) }}</div>
     </div>
   </a>
-{% else %}
-  <div class="inform-empty-status">
-    <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"
-srcset="{{ asset('static-dist/app/img/notice/null-message.png') }} 1x, {{ asset('static-dist/app/img/notice/null-message@2x.png') }} 2x"/>
-    <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_messages'|trans }}</div>
-  </div>
 {% endfor %}
