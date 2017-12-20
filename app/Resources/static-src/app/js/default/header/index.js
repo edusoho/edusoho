@@ -67,8 +67,6 @@ $(document).ajaxSend((event, xhr, options) => {
 
   // 加载loading效果
   if (isNotificationUrl || isMessageUrl) {
-    console.log(isNotificationUrl);
-    console.log(isMessageUrl);
     const $dom = $('.js-inform-loading');
     const loading = cd.loading();
     $dom.removeClass('hidden');
