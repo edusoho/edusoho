@@ -3,10 +3,11 @@
 {% set modalSize = 'large' %}
 {% set categoriesFirst = data('Categories',{'group':'course'})%}
 {% set title = config.title ? config.title : config.defaultTitle %}
-{% set subTitle = config.subTitle ? config.subTitle : config.defaultSubTitle %}
+{% set subTitle = config.subTitle|default() ? config.subTitle|default() : config.defaultSubTitle|default() %}
 {% block title %}{{ title }}{{'admin.setting.theme.manage.modal.edit'|trans}}{% endblock %}
 {% block body %}
-    <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
+  <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
+    {% block content %}
       {% block custom_name %}
         <div class="row form-group">
           <div class="col-md-3 control-label">
@@ -75,9 +76,10 @@
           </div>
         </div>
       {% endblock %}
-      <input class="hide" value="{{ config.id|default() }}" name="id" >
-      <input class="hide" value="{{ config.blockKey|default('left') }}" name="blockKey" >
-    </form>
+    {% endblock %}
+    <input class="hide" value="{{ config.id|default() }}" name="id" >
+    <input class="hide" value="{{ config.blockKey|default('left') }}" name="blockKey" >
+  </form>
 
 {% endblock %}
 

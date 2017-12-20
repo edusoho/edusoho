@@ -23,8 +23,7 @@ define(function(require, exports, module) {
         var setting = {};
         $componets.each(function(){
           var $this = $(this);
-          var $actives = $componets.find('input[type=checkbox]:checked');
-          var blockKey = $(this).attr('id');
+          var $actives = $this.find('input[type=checkbox]:checked'), blockKey = $this.attr('id');
           $actives.each(function(){
             var key = $(this).data('componentId');
             if (undefined == setting[blockKey]) {
@@ -65,8 +64,6 @@ define(function(require, exports, module) {
       $themeEditContent.on("save_part_config", function(event, data){
         componentSetting[data.blockKey][data.id] = $.extend(componentSetting[data.blockKey][data.id], data);
 
-        console.log(componentSetting[data.blockKey][data.id].title);
-        console.log($("#"+ data.id).find('.col-md-4').eq(1));
         $("#"+ data.id).find('>div').eq(1).text(componentSetting[data.blockKey][data.id].title);
         $themeEditContent.trigger('save_config', getConfig());
       });

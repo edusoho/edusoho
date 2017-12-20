@@ -6,7 +6,7 @@
   {{ allBlockConfig|json_encode|raw }}
 </div>
 
-<div class="tab-pane active js-theme-component" id="{{ configKey }}">
+<div class="tab-pane {% if isActive|default() %} active {% endif %} js-theme-component" id="{{ configKey }}">
     <div class="panel panel-default">
       <!-- Default panel contents -->
       <div class="panel-heading clearfix">

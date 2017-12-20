@@ -10,7 +10,8 @@
   {% include 'admin/theme/tab-panel/components.html.twig' with {
     allBlockConfig: allConfig.blocks.left|default(),  
     blockConfig: themeConfig.blocks.left|default(),
-    configKey: 'left'
+    configKey: 'left',
+    isActive: true,
   }%}
   {% include 'admin/theme/tab-panel/nav.html.twig' with {navigation: themeConfig.navigation|default() }%}
   {% include 'admin/theme/tab-panel/maincolor.html.twig' with {maincolor: themeConfig.maincolor, navigationcolor: themeConfig.navigationcolor} %}

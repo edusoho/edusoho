@@ -159,7 +159,7 @@ class ThemeController extends BaseController
     private function edit($code, $config)
     {
         return $this->render(
-            'admin/theme/edit-'.$code.'-modal.html.twig',
+            'admin/theme/edit-modal/edit-'.$code.'-modal.html.twig',
             array(
                 'config' => $config,
             )
