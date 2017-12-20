@@ -2,8 +2,8 @@ define(function(require, exports, module) {
     require('jquery.sortable');
     exports.run = function() {
       var $themeEditContent = $('.js-theme-component');
-      var componentSetting = $.parseJSON($('#componet-setting').text());
-      var $modal = $('#modal')
+      var componentSetting = $.parseJSON($('#componet-setting').text()), $modal = $('#modal'), saveKey = $themeEditContent.data('configKey');
+console.log(componentSetting);
       var $list = $(".module-item-list").sortable({
         distance: 20,
         itemSelector: '.theme-edit-item',
@@ -14,17 +14,16 @@ define(function(require, exports, module) {
       });
 
       var getConfig = function(){
-        var $actives = $themeEditContent.find('input[type=checkbox]:checked');
-        var setting = {};
+        var $actives = $themeEditContent.find('input[type=checkbox]:checked'), setting = {};
+        setting[saveKey] = {};
+        
         $actives.each(function(){
-           var code = $(this).data('code');
-           setting[code] = componentSetting[code];
+           var key = $(this).data('componentId');
+           setting[saveKey][key] = componentSetting[key];
         });
         
         return {
-          blocks: {
-            left: setting
-          }
+          blocks: setting
         };
       };
       
@@ -40,18 +39,18 @@ define(function(require, exports, module) {
 
       $themeEditContent.on('click', '.item-edit-btn', function(event){
         var $this = $(this);
-        var code = $(this).closest('li').find('.check-block').data('code');
+        var key = $(this).closest('li').find('.check-block').data('componentId');
         var url = $this.data('url');
 
-        $.get(url, {config: componentSetting[code]}, function(html){
+        $.get(url, {config: componentSetting[key]}, function(html){
           $modal.html(html)
           $modal.modal('show');
         });
       })
 
       $themeEditContent.on("save_part_config", function(event, data){
-        componentSetting[data.code] = $.extend(componentSetting[data.code], data);
-        $("#"+ componentSetting[data.code]['id']).find('.col-md-4').eq(1).text(componentSetting[data.code].title);
+        componentSetting[data.id] = $.extend(componentSetting[data.id], data);
+        $("#"+ data.id).find('.col-md-4').eq(1).text(componentSetting[data.id].title);
         $themeEditContent.trigger('save_config', getConfig());
       });
 
