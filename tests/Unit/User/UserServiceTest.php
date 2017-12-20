@@ -2297,7 +2297,7 @@ class UserServiceTest extends BaseTestCase
     {
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 0,
+            'id' => 2,
             'nickname' => 'admin1',
             'email' => 'admin3@admin.com',
             'password' => 'admin',
