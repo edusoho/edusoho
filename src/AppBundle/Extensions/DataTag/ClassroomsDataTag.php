@@ -32,16 +32,12 @@ class ClassroomsDataTag extends CourseBaseDataTag implements DataTag
             $arguments['count']
         );
 
-        $users = array();
-
         foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds = array();
             } else {
                 $classroomTeacherIds = $classroom['teacherIds'];
             }
-
-            $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
 
             $classrooms[$key]['teachers'] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
         }
