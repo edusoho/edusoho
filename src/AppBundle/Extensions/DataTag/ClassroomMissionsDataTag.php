@@ -75,11 +75,12 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                 'userId' => $userId,
                 'courseIds' => $courseIds,
             );
-
+            
             $taskCount = $this->getTaskResultService()->countTaskResults($learnedConditions);
+           
             $tasks = $this->getTaskResultService()->searchTaskResults(
                 $learnedConditions,
-                $sort = array('finishedTime' => 'ASC'),
+                array('finishedTime' => 'ASC'),
                 0,
                 $taskCount
             );
@@ -129,14 +130,6 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
     }
 
     /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
-    }
-
-    /**
      * @return TaskResultService
      */
     protected function getTaskResultService()
@@ -162,6 +155,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
     private function getSortedClassrooms($classroomIds, $members, $sortedClassrooms)
     {
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
         foreach ($members as $member) {
             if (empty($classrooms[$member['classroomId']])) {
                 continue;
