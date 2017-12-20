@@ -359,7 +359,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
         $ssl = $this->request->isSecure() ? true : false;
-
+        
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
@@ -507,6 +507,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
                     $lesson['mediaConvertStatus'] = $file['status'];
+
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
