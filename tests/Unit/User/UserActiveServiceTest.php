@@ -77,16 +77,10 @@ class UserActiveServiceTest extends BaseTestCase
         $this->assertEquals(array(array('userId' => 1, 'date' => '20171022')), $result);
     }
 
-    // public function testWriteToFile()
-    // {
-    //     $result = $this->getUserActiveService()->writeToFile(__DIR__.'/File/test.txt', 2);
-    //     $this->assertTrue($result);
-    // }
-
-    public function testGetFilePath()
+    public function testWriteToFile()
     {
-        $result = $this->getUserActiveService()->getFilePath(2);
-        var_dump($result);
+        $result = $this->getUserActiveService()->writeToFile(__DIR__.'/File/test.txt', 2);
+        $this->assertTrue($result);
     }
 
     protected function getUserActiveService()
