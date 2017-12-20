@@ -1947,11 +1947,10 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getCurrentUser();
         $newMessageNum = $user['newMessageNum'] - 1;
-        if ($newMessageNum < 0) {
-            $newMessageNum = 0;
+        if ($newMessageNum >= 0 && $num > 0) {
+            $this->getUserDao()->update($id, array('newMessageNum' => $newMessageNum));
+            $user->__set('newMessageNum', $newMessageNum);
         }
-        $this->getUserDao()->update($id, array('newMessageNum' => $newMessageNum));
-        $user->__set('newMessageNum', $newMessageNum);
     }
 
     protected function _prepareApprovalConditions($conditions)
