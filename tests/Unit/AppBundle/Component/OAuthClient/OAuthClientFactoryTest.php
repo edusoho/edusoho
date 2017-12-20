@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\AppBundle\Components\OAuthClient;
+namespace Tests\Unit\AppBundle\Component\OAuthClient;
 
 use Biz\BaseTestCase;
-use AppBundle\Components\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
 class OAuthClientFactoryTest extends BaseTestCase
 {

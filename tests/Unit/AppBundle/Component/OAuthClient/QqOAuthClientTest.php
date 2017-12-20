@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\AppBundle\Components\OAuthClient;
+namespace Tests\Unit\AppBundle\Component\OAuthClient;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\OAuthClient\QqOAuthClient;
