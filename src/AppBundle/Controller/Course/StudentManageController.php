@@ -228,10 +228,15 @@ class StudentManageController extends BaseController
 
     public function definedShowAction(Request $request, $courseId, $userId)
     {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            return $this->createMessageResponse('error', '您无权查看学员详细信息！');
+        }
+
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+
         if (empty($member)) {
-            throw $this->createAccessDeniedException(sprintf('学员#%s不属于教学计划#%s', $userId, $courseId));
+            return $this->createMessageResponse('error', sprintf('学员#%s不属于教学计划#%s的学员', $userId, $courseId));
         }
 
         return $this->forward('AppBundle:Student:definedShow', array(

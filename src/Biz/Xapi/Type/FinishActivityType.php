@@ -30,6 +30,6 @@ class FinishActivityType extends Type
             'definitionType' => $this->convertMediaType($activity['mediaType']),
         );
 
-        return $this->createXAPIService()->finishActivity($actor, $object, array(), $statement['created_time'], false);
+        return $this->createXAPIService()->finishActivity($actor, $object, array(), $statement['uuid'], $statement['occur_time'], false);
     }
 }

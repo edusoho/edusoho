@@ -12,15 +12,15 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.not_found');
         }
 
-        if ($course['status'] === 'draft') {
+        if ('draft' === $course['status']) {
             return $this->buildResult('course.unpublished', array('courseId' => $course['id']));
         }
 
-        if ($course['status'] === 'closed') {
+        if ('closed' === $course['status']) {
             return $this->buildResult('course.closed', array('courseId' => $course['id']));
         }
 
-        if (!$course['buyable'] && $course['vipLevelId'] == 0) {
+        if (!$course['buyable']) {
             return $this->buildResult('course.not_buyable', array('courseId' => $course['id']));
         }
 
@@ -41,10 +41,10 @@ class JoinCourseAccessor extends AccessorAdapter
     private function isExpired($course)
     {
         $expiryMode = $course['expiryMode'];
-        if ($expiryMode === 'forever') {
+        if ('forever' === $expiryMode) {
             return false;
         }
-        if ($expiryMode === 'date' || $expiryMode === 'end_date') {
+        if ('date' === $expiryMode || 'end_date' === $expiryMode) {
             return time() > $course['expiryEndDate'];
         }
 

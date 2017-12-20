@@ -241,6 +241,9 @@ date.month: 月
 date.day: 日
 date.format: Y年m月d日
 
+#符号通用
+word.seperator: '、'
+
 #分页
 paginator.firstPage: 首页
 paginator.endPage: 尾页
@@ -292,7 +295,6 @@ user.not_login.tips: >
   <a href='%login%'>登录或</a>
   <a href='%register%'>注册！</a>
 user.approve_tips: 温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！
-user.email_tips: 为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
 user.approved: 已认证
 user.approving: 实名认证中
 user.mobile_bind: 已绑定
@@ -397,6 +399,8 @@ form.change_captcha_code: 看不清，点击换一张
 form.mobile: 手机号码
 form.change_mobile: 修改手机号码
 form.input_mobile: 输入手机号码
+form.btn.yes: 是
+form.btn.no: 否
 
 
 #财务通用
@@ -982,7 +986,7 @@ course.marketing_setup.preview.set_task: 设置免费学习任务
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
@@ -1239,7 +1243,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -1580,6 +1585,7 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+course.course_files.re_try_convert_video_to_audio: 重转音频
 
 course.plan_overview: 计划概览
 
@@ -1895,7 +1901,7 @@ course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
-activity.liva.not_created_notice: 直播教室尚未创建！
+activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
 course.cover_image: 封面图片
@@ -1941,7 +1947,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -2672,6 +2679,7 @@ form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.delete: 删除
+form.btn.not_delete: 不删除
 form.btn.create: 创建
 form.btn.import: 导入
 form.btn.submit_disabled: 已提交
@@ -2798,6 +2806,9 @@ user.register.emaill_not_useful_tips: >
   <h5>原邮箱已失效？</h5>
   <a class="btn btn-primary" href="%resetEmail%">重新绑定</a>
 user.register.service_protocol: 服务协议
+user.register.agree_terms: 同意服务协议并注册
+user.register.read_detail: 请详细阅读
+user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
 user.register.reset_email.origin_email: 原邮箱地址:
 user.register.reset_email.school_login_password: 网校密码：
@@ -2835,6 +2846,36 @@ user.register.email_label: 邮箱地址
 user.register.get_user_avatar_tips: 自动获取头像失败，请稍后在自行上传头像
 user.register.avatar_label: 头像
 user.register.invite_register_tips: 您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
+
+# 用户第三方登录
+user.oauth.login_by_email: 邮箱
+user.oauth.login_by_mobile: 手机
+user.oauth.login_by_mobile_or_email: 手机/邮箱
+user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
+user.oauth.bind_account: 绑定帐号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%帐号
+user.oauth.validate_password: 验证密码
+user.oauth.bind_success: 帐号绑定成功
+user.oauth.bind_account_success: 绑定成功
+user.oauth.web_account_password: 网校帐号密码
+user.oauth.binding_web_user: 正在绑定网校用户
+user.oauth.bind_account_and_go_continue: 绑定并继续
+user.oauth.bind_other_account: 绑定其他帐号？
+user.oauth.bind_existed_account: 绑定已有帐号？
+user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
+user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
+user.oauth.register_account_by_ways: 使用%accountType%创建帐号
+user.oauth.register.confirm_password_label: 确认密码
+user.oauth.register.confirm_password_placeholder: 再次输入密码
+user.oauth.register.input_sms_code_tips: 输入验证码
+user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
+user.oauth.register.send_sms: 发送验证
+user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
+user.oauth.register_account: 创建帐号
+user.oauth.register_success: 注册成功
+user.oauth.register_account_success: 帐号注册成功
+user.oauth.page.closed: 秒后该页面自动关闭
+user.oauth.register.closed: 注册已关闭，请联系管理员
 
 # 用户个人设置
 user.settings: 个人设置
@@ -3556,17 +3597,16 @@ group.buy_attach.purchased_tips: 您已购买该附件
 
 # 资讯
 article: 资讯
-article.channel: %article_name%频道
 article.banner_tips: >
   头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性<a class="mls alert-link" href="%articleUrl%">前往设置</a>
 article.empty: 还没有任何资讯
-article.popular_article: 热门资讯
-article.popular_article_mpty: 暂无热门资讯
+article.popular_article: 热门焦点
+article.popular_article_mpty: 暂无热门焦点
 article.popular_comments: 热门评论
 article.popular_comments_empty: 一个评论都没有！
 article.comment_target: 评论于
-article.recommend_article: 推荐%article_name%
-article.recommend_article_empty: 暂无推荐%article_name%
+article.recommend_article: 编辑推荐
+article.recommend_article_empty: 暂无编辑推荐
 article.detail.text: 正文
 article.detail.source: 文章来源
 article.detail.source_url: 原文链接
@@ -4645,8 +4685,8 @@ admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
-admin.course_manage.manage.status: 状态
-admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.status: 课程状态
+admin.course_manage.manage.creator: 创建者/时间
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -4664,6 +4704,11 @@ admin.course_manage.manage.auth_user: 核实用户
 admin.course_manage.manage.user_passwd: 用户密码
 admin.course_manage.manage.input_passwd_placeholder: 请输入你的登录密码
 admin.course_manage.manage.week_excellent_courses: 每周精品课程
+admin.course_manage.manage.course_num: 计划数
+admin.course_manage.manage.course_list.block_title: 计划详情
+admin.course_manage.manage.course_list.status: 计划状态
+admin.course_manage.manage.course_list.creator: 创建者
+admin.course_manage.manage.course_list.createdTime: 创建时间
 
 # 文件管理
 admin.course_manage.file.name_title: 文件管理
@@ -4766,6 +4811,22 @@ admin.course_manage.statistics.data_detail.study_days: 课程学习天数
 admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
+
+## 用户数据统计
+admin.user.statistics.data_detail.note_number: 笔记数
+admin.user.statistics.data_detail.learning_course_sets: 在学课程
+admin.user.statistics.data_detail.learning_courses: 在学计划
+admin.user.statistics.data_detail.average_process: 平均计划进度
+admin.user.statistics.data_detail.task_rate: 任务完成比
+admin.user.statistics.data_detail.thread_number: 参与话题
+admin.user.statistics.data_detail.review_number: 评价数
+admin.user.statistics.data_detail.active_chart: 活跃度
+admin.user.statistics.data_detail.teaching_plan_name: 计划名
+admin.user.statistics.data_detail.learn_detail: 学习详情
+admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.from_classroom: 来自班级
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
@@ -5244,6 +5305,11 @@ admin.setting.theme.manage.theme_edit: 主题编辑
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+admin.setting.theme.manage.navigation_num_validation: 请输入1-99以内的整数
 admin.setting.theme.manage.coloring_scheme_btn: 配色方案
 admin.setting.theme.manage.all_reset: 全部重置
 admin.setting.theme.manage.component_name: 挂件名称
@@ -5269,6 +5335,8 @@ admin.setting.theme.manage.modal.student_comment: 学员评价
 admin.setting.theme.manage.modal.student_dynamic: 学员动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
+
+
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -5585,7 +5653,6 @@ admin.operation_analysis.register.web_mobile: 网站手机注册
 admin.operation_analysis.register.web_email: 网站邮箱注册
 admin.operation_analysis.register.weibo: 新浪微博
 admin.operation_analysis.register.qq: QQ
-admin.operation_analysis.register.renren: 人人
 admin.operation_analysis.register.discuz: discuz
 admin.operation_analysis.register.phpwind: phpwind
 admin.operation_analysis.register.weixin: 微信
@@ -6069,6 +6136,7 @@ admin.edu_cloud.account.arrears_tips: 您已欠费%arrearageDays%天，教育云
 admin.edu_cloud.account.balance_not_enough: 你的余额不足50元，请尽快充值，以免影响正常使用。
 admin.edu_cloud.overview.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.overview.disabled_tips: 您的教育云服务已被禁用
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 若有疑问，请联系客服人员：4008041114
 admin.edu_cloud.overview.balance: 余额
 admin.edu_cloud.overview.recharge: 充值
@@ -6139,11 +6207,14 @@ admin.edu_cloud.edu_video.close_btn: 关闭
 admin.edu_cloud.edu_video.switch_tips: >
   云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。点击<a href="%cloudShow%" target="_blank">这里</a>了解详情
 admin.edu_cloud.edu_video.base_setting: 基本设置
-admin.edu_cloud.edu_video.support_mobile: 手机浏览器MP4视频
+admin.edu_cloud.edu_video.support_mobile: 手机浏览器安全性设置
+admin.edu_cloud.edu_video.normal_mode: 普通模式
+admin.edu_cloud.edu_video.encryption_mode: 加密模式
 admin.edu_cloud.edu_video.open_radio: 开启
 admin.edu_cloud.edu_video.close_radio: 关闭
-admin.edu_cloud.edu_video.support_mobile_tips: >
-  MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；<br/>开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；<br/><span style="color: red">注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。</span>
+admin.edu_cloud.edu_video.normal_mode_tips: >
+  选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>
+admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
 admin.edu_cloud.edu_video.transcode_quality: 视频转码画质
 admin.edu_cloud.edu_video.transcode_quality_low: >
   流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%
@@ -6151,14 +6222,14 @@ admin.edu_cloud.edu_video.transcode_quality_normal: >
   标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%
 admin.edu_cloud.edu_video.transcode_quality_high: >
   精细 %<span class="text-muted">%(适合动态电影)%</span>%
-admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质
+admin.edu_cloud.edu_video.audio_transcode_quality: 视频转码音质：
 admin.edu_cloud.edu_video.low: 流畅
 admin.edu_cloud.edu_video.normal: 标准
 admin.edu_cloud.edu_video.high: 高品质
-admin.edu_cloud.edu_video.play_speed: 倍速播放
+admin.edu_cloud.edu_video.play_speed: 倍速播放：
 admin.edu_cloud.edu_video.play_speed_tips: 开启后，云视频任务支持倍速播放。注意：仅支持高版本Chrome、火狐以及QQ浏览器（极速模式）。
 admin.edu_cloud.edu_video.auto_play: 云视频自动播放
-admin.edu_cloud.edu_video.video_header: 云视频片头
+admin.edu_cloud.edu_video.video_header: 云视频片头：
 admin.edu_cloud.edu_video.video_header_edit_btn: 编辑
 admin.edu_cloud.edu_video.video_header_tips: >
   正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br/>转换完成后将以站内消息通知您。
@@ -6183,7 +6254,7 @@ admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、j
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
-admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
+admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
 admin.edu_cloud.edu_video.enable_hls_encryption_plus: 云视频防盗增强
@@ -6218,6 +6289,16 @@ admin.edu_cloud.edu_video.enable_tips: >
   <p>3.高性价比——针对在线教育的视频动态转码技术，以及浏览器缓存播放、移动端离线播放等多项功能，大大压缩视频流量成本。</p>
   <p>4.优质视听体验——采用CDN（内容分发网络）技术，200多个国内外优质节点，保障高清流畅的视听体验。多种清晰度自由切换，不同的网络环境都能流畅观看。多终端全平台完美支持，随时随地观看精彩视频。</p>
   <p>5.单价￥0.8/GB，购买云视频包享受更多优惠，立即 <a href="%url%" target="_blank"> 了解详情</a>。</p>
+admin.edu_cloud.edu_video_setting.delete_modal_title: 是否删除普通视频
+admin.edu_cloud.edu_video_setting.delete_modal_content: 您选择了加密模式，删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video_setting.change_normal_title: 转换为普通模式
+admin.edu_cloud.edu_video_setting.change_normal_content: 转换为普通模式能增强视频对手机浏览器的兼容性；但<span class="text-danger">可能降低网校视频的安全性</span>，是否继续？
+admin.edu_cloud.edu_video.delete_btn: 删除普通视频
+admin.edu_cloud.edu_video.delete_success: 恭喜
+admin.edu_cloud.edu_video.delete_ok_confirm: 恭喜，您的云视频全部为加密格式！安全性更高。
+admin.edu_cloud.edu_video.delete_ok_btn: 好
+admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
+admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
 
 # 云直播
 admin.edu_cloud.edu_live.student_num: 参与直播人数（最近7天）
@@ -6763,8 +6844,6 @@ admin.login_connect.type.weixinweb.help_block: >
 admin.login_connect.type.weixinmob.help_block: >
   APP ID和APP Secret来自<a target="_blank" href="https://mp.weixin.qq.com/">微信公众平台</a>服务号内，在左侧栏【开发】-【基本配置】-【开发者ID】中。
 admin.login_connect.type.weixinmob.MP_verify.help_block: 请填写微信提供的MP_verify文件中的内容
-admin.login_connect.required_email: 登录时必须设置邮箱
-admin.login_connect.required_email.help_block: 在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过
 admin.login_connect.type.weibo.help_block: 最后一步,请在底部输入登录接口验证代码
 admin.login_connect.verifcation_loging_interface: 登录接口验证代码
 admin.login_connect.verifcation_code: 验证代码
@@ -7323,10 +7402,17 @@ admin.payment_setting.heepay_api_application_word: 下载接口申请说明文�
 admin.payment_setting.heepay_secret: 商户平台Key
 admin.payment_setting.heepay_tips: 因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
 
-admin.payment_setting.llpay: 连连支付
+admin.payment_setting.llpay: 连连支付-RSA加密
 admin.payment_setting.llpay_api_application_word: 下载接口申请说明文档
 admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
+admin.payment_setting.llpay_public_key: 公钥
+admin.payment_setting.llpay_private_key: 密钥
+admin.payment_setting.llpay_application_tips: >
+ 使用前提：
+  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看</a>操作。</p>
+  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
@@ -7804,6 +7890,8 @@ notification.materialLib.click_to_view: 点击查看
 notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
 notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
+notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
 status.become_student.course.simple: 加入学习
@@ -8245,4 +8333,31 @@ site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
+course.to_be.biz.user.first: 需要先申请为商业用户!
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+course.video.convert.client.listen: 听
+course.video.convert.client.click.listen: 手机端支持一键听课
+course.video.convert.client.try: '（试一试）'
+course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
+course.task.show.video.convert.client.notify: 不再提醒
+course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.start: 开启
+course.info.video.convert.audio.close: 关闭
 
+
+user.learn.statistics.start_time: 起始时间
+user.learn.statistics.end_time: 结束时间
+user.learn.statistics.default.search: 默认排序
+user.learn.statistics.search: 搜索
+user.learn.statistics.nickname: 用户名
+user.learn.statistics.join.classroom.num: 加入班级数
+user.learn.statistics.exit.classroom.num: 退出班级数
+user.learn.statistics.join.course.num: 加入计划数
+user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.finished.task.num: 学完任务数
+user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.actual.amount: 消费总额(元)
+user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）

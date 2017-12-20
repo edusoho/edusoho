@@ -22,7 +22,7 @@ class BatchCreate {
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
-      process: $uploader.data('process'),
+      process: this.getUploadProcess(),
       ui: 'batch',
       locale: document.documentElement.lang
     })

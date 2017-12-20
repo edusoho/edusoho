@@ -12,15 +12,12 @@ class StatementArchiveDaoImpl extends AdvancedDaoImpl
     {
         return array(
             'serializes' => array(
-                'data' => 'json'
+                'data' => 'json',
             ),
             'timestamps' => array(
-                'created_time'
             ),
-            'orderbys' => array('created_time'),
+            'orderbys' => array('created_time', 'push_time'),
             'conditions' => array(),
         );
     }
-
-
 }

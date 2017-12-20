@@ -174,6 +174,7 @@ date.year: Year
 date.month: Month
 date.day: Day
 date.format: Y/m/d
+word.seperator: ','
 paginator.firstPage: 'First'
 paginator.endPage: 'End'
 paginator.nextPage: 'Next'
@@ -218,7 +219,6 @@ user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
 user.not_login.tips: 'You are not login now, <a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
 user.approve_tips: 'Tips： if your want to change your personal information, please change here.'
-user.email_tips: 'Please fill your email address to ensure your account safty.'
 user.approved: Verified
 user.approving: Verifying
 user.mobile_bind: Binded
@@ -269,6 +269,7 @@ form.btn.cancel: Cancel
 form.btn.confirm: Confirm
 form.btn.insert: Insert
 form.btn.delete: Delete
+form.btn.not_delete: Not delete
 form.btn.import: Import
 form.btn.submit_disabled: Submitted
 form.btn.reset_password: 'Reset password'
@@ -320,6 +321,9 @@ form.change_captcha_code: Can't see, click change one
 form.mobile: Mobile
 form.change_mobile: Change mobile
 form.input_mobile: Input mobile
+form.btn.yes: 'Yes'
+form.btn.no: 'No'
+
 finance.income: Income
 finance.total_incom: Total income
 finance.expense: Expense
@@ -853,7 +857,7 @@ course.marketing_setup.preview.set_task: 'Free tasks'
 course.marketing_setup.preview.set_task.task: Task
 course.marketing_setup.preview.set_task.task_name: 'Task %name%'
 course.marketing_setup.preview.set_task.free: Free
-course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support text, video, audio, flash, docs and ppt'
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson task only support'
 course.marketing_setup.preview.try_watch: Preview
 course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
 course.marketing_setup.services: 'Services setting'
@@ -1080,6 +1084,7 @@ course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
+course.courseSet_closed_tips: 'Sorry, this courseSet %title% has been closed.'
 course.unbuyable.unpublished_tips: 'You are not allowed to enroll before the course published.'
 course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to enroll, since it‘s expired.'
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, since it''s expired.'
@@ -1403,6 +1408,7 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+course.course_files.re_try_convert_video_to_audio： 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 
@@ -1645,6 +1651,7 @@ course.live.replay_manage.lesson_add_content_title: 'Add playback video'
 course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, pleas wait ...'
+activity.live.not_created_notice: Live classroom not yet created!
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'
@@ -2198,6 +2205,9 @@ user.register.not_receive_email_tips: "<h5>Not received a confirmation letter?</
 user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Home</a></li>\n</ul>\n"
 user.register.emaill_not_useful_tips: "<h5>original mailbox is invalid?</h5> <a class=\"btn btn-primary\" href=\"%resetEmail%\">Rebind</a>\n"
 user.register.service_protocol: 'Service Agreements'
+user.register.agree_terms: 同意服务协议并注册
+user.register.read_detail: 请详细阅读
+user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 'Reset email'
 user.register.reset_email.origin_email: 'Previous email address:'
 user.register.reset_email.school_login_password: 'Network school password：'
@@ -2233,6 +2243,36 @@ user.register.email_label: Email
 user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload your avatar later'
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
+
+user.oauth.login_by_email: 邮箱
+user.oauth.login_by_mobile: 手机
+user.oauth.login_by_mobile_or_email: 手机/邮箱
+user.oauth.login_by_mobile_or_email_tip: 手机或邮箱
+user.oauth.bind_account: 绑定帐号
+user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountType%帐号
+user.oauth.validate_password: 验证密码
+user.oauth.bind_success: 帐号绑定成功
+user.oauth.bind_account_success: 绑定成功
+user.oauth.web_account_password: 网校帐号密码
+user.oauth.binding_web_user: 正在绑定网校用户
+user.oauth.bind_account_and_go_continue: 绑定并继续
+user.oauth.bind_other_account: 绑定其他帐号？
+user.oauth.bind_existed_account: 绑定已有帐号？
+user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
+user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
+user.oauth.register_account_by_ways: 使用%accountType%创建帐号
+user.oauth.register.confirm_password_label: 确认密码
+user.oauth.register.confirm_password_placeholder: 再次输入密码
+user.oauth.register.input_sms_code_tips: 输入验证码
+user.oauth.register.input_sms_code_placeholder: 请输入短信验证码
+user.oauth.register.send_sms: 发送验证
+user.oauth.register.input_captcha_code_placeholder: 请输入右侧图形验证码
+user.oauth.register_account: 创建帐号
+user.oauth.register_success: 注册成功
+user.oauth.register_account_success: 帐号注册成功
+user.oauth.page.closed: 秒后该页面自动关闭
+user.oauth.register.closed: 注册已关闭，请联系管理员
+
 user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Profile'
@@ -2827,7 +2867,6 @@ group.buy_attach.content_title: 'Download accessaries'
 group.buy_attach.require_coin_name: 'Need %name%'
 group.buy_attach.purchased_tips: 'You have already purchased this attachement'
 article: Article
-article.channel: 'Channel %article_name%'
 article.banner_tips: "headlines banner need to set thumbnail and add headlines attribute in infomation management page first <a class=\"mls alert-link\" href=\"%articleUrl%\">setting</a>\n"
 article.empty: 'No article'
 article.popular_article: 'Popular article'
@@ -3679,7 +3718,7 @@ admin.course_manage.manage.name: Name
 admin.course_manage.manage.price: Price
 admin.course_manage.manage.serialize_mode: 'Serialize Status'
 admin.course_manage.manage.status: Status
-admin.course_manage.manage.creator: Creator
+admin.course_manage.manage.creator: Creator/Date
 admin.course_manage.manage.manage_btn: Config
 admin.course_manage.manage.empty: 'No record'
 admin.course_manage.manage.category: Category
@@ -3778,6 +3817,24 @@ admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
 admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
+
+## 用户数据统计
+admin.user.statistics.data_detail.note_number: Note Number
+admin.user.statistics.data_detail.learning_course_sets: Learning CourseSet
+admin.user.statistics.data_detail.learning_courses: Learning Course
+admin.user.statistics.data_detail.average_process: Average Process
+admin.user.statistics.data_detail.task_rate: TaskRate
+admin.user.statistics.data_detail.thread_number: Thread Number
+admin.user.statistics.data_detail.review_number: Review Number
+admin.user.statistics.data_detail.active_chart: Active
+admin.user.statistics.data_detail.learn_detail: Learn Detail
+admin.user.statistics.data_detail.teaching_plan_name: 计划名
+admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.from_classroom: From Class
+
+
 admin.comment_manage.title: 'Comments'
 admin.comment_manage.monitor: 'Comment monitor'
 admin.comment_manage.id: ID
@@ -4177,6 +4234,11 @@ admin.setting.theme.manage.modal.student_comment: 'Student Comments'
 admin.setting.theme.manage.modal.student_dynamic: 'Latest updates'
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 'Class Capacity Setting'
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 'Teacher Count Setting'
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
 admin.setting.mailer.cloud_email_crm.status.open: Enabled
@@ -4861,6 +4923,7 @@ admin.edu_cloud.account.arrears_tips: 'Your account is overdue for %arrearageDay
 admin.edu_cloud.account.balance_not_enough: 'Your account balance is less than 50 CNY. Please recharge as soon as possilbe to avoid outage.'
 admin.edu_cloud.overview.locked_tips: 'Your education cloud service has been locked, please contact customer service'
 admin.edu_cloud.overview.disabled_tips: 'Your educational cloud service has been disabled'
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 'If you have any questions, please contact customer service 4008041114.'
 admin.edu_cloud.overview.balance: Balance
 admin.edu_cloud.overview.recharge: Recharge
@@ -4914,10 +4977,15 @@ admin.edu_cloud.edu_video.open_btn: Enabled
 admin.edu_cloud.edu_video.close_btn: Disable
 admin.edu_cloud.edu_video.switch_tips: "Cloud Video provides you with a safe, cost-effective, and high-quality audio-visual experience that allows you to easily create online video lessons. Click <a href=\"%cloudShow%\" target=\"_blank\"> here </a> for more information.\n"
 admin.edu_cloud.edu_video.base_setting: 'Base Setting'
-admin.edu_cloud.edu_video.support_mobile: 'Mobile browser MP4 video'
+admin.edu_cloud.edu_video.support_mobile: 'Mobile browser security'
+admin.edu_cloud.edu_video.normal_mode: Normal
+admin.edu_cloud.edu_video.encryption_mode: Encryption
 admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
-admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different phone models under the use of different phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
+#TODO trans
+admin.edu_cloud.edu_video.normal_mode_tips: '选择普通模式，<span class="text-success">新上传</span>的视频文件在手机浏览器下默认使用通用格式播放，增强了视频课时对手机浏览器的兼容性；<br/><span class="text-danger">但普通模式的视频在某些情况下有被盗的风险，请谨慎开启。</span>'
+admin.edu_cloud.edu_video.encryption_mode_tips: '选择加密模式，能极大的提升视频的安全性，但可能导致视频课时在某些陈旧的手机浏览器上无法正常播放。'
+
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
@@ -4971,6 +5039,20 @@ admin.edu_cloud.edu_video.month_flow: 'Traffic this month'
 admin.edu_cloud.edu_video.no_enable: 'Cloud video is not enabled yet'
 admin.edu_cloud.edu_video.enable: 'Enable Immediately'
 admin.edu_cloud.edu_video.enable_tips: "<P> 1. Focus on education - to provide video with practice, video subtitles, video barrage and many other online education for video teaching methods, so that video teaching more fun. </ P> <P> 2. Stable security - to provide video watermark, video fingerprints and many other security measures to prevent video theft, effectively prevent video piracy and malicious download. Stable and reliable video cloud storage services to protect data security, to prevent physical loss. </ P> <P> 3. Cost-effective - for online education video transcoding technology, as well as browser cache playback, mobile off-line playback and many other features, greatly compressed video traffic costs. </ P> <P> 4. Quality audio-visual experience - using CDN (content distribution network) technology, more than 200 high-quality domestic and foreign nodes, to ensure high-definition smooth audio-visual experience. A variety of clarity free to switch, different network environment can be smooth to watch. Multi-terminal full platform perfect support, anytime, anywhere to watch the wonderful video. </ P> <P> 5. Price ¥ 0.8 / GB, buy cloud video packs to enjoy more offers, and immediately <a href=\"%url%\" target=\"_blank\"> learn more </a>. </ P>\n"
+admin.edu_cloud.edu_video_setting.delete_modal_title: Is delete MP4 videos
+#TODO trans
+admin.edu_cloud.edu_video_setting.delete_modal_content: 您选择了加密模式，删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video_setting.change_normal_title: 转换为普通模式
+admin.edu_cloud.edu_video_setting.change_normal_content: 转换为普通模式能增强视频对手机浏览器的兼容性；但<span class="text-danger">可能降低网校视频的安全性</span>，是否继续？
+admin.edu_cloud.edu_video.delete_btn: Delete MP4 videos
+admin.edu_cloud.edu_video.delete_success: Congratulations
+admin.edu_cloud.edu_video.delete_ok_confirm: Congratulations,your cloud videos are all security.
+admin.edu_cloud.edu_video.delete_ok_btn: OK
+#TOFO trans
+admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
+admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+
+
 admin.edu_cloud.edu_live.student_num: 'Number of live participants (last 7 days)'
 admin.edu_cloud.edu_live.locked_tips: 'Your education cloud service has been locked, please contact customer service 4008041114.'
 admin.edu_cloud.edu_live.service_suspend: 'Your cloud live service has been suspended, can not be used, please contact customer service 4008041114.'
@@ -5361,8 +5443,6 @@ admin.login_connect.other.qq.data_content: '1. Your QQ account open platform cer
 admin.login_connect.type.weixinweb.help_block: 'APP ID and APP Secret can be found at <a target="_blank" href="https://open.weixin.qq.com"> wechat oepn platform </a> - create Web applications'
 admin.login_connect.type.weixinmob.help_block: 'APP ID APP Secret can be found at <a target="_blank" href="https://mp.weixin.qq.com/"> wechat public platform </a> - your services account, check the left column "development" - "Basic configuration" - "Developer ID ".'
 admin.login_connect.type.weixinmob.MP_verify.help_block: 'Please fill in the content of the MP_verify Contents from wechat'
-admin.login_connect.required_email: 'Email required while login'
-admin.login_connect.required_email.help_block: 'Do not turn on this option before %admin_name% aprroved your access application, or your application may be refused.'
 admin.login_connect.type.weibo.help_block: 'The final step , please enter the login interface validation code at the bottom'
 admin.login_connect.verifcation_loging_interface: 'Login interface validation code'
 admin.login_connect.verifcation_code: 'Validation code'
@@ -5814,10 +5894,13 @@ admin.payment_setting.heepay: 'Heepay-online bank payments'
 admin.payment_setting.heepay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.heepay_secret: 'Business platform Key'
 admin.payment_setting.heepay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'
-admin.payment_setting.llpay: 'Lianlian Pay'
+admin.payment_setting.llpay: 'Lianlian Pay-RSA encryption'
 admin.payment_setting.llpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.llpay_key: 'Merchant account'
 admin.payment_setting.llpay_secret: 'Business platform Key'
+admin.payment_setting.llpay_public_key: Public Key
+admin.payment_setting.llpay_private_key: Private Key
+admin.payment_setting.llpay_application_tips: ''
 admin.payment_setting.quickpay: 'Meeting fubao-quick pay'
 admin.payment_setting.quickpay_api_application_word: 'Download interface application documentation'
 admin.payment_setting.quickpay_tips: 'Heepay application is suspended. Sorry for the inconvenience. if you have any questions, please contact EduSoho Official'
@@ -6354,6 +6437,9 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
+#TODO trans
+notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn
 status.become_student.classroom.simple: Enroll to learn
@@ -6790,3 +6876,31 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+
+course.to_be.biz.user.first: 需要先申请为商业用户!
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+course.video.convert.client.listen: 听
+course.video.convert.client.click.listen: 手机端支持一键听课
+course.video.convert.client.try: '（试一试）'
+course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
+course.task.show.video.convert.client.notify: 不再提醒
+course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.start: 开启
+course.info.video.convert.audio.close: 关闭
+
+user.learn.statistics.start_time: 起始时间
+user.learn.statistics.end_time: 结束时间
+user.learn.statistics.default.search: 默认排序
+user.learn.statistics.search: 搜索
+user.learn.statistics.nickname: 用户名
+user.learn.statistics.join.classroom.num: 加入班级数
+user.learn.statistics.exit.classroom.num: 退出班级数
+user.learn.statistics.join.course.num: 加入计划数
+user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.finished.task.num: 学完任务数
+user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.actual.amount: 消费总额(元)
+user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）

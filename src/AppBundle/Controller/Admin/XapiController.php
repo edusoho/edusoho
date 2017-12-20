@@ -51,7 +51,7 @@ class XapiController extends BaseController
 
     public function settingAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $xapiSetting = $request->request->all();
             $default = array(
                 'enabled' => 0,

@@ -60,6 +60,11 @@ abstract class BuyFlowController extends BaseController
         if (!empty($setting['buy_fill_userinfo'])) {
             $user = $this->getUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
+            if (!empty($user['verifiedMobile']) && empty($userInfo['mobile'])) {
+                $userInfo = $this->getUserService()->updateUserProfile($user['id'], array(
+                    'mobile' => $user['verifiedMobile'],
+                ));
+            }
             $user = array_merge($userInfo, $user->toArray());
             $buyFields = $setting['userinfoFields'];
             foreach ($buyFields as $buyField) {

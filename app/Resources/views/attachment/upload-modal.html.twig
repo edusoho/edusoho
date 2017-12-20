@@ -4,7 +4,7 @@
 
 {% block title %}{{ 'attachments.modal.upload_file'|trans }}{% endblock %}
 
-{% do script([get_upload_sdk(), 'app/js/attachment/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/attachment/index.js']) %}
 
 {% block body %}
   {% set currentTarget = app.request.query.get('currentTarget')|default('') %}

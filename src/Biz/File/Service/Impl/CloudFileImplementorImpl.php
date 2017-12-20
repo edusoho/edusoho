@@ -99,6 +99,36 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $api->post("/resources/{$globalId}/processes", $options);
     }
 
+    public function retryTranscode(array $globalIds)
+    {
+        if (!empty($globalIds)) {
+            $api = CloudAPIFactory::create('root');
+            $params = array('nos' => $globalIds);
+
+            return $api->post('/resources/transcode_retry', $params);
+        }
+
+        return false;
+    }
+
+    public function getResourcesStatus($options)
+    {
+        if (isset($options['cursor'])) {
+            $api = CloudAPIFactory::create('root');
+
+            return $api->get('/resources_statuses', $options);
+        }
+
+        return array();
+    }
+
+    public function getAudioServiceStatus()
+    {
+        $api = CloudAPIFactory::create('root');
+
+        return $api->get('/me/profile');
+    }
+
     public function deleteFile($file)
     {
         if (!empty($file['globalId'])) {
@@ -176,18 +206,18 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'name' => $file['fileName'],
             'size' => $file['fileSize'],
         );
-        if ($file['targetType'] == 'attachment') {
+        if ('attachment' == $file['targetType']) {
             $params['type'] = $file['targetType'];
         }
 
-        if ($file['targetType'] == 'subtitle') {
+        if ('subtitle' == $file['targetType']) {
             $params['type'] = 'sub';
         }
         if (isset($file['directives'])) {
             $params['directives'] = $file['directives'];
         }
 
-        if ($file['type'] == 'video') {
+        if ('video' == $file['type']) {
             $watermarks = $this->getVideoWatermarkImages();
 
             if (!empty($watermarks)) {
@@ -233,7 +263,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $api = CloudAPIFactory::create('root');
         $apiResult = $api->post("/resources/{$file['globalId']}/upload_resume", $params);
 
-        if (empty($apiResult['resumed']) || ($apiResult['resumed'] !== 'ok')) {
+        if (empty($apiResult['resumed']) || ('ok' !== $apiResult['resumed'])) {
             return null;
         }
 
@@ -343,7 +373,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'size' => $params['size'],
             'extno' => $file['id'],
         );
-        if ($file['targetType'] == 'attachment') {
+        if ('attachment' == $file['targetType']) {
             $params['type'] = $file['targetType'];
         }
         $api = CloudAPIFactory::create('root');
@@ -379,6 +409,13 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $result;
     }
 
+    public function deleteMP4Files($callback)
+    {
+        $api = CloudAPIFactory::create('root');
+
+        return $api->post('/system_jobs/delete_user_all_video_resource_mp4', array('callback' => $callback));
+    }
+
     private function mergeCloudFile($localFile, $cloudFile)
     {
         if (empty($localFile)) {
@@ -408,7 +445,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         $setting = $this->getSettingService()->get('storage', array());
 
-        if (empty($setting['video_embed_watermark_image']) || ($setting['video_watermark'] != 2)) {
+        if (empty($setting['video_embed_watermark_image']) || (2 != $setting['video_watermark'])) {
             return array();
         }
 
@@ -476,7 +513,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $file['metas2'] = array();
 
         if (!empty($file['directives']['output'])) {
-            if ($file['type'] == 'video') {
+            if ('video' == $file['type']) {
                 $file['convertParams'] = array(
                     'convertor' => 'HLSEncryptedVideo',
                     'videoQuality' => isset($file['directives']['videoQuality']) ? $file['directives']['videoQuality'] : 'normal',
@@ -493,6 +530,16 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     $file['metas2'] = $file['metas']['levels'];
                 }
 
+                if (isset($file['metas']['audiolevels'])) {
+                    foreach ($file['metas']['audiolevels'] as $key => $value) {
+                        $value['type'] = $key;
+                        $value['cmd']['hlsKey'] = $file['metas']['audiolevels'][$key]['hlsKey'];
+                        $file['audioMetas']['levels'][$key] = $value;
+                    }
+
+                    $file['audioMetas2'] = $file['audioMetas']['levels'];
+                }
+
                 if (isset($file['directives']['watermarks'])) {
                     $file['convertParams']['hasVideoWatermark'] = 1;
                 }
@@ -501,7 +548,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     'convertor' => $file['directives']['output'],
                 );
                 $file['metas2'] = $file['metas'];
-            } elseif ($file['type'] == 'audio') {
+            } elseif ('audio' == $file['type']) {
                 $file['convertParams'] = array(
                     'convertor' => $file['directives']['output'],
                     'videoQuality' => 'normal',

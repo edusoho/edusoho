@@ -262,7 +262,6 @@ userType:
     web_email: 网站邮箱注册
     web_mobile: 网站手机注册
     import: 手动导入
-    renren: 人人连接
     qq: QQ登录
     weixin: 微信登录
 
@@ -394,6 +393,12 @@ convertStatus:
     doing: 正在转码
     success: 转码成功
     error: 转码失败
+
+audioConvertStatus:
+    none: 等待转音频
+    doing: 正在转音频
+    success: 已转音频
+    error: 转音频失败
 
 state:
     banned: 禁用

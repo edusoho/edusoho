@@ -2,6 +2,7 @@
 
 namespace Biz\CloudFile\Service\Impl;
 
+use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
@@ -10,7 +11,6 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
-use Topxia\Service\Common\ServiceKernel;
 use QiQiuYun\SDK\Service\ResourceService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
@@ -63,7 +63,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function findGlobalIdByUsedCount(&$conditions)
     {
-        if ($conditions['useStatus'] == 'used') {
+        if ('used' == $conditions['useStatus']) {
             $conditions['startCount'] = 1;
         } else {
             $conditions['endCount'] = 1;
@@ -91,7 +91,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if ($unavailableSearch) {
             return;
         }
-        if ($searchType == 'course') {
+        if ('course' == $searchType) {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
             if (empty($courseSets)) {
                 $conditions['ids'] = array(-1);
@@ -103,7 +103,6 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                     0,
                     PHP_INT_MAX
                 );
-
                 $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
                 $fileIds = empty($fileIds) ? array(-1) : $fileIds;
                 if (isset($conditions['ids'])) {
@@ -114,7 +113,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             }
 
             $conditions['ids'] = array_unique($conditions['ids']);
-        } elseif ($searchType == 'user') {
+        } elseif ('user' == $searchType) {
             $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id' => 'DESC'), 0, PHP_INT_MAX);
 
             $userIds = ArrayToolkit::column($users, 'id');
@@ -223,6 +222,37 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getStatistics($options);
     }
 
+    public function deleteCloudMP4Files($userId, $callback)
+    {
+        $tokenFields = array(
+            'userId' => $userId,
+            'duration' => TimeMachine::ONE_MONTH,
+            'times' => 1,
+        );
+        $token = $this->getTokenService()->makeToken('mp4_delete.callback', $tokenFields);
+
+        $callback = $callback.'&token='.$token['token'];
+
+        return $this->getCloudFileImplementor()->deleteMP4Files($callback);
+    }
+
+    public function hasMp4Video()
+    {
+        $conditions = array(
+            'mcStatus' => 'yes',
+            'page' => 1,
+            'start' => 0,
+            'limit' => 1,
+        );
+        $result = $this->getCloudFileImplementor()->search($conditions);
+
+        if (!empty($result['data'])) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function getResourceService()
     {
         $storage = $this->getSettingService()->get('storage', array());
@@ -279,8 +309,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->createService('File:CloudFileImplementor');
     }
 
+    /**
+     * @return \Biz\Course\Service\MaterialService
+     */
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

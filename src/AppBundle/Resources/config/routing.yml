@@ -52,33 +52,35 @@ login_bind_callback:
     path:  /login/bind/{type}/callback
     defaults: { _controller: AppBundle:LoginBind:callback }
 
-login_bind_choose:
-    path:  /login/bind/{type}/choose
-    defaults: { _controller: AppBundle:LoginBind:choose }
+oauth2_login_index:
+    path:  /oauth2/login/main
+    defaults: { _controller: AppBundle:OAuth2/Login:main }
+
+oauth2_login_app:
+    path:  /oauth2/login/app
+    defaults: { _controller: AppBundle:OAuth2/Login:app }
+
+oauth2_login_bind_account:
+    path:  /oauth2/login/bind_account
+    defaults: { _controller: AppBundle:OAuth2/Login:bindAccount }
+    methods: [POST]
+
+oauth2_login_bind_login:
+    path:  /oauth2/login/bind_login
+    defaults: { _controller: AppBundle:OAuth2/Login:bindLogin }
+
+oauth2_login_create:
+    path:  /oauth2/login/create
+    defaults: { _controller: AppBundle:OAuth2/Login:create }
+
+oauth2_login_success:
+    path:  /oauth2/login/success
+    defaults: { _controller: AppBundle:OAuth2/Login:success }
 
 login_bind_new:
     path:  /login/bind/{type}/new
     defaults: { _controller: AppBundle:LoginBind:new }
     methods: [POST]
-
-login_bind_newset:
-    path:  /login/bind/{type}/newset
-    defaults: { _controller: AppBundle:LoginBind:newSet }
-    methods: [POST]
-
-login_bind_exist:
-    path:  /login/bind/{type}/exist
-    defaults: { _controller: AppBundle:LoginBind:exist }
-    methods: [POST]
-
-login_bind_existbind:
-    path:  /login/bind/weixinmob/existbind
-    defaults: { _controller: AppBundle:LoginBind:existBind }
-    methods: [POST]
-
-login_bind_weixin:
-    path:  /login/weixinmob
-    defaults: { _controller: AppBundle:LoginBind:weixinIndex }
 
 login_check_email:
     path:  /login/check/email
@@ -247,6 +249,10 @@ uploadfile_browsers:
 hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: AppBundle:HLS:playlist}
+
+hls_audio_playlist:
+    path: /hls/{id}/audio/playlist/{token}.m3u8
+    defaults: { _controller: AppBundle:HLS:audioPlaylist}
 
 player_local_media:
     path: /player/{id}/file/{token}
@@ -427,6 +433,7 @@ settings_binds:
 settings_binds_unbind:
     path: /settings/unbind/{type}
     defaults: { _controller: AppBundle:Settings:unBind  }
+    methods: [POST]
 
 settings_binds_bind:
     path: /settings/bind/{type}
@@ -435,10 +442,6 @@ settings_binds_bind:
 settings_binds_bind_callback:
     path: /settings/bind/{type}/callback
     defaults: { _controller: AppBundle:Settings:bindCallback }
-
-settings_setup:
-    path: /settings/setup
-    defaults: { _controller: AppBundle:Settings:setup }
 
 settings_setup_password:
     path: /settings/setup_password
@@ -2059,6 +2062,11 @@ course_set_manage_delete_materials_show:
 course_set_manage_delete_materials:
    path:  /course_set/{id}/manage/delete/materials
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
+   methods: [POST]
+
+course_set_manage_retry_transcode:
+   path:  /course_set/{id}/manage/file/{fileId}/retry_transcode
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:retryTranscode }
    methods: [POST]
 
 

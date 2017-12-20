@@ -21,4 +21,12 @@ interface CloudFileService
     public function reconvert($globalId, $options);
 
     public function getDefaultHumbnails($globalId);
+
+    public function getThumbnail($globalId, $options);
+
+    public function getStatistics($options = array());
+
+    public function deleteCloudMP4Files($userId, $callback);
+
+    public function hasMp4Video();
 }

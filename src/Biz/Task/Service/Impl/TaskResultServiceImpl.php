@@ -12,6 +12,13 @@ use Biz\Task\Service\TaskService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
+    public function countTaskNumGroupByUserId($conditions)
+    {
+        $result = $this->getTaskResultDao()->countTaskNumGroupByUserId($conditions);
+
+        return ArrayToolkit::index($result, 'userId');
+    }
+
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
         return $this->getTaskResultDao()->analysisCompletedTaskDataByTime($startTime, $endTime);
@@ -111,7 +118,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         //只有视频课程才限制观看时长
-        if (empty($course['watchLimit']) || $task['type'] !== 'video') {
+        if (empty($course['watchLimit']) || 'video' !== $task['type']) {
             return array('status' => 'ignore');
         }
 
@@ -221,7 +228,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
     public function countUsersByTaskIdAndLearnStatus($taskId, $status)
     {
-        if ($status === 'all') {
+        if ('all' === $status) {
             $status = null;
         }
         $task = $this->getTaskService()->getTask($taskId);

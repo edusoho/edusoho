@@ -268,6 +268,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
         $ids = ArrayToolkit::column($sets, 'id');
+
+        if (empty($ids)) {
+            return 0;
+        }
+
         $count = $this->countCourseSets(
             array(
                 'ids' => $ids,
@@ -804,6 +809,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
             $courseSet = $this->getCourseSetDao()->update($id, $fields);
             $this->getCourseDao()->update($courses[0]['id'], $fields);
+
+            $this->dispatchEvent('course-set.unlock', new Event($courseSet));
 
             $this->commit();
 

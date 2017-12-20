@@ -36,7 +36,7 @@ class ExceptionListener
             $exception = $this->convertException($exception);
             $statusCode = $this->getStatusCode($exception);
             $user = $this->getUser();
-            if ($statusCode === Response::HTTP_FORBIDDEN && empty($user)) {
+            if (Response::HTTP_FORBIDDEN === $statusCode && empty($user)) {
                 $response = new RedirectResponse($this->container->get('router')->generate('login'));
                 $event->setResponse($response);
             }
@@ -61,10 +61,10 @@ class ExceptionListener
             $error['message'] = $exception->getMessage();
             $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         } else {
-            $error['message'] = 'Request occurs and error';
+            $error['message'] = 'Request occurs an error';
         }
 
-        if ($statusCode === 403) {
+        if (403 === $statusCode) {
             $user = $this->getUser($event);
             if ($user) {
                 $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));

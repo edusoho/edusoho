@@ -1,6 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
-{% do script([get_upload_sdk(), 'app/js/activity-manage/doc/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/activity-manage/doc/index.js']) %}
 
 {% block activity_content %}
   <div class="form-group">

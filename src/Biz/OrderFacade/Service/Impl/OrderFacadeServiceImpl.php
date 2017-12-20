@@ -127,7 +127,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $price = empty($orderFields['create_extra']['price']) ? 0 : $orderFields['create_extra']['price'];
 
-        if ($price > 0) {
+        if ($price > 0 && !MathToolkit::isEqual($order['pay_amount'], MathToolkit::simple($price, 100))) {
             $this->getWorkflowService()->adjustPrice($order['id'], MathToolkit::simple($price, 100));
         }
 
@@ -189,7 +189,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 20005);
+            throw new OrderPayCheckException('order.pay_check_msg.user_not_login', 2005);
         }
 
         if ($order['user_id'] != $user['id']) {
@@ -207,7 +207,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $order = $this->getOrderService()->getOrder($orderId);
 
-        if ($newPayAmount != $order['pay_amount']) {
+        if (!MathToolkit::isEqual($order['pay_amount'], $newPayAmount)) {
             $adjustDeduct = $this->getWorkflowService()->adjustPrice($orderId, $newPayAmount);
 
             $this->getLogService()->info(AppLoggerConstant::ORDER, self::DEDUCT_TYPE_ADJUST, 'log.message.order_adjust_price.success', array(

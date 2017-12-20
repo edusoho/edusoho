@@ -23,6 +23,6 @@ class DoExerciseType extends Type
         $actor = $this->getActor($statement['user_id']);
         $result = array();
 
-        return $this->createXAPIService()->finishExercise($actor, $object, $result, $statement['created_time'], false);
+        return $this->createXAPIService()->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 }

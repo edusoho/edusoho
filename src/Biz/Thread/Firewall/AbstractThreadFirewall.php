@@ -23,7 +23,7 @@ abstract class AbstractThreadFirewall
 
     public function accessThreadSticky($thread)
     {
-        throw new UnderflowException('Method accessThreadStick is not implement');
+        throw new UnderflowException('Method accessThreadSticky is not implement');
     }
 
     public function accessThreadNice($thread)

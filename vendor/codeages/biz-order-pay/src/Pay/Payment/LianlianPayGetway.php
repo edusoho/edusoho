@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\Pay\Payment;
 
-
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -57,14 +56,14 @@ class LianlianPayGetway extends AbstractGetway
             'oid_paybill',
             'money_order',
             'result_pay',
-            'settle_date',
+            'settle_date',   //此属性出账日期，用于对账用，对账时才能返回付款时间或退款时间
             'info_order',
             'pay_type',
             'bank_code'
         ));
 
         $setting = $this->getSetting();
-        if (!SignatureToolkit::signVerify($data, array('secret'=>$setting['secret']))) {
+        if (!$setting['signatureToolkit']->signVerify($data, array('accessKey'=>$setting['accessKey']))) {
             return array(
                 array(
                     'status' => 'failture',
@@ -77,7 +76,7 @@ class LianlianPayGetway extends AbstractGetway
         return array(array(
                 'status' => 'paid',
                 'cash_flow' => $data['oid_paybill'],
-                'paid_time' => $data['settle_date'],
+                'paid_time' => time(),
                 'pay_amount' => (int)($data['money_order']*100),
                 'cash_type' => 'CNY',
                 'trade_sn' => $data['no_order'],
@@ -106,21 +105,10 @@ class LianlianPayGetway extends AbstractGetway
         throw new AccessDeniedException('can not convert refund notify with lianlianpay.');
     }
 
-    protected function signParams($params)
+    protected function signParams($params, $options)
     {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-
-            $sign .= $key.'='.$value.'&';
-        }
-
         $setting = $this->getSetting();
-        $sign .= 'key='.$setting['secret'];
-        return md5($sign);
+        return $setting['signatureToolkit']->signParams($params, $options);
     }
 
     protected function convertParams($params)
@@ -135,7 +123,7 @@ class LianlianPayGetway extends AbstractGetway
         if (!empty($params['notify_url'])) {
             $converted['notify_url'] = $params['notify_url'];
         }
-        $converted['sign_type']    = 'MD5';
+        $converted['sign_type']    = 'RSA';
         $converted['version']      = '1.0';
 
         $converted['oid_partner']  = $setting['oid_partner'];
@@ -154,7 +142,7 @@ class LianlianPayGetway extends AbstractGetway
         $converted['userreq_ip'] = str_replace(".", "_", $params['create_ip']);
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
-        $converted['sign']       = $this->signParams($converted);
+        $converted['sign']       = $this->signParams($converted, $setting);
 
         if ($this->isWap) {
             $converted['back_url'] = $params['show_url'];
@@ -169,7 +157,7 @@ class LianlianPayGetway extends AbstractGetway
         unset($converted['userreq_ip'], $converted['bank_code'], $converted['pay_type'], $converted['timestamp'], $converted['version'], $converted['sign']);
         $converted['version'] = '1.2';
         $converted['app_request'] = 3;
-        $converted['sign'] = $this->signParams($converted);
+        $converted['sign'] = $this->signParams($converted, $this->getSetting());
         return array('req_data'=>json_encode($converted));
     }
 
@@ -193,7 +181,9 @@ class LianlianPayGetway extends AbstractGetway
         $config = $this->biz['payment.platforms']['lianlianpay'];
         return array(
             'secret' => $config['secret'],
+            'accessKey' => $config['accessKey'],
             'oid_partner' => $config['oid_partner'],
+            'signatureToolkit' => $config['signatureToolkit'],
         );
     }
 }

@@ -9,7 +9,7 @@ class AskQuestionType extends Type
     public function package($statement)
     {
         $thread = $this->getThreadService()->getThread(0, $statement['target_id']);
-        if ($thread['type'] != 'question') {
+        if ('question' != $thread['type']) {
             return;
         }
         $task = $this->getTaskService()->getTask($thread['taskId']);
@@ -34,6 +34,6 @@ class AskQuestionType extends Type
 
         $result = $thread;
 
-        return $this->createXAPIService()->askQuestion($actor, $object, $result, $statement['created_time'], false);
+        return $this->createXAPIService()->askQuestion($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
 }

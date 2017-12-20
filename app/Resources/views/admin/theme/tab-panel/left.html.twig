@@ -1,0 +1,30 @@
+<div class="tab-pane active" id="left">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading clearfix">
+        <div class="col-md-4 ">
+          {{'admin.setting.theme.manage.component_name'|trans}}
+        </div>
+        <div class="col-md-4">
+          {{'admin.setting.theme.manage.custom_name'|trans}}
+        </div>
+
+      </div>
+      <!-- List group -->
+      <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
+        {% for pendant in themeConfig.blocks.left|default([]) %}
+
+          {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced:true,uri:themeUri} %}
+
+        {% endfor %}
+
+        {% for pendant in allConfig.blocks.left|default([]) %}
+          {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
+
+            {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced:false,uri:themeUri} %}
+
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+</div>

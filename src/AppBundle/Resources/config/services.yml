@@ -3,6 +3,10 @@ imports:
     - { resource: oauth2.yml }
 
 services:
+    user.online_track:
+        class: AppBundle\Component\Track\UserOnlineTrack
+        arguments: ['@service_container', '@Biz']
+
     extension.manager:
         class: AppBundle\Extension\ExtensionManager
 
@@ -54,10 +58,6 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
-
-    authentication_handler:
-        class: Biz\Common\LoginListener
-        arguments: ["@biz"]
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector

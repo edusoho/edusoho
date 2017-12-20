@@ -15,6 +15,7 @@ class StatementDaoImpl extends AdvancedDaoImpl implements StatementDao
             'timestamps' => array('created_time'),
             'orderbys' => array(
                 'created_time',
+                'push_time',
             ),
             'serializes' => array(
                 'data' => 'json',

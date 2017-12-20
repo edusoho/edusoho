@@ -391,6 +391,13 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $fields;
     }
 
+    public function sumAmountGroupByUserId($conditions)
+    {
+        $result = $this->getCashflowDao()->sumAmountGroupByUserId($conditions);
+        
+        return ArrayToolkit::index($result, 'user_id');
+    }
+
     protected function generateSn($prefix = '')
     {
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);

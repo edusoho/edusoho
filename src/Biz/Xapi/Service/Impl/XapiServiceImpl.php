@@ -2,6 +2,7 @@
 
 namespace Biz\Xapi\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
@@ -132,6 +133,39 @@ class XapiServiceImpl extends BaseService implements XapiService
             $this->createWatchLog($log);
         } else {
             $this->getActivityWatchLogDao()->wave(array($watchLog['id']), array('watched_time' => $watchTime));
+        }
+    }
+
+    public function archiveStatement()
+    {
+        try {
+            $this->beginTransaction();
+            $statements = $this->searchStatements(
+                array(
+                    'status' => 'pushed',
+                ),
+                array('push_time' => 'ASC'),
+                0,
+                1000
+            );
+
+            if (!empty($statements)) {
+                $archives = array();
+                foreach ($statements as $statement) {
+                    $archives[] = ArrayToolkit::parts($statement, array(
+                        'uuid', 'version', 'push_time', 'user_id', 'verb', 'target_id', 'target_type', 'status', 'data', 'occur_time', 'created_time',
+                    ));
+                }
+                $this->getStatementArchiveDao()->batchCreate($archives);
+                foreach ($statements as $statement) {
+                    $this->getStatementDao()->delete($statement['id']);
+                }
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogger()->error($e);
         }
     }
 

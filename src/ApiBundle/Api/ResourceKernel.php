@@ -137,7 +137,7 @@ class ResourceKernel
         return $this->handleApiRequest($apiRequest);
     }
 
-    public function handleApiRequest(ApiRequest $apiRequest, $needAuth = true)
+    public function handleApiRequest(ApiRequest $apiRequest)
     {
         $pathMeta = $this->pathParser->parse($apiRequest);
         $resourceProxy = $this->resManager->create($pathMeta);

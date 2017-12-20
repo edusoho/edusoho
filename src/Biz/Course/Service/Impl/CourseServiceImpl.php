@@ -141,6 +141,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'courseType',
                 'type',
+                'enableAudio',
             )
         );
 
@@ -213,6 +214,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+        $this->validatie($fields);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -226,6 +228,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'serializeMode',
                 'maxStudentNum',
                 'locked',
+                'enableAudio',
             )
         );
 
@@ -238,6 +241,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
+
         $this->dispatchEvent('course.update', new Event($course));
 
         return $course;
@@ -316,7 +320,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
-        if ($courseSet['status'] == 'published') {
+        if ('published' == $courseSet['status']) {
             //课程发布不允许修改模式和时间
             unset($fields['expiryMode']);
             unset($fields['expiryDays']);
@@ -334,7 +338,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
-        if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
+        if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
         } else {
             $fields['tryLookable'] = 0;
@@ -346,11 +350,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
-        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+        if ('published' == $oldCourse['status'] || 'closed' == $oldCourse['status']) {
             //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
             unset($fields['expiryMode']);
 
-            if ($courseSet['status'] == 'published') {
+            if ('published' == $courseSet['status']) {
                 //课程计划发布或者关闭，课程也发布，不允许修改时间
                 unset($fields['expiryDays']);
                 unset($fields['expiryStartDate']);
@@ -366,6 +370,38 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    public function batchConvert($courseId)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
+        $medias = ArrayToolkit::column($activities, 'ext');
+        $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
+    }
+
+    public function convertAudioByCourseIdAndMediaId($courseId, $mediaId)
+    {
+        $course = $this->tryManageCourse($courseId);
+        $storage = $this->getSettingService()->get('storage', array('upload_mode' => 'local'));
+
+        if (empty($course['enableAudio']) || 'local' == $storage['upload_mode']) {
+            return false;
+        }
+
+        $media = $this->getUploadFileService()->getFile($mediaId);
+
+        if (empty($media)) {
+            throw $this->createNotFoundException("No exist the media ID#{$mediaId}");
+        }
+
+        if ('cloud' != $media['storage'] || in_array($media['audioConvertStatus'], array('doing', 'success'))) {
+            return false;
+        }
+
+        $this->getUploadFileService()->retryTranscode(array($media['globalId']));
+        $this->getUploadFileService()->setAudioConvertStatus($media['id'], 'doing');
+
+        return true;
     }
 
     public function updateCourseRewardPoint($id, $fields)
@@ -418,7 +454,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $storage = $this->getSettingService()->get('storage', array());
 
-        return !empty($storage['upload_mode']) && $storage['upload_mode'] === 'cloud';
+        return !empty($storage['upload_mode']) && 'cloud' === $storage['upload_mode'];
     }
 
     /**
@@ -444,6 +480,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
+    protected function validatie($fields)
+    {
+        if (!empty($fields['enableAudio'])) {
+            $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
+            if ('opened' != $audioServiceStatus) {
+                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
+            }
+        }
+    }
+
     public function updateCourseStatistics($id, $fields)
     {
         if (empty($fields)) {
@@ -452,24 +498,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $updateFields = array();
         foreach ($fields as $field) {
-            if ($field === 'studentNum') {
+            if ('studentNum' === $field) {
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
-            } elseif ($field === 'taskNum') {
+            } elseif ('taskNum' === $field) {
                 $updateFields['taskNum'] = $this->getTaskService()->countTasks(
                     array('courseId' => $id, 'isOptional' => 0)
                 );
-            } elseif ($field === 'compulsoryTaskNum') {
+            } elseif ('compulsoryTaskNum' === $field) {
                 $updateFields['compulsoryTaskNum'] = $this->getTaskService()->countTasks(
                     array('courseId' => $id, 'isOptional' => 0)
                 );
-            } elseif ($field === 'threadNum') {
+            } elseif ('threadNum' === $field) {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
-            } elseif ($field === 'ratingNum') {
+            } elseif ('ratingNum' === $field) {
                 $ratingFields = $this->getReviewService()->countRatingByCourseId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
-            } elseif ($field === 'noteNum') {
+            } elseif ('noteNum' === $field) {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
-            } elseif ($field === 'materialNum') {
+            } elseif ('materialNum' === $field) {
                 $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(
                     array('courseId' => $id, 'source' => 'coursematerial')
                 );
@@ -489,7 +535,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
-        if ($course['status'] == 'published') {
+        if ('published' == $course['status']) {
             throw $this->createAccessDeniedException('Deleting published Course is not allowed');
         }
 
@@ -504,9 +550,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $result = $this->getCourseDeleteService()->deleteCourse($id);
 
-        $this->dispatchEvent('course.delete', new Event($course));
-
         $this->getCourseDao()->delete($id);
+
+        $this->dispatchEvent('course.delete', new Event($course));
 
         return $result;
     }
@@ -514,7 +560,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function closeCourse($id)
     {
         $course = $this->tryManageCourse($id);
-        if ($course['status'] != 'published') {
+        if ('published' != $course['status']) {
             throw $this->createAccessDeniedException('Course has not bean published');
         }
         $course['status'] = 'closed';
@@ -556,14 +602,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             return $course;
         }
         //enum: [days,end_date,date,forever]
-        if ($course['expiryMode'] === 'days') {
+        if ('days' === $course['expiryMode']) {
             $course['expiryStartDate'] = null;
             $course['expiryEndDate'] = null;
 
             if (empty($course['expiryDays'])) {
                 throw $this->createInvalidArgumentException('Param Invalid: expiryDays');
             }
-        } elseif ($course['expiryMode'] == 'end_date') {
+        } elseif ('end_date' == $course['expiryMode']) {
             $course['expiryStartDate'] = null;
             $course['expiryDays'] = 0;
 
@@ -571,7 +617,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
             }
             $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
-        } elseif ($course['expiryMode'] === 'date') {
+        } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
@@ -588,7 +634,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'Value of Params expiryEndDate must later than expiryStartDate'
                 );
             }
-        } elseif ($course['expiryMode'] == 'forever') {
+        } elseif ('forever' == $course['expiryMode']) {
             $course['expiryStartDate'] = 0;
             $course['expiryEndDate'] = 0;
             $course['expiryDays'] = 0;
@@ -916,6 +962,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    public function findUserLearnCourseIds($userId)
+    {
+        $courseIds = $this->getMemberDao()->findUserLearnCourseIds($userId);
+
+        return ArrayToolkit::column($courseIds, 'courseId');
+    }
+
+    public function countUserLearnCourses($userId)
+    {
+        return $this->getMemberDao()->countUserLearnCourses($userId);
+    }
+
     // Refactor: countLearnedCourses
     public function countUserLearnedCourses($userId, $filters = array())
     {
@@ -1138,7 +1196,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $conditions = array_filter(
             $conditions,
             function ($value) {
-                if ($value == 0) {
+                if (0 == $value) {
                     return true;
                 }
 
@@ -1239,7 +1297,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
 
         foreach ($chapters as $chapter) {
-            if ($chapter['type'] == 'lesson') {
+            if ('lesson' == $chapter['type']) {
                 continue;
             }
             $chapter['itemType'] = 'chapter';
@@ -1305,7 +1363,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $task = array_merge($task, $defaultTask);
             $task['itemType'] = 'lesson';
             $task['number'] = ++$number;
-            if ($task['type'] == 'doc') {
+            if ('doc' == $task['type']) {
                 $task['type'] = 'document';
             }
             foreach ($transformKeys as $key => $value) {
@@ -1382,7 +1440,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'live',
         );
 
-        if ($courseType == 'live') {
+        if ('live' == $courseType) {
             $lessonTypes = array('live', 'testpaper');
         }
 
@@ -1397,12 +1455,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
 
-        if ($task['type'] == 'video') {
+        if ('video' == $task['type']) {
             $task['mediaSource'] = $activity['ext']['mediaSource'];
             $task['mediaUri'] = $activity['ext']['mediaUri'];
-        } elseif ($task['type'] == 'audio') {
+        } elseif ('audio' == $task['type']) {
             $task['mediaSource'] = 'self';
-        } elseif ($task['type'] == 'live') {
+        } elseif ('live' == $task['type']) {
             if ($activity['ext']['replayStatus'] == 'videoGenerated') {
                 $task['mediaSource'] = 'self';
             }
@@ -1570,7 +1628,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $conditions['courseIds'] = $courseIds;
 
-        if (count($courseIds) == 0) {
+        if (0 == count($courseIds)) {
             return 0;
         }
 
@@ -1595,7 +1653,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $conditions['courseIds'] = $courseIds;
 
-        if (count($courseIds) == 0) {
+        if (0 == count($courseIds)) {
             return array();
         }
 
@@ -1617,7 +1675,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseIds = ArrayToolkit::column($courseFavorites, 'courseId');
         $conditions = array('courseIds' => $courseIds);
 
-        if (count($courseIds) == 0) {
+        if (0 == count($courseIds)) {
             return 0;
         }
 
@@ -1676,17 +1734,17 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         if (is_array($sort)) {
             $orderBy = $sort;
-        } elseif ($sort == 'popular' || $sort == 'hitNum') {
+        } elseif ('popular' == $sort || 'hitNum' == $sort) {
             $orderBy = array('hitNum' => 'DESC');
-        } elseif ($sort == 'recommended') {
+        } elseif ('recommended' == $sort) {
             $orderBy = array('recommendedTime' => 'DESC');
-        } elseif ($sort == 'Rating') {
+        } elseif ('Rating' == $sort) {
             $orderBy = array('Rating' => 'DESC');
-        } elseif ($sort == 'studentNum') {
+        } elseif ('studentNum' == $sort) {
             $orderBy = array('studentNum' => 'DESC');
-        } elseif ($sort == 'recommendedSeq') {
+        } elseif ('recommendedSeq' == $sort) {
             $orderBy = array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC');
-        } elseif ($sort == 'createdTimeByAsc') {
+        } elseif ('createdTimeByAsc' == $sort) {
             $orderBy = array('createdTime' => 'ASC');
         } else {
             $orderBy = array('createdTime' => 'DESC');
@@ -1761,15 +1819,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue)
     {
         $fields = array();
-        if ($expiryMode === 'forever') {
+        if ('forever' === $expiryMode) {
             $fields = array(
                 'expiryMode' => 'forever',
                 'expiryDays' => 0,
                 'expiryStartDate' => null,
                 'expiryEndDate' => null,
             );
-        } elseif ($expiryMode === 'days') {
-            if ($expiryValue == 0) {
+        } elseif ('days' === $expiryMode) {
+            if (0 == $expiryValue) {
                 $fields = array(
                     'expiryMode' => 'forever',
                     'expiryDays' => 0,
@@ -1784,7 +1842,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     'expiryEndDate' => null,
                 );
             }
-        } elseif ($expiryMode === 'date') {
+        } elseif ('date' === $expiryMode) {
             $fields = array(
                 'expiryMode' => 'end_date',
                 'expiryDays' => 0,
@@ -1831,13 +1889,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $access = $this->canJoinCourse($courseId);
 
-        if ($access['code'] != AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS != $access['code']) {
             throw new UnableJoinException($access['msg'], $access['code']);
         }
 
         $course = $this->getCourse($courseId);
 
-        if ($course['isFree'] == 1 || $course['originPrice'] == 0) {
+        if (1 == $course['isFree'] || 0 == $course['originPrice']) {
             $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId());
         }
 
@@ -2004,6 +2062,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    /**
      * @return SettingService
      */
     protected function getSettingService()
@@ -2023,7 +2089,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = array_filter(
             $course,
             function ($value) {
-                if ($value === '' || $value === null) {
+                if ('' === $value || null === $value) {
                     return false;
                 }
 
@@ -2080,11 +2146,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
         }
 
-        if ($fields['isFree'] == 1) {
+        if (1 == $fields['isFree']) {
             $fields['price'] = 0;
         }
 
-        if ($courseSet['type'] == 'normal' && $fields['tryLookable'] == 0) {
+        if ('normal' == $courseSet['type'] && 0 == $fields['tryLookable']) {
             $fields['tryLookLength'] = 0;
         }
 

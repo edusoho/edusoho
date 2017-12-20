@@ -19,4 +19,9 @@ class MathToolkit
     {
         return $number * $multiplicator;
     }
+
+    public static function isEqual($number1, $number2)
+    {
+        return abs($number1 - $number2) < 0.00001;
+    }
 }

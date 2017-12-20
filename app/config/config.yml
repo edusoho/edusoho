@@ -93,15 +93,15 @@ services:
     session.handler.redis: '@session.handler.pdo'
 
     topxia.twig.file_cache:
-        class: Biz\Common\FilesystemCache
-        arguments:    ['@service_container']
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:    ['%kernel.cache_dir%/twig_cache']
 
     topxia.twig.cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
         arguments:    ['@topxia.twig.file_cache']
 
     topxia.twig.cache_strategy:
-        class: Biz\Common\LifetimeCacheStrategy
+        class: AppBundle\Twig\LifetimeCacheStrategy
         arguments:    ['@biz', '@topxia.twig.cache_provider']
 
     topxia.twig.cache_extension:

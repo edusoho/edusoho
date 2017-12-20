@@ -127,9 +127,23 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $params['id'] = $user['id'];
         $params['nickname'] = $user['nickname'];
 
+        /**
+         * @var int
+         *          last record: 2017-12-12
+         *          '1'=>'vhall',
+         *          '2'=>'soooner',
+         *          '3'=>'sanmang',
+         *          '4'=>'gensee',
+         *          '5'=>'longinus',
+         *          '6'=>'training',
+         *          '7'=>'talkFun',
+         *          '8'=>'athena', //ES直播
+         */
+        $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
+
         return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId' => $activity['ext']['liveId'],
-            'params' => array('courseId' => $courseId, 'activityId' => $activityId),
+            'params' => array('courseId' => $courseId, 'activityId' => $activityId, 'provider' => $provider),
         ), $params);
     }
 
@@ -149,7 +163,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        if ($activity['mediaType'] !== 'live') {
+        if ('live' !== $activity['mediaType']) {
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_live'));
         }
         $now = time();
@@ -167,7 +181,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             }
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
-            if ($taskResult['status'] == 'start') {
+            if ('start' == $taskResult['status']) {
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
                 $this->getTaskService()->finishTaskResult($task['id']);
             }

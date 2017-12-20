@@ -49,6 +49,24 @@
       <td width="25%" class="text-muted" style="text-align: right">{{ 'order.paid_cash_amount'|trans }}</td>
       <td width="75%"><span class="color-warning">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
     </tr>
+
+    {% if order.paid_cash_amount %}
+      <tr>
+        <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('payment', order.payment) }}</td>
+        <td width="75%">
+          <span class="text-muted">{{ order.paid_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
+          {% if paymentTrade.platform_sn is not null %}
+            <span class="pull-right">
+              <a class="es-icon es-icon-help text-normal link-gray"
+                 data-toggle="popover" data-trigger="hover"
+                 data-placement="left"
+                 data-content="{{ '支付流水号'|trans }} {{ paymentTrade.platform_sn }}"></a>
+            </span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endif %}
+    
     <tr>
       <td width="25%">{{ 'order.paid_time'|trans }}</td>
       <td width="75%">{{ order.pay_time|date('Y-n-d H:i:s') }}</td>

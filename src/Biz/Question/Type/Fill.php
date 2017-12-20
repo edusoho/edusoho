@@ -2,7 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use AppBundle\Common\Exception\UnexpectedValueException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class Fill extends BaseQuestion implements TypeInterface
 {
@@ -47,7 +47,7 @@ class Fill extends BaseQuestion implements TypeInterface
             }
         }
 
-        if ($rightCount == 0) {
+        if (0 == $rightCount) {
             return array('status' => 'wrong', 'score' => 0);
         } elseif ($rightCount < count($questionAnswers)) {
             $percentage = intval($rightCount / count($questionAnswers) * 100);
@@ -66,7 +66,7 @@ class Fill extends BaseQuestion implements TypeInterface
 
         preg_match_all("/\[\[(.+?)\]\]/", $fields['stem'], $answer, PREG_PATTERN_ORDER);
         if (empty($answer[1])) {
-            throw new UnexpectedValueException('This Question Answer Unexpected');
+            throw new InvalidArgumentException('This Question Answer Unexpected');
         }
 
         $fields['answer'] = array();
