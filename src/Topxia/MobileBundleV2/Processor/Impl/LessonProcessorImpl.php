@@ -359,7 +359,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
         $ssl = $this->request->isSecure() ? true : false;
-
+        
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
             return $this->createErrorResponse('not_courseId', '课程信息不存在！');
@@ -507,6 +507,31 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
                     $lesson['mediaConvertStatus'] = $file['status'];
+
+                    if (isset($file['processAudioStatus']) && $file['processAudioStatus'] == 'ok') {
+                        if (!empty($file['audioMetas2']) && !empty($file['audioMetas2']['sd']['key'])) {
+                            $data = array(
+                                'id' => $file['id'],
+                                'fromApi' => !$hlsEncryption,
+                            );
+
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                                'data' => $data,
+                                'times' => 2,
+                                'duration' => 3600,
+                            ));
+
+                            $audioUrl = array(
+                                'url' => $this->getHttpHost()."/hls/{$file['id']}/audio/playlist/{$token['token']}.m3u8?format=json&line=".$line,
+                            );
+
+                            if (isset($audioUrl) && is_array($audioUrl) && !empty($audioUrl['url'])) {
+                                $lesson['audioUri'] = $audioUrl['url'];
+                            }
+                        }
+
+                    }
+
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
