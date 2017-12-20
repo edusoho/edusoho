@@ -206,10 +206,10 @@ class MessageServiceTest extends BaseTestCase
                     'functionName' => 'search',
                     'returnValue' => array(array('id' => 111, 'toId' => 2, 'unreadNum' => 1)),
                     'withParams' => array(
-                        array('toId' => 2, 'lessUnreadNum' => 0), 
-                        array('latestMessageTime' => 'DESC'), 
-                        0, 
-                        5
+                        array('toId' => 2, 'lessUnreadNum' => 0),
+                        array('latestMessageTime' => 'DESC'),
+                        0,
+                        5,
                     ),
                 ),
             )
