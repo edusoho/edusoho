@@ -75,7 +75,7 @@
         </ul>
 
         <!-- Tab panes -->
-        <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_themes_config',{uri:themeUri}) }}">
+        <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_themes_config') }}">
           {% include 'admin/theme/tab-panel/left.html.twig' %}
           {% include 'admin/theme/tab-panel/nav.html.twig' with {navigation: themeConfig.navigation|default() }%}
           {% include 'admin/theme/tab-panel/maincolor.html.twig' %}

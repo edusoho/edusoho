@@ -27,11 +27,15 @@ define(function(require, exports, module) {
         },
 
         _saveConfig: function(data) {
-            var configs = this.get('config');
+            var configs = this.get('config'), $iframe = this.get('currentIframe'), self = this;
             configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
             configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
             configs = $.extend(configs, data);
             this.set('config', configs, {override: true});
+            console.log(this.get('config'));
+            $.post(this.element.data('url'), {config: this.get('config')}, function(){
+              self._flushIframe();
+            });
         },
 
         _setupBlockConfig: function() {

@@ -33,21 +33,10 @@ class ThemeController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function saveConfigAction(Request $request, $uri)
+    public function saveConfigAction(Request $request)
     {
         $config = $request->request->get('config');
-        $currentData = $request->request->get('currentData');
         $this->getThemeService()->saveCurrentThemeConfig($config);
-
-        if ($currentData) {
-            return $this->render(
-                'admin/theme/theme-edit-config-li.html.twig',
-                array(
-                    'pendant' => $currentData,
-                    'uri' => $uri,
-                )
-            );
-        }
 
         return $this->createJsonResponse(true);
     }

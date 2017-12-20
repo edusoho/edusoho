@@ -847,7 +847,7 @@ admin_reset_currentTheme_config:
     permissions: [admin_setting_theme]
 
 admin_save_themes_config:
-    path:  /theme/{uri}/config/save
+    path:  /theme/config/save
     defaults: { _controller: AppBundle:Admin/Theme:saveConfig }
     methods:  [POST]
     permissions: [admin_setting_theme]
