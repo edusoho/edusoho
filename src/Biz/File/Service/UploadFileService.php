@@ -39,6 +39,8 @@ interface UploadFileService
 
     public function retryTranscode(array $globalIds);
 
+    public function getResourcesStatus(array $options);
+
     public function collectFile($userId, $fileId);
 
     public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
@@ -76,6 +78,8 @@ interface UploadFileService
     public function setFileConverting($id, $convertHash);
 
     public function setAudioConvertStatus($id, $status);
+
+    public function setResourceConvertStatus($globalId, array $result);
 
     public function makeUploadParams($params);
 
