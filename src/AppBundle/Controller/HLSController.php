@@ -23,9 +23,9 @@ class HLSController extends BaseController
     }
 
     /**
-     * @param $type vedio or audio
+     * @param $type video or audio
      */
-    protected function commonPlayList(Request $request, $id, $token, $type = 'vedio')
+    protected function commonPlayList(Request $request, $id, $token, $type = 'video')
     {
         $line = $request->query->get('line', null);
         $format = $request->query->get('format', '');
@@ -54,7 +54,7 @@ class HLSController extends BaseController
         $streams = array();
         $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
 
-        $metas = ($type == 'vedio') ? $file['metas2'] : $file['audioMetas2'];
+        $metas = ($type == 'video') ? $file['metas2'] : $file['audioMetas2'];
 
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($metas[$level])) {
