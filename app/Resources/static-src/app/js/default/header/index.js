@@ -69,6 +69,7 @@ $(document).ajaxSend((event, xhr, options) => {
     const $dom = $('.js-inform-loading');
     const loading = cd.loading();
     $dom.removeClass('hidden');
+    $('.js-inform-dropdown-body').css('overflow-y', 'hidden');
     $dom.html(loading);
   }
 });
@@ -82,12 +83,15 @@ Api.newNotification.search().then((res) => {
 })
 
 const informShow = ($dom, res, flag) => {
-  $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
+  const $loading = $('.tab-pane.active').find('.js-inform-loading');
+  $loading.addClass('hidden');
+  $('.js-inform-dropdown-body').css('overflow-y', 'auto');
   $dom.append(res);
   if (flag) {
     $dom.find('.notification-footer').addClass('hidden');
     $dom.find('.pull-left').addClass('hidden');
   }
+
 }
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {

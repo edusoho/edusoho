@@ -7,7 +7,7 @@
     </div>
     <div class="tab-content">
       <div class="notification-content tab-pane active" role="tabpanel" id="notification">
-        <div class="inform-dropdown-body">
+        <div class="inform-dropdown-body js-inform-dropdown-body">
           {% if app.user.newNotificationNum > 0 %}
             <div class="inform-loading js-inform-loading"></div>
             <div class="js-inform-newNotification"></div>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="message-content tab-pane" role="tabpanel" id="message">
-        <div class="inform-dropdown-body">
+        <div class="inform-dropdown-body js-inform-dropdown-body">
           {% if app.user.newMessageNum > 0 %}
             <div class="inform-loading js-inform-loading"></div>
             <div class="js-inform-conversation"></div>
