@@ -61,12 +61,19 @@ $('.js-inform-tab').click(function(e) {
   $this.addClass('active').siblings().removeClass('active');
 })
 
-$(document).ajaxSend(() => {
+$(document).ajaxSend((event, xhr, options) => {
+  const isNotificationUrl = options.url === "/api/newNotifications";
+  const isMessageUrl = options.url === "/api/conversations";
+
   // 加载loading效果
-  const $dom = $('.js-inform-loading');
-  const loading = cd.loading();
-  $dom.removeClass('hidden');
-  $dom.html(loading);
+  if (isNotificationUrl || isMessageUrl) {
+    console.log(isNotificationUrl);
+    console.log(isMessageUrl);
+    const $dom = $('.js-inform-loading');
+    const loading = cd.loading();
+    $dom.removeClass('hidden');
+    $dom.html(loading);
+  }
 });
 
 Api.newNotification.search().then((res) => {
