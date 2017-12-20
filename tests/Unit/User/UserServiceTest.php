@@ -3,6 +3,7 @@
 namespace Tests\Unit\User;
 
 use Biz\BaseTestCase;
+use Biz\User\CurrentUser;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class UserServiceTest extends BaseTestCase
@@ -2290,6 +2291,32 @@ class UserServiceTest extends BaseTestCase
         $user = array();
         $nickname = $this->getUserService()->generateNickname($user);
         $this->assertEquals(stripos($nickname, 'user'), 0);
+    }
+
+    public function testUpdateUserNewMessageNum()
+    {
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => 'admin1',
+            'email' => 'admin3@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
+        ));
+        $currentUser->__set('newMessageNum', 2);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->mockBiz(
+            'User:UserDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'withParams' => array(2, array('newMessageNum' => 1)),
+                ),
+            )
+        );
+        $result = $this->getUserService()->updateUserNewMessageNum(2, 1);
+        $this->assertNull($result);
     }
 
     protected function createUser($user)
