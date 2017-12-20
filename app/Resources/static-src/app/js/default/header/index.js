@@ -26,7 +26,7 @@ $('.js-back').click(() => {
   }
 });
 
-$('body').on('click', '.js-user-nav-dropdown', function (event) {
+$('body').on('click', '.js-user-nav-dropdown', (event) => {
   event.stopPropagation();
 });
 
@@ -34,52 +34,63 @@ $('body').on('click', '.js-user-nav-dropdown', function (event) {
 $('.js-inform-tab').click(function(e) {
   const $this = $(this);
   e.preventDefault();
-  $this.addClass('active').siblings().removeClass('active');
   $this.tab('show');
   const id = $this[0].id;
   const isEmpty = $('.tab-pane.active').find('.js-inform-empty').length;
-  if (id === 'conversation' && !isEmpty) {
+  const isActive = $this.hasClass('active');
+  if (id === 'conversation' && !isEmpty && !isActive) {
     Api.conversation.search().then((res) => {
-      $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
-      $('.js-inform-conversation').empty();
-      $('.js-inform-conversation').append(res);
+      const $conversation = $('.js-inform-conversation');
+      $conversation.empty();
+      informShow($conversation, res, false);
      }).catch((res) => {
       // 异常捕获
       console.log('catch', res.responseJSON.error.message);
     })
   }
-  if (id === 'newNotification' && !isEmpty) {
+  if (id === 'newNotification' && !isEmpty && !isActive) {
     Api.newNotification.search().then((res) => {
-      $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
-      $('.js-inform-newNotification').empty();
-      $('.js-inform-newNotification').append(res);
-     }).catch((res) => {
+      const $newNotification = $('.js-inform-newNotification');
+      $newNotification.empty();
+      informShow($newNotification, res, true);
+    }).catch((res) => {
       // 异常捕获
       console.log('catch', res.responseJSON.error.message);
     })
   }
+  $this.addClass('active').siblings().removeClass('active');
 })
 
-$(document).ajaxSend(() => {
+$(document).ajaxSend((event, xhr, options) => {
+  const isNotificationUrl = options.url === "/api/newNotifications";
+  const isMessageUrl = options.url === "/api/conversations";
   // 加载loading效果
-  const $dom = $('.js-inform-loading');
-  const loading = cd.loading();
-  $dom.removeClass('hidden');
-  $dom.html(loading);
+  if (isNotificationUrl || isMessageUrl) {
+    const $dom = $('.js-inform-loading');
+    const loading = cd.loading();
+    $dom.removeClass('hidden');
+    $dom.html(loading);
+  }
 });
 
 Api.newNotification.search().then((res) => {
-  $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
-  $('.js-inform-newNotification').append(res);
+  const $newNotification = $('.js-inform-newNotification');
+  informShow($newNotification, res, true);
  }).catch((res) => {
   // 异常捕获
   console.log('catch', res.responseJSON.error.message);
 })
 
-
+const informShow = ($dom, res, flag) => {
+  $('.tab-pane.active').find('.js-inform-loading').addClass('hidden');
+  $dom.append(res);
+  if (flag) {
+    $dom.find('.notification-footer').addClass('hidden');
+    $dom.find('.pull-left').addClass('hidden');
+  }
+}
 
 $('.js-user-nav-dropdown').on('click', '.js-inform-notification', (event) => {
   const $item = $(event.currentTarget);
   window.open($item.data('url'));
 })
-

@@ -40,19 +40,14 @@
   &.cd-btn-ghost-warning {
     .cd-btn-ghost(@brand-warning);
   }
-  &.cd-btn-ghost-default {
-    background: #fff;
-    border-color: rgba(0,0,0,0.16);
-    color: @cd-gray-dark;
+  &.cd-btn-ghost-light {
+    border-color: #fff;
+    color: #fff;
     .cd-transition;
     &:hover,
     &:focus {
-      .cd-box-shadow(6px);
-      .cd-transition;
-      background: rgba(red(#fff), green(#fff), blue(#fff), 0.1);
-    }
-    &:active {
-      background: @cd-bg;
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.2);
       .cd-transition;
     }
   }

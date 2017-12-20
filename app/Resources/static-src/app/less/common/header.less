@@ -48,3 +48,26 @@
 }
 
 
+// 老的私信
+.nav.user-nav {
+  > li {
+    > a {
+      padding: 16px 0;
+      &.hasmessage {
+        position: relative;
+        display: block;
+        >.dot {
+          position: absolute;
+          display: block;
+          width: 4px;
+          height: 4px;
+          top: 20px;
+          right: 0;
+          font-size: 20px;
+          .border-radius(50%);
+          background-color: @brand-danger;
+        }
+      }
+    }
+  }
+}

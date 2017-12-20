@@ -1,8 +1,8 @@
 @import '~common/variable.less';
 @import '~common/mixins.less';
 @import './module/header-avatar.less';
-@import './module/header-inform.less';
 @import './module/header-manage.less';
+@import './module/header-inform.less';
 
 .navbar {
   margin-bottom: 0;
@@ -195,11 +195,9 @@
   }
 }
 
-
-
 // 搜索框
 .navbar-form {
-  margin: 10px 0;
+  margin: 11px 0;
   padding-left: 0;
   padding-right: 0;
   .box-shadow(none);
@@ -207,7 +205,7 @@
     position: relative;
   }
   .form-control {
-    padding: 12px 28px 12px 8px;
+    padding: 11px 28px 11px 8px;
     @media (min-width: @screen-lg-min) {
       width: 180px;
     }
@@ -217,11 +215,11 @@
     @media (max-width: @screen-sm-max) {
       width: 60px;
     }
-    height: 36px;
+    height: 34px;
     font-size: 12px;
     line-height: 1;
     background-color: #fafafa;
-    color: @cd-gray-light;
+    color: @gray-dark;
     border: none;
   }
   .button {
@@ -241,4 +239,3 @@
     }
   }
 }
-

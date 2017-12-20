@@ -4,8 +4,13 @@
       .inform-dropdown-toggle {
         padding: 16px 0;
         color: rgba(255, 255, 255, 0.7);
+        position: relative;
+        cursor: pointer;
         &:hover {
           color: #fff;
+        }
+        i {
+          font-size: 24px;
         }
       }
       .inform-dropdown {
@@ -18,6 +23,29 @@
     }
   }
 }
+
+.inform-dropdown-toggle__num {
+  position: absolute;
+  top: 10px;
+  right: -6px;
+  padding: 1px 4px;
+}
+
+.inform-dropdown-toggle__num--big {
+  right: -8px;
+  padding: 2px;
+}
+
+.inform-dropdown-dot {
+  margin-left: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 4px;
+  height: 4px;
+  .cd-border-radius(50%);
+  background-color: @brand-danger;
+}
+
 
 .inform-dropdown-head {
   .cd-box-shadow-inset(0 -1px 0 0);
