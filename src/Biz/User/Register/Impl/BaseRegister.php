@@ -25,7 +25,7 @@ abstract class BaseRegister
         $this->validate($registration);
 
         $authUser = array();
-        if ('default' != $this->getAuthService()->getAuthProvider()->getProviderName()) {
+        if ($this->getAuthService()->hasPartnerAuth()) {
             // 从discuz中注册过来
             if (!empty($registration['token']['userId'])) {
                 $registration['type'] = 'discuz';
@@ -126,10 +126,7 @@ abstract class BaseRegister
         $user['createdTime'] = time();
 
         $type = $registration['type'];
-        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
-            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-        } elseif ('marketing' === $type) {
+        if (in_array($type, array('default', 'phpwind', 'discuz', 'marketing'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
         } else {

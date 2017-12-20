@@ -98,6 +98,50 @@ class EmailRegistDecoderImplTest extends BaseTestCase
         $this->getEmailRegistDecoder()->register($registration);
     }
 
+    public function testRegisterWithDiscuz()
+    {
+        $provider = $this->mockBiz(
+            'authProvider',
+            array(
+                array(
+                    'functionName' => 'register',
+                    'returnValue' => array('id' => 1112222),
+                ),
+            )
+        );
+        $authService = $this->mockBiz(
+            'User:AuthService',
+            array(
+                array(
+                    'functionName' => 'hasPartnerAuth',
+                    'returnValue' => true,
+                ),
+                array(
+                    'functionName' => 'getPartnerName',
+                    'returnValue' => 'discuz',
+                ),
+                array(
+                    'functionName' => 'getAuthProvider',
+                    'returnValue' => $provider,
+                ),
+            )
+        );
+        $registration = array(
+            'email' => 'hello@howzhi.com',
+            'nickname' => 'hello',
+            'password' => '123',
+        );
+        $this->getEmailRegistDecoder()->register($registration);
+
+        $provider->shouldHaveReceived('register')->times(1);
+        $authService->shouldHaveReceived('hasPartnerAuth')->times(1);
+        $authService->shouldHaveReceived('getPartnerName')->times(1);
+        $authService->shouldHaveReceived('getAuthProvider')->times(1);
+
+        $userBind = $this->getUserBindDao()->getByTypeAndFromId('discuz', '1112222');
+        $this->assertEquals('1112222', $userBind['fromId']);
+    }
+
     protected function getEmailRegistDecoder()
     {
         return $this->biz['user.register.email'];
@@ -105,6 +149,11 @@ class EmailRegistDecoderImplTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->biz->dao('User:UserService');
+        return $this->biz->service('User:UserService');
+    }
+
+    protected function getUserBindDao()
+    {
+        return $this->biz->service('User:UserBindDao');
     }
 }
