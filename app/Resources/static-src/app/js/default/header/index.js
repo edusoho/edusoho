@@ -31,14 +31,14 @@ $('body').on('click', '.js-user-nav-dropdown', (event) => {
 });
 
 
-$('.js-inform-tab').click(function(e) {
-  const $this = $(this);
-  e.preventDefault();
-  $this.tab('show');
-  const id = $this[0].id;
+$('.js-inform-tab').click((event) => {
+  const $target = $(event.target);
+  event.preventDefault();
+  $target.tab('show');
+  const type = $target.data('type');
   const isEmpty = $('.tab-pane.active').find('.js-inform-empty').length;
-  const isActive = $this.hasClass('active');
-  if (id === 'conversation' && !isEmpty && !isActive) {
+  const isActive = $target.hasClass('active');
+  if (type === 'conversation' && !isEmpty && !isActive) {
     Api.conversation.search().then((res) => {
       const $conversation = $('.js-inform-conversation');
       $conversation.empty();
@@ -48,7 +48,7 @@ $('.js-inform-tab').click(function(e) {
       console.log('catch', res.responseJSON.error.message);
     })
   }
-  if (id === 'newNotification' && !isEmpty && !isActive) {
+  if (type === 'newNotification' && !isEmpty && !isActive) {
     Api.newNotification.search().then((res) => {
       const $newNotification = $('.js-inform-newNotification');
       $newNotification.empty();
@@ -58,7 +58,7 @@ $('.js-inform-tab').click(function(e) {
       console.log('catch', res.responseJSON.error.message);
     })
   }
-  $this.addClass('active').siblings().removeClass('active');
+  $target.addClass('active').siblings().removeClass('active');
 })
 
 $(document).ajaxSend((event, xhr, options) => {
