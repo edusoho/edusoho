@@ -1,7 +1,5 @@
 define(function(require, exports, module) {
-
     var Widget = require('widget');
-
     var ThemeManage = Widget.extend({
         attrs: {
             config: {},
@@ -11,8 +9,6 @@ define(function(require, exports, module) {
 
         setup: function() {
           this._initEvent();
-          // this._setupBlockConfig();
-          this._setupBottomConfig();
         },
 
         _initEvent: function() {
@@ -28,62 +24,12 @@ define(function(require, exports, module) {
 
         _saveConfig: function(data) {
             var configs = this.get('config'), $iframe = this.get('currentIframe'), self = this;
-            configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
-            configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
             configs = $.extend(configs, data);
             this.set('config', configs, {override: true});
             console.log(this.get('config'));
             $.post(this.element.data('url'), {config: this.get('config')}, function(){
               self._flushIframe();
             });
-        },
-
-        _setupBlockConfig: function() {
-            var config = this.get('config');
-            var allConfig = this.get('allConfig');
-            var self = this;
-            this.$('.theme-custom-left-block').find('li').each(function(index, value){
-                if ($(this).find('.check-block').prop('checked') == true) {
-                    $(this).data('config', config.blocks.left[index]);
-                } else {
-                    var itemConfig = self._getConfigfromAllConfig($(this).attr('id'), allConfig.blocks.left);
-                    $(this).data('config', itemConfig);
-                }
-            });
-            this.$('.theme-custom-right-block').find('li').each(function(index, value){
-                if ($(this).find('.check-block').prop('checked') == true) {
-                    $(this).data('config', config.blocks.right[index]);
-                } else {
-                    var itemConfig = self._getConfigfromAllConfig($(this).attr('id'), allConfig.blocks.right);
-                    $(this).data('config', itemConfig);
-                }
-            });
-        },
-
-        _setupBottomConfig: function() {
-            var config = this.get('config');
-            this.$('.theme-custom-bottom-block').find('input[type=radio][value='+config.bottom+']').prop('checked', true);
-        },
-
-        _getBlockConfig: function($block) {
-            var config = [];
-            $($block).find('input[type=checkbox]:checked').each(function(){
-                config.push($(this).parents('li').data('config'));
-            });
-
-            return config;
-        },
-
-        _getBottomConfig: function($block) {
-            return $($block).find('input[type=radio]:checked').val();
-        },
-
-        _getConfigfromAllConfig: function(id, allConfig){
-            for (var itemConfig in allConfig) {
-                if (allConfig[itemConfig].id == id) {
-                    return allConfig[itemConfig];
-                }
-            }
         },
 
         _flushIframe: function(){
