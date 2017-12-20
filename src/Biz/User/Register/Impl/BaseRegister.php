@@ -23,31 +23,8 @@ abstract class BaseRegister
         }
 
         $this->validate($registration);
-
-        $authUser = array();
-        if ($this->getAuthService()->hasPartnerAuth()) {
-            // 从discuz中注册过来
-            if (!empty($registration['token']['userId'])) {
-                $registration['type'] = 'discuz';
-                $authUser = array('id' => $registration['token']['userId']);
-            } else { // 非discuz注册
-                $authUser = $this->getAuthService()->getAuthProvider()->register($registration);
-            }
-        }
-
-        $user = $this->createUser($registration);
+        list($user, $registration) = $this->createUser($registration);
         $this->createUserProfile($registration, $user);
-
-        //　绑定 discuz　用户
-        if (!empty($authUser['id'])) {
-            $this->getUserService()->bindUser(
-                $this->getAuthService()->getPartnerName(),
-                $authUser['id'],
-                $user['id'],
-                null
-            );
-        }
-
         $this->afterSave($registration, $user);
 
         return array($user, $this->createPerInviteUser($registration, $user));
@@ -146,6 +123,15 @@ abstract class BaseRegister
 
     protected function afterSave($registration, $user)
     {
+        //　绑定 discuz　用户
+        if (!empty($registration['parterAuthUser']['id'])) {
+            $this->getUserService()->bindUser(
+                $this->getAuthService()->getPartnerName(),
+                $registration['parterAuthUser']['id'],
+                $user['id'],
+                null
+            );
+        }
     }
 
     /**
@@ -208,9 +194,11 @@ abstract class BaseRegister
 
     private function createUser($registration)
     {
+        $registration['parterAuthUser'] = $this->generateParterAuthUser($registration);
+
         $user = $this->beforeSave($registration);
 
-        return $this->getUserDao()->create($user);
+        return array($this->getUserDao()->create($user), $registration);
     }
 
     private function createUserProfile($registration, $user)
@@ -258,5 +246,21 @@ abstract class BaseRegister
         }
 
         return $inviteUser;
+    }
+
+    private function generateParterAuthUser($registration)
+    {
+        $authUser = array();
+        if ($this->getAuthService()->hasPartnerAuth()) {
+            // 从discuz中注册过来
+            if (!empty($registration['token']['userId'])) {
+                $registration['type'] = 'discuz';
+                $authUser = array('id' => $registration['token']['userId']);
+            } else { // 非discuz注册
+                $authUser = $this->getAuthService()->getAuthProvider()->register($registration);
+            }
+        }
+
+        return $authUser;
     }
 }
