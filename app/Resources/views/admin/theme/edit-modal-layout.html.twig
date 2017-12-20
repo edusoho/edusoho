@@ -76,6 +76,7 @@
         </div>
       {% endblock %}
       <input class="hide" value="{{ config.id|default() }}" name="id" >
+      <input class="hide" value="{{ config.blockKey|default('left') }}" name="blockKey" >
     </form>
 
 {% endblock %}

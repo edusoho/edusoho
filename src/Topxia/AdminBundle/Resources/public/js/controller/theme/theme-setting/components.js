@@ -1,9 +1,15 @@
 define(function(require, exports, module) {
     require('jquery.sortable');
     exports.run = function() {
-      var $themeEditContent = $('.js-theme-component');
-      var componentSetting = $.parseJSON($('#componet-setting').text()), $modal = $('#modal'), saveKey = $themeEditContent.data('configKey');
-console.log(componentSetting);
+      var $themeEditContent = $('#theme-edit-content'), $componets = $('.js-theme-component');
+      var componentSetting = {}, $modal = $('#modal');
+      $('.js-componet-setting').each(function(){
+        var $this = $(this);
+        var blockKey = $this.data('key'), config = $.parseJSON($this.text());
+        config.blockKey = blockKey;
+        componentSetting[blockKey] = config;
+      });
+      
       var $list = $(".module-item-list").sortable({
         distance: 20,
         itemSelector: '.theme-edit-item',
@@ -14,20 +20,27 @@ console.log(componentSetting);
       });
 
       var getConfig = function(){
-        var $actives = $themeEditContent.find('input[type=checkbox]:checked'), setting = {};
-        setting[saveKey] = {};
-        
-        $actives.each(function(){
-           var key = $(this).data('componentId');
-           setting[saveKey][key] = componentSetting[key];
+        var setting = {};
+        $componets.each(function(){
+          var $this = $(this);
+          var $actives = $componets.find('input[type=checkbox]:checked');
+          var blockKey = $(this).attr('id');
+          $actives.each(function(){
+            var key = $(this).data('componentId');
+            if (undefined == setting[blockKey]) {
+                setting[blockKey] = {};
+            }
+            
+            setting[blockKey][key] = componentSetting[blockKey][key];
+          });
         });
-        
+       
         return {
           blocks: setting
         };
       };
       
-      $themeEditContent.on("click", '.check-block', function(event){
+      $componets.on("click", '.check-block', function(event){
         var $this = $(this);
         if ($this.prop('checked') == true) {
             $this.parents('li').find('.item-edit-btn,.item-set-btn').show();
@@ -37,20 +50,24 @@ console.log(componentSetting);
         $themeEditContent.trigger('save_config', getConfig());
       });
 
-      $themeEditContent.on('click', '.item-edit-btn', function(event){
+      $componets.on('click', '.item-edit-btn', function(event){
         var $this = $(this);
-        var key = $(this).closest('li').find('.check-block').data('componentId');
-        var url = $this.data('url');
+        var key = $(this).closest('li').find('.check-block').data('componentId'),
+        blockKey = $(this).closest('.js-theme-component').attr('id'),
+        url = $this.data('url');
 
-        $.get(url, {config: componentSetting[key]}, function(html){
+        $.get(url, {config: componentSetting[blockKey][key]}, function(html){
           $modal.html(html)
           $modal.modal('show');
         });
       })
 
       $themeEditContent.on("save_part_config", function(event, data){
-        componentSetting[data.id] = $.extend(componentSetting[data.id], data);
-        $("#"+ data.id).find('.col-md-4').eq(1).text(componentSetting[data.id].title);
+        componentSetting[data.blockKey][data.id] = $.extend(componentSetting[data.blockKey][data.id], data);
+
+        console.log(componentSetting[data.blockKey][data.id].title);
+        console.log($("#"+ data.id).find('.col-md-4').eq(1));
+        $("#"+ data.id).find('>div').eq(1).text(componentSetting[data.blockKey][data.id].title);
         $themeEditContent.trigger('save_config', getConfig());
       });
 

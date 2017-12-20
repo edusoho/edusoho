@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     require('jquery.serializeJSON');
     exports.run = function() {
-      var $themeEditContent = $('.js-theme-component');
+      var $themeEditContent = $('#theme-edit-content');
       $("#save-btn").on('click', function(){
         var $form = $($(this).data('form'));
         var config = $form.serializeJSON();
