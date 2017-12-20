@@ -41,7 +41,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
         $conversation = $this->getConversationDao()->getByFromIdAndToId($fromId, $toId);
-        if ($conversation['unreadNum'] == 1) {
+        if (1 == $conversation['unreadNum']) {
             $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
         }
 

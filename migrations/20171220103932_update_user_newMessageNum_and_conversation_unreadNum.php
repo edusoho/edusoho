@@ -11,8 +11,8 @@ class UpdateUserNewMessageNumAndConversationUnreadNum extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("UPDATE user SET newMessageNum = 0;");
-        $db->exec("UPDATE message_conversation SET unreadNum = 0;");
+        $db->exec('UPDATE user SET newMessageNum = 0;');
+        $db->exec('UPDATE message_conversation SET unreadNum = 0;');
         $db->exec("UPDATE message_relation SET isRead = '1';");
     }
 
@@ -21,6 +21,5 @@ class UpdateUserNewMessageNumAndConversationUnreadNum extends Migration
      */
     public function down()
     {
-
     }
 }
