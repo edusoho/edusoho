@@ -3,6 +3,11 @@ imports:
     - { resource: oauth2.yml }
 
 services:
+
+    activity_runtime_container:
+        class: AppBundle\Component\Activity\ActivityRuntimeContainerV1
+        arguments: ['@service_container']
+
     user.online_track:
         class: AppBundle\Component\Track\UserOnlineTrack
         arguments: ['@service_container', '@Biz']

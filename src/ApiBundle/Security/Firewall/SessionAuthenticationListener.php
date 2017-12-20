@@ -29,7 +29,9 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
             return;
         }
 
-        $this->validateCsrfToken($request);
+        if (!$this->isCrsfTokenValid($request)) {
+             return;
+        }
 
         $token = unserialize($token);
 
@@ -42,7 +44,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
         $this->getTokenStorage()->setToken($token);
     }
 
-    private function validateCsrfToken(Request $request)
+    private function isCrsfTokenValid(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $token = $request->headers->get('X-CSRF-Token');
@@ -50,9 +52,7 @@ class SessionAuthenticationListener extends BaseAuthenticationListener
             $token = $request->request->get('_csrf_token', '');
         }
 
-        if (!$this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken('site', $token))) {
-            throw new AccessDeniedHttpException('The page has expired, please resubmit.');
-        }
+        return $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken('site', $token));
     }
 
     /**

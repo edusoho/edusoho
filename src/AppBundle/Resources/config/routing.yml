@@ -2,6 +2,10 @@ homepage:
     path:  /
     defaults: { _controller: AppBundle:Default:index }
 
+ltc:
+    path:  /ltc/{endpoint}
+    defaults: { _controller: AppBundle:LTC/Runtime:entryPoint }
+
 crontab_web:
     path:  /anon/crontab
     defaults: { _controller: AppBundle:Common:crontab }

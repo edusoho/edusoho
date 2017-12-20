@@ -1,0 +1,17 @@
+{
+  "name": "图文教学活动",
+  "type": "text",
+  "description": "",
+  "author": "ruanwenqin",
+  "version": "1.0.0",
+  "ltc_version": "1.0.0",
+  "icon": {
+    "type": "font", //image, font
+    "value": "es-icon es-icon-graphicclass"
+  },
+  "routes": {
+    "create": "create.php",
+    "show": "show.html.twig",
+    "update": "update.html.twig"
+  }
+}

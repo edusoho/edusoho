@@ -1,0 +1,12 @@
+{
+  "name": "签到教学活动",
+  "type": "sign",
+  "description": "",
+  "author": "ruanwenqin",
+  "version": "1.0.0",
+  "ltc_version": "1.0.0",
+  "icon": {
+    "type": "font", //image, font
+    "value": "es-icon es-icon-graphicclass"
+  }
+}

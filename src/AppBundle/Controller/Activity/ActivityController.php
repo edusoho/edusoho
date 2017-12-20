@@ -16,12 +16,11 @@ class ActivityController extends BaseController
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['controller'].':show', array(
-            'activity' => $activity,
-            'preview' => $preview,
-        ));
+        $container = $this->get('activity_runtime_container');
+        $container->initActivityProxy($activity);
+        $activity['preview'] = $preview;
+        return $container->show($activity);
     }
 
     public function previewAction($task)
