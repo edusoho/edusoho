@@ -90,7 +90,7 @@ abstract class BaseRegister
 
     protected function beforeSave($registration, $user = array())
     {
-        $registration = $this->generateParterAuthUser($registration);
+        $registration = $this->generatePartnerAuthUser($registration);
 
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
@@ -248,7 +248,7 @@ abstract class BaseRegister
         return $inviteUser;
     }
 
-    private function generateParterAuthUser($registration)
+    private function generatePartnerAuthUser($registration)
     {
         if ($this->getAuthService()->hasPartnerAuth()) {
             // 从discuz中注册过来

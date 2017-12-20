@@ -99,7 +99,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
         $this->getEmailRegistDecoder()->register($registration);
     }
 
-    public function testGenerateParterAuthUserWithDiscuzRegister()
+    public function testGeneratePartnerAuthUserWithDiscuzRegister()
     {
         $authService = $this->mockBiz(
             'User:AuthService',
@@ -121,7 +121,7 @@ class EmailRegistDecoderImplTest extends BaseTestCase
 
         $result = ReflectionUtils::invokeMethod(
             $this->getEmailRegistDecoder(),
-            'generateParterAuthUser',
+            'generatePartnerAuthUser',
             array($registration)
         );
 
