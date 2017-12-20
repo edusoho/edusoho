@@ -530,6 +530,16 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     $file['metas2'] = $file['metas']['levels'];
                 }
 
+                if (isset($file['metas']['audiolevels'])) {
+                    foreach ($file['metas']['audiolevels'] as $key => $value) {
+                        $value['type'] = $key;
+                        $value['cmd']['hlsKey'] = $file['metas']['audiolevels'][$key]['hlsKey'];
+                        $file['audioMetas']['levels'][$key] = $value;
+                    }
+
+                    $file['audioMetas2'] = $file['audioMetas']['levels'];
+                }
+
                 if (isset($file['directives']['watermarks'])) {
                     $file['convertParams']['hasVideoWatermark'] = 1;
                 }
