@@ -15,12 +15,6 @@ define(function(require, exports, module) {
             var mainheight = $(this).contents().find("body").outerHeight();
             $(this).height(mainheight);
         });
-
-        var $themeEditContent = $('#theme-edit-content');
-        $themeEditContent.on("click", '.check-box', function(event){
-            themeManage.getElement().trigger('save_config');
-            return false;
-        });
     };
 
 });

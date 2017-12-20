@@ -36,9 +36,6 @@
             {% set selectOptions = {4: 4, 8: 8, 12: 12} %}
             <select class="form-control width-input-large" name="count">
               {{ select_options(selectOptions, config.count|default(4)) }}
-              {# <option value="4">4</option>
-              <option value="8">8</option>
-              <option value="12">12</option> #}
             </select>
           </div>
         </div>

@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     exports.run = function() {
-        var $themeEditContent = $('#theme-edit-content');
+      var $themeEditContent = $('#theme-edit-content');
       $themeEditContent.on("change", '#topNavNum', function(event){
         if (!validateTopNavNum($(this))) {
           return;

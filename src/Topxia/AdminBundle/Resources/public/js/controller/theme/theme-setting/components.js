@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         itemSelector: '.theme-edit-item',
         onDrop: function (item, container, _super) {
           _super(item, container);
-          $themeEditContent.trigger('save_sort', getConfig());
+          $themeEditContent.trigger('save_config', getConfig());
         },
       });
 
@@ -52,7 +52,7 @@ define(function(require, exports, module) {
       $themeEditContent.on("save_part_config", function(event, data){
         componentSetting[data.code] = $.extend(componentSetting[data.code], data);
         $("#"+ componentSetting[data.code]['id']).find('.col-md-4').eq(1).text(componentSetting[data.code].title);
-        $themeEditContent.trigger('save_sort', getConfig());
+        $themeEditContent.trigger('save_config', getConfig());
       });
 
     }
