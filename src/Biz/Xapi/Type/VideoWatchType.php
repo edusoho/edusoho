@@ -39,6 +39,6 @@ class VideoWatchType extends Type
 
     public function packages($statements)
     {
-        // TODO: Implement packages() method.
+
     }
 }

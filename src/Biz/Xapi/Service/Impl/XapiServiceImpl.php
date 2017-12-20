@@ -92,6 +92,11 @@ class XapiServiceImpl extends BaseService implements XapiService
         return $this->getActivityWatchLogDao()->get($id);
     }
 
+    public function findWatchLogsByIds($ids)
+    {
+        return $this->getActivityWatchLogDao()->findByIds($ids);
+    }
+
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0)
     {
         return $this->getActivityWatchLogDao()->getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush);

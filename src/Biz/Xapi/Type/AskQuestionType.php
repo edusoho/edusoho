@@ -82,6 +82,7 @@ class AskQuestionType extends Type
             }
         }
         $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
+        $resources = ArrayToolkit::index($resources, 'id');
 
         $sdk = $this->createXAPIService();
         $pushStatements = array();
