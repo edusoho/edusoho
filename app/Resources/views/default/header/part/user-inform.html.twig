@@ -2,12 +2,12 @@
   <a class="dropdown-toggle inform-dropdown-toggle" data-toggle="dropdown"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}<span class="inform-dropdown-toggle__num cd-badge cd-badge-danger {% if app.user.newNotificationNum + app.user.newMessageNum > 9 %} inform-dropdown-toggle__num--big {% endif %}">{{ app.user.newNotificationNum + app.user.newMessageNum }}</span>{% endif %}</a>
   <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
     <div class="clearfix inform-dropdown-head" role="tablist">
-      <a class="inform-dropdown-head__tab js-inform-tab active" href="#notification" role="tab" data-toggle="tab" id="newNotification">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="inform-dropdown-dot"></span>{% endif %}</a>
-      <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab" id="conversation">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="inform-dropdown-dot"></span>{% endif %}</a>
+      <a class="inform-dropdown-head__tab js-inform-tab active" href="#notification" role="tab" data-toggle="tab" data-type="newNotification">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="inform-dropdown-dot"></span>{% endif %}</a>
+      <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab" data-type="conversation">{{ 'user.btn.send_message'|trans }}{% if app.user.newMessageNum > 0 %}<span class="inform-dropdown-dot"></span>{% endif %}</a>
     </div>
     <div class="tab-content">
       <div class="notification-content tab-pane active" role="tabpanel" id="notification">
-        <div class="inform-dropdown-body">
+        <div class="inform-dropdown-body js-inform-dropdown-body">
           {% if app.user.newNotificationNum > 0 %}
             <div class="inform-loading js-inform-loading"></div>
             <div class="js-inform-newNotification"></div>
@@ -20,11 +20,11 @@
           {% endif %}
         </div>
         <div class="inform-dropdown-foot">
-          <a class="cd-link-gray" href="{{ path('notification') }}" target="_blank">{{ 'homepage.header.check_all_notifications'|trans }}</a>
+          <a class="cd-link-gray" href="{{ path('notification') }}">{{ 'homepage.header.check_all_notifications'|trans }}</a>
         </div>
       </div>
       <div class="message-content tab-pane" role="tabpanel" id="message">
-        <div class="inform-dropdown-body">
+        <div class="inform-dropdown-body js-inform-dropdown-body">
           {% if app.user.newMessageNum > 0 %}
             <div class="inform-loading js-inform-loading"></div>
             <div class="js-inform-conversation"></div>
@@ -37,7 +37,7 @@
           {% endif %}
         </div>
         <div class="inform-dropdown-foot">
-          <a class="cd-link-gray" href="{{ path('message') }}" target="_blank">{{ 'homepage.header.check_all_messages'|trans }}</a>
+          <a class="cd-link-gray" href="{{ path('message') }}">{{ 'homepage.header.check_all_messages'|trans }}</a>
         </div>
       </div>
     </div>
