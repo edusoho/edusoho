@@ -17,15 +17,15 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                     'returnValue' => array(
                         array(
                             'classroomId' => '1',
-                            'userId' => '1'
+                            'userId' => '1',
                         ),
                         array(
                             'classroomId' => '2',
-                            'userId' => '1'
+                            'userId' => '1',
                         ),
                         array(
                             'classroomId' => '3',
-                            'userId' => '1'
+                            'userId' => '1',
                         ),
                     ),
                     'withParams' => array(
@@ -52,7 +52,7 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                             'id' => '3',
                         ),
                     ),
-                    'withParams' => array(array(1,2,3))
+                    'withParams' => array(array(1, 2, 3)),
                 ),
                 array(
                     'functionName' => 'findActiveCoursesByClassroomId',
@@ -70,7 +70,7 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                             'taskNum' => '1',
                         ),
                     ),
-                    'withParams' => array(1)
+                    'withParams' => array(1),
                 ),
                 array(
                     'functionName' => 'findActiveCoursesByClassroomId',
@@ -80,14 +80,13 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                             'taskNum' => '3',
                         ),
                     ),
-                    'withParams' => array(2)
+                    'withParams' => array(2),
                 ),
                 array(
                     'functionName' => 'findActiveCoursesByClassroomId',
                     'returnValue' => array(),
                     'withParams' => array(3),
                 ),
-               
             )
         );
 
@@ -102,7 +101,7 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                             'userId' => 1,
                             'courseIds' => array(11, 12, 13),
                         ),
-                    )
+                    ),
                 ),
                 array(
                     'functionName' => 'countTaskResults',
@@ -112,7 +111,7 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                             'userId' => 1,
                             'courseIds' => array(14),
                         ),
-                    )
+                    ),
                 ),
                 array(
                     'functionName' => 'searchTaskResults',
@@ -120,17 +119,17 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                         array(
                             'id' => '1',
                             'status' => 'finish',
-                            'courseTaskId' => '11'
+                            'courseTaskId' => '11',
                         ),
                         array(
                             'id' => '2',
                             'status' => 'start',
-                            'courseTaskId' => '12'
+                            'courseTaskId' => '12',
                         ),
                         array(
                             'id' => '3',
                             'status' => 'finish',
-                            'courseTaskId' => '13'
+                            'courseTaskId' => '13',
                         ),
                     ),
                     'withParams' => array(
@@ -141,7 +140,7 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                         array('finishedTime' => 'ASC'),
                         0,
                         3,
-                    )
+                    ),
                 ),
                 array(
                     'functionName' => 'searchTaskResults',
@@ -149,18 +148,18 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
                         array(
                             'id' => '4',
                             'status' => 'finish',
-                            'courseTaskId' => '14'
+                            'courseTaskId' => '14',
                         ),
                     ),
                     'withParams' => array(
                         array(
                             'userId' => 1,
-                            'courseIds' => array(14)
+                            'courseIds' => array(14),
                         ),
                         array('finishedTime' => 'ASC'),
                         0,
                         1,
-                    )
+                    ),
                 ),
             )
         );
@@ -222,7 +221,7 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
             'count' => '3',
             'missionCount' => '2',
         );
-        
+
         $datatag = new ClassroomMissionsDataTag();
         $studyMission = $datatag->getData($arguments);
         $studyMission1 = array(
@@ -243,6 +242,5 @@ class ClassroomMissionsDataTagTest extends BaseTestCase
         );
         $this->assertEquals(2, count($studyMission));
         $this->assertArrayEquals($arr1, $studyMission1);
-        
     }
 }

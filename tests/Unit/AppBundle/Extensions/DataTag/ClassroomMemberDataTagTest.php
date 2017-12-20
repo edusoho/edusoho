@@ -19,7 +19,7 @@ class ClassroomMemberDataTagTest extends BaseTestCase
                             'id' => '1',
                             'classroomId' => '1',
                             'userId' => '11',
-                            'role' => '|student|'
+                            'role' => '|student|',
                         ),
                     ),
                     'withParams' => array(1, 11),

@@ -28,7 +28,7 @@ class CourseAnnouncementsDataTagTest extends BaseTestCase
                             'targetType' => 'course',
                             'url' => 'http://www.dev-edusoho.com/course/1',
                             'contents' => 'course contents 12',
-                        )
+                        ),
                     ),
                     'withParams' => array(
                         array(

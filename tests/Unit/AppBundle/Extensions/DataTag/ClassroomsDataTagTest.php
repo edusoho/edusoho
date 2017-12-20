@@ -24,15 +24,15 @@ class ClassroomsDataTagTest extends BaseTestCase
                             'id' => 2,
                             'status' => 'published',
                             'teacherIds' => array(1),
-                        )
+                        ),
                     ),
                     'withParams' => array(
                         array(
-                            'status' => 'published'
+                            'status' => 'published',
                         ),
                         array('createdTime' => 'desc'),
                         0,
-                        2
+                        2,
                     ),
                 ),
             )
@@ -51,7 +51,7 @@ class ClassroomsDataTagTest extends BaseTestCase
                         ),
                     ),
                     'withParams' => array(
-                        array(1)
+                        array(1),
                     ),
                 ),
             )
