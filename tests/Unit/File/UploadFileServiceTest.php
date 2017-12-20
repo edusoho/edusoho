@@ -60,6 +60,18 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioServiceStatus()
     {
+        $settingParams = array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'cloud_access_key' => 'abbbcc',
+                    'cloud_secret_key' => 'testddd',
+                ),
+            ),
+        );
+        $this->mockBiz('System:SettingService', $settingParams);
+
         $params = array(
             array(
                 'functionName' => 'getAudioServiceStatus',
