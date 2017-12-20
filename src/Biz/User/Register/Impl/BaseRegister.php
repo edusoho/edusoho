@@ -90,6 +90,8 @@ abstract class BaseRegister
 
     protected function beforeSave($registration, $user = array())
     {
+        $registration = $this->generateParterAuthUser($registration);
+
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
                 $user[$attr] = $registration[$attr];
@@ -118,16 +120,16 @@ abstract class BaseRegister
             $user['orgCode'] = $registration['orgCode'];
         }
 
-        return $user;
+        return array($user, $registration);
     }
 
     protected function afterSave($registration, $user)
     {
         //　绑定 discuz　用户
-        if (!empty($registration['parterAuthUser']['id'])) {
+        if (!empty($registration['partnerAuthUser']['id'])) {
             $this->getUserService()->bindUser(
                 $this->getAuthService()->getPartnerName(),
-                $registration['parterAuthUser']['id'],
+                $registration['partnerAuthUser']['id'],
                 $user['id'],
                 null
             );
@@ -194,9 +196,7 @@ abstract class BaseRegister
 
     private function createUser($registration)
     {
-        $registration['parterAuthUser'] = $this->generateParterAuthUser($registration);
-
-        $user = $this->beforeSave($registration);
+        list($user, $registration) = $this->beforeSave($registration);
 
         return array($this->getUserDao()->create($user), $registration);
     }
@@ -250,17 +250,19 @@ abstract class BaseRegister
 
     private function generateParterAuthUser($registration)
     {
-        $authUser = array();
         if ($this->getAuthService()->hasPartnerAuth()) {
             // 从discuz中注册过来
             if (!empty($registration['token']['userId'])) {
                 $registration['type'] = 'discuz';
-                $authUser = array('id' => $registration['token']['userId']);
+                $registration['partnerAuthUser'] = array(
+                    'id' => $registration['token']['userId'],
+                );
             } else { // 非discuz注册
-                $authUser = $this->getAuthService()->getAuthProvider()->register($registration);
+                $provider = $this->getAuthService()->getAuthProvider();
+                $registration['partnerAuthUser'] = $provider->register($registration);
             }
         }
 
-        return $authUser;
+        return $registration;
     }
 }

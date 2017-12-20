@@ -3,6 +3,7 @@
 namespace Tests\Unit\User;
 
 use Biz\BaseTestCase;
+use AppBundle\Common\ReflectionUtils;
 
 class EmailRegistDecoderImplTest extends BaseTestCase
 {
@@ -96,6 +97,37 @@ class EmailRegistDecoderImplTest extends BaseTestCase
             'truename' => '陈列',
         );
         $this->getEmailRegistDecoder()->register($registration);
+    }
+
+    public function testGenerateParterAuthUserWithDiscuzRegister()
+    {
+        $authService = $this->mockBiz(
+            'User:AuthService',
+            array(
+                array(
+                    'functionName' => 'hasPartnerAuth',
+                    'returnValue' => true,
+                ),
+            )
+        );
+        $registration = array(
+            'email' => 'hello@howzhi.com',
+            'nickname' => 'hello',
+            'password' => '123',
+            'token' => array(
+                'userId' => 1357,
+            ),
+        );
+
+        $result = ReflectionUtils::invokeMethod(
+            $this->getEmailRegistDecoder(),
+            'generateParterAuthUser',
+            array($registration)
+        );
+
+        $this->assertEquals(1357, $result['partnerAuthUser']['id']);
+        $this->assertEquals('discuz', $result['type']);
+        $authService->shouldHaveReceived('hasPartnerAuth')->times(1);
     }
 
     public function testRegisterWithDiscuz()
