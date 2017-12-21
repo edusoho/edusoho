@@ -62,8 +62,8 @@ $('.js-inform-tab').click((event) => {
 })
 
 $(document).ajaxSend((event, xhr, options) => {
-  const isNotificationUrl = options.url === "/api/newNotifications";
-  const isMessageUrl = options.url === "/api/conversations";
+  const isNotificationUrl = options.url === '/api/newNotifications';
+  const isMessageUrl = options.url === '/api/conversations';
   // 加载loading效果
   if (isNotificationUrl || isMessageUrl) {
     const $dom = $('.js-inform-loading');
