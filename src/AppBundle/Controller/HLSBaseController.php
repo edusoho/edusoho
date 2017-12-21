@@ -10,7 +10,7 @@ use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class HLSVideoController extends BaseController
+abstract class HLSBaseController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
     {
