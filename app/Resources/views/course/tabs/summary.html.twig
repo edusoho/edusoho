@@ -11,7 +11,7 @@
 <div class="es-piece">
   <div class="piece-header">{{ 'course.introduction.course_introduction'|trans }}</div>
   <div class="piece-body p-lg clearfix">
-    {{ course.summary|default(courseSet.summary)|raw }}
+    {{ course.summary|cdn|default(courseSet.summary|cdn)|raw }}
   </div>
 </div>
 
