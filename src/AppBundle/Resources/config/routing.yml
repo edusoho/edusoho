@@ -250,6 +250,10 @@ hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: AppBundle:HLS:playlist}
 
+hls_audio_playlist:
+    path: /hls/{id}/audio/playlist/{token}.m3u8
+    defaults: { _controller: AppBundle:HLS:audioPlaylist}
+
 player_local_media:
     path: /player/{id}/file/{token}
     defaults: { _controller: AppBundle:Player:localMedia}
@@ -2062,6 +2066,11 @@ course_set_manage_delete_materials_show:
 course_set_manage_delete_materials:
    path:  /course_set/{id}/manage/delete/materials
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
+   methods: [POST]
+
+course_set_manage_retry_transcode:
+   path:  /course_set/{id}/manage/file/{fileId}/retry_transcode
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:retryTranscode }
    methods: [POST]
 
 

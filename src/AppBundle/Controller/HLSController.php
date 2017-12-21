@@ -14,6 +14,19 @@ class HLSController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
     {
+        return $this->commonPlayList($request, $id, $token);
+    }
+
+    public function audioPlaylistAction(Request $request, $id, $token)
+    {
+        return $this->commonPlayList($request, $id, $token, 'audio');
+    }
+
+    /**
+     * @param $type video or audio
+     */
+    protected function commonPlayList(Request $request, $id, $token, $type = 'video')
+    {
         $line = $request->query->get('line', null);
         $format = $request->query->get('format', '');
         $levelParam = $request->query->get('level', '');
@@ -40,8 +53,11 @@ class HLSController extends BaseController
 
         $streams = array();
         $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
+
+        $metas = ($type == 'video') ? $file['metas2'] : $file['audioMetas2'];
+
         foreach (array('sd', 'hd', 'shd') as $level) {
-            if (empty($file['metas2'][$level])) {
+            if (empty($metas[$level])) {
                 continue;
             }
 
@@ -55,21 +71,8 @@ class HLSController extends BaseController
                     'duration' => 3600,
                 );
 
-                if (!empty($token['data']['replayId'])) {
-                    $tokenFields['data']['replayId'] = $token['data']['replayId'];
-                    $tokenFields['data']['type'] = $token['data']['type'];
-                }
-
                 if (!empty($token['userId'])) {
                     $tokenFields['userId'] = $token['userId'];
-                }
-
-                if (isset($token['data']['watchTimeLimit'])) {
-                    $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
-                }
-
-                if (isset($token['data']['hideBeginning'])) {
-                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);

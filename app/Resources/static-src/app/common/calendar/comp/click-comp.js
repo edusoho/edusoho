@@ -8,14 +8,21 @@ export default class ClickComp extends Comp {
     this._generateParamNamesPerUrl();
   }
 
-  _getParamNames() {
-    return this.paramNames;
+  registerAction(options) {
+    let current = this;
+    options['eventClick'] = function(event, jsEvent, view) {
+      window.open(current._generateClickUrl(event));
+    }
+    return options;
   }
 
   _appendAdditionalAttr(event) {
-    event['url'] = this._generateClickUrl(event);
     event['className'] = ['calendar_clickable'];
     return event;
+  }
+
+  _getParamNames() {
+    return this.paramNames;
   }
 
   _getParamPrefix() {

@@ -171,9 +171,11 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\Xapi\XapiServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
-
         $biz->boot();
 
+        if (empty($this->pluginConfigurationManager->getActiveThemeName())) {
+            $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
+        }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
     }
 

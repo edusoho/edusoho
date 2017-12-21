@@ -31,7 +31,7 @@
     {% endif %}
   </td>
   {% if filter == 'normal' %}
-    <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum }}</a></td>
+    <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum|default(0) }}</a></td>
   {% endif %}
   <td>{{ dict_macro.courseStatus( courseSet.status) }}</td>
 
