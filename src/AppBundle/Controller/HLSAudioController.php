@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-class HLSVideoController extends HLSBaseController
+class HLSAudioController extends HLSBaseController
 {
     protected function getMediaAttr()
     {
