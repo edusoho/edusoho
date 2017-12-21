@@ -126,7 +126,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 
     /**
@@ -134,7 +134,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskResultService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskResultService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskResultService');
     }
 
     /**
@@ -142,7 +142,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 
     /**
