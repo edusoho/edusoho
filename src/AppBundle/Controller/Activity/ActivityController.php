@@ -49,11 +49,24 @@ class ActivityController extends BaseController
     public function createAction($type, $courseId)
     {
         $activity = array(
+            'id' => 0,
             'mediaType' => $type,
             'fromCourseId' => $courseId
         );
         $container = $this->get('activity_runtime_container');
         return $container->create($activity);
+    }
+
+    public function customManageRouteAction($fromCourseId, $mediaType, $id, $routeName)
+    {
+        $activity = array(
+            'id' => $id,
+            'mediaType' => $mediaType,
+            'fromCourseId' => $fromCourseId,
+        );
+
+        $container = $this->get('activity_runtime_container');
+        return $container->customRoute($activity, $routeName);
     }
 
     public function triggerAction(Request $request, $courseId, $activityId)

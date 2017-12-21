@@ -54,7 +54,7 @@ class ActivityProxy
     public function renderPhp($absolutePath)
     {
         if (!file_exists($absolutePath)) {
-            throw new \RuntimeException('The activity not found.');
+            throw new \RuntimeException('The php file not found.');
         }
 
         return require $absolutePath;
@@ -89,7 +89,7 @@ class ActivityProxy
     private function getAbsolutePath($extension, $relativePath)
     {
         if ($extension === 'php') {
-            return $this->activityDir.DIRECTORY_SEPARATOR.$relativePath;
+            return implode(DIRECTORY_SEPARATOR, array($this->activityDir, 'src', $relativePath));
         } else {
             return $this->getViewPath($relativePath);
         }

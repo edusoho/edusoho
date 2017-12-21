@@ -3,6 +3,7 @@
 namespace AppBundle\Component\Activity;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
@@ -33,6 +34,7 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
         $this->biz = $container->get('biz');
         $this->activitiesDir = $container->getParameter('edusoho.activities_dir');
         $this->request = $container->get('request');
+        self::$instance = $this;
     }
 
     public function show($activity)
@@ -56,6 +58,14 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
         // TODO: Implement update() method.
     }
 
+    public function customRoute($activity, $routeName)
+    {
+        $activityProxy = $this->createActivityProxy($activity);
+        return $activityProxy->renderRoute($routeName, $activityProxy, array(
+            'activity' => $activity,
+        ));
+    }
+
     /**
      * @return \AppBundle\Component\Activity\ActivityRuntimeContainerV1
      */
@@ -67,15 +77,6 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function getActivityProxy()
     {
         return $this->activityProxy;
-    }
-
-    public function renderPhp($realPath)
-    {
-        if (!file_exists($realPath)) {
-            throw new \RuntimeException('The activity not found.');
-        }
-
-        return require $realPath;
     }
 
     private function createActivityProxy($activity)
@@ -101,6 +102,11 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function createService($service)
     {
         return $this->biz->service($service);
+    }
+
+    public function createJsonResponse($data = null, $status = 200, $headers = array())
+    {
+        return new JsonResponse($data, $status, $headers);
     }
 
     public function render($view, array $parameters = array(), Response $response = null)

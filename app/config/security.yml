@@ -70,6 +70,7 @@ security:
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }
         - { path: ^/classroom/\d+/manage/, role: ROLE_USER }
+        - { path: ^/course/\d+/manage, role: ROLE_TEACHER }
         - { path: ^/admin/course, role: ROLE_BACKEND }
         - { path: ^/admin/user, role: ROLE_BACKEND }
         - { path: ^/admin/app, role: ROLE_BACKEND }

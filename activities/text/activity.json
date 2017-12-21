@@ -12,6 +12,7 @@
   "routes": {
     "create": "create_or_update.html.twig",
     "show": "show.html.twig",
-    "update": "update.html.twig"
+    "update": "update.html.twig",
+    "draft": "draft.php"
   }
 }

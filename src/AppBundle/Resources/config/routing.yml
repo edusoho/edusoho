@@ -1533,6 +1533,11 @@ course_text_activity_auto_save:
     defaults: { _controller: AppBundle:Activity/Text:autoSave }
     methods: [POST]
 
+course_manage_activity_manage_custom_route:
+    path: /course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}
+    defaults: { _controller: AppBundle:Activity/Activity:customManageRoute }
+    methods: [POST]
+
 #task
 course_task_show:
     path:  /course/{courseId}/task/{id}/show
