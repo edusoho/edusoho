@@ -37,7 +37,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $setting = $this->getSettingService()->get('storage');
 
         if (!empty($setting['cloud_access_key']) || !empty($setting['cloud_secret_key'])) {
-            $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();   
+            $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
         }
 
         return !empty($audioService['audioService']) ? $audioService['audioService'] : 'notAllowed';
@@ -83,10 +83,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         );
 
         $count = $this->getUploadFileDao()->count($conditions);
-        
+
         for ($start = 0; $start < $count; $start = $start + 100) {
             $videofiles = $this->getUploadFileDao()->search($conditions, null, $start, 100);
-            
+
             $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
         }
         $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
@@ -288,7 +288,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileInitDao()->update($params['id'], array('status' => 'ok'));
 
-            if ($file['storage'] == 'cloud' && $file['type'] == 'video') {
+            if ('cloud' == $file['storage'] && 'video' == $file['type']) {
                 $fields['audioConvertStatus'] = 'doing';
             }
 
