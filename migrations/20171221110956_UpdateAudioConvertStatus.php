@@ -21,6 +21,5 @@ class UpdateAudioConvertStatus extends Migration
      */
     public function down()
     {
-
     }
 }
