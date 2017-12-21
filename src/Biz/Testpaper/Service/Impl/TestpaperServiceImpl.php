@@ -297,6 +297,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->get($id);
     }
 
+    public function findTestpaperResultsByIds($ids)
+    {
+        return $this->getTestpaperResultDao()->findByIds($ids);
+    }
+
     public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
     {
         return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
@@ -365,7 +370,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpapersScore($conditions)
     {
-        return $this->getTestpaperResultDao()->sumScoreByParames($conditions);
+        return $this->getTestpaperResultDao()->sumScoreByParams($conditions);
     }
 
     public function buildTestpaper($fields, $type)

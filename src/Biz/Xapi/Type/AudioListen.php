@@ -47,6 +47,7 @@ class AudioListen extends Type
 
         $watchLogIds = ArrayToolkit::column($statements, 'target_id');
         $watchLogs = $this->getXapiService()->findWatchLogsByIds($watchLogIds);
+        $watchLogs = ArrayToolkit::index($watchLogs, 'id');
 
         $taskIds = ArrayToolkit::column($watchLogIds, 'task_id');
         $tasks = $this->getTaskService()->findTasksByIds($taskIds);
