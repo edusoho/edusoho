@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import notify from 'common/notify';
 import Api from 'common/api';
 
 export default class HeaderNav {
