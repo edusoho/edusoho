@@ -31,7 +31,7 @@ class Setting extends AbstractResource
     {
         $registerSetting = $this->getSettingService()->get('auth', array('register_mode' => 'closed', 'email_enabled' => 'closed'));
         $registerMode = $registerSetting['register_mode'];
-        $isEmailVerifyEnable = $registerSetting['email_enabled'] == 'opened' ? true : false;
+        $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && $registerSetting['email_enabled'] == 'opened';
         $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
         $captchaEnabled = $level === 'none' ? false : true;

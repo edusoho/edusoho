@@ -4,7 +4,6 @@
 <header class="es-header navbar">
   {% include 'default/header/logo.html.twig' %}
   <nav class="collapse navbar-collapse">
-    {# 导航栏模块 #}
     <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
       {% include 'default/top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: false} %}
     </ul>

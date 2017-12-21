@@ -250,6 +250,10 @@ hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: AppBundle:HLS:playlist}
 
+hls_audio_playlist:
+    path: /hls/{id}/audio/playlist/{token}.m3u8
+    defaults: { _controller: AppBundle:HLS:audioPlaylist}
+
 player_local_media:
     path: /player/{id}/file/{token}
     defaults: { _controller: AppBundle:Player:localMedia}

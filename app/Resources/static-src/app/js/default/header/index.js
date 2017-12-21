@@ -74,13 +74,17 @@ $(document).ajaxSend((event, xhr, options) => {
   }
 });
 
-Api.newNotification.search().then((res) => {
-  const $newNotification = $('.js-inform-newNotification');
-  informShow($newNotification, res, true);
- }).catch((res) => {
-  // 异常捕获
-  console.log('catch', res.responseJSON.error.message);
-})
+const $informItem = $('.js-user-inform');
+const isShow = $informItem.css('display') === 'block';
+if ($informItem.length && isShow) {
+  Api.newNotification.search().then((res) => {
+    const $newNotification = $('.js-inform-newNotification');
+    informShow($newNotification, res, true);
+   }).catch((res) => {
+    // 异常捕获
+    console.log('catch', res.responseJSON.error.message);
+  })
+}
 
 const informShow = ($dom, res, flag) => {
   const $loading = $('.tab-pane.active').find('.js-inform-loading');
