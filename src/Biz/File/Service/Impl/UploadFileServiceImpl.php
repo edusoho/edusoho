@@ -37,7 +37,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $setting = $this->getSettingService()->get('storage');
 
         if (!empty($setting['cloud_access_key']) || !empty($setting['cloud_secret_key'])) {
-            $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();   
+            $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
         }
 
         return !empty($audioService) ? $audioService['audioService'] : 'notAllowed';
