@@ -2,7 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -75,9 +74,9 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                 'userId' => $userId,
                 'courseIds' => $courseIds,
             );
-            
+
             $taskCount = $this->getTaskResultService()->countTaskResults($learnedConditions);
-           
+
             $tasks = $this->getTaskResultService()->searchTaskResults(
                 $learnedConditions,
                 array('finishedTime' => 'ASC'),

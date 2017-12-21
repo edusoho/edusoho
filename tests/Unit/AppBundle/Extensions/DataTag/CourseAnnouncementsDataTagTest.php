@@ -8,7 +8,7 @@ use AppBundle\Extensions\DataTag\CourseAnnouncementsDataTag;
 class CourseAnnouncementsDataTagTest extends BaseTestCase
 {
     public function testGetData()
-    {         
+    {
         $this->mockBiz(
             'Announcement:AnnouncementService',
             array(
