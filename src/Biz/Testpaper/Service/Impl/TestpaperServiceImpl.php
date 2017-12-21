@@ -919,6 +919,35 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             PHP_INT_MAX
         );
 
+        return $this->calculateResultsFirstAndMaxScore($results);
+    }
+
+    public function findFirstResultsGroupByUserId($testId, $activityId)
+    {
+        return $this->getTestpaperResultDao()->findFirstResultsGroupByUserId($testId, $activityId);
+    }
+
+    public function findResultsByTestIdAndActivityId($testId, $activityId)
+    {
+        $conditions = array(
+            'testId' => $testId,
+            'lessonId' => $activityId,
+            'type' => 'testpaper',
+            'status' => 'finished',
+        );
+
+        $results = $this->searchTestpaperResults(
+            $conditions,
+            array('beginTime' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        return $this->calculateResultsFirstAndMaxScore($results);
+    }
+
+    protected function calculateResultsFirstAndMaxScore($results)
+    {
         if (empty($results)) {
             return array();
         }

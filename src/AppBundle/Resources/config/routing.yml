@@ -2233,6 +2233,14 @@ course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
+course_manage_testpaper_result_next_check:
+  path: /course/{id}/manage/testpaper/result/next/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultNextCheck }
+
+course_manage_testpaper_result_graph:
+  path: /course/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultGraph }
+
 testpaper_check:
   path: /testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }

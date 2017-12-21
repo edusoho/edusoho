@@ -1,0 +1,18 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['libs/echarts.js','app/js/testpaper-manage/result/index.js']) %}
+
+{% block title %}
+  {{ testpaper.name }}的成绩分布图
+{% endblock %}
+
+{% block body %}
+<div>平均分：{{ analysis.avg|default(0) }}分 最高分：{{ analysis.maxScore|default(0) }}分 合格率：{{analysis.passPercent|default(0) }}%</div>
+<div class="col-md-12">  
+  <div id="line-data" style="width: 100%;height:400px;"></div>
+  <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>  
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

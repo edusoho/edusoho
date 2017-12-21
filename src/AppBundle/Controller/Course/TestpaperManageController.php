@@ -86,6 +86,15 @@ class TestpaperManageController extends BaseController
         ));
     }
 
+    public function resultGraphAction(Request $request, $id, $activityId)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+        
+        return $this->forward('AppBundle:Testpaper/Manage:resultGraph', array(
+            'activityId' => $activityId,
+        ));
+    }
+
     /**
      * @return CourseService
      */

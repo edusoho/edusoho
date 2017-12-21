@@ -45,7 +45,7 @@
 </style>
 
 <div class="clearfix testpaper-list">
-  <div class=" testpaper-info col-md-9">
+  <div class=" testpaper-info col-md-6">
     <div>
       <h3>
         <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'all'}) }}">{{ testpaper.name }}</a>
@@ -55,6 +55,12 @@
     <div class="mvm testpaper-meta">
       <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ testpaper.createdTime|date('Y-m-d H:i') }}</span>
     </div>
+  </div>
+
+  <div class="col-md-3">
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:'128', activityId:'816'}) }}">成绩分布</a>
+
+    <a href="" {% if targetResultInfo.reviewing|default(0) == 0 %}class="disabled"{% endif %}><i class="es-icon es-icon-check"></i></a>
   </div>
 
   <div class="result-info col-md-3 text-center">

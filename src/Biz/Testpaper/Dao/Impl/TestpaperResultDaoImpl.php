@@ -42,6 +42,13 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->db()->fetchAll($sql, array_merge(array($testId), $courseIds)) ?: array();
     }
 
+    public function findFirstResultsGroupByUserId($testId, $activityId)
+    {
+        $sql = "SELECT userId,min(beginTime) as fistBegin,score,passedStatus,testId From {$this->table} WHERE testId = ? AND status = 'finished' and lessonId = ? group by userId";
+
+        return $this->db()->fetchAll($sql, array($testId, $activityId)) ?: array();
+    }
+
     public function sumScoreByParames($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
