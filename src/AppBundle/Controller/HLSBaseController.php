@@ -253,12 +253,14 @@ abstract class HLSBaseController extends BaseController
     }
 
     /**
-     * return audioMetas2 或 metas2
+     * 取被播放m3u8的属性
      */
     abstract protected function getMediaAttr();
 
     /**
-     * return audio 或 video
+     * 用于生成路由,
+     *   hls_{$this->getRoutingPrefix()}clef
+     *   hls_{$this->getRoutingPrefix()}stream
      */
     abstract protected function getRoutingPrefix();
 

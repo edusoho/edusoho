@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 class HLSVideoController extends HLSBaseController
 {
     /**
-     * return audioMetas2 或 metas2
+     * 取被播放m3u8的属性
      */
     protected function getMediaAttr()
     {
@@ -13,7 +13,9 @@ class HLSVideoController extends HLSBaseController
     }
 
     /**
-     * video使用老路由
+     * 用于生成路由,
+     *   hls_{$this->getRoutingPrefix()}clef
+     *   hls_{$this->getRoutingPrefix()}stream
      */
     protected function getRoutingPrefix()
     {
