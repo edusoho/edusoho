@@ -54,7 +54,7 @@ class HLSController extends BaseController
         $streams = array();
         $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
 
-        $metas = ($type == 'video') ? $file['metas2'] : $file['audioMetas2'];
+        $metas = ('video' == $type) ? $file['metas2'] : $file['audioMetas2'];
 
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($metas[$level])) {
@@ -104,7 +104,7 @@ class HLSController extends BaseController
         $api = CloudAPIFactory::create('leaf');
 
         //新版api需要返回json形式的m3u8
-        if (strtolower($format) == 'json') {
+        if ('json' == strtolower($format)) {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
 
             return $this->createJsonResponse($playlist);
