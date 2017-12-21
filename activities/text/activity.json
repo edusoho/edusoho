@@ -10,7 +10,7 @@
     "value": "es-icon es-icon-graphicclass"
   },
   "routes": {
-    "create": "create.php",
+    "create": "create_or_update.html.twig",
     "show": "show.html.twig",
     "update": "update.html.twig"
   }

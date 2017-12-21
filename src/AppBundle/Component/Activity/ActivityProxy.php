@@ -4,32 +4,67 @@ namespace AppBundle\Component\Activity;
 
 class ActivityProxy
 {
-    public $routeName;
+    public $activityConfig;
 
-    private $activityConfig;
+    public $activityContext;
 
     private $activityDir;
+
+    /**
+     * @var \AppBundle\Component\Activity\ActivityRuntimeContainerV1
+     */
+    private $container;
 
     private $allowedExt = array(
         'php', 'html', 'twig'
     );
 
-    public function __construct($activity, $activityDir)
+    public function __construct(ActivityRuntimeContainerV1 $container, $activity, $activityDir)
     {
         $this->activityDir = $activityDir;
         $this->activityConfig = new ActivityConfig($activityDir.DIRECTORY_SEPARATOR.'activity.json');
+        $this->activityContext = new ActivityContext($container->getBiz(), $activity);
+        $this->container = $container;
     }
 
-    public function setRouteName($routeName)
+    public function renderRoute($routeName, ActivityProxy $activityProxy, $parameters = array())
     {
-        $this->routeName = $routeName;
+        $routeInfo = $activityProxy->getRouteInfo($routeName);
+        switch ($routeInfo['extension']) {
+            case 'php':
+                $resp = $this->renderPhp($routeInfo['absolutePath']);
+                break;
+            case 'html':
+            case 'twig':
+                $resp = $this->render($routeInfo['relativePath'], $parameters);
+                break;
+            default:
+                throw new \RuntimeException('Bad route info in activity');
+        }
+
+        return $resp;
     }
 
-    public function getRouteInfo()
+    public function render($relativePathView, array $parameters = array())
     {
-        if (!empty($this->activityConfig['routes']) && !empty($this->activityConfig['routes'][$this->routeName])) {
+        $parameters = array_merge(array('activityContext' => $this->activityContext), $parameters);
+        return $this->container->render($this->getViewPath($relativePathView), $parameters);
+    }
 
-            $relativePath = $this->activityConfig['routes'][$this->routeName];
+    public function renderPhp($absolutePath)
+    {
+        if (!file_exists($absolutePath)) {
+            throw new \RuntimeException('The activity not found.');
+        }
+
+        return require $absolutePath;
+    }
+
+    public function getRouteInfo($routeName)
+    {
+        if (!empty($this->activityConfig['routes']) && !empty($this->activityConfig['routes'][$routeName])) {
+
+            $relativePath = $this->activityConfig['routes'][$routeName];
             $pathInfo = pathinfo($relativePath);
 
             if (!in_array($pathInfo['extension'], $this->allowedExt)) {
@@ -38,26 +73,31 @@ class ActivityProxy
 
             return array(
                 'extension' => $pathInfo['extension'],
-                'realPath' => $this->getRealFilePath($pathInfo['extension'], $relativePath),
+                'absolutePath' => $this->getAbsolutePath($pathInfo['extension'], $relativePath),
                 'relativePath' => $relativePath,
             );
         } else {
-            $defaultRelativePath = 'resources'.DIRECTORY_SEPARATOR.$this->routeName.'.html';
+            $defaultRelativePath = $routeName.'.html';
             return array(
                 'extension' => 'html',
-                'realPath' => $this->getRealFilePath('html', $defaultRelativePath),
+                'absolutePath' => $this->getAbsolutePath('html', $defaultRelativePath),
                 'relativePath' => $defaultRelativePath,
             );
         }
     }
 
-    private function getRealFilePath($extension, $relativePath)
+    private function getAbsolutePath($extension, $relativePath)
     {
         if ($extension === 'php') {
             return $this->activityDir.DIRECTORY_SEPARATOR.$relativePath;
         } else {
-            return implode(DIRECTORY_SEPARATOR, array('@activity', $this->activityConfig['type'], 'resources', 'views', $relativePath));
+            return $this->getViewPath($relativePath);
         }
+    }
+
+    private function getViewPath($relativePath)
+    {
+        return implode(DIRECTORY_SEPARATOR, array('@activity', $this->activityConfig['type'], 'resources', 'views', $relativePath));
     }
 
 }

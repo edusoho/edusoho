@@ -8,7 +8,7 @@ interface ActivityRuntimeContainerInterface
     const ROUTE_CREATE = 'create';
     const ROUTE_UPDATE = 'update';
 
-    public function create();
+    public function create($activity);
 
     public function show($activity);
 

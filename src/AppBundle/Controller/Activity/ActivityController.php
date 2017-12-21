@@ -48,11 +48,12 @@ class ActivityController extends BaseController
 
     public function createAction($type, $courseId)
     {
-        $actionConfig = $this->getActivityConfig($type);
-
-        return $this->forward($actionConfig['controller'].':create', array(
-            'courseId' => $courseId,
-        ));
+        $activity = array(
+            'mediaType' => $type,
+            'fromCourseId' => $courseId
+        );
+        $container = $this->get('activity_runtime_container');
+        return $container->create($activity);
     }
 
     public function triggerAction(Request $request, $courseId, $activityId)

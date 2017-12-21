@@ -4,7 +4,6 @@ namespace AppBundle\Component\Activity;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
 {
@@ -18,9 +17,10 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
 
     public $activitiesDir;
 
+    /**
+     * @var \AppBundle\Component\Activity\ActivityProxy
+     */
     public $activityProxy;
-
-    public $activityConfig;
 
     /**
      * @var \Symfony\Component\HttpFoundation\Request
@@ -38,41 +38,27 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function show($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);
-        $activityProxy->setRouteName(ActivityRuntimeContainerInterface::ROUTE_SHOW);
-        return $this->renderRoute($activityProxy, array(
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_SHOW, $activityProxy, array(
             'activity' => $activity,
         ));
     }
 
-    private function renderRoute(ActivityProxy $activityProxy, $parameters = array())
+    public function create($activity)
     {
-        $routeInfo = $activityProxy->getRouteInfo();
-        switch ($routeInfo['extension']) {
-            case 'php':
-                $resp = $this->renderPhp($routeInfo['realPath']);
-                break;
-            case 'html':
-            case 'twig':
-                $resp = $this->render($routeInfo['realPath'], $parameters);
-                break;
-            default:
-                throw new \RuntimeException('Bad route info in activity');
-        }
-
-        return $resp;
+        $activityProxy = $this->createActivityProxy($activity);
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_CREATE, $activityProxy, array(
+            'activity' => $activity,
+        ));
     }
 
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
-
-    public function update($task)
+    public function update($activity)
     {
         // TODO: Implement update() method.
     }
 
-
+    /**
+     * @return \AppBundle\Component\Activity\ActivityRuntimeContainerV1
+     */
     public static function instance()
     {
         return self::$instance;
@@ -94,7 +80,9 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
 
     private function createActivityProxy($activity)
     {
-        return new ActivityProxy($activity, $this->activitiesDir.DIRECTORY_SEPARATOR.$activity['mediaType']);
+        $activityProxy = new ActivityProxy($this, $activity, $this->activitiesDir.DIRECTORY_SEPARATOR.$activity['mediaType']);
+        $this->activityProxy = $activityProxy;
+        return $activityProxy;
     }
 
     /**
@@ -103,6 +91,16 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function db()
     {
         return $this->biz['db'];
+    }
+
+    public function getBiz()
+    {
+        return $this->biz;
+    }
+
+    public function createService($service)
+    {
+        return $this->biz->service($service);
     }
 
     public function render($view, array $parameters = array(), Response $response = null)
