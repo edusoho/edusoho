@@ -26,7 +26,6 @@ define(function(require, exports, module) {
             var configs = this.get('config'), $iframe = this.get('currentIframe'), self = this;
             configs = $.extend(configs, data);
             this.set('config', configs, {override: true});
-            console.log(this.get('config'));
             $.post(this.element.data('url'), {config: this.get('config')}, function(){
               self._flushIframe();
             });

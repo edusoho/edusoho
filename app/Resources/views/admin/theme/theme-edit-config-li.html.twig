@@ -19,12 +19,12 @@
   <div class="col-md-3 text-right">
     {% set blockPendant = ['middle-banner', 'footer-link', 'advertisement-banner'] %}
     {% if pendant.code in blockPendant %}
-      <a href="{{path('admin_block', {category:'theme'|default('all')})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %}>
+      <a href="{{path('admin_block', {category:'theme'|default('all')})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default() %}style="display:none;"{% endif %}>
         <span class="glyphicon glyphicon-wrench"></span> 
         {{ 'admin.setting.theme.manage.edit.setting_btn'|trans }}
       </a>
     {% elseif pendant.code == 'friend-link' %}
-      <a href="{{path('admin_navigation', {type:'friendlyLink'})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn">
+      <a href="{{path('admin_navigation', {type:'friendlyLink'})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default() %}style="display:none;"{% endif %}>
         <span class="glyphicon glyphicon-wrench"></span> 
         {{ 'admin.setting.theme.manage.edit.setting_btn'|trans }}
       </a>
