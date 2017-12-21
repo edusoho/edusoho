@@ -27,6 +27,7 @@ class MarketingController extends BaseController
                 'user_avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
                 'entry' => $entry,
             ));
+
             return  $this->redirect($login['url']);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
