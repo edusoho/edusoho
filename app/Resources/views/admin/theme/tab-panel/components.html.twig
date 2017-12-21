@@ -19,9 +19,14 @@
       </div>
       <!-- List group -->
       <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
+        {% for key, pendant in blockConfig %}
+          {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: true} %}
+        {% endfor %}
+        
         {% for key, pendant in allBlockConfig %}
-          {% set isChoiced = blockConfig[key]|default() ? true : false %}
-          {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: isChoiced} %}
+          {% if not blockConfig[key]|default() %}
+            {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: false} %}
+          {% endif %}
         {% endfor %}
       </ul>
     </div>

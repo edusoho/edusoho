@@ -53,9 +53,11 @@ define(function(require, exports, module) {
         var $this = $(this);
         var key = $(this).closest('li').find('.check-block').data('componentId'),
         blockKey = $(this).closest('.js-theme-component').attr('id'),
-        url = $this.data('url');
+        url = $this.data('url'),
+        config = componentSetting[blockKey][key];
+        config.blockKey = blockKey;
 
-        $.get(url, {config: componentSetting[blockKey][key]}, function(html){
+        $.get(url, {config: config}, function(html){
           $modal.html(html)
           $modal.modal('show');
         });
