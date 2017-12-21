@@ -42,12 +42,12 @@ abstract class RegistDecoder extends BaseRegister
 
     protected function beforeSave($registration, $user = array())
     {
-        $user = parent::beforeSave($registration, $user);
+        list($user, $registration) = parent::beforeSave($registration, $user);
         if (!empty($this->register)) {
             $user = $this->register->dealDataBeforeSave($registration, $user);
         }
 
-        return $this->dealDataBeforeSave($registration, $user);
+        return array($this->dealDataBeforeSave($registration, $user), $registration);
     }
 
     protected function afterSave($registration, $user)

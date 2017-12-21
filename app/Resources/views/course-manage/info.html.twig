@@ -44,21 +44,22 @@
             </label>
           </div>
         </div>
-        {% if setting('storage.upload_mode') == 'cloud' and audioPerssion != 'unopen' %}
-          <div class="form-group" id="cc">
-            <label for="" class="col-sm-2 control-label">{{ '音频听课（试用）' }}</label>
-            <div class="col-sm-8 radios" data-value="{{ audioPerssion }}" id="course-audio-mode">
+        
+        {% if audioServiceStatus != 'needOpen' %}
+          <div class="form-group" id="audio-modal-id">
+            <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
+            <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
               <label>
                 <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %} id="aa">
-                {{ '开启' }}
+                {{ 'course.info.video.convert.audio.start'|trans }}
               </label>
               <label>
                 <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %} id="bb">
-                {{ '关闭' }}
+                {{ 'course.info.video.convert.audio.close'|trans }}
               </label>
               <div>
-                <label>1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</label>
-                <label>2.当前转音频完成情况：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'查看详情'}}</a></label>
+                <label>1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</label>
+                <label>2.{{ 'course.video.convert.audio.status'|trans }}：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'course.video.convert.audio.detail'|trans }}</a></label>
               </div>
             </div>
           </div>

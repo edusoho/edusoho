@@ -9,11 +9,14 @@ class BinderRegistDecoderImpl extends RegistDecoder
     protected function validateBeforeSave($registration)
     {
         $type = $registration['type'];
-        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-        if (empty($thirdLoginInfo["{$type}_enabled"]) ||
-                empty($thirdLoginInfo["{$type}_key"]) ||
-                empty($thirdLoginInfo["{$type}_secret"])) {
-            throw new InvalidArgumentException('Invalid binder type for '.$type);
+
+        if (!in_array($type, array('discuz'))) {
+            $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
+            if (empty($thirdLoginInfo["{$type}_enabled"]) ||
+                    empty($thirdLoginInfo["{$type}_key"]) ||
+                    empty($thirdLoginInfo["{$type}_secret"])) {
+                throw new InvalidArgumentException('Invalid binder type for '.$type);
+            }
         }
     }
 
@@ -36,9 +39,6 @@ class BinderRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataAfterSave($registration, $user)
     {
-        if (empty($registration['authid']) && !empty($registration['token']['userId'])) {
-            $registration['authid'] = $registration['token']['userId'];
-        }
         $this->getUserService()->bindUser(
             $registration['type'],
             $registration['authid'],

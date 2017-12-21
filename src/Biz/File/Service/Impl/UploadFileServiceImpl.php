@@ -29,9 +29,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         'cloud' => 'File:CloudFileImplementor',
     );
 
-    public function getAudioPerssion()
+    /**
+     * @return (opened, needOpen, notAllowed)
+     */
+    public function getAudioServiceStatus()
     {
-        return $this->getFileImplementor('cloud')->convertPermission();
+        $setting = $this->getSettingService()->get('storage');
+
+        if (!empty($setting['cloud_access_key']) || !empty($setting['cloud_secret_key'])) {
+            $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();   
+        }
+
+        return !empty($audioService['audioService']) ? $audioService['audioService'] : 'notAllowed';
     }
 
     public function getFile($id)
@@ -74,13 +83,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         );
 
         $count = $this->getUploadFileDao()->count($conditions);
+        
         for ($start = 0; $start < $count; $start = $start + 100) {
-            $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, $start);
-
+            $videofiles = $this->getUploadFileDao()->search($conditions, null, $start, 100);
+            
             $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
         }
-
         $this->getUploadFileDao()->update($conditions, array('audioConvertStatus' => 'doing'));
+
+        return true;
     }
 
     //视频转音频的完成情况
@@ -481,6 +492,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
     }
 
+    public function getResourcesStatus(array $options)
+    {
+        return $this->getFileImplementor('cloud')->getResourcesStatus($options);
+    }
+
     public function collectFile($userId, $fileId)
     {
         if (empty($userId) || empty($fileId)) {
@@ -828,6 +844,42 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->getUploadFileDao()->update($id, $fields);
 
         return $this->getFile($id);
+    }
+
+    public function setResourceConvertStatus($globalId, array $result)
+    {
+        $file = $this->getFileByGlobalId($globalId);
+
+        if (empty($file)) {
+            return array();
+        }
+
+        $videoStatusMap = array(
+            'none' => 'none',
+            'waiting' => 'waiting',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+
+        $audioStatusMap = array(
+            'none' => 'none',
+            'waiting' => 'doing',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+
+        $fields = array(
+            'convertStatus' => $videoStatusMap[$result['status']],
+            'updatedTime' => time(),
+        );
+
+        if ($result['audio']) {
+            $fields['audioConvertStatus'] = $audioStatusMap[$result['status']];
+        }
+
+        return $this->getUploadFileDao()->update($file['id'], $fields);
     }
 
     public function makeUploadParams($params)

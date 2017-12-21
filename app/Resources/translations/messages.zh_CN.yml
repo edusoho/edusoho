@@ -1243,7 +1243,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -1584,6 +1585,7 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+course.course_files.re_try_convert_video_to_audio: 重转音频
 
 course.plan_overview: 计划概览
 
@@ -1899,7 +1901,7 @@ course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
-activity.liva.not_created_notice: 直播教室尚未创建！
+activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
 course.cover_image: 封面图片
@@ -1945,7 +1947,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -4682,8 +4685,8 @@ admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
-admin.course_manage.manage.status: 状态
-admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.status: 课程状态
+admin.course_manage.manage.creator: 创建者/时间
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -4701,6 +4704,11 @@ admin.course_manage.manage.auth_user: 核实用户
 admin.course_manage.manage.user_passwd: 用户密码
 admin.course_manage.manage.input_passwd_placeholder: 请输入你的登录密码
 admin.course_manage.manage.week_excellent_courses: 每周精品课程
+admin.course_manage.manage.course_num: 计划数
+admin.course_manage.manage.course_list.block_title: 计划详情
+admin.course_manage.manage.course_list.status: 计划状态
+admin.course_manage.manage.course_list.creator: 创建者
+admin.course_manage.manage.course_list.createdTime: 创建时间
 
 # 文件管理
 admin.course_manage.file.name_title: 文件管理
@@ -5297,6 +5305,11 @@ admin.setting.theme.manage.theme_edit: 主题编辑
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+admin.setting.theme.manage.navigation_num_validation: 请输入1-99以内的整数
 admin.setting.theme.manage.coloring_scheme_btn: 配色方案
 admin.setting.theme.manage.all_reset: 全部重置
 admin.setting.theme.manage.component_name: 挂件名称
@@ -5322,6 +5335,8 @@ admin.setting.theme.manage.modal.student_comment: 学员评价
 admin.setting.theme.manage.modal.student_dynamic: 学员动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
+
+
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -8318,6 +8333,20 @@ site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
+course.to_be.biz.user.first: 需要先申请为商业用户!
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+course.video.convert.client.listen: 听
+course.video.convert.client.click.listen: 手机端支持一键听课
+course.video.convert.client.try: '（试一试）'
+course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
+course.task.show.video.convert.client.notify: 不再提醒
+course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.start: 开启
+course.info.video.convert.audio.close: 关闭
+
+
 user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间
 user.learn.statistics.default.search: 默认排序
@@ -8331,3 +8360,4 @@ user.learn.statistics.finished.task.num: 学完任务数
 user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
