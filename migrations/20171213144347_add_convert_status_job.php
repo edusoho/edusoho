@@ -29,7 +29,7 @@ class AddConvertStatusJob extends Migration
         (
             'CheckConvertStatusJob',
             '*/15 * * * *',
-            'Biz\\File\\Job\\VideoMediaStatusUpdateJob',
+            'Biz\\\\File\\\\Job\\\\VideoMediaStatusUpdateJob',
             '',
             '100',
             '{$currentTime}',

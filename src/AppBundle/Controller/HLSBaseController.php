@@ -10,22 +10,9 @@ use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class HLSController extends BaseController
+abstract class HLSBaseController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
-    {
-        return $this->commonPlayList($request, $id, $token);
-    }
-
-    public function audioPlaylistAction(Request $request, $id, $token)
-    {
-        return $this->commonPlayList($request, $id, $token, 'audio');
-    }
-
-    /**
-     * @param $type video or audio
-     */
-    protected function commonPlayList(Request $request, $id, $token, $type = 'video')
     {
         $line = $request->query->get('line', null);
         $format = $request->query->get('format', '');
@@ -54,7 +41,7 @@ class HLSController extends BaseController
         $streams = array();
         $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
 
-        $metas = ('video' == $type) ? $file['metas2'] : $file['audioMetas2'];
+        $metas = $file[$this->getMediaAttr()];
 
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($metas[$level])) {
@@ -94,7 +81,7 @@ class HLSController extends BaseController
                 $params['protocol'] = 'https';
             }
 
-            $streams[$level] = $this->generateUrl('hls_stream', $params, true);
+            $streams[$level] = $this->generateUrl("hls_{$this->getRoutingPrefix()}stream", $params, true);
         }
 
         $qualities = array(
@@ -149,13 +136,13 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (empty($file['metas2'][$level]['key'])) {
+        if (empty($file[$this->getMediaAttr()][$level]['key'])) {
             throw $this->createNotFoundException();
         }
 
         $params = array();
         $params['accessKey'] = $this->setting('storage.cloud_access_key');
-        $params['key'] = $file['metas2'][$level]['key'];
+        $params['key'] = $file[$this->getMediaAttr()][$level]['key'];
         $params['fileId'] = $file['id'];
         $params['fileGlobalId'] = $file['globalId'];
         $params['clientIp'] = $clientIp;
@@ -189,7 +176,7 @@ class HLSController extends BaseController
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
 
-        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
+        $params['keyUrl'] = $this->generateUrl("hls_{$this->getRoutingPrefix()}clef", array('id' => $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
         if (!$inWhiteList && !$this->isHiddenVideoHeader($hideBeginning)) {
@@ -247,23 +234,35 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (empty($file['metas2'][$token['data']['level']]['hlsKey'])) {
+        if (empty($file[$this->getMediaAttr()][$token['data']['level']]['hlsKey'])) {
             return $this->makeFakeTokenString();
         }
 
         if (!empty($token['data']['fromApi'])) {
-            return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
+            return $this->responseEnhanced($file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']);
         }
 
         if ($this->isHlsEncryptionPlusEnabled() || !$isMobileUserAgent) {
             $api = CloudAPIFactory::create('leaf');
-            $result = $api->get("/hls/clef_plus/{$file['metas2'][$token['data']['level']]['hlsKey']}");
+            $result = $api->get("/hls/clef_plus/{$file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']}");
 
             return $this->responseEnhanced($result['key']);
         }
 
-        return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
+        return $this->responseEnhanced($file[$this->getMediaAttr()][$token['data']['level']]['hlsKey']);
     }
+
+    /**
+     * 取被播放m3u8的属性
+     */
+    abstract protected function getMediaAttr();
+
+    /**
+     * 用于生成路由,
+     *   hls_{$this->getRoutingPrefix()}clef
+     *   hls_{$this->getRoutingPrefix()}stream
+     */
+    abstract protected function getRoutingPrefix();
 
     protected function responseEnhanced($responseContent, $headers = array())
     {
@@ -318,7 +317,7 @@ class HLSController extends BaseController
 
         if (!empty($storage['video_header'])) {
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $beginnings = $file['metas2'];
+            $beginnings = $file[$this->getMediaAttr()];
             $levels = array($level);
             $levels = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));
 
@@ -339,7 +338,7 @@ class HLSController extends BaseController
                     'userId' => $params['userId'],
                 ));
 
-                $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array(
+                $beginning['beginningKeyUrl'] = $this->generateUrl("hls_{$this->getRoutingPrefix()}clef", array(
                     'id' => $file['id'],
                     'token' => $token['token'],
                 ), true);
