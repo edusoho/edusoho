@@ -268,7 +268,7 @@ hls_audio_stream:
 
 hls_clef:
     path: /hls/{id}/clef/{token}
-    defaults: { _controller: AppBundle:HLS:clef}
+    defaults: { _controller: AppBundle:HLSVideo:clef}
 
 hls_audio_clef:
     path: /hls/{id}/audio/clef/{token}
