@@ -854,7 +854,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array();
         }
 
-        $videoStatusMap = array(
+        $statusMap = array(
             'none' => 'none',
             'waiting' => 'waiting',
             'processing' => 'doing',
@@ -862,21 +862,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'error' => 'error',
         );
 
-        $audioStatusMap = array(
-            'none' => 'none',
-            'waiting' => 'doing',
-            'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
-        );
-
         $fields = array(
-            'convertStatus' => $videoStatusMap[$result['status']],
+            'convertStatus' => $statusMap[$result['status']],
             'updatedTime' => time(),
         );
 
         if ($result['audio']) {
-            $fields['audioConvertStatus'] = $audioStatusMap[$result['status']];
+            $fields['audioConvertStatus'] = $statusMap[$result['status']];
         }
 
         return $this->getUploadFileDao()->update($file['id'], $fields);
