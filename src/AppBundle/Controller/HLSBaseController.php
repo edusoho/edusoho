@@ -14,14 +14,6 @@ abstract class HLSBaseController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
     {
-        return $this->commonPlayList($request, $id, $token);
-    }
-
-    /**
-     * @param $type video or audio
-     */
-    protected function commonPlayList(Request $request, $id, $token)
-    {
         $line = $request->query->get('line', null);
         $format = $request->query->get('format', '');
         $levelParam = $request->query->get('level', '');
