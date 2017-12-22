@@ -197,6 +197,27 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEmpty($messagesCount);
     }
 
+    public function testFindNewUserConversations()
+    {
+        $this->mockBiz(
+            'User:MessageConversationDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 111, 'toId' => 2, 'unreadNum' => 1)),
+                    'withParams' => array(
+                        array('toId' => 2, 'lessUnreadNum' => 0),
+                        array('latestMessageTime' => 'DESC'),
+                        0,
+                        5,
+                    ),
+                ),
+            )
+        );
+        $result = $this->getMessageService()->findNewUserConversations(2, 0, 5);
+        $this->assertEquals(array(array('id' => 111, 'toId' => 2, 'unreadNum' => 1)), $result);
+    }
+
     protected function createSender()
     {
         $sender = array();

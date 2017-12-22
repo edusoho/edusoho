@@ -30,7 +30,7 @@ class PushServiceImpl extends BaseService implements PushService
             'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
         );
 
-        if ($to['type'] == 'user') {
+        if ('user' == $to['type']) {
             $params['toId'] = $to['id'];
         }
 
