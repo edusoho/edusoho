@@ -214,8 +214,8 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return $result;
             }
 
-            if (preg_match('/^1\d{10}$/', $username)) {
-                return array('error_mismatching', '用户名不允许以1开头的11位纯数字!');
+            if (!SimpleValidator::nickname($nickname)) {
+                return array('error_mismatching', '用户名不合法!');
             }
 
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
