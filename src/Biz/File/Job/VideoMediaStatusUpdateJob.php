@@ -8,7 +8,7 @@ class VideoMediaStatusUpdateJob extends AbstractJob
 {
     public function execute()
     {
-        $results = $this->getUploadFileService()->getResourcesStatus(array('cursor' => $this->getNextTime()));
+        $results = $this->getUploadFileService()->getResourcesStatus($this->getJobArgs());
 
         if (isset($results['data']) && !empty($results['data'])) {
             $successNum = 0;
@@ -32,14 +32,18 @@ class VideoMediaStatusUpdateJob extends AbstractJob
         }
     }
 
-    private function getNextTime()
+    private function getJobArgs()
     {
         $jobArgs = $this->args;
         if (empty($jobArgs)) {
-            $jobArgs = array();
+            $jobArgs = array(
+                'cursor' => 0,
+                'start' => 0,
+                'limit' => 100,
+            );
         }
 
-        return empty($jobArgs['cursor']) ? 0 : $jobArgs['cursor'];
+        return $jobArgs;
     }
 
     protected function getSettingService()
