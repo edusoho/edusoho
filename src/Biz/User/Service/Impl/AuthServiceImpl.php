@@ -214,7 +214,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return $result;
             }
 
-            if (!SimpleValidator::nickname($nickname)) {
+            if (!SimpleValidator::nickname($username)) {
                 return array('error_mismatching', '用户名不合法!');
             }
 
