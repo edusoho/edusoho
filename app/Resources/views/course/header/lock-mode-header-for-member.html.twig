@@ -25,7 +25,7 @@
           {{ 'my.course.lock_mode_plan.expiry_date'|trans }}
           {% include 'course/header/parts/member-deadline-info.html.twig' %}
         </li>
-        {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) %}
+        {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
           <li class="pt30 mb10 mll">
             <span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span>
             {{ 'course.video.convert.client.click.listen'|trans }}

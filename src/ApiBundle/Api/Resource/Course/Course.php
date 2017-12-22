@@ -50,7 +50,7 @@ class Course extends AbstractResource
     protected function convertFields($course)
     {
         $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
-        $course['isAudioOn'] = $enableAudioStatus ? 1 : 0;
+        $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
         unset($course['enableAudio']);
 
         return $course;
