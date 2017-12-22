@@ -19,6 +19,7 @@ use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
+use CustomBundle\Biz\Common\CustomSystemInitializer;
 
 class SystemInitializer
 {
@@ -54,6 +55,18 @@ class SystemInitializer
         $this->_initSiteSetting();
         $this->_initStorageSetting();
         $this->_initSystemUsers();
+        $this->_initCustom();
+    }
+
+    public function _initCustom()
+    {
+        try {
+            $biz = ServiceKernel::instance()->getBiz();
+            $customSystemInitializer = new CustomSystemInitializer($biz, $this->output);
+            $customSystemInitializer->init();
+        } catch (\Exception $e) {
+            $this->output->write('  定制初始化的数据异常'.$e->getMessage());
+        }
     }
 
     protected function _initDictionary()
