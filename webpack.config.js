@@ -41,7 +41,6 @@ module.exports = {
     'console-polyfill': 'console-polyfill/index.js',
     'html5shiv': 'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker': 'bootstrap-daterangepicker/daterangepicker.js',
-    'moment': 'moment/moment.js',
     'bootstrap-datetime-picker': 'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable': 'jquery-sortable/source/js/jquery-sortable.js',
     'jquery-cycle2': 'jquery.cycle2/src/jquery.cycle2.min.js',

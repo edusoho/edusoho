@@ -12,7 +12,7 @@
         "url": ""
     },
     "devDependencies": {
-        "es-webpack-engine": "3.5.0-bata7"
+        "es-webpack-engine": "3.5.0"
     },
     "dependencies": {
         "babel-polyfill": "6.5.0",
@@ -54,8 +54,8 @@
         "postal": "2.0.5",
         "postal.federation": "0.5.3",
         "postal.xframe": "0.5.0",
-        "react": "0.14.8",
-        "react-dom": "0.14.8",
+        "react": "15.6.1",
+        "react-dom": "15.6.1",
         "reset.css": "2.0.2",
         "respond.js": "1.4.2",
         "screenfull": "3.0.2",
