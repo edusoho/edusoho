@@ -52,7 +52,7 @@ class CustomSystemInitializer
         }
     }
 
-    protected function getSettingService()
+    private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
     }
