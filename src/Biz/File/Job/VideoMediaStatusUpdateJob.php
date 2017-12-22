@@ -39,7 +39,7 @@ class VideoMediaStatusUpdateJob extends AbstractJob
             $jobArgs = array(
                 'cursor' => 0,
                 'start' => 0,
-                'limit' => 100,
+                'limit' => 1000,
             );
         }
 
