@@ -20,7 +20,7 @@ import classroomModule from './modules/classroom';
 import tradeModule from './modules/trade';
 import captchaModule from './modules/captcha';
 import smsModule from './modules/sms';
-import taskModule from './modules/task';
+import teacherLiveTaskModule from './modules/teacherLiveTask';
 import courseTaskModule from './modules/courseTask';
 
 const API_URL_PREFIX = '/api';
@@ -33,7 +33,7 @@ const Api = {
   trade: tradeModule(API_URL_PREFIX),
   captcha: captchaModule(API_URL_PREFIX),
   sms: smsModule(API_URL_PREFIX),
-  task: taskModule(API_URL_PREFIX),
+  teacherLiveTask: teacherLiveTaskModule(API_URL_PREFIX),
   courseTask: courseTaskModule(API_URL_PREFIX),
 };
 

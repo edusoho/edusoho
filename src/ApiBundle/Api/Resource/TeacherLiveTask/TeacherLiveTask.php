@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\Task;
+namespace ApiBundle\Api\Resource\TeacherLiveTask;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
@@ -9,7 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use ApiBundle\Api\Exception\ErrorCode;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class Task extends AbstractResource
+class TeacherLiveTask extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -17,7 +17,7 @@ class Task extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        if (empty($conditions['start']) || empty($conditions['end'])) {
+        if (empty($conditions['createdTime_GE']) || empty($conditions['end'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getCurrentUser();
