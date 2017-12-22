@@ -848,7 +848,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function setResourceConvertStatus($globalId, array $result)
     {
-        $file = $this->getFileByGlobalId($globalId);
+        $file = $this->getUploadFileDao()->getByGlobalId($globalId);
 
         if (empty($file)) {
             return array();
