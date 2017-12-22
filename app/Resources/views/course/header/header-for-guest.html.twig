@@ -129,7 +129,7 @@
           </div>
 				{% endif %}
         
-        {% if setting('mobile.enabled')|default(false) and course.enableAudio|default(0) %}
+        {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) %}
           <div class="">
             <span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span>
             {{ 'course.video.convert.client.click.listen'|trans }}
