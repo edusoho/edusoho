@@ -873,6 +873,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $fields = array(
             'convertStatus' => $statusMap[$result['status']],
+            'audioConvertStatus' => 'waiting',
             'updatedTime' => time(),
         );
 
