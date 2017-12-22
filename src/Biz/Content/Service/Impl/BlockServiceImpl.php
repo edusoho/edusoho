@@ -18,8 +18,6 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (!ArrayToolkit::requireds($blockTemplate, array('code', 'mode', 'category', 'meta', 'data', 'templateName', 'title'))) {
             throw $this->createServiceException('创建编辑区失败，缺少必要的字段');
         }
-        $blockTemplate['createdTime'] = time();
-        $blockTemplate['updateTime'] = time();
         $createdBlockTemplate = $this->getBlockTemplateDao()->create($blockTemplate);
 
         return $createdBlockTemplate;
@@ -244,7 +242,6 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         return $this->getBlockTemplateDao()->update($id, array(
             'content' => $content,
-            'updateTime' => time(),
         ));
     }
 
@@ -321,7 +318,6 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (empty($blockTemplate)) {
             throw $this->createNotFoundException('此编辑区模板不存在，更新失败!');
         }
-        $fields['updateTime'] = time();
         $updatedBlockTemplate = $this->getBlockTemplateDao()->update($id, $fields);
 
         $this->getLogService()->info('blockTemplate', 'update_block_template', "更新编辑区模板#{$id}");
