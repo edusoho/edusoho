@@ -30,7 +30,7 @@ class NotificationController extends BaseController
         );
         $id = $request->query->get('id');
         if (!empty($id)) {
-            $notifications = $this->getNotificationService()->isHighLight($notifications, $id);
+            $notifications = $this->getNotificationService()->isSelectNotification($notifications, $id);
         }
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         $user->clearNotifacationNum();
