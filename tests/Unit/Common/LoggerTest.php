@@ -37,6 +37,7 @@ class LoggerTest extends BaseTestCase
             'question_plus' => '题库增强版',
             'announcement' => '公告',
             'open_course' => '公开课',
+            'live' => '直播',
         ), $result);
     }
 
@@ -285,6 +286,9 @@ class LoggerTest extends BaseTestCase
                     'delete_material' => '移除资料',
                     'update_teacher' => '更新公开课教师',
                     'delete_recommend_course' => '删除推荐课程',
+                ),
+            'live' => array(
+                'update_live_activity' => '更新直播活动',
                 ),
         ), $result);
     }
