@@ -77,7 +77,7 @@
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ 'admin.navbar.header.console_btn'|trans }}<span class="glyphicon glyphicon-chevron-down"></span></a>
               <ul class="dropdown-menu main-list">
                 {% if 'ROLE_TEACHER' in app.user.roles %}
-                  <li><a href="{{ path('my') }}"><i class="es-icon es-icon-event mrs" style="    vertical-align: middle;"></i>{{ 'homepage.header.my_course'|trans }}</a></li>
+                  <li><a href="{{ path('my') }}"><i class="es-icon es-icon-event mrs" style="vertical-align: middle;"></i>{{ 'homepage.header.my_course'|trans }}</a></li>
                 {% endif %}
                 <li><a href="{{ path('my_courses_learning') }}"><i class="es-icon es-icon-book mrs"></i>{{ 'homepage.header.my_learning'|trans }}</a></li>
               </ul>
