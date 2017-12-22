@@ -28,9 +28,9 @@ class NotificationController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        if (!empty($request->query->get('id'))) {
-            $id = $request->query->get('id');
-            $notifications = $this->getNotificationService()->isHighLight($notifications, $id);
+        $id = $request->query->get('id');
+        if (!empty($id)) {
+            $notifications = $this->getNotificationService()->isSelectNotification($notifications, $id);
         }
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         $user->clearNotifacationNum();
