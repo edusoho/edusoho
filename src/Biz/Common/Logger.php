@@ -378,6 +378,7 @@ class Logger
             ),
             self::LIVE => array(
                 'update_live_activity' => '更新直播活动',
+                'generate_live_replay' => '生成录播回放',
             ),
         );
     }

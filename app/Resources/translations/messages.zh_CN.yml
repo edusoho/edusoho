@@ -8289,6 +8289,7 @@ crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
 log.action.live.update_live_activity: 更新直播活动
+log.action.live.generate_live_replay: 生成录播回放
 
 cashflow.title: 名称
 cashflow.sn: 流水号
