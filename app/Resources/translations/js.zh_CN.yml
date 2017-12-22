@@ -785,4 +785,4 @@ admin.user.statistics.data.learn_total_time: 学习总时长
 admin.user.statistics.data.learn_time: 学习时长/分钟
 admin.user.statistics.data.time: 时长
 
-course.audio.enable.biz.user.or.cloud: 听课模式需要先申请为商业用户并且开启云视频!
+course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
