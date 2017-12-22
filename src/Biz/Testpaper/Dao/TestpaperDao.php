@@ -12,8 +12,6 @@ interface TestpaperDao extends GeneralDaoInterface
 
     public function findTestpapersByIdsAndType($ids, $type);
 
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
-
     public function findTestpapersByCopyIdAndCourseSetIds($copyId, $courseSetIds);
 
     public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId);

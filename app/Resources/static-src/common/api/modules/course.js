@@ -6,6 +6,11 @@ const courseModule = (api) => {
       return ajax(Object.assign({
         url: `${api}/courses/${options.params.courseId}`,
       }, options));
+    },
+    search(options) {
+      return ajax(Object.assign({
+        url: `${api}/courses`,
+      }, options));
     }
   }
 }

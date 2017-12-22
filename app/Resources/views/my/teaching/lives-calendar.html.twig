@@ -1,0 +1,21 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-live-calendar' %}
+
+{% do script(['libs/fullcalendar.js', 'app/js/my/teaching-calendar/index.js'])  %}
+
+
+{% block main %}
+  <div class="panel panel-default panel-col lesson-manage-panel">
+    <div class="panel-heading">
+      {{'my.teaching.live_schedule_menu'|trans}}
+    </div>
+
+    <div class="panel-body">
+      <div id='calendar'></div>
+      <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d')}}</div>
+    </div>
+  </div>
+{% endblock %}

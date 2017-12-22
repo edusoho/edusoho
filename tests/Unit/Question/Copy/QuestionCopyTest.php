@@ -2,8 +2,12 @@
 
 namespace Tests\Unit\Question\Copy;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
+use Biz\File\Dao\FileUsedDao;
+use Biz\File\Service\UploadFileService;
 use Biz\Question\Copy\QuestionCopy;
+use Biz\Question\Service\QuestionService;
 
 class QuestionCopyTest extends BaseTestCase
 {
@@ -60,6 +64,34 @@ class QuestionCopyTest extends BaseTestCase
         $this->assertEquals(count($questions), count($copyQuestions));
     }
 
+    public function testDoCopyWithAttachments()
+    {
+        $source = array('id' => 1);
+        $options = array('newCourseSet' => array('id' => 2));
+
+        $biz = $this->getBiz();
+        $copyObj = new QuestionCopy($biz, array());
+
+        $this->createQuestions($source['id'], 1, true);
+
+        $copyObj->doCopy($source, $options);
+
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($source['id']);
+        $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($options['newCourseSet']['id']);
+
+        $targetIds = ArrayToolkit::column($copyQuestions, 'id');
+        $conditions = array(
+            'type' => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds' => $targetIds,
+        );
+
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
+
+        $this->assertEquals(1, count($attachments));
+        $this->assertEquals(count($questions), count($copyQuestions));
+    }
+
     public function testPreCopy()
     {
         $biz = $this->getBiz();
@@ -69,7 +101,7 @@ class QuestionCopyTest extends BaseTestCase
         $this->assertNull($result);
     }
 
-    private function createQuestions($courseSetId, $isCreateChild)
+    private function createQuestions($courseSetId, $isCreateChild, $withAttachments = false)
     {
         $material = array(
             'type' => 'material',
@@ -82,6 +114,16 @@ class QuestionCopyTest extends BaseTestCase
             'target' => 'course-1',
         );
         $questionParent = $this->getQuestionService()->create($material);
+
+        if ($withAttachments) {
+            $attachments = array(
+                'type' => 'attachment',
+                'fileId' => 1,
+                'targetType' => 'question.stem',
+                'targetId' => $questionParent['id'],
+            );
+            $this->getFileUsedDao()->create($attachments);
+        }
 
         if ($isCreateChild) {
             $single = array(
@@ -144,8 +186,27 @@ class QuestionCopyTest extends BaseTestCase
         $this->getQuestionService()->create($question);
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return FileUsedDao
+     */
+    protected function getFileUsedDao()
+    {
+        return $this->biz->dao('File:FileUsedDao');
     }
 }
