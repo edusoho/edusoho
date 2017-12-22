@@ -50,11 +50,11 @@
             <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
             <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
               <label>
-                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %} id="aa">
+                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
                 {{ 'course.info.video.convert.audio.start'|trans }}
               </label>
               <label>
-                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %} id="bb">
+                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
                 {{ 'course.info.video.convert.audio.close'|trans }}
               </label>
               <div>
