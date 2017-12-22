@@ -37,7 +37,7 @@ class courseInfo {
   changeAudioMode() {
     $('#audio-modal-id').on('change', "input[name='enableAudio']", function(){
       let mode = $("#course-audio-mode").data('value');
-      if (mode == 'needOpen') {
+      if (mode == 'notAllowed') {
         notify('info', '听课模式需要先申请为商业用户!');
         $("[name='enableAudio']")[1].checked = true;
         $("[name='enableAudio']")[0].checked = false;
