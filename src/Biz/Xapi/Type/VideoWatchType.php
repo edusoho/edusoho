@@ -2,6 +2,8 @@
 
 namespace Biz\Xapi\Type;
 
+use AppBundle\Common\ArrayToolkit;
+
 class VideoWatchType extends Type
 {
     const TYPE = 'watch_video';
@@ -39,6 +41,22 @@ class VideoWatchType extends Type
 
     public function packages($statements)
     {
+        $watchingLogIds = ArrayToolkit::column($statements, 'target_id');
+        $watchingLogs = $this->getXapiService()->findWatchLogsByIds($watchingLogIds);
+        $watchingLogs = ArrayToolkit::index($watchingLogs, 'id');
+
+        $taskIds = ArrayToolkit::column($watchingLogs, 'task_id');
+        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+
+        $courseIds = ArrayToolkit::column($watchingLogs, 'course_id');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
     }
 }
