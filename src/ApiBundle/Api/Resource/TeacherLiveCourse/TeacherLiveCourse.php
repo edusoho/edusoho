@@ -17,7 +17,7 @@ class TeacherLiveTask extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        if (empty($conditions['createdTime_GE']) || empty($conditions['end'])) {
+        if (empty($conditions['createdTime_GE']) || empty($conditions['createdTime_LT'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getCurrentUser();
@@ -39,7 +39,7 @@ class TeacherLiveTask extends AbstractResource
             $courseIds = array(-1);
         }
         $tasks = $this->getTaskService()->searchTasks(
-            array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $conditions['start'], 'endTime_LT' => $conditions['end'], 'status' => 'published'),
+            array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $conditions['createdTime_GE'], 'endTime_LT' => $conditions['createdTime_LT'], 'status' => 'published'),
             array(),
             0,
             PHP_INT_MAX
@@ -60,7 +60,7 @@ class TeacherLiveTask extends AbstractResource
             $courseIds = array(-1);
         }
         $openCourses = $this->getOpenCourseService()->searchLessons(
-            array('courseIds' => $courseIds, 'type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['start'], 'endTimeLessThan' => $conditions['end'], 'status' => 'published'),
+            array('courseIds' => $courseIds, 'type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['createdTime_GE'], 'endTimeLessThan' => $conditions['createdTime_LT'], 'status' => 'published'),
             array(),
             0,
             PHP_INT_MAX

@@ -1,14 +1,14 @@
 import ajax from '../ajax';
 
-const teacherLiveTaskModule = (api) => {
+const teacherLiveCourseModule = (api) => {
   return {
     search(options) {
       return ajax(Object.assign({
-        url: `${api}/teacherLiveTasks`,
+        url: `${api}/teacherLiveCourses`,
         type: 'GET'
       }, options));
     }
   }
 }
 
-export default teacherLiveTaskModule;
+export default teacherLiveCourseModule;
