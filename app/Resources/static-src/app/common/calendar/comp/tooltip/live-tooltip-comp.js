@@ -1,4 +1,4 @@
-import BaseTooltipComp from 'app/common/calendar/comp/tooltip/base-tooltip-comp'
+import BaseTooltipComp from './base-tooltip-comp'
 
 export default class LiveTooltip extends BaseTooltipComp {
 

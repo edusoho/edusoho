@@ -1,0 +1,59 @@
+.schedule-panel-body {
+  min-height: 500px;
+}
+
+.schedule-panel-body__current-num {
+  position: absolute;
+  top: 15px;
+  font-size: 18px;
+  line-height: 1;
+  color: @cd-gray-dark;
+}
+
+.fc-button {
+  color: @cd-gray-dark;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  background-color: #fff;
+  .cd-border-radius;
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+}
+
+.fc-center {
+  h2 {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0;
+    color: @cd-gray;
+  }
+}
+
+.week {
+  padding-top: 11px;
+  padding-left: 11px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 400;
+  color: @cd-gray-dark;
+}
+
+.day {
+  padding-right: 16px;
+  padding-bottom: 11px;
+  text-align: right;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 400;
+  color: @cd-gray-dark;
+}
+
+.fc-today {
+  .week,
+  .day {
+    color: @brand-success;
+  }
+}
