@@ -21,7 +21,7 @@ import tradeModule from './modules/trade';
 import captchaModule from './modules/captcha';
 import smsModule from './modules/sms';
 import teacherLiveCourseModule from './modules/teacherLiveCourse';
-import courseTaskModule from './modules/courseTask';
+import studentLiveCourseModule from './modules/studentLiveCourse';
 
 const API_URL_PREFIX = '/api';
 
@@ -34,7 +34,7 @@ const Api = {
   captcha: captchaModule(API_URL_PREFIX),
   sms: smsModule(API_URL_PREFIX),
   teacherLiveCourse: teacherLiveCourseModule(API_URL_PREFIX),
-  courseTask: courseTaskModule(API_URL_PREFIX),
+  studentLiveCourse: studentLiveCourseModule(API_URL_PREFIX),
 };
 
 export default Api;

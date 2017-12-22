@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\TeacherLiveCourse;
+namespace ApiBundle\Api\Resource\StudentLiveCourse;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
@@ -9,7 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use ApiBundle\Api\Exception\ErrorCode;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class TeacherLiveCourse extends AbstractResource
+class StudentLiveCourse extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -22,14 +22,13 @@ class TeacherLiveCourse extends AbstractResource
         }
         $user = $this->getCurrentUser();
         $liveCourses = $this->findLiveCourse($conditions, $user['id']);
-        $openLiveCourses = $this->findOpenLiveCourse($conditions, $user['id']);
-        return array('data' => array_merge($liveCourses, $openLiveCourses));
+        return array('data' => $liveCourses);
     }
 
     protected function findLiveCourse($conditions, $userId)
     {
         $members = $this->getMemberService()->searchMembers(
-            array('userId' => $userId, 'role' => 'teacher'), array(), 0, PHP_INT_MAX
+            array('userId' => $userId, 'role' => 'student'), array(), 0, PHP_INT_MAX
         );
         $courseIds = ArrayToolkit::column($members, 'courseId');
         if (empty($courseIds)) {
@@ -58,36 +57,6 @@ class TeacherLiveCourse extends AbstractResource
         }
     }
 
-    protected function findOpenLiveCourse($conditions, $userId)
-    {
-        $members = $this->getOpenCourseService()->searchMembers(
-            array('userId' => $userId, 'role' => 'teacher'), array(), 0, PHP_INT_MAX
-        );
-        $courseIds = ArrayToolkit::column($members, 'courseId');
-        if (empty($courseIds)) {
-            return array();
-        } else {
-            $openLiveCourses = array();
-            $openLessons = $this->getOpenCourseService()->searchLessons(
-                array('courseIds' => $courseIds, 'type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['createdTime_GE'], 'endTimeLessThan' => $conditions['createdTime_LT'], 'status' => 'published'),
-                array(),
-                0,
-                PHP_INT_MAX
-            );
-            foreach ($openLessons as $openLesson) {
-                $openCourse = $this->getOpenCourseService()->getCourse($openLesson['courseId']);
-                if (!empty($openCourse)) {
-                    $openLiveCourse = array();
-                    $openLiveCourse['title'] = $openCourse['title'];
-                    $openLiveCourse['startTime'] = date("Y-m-d H:i:s", $openLesson['startTime']);
-                    $openLiveCourse['endTime'] = date("Y-m-d H:i:s", $openLesson['endTime']);
-                    array_push($openLiveCourses, $openLiveCourse);
-                }
-            }
-            return $openLiveCourses;
-        }
-    }
-
     /**
      * @return MemberService
      */
@@ -102,14 +71,6 @@ class TeacherLiveCourse extends AbstractResource
     private function getTaskService()
     {
         return $this->service('Task:TaskService');
-    }
-
-    /**
-     * @return OpenCourseService
-     */
-    private function getOpenCourseService()
-    {
-        return $this->service('OpenCourse:OpenCourseService');
     }
 
     /**
