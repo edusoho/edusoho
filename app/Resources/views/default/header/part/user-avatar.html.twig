@@ -9,8 +9,7 @@
       </a>
       <div class="user-dropdown-profile">
         <div class="user-dropdown-profile__nickname">
-          <span>{{ app.user.nickname }}</span>
-          {{ slot('header.user.logo', {user: app.user}) }}
+          <span>{{ app.user.nickname }}</span>{{ slot('header.user.logo', {user: app.user}) }}
         </div>
         {{ slot('header.user.info', {user: app.user}) }}
       </div>
