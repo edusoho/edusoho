@@ -4208,6 +4208,7 @@ admin.setting.theme.use_btn: Apply
 admin.setting.theme.manage_btn: Config
 admin.setting.theme.manage.title: 'EduSoho Theme Edit'
 admin.setting.theme.manage.theme_edit: 'Theme edit'
+admin.setting.theme.manage: manage
 admin.setting.theme.manage.theme_cancel: Cancel
 admin.setting.theme.manage.theme_ok: Apply
 admin.setting.theme.manage.components: Component

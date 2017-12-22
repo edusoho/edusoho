@@ -5303,6 +5303,7 @@ admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
 admin.setting.theme.manage.theme_edit: 主题编辑
+admin.setting.theme.manage: 主题管理
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
