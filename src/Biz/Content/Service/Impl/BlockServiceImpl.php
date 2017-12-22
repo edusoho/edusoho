@@ -253,7 +253,7 @@ class BlockServiceImpl extends BaseService implements BlockService
             throw $this->createNotFoundException('此编辑区不存在，更新失败!');
         }
 
-        if ($blockTemplate['mode'] == 'template' && empty($history['data'])) {
+        if ('template' == $blockTemplate['mode'] && empty($history['data'])) {
             throw $this->createNotFoundException('此编辑区数据不存在，更新失败!');
         }
 
