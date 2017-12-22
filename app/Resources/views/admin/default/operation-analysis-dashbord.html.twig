@@ -26,7 +26,7 @@ clearfix">
     <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalClassroomMemberNum }}</p>
   </li>
   {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
-    <li style="width: 16%">
+    <li>
       <div class="title">{{ 'admin.homepage.todays_data.new_vip_members'|trans }}</div>
       <span class="number">{{ todayVipNum }}</span>
       <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalVipNum }}</p>
