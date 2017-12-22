@@ -3,6 +3,7 @@
 namespace AppBundle\Extension;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Activity\ActivityConfig;
 use Biz\Activity\Type\Audio;
 use Biz\Activity\Type\Discuss;
 use Biz\Activity\Type\Doc;
@@ -17,6 +18,7 @@ use Biz\Activity\Type\Text;
 use Biz\Activity\Type\Video;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Biz\Activity\Config\Activity;
 
 class ActivityExtension extends Extension implements ServiceProviderInterface
 {
@@ -25,49 +27,69 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $container['activity_type.text'] = function ($biz) {
-            return new Text($biz);
-        };
-        $container['activity_type.video'] = function ($biz) {
-            return new Video($biz);
-        };
 
-        $container['activity_type.audio'] = function ($biz) {
-            return new Audio($biz);
-        };
+        $activityDir = $container['activity_dir'];
+        $activitiesDir = glob($activityDir . '/*' , GLOB_ONLYDIR);
 
-        $container['activity_type.download'] = function ($biz) {
-            return new Download($biz);
-        };
+        foreach ($activitiesDir as $dir) {
+            $pathInfo = pathinfo($dir);
+            $type = $pathInfo['filename'];
+            $activityExtFile = implode(DIRECTORY_SEPARATOR, array($dir, "activity_{$type}.php"));
+            if (file_exists($activityExtFile)) {
+                require_once $activityExtFile;
+                $class = "activity_{$type}";
+                $customExt = new $class($container);
+                if ($customExt instanceof Activity) {
+                    $container['activity_type.'.$type] = $customExt;
+                } else {
+                    $container['activity_type.'.$type] = new Activity($container);
+                }
+            }
+        }
 
-        $container['activity_type.live'] = function ($biz) {
-            return new Live($biz);
-        };
-
-        $container['activity_type.discuss'] = function ($biz) {
-            return new Discuss($biz);
-        };
-
-        $container['activity_type.flash'] = function ($biz) {
-            return new Flash($biz);
-        };
-
-        $container['activity_type.doc'] = function ($biz) {
-            return new Doc($biz);
-        };
-
-        $container['activity_type.ppt'] = function ($biz) {
-            return new Ppt($biz);
-        };
-        $container['activity_type.testpaper'] = function ($biz) {
-            return new Testpaper($biz);
-        };
-        $container['activity_type.homework'] = function ($biz) {
-            return new Homework($biz);
-        };
-        $container['activity_type.exercise'] = function ($biz) {
-            return new Exercise($biz);
-        };
+//        $container['activity_type.text'] = function ($biz) {
+//            return new Text($biz);
+//        };
+//        $container['activity_type.video'] = function ($biz) {
+//            return new Video($biz);
+//        };
+//
+//        $container['activity_type.audio'] = function ($biz) {
+//            return new Audio($biz);
+//        };
+//
+//        $container['activity_type.download'] = function ($biz) {
+//            return new Download($biz);
+//        };
+//
+//        $container['activity_type.live'] = function ($biz) {
+//            return new Live($biz);
+//        };
+//
+//        $container['activity_type.discuss'] = function ($biz) {
+//            return new Discuss($biz);
+//        };
+//
+//        $container['activity_type.flash'] = function ($biz) {
+//            return new Flash($biz);
+//        };
+//
+//        $container['activity_type.doc'] = function ($biz) {
+//            return new Doc($biz);
+//        };
+//
+//        $container['activity_type.ppt'] = function ($biz) {
+//            return new Ppt($biz);
+//        };
+//        $container['activity_type.testpaper'] = function ($biz) {
+//            return new Testpaper($biz);
+//        };
+//        $container['activity_type.homework'] = function ($biz) {
+//            return new Homework($biz);
+//        };
+//        $container['activity_type.exercise'] = function ($biz) {
+//            return new Exercise($biz);
+//        };
     }
 
     public function getActivities()

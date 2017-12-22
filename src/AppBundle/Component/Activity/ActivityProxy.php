@@ -2,6 +2,9 @@
 
 namespace AppBundle\Component\Activity;
 
+use Biz\Activity\BaseActivityExt;
+use Codeages\Biz\Framework\Context\Biz;
+
 class ActivityProxy
 {
     public $activityConfig;
@@ -89,7 +92,7 @@ class ActivityProxy
     private function getAbsolutePath($extension, $relativePath)
     {
         if ($extension === 'php') {
-            return implode(DIRECTORY_SEPARATOR, array($this->activityDir, 'src', $relativePath));
+            return implode(DIRECTORY_SEPARATOR, array($this->activityDir, $relativePath));
         } else {
             return $this->getViewPath($relativePath);
         }

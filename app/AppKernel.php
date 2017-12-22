@@ -145,6 +145,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz['env'] = array(
             'base_url' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath(),
         );
+        $biz['activity_dir'] = $this->getContainer()->getParameter('edusoho.activities_dir');
 
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
