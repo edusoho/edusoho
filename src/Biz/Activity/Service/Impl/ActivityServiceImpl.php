@@ -138,10 +138,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
-        $activityConfig = $this->getActivityConfig($fields['mediaType']);
-        $materials = $this->getMaterialsFromActivity($fields, $activityConfig);
+        /** @var \Biz\Activity\BaseActivityExt $activityExt */
+        $activityExt = $this->biz['activity_ext'];
 
-        $media = $activityConfig->create($fields);
+        $media = $activityExt->create($fields);
 
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
@@ -157,7 +157,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->syncActivityMaterials($activity, $materials, 'create');
         }
 
-        $listener = $activityConfig->getListener('activity.created');
+        $listener = $activityExt->getListener('activity.created');
         if (!empty($listener)) {
             $listener->handle($activity, array());
         }
