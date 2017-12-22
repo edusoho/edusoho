@@ -2,9 +2,6 @@
 
 namespace AppBundle\Component\Activity;
 
-use Biz\Activity\BaseActivityExt;
-use Codeages\Biz\Framework\Context\Biz;
-
 class ActivityProxy
 {
     public $activityConfig;
@@ -28,8 +25,6 @@ class ActivityProxy
         $this->activityConfig = new ActivityConfig($activityDir.DIRECTORY_SEPARATOR.'activity.json');
         $this->activityContext = new ActivityContext($container->getBiz(), $activity);
         $this->container = $container;
-
-        $this->setActivityExt($container->getBiz());
     }
 
     public function renderRoute($routeName, ActivityProxy $activityProxy, $parameters = array())
@@ -88,22 +83,6 @@ class ActivityProxy
                 'absolutePath' => $this->getAbsolutePath('html', $defaultRelativePath),
                 'relativePath' => $defaultRelativePath,
             );
-        }
-    }
-
-    private function setActivityExt(Biz $biz)
-    {
-        $customActivityExtFile = $this->activityDir.DIRECTORY_SEPARATOR."activity_{$this->activityConfig['type']}.php";
-        if (file_exists($customActivityExtFile)) {
-            require_once $customActivityExtFile;
-            $class = "activity_{$this->activityConfig['type']}";
-            $customExt = new $class($biz);
-
-            if ($customExt instanceof BaseActivityExt) {
-                $biz['activity_ext'] = $customExt;
-            }
-        } else {
-            $biz['activity_ext'] = new BaseActivityExt($biz);
         }
     }
 
