@@ -7,7 +7,7 @@ use AppBundle\Component\Export\Invite\InviteRecordsExporter;
 use AppBundle\Common\ReflectionUtils;
 
 class InviteRecordsExporterTest extends BaseTestCase
-{   
+{
     public function testGetContent()
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
@@ -24,7 +24,7 @@ class InviteRecordsExporterTest extends BaseTestCase
                             'coinAmount' => 3,
                             'cashAmount' => 4,
                             'inviteTime' => 444,
-                        ),  
+                        ),
                         array(
                             'inviteUserId' => 2,
                             'invitedUserId' => 1,
@@ -32,52 +32,51 @@ class InviteRecordsExporterTest extends BaseTestCase
                             'coinAmount' => 3,
                             'cashAmount' => 4,
                             'inviteTime' => 444,
-                        ), 
+                        ),
                     ),
                     'withParams' => array(
                     ),
                 ),
                 array(
                     'functionName' => 'getAllUsersByRecords',
-                    'returnValue' => 
-                    array(
+                    'returnValue' => array(
                         '1' => array(
                             'id' => 1,
                             'nickname' => 'wo',
-                            'inviteCode' => 'wowowo' 
+                            'inviteCode' => 'wowowo',
                         ),
                         '2' => array(
                             'id' => 2,
                             'nickname' => 'la',
-                            'inviteCode' => 'lalala'
-                        )   
-                    ),  
+                            'inviteCode' => 'lalala',
+                        ),
+                    ),
                     'withParams' => array(
                     ),
                 ),
             )
-        ); 
+        );
 
         $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), array());
         $content = $expoter->getContent(0, 10);
         $this->assertArrayEquals(array(
-            "wo",
-            "la",
+            'wo',
+            'la',
             2,
             3,
             4,
-            "wowowo",
-            "1970-01-01 08:07:24",
+            'wowowo',
+            '1970-01-01 08:07:24',
         ), $content[0]);
 
         $this->assertArrayEquals(array(
-            "la",
-            "wo",
+            'la',
+            'wo',
             2,
             3,
             4,
-            "lalala",
-            "1970-01-01 08:07:24",
+            'lalala',
+            '1970-01-01 08:07:24',
         ), $content[1]);
     }
 
@@ -132,26 +131,26 @@ class InviteRecordsExporterTest extends BaseTestCase
             '1' => array(
                 'id' => 1,
                 'nickname' => 'wo',
-                'inviteCode' => 'wowowo' 
+                'inviteCode' => 'wowowo',
             ),
             '2' => array(
                 'id' => 2,
                 'nickname' => 'la',
-                'inviteCode' => 'lalala'
-            )          
+                'inviteCode' => 'lalala',
+            ),
         );
 
         $expoter = new InviteRecordsExporter(self::$appKernel->getContainer(), array());
         $data = ReflectionUtils::invokeMethod($expoter, 'exportDataByRecord', array($record, $user));
-        
+
         $this->assertArrayEquals(array(
-            "wo",
-            "la",
+            'wo',
+            'la',
             2,
             3,
             4,
             'wowowo',
-            '1970-01-01 08:07:24'   
+            '1970-01-01 08:07:24',
         ), $data);
     }
 
@@ -180,8 +179,8 @@ class InviteRecordsExporterTest extends BaseTestCase
 
         $exportConditions = $expoter->buildCondition($conditions);
         $this->assertArrayEquals(array(
-            'startDate' => "2014-1-1",
-            'endDate' => "2014-1-12",
+            'startDate' => '2014-1-1',
+            'endDate' => '2014-1-12',
             'inviteUserId' => 2,
         ), $exportConditions);
 
@@ -215,7 +214,7 @@ class InviteRecordsExporterTest extends BaseTestCase
         $this->assertEquals(true, $expoter->canExport());
 
         $biz = $this->getBiz();
-        $user =  $biz['user'];
+        $user = $biz['user'];
         $user->setPermissions(array());
 
         $this->assertEquals(false, $expoter->canExport());
