@@ -21,7 +21,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return true;
     }
 
-    public function isHighLight($notifications, $id)
+    public function isSelectNotification($notifications, $id)
     {
         foreach ($notifications as &$notification) {
             if ($notification['id'] == $id) {
