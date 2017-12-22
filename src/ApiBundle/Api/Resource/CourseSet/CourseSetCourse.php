@@ -39,7 +39,7 @@ class CourseSetCourse extends AbstractResource
             $course['access'] = $this->getCourseService()->canJoinCourse($course['id']);
             
             $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
-            $course['isAudioOn'] = $enableAudioStatus ? 1 : 0;
+            $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
             unset($course['enableAudio']);
         }
     }

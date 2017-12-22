@@ -22,10 +22,12 @@ class CourseCopy extends AbstractEntityCopy
     protected function copyEntity($source, $course = array())
     {
         $course = array_merge($source, $course);
+        
         $newCourse = $this->processCourse($course);
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
         $modeChange = $newCourse['courseType'] != $source['courseType'];
         $newCourse = $this->parseExpiryMode($course, $newCourse);
+
         $newCourse = $this->getCourseDao()->create($newCourse);
 
         $course = array('newCourse' => $newCourse, 'modeChange' => $modeChange, 'isCopy' => false);
@@ -86,6 +88,7 @@ class CourseCopy extends AbstractEntityCopy
             'courseType',
             'taskNumber',
             'compulsoryTaskNum',
+            'enableAudio',
         );
     }
 
