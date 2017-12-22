@@ -13,7 +13,6 @@ class NotificationController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
@@ -29,6 +28,10 @@ class NotificationController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        if (!empty($request->query->get('id'))) {
+            $id = $request->query->get('id');
+            $notifications = $this->getNotificationService()->isHighLight($notifications, $id);
+        }
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         $user->clearNotifacationNum();
 

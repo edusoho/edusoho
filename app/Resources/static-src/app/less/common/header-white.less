@@ -44,7 +44,18 @@
       color: @gray-darker;
     }
   }
+  .nav.user-nav > li {
+    .inform-dropdown-toggle {
+      color: rgb(111, 111, 111) !important;
+      &:hover {
+        color: rgba(111, 111, 111, 0.8) !important;
+      }
+    }
+  }
 }
-.navbar-form .form-control {
-  border-color: @gray-light;
+
+.navbar-form {
+  .form-control {
+    color: rgba(0, 0, 0, 0.32);
+  }
 }
