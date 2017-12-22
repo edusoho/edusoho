@@ -63,6 +63,7 @@ export default class CustomFullCalendar {
   }
 
   _init() {
+    let date = new Date();
     let calendarOptions = {
       header: {
         left: '',
@@ -75,6 +76,21 @@ export default class CustomFullCalendar {
       defaultView: this.options['defaultView'],
       allDaySlot: false,
       scrollTime: '08:00:00', //默认移动到　８点位置
+
+      eventRender: function(event, element) {
+        element.popover({
+          animation:true,
+          delay: 300,
+          content: '<b>Inicio</b>:'+event.start+"<b>Fin</b>:"+event.end,
+          trigger: 'hover'
+        });
+      },
+      events: [
+        {
+          title: 'All Day Event',
+          start: new Date(date.getDate(), date.getMonth(), 1)
+        },
+      ]
     };
 
     if (calendarOptions['defaultView'] == 'agendaWeek') {
