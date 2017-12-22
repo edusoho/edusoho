@@ -215,6 +215,7 @@ export default class CustomFullCalendar {
     let singleEvent = {};
     for (let i = 0; i < copiedFields.length; i++) {
       let fieldName = copiedFields[i];
+      console.log(singleResult[this.options['attrs'][fieldName]]);
       singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
     }
     singleEvent['className'] = [];

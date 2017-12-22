@@ -31,10 +31,7 @@ class StudentLiveCourse extends AbstractResource
             array('userId' => $userId, 'role' => 'student'), array(), 0, PHP_INT_MAX
         );
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        if (empty($courseIds)) {
-            return array();
-        } else {
-            $liveCourses = array();
+        if (!empty($courseIds)) {
             $tasks = $this->getTaskService()->searchTasks(
                 array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $conditions['createdTime_GE'], 'endTime_LT' => $conditions['createdTime_LT'], 'status' => 'published'),
                 array(),
@@ -42,19 +39,24 @@ class StudentLiveCourse extends AbstractResource
                 PHP_INT_MAX
             );
             foreach ($tasks as $task) {
-                $course = $this->getCourseSetService()->searchCourseSets(
+                $course = $this->getCourseService()->searchCourses(
                     array('id' => $task['courseId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
                 );
                 if (!empty($course)) {
-                    $liveCourse = array();
-                    $liveCourse['title'] = $course[0]['title'];
-                    $liveCourse['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
-                    $liveCourse['endTime'] = date("Y-m-d H:i:s", $task['endTime']);
-                    array_push($liveCourses, $liveCourse);
+                    $courseSet = $this->getCourseSetService()->searchCourseSets(
+                        array('id' => $course[0]['courseSetId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
+                    );
+                    if (!empty($courseSet)) {
+                        $liveCourse = array();
+                        $liveCourse['title'] = $courseSet[0]['title'];
+                        $liveCourse['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
+                        $liveCourse['endTime'] = date("Y-m-d H:i:s", $task['endTime']);
+                        array_push($liveCourses, $liveCourse);
+                    }
                 }
             }
-            return $liveCourses;
         }
+        return $liveCourses;
     }
 
     /**

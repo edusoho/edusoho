@@ -32,10 +32,8 @@ class TeacherLiveCourse extends AbstractResource
             array('userId' => $userId, 'role' => 'teacher'), array(), 0, PHP_INT_MAX
         );
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        if (empty($courseIds)) {
-            return array();
-        } else {
-            $liveCourses = array();
+        $liveCourses = array();
+        if (!empty($courseIds)) {
             $tasks = $this->getTaskService()->searchTasks(
                 array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $conditions['createdTime_GE'], 'endTime_LT' => $conditions['createdTime_LT'], 'status' => 'published'),
                 array(),
@@ -43,19 +41,24 @@ class TeacherLiveCourse extends AbstractResource
                 PHP_INT_MAX
             );
             foreach ($tasks as $task) {
-                $course = $this->getCourseSetService()->searchCourseSets(
+                $course = $this->getCourseService()->searchCourses(
                     array('id' => $task['courseId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
                 );
                 if (!empty($course)) {
-                    $liveCourse = array();
-                    $liveCourse['title'] = $course[0]['title'];
-                    $liveCourse['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
-                    $liveCourse['endTime'] = date("Y-m-d H:i:s", $task['endTime']);
-                    array_push($liveCourses, $liveCourse);
+                    $courseSet = $this->getCourseSetService()->searchCourseSets(
+                        array('id' => $course[0]['courseSetId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
+                    );
+                    if (!empty($courseSet)) {
+                        $liveCourse = array();
+                        $liveCourse['title'] = $courseSet[0]['title'];
+                        $liveCourse['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
+                        $liveCourse['endTime'] = date("Y-m-d H:i:s", $task['endTime']);
+                        array_push($liveCourses, $liveCourse);
+                    }
                 }
             }
-            return $liveCourses;
         }
+        return $liveCourses;
     }
 
     protected function findOpenLiveCourse($conditions, $userId)
@@ -64,10 +67,8 @@ class TeacherLiveCourse extends AbstractResource
             array('userId' => $userId, 'role' => 'teacher'), array(), 0, PHP_INT_MAX
         );
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        if (empty($courseIds)) {
-            return array();
-        } else {
-            $openLiveCourses = array();
+        $openLiveCourses = array();
+        if (!empty($courseIds)) {
             $openLessons = $this->getOpenCourseService()->searchLessons(
                 array('courseIds' => $courseIds, 'type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['createdTime_GE'], 'endTimeLessThan' => $conditions['createdTime_LT'], 'status' => 'published'),
                 array(),
@@ -84,8 +85,8 @@ class TeacherLiveCourse extends AbstractResource
                     array_push($openLiveCourses, $openLiveCourse);
                 }
             }
-            return $openLiveCourses;
         }
+        return $openLiveCourses;
     }
 
     /**
@@ -118,5 +119,13 @@ class TeacherLiveCourse extends AbstractResource
     private function getCourseSetService()
     {
        return $this->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
