@@ -78,11 +78,17 @@ class ApiAuth
 
     protected function onlineSample($request, $token, $userId)
     {
+        $userAgent = $request->headers->get('User-Agent', '');
+        // 气球鱼爬虫不统计在线人数
+        if (!$userAgent || strpos($userAgent, 'QiQiuYun Search Spider') >= 0) {
+            return;
+        }
+
         $online = array(
             'sess_id' => $token,
             'user_id' => $userId,
             'ip' => $request->getClientIp(),
-            'user_agent' => $request->headers->get('User-Agent', ''),
+            'user_agent' => $userAgent,
             'source' => 'App',
         );
         $this->getOnlineService()->saveOnline($online);
