@@ -205,6 +205,8 @@ class BaseTestCase extends TestCase
      *          'runTimes' => 1 //非必填，表示跑第几次会出相应结果, 不填表示无论跑多少此，结果都一样
      *      )
      *  )
+     *
+     * @return \Mockery\MockInterface
      */
     protected function mockBiz($alias, $params = array())
     {
@@ -229,6 +231,10 @@ class BaseTestCase extends TestCase
                 $expectation->andReturn($param['returnValue']);
             }
 
+            if (!empty($param['andReturnValues'])) {
+                $expectation->andReturnValues($param['andReturnValues']);
+            }
+
             if (!empty($param['throwException'])) {
                 $expectation->andThrow($param['throwException']);
             }
@@ -236,6 +242,8 @@ class BaseTestCase extends TestCase
 
         $biz = $this->getBiz();
         $biz['@'.$alias] = $mockObj;
+
+        return $mockObj;
     }
 
     protected static function getContainer()

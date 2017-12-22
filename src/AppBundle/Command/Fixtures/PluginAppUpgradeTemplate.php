@@ -75,7 +75,7 @@ class EduSohoPluginUpgrade
         $filesystem = new Filesystem();
         $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
         if (is_dir($originDir)) {
-            $targetDir = "{$rootDir}/web/bundles/{{$lowerCode}}plugin";
+            $targetDir = "{$rootDir}/web/bundles/{$lowerCode}plugin";
             if ($filesystem->exists($targetDir)) {
                 $filesystem->remove($targetDir);
             }

@@ -99,6 +99,36 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $api->post("/resources/{$globalId}/processes", $options);
     }
 
+    public function retryTranscode(array $globalIds)
+    {
+        if (!empty($globalIds)) {
+            $api = CloudAPIFactory::create('root');
+            $params = array('nos' => $globalIds);
+
+            return $api->post('/resources/transcode_retry', $params);
+        }
+
+        return false;
+    }
+
+    public function getResourcesStatus($options)
+    {
+        if (isset($options['cursor'])) {
+            $api = CloudAPIFactory::create('root');
+
+            return $api->get('/resources_statuses', $options);
+        }
+
+        return array();
+    }
+
+    public function getAudioServiceStatus()
+    {
+        $api = CloudAPIFactory::create('root');
+
+        return $api->get('/me/profile');
+    }
+
     public function deleteFile($file)
     {
         if (!empty($file['globalId'])) {
@@ -498,6 +528,16 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     }
 
                     $file['metas2'] = $file['metas']['levels'];
+                }
+
+                if (isset($file['metas']['audiolevels'])) {
+                    foreach ($file['metas']['audiolevels'] as $key => $value) {
+                        $value['type'] = $key;
+                        $value['cmd']['hlsKey'] = $file['metas']['audiolevels'][$key]['hlsKey'];
+                        $file['audioMetas']['levels'][$key] = $value;
+                    }
+
+                    $file['audioMetas2'] = $file['audioMetas']['levels'];
                 }
 
                 if (isset($file['directives']['watermarks'])) {

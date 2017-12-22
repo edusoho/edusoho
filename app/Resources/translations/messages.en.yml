@@ -1408,6 +1408,7 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+course.course_files.re_try_convert_video_to_audio： 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 
@@ -3029,6 +3030,7 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
+my.teaching.live_schedule_menu: Live Schedules
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -4233,6 +4235,11 @@ admin.setting.theme.manage.modal.student_comment: 'Student Comments'
 admin.setting.theme.manage.modal.student_dynamic: 'Latest updates'
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 'Class Capacity Setting'
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 'Teacher Count Setting'
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
 admin.setting.mailer.cloud_email_crm.status.open: Enabled
@@ -6870,6 +6877,19 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+
+course.to_be.biz.user.first: 需要先申请为商业用户!
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+course.video.convert.client.listen: 听
+course.video.convert.client.click.listen: 手机端支持一键听课
+course.video.convert.client.try: '（试一试）'
+course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
+course.task.show.video.convert.client.notify: 不再提醒
+course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.start: 开启
+course.info.video.convert.audio.close: 关闭
 
 user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间

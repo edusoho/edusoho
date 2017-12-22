@@ -248,7 +248,11 @@ uploadfile_browsers:
 
 hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
-    defaults: { _controller: AppBundle:HLS:playlist}
+    defaults: { _controller: AppBundle:HLSVideo:playlist}
+
+hls_audio_playlist:
+    path: /hls/{id}/audio/playlist/{token}.m3u8
+    defaults: { _controller: AppBundle:HLSAudio:playlist}
 
 player_local_media:
     path: /player/{id}/file/{token}
@@ -256,11 +260,19 @@ player_local_media:
 
 hls_stream:
     path: /hls/{id}/stream/{level}/{token}.m3u8
-    defaults: { _controller: AppBundle:HLS:stream}
+    defaults: { _controller: AppBundle:HLSVideo:stream}
+
+hls_audio_stream:
+    path: /hls/{id}/audio/stream/{level}/{token}.m3u8
+    defaults: { _controller: AppBundle:HLSAudio:stream}
 
 hls_clef:
     path: /hls/{id}/clef/{token}
-    defaults: { _controller: AppBundle:HLS:clef}
+    defaults: { _controller: AppBundle:HLSVideo:clef}
+
+hls_audio_clef:
+    path: /hls/{id}/audio/clef/{token}
+    defaults: { _controller: AppBundle:HLSAudio:clef}
 
 editor_upload:
     path:  /editor/upload
@@ -531,6 +543,10 @@ my_teaching_threads:
 my_teaching_classrooms:
     path: /my/teaching/classrooms
     defaults: { _controller: AppBundle:My/Classroom:teaching }
+
+my_teaching_live_calendar:
+    path: /my/teaching/live/calendar
+    defaults: { _controller: AppBundle:My/CourseSet:teachingLivesCalendar }
 
 my_live_courses_learning:
     path: /my/learning/live
@@ -2058,6 +2074,11 @@ course_set_manage_delete_materials_show:
 course_set_manage_delete_materials:
    path:  /course_set/{id}/manage/delete/materials
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
+   methods: [POST]
+
+course_set_manage_retry_transcode:
+   path:  /course_set/{id}/manage/file/{fileId}/retry_transcode
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:retryTranscode }
    methods: [POST]
 
 

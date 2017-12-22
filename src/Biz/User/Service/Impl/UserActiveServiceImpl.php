@@ -58,13 +58,6 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
         return true;
     }
 
-    public function getFilePath($userId)
-    {
-        $rootDir = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../');
-
-        return $rootDir."/app/data/active_user/{$userId}/".date('Y_m_d', time());
-    }
-
     /**
      * @return UserActiveDaoImpl
      */

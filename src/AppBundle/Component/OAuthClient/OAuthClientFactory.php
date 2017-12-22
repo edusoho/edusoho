@@ -24,7 +24,7 @@ class OAuthClientFactory
         $clients = self::clients();
 
         if (!array_key_exists($type, $clients)) {
-            throw new InvalidArgumentException(array('参数不正确%type%', array('%type%' => $type)));
+            throw new InvalidArgumentException('参数不正确'.$type);
         }
 
         $class = $clients[$type]['class'];

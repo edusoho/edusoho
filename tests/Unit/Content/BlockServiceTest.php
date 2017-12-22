@@ -32,8 +32,6 @@ class BlockServiceTest extends BaseTestCase
                         'data' => '',
                         'templateName' => 'template',
                         'title' => '默认',
-                        'createdTime' => time(),
-                        'updateTime' => time(),
                     )),
                 ),
             )
@@ -125,7 +123,7 @@ class BlockServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'update',
                     'returnValue' => array('id' => 111, 'content' => 'test'),
-                    'withParams' => array(111, array('content' => 'test', 'updateTime' => time())),
+                    'withParams' => array(111, array('content' => 'test')),
                 ),
             )
         );
@@ -397,7 +395,7 @@ class BlockServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'update',
                     'returnValue' => array('id' => 111, 'code' => 'test'),
-                    'withParams' => array(111, array('code' => 'test', 'updateTime' => time())),
+                    'withParams' => array(111, array('code' => 'test')),
                 ),
             )
         );
