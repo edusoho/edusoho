@@ -33,7 +33,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
     {
         $cloudApi = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($cloudApi);
-        $mockObject->shouldReceive('patch')->times(1)->andReturn(array('id' => 123, 'title' => 'live title update' ,'provider' => 6));
+        $mockObject->shouldReceive('patch')->times(1)->andReturn(array('id' => 123, 'title' => 'live title update', 'provider' => 6));
         $client = new EdusohoLiveClient();
         $client->setCloudApi($mockObject, 'root');
 
@@ -115,7 +115,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
         $client->setCloudApi($mockObject, 'leaf');
 
         $result = $client->entryReplay(array('liveId' => 123));
-        $this->assertEquals('iphone',$result['device']);
+        $this->assertEquals('iphone', $result['device']);
         $this->assertEquals('http://www.edusoho.com', $result['url']);
     }
 
@@ -128,7 +128,7 @@ class EdusohoLiveClientlTest extends BaseTestCase
         $client->setCloudApi($mockObject, 'root');
 
         $result = $client->createReplayList(123, 'name1', 6);
-        $this->assertEquals('name1',$result[0]['subject']);
+        $this->assertEquals('name1', $result[0]['subject']);
         $this->assertEquals('333', $result[0]['resourceNo']);
     }
 
@@ -154,8 +154,8 @@ class EdusohoLiveClientlTest extends BaseTestCase
 
         $result = $client->setLiveLogo(array('logoPcUrl' => '123', 'logoClientUrl' => '456', 'logoGotoUrl' => '789'));
 
-        $this->assertEquals(123,$result['logoPcUrl']);
-        $this->assertEquals(456,$result['logoClientUrl']);
-        $this->assertEquals(789,$result['logoGotoUrl']);
+        $this->assertEquals(123, $result['logoPcUrl']);
+        $this->assertEquals(456, $result['logoClientUrl']);
+        $this->assertEquals(789, $result['logoGotoUrl']);
     }
 }
