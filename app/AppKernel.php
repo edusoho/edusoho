@@ -174,7 +174,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->boot();
 
         if (empty($this->pluginConfigurationManager->getActiveThemeName())) {
-            $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
+            $jiamMoTheme = $this->pluginConfigurationManager->setActiveThemeName('jianmo');
+            $jiamMoTheme->save();
         }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
     }
