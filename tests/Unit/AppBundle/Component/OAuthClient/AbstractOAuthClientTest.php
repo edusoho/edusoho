@@ -7,9 +7,6 @@ use AppBundle\Component\OAuthClient\WeixinwebOAuthClient;
 
 class AbstractOAuthClientTest extends BaseTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testMakeToken()
     {
         $client = new WeixinwebOAuthClient(array('key' => 'auth_key', 'secret' => 'auth_secret'));
@@ -45,11 +42,17 @@ class AbstractOAuthClientTest extends BaseTestCase
             ),
             $client->makeToken('weixinweb', 'test_accessToken', 'test_openId', 'test_appId')
         );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testMakeTokenWithException()
+    {
+        $client = new WeixinwebOAuthClient(array('key' => 'auth_key', 'secret' => 'auth_secret'));
 
         // 这里会抛出异常
         $client->makeToken('des', 'test_accessToken', 'test_openId', 'test_appId');
-
-        $this->assertFalse(true);
     }
 
     public function testPostRequest()
