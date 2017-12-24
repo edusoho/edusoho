@@ -239,7 +239,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = ArrayToolkit::parts($category, array('description', 'name', 'code', 'groupId', 'parentId', 'icon'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'groupId', 'parentId'))) {
-            throw $this->createServiceException('缺少必要参数，，添加分类失败');
+            throw $this->createServiceException('缺少必要参数，添加分类失败');
         }
 
         $this->filterCategoryFields($category);
