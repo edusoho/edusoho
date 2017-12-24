@@ -37,6 +37,13 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals('content', $notifications[1]['content']['message']);
     }
 
+    public function testIsSelectNotification()
+    {
+        $notifications = array(array('id' => 2, 'content' => 'test'));
+        $result = $this->getNotificationService()->isSelectNotification($notifications, 2);
+        $this->assertEquals(1, $result[0]['highLight']);
+    }
+
     protected function createUser()
     {
         $user = array();
