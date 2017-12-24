@@ -24,7 +24,7 @@ class TestpapersCopyTest extends BaseTestCase
                         ),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                 ),
             )
@@ -57,7 +57,7 @@ class TestpapersCopyTest extends BaseTestCase
                         ),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                     'runTimes' => 1,
                 ),
@@ -68,7 +68,7 @@ class TestpapersCopyTest extends BaseTestCase
                         'target' => 'course-2',
                         'createdUserId' => 1,
                         'updatedUserId' => 1,
-                        'copyId' => 2
+                        'copyId' => 2,
                     ))),
                 ),
                 array(
@@ -76,11 +76,11 @@ class TestpapersCopyTest extends BaseTestCase
                     'returnValue' => array(array('id' => 2, 'copyId' => 2)),
                     'withParams' => array(
                         array(
-                            'courseSetId' => 2
+                            'courseSetId' => 2,
                         ),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                     'runTimes' => 1,
                 ),
