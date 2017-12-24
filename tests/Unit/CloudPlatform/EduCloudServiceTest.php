@@ -51,8 +51,8 @@ class EduCloudServiceTest extends BaseTestCase
         $this->mockBiz('System:SettingService', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('status' => 'unusual', 'checkTime' => strtotime('+1 day'))
-            )
+                'returnValue' => array('status' => 'unusual', 'checkTime' => strtotime('+1 day')),
+            ),
         ));
 
         $result = $this->getEduCloudService()->getOldSmsUserStatus();
@@ -70,11 +70,11 @@ class EduCloudServiceTest extends BaseTestCase
         $this->mockBiz('System:SettingService', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
             array(
                 'functionName' => 'set',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
         ));
 
@@ -96,11 +96,11 @@ class EduCloudServiceTest extends BaseTestCase
         $this->mockBiz('System:SettingService', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
             array(
                 'functionName' => 'set',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
         ));
 
@@ -112,18 +112,18 @@ class EduCloudServiceTest extends BaseTestCase
     {
         $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
-        $mockObject->shouldReceive('get')->times(1)->andThrow(new \RuntimeException);
+        $mockObject->shouldReceive('get')->times(1)->andThrow(new \RuntimeException());
 
         $this->getEduCloudService()->setCloudApi($mockObject);
 
         $this->mockBiz('System:SettingService', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array()
+                'returnValue' => array(),
             ),
             array(
                 'functionName' => 'set',
-                'returnValue' => array('status' => 'uncheck', 'checkTime' => time() + 60 * 10, 'isOldSmsUser' => 'unknown')
+                'returnValue' => array('status' => 'uncheck', 'checkTime' => time() + 60 * 10, 'isOldSmsUser' => 'unknown'),
             ),
         ));
 

@@ -95,9 +95,9 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         return $this->cloudApi;
     }
 
-
     /**
      * 仅给单元测试Mock用
+     *
      * @param [type] $api [description]
      */
     public function setCloudApi($api)

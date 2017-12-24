@@ -13,11 +13,11 @@ class FreeCourseSetsDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:CategoryGroupDao', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('id' => 1)
-            )
+                'returnValue' => array('id' => 1),
+            ),
         ));
 
-        $category = $this->getCategoryService()->createCategory(array('name' => 'category name', 'code' => 'courseSet', 'groupId' => 1,'parentId' => 0, 'published' => 1));
+        $category = $this->getCategoryService()->createCategory(array('name' => 'category name', 'code' => 'courseSet', 'groupId' => 1, 'parentId' => 0, 'published' => 1));
 
         $courseSet1 = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
         $this->getCourseSetService()->publishCourseSet($courseSet1['id']);
