@@ -34,7 +34,10 @@ class Course extends BaseResource
         $course['userId'] = $course['creator'];
         $course['tryLookTime'] = $course['tryLookLength'];
         $course['createdTime'] = date('c', $course['createdTime']);
-        $course['isAudioOn'] = $course['enableAudio'];
+
+        $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
+        $course['isAudioOn'] = $enableAudioStatus ? 1 : 0;
+        unset($course['enableAudio']);
         
         return $course;
     }

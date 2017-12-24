@@ -146,8 +146,16 @@ class CourseSetFileManageController extends BaseController
         }
 
         if (in_array($file['audioConvertStatus'], array('none', 'error'))) {
-            $this->getUploadFileService()->retryTranscode(array($file['globalId']));
-            $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
+            $convertStatus = $this->getUploadFileService()->retryTranscode(array($file['globalId']));
+            if (empty($convertStatus)) {
+                return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
+            }
+            if (isset($convertStatus['error'])) {
+                return $this->createJsonResponse(array('status' => 'error', 'message' => $convertStatus['error']));
+            }
+            if (isset($convertStatus['success'])) {
+                $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
+            }
         }
 
         return $this->createJsonResponse(array('status' => 'ok'));
