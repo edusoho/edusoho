@@ -386,7 +386,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $setting = $this->getSettingService()->get('storage', array());
-        
+
         if (!empty($setting['upload_mode']) && 'cloud' != $setting['upload_mode']) {
             return false;
         }
