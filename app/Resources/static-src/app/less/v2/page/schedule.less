@@ -21,6 +21,35 @@
   }
 }
 
+.fc-toolbar .fc-center {
+  margin-left: 120px;
+}
+
+.fc-unthemed th.fc-today {
+  background: #f2faf3;
+}
+
+.fc-today-button {
+  margin: 0 4px !important;
+}
+
+.fc-state-default {
+  background-color: transparent;
+  background: none;
+}
+
+.fc-state-disabled {
+  cursor: not-allowed !important;
+}
+
+.fc th {
+  height: 3.8em;
+}
+
+.fc-time-grid .fc-slats td {
+  height: 1.9em;
+}
+
 .fc-center {
   h2 {
     font-size: 24px;
@@ -72,13 +101,35 @@
 
 
 .calendar-future {
-  background-color: #278BF5;
+  background-color: #278bf5;
   .cd-border-radius(2px);
   border: none;
 }
 
 .schedule-popover {
-  padding: 8px;
+  padding: 4px 0 0 0;
   width: 205px;
-  .cd-border-radius(2px);
+  .cd-border-radius;
+  background-color: #278bf5;
+  .cd-box-shadow-z(12px);
+  border: none;
+}
+
+.schedule-popover-content {
+  padding: 8px 8px 16px;
+  background-color: #fff;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+
+.schedule-popover-content__item {
+  margin-left: 22px;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.schedule-popover-content__time {
+  font-size: 12px;
+  line-height: 1;
 }

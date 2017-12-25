@@ -16,6 +16,12 @@
   box-shadow: inset @value rgba(0, 0, 0, 0.08);
 }
 
+.cd-box-shadow-z(@level) {
+  -webkit-box-shadow: 0 0 @level 0 rgba(0,0,0,0.02), 0 0 @level 0 rgba(0,0,0,0.04), 0 @level @level 0 rgba(0,0,0,0.06);
+  -moz-box-shadow: 0 0 @level 0 rgba(0,0,0,0.02), 0 0 @level 0 rgba(0,0,0,0.04), 0 @level @level 0 rgba(0,0,0,0.06);
+  box-shadow: 0 0 @level 0 rgba(0,0,0,0.02), 0 0 @level 0 rgba(0,0,0,0.04), 0 @level @level 0 rgba(0,0,0,0.06);
+}
+
 .cd-border-radius(@border-radius:4px) {
   -webkit-border-radius: @border-radius;
      -moz-border-radius: @border-radius;
@@ -183,6 +189,10 @@
 
 .cd-ml8 {
   margin-left: 8px !important;;
+}
+
+.cd-mb8 {
+  margin-bottom: 8px !important;;
 }
 
 
