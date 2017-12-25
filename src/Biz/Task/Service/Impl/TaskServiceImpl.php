@@ -996,6 +996,29 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->batchCreate($tasks);
     }
 
+    public function getTodayLiveCourseNumber()
+    {
+        $user = $this->getCurrentUser();
+        $members = $this->getMemberService()->searchMembers(
+            array('userId' => $user['id'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX
+        );
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $liveCourseNumber = 0;
+        if (!empty($courseIds)) {
+            $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+            $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+            $tasks = $this->searchTasks(
+                array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
+                array(),
+                0,
+                PHP_INT_MAX
+            );
+            $liveCourseNumber = count($tasks);
+        }
+
+        return $liveCourseNumber;
+    }
+
     /**
      * @return TaskDao
      */

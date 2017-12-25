@@ -129,18 +129,19 @@ export default class CustomFullCalendar {
     }
 
     calendarOptions = this._registerCompActions(calendarOptions);
+    this.calendarOptions = calendarOptions;
 
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
-    this._formatHeadColIfNeed(calendarOptions);
   }
 
   _ajaxLoading(start, end, timezone, callback) {
+    $('.fc-day-header span').hide();
     let startTimeAttr = current.options['dateParams']['start'];
     let endTimeAttr = current.options['dateParams']['end'];
     let params = {};
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
-
+    params['limit'] = 1000;
     current.options['dataApi']({
       data: params
     }).then((result) => {
@@ -254,21 +255,6 @@ export default class CustomFullCalendar {
       $.extend(singleEvent, this.options['components'][i].generateEventValues(singleResult));
     }
     return singleEvent;
-  }
-
-  _formatHeadColIfNeed(calendarOptions) {
-    if (calendarOptions['defaultView'] == 'agendaWeek') {
-      $('.fc-day-header span').each(
-        function() {
-          let text = $(this).html();
-          let segs = text.split(' ');
-          $(this).html(
-            '<div class="week">' + segs[0] + '</div>' +
-            '<div class="day">' + segs[1] + '</div>'
-          );
-        }
-      );
-    }
   }
 
 }

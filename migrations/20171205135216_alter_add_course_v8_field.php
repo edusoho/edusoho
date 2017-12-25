@@ -26,7 +26,7 @@ class AlterAddCourseV8Field extends Migration
         $db = $container['db'];
 
         if ($this->isFieldExist('course_v8', 'enableAudio')) {
-            $db->exec("ALTER TABLE `course_v8` DROP `enableAudio`");
+            $db->exec('ALTER TABLE `course_v8` DROP `enableAudio`');
         }
     }
 
