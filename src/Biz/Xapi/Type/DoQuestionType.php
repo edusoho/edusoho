@@ -122,7 +122,11 @@ class DoQuestionType extends Type
                     $task = $tasks[$questionMarkerResult['taskId']];
                     $course = $courses[$task['courseId']];
                     $activity = $activities[$task['activityId']];
-                    $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    if (!empty($activity['ext']['mediaId'])) {
+                        $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    } else {
+                        $resource = array();
+                    }
 
                     $answers = array();
                     if (is_array($questionMarker['answer'])) {

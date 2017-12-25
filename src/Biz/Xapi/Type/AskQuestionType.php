@@ -92,7 +92,11 @@ class AskQuestionType extends Type
                     $course = $courses[$thread['courseId']];
                     $task = $tasks[$thread['taskId']];
                     $activity = $activities[$task['activityId']];
-                    $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    if (!empty($activity['ext']['mediaId'])) {
+                        $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    } else {
+                        $resource = array();
+                    }
                     $object = array(
                         'id' => $thread['id'],
                         'course' => $course,

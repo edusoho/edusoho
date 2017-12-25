@@ -88,7 +88,11 @@ class WriteNoteType extends Type
                     $course = $courses[$note['courseId']];
                     $task = $tasks[$note['taskId']];
                     $activity = $activities[$task['activityId']];
-                    $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    if (!empty($activity['ext']['mediaId'])) {
+                        $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    } else {
+                        $resource = array();
+                    }
                     $object = array(
                         'id' => $activity['id'],
                         'course' => $course,
