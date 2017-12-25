@@ -33,7 +33,10 @@ class PushStatementJob extends AbstractJob
             $pushStatements = array();
             foreach ($groupStatements as $key => $values) {
                 $push = $this->biz["xapi.push.{$key}"];
-                $pushStatements = array_merge($pushStatements, $push->packages($values));
+                $result = $push->packages($values);
+                if (is_array($result)) {
+                    $pushStatements = array_merge($pushStatements, $result);
+                }
             }
 
             if (empty($pushStatements)) {
