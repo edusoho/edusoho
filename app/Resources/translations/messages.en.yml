@@ -2619,12 +2619,17 @@ homepage.header.register: Sign Up
 homepage.header.my_course: 'My Courses'
 homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
+homepage.header.check_all_notifications: 查看全部通知
+homepage.header.no_new_notifications: 暂无新的通知～
 homepage.header.message: Message
+homepage.header.check_all_messages: 查看全部私信
+homepage.header.no_new_messages: 暂无新的私信～
 homepage.header.personal_menu: 'My Home'
 homepage.header.settings_menu: 'Profile Setting'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
+homepage.header.reward: 积分
 homepage.header.admin_menu: 'Admin'
 homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
@@ -6717,6 +6722,7 @@ log.module.homework: 作业
 log.module.question_plus: 题库增强版
 log.module.announcement: 公告
 log.module.open_course: 公开课
+log.module.live: 直播
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -6877,6 +6883,8 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+log.action.live.update_live_activity: 更新直播活动
+log.action.live.generate_live_replay: 生成直播回放
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

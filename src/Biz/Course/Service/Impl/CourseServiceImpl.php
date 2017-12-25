@@ -379,6 +379,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
     }
 
+    public function isSupportEnableAudio($enableAudioStatus = false)
+    {
+        if (empty($enableAudioStatus)) {
+            return false;
+        }
+
+        $setting = $this->getSettingService()->get('storage', array());
+
+        if (!empty($setting['upload_mode']) && 'cloud' != $setting['upload_mode']) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function convertAudioByCourseIdAndMediaId($courseId, $mediaId)
     {
         $course = $this->tryManageCourse($courseId);

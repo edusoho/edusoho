@@ -14,7 +14,7 @@
 
   {% if content.body %}
     <div class="editor-text">
-  	  {{ content.body|raw }}
+  	  {{ content.body|cdn|raw }}
     </div>
   {% else %}
     <div class="empty">{{'custom_page.empty'|trans}}</div>
