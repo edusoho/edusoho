@@ -1,8 +1,8 @@
 <?php
 
-$container = \AppBundle\Component\Activity\ActivityRuntimeContainerV1::instance();
+$container = \AppBundle\Component\Activity\ActivityRuntimeContainer::instance();
 
-$request = $container->request;
+$request = $container->getRequest();
 
 $content = $request->request->get('content', '');
 
@@ -10,9 +10,9 @@ if (empty($content)) {
     return $container->createJsonResponse(true);
 }
 
-$activityProxy = $container->activityProxy;
-$activity = $activityProxy->activityContext->getActivity();
-$user = $activityProxy->activityContext->getUser();
+$activityProxy = $container->getActivityProxy();
+$activity = $activityProxy->getActivityContext()->getActivity();
+$user = $activityProxy->getActivityContext()->getUser();
 
 /** @var \Biz\Course\Service\CourseDraftService $courseDraftService */
 $courseDraftService = $container->createService('Course:CourseDraftService');

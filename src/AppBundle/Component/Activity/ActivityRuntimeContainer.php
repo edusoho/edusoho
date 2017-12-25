@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
+class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
 {
     const VERSION = '1.0.0';
 
@@ -16,17 +16,17 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
 
     private static $instance;
 
-    public $activitiesDir;
+    private $activitiesDir;
 
     /**
      * @var \AppBundle\Component\Activity\ActivityProxy
      */
-    public $activityProxy;
+    private $activityProxy;
 
     /**
      * @var \Symfony\Component\HttpFoundation\Request
      */
-    public $request;
+    private $request;
 
     public function __construct(ContainerInterface $container)
     {
@@ -40,7 +40,7 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function show($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);
-        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_SHOW, $activityProxy, array(
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_SHOW, array(
             'activity' => $activity,
         ));
     }
@@ -48,7 +48,7 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function create($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);
-        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_CREATE, $activityProxy, array(
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_CREATE, array(
             'activity' => $activity,
         ));
     }
@@ -61,13 +61,13 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function customRoute($activity, $routeName)
     {
         $activityProxy = $this->createActivityProxy($activity);
-        return $activityProxy->renderRoute($routeName, $activityProxy, array(
+        return $activityProxy->renderRoute($routeName, array(
             'activity' => $activity,
         ));
     }
 
     /**
-     * @return \AppBundle\Component\Activity\ActivityRuntimeContainerV1
+     * @return \AppBundle\Component\Activity\ActivityRuntimeContainer
      */
     public static function instance()
     {
@@ -77,6 +77,11 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     public function getActivityProxy()
     {
         return $this->activityProxy;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     private function createActivityProxy($activity)
@@ -89,7 +94,7 @@ class ActivityRuntimeContainerV1 implements ActivityRuntimeContainerInterface
     /**
      * @return \Codeages\Biz\Framework\Dao\Connection
      */
-    public function db()
+    public function getDB()
     {
         return $this->biz['db'];
     }

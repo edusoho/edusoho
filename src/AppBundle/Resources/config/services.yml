@@ -5,7 +5,7 @@ imports:
 services:
 
     activity_runtime_container:
-        class: AppBundle\Component\Activity\ActivityRuntimeContainerV1
+        class: AppBundle\Component\Activity\ActivityRuntimeContainer
         arguments: ['@service_container']
 
     user.online_track:

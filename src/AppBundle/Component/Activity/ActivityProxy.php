@@ -4,14 +4,14 @@ namespace AppBundle\Component\Activity;
 
 class ActivityProxy
 {
-    public $activityConfig;
+    private $activityConfig;
 
-    public $activityContext;
+    private $activityContext;
 
     private $activityDir;
 
     /**
-     * @var \AppBundle\Component\Activity\ActivityRuntimeContainerV1
+     * @var \AppBundle\Component\Activity\ActivityRuntimeContainer
      */
     private $container;
 
@@ -19,7 +19,7 @@ class ActivityProxy
         'php', 'html', 'twig',
     );
 
-    public function __construct(ActivityRuntimeContainerV1 $container, $activity, $activityDir)
+    public function __construct(ActivityRuntimeContainer $container, $activity, $activityDir)
     {
         $this->activityDir = $activityDir;
         $this->activityConfig = new ActivityConfig($activityDir.DIRECTORY_SEPARATOR.'activity.json');
@@ -27,9 +27,26 @@ class ActivityProxy
         $this->container = $container;
     }
 
-    public function renderRoute($routeName, self $activityProxy, $parameters = array())
+    /**
+     * @return \AppBundle\Component\Activity\ActivityConfig
+     */
+    public function getActivityConfig()
     {
-        $routeInfo = $activityProxy->getRouteInfo($routeName);
+        return $this->activityConfig;
+    }
+
+    /**
+     * @return \AppBundle\Component\Activity\ActivityContext
+     */
+    public function getActivityContext()
+    {
+        return $this->activityContext;
+    }
+
+
+    public function renderRoute($routeName, $parameters = array())
+    {
+        $routeInfo = $this->getRouteInfo($routeName);
         switch ($routeInfo['extension']) {
             case 'php':
                 $resp = $this->renderPhp($routeInfo['absolutePath']);
