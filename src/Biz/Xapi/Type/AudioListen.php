@@ -44,75 +44,76 @@ class AudioListen extends Type
         if (empty($statements)) {
             return array();
         }
+        try {
+            $watchLogIds = ArrayToolkit::column($statements, 'target_id');
+            $watchLogs = $this->getXapiService()->findWatchLogsByIds($watchLogIds);
+            $watchLogs = ArrayToolkit::index($watchLogs, 'id');
 
-        $watchLogIds = ArrayToolkit::column($statements, 'target_id');
-        $watchLogs = $this->getXapiService()->findWatchLogsByIds($watchLogIds);
-        $watchLogs = ArrayToolkit::index($watchLogs, 'id');
+            $taskIds = ArrayToolkit::column($watchLogIds, 'task_id');
+            $tasks = $this->getTaskService()->findTasksByIds($taskIds);
+            $tasks = ArrayToolkit::index($tasks, 'id');
 
-        $taskIds = ArrayToolkit::column($watchLogIds, 'task_id');
-        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
-        $tasks = ArrayToolkit::index($tasks, 'id');
+            $courseIds = ArrayToolkit::column($watchLogs, 'course_id');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courses = ArrayToolkit::index($courses, 'id');
 
-        $courseIds = ArrayToolkit::column($watchLogs, 'course_id');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses = ArrayToolkit::index($courses, 'id');
+            $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+            $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-
-        foreach ($courses as &$course) {
-            $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-            $course['title'] = $courseSet['title'].'-'.$course['title'];
-            if (!empty($courseSets[$course['courseSetId']])) {
-                $courseSet = $courseSets[$course['courseSetId']];
-                $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                $course['title'] = $courseSet['title'].'-'.$course['title'];
-            }
-        }
-
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds, true);
-        $activities = ArrayToolkit::index($activities, 'id');
-
-        $resourceIds = array();
-        foreach ($activities as $activity) {
-            if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
-                if (!empty($activity['ext']['mediaId'])) {
-                    $resourceIds[] = $activity['ext']['mediaId'];
+            foreach ($courses as &$course) {
+                if (!empty($courseSets[$course['courseSetId']])) {
+                    $courseSet = $courseSets[$course['courseSetId']];
+                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
+                    $course['title'] = $courseSet['title'].'-'.$course['title'];
                 }
             }
-        }
-        $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
-        $resources = ArrayToolkit::index($resources, 'id');
 
-        $sdk = $this->createXAPIService();
-        $pushStatements = array();
+            $activityIds = ArrayToolkit::column($tasks, 'activityId');
+            $activities = $this->getActivityService()->findActivities($activityIds, true);
+            $activities = ArrayToolkit::index($activities, 'id');
 
-        foreach ($statements as $statement) {
-            try {
-                $watchLog = $watchLogs[$statement['target_id']];
-                $course = $courses[$watchLog['course_id']];
-                $task = $tasks[$watchLog['task_id']];
-                $activity = $activities[$task['activityId']];
-                $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
-                $object = array(
-                    'id' => $activity['id'],
-                    'name' => $task['title'],
-                    'course' => $course,
-                    'definitionType' => $this->convertMediaType($task['type']),
-                    'resource' => empty($resource) ? array() : $resource,
-                );
-                $actor = $this->getActor($statement['user_id']);
-                $result = array(
-                    'duration' => $watchLog['watched_time'],
-                );
-                $pushStatements[] = $sdk->listenAudio($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
-            } catch (\Exception $e) {
-                $this->biz['logger']->error($e);
+            $resourceIds = array();
+            foreach ($activities as $activity) {
+                if (in_array($activity['mediaType'], array('video', 'audio', 'doc', 'ppt', 'flash'))) {
+                    if (!empty($activity['ext']['mediaId'])) {
+                        $resourceIds[] = $activity['ext']['mediaId'];
+                    }
+                }
             }
-        }
+            $resources = $this->getUploadFileService()->findFilesByIds($resourceIds);
+            $resources = ArrayToolkit::index($resources, 'id');
 
-        return $pushStatements;
+            $sdk = $this->createXAPIService();
+            $pushStatements = array();
+
+            foreach ($statements as $statement) {
+                try {
+                    $watchLog = $watchLogs[$statement['target_id']];
+                    $course = $courses[$watchLog['course_id']];
+                    $task = $tasks[$watchLog['task_id']];
+                    $activity = $activities[$task['activityId']];
+                    $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    $object = array(
+                        'id' => $activity['id'],
+                        'name' => $task['title'],
+                        'course' => $course,
+                        'definitionType' => $this->convertMediaType($task['type']),
+                        'resource' => empty($resource) ? array() : $resource,
+                    );
+                    $actor = $this->getActor($statement['user_id']);
+                    $result = array(
+                        'duration' => $watchLog['watched_time'],
+                    );
+                    $pushStatements[] = $sdk->listenAudio($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+                } catch (\Exception $e) {
+                    $this->biz['logger']->error($e);
+                }
+            }
+
+            return $pushStatements;
+        } catch (\Exception $e) {
+            $this->biz['logger']->error($e);
+        }
     }
 }

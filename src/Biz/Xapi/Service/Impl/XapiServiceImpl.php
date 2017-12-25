@@ -67,8 +67,8 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function updateStatementsPushedAndDataByStatementData($pushStatementsData)
     {
         $batchUpdateHelper = new BatchUpdateHelper($this->getStatementDao());
-        foreach ($pushStatementsData as $data) {
-            $batchUpdateHelper->add('uuid', $data['id'], array(
+        foreach ($pushStatementsData as $id => $data) {
+            $batchUpdateHelper->add('id', $id, array(
                 'status' => 'pushed',
                 'push_time' => time(),
                 'data' => $data,

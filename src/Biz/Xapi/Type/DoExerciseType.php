@@ -30,49 +30,54 @@ class DoExerciseType extends Type
 
     public function packages($statements)
     {
-        $exerciseResultIds = ArrayToolkit::index($statements, 'target_id');
-        $exerciseResults = $this->getTestpaperService()->findTestpaperResultsByIds($exerciseResultIds);
-        $exerciseResults = ArrayToolkit::index($exerciseResults, 'id');
-
-        $courseIds = ArrayToolkit::column($exerciseResults, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses = ArrayToolkit::index($courses, 'id');
-
-        $courseSetIds = ArrayToolkit::column($exerciseResults, 'courseSetId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-
-        foreach ($courses as &$course) {
-            $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-            $course['title'] = $courseSet['title'].'-'.$course['title'];
-            if (!empty($courseSets[$course['courseSetId']])) {
-                $courseSet = $courseSets[$course['courseSetId']];
-                $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
-                $course['title'] = $courseSet['title'].'-'.$course['title'];
-            }
+        if (empty($statements)) {
+            return array();
         }
+        try {
+            $exerciseResultIds = ArrayToolkit::index($statements, 'target_id');
+            $exerciseResults = $this->getTestpaperService()->findTestpaperResultsByIds($exerciseResultIds);
+            $exerciseResults = ArrayToolkit::index($exerciseResults, 'id');
 
-        $sdk = $this->createXAPIService();
-        $pushStatements = array();
-        foreach ($statements as $statement) {
-            try {
-                $exerciseResult = $exerciseResults[$statement['target_id']];
-                $course = $courses[$exerciseResult['courseId']];
-                $object = array(
-                    'id' => $exerciseResult['id'],
-                    'name' => $exerciseResult['paperName'],
-                    'course' => $course,
-                );
+            $courseIds = ArrayToolkit::column($exerciseResults, 'courseId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courses = ArrayToolkit::index($courses, 'id');
 
-                $actor = $this->getActor($statement['user_id']);
-                $result = array();
+            $courseSetIds = ArrayToolkit::column($exerciseResults, 'courseSetId');
+            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+            $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-                $pushStatements[] = $sdk->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
-            } catch (\Exception $e) {
-                $this->biz['logger']->error($e);
+            foreach ($courses as &$course) {
+                if (!empty($courseSets[$course['courseSetId']])) {
+                    $courseSet = $courseSets[$course['courseSetId']];
+                    $course['description'] = empty($courseSet['subtitle']) ? '' : $courseSet['subtitle'];
+                    $course['title'] = $courseSet['title'].'-'.$course['title'];
+                }
             }
-        }
 
-        return $pushStatements;
+            $sdk = $this->createXAPIService();
+            $pushStatements = array();
+            foreach ($statements as $statement) {
+                try {
+                    $exerciseResult = $exerciseResults[$statement['target_id']];
+                    $course = $courses[$exerciseResult['courseId']];
+                    $object = array(
+                        'id' => $exerciseResult['id'],
+                        'name' => $exerciseResult['paperName'],
+                        'course' => $course,
+                    );
+
+                    $actor = $this->getActor($statement['user_id']);
+                    $result = array();
+
+                    $pushStatements[] = $sdk->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+                } catch (\Exception $e) {
+                    $this->biz['logger']->error($e);
+                }
+            }
+
+            return $pushStatements;
+        } catch (\Exception $e) {
+            $this->biz['logger']->error($e);
+        }
     }
 }
