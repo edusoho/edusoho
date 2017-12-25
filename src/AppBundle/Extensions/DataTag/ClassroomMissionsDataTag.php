@@ -2,7 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -77,9 +76,10 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
             );
 
             $taskCount = $this->getTaskResultService()->countTaskResults($learnedConditions);
+
             $tasks = $this->getTaskResultService()->searchTaskResults(
                 $learnedConditions,
-                $sort = array('finishedTime' => 'ASC'),
+                array('finishedTime' => 'ASC'),
                 0,
                 $taskCount
             );
@@ -125,15 +125,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 
     /**
@@ -141,7 +133,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskResultService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskResultService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskResultService');
     }
 
     /**
@@ -149,7 +141,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 
     /**
@@ -162,6 +154,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
     private function getSortedClassrooms($classroomIds, $members, $sortedClassrooms)
     {
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
         foreach ($members as $member) {
             if (empty($classrooms[$member['classroomId']])) {
                 continue;

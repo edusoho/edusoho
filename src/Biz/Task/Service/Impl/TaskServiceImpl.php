@@ -153,7 +153,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
+            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})", array(
+                'oldTask' => $oldTask,
+                'task' => $task,
+            ));
             $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
 
             if ('download' == $task['type']) {

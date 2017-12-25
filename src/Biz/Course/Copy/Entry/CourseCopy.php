@@ -22,7 +22,7 @@ class CourseCopy extends AbstractEntityCopy
     protected function copyEntity($source, $course = array())
     {
         $course = array_merge($source, $course);
-        
+
         $newCourse = $this->processCourse($course);
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
         $modeChange = $newCourse['courseType'] != $source['courseType'];
@@ -132,15 +132,15 @@ class CourseCopy extends AbstractEntityCopy
     {
         if (!empty($course['expiryMode'])) {
             $newCourse['expiryMode'] = $course['expiryMode'];
-            if ($course['expiryMode'] === 'days') {
+            if ('days' === $course['expiryMode']) {
                 $newCourse['expiryDays'] = $course['expiryDays'];
                 $newCourse['expiryStartDate'] = 0;
                 $newCourse['expiryEndDate'] = 0;
-            } elseif ($course['expiryMode'] === 'end_date') {
+            } elseif ('end_date' === $course['expiryMode']) {
                 $newCourse['expiryStartDate'] = 0;
                 $newCourse['expiryDays'] = 0;
                 $newCourse['expiryEndDate'] = $course['expiryEndDate'];
-            } elseif ($course['expiryMode'] === 'date') {
+            } elseif ('date' === $course['expiryMode']) {
                 $newCourse['expiryDays'] = 0;
                 $newCourse['expiryStartDate'] = $course['expiryStartDate'];
                 $newCourse['expiryEndDate'] = $course['expiryEndDate'];

@@ -3,8 +3,8 @@
 namespace Biz\Notification\Job;
 
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Topxia\Service\Common\ServiceKernel;
 
 class LiveOpenPushNotificationOneHourJob extends AbstractJob
 {
@@ -46,9 +46,12 @@ class LiveOpenPushNotificationOneHourJob extends AbstractJob
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse:OpenCourseService');
+        return $this->biz->service('OpenCourse:OpenCourseService');
     }
 
     protected function getFileUrl($path)

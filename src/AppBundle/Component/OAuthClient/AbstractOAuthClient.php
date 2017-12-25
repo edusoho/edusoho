@@ -12,6 +12,8 @@ abstract class AbstractOAuthClient
 
     protected $timeout = 30;
 
+    protected $request;
+
     public function __construct($config)
     {
         $this->config = $config;
@@ -63,6 +65,10 @@ abstract class AbstractOAuthClient
      */
     public function postRequest($url, $params)
     {
+        if (isset($this->request)) {
+            return $this->request->postRequest($url, $params);
+        }
+
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -86,6 +92,10 @@ abstract class AbstractOAuthClient
 
     public function getRequest($url, $params)
     {
+        if (isset($this->request)) {
+            return $this->request->getRequest($url, $params);
+        }
+
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);

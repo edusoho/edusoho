@@ -25,6 +25,7 @@ class BlockTemplateDaoImpl extends GeneralDaoImpl implements BlockTemplateDao
             'orderbys' => array(
                 'updateTime', 'createdTime',
             ),
+            'timestamps' => array('createdTime', 'updateTime'),
         );
     }
 
