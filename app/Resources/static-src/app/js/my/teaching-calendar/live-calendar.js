@@ -14,7 +14,7 @@ new CustomFullCalendar({
   'currentTime': $('#todayDateStr').html(),
   'components': [
     new LiveTooltipComp(),
-    new ClickComp('/course/{id}') //routing course_show
+    new ClickComp('{url}') //routing course_show
   ],
   'defaultView': 'agendaWeek' // 'agendaWeek'
 });

@@ -205,6 +205,7 @@ export default class CustomFullCalendar {
 
   _registerCompActions(calendarOptions) {
     for (let i = 0; i < this.options['components'].length; i++) {
+      console.log(calendarOptions);
       calendarOptions = this.options['components'][i].registerAction(calendarOptions);
     }
     return calendarOptions;

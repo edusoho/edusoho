@@ -51,6 +51,8 @@ class TeacherLiveCourse extends AbstractResource
                     if (!empty($courseSet)) {
                         $liveCourse = array();
                         $liveCourse['title'] = $courseSet[0]['title'];
+                        $liveCourse['url'] = '/course/' . $task['courseId'] . '/task/' . $task['id'] . '/show';
+                        $liveCourse['event'] = $courseSet[0]['title'] . '-' . $course[0]['title'] . '-' . $task['title'];
                         $liveCourse['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
                         $liveCourse['endTime'] = date("Y-m-d H:i:s", $task['endTime']);
                         array_push($liveCourses, $liveCourse);
@@ -80,6 +82,8 @@ class TeacherLiveCourse extends AbstractResource
                 if (!empty($openCourse)) {
                     $openLiveCourse = array();
                     $openLiveCourse['title'] = $openCourse['title'];
+                    $openLiveCourse['event'] = $openCourse['title'];
+                    $openLiveCourse['url'] = '/open/course/' . $openCourse['id'];
                     $openLiveCourse['startTime'] = date("Y-m-d H:i:s", $openLesson['startTime']);
                     $openLiveCourse['endTime'] = date("Y-m-d H:i:s", $openLesson['endTime']);
                     array_push($openLiveCourses, $openLiveCourse);
