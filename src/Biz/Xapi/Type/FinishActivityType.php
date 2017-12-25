@@ -89,8 +89,11 @@ class FinishActivityType extends Type
                     $task = $tasks[$taskResult['courseTaskId']];
                     $course = $courses[$taskResult['courseId']];
                     $activity = $activities[$taskResult['activityId']];
-                    $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
-
+                    if (!empty($activity['ext']['mediaId'])) {
+                        $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                    } else {
+                        $resource = array();
+                    }
                     $actor = $this->getActor($statement['user_id']);
                     $object = array(
                         'id' => $task['id'],
