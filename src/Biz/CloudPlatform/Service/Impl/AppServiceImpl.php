@@ -59,7 +59,6 @@ class AppServiceImpl extends BaseService implements AppService
                 $app['description'] = $this->purifyHtml($app['description']);
             }
         }
-
         return $apps;
     }
 

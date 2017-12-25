@@ -6,8 +6,10 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\AthenaLiveToolkit;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Course\Service\LiveReplayService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\Util\EdusohoLiveClient;
@@ -73,7 +75,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function updateLiveActivity($id, &$fields, $activity)
     {
-        $liveActivity = $this->getLiveActivityDao()->get($id);
+        $preLiveActivity = $liveActivity = $this->getLiveActivityDao()->get($id);
 
         if (empty($liveActivity)) {
             return array();
@@ -116,6 +118,12 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (!empty($live)) {
             $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
+
+        $this->getLogService()->info(AppLoggerConstant::LIVE, 'update_live_activity', "修改直播活动（#{$activity['id']}, #{$liveActivity['id']}）", array(
+            'preActivity' => $activity,
+            'preLiveActivity' => $preLiveActivity,
+            'newLiveActivity' => $liveActivity,
+        ));
 
         return $liveActivity;
     }
@@ -227,5 +235,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }

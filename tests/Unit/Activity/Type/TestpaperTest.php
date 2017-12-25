@@ -2,8 +2,6 @@
 
 namespace Tests\Unit\Activity\Type;
 
-use AppBundle\Common\ReflectionUtils;
-
 class TestpaperTest extends BaseTypeTestCase
 {
     const TYPE = 'testpaper';
@@ -11,7 +9,7 @@ class TestpaperTest extends BaseTypeTestCase
     public function testGet()
     {
         $type = $this->getActivityConfig(self::TYPE);
-        
+
         $fields = $this->mockField(1);
         $activity = $type->create($fields);
 
@@ -60,7 +58,7 @@ class TestpaperTest extends BaseTypeTestCase
         $fields1 = $this->mockField(1);
         $activity1 = $type->create($fields1);
 
-        $copy = $type->copy(array('mediaType' => 'testpaper','mediaId' => 1), array('testId' => 2));
+        $copy = $type->copy(array('mediaType' => 'testpaper', 'mediaId' => 1), array('testId' => 2));
         $this->assertEquals(2, $copy['mediaId']);
     }
 
@@ -79,12 +77,12 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getTestpaperByCopyIdAndCourseSetId',
-                'returnValue' => array('id' => 1)
-            )
+                'returnValue' => array('id' => 1),
+            ),
         ));
 
-        $syncedActivity = $type->sync(array('mediaId' => $activity['id']), array('mediaId' => $copyActivity['id'],'fromCourseSetId' => 2));
-        
+        $syncedActivity = $type->sync(array('mediaId' => $activity['id']), array('mediaId' => $copyActivity['id'], 'fromCourseSetId' => 2));
+
         $result = $type->get($copyActivity['id']);
 
         $this->assertEquals($activity['mediaId'], $result['mediaId']);
@@ -101,8 +99,8 @@ class TestpaperTest extends BaseTypeTestCase
         $fields = $this->mockField(1);
         $activity = $type->create($fields);
 
-        $update = array('mediaId' => 2,'length' => 50, 'doTimes' => 0);
-  
+        $update = array('mediaId' => 2, 'length' => 50, 'doTimes' => 0);
+
         $result = $type->update($activity['id'], $update, array());
 
         $activity = $type->get($result['id']);
@@ -137,14 +135,14 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1,'mediaId' => $activity['id'], 'fromCourseId' => 1)
+                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
         $result = $type->isFinished(1);
@@ -161,14 +159,14 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1,'mediaId' => $activity['id'], 'fromCourseId' => 1)
+                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array('status' => 'finished')
-            )
+                'returnValue' => array('status' => 'finished'),
+            ),
         ));
 
         $result = $type->isFinished(1);
@@ -179,20 +177,20 @@ class TestpaperTest extends BaseTypeTestCase
     {
         $type = $this->getActivityConfig(self::TYPE);
 
-        $fields = array_merge($this->mockField(1), array('finishCondition' => array('type' => 'score','finishScore' => 5, 'condition' => 'score')));
+        $fields = array_merge($this->mockField(1), array('finishCondition' => array('type' => 'score', 'finishScore' => 5, 'condition' => 'score')));
         $activity = $type->create($fields);
 
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1,'mediaId' => $activity['id'], 'fromCourseId' => 1)
+                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array('status' => 'finished', 'score' => 8)
-            )
+                'returnValue' => array('status' => 'finished', 'score' => 8),
+            ),
         ));
 
         $result = $type->isFinished(1);
@@ -209,14 +207,14 @@ class TestpaperTest extends BaseTypeTestCase
         $this->mockBiz('Activity:ActivityService', array(
             array(
                 'functionName' => 'getActivity',
-                'returnValue' => array('id' => 1,'mediaId' => $activity['id'], 'fromCourseId' => 1)
+                'returnValue' => array('id' => 1, 'mediaId' => $activity['id'], 'fromCourseId' => 1),
             ),
         ));
         $this->mockBiz('Testpaper:TestpaperService', array(
             array(
                 'functionName' => 'getUserLatelyResultByTestId',
-                'returnValue' => array('status' => 'doing')
-            )
+                'returnValue' => array('status' => 'doing'),
+            ),
         ));
 
         $result = $type->isFinished(1);
@@ -233,8 +231,10 @@ class TestpaperTest extends BaseTypeTestCase
 
     /**
      * [mockField description]
-     * @param  [type] $mediaId [description]
-     * @return [type]          [description]
+     *
+     * @param [type] $mediaId [description]
+     *
+     * @return [type] [description]
      */
     private function mockField($mediaId)
     {
@@ -244,7 +244,7 @@ class TestpaperTest extends BaseTypeTestCase
             'redoInterval' => 0,
             'length' => 30,
             'checkType' => 'score',
-            'finishCondition' => array('type' => 'submit','finishScore' => 0),
+            'finishCondition' => array('type' => 'submit', 'finishScore' => 0),
             'condition' => 'submit',
             'finishScore' => 5,
         );
