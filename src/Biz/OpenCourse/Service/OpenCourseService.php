@@ -122,4 +122,6 @@ interface OpenCourseService
     public function setCourseTeachers($courseId, $teachers);
 
     public function getTodayOpenLiveCourseNumber();
+
+    public function findOpenLiveCourse($conditions, $userId);
 }
