@@ -52,7 +52,7 @@ module.exports = {
     'jquery-waypoints/waypoints.js',
     'echarts/dist/echarts.js',
     'handlebars/dist/handlebars.min.js',
-    'fullcalendar/dist/fullcalendar.min.js'
+    'fullcalendar/dist/fullcalendar.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {

@@ -125,7 +125,6 @@ export default class CustomFullCalendar {
       }
       calEvents = current._generateEventOtherAttrs(calEvents, result['data']);
       callback(calEvents);
-      current._formatHeadColIfNeed();
     }).catch((res) => {
       console.log('error callback')
     });
@@ -230,24 +229,6 @@ export default class CustomFullCalendar {
       $.extend(singleEvent, this.options['components'][i].generateEventValues(singleResult));
     }
     return singleEvent;
-  }
-
-  _formatHeadColIfNeed() {
-    if (this.calendarOptions['defaultView'] == 'agendaWeek') {
-      let headerSpans = $('.fc-day-header span');
-      if (headerSpans.find('.week').length === 0) {
-        headerSpans.each(
-          function() {
-            let text = $(this).html();
-            let segs = text.split(' ');
-            $(this).html(
-              '<div class="week">' + segs[0] + '</div>' +
-              '<div class="day">' + segs[1] + '</div>'
-            );
-          }
-        );
-      }
-    }
   }
 
 }
