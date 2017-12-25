@@ -37,15 +37,15 @@ class MarketingController extends BaseController
 
     public function loginMarketingAction(Request $request)
     {
-        $marketingEntry = $request->get('entry','');
-        if(empty($marketingEntry)){
+        $marketingEntry = $request->get('entry', '');
+        if (empty($marketingEntry)) {
             throw new InvalidArgumentException('entry is require');
         }
         $marketingEntry = strtolower($marketingEntry);
         $loginDomain = $this->getMarketingDomain($marketingEntry);
         $loginPath = $this->getMarketingPath($marketingEntry);
         $site = $this->getSiteInfo();
-        $siteDomain =  $request->getSchemeAndHttpHost();
+        $siteDomain = $request->getSchemeAndHttpHost();
         $site['domain'] = $siteDomain;
 
         $storage = $this->getSettingService()->get('storage', array());
@@ -54,52 +54,50 @@ class MarketingController extends BaseController
         $user = $this->getCurrentUser();
         $user = ['user_source_id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png')
+                'avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
         ];
 
         $spec = new JsonHmacSpecification2('sha1');
-        $body = $spec->serialize(['user'=>$user,'site'=>$site]);
+        $body = $spec->serialize(['user' => $user, 'site' => $site]);
 
         $once = $this->makeRequestId();
-        $deadline = time()+5*60;
-        $sign = $spec->signature(['secretKey'=>$storage['cloud_secret_key']], $loginPath, $body, $deadline, $once);
+        $deadline = time() + 5 * 60;
+        $sign = $spec->signature(['secretKey' => $storage['cloud_secret_key']], $loginPath, $body, $deadline, $once);
         $sign = "{$storage['cloud_access_key']}:{$deadline}:{$once}:{$sign}";
+
         return $this->render('admin/marketing/login.html.twig', array(
             'login' => $loginDomain.$loginPath,
             'site' => $site,
             'user' => $user,
             'sign' => $sign,
         ));
-
-
-
     }
 
-    private  function makeRequestId()
+    private function makeRequestId()
     {
         return ((string) (microtime(true) * 10000)).substr(md5(uniqid('', true)), -18);
     }
-    private function getMarketingDomain($entry)
-    {   
-        $developerSetting = $this->getSettingService()->get('developer', array());
-        $entryDomainKey = 'marketing_'.$entry."_domain";
-        $defaultDomain = "http://{$entry}.marketing.com";
-        $domain = (isset($developerSetting[$entryDomainKey]) && !empty($developerSetting[$entryDomainKey])) 
-            ? $developerSetting[$entryDomainKey] : $defaultDomain;
-        return $domain;
 
+    private function getMarketingDomain($entry)
+    {
+        $developerSetting = $this->getSettingService()->get('developer', array());
+        $entryDomainKey = 'marketing_'.$entry.'_domain';
+        $defaultDomain = "http://{$entry}.marketing.com";
+        $domain = (isset($developerSetting[$entryDomainKey]) && !empty($developerSetting[$entryDomainKey]))
+            ? $developerSetting[$entryDomainKey] : $defaultDomain;
+
+        return $domain;
     }
 
     private function getMarketingPath($entry)
     {
-        if($entry == 'wyx'){
-            $path = "/merchant/newlogin";
+        if ($entry == 'wyx') {
+            $path = '/merchant/newlogin';
         }
-        $path = "/merchant/login";
+        $path = '/merchant/login';
+
         return $path;
-
     }
-
 
     private function createMarketingClient()
     {
