@@ -36,7 +36,7 @@
           {% endfor %}
         </li>
       </ul>
-      {% if setting('mobile.enabled')|default(false) and course.enableAudio|default(0) %}
+      {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
         <ul class="clearfix text-12 course-learn-list mt10">
           <li>
             <span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span>

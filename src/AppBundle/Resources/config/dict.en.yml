@@ -378,6 +378,7 @@ convertStatus:
 
 audioConvertStatus:
     none: Audio transcoding not start
+    waiting: Audio transcoding
     doing: Audio transcoding
     success: Audio transcoding success
     error: Audio transcoding error

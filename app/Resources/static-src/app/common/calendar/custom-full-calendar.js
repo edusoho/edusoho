@@ -102,18 +102,20 @@ export default class CustomFullCalendar {
     }
 
     calendarOptions = this._registerCompActions(calendarOptions);
+    this.calendarOptions = calendarOptions;
 
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
-    this._formatHeadColIfNeed(calendarOptions);
   }
 
   _ajaxLoading(start, end, timezone, callback) {
+    $('.fc-day-header span').hide();
     let startTimeAttr = current.options['dateParams']['start'];
     let endTimeAttr = current.options['dateParams']['end'];
     let params = {};
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
-
+    params['limit'] = 1000;
+    
     current.options['dataApi']({
       data: params
     }).then((result) => {
@@ -123,6 +125,7 @@ export default class CustomFullCalendar {
       }
       calEvents = current._generateEventOtherAttrs(calEvents, result['data']);
       callback(calEvents);
+      current._formatHeadColIfNeed();
     }).catch((res) => {
       console.log('error callback')
     });
@@ -229,18 +232,21 @@ export default class CustomFullCalendar {
     return singleEvent;
   }
 
-  _formatHeadColIfNeed(calendarOptions) {
-    if (calendarOptions['defaultView'] == 'agendaWeek') {
-      $('.fc-day-header span').each(
-        function() {
-          let text = $(this).html();
-          let segs = text.split(' ');
-          $(this).html(
-            '<div class="week">' + segs[0] + '</div>' +
-            '<div class="day">' + segs[1] + '</div>'
-          );
-        }
-      );
+  _formatHeadColIfNeed() {
+    if (this.calendarOptions['defaultView'] == 'agendaWeek') {
+      let headerSpans = $('.fc-day-header span');
+      if (headerSpans.find('.week').length === 0) {
+        headerSpans.each(
+          function() {
+            let text = $(this).html();
+            let segs = text.split(' ');
+            $(this).html(
+              '<div class="week">' + segs[0] + '</div>' +
+              '<div class="day">' + segs[1] + '</div>'
+            );
+          }
+        );
+      }
     }
   }
 

@@ -27,9 +27,6 @@ class MessageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
 
-        $this->getMessageService()->clearUserNewMessageCounter($user['id']);
-        $user->clearMessageNum();
-
         return $this->render('message/index.html.twig', array(
             'conversations' => $conversations,
             'users' => $users,
@@ -67,6 +64,7 @@ class MessageController extends BaseController
         );
 
         $this->getMessageService()->markConversationRead($conversationId);
+        $this->getUserService()->updateUserNewMessageNum($user['id'], $conversation['unreadNum']);
 
         $messages = $this->getMessageService()->findConversationMessages(
             $conversation['id'],
@@ -74,7 +72,7 @@ class MessageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message_reply');
             $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
             $html = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
@@ -95,7 +93,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $receiver = $this->getUserService()->getUser($toId);
         $message = array('receiver' => $receiver['nickname']);
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message');
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
@@ -115,7 +113,7 @@ class MessageController extends BaseController
     public function sendAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message');
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
@@ -135,7 +133,7 @@ class MessageController extends BaseController
         $receiver = $this->getUserService()->getUser($receiverId);
         $user = $this->getCurrentUser();
         $message = array('receiver' => $receiver['nickname']);
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $message = $request->request->get('message');
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);

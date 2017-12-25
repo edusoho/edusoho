@@ -13,10 +13,6 @@
 
 {% set _target_path = path('homepage') %}
 
-{% set currentTheme = current_theme() %}
-{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
-{% set allConfig = currentTheme.allConfig %}
-
 {% set isIndex = true %}
 {% set consultDisplay = true %}
 
