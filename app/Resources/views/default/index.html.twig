@@ -2,10 +2,6 @@
 {% do script(['libs/echo-js.js', 'app/js/index/index.js']) %}
 
 {% block content %}
-    {% set currentTheme = current_theme() %}
-    {% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
-    {% set allConfig = currentTheme.allConfig %}
-
     {% cache 'jianmo/home/top/banner' 600 %}
     {{ block_show('jianmo:home_top_banner') }}
     {% endcache %}
