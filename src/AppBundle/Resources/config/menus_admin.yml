@@ -806,7 +806,7 @@ admin:
                         children:
                             _marketing_fx_page:
                                 name: admin.marketing_fx.menu
-                                router_name: admin_marketing
+                                router_name: admin_login_marketing
                                 router_params:
                                   entry: fx
 
