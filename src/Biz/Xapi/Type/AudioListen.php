@@ -90,24 +90,29 @@ class AudioListen extends Type
         $pushStatements = array();
 
         foreach ($statements as $statement) {
-            $watchLog  = $watchLogs[$statement['target_id']];
-            $course = $courses[$watchLog['course_id']];
-            $task = $tasks[$watchLog['task_id']];
-            $activity = $activities[$task['activityId']];
-            $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
-            $object = array(
-                'id' => $activity['id'],
-                'name' => $task['title'],
-                'course' => $course,
-                'definitionType' => $this->convertMediaType($task['type']),
-                'resource' => empty($resource) ? array() : $resource,
-            );
-            $actor = $this->getActor($statement['user_id']);
-            $result = array(
-                'duration' => $watchLog['watched_time'],
-            );
-            $pushStatements[] = $sdk->listenAudio($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+            try {
+                $watchLog = $watchLogs[$statement['target_id']];
+                $course = $courses[$watchLog['course_id']];
+                $task = $tasks[$watchLog['task_id']];
+                $activity = $activities[$task['activityId']];
+                $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
+                $object = array(
+                    'id' => $activity['id'],
+                    'name' => $task['title'],
+                    'course' => $course,
+                    'definitionType' => $this->convertMediaType($task['type']),
+                    'resource' => empty($resource) ? array() : $resource,
+                );
+                $actor = $this->getActor($statement['user_id']);
+                $result = array(
+                    'duration' => $watchLog['watched_time'],
+                );
+                $pushStatements[] = $sdk->listenAudio($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+            } catch (\Exception $e) {
+                $this->biz['logger']->error($e);
+            }
         }
+
         return $pushStatements;
     }
 }

@@ -88,7 +88,7 @@ class AskQuestionType extends Type
         $pushStatements = array();
 
         foreach ($statements as $statement) {
-            if (!empty($threads[$statement['target_id']])) {
+            try {
                 $thread = $threads[$statement['target_id']];
                 $course = $courses[$thread['courseId']];
                 $task = $tasks[$thread['taskId']];
@@ -104,6 +104,8 @@ class AskQuestionType extends Type
 
                 $result = $thread;
                 $pushStatements[] = $sdk->askQuestion($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+            } catch (\Exception $e) {
+                $this->biz['logger']->error($e);
             }
         }
 

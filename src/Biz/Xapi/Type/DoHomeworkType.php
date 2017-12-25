@@ -59,25 +59,27 @@ class DoHomeworkType extends Type
         $sdk = $this->createXAPIService();
         $pushStatements = array();
         foreach ($statements as $statement) {
-            $homeworkResult = $homeworkResults[$statement['target_id']];
-            $course = $courses[$homeworkResult['courseId']];
-            $object = array(
-                'id' => $homeworkResult['id'],
-                'name' => $homeworkResult['paperName'],
-                'course' => $course,
-            );
+            try {
+                $homeworkResult = $homeworkResults[$statement['target_id']];
+                $course = $courses[$homeworkResult['courseId']];
+                $object = array(
+                    'id' => $homeworkResult['id'],
+                    'name' => $homeworkResult['paperName'],
+                    'course' => $course,
+                );
 
-            $actor = $this->getActor($statement['user_id']);
-            $result = array();
-            if ('none' != $homeworkResult['passedStatus']) {
-                $result['success'] = ('passed' == $homeworkResult['passedStatus']) ? true : false;
+                $actor = $this->getActor($statement['user_id']);
+                $result = array();
+                if ('none' != $homeworkResult['passedStatus']) {
+                    $result['success'] = ('passed' == $homeworkResult['passedStatus']) ? true : false;
+                }
+
+                $pushStatements[] = $sdk->finishHomework($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
+            } catch (\Exception $e) {
+                $this->biz['logger']->error($e);
             }
-
-            $pushStatements[] = $sdk->finishHomework($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
         }
 
         return $pushStatements;
     }
-
-
 }

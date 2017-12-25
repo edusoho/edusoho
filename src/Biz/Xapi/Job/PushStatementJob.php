@@ -24,13 +24,16 @@ class PushStatementJob extends AbstractJob
             $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
             $statementIds = ArrayToolkit::column($statements, 'id');
 
+            foreach ($statements as &$statement) {
+                $statement['key'] = "{$statement['verb']}_{$statement['target_type']}";
+            }
+
+            $groupStatements = ArrayToolkit::group($statements, 'key');
+
             $pushStatements = array();
-            $pushData = array();
-            foreach ($statements as $statement) {
-                $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
-                $pushStatement = $push->package($statement);
-                $pushStatements[] = $pushStatement;
-                $pushData[$statement['id']] = $pushStatement;
+            foreach ($groupStatements as $key => $values) {
+                $push = $this->biz["xapi.push.{$key}"];
+                $pushStatements = array_merge($pushStatements, $push->packages($values));
             }
 
             if (empty($pushStatements)) {
@@ -41,13 +44,13 @@ class PushStatementJob extends AbstractJob
             $results = $this->createXAPIService()->pushStatements($pushStatements);
 
             if (is_array($results)) {
-                foreach ($pushData as $key => $data) {
+                foreach ($pushStatements as $key => $data) {
                     if (!in_array($data['id'], $results)) {
                         $this->biz['logger']->info($results);
-                        unset($pushData[$key]);
+                        unset($pushStatements[$key]);
                     }
                 }
-                $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
+                $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushStatements);
             }
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);

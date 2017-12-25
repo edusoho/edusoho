@@ -8,6 +8,8 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
+use Biz\Marker\Service\QuestionMarkerResultService;
+use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -109,6 +111,9 @@ abstract class Type extends BizAware
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return QuestionMarkerResultService
+     */
     protected function getQuestionMarkerResultService()
     {
         return $this->createService('Marker:QuestionMarkerResultService');
@@ -119,6 +124,9 @@ abstract class Type extends BizAware
         return $this->createService('Marker:MarkerService');
     }
 
+    /**
+     * @return QuestionMarkerService
+     */
     protected function getQuestionMarkerService()
     {
         return $this->createService('Marker:QuestionMarkerService');
