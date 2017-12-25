@@ -205,7 +205,6 @@ export default class CustomFullCalendar {
 
   _registerCompActions(calendarOptions) {
     for (let i = 0; i < this.options['components'].length; i++) {
-      console.log(calendarOptions);
       calendarOptions = this.options['components'][i].registerAction(calendarOptions);
     }
     return calendarOptions;
@@ -216,7 +215,6 @@ export default class CustomFullCalendar {
     let singleEvent = {};
     for (let i = 0; i < copiedFields.length; i++) {
       let fieldName = copiedFields[i];
-      console.log(singleResult[this.options['attrs'][fieldName]]);
       singleEvent[fieldName] = singleResult[this.options['attrs'][fieldName]];
     }
     singleEvent['className'] = [];
