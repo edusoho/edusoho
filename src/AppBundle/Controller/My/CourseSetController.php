@@ -111,6 +111,7 @@ class CourseSetController extends CourseBaseController
         $liveCourseNumber = $this->getTaskService()->getTodayLiveCourseNumber();
         $openLiveCourseNumber = $this->getOpenCourseService()->getTodayOpenLiveCourseNumber();
         $courseNumber = $liveCourseNumber + $openLiveCourseNumber;
+
         return $this->render(
             'my/teaching/lives-calendar.html.twig',
             array('courseNumber' => $courseNumber)

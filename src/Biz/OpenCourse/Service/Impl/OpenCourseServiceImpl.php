@@ -112,7 +112,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->getOpenCourseDao()->delete($id);
 
-        if ($course['type'] == 'liveOpen') {
+        if ('liveOpen' == $course['type']) {
             $this->getLiveReplayService()->deleteReplaysByCourseId($id, 'liveOpen');
         }
 
@@ -196,7 +196,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+        if (0 == count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')))) {
             throw $this->createAccessDeniedException('您不是管理员，无权操作！');
         }
 
@@ -248,7 +248,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createServiceException('该课程不存在,收藏失败!');
         }
 
-        if ($course['status'] != 'published') {
+        if ('published' != $course['status']) {
             throw $this->createServiceException('不能收藏未发布课程');
         }
 
@@ -418,7 +418,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $lesson['userId'] = $this->getCurrentUser()->id;
         $lesson['createdTime'] = time();
 
-        if ($lesson['type'] == 'liveOpen') {
+        if ('liveOpen' == $lesson['type']) {
             $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
         }
 
@@ -480,7 +480,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $fields['type'] = $lesson['type'];
 
-        if ($fields['type'] == 'liveOpen' && isset($fields['startTime'])) {
+        if ('liveOpen' == $fields['type'] && isset($fields['startTime'])) {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 
@@ -829,8 +829,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $openLiveCourseNumber = 0;
         if (!empty($courseIds)) {
-            $beginToday=mktime(0,0,0,date('m'),date('d'),date('Y'));
-            $endToday=mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
+            $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+            $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
             $openLessons = $this->searchLessons(
                 array('courseIds' => $courseIds, 'type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'),
                 array(),
@@ -839,6 +839,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             );
             $openLiveCourseNumber = count($openLessons);
         }
+
         return $openLiveCourseNumber;
     }
 
@@ -856,11 +857,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function fillLessonMediaFields(&$lesson)
     {
-        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] != 'videoGenerated') {
+        if ('liveOpen' == $lesson['type'] && 'videoGenerated' != $lesson['replayStatus']) {
             $lesson['mediaName'] = '';
             $lesson['mediaSource'] = '';
             $lesson['mediaUri'] = '';
-        } elseif ($lesson['mediaSource'] == 'self') {
+        } elseif ('self' == $lesson['mediaSource']) {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             $lesson['mediaName'] = $file['filename'];
             $lesson['mediaSource'] = 'self';
@@ -927,7 +928,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $member = $this->getCourseMember($courseId, $userId);
 
-        if ($member && ($member['role'] == 'teacher')) {
+        if ($member && ('teacher' == $member['role'])) {
             return true;
         }
 
@@ -937,7 +938,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function _prepareCourseConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if ($value == 0) {
+            if (0 == $value) {
                 return true;
             }
 

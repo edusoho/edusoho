@@ -1005,8 +1005,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $liveCourseNumber = 0;
         if (!empty($courseIds)) {
-            $beginToday=mktime(0,0,0,date('m'),date('d'),date('Y'));
-            $endToday=mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
+            $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+            $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
             $tasks = $this->searchTasks(
                 array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
                 array(),
@@ -1015,6 +1015,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             );
             $liveCourseNumber = count($tasks);
         }
+
         return $liveCourseNumber;
     }
 
