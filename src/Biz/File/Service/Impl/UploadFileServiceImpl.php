@@ -40,7 +40,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
         }
 
-        return 'opened';
+        return 'needOpen';
 
         if (empty($audioService['audioService'])) {
             return 'notAllowed';
