@@ -1945,14 +1945,15 @@ class CourseServiceImpl extends BaseService implements CourseService
                         $liveCourse['title'] = $courseSet[0]['title'];
                         $liveCourse['courseId'] = $task['courseId'];
                         $liveCourse['taskId'] = $task['id'];
-                        $liveCourse['event'] = $courseSet[0]['title'] . '-' . $course[0]['title'] . '-' . $task['title'];
-                        $liveCourse['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
-                        $liveCourse['endTime'] = date("Y-m-d H:i:s", $task['endTime']);
+                        $liveCourse['event'] = $courseSet[0]['title'].'-'.$course[0]['title'].'-'.$task['title'];
+                        $liveCourse['startTime'] = date('Y-m-d H:i:s', $task['startTime']);
+                        $liveCourse['endTime'] = date('Y-m-d H:i:s', $task['endTime']);
                         array_push($liveCourses, $liveCourse);
                     }
                 }
             }
         }
+
         return $liveCourses;
     }
 
