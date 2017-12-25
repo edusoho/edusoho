@@ -55,4 +55,4 @@ chunk-manifest.json
 deployment-config.json
 .webpack-watch.log
 /web/MP_*
-.webpack-watch.log
+yarn-error.log

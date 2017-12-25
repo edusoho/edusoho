@@ -214,7 +214,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-        $this->validatie($fields);
+        $this->validatie($id, $fields);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -495,12 +495,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
-    protected function validatie($fields)
+    protected function validatie($id, &$fields)
     {
         if (!empty($fields['enableAudio'])) {
             $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
             if ('opened' != $audioServiceStatus) {
-                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
+                $this->getCourseDao()->update($id, array('enableAudio' => '0'));
+                unset($fields['enableAudio']);
             }
         }
     }
