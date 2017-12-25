@@ -38,7 +38,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         if ($this->isReloadSmsAccountFromCloud($smsAccount)) {
             $smsAccount = $this->getUserSmsAccountFromCloud();
         }
-        if ($smsAccount['status'] == 'unusual') {
+        if ('unusual' == $smsAccount['status']) {
             return $smsAccount;
         }
 
@@ -47,7 +47,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
 
     private function isReloadSmsAccountFromCloud($smsAccount)
     {
-        if (!$smsAccount || ($smsAccount['status'] != 'normal' && $smsAccount['checkTime'] < time())) {
+        if (!$smsAccount || ('normal' != $smsAccount['status'] && $smsAccount['checkTime'] < time())) {
             return true;
         }
 

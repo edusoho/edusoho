@@ -216,4 +216,6 @@ interface TaskService
     public function findPublishedLivingTasksByCourseSetId($courseSetId);
 
     public function findPublishedTasksByCourseSetId($courseSetId);
+
+    public function getTodayLiveCourseNumber();
 }

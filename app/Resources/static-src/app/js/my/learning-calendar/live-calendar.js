@@ -5,7 +5,7 @@ import Api from 'common/api';
 
 new CustomFullCalendar({
   'calendarContainer': '#calendar',
-  'dataApi': Api.teacherLiveCourse.search, //需要使用 common/api/index.js 指定的路由
+  'dataApi': Api.studentLiveCourse.search, //需要使用 common/api/index.js 指定的路由
   'attrs': {
     'title': 'title',
     'start': 'startTime',
@@ -16,5 +16,5 @@ new CustomFullCalendar({
     new LiveTooltipComp(),
     new ClickComp('{url}') //routing course_show
   ],
-  'defaultView': 'agendaWeek' // 'agendaWeek'
+  'defaultView': 'month' // 'agendaWeek'
 });

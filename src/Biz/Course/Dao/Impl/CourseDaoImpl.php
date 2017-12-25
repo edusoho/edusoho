@@ -174,6 +174,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             ),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
+                'id = :id',
                 'courseSetId = :courseSetId',
                 'courseSetId IN (:courseSetIds)',
                 'updatedTime >= :updatedTime_GE',

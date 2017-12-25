@@ -115,7 +115,6 @@ export default class CustomFullCalendar {
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
     params['limit'] = 1000;
-    
     current.options['dataApi']({
       data: params
     }).then((result) => {

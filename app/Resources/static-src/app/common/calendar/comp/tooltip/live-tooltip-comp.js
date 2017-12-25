@@ -3,7 +3,7 @@ import BaseTooltipComp from 'app/common/calendar/comp/tooltip/base-tooltip-comp'
 export default class LiveTooltip extends BaseTooltipComp {
 
   _getParamNames() {
-    return ['id', 'title'];
+    return ['event', 'startTime', 'endTime'];
   }
 
   _showTip(params, event, jsEvent) {
