@@ -1,5 +1,24 @@
 .schedule-panel-body {
   min-height: 500px;
+  .week {
+    padding-top: 11px;
+    padding-left: 11px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 400;
+    color: @cd-gray-dark;
+  }
+
+  .day {
+    padding-right: 16px;
+    padding-bottom: 11px;
+    text-align: right;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 400;
+    color: @cd-gray-dark;
+  }
 }
 
 .schedule-panel-body__current-num {
@@ -9,6 +28,18 @@
   line-height: 1;
   color: @cd-gray-dark;
 }
+
+.fc-content {
+  padding: 4px;
+}
+
+.fc-time,
+.fc-title {
+  margin-bottom: 4px;
+  font-size: 12px;
+  line-height: 1;
+}
+
 
 .fc-button {
   color: @cd-gray-dark;
@@ -23,6 +54,10 @@
 
 .fc-toolbar .fc-center {
   margin-left: 120px;
+}
+
+.fc-unthemed td.fc-today {
+  background: #f2faf3;
 }
 
 .fc-unthemed th.fc-today {
@@ -60,26 +95,6 @@
   }
 }
 
-.week {
-  padding-top: 11px;
-  padding-left: 11px;
-  text-align: left;
-  font-size: 12px;
-  line-height: 1;
-  font-weight: 400;
-  color: @cd-gray-dark;
-}
-
-.day {
-  padding-right: 16px;
-  padding-bottom: 11px;
-  text-align: right;
-  font-size: 24px;
-  line-height: 1;
-  font-weight: 400;
-  color: @cd-gray-dark;
-}
-
 .fc-today {
   .week,
   .day {
@@ -91,12 +106,18 @@
   background-color: rgba(0,0,0,0.24);
   .cd-border-radius(2px);
   border: none;
+  &:hover {
+    cursor: default;
+  }
 }
 
 .calendar-today {
   background-color: #ffa51f;
   .cd-border-radius(2px);
   border: none;
+  &:hover {
+    cursor: default;
+  }
 }
 
 
@@ -104,6 +125,9 @@
   background-color: #278bf5;
   .cd-border-radius(2px);
   border: none;
+  &:hover {
+    cursor: default;
+  }
 }
 
 .schedule-popover {
