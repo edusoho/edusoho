@@ -11,10 +11,12 @@ use Biz\CloudPlatform\CloudAPIFactory;
 
 class EduCloudServiceImpl extends BaseService implements EduCloudService
 {
+    private $cloudApi;
+
     public function isHiddenCloud()
     {
         try {
-            $api = CloudAPIFactory::create('root');
+            $api = $this->createCloudApi();
             $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
             $logger = new Logger('CloudAPI');
@@ -45,12 +47,11 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
 
     private function isReloadSmsAccountFromCloud($smsAccount)
     {
-        if (!$smsAccount) {
+        if (!$smsAccount || ($smsAccount['status'] != 'normal' && $smsAccount['checkTime'] < time())) {
             return true;
         }
-        if ($smsAccount['status'] != 'normal' && $smsAccount['checkTime'] < time()) {
-            return true;
-        }
+
+        return false;
     }
 
     private function getUserSmsAccountFromCloud()
@@ -59,7 +60,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         * @accessCloud->false: 没有云平台帐号或者未接入教育云
         */
         try {
-            $api = CloudAPIFactory::create('root');
+            $api = $this->createCloudApi();
             $smsAccount = $api->get('/me/sms_account');
         } catch (\RuntimeException $e) {
             $logger = new Logger('CloudAPI');
@@ -74,8 +75,6 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         $smsAccountStatus = isset($smsAccount['status']) && 'used' == $smsAccount['status'];
         $accessCloud = isset($smsAccount['accessCloud']) && false == $smsAccount['accessCloud'];
         if ($smsAccountStatus && $accessCloud) {
-            $smsInfo['remainCount'] = $smsAccount['remainCount'];
-
             $smsAccount = array('status' => 'unusual', 'checkTime' => time() + 60 * 60 * 24, 'isOldSmsUser' => true, 'remainCount' => $smsAccount['remainCount']);
             $this->getSettingService()->set('sms_account', $smsAccount);
 
@@ -85,6 +84,25 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         $this->getSettingService()->set('sms_account', $smsAccount);
 
         return $smsAccount;
+    }
+
+    protected function createCloudApi()
+    {
+        if (!$this->cloudApi) {
+            $this->cloudApi = CloudAPIFactory::create('root');
+        }
+
+        return $this->cloudApi;
+    }
+
+    /**
+     * 仅给单元测试Mock用
+     *
+     * @param [type] $api [description]
+     */
+    public function setCloudApi($api)
+    {
+        $this->cloudApi = $api;
     }
 
     /**

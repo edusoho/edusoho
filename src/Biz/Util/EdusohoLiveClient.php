@@ -7,6 +7,8 @@ use AppBundle\Common\ArrayToolkit;
 
 class EdusohoLiveClient
 {
+    private $cloudApi;
+
     /**
      * 创建直播.
      *
@@ -16,12 +18,12 @@ class EdusohoLiveClient
      */
     public function createLive(array $args)
     {
-        return CloudAPIFactory::create('root')->post('/lives', $args);
+        return $this->createCloudApi('root')->post('/lives', $args);
     }
 
     public function updateLive(array $args)
     {
-        return CloudAPIFactory::create('root')->patch('/lives/'.$args['liveId'], $args);
+        return $this->createCloudApi('root')->patch('/lives/'.$args['liveId'], $args);
     }
 
     public function getCapacity()
@@ -30,12 +32,12 @@ class EdusohoLiveClient
             'timestamp' => time().'',
         );
 
-        return CloudAPIFactory::create('leaf')->get('/lives/capacity', $args);
+        return $this->createCloudApi('leaf')->get('/lives/capacity', $args);
     }
 
     public function getRoomUrl($args, $server = 'leaf')
     {
-        return CloudAPIFactory::create($server)->post('/lives/'.$args['liveId'].'/room_url', $args);
+        return $this->createCloudApi($server)->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
     public function deleteLive($liveId, $provider)
@@ -45,7 +47,7 @@ class EdusohoLiveClient
             'provider' => $provider,
         );
 
-        return CloudAPIFactory::create('root')->delete('/lives/'.$liveId, $args);
+        return $this->createCloudApi('root')->delete('/lives/'.$liveId, $args);
     }
 
     public function getMaxOnline($liveId)
@@ -54,17 +56,17 @@ class EdusohoLiveClient
             'liveId' => $liveId,
         );
 
-        return CloudAPIFactory::create('leaf')->get('/lives/'.$liveId.'/max_online', $args);
+        return $this->createCloudApi('leaf')->get('/lives/'.$liveId.'/max_online', $args);
     }
 
     public function entryLive($args)
     {
-        return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/entry_room', $args);
+        return $this->createCloudApi('leaf')->post('/lives/'.$args['liveId'].'/entry_room', $args);
     }
 
     public function entryReplay($args, $server = 'leaf')
     {
-        return CloudAPIFactory::create($server)->post('/lives/'.$args['liveId'].'/record_url', $args);
+        return $this->createCloudApi($server)->post('/lives/'.$args['liveId'].'/record_url', $args);
     }
 
     public function createReplayList($liveId, $title, $provider)
@@ -75,7 +77,7 @@ class EdusohoLiveClient
             'provider' => $provider,
         );
 
-        return CloudAPIFactory::create('root')->post('/lives/'.$liveId.'/records', $args);
+        return $this->createCloudApi('root')->post('/lives/'.$liveId.'/records', $args);
     }
 
     public function isAvailableRecord($liveId, $server = 'root')
@@ -84,7 +86,7 @@ class EdusohoLiveClient
             'liveId' => $liveId,
         );
 
-        $response = CloudAPIFactory::create($server)->get('/lives/'.$liveId.'/available_record', $args);
+        $response = $this->createCloudApi($server)->get('/lives/'.$liveId.'/available_record', $args);
 
         return isset($response['success']) ? true : false;
     }
@@ -99,6 +101,23 @@ class EdusohoLiveClient
 
         $logoData = ArrayToolkit::parts($logoData, $filter);
 
-        return CloudAPIFactory::create('root')->post('/liveaccount/logo/set', $logoData);
+        return $this->createCloudApi('root')->post('/liveaccount/logo/set', $logoData);
+    }
+
+    protected function createCloudApi($server)
+    {
+        if (empty($this->cloudApi[$server])) {
+            $this->cloudApi[$server] = CloudAPIFactory::create($server);
+        }
+
+        return $this->cloudApi[$server];
+    }
+
+    /**
+     * 仅给单元测试mock用。
+     */
+    public function setCloudApi($cloudApi, $server)
+    {
+        $this->cloudApi[$server] = $cloudApi;
     }
 }
