@@ -3,7 +3,6 @@
 namespace AppBundle\Extension;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Component\Activity\ActivityConfig;
 use Biz\Activity\Type\Audio;
 use Biz\Activity\Type\Discuss;
 use Biz\Activity\Type\Doc;
@@ -27,9 +26,8 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-
         $activityDir = $container['activity_dir'];
-        $activitiesDir = glob($activityDir . '/*' , GLOB_ONLYDIR);
+        $activitiesDir = glob($activityDir.'/*', GLOB_ONLYDIR);
 
         foreach ($activitiesDir as $dir) {
             $pathInfo = pathinfo($dir);

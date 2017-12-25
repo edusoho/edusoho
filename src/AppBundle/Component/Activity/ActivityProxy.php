@@ -2,9 +2,6 @@
 
 namespace AppBundle\Component\Activity;
 
-use Biz\Activity\BaseActivityExt;
-use Codeages\Biz\Framework\Context\Biz;
-
 class ActivityProxy
 {
     public $activityConfig;
@@ -19,7 +16,7 @@ class ActivityProxy
     private $container;
 
     private $allowedExt = array(
-        'php', 'html', 'twig'
+        'php', 'html', 'twig',
     );
 
     public function __construct(ActivityRuntimeContainerV1 $container, $activity, $activityDir)
@@ -30,7 +27,7 @@ class ActivityProxy
         $this->container = $container;
     }
 
-    public function renderRoute($routeName, ActivityProxy $activityProxy, $parameters = array())
+    public function renderRoute($routeName, self $activityProxy, $parameters = array())
     {
         $routeInfo = $activityProxy->getRouteInfo($routeName);
         switch ($routeInfo['extension']) {
@@ -51,6 +48,7 @@ class ActivityProxy
     public function render($relativePathView, array $parameters = array())
     {
         $parameters = array_merge(array('activityContext' => $this->activityContext), $parameters);
+
         return $this->container->render($this->getViewPath($relativePathView), $parameters);
     }
 
@@ -66,7 +64,6 @@ class ActivityProxy
     public function getRouteInfo($routeName)
     {
         if (!empty($this->activityConfig['routes']) && !empty($this->activityConfig['routes'][$routeName])) {
-
             $relativePath = $this->activityConfig['routes'][$routeName];
             $pathInfo = pathinfo($relativePath);
 
@@ -81,6 +78,7 @@ class ActivityProxy
             );
         } else {
             $defaultRelativePath = $routeName.'.html';
+
             return array(
                 'extension' => 'html',
                 'absolutePath' => $this->getAbsolutePath('html', $defaultRelativePath),
@@ -91,7 +89,7 @@ class ActivityProxy
 
     private function getAbsolutePath($extension, $relativePath)
     {
-        if ($extension === 'php') {
+        if ('php' === $extension) {
             return implode(DIRECTORY_SEPARATOR, array($this->activityDir, $relativePath));
         } else {
             return $this->getViewPath($relativePath);
@@ -102,5 +100,4 @@ class ActivityProxy
     {
         return implode(DIRECTORY_SEPARATOR, array('@activity', $this->activityConfig['type'], 'resources', 'views', $relativePath));
     }
-
 }
