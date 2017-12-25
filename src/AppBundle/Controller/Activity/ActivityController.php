@@ -38,12 +38,9 @@ class ActivityController extends BaseController
     public function updateAction($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
-        return $this->forward($actionConfig['controller'].':edit', array(
-            'id' => $activity['id'],
-            'courseId' => $courseId,
-        ));
+        $container = $this->get('activity_runtime_container');
+        return $container->update($activity);
     }
 
     public function createAction($type, $courseId)

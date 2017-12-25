@@ -1528,11 +1528,6 @@ course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
 
-course_text_activity_auto_save:
-    path: /course/{courseId}/activity/{activityId}/text/auto_save
-    defaults: { _controller: AppBundle:Activity/Text:autoSave }
-    methods: [POST]
-
 course_manage_activity_manage_custom_route:
     path: /course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}
     defaults: { _controller: AppBundle:Activity/Activity:customManageRoute }

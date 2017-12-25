@@ -55,7 +55,10 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
 
     public function update($activity)
     {
-        // TODO: Implement update() method.
+        $activityProxy = $this->createActivityProxy($activity);
+        return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_UPDATE, array(
+            'activity' => $activity,
+        ));
     }
 
     public function customRoute($activity, $routeName)
