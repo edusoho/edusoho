@@ -3,9 +3,11 @@
 namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Course\Service\LiveReplayService;
+use Biz\System\Service\LogService;
 use Biz\Util\EdusohoLiveClient;
 
 // Refactor: 该类不应该在Course模块，应该在和LiveActivity放一块，或者另启一个模块LiveRoom
@@ -135,6 +137,10 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     {
         try {
             $replayList = $this->createLiveClient()->createReplayList($liveId, '录播回放', $liveProvider);
+            $this->getLogService()->info(AppLoggerConstant::LIVE, 'generate_live_replay', "生成录制回放#{$liveId}", array(
+                'taskId' => $lessonId,
+                'result' => $replayList,
+            ));
         } catch (CloudAPIIOException $cloudAPIIOException) {
             return array();
         }
@@ -190,5 +196,13 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     protected function getLessonReplayDao()
     {
         return $this->createDao('Course:CourseLessonReplayDao');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
