@@ -69,6 +69,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCrontabJobNum',
+            'otherMigrations'
         );
 
         $funcNames = array();
@@ -122,6 +123,56 @@ class EduSohoUpgrade extends AbstractUpdater
             self::getSchedulerService()->deleteJobByName('Xapi_ArchiveStatementJob');
         }
         \Biz\Crontab\SystemCrontabInitializer::init();
+
+        return 1;
+    }
+
+    protected function otherMigrations()
+    {
+        if (!$this->isFieldExist('course_v8', 'enableAudio')) {
+            $this->getConnection()->exec("ALTER TABLE `course_v8` ADD `enableAudio` int(1) NOT NULL DEFAULT '0';");
+        }
+
+        $currentTime = time();
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES
+        (
+            'CheckConvertStatusJob',
+            '*/15 * * * *',
+            'Biz\\\\File\\\\Job\\\\VideoMediaStatusUpdateJob',
+            '',
+            '100',
+            '{$currentTime}',
+            '300',
+            'missed',
+            '1',
+            '0',
+            '{$currentTime}',
+            '{$currentTime}'
+        );
+        ");
+
+        $this->getConnection()->exec('UPDATE user SET newMessageNum = 0;');
+        $this->getConnection()->exec('UPDATE message_conversation SET unreadNum = 0;');
+        $this->getConnection()->exec("UPDATE message_relation SET isRead = '1';");
+
+        if ($this->isFieldExist('upload_files', 'audioConvertStatus')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `upload_files` CHANGE `audioConvertStatus` `audioConvertStatus` ENUM('none','waiting','doing','success','error') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'none' COMMENT '视频转音频的状态';
+            ");
+        }
 
         return 1;
     }
