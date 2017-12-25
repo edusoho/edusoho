@@ -50,8 +50,9 @@ module.exports = {
     'jquery-waypoints': 'jquery-waypoints/waypoints.js',
     'echarts': 'echarts/dist/echarts.js',
     'handlebars': 'handlebars/dist/handlebars.min.js',
-    'fullcalendar': 'fullcalendar/dist/fullcalendar.min.js'
-  }, 
+    'moment': 'moment/moment.js',
+    'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js'
+  },
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
       name: 'es-ckeditor',

@@ -1782,6 +1782,13 @@ es-ckeditor@4.7.2-patch2:
   version "4.7.2-patch2"
   resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch2.tgz#8c3e922009c5f8fbb807c481c53965f3d5e9f998"
 
+es-fullcalendar@3.7.0-patch1:
+  version "3.7.0-patch1"
+  resolved "https://registry.npmjs.org/es-fullcalendar/-/es-fullcalendar-3.7.0-patch1.tgz#bb72fc6aa6b4fd48cd90a27b0cff2a66ba3d7822"
+  dependencies:
+    jquery "2 - 3"
+    moment "^2.9.0"
+
 es-jcrop@latest:
   version "2.0.5"
   resolved "https://registry.npmjs.org/es-jcrop/-/es-jcrop-2.0.5.tgz#68ab9377af369c88600caae147eb9dddafd221dd"
@@ -2258,13 +2265,6 @@ fstream@^1.0.0, fstream@^1.0.10, fstream@^1.0.2:
     inherits "~2.0.0"
     mkdirp ">=0.5 0"
     rimraf "2"
-
-fullcalendar@^3.7.0:
-  version "3.7.0"
-  resolved "http://registry.npm.taobao.org/fullcalendar/download/fullcalendar-3.7.0.tgz#74309943790a0085647ef7671c81c852f68b4a28"
-  dependencies:
-    jquery "2 - 3"
-    moment "^2.9.0"
 
 function-bind@^1.0.2, function-bind@^1.1.0:
   version "1.1.0"
