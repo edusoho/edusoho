@@ -8,6 +8,9 @@
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
       <a href="{{ path('my_courses_learning') }}">{{'my.learning.menu_heading'|trans}}</a>
+      <span class="pull-right">
+        <a id="create-course" href="{{ path('my_courses_learning') }}" class="btn btn-info btn-sm">{{ 'my.learning.course'|trans }}</a>
+      </span>
     </div>
 
     <div class="panel-body">
