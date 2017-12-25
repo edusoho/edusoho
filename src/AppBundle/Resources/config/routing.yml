@@ -1894,6 +1894,10 @@ my_courses_learned:
     path: /my/courses/learned
     defaults: { _controller: AppBundle:My/Course:learned }
 
+my_courses_live_calendar:
+    path: /my/courses/live/calendar
+    defaults: { _controller: AppBundle:My/Course:learningLivesCalendar }
+
 #my_course_set
 my_course_sets_favorite:
     path: /my/courses/favorite

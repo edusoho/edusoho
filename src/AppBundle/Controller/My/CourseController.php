@@ -228,6 +228,13 @@ class CourseController extends CourseBaseController
         );
     }
 
+    public function learningLivesCalendarAction(Request $request)
+    {
+        return $this->render(
+            'my/learning/lives-calendar.html.twig'
+        );
+    }
+
     /**
      * 当用户是班级学员却不在课程学员中时，将学员添加到课程学员中.
      *
