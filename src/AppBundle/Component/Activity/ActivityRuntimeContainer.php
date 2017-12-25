@@ -40,6 +40,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
     public function show($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);
+
         return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_SHOW, array(
             'activity' => $activity,
         ));
@@ -48,6 +49,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
     public function create($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);
+
         return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_CREATE, array(
             'activity' => $activity,
         ));
@@ -56,6 +58,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
     public function update($activity)
     {
         $activityProxy = $this->createActivityProxy($activity);
+
         return $activityProxy->renderRoute(ActivityRuntimeContainerInterface::ROUTE_UPDATE, array(
             'activity' => $activity,
         ));
@@ -64,6 +67,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
     public function customRoute($activity, $routeName)
     {
         $activityProxy = $this->createActivityProxy($activity);
+
         return $activityProxy->renderRoute($routeName, array(
             'activity' => $activity,
         ));
@@ -91,6 +95,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
     {
         $activityProxy = new ActivityProxy($this, $activity, $this->activitiesDir.DIRECTORY_SEPARATOR.$activity['mediaType']);
         $this->activityProxy = $activityProxy;
+
         return $activityProxy;
     }
 

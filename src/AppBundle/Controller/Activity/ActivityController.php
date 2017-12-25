@@ -19,6 +19,7 @@ class ActivityController extends BaseController
 
         $container = $this->get('activity_runtime_container');
         $activity['preview'] = $preview;
+
         return $container->show($activity);
     }
 
@@ -40,6 +41,7 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($id);
 
         $container = $this->get('activity_runtime_container');
+
         return $container->update($activity);
     }
 
@@ -48,9 +50,10 @@ class ActivityController extends BaseController
         $activity = array(
             'id' => 0,
             'mediaType' => $type,
-            'fromCourseId' => $courseId
+            'fromCourseId' => $courseId,
         );
         $container = $this->get('activity_runtime_container');
+
         return $container->create($activity);
     }
 
@@ -63,6 +66,7 @@ class ActivityController extends BaseController
         );
 
         $container = $this->get('activity_runtime_container');
+
         return $container->customRoute($activity, $routeName);
     }
 
