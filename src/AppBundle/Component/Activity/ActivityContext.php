@@ -32,7 +32,7 @@ class ActivityContext
     public function getCourseDraft()
     {
         $user = $this->getUser();
-        return $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($this->activity['fromCourseId'], 0, $user['id']);
+        return $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($this->activity['fromCourseId'], $this->activity['id'], $user['id']);
     }
 
     public function getActivity()

@@ -21,7 +21,7 @@
                 data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
                 data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
                 data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
-                data-save-draft-url="{{ path('course_manage_activity_manage_custom_route', activity|merge({'routeName':'draft'})) }}"
+                data-save-draft-url="{{ path('course_manage_activity_manage_custom_route', {'routeName':'draft', 'fromCourseId':activity.fromCourseId, 'mediaType':activity.mediaType, 'id':activity.id}) }}"
       >
         {{ activity.content|default('') }}
       </textarea>
