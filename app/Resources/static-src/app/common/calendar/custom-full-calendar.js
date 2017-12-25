@@ -232,7 +232,7 @@ export default class CustomFullCalendar {
     return singleEvent;
   }
 
-  _formatHeadColIfNeed(calendarOptions) {
+  _formatHeadColIfNeed() {
     if (this.calendarOptions['defaultView'] == 'agendaWeek') {
       let headerSpans = $('.fc-day-header span');
       if (headerSpans.find('.week').length === 0) {
@@ -247,6 +247,7 @@ export default class CustomFullCalendar {
           }
         );
       }
+    }
   }
 
 }
