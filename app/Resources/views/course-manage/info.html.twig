@@ -46,7 +46,7 @@
         </div>
         
         {% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
-          <div class="form-group" id="audio-modal-id">
+          <div class="form-group" id="audio-modal-id" style="display:none;">
             <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
             <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
               <label>
