@@ -21,7 +21,7 @@ class PushStatementJob extends AbstractJob
             $condition = array(
                 'status' => 'created',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 2000);
             $statementIds = ArrayToolkit::column($statements, 'id');
             $statements = ArrayToolkit::index($statements, 'uuid');
 
