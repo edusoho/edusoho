@@ -190,7 +190,7 @@ class CourseController extends CourseBaseController
             );
         }
 
-        if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
+        if ('date' == $course['expiryMode'] && $course['expiryStartDate'] >= time()) {
             return $this->redirectToRoute('course_show', array('id' => $course['id']));
         }
 
@@ -202,7 +202,7 @@ class CourseController extends CourseBaseController
                 'tab' => $tab,
                 'tags' => $tags,
                 'member' => $member,
-                'isCourseTeacher' => $member['role'] == 'teacher',
+                'isCourseTeacher' => 'teacher' == $member['role'],
                 'course' => $course,
                 'classroom' => $classroom,
             )
@@ -312,7 +312,7 @@ class CourseController extends CourseBaseController
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($courseSets as $courseSetId => $courseSet) {
-            if ($courseSet['parentId'] == 0 || empty($classroomCourses[$courseSet['id']])) {
+            if (0 == $courseSet['parentId'] || empty($classroomCourses[$courseSet['id']])) {
                 continue;
             }
 
@@ -339,7 +339,7 @@ class CourseController extends CourseBaseController
             $isLearned = 1;
             array_map(function ($course) use ($members, &$isLearned) {
                 $member = $members[$course['id']];
-                if ($member['learnedNum'] < $course['compulsoryTaskNum'] or $course['compulsoryTaskNum'] == 0) {
+                if ($member['learnedNum'] < $course['compulsoryTaskNum'] or 0 == $course['compulsoryTaskNum']) {
                     $isLearned = 0;
                 }
             }, $courses);
