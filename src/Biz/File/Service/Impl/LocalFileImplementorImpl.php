@@ -24,6 +24,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getFile($file);
     }
 
+    //@todo 目前没用到，如果用到，逻辑要改动
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
@@ -42,7 +43,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $filename = FileToolkit::generateFilename($uploadFile['ext']);
 
-        $uploadFile['hashId'] = "{$uploadFile['targetType']}/{$uploadFile['targetId']}/{$filename}";
+        $uploadFile['hashId'] = "{$targetType}/{$targetId}/{$filename}";
 
         $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
         $uploadFile['convertStatus'] = 'none';
