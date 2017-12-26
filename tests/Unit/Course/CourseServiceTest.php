@@ -453,13 +453,13 @@ class CourseServiceTest extends BaseTestCase
                     'functionName' => 'searchTasks',
                     'returnValue' => array(
                         array('id' => 2, 'courseId' => 2, 'title' => 'title', 'startTime' => 6000, 'endTime' => 7000),
-                        array('id' => 3, 'courseId' => 3, 'title' => 'title', 'startTime' => 7000, 'endTime' => 8000)
+                        array('id' => 3, 'courseId' => 3, 'title' => 'title', 'startTime' => 7000, 'endTime' => 8000),
                     ),
                     'withParams' => array(
                         array('type' => 'live', 'startTime_GE' => 5000, 'endTime_LT' => 10000, 'status' => 'published'),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                 ),
             )
@@ -502,8 +502,8 @@ class CourseServiceTest extends BaseTestCase
             )
         );
         $result = $this->getCourseService()->findLiveCourse(
-            array('startTime_GE' => 5000, 'endTime_LT' => 10000), 
-            2, 
+            array('startTime_GE' => 5000, 'endTime_LT' => 10000),
+            2,
             'teacher'
         );
         $this->assertEquals('title', $result[0]['title']);

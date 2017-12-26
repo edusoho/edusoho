@@ -754,13 +754,13 @@ class TaskServiceTest extends BaseTestCase
                     'functionName' => 'search',
                     'returnValue' => array(
                         array('id' => 2, 'courseId' => 2),
-                        array('id' => 3, 'courseId' => 3)
+                        array('id' => 3, 'courseId' => 3),
                     ),
                     'withParams' => array(
                         array('type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                 ),
             )

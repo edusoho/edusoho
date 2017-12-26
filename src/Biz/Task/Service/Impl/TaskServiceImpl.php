@@ -1027,6 +1027,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 }
             }
         }
+
         return $liveCourseNumber;
     }
 

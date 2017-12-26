@@ -484,13 +484,13 @@ class OpenCourseServiceTest extends BaseTestCase
                     'functionName' => 'search',
                     'returnValue' => array(
                         array('id' => 2, 'courseId' => 2),
-                        array('id' => 3, 'courseId' => 3)
+                        array('id' => 3, 'courseId' => 3),
                     ),
                     'withParams' => array(
                         array('type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                 ),
             )
@@ -535,13 +535,13 @@ class OpenCourseServiceTest extends BaseTestCase
                     'functionName' => 'search',
                     'returnValue' => array(
                         array('id' => 2, 'courseId' => 2, 'startTime' => 6000, 'endTime' => 7000),
-                        array('id' => 3, 'courseId' => 3, 'startTime' => 7000, 'endTime' => 8000)
+                        array('id' => 3, 'courseId' => 3, 'startTime' => 7000, 'endTime' => 8000),
                     ),
                     'withParams' => array(
                         array('type' => 'liveOpen', 'startTimeGreaterThan' => 5000, 'endTimeLessThan' => 10000, 'status' => 'published'),
                         array(),
                         0,
-                        PHP_INT_MAX
+                        PHP_INT_MAX,
                     ),
                 ),
             )
