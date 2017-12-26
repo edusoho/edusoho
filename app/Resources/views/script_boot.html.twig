@@ -38,6 +38,7 @@
   
   app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
 
+  app.fileSingleSizeLimit = 4;
   app.uploadUrl = '{{ path("file_upload") }}';
   app.imgCropUrl = '{{ path("file_img_crop") }}';
   app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
