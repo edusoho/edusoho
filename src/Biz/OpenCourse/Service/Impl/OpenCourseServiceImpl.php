@@ -823,21 +823,25 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function getTodayOpenLiveCourseNumber()
     {
         $user = $this->getCurrentUser();
-        $members = $this->searchMembers(
-            array('userId' => $user['id'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX
-        );
-        $courseIds = ArrayToolkit::column($members, 'courseId');
         $openLiveCourseNumber = 0;
-        if (!empty($courseIds)) {
-            $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-            $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
-            $openLessons = $this->searchLessons(
-                array('courseIds' => $courseIds, 'type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'),
-                array(),
-                0,
-                PHP_INT_MAX
-            );
-            $openLiveCourseNumber = count($openLessons);
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+        $openLessons = $this->searchLessons(
+            array('type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($openLessons as $openLesson) {
+            $members = $this->searchMembers(array('courseId' => $openLesson['courseId'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX);
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($user['id'], $userIds)) {
+                continue;
+            }
+            $openCourse = $this->getCourse($openLesson['courseId']);
+            if (!empty($openCourse) && 'published' == $openCourse['status']) {
+                $openLiveCourseNumber = $openLiveCourseNumber + 1;
+            }
         }
 
         return $openLiveCourseNumber;

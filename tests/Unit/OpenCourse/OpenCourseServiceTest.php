@@ -473,6 +473,113 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals(empty($nextLesson), true);
     }
 
+    public function testGetTodayOpenLiveCourseNumber()
+    {
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+        $this->mockBiz(
+            'OpenCourse:OpenCourseLessonDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                        array('id' => 2, 'courseId' => 2),
+                        array('id' => 3, 'courseId' => 3)
+                    ),
+                    'withParams' => array(
+                        array('type' => 'liveOpen', 'startTimeGreaterThan' => $beginToday, 'endTimeLessThan' => $endToday, 'status' => 'published'),
+                        array(),
+                        0,
+                        PHP_INT_MAX
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'OpenCourse:OpenCourseMemberDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array()),
+                    'withParams' => array(array('courseId' => 2, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 2, 'userId' => 1)),
+                    'withParams' => array(array('courseId' => 3, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'OpenCourse:OpenCourseDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 2, 'title' => 'title', 'status' => 'published'),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $result = $this->getOpenCourseService()->getTodayOpenLiveCourseNumber();
+        $this->assertEquals(1, $result);
+    }
+
+    public function testFindOpenLiveCourse()
+    {
+        $this->mockBiz(
+            'OpenCourse:OpenCourseLessonDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                        array('id' => 2, 'courseId' => 2, 'startTime' => 6000, 'endTime' => 7000),
+                        array('id' => 3, 'courseId' => 3, 'startTime' => 7000, 'endTime' => 8000)
+                    ),
+                    'withParams' => array(
+                        array('type' => 'liveOpen', 'startTimeGreaterThan' => 5000, 'endTimeLessThan' => 10000, 'status' => 'published'),
+                        array(),
+                        0,
+                        PHP_INT_MAX
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'OpenCourse:OpenCourseMemberDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array()),
+                    'withParams' => array(array('courseId' => 2, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 2, 'userId' => 2)),
+                    'withParams' => array(array('courseId' => 3, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'OpenCourse:OpenCourseDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 2, 'title' => 'title', 'status' => 'published'),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $result = $this->getOpenCourseService()->findOpenLiveCourse(
+            array('startTime_GE' => 5000, 'endTime_LT' => 10000),
+            2
+        );
+        $this->assertEquals('title', $result[0]['title']);
+    }
+
     private function _createLiveOpenCourse()
     {
         $course = array(
