@@ -853,7 +853,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             PHP_INT_MAX
         );
         foreach ($openLessons as $openLesson) {
-            $members = $this->searchMembers(array('courseId' => $openLesson['courseId']), array(), 0, PHP_INT_MAX);
+            $members = $this->searchMembers(array('courseId' => $openLesson['courseId'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX);
             $userIds = ArrayToolkit::column($members, 'userId');
             if (empty($userIds) || !in_array($userId, $userIds)) {
                 continue;
