@@ -40,7 +40,6 @@ class ActivityProxy
         return $this->activityContext;
     }
 
-
     public function renderRoute($routeName, $parameters = array())
     {
         $routeInfo = $this->getRouteInfo($routeName);

@@ -42,7 +42,7 @@ class ActivityConfigManager
         }
 
         if (!$code) {
-            $content =  "<?php \n return array();";
+            $content = "<?php \n return array();";
         } else {
             $content = "<?php \n return ".var_export($code, true).';';
         }
@@ -59,5 +59,4 @@ class ActivityConfigManager
     {
         return $this->activitiesConfig;
     }
-
 }

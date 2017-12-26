@@ -55,5 +55,4 @@ class ActivityConfig implements \ArrayAccess
     {
         unset($this->config[$name]);
     }
-
 }
