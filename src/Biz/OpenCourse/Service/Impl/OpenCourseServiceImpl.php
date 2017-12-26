@@ -859,7 +859,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 continue;
             }
             $openCourse = $this->getCourse($openLesson['courseId']);
-            if (!empty($openCourse)) {
+            if (!empty($openCourse) && 'published' == $openCourse['status']) {
                 $openLiveCourse = array(
                     'title' => $openCourse['title'],
                     'event' => $openCourse['title'],
