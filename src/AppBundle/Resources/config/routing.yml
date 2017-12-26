@@ -77,18 +77,9 @@ oauth2_login_success:
     path:  /oauth2/login/success
     defaults: { _controller: AppBundle:OAuth2/Login:success }
 
-login_bind_new:
-    path:  /login/bind/{type}/new
-    defaults: { _controller: AppBundle:LoginBind:new }
-    methods: [POST]
-
 login_check_email:
     path:  /login/check/email
     defaults: { _controller: AppBundle:Login:checkEmail }
-
-login_bind_change:
-    path: /login/bind/{type}/changetoexist
-    defaults: { _controller: AppBundle:LoginBind:changeToExist }
 
 common_qrcode:
     path:  /common/qrcode
