@@ -139,11 +139,6 @@ class Testpaper extends Activity
         return false;
     }
 
-    protected function getListeners()
-    {
-        return array();
-    }
-
     protected function filterFields($fields)
     {
         $filterFields = ArrayToolkit::parts(

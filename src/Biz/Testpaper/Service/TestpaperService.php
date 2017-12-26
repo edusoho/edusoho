@@ -69,6 +69,8 @@ interface TestpaperService
 
     public function getTestpaperResult($id);
 
+    public function findTestpaperResultsByIds($ids);
+
     public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
 
     public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);

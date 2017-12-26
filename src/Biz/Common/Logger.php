@@ -163,6 +163,13 @@ class Logger
      */
     const OPEN_COURSE = 'open_course';
 
+    /**
+     * [$live 直播].
+     *
+     * @var string
+     */
+    const LIVE = 'live';
+
     const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
 
     const ACTION_SYNC_WHEN_TASK_CREATE = 'sync_when_task_create';
@@ -367,7 +374,12 @@ class Logger
                 //'add_material' => '新增资料',
                 'delete_material' => '移除资料',
                 'update_teacher' => '更新公开课教师',
-                'delete_recommend_course' => '删除推荐课程', ),
+                'delete_recommend_course' => '删除推荐课程',
+            ),
+            self::LIVE => array(
+                'update_live_activity' => '更新直播活动',
+                'generate_live_replay' => '生成录播回放',
+            ),
         );
     }
 
@@ -453,6 +465,7 @@ class Logger
             self::QUESTIONPLUS => '题库增强版',
             self::ANNOUNCEMENT => '公告',
             self::OPEN_COURSE => '公开课',
+            self::LIVE => '直播',
         );
     }
 }

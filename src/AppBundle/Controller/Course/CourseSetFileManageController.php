@@ -153,7 +153,7 @@ class CourseSetFileManageController extends BaseController
             if (isset($convertStatus['error'])) {
                 return $this->createJsonResponse(array('status' => 'error', 'message' => $convertStatus['error']));
             }
-            if (isset($convertStatus['success'])) {
+            if (isset($convertStatus['status']) && $convertStatus['status'] == 'ok') {
                 $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
             }
         }

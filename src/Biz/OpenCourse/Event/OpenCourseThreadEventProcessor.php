@@ -23,9 +23,4 @@ class OpenCourseThreadEventProcessor extends EventSubscriber
     {
         return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
-
-    private function getThreadService()
-    {
-        return $this->getBiz()->service('Thread:ThreadService');
-    }
 }

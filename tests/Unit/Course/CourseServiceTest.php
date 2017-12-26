@@ -292,19 +292,28 @@ class CourseServiceTest extends BaseTestCase
         $this->getUploadFileService()->shouldHaveReceived('batchConvertByIds');
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
     public function testValidatie()
     {
         $fileds = array(
             'enableAudio' => '1',
         );
 
+        $courseFields = array(
+            'id' => 2,
+            'courseSetId' => 2,
+            'title' => '计划名称',
+            'enableAudio' => '0',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($courseFields);
+
         $this->mockBiz('File:UploadFileService');
         $this->getUploadFileService()->shouldReceive('getAudioServiceStatus')->andReturn('notAllowed');
 
-        ReflectionUtils::invokeMethod($this->getCourseService(), 'validatie', array($fileds));
+        ReflectionUtils::invokeMethod($this->getCourseService(), 'validatie', array($course['id'], &$fileds));
 
         $this->getUploadFileService()->shouldReceive('getAudioServiceStatus');
     }

@@ -346,7 +346,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
-
         if ($auth && array_key_exists('register_mode', $auth)) {
             return in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile'));
         }
@@ -358,7 +357,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-
             if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
@@ -379,22 +377,22 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function getSensitiveService()
     {
-        return $this->getKernel()->createService('Sensitive:SensitiveService');
+        return $this->createService('Sensitive:SensitiveService');
     }
 
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getLogService()
     {
-        return $this->biz->service('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getKernel()

@@ -134,7 +134,7 @@ class AppServiceImpl extends BaseService implements AppService
             $userAccess = isset($app['userAccess']) ? $app['userAccess'] : null;
             $purchased = isset($app['purchased']) ? $app['purchased'] : null;
 
-            return !($userAccess == 'fail' && $purchased == false);
+            return !('fail' == $userAccess && false == $purchased);
         });
 
         return $canUpgradeApps;
@@ -196,7 +196,7 @@ class AppServiceImpl extends BaseService implements AppService
             return false;
         }
 
-        return $log['status'] == 'ROLLBACK';
+        return 'ROLLBACK' == $log['status'];
     }
 
     public function checkEnvironmentForPackageUpdate($packageId)
@@ -301,7 +301,7 @@ class AppServiceImpl extends BaseService implements AppService
             $package = $this->getCenterPackageInfo($packageId);
             // $errors  = $this->checkPluginDepend($package);
             $product = $package['product'];
-            if ($product['code'] == 'MAIN') {
+            if ('MAIN' == $product['code']) {
                 $app = $this->getAppByCode('MAIN');
                 if ($package['fromVersion'] != $app['version']) {
                     $errors[] = sprintf('当前版本(%s)依赖不匹配，或页面请求已过期，请刷新后重试', $app['version']);
@@ -312,7 +312,7 @@ class AppServiceImpl extends BaseService implements AppService
                 $errors[] = sprintf('EduSoho版本需大于等于%s，您的版本为%s，请先升级EduSoho', $package['edusohoMinVersion'], System::VERSION);
             }
 
-            if ($package['edusohoMaxVersion'] != 'up' && version_compare($package['edusohoMaxVersion'], System::VERSION, '<')) {
+            if ('up' != $package['edusohoMaxVersion'] && version_compare($package['edusohoMaxVersion'], System::VERSION, '<')) {
                 $errors[] = sprintf('当前应用版本 (%s) 与主系统版本不匹配, 无法安装。', $package['toVersion']);
             }
         } catch (\Exception $e) {
@@ -346,7 +346,7 @@ class AppServiceImpl extends BaseService implements AppService
         unset($apps['MAIN']);
 
         $unsupportApps = array_filter($apps, function ($app) use ($systemVersion) {
-            return $app['edusohoMaxVersion'] != 'up' && version_compare($app['edusohoMaxVersion'], $systemVersion, '<=');
+            return 'up' != $app['edusohoMaxVersion'] && version_compare($app['edusohoMaxVersion'], $systemVersion, '<=');
         });
 
         $errors = array_map(function ($app) use ($systemVersion) {
@@ -501,7 +501,7 @@ class AppServiceImpl extends BaseService implements AppService
         UpgradeLock::lock();
         $result = $this->createAppClient()->checkDownloadPackage($packageId);
 
-        if ($result['status'] == 'ok') {
+        if ('ok' == $result['status']) {
             return array();
         }
 
@@ -652,7 +652,7 @@ class AppServiceImpl extends BaseService implements AppService
             throw $this->createServiceException("App {$code} is not exist.");
         }
 
-        if ($app['type'] == 'plugin') {
+        if ('plugin' == $app['type']) {
             $uninstallScript = realpath($this->biz['plugin.directory'].DIRECTORY_SEPARATOR.ucfirst($app['code']).'/Scripts/uninstall.php');
 
             if (file_exists($uninstallScript)) {
@@ -660,7 +660,7 @@ class AppServiceImpl extends BaseService implements AppService
                 $uninstaller = new \AppUninstaller(ServiceKernel::instance());
                 $uninstaller->uninstall();
             }
-        } elseif ($app['type'] == 'theme') {
+        } elseif ('theme' == $app['type']) {
             $themeDir = realpath($this->biz['theme.directory'].DIRECTORY_SEPARATOR.strtolower($app['code']));
             $filesystem = new Filesystem();
             $filesystem->remove($themeDir);
@@ -814,7 +814,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         $zip = new \ZipArchive();
 
-        if ($zip->open($filepath) === true) {
+        if (true === $zip->open($filepath)) {
             $tmpUnzipFullDir = $tmpUnzipDir.'/'.$zip->getNameIndex(0);
             $zip->extractTo($tmpUnzipDir);
             $zip->close();

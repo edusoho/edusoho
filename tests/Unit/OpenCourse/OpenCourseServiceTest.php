@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\OpenCourseRecommendedServiceTest;
+namespace Tests\Unit\OpenCourse;
 
 use Biz\BaseTestCase;
 use Biz\OpenCourse\Service\OpenCourseService;
