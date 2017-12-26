@@ -180,10 +180,6 @@ class TranslationDumper
         foreach ($this->getTranslations() as $locale => $domains) {
             foreach ($domains as $domain => $translations) {
                 foreach ($formats as $format) {
-                    if (empty($translations)) {
-                        continue;
-                    }
-               
                     $content = $this->engine->render('BazingaJsTranslationBundle::getTranslations.' . $format . '.twig', array(
                         'translations'   => array($locale => array(
                             $domain => $translations,
