@@ -869,11 +869,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                     'event' => $openCourse['title'],
                     'id' => $openCourse['id'],
                     'startTime' => date('Y-m-d H:i:s', $openLesson['startTime']),
-                    'endTime' => date('Y-m-d H:i:s', $openLesson['endTime'])
+                    'endTime' => date('Y-m-d H:i:s', $openLesson['endTime']),
                 );
                 array_push($openLiveCourses, $openLiveCourse);
             }
         }
+
         return $openLiveCourses;
     }
 

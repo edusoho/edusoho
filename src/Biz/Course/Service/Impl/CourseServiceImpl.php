@@ -1934,21 +1934,22 @@ class CourseServiceImpl extends BaseService implements CourseService
                 continue;
             }
             $course = $this->getCourse($task['courseId']);
-            if (!empty($course) && $course['status'] == 'published') {
+            if (!empty($course) && 'published' == $course['status']) {
                 $courseSet = $this->getCourseSetDao()->get($course['courseSetId']);
-                if (!empty($courseSet) && $courseSet['status'] == 'published') {
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
                     $liveCourse = array(
                         'title' => $courseSet['title'],
                         'courseId' => $task['courseId'],
                         'taskId' => $task['id'],
                         'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
                         'startTime' => date('Y-m-d H:i:s', $task['startTime']),
-                        'endTime' => date('Y-m-d H:i:s', $task['endTime'])
+                        'endTime' => date('Y-m-d H:i:s', $task['endTime']),
                     );
                     array_push($liveCourses, $liveCourse);
                 }
-            }        
+            }
         }
+
         return $liveCourses;
     }
 
