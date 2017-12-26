@@ -1928,7 +1928,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             PHP_INT_MAX
         );
         foreach ($tasks as $task) {
-            $members = $this->getMemberDao()->search(array('courseId' => $task['courseId']), array(), 0, PHP_INT_MAX);
+            $members = $this->getMemberDao()->search(array('courseId' => $task['courseId'], 'role' => $role), array(), 0, PHP_INT_MAX);
             $userIds = ArrayToolkit::column($members, 'userId');
             if (empty($userIds) || !in_array($userId, $userIds)) {
                 continue;
