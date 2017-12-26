@@ -4,19 +4,11 @@ namespace AppBundle\Component\Activity;
 
 class ActivityConfig implements \ArrayAccess
 {
-    private $raw;
+    private $config;
 
-    public function __construct($jsonPath)
+    public function __construct($config)
     {
-        if (!file_exists($jsonPath)) {
-            throw new \RuntimeException('The activity.json not found');
-        }
-        $this->raw = json_decode(file_get_contents($jsonPath), true);
-
-        if (!$this->raw) {
-            throw new \RuntimeException('The activity.json json format error');
-        }
-
+        $this->config = $config;
     }
 
     public function offsetExists($offset)
@@ -41,27 +33,27 @@ class ActivityConfig implements \ArrayAccess
 
     public function __set($name, $value)
     {
-        $this->raw[$name] = $value;
+        $this->config[$name] = $value;
 
         return $this;
     }
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->raw)) {
-            return $this->raw[$name];
+        if (array_key_exists($name, $this->config)) {
+            return $this->config[$name];
         }
         throw new \RuntimeException("{$name} is not exist.");
     }
 
     public function __isset($name)
     {
-        return isset($this->raw[$name]);
+        return isset($this->config[$name]);
     }
 
     public function __unset($name)
     {
-        unset($this->raw[$name]);
+        unset($this->config[$name]);
     }
 
 }

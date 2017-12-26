@@ -8,8 +8,6 @@ class ActivityProxy
 
     private $activityContext;
 
-    private $activityDir;
-
     /**
      * @var \AppBundle\Component\Activity\ActivityRuntimeContainer
      */
@@ -19,10 +17,9 @@ class ActivityProxy
         'php', 'html', 'twig',
     );
 
-    public function __construct(ActivityRuntimeContainer $container, $activity, $activityDir)
+    public function __construct(ActivityRuntimeContainer $container, $activity, ActivityConfig $activityConfig)
     {
-        $this->activityDir = $activityDir;
-        $this->activityConfig = new ActivityConfig($activityDir.DIRECTORY_SEPARATOR.'activity.json');
+        $this->activityConfig = $activityConfig;
         $this->activityContext = new ActivityContext($container->getBiz(), $activity);
         $this->container = $container;
     }
@@ -107,7 +104,7 @@ class ActivityProxy
     private function getAbsolutePath($extension, $relativePath)
     {
         if ('php' === $extension) {
-            return implode(DIRECTORY_SEPARATOR, array($this->activityDir, $relativePath));
+            return implode(DIRECTORY_SEPARATOR, array($this->activityConfig['dir'], $relativePath));
         } else {
             return $this->getViewPath($relativePath);
         }

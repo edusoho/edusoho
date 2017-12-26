@@ -20,6 +20,11 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
     private $activitiesDir;
 
     /**
+     * @var \AppBundle\Component\Activity\ActivityConfigManager
+     */
+    private $activityConfigManager;
+
+    /**
      * @var \AppBundle\Component\Activity\ActivityProxy
      */
     private $activityProxy;
@@ -35,6 +40,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
         $this->biz = $container->get('biz');
         $this->activitiesDir = $container->getParameter('edusoho.activities_dir');
         $this->request = $container->get('request');
+        $this->activityConfigManager = $container->get('activity_config_manager');
         self::$instance = $this;
     }
 
@@ -94,7 +100,8 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
 
     private function createActivityProxy($activity)
     {
-        $activityProxy = new ActivityProxy($this, $activity, $this->activitiesDir.DIRECTORY_SEPARATOR.$activity['mediaType']);
+        $activityConfig = new ActivityConfig($this->activityConfigManager->getInstalledActivity($activity['mediaType']));
+        $activityProxy = new ActivityProxy($this, $activity, $activityConfig);
         $this->activityProxy = $activityProxy;
 
         return $activityProxy;

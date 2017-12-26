@@ -52,7 +52,7 @@ class ActivityConfigManager
 
     public function getInstalledActivity($type)
     {
-
+        return $this->activitiesConfig[$type];
     }
 
     public function getInstalledActivities()
