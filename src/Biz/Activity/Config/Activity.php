@@ -178,6 +178,10 @@ class Activity
         return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
+    /**
+     * @param $realDao
+     * @return mixed
+     */
     protected function createDao($realDao)
     {
         return new DaoProxy($this->biz, $realDao, $this->biz['dao.metadata_reader'], $this->biz['dao.serializer'], $this->biz['dao.cache.array_storage']);

@@ -114,6 +114,9 @@ class activity_text extends Biz\Activity\Config\Activity
         return $this->getBiz()->service('Course:CourseDraftService');
     }
 
+    /**
+     * @return text_activity_dao
+     */
     protected function getTextActivityDao()
     {
         return $this->createDao(new text_activity_dao($this->getBiz()));
