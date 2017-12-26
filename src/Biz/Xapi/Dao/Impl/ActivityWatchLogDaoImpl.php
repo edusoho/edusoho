@@ -32,6 +32,7 @@ class ActivityWatchLogDaoImpl extends GeneralDaoImpl implements ActivityWatchLog
     {
         return $this->findInField('id', $ids);
     }
+
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0)
     {
         $sql = "SELECT * FROM {$this->table} WHERE user_id = ? AND activity_id = ? AND is_push = ? ORDER BY created_time DESC LIMIT 1";
