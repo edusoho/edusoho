@@ -39,7 +39,7 @@ class DoTestpaper extends DoTestBase {
         callback: () => {
           this.$container.find('#time-finish-dialog').modal('show');
           clearInterval(this.$usedTimer);
-          this.usedTime = this.$timer.data('time');
+          this.usedTime = this.$timer.data('time') / 60;
           if ($('input[name="preview"]').length == 0) {
             this._submitTest(this.$container.find('[data-role="paper-submit"]').data('url'));
           }
