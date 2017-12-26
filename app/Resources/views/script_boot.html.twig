@@ -49,14 +49,7 @@
   app.lang = '{{ app.request.locale }}';
 </script>
 
-<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-<script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales=
-{% if app.request.hasSession() %}
-{{ app.request.session.get('_locale',app.request.locale) }}
-{% else %}
-{{ app.request.locale }}
-{% endif %}"></script>
-
+{% include 'script/translation.html.twig' %}
 {% include 'js_loader.html.twig' %}
 
 <script type="text/javascript">
