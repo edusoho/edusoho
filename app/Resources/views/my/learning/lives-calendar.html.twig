@@ -6,19 +6,19 @@
 
 {% block full_content %}
   <div class="container cd-container">
-    <ol class="breadcrumb breadcrumb-o schedule">
-      <li><a href="{{ path('my_courses_learning') }}">{{'my.learning.menu_heading'|trans}}</a></li>
+    <ol class="breadcrumb breadcrumb-o">
+      <li><a href="{{ path('my_courses_learning') }}">{{ 'my.learning.menu_heading'|trans }}</a></li>
       <li class="active">{{ 'my.teaching.live_schedule_menu'|trans }}</li>
     </ol>
-    <div class="cd-content">
-      <div class="cd-panel panel-default panel-col lesson-manage-panel">
-        <div class="panel-heading clearfix">
+    <div class="cd-content schedule-content">
+      <div class="cd-panel schedule-panel lesson-manage-panel schedule-panel">
+        <div class="cd-panel-heading schedule-panel__heading clearfix">
           <span class="pull-right">
-            <a id="create-course" href="{{ path('my_courses_learning') }}" class="btn cd-btn cd-btn-primary cd-btn-sm">{{ 'my.learning.course'|trans }}</a>
+            <a class="btn cd-btn cd-btn-info cd-btn-sm" id="create-course" href="{{ path('my_courses_learning') }}">{{ 'my.learning.course'|trans }}</a>
           </span>
         </div>
 
-        <div class="panel-body my-course-manage-panel">
+        <div class="cd-panel-body schedule-panel__body">
           <div id='calendar'></div>
           <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d')}}</div>
         </div>

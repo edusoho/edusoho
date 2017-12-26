@@ -78,6 +78,11 @@ export default class CustomFullCalendar {
       scrollTime: '08:00:00', //默认移动到　８点位置
 
       eventRender: function(event, element) {
+        let text = {
+          date: '2017年12月11日 周四',
+          zoom: '09:30～10:30',
+          content: '产品经理高端课程，随便学都能学会的无敌厉害的课程，虽然名字有点长，但是还挺好的真不错谢谢大家！',
+        };
         element.popover({
           animation: true,
           delay: 300,
@@ -86,11 +91,11 @@ export default class CustomFullCalendar {
                       <div class="schedule-popover-content">
                         <i class="es-icon es-icon-history pull-left"></i>
                         <div class="schedule-popover-content__item cd-mb8">
-                          <span class="schedule-popover-content__time cd-text-gray-dark">2017年12月11日 周四</span>
-                          <div class="schedule-popover-content__time cd-text-gray">09:30～10:30</div>
+                          <span class="schedule-popover-content__time cd-text-gray-dark">${text.date}</span>
+                          <div class="schedule-popover-content__time cd-text-gray">${text.zoom}</div>
                         </div>
                         <i class="es-icon es-icon-eventnote pull-left"></i>
-                        <div class="cd-text-gray schedule-popover-content__item">产品经理高端课程，随便学都能学会的无敌厉害的课程，虽然名字有点长，但是还挺好的真不错谢谢大家！</div>
+                        <div class="cd-text-gray schedule-popover-content__item">${text.content}</div>
                       </div>
                     </div>`,
           trigger: 'hover'
@@ -99,7 +104,7 @@ export default class CustomFullCalendar {
       events: [
         {
           title: 'All Day Event',
-          start: new Date(date.getDate(), date.getMonth(), 1)
+          start: new Date(date.getDate(), date.getMonth(), 1),
         },
       ]
     };
