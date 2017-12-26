@@ -318,17 +318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
-
-        if ('published' == $courseSet['status']) {
-            //课程发布不允许修改模式和时间
-            unset($fields['expiryMode']);
-            unset($fields['expiryDays']);
-            unset($fields['expiryStartDate']);
-            unset($fields['expiryEndDate']);
-        } else {
-            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
-        }
+        $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
 
         if (!$this->isTeacherAllowToSetRewardPoint()) {
             unset($fields['taskRewardPoint']);
@@ -350,12 +340,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
-        if ('published' == $oldCourse['status'] || 'closed' == $oldCourse['status']) {
+        if (in_array($oldCourse['status'], array('published', 'closed'))) {
             //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
             unset($fields['expiryMode']);
 
-            if ('published' == $courseSet['status']) {
-                //课程计划发布或者关闭，课程也发布，不允许修改时间
+            if ('published' == $oldCourse['status']) {
+                //课程计划发布后，不允许修改时间
                 unset($fields['expiryDays']);
                 unset($fields['expiryStartDate']);
                 unset($fields['expiryEndDate']);
