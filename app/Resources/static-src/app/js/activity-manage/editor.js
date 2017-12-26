@@ -2,6 +2,7 @@ export const initEditor = ($item, validator) => {
   
   var editor = CKEDITOR.replace('text-content-field', {
     toolbar: 'Task',
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
     filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
     filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
     allowedContent: true,

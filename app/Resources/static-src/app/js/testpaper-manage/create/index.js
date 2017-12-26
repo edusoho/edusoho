@@ -95,6 +95,7 @@ class TestpaperForm {
   _initEditor(validator) {
     let editor = CKEDITOR.replace(this.$description.attr('id'), {
       toolbar: 'Simple',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: this.$description.data('imageUploadUrl'),
       height: 100
     });
