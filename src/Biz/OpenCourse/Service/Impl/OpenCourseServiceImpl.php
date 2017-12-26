@@ -845,10 +845,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function findOpenLiveCourse($conditions, $userId)
     {
-        // $members = $this->searchMembers(
-        //     array('userId' => $userId, 'role' => 'teacher'), array(), 0, PHP_INT_MAX
-        // );
-        // $courseIds = ArrayToolkit::column($members, 'courseId');
         $openLiveCourses = array();
         $openLessons = $this->searchLessons(
             array('type' => 'liveOpen', 'startTimeGreaterThan' => $conditions['startTime_GE'], 'endTimeLessThan' => $conditions['endTime_LT'], 'status' => 'published'),
