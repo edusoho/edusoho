@@ -100,6 +100,6 @@
   eventLimitText: function(e) {
     return "还有" + e + "项"
   },
-  slotLabelFormat: 'hh:mm', // 周视图，左侧的时间
+  slotLabelFormat: 'HH:mm', // 周视图，左侧的时间
   noEventsMessage: "没有事件显示"
 })
