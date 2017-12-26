@@ -1408,7 +1408,7 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
-course.course_files.re_try_convert_video_to_audio： 'Re-Conversion To Audio'
+course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 

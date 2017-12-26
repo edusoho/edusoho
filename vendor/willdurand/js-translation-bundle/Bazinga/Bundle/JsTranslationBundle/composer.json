@@ -30,9 +30,8 @@
         "willdurand/expose-translation-bundle": "2.5.*"
     },
     "autoload": {
-        "psr-0": { "Bazinga\\Bundle\\JsTranslationBundle": "" }
+        "psr-4": { "Bazinga\\Bundle\\JsTranslationBundle\\": "" }
     },
-    "target-dir": "Bazinga/Bundle/JsTranslationBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.7-dev"

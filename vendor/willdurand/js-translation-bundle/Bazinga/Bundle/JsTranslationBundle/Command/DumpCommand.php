@@ -2,6 +2,7 @@
 
 namespace Bazinga\Bundle\JsTranslationBundle\Command;
 
+use Bazinga\Bundle\JsTranslationBundle\Dumper\TranslationDumper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author Adrien Russo <adrien.russo.qc@gmail.com>
+ * @author Hugo Monteiro <hugo.monteiro@gmail.com>
  */
 class DumpCommand extends ContainerAwareCommand
 {
@@ -30,6 +32,13 @@ class DumpCommand extends ContainerAwareCommand
                 ),
             ))
             ->setDescription('Dumps all JS translation files to the filesystem')
+            ->addOption(
+                'pattern',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The route pattern: e.g. "/translations/{domain}.{_format}"',
+                TranslationDumper::DEFAULT_TRANSLATION_PATTERN
+            )
             ->addOption(
                 'format',
                 null,
@@ -62,7 +71,7 @@ class DumpCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $formats = $input->getOption('format');
-        $merge = (object) array (
+        $merge = (object) array(
             'domains' => $input->getOption('merge-domains')
         );
 
@@ -81,6 +90,6 @@ class DumpCommand extends ContainerAwareCommand
         $this
             ->getContainer()
             ->get('bazinga.jstranslation.translation_dumper')
-            ->dump($this->targetPath, $formats, $merge);
+            ->dump($this->targetPath, $input->getOption('pattern'), $formats, $merge);
     }
 }

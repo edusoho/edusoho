@@ -87,11 +87,11 @@ JSON
         $response = $client->getResponse();
 
         $this->assertEquals(<<<JS
-(function (Translator) {
-    Translator.fallback      = 'en';
-    Translator.defaultDomain = 'messages';
-    // en
-    Translator.add("hello", "hello", "messages", "en");
+(function (t) {
+t.fallback = 'en';
+t.defaultDomain = 'messages';
+// en
+t.add("hello", "hello", "messages", "en");
 })(Translator);
 
 JS
@@ -106,13 +106,13 @@ JS
         $response = $client->getResponse();
 
         $this->assertEquals(<<<JS
-(function (Translator) {
-    Translator.fallback      = 'en';
-    Translator.defaultDomain = 'messages';
-    // en
-    Translator.add("hello", "hello", "messages", "en");
-    // fr
-    Translator.add("hello", "bonjour", "messages", "fr");
+(function (t) {
+t.fallback = 'en';
+t.defaultDomain = 'messages';
+// en
+t.add("hello", "hello", "messages", "en");
+// fr
+t.add("hello", "bonjour", "messages", "fr");
 })(Translator);
 
 JS
@@ -127,10 +127,10 @@ JS
         $response = $client->getResponse();
 
         $this->assertEquals(<<<JS
-(function (Translator) {
-    Translator.fallback      = 'en';
-    Translator.defaultDomain = 'messages';
-    // en
+(function (t) {
+t.fallback = 'en';
+t.defaultDomain = 'messages';
+// en
 })(Translator);
 
 JS
@@ -145,10 +145,10 @@ JS
         $response = $client->getResponse();
 
         $this->assertEquals(<<<JS
-(function (Translator) {
-    Translator.fallback      = 'en';
-    Translator.defaultDomain = 'messages';
-    // pt
+(function (t) {
+t.fallback = 'en';
+t.defaultDomain = 'messages';
+// pt
 })(Translator);
 
 JS
