@@ -117,6 +117,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Codeages\\Biz\\Order\\' => 19,
             'Codeages\\Biz\\Framework\\' => 23,
         ),
+        'B' => 
+        array (
+            'Bazinga\\Bundle\\JsTranslationBundle\\' => 35,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -336,6 +340,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         array (
             0 => __DIR__ . '/..' . '/codeages/biz-framework/src',
         ),
+        'Bazinga\\Bundle\\JsTranslationBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/js-translation-bundle',
+        ),
     );
 
     public static $fallbackDirsPsr4 = array (
@@ -477,13 +485,6 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Doctrine\\Common\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/common/lib',
-            ),
-        ),
-        'B' => 
-        array (
-            'Bazinga\\Bundle\\JsTranslationBundle' => 
-            array (
-                0 => __DIR__ . '/..' . '/willdurand/js-translation-bundle',
             ),
         ),
         'A' => 
