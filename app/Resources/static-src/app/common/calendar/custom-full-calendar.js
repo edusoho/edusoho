@@ -83,7 +83,7 @@ export default class CustomFullCalendar {
           zoom: '09:30～10:30',
           content: '产品经理高端课程，随便学都能学会的无敌厉害的课程，虽然名字有点长，但是还挺好的真不错谢谢大家！',
         };
-
+        const type = element[0].className;
         let popoverType;
         if(type.indexOf('future') !== -1) {
           popoverType = 'schedule-popover--future';
