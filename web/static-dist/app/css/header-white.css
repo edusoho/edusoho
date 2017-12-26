@@ -40,6 +40,12 @@
 .es-header .nav.user-nav > li > a:focus {
   color: #313131;
 }
+.es-header .nav.user-nav > li .inform-dropdown-toggle {
+  color: #6f6f6f !important;
+}
+.es-header .nav.user-nav > li .inform-dropdown-toggle:hover {
+  color: rgba(111, 111, 111, 0.8) !important;
+}
 .navbar-form .form-control {
-  border-color: #e1e1e1;
+  color: rgba(0, 0, 0, 0.32);
 }

@@ -1,6 +1,6 @@
 {% extends 'v2/layout.html.twig' %}
 
-{% block title %}{{ 'my.teaching.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.learning.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
 
 {% do script(['libs/fullcalendar.js', 'app/js/my/learning-calendar/index.js'])  %}
 
@@ -17,7 +17,6 @@
             <a class="btn cd-btn cd-btn-info cd-btn-sm" id="create-course" href="{{ path('my_courses_learning') }}">{{ 'my.learning.course'|trans }}</a>
           </span>
         </div>
-
         <div class="cd-panel-body schedule-panel__body">
           <div id='calendar'></div>
           <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d')}}</div>

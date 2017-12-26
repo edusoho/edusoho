@@ -26,6 +26,8 @@ interface XapiService
 
     public function getWatchLog($id);
 
+    public function findWatchLogsByIds($ids);
+
     public function watchTask($taskId, $watchTime);
 
     public function archiveStatement();

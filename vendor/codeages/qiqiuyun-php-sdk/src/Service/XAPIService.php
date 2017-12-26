@@ -10,16 +10,7 @@ class XAPIService extends BaseService
 
     protected $defaultLang = 'zh-CN';
 
-    /**
-     * 提交"听音频"的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param null $uuid
-     * @param null $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+    //提交"听音频"的学习记录
     public function listenAudio($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -63,16 +54,7 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“观看视频”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+    //提交“观看视频”的学习记录
     public function watchVideo($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -116,16 +98,7 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“完成任务”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+    //提交“完成任务”的学习记录
     public function finishActivity($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -171,16 +144,7 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“完成任务的弹题”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+    //提交“完成任务的弹题”的学习记录
     public function finishActivityQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -232,17 +196,8 @@ class XAPIService extends BaseService
 
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
-    
-    /**
-     * 提交“完成作业”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+
+    //提交“完成作业”的学习记录
     public function finishHomework($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -279,16 +234,7 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“完成练习”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+    //提交“完成练习”的学习记录
     public function finishExercise($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -325,16 +271,8 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“完成考试”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+
+    //提交“完成考试”的学习记录
     public function finishTestpaper($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -371,16 +309,8 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“记笔记”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+
+    //提交“记笔记”的学习记录
     public function writeNote($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -420,16 +350,7 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交“提问题”的学习记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param $uuid
-     * @param $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+    //提交“提问题”的学习记录
     public function askQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -469,16 +390,8 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    /**
-     * 提交"观看直播"的记录
-     * @param $actor
-     * @param $object
-     * @param $result
-     * @param null $uuid
-     * @param null $timestamp
-     * @param bool $isPush
-     * @return array|mixed
-     */
+
+    //提交"观看直播"的记录
     public function watchLive($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -520,12 +433,7 @@ class XAPIService extends BaseService
 
     }
 
-    /**
-     * 提交学习记录
-     * @param $statement
-     * @return mixed
-     * @throws ResponseException
-     */
+    //提交学习记录
     public function pushStatement($statement)
     {
         $statement['context'] = array(
@@ -550,6 +458,7 @@ class XAPIService extends BaseService
         return $statement;
     }
 
+    //批量提交学习记录
     public function pushStatements($statements)
     {
         foreach ($statements as &$statement) {
