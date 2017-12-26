@@ -3035,7 +3035,7 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
-my.teaching.live_schedule_menu: Live Schedules
+my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -3298,6 +3298,8 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.live_schedule_menu: Live Schedule
+my.teaching.hints_block: Only live courses are shown currently
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
 my.learning.question_menu: 'Q&A'

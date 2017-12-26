@@ -1,16 +1,20 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ 'my.teaching.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.learning.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
 
 {% do script(['libs/fullcalendar.js', 'app/js/my/learning-calendar/index.js'])  %}
 
 {% block content %}
+  <ul class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('my_courses_learning') }}">{{'my.learning.menu_heading'|trans}}</a></li>
+    <li class="active">{{'my.learning.live_schedule_menu'|trans}}</li>
+  </ul>
   <div class="panel panel-default panel-col lesson-manage-panel">
     <div class="panel-heading">
-      <a href="{{ path('my_courses_learning') }}">{{'my.learning.menu_heading'|trans}}</a>
       <span class="pull-right">
         <a id="create-course" href="{{ path('my_courses_learning') }}" class="btn btn-info btn-sm">{{ 'my.learning.course'|trans }}</a>
       </span>
+      {{'my.learning.live_schedule_menu'|trans}}
     </div>
 
     <div class="panel-body">
