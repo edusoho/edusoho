@@ -43,7 +43,44 @@ a:hover {
 .nav > li.nav-more .open > a:focus {
   background: #cf010e !important;
 }
-.nav.user-nav .dropdown-menu > li > a:hover .num {
+.es-header .nav.user-nav > li .dropdown-menu > li > a:hover .num {
+  color: #cf010e;
+}
+.es-nav-white .es-header .nav.user-nav .user-manage-li .user-manage-toggle {
+  color: #fff;
+  background: #cf010e;
+  border-color: #cf010e;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-nav-white .es-header .nav.user-nav .user-manage-li .user-manage-toggle:hover,
+.es-nav-white .es-header .nav.user-nav .user-manage-li .user-manage-toggle:focus {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-box-shadow: 0 6px 6px 0 rgba(207, 1, 14, 0.3);
+  -moz-box-shadow: 0 6px 6px 0 rgba(207, 1, 14, 0.3);
+  box-shadow: 0 6px 6px 0 rgba(207, 1, 14, 0.3);
+}
+.es-nav-white .es-header .nav.user-nav .user-manage-li .user-manage-toggle:active {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  border-color: #b6010c;
+  background: #b6010c;
+}
+.es-nav-white .es-header .nav.user-nav .user-manage-li .user-manage-toggle:hover,
+.es-nav-white .es-header .nav.user-nav .user-manage-li .user-manage-toggle:focus {
+  background-color: #cf010e !important;
+  border-color: #cf010e !important;
+}
+.inform-dropdown-head__tab:focus,
+.inform-dropdown-head__tab:hover,
+.inform-dropdown-head__tab.active {
   color: #cf010e;
 }
 .float-consult .btn-consult-default {
@@ -414,6 +451,9 @@ a:hover {
   transition: all 0.3s ease;
   color: #b6010c;
 }
+.cd-ml24 {
+  margin-left: 24px !important;
+}
 .cd-mr24 {
   margin-right: 24px !important;
 }
@@ -443,6 +483,9 @@ a:hover {
 }
 .cd-mb40 {
   margin-bottom: 40px !important;
+}
+.cd-mb8 {
+  margin-bottom: 8px !important;
 }
 .cd-mv8 {
   margin-top: 8px !important;
@@ -865,6 +908,9 @@ a:hover {
 .es-mobile .step .member {
   background: #cf010e;
   box-shadow: 0 6px 20px rgba(207, 1, 14, 0.4);
+}
+.notification-list .notification-list__media.active {
+  background-color: rgba(207, 1, 14, 0.08);
 }
 .open-course-panel .panel-heading:before {
   background: #cf010e;
