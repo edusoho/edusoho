@@ -1595,8 +1595,6 @@ course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span c
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
-course.plan_task.activity_manage.text: Content
-course.plan_task.activity_manage.text_tips: 'You have an automatic save of content, please click to continue editing'
 course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
 course.plan_task.activity_manage.video.subtitle: 'Subtitles'

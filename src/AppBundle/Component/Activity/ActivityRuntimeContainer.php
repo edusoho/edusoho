@@ -5,6 +5,7 @@ namespace AppBundle\Component\Activity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
 {

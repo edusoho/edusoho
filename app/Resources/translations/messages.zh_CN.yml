@@ -1817,8 +1817,6 @@ course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
-course.plan_task.activity_manage.text: 内容
-course.plan_task.activity_manage.text_tips: 您有一段自动保存内容，请点击继续编辑
 course.plan_task.activity_manage.video: 视频
 course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕

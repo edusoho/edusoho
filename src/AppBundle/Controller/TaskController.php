@@ -13,6 +13,7 @@ use Biz\User\Service\TokenService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException as ServiceAccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class TaskController extends BaseController
 {

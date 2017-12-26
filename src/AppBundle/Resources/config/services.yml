@@ -8,6 +8,10 @@ services:
         class: AppBundle\Component\Activity\ActivityRuntimeContainer
         arguments: ['@service_container']
 
+    activity_config_manager:
+        class: AppBundle\Component\Activity\ActivityConfigManager
+        arguments: ['%kernel.cache_dir%', '%kernel.root_dir%', '%kernel.debug%']
+
     user.online_track:
         class: AppBundle\Component\Track\UserOnlineTrack
         arguments: ['@service_container', '@Biz']
