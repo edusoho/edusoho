@@ -25,6 +25,7 @@ site.date.month: 月
 site.date.hour: 小时
 site.date.minute: 分钟
 site.date.second: 秒
+site.date.format: YYYY年MM月DD日
 site.data.get_sms_code_btn: 获取短信验证码
 site.data.get_sms_code_again_btn: 秒后重新获取
 site.data.get_sms_code_success_hint: 发送短信成功
