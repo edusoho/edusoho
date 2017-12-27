@@ -1,6 +1,6 @@
 {
-  "name": "图文教学活动",
-  "type": "text",
+  "name": "签到",
+  "type": "checkin",
   "description": "",
   "authors": [
     {
