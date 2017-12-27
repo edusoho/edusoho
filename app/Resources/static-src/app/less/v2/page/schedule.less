@@ -1,6 +1,10 @@
 @import '../module/calendar-month-view.less';
 @import '../module/calendar-daily-view.less';
 
+@before-color:             rgba(0, 0, 0, 0.24);
+@today-color:              #ffa51f;
+@future-color:             #278bf5;
+
 .schedule-panel {
   min-height: 834px;
   .schedule-panel__heading {
@@ -24,13 +28,13 @@
     .cd-box-shadow-z(12px);
     border: none;
     &.schedule-popover--before {
-      background-color: rgba(0, 0, 0, 0.24);
+      background-color: @before-color;
     }
     &.schedule-popover--today {
-      background-color: #ffa51f;
+      background-color: @today-color;
     }
     &.schedule-popover--future {
-      background-color: #278bf5;
+      background-color: @future-color;
     }
   }
 
@@ -145,7 +149,7 @@
 }
 
 .calendar-before {
-  background-color: rgba(0, 0, 0, 0.24);
+  background-color: @before-color;
   .cd-border-radius(2px);
   border: none;
   .cd-transition;
@@ -157,24 +161,24 @@
 }
 
 .calendar-today {
-  background-color: #ffa51f;
+  background-color: @today-color;
   .cd-border-radius(2px);
   border: none;
   .cd-transition;
   &:hover {
     cursor: default;
-    background-color: rgba(red(#ffa51f), green(#ffa51f), blue(#ffa51f), 0.8);
+    background-color: rgba(red(@today-color), green(@today-color), blue(@today-color), 0.8);
   }
 }
 
 .calendar-future {
-  background-color: #278bf5;
+  background-color: @future-color;
   .cd-border-radius(2px);
   border: none;
   .cd-transition;
   &:hover {
     cursor: default;
-    background-color: rgba(red(#278bf5), green(#278bf5), blue(#278bf5), 0.8);
+    background-color: rgba(red(@future-color), green(@future-color), blue(@future-color), 0.8);
   }
 }
 
