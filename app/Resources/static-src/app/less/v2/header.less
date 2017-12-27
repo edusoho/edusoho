@@ -39,10 +39,14 @@
     .navbar-brand {
       padding: 5px 20px 5px 0;
       @media (max-width: @screen-md-max) {
-        padding: 5px 10px 5px 0;
+        padding-right: 10px;
       }
       @media (max-width: @screen-sm-max) {
         padding-right: 8px;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 8px 0;
+        line-height: 40px;
       }
       height: 56px;
       line-height: 46px;
@@ -50,6 +54,9 @@
       img {
         height: 46px;
         width: auto;
+        @media (max-width: @screen-xs-max) {
+          height: 40px;
+        }
       }
     }
   }
