@@ -1,10 +1,8 @@
-{% extends 'layout.html.twig' %}
+{% extends 'v2/layout.html.twig' %}
 
 {% block title %}{{ 'my.learning.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
 
 {% do script(['libs/fullcalendar.js', 'app/js/my/learning-calendar/index.js'])  %}
-
-{% set bodyClass = 'lives-schedule cd-design' %}
 
 {% block full_content %}
   <div class="container cd-container">
