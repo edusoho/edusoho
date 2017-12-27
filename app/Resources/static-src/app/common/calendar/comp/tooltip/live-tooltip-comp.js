@@ -10,7 +10,7 @@ export default class LiveTooltip extends BaseTooltipComp {
     console.log('show live tip', params);
     const $target = $(jsEvent.currentTarget);
     const time = params.startTime.substr(0, 10);
-    const date = moment(time).format(Translator.trans('site.date.format'));
+    const date = moment(time).format('L');
     const weekDay = moment(time).format('ddd');
     const startTime = params.startTime.substr(10, 6);
     const endTime = params.endTime.substr(10, 6);
