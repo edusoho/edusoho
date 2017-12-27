@@ -39,9 +39,9 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                 $customExt = new $class($container);
                 if ($customExt instanceof Activity) {
                     $container['activity_type.'.$type] = $customExt;
-                } else {
-                    $container['activity_type.'.$type] = new Activity($container);
                 }
+            } else {
+                $container['activity_type.'.$type] = new Activity($container);
             }
         }
 

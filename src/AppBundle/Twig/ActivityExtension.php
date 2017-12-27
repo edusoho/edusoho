@@ -42,10 +42,22 @@ class ActivityExtension extends \Twig_Extension
 
     public function getActivityMeta($type = null)
     {
+        // todo 获取activity信息要重构
         $activities = $this->container->get('extension.manager')->getActivities();
-
+        $customActivities = $this->container->get('activity_config_manager')->getInstalledActivities();
         foreach ($activities as &$activity) {
             $activity['meta']['name'] = $this->container->get('translator')->trans($activity['meta']['name']);
+        }
+        
+        foreach ($customActivities as $customActivity) {
+            if (!isset($activities[$customActivity['type']])) {
+                $activities[$customActivity['type']] = array(
+                    'meta' => array(
+                        'name' => $this->container->get('translator')->trans($customActivity['name']),
+                        'icon' => $customActivity['icon']['value'],
+                    )
+                );
+            }
         }
 
         if (empty($type)) {

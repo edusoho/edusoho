@@ -14,7 +14,7 @@
     <form class="form-horizontal" id="step1-form">
       <ul class="form-group task-create-type-list ">
         {% cache courseSet.type ~ '-create-task-activity-metas-' ~ setting('storage.upload_mode', 'local') 1000 %}
-          {% for type, meta in activity_metas() if type|activity_visible(courseSet, course) %}
+          {% for type, meta in activity_metas() %}
             <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if task.type|default(null)==  type %} active {% endif %}"
                 data-role="activityType" data-type="{{ type }}"
                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">

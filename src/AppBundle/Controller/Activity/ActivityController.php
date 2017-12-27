@@ -67,7 +67,16 @@ class ActivityController extends BaseController
 
         $container = $this->get('activity_runtime_container');
 
-        return $container->customRoute($activity, $routeName);
+        return $container->renderRoute($activity, $routeName);
+    }
+
+    public function customLearningRouteAction(Request $request, $courseId, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $container = $this->get('activity_runtime_container');
+        $routeName = $request->query->get('routeName');
+        return $container->renderRoute($activity, $routeName);
     }
 
     public function triggerAction(Request $request, $courseId, $activityId)
@@ -109,6 +118,14 @@ class ActivityController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return \Biz\Task\Service\TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**

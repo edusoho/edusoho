@@ -33,8 +33,13 @@ class ActivityConfigManager
         foreach ($activitiesDir as $activityDir) {
             $pathInfo = pathinfo($activityDir);
             $activityJson = implode(DIRECTORY_SEPARATOR, array($activitiesRootDir, $pathInfo['filename'], 'activity.json'));
+
+            if (!file_exists($activityJson)) {
+                continue;
+            }
+
             $jsonArr = json_decode(file_get_contents($activityJson), true);
-            if (file_exists($activityJson) && $jsonArr) {
+            if ($jsonArr) {
                 $resources[] = new FileResource($activityJson);
                 $jsonArr['dir'] = implode(DIRECTORY_SEPARATOR, array($activitiesRootDir, $pathInfo['filename']));
                 $code[$pathInfo['filename']] = $jsonArr;

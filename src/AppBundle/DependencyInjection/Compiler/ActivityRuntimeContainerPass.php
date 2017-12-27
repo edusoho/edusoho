@@ -22,6 +22,11 @@ class ActivityRuntimeContainerPass implements CompilerPassInterface
         $translationFiles = array();
         foreach ($installedActivities as $installedActivity) {
             $translationDir = implode(DIRECTORY_SEPARATOR, array($installedActivity['dir'], 'resources', 'translations'));
+
+            if (!file_exists($translationDir)) {
+                continue;
+            }
+
             $transFiles = Finder::create()->files()->in($translationDir);
 
             foreach ($transFiles as $file) {

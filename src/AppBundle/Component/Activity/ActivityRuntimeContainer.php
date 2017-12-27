@@ -70,7 +70,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
         ));
     }
 
-    public function customRoute($activity, $routeName)
+    public function renderRoute($activity, $routeName)
     {
         $activityProxy = $this->createActivityProxy($activity);
 

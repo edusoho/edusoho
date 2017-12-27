@@ -1533,6 +1533,10 @@ course_manage_activity_manage_custom_route:
     defaults: { _controller: AppBundle:Activity/Activity:customManageRoute }
     methods: [POST]
 
+course_activity_learning_custom_route:
+    path: /course/{courseId}/task/{taskId}/learning
+    defaults: { _controller: AppBundle:Activity/Activity:customLearningRoute }
+
 #task
 course_task_show:
     path:  /course/{courseId}/task/{id}/show

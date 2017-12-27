@@ -35,6 +35,11 @@ class ActivityContext
         return $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($this->activity['fromCourseId'], $this->activity['id'], $user['id']);
     }
 
+    public function getCourse()
+    {
+        return $this->getCourseService()->getCourse($this->activity['fromCourseId']);
+    }
+
     public function getActivity()
     {
         return $this->activity;
@@ -51,5 +56,13 @@ class ActivityContext
     private function getCourseDraftService()
     {
         return $this->biz->service('Course:CourseDraftService');
+    }
+
+    /**
+     * @return \Biz\Course\Service\CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }
