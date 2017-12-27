@@ -1,4 +1,4 @@
-import Comp from 'app/common/calendar/comp/comp'
+import Comp from './comp'
 
 export default class ClickComp extends Comp {
 
