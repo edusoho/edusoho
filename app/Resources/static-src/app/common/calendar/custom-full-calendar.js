@@ -76,46 +76,6 @@ export default class CustomFullCalendar {
       defaultView: this.options['defaultView'],
       allDaySlot: false,
       scrollTime: '08:00:00', //默认移动到　８点位置
-
-      eventRender: function(event, element) {
-        let text = {
-          date: '2017年12月11日 周四',
-          zoom: '09:30～10:30',
-          content: '产品经理高端课程，随便学都能学会的无敌厉害的课程，虽然名字有点长，但是还挺好的真不错谢谢大家！',
-        };
-        const type = element[0].className;
-        let popoverType;
-        if(type.indexOf('future') !== -1) {
-          popoverType = 'schedule-popover--future';
-        } else if (type.indexOf('today') !== -1) {
-          popoverType = 'schedule-popover--today';
-        } else if (type.indexOf('past') !== -1) {
-          popoverType = 'schedule-popover--before';
-        }
-        element.popover({
-          animation: true,
-          delay: 300,
-          content: '<b>Inicio</b>:'+event.start+"<b>Fin</b>:"+event.end,
-          template: `<div class="popover schedule-popover ${popoverType}" role="tooltip">
-                      <div class="schedule-popover-content">
-                        <i class="es-icon es-icon-history pull-left"></i>
-                        <div class="schedule-popover-content__item cd-mb8">
-                          <span class="schedule-popover-content__time cd-text-gray-dark">${text.date}</span>
-                          <div class="schedule-popover-content__time cd-text-gray">${text.zoom}</div>
-                        </div>
-                        <i class="es-icon es-icon-eventnote pull-left"></i>
-                        <div class="cd-text-gray schedule-popover-content__item">${text.content}</div>
-                      </div>
-                    </div>`,
-          trigger: 'hover'
-        });
-      },
-      events: [
-        {
-          title: 'All Day Event',
-          start: new Date(date.getDate(), date.getMonth(), 1),
-        },
-      ]
     };
 
     if (calendarOptions['defaultView'] == 'agendaWeek') {
