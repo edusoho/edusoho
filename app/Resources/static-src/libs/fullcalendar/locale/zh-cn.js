@@ -101,5 +101,6 @@
     return "还有" + e + "项"
   },
   slotLabelFormat: 'HH:mm', // 周视图，左侧的时间
+  timeFormat: 'HH:mm',
   noEventsMessage: "没有事件显示"
 })
