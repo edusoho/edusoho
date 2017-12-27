@@ -104,7 +104,7 @@ class LoginBindController extends BaseController
         $registerSetting = $setting->getRegister();
         $oauthUser = new OAuthUser();
         $oauthUser->authid = $oUser['id'];
-        $oauthUser->name = mb_substr($oUser['name'], 0, 9, 'utf8');
+        $oauthUser->name = $this->filterNickname($oUser['user']);
         $oauthUser->avatar = $oUser['avatar'];
         $oauthUser->type = $type;
         $oauthUser->mode = $registerSetting['mode'];
@@ -112,6 +112,16 @@ class LoginBindController extends BaseController
         $oauthUser->os = $os;
 
         $request->getSession()->set(OAuthUser::SESSION_KEY, $oauthUser);
+    }
+
+    protected function filterNickname($nickname)
+    {
+        $str = mb_substr($nickname, 0, strlen($nickname), 'utf8');
+        $filterArr = array_filter(str_split($str), function ($item) {
+            return preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.·]+$/u', $item) ? $item : '';
+        });
+
+        return mb_substr(implode('', $filterArr), 0, 9);
     }
 
     protected function validateToken(Request $request, $type)
