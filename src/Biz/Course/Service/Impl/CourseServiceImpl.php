@@ -321,7 +321,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($oldCourse['status'] != 'published') {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
-        
+
         if (!$this->isTeacherAllowToSetRewardPoint()) {
             unset($fields['taskRewardPoint']);
             unset($fields['rewardPoint']);
