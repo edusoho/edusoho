@@ -28,7 +28,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-            $registration['type'] = $type;
+            $registration['providerType'] = $this->getAuthProvider()->getProviderName();
 
             $newUser = $this->getUserService()->register(
                 $registration,
