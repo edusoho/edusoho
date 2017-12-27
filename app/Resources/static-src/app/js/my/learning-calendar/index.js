@@ -1,1 +1,1 @@
-import './live-calendar.js';
+import './live-calendar';
