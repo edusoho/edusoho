@@ -76,6 +76,7 @@ class ActivityController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $container = $this->get('activity_runtime_container');
         $routeName = $request->query->get('routeName');
+
         return $container->renderRoute($activity, $routeName);
     }
 

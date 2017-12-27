@@ -30,7 +30,7 @@ class ActivityRuntimeContainerPass implements CompilerPassInterface
             $transFiles = Finder::create()->files()->in($translationDir);
 
             foreach ($transFiles as $file) {
-                /** @var \Symfony\Component\Finder\SplFileInfo $file */
+                /* @var \Symfony\Component\Finder\SplFileInfo $file */
                 list(, $locale) = explode('.', $file->getBasename(), 3);
                 if (!isset($translationFiles[$locale])) {
                     $translationFiles[$locale] = array();

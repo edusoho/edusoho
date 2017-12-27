@@ -48,14 +48,14 @@ class ActivityExtension extends \Twig_Extension
         foreach ($activities as &$activity) {
             $activity['meta']['name'] = $this->container->get('translator')->trans($activity['meta']['name']);
         }
-        
+
         foreach ($customActivities as $customActivity) {
             if (!isset($activities[$customActivity['type']])) {
                 $activities[$customActivity['type']] = array(
                     'meta' => array(
                         'name' => $this->container->get('translator')->trans($customActivity['name']),
                         'icon' => $customActivity['icon']['value'],
-                    )
+                    ),
                 );
             }
         }

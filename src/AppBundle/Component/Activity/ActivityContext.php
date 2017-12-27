@@ -32,6 +32,7 @@ class ActivityContext
     public function getCourseDraft()
     {
         $user = $this->getUser();
+
         return $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($this->activity['fromCourseId'], $this->activity['id'], $user['id']);
     }
 
@@ -47,7 +48,6 @@ class ActivityContext
 
     public function getTask()
     {
-
     }
 
     /**
