@@ -9,7 +9,7 @@ export default class LiveTooltip extends BaseTooltipComp {
   _showTip(params, event, jsEvent) {
     console.log('show live tip', params);
     const $target = $(jsEvent.currentTarget);
-    const date = params.startTime.substr(0, 9);
+    const date = params.startTime.substr(0, 10);
     const startTime = params.startTime.substr(10, 6);
     const endTime = params.endTime.substr(10, 6);
     let popoverType;
