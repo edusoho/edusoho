@@ -104,7 +104,7 @@ class LoginBindController extends BaseController
         $registerSetting = $setting->getRegister();
         $oauthUser = new OAuthUser();
         $oauthUser->authid = $oUser['id'];
-        $oauthUser->name = $this->filterNickname($oUser['user']);
+        $oauthUser->name = $this->filterNickname($oUser['name']);
         $oauthUser->avatar = $oUser['avatar'];
         $oauthUser->type = $type;
         $oauthUser->mode = $registerSetting['mode'];
