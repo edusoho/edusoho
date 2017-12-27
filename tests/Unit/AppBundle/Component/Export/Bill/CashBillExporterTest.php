@@ -27,13 +27,13 @@ class CashBillExporterTest extends BaseTestCase
                     'returnValue' => array(
                         array('trade_sn' => '201711221', 'buyer_id' => 2, 'type' => 'outflow', 'amount_type' => 'money', 'platform' => 'lianlianpay', 'sn' => '201711221', 'title' => 'title1', 'order_sn' => '201711221', 'created_time' => 50000, 'amount' => 2),
                         array('trade_sn' => '201711222', 'buyer_id' => 2, 'type' => 'inflow', 'amount_type' => 'coin', 'platform' => 'lianlianpay', 'sn' => '201711222', 'title' => 'title2', 'order_sn' => '201711222', 'created_time' => 60000, 'amount' => 2),
-                        array('trade_sn' => '201711223', 'buyer_id' => 2, 'type' => 'outflow', 'amount_type' => 'coin', 'platform' => 'lianlianpay', 'sn' => '201711223', 'title' => 'title3', 'order_sn' => '201711223', 'created_time' => 70000, 'amount' => 2)
+                        array('trade_sn' => '201711223', 'buyer_id' => 2, 'type' => 'outflow', 'amount_type' => 'coin', 'platform' => 'lianlianpay', 'sn' => '201711223', 'title' => 'title3', 'order_sn' => '201711223', 'created_time' => 70000, 'amount' => 2),
                     ),
                     'withParams' => array(
                         array('amount_type' => 'money', 'user_id' => 0),
                         array('id' => 'DESC'),
                         0,
-                        5
+                        5,
                     ),
                 ),
             )
@@ -47,7 +47,7 @@ class CashBillExporterTest extends BaseTestCase
                         array('trade_sn' => '201711221', 'platform_sn' => '2017112296940135'),
                     ),
                     'withParams' => array(
-                        array('201711221', '201711222', '201711223')
+                        array('201711221', '201711222', '201711223'),
                     ),
                 ),
             )
@@ -61,7 +61,7 @@ class CashBillExporterTest extends BaseTestCase
                         2 => array('email' => 'test@edusoho.net', 'nickname' => 'test'),
                     ),
                     'withParams' => array(
-                        array(2, 2, 2)
+                        array(2, 2, 2),
                     ),
                 ),
                 array(
@@ -70,7 +70,7 @@ class CashBillExporterTest extends BaseTestCase
                         2 => array('mobile' => '15687654321', 'truename' => 'name'),
                     ),
                     'withParams' => array(
-                        array(2, 2, 2)
+                        array(2, 2, 2),
                     ),
                 ),
             )
