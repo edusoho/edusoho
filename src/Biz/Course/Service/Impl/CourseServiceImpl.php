@@ -1944,6 +1944,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                         'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
                         'startTime' => date('Y-m-d H:i:s', $task['startTime']),
                         'endTime' => date('Y-m-d H:i:s', $task['endTime']),
+                        'date' => date('w', $task['startTime'])
                     );
                     array_push($liveCourses, $liveCourse);
                 }
