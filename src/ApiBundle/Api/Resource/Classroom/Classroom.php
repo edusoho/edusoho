@@ -36,6 +36,10 @@ class Classroom extends AbstractResource
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = $conditions['title'];
+            unset($conditions['title']);
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $classrooms = $this->getClassroomService()->searchClassrooms(
