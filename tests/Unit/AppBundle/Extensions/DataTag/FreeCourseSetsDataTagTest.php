@@ -47,9 +47,6 @@ class FreeCourseSetsDataTagTest extends BaseTestCase
         $this->assertEquals($courseSet2['id'], $courseSets[0]['id']);
     }
 
-    /**
-     * @return AnnouncementService
-     */
     private function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
