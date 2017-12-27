@@ -318,8 +318,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
-
+        if ($oldCourse['status'] != 'published') {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
+        
         if (!$this->isTeacherAllowToSetRewardPoint()) {
             unset($fields['taskRewardPoint']);
             unset($fields['rewardPoint']);
@@ -340,19 +342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
-        if (in_array($oldCourse['status'], array('published', 'closed'))) {
-            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
-            unset($fields['expiryMode']);
-
-            if ('published' == $oldCourse['status']) {
-                //课程计划发布后，不允许修改时间
-                unset($fields['expiryDays']);
-                unset($fields['expiryStartDate']);
-                unset($fields['expiryEndDate']);
-            }
-        }
-
-        $fields = $this->processFields($id, $fields, $courseSet);
+        $fields = $this->processFields($oldCourse, $fields, $courseSet);
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
 
@@ -2185,10 +2175,21 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @return mixed
      */
-    private function processFields($id, $fields, $courseSet)
+    private function processFields($course, $fields, $courseSet)
     {
+        if (in_array($course['status'], array('published', 'closed'))) {
+            //计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $course['status']) {
+                //计划发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
         if (isset($fields['originPrice'])) {
-            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
         if (1 == $fields['isFree']) {
