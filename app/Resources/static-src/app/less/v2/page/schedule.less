@@ -5,6 +5,24 @@
 @today-color:              #ffa51f;
 @future-color:             #278bf5;
 
+.schedule-panel {
+  min-height: 834px;
+  .schedule-panel__heading {
+    padding: 12px 42px;
+  }
+}
+
+.schedule-panel__body {
+  padding: 24px 42px;
+}
+
+.schedule-panel-body__current-num {
+  position: absolute;
+  font-size: 18px;
+  line-height: 1;
+  color: @cd-gray-dark;
+}
+
 .schedule-popover {
   padding-top: 4px !important;
   width: 205px;
@@ -38,24 +56,6 @@
 .schedule-popover-content__time {
   font-size: 12px;
   line-height: 1;
-}
-
-.schedule-panel {
-  min-height: 834px;
-  .schedule-panel__heading {
-    padding: 12px 42px;
-  }
-}
-
-.schedule-panel__body {
-  padding: 24px 42px;
-}
-
-.schedule-panel-body__current-num {
-  position: absolute;
-  font-size: 18px;
-  line-height: 1;
-  color: @cd-gray-dark;
 }
 
 .fc-content {
