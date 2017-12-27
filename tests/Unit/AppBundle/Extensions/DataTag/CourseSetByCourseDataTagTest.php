@@ -29,14 +29,14 @@ class CourseSetByCourseDataTagTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 5, 'courseSetId' => 1)
-            )
+                'returnValue' => array('id' => 5, 'courseSetId' => 1),
+            ),
         ));
         $this->mockBiz('Course:CourseSetService', array(
             array(
                 'functionName' => 'getCourseSet',
-                'returnValue' => ''
-            )
+                'returnValue' => '',
+            ),
         ));
 
         $datatag = new CourseSetByCourseDataTag();
@@ -49,8 +49,8 @@ class CourseSetByCourseDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:CategoryService', array(
             array(
                 'functionName' => 'getCategory',
-                'returnValue' => array('id' => 3)
-            )
+                'returnValue' => array('id' => 3),
+            ),
         ));
         $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
         $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], array('title' => 'course set3 title', 'categoryId' => 3, 'serializeMode' => 'none', 'tags' => ''));
@@ -59,7 +59,7 @@ class CourseSetByCourseDataTagTest extends BaseTestCase
 
         $datatag = new CourseSetByCourseDataTag();
         $data = $datatag->getData(array('courseId' => $course['id']));
-        
+
         $this->assertEquals($courseSet['id'], $data['id']);
         $this->assertEquals($courseSet['categoryId'], $data['category']['id']);
     }

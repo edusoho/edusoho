@@ -21,15 +21,15 @@ class CourseSetDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:CategoryService', array(
             array(
                 'functionName' => 'getCategory',
-                'returnValue' => array('id' => 3)
-            )
+                'returnValue' => array('id' => 3),
+            ),
         ));
         $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
         $courseSet = $this->getCourseSetService()->updateCourseSet($courseSet['id'], array('title' => 'course set3 title', 'categoryId' => 3, 'serializeMode' => 'none', 'tags' => ''));
 
         $datatag = new CourseSetDataTag();
         $data = $datatag->getData(array('id' => $courseSet['id']));
-        
+
         $this->assertEquals($courseSet['id'], $data['id']);
         $this->assertEquals($courseSet['categoryId'], $data['category']['id']);
     }
