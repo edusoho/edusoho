@@ -63,7 +63,6 @@ export default class CustomFullCalendar {
   }
 
   _init() {
-    let date = new Date();
     let calendarOptions = {
       header: {
         left: '',
