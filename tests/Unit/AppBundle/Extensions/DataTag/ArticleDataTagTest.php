@@ -16,7 +16,7 @@ class ArticleDataTagTest extends BaseTestCase
             'originalThumb' => '',
             'categoryId' => 1,
             'source' => 'article source',
-            'publishedTime' => date('Y-m-d',strtotime('+1 day'))
+            'publishedTime' => date('Y-m-d', strtotime('+1 day')),
         );
         $article = $this->getArticleService()->createArticle($fields);
 

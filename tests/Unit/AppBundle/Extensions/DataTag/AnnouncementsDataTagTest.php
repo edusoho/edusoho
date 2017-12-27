@@ -82,7 +82,7 @@ class AnnouncementsDataTagTest extends BaseTestCase
     public function testCountGT100()
     {
         $dataTag = new AnnouncementsDataTag();
-        $announcement = $dataTag->getData(array('count' => 101,'targetType' => 'course', 'targetId' => 1));
+        $announcement = $dataTag->getData(array('count' => 101, 'targetType' => 'course', 'targetId' => 1));
     }
 
     /**

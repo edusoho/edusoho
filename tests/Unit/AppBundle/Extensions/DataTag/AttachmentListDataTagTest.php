@@ -7,7 +7,6 @@ use AppBundle\Extensions\DataTag\AttachmentListDataTag;
 
 class AttachmentListDataTagTest extends BaseTestCase
 {
-
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage 缺少参数，无法获取附件列表
