@@ -23,6 +23,7 @@ export default class LiveTooltip extends BaseTooltipComp {
       popoverType = 'schedule-popover--future';
     }
     $target.popover({
+      container: 'body',
       html: true,
       content: `<i class="es-icon es-icon-history pull-left"></i>
                 <div class="schedule-popover-content__item cd-mb8">
