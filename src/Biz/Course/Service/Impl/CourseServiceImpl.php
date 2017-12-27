@@ -214,7 +214,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-        $this->validatie($fields);
+        $this->validatie($id, $fields);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -386,7 +386,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $setting = $this->getSettingService()->get('storage', array());
-        
+
         if (!empty($setting['upload_mode']) && 'cloud' != $setting['upload_mode']) {
             return false;
         }
@@ -495,12 +495,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
-    protected function validatie($fields)
+    protected function validatie($id, &$fields)
     {
         if (!empty($fields['enableAudio'])) {
             $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
             if ('opened' != $audioServiceStatus) {
-                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
+                $this->getCourseDao()->update($id, array('enableAudio' => '0'));
+                unset($fields['enableAudio']);
             }
         }
     }
@@ -1915,6 +1916,42 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->dispatch('course.try_free_join', $course);
+    }
+
+    public function findLiveCourse($conditions, $userId, $role)
+    {
+        $liveCourses = array();
+        $tasks = $this->getTaskService()->searchTasks(
+            array('type' => 'live', 'startTime_GE' => $conditions['startTime_GE'], 'endTime_LT' => $conditions['endTime_LT'], 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($tasks as $task) {
+            $members = $this->getMemberDao()->search(array('courseId' => $task['courseId'], 'role' => $role), array(), 0, PHP_INT_MAX);
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($userId, $userIds)) {
+                continue;
+            }
+            $course = $this->getCourse($task['courseId']);
+            if (!empty($course) && 'published' == $course['status']) {
+                $courseSet = $this->getCourseSetDao()->get($course['courseSetId']);
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
+                    $liveCourse = array(
+                        'title' => $courseSet['title'],
+                        'courseId' => $task['courseId'],
+                        'taskId' => $task['id'],
+                        'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
+                        'startTime' => date('Y-m-d H:i:s', $task['startTime']),
+                        'endTime' => date('Y-m-d H:i:s', $task['endTime']),
+                        'date' => date('w', $task['startTime']),
+                    );
+                    array_push($liveCourses, $liveCourse);
+                }
+            }
+        }
+
+        return $liveCourses;
     }
 
     protected function hasAdminRole()

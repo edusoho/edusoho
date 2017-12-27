@@ -1408,7 +1408,7 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
-course.course_files.re_try_convert_video_to_audio： 'Re-Conversion To Audio'
+course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 
@@ -3035,6 +3035,9 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
+my.teaching.live_schedule_menu: Teaching Schedules
+my.teaching.hints_block: Only live courses are shown currently
+my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -3297,6 +3300,7 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
 my.learning.question_menu: 'Q&A'
@@ -6723,6 +6727,7 @@ log.module.homework: 作业
 log.module.question_plus: 题库增强版
 log.module.announcement: 公告
 log.module.open_course: 公开课
+log.module.live: 直播
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -6883,6 +6888,8 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+log.action.live.update_live_activity: 更新直播活动
+log.action.live.generate_live_replay: 生成直播回放
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

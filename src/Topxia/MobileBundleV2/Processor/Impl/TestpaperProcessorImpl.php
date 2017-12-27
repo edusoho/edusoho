@@ -577,6 +577,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                 );
             }
 
+            $questions[$questionId]['score'] = $item['score'];
             $items[$questionId]['question'] = $questions[$questionId];
 
             if ($item['parentId'] != 0) {
