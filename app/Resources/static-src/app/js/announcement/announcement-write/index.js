@@ -42,6 +42,7 @@ function initCkeditor(validator) {
   // group: 'course'
   var editor = CKEDITOR.replace('announcement-content-field', {
     toolbar: 'Simple',
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
     filebrowserImageUploadUrl: $('#announcement-content-field').data('imageUploadUrl')
   });
 

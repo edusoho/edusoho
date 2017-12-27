@@ -20,6 +20,7 @@ $('.js-btn-thread-save').click((event) => {
 
 let editor = CKEDITOR.replace('thread_content', {
   toolbar: 'Thread',
+  fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
 });
 
