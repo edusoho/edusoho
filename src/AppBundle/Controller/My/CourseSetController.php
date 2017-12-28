@@ -113,7 +113,7 @@ class CourseSetController extends CourseBaseController
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
-        
+
         $liveCourseNumber = $this->getTaskService()->getTodayLiveCourseNumber();
         $openLiveCourseNumber = $this->getOpenCourseService()->getTodayOpenLiveCourseNumber();
         $courseNumber = $liveCourseNumber + $openLiveCourseNumber;
