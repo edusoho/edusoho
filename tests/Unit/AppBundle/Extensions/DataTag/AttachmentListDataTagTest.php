@@ -11,7 +11,7 @@ class AttachmentListDataTagTest extends BaseTestCase
      * @expectedException \Exception
      * @expectedExceptionMessage 缺少参数，无法获取附件列表
      */
-    public function testeGetArgumentError()
+    public function testGetArgumentError()
     {
         $dataTag = new AttachmentListDataTag();
         $dataTag->getData(array());
