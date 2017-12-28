@@ -64,6 +64,7 @@ class QuestionFormBase {
     let $target = $('#' + this.titleFieldId);
     let editor = CKEDITOR.replace(this.titleFieldId, {
       toolbar: this.titleEditorToolBarName,
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
       height: $target.height()
     });
@@ -85,6 +86,7 @@ class QuestionFormBase {
     let $target = $('#' + this.analysisFieldId);
     let editor = CKEDITOR.replace(this.analysisFieldId, {
       toolbar: this.titleEditorToolBarName,
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
       height: $target.height()
     });

@@ -7045,6 +7045,8 @@ admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
+admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
+admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用

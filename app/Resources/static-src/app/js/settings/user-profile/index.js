@@ -3,6 +3,7 @@ import notify from 'common/notify';
 
 let editor = CKEDITOR.replace('profile_about', {
   toolbar: 'Simple',
+  fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
 });
 

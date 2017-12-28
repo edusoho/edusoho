@@ -30,6 +30,7 @@ class courseInfo {
     CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
     });
   }
