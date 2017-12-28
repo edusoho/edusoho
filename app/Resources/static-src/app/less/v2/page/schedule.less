@@ -93,6 +93,7 @@
 
 .fc-today-button {
   margin: 0 4px !important;
+  font-weight: 500;
 }
 
 .fc-button {
@@ -104,6 +105,11 @@
   &:focus {
     outline: none;
   }
+  .fc-icon-left-single-arrow,
+  .fc-icon-right-single-arrow {
+    color: @cd-gray-dark;
+  }
+
 }
 
 .fc-state-default {
@@ -145,37 +151,38 @@
   }
 }
 
-.calendar-before {
-  background-color: @before-color;
+.fc-event {
   .cd-border-radius(2px);
   border: none;
   .cd-transition;
+  .cd-box-shadow-z(6px);
   &:hover {
     .cd-transition;
     cursor: default;
+  }
+}
+
+.calendar-before {
+  background-color: @before-color;
+  &:hover {
     background-color: rgba(0, 0, 0, 0.16);
   }
 }
 
 .calendar-today {
   background-color: @today-color;
-  .cd-border-radius(2px);
-  border: none;
-  .cd-transition;
   &:hover {
-    cursor: default;
     background-color: rgba(red(@today-color), green(@today-color), blue(@today-color), 0.8);
   }
 }
 
 .calendar-future {
   background-color: @future-color;
-  .cd-border-radius(2px);
-  border: none;
-  .cd-transition;
   &:hover {
-    cursor: default;
     background-color: rgba(red(@future-color), green(@future-color), blue(@future-color), 0.8);
   }
 }
 
+.fc-event .fc-bg {
+  background-color: transparent;
+}
