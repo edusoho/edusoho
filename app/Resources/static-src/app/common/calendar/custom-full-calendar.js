@@ -139,14 +139,17 @@ export default class CustomFullCalendar {
   }
 
   _addDateClassToEvent(event) {
-    let currentUnixTime = moment(this.options['currentTime']).unix();
+
     let startUnixTime = this._getDateStartUnixTime(moment(event['start']));
-    if (startUnixTime < currentUnixTime) {
+    let currentUnixTime = this._getDateStartUnixTime(moment());
+    let endUnixTime = this._getDateStartUnixTime(moment(event['end']));
+
+    if (endUnixTime < currentUnixTime) {
       event['className'].push('calendar-before');
-    } else if (startUnixTime == currentUnixTime) {
-      event['className'].push('calendar-today');
-    } else {
+    } else if (currentUnixTime < startUnixTime) {
       event['className'].push('calendar-future');
+    } else  {
+      event['className'].push('calendar-today');
     }
     return event;
   }
@@ -200,7 +203,7 @@ export default class CustomFullCalendar {
    * @param momentObj 
    */
   _getDateStartUnixTime(momentObj) {
-    let dateStr = momentObj.format('YYYY-MM-DD');
+    let dateStr = momentObj.format('YYYY-MM-DD HH:mm:ss');
     return moment(dateStr).unix();
   }
 
