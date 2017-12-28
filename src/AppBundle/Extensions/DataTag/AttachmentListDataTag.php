@@ -36,6 +36,6 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getServiceKernel()->getBiz()->service('File:UploadFileService');
     }
 }
