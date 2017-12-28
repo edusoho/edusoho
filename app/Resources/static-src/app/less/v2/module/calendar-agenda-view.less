@@ -65,4 +65,24 @@
       margin-left: 0;
     }
   }
+
+  .fc-slats {
+    tbody > tr {
+      &:first-child {
+        .fc-axis span {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .fc-axis {
+    position: relative;
+    border-top: 0 !important;
+    span {
+      position: absolute;
+      top: -5px;
+      left: 5px;
+    }
+  }
 }
