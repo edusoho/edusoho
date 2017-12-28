@@ -33,7 +33,6 @@ class AppBundle extends ExtensionalBundle
         }
     }
 
-
     public function getEnabledExtensions()
     {
         return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
