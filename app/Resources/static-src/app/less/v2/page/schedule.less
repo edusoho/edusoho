@@ -1,7 +1,7 @@
 @import '../module/calendar-month-view.less';
 @import '../module/calendar-agenda-view.less';
 
-@before-color:             rgba(0, 0, 0, 0.24);
+@before-color:             #c1c1c1;
 @today-color:              #ffa51f;
 @future-color:             #278bf5;
 
@@ -105,11 +105,6 @@
   &:focus {
     outline: none;
   }
-  .fc-icon-left-single-arrow,
-  .fc-icon-right-single-arrow {
-    color: @cd-gray-dark;
-  }
-
 }
 
 .fc-state-default {
@@ -165,21 +160,21 @@
 .calendar-before {
   background-color: @before-color;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.16);
+    background-color: #cbcdcc;
   }
 }
 
 .calendar-today {
   background-color: @today-color;
   &:hover {
-    background-color: rgba(red(@today-color), green(@today-color), blue(@today-color), 0.8);
+    background-color: #ffb74d;
   }
 }
 
 .calendar-future {
   background-color: @future-color;
   &:hover {
-    background-color: rgba(red(@future-color), green(@future-color), blue(@future-color), 0.8);
+    background-color: #51a2f7;
   }
 }
 
