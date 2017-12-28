@@ -21,9 +21,20 @@ class VideoMediaStatusUpdateJobTest extends BaseTestCase
             'next' => array('cursor' => time(), 'start' => 0, 'limit' => 1),
         );
 
-        $this->mockBiz('File:UploadFileService');
-        $this->getUploadFileService()->shouldReceive('getResourcesStatus')->andReturn($mockRemoteResources);
-        $this->getUploadFileService()->shouldReceive('setResourceConvertStatus')->andReturn(array());
+        $this->mockBiz(
+            'File:UploadFileService',
+            array(
+                array(
+                    'functionName' => 'getResourcesStatus',
+                    'returnValue' => $mockRemoteResources,
+                    'withParams' => array($mockRemoteResources['next']),
+                ),
+                array(
+                    'functionName' => 'setResourceConvertStatus',
+                    'withParams' => array(1, $mockRemoteResources['data'][0]),
+                ),
+            )
+        );
 
         $job = new VideoMediaStatusUpdateJob(array('args' => $mockRemoteResources['next']), $this->getBiz());
         $result = $job->execute();
