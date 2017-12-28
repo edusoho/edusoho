@@ -89,6 +89,10 @@ user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
 
+distributor_register:
+    path:  /distributor_register
+    defaults: { _controller: AppBundle:Register:distributorIndex }
+
 register:
     path:  /register
     defaults: { _controller: AppBundle:Register:index }
