@@ -26,22 +26,22 @@ class CourseReviewDataTagTest extends BaseTestCase
         $this->mockBiz('Course:ReviewService', array(
             array(
                 'functionName' => 'getReview',
-                'returnValue' => array('id' => 1, 'userId' => 2, 'courseId' => 3)
-            )
+                'returnValue' => array('id' => 1, 'userId' => 2, 'courseId' => 3),
+            ),
         ));
 
         $this->mockBiz('User:UserService', array(
             array(
                 'functionName' => 'getUser',
-                'returnValue' => array('id' => 2, 'nickname' => 'user name', 'password' => '123456','salt' => 'abcd')
-            )
+                'returnValue' => array('id' => 2, 'nickname' => 'user name', 'password' => '123456', 'salt' => 'abcd'),
+            ),
         ));
 
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 3, 'title' => 'course title')
-            )
+                'returnValue' => array('id' => 3, 'title' => 'course title'),
+            ),
         ));
 
         $data = $datatag->getData(array('reviewId' => 1));

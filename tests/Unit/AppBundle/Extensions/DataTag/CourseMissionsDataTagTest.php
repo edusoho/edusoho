@@ -79,8 +79,8 @@ class CourseMissionsDataTagTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findTasksByCourseId',
-                'returnValue' => array(array('id' => 20))
-            )
+                'returnValue' => array(array('id' => 20)),
+            ),
         ));
     }
 }

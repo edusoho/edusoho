@@ -26,22 +26,22 @@ class CourseRelatedArticlesDataTagTest extends BaseTestCase
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 1, 'title' => 'course title')
-            )
+                'returnValue' => array('id' => 1, 'title' => 'course title'),
+            ),
         ));
 
         $this->mockBiz('Taxonomy:TagService', array(
             array(
                 'functionName' => 'findTagsByOwner',
-                'returnValue' => array(array('id' => 1, 'name' => 'tag name1'), array('id' => 2, 'name' => 'tag name2'))
-            )
+                'returnValue' => array(array('id' => 1, 'name' => 'tag name1'), array('id' => 2, 'name' => 'tag name2')),
+            ),
         ));
 
         $this->mockBiz('Article:ArticleService', array(
             array(
                 'functionName' => 'findPublishedArticlesByTagIdsAndCount',
-                'returnValue' => array(array('id' => 1, 'title' => 'article title1', 'status' => 'published'), array('id' => 2, 'title' => 'article title2', 'status' => 'published'))
-            )
+                'returnValue' => array(array('id' => 1, 'title' => 'article title1', 'status' => 'published'), array('id' => 2, 'title' => 'article title2', 'status' => 'published')),
+            ),
         ));
 
         $articles = $datatag->getData(array('courseId' => 1, 'count' => 3));

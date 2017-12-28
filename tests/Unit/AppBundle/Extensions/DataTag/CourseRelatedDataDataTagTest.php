@@ -23,15 +23,15 @@ class CourseRelatedDataDataTagTest extends BaseTestCase
         $this->mockBiz('Course:ThreadService', array(
             array(
                 'functionName' => 'countThreads',
-                'returnValue' => 5
-            )
+                'returnValue' => 5,
+            ),
         ));
 
         $this->mockBiz('Course:MaterialService', array(
             array(
                 'functionName' => 'countMaterials',
-                'returnValue' => 10
-            )
+                'returnValue' => 10,
+            ),
         ));
 
         $data = $datatag->getData(array('courseId' => 1));
