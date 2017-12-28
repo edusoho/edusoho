@@ -22,8 +22,8 @@ class AttachmentListDataTagTest extends BaseTestCase
         $this->mockBiz('File:UploadFileService', array(
             array(
                 'functionName' => 'findUseFilesByTargetTypeAndTargetIdAndType',
-                'returnValue' => array(array('id' => 1), array('id' => 2))
-            )
+                'returnValue' => array(array('id' => 1), array('id' => 2)),
+            ),
         ));
         $dataTag = new AttachmentListDataTag();
         $data = $dataTag->getData(array('targetType' => 'article', 'targetId' => 1));
