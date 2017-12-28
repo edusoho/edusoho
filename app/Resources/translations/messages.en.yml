@@ -3035,7 +3035,9 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
-my.teaching.live_schedule_menu: Live Schedules
+my.teaching.live_schedule_menu: Teaching Schedules
+my.teaching.hints_block: Only live courses are shown currently
+my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -3298,6 +3300,7 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
 my.learning.question_menu: 'Q&A'
@@ -5615,6 +5618,8 @@ admin.magic_setting.enable_org: 'Turn on organization settings'
 admin.magic_setting.quick_pay: 'Turn on quick pay'
 admin.magic_setting.uc_phpwind: 'Turn on phpwind settings'
 admin.magic_setting.login_limit: 'Account and log off the set'
+admin.magic_setting.file_single_size_limit: Single file set upload size
+admin.magic_setting.file_single_size_limit_tip: MByte,be used by editor upload only
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
 admin.magic_setting.zero_for_open: '0 To enable'
