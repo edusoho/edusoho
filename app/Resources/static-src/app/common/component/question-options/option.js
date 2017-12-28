@@ -30,6 +30,7 @@ export default class Options extends Component {
     if(!this.editor) {
       this.editor = CKEDITOR.replace(this.props.datas.optionId, {
         toolbar: 'Minimal',
+        fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl:this.props.imageUploadUrl,
         height: 120
       });

@@ -135,6 +135,7 @@ class DoTestBase
 
       let editor = CKEDITOR.replace($longTextarea.attr('id'), {
         toolbar: 'Minimal',
+        fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 

@@ -5,6 +5,7 @@ let $content = $('#note-content-field');
 let lastNoteContent;
 let editor = CKEDITOR.replace('note-content-field', {
   toolbar: 'Simple',
+  fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
   allowedContent: true,
   height: heigth < 300 ? 200 : heigth,

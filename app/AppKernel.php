@@ -1,4 +1,5 @@
 <?php
+
 use AppBundle\Common\ExtensionManager;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
@@ -80,19 +81,19 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new ApiBundle\ApiBundle(),
         );
 
-        if (is_file($this->getRootDir() . '/config/sentry.yml')) {
+        if (is_file($this->getRootDir().'/config/sentry.yml')) {
             $bundles[] = new Sentry\SentryBundle\SentryBundle();
         }
 
-        if ($this->getEnvironment() !== 'test') {
+        if ('test' !== $this->getEnvironment()) {
             $plugins = $this->pluginConfigurationManager->getInstalledPlugins();
 
             foreach ($plugins as $plugin) {
-                if ($plugin['type'] != 'plugin') {
+                if ('plugin' != $plugin['type']) {
                     continue;
                 }
 
-                if ($plugin['protocol'] != 3) {
+                if (3 != $plugin['protocol']) {
                     continue;
                 }
 
@@ -119,7 +120,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
 
     public function getPlugins()
@@ -141,16 +142,16 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     public function initializeBiz(Biz $biz)
     {
-        $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
+        $biz['migration.directories'][] = dirname(__DIR__).'/migrations';
         $biz['env'] = array(
-            'base_url' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath(),
+            'base_url' => $this->request->getSchemeAndHttpHost().$this->request->getBasePath(),
         );
 
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
-            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir') . '/biz.log',
+            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir').'/biz.log',
             'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
-            'monolog.permission' => 0666
+            'monolog.permission' => 0666,
         ));
         $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
@@ -171,9 +172,12 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\Xapi\XapiServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\SessionServiceProvider());
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
-
         $biz->boot();
 
+        $activeTheme = $this->pluginConfigurationManager->getActiveThemeName();
+        if (empty($activeTheme)) {
+            $this->pluginConfigurationManager->setActiveThemeName('jianmo')->save();
+        }
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
     }
 
@@ -203,7 +207,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
 
-            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ? : '127.0.0.1');
+            $currentUser = new \Biz\User\AnonymousUser($this->request->getClientIp() ?: '127.0.0.1');
 
             $biz['user'] = $currentUser;
             $serviceKernel
@@ -214,13 +218,13 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                     'host' => $this->request->getHttpHost(),
                     'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
                     'basePath' => $this->request->getBasePath(),
-                    'baseUrl' => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath(),
+                    'baseUrl' => $this->request->getSchemeAndHttpHost().$this->request->getBasePath(),
                 )
             )
                 ->setTranslatorEnabled(true)
                 ->setTranslator($container->get('translator'))
                 ->setParameterBag($container->getParameterBag())
-                ->registerModuleDirectory(dirname(__DIR__) . '/plugins');
+                ->registerModuleDirectory(dirname(__DIR__).'/plugins');
 
             $this->isServiceKernelInit = true;
         }
@@ -231,6 +235,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $theme = $this->pluginConfigurationManager->getActiveThemeName();
         $theme = empty($theme) ? '' : ucfirst(str_replace('-', '_', $theme));
 
-        return $this->rootDir . '/cache/' . $this->environment . '/' . $theme;
+        return $this->rootDir.'/cache/'.$this->environment.'/'.$theme;
     }
 }

@@ -50,6 +50,7 @@ export default class {
 
     let editor = CKEDITOR.replace('question_content', {
       toolbar: 'Simple',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: this.$element.find('#question_content').data('imageUploadUrl')
     });
 

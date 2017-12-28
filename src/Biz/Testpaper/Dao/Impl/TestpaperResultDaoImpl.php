@@ -47,7 +47,6 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->findInField('id', $ids);
     }
 
-
     public function sumScoreByParams($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)

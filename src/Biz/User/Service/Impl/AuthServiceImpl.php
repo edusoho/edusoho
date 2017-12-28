@@ -28,7 +28,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-            $registration['type'] = $type;
+            $registration['providerType'] = $this->getAuthProvider()->getProviderName();
 
             $newUser = $this->getUserService()->register(
                 $registration,
@@ -214,8 +214,8 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return $result;
             }
 
-            if (preg_match('/^1\d{10}$/', $username)) {
-                return array('error_mismatching', '用户名不允许以1开头的11位纯数字!');
+            if (!SimpleValidator::nickname($username)) {
+                return array('error_mismatching', '用户名不合法!');
             }
 
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
@@ -346,7 +346,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
-
         if ($auth && array_key_exists('register_mode', $auth)) {
             return in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile'));
         }
@@ -358,7 +357,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-
             if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
@@ -379,22 +377,22 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     protected function getSensitiveService()
     {
-        return $this->getKernel()->createService('Sensitive:SensitiveService');
+        return $this->createService('Sensitive:SensitiveService');
     }
 
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getLogService()
     {
-        return $this->biz->service('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     protected function getKernel()

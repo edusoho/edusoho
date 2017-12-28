@@ -20,8 +20,11 @@ import classroomModule from './modules/classroom';
 import tradeModule from './modules/trade';
 import captchaModule from './modules/captcha';
 import smsModule from './modules/sms';
+import teacherLiveCourseModule from './modules/teacherLiveCourse';
+import studentLiveCourseModule from './modules/studentLiveCourse';
 import conversationModule from './modules/conversation';
 import newNotificationModule from './modules/newNotification';
+
 
 const API_URL_PREFIX = '/api';
 
@@ -33,6 +36,8 @@ const Api = {
   trade: tradeModule(API_URL_PREFIX),
   captcha: captchaModule(API_URL_PREFIX),
   sms: smsModule(API_URL_PREFIX),
+  teacherLiveCourse: teacherLiveCourseModule(API_URL_PREFIX),
+  studentLiveCourse: studentLiveCourseModule(API_URL_PREFIX),
   conversation: conversationModule(API_URL_PREFIX),
   newNotification: newNotificationModule(API_URL_PREFIX),
 };

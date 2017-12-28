@@ -3,7 +3,10 @@
 namespace Biz\Notification\Job;
 
 use Biz\CloudPlatform\QueueJob\PushJob;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
@@ -63,38 +66,28 @@ class PushNotificationOneHourJob extends AbstractJob
         $this->getQueueService()->pushJob($pushJob);
     }
 
-    protected function getFileUrl($path)
-    {
-        if (empty($path)) {
-            return $path;
-        }
-        $path = str_replace('public://', '', $path);
-        $path = str_replace('files/', '', $path);
-
-        // TODO: fix command方式下
-        $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
-
-        return $path;
-    }
-
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     private function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
-    }
-
-    protected function getCloudDataService()
-    {
-        return $this->biz->service('CloudData:CloudDataService');
     }
 
     /**

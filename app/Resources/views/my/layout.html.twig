@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib'] %}
+  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib','my-teaching-live-calendar'] %}
     {{ 'my.teaching.menu_heading'|trans }} - {{ parent() }}
   {% else %}
     {{ 'my.learning.menu_heading'|trans }} - {{ parent() }}
@@ -29,6 +29,10 @@
             <li class="list-group-heading">{{ 'my.teaching.menu_heading'|trans }}</li>
             <li class="list-group-item {% if side_nav == 'my-teaching-courses' %} active {% endif %}">
               <a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a>
+            </li>
+
+            <li class="list-group-item {% if side_nav == 'my-teaching-live-calendar' %} active {% endif %}">
+              <a href="{{ path('my_teaching_live_calendar') }}">{{ 'my.teaching.live_schedule_menu'|trans }}</a>
             </li>
 
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
