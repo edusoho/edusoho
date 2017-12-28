@@ -15,6 +15,25 @@ class AppBundle extends ExtensionalBundle
         $container->addCompilerPass(new ActivityRuntimeContainerPass());
     }
 
+    public function boot()
+    {
+        parent::boot();
+
+        $biz = $this->container->get('biz');
+
+        $activityConfigManager = $this->container->get('activity_config_manager');
+
+        $installedActivities = $activityConfigManager->getInstalledActivities();
+
+        foreach ($installedActivities as $installedActivity) {
+            $migrationsDir = implode(DIRECTORY_SEPARATOR, array($installedActivity['dir'], 'migrations'));
+            if (file_exists($migrationsDir)) {
+                $biz['migration.directories'][] = $migrationsDir;
+            }
+        }
+    }
+
+
     public function getEnabledExtensions()
     {
         return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
