@@ -101,5 +101,7 @@
     return "还有" + e + "项"
   },
   slotLabelFormat: 'HH:mm', // 周视图，左侧的时间
+  timeFormat: 'HH:mm',
+  slotEventOverlap: false, // 相同时间段的多个日程视觉上是否允许重叠
   noEventsMessage: "没有事件显示"
 })

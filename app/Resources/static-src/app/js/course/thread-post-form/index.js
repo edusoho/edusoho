@@ -17,6 +17,7 @@ $('.js-btn-thread-save').click((event) => {
 
 let editor = CKEDITOR.replace('post_content', {
   toolbar: 'Thread',
+  fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl'),
   height: 300
 });

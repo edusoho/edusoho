@@ -303,7 +303,7 @@ class AuthServiceTest extends BaseTestCase
 
     public function testCheckUserNameWithUnexistName()
     {
-        $result = $this->getAuthService()->checkUserName('yyy');
+        $result = $this->getAuthService()->checkUserName('testUsername');
         $this->assertEquals('success', $result[0]);
         $this->assertEquals('', $result[1]);
     }
@@ -331,8 +331,8 @@ class AuthServiceTest extends BaseTestCase
 
     public function testCheckUserNameWithWrongUserName()
     {
-        $result = $this->getAuthService()->checkUserName('11111111111');
-        $this->assertEquals(array('error_mismatching', '用户名不允许以1开头的11位纯数字!'), $result);
+        $result = $this->getAuthService()->checkUserName('🦌');
+        $this->assertEquals(array('error_mismatching', '用户名不合法!'), $result);
     }
 
     public function testCheckEmailWithUnexistEmail()

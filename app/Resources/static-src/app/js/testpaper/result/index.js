@@ -12,8 +12,7 @@ testpaperCardLocation();
 onlyShowError();
 initWatermark();
 
-let doBase = new DoTestBase($('.js-task-testpaper-body'));
-clearInterval(doBase.$usedTimer);
+new DoTestBase($('.js-task-testpaper-body'));
 
 $('.js-testpaper-redo-timer').timer({
   countdown:true,

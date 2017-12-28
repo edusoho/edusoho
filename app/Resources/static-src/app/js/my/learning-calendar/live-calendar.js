@@ -11,6 +11,7 @@ new CustomFullCalendar({
     'start': 'startTime',
     'end': 'endTime'
   },
+  'dateParams': {'start': 'startTime_GE', 'end': 'endTime_LT'},
   'currentTime': $('#todayDateStr').html(),
   'components': [
     new LiveTooltipComp(),

@@ -92,6 +92,7 @@ export default class Base {
       CKEDITOR.replace('course-about-field', {
         allowedContent: true,
         toolbar: 'Detail',
+        fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
       });
     }

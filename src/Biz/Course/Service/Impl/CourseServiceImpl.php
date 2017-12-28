@@ -1920,36 +1920,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findLiveCourse($conditions, $userId, $role)
     {
-        $members = $this->getMemberDao()->search(
-            array('userId' => $userId, 'role' => $role), array(), 0, PHP_INT_MAX
-        );
-        $courseIds = ArrayToolkit::column($members, 'courseId');
         $liveCourses = array();
-        if (!empty($courseIds)) {
-            $tasks = $this->getTaskService()->searchTasks(
-                array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $conditions['createdTime_GE'], 'endTime_LT' => $conditions['createdTime_LT'], 'status' => 'published'),
-                array(),
-                0,
-                PHP_INT_MAX
-            );
-            foreach ($tasks as $task) {
-                $course = $this->searchCourses(
-                    array('id' => $task['courseId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
-                );
-                if (!empty($course)) {
-                    $courseSet = $this->getCourseSetDao()->search(
-                        array('id' => $course[0]['courseSetId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
+        $tasks = $this->getTaskService()->searchTasks(
+            array('type' => 'live', 'startTime_GE' => $conditions['startTime_GE'], 'endTime_LT' => $conditions['endTime_LT'], 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($tasks as $task) {
+            $members = $this->getMemberDao()->search(array('courseId' => $task['courseId'], 'role' => $role), array(), 0, PHP_INT_MAX);
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($userId, $userIds)) {
+                continue;
+            }
+            $course = $this->getCourse($task['courseId']);
+            if (!empty($course) && 'published' == $course['status']) {
+                $courseSet = $this->getCourseSetDao()->get($course['courseSetId']);
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
+                    $liveCourse = array(
+                        'title' => $courseSet['title'],
+                        'courseId' => $task['courseId'],
+                        'taskId' => $task['id'],
+                        'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
+                        'startTime' => date('Y-m-d H:i:s', $task['startTime']),
+                        'endTime' => date('Y-m-d H:i:s', $task['endTime']),
+                        'date' => date('w', $task['startTime']),
                     );
-                    if (!empty($courseSet)) {
-                        $liveCourse = array();
-                        $liveCourse['title'] = $courseSet[0]['title'];
-                        $liveCourse['courseId'] = $task['courseId'];
-                        $liveCourse['taskId'] = $task['id'];
-                        $liveCourse['event'] = $courseSet[0]['title'].'-'.$course[0]['title'].'-'.$task['title'];
-                        $liveCourse['startTime'] = date('Y-m-d H:i:s', $task['startTime']);
-                        $liveCourse['endTime'] = date('Y-m-d H:i:s', $task['endTime']);
-                        array_push($liveCourses, $liveCourse);
-                    }
+                    array_push($liveCourses, $liveCourse);
                 }
             }
         }
