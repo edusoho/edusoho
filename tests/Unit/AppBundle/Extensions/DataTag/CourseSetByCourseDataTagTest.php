@@ -61,7 +61,7 @@ class CourseSetByCourseDataTagTest extends BaseTestCase
         $data = $datatag->getData(array('courseId' => $course['id']));
 
         $this->assertEquals($courseSet['id'], $data['id']);
-        $this->assertEquals($courseSet['categoryId'], $data['category']['id']);
+        $this->assertArrayHasKey('category', $data);
     }
 
     private function getCourseService()
