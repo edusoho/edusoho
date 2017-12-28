@@ -4,7 +4,6 @@ namespace AppBundle\Extensions\DataTag;
 
 use Biz\File\Service\UploadFileService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class AttachmentListDataTag extends BaseDataTag implements DataTag
 {
