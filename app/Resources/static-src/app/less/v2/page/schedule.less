@@ -10,11 +10,11 @@
   .schedule-panel__heading {
     padding: 12px 42px;
   }
+  .schedule-panel__body {
+    padding: 24px 42px;
+  }
 }
 
-.schedule-panel__body {
-  padding: 24px 42px;
-}
 
 .schedule-panel-body__current-num {
   position: absolute;
@@ -115,8 +115,10 @@
   cursor: not-allowed !important;
 }
 
-.fc-row.fc-rigid {
-  overflow: visible;
+.fc-widget-header {
+  thead > tr {
+    .cd-box-shadow-inset(0 -1px 0 0);
+  }
 }
 
 .fc-past {

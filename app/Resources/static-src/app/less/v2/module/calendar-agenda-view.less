@@ -32,9 +32,21 @@
   }
 
   .fc-time-grid-event {
-    margin-right: 0 !important;
+    min-height: 20px;
     .fc-content {
       padding-left: 2px;
+    }
+  }
+
+  .fc-short {
+    .fc-content {
+      .fc-title {
+        display: inline-block;
+        width: 70%;
+        @media (max-width: @screen-sm-max) {
+          width: 47%;
+        }
+      }
     }
   }
 
@@ -51,6 +63,27 @@
   .fc-time-grid {
     .fc-event-container {
       margin-left: 0;
+    }
+  }
+
+  .fc-slats {
+    tbody > tr {
+      &:first-child {
+        .fc-axis span {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .fc-axis {
+    position: relative;
+    border-top: 0 !important;
+    span {
+      position: absolute;
+      top: -5px;
+      left: 5px;
+      color: @cd-gray;
     }
   }
 }
