@@ -82,6 +82,9 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
+                if (!empty($_COOKIE['distributor-token'])) {
+                    $registration['distributorToken'] = $_COOKIE['distributor-token'];
+                }
 
                 $user = $this->getAuthService()->register($registration);
 
