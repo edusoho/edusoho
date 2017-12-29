@@ -4,5 +4,7 @@ namespace Biz\Distributor\Service;
 
 interface DistributorService
 {
-    public function validateToken($token);
+    public function findJobData();
+
+    public function createJobData($data);
 }
