@@ -2,10 +2,7 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\FInder;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,23 +35,22 @@ class TranslationJsDumperCommand extends BaseCommand
     {
         $filesystem = new Filesystem();
         $translations = $this->getTranslations($code);
-        foreach($translations as $locale => $translation) {
+        foreach ($translations as $locale => $translation) {
             if (empty($translation)) {
                 continue;
             }
             $template = $this->getContainer()->get('templating');
             $content = $template->render('BazingaJsTranslationBundle::getTranslations.js.twig', array(
-                'translations'   => array($locale => array(
+                'translations' => array($locale => array(
                     'js' => $translation,
                 )),
                 'include_config' => true,
                 'fallback' => $locale,
-                'defaultDomain' => 'js'
+                'defaultDomain' => 'js',
             ));
             $filePath = empty($code) ? 'web/static-dist/translations/'
-            : 'plugins/'.ucfirst($code).'Plugin/Resources/static-dist/js/translations/';
-            $file = $filePath . $locale . '.js' ;
-            var_dump( $file);
+            : 'web/static-dist/'.strtolower($code).'plugin/js/translations/';
+            $file = $filePath.$locale.'.js';
             $filesystem->mkdir(dirname($file));
 
             if (file_exists($file)) {
@@ -81,14 +77,14 @@ class TranslationJsDumperCommand extends BaseCommand
                 continue;
             }
 
-            if(!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin') ){
+            if (!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
                 continue;
             }
-            
+
             if (empty($code) && 0 === strpos($filename, $rootDirectory.'/plugins/')) {
-                 continue;
+                continue;
             }
- 
+
             if (!isset($translations[$locale])) {
                 $translations[$locale] = array();
             }
