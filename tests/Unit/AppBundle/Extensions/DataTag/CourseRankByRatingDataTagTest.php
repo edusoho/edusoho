@@ -30,8 +30,8 @@ class CourseRankByRatingDataTagTest extends BaseTestCase
         $this->mockBiz('Course:ReviewService', array(
             array(
                 'functionName' => 'countRatingByCourseId',
-                'returnValue' => array('ratingNum' => 1, 'rating' => 3)
-            )
+                'returnValue' => array('ratingNum' => 1, 'rating' => 3),
+            ),
         ));
         $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
         $course1 = $this->getCourseService()->createCourse(array('title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'normal'));

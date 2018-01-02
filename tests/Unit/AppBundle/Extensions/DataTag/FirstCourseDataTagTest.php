@@ -21,7 +21,7 @@ class FirstCourseDataTagTest extends BaseTestCase
         $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
         $course1 = $this->getCourseService()->createCourse(array('title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'normal'));
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
- 
+
         $datatag = new FirstCourseDataTag();
         $data = $datatag->getData(array('courseSetId' => $courseSet['id']));
         $this->assertEquals($courses[0]['id'], $data['id']);

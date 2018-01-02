@@ -30,18 +30,18 @@ class CourseSetRankByStudentDataTagTest extends BaseTestCase
         $this->mockBiz('Course:MemberService', array(
             array(
                 'functionName' => 'setCourseTeachers',
-                'returnValue' => true
+                'returnValue' => true,
             ),
             array(
                 'functionName' => 'findCourseTeachers',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
         $this->mockBiz('Course:CourseMemberDao', array(
             array(
                 'functionName' => 'count',
-                'returnValue' => 3
-            )
+                'returnValue' => 3,
+            ),
         ));
 
         $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));

@@ -12,8 +12,8 @@ class GetClassroomByCourseIdDataTagTest extends BaseTestCase
         $this->mockBiz('Classroom:ClassroomService', array(
             array(
                 'functionName' => 'getClassroomByCourseId',
-                'returnValue' => array()
-            )
+                'returnValue' => array(),
+            ),
         ));
 
         $datatag = new GetClassroomByCourseIdDataTag();
@@ -26,12 +26,12 @@ class GetClassroomByCourseIdDataTagTest extends BaseTestCase
         $this->mockBiz('Classroom:ClassroomService', array(
             array(
                 'functionName' => 'getClassroomByCourseId',
-                'returnValue' => array('id' => 1, 'courseId' => '2', 'classroomId' => 1)
+                'returnValue' => array('id' => 1, 'courseId' => '2', 'classroomId' => 1),
             ),
             array(
                 'functionName' => 'getClassroom',
-                'returnValue' => array('id' => 1, 'title' => 'classroom title')
-            )
+                'returnValue' => array('id' => 1, 'title' => 'classroom title'),
+            ),
         ));
 
         $datatag = new GetClassroomByCourseIdDataTag();
