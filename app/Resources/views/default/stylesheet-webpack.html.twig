@@ -14,8 +14,7 @@
 {{ slot('stylesheet.webpack.extension', {maincolor: maincolor}) }}
 
 {% include 'stylesheet/stylesheet-custom.html.twig' with {
-    config: currentTheme, 
-    isEditColor: isEditColor|default(false), 
+    config: currentTheme,
     mobile: mobile,
     maincolor: maincolor,
     navigationcolor: navigationcolor,

@@ -6,7 +6,6 @@
     {{ block_show('jianmo:home_top_banner') }}
     {% endcache %}
     {% for config in themeConfig.blocks.left|default([]) %}
-
         {% set code = config.code %}
         {% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
             {% set code = 'recommend-course' %}

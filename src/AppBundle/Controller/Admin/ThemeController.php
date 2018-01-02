@@ -33,21 +33,10 @@ class ThemeController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function saveConfigAction(Request $request, $uri)
+    public function saveConfigAction(Request $request)
     {
         $config = $request->request->get('config');
-        $currentData = $request->request->get('currentData');
         $this->getThemeService()->saveCurrentThemeConfig($config);
-
-        if ($currentData) {
-            return $this->render(
-                'admin/theme/theme-edit-config-li.html.twig',
-                array(
-                    'pendant' => $currentData,
-                    'uri' => $uri,
-                )
-            );
-        }
 
         return $this->createJsonResponse(true);
     }
@@ -97,24 +86,17 @@ class ThemeController extends BaseController
         );
     }
 
-    public function showAction(Request $request, $uri)
+    public function showAction(Request $request)
     {
-        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-
-        return $this->render(
-            'admin/theme/default/index.html.twig',
-            array(
-                'friendlyLinks' => $friendlyLinks,
-                'isEditColor' => true,
-            )
-        );
+        $request->request->set('themeEditing', 1);
+        return $this->forward('AppBundle:Default:index', array(
+            'request' => $request,
+        ));
     }
 
-    public function themeConfigEditAction(Request $request, $uri)
+    public function themeConfigEditAction(Request $request)
     {
         $config = $request->query->get('config');
-
-        //$code = "edit".$this->fiterCode($config['code']);
 
         return $this->edit($config['code'], $config);
     }
@@ -177,7 +159,7 @@ class ThemeController extends BaseController
     private function edit($code, $config)
     {
         return $this->render(
-            'admin/theme/edit-'.$code.'-modal.html.twig',
+            'admin/theme/edit-modal/edit-'.$code.'-modal.html.twig',
             array(
                 'config' => $config,
             )
