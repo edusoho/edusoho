@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\AppBundle\Component\MediaParser;
+namespace Tests\Unit\AppBundle\Component\MediaParser\ItemParser;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\MediaParser\ItemParser\NeteaseOpenCourseItemParser;
@@ -21,6 +21,15 @@ class NeteaseOpenCourseItemParserTest extends BaseTestCase
         $file = empty($video['files']) ? array() : $video['files'][0];
         $this->assertEquals('swf', $file['type']);
         $this->assertStringStartsWith('http://', $file['url']);
+    }
+
+    public function testDetect()
+    {
+        $this->assertEquals(1, $this->createParser()->detect('http://v.163.com/movie/abc.html'));
+        $this->assertEquals(1, $this->createParser()->detect('http://open.163.com/movie/a.html'));
+        $this->assertEquals(0, $this->createParser()->detect('http://open.164.com/movie/a.html'));
+        $this->assertEquals(0, $this->createParser()->detect('http://open.163.com/movie/a.mp3'));
+        $this->assertEquals(0, $this->createParser()->detect('http://v.163.com/movie/a.mp3'));
     }
 
     private function createParser()
