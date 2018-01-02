@@ -52,7 +52,6 @@ class OverviewStudentExporter extends Exporter
         $taskCount = $this->countTasksByCourseId();
 
         list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds, $taskCount);
-        $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         $datas = array();
 
@@ -67,7 +66,6 @@ class OverviewStudentExporter extends Exporter
             $user = $users[$member['userId']];
             $data = array();
             $data[] = $user['nickname'];
-            //$data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
