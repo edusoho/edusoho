@@ -34,13 +34,24 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      */
     public function getAudioServiceStatus()
     {
-        $setting = $this->getSettingService()->get('storage');
+        $setting = $this->getSettingService()->get('storage', array());
 
         if (!empty($setting['cloud_access_key']) || !empty($setting['cloud_secret_key'])) {
             $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
         }
 
-        return !empty($audioService['audioService']) ? $audioService['audioService'] : 'notAllowed';
+        return 'needOpen';
+
+        if (empty($audioService['audioService'])) {
+            return 'notAllowed';
+        }
+
+        $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio(true);
+        if (!$enableAudioStatus && 'opened' == $audioService['audioService']) {
+            return 'needOpen';
+        }
+
+        return $audioService['audioService'];
     }
 
     public function getFile($id)
@@ -848,13 +859,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function setResourceConvertStatus($globalId, array $result)
     {
-        $file = $this->getFileByGlobalId($globalId);
+        $file = $this->getUploadFileDao()->getByGlobalId($globalId);
 
         if (empty($file)) {
             return array();
         }
 
-        $videoStatusMap = array(
+        $statusMap = array(
             'none' => 'none',
             'waiting' => 'waiting',
             'processing' => 'doing',
@@ -862,21 +873,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'error' => 'error',
         );
 
-        $audioStatusMap = array(
-            'none' => 'none',
-            'waiting' => 'doing',
-            'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
-        );
-
         $fields = array(
-            'convertStatus' => $videoStatusMap[$result['status']],
+            'convertStatus' => $statusMap[$result['status']],
+            'audioConvertStatus' => 'none',
             'updatedTime' => time(),
         );
 
         if ($result['audio']) {
-            $fields['audioConvertStatus'] = $audioStatusMap[$result['status']];
+            $fields['audioConvertStatus'] = $statusMap[$result['status']];
         }
 
         return $this->getUploadFileDao()->update($file['id'], $fields);

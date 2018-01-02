@@ -108,8 +108,19 @@ class CourseSetController extends CourseBaseController
 
     public function teachingLivesCalendarAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $liveCourseNumber = $this->getTaskService()->getTodayLiveCourseNumber();
+        $openLiveCourseNumber = $this->getOpenCourseService()->getTodayOpenLiveCourseNumber();
+        $courseNumber = $liveCourseNumber + $openLiveCourseNumber;
+
         return $this->render(
-            'my/teaching/lives-calendar.html.twig'
+            'my/teaching/lives-calendar.html.twig',
+            array('courseNumber' => $courseNumber)
         );
     }
 
@@ -195,5 +206,10 @@ class CourseSetController extends CourseBaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 }

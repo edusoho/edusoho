@@ -102,18 +102,19 @@ export default class CustomFullCalendar {
     }
 
     calendarOptions = this._registerCompActions(calendarOptions);
+    this.calendarOptions = calendarOptions;
 
     $(this.options['calendarContainer']).fullCalendar(calendarOptions);
-    this._formatHeadColIfNeed(calendarOptions);
   }
 
   _ajaxLoading(start, end, timezone, callback) {
+    $('.fc-day-header span').hide();
     let startTimeAttr = current.options['dateParams']['start'];
     let endTimeAttr = current.options['dateParams']['end'];
     let params = {};
     params[startTimeAttr] = current._getDateStartUnixTime(start);
     params[endTimeAttr] = current._getDateStartUnixTime(end);
-
+    params['limit'] = 1000;
     current.options['dataApi']({
       data: params
     }).then((result) => {
@@ -138,14 +139,17 @@ export default class CustomFullCalendar {
   }
 
   _addDateClassToEvent(event) {
-    let currentUnixTime = moment(this.options['currentTime']).unix();
+
     let startUnixTime = this._getDateStartUnixTime(moment(event['start']));
-    if (startUnixTime < currentUnixTime) {
+    let currentUnixTime = this._getDateStartUnixTime(moment());
+    let endUnixTime = this._getDateStartUnixTime(moment(event['end']));
+
+    if (endUnixTime < currentUnixTime) {
       event['className'].push('calendar-before');
-    } else if (startUnixTime == currentUnixTime) {
-      event['className'].push('calendar-today');
-    } else {
+    } else if (currentUnixTime < startUnixTime) {
       event['className'].push('calendar-future');
+    } else  {
+      event['className'].push('calendar-today');
     }
     return event;
   }
@@ -199,7 +203,7 @@ export default class CustomFullCalendar {
    * @param momentObj 
    */
   _getDateStartUnixTime(momentObj) {
-    let dateStr = momentObj.format('YYYY-MM-DD');
+    let dateStr = momentObj.format('YYYY-MM-DD HH:mm:ss');
     return moment(dateStr).unix();
   }
 
@@ -227,21 +231,6 @@ export default class CustomFullCalendar {
       $.extend(singleEvent, this.options['components'][i].generateEventValues(singleResult));
     }
     return singleEvent;
-  }
-
-  _formatHeadColIfNeed(calendarOptions) {
-    if (calendarOptions['defaultView'] == 'agendaWeek') {
-      $('.fc-day-header span').each(
-        function() {
-          let text = $(this).html();
-          let segs = text.split(' ');
-          $(this).html(
-            '<div class="week">' + segs[0] + '</div>' +
-            '<div class="day">' + segs[1] + '</div>'
-          );
-        }
-      );
-    }
   }
 
 }

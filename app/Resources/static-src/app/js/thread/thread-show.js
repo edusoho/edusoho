@@ -160,6 +160,7 @@ class ThreadShowWidget {
         if ($textarea.data('imageUploadUrl')) {
             editor = CKEDITOR.replace($textarea.attr('id'), {
                 toolbar: 'Thread',
+                fileSingleSizeLimit: app.fileSingleSizeLimit,
                 filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
             });
             editor.on('change',()=> {

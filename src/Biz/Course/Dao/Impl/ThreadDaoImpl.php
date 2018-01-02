@@ -91,6 +91,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'title LIKE :title',
                 'content LIKE :content',
                 'courseId IN (:courseIds)',
+                'id IN (:ids)',
                 'private = :private',
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',

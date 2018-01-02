@@ -8,6 +8,8 @@ interface QuestionMarkerResultDao extends GeneralDaoInterface
 {
     public function deleteByQuestionMarkerId($questionMarkerId);
 
+    public function findByIds($ids);
+
     public function findByUserIdAndMarkerId($userId, $markerId);
 
     public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);

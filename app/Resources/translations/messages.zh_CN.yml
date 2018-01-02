@@ -1585,7 +1585,7 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
-course.course_files.re_try_convert_video_to_audio: 重转音频
+course.course_files.re_try_convert_video_to_audio: 重新转码
 
 course.plan_overview: 计划概览
 
@@ -3300,12 +3300,17 @@ homepage.header.register: 注册
 homepage.header.my_course: 我的教学
 homepage.header.my_learning: 我的学习
 homepage.header.notice: 通知
+homepage.header.check_all_notifications: 查看全部通知
+homepage.header.no_new_notifications: 暂无新的通知～
 homepage.header.message: 私信
+homepage.header.check_all_messages: 查看全部私信
+homepage.header.no_new_messages: 暂无新的私信～
 homepage.header.personal_menu: 个人主页
 homepage.header.settings_menu: 个人设置
 homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
+homepage.header.reward: 积分
 homepage.header.admin_menu: 管理后台
 homepage.header.switch_pc: 切换电脑版
 homepage.header.switch_mobile: 切换触屏版
@@ -3798,7 +3803,9 @@ customer_service.customer_email: 反馈邮件
 # 我的教学
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
-my.teaching.live_schedule_menu: 直播课表
+my.teaching.live_schedule_menu: 教学课表
+my.teaching.hints_block: (当前仅展示直播课程)
+my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: 学员问题
 my.teaching.discussion_menu: 学员话题
@@ -4138,6 +4145,7 @@ my.teaching.open_course.material.upload_time: 上传于
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
+my.learning.live_schedule_menu: 直播课表
 my.learning.classroom_menu: 我的%classroom%
 my.learning.live_menu: 我的直播
 my.learning.question_menu: 我的问答
@@ -7039,6 +7047,8 @@ admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
+admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
+admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
@@ -8129,6 +8139,7 @@ log.module.homework: 作业
 log.module.question_plus: 题库增强版
 log.module.announcement: 公告
 log.module.open_course: 公开课
+log.module.live: 直播
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8289,6 +8300,8 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+log.action.live.update_live_activity: 更新直播活动
+log.action.live.generate_live_replay: 生成录播回放
 
 cashflow.title: 名称
 cashflow.sn: 流水号

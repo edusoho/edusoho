@@ -14,7 +14,6 @@
 
 {% set currentTheme = current_theme() %}
 {% set themeConfig = app.request.get('themeEditing')|default(false) ? currentTheme.config  : currentTheme.confirmConfig %}
-{% set allConfig = currentTheme.allConfig %}
 {% set maincolor = themeConfig.maincolor|default('default') %}
 {% set navigationcolor = themeConfig.navigationcolor|default('default') %}
 

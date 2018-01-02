@@ -1,6 +1,7 @@
 export let initEditor = (options) => {
   var editor = CKEDITOR.replace(options.replace, {
     toolbar: options.toolbar,
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
     filebrowserImageUploadUrl: $("#" + options.replace).data('imageUploadUrl'),
     allowedContent: true,
     height: 300

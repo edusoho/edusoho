@@ -128,4 +128,6 @@ interface MessageService
     public function deleteMessagesByIds(array $ids = null);
 
     public function clearUserNewMessageCounter($userId);
+
+    public function findNewUserConversations($userId, $start, $limit);
 }

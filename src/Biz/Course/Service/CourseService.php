@@ -240,4 +240,6 @@ interface CourseService
     public function recountLearningData($courseId, $userId);
 
     public function tryFreeJoin($courseId);
+
+    public function findLiveCourse($conditions, $userId, $role);
 }
