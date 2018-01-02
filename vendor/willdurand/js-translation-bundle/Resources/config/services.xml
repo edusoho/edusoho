@@ -15,7 +15,6 @@
         <service id="bazinga.jstranslation.translation_dumper" class="%bazinga.jstranslation.translation_dumper.class%">
             <argument type="service" id="templating" />
             <argument type="service" id="bazinga.jstranslation.translation_finder" />
-            <argument type="service" id="router" />
             <argument type="service" id="filesystem" />
             <argument></argument> <!-- fallback (locale) -->
             <argument></argument> <!-- default domain    -->

@@ -2,88 +2,90 @@
 
 namespace Bazinga\JsTranslationBundle\Tests\Finder;
 
+use Bazinga\Bundle\JsTranslationBundle\Dumper\TranslationDumper;
 use Bazinga\Bundle\JsTranslationBundle\Tests\WebTestCase;
 
 /**
  * @author Adrien Russo <adrien.russo.qc@gmail.com>
+ * @author Hugo Monteiro <hugo.monteiro@gmail.com>
  */
 class TranslationDumperTest extends WebTestCase
 {
     const JS_CONFIG = <<<JS
-(function (Translator) {
-    Translator.fallback      = 'en';
-    Translator.defaultDomain = 'messages';
+(function (t) {
+t.fallback = 'en';
+t.defaultDomain = 'messages';
 })(Translator);
 
 JS;
 
     const JS_EN_MERGED_TRANSLATIONS = <<<JS
-(function (Translator) {
-    // en
-    Translator.add("foo", "bar", "foo", "en");
-    Translator.add("hello", "hello", "messages", "en");
-    Translator.add(7, "Nos occasions", "numerics", "en");
-    Translator.add(8, "Nous contacter", "numerics", "en");
-    Translator.add(12, "pr\u00e9nom", "numerics", "en");
-    Translator.add(13, "nom", "numerics", "en");
-    Translator.add(14, "adresse", "numerics", "en");
-    Translator.add(15, "code postal", "numerics", "en");
+(function (t) {
+// en
+t.add("foo", "bar", "foo", "en");
+t.add("hello", "hello", "messages", "en");
+t.add(7, "Nos occasions", "numerics", "en");
+t.add(8, "Nous contacter", "numerics", "en");
+t.add(12, "pr\u00e9nom", "numerics", "en");
+t.add(13, "nom", "numerics", "en");
+t.add(14, "adresse", "numerics", "en");
+t.add(15, "code postal", "numerics", "en");
 })(Translator);
 
 JS;
 
     const JS_EN_MESSAGES_TRANSLATIONS = <<<JS
-(function (Translator) {
-    // en
-    Translator.add("hello", "hello", "messages", "en");
+(function (t) {
+// en
+t.add("hello", "hello", "messages", "en");
 })(Translator);
 
 JS;
 
     const JS_EN_NUMERICS_TRANSLATIONS = <<<JS
-(function (Translator) {
-    // en
-    Translator.add(7, "Nos occasions", "numerics", "en");
-    Translator.add(8, "Nous contacter", "numerics", "en");
-    Translator.add(12, "pr\u00e9nom", "numerics", "en");
-    Translator.add(13, "nom", "numerics", "en");
-    Translator.add(14, "adresse", "numerics", "en");
-    Translator.add(15, "code postal", "numerics", "en");
+(function (t) {
+// en
+t.add(7, "Nos occasions", "numerics", "en");
+t.add(8, "Nous contacter", "numerics", "en");
+t.add(12, "pr\u00e9nom", "numerics", "en");
+t.add(13, "nom", "numerics", "en");
+t.add(14, "adresse", "numerics", "en");
+t.add(15, "code postal", "numerics", "en");
 })(Translator);
 
 JS;
 
     const JS_FR_MERGED_TRANSLATIONS = <<<JS
-(function (Translator) {
-    // fr
-    Translator.add("hello", "bonjour", "messages", "fr");
-    Translator.add(7, "Nos occasions", "numerics", "fr");
-    Translator.add(8, "Nous contacter", "numerics", "fr");
-    Translator.add(12, "pr\u00e9nom", "numerics", "fr");
-    Translator.add(13, "nom", "numerics", "fr");
-    Translator.add(14, "adresse", "numerics", "fr");
-    Translator.add(15, "code postal", "numerics", "fr");
+(function (t) {
+// fr
+t.add("hello", "bonjour", "messages", "fr");
+t.add(7, "Nos occasions", "numerics", "fr");
+t.add(8, "Nous contacter", "numerics", "fr");
+t.add(12, "pr\u00e9nom", "numerics", "fr");
+t.add(13, "nom", "numerics", "fr");
+t.add(14, "adresse", "numerics", "fr");
+t.add(15, "code postal", "numerics", "fr");
 })(Translator);
 
 JS;
 
     const JS_FR_MESSAGES_TRANSLATIONS = <<<JS
-(function (Translator) {
-    // fr
-    Translator.add("hello", "bonjour", "messages", "fr");
+(function (t) {
+// fr
+t.add("hello", "bonjour", "messages", "fr");
 })(Translator);
 
 JS;
 
     const JS_FR_NUMERICS_TRANSLATIONS = <<<JS
-(function (Translator) {
-    // fr
-    Translator.add(7, "Nos occasions", "numerics", "fr");
-    Translator.add(8, "Nous contacter", "numerics", "fr");
-    Translator.add(12, "pr\u00e9nom", "numerics", "fr");
-    Translator.add(13, "nom", "numerics", "fr");
-    Translator.add(14, "adresse", "numerics", "fr");
-    Translator.add(15, "code postal", "numerics", "fr");
+(function (t) {
+// fr
+t.add(7, "Nos occasions", "numerics", "fr");
+t.add(8, "Nous contacter", "numerics", "fr");
+t.add(12, "pr\u00e9nom", "numerics", "fr");
+t.add(13, "nom", "numerics", "fr");
+t.add(14, "adresse", "numerics", "fr");
+t.add(15, "code postal", "numerics", "fr");
 })(Translator);
 
 JS;
@@ -164,29 +166,31 @@ JSON;
 
     public function testDumpPerDomain()
     {
-        $this->dumper->dump($this->target);
+        $this->dumper->dump(
+            $this->target
+        );
 
         foreach (array(
-            'messages/en.js',
-            'messages/en.json',
-            'messages/fr.js',
-            'messages/fr.json',
-            'foo/en.js',
-            'foo/en.json',
-            'numerics/en.js',
-            'numerics/en.json',
-        ) as $file) {
+                     'messages/en.js',
+                     'messages/en.json',
+                     'messages/fr.js',
+                     'messages/fr.json',
+                     'foo/en.js',
+                     'foo/en.json',
+                     'numerics/en.js',
+                     'numerics/en.json',
+                 ) as $file) {
             $this->assertFileExists($this->target . '/translations/' . $file);
         }
 
         foreach (array(
-            'front/en.js',
-            'front/en.json',
-            'front/fr.js',
-            'front/fr.json',
-            'messages/es.js',
-            'messages/es.json',
-        ) as $file) {
+                     'front/en.js',
+                     'front/en.json',
+                     'front/fr.js',
+                     'front/fr.json',
+                     'messages/es.js',
+                     'messages/es.json',
+                 ) as $file) {
             $this->assertFileNotExists($this->target . '/translations/' . $file);
         }
 
@@ -209,12 +213,16 @@ JSON;
         $this->assertEquals(self::JSON_FR_NUMERICS_TRANSLATIONS, file_get_contents($this->target . '/translations/numerics/fr.json'));
 
         $this->assertEquals(self::JSON_CONFIG, file_get_contents($this->target . '/translations/config.json'));
-
     }
 
     public function testDumpPerLocale()
     {
-        $this->dumper->dump($this->target, array(), (object) array('domains' => true));
+        $this->dumper->dump(
+            $this->target,
+            TranslationDumper::DEFAULT_TRANSLATION_PATTERN,
+            array(),
+            (object) array('domains' => true)
+        );
 
         foreach (array(
                      'en.js',
@@ -243,12 +251,15 @@ JSON;
         $this->assertEquals(self::JSON_FR_MERGED_TRANSLATIONS, file_get_contents($this->target . '/translations/fr.json'));
 
         $this->assertEquals(self::JSON_CONFIG, file_get_contents($this->target . '/translations/config.json'));
-
     }
 
     public function testDumpJsPerDomain()
     {
-        $this->dumper->dump($this->target, array('js'));
+        $this->dumper->dump(
+            $this->target,
+            TranslationDumper::DEFAULT_TRANSLATION_PATTERN,
+            array('js')
+        );
 
         foreach (array(
                      'foo/en.js',
@@ -285,12 +296,15 @@ JSON;
         $this->assertEquals(self::JS_FR_NUMERICS_TRANSLATIONS, file_get_contents($this->target . '/translations/numerics/fr.js'));
 
         $this->assertEquals(self::JS_CONFIG, file_get_contents($this->target . '/translations/config.js'));
-
     }
 
     public function testDumpJsonPerDomain()
     {
-        $this->dumper->dump($this->target, array('json'));
+        $this->dumper->dump(
+            $this->target,
+            TranslationDumper::DEFAULT_TRANSLATION_PATTERN,
+            array('json')
+        );
 
         foreach (array(
                      'foo/en.json',
@@ -327,12 +341,16 @@ JSON;
         $this->assertEquals(self::JSON_FR_NUMERICS_TRANSLATIONS, file_get_contents($this->target . '/translations/numerics/fr.json'));
 
         $this->assertEquals(self::JSON_CONFIG, file_get_contents($this->target . '/translations/config.json'));
-
     }
 
     public function testDumpJsPerLocale()
     {
-        $this->dumper->dump($this->target, array('js'), (object) array('domains' => true));
+        $this->dumper->dump(
+            $this->target,
+            TranslationDumper::DEFAULT_TRANSLATION_PATTERN,
+            array('js'),
+            (object) array('domains' => true)
+        );
 
         foreach (array(
                      'en.js',
@@ -355,12 +373,16 @@ JSON;
         $this->assertEquals(self::JS_FR_MERGED_TRANSLATIONS, file_get_contents($this->target . '/translations/fr.js'));
 
         $this->assertEquals(self::JS_CONFIG, file_get_contents($this->target . '/translations/config.js'));
-
     }
 
     public function testDumpJsonPerLocale()
     {
-        $this->dumper->dump($this->target, array('json'), (object) array('domains' => true));
+        $this->dumper->dump(
+            $this->target,
+            TranslationDumper::DEFAULT_TRANSLATION_PATTERN,
+            array('json'),
+            (object) array('domains' => true)
+        );
 
         foreach (array(
                      'en.json',
@@ -383,6 +405,5 @@ JSON;
         $this->assertEquals(self::JSON_FR_MERGED_TRANSLATIONS, file_get_contents($this->target . '/translations/fr.json'));
 
         $this->assertEquals(self::JSON_CONFIG, file_get_contents($this->target . '/translations/config.json'));
-
     }
 }
