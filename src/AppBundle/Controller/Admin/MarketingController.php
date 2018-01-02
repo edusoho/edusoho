@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use QiQiuYun\SDK\Service\Marketing\MarketingService;
+use QiQiuYun\SDK\Auth;
+
 
 class MarketingController extends BaseController
 {
@@ -42,8 +45,8 @@ class MarketingController extends BaseController
             throw new InvalidArgumentException('entry is require');
         }
         $marketingEntry = strtolower($marketingEntry);
-        $loginDomain = $this->getMarketingDomain($marketingEntry);
-        $loginPath = $this->getMarketingPath($marketingEntry);
+        // $loginDomain = $this->getMarketingDomain($marketingEntry);
+        // $loginPath = $this->getMarketingPath($marketingEntry);
         $site = $this->getSiteInfo();
         $siteDomain = $request->getSchemeAndHttpHost();
         $site['domain'] = $siteDomain;
@@ -57,19 +60,35 @@ class MarketingController extends BaseController
                 'avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
         ];
 
-        $spec = new JsonHmacSpecification2('sha1');
-        $body = $spec->serialize(['user' => $user, 'site' => $site]);
+        // $spec = new JsonHmacSpecification2('sha1');
+        // $body = $spec->serialize(['user' => $user, 'site' => $site]);
 
-        $once = $this->makeRequestId();
-        $deadline = time() + 5 * 60;
-        $sign = $spec->signature(['secretKey' => $storage['cloud_secret_key']], $loginPath, $body, $deadline, $once);
-        $sign = "{$storage['cloud_access_key']}:{$deadline}:{$once}:{$sign}";
-
+        // $once = $this->makeRequestId();
+        // $deadline = time() + 5 * 60;
+        // $sign = $spec->signature(['secretKey' => $storage['cloud_secret_key']], $loginPath, $body, $deadline, $once);
+        // $sign = "{$storage['cloud_access_key']}:{$deadline}:{$once}:{$sign}";
+        $loginDomain = $this->getMarketingDomain($marketingEntry);
+        $loginPath = $this->getMarketingPath($marketingEntry);
+        $baseURI = $loginDomain.$loginPath;
+        $form = $this->createMarketingService($baseURI)->generateLoginForm($user,$site);
+       
         return $this->render('admin/marketing/login.html.twig', array(
-            'login' => $loginDomain.$loginPath,
-            'site' => $site,
-            'user' => $user,
-            'sign' => $sign,
+            'form' => $form,
+        ));
+    }
+
+    public function createMarketingService($baseURI)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        $siteSettings = $this->getSettingService()->get('site', array());
+
+        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
+        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
+        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
+        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
+        $auth = new Auth($accessKey, $secretKey);
+        return new \QiQiuYun\SDK\Service\MarketingService($auth, array(
+            'base_uri' => $baseURI, //推送的URL需要配置
         ));
     }
 
