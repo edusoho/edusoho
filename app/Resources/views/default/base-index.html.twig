@@ -4,11 +4,7 @@
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
 {% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null) and is_show_mobile_page() %}
-{% if appDownload %}
-  {% set bodyClass = 'homepage has-app' %}
-{% else %}
-  {% set bodyClass = 'homepage' %}
-{% endif %}
+{% set bodyClass = appDownload ? 'homepage has-app' : 'homepage' %}
 {% set siteNav = '/' %}
 
 {% set _target_path = path('homepage') %}

@@ -4216,6 +4216,7 @@ admin.setting.theme.use_btn: Apply
 admin.setting.theme.manage_btn: Config
 admin.setting.theme.manage.title: 'EduSoho Theme Edit'
 admin.setting.theme.manage.theme_edit: 'Theme edit'
+admin.setting.theme.manage: manage
 admin.setting.theme.manage.theme_cancel: Cancel
 admin.setting.theme.manage.theme_ok: Apply
 admin.setting.theme.manage.components: Component
@@ -4231,6 +4232,7 @@ admin.setting.theme.manage.modal.edit: Edit
 admin.setting.theme.manage.modal.subname: Subtitle
 admin.setting.theme.manage.modal.setting_course_num: 'Coures Number Setting'
 admin.setting.theme.manage.modal.setting_custom_category_count: 'Course Category Number Setting'
+admin.setting.theme.manage.modal.setting_count: Count
 admin.setting.theme.manage.modal.setting_custom_orderby: 'Sort Setting'
 admin.setting.theme.manage.modal.setting_ustom_background_color: 'Background Color Setting'
 admin.setting.theme.manage.modal.color_gray: Gray
