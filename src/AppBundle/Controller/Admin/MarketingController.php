@@ -6,9 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use QiQiuYun\SDK\Service\Marketing\MarketingService;
 use QiQiuYun\SDK\Auth;
-
 
 class MarketingController extends BaseController
 {
@@ -70,8 +68,8 @@ class MarketingController extends BaseController
         $loginDomain = $this->getMarketingDomain($marketingEntry);
         $loginPath = $this->getMarketingPath($marketingEntry);
         $baseURI = $loginDomain.$loginPath;
-        $form = $this->createMarketingService($baseURI)->generateLoginForm($user,$site);
-       
+        $form = $this->createMarketingService($baseURI)->generateLoginForm($user, $site);
+
         return $this->render('admin/marketing/login.html.twig', array(
             'form' => $form,
         ));
@@ -87,6 +85,7 @@ class MarketingController extends BaseController
         $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
         $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
         $auth = new Auth($accessKey, $secretKey);
+
         return new \QiQiuYun\SDK\Service\MarketingService($auth, array(
             'base_uri' => $baseURI, //推送的URL需要配置
         ));
