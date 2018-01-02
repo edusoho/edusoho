@@ -1,4 +1,6 @@
 (function (t) {
+t.fallback = 'en';
+t.defaultDomain = 'js';
 // en
 t.add("site.flash_not_install_hint", "Flash player is not installed in your browser or version is too low, please install the Flash player. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
 t.add("site.date_format_dhis", "Days %day% Hours %hour% Minutes %minutes% seconds %seconds%", "js", "en");
