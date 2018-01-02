@@ -1,0 +1,40 @@
+{
+    "name": "willdurand/js-translation-bundle",
+    "description": "A pretty nice way to expose your translation messages to your JavaScript.",
+    "keywords": [ "translation", "javascript", "symfony" ],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+        "name": "William Durand",
+        "email": "will+git@drnd.me"
+    }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.7|~3.1",
+        "symfony/finder": "~2.7|~3.1",
+        "symfony/console": "~2.7|~3.1",
+        "symfony/intl": "~2.7|~3.1",
+        "symfony/templating": "~2.7|~3.1",
+        "symfony/translation":  "~2.7|~3.1"
+    },
+    "require-dev": {
+        "symfony/asset": "~2.7|~3.1",
+        "symfony/yaml": "~2.7|~3.1",
+        "symfony/browser-kit": "~2.7|~3.1",
+        "symfony/twig-bundle": "~2.7|~3.1",
+        "symfony/phpunit-bridge": "~2.7|~3.1",
+        "phpunit/phpunit": "^4.8|~5.7"
+    },
+    "replace": {
+        "willdurand/expose-translation-bundle": "2.5.*"
+    },
+    "autoload": {
+        "psr-4": { "Bazinga\\Bundle\\JsTranslationBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.7-dev"
+        }
+    }
+}
