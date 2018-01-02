@@ -9,8 +9,9 @@ class UpgradeLock
     public static function lock()
     {
         $filePath = self::_getFile();
-
-        $time = time();
+        $initMaxTime = (int) ini_get('max_execution_time');
+        $plus = ($initMaxTime <= 0) ? 120 : $initMaxTime;
+        $time = time() + $plus + 30;
 
         file_put_contents($filePath, (string) $time);
     }

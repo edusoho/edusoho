@@ -58,8 +58,21 @@ abstract class HLSBaseController extends BaseController
                     'duration' => 3600,
                 );
 
+                if (!empty($token['data']['replayId'])) {
+                    $tokenFields['data']['replayId'] = $token['data']['replayId'];
+                    $tokenFields['data']['type'] = $token['data']['type'];
+                }
+
                 if (!empty($token['userId'])) {
                     $tokenFields['userId'] = $token['userId'];
+                }
+
+                if (isset($token['data']['watchTimeLimit'])) {
+                    $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
+                }
+
+                if (isset($token['data']['hideBeginning'])) {
+                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);

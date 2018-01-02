@@ -999,21 +999,33 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getTodayLiveCourseNumber()
     {
         $user = $this->getCurrentUser();
-        $members = $this->getMemberService()->searchMembers(
-            array('userId' => $user['id'], 'role' => 'teacher'), array(), 0, PHP_INT_MAX
-        );
-        $courseIds = ArrayToolkit::column($members, 'courseId');
         $liveCourseNumber = 0;
-        if (!empty($courseIds)) {
-            $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-            $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
-            $tasks = $this->searchTasks(
-                array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+        $tasks = $this->searchTasks(
+            array('type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($tasks as $task) {
+            $members = $this->getMemberService()->searchMembers(
+                array('courseId' => $task['courseId'], 'role' => 'teacher'),
                 array(),
                 0,
                 PHP_INT_MAX
             );
-            $liveCourseNumber = count($tasks);
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($user['id'], $userIds)) {
+                continue;
+            }
+            $course = $this->getCourseService()->getCourse($task['courseId']);
+            if (!empty($course) && 'published' == $course['status']) {
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
+                    $liveCourseNumber = $liveCourseNumber + 1;
+                }
+            }
         }
 
         return $liveCourseNumber;
