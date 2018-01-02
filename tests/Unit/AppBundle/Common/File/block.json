@@ -1,0 +1,38 @@
+{
+  "default:home_top_banner":
+  {
+    "title": "简墨主题：首页顶部.轮播图 ",
+    "category": "jianmo",
+    "templateName": "@theme/jianmo/block/carousel.template.html.twig",
+    "items": {
+        "posters":{
+            "title":"海报",
+            "desc":"首页海报",
+            "count":1,
+            "type":"poster",
+            "default":[
+                {
+                    "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                    "alt" : "海报1",
+                    "layout" : "limitWide",
+                    "background" : "#3ec768",
+                    "href" : "",
+                    "html" : "",
+                    "status" : "1",
+                    "mode" : "img"
+                },
+                {
+                    "src" : "\/themes\/jianmo\/img\/banner_eweek.jpg",
+                    "alt" : "海报3",
+                    "layout" : "limitWide",
+                    "background" : "#3b4250",
+                    "href" : "",
+                    "html" : "",
+                    "status" : "1",
+                    "mode" : "img"
+                }
+            ]
+        }
+    }
+  }
+}
