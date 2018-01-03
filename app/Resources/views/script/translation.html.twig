@@ -1,4 +1,5 @@
-<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+<script src="{{ asset('static-dist/translations/translator.min.js') }}"></script>
+
 {% set locales = app.request.session.get('_locale',app.request.locale) %}
 {% if app.debug %}
   <script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales={{ locales }}"></script>
