@@ -141,6 +141,11 @@ class MarketingServiceTest extends BaseTestCase
             )
         );
 
+        $this->mockBiz('Classroom:ClassroomService', array(
+            array('functionName' => 'getClassroom', 'returnValue' => array(
+                'id' => 12, 'title' => 'test classroom', 'price' => '10.00', 'middlePicture' => '', 'maxRate' => 0, 'smallPicture' => '', 'largePicture' => '', )),
+        ));
+
         $biz = $this->getBiz();
         $biz['@Marketing:MarketingClassroomMemberService'] = new MockedClassroomMemberServiceImpl($this->getBiz());
 
