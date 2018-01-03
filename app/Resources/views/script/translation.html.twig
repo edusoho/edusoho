@@ -3,5 +3,5 @@
 {% if app.debug %}
   <script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales={{ locales }}"></script>
 {% else %}
-  <script src="{{ asset('static-dist/translations/js/' ~ locales ~ '.js') }}"></script>
+  <script src="{{ asset('static-dist/translations/' ~ locales ~ '.js') }}"></script>
 {% endif %}
