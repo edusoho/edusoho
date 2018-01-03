@@ -1,4 +1,6 @@
 (function (t) {
+t.fallback = 'zh_CN';
+t.defaultDomain = 'js';
 // zh_CN
 t.add("site.flash_not_install_hint", "\u60a8\u7684\u6d4f\u89c8\u5668\u672a\u88c5Flash\u64ad\u653e\u5668\u6216\u7248\u672c\u592a\u4f4e\uff0c\u8bf7\u5148\u5b89\u88c5Flash\u64ad\u653e\u5668\u3002<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">\u70b9\u51fb\u5b89\u88c5<\/a>", "js", "zh_CN");
 t.add("site.date_format_dhis", "%days%\u5929%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");

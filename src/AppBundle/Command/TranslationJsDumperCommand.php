@@ -10,11 +10,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class TranslationJsDumperCommand extends BaseCommand
 {
-    private $filePath = array(
-        'main' => 'web/static-dist/translations/',
-        'plugin' => 'plugin/',
-    );
-
     protected function configure()
     {
         $this->setName('trans:dump-js')
@@ -49,12 +44,12 @@ class TranslationJsDumperCommand extends BaseCommand
                 'translations' => array($locale => array(
                     'js' => $translation,
                 )),
-                'include_config' => false,
+                'include_config' => true,
+                'fallback' => $locale,
+                'defaultDomain' => 'js',
             ));
-            $filePath = empty($code) ? 'web/static-dist/translations/'
-            : 'plugins/'.ucfirst($code).'Plugin/Resources/static-dist/js/translations/';
+            $filePath = empty($code) ? 'web/static-dist/translations/' : 'web/static-dist/'.strtolower($code).'plugin/js/translations/';
             $file = $filePath.$locale.'.js';
-            var_dump($file);
             $filesystem->mkdir(dirname($file));
 
             if (file_exists($file)) {
