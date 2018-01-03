@@ -76,13 +76,13 @@ class TranslationJsDumperCommand extends BaseCommand
                 continue;
             }
 
-            if (!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
-                continue;
-            }
+            // if (!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
+            //     continue;
+            // }
 
-            if (empty($code) && 0 === strpos($filename, $rootDirectory.'/plugins/')) {
-                continue;
-            }
+            // if (empty($code) && 0 === strpos($filename, $rootDirectory.'/plugins/')) {
+            //     continue;
+            // }
 
             if (!isset($translations[$locale])) {
                 $translations[$locale] = array();

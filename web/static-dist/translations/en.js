@@ -2,6 +2,11 @@
 t.fallback = 'en';
 t.defaultDomain = 'js';
 // en
+t.add("plugin_faq.validate.from_version", "\u8d77\u59cb\u7248\u672c\u53f7", "js", "en");
+t.add("plugin_faq.validate.end_version", "\u7ec8\u6b62\u7248\u672c\u53f7", "js", "en");
+t.add("plugin_faq.category.hint", "\u8bf7\u9009\u62e9\u5206\u7c7b", "js", "en");
+t.add("plugin_faq.validate.es_version", "ES\u7248\u672c\u53f7", "js", "en");
+t.add("plugin_faq.validate.compare_version.hint", "\u8d77\u59cb\u7248\u672c\u53f7\u5fc5\u987b\u5c0f\u4e8e\u7b49\u4e8e\u7ec8\u6b62\u7248\u672c\u53f7", "js", "en");
 t.add("site.flash_not_install_hint", "Flash player is not installed in your browser or version is too low, please install the Flash player. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
 t.add("site.date_format_dhis", "Days %day% Hours %hour% Minutes %minutes% seconds %seconds%", "js", "en");
 t.add("site.date_format_his", "Hours %hours% Minutes %minutes% Seconds %seconds%", "js", "en");
