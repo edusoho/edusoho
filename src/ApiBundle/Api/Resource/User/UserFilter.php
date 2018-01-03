@@ -23,6 +23,7 @@ class UserFilter extends Filter
 
     protected function simpleFields(&$data)
     {
+        $data['about'] = $this->convertAbsoluteUrl($data['about']);
         $this->transformAvatar($data);
     }
 
