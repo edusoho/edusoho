@@ -318,15 +318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
-
-        if ('published' == $courseSet['status']) {
-            //课程发布不允许修改模式和时间
-            unset($fields['expiryMode']);
-            unset($fields['expiryDays']);
-            unset($fields['expiryStartDate']);
-            unset($fields['expiryEndDate']);
-        } else {
+        if ($oldCourse['status'] != 'published') {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -350,19 +342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
-        if ('published' == $oldCourse['status'] || 'closed' == $oldCourse['status']) {
-            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
-            unset($fields['expiryMode']);
-
-            if ('published' == $courseSet['status']) {
-                //课程计划发布或者关闭，课程也发布，不允许修改时间
-                unset($fields['expiryDays']);
-                unset($fields['expiryStartDate']);
-                unset($fields['expiryEndDate']);
-            }
-        }
-
-        $fields = $this->processFields($id, $fields, $courseSet);
+        $fields = $this->processFields($oldCourse, $fields, $courseSet);
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
 
@@ -2192,10 +2172,21 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @return mixed
      */
-    private function processFields($id, $fields, $courseSet)
+    private function processFields($course, $fields, $courseSet)
     {
+        if (in_array($course['status'], array('published', 'closed'))) {
+            //计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $course['status']) {
+                //计划发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
         if (isset($fields['originPrice'])) {
-            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
         if (1 == $fields['isFree']) {

@@ -149,7 +149,10 @@
       {{ setting('site.analytics')|raw }}
     {% endblock %}
 
-    {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+    {% block scriptBoot %}
+      {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+    {% endblock %}
+    
     <div id="modal" class="modal" ></div>
     <div id="attachment-modal" class="modal" ></div>
     {% if setting('copyright.thirdCopyright') != 1 %}
