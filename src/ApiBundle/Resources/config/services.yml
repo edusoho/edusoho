@@ -24,8 +24,12 @@ services:
         arguments: ['@service_container']
 
     api_anonymous_listener:
-          class: ApiBundle\Security\Firewall\AnonymousListener
-          arguments: ['@security.token_storage']
+        class: ApiBundle\Security\Firewall\AnonymousListener
+        arguments: ['@security.token_storage']
+
+    api_web_lib_listener:
+        class: ApiBundle\Security\FireWall\WebLibAuthenticationListener
+        arguments: ['@service_container']
 
     api_default_authentication:
         class: ApiBundle\Security\Authentication\DefaultResourceAuthenticationProvider
@@ -40,7 +44,7 @@ services:
     api_firewall:
         class: ApiBundle\Security\Firewall\Firewall
         arguments:
-            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_old_token_header_listener', '@api_third_party_oauth2_authentication_listener', '@api_session_authentication_listener', '@api_anonymous_listener']
+            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_old_token_header_listener', '@api_third_party_oauth2_authentication_listener', '@api_session_authentication_listener', '@api_anonymous_listener', '@api_web_lib_listener']
 
     api_resource_kernel:
         class: ApiBundle\Api\ResourceKernel
