@@ -48,8 +48,7 @@ class TranslationJsDumperCommand extends BaseCommand
                 'fallback' => $locale,
                 'defaultDomain' => 'js',
             ));
-            $filePath = empty($code) ? 'web/static-dist/translations/'
-            : 'web/static-dist/'.strtolower($code).'plugin/js/translations/';
+            $filePath = empty($code) ? 'web/static-dist/translations/' : 'web/static-dist/'.strtolower($code).'plugin/js/translations/';
             $file = $filePath.$locale.'.js';
             $filesystem->mkdir(dirname($file));
 
