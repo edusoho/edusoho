@@ -165,10 +165,6 @@ class BuildUpgradePackageCommand extends BaseCommand
             return str_ireplace('src/Org/OrgBundle/Resources/public', 'web/bundles/org', $file);
         }
 
-        if (stripos($file, 'vendor/willdurand/js-translation-bundle/Resources/public') === 0) {
-            return str_ireplace('vendor/willdurand/js-translation-bundle/Resources/public', 'web/bundles/bazingajstranslation', $file);
-        }
-
         return null;
     }
 
