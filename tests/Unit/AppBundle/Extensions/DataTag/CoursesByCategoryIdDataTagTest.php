@@ -25,6 +25,9 @@ class CoursesByCategoryIdDataTagTest extends BaseTestCase
         $datatag->getData(array('count' => 101));
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testCategoryIdMissing()
     {
         $datatag = new CoursesByCategoryIdDataTag();
