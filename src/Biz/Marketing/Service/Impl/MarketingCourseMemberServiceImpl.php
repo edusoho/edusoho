@@ -4,7 +4,7 @@ namespace Biz\Marketing\Service\Impl;
 
 use Biz\Course\Service\Impl\MemberServiceImpl;
 
-class MarketingMemberServiceImpl extends MemberServiceImpl
+class MarketingCourseMemberServiceImpl extends MemberServiceImpl
 {
     protected function createOrder($courseId, $userId, $data)
     {
