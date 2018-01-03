@@ -13,7 +13,7 @@ class MockedCourseMemberServiceImpl extends MarketingCourseMemberServiceImpl
         $this->data = $data;
 
         if ($data['price'] > 0) {
-            $order = $this->createOrder($userId, $userId, $data);
+            $order = $this->createOrder($courseId, $userId, $data);
             $this->order = $order;
         }
 

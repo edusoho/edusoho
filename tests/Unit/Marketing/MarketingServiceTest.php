@@ -3,6 +3,7 @@
 namespace Tests\Unit\Marketing;
 
 use Biz\BaseTestCase;
+use Tests\Unit\Marketing\Tools\MockedClassroomMemberServiceImpl;
 use Tests\Unit\Marketing\Tools\MockedCourseMemberServiceImpl;
 
 class MarketingServiceTest extends BaseTestCase
@@ -50,7 +51,7 @@ class MarketingServiceTest extends BaseTestCase
         );
 
         $biz = $this->getBiz();
-        $biz['@Marketing:MarketingMemberService'] = new MockedCourseMemberServiceImpl($this->getBiz());
+        $biz['@Marketing:MarketingCourseMemberService'] = new MockedCourseMemberServiceImpl($this->getBiz());
 
         $result = $this->getMarketingService()->addUserToCourse($postData);
 
@@ -125,7 +126,7 @@ class MarketingServiceTest extends BaseTestCase
                 'created_time' => '1511948304',
                 'updated_time' => '1511948322',
             ),
-            'target_type' => 'course',
+            'target_type' => 'classroom',
             'target_id' => 12,
         );
 
@@ -141,13 +142,13 @@ class MarketingServiceTest extends BaseTestCase
         );
 
         $biz = $this->getBiz();
-        $biz['@Marketing:MarketingMemberService'] = new MockedCourseMemberServiceImpl($this->getBiz());
+        $biz['@Marketing:MarketingClassroomMemberService'] = new MockedClassroomMemberServiceImpl($this->getBiz());
 
-        $result = $this->getMarketingService()->addUserToCourse($postData);
+        $result = $this->getMarketingService()->addUserToClassroom($postData);
 
-        $this->assertEquals('3', $this->getCourseMemberService()->getUserId());
-        $this->assertEquals(12, $this->getCourseMemberService()->getCourseId());
-        $order = $this->getCourseMemberService()->getOrder();
+        $this->assertEquals('3', $this->getClassroomMemberService()->getUserId());
+        $this->assertEquals(12, $this->getClassroomMemberService()->getClassroomId());
+        $order = $this->getClassroomMemberService()->getOrder();
 
         $this->assertArrayEquals(
             array(
@@ -170,7 +171,7 @@ class MarketingServiceTest extends BaseTestCase
                 'remark' => '来自微营销',
                 'orderTitleRemark' => '(来自微营销)',
             ),
-            $this->getCourseMemberService()->getData()
+            $this->getClassroomMemberService()->getData()
         );
 
         $this->assertArrayEquals(
@@ -178,7 +179,7 @@ class MarketingServiceTest extends BaseTestCase
                 'is_new' => true,
                 'user_id' => '3',
                 'code' => 'success',
-                'msg' => '把用户,3添加到课程成功,课程ID：12,memberId:12222,订单Id:'.$order['id'],
+                'msg' => '把用户,3添加到班级成功,班级ID：12,memberId:12222,订单Id:'.$order['id'],
             ),
             $result,
             array('is_new', 'user_id', 'code', 'msg')
@@ -186,7 +187,7 @@ class MarketingServiceTest extends BaseTestCase
 
         $this->assertEquals('11000', $order['price_amount']);
         $this->assertEquals('1', $order['pay_amount']);
-        $this->assertEquals('course', $order['create_extra']['targetType']);
+        $this->assertEquals('classroom', $order['create_extra']['targetType']);
     }
 
     protected function getMarketingService()
@@ -204,6 +205,9 @@ class MarketingServiceTest extends BaseTestCase
         return $this->createService('Marketing:MarketingCourseMemberService');
     }
 
+    /**
+     * @return MockedClassroomMemberServiceImpl
+     */
     protected function getClassroomMemberService()
     {
         return $this->createService('Marketing:MarketingClassroomMemberService');

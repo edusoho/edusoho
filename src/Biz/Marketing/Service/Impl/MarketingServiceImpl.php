@@ -121,7 +121,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         list($classroom, $member, $order) = $this->makeUserJoinClassroom($user['id'], $target['id'], $orderInfo);
         $logger->debug("把用户,{$user['id']}添加到班级成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}");
         $response['code'] = 'success';
-        $response['msg'] = "把用户,{$user['id']}添加到课程成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}";
+        $response['msg'] = "把用户,{$user['id']}添加到班级成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}";
 
         return $response;
     }
@@ -191,7 +191,9 @@ class MarketingServiceImpl extends BaseService implements MarketingService
      * @param $userId
      * @param $classroomId
      * @param $data
+     *
      * @return array
+     *
      * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
@@ -209,7 +211,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         $data['remark'] = '来自微营销';
         $data['orderTitleRemark'] = '(来自微营销)';
 
-        list($course, $member, $order) = $this->getClassroomMemberService()->becomeStudent($classroomId, $userId, $data);
+        list($course, $member, $order) = $this->getClassroomMemberService()->becomeStudentWithOrder($classroomId, $userId, $data);
 
         return array($course, $member, $order);
     }
