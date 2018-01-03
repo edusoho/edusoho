@@ -34,6 +34,7 @@ class PayCenter extends AbstractResource
         if ($trade['status'] === 'paid') {
             $trade['paymentForm'] = array();
             $trade['paymentHtml'] = '';
+            $trade['paymentUrl'] = '';
         } else {
             if ($trade['platform'] == 'wechat' && $trade['platform_type'] == 'Mweb') {
                 $trade['paymentForm'] = array();
@@ -45,6 +46,7 @@ class PayCenter extends AbstractResource
                 $trade['paymentForm'] = $form;
                 $trade['paymentHtml'] = $this->renderView('ApiBundle:cashier:submit-pay.html.twig',
                     array('form' => $form));
+                $trade['paymentUrl'] = '';
             }
         }
 
