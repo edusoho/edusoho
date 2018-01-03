@@ -133,21 +133,20 @@
                   {% endif %}
 
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}" id="deadlineType-date">
-                    <input class="form-control width-150 mr10" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if coursePublished %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
+                    <input class="form-control width-150 mr10" id="deadline" name="deadline" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
                   </div>
 
                   <div class="mb20 mt20 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}" id="deadlineType-days">
-                    <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays" value="{{ course.expiryDays|default(1) }}" 
-                    {% if coursePublished %} disabled {% endif %}>
+                    <input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays" value="{{ course.expiryDays|default(1) }}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>
                     {{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}
                   </div>
                 </div>
                 {#固定周期#}
                 <div class="mb20 mt20 {% if course.expiryMode|default('days') in ['days', 'forever'] %}hidden{% endif %}" id="expiry-date">
                   {{ 'course.plan_task.start_time'|trans }}
-                  <input class="form-control mh10 width-150 " id="expiryStartDate" type="text" name="expiryStartDate" value="{% if course.expiryStartDate|default(0) == 0 %}{{'now'|date('Y-m-d')}}{% else %}{{ course.expiryStartDate|default('now'|date('Y-m-d')) }}{% endif %}" {% if coursePublished %} disabled {% endif %}>
+                  <input class="form-control mh10 width-150 " id="expiryStartDate" type="text" name="expiryStartDate" value="{% if course.expiryStartDate|default(0) == 0 %}{{'now'|date('Y-m-d')}}{% else %}{{ course.expiryStartDate|default('now'|date('Y-m-d')) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %}>
                   {{ 'course.plan_task.end_time'|trans }}
-                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if coursePublished %} disabled  {% endif %} >
+                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate" value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if not coursePublished or not courseSetPublished %}{% else %} disabled {% endif %} >
                 </div>
                 <div class="color-warning">{{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}</div>
               </div>
