@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class UserFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar'
+        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
     );
 
     protected $publicFields = array(
@@ -16,7 +16,7 @@ class UserFilter extends Filter
 
     protected $authenticatedFields = array(
         'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'about', 'company',
-        'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip'
+        'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip',
     );
 
     protected $mode = self::SIMPLE_MODE;
