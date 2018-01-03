@@ -8,14 +8,15 @@ use ApiBundle\Api\Util\AssetHelper;
 class UserFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
+        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
     );
 
     protected $publicFields = array(
+        'about',
     );
 
     protected $authenticatedFields = array(
-        'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'about', 'company',
+        'email', 'locale', 'uri', 'type', 'roles', 'promotedSeq', 'locked', 'currentIp', 'gender', 'iam', 'city', 'qq', 'signature', 'company',
         'job', 'school', 'class', 'weibo', 'weixin', 'isQQPublic', 'isWeixinPublic', 'isWeiboPublic', 'following', 'follower', 'verifiedMobile', 'promotedTime', 'lastPasswordFailTime', 'loginTime', 'approvalTime', 'vip',
     );
 
@@ -23,14 +24,16 @@ class UserFilter extends Filter
 
     protected function simpleFields(&$data)
     {
-        $data['about'] = $this->convertAbsoluteUrl($data['about']);
         $this->transformAvatar($data);
+    }
+
+    protected function publicFields(&$data)
+    {
+        $data['about'] = $this->convertAbsoluteUrl($data['about']);
     }
 
     protected function authenticatedFields(&$data)
     {
-        $data['about'] = $this->convertAbsoluteUrl($data['about']);
-
         $data['promotedTime'] = date('c', $data['promotedTime']);
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
         $data['loginTime'] = date('c', $data['loginTime']);

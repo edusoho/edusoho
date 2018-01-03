@@ -28,7 +28,7 @@ services:
         arguments: ['@security.token_storage']
 
     api_web_lib_listener:
-        class: ApiBundle\Security\FireWall\WebLibAuthenticationListener
+        class: ApiBundle\Security\Firewall\WebLibAuthenticationListener
         arguments: ['@service_container']
 
     api_default_authentication:

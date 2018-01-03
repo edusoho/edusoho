@@ -7,6 +7,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Classroom extends AbstractResource
@@ -23,6 +24,10 @@ class Classroom extends AbstractResource
         }
 
         $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+
+        if (!empty($classroom['headTeacher'])) {
+            $this->mergeProfile($classroom['headTeacher']);
+        }
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
 
@@ -56,11 +61,25 @@ class Classroom extends AbstractResource
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
     }
 
+    private function mergeProfile(&$user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = array_merge($profile, $user);
+    }
+
     /**
      * @return ClassroomService
      */
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
