@@ -9,7 +9,7 @@ class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
     protected function createOrder($classroomId, $userId, $data, $source = 'outside')
     {
         $classroomProduct = $this->getOrderFacadeService()->getOrderProduct(
-            'course',
+            'classroom',
             array(
                 'targetId' => $classroomId,
             )
@@ -26,5 +26,4 @@ class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
 
         return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
     }
-
 }

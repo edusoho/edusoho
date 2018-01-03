@@ -196,6 +196,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
      *
      * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @throws \Exception
      */
     private function makeUserJoinClassroom($userId, $classroomId, $data)
     {
@@ -211,9 +212,9 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         $data['remark'] = '来自微营销';
         $data['orderTitleRemark'] = '(来自微营销)';
 
-        list($course, $member, $order) = $this->getClassroomMemberService()->becomeStudentWithOrder($classroomId, $userId, $data);
+        list($classroom, $member, $order) = $this->getClassroomMemberService()->becomeStudentWithOrder($classroomId, $userId, $data);
 
-        return array($course, $member, $order);
+        return array($classroom, $member, $order);
     }
 
     protected function getAuthService()
