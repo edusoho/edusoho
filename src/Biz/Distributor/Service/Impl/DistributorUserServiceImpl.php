@@ -10,7 +10,6 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
            'user_source_id' => $user['id'],
            'nickname' => $user['nickname'],
            'mobile' => $user['verifiedMobile'],
-           'email' => $user['email'],
            'registered_time' => $user['createdTime'],
            'token' => $user['token'],
         );
@@ -18,6 +17,16 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 
     protected function getJobType()
     {
-        return 'user';
+        return 'User';
+    }
+
+    protected function getNextJobType()
+    {
+        return 'Order';
+    }
+
+    public function getPostMethod()
+    {
+        return 'postStudents';
     }
 }

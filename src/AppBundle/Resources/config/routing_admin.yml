@@ -944,6 +944,14 @@ admin_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:Admin/CdnSetting:index }
 
+admin_mocked:
+    path: /mock
+    defaults: { _controller: AppBundle:Admin/Mock:index }
+
+admin_mocked_distributor_token:
+    path: /mock/distributor_token
+    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+
 admin_optimize:
     path:  /setting/optimize
     defaults: { _controller: AppBundle:Admin/Optimize:index }

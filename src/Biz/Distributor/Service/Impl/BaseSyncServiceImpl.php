@@ -14,6 +14,11 @@ abstract class BaseSyncServiceImpl extends BaseService
 
     abstract public function getNextJob();
 
+    /**
+     * 调用DrpService的什么方法进行数据发送
+     */
+    abstract public function getPostMethod();
+
     protected function afterDeal()
     {
     }

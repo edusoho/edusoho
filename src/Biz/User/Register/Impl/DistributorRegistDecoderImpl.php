@@ -13,8 +13,13 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         $splitedInfos = $this->splitToken($registration);
 
         // 有效，则注册来源为分销平台
-        if ($splitedInfos['valid']) {
+        if ($splitedInfos['registable']) {
             $user['type'] = 'distributor';
+            $user['distributorToken'] = $registration['distributorToken'];
+        }
+
+        if ($splitedInfos['rewardable']) {
+            // 方法虚拟币
         }
 
         return $user;
@@ -24,43 +29,44 @@ class DistributorRegistDecoderImpl extends RegistDecoder
     {
         $splitedInfos = $this->splitToken($registration);
 
-        if ($splitedInfos['valid']) {
+        $errMsg = '';
+        if ($splitedInfos['registable']) {
             $user['token'] = $registration['distributorToken'];
             $this->getDistributorUserService()->createJobData($user);
+        } else {
+            $errMsg .= 'not registable ';
         }
 
-        if ($splitedInfos['usable']) {
+        if ($splitedInfos['rewardable']) {
             // 分发优惠券
+        } else {
+            $errMsg .= 'not rewardable ';
+        }
+
+        if (!empty($errMsg)) {
+            $this->biz['logger']->error('distributor sign error DistributorRegistDecoderImpl::dealDataAfterSave', array(
+                'userId' => $user['id'],
+                'token' => $registration['distributorToken'],
+            ));
         }
     }
 
     /**
      * return \Biz\Distributor\Service\DistributorUserService
+     *
+     * MTIzOjIyMjIxOjEwMDoxNTE1MTE0OTQzOjE1MTUyMDEzNDM6MTI2ODM4ZDdmMDZkYzE4OGQ4YjY0YjExN2EzNmUxZTc6bXpuZDJjZHUyNWxCLUJXQjdPYzNSUnNaT2s4PQ%3D%3D
      */
     protected function getDistributorUserService()
     {
         return $this->biz->service('Distributor:DistributorUserService');
     }
 
-    /**
-     * 分销平台的token，只能使用一次，使用多次，仍然算这个分销商的拉新用户，但不会给奖励
-     *
-     * @return array(
-     *                'coupon' => 123, //优惠券，奖励多少元
-     *                'valid'  => true, //是否有效，有效指的是分销平台是否颁发过这个token
-     *                'usable' => false //是否有用, 有用指的是，这个token还能不能继续实行奖励
-     *                )
-     */
     private function splitToken($registration)
     {
         if (empty($this->splitedInfos)) {
-            $splitedInfos = array(
-                'coupon' => 123,
-                'valid' => true,
-                'usable' => true,
-            );
+            $this->splitedInfos = $this->getDistributorUserService()->decodeToken($registration['distributorToken']);
         }
 
-        return $splitedInfos;
+        return $this->splitedInfos;
     }
 }

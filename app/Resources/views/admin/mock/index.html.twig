@@ -1,0 +1,24 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_message' %}
+{% set script_controller = 'mock/index' %}
+
+{% block main %}
+  分销平台token伪造
+  <form id="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token')}}">
+    <div>
+      优惠券金额(元): <input type="text" name="couponPrice" value="100"></input>
+    </div>
+    <div>
+      优惠卷有效期(天): <input type="text" name="couponExpiryDay" value="{{couponExpireDateStr}}"></input>
+    </div>
+    <div>
+      token有效期: <input type="text" name="tokenExpireDateStr" value="{{tokenExpireDateStr}}"></input>
+    </div>
+  </form>
+
+  生成的token: <textarea type="text" class="generatedToken" readonly style="width: 800px"></textarea>
+  <div>
+    <input type="button" value="提交" id="tokenGeneratorBtn"></input>
+  </div>
+{% endblock %}

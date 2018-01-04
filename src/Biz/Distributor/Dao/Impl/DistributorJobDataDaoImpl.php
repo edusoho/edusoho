@@ -14,7 +14,8 @@ class DistributorJobDataDaoImpl extends GeneralDaoImpl implements DistributorJob
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
-                'status = (:statusArr)',
+                'jobType = :jobType',
+                'status in (:statusArr)',
             ),
         );
     }
