@@ -11,7 +11,7 @@
       <span class="bullet">•</span>
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
     </div>
-    <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}</div>
     {% include 'thread/post-interaction.html.twig' %}
   </div>
 </li>

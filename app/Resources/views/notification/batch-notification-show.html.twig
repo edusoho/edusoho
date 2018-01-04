@@ -15,7 +15,7 @@
         {{'notification.site_notification.publish_time'|trans}} ：{{ batchnotification.sendedTime|date_format }}
       </p>
       <div class="editor-text">
-        {{ batchnotification.content|raw }}
+        {{ batchnotification.content|cdn|raw }}
       </div>
     {% else %}
       <div class="empty">{{'notification.site_notification.empty'|trans}}</div>
