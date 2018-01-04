@@ -18,10 +18,19 @@ class WebLibAuthenticationListener extends BaseAuthenticationListener
         $keyProvider = new WebLibAuthenticationKeyProvider($this->getBiz());
         $authentication = new Authentication($keyProvider);
         try {
-            $authentication->getTokenHeader($request);
+            $header = $authentication->getTokenHeader($request);
+            $header = explode(' ', $header);
+            if (2 !== count($header)) {
+                return;
+            }
+
+            if (!in_array($header[0], array('Signature', 'Secret'))) {
+                return;
+            }
         } catch (\InvalidArgumentException $e) {
             return;
         }
+
         try {
             $authentication->auth($request);
         } catch (\Exception $e) {
