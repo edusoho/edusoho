@@ -60,5 +60,6 @@ return array(
     'Codeages\\Biz\\Pay\\' => array($vendorDir . '/codeages/biz-order-pay/src/Pay'),
     'Codeages\\Biz\\Order\\' => array($vendorDir . '/codeages/biz-order-pay/src/Order'),
     'Codeages\\Biz\\Framework\\' => array($vendorDir . '/codeages/biz-framework/src'),
+    'Bazinga\\Bundle\\JsTranslationBundle\\' => array($vendorDir . '/willdurand/js-translation-bundle'),
     '' => array($vendorDir . '/asm89/twig-cache-extension/lib'),
 );
