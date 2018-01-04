@@ -9,16 +9,43 @@ class VideoMediaStatusUpdateJobTest extends BaseTestCase
 {
     public function testExecute()
     {
-        $this->mockBiz('File:UploadFileService', array(
-            array(
-                'functionName' => 'getResourcesStatus',
-                'returnValue' => array('data' => array(), 'next' => array('cursor' => 0, 'start' => 0, 'limit' => 1000)),
+        $mockRemoteResources = array(
+            'data' => array(
+                array(
+                    'resourceNo' => 1,
+                    'status' => 'ok',
+                    'audio' => true,
+                    'mp4' => true,
+                ),
             ),
-        ));
+            'next' => array('cursor' => time(), 'start' => 0, 'limit' => 1),
+        );
 
-        $job = new VideoMediaStatusUpdateJob(array('args' => array('cursor' => 0, 'start' => 0, 'limit' => 1)), $this->getBiz());
+        $this->mockBiz(
+            'File:UploadFileService',
+            array(
+                array(
+                    'functionName' => 'getResourcesStatus',
+                    'returnValue' => $mockRemoteResources,
+                    'withParams' => array($mockRemoteResources['next']),
+                ),
+                array(
+                    'functionName' => 'setResourceConvertStatus',
+                    'withParams' => array(1, $mockRemoteResources['data'][0]),
+                ),
+            )
+        );
+
+        $job = new VideoMediaStatusUpdateJob(array('args' => $mockRemoteResources['next']), $this->getBiz());
         $result = $job->execute();
-
         $this->assertNull($result);
+
+        $this->getUploadFileService()->shouldHaveReceived('getResourcesStatus');
+        $this->getUploadFileService()->shouldHaveReceived('setResourceConvertStatus');
+    }
+
+    public function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }

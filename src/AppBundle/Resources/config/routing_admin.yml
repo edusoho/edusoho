@@ -847,7 +847,7 @@ admin_reset_currentTheme_config:
     permissions: [admin_setting_theme]
 
 admin_save_themes_config:
-    path:  /theme/{uri}/config/save
+    path:  /theme/config/save
     defaults: { _controller: AppBundle:Admin/Theme:saveConfig }
     methods:  [POST]
     permissions: [admin_setting_theme]
@@ -858,12 +858,12 @@ admin_confirm_themes_config:
     permissions: [admin_setting_theme]
 
 admin_themes_show:
-    path:  /theme/{uri}/show
+    path:  /theme/show
     defaults: { _controller: AppBundle:Admin/Theme:show }
     permissions: [admin_setting_theme]
 
 admin_themes_config_edit:
-    path:  /theme/{uri}/config/edit
+    path:  /theme/config/edit
     defaults: { _controller: AppBundle:Admin/Theme:themeConfigEdit }
     permissions: [admin_setting_theme]
 

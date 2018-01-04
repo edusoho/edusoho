@@ -97,6 +97,9 @@ export default class CustomFullCalendar {
     if (typeof this.options['dataApi'] != 'undefined') {
       calendarOptions['lazyFetching'] = true;
       calendarOptions['events'] = this._ajaxLoading;
+      if (calendarOptions['defaultView'] === 'month') {
+        calendarOptions['viewRender'] = this._formatMonthFirstDay;
+      }
     } else if (typeof this.options['data'] != 'undefined') {
       calendarOptions['events'] = this.options['data'];
     }
@@ -129,6 +132,22 @@ export default class CustomFullCalendar {
     });
   }
 
+  _formatMonthFirstDay(view) {
+    $('.fc-day-top').each(function() {
+      const $this = $(this);
+      const isMonthFirstDay = $this.data('date').substr(-3, 3) === '-01';
+      const isOtherMonth = $this.hasClass('fc-other-month');
+      const currentMonthFirstDay = isMonthFirstDay && !isOtherMonth;
+      const nextMonthFirstDay = isMonthFirstDay && isOtherMonth;
+      const $day = $this.find('.fc-day-number');
+      if (currentMonthFirstDay) {
+        $day.html(view.intervalStart.format('LL'));
+      } else if (nextMonthFirstDay) {
+        $day.html(view.intervalEnd.format('LL'));
+      }
+    })
+  }
+
   _generateEventOtherAttrs(events, data) {
     for (let i = 0; i < events.length; i++) {
       $.extend(events[i], this._generateEventCompValues(data[i]));
@@ -139,14 +158,16 @@ export default class CustomFullCalendar {
   }
 
   _addDateClassToEvent(event) {
-    let currentUnixTime = moment(this.options['currentTime']).unix();
     let startUnixTime = this._getDateStartUnixTime(moment(event['start']));
-    if (startUnixTime < currentUnixTime) {
+    let currentUnixTime = this._getDateStartUnixTime(moment(this.options['currentTime']));
+    let endUnixTime = this._getDateStartUnixTime(moment(event['end']));
+
+    if (endUnixTime < currentUnixTime) {
       event['className'].push('calendar-before');
-    } else if (startUnixTime == currentUnixTime) {
-      event['className'].push('calendar-today');
-    } else {
+    } else if (currentUnixTime < startUnixTime) {
       event['className'].push('calendar-future');
+    } else  {
+      event['className'].push('calendar-today');
     }
     return event;
   }
@@ -200,7 +221,7 @@ export default class CustomFullCalendar {
    * @param momentObj 
    */
   _getDateStartUnixTime(momentObj) {
-    let dateStr = momentObj.format('YYYY-MM-DD');
+    let dateStr = momentObj.format('YYYY-MM-DD HH:mm:ss');
     return moment(dateStr).unix();
   }
 

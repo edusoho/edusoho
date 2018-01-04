@@ -4,7 +4,6 @@ namespace AppBundle\Extensions\DataTag;
 
 use Biz\File\Service\UploadFileService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class AttachmentListDataTag extends BaseDataTag implements DataTag
 {
@@ -36,6 +35,6 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->getServiceKernel()->getBiz()->service('File:UploadFileService');
     }
 }

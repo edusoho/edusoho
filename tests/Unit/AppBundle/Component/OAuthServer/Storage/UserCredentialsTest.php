@@ -30,6 +30,24 @@ class UserCredentialsTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
+    public function testCheckUserCredentialsWithNotFoundUser()
+    {
+        self::$appKernel->getContainer()->set('biz', $this->getBiz());
+        $credentials = new UserCredentials(self::$appKernel->getContainer());
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserByLoginField',
+                    'throwException' => new \Symfony\Component\Security\Core\Exception\UsernameNotFoundException(),
+                    'withParams' => array('username'),
+                ),
+            )
+        );
+        $result = $credentials->checkUserCredentials('username', 'password');
+        $this->assertFalse($result);
+    }
+
     public function testGetUserDetails()
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
@@ -46,5 +64,23 @@ class UserCredentialsTest extends BaseTestCase
         );
         $result = $credentials->getUserDetails('username');
         $this->assertEquals(array('user_id' => 2, 'scope' => 'default'), $result);
+    }
+
+    public function testGetUserDetailsWithNotFoundUser()
+    {
+        self::$appKernel->getContainer()->set('biz', $this->getBiz());
+        $credentials = new UserCredentials(self::$appKernel->getContainer());
+        $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUserByLoginField',
+                    'throwException' => new \Symfony\Component\Security\Core\Exception\UsernameNotFoundException(),
+                    'withParams' => array('username'),
+                ),
+            )
+        );
+        $result = $credentials->getUserDetails('username');
+        $this->assertFalse($result);
     }
 }

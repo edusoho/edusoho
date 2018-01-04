@@ -37,6 +37,6 @@ class CourseRelatedDataDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getCourseMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->getServiceKernel()->getBiz()->service('Course:MaterialService');
     }
 }

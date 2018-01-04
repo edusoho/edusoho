@@ -14,7 +14,7 @@
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
         <div class="well editor-text">
-          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
+          {% if groupinfo.about%} {{groupinfo.about|cdn|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
         </div>
       {% endif %}
     </div>

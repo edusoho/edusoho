@@ -14,6 +14,8 @@ fi
 # pull the last version of repository
 echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
 git pull
+app/console trans:dump-js
+echo "生成翻译静态资源文件"
 
 # pull the last version of repository from scripts
 echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)

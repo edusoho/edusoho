@@ -974,7 +974,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => 0,
                     'note' => $params['remark'],
                 );
-
                 $this->becomeStudent($classroom['id'], $user['id'], $info);
                 $order = array('id' => 0);
             }

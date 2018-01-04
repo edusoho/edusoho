@@ -1,7 +1,7 @@
 @import '../module/calendar-month-view.less';
 @import '../module/calendar-agenda-view.less';
 
-@before-color:             rgba(0, 0, 0, 0.24);
+@before-color:             #c1c1c1;
 @today-color:              #ffa51f;
 @future-color:             #278bf5;
 
@@ -93,6 +93,7 @@
 
 .fc-today-button {
   margin: 0 4px !important;
+  font-weight: 500;
 }
 
 .fc-button {
@@ -122,7 +123,6 @@
 }
 
 .fc-past {
-  .fc-day-number,
   .week,
   .day {
     color: @cd-gray-light;
@@ -145,37 +145,38 @@
   }
 }
 
-.calendar-before {
-  background-color: @before-color;
+.fc-event {
   .cd-border-radius(2px);
   border: none;
   .cd-transition;
+  .cd-box-shadow-z(6px);
   &:hover {
     .cd-transition;
-    cursor: default;
-    background-color: rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+  }
+}
+
+.calendar-before {
+  background-color: @before-color;
+  &:hover {
+    background-color: #cbcdcc;
   }
 }
 
 .calendar-today {
   background-color: @today-color;
-  .cd-border-radius(2px);
-  border: none;
-  .cd-transition;
   &:hover {
-    cursor: default;
-    background-color: rgba(red(@today-color), green(@today-color), blue(@today-color), 0.8);
+    background-color: #ffb74d;
   }
 }
 
 .calendar-future {
   background-color: @future-color;
-  .cd-border-radius(2px);
-  border: none;
-  .cd-transition;
   &:hover {
-    cursor: default;
-    background-color: rgba(red(@future-color), green(@future-color), blue(@future-color), 0.8);
+    background-color: #51a2f7;
   }
 }
 
+.fc-event .fc-bg {
+  background-color: transparent;
+}
