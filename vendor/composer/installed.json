@@ -2926,71 +2926,6 @@
         ]
     },
     {
-        "name": "willdurand/js-translation-bundle",
-        "version": "2.6.4",
-        "version_normalized": "2.6.4.0",
-        "target-dir": "Bazinga/Bundle/JsTranslationBundle",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/willdurand/BazingaJsTranslationBundle.git",
-            "reference": "e1f180539da3b6b29dfde51aa2fbc091052dfb9b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/e1f180539da3b6b29dfde51aa2fbc091052dfb9b",
-            "reference": "e1f180539da3b6b29dfde51aa2fbc091052dfb9b",
-            "shasum": ""
-        },
-        "require": {
-            "symfony/console": "~2.7|~3.1",
-            "symfony/finder": "~2.7|~3.1",
-            "symfony/framework-bundle": "~2.7|~3.1",
-            "symfony/intl": "~2.7|~3.1",
-            "symfony/templating": "~2.7|~3.1",
-            "symfony/translation": "~2.7|~3.1"
-        },
-        "replace": {
-            "willdurand/expose-translation-bundle": "2.5.*"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8|~5.7",
-            "symfony/asset": "~2.7|~3.1",
-            "symfony/browser-kit": "~2.7|~3.1",
-            "symfony/phpunit-bridge": "~2.7|~3.1",
-            "symfony/twig-bundle": "~2.7|~3.1",
-            "symfony/yaml": "~2.7|~3.1"
-        },
-        "time": "2017-02-13T14:50:50+00:00",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.7-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Bazinga\\Bundle\\JsTranslationBundle": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "William Durand",
-                "email": "will+git@drnd.me"
-            }
-        ],
-        "description": "A pretty nice way to expose your translation messages to your JavaScript.",
-        "keywords": [
-            "javascript",
-            "symfony",
-            "translation"
-        ]
-    },
-    {
         "name": "xxtea/xxtea",
         "version": "v1.0.2",
         "version_normalized": "1.0.2.0",
@@ -5518,5 +5453,69 @@
             "MIT"
         ],
         "description": "order, pay module"
+    },
+    {
+        "name": "willdurand/js-translation-bundle",
+        "version": "2.6.5",
+        "version_normalized": "2.6.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/willdurand/BazingaJsTranslationBundle.git",
+            "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/d9cb848fc66b502658994cf86e63ed3d940e1095.zip",
+            "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095",
+            "shasum": ""
+        },
+        "require": {
+            "symfony/console": "~2.7|~3.1",
+            "symfony/finder": "~2.7|~3.1",
+            "symfony/framework-bundle": "~2.7|~3.1",
+            "symfony/intl": "~2.7|~3.1",
+            "symfony/templating": "~2.7|~3.1",
+            "symfony/translation": "~2.7|~3.1"
+        },
+        "replace": {
+            "willdurand/expose-translation-bundle": "2.5.*"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8|~5.7",
+            "symfony/asset": "~2.7|~3.1",
+            "symfony/browser-kit": "~2.7|~3.1",
+            "symfony/phpunit-bridge": "~2.7|~3.1",
+            "symfony/twig-bundle": "~2.7|~3.1",
+            "symfony/yaml": "~2.7|~3.1"
+        },
+        "time": "2017-05-17T21:16:31+00:00",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.7-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Bazinga\\Bundle\\JsTranslationBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "William Durand",
+                "email": "will+git@drnd.me"
+            }
+        ],
+        "description": "A pretty nice way to expose your translation messages to your JavaScript.",
+        "keywords": [
+            "javascript",
+            "symfony",
+            "translation"
+        ]
     }
 ]
