@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\User\Service\UserService;
@@ -56,6 +57,8 @@ class Classroom extends AbstractResource
 
         $this->getOCUtil()->multiple($classrooms, array('creator', 'teacherIds', 'headTeacherId', 'assistantIds'));
 
+        $this->mergeProfilesInClassroom($classrooms, 'headTeacher');
+
         $total = $this->getClassroomService()->countClassrooms($conditions);
 
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
@@ -65,6 +68,19 @@ class Classroom extends AbstractResource
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($profile, $user);
+    }
+
+    private function mergeProfilesInClassroom(&$classrooms, $column)
+    {
+        $users = ArrayToolkit::column($classrooms, $column);
+        $userIds = ArrayToolkit::column($users, 'id');
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+        foreach ($classrooms as &$classroom) {
+            if (!empty($classroom[$column]['id']) && !empty($profiles[$classroom[$column]['id']])) {
+                $classroom[$column] = array_merge($classroom[$column], $profiles[$classroom[$column]['id']]);
+            }
+        }
     }
 
     /**
