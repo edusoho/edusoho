@@ -4,7 +4,6 @@ namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Service\ThreadService;
-use Topxia\Service\Common\ServiceKernel;
 
 class HotThreadsDataTag extends BaseDataTag implements DataTag
 {

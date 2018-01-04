@@ -19,17 +19,17 @@ class CourseThreadByThreadIdDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new CourseThreadByThreadIdDataTag();
-        $threads = $datatag->getData(array('courseId' => 1,'threadId' => 1));
+        $threads = $datatag->getData(array('courseId' => 1, 'threadId' => 1));
         $this->assertNull($threads);
 
         $this->mockBiz('Course:ThreadService', array(
             array(
                 'functionName' => 'getThread',
-                'returnValue' => array('id' => 1, 'title' => 'thread content', 'courseId' => 1)
-            )
+                'returnValue' => array('id' => 1, 'title' => 'thread content', 'courseId' => 1),
+            ),
         ));
 
-        $thread = $datatag->getData(array('courseId' => 1,'threadId' => 1));
+        $thread = $datatag->getData(array('courseId' => 1, 'threadId' => 1));
         $this->assertEquals(1, $thread['id']);
     }
 }

@@ -12,15 +12,15 @@ class HotThreadsDataTagTest extends BaseTestCase
         $this->mockBiz('User:UserService', array(
             array(
                 'functionName' => 'findUsersByIds',
-                'returnValue' => array(1 => array('id' => 1, 'nickname' => 'username1'), 2 => array('id' => 2, 'nickname' => 'username2'))
-            )
+                'returnValue' => array(1 => array('id' => 1, 'nickname' => 'username1'), 2 => array('id' => 2, 'nickname' => 'username2')),
+            ),
         ));
 
         $this->mockBiz('System:SettingService', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('threadTime_range' => 3)
-            )
+                'returnValue' => array('threadTime_range' => 3),
+            ),
         ));
 
         $user = $this->getCurrentUser();

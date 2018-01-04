@@ -34,15 +34,15 @@ class CourseThreadDataTagTest extends BaseTestCase
         $this->mockBiz('Course:ThreadService', array(
             array(
                 'functionName' => 'getThread',
-                'returnValue' => array('id' => 1, 'title' => 'thread content', 'courseId' => 1)
-            )
+                'returnValue' => array('id' => 1, 'title' => 'thread content', 'courseId' => 1),
+            ),
         ));
 
         $this->mockBiz('Course:CourseService', array(
             array(
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 1, 'title' => 'course title')
-            )
+                'returnValue' => array('id' => 1, 'title' => 'course title'),
+            ),
         ));
 
         $thread = $datatag->getData(array('courseId' => 1, 'threadId' => 1));
