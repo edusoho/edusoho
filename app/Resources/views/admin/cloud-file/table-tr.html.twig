@@ -21,7 +21,7 @@
           <img src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
         </div>
         <div class="materials-table-title">
-          <a class="heading"  href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}" data-placement="top" title="{{ cloudFile.filename }}">{{ cloudFile.filename }}</a>
+          <a class="heading"  href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no})}}"  data-placement="top" title="{{ cloudFile.filename }}">{{ cloudFile.filename }}</a>
           <span class="subtitle">
             {% if createdUser %}
                 {{ createdUser.nickname }} {{ 'cloud_file.upload'|trans }}
