@@ -15,7 +15,8 @@
 !/web/themes/default-b
 !/web/themes/jianmo
 !/web/themes/block.json
-/web/bundles/
+/web/bundles/*
+!/web/bundles/translations/
 /web/files
 /web/customize/*
 !/web/customize/.gitkeep

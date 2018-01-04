@@ -4,6 +4,7 @@ namespace Bazinga\Bundle\JsTranslationBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 
 /**
  * @author Hugo MONTEIRO <hugo.monteiro@gmail.com>
@@ -46,8 +47,16 @@ class TranslationResourceFilesPass implements CompilerPassInterface
     private function getTranslationFiles(ContainerBuilder $container)
     {
         $translationFiles = array();
+        $translator = $container->findDefinition('translator.default');
 
-        $translatorOptions = $container->findDefinition('translator.default')->getArgument(3);
+        try {
+            $translatorOptions = $translator->getArgument(4);
+        } catch (OutOfBoundsException $e) {
+            $translatorOptions = array();
+        }
+
+        $translatorOptions = array_merge($translatorOptions, $translator->getArgument(3));
+        
         if (isset($translatorOptions['resource_files'])) {
             $translationFiles = $translatorOptions['resource_files'];
         }

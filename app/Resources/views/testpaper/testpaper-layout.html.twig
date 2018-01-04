@@ -67,6 +67,7 @@
             </div>
           </div>
           <div class="col-md-3">
+            <input type="hidden" value="{{ paperResult.usedTime|default(0) }}" class="js-used-time">
             {% block paper_sidebar %}{% endblock %}
           </div>
         </div>
