@@ -69,6 +69,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateAudioConvertStatus',
+            'downloadPlugin',
+            'updatePlugin',
         );
 
         $funcNames = array();
@@ -110,6 +112,95 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec("ALTER TABLE `upload_files` CHANGE `audioConvertStatus` `audioConvertStatus` ENUM('none','waiting','doing','success','error') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'none' COMMENT '视频转音频的状态';");
 
         return 1;
+    }
+
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger( 'warning', '升级'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if(isset($package['error'])){
+                $this->logger( 'warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install', 0);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger( 'warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger( 'info', '升级完毕');
+        return $page + 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            array(
+                'GracefulTheme', 
+                1216
+            ),           
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
     }
 
     protected function generateIndex($step, $page)
