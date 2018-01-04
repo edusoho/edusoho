@@ -3,7 +3,8 @@ let $groupIntroduce = $('#groupIntroduce');
 let btn = '#group-save-btn';
 
 var editor = CKEDITOR.replace('groupIntroduce', {
-	toolbar: 'Full',
+  toolbar: 'Full',
+  fileSingleSizeLimit: app.fileSingleSizeLimit,
 	filebrowserImageUploadUrl: $groupIntroduce.data('imageUploadUrl'),
 	allowedContent: true,
 	height: 300

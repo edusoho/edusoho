@@ -4,12 +4,18 @@ namespace AppBundle\Component\MediaParser;
 
 abstract class AbstractParser
 {
+    protected $mockedSender = null;
+
     abstract public function parse($url);
 
     abstract public function detect($url);
 
     protected function fetchUrl($url)
     {
+        if (!empty($this->mockedSender)) {
+            return $this->mockedSender->fetchUrl($url);
+        }
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HEADER, false);

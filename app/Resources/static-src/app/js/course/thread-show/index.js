@@ -5,6 +5,7 @@
 
 var editor = CKEDITOR.replace('post_content', {
   toolbar: 'Thread',
+  fileSingleSizeLimit: app.fileSingleSizeLimit,
   filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
 });
 editor.on('change', () => {

@@ -3803,7 +3803,9 @@ customer_service.customer_email: 反馈邮件
 # 我的教学
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
-my.teaching.live_schedule_menu: 直播课表
+my.teaching.live_schedule_menu: 教学课表
+my.teaching.hints_block: (当前仅展示直播课程)
+my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: 学员问题
 my.teaching.discussion_menu: 学员话题
@@ -4143,6 +4145,7 @@ my.teaching.open_course.material.upload_time: 上传于
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
+my.learning.live_schedule_menu: 直播课表
 my.learning.classroom_menu: 我的%classroom%
 my.learning.live_menu: 我的直播
 my.learning.question_menu: 我的问答
@@ -5308,6 +5311,7 @@ admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
 admin.setting.theme.manage.theme_edit: 主题编辑
+admin.setting.theme.manage: 主题管理
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
@@ -5327,6 +5331,7 @@ admin.setting.theme.manage.edit_btn: 编辑
 admin.setting.theme.manage.modal.edit: 编辑
 admin.setting.theme.manage.modal.subname: 副标题名称
 admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
+admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
@@ -7042,6 +7047,8 @@ admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
+admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
+admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用

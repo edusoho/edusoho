@@ -17,7 +17,7 @@ class StudentLiveCourse extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        if (empty($conditions['createdTime_GE']) || empty($conditions['createdTime_LT'])) {
+        if (empty($conditions['startTime_GE']) || empty($conditions['endTime_LT'])) {
             throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
         $user = $this->getCurrentUser();

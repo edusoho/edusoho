@@ -20,6 +20,7 @@ class Essay extends QuestionFormBase {
 
     let editor = CKEDITOR.replace(this.answerFieldId, {
       toolbar: 'Minimal',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: this.$answerField.data('imageUploadUrl'),
       height: this.$answerField.height()
     });

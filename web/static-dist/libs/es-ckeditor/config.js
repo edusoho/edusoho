@@ -87,4 +87,6 @@ CKEDITOR.editorConfig = function( config ) {
     // config.stylesSet = 'my_styles';
     config.codeSnippet_theme = 'zenburn';
 
+    config.fileSingleSizeLimit = 2;
+
 };

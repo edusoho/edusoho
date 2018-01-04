@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Component\MediaParser\Tests;
+namespace Tests\Unit\AppBundle\Component\MediaParser\ItemParser;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\MediaParser\ItemParser\YoukuVideoItemParser;

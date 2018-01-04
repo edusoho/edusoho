@@ -91,9 +91,9 @@ class SystemCrontabInitializer
 
     private static function registerDefaultJobs()
     {
-        $xapiRandNum1 = rand(1, 60);
-        $xapiRandNum2 = rand(1, 60);
-        $xapiRandNum3 = rand(1, 60);
+        $xapiRandNum1 = rand(1, 59);
+        $xapiRandNum2 = rand(1, 59);
+        $xapiRandNum3 = rand(1, 59);
         $jobMap = array(
             'Order_FinishSuccessOrdersJob' => array(
                 'expression' => '20 * * * *',
