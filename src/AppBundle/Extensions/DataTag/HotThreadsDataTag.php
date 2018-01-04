@@ -73,21 +73,21 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
      */
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group:ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Group:ThreadService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     private function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group:GroupService');
+        return $this->getServiceKernel()->getBiz()->service('Group:GroupService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getServiceKernel()->getBiz()->service('System:SettingService');
     }
 }
