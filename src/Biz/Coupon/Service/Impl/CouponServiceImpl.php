@@ -69,9 +69,11 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     /**
      * [generateInviteCoupon description]
-     * @param  [int] $userId [description]
-     * @param  [string] $mode   user可能是邀请者*pay，也可能是被邀请者*register
-     * @return [type]         [description]
+     *
+     * @param [int]    $userId [description]
+     * @param [string] $mode   user可能是邀请者*pay，也可能是被邀请者*register
+     *
+     * @return [type] [description]
      */
     public function generateInviteCoupon($userId, $mode)
     {
