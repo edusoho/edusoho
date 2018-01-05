@@ -67,10 +67,16 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponDao()->count($conditions);
     }
 
-    public function generateInviteCoupon($userId, $mode) //user可能是邀请者*pay，也可能是被邀请者*register
+    /**
+     * [generateInviteCoupon description]
+     *
+     * @param [int]    $userId [description]
+     * @param [string] $mode   user可能是邀请者*pay，也可能是被邀请者*register
+     *
+     * @return [type] [description]
+     */
+    public function generateInviteCoupon($userId, $mode)
     {
-        $inviteSetting = $this->getSettingService()->get('invite', array());
-
         if (!in_array($mode, array('register', 'pay'))) {
             return array();
         }
@@ -87,52 +93,48 @@ class CouponServiceImpl extends BaseService implements CouponService
                 break;
         }
 
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+
         if (isset($inviteSetting['invite_code_setting'])
             && $inviteSetting['invite_code_setting'] == 1
             && $inviteSetting[$settingName] > 0
         ) {
             $couponCode = $this->generateRandomCode(10, 'inviteCoupon');
-            $isCouponUnique = $this->isCouponUnique($couponCode);
 
-            if ($isCouponUnique) {
-                $inviteSetting = $this->getSettingService()->get('invite', array());
-                $coupon = array(
-                    'code' => $couponCode,
-                    'type' => 'minus',
+            $coupon = array(
+                'code' => $couponCode,
+                'type' => 'minus',
+                'status' => 'receive',
+                'rate' => $inviteSetting[$settingName],
+                'userId' => $userId,
+                'batchId' => null,
+                'deadline' => strtotime(date('Y-m-d')) + $inviteSetting['deadline'] * 24 * 3600,
+                'targetType' => 'all',
+                'targetId' => 0,
+                'createdTime' => time(),
+            );
+
+            $coupon = $this->getCouponDao()->create($coupon);
+
+            $card = $this->getCardService()->addCard(
+                array(
+                    'cardId' => $coupon['id'],
+                    'cardType' => 'coupon',
                     'status' => 'receive',
-                    'rate' => $inviteSetting[$settingName],
-                    'userId' => $userId,
-                    'batchId' => null,
-                    'deadline' => strtotime(date('Y-m-d')) + $inviteSetting['deadline'] * 24 * 3600,
-                    'targetType' => 'all',
-                    'targetId' => 0,
+                    'deadline' => $coupon['deadline'],
+                    'useTime' => 0,
+                    'userId' => $coupon['userId'],
                     'createdTime' => time(),
-                );
+                )
+            );
+            $message = array(
+                'rewardName' => $rewardName,
+                'settingName' => $inviteSetting[$settingName],
+            );
+            $this->getNotificationService()->notify($userId, 'invite-reward', $message);
+            $this->dispatchEvent('invite.reward', $coupon, array('message' => $message));
 
-                $coupon = $this->getCouponDao()->create($coupon);
-
-                $card = $this->getCardService()->addCard(
-                    array(
-                        'cardId' => $coupon['id'],
-                        'cardType' => 'coupon',
-                        'status' => 'receive',
-                        'deadline' => $coupon['deadline'],
-                        'useTime' => 0,
-                        'userId' => $coupon['userId'],
-                        'createdTime' => time(),
-                    )
-                );
-                $message = array(
-                    'rewardName' => $rewardName,
-                    'settingName' => $inviteSetting[$settingName],
-                );
-                $this->getNotificationService()->notify($userId, 'invite-reward', $message);
-                $this->dispatchEvent('invite.reward', $coupon, array('message' => $message));
-
-                return $coupon;
-            } else {
-                return $this->generateInviteCoupon($userId, $mode);
-            }
+            return $coupon;
         }
 
         return array();
@@ -369,15 +371,17 @@ class CouponServiceImpl extends BaseService implements CouponService
 
     private function generateRandomCode($length, $prefix)
     {
-        $randomCode = '';
+        $randomCode = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
 
-        for ($j = 0; $j < (int) $length; ++$j) {
-            $randomCode .= mt_rand(0, 9);
+        $code = substr($randomCode, 0, $length);
+        $code = $prefix.strtoupper($code);
+
+        $isUnique = $this->isCouponUnique($code);
+        if ($isUnique) {
+            return $code;
+        } else {
+            return $this->generateRandomCode($length, $prefix);
         }
-
-        $randomCode = $prefix.$randomCode;
-
-        return $randomCode;
     }
 
     public function getDeductAmount($coupon, $price)
@@ -406,6 +410,41 @@ class CouponServiceImpl extends BaseService implements CouponService
                 throw new InvalidArgumentException(sprintf('Invalid coupon status %s given', $coupon['status']));
                 break;
         }
+    }
+
+    public function generateDistributionCoupon($userId, $rate, $expireDay)
+    {
+        $couponCode = $this->generateRandomCode(10, 'distributionCoupon');
+
+        $coupon = array(
+            'code' => $couponCode,
+            'type' => 'minus',
+            'status' => 'receive',
+            'rate' => intval($rate),
+            'userId' => $userId,
+            'batchId' => null,
+            'deadline' => strtotime(date('Y-m-d')) + intval($expireDay) * 24 * 3600,
+            'targetType' => 'all',
+            'targetId' => 0,
+            'receiveTime' => time(),
+        );
+        $coupon = $this->addCoupon($coupon);
+
+        $card = $this->getCardService()->addCard(
+            array(
+                'cardId' => $coupon['id'],
+                'cardType' => 'coupon',
+                'status' => 'receive',
+                'deadline' => $coupon['deadline'],
+                'useTime' => 0,
+                'userId' => $coupon['userId'],
+                'createdTime' => time(),
+            )
+        );
+
+        $this->getNotificationService()->notify($userId, 'distributor-reward', $coupon);
+
+        return $coupon;
     }
 
     /**
