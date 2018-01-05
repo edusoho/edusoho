@@ -19,7 +19,7 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         }
 
         if ($splitedInfos['rewardable']) {
-            // 方法虚拟币
+            // 分发优惠券
         }
 
         return $user;
