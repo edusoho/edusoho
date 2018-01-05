@@ -51,7 +51,7 @@ class DrpService extends BaseService
 
         list($merchantId, $agencyId, $couponPrice, $couponExpiryDay, $time, $nonce, $signature) = $data;
 
-        $json = SignUtil::serialize(['merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay]);
+        $json = SignUtil::serialize(array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay));
         $signText = implode('\n', array($time, $nonce, $json));
         $sign = $this->auth->sign($signText);
         if ($sign != $signature) {
