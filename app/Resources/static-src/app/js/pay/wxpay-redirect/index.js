@@ -1,0 +1,1 @@
+window.location.href = $('#jsWebViewPay').data('goto');
