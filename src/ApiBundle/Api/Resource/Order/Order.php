@@ -69,7 +69,7 @@ class Order extends AbstractResource
 
     public function handleParams(&$params, $order)
     {
-        $params['gateway'] = ($params['payment'] == 'wechat') ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
+        $params['gateway'] = (!empty($params['payment']) && $params['payment'] == 'wechat') ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
         $params['type'] = 'purchase';
         $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
         $params['orderSn'] = $order['sn'];

@@ -78,7 +78,13 @@ class WechatController extends PaymentController
         }
         $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($tradeSn);
 
-        return $this->redirect($platformCreatedResult['mweb_url']);
+        return $this->render(
+            'cashier/wechat/redirect.html.twig',
+            array(
+                'mwebUrl' => $platformCreatedResult['mweb_url'],
+                'trade' => $trade,
+            )
+        );
     }
 
     public function returnAction(Request $request)
