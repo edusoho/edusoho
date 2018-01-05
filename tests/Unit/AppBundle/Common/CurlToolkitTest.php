@@ -41,7 +41,8 @@ class CurlToolkitTest extends BaseTestCase
         }
 
         $result = CurlToolkit::request('PATCH', 'http://www.edusoho.com/question/get/token');
-        $this->assertEquals(32, strlen($result));if (empty($result)) {
+        $this->assertEquals(32, strlen($result));
+        if (empty($result)) {
             $this->assertEmpty($result);
         } else {
             $this->assertEquals(32, strlen($result));
