@@ -18,7 +18,7 @@ class FreeTasksDataTagTest extends BaseTestCase
             'type' => 'text',
             'mode' => '',
             'isFree' => 1,
-            'createdUserId' => 1
+            'createdUserId' => 1,
         );
         $task1 = $this->getTaskDao()->create($fields1);
 
@@ -31,7 +31,7 @@ class FreeTasksDataTagTest extends BaseTestCase
             'type' => 'text',
             'mode' => '',
             'isFree' => 1,
-            'createdUserId' => 1
+            'createdUserId' => 1,
         );
         $task2 = $this->getTaskDao()->create($fields2);
 
@@ -44,7 +44,7 @@ class FreeTasksDataTagTest extends BaseTestCase
             'type' => 'text',
             'mode' => '',
             'isFree' => 1,
-            'createdUserId' => 1
+            'createdUserId' => 1,
         );
         $task3 = $this->getTaskDao()->create($fields3);
 
@@ -57,7 +57,7 @@ class FreeTasksDataTagTest extends BaseTestCase
             'type' => 'text',
             'mode' => '',
             'isFree' => 1,
-            'createdUserId' => 1
+            'createdUserId' => 1,
         );
         $task4 = $this->getTaskDao()->create($fields4);
 
@@ -70,7 +70,7 @@ class FreeTasksDataTagTest extends BaseTestCase
             'type' => 'text',
             'mode' => '',
             'isFree' => 1,
-            'createdUserId' => 1
+            'createdUserId' => 1,
         );
         $task5 = $this->getTaskDao()->create($fields5);
 
