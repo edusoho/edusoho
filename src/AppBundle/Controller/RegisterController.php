@@ -13,6 +13,7 @@ use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class RegisterController extends BaseController
@@ -26,10 +27,14 @@ class RegisterController extends BaseController
         // $fields = $request->request->all();
         $registerUrl = $this->generateUrl('register');
         if (!empty($fields['token'])) {
-            setcookie('distributor-token', $fields['token'], time() + 604800); //有效期7天
             if ($this->getCurrentUser()->isLogin()) {
-                return $this->redirect($this->generateUrl('logout').'?goto='.$registerUrl);
+                $response = $this->redirect($this->generateUrl('logout').'?goto='.$registerUrl);
+            } else {
+                $response = $this->redirect($registerUrl);
             }
+            $cookie = new Cookie('distributor-token', $fields['token'], time() + 604800);
+            $response->headers->setCookie($cookie); //有效期7天
+            return $response;
         }
 
         return $this->redirect($registerUrl);

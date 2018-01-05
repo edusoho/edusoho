@@ -61,7 +61,7 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
      *                'couponPrice' => 123, //优惠券，奖励多少元
      *                'couponExpiryDay' => unix_time, //优惠券有效时间
      *                'registable'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
-     *                'rewardable' => false //是否有奖励, 这个token还能不能继续实行奖励，如果为false, 则注册的用户不会发放优惠券
+     *                'rewardable' => false  //是否有奖励, 当couponPrice或couponExpiryday=0时, 则注册的用户不会发放优惠券
      *                )
      */
     public function decodeToken($token)
@@ -74,13 +74,17 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
         );
 
         try {
-            $parsedInfo = $this->getDrpService()->parseToken($token);
-            $tokenInfo['registable'] = true;
-            $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
-            if ($tokenExpireTime > time()) {
-                $tokenInfo['couponPrice'] = $parsedInfo['couponPrice'];
-                $tokenInfo['couponExpiryDay'] = $parsedInfo['couponExpiryDay'];
-                $tokenInfo['rewardable'] = true;
+            if (!empty($this->getDrpService())) {
+                $parsedInfo = $this->getDrpService()->parseToken($token);
+                $tokenInfo['registable'] = true;
+                $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
+                if ($tokenExpireTime > time()) {
+                    $tokenInfo['couponPrice'] = $parsedInfo['couponPrice'];
+                    $tokenInfo['couponExpiryDay'] = $parsedInfo['couponExpiryDay'];
+                    if (0 != $tokenInfo['couponPrice'] && 0 != $tokenInfo['couponExpiryDay']) {
+                        $tokenInfo['rewardable'] = true;
+                    }
+                }
             }
         } catch (\Exception $e) {
             $this->biz['logger']->error('distributor sign error BaseDistributorServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
