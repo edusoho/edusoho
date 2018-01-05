@@ -38,7 +38,7 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         }
 
         if ($splitedInfos['rewardable']) {
-            // 分发优惠券
+            $this->getCouponService()->generateDistributionCoupon($user['id'], $splitedInfos['couponPrice'], $splitedInfos['couponExpiryDay']);
         } else {
             $errMsg .= 'not rewardable ';
         }
@@ -68,5 +68,10 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         }
 
         return $this->splitedInfos;
+    }
+
+    protected function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
     }
 }

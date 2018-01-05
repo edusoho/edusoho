@@ -2486,7 +2486,7 @@ user.account_center: 'Account Center'
 user.menu_heading: 'Account'
 user.account_menu: 'My Bills'
 user.order_menu: 'My Order'
-user.cards_menu: 'My Wallet'
+user.cards_menu: 'My Coupons'
 user.vip_history_menu: 'VIP Record'
 user.account.empty: 'No record'
 user.account.coin_introductions: '%coin_name% introductions'
@@ -6452,6 +6452,7 @@ notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
 #TODO trans
 notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+notification.distributor-reward: 恭喜您获得注册成功奖励：%money%元面值抵价优惠券一张，可用于全站消费，已发至%where%。
 
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn
