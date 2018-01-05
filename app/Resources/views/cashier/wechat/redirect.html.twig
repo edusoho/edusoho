@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ 'pay_center.pay.weixin_pay'|trans }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/pay/wxpay-redirect/index.js'])%}
-{% block content %}
+{% block body %}
   <div class="panel panel-default panel-wxpay ">
       <div id="jsWebViewPay" data-goto="{{ mwebUrl }}">
       </div>
