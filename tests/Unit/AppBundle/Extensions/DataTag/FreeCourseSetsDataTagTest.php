@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
-use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\FreeCourseSetsDataTag;
 
@@ -47,9 +46,6 @@ class FreeCourseSetsDataTagTest extends BaseTestCase
         $this->assertEquals($courseSet2['id'], $courseSets[0]['id']);
     }
 
-    /**
-     * @return AnnouncementService
-     */
     private function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');

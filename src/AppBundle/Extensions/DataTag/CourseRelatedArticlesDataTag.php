@@ -4,8 +4,6 @@ namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
 
-// use Topxia\Service\Article\ArticleService;
-
 class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -26,24 +24,21 @@ class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag
 
         $tagIds = ArrayToolkit::column($tags, 'id');
 
-        $count = $arguments['count'];
-
-        if (empty($count)) {
-            $count = 5;
+        $count = 5;
+        if (!empty($arguments['count'])) {
+            $count = $arguments['count'];
         }
 
-        $articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
-
-        return $articles;
+        return $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
     }
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->getServiceKernel()->getBiz()->service('Article:ArticleService');
     }
 
     private function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:TagService');
+        return $this->getServiceKernel()->getBiz()->service('Taxonomy:TagService');
     }
 }

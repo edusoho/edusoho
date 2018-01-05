@@ -25,17 +25,26 @@ if ($argument_count > 0) {
     $plugins = $arguments;
 }
 
+if (empty($plugins)) {
+    $folders = scandir($root_dir);
+    foreach ($folders as $folder) {
+        if (is_dir($root_dir . $folder) && !in_array($folder, array(".", ".."))) {
+            array_push($plugins, substr($folder, 0, strpos($folder, 'Plugin')));
+        }
+    }
+}
 
 build_app($default_skip_js, $plugins);
 
 function build_app($default_skip_js, $plugins)
 {
     check_plugin($plugins);
-    compile_js($default_skip_js);
+    compile_js($default_skip_js, $plugins);
+    generate_translation_js($plugins);
     build_plugin($plugins);
 }
 
-function compile_js($skip_js)
+function compile_js($skip_js, $plugins)
 {
     if ($skip_js == 'n') {
        #remove node modules folder and caches folder 
@@ -45,25 +54,27 @@ function compile_js($skip_js)
 
         #compile static resource file with webpack
         echos("compile static resource file with webpack using command : npm run compile");
-        exec('npm run compile');
+        foreach ($plugins as $plugin) {
+            exec("npm run compile module:$plugin".'Plugin');
+        }
     }
     else {
         echos(" WARING !!!skip compile js . ");
     }
 
 }
+
+function generate_translation_js($plugins)
+{
+    foreach ($plugins as $plugin) {
+        exec_shell("app/console trans:dump-js --code=$plugin ");
+    }
+}
+
 function build_plugin($plugins)
 {
     $root_dir = __DIR__ . "/../plugins/";
 
-    if (empty($plugins)) {
-        $folders = scandir($root_dir);
-        foreach ($folders as $folder) {
-            if (is_dir($root_dir . $folder) && !in_array($folder, array(".", ".."))) {
-                array_push($plugins, substr($folder, 0, strpos($folder, 'Plugin')));
-            }
-        }
-    }
     foreach ($plugins as $plugin) {
         $full_path = $root_dir . $plugin . "Plugin";
         echos($plugin . " is in " . exec("git rev-parse --abbrev-ref HEAD"));

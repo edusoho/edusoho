@@ -170,7 +170,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         $fields['score'] = $accuracy['sumScore'];
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
-        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
         $fields['checkedTime'] = time();
 

@@ -77,18 +77,9 @@ oauth2_login_success:
     path:  /oauth2/login/success
     defaults: { _controller: AppBundle:OAuth2/Login:success }
 
-login_bind_new:
-    path:  /login/bind/{type}/new
-    defaults: { _controller: AppBundle:LoginBind:new }
-    methods: [POST]
-
 login_check_email:
     path:  /login/check/email
     defaults: { _controller: AppBundle:Login:checkEmail }
-
-login_bind_change:
-    path: /login/bind/{type}/changetoexist
-    defaults: { _controller: AppBundle:LoginBind:changeToExist }
 
 common_qrcode:
     path:  /common/qrcode
@@ -1014,6 +1005,10 @@ cashier_redirect:
 cashier_wechat_js_pay:
     path:   /pay/center/wxpay
     defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
+
+cashier_wechat_mweb_app_trade:
+    path:   /pay/center/wxpay_mweb_app_trade
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatAppMwebTrade }
 
 cashier_password_check:
     path:  /cashier/password/check

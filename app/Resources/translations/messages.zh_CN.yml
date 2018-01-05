@@ -975,7 +975,7 @@ course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；管理员在后台关闭课程后，可以修改日期。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
@@ -5311,6 +5311,7 @@ admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
 admin.setting.theme.manage.theme_edit: 主题编辑
+admin.setting.theme.manage: 主题管理
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
@@ -5330,6 +5331,7 @@ admin.setting.theme.manage.edit_btn: 编辑
 admin.setting.theme.manage.modal.edit: 编辑
 admin.setting.theme.manage.modal.subname: 副标题名称
 admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
+admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置

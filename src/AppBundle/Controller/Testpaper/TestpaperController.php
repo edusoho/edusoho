@@ -218,7 +218,7 @@ class TestpaperController extends BaseController
             $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, $attachments);
 
             $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array(
-                'usedTime' => ($testpaperResult['usedTime'] + $usedTime),
+                'usedTime' => $usedTime,
                 'metas' => array('orders' => $orders),
             ));
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc786b4ae82fce90503fcbc4b9900f2c",
+    "content-hash": "532f1f3b9c4c5dc4477d4398171395a2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -4148,17 +4148,16 @@
         },
         {
             "name": "willdurand/js-translation-bundle",
-            "version": "2.6.4",
-            "target-dir": "Bazinga/Bundle/JsTranslationBundle",
+            "version": "2.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/BazingaJsTranslationBundle.git",
-                "reference": "e1f180539da3b6b29dfde51aa2fbc091052dfb9b"
+                "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/e1f180539da3b6b29dfde51aa2fbc091052dfb9b",
-                "reference": "e1f180539da3b6b29dfde51aa2fbc091052dfb9b",
+                "url": "https://files.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/d9cb848fc66b502658994cf86e63ed3d940e1095.zip",
+                "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095",
                 "shasum": ""
             },
             "require": {
@@ -4187,8 +4186,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Bazinga\\Bundle\\JsTranslationBundle": ""
+                "psr-4": {
+                    "Bazinga\\Bundle\\JsTranslationBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4207,7 +4206,7 @@
                 "symfony",
                 "translation"
             ],
-            "time": "2017-02-13T14:50:50+00:00"
+            "time": "2017-05-17T21:16:31+00:00"
         },
         {
             "name": "xxtea/xxtea",
