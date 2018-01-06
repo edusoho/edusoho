@@ -58,7 +58,10 @@ class WechatController extends PaymentController
         );
 
         $result = $apiKernel->handleApiRequest($apiRequest);
-
+        if (isset($result['isPaid']) && isset($result['paidSuccessUrl']) && $result['isPaid']) {
+            return $this->redirect($result['paidSuccessUrl']);
+        }
+        
         $trade = $this->getPayService()->queryTradeFromPlatform($result['tradeSn']);
 
         return $this->render(
