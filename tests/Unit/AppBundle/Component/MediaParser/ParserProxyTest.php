@@ -31,9 +31,9 @@ class ParserProxyTest extends BaseTestCase
                     'functionName' => 'get',
                     'withParams' => array('media_parser'),
                     'returnValue' => array(
-                        'items' => array(
-                            'class' => 'AppBundle\Component\MediaParser\QQItemParser',
-                        ),
+                        'item' => array(array(
+                            'class' => 'AppBundle\Component\MediaParser\ItemParser\QQVideoItemParser',
+                        )),
                     ),
                 ),
             )
