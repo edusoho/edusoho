@@ -9,6 +9,8 @@ use Biz\Announcement\Service\AnnouncementService;
  */
 class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
 {
+    private $mockedTime = 0;
+
     /**
      * 获取课程公告列表.
      *
@@ -27,7 +29,7 @@ class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
 
         $conditions = array(
             'targetType' => 'course',
-            'endTime' => time(),
+            'endTime' => empty($this->mockedTime) ? time() : $this->mockedTime,  //mockedTime 是为了单元测试
         );
 
         if (!empty($arguments['courseId'])) {
