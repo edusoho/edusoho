@@ -9,13 +9,13 @@ class LearnStatisticsServiceTest extends BaseTestCase
 {
     public function testUpdateStorageByIds()
     {
-        $result =  $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(
-           array('userId' => 1 )
+        $result = $this->createDao('UserLearnStatistics:DailyStatisticsDao')->create(
+           array('userId' => 1)
         );
-        $this->assertEquals(0,  $result['isStorage']);
+        $this->assertEquals(0, $result['isStorage']);
         $this->getLearnStatisticsService()->updateStorageByIds(array(1));
         $result = $this->createDao('UserLearnStatistics:DailyStatisticsDao')->get($result['id']);
-        $this->assertEquals(1,  $result['isStorage']);
+        $this->assertEquals(1, $result['isStorage']);
     }
 
     public function testGetRecordEndTime()
@@ -49,12 +49,12 @@ class LearnStatisticsServiceTest extends BaseTestCase
     // public function testStorageDailyStatistics()
     // {
     // }
-    
+
     public function testSetStatisticsSetting()
     {
-         $result = $this->getLearnStatisticsService()->setStatisticsSetting();
-         $this->assertEquals(strtotime(date('Y-m-d')), $result['currentTime']);
-         $this->assertEquals(24 * 60 * 60 * 365, $result['timespan']);
+        $result = $this->getLearnStatisticsService()->setStatisticsSetting();
+        $this->assertEquals(strtotime(date('Y-m-d')), $result['currentTime']);
+        $this->assertEquals(24 * 60 * 60 * 365, $result['timespan']);
     }
 
     public function testGetStatisticsSetting()
@@ -63,7 +63,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(strtotime(date('Y-m-d')), $result['currentTime']);
         $this->assertEquals(24 * 60 * 60 * 365, $result['timespan']);
 
-         $this->mockBiz('System:SettingService', array(
+        $this->mockBiz('System:SettingService', array(
             array('functionName' => 'get', 'returnValue' => array(
                 'currentTime' => 123,
                 'timespan' => 312,
