@@ -4,11 +4,14 @@ namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
 use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CourseAnnouncementsDataTag;
+use AppBundle\Common\ReflectionUtils;
 
 class CourseAnnouncementsDataTagTest extends BaseTestCase
 {
     public function testGetData()
     {
+        $mockedTime = 1515302767;
+
         $this->mockBiz(
             'Announcement:AnnouncementService',
             array(
@@ -33,7 +36,7 @@ class CourseAnnouncementsDataTagTest extends BaseTestCase
                     'withParams' => array(
                         array(
                             'targetType' => 'course',
-                            'endTime' => time(),
+                            'endTime' => $mockedTime,
                             'targetId' => 1,
                         ),
                         array('createdTime' => 'DESC'),
@@ -49,6 +52,7 @@ class CourseAnnouncementsDataTagTest extends BaseTestCase
             'courseId' => 1,
         );
         $dataTag = new CourseAnnouncementsDataTag();
+        $dataTag = ReflectionUtils::setProperty($dataTag, 'mockedTime', $mockedTime);
         $announcementsData = $dataTag->getData($arguments);
 
         $expect = array(
