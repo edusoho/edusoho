@@ -4,7 +4,7 @@ namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
 use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CourseAnnouncementsDataTag;
-use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 class CourseAnnouncementsDataTagTest extends BaseTestCase
 {
@@ -52,7 +52,7 @@ class CourseAnnouncementsDataTagTest extends BaseTestCase
             'courseId' => 1,
         );
         $dataTag = new CourseAnnouncementsDataTag();
-        $dataTag = ReflectionUtils::setProperty($dataTag, 'mockedTime', $mockedTime);
+        TimeMachine::setMockedTime($mockedTime);
         $announcementsData = $dataTag->getData($arguments);
 
         $expect = array(
