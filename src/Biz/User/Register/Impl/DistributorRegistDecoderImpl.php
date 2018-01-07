@@ -53,8 +53,6 @@ class DistributorRegistDecoderImpl extends RegistDecoder
 
     /**
      * return \Biz\Distributor\Service\DistributorUserService
-     *
-     * MTIzOjIyMjIxOjEwMDoxNTE1MTE0OTQzOjE1MTUyMDEzNDM6MTI2ODM4ZDdmMDZkYzE4OGQ4YjY0YjExN2EzNmUxZTc6bXpuZDJjZHUyNWxCLUJXQjdPYzNSUnNaT2s4PQ%3D%3D
      */
     protected function getDistributorUserService()
     {

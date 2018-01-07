@@ -30,69 +30,6 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
         $this->getDistributorJobDataDao()->create($result);
     }
 
-    public function encodeToken($data, $tokenExpireTime = null)
-    {
-        if (empty($tokenExpireTime)) {
-            $time = time();
-        } else {
-            $time = strtotime('-1 day', $tokenExpireTime);
-        }
-
-        $once = md5(time());
-
-        $resultStr = '';
-        foreach ($data as $key => $value) {
-            if (!empty($resultStr)) {
-                $resultStr .= ':';
-            }
-
-            $resultStr .= $value;
-        }
-
-        $resultStr .= ":{$time}:{$once}:{$this->sign($data, $time, $once)}";
-
-        return $resultStr;
-    }
-
-    /**
-     * 分销平台的token，只能使用一次，使用多次，仍然算这个分销商的拉新用户，但不会给奖励
-     *
-     * @return array(
-     *                'couponPrice' => 123, //优惠券，奖励多少元
-     *                'couponExpiryDay' => unix_time, //优惠券有效时间
-     *                'registable'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
-     *                'rewardable' => false  //是否有奖励, 当couponPrice或couponExpiryday=0时, 则注册的用户不会发放优惠券
-     *                )
-     */
-    public function decodeToken($token)
-    {
-        $splitedStr = explode(':', $token);
-
-        $tokenInfo = array(
-            'registable' => false,
-            'rewardable' => false,
-        );
-
-        try {
-            if (!empty($this->getDrpService())) {
-                $parsedInfo = $this->getDrpService()->parseToken($token);
-                $tokenInfo['registable'] = true;
-                $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
-                if ($tokenExpireTime > time()) {
-                    $tokenInfo['couponPrice'] = $parsedInfo['couponPrice'];
-                    $tokenInfo['couponExpiryDay'] = $parsedInfo['couponExpiryDay'];
-                    if (0 != $tokenInfo['couponPrice'] && 0 != $tokenInfo['couponExpiryDay']) {
-                        $tokenInfo['rewardable'] = true;
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            $this->biz['logger']->error('distributor sign error BaseDistributorServiceImpl::decodeToken '.$e->getMessage(), array('trace' => $e->getTraceAsString()));
-        }
-
-        return $tokenInfo;
-    }
-
     public function getDrpService()
     {
         if (empty($this->drpService)) {
@@ -126,15 +63,5 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function sign($arr, $time, $once)
-    {
-        ksort($arr);
-        $json = implode('\n', array($time, $once, json_encode($arr)));
-        $settings = $this->getSettingService()->get('storage', array());
-        $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-
-        return $auth->sign($json);
     }
 }

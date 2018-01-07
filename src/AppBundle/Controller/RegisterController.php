@@ -117,7 +117,12 @@ class RegisterController extends BaseController
                     $goto = $this->generateUrl('partner_login', array('goto' => $goto));
                 }
 
-                return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+                $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+                if (!empty($_COOKIE['distributor-token'])) {
+                    $response->headers->setCookie(new Cookie('distributor-token', ''));
+                }
+
+                return $response;
             } catch (ServiceException $se) {
                 $this->setFlashMessage('danger', $se->getMessage());
             } catch (\Exception $e) {

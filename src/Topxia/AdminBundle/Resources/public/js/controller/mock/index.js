@@ -4,12 +4,12 @@ define(function(require, exports, module) {
 
     $('#tokenGeneratorBtn').click(
       function() {
-        $('.generatedToken').val('');
+        $('.distributorRegisterUrl').val('');
         $.post(
           $('#tokenGeneratorForm').attr('action'),
           $('#tokenGeneratorForm').serialize(),
           function(data) {
-            $('.generatedToken').val(data.token);
+            $('.distributorRegisterUrl').val(document.origin + '/distributor_register?token=' + data.token);
           }
         );
       }
