@@ -8,9 +8,9 @@ use AppBundle\Common\TimeMachine;
 
 class MediaAttrsRenderTest extends BaseTestCase
 {
-    public function testRenderWithNonMediaId()
+    public function testRenderWithEmptyMedia()
     {
-        $media = array('uuid' => 'YoukuVideo');
+        $media = array();
         $result = MediaAttrsRender::render($media);
 
         $this->assertEquals('[]', $result);
