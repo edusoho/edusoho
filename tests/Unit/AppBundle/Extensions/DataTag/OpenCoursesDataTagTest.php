@@ -10,7 +10,7 @@ class OpenCoursesDataTagTest extends BaseTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public  function testCountEmpty()
+    public function testCountEmpty()
     {
         $dataTag = new OpenCoursesDataTag();
         $dataTag->getData(array());
@@ -19,7 +19,7 @@ class OpenCoursesDataTagTest extends BaseTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public  function testCountError()
+    public function testCountError()
     {
         $dataTag = new OpenCoursesDataTag();
         $dataTag->getData(array('countId' => 101));
@@ -30,12 +30,12 @@ class OpenCoursesDataTagTest extends BaseTestCase
         $this->mockBiz('Taxonomy:CategoryService', array(
             array(
                 'functionName' => 'findCategoriesByIds',
-                'returnValue' => array('id' => 1, 'title' => 'open course lesson')
+                'returnValue' => array('id' => 1, 'title' => 'open course lesson'),
             ),
             array(
                 'functionName' => 'findCategoryChildrenIds',
-                'returnValue' => array(1)
-            )
+                'returnValue' => array(1),
+            ),
         ));
 
         $course1 = $this->getOpenCourseService()->createCourse(array('title' => 'course1 title', 'type' => 'open', 'about' => 'course1 about', 'categoryId' => 0));
@@ -49,7 +49,7 @@ class OpenCoursesDataTagTest extends BaseTestCase
         $this->getOpenCourseService()->updateCourse($course3['id'], array('status' => 'published'));
 
         $course4 = $this->getOpenCourseService()->createCourse(array('title' => 'course4 title', 'type' => 'open', 'about' => 'course4 about', 'categoryId' => 0));
-        $this->getOpenCourseService()->updateCourse($course4['id'], array('status' => 'published','recommended' => 1, 'recommendedSeq' => 2, 'recommendedTime' => time()));
+        $this->getOpenCourseService()->updateCourse($course4['id'], array('status' => 'published', 'recommended' => 1, 'recommendedSeq' => 2, 'recommendedTime' => time()));
 
         $course5 = $this->getOpenCourseService()->createCourse(array('title' => 'course5 title', 'type' => 'open', 'about' => 'course5 about', 'categoryId' => 0));
         $this->getOpenCourseService()->updateCourse($course5['id'], array('status' => 'published'));
@@ -80,5 +80,4 @@ class OpenCoursesDataTagTest extends BaseTestCase
     {
         return $this->createService('OpenCourse:OpenCourseService');
     }
-
 }

@@ -12,13 +12,12 @@ class OpenCourseLessonDataTagTest extends BaseTestCase
         $this->mockBiz('OpenCourse:OpenCourseService', array(
             array(
                 'functionName' => 'getLesson',
-                'returnValue' => array('id' => 1, 'title' => 'open course lesson')
-            )
+                'returnValue' => array('id' => 1, 'title' => 'open course lesson'),
+            ),
         ));
 
         $dataTag = new OpenCourseLessonDataTag();
         $data = $dataTag->getData(array('lessonId' => 1));
         $this->assertEquals(1, $data['id']);
     }
-
 }
