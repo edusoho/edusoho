@@ -101,4 +101,31 @@ class NeteaseOpenCourseAlbumParserTest extends BaseTestCase
         $this->assertFalse($parser->detect('https://v.163.com/special/a.html'));
         $this->assertFalse($parser->detect('http://v.163.com/special/a'));
     }
+
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     */
+    public function testParseIdWithException()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        ReflectionUtils::invokeMethod($parser, 'parseId', array('http://www.baidu.com'));
+    }
+
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     */
+    public function testParseInternationalItemsWithExcpetion()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        ReflectionUtils::invokeMethod($parser, 'parseInternationalItems', array('http://www.baidu.com'));
+    }
+
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     */
+    public function testParseInternationalItemsWithExcpetionPerInnerText()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        ReflectionUtils::invokeMethod($parser, 'parseInternationalItems', array('<table id="list2"></table>'));
+    }
 }
