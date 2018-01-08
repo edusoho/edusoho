@@ -270,7 +270,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         } catch (\Exception $e) {
             $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage());
             $this->rollback();
-            
+
             throw $e;
         }
     }
