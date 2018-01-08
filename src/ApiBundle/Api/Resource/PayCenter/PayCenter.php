@@ -34,12 +34,20 @@ class PayCenter extends AbstractResource
         if ($trade['status'] === 'paid') {
             $trade['paymentForm'] = array();
             $trade['paymentHtml'] = '';
+            $trade['paymentUrl'] = '';
         } else {
-            $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
-            $form = $this->makePayForm($platformCreatedResult);
-            $trade['paymentForm'] = $form;
-            $trade['paymentHtml'] = $this->renderView('ApiBundle:cashier:submit-pay.html.twig',
-                array('form' => $form));
+            if ($trade['platform'] == 'wechat' && $trade['platform_type'] == 'Mweb') {
+                $trade['paymentForm'] = array();
+                $trade['paymentHtml'] = '';
+                $trade['paymentUrl'] = $this->generateUrl('cashier_wechat_mweb_app_trade', array('tradeSn' => $params['orderId']), true);
+            } else {
+                $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($params['orderId']);
+                $form = $this->makePayForm($platformCreatedResult);
+                $trade['paymentForm'] = $form;
+                $trade['paymentHtml'] = $this->renderView('ApiBundle:cashier:submit-pay.html.twig',
+                    array('form' => $form));
+                $trade['paymentUrl'] = '';
+            }
         }
 
         return $trade;
@@ -52,7 +60,7 @@ class PayCenter extends AbstractResource
         $form['action'] = $urlParts[0].'?_input_charset=UTF-8';
         $form['method'] = 'post';
         $form['params'] = $platformCreatedResult['data'];
-        
+
         return $form;
     }
 

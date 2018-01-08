@@ -37,7 +37,7 @@
         <span>{{'cloud_search.course.evaluate'|trans({'%ratingNum%':course.ratingNum|default(0)})}}{{ 'cloud_search.course.learned'|trans({'%studentNum%':course.studentNum|default(0)}) }}</span>
       {% endif %}
     </div>
-    <div class="content editor-text">{{ course.about|raw }}</div>
+    <div class="content editor-text">{{ course.about|cdn|raw }}</div>
     {# 云搜索任务直接取前三个会造成与搜索结果不匹配，暂时先隐藏 #}
     {#{% if not is_open_course and course.lessons|default(null) %}
       <ul class="ul-lesson">

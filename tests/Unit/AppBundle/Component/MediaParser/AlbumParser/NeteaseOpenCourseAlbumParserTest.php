@@ -75,4 +75,12 @@ class NeteaseOpenCourseAlbumParserTest extends BaseTestCase
             $video
         );
     }
+
+    public function testDetect()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        $this->assertTrue($parser->detect('http://v.163.com/special/a.html'));
+        $this->assertFalse($parser->detect('https://v.163.com/special/a.html'));
+        $this->assertFalse($parser->detect('http://v.163.com/special/a'));
+    }
 }
