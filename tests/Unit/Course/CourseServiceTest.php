@@ -292,19 +292,28 @@ class CourseServiceTest extends BaseTestCase
         $this->getUploadFileService()->shouldHaveReceived('batchConvertByIds');
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
     public function testValidatie()
     {
         $fileds = array(
             'enableAudio' => '1',
         );
 
+        $courseFields = array(
+            'id' => 2,
+            'courseSetId' => 2,
+            'title' => '计划名称',
+            'enableAudio' => '0',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        );
+        $course = $this->getCourseService()->createCourse($courseFields);
+
         $this->mockBiz('File:UploadFileService');
         $this->getUploadFileService()->shouldReceive('getAudioServiceStatus')->andReturn('notAllowed');
 
-        ReflectionUtils::invokeMethod($this->getCourseService(), 'validatie', array($fileds));
+        ReflectionUtils::invokeMethod($this->getCourseService(), 'validatie', array($course['id'], &$fileds));
 
         $this->getUploadFileService()->shouldReceive('getAudioServiceStatus');
     }
@@ -433,6 +442,71 @@ class CourseServiceTest extends BaseTestCase
         $this->getUploadFileService()->shouldHaveReceived('setAudioConvertStatus');
 
         $this->assertEquals($result, true);
+    }
+
+    public function testFindLiveCourse()
+    {
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'searchTasks',
+                    'returnValue' => array(
+                        array('id' => 2, 'courseId' => 2, 'title' => 'title', 'startTime' => 6000, 'endTime' => 7000),
+                        array('id' => 3, 'courseId' => 3, 'title' => 'title', 'startTime' => 7000, 'endTime' => 8000),
+                    ),
+                    'withParams' => array(
+                        array('type' => 'live', 'startTime_GE' => 5000, 'endTime_LT' => 10000, 'status' => 'published'),
+                        array(),
+                        0,
+                        PHP_INT_MAX,
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseMemberDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array()),
+                    'withParams' => array(array('courseId' => 2, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 2, 'userId' => 2)),
+                    'withParams' => array(array('courseId' => 3, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 3, 'status' => 'published', 'title' => 'title', 'courseSetId' => 3),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseSetDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 3, 'status' => 'published', 'title' => 'title'),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $result = $this->getCourseService()->findLiveCourse(
+            array('startTime_GE' => 5000, 'endTime_LT' => 10000),
+            2,
+            'teacher'
+        );
+        $this->assertEquals('title', $result[0]['title']);
     }
 
     protected function createNewCourseSet()

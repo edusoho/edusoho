@@ -40,8 +40,18 @@ class Course extends AbstractResource
 
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
-
+        
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
+        $course = $this->convertFields($course);
+
+        return $course;
+    }
+
+    protected function convertFields($course)
+    {
+        $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
+        $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
+        unset($course['enableAudio']);
 
         return $course;
     }

@@ -8,7 +8,7 @@ class DoTestBase
   constructor($container) {
     this.$container = $container;
     this.answers = {};
-    this.usedTime = 0;
+    this.usedTime = $container.find('.js-used-time').length > 0 ? parseInt($container.find('.js-used-time').val()) : 0;
     this.$form = $container.find('form');
     this._initEvent();
     this._initUsedTimer();
@@ -135,6 +135,7 @@ class DoTestBase
 
       let editor = CKEDITOR.replace($longTextarea.attr('id'), {
         toolbar: 'Minimal',
+        fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 

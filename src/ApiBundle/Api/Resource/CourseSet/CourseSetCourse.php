@@ -24,6 +24,7 @@ class CourseSetCourse extends AbstractResource
         }
 
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
+
         $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
@@ -36,6 +37,10 @@ class CourseSetCourse extends AbstractResource
     {
         foreach ($courses as &$course) {
             $course['access'] = $this->getCourseService()->canJoinCourse($course['id']);
+            
+            $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
+            $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
+            unset($course['enableAudio']);
         }
     }
 

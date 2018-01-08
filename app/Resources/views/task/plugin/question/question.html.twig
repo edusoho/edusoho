@@ -5,7 +5,7 @@
 
 <div class="task-question-plugin-pane-thread">
 	<h5><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></h5>
-	<div class="lesson-question-plugin-pane-thread-content editor-text">{{ thread.content|raw }}</div>
+	<div class="lesson-question-plugin-pane-thread-content editor-text">{{ thread.content|cdn|raw }}</div>
 </div>
 
 <div class="task-question-plugin-pane-posts">

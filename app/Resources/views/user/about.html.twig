@@ -7,7 +7,7 @@
 {% block main %}
   <div class="editor-text">
 	{% if userProfile.about %}
-    {{userProfile.about|raw}}
+    {{userProfile.about|cdn|raw}}
   {% else %}
     <div class="empty">{{'user.homepage.introductions.empty'|trans}}</div>
   {% endif %}

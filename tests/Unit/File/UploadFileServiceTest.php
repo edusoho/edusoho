@@ -60,6 +60,18 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioServiceStatus()
     {
+        $settingParams = array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'cloud_access_key' => 'abbbcc',
+                    'cloud_secret_key' => 'testddd',
+                ),
+            ),
+        );
+        $this->mockBiz('System:SettingService', $settingParams);
+
         $params = array(
             array(
                 'functionName' => 'getAudioServiceStatus',
@@ -192,6 +204,42 @@ class UploadFileServiceTest extends BaseTestCase
 
         $biz = $this->getBiz();
         unset($biz['@File:UploadFileDao']);
+    }
+
+    public function testGetResourcesStatus()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getResourcesStatus',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    array(
+                        'data' => array(
+                            'resourceNo' => '65d474f089074fa0810d1f2f146fd218',
+                            'status' => 'ok',
+                            'mp4' => false,
+                            'audio' => true,
+                        ),
+                        'next' => array(
+                            'cursor' => '1519214541',
+                            'start' => 0,
+                            'limit' => 1,
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $this->mockBiz('File:CloudFileImplementor', $params);
+
+        $globalId = '65d474f089074fa0810d1f2f146fd218';
+        $status = $this->getUploadFileService()->getResourcesStatus(array('cursor' => 0, 'start' => 0, 'limit' => 2));
+
+        $this->assertEquals($globalId, $status[0]['data']['resourceNo']);
+        $this->assertEquals('ok', $status[0]['data']['status']);
+
+        $biz = $this->getBiz();
+        unset($biz['@File:CloudFileImplementor']);
     }
 
     public function testGetFileByGlobalId()

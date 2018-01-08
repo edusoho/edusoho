@@ -34,7 +34,20 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      */
     public function getAudioServiceStatus()
     {
-        $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
+        $setting = $this->getSettingService()->get('storage', array());
+
+        if (!empty($setting['cloud_access_key']) || !empty($setting['cloud_secret_key'])) {
+            $audioService = $this->getFileImplementor('cloud')->getAudioServiceStatus();
+        }
+
+        if (empty($audioService['audioService'])) {
+            return 'notAllowed';
+        }
+
+        $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio(true);
+        if (!$enableAudioStatus && 'opened' == $audioService['audioService']) {
+            return 'needOpen';
+        }
 
         return $audioService['audioService'];
     }
@@ -79,8 +92,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         );
 
         $count = $this->getUploadFileDao()->count($conditions);
+
         for ($start = 0; $start < $count; $start = $start + 100) {
-            $videofiles = $this->getUploadFileDao()->search($conditions, null, 0, $start);
+            $videofiles = $this->getUploadFileDao()->search($conditions, null, $start, 100);
 
             $this->retryTranscode(ArrayToolkit::column($videofiles, 'globalId'));
         }
@@ -283,6 +297,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileInitDao()->update($params['id'], array('status' => 'ok'));
 
+            if ('cloud' == $file['storage'] && 'video' == $file['type']) {
+                $fields['audioConvertStatus'] = 'doing';
+            }
+
             $file = array_merge($file, $fields);
 
             $file = $this->getUploadFileDao()->create($file);
@@ -481,6 +499,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function retryTranscode(array $globalIds)
     {
         return $this->getFileImplementor('cloud')->retryTranscode($globalIds);
+    }
+
+    public function getResourcesStatus(array $options)
+    {
+        return $this->getFileImplementor('cloud')->getResourcesStatus($options);
     }
 
     public function collectFile($userId, $fileId)
@@ -830,6 +853,35 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->getUploadFileDao()->update($id, $fields);
 
         return $this->getFile($id);
+    }
+
+    public function setResourceConvertStatus($globalId, array $result)
+    {
+        $file = $this->getUploadFileDao()->getByGlobalId($globalId);
+
+        if (empty($file)) {
+            return array();
+        }
+
+        $statusMap = array(
+            'none' => 'none',
+            'waiting' => 'waiting',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+
+        $fields = array(
+            'convertStatus' => $statusMap[$result['status']],
+            'audioConvertStatus' => 'none',
+            'updatedTime' => time(),
+        );
+
+        if ($result['audio']) {
+            $fields['audioConvertStatus'] = $statusMap[$result['status']];
+        }
+
+        return $this->getUploadFileDao()->update($file['id'], $fields);
     }
 
     public function makeUploadParams($params)

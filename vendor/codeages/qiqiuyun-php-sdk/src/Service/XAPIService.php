@@ -12,13 +12,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交"听音频"的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function listenAudio($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -65,13 +67,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“观看视频”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function watchVideo($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -118,13 +122,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成任务”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function finishActivity($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -173,13 +179,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成任务的弹题”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function finishActivityQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -232,16 +240,18 @@ class XAPIService extends BaseService
 
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
-    
+
     /**
      * 提交“完成作业”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function finishHomework($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -281,13 +291,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成练习”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function finishExercise($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -327,13 +339,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“完成考试”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function finishTestpaper($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -373,13 +387,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“记笔记”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function writeNote($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -422,13 +438,15 @@ class XAPIService extends BaseService
 
     /**
      * 提交“提问题”的学习记录
+     *
      * @param $actor
      * @param $object
      * @param $result
-     * @param $uuid
-     * @param $timestamp
+     * @param null $uuid
+     * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function askQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -469,15 +487,18 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
+
     /**
      * 提交"观看直播"的记录
+     *
      * @param $actor
      * @param $object
      * @param $result
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     * @return array|mixed
+     * @return array
+     * @throws ResponseException
      */
     public function watchLive($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
@@ -522,9 +543,11 @@ class XAPIService extends BaseService
 
     /**
      * 提交学习记录
+     *
      * @param $statement
      * @return mixed
      * @throws ResponseException
+     * @throws \QiQiuYun\SDK\HttpClient\ClientException
      */
     public function pushStatement($statement)
     {
@@ -550,6 +573,13 @@ class XAPIService extends BaseService
         return $statement;
     }
 
+    /**
+     * 批量提交学习记录
+     * @param $statements
+     * @return mixed
+     * @throws ResponseException
+     * @throws \QiQiuYun\SDK\HttpClient\ClientException
+     */
     public function pushStatements($statements)
     {
         foreach ($statements as &$statement) {
@@ -576,6 +606,11 @@ class XAPIService extends BaseService
         return $response;
     }
 
+    /**
+     * @param $verb
+     * @return string
+     * @throws SDKException
+     */
     private function getVerbType($verb)
     {
         switch ($verb) {
@@ -609,6 +644,10 @@ class XAPIService extends BaseService
         return $verbType;
     }
 
+    /**
+     * @param $minType
+     * @return string
+     */
     private function getActivityType($minType)
     {
         switch ($minType) {
@@ -653,6 +692,11 @@ class XAPIService extends BaseService
 
     }
 
+    /**
+     * @param $type
+     * @return string
+     * @throws SDKException
+     */
     private function getExtensionId($type)
     {
         switch ($type) {
@@ -696,7 +740,7 @@ class XAPIService extends BaseService
     {
         switch ($format) {
             case 'iso8601':
-                $result = $this->get_iso8601_time($timestamp);
+                $result = $this->getIsoTime($timestamp);
                 break;
             default:
                 $result = $timestamp;
@@ -709,7 +753,7 @@ class XAPIService extends BaseService
     {
         switch ($format) {
             case 'iso8601':
-                $result = $this->time_to_iso8601_duration($time);
+                $result = $this->timeToIsoDuration($time);
                 break;
             default:
                 $result = $time;
@@ -718,7 +762,7 @@ class XAPIService extends BaseService
         return $result;
     }
 
-    protected function time_to_iso8601_duration($time)
+    protected function timeToIsoDuration($time)
     {
         $units = array(
             "Y" => 365*24*3600,
@@ -747,7 +791,7 @@ class XAPIService extends BaseService
         return $str;
     }
 
-    protected function get_iso8601_time($timestamp = null)
+    protected function getIsoTime($timestamp = null)
     {
         return empty($timestamp) ? date('c') : date('c', $timestamp);
     }

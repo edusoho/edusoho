@@ -16,7 +16,7 @@ class LearningDataAnalysisDaoImpl extends GeneralDaoImpl implements LearningData
         );
     }
 
-    public function getStatisticDataByCourseIdsAndUserId($courseIds, $userId)
+    public function sumStatisticDataByCourseIdsAndUserId($courseIds, $userId)
     {
         if (empty($courseIds)) {
             return array('compulsoryTaskNum' => 0, 'learnedCompulsoryTaskNum' => 0);

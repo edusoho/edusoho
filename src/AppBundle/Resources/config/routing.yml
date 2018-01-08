@@ -77,18 +77,9 @@ oauth2_login_success:
     path:  /oauth2/login/success
     defaults: { _controller: AppBundle:OAuth2/Login:success }
 
-login_bind_new:
-    path:  /login/bind/{type}/new
-    defaults: { _controller: AppBundle:LoginBind:new }
-    methods: [POST]
-
 login_check_email:
     path:  /login/check/email
     defaults: { _controller: AppBundle:Login:checkEmail }
-
-login_bind_change:
-    path: /login/bind/{type}/changetoexist
-    defaults: { _controller: AppBundle:LoginBind:changeToExist }
 
 common_qrcode:
     path:  /common/qrcode
@@ -248,7 +239,11 @@ uploadfile_browsers:
 
 hls_playlist:
     path: /hls/{id}/playlist/{token}.m3u8
-    defaults: { _controller: AppBundle:HLS:playlist}
+    defaults: { _controller: AppBundle:HLSVideo:playlist}
+
+hls_audio_playlist:
+    path: /hls/{id}/audio/playlist/{token}.m3u8
+    defaults: { _controller: AppBundle:HLSAudio:playlist}
 
 player_local_media:
     path: /player/{id}/file/{token}
@@ -256,11 +251,19 @@ player_local_media:
 
 hls_stream:
     path: /hls/{id}/stream/{level}/{token}.m3u8
-    defaults: { _controller: AppBundle:HLS:stream}
+    defaults: { _controller: AppBundle:HLSVideo:stream}
+
+hls_audio_stream:
+    path: /hls/{id}/audio/stream/{level}/{token}.m3u8
+    defaults: { _controller: AppBundle:HLSAudio:stream}
 
 hls_clef:
     path: /hls/{id}/clef/{token}
-    defaults: { _controller: AppBundle:HLS:clef}
+    defaults: { _controller: AppBundle:HLSVideo:clef}
+
+hls_audio_clef:
+    path: /hls/{id}/audio/clef/{token}
+    defaults: { _controller: AppBundle:HLSAudio:clef}
 
 editor_upload:
     path:  /editor/upload
@@ -1002,6 +1005,10 @@ cashier_redirect:
 cashier_wechat_js_pay:
     path:   /pay/center/wxpay
     defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
+
+cashier_wechat_mweb_app_trade:
+    path:   /pay/center/wxpay_mweb_app_trade
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatAppMwebTrade }
 
 cashier_password_check:
     path:  /cashier/password/check
@@ -1882,6 +1889,10 @@ my_courses_learned:
     path: /my/courses/learned
     defaults: { _controller: AppBundle:My/Course:learned }
 
+my_courses_live_calendar:
+    path: /my/courses/live/calendar
+    defaults: { _controller: AppBundle:My/Course:learningLivesCalendar }
+
 #my_course_set
 my_course_sets_favorite:
     path: /my/courses/favorite
@@ -2062,6 +2073,11 @@ course_set_manage_delete_materials_show:
 course_set_manage_delete_materials:
    path:  /course_set/{id}/manage/delete/materials
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
+   methods: [POST]
+
+course_set_manage_retry_transcode:
+   path:  /course_set/{id}/manage/file/{fileId}/retry_transcode
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:retryTranscode }
    methods: [POST]
 
 

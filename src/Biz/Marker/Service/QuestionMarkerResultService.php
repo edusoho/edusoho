@@ -19,4 +19,6 @@ interface QuestionMarkerResultService
     public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
 
     public function findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId);
+
+    public function findResultsByIds($resultIds);
 }

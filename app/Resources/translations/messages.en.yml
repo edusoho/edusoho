@@ -848,7 +848,7 @@ course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
 course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
 course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
-course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry Mode can not be edited since the program was published, but expiry date can be edited while the course was closed by administrator'
+course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry Mode can not be edited since the program was published, but expiry date can be edited while course or the program was closed.'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
@@ -1408,6 +1408,7 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 
@@ -2618,12 +2619,17 @@ homepage.header.register: Sign Up
 homepage.header.my_course: 'My Courses'
 homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
+homepage.header.check_all_notifications: 查看全部通知
+homepage.header.no_new_notifications: 暂无新的通知～
 homepage.header.message: Message
+homepage.header.check_all_messages: 查看全部私信
+homepage.header.no_new_messages: 暂无新的私信～
 homepage.header.personal_menu: 'My Home'
 homepage.header.settings_menu: 'Profile Setting'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
+homepage.header.reward: 积分
 homepage.header.admin_menu: 'Admin'
 homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
@@ -3029,7 +3035,9 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
-my.teaching.live_schedule_menu: Live Schedules
+my.teaching.live_schedule_menu: Teaching Schedules
+my.teaching.hints_block: Only live courses are shown currently
+my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Discussions
@@ -3292,6 +3300,7 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
 my.learning.question_menu: 'Q&A'
@@ -4207,6 +4216,7 @@ admin.setting.theme.use_btn: Apply
 admin.setting.theme.manage_btn: Config
 admin.setting.theme.manage.title: 'EduSoho Theme Edit'
 admin.setting.theme.manage.theme_edit: 'Theme edit'
+admin.setting.theme.manage: manage
 admin.setting.theme.manage.theme_cancel: Cancel
 admin.setting.theme.manage.theme_ok: Apply
 admin.setting.theme.manage.components: Component
@@ -4222,6 +4232,7 @@ admin.setting.theme.manage.modal.edit: Edit
 admin.setting.theme.manage.modal.subname: Subtitle
 admin.setting.theme.manage.modal.setting_course_num: 'Coures Number Setting'
 admin.setting.theme.manage.modal.setting_custom_category_count: 'Course Category Number Setting'
+admin.setting.theme.manage.modal.setting_count: Count
 admin.setting.theme.manage.modal.setting_custom_orderby: 'Sort Setting'
 admin.setting.theme.manage.modal.setting_ustom_background_color: 'Background Color Setting'
 admin.setting.theme.manage.modal.color_gray: Gray
@@ -5609,6 +5620,8 @@ admin.magic_setting.enable_org: 'Turn on organization settings'
 admin.magic_setting.quick_pay: 'Turn on quick pay'
 admin.magic_setting.uc_phpwind: 'Turn on phpwind settings'
 admin.magic_setting.login_limit: 'Account and log off the set'
+admin.magic_setting.file_single_size_limit: Single file set upload size
+admin.magic_setting.file_single_size_limit_tip: MByte,be used by editor upload only
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
 admin.magic_setting.zero_for_open: '0 To enable'
@@ -6716,6 +6729,7 @@ log.module.homework: 作业
 log.module.question_plus: 题库增强版
 log.module.announcement: 公告
 log.module.open_course: 公开课
+log.module.live: 直播
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -6876,6 +6890,8 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+log.action.live.update_live_activity: 更新直播活动
+log.action.live.generate_live_replay: 生成直播回放
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
 course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。

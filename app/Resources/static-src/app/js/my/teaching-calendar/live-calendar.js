@@ -5,16 +5,17 @@ import Api from 'common/api';
 
 new CustomFullCalendar({
   'calendarContainer': '#calendar',
-  'dataApi': Api.course.search, //需要使用 common/api/index.js 指定的路由
+  'dataApi': Api.teacherLiveCourse.search, //需要使用 common/api/index.js 指定的路由
   'attrs': {
     'title': 'title',
-    'start': 'createdTime',
-    'end': 'updatedTime'
+    'start': 'startTime',
+    'end': 'endTime'
   },
+  'dateParams': {'start': 'startTime_GE', 'end': 'endTime_LT'},
   'currentTime': $('#todayDateStr').html(),
   'components': [
     new LiveTooltipComp(),
-    new ClickComp('/course/{id}') //routing course_show
+    new ClickComp('{url}') //routing course_show
   ],
   'defaultView': 'agendaWeek' // 'agendaWeek'
 });

@@ -30,6 +30,7 @@ class courseInfo {
     CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
     });
   }
@@ -37,8 +38,8 @@ class courseInfo {
   changeAudioMode() {
     $('#audio-modal-id').on('change', "input[name='enableAudio']", function(){
       let mode = $("#course-audio-mode").data('value');
-      if (mode == 'needOpen') {
-        notify('info', '听课模式需要先申请为商业用户!');
+      if (mode == 'notAllowed') {
+        notify('info', Translator.trans('course.audio.enable.biz.user'));
         $("[name='enableAudio']")[1].checked = true;
         $("[name='enableAudio']")[0].checked = false;
       }

@@ -27,7 +27,7 @@
       <span class="bullet">•</span>
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
     </div>
-    <div class="editor-text">{{ post.content|raw }}</div>
+    <div class="editor-text">{{ post.content|cdn|raw }}</div>
     <div class="thread-post-interaction">&nbsp;</div>
   </div>
 </li>

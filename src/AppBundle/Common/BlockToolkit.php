@@ -16,7 +16,7 @@ class BlockToolkit
                     array('%blockMeta%' => $blockMeta)));
             }
 
-            $blockService = ServiceKernel::instance()->createService('Content:BlockService');
+            $blockService = ServiceKernel::instance()->getBiz()->service('Content:BlockService');
 
             foreach ($blockMeta as $key => $meta) {
                 $blockTemplate = $blockService->getBlockTemplateByCode($key);
@@ -102,7 +102,7 @@ class BlockToolkit
 
     public static function updateCarousel($code)
     {
-        $blockService = ServiceKernel::instance()->createService('Content:BlockService');
+        $blockService = ServiceKernel::instance()->getBiz()->service('Content:BlockService');
         $blockTemplate = $blockService->getBlockTemplateByCode($code);
         $data = $blockTemplate['data'];
         $content = $blockTemplate['content'];
@@ -144,7 +144,7 @@ class BlockToolkit
 
     public static function updateLinks($code)
     {
-        $blockService = ServiceKernel::instance()->createService('Content:BlockService');
+        $blockService = ServiceKernel::instance()->getBiz()->service('Content:BlockService');
         $block = $blockService->getBlockTemplateByCode($code);
         $data = $block['data'];
         $content = $block['content'];

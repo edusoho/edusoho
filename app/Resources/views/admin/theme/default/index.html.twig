@@ -4,14 +4,7 @@
 {% block stylesheets %}
   {% include 'css_loader.html.twig' %}
   {% include 'default/stylesheet-webpack.html.twig' with {
-    isEditColor: true, 
-    maincolor: currentTheme.config.maincolor|default('default'), 
-    navigationcolor: currentTheme.config.navigationcolor|default('default')} 
+      isEditColor: true, 
+    }
   %}
-{% endblock %}
-
-{% block bodyClass %}
-  {{ 'es-main-' ~ currentTheme.config.maincolor|default('default') }} 
-  {{ 'es-nav-' ~ currentTheme.config.navigationcolor|default('default') }}
-  {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}
 {% endblock %}

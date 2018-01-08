@@ -25,7 +25,7 @@
       <div class="col-md-8 mbl">
         <dl class="course-infos">
           <dt class="thread-title">{{ 'course_set.course.about'|trans }}</dt>
-          <dd class="thread-body">{{ course.about|raw }}</dd>
+          <dd class="thread-body">{{ course.about|cdn|raw }}</dd>
           {% if category %}
             <dt>{{ 'course_set.course.category'|trans }}</dt>
             <dd class="mbm">

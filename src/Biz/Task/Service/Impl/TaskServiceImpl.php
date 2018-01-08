@@ -153,7 +153,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             $fields['endTime'] = $activity['endTime'];
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
-            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
+            $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})", array(
+                'oldTask' => $oldTask,
+                'task' => $task,
+            ));
             $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
 
             if ('download' == $task['type']) {
@@ -991,6 +994,41 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         return $this->getTaskDao()->batchCreate($tasks);
+    }
+
+    public function getTodayLiveCourseNumber()
+    {
+        $user = $this->getCurrentUser();
+        $liveCourseNumber = 0;
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+        $tasks = $this->searchTasks(
+            array('type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($tasks as $task) {
+            $members = $this->getMemberService()->searchMembers(
+                array('courseId' => $task['courseId'], 'role' => 'teacher'),
+                array(),
+                0,
+                PHP_INT_MAX
+            );
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($user['id'], $userIds)) {
+                continue;
+            }
+            $course = $this->getCourseService()->getCourse($task['courseId']);
+            if (!empty($course) && 'published' == $course['status']) {
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
+                    $liveCourseNumber = $liveCourseNumber + 1;
+                }
+            }
+        }
+
+        return $liveCourseNumber;
     }
 
     /**

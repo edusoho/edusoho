@@ -69,6 +69,11 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId);
     }
 
+    public function findResultsByIds($resultIds)
+    {
+        return $this->getQuestionMarkerResultDao()->findByIds($resultIds);
+    }
+
     /**
      * @return QuestionMarkerResultDao
      */

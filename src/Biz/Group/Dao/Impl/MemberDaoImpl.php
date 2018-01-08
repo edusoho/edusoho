@@ -29,6 +29,7 @@ class MemberDaoImpl extends GeneralDaoImpl implements MemberDao
                 'groupId = :groupId',
                 'role = :role',
                 'userId = :userId',
+                'courseId = :courseId',
             ),
         );
     }
