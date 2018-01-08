@@ -179,7 +179,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'promoted',
                 'promotedSeq',
                 'nickname',
-                'loginTime'
+                'loginTime',
             ),
             'timestamps' => array(
                 'createdTime',

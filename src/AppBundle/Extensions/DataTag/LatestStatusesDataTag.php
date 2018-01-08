@@ -3,7 +3,6 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Biz\Course\Service\CourseService;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExtensionManager;
 

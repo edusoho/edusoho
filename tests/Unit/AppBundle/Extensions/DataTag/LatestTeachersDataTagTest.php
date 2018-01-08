@@ -24,7 +24,7 @@ class LatestTeachersDataTagTest extends BaseTestCase
         $dataTag = new LatestTeachersDataTag();
         $dataTag->getData(array('countId' => 101));
     }
-    
+
     public function testGetData()
     {
         $user1 = $this->getUserService()->register(array(
@@ -51,7 +51,7 @@ class LatestTeachersDataTagTest extends BaseTestCase
         $this->getUserService()->changeUserRoles($user1['id'], array('ROLE_USER', 'ROLE_TEACHER'));
         $this->getUserService()->changeUserRoles($user2['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN'));
         $this->getUserService()->changeUserRoles($user3['id'], array('ROLE_USER'));
-        
+
         $datatag = new LatestTeachersDataTag();
         $teachers = $datatag->getData(array('count' => 5));
         $this->assertEquals(3, count($teachers));

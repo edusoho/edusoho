@@ -24,7 +24,7 @@ class LatestLoginUsersDataTagTest extends BaseTestCase
         $dataTag = new LatestLoginUsersDataTag();
         $dataTag->getData(array('countId' => 101));
     }
-    
+
     public function testGetData()
     {
         $user1 = $this->getUserService()->register(array(
