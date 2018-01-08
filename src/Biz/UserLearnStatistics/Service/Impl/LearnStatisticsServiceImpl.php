@@ -268,8 +268,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->updateStorageByIds(ArrayToolkit::column($dailyData, 'id'));
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage(), $conditions);
+            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage());
             $this->rollback();
+            
             throw $e;
         }
     }
