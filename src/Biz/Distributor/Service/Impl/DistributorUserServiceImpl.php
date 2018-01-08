@@ -66,7 +66,8 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         );
 
         try {
-            if (!empty($this->getDrpService())) {
+            $drpService = $this->getDrpService();
+            if (!empty($drpService)) {
                 $this->validateExistedToken($token);
                 $parsedInfo = $this->getDrpService()->parseToken($token);
                 $tokenInfo['registable'] = true;
