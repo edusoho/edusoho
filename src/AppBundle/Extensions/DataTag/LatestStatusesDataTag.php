@@ -25,11 +25,10 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $conditions = array();
-        if (isset($arguments['private'])) {
-            if ($arguments['private'] == 0) {
-                $conditions['private'] = 0;
-            }
+        if (isset($arguments['private']) && $arguments['private'] == 0) {
+            $conditions['private'] = 0;
         }
+
         if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
             if ($arguments['objectType'] == 'course') {
                 $conditions['courseIds'] = array($arguments['objectId']);
@@ -50,17 +49,19 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
 
         $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
 
-        if ($statuses) {
-            $userIds = ArrayToolkit::column($statuses, 'userId');
-            $users = $this->getUserService()->findUsersByIds($userIds);
+        if (empty($statuses)) {
+            return array();
+        }
 
-            $manager = ExtensionManager::instance();
+        $userIds = ArrayToolkit::column($statuses, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
-            foreach ($statuses as &$status) {
-                $status['user'] = $users[$status['userId']];
-                $status['message'] = $manager->renderStatus($status, $arguments['mode']);
-                unset($status);
-            }
+        $manager = ExtensionManager::instance();
+
+        foreach ($statuses as &$status) {
+            $status['user'] = $users[$status['userId']];
+            $status['message'] = $manager->renderStatus($status, $arguments['mode']);
+            unset($status);
         }
 
         return $statuses;
@@ -68,17 +69,17 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User:StatusService');
+        return $this->getServiceKernel()->getBiz()->service('User:StatusService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 
     /**
