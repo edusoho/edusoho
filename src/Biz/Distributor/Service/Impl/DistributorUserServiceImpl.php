@@ -4,6 +4,7 @@ namespace Biz\Distributor\Service\Impl;
 
 use QiQiuYun\SDK\Auth;
 use AppBundle\Common\Exception\RuntimeException;
+use Biz\Distributor\Util\DistributorJobStatus;
 
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 {
@@ -85,6 +86,19 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         }
 
         return $tokenInfo;
+    }
+
+    public function batchUpdateStatus($jobData, $status)
+    {
+        Parent::batchUpdateStatus($jobData, $status);
+        if ($status == DistributorJobStatus::$FINISHED) {
+            foreach ($jobData as $single) {
+                $this->getDistributorJobDataDao()->update(
+                    array('status' => DistributorJobStatus::$DEPENDENT, 'dependentTarget' => $this->getJobType().':'.$jobData['data']['user_source_id']),
+                    array('status' => DistributorJobStatus::$PENDING)
+                );
+            }
+        }
     }
 
     public function getPostMethod()

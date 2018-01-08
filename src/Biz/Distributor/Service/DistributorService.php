@@ -6,7 +6,12 @@ interface DistributorService
 {
     public function findJobData();
 
-    public function createJobData($data);
+    /**
+     * $param $dataObj, user 或 order对象
+     */
+    public function createJobData($dataObj);
+
+    public function batchUpdateStatus($jobData, $status);
 
     public function getDrpService();
 }

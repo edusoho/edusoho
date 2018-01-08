@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Distributor\Service\DistributorService;
 use QiQiuYun\SDK\Service\DrpService;
 use QiQiuYun\SDK\Auth;
+use Biz\Distributor\Util\DistributorJobStatus;
 
 abstract class BaseDistributorServiceImpl extends BaseService implements DistributorService
 {
@@ -13,21 +14,34 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
     {
         $conditions = array(
             'jobType' => $this->getJobType(),
-            'statusArr' => array('pending', 'error'),
+            'statusArr' => DistributorJobStatus::getSendableStatus(),
         );
 
         return $this->getDistributorJobDataDao()->search($conditions, array(), 0, 100);
     }
 
-    public function createJobData($data)
+    public function createJobData($dataObj)
     {
+        $dependentTarget = $this->getDependentTarget($dataObj);
+
         $result = array(
-            'data' => json_encode($this->convertData($data)),
+            'data' => json_encode($this->convertData($dataObj)),
             'jobType' => $this->getJobType(),
-            'status' => $this->getDefaultStatus(),
+            'status' => empty($dependentTarget) ? DistributorJobStatus::$PENDING : DistributorJobStatus::$DEPENDENT,
+            'dependentTarget' => $dependentTarget,
             'errMsg' => '',
         );
         $this->getDistributorJobDataDao()->create($result);
+    }
+
+    /**
+     * @param status 见 DistributorJobStatus.php 如 DistributorJobStatus::$PENDING
+     */
+    public function batchUpdateStatus($jobData, $status)
+    {
+        foreach ($jobData as $single) {
+            $this->getDistributorJobDataDao()->update($single['id'], array('status' => $status));
+        }
     }
 
     public function getDrpService()
@@ -50,9 +64,9 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
 
     abstract protected function getNextJobType();
 
-    protected function getDefaultStatus()
+    protected function getDependentTarget($data)
     {
-        return 'pending';
+        return '';
     }
 
     protected function getDistributorJobDataDao()

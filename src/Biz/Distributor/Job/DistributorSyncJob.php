@@ -4,6 +4,7 @@ namespace Biz\Distributor\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use AppBundle\Common\ReflectionUtils;
+use Biz\Distributor\Util\DistributorJobStatus;
 
 class DistributorSyncJob extends AbstractJob
 {
@@ -14,11 +15,19 @@ class DistributorSyncJob extends AbstractJob
         if (!empty($drpService)) {
             $jobData = $this->getDistributorService()->findJobData();
             if (!empty($jobData)) {
-                ReflectionUtils::invokeMethod(
+                $result = ReflectionUtils::invokeMethod(
                     $drpService,
                     $this->getDistributorService()->getPostMethod(),
                     array($jobData)
                 );
+
+                if ('success' == $result['code']) {
+                    $status = DistributorJobStatus::$FINISHED;
+                } else {
+                    $status = DistributorJobStatus::$ERROR;
+                }
+                $this->getDistributorService()->batchUpdateStatus($jobData, $status);
+
                 $this->getJobDao()->update($this->id, array('args' => $this->getDistributorService()->getNextJob()));
             }
         }

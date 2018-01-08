@@ -16,6 +16,9 @@ class DistributorJobDataDaoImpl extends GeneralDaoImpl implements DistributorJob
             'conditions' => array(
                 'jobType = :jobType',
                 'status in (:statusArr)',
+                'status = :status',
+                'target = :target',
+                'pendingTarget = :pendingTarget',
             ),
         );
     }
