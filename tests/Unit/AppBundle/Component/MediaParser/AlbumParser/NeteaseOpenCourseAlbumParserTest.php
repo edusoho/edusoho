@@ -76,6 +76,24 @@ class NeteaseOpenCourseAlbumParserTest extends BaseTestCase
         );
     }
 
+    public function testParseInternationalItems()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        $content = '<table id="list2"><div class="u-ctitle">black<a href="http://v.163.com/movie/23"></a></div></table>';
+        $result = ReflectionUtils::invokeMethod($parser, 'parseInternationalItems', array($content));
+
+        $this->assertArrayEquals(
+            array(
+                array(
+                    'id' => false,
+                    'title' => '',
+                    'url' => 'http://v.163.com/movie/23',
+                ),
+            ),
+            $result
+        );
+    }
+
     public function testDetect()
     {
         $parser = new NeteaseOpenCourseAlbumParser();
