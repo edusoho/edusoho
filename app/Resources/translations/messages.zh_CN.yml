@@ -1853,7 +1853,7 @@ course.plan_task.exercise.submit_btn: 提交练习
 course.recommend_course.content_title: 推荐课程
 course.recommend_course.empty_tips: 暂无推荐课程
 
-course.live.enter_classroom_tips: 正在打开教室，请稍后
+course.live.enter_classroom_tips: 正在打开教室，请稍候......
 course.live_lesson_manage.content_title.create: 新增直播课时
 course.live_lesson_manage.content_title.edit: 编辑直播课时
 course.live_lesson_manage.title: 标题
@@ -1901,7 +1901,7 @@ course.live.replay_manage.lesson_add_content_title: 添加回放视频
 course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
-course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
+course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
