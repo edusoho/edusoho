@@ -58,7 +58,7 @@ class WechatController extends PaymentController
         );
 
         $result = $apiKernel->handleApiRequest($apiRequest);
-        if (isset($result['status']) && isset($result['paidSuccessUrl']) && 'paid' == $result['status']) {
+        if (!empty($result['paidSuccessUrl'])) {
             return $this->redirect($result['paidSuccessUrl']);
         }
 
