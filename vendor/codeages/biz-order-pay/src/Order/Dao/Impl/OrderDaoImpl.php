@@ -169,6 +169,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ),
             'conditions' => array(
                 'id IN (:ids)',
+                'id NOT IN (:exclude_ids)',
                 'sn = :sn',
                 'user_id = :user_id',
                 'payment = :payment',
