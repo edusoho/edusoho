@@ -5020,6 +5020,14 @@ admin.classroom_manage.manage.describe_tips: >
     1. 编号及排序无法修改；<br>
     2. 班级地址规则：域名/classroom/班级编号；
   </div>
+admin.classroom_manage.manage.count: >
+  班级：<strong class="inflow-num">%courseNum%</strong>个
+admin.classroom_manage.manage.published_count: >
+  已发布：<strong class="inflow-num">%publishedNum%</strong>个
+admin.classroom_manage.manage.closed_count: >
+  已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.classroom_manage.manage.unpublish_count: >
+  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.classroom_manage.manage.number_th: %title%编号
 admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
