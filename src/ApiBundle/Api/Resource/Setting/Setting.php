@@ -50,10 +50,10 @@ class Setting extends AbstractResource
         $paymentSetting = $this->getSettingService()->get('payment', array());
 
         return array(
-            'enabled' => empty($paymentSetting['enabled']) ? 0 : 1,
-            'alipayEnabled' => empty($paymentSetting['alipay_enabled']) ? 0 : 1,
-            'wxpayEnabled' => empty($paymentSetting['wxpay_enabled']) ? 0 : 1,
-            'llpayEnabled' => empty($paymentSetting['llpay_enabled']) ? 0 : 1,
+            'enabled' => empty($paymentSetting['enabled']) ? false : true,
+            'alipayEnabled' => empty($paymentSetting['alipay_enabled']) ? false : true,
+            'wxpayEnabled' => empty($paymentSetting['wxpay_enabled']) ? false : true,
+            'llpayEnabled' => empty($paymentSetting['llpay_enabled']) ? false : true,
         );
     }
 
