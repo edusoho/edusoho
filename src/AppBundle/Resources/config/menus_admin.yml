@@ -779,6 +779,17 @@ admin:
                         admin_cloud_consult_setting:
                             name: admin.tab.setting_tab
                             disable: true
+                admin_cloud_data_lab_manage:
+                    name: 数据实验室
+                    visable: (cloudStatus())
+                    children:
+                        admin_cloud_data_lab:
+                            name: 数据实验室
+                            router_name: admin_cloud_data_lab
+                            disable: true
+                        admin_cloud_data_lab_setting:
+                            name: 设置
+                            disable: true
                 admin_setting_cloud:
                     name: admin.cloud.cloud_setting_menu
                     children:
