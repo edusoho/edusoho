@@ -51,14 +51,14 @@ class WechatController extends PaymentController
                 'type' => 'purchase',
                 'openid' => $openid,
                 'orderSn' => $params['orderSn'],
-                'coinAmount' => $params['coinAmount'],
+                'coinAmount' => empty($params['coinAmount']) ? 0 : $params['coinAmount'],
                 'payPassword' => empty($params['payPassword']) ? '' : $params['payPassword'],
             ),
             array()
         );
 
         $result = $apiKernel->handleApiRequest($apiRequest);
-        if (isset($result['isPaid']) && isset($result['paidSuccessUrl']) && $result['isPaid']) {
+        if (!empty($result['paidSuccessUrl'])) {
             return $this->redirect($result['paidSuccessUrl']);
         }
 
