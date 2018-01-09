@@ -2,19 +2,23 @@
 
 namespace AppBundle\Component\MediaParser;
 
+use AppBundle\Common\TimeMachine;
+
 class MediaAttrsRender
 {
+    private static $mockedTime = 0;
+
     public static function render($media)
     {
-        $attrs = [];
+        $attrs = array();
         if (empty($media) || empty($media['id']) || empty($media['uuid'])) {
             return json_encode($attrs);
         }
 
-        if (stripos($media['uuid'], 'YoukuVideo') !== false) {
+        if (false !== stripos($media['uuid'], 'YoukuVideo')) {
             $attrs['swf_url'] = $media['swf_url'];
-            $attrs['apple_url'] = "http://v.youku.com/player/getM3U8/vid/{$media['id']}/ts/".time().'/v.m3u8';
-        } elseif (stripos($media['uuid'], 'QQVideo') !== false) {
+            $attrs['apple_url'] = "http://v.youku.com/player/getM3U8/vid/{$media['id']}/ts/".TimeMachine::time().'/v.m3u8';
+        } elseif (false !== stripos($media['uuid'], 'QQVideo')) {
             $attrs['swf_url'] = $media['swf_url'];
             $attrs['mp4_url'] = "http://video.store.qq.com/{$media['id']}.mp4";
         } else {
