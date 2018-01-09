@@ -51,7 +51,7 @@ class WechatController extends PaymentController
                 'type' => 'purchase',
                 'openid' => $openid,
                 'orderSn' => $params['orderSn'],
-                'coinAmount' => $params['coinAmount'],
+                'coinAmount' => empty($params['coinAmount']) ? 0 : $params['coinAmount'],
                 'payPassword' => empty($params['payPassword']) ? '' : $params['payPassword'],
             ),
             array()
