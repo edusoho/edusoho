@@ -52,14 +52,32 @@ class ClassroomAdminController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
+        $classroomStatusNum = $this->getDifferentClassroomNum($conditions);
+
         return $this->render('admin/classroom/index.html.twig', array(
             'classroomInfo' => $classroomInfo,
             'paginator' => $paginator,
+            'classroomStatusNum' => $classroomStatusNum,
             'classroomCoursesNum' => $classroomCoursesNum,
             'priceAll' => $priceAll,
             'coinPriceAll' => $coinPriceAll,
             'categories' => $categories,
         ));
+    }
+
+    protected function getDifferentClassroomNum($conditions)
+    {
+        $total = $this->getClassroomService()->countClassrooms($conditions);
+        $published = $this->getClassroomService()->countClassrooms(array_merge($conditions, array('status' => 'published')));
+        $closed = $this->getClassroomService()->countClassrooms(array_merge($conditions, array('status' => 'closed')));
+        $draft = $this->getClassroomService()->countClassrooms(array_merge($conditions, array('status' => 'draft')));
+
+        return array(
+            'total' => empty($total) ? 0 : $total,
+            'published' => empty($published) ? 0 : $published,
+            'closed' => empty($closed) ? 0 : $closed,
+            'draft' => empty($draft) ? 0 : $draft,
+        );
     }
 
     public function setAction(Request $request)
