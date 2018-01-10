@@ -7360,13 +7360,13 @@ admin.article_setting.thumb_setting: 设置缩略图
 admin.article_setting.thumb_setting.upload_btn: 上传
 admin.article_setting.thumb_setting.upload_tips: >
   <p class="help-block">请上传png, gif, jpg格式的图片文件</p>
-  <p class="help-block mbs">请推荐尺寸754*424px。
+  <p class="help-block mbs">推荐尺寸：754×424px。
 admin.article_setting.publish_time: 发布时间
 admin.article_setting.publish_time_tips: 内容条目默认按发布时间的倒序显示
 admin.article_setting.image.content_title: 设置资讯图片
 admin.article_setting.image: 资讯图片
 admin.article_setting.image.tips: 提示：请选择图片裁剪区域。
-admin.article_setting.image.upload_tips: 你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过2M。
+admin.article_setting.image.upload_tips: 你可以上传JPG、GIF或PNG格式的文件，推荐尺寸：754×424px，文件大小不能超过2M。
 admin.article_setting.image.choose_btn: 选择上传的文件
 
 admin.group_settings.homepage_show_group: 首页显示小组信息

@@ -5867,13 +5867,13 @@ admin.article_setting.source_name: Source
 admin.article_setting.source_address: 'Source address'
 admin.article_setting.thumb_setting: 'Set thumbnail'
 admin.article_setting.thumb_setting.upload_btn: Upload
-admin.article_setting.thumb_setting.upload_tips: "<p class=\"help-block\">请上传png, gif, jpg格式的图片文件</p> <p class=\"help-block mbs\">请推荐尺寸754*424px。\n"
+admin.article_setting.thumb_setting.upload_tips: "<p class=\"help-block\">Please upload pictures in png, gif, jpg format</p> <p class=\"help-block mbs\">Recommend size: 754×424px. \n"
 admin.article_setting.publish_time: 'Publish time'
 admin.article_setting.publish_time_tips: 'Content show in chronological order'
 admin.article_setting.image.content_title: 'Set thumbnail'
 admin.article_setting.image: Thumbnail
 admin.article_setting.image.tips: 'Tip: Select the crop area.'
-admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754*424px, and the files size could not exceed 2M.'
+admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2M.'
 admin.article_setting.image.choose_btn: 'Select upload file'
 admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
