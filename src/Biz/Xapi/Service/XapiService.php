@@ -14,6 +14,8 @@ interface XapiService
 
     public function updateStatementsPushedAndDataByStatementData($pushStatementsData);
 
+    public function updateStatementsConvertedAndDataByStatementData($pushStatementsData);
+
     public function searchStatements($conditions, $orders, $start, $limit);
 
     public function countStatements($conditions);

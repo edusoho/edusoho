@@ -77,6 +77,19 @@ class XapiServiceImpl extends BaseService implements XapiService
         $batchUpdateHelper->flush();
     }
 
+    public function updateStatementsConvertedAndDataByStatementData($pushStatementsData)
+    {
+        $batchUpdateHelper = new BatchUpdateHelper($this->getStatementDao());
+        foreach ($pushStatementsData as $id => $data) {
+            $batchUpdateHelper->add('id', $id, array(
+                'status' => 'converted',
+                'push_time' => time(),
+                'data' => $data,
+            ));
+        }
+        $batchUpdateHelper->flush();
+    }
+
     public function searchStatements($conditions, $orders, $start, $limit)
     {
         return $this->getStatementDao()->search($conditions, $orders, $start, $limit);
