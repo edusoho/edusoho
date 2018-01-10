@@ -89,6 +89,10 @@ class XapiServiceImpl extends BaseService implements XapiService
         }
         $batchUpdateHelper->flush();
     }
+    public function updateStatusPushedAndPushedTimeByUuids($uuids, $pushTime)
+    {
+        return $this->getStatementDao()->callbackStatusPushedAndPushedTimeByUuids($uuids, $pushTime);
+    }
 
     public function searchStatements($conditions, $orders, $start, $limit)
     {

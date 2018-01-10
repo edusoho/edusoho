@@ -25,4 +25,17 @@ class StatementDaoImpl extends AdvancedDaoImpl implements StatementDao
             ),
         );
     }
+
+    public function callbackStatusPushedAndPushedTimeByUuids(array $ids, $pushTime)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $params = array_merge(array('pushed', $pushTime), $ids);
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "UPDATE {$this->table} SET status = ?,push_time = ? WHERE uuid IN ({$marks})";
+
+        return $this->db()->executeUpdate($sql, $params);
+    }
 }

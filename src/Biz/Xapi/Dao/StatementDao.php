@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface StatementDao extends GeneralDaoInterface
 {
+    public function callbackStatusPushedAndPushedTimeByUuids(array $ids, $pushTime);
 }

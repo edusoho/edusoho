@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class ConvertStatementsJob extends AbstractJob
+class ConvertStatementJob extends AbstractJob
 {
     public function execute()
     {
@@ -14,7 +14,7 @@ class ConvertStatementsJob extends AbstractJob
             $condition = array(
                 'status' => 'created',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 10);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 500);
             $statements = ArrayToolkit::index($statements, 'uuid');
 
             foreach ($statements as &$statement) {
