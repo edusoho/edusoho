@@ -3,6 +3,7 @@
 namespace Biz\Xapi\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
@@ -11,6 +12,7 @@ class ConvertStatementJob extends AbstractJob
     public function execute()
     {
         try {
+            $this->getStatementDao()->retryStatusPushingToCreatedByCreatedTime(strtotime('-3 day'));
             $condition = array(
                 'status' => 'created',
             );
@@ -54,5 +56,13 @@ class ConvertStatementJob extends AbstractJob
     protected function getXapiService()
     {
         return $this->biz->service('Xapi:XapiService');
+    }
+
+    /**
+     * @return StatementDao
+     */
+    protected function getStatementDao()
+    {
+        return $this->biz->dao('Xapi:StatementDao');
     }
 }
