@@ -17,10 +17,9 @@ class PushStatementJob extends AbstractJob
             return;
         }
 
-        for ($i = 0; $i <= 5; $i++ ) {
+        for ($i = 0; $i <= 5; ++$i) {
             $this->pushStatements(500);
         }
-
     }
 
     protected function pushStatements($count)

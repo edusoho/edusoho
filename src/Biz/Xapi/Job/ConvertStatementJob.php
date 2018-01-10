@@ -43,7 +43,6 @@ class ConvertStatementJob extends AbstractJob
                 }
             }
             $this->getXapiService()->updateStatementsConvertedAndDataByStatementData($pushData);
-
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);
         }
