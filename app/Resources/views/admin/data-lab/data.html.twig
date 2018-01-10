@@ -1,18 +1,14 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% set menu = 'admin_cloud_data_lab' %}
-{% set script_controller = 'invite/record' %}
+{% set xapiSetting = setting('xapi') %}
 
 {% block main %}
-<div class="">
-  开起数据分析服务：
-  <label for="switch" class="switch checked">
-    <input type="checkbox" name="is_public" value="{{ 123 }}" id="switch" data-toggle="switch" data-url="">
-  </label> 
-  <a href="http://open.edusoho.com/doc/agreement/privacy-content.html" target="_blank">
-    用户协议
-  </a>
-</div>
-
-asdf
+  <div class="mtl">
+    {% if not xapiSetting.enabled|default() %}
+      <p style="color: red">当前数据分析服务已关闭，报表数据无法更新。可在<a href="{{ path('admin_cloud_data_lab_setting') }}">【设置】</a>中重新启用该服务。</p>
+    {% endif %}
+    <iframe id="xapi-data" name="xapi-data" src="{{ url }}" style="width: 100%;height: 900px;border: none;">
+    </iframe>
+  </div>
 {% endblock %}

@@ -73,7 +73,7 @@ class PushStatementJob extends AbstractJob
         $siteSettings = $this->getSettingService()->get('site', array());
         $xapiSetting = $this->getSettingService()->get('xapi', array());
 
-        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'http://xapi.qiqiuyu.net/vi/';
+        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'http://xapi.qiqiuyu.net/v1/';
 
         $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
         $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
