@@ -5283,7 +5283,7 @@ admin.setting.site.logo: 网站LOGO
 admin.setting.site.logo.help_block: 请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
-admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议大小16*16或者32*32。
+admin.setting.site.favicon.help_block: ico格式，推荐尺寸：16×16px或者32×32px。
 admin.setting.site.seo_keywords: SEO关键词
 admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
 admin.setting.site.seo_description: SEO描述信息
@@ -6997,7 +6997,7 @@ admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显�
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
-admin.setting_course.course_avatar.tips: 支持jpg、gif、png格式的图片，建议尺寸：480*270px.
+admin.setting_course.course_avatar.tips: 支持jpg、gif、png格式的图片，推荐尺寸：480×270px。
 admin.setting_course.classroom.setting_classroom_name: 班级称谓设置
 admin.setting_course.classroom.setting_classroom_name.help_block: 用户所能看到的是这里设置的称谓
 admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
