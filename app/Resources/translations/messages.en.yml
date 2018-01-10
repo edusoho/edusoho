@@ -2851,7 +2851,7 @@ group.detail.group_settings.group_edit.name: 'Group name'
 group.detail.group_settings.group_edit.introduction: 'Group Info'
 group.detail.group_settings.logo_setup: 'Image setting'
 group.detail.group_settings.logo_setup.current_logo: 'Current image'
-group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>.\n"
+group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size: 180×180px. \n"
 group.detail.group_settings.logo_setup.upload_btn: 'Upload new image'
 group.detail.group_settings.background_image_setup: 'Background setting'
 group.detail.group_settings.background_image_setup.current_image: 'Current background'
@@ -5522,7 +5522,7 @@ admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
-admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px'
+admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px.'
 admin.role_manage.keyword_type: '-- Keyword type--'
 admin.role_manage.nameLike: 'Role name'
 admin.role_manage.codeLike: Coding
