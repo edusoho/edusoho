@@ -13,7 +13,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     {
         return array(
             'payment_trade.paid' => 'onPaid',
-            'payment_trade.refunded' => 'onTradeRefunded'
+            'payment_trade.refunded' => 'onTradeRefunded',
         );
     }
 
@@ -27,7 +27,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         foreach ($refundIds as $refundId) {
             $this->getWorkflowService()->setRefunded($refundId);
         }
-        
+
         $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
         if (!empty($order)) {
             $user = $this->getUserService()->getUser($order['user_id']);
@@ -50,7 +50,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
             'paid_coin_amount' => $trade['coin_amount'],
         );
 
-        if ($trade['cash_amount'] == 0 && $trade['coin_amount'] > 0) {
+        if (0 == $trade['cash_amount'] && $trade['coin_amount'] > 0) {
             $data['payment'] = 'coin';
         }
 
@@ -88,6 +88,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     private function getDispatcher()
     {
         $biz = $this->getBiz();
+
         return $biz['dispatcher'];
     }
 

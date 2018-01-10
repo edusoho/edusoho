@@ -15,11 +15,12 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
     protected function convertData($order)
     {
         $item = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
         return array(
             'user_source_id' => $order['user_id'],
             'source_id' => $order['id'],
             'product_type' => $item[0]['target_type'],
-            'product_id' => $item[0]['target_id'], 
+            'product_id' => $item[0]['target_id'],
             'title' => $order['title'],
             'sn' => $order['sn'],
             'order_created_time' => $order['created_time'],
