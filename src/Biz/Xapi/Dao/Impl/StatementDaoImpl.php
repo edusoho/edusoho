@@ -41,7 +41,7 @@ class StatementDaoImpl extends AdvancedDaoImpl implements StatementDao
 
     public function retryStatusPushingToCreatedByCreatedTime($createdTime)
     {
-        $sql = "UPDATE {$this->table} SET status = 'created' WHERE created_time > ?";
+        $sql = "UPDATE {$this->table} SET status = 'created' WHERE created_time > ? AND status = 'pushing'";
 
         return $this->db()->executeUpdate($sql, array($createdTime));
     }
