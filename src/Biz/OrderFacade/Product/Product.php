@@ -143,6 +143,17 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return round(($this->maxRate / 100) * $this->getCurrency()->convertToCoin($this->originPrice), 2);
     }
 
+    public function onFinished($orderItem)
+    {
+        $order = $this->getOrderService()->getOrder($orderItem['order_id']);
+        if (!empty($order)) {
+            $user = $this->getUserService()->getUser($order['user_id']);
+            if (!empty($user) && 'distributor' == $user['type']) {
+                $this->getDistributorOrderService()->createJobData($order);
+            }
+        }
+    }
+
     protected function smsCallback($orderItem, $targetName)
     {
         try {
@@ -225,5 +236,21 @@ abstract class Product extends BizAware implements OrderStatusCallback
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return \Biz\Distributor\Service\DistributorOrderService
+     */
+    protected function getDistributorOrderService()
+    {
+        return $this->biz->service('Distributor:DistributorOrderService');
     }
 }
