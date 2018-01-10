@@ -54,10 +54,10 @@ class TranslationJsDumperCommand extends BaseCommand
             } else {
                 $filePaths = array(
                     'plugins/'.ucfirst($code).'plugin/Resources/public/js/controller/translations/',
-                    'plugins/'.ucfirst($code).'Plugin/Resources/static-src/js/translations/'
+                    'plugins/'.ucfirst($code).'Plugin/Resources/static-src/js/translations/',
                 );
             }
-            foreach($filePaths as $filePath) {
+            foreach ($filePaths as $filePath) {
                 $file = $filePath.$locale.'.js';
                 $filesystem->mkdir(dirname($file));
 
@@ -66,7 +66,7 @@ class TranslationJsDumperCommand extends BaseCommand
                 }
 
                 file_put_contents($file, $content);
-            }    
+            }
         }
     }
 
@@ -78,7 +78,7 @@ class TranslationJsDumperCommand extends BaseCommand
         $yaml = new Yaml();
         $finder = $this->getContainer()->get('bazinga.jstranslation.translation_finder');
         $files = $finder->all();
-        
+
         foreach ($files as $filename) {
             list($domain, $locale, $extension) = $this->getFileInfo($filename);
             if ('js' != $domain || 'yml' != $extension) {
@@ -100,8 +100,8 @@ class TranslationJsDumperCommand extends BaseCommand
             $fileContent = $yaml->parse($filename);
 
             if (!empty($fileContent)) {
-                 $translations[$locale] = array_merge($translations[$locale], $fileContent);
-            } 
+                $translations[$locale] = array_merge($translations[$locale], $fileContent);
+            }
         }
 
         return $translations;
