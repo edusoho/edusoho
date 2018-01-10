@@ -81,7 +81,9 @@ class BatchCreate {
       uploadProcess.supportMobile = $('[name=support_mobile]').val();
     }
 
+    console.log(uploadProcess);
     uploadProcess.type = 'html';
+
     return uploadProcess;
   }
 

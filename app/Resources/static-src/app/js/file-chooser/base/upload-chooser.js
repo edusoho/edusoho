@@ -54,6 +54,7 @@ export default class UploaderChooser extends Chooser {
     if(this.element.find('[name=support_mobile]').length > 0){
       uploadProcess.supportMobile = this.element.find('[name=support_mobile]').val();
     }
+    console.log(uploadProcess);
     return uploadProcess;
   }
 
