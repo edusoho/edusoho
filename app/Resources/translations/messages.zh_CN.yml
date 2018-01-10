@@ -3577,7 +3577,7 @@ group.detail.group_settings.logo_setup.upload_btn: 上传新图标
 group.detail.group_settings.background_image_setup: 背景设置
 group.detail.group_settings.background_image_setup.current_image: 当前背景
 group.detail.group_settings.background_image_setup.tips: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（1140*150）
+  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐尺寸：1140×150px
 group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组

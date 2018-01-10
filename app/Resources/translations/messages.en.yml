@@ -2855,7 +2855,7 @@ group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PN
 group.detail.group_settings.logo_setup.upload_btn: 'Upload new image'
 group.detail.group_settings.background_image_setup: 'Background setting'
 group.detail.group_settings.background_image_setup.current_image: 'Current background'
-group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size（1140*150）\n"
+group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size: 1140×150px. \n"
 group.detail.new_group_members: 'New member'
 group.detail.new_group_members.empty: 'No member'
 group.detail.hot_group: 'Popular group'
