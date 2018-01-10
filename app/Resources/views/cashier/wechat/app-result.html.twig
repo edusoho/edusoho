@@ -3,7 +3,7 @@
 {% do script(['app/js/pay/wxpay-app-result/index.js'])%}
 {% block body %}
   <div class="panel panel-default panel-wxpay ">
-    <a id="openApp" href="kuozhi://objc://wxpayCallback?{% if trade.status == 'paid' %}1{% else %}0{% endif %}">redirect APP</a>
+    <a id="openApp"  href="kuozhi://objc://wxpayCallback?{% if trade.status == 'paid' %}1{% else %}0{% endif %}">redirect APP</a>
     {% if trade.status == 'paid' %}
       <p>{{ 'pay_center.finish_title'|trans }}</p>
     {% endif %}
