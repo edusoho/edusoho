@@ -5,6 +5,7 @@ namespace Tests\Unit\Content;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
 use Biz\Content\Service\CommentService;
+use AppBundle\Common\TimeMachine;
 
 class CommentServiceTest extends BaseTestCase
 {
@@ -52,6 +53,8 @@ class CommentServiceTest extends BaseTestCase
                 ),
             )
         );
+
+        TimeMachine::setMockedTime(1515586775);
         $this->mockBiz(
             'Content:CommentDao',
             array(
@@ -63,7 +66,7 @@ class CommentServiceTest extends BaseTestCase
                         'objectId' => 111,
                         'content' => 'content',
                         'userId' => $this->getCurrentUser()->id,
-                        'createdTime' => time(),
+                        'createdTime' => TimeMachine::time(),
                     )),
                 ),
             )
