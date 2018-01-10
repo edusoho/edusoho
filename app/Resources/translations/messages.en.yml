@@ -1056,7 +1056,7 @@ course.teach_plan_manage: 'Programs'
 course.cover: 'Course cover'
 course.cover_image: 'Cover'
 course.cover_image.content_title: 'Cover'
-course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
+course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2M</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
@@ -2058,7 +2058,7 @@ classroom.category: Category
 classroom.price_label: Price(CNY)
 classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
 classroom.amount: "Equals to%price%\n"
-classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525 * 350 px.<br> The file limits  to <strong>2M</strong>.\n"
+classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525×350px. <br> The file limits to <strong>2M</strong>.\n"
 classroom.commitment_service_label: Commitment
 classroom.activiy: Activity
 classroom.activity_tips: "Arrange online and offline %name% activities, make the learning with more fun and keep closer relationships with your classmates.\n"

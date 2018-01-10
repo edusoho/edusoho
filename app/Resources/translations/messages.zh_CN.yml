@@ -1203,7 +1203,7 @@ course.cover: 课程封面
 course.cover_image: 封面图片
 course.cover_image.content_title: 封面图片
 course.cover_image.upload_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
+  你可以上传jpg, gif, png格式的文件, 推荐尺寸：480×270px。<br>文件大小不能超过<strong>2M</strong>。
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
@@ -2538,7 +2538,7 @@ classroom.price_tips: >
 classroom.amount: >
   相当于%price%
 classroom.picture_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为525x350。<br>文件大小不能超过<strong>2M</strong>。
+  你可以上传jpg, gif, png格式的文件, 推荐尺寸：525×350px。<br>文件大小不能超过<strong>2M</strong>。
 classroom.upload_picture_btn: 上传新图片
 classroom.commitment_service_label: 承诺提供服务
 classroom.activiy: 活动
