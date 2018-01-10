@@ -4450,7 +4450,7 @@ admin.custom_page_manage.custom_page_template: Template
 admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
-admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750*300 in JPG or PNG format'
+admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format'
 admin.mobile_manage.banner_label: 'Slider Image'
 admin.mobile_manage.upload_btn: Upload
 admin.mobile_manage.delete_btn: Delete
@@ -5946,7 +5946,7 @@ admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
 admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gif, jpg format.'
 admin.mobile_setting.online_school_about_hint: 'This profile will be displayed in the app''s " About Us" part'
-admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.'
+admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Recommend size: 50×50px.'
 admin.mobile_setting.app_custom_setting_option: 'Custom APP Set'
 admin.mobile_setting.app_custom_name: 'APP name'
 admin.mobile_setting.app_custom_about: 'APP Profile'
@@ -5955,7 +5955,7 @@ admin.mobile_setting.app_custom_logo_hint: 'Please upload pictures in png, gif, 
 admin.mobile_setting.app_custom_cover: 'APP Cover Image'
 admin.mobile_setting.app_custom_cover_hint: 'Please upload pictures in png, gif or jpg format. Recommend size 225*400px.'
 admin.mobile_setting.splash_setting: 'Setup launch pictures'
-admin.mobile_setting.splash_setting_hint: 'Maximum 5 launch pictures(size 640*960px). Users will see the launch pictures when enter the site in App for first time.admin.mobile_setting.splash1: Launch picture 1admin.mobile_setting.splash2: Launch picture 2admin.mobile_setting.splash3: Launch picture 3admin.mobile_setting.splash4: Launch picture 4admin.mobile_setting.splash5: Launch picture 5'
+admin.mobile_setting.splash_setting_hint: 'Maximum 5 launch pictures, recommend size: 640×960px. Users will see the launch pictures when enter the site in App for first time.admin.mobile_setting.splash1: Launch picture 1admin.mobile_setting.splash2: Launch picture 2admin.mobile_setting.splash3: Launch picture 3admin.mobile_setting.splash4: Launch picture 4admin.mobile_setting.splash5: Launch picture 5'
 admin.mobile_setting.splash1: 'Launch image 1'
 admin.mobile_setting.splash2: 'Launch image 2'
 admin.mobile_setting.splash3: 'Launch image 3'

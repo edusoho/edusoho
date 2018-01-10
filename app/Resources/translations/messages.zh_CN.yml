@@ -5607,7 +5607,7 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
-admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多可设置5张轮播图，图片可设置跳转动作和链接。推荐尺寸：750×300px。
 admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
@@ -7476,7 +7476,7 @@ admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
 admin.mobile_setting.splash_pic_setting_hint: 请上传png, gif, jpg格式的图片文件。
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
-admin.mobile_setting.online_school_logo_hint: 请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。
+admin.mobile_setting.online_school_logo_hint: 请上传png, gif, jpg格式的图片文件。LOGO图片推荐尺寸：50×50px。
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
@@ -7485,7 +7485,7 @@ admin.mobile_setting.app_custom_logo_hint: 请上传png, gif, jpg格式的图片
 admin.mobile_setting.app_custom_cover: APP封面
 admin.mobile_setting.app_custom_cover_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。
 admin.mobile_setting.splash_setting: 设置启动图
-admin.mobile_setting.splash_setting_hint: 最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。
+admin.mobile_setting.splash_setting_hint: 最多允许设置5张启动图，推荐尺寸：640×960px，用户首次登录网校时会显示启动图。
 admin.mobile_setting.splash1: 启动图1
 admin.mobile_setting.splash2: 启动图2
 admin.mobile_setting.splash3: 启动图3
