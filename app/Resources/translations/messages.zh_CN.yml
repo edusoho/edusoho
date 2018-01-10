@@ -6929,7 +6929,7 @@ admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 你可以上传JPG、GIF或PNG格式的文件
 admin.user_avatar.system_default_avatar: 系统默认头像
-admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）
+admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。推荐尺寸：270×270px
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
