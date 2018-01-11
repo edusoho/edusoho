@@ -419,7 +419,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
 
                 if (strpos($bannerIndex, 'http://') !== false || strpos($bannerIndex, 'https://') !== false) {
                     $uri = $bannerIndex;
-                } else if (preg_match($bannerIndex, '/^//\s*/')) {
+                } else if (preg_match('/^//\s*/', $bannerIndex)) {
                     $uri = ($ssl ? 'https:' : 'http:').$bannerIndex;
                 } else {
                     $uri = $baseUrl.'/'.$bannerIndex;
