@@ -3,9 +3,24 @@ define(function(require, exports, module) {
   for (index in markMenus) {
       ids+= '#'+ markMenus[index]+',';
   }
-  ids = s.substring(0,s.length-1);
-  $(ids).each(function(element) {
-    var $this = $(this);
-    $this.addClass('new');
-  }, this);
+
+  ids = ids.substring(0,ids.length-1);
+  var $menus = $(ids);
+
+
+  if (window.localStorage) {
+    var localSetting = window.localStorage.getItem('markMenuList');
+    if (!localSetting) {
+      localSetting = '';
+    }
+    localSetting = localSetting.split(',') 
+
+    $menus.on('click', function(){
+        localSetting.push(this.id);
+        window.localStorage.setItem('markMenuList', localSetting.join(','));
+    })
+  }
+
+  $menus.addClass('new');
 });
+
