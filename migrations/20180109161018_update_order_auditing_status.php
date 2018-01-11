@@ -15,7 +15,6 @@ class UpdateOrderAuditingStatus extends Migration
             update  `biz_order` set `status` = 'success' where id in (SELECT `order_id` FROM `biz_order_refund` WHERE `status` = 'auditing');
             update  `biz_order_item` set `status` = 'success' where order_id in (SELECT `order_id` FROM `biz_order_refund` WHERE `status` = 'auditing');
         ");
-
     }
 
     /**
@@ -23,6 +22,5 @@ class UpdateOrderAuditingStatus extends Migration
      */
     public function down()
     {
-
     }
 }
