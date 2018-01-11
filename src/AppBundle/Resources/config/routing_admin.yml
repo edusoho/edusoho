@@ -2305,3 +2305,11 @@ admin_cloud_data_lab:
 admin_cloud_data_lab_setting:
     path: /data/lab/setting
     defaults: { _controller: AppBundle:Admin/DataLab:settting }
+
+admin_cloud_data_lab_setting_enable_modal:
+    path: /data/lab/setting/modal/enable
+    defaults: { _controller: AppBundle:Admin/DataLab:enableXapiSetting }
+
+admin_cloud_data_lab_setting_disable_modal:
+    path: /data/lab/setting/modal/disable
+    defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }

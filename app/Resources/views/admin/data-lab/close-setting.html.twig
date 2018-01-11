@@ -1,0 +1,15 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+提示：
+{% endblock %}
+
+{% block body %}
+  关闭后，关闭期内的学习数据将无法更新到报表中。
+  您确认要关闭吗？
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">{{ '在用看看'|trans }}</button>
+    <button id="xapi-setting-confirm" class="btn btn-link pull-right">{{ '确认关闭'|trans }}</button>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+提示：
+{% endblock %}
+
+{% block body %}
+开启后，将在 24 小时内开始更新数据。
+关闭期内的学习数据无法更新到报表中。
+{% endblock %}
+
+{% block footer %}
+    <button id="xapi-setting-confirm" class="btn btn-primary pull-right">{{ '确认开启'|trans }}</button>
+    <button type="button"class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
+{% endblock %}

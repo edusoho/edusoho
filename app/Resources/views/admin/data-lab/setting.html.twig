@@ -1,4 +1,56 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% set menu = 'admin_cloud_data_lab_setting' %}
-{% set script_controller = 'invite/record' %}
+{% set script_controller = 'data-lab/setting' %}
+
+{% block main %}
+<style>
+  .form-switch {
+    margin-bottom: 0;
+  }
+  .form-switch {
+    position: relative;
+    border-radius: 20px;
+    height: 20px;
+    width: 40px;
+    background: #ccc;
+    background: rgba(0, 0, 0, .32);
+    transition: all 0.3s ease;
+  }
+   .form-switch.checked {
+    background: #428bca;
+    transition: all 0.3s ease;
+  }
+  .form-switch.checked:before {
+    left: 22px;
+    transition: all 0.3s ease;
+  } 
+  .form-switch:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: all 0.3s ease;
+  }
+  .form-switch:hover {
+    cursor: pointer;
+  }
+  .form-switch input {
+    display: none;
+  }
+  </style>
+
+{% set xapiSetting = setting('xapi') %}
+<div class="mtl">
+  开起数据分析服务：
+  <label id="xapi-swith" data-disable="{{ path('admin_cloud_data_lab_setting_disable_modal') }}" data-enabled="{{ path('admin_cloud_data_lab_setting_enable_modal') }}" for="switch" class="form-switch {% if xapiSetting.enabled %}checked{% endif %}">
+  </label> 
+  <a class="mlm" href="http://open.edusoho.com/doc/agreement/privacy-content.html" target="_blank">
+    《用户协议》
+  </a>
+</div>
+{% endblock %}
