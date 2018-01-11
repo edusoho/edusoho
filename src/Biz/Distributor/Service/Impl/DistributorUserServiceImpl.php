@@ -103,9 +103,14 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         }
     }
 
-    public function getPostMethod()
+    public function getSendType()
     {
-        return 'postStudents';
+        return 'student';
+    }
+
+    public function getNextJobType()
+    {
+        return 'Order';
     }
 
     protected function convertData($user)
@@ -122,11 +127,6 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     protected function getJobType()
     {
         return 'User';
-    }
-
-    protected function getNextJobType()
-    {
-        return 'Order';
     }
 
     protected function getUserService()

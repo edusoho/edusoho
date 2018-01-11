@@ -14,6 +14,6 @@ class DistributorJobStatus
 
     public static function getSendableStatus()
     {
-        return array(self::$PENDING, self::$DEPENDENT);
+        return array(self::$PENDING, self::$ERROR);
     }
 }

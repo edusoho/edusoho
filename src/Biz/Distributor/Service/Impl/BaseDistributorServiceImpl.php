@@ -58,11 +58,16 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
         return $this->drpService;
     }
 
+    /**
+     * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 student
+     */
+    abstract public function getSendType();
+
+    abstract public function getNextJobType();
+
     abstract protected function convertData($data);
 
     abstract protected function getJobType();
-
-    abstract protected function getNextJobType();
 
     protected function getDependentTarget($data)
     {

@@ -7,9 +7,14 @@ use Biz\Distributor\Util\DistributorJobStatus;
 
 class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
 {
-    public function getPostMethod()
+    public function getSendType()
     {
-        return 'postOrders';
+        return 'order';
+    }
+
+    public function getNextJobType()
+    {
+        return 'User';
     }
 
     protected function convertData($order)
@@ -37,11 +42,6 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
     protected function getJobType()
     {
         return 'Order';
-    }
-
-    protected function getNextJobType()
-    {
-        return 'User';
     }
 
     protected function getDependentTarget($order)

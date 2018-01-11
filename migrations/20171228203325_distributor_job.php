@@ -46,7 +46,7 @@ class DistributorJob extends Migration
                 'DistributorSyncJob',
                 '*/19 * * * *',
                 'Biz\\\\Distributor\\\\Job\\\\DistributorSyncJob',
-                'User',
+                '{\"type\": \"User\"}',
                 '100',
                 '{$currentTime}',
                 '300',

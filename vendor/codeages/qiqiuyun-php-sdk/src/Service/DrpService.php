@@ -12,6 +12,8 @@ class DrpService extends BaseService
     private $merchantStudents = '/merchant/students';
     private $studentOrders = '/merchant/orders';
 
+    protected $baseUri = 'http://try6.edusoho.cn';
+
     /**
      * 生成登陆的表单
      *
@@ -89,7 +91,7 @@ class DrpService extends BaseService
         return $this->postData($this->studentOrders, $orders);
     }
 
-    private function postData($path, $data)
+    public function postData($data, $type, $path = '/merchant_data_report')
     {
         $jsonStr = SignUtil::serialize($data);
         $jsonStr = SignUtil::cut($jsonStr);
@@ -100,6 +102,7 @@ class DrpService extends BaseService
             $this->baseUri.$path,
             array(
                 'data' => $data,
+                'type' => $type,
                 'sign' => $sign,
             )
         );
