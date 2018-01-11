@@ -7486,7 +7486,7 @@ admin.mobile_setting.app_custom_cover: APP封面
 admin.mobile_setting.app_custom_cover_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸：225×400px。
 admin.mobile_setting.splash_setting: 设置启动图
 admin.mobile_setting.splash_setting_hint: 最多允许设置5张启动图，推荐尺寸：640×960px，用户首次登录网校时会显示启动图。
-admin.mobile_setting.splash: 启动图
+admin.mobile_setting.splash: 启动图%splashNum%
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
   <br>

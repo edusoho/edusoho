@@ -118,7 +118,7 @@
      {% set splash = 'splash' ~ i %}
       <div class="form-group">
           <div class="col-md-2 control-label">
-              <label for="{{ splash }}">{{ 'admin.mobile_setting.splash'|trans ~ i }}</label>
+              <label for="{{ splash }}">{{ 'admin.mobile_setting.splash'|trans({ '%splashNum%':i }) }}</label>
           </div>
           <div class="col-md-8 controls">
               {% set mobileId = 'mobile-splash'~i %}
