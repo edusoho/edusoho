@@ -6,8 +6,4 @@ let os = $uapraser.getOS();
 
 if (os.name === 'iOS' && browser.name === 'Mobile Safari') {
   document.getElementById("openApp").click();
-} else {
-  window.location.href = $('#jsWebViewPay').data('goto');
 }
-
-

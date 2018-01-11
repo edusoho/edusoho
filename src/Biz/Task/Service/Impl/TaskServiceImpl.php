@@ -184,10 +184,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
         }
 
-        if (!$this->canPublish($task['id'])) {
-            return false;
-        }
-
         $strategy = $this->createCourseStrategy($task['courseId']);
 
         $task = $strategy->publishTask($task);
@@ -208,44 +204,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                     if (!empty($task['mode']) && 'lesson' !== $task['mode']) {
                         continue;
                     }
-                    if (!$this->canPublish($task['id'])) {
-                        continue;
-                    }
                     $this->publishTask($task['id']);
                 }
             }
         }
-    }
-
-    protected function canPublish($taskId)
-    {
-        $jobName = 'course_task_create_sync_job_'.$taskId;
-
-        $jobs = $this->getSchedulerService()->searchJobLogs(
-            array('name' => $jobName),
-            array('id' => 'desc'),
-            0,
-            1
-        );
-        $jobLog = reset($jobs);
-
-        if (!$jobLog) {
-            return true;
-        }
-
-        $fireJobs = $this->getSchedulerService()->searchJobFires(
-            array('job_id' => $jobLog['job_id']),
-            array('id' => 'desc'),
-            0,
-            1
-        );
-        $syncCreateTaskJob = reset($fireJobs);
-
-        if (!empty($syncCreateTaskJob) && in_array($syncCreateTaskJob['status'], array('executing', 'acquired'))) {
-            return false;
-        }
-
-        return true;
     }
 
     public function unpublishTask($id)
@@ -1240,13 +1202,5 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
-    }
-
-    /**
-     * @return SchedulerService
-     */
-    protected function getSchedulerService()
-    {
-        return $this->createService('Scheduler:SchedulerService');
     }
 }

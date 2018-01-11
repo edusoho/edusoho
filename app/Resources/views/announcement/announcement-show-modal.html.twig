@@ -7,7 +7,7 @@
 {% block body %}
 
     <div class="announcement-detail clearfix">
-    	<div>{{ announcement.content|raw }}</div>
+    	<div>{{ announcement.content|cdn|raw }}</div>
   		<div class="color-gray pull-right mtm">{{'announcement.modal.global.publish_time'|trans({'%createdTime%':announcement.createdTime|date('Y-m-d H:i')})}}</div>
   	</div>
 

@@ -1,3 +1,7 @@
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+
 {% if is_mobile_client() and isEncryptionPlus %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
 {% else %}
