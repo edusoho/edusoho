@@ -115,10 +115,10 @@
   <legend>{{'admin.mobile_setting.app_custom_setting_option'|trans}}</legend>
   <div class="help-block">{{'admin.mobile_setting.splash_setting_hint'|trans}}</div>
   {% for i in 1..5 %}
-     {% set splash = 'splash'~ i %}
+     {% set splash = 'splash' ~ i %}
       <div class="form-group">
           <div class="col-md-2 control-label">
-              <label for="splash1">{{'admin.mobile_setting.splash1'|trans}}</label>
+              <label for="{{ splash }}">{{ 'admin.mobile_setting.splash'|trans ~ i }}</label>
           </div>
           <div class="col-md-8 controls">
               {% set mobileId = 'mobile-splash'~i %}
