@@ -29,6 +29,7 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
             'jobType' => $this->getJobType(),
             'status' => empty($dependentTarget) ? DistributorJobStatus::$PENDING : DistributorJobStatus::$DEPENDENT,
             'dependentTarget' => $dependentTarget,
+            'target' => strtolower($this->getJobType()).':'.$dataObj['id'],
             'errMsg' => '',
         );
         $this->getDistributorJobDataDao()->create($result);
