@@ -5,33 +5,35 @@ namespace Biz\Distributor\Service\Impl;
 use QiQiuYun\SDK\Auth;
 use AppBundle\Common\Exception\RuntimeException;
 use Biz\Distributor\Util\DistributorJobStatus;
+use AppBundle\Common\TimeMachine;
 
 class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 {
     /**
      * 分销平台的token编码方式
+     *   注意，$data 内的参数值必须为字符串
      *
-     * @param $data
+     * @param $data, key顺序不能错误
      * array(
-     *   'merchant_id' => 123,
-     *   'agency_id' => 222,
-     *   'coupon_price' => 222,
-     *   'coupon_expiry_day' => unix_time,
+     *   'merchant_id' => '123',
+     *   'agency_id' => '222',
+     *   'coupon_price' => '222',
+     *   'coupon_expiry_day' => '12',
      * )
-     * @param $time unix_time, 如果填了，则使用填写的时间，不填，则使用当前时间
+     * @param $tokenExpireDateNum unix_time, 如果填了，则使用填写的时间，不填，则使用当前时间
      *
      * @return {merchant_id}:{agency_id}:{coupon_price}:{coupon_expiry_day}:{time}:{nonce}:{sign}
      *                                                                                            sign 为 添加 secretKey 后的加密方法
      */
-    public function encodeToken($data, $tokenExpireTime = null)
+    public function encodeToken($data, $tokenExpireDateNum = null)
     {
-        if (empty($tokenExpireTime)) {
-            $time = time();
+        if (empty($tokenExpireDateNum)) {
+            $time = TimeMachine::time().'';
         } else {
-            $time = strtotime('-1 day', $tokenExpireTime);
+            $time = strtotime('-1 day', $tokenExpireDateNum);
         }
 
-        $once = md5(time());
+        $once = md5(TimeMachine::time());
 
         $resultStr = '';
         foreach ($data as $key => $value) {
@@ -73,7 +75,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
                 $parsedInfo = $this->getDrpService()->parseToken($token);
                 $tokenInfo['registable'] = true;
                 $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
-                if ($tokenExpireTime > time()) {
+                if ($tokenExpireTime > TimeMachine::time()) {
                     $tokenInfo['couponPrice'] = $parsedInfo['couponPrice'];
                     $tokenInfo['couponExpiryDay'] = $parsedInfo['couponExpiryDay'];
                     if (0 != $tokenInfo['couponPrice'] && 0 != $tokenInfo['couponExpiryDay']) {
@@ -136,6 +138,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     {
         ksort($arr);
         $json = implode('\n', array($time, $once, json_encode($arr)));
+
         $settings = $this->getSettingService()->get('storage', array());
         $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
 

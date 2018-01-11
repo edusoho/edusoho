@@ -18,10 +18,6 @@ class DistributorRegistDecoderImpl extends RegistDecoder
             $user['distributorToken'] = $registration['distributorToken'];
         }
 
-        if ($splitedInfos['rewardable']) {
-            // 分发优惠券
-        }
-
         return $user;
     }
 
