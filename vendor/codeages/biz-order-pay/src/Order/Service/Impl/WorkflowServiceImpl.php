@@ -95,23 +95,32 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
     public function finishSuccessOrders()
     {
-        $orderRefunds = $this->getOrderRefundDao()->search(
-            array(
-                'status' => 'auditing',
-            ),
-            array(),
-            0,
-            PHP_INT_MAX   
-        );
-        $refundOrderIds = ArrayToolkit::column($orderRefunds, 'order_id');
-
         $orders = $this->getOrderDao()->search(array(
             'refund_deadline_LT' => time(),
             'status' => 'success',
-            'exclude_ids' => $refundOrderIds,
         ), array('id' => 'DESC'), 0, 1000);
 
+        if (empty($orders)) {
+            return;
+        }
+
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderRefunds = $this->getOrderRefundDao()->search(
+            array(
+                'status' => 'auditing',
+                'order_ids' => $orderIds
+            ),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        $orderRefunds = ArrayToolkit::index($orderRefunds, 'order_id');
+        
         foreach ($orders as $order) {
+            if (!empty($orderRefunds[$order['id']])) {
+                continue;
+            }
+            
             $this->finished($order['id']);
         }
     }
