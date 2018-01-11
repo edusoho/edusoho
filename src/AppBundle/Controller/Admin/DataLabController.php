@@ -26,6 +26,8 @@ class DataLabController extends BaseController
     public function enableXapiSettingAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $xapiSdk = $this->getXapiService()->getXapiSdk();
+            $xapiSdk->setting('xapiUpload', true);
             $this->setXapiSetting(1);
         }
 
@@ -35,6 +37,8 @@ class DataLabController extends BaseController
     public function disableXapiSettingAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $xapiSdk = $this->getXapiService()->getXapiSdk();
+            $xapiSdk->setting('xapiUpload', false);
             $this->setXapiSetting(0);
         }
         return $this->render('admin/data-lab/close-setting.html.twig'); 
@@ -53,6 +57,14 @@ class DataLabController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return XapiService
+     */
+    protected function getXapiService()
+    {
+        return $this->createService('Xapi:XapiService');
     }
 
     protected function getAppService()
