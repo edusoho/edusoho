@@ -3,9 +3,6 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
-use QiQiuYun\SDK\Auth;
 
 class DataLabController extends BaseController
 {
@@ -31,7 +28,7 @@ class DataLabController extends BaseController
             $this->setXapiSetting(1);
         }
 
-        return $this->render('admin/data-lab/open-setting.html.twig'); 
+        return $this->render('admin/data-lab/open-setting.html.twig');
     }
 
     public function disableXapiSettingAction(Request $request)
@@ -41,7 +38,8 @@ class DataLabController extends BaseController
             $xapiSdk->setting('xapiUpload', false);
             $this->setXapiSetting(0);
         }
-        return $this->render('admin/data-lab/close-setting.html.twig'); 
+
+        return $this->render('admin/data-lab/close-setting.html.twig');
     }
 
     private function setXapiSetting($enable)
