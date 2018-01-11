@@ -20,6 +20,9 @@ class DistributorJobDataDaoImpl extends GeneralDaoImpl implements DistributorJob
                 'target = :target',
                 'pendingTarget = :pendingTarget',
             ),
+            'orderbys' => array(
+                'id',
+            ),
         );
     }
 }

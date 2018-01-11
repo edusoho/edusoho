@@ -14,7 +14,23 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
 
     protected function convertData($order)
     {
+        $item = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
         return array(
+            'user_source_id' => $order['user_id'],
+            'source_id' => $order['id'],
+            'product_type' => $item[0]['target_type'],
+            'product_id' => $item[0]['target_id'],
+            'title' => $order['title'],
+            'sn' => $order['sn'],
+            'order_created_time' => $order['created_time'],
+            'payment_time' => $order['pay_time'],
+            'refund_expiry_day' => $order['expired_refund_days'],
+            'refund_deadline' => $order['refund_deadline'],
+            'price' => $order['price_amount'],
+            'pay_amount' => $order['pay_amount'],
+            'deduction' => $order['price_amount'] - $order['pay_amount'],
+            'status' => $order['status'],
         );
     }
 
@@ -31,7 +47,7 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
     protected function getDependentTarget($order)
     {
         $userJobData = $this->getDistributorJobDataDao()->search(
-            array('status' => DistributorJobStatus::$finished, 'target' => 'user:'.$order['userId']),
+            array('status' => DistributorJobStatus::$FINISHED, 'target' => 'user:'.$order['user_id']),
             array('id' => 'DESC'),
             0,
             1
@@ -52,5 +68,10 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
         $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
 
         return $auth->sign($json);
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }
