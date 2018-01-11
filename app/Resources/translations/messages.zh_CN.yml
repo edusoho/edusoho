@@ -2372,7 +2372,7 @@ classroom.thread.create.event_time: 活动时间
 classroom.thread.create.event_start_time: 活动开始时间
 classroom.thread.create.event_location: 活动地点
 classroom.thread.create.cover_image: 封面图片
-classroom.thread.create.cover_image.placeholder: 推荐图片大小200*112
+classroom.thread.create.cover_image.placeholder: 图片推荐尺寸：200×112px
 classroom.thread.create.views_btn: 浏览...
 classroom.thread.create.maxUsers: 最大人数
 classroom.thread.create.maxUsers.placeholder: 不限
