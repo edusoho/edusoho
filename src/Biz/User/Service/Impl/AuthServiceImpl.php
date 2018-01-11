@@ -153,8 +153,13 @@ class AuthServiceImpl extends BaseService implements AuthService
                 $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
             }
         }
-
         $this->getUserService()->changeNickname($userId, $newName);
+
+        $user = $this->getUserService()->getUser($userId);
+        if (!empty($user) && 'distributor' == $user['type']) {
+            $user['token'] = $user['distributorToken'];
+            $this->getDistributorUserService()->createJobData($user);
+        }
     }
 
     public function changeEmail($userId, $password, $newEmail)
@@ -402,5 +407,10 @@ class AuthServiceImpl extends BaseService implements AuthService
     private function isMarketingType($registration)
     {
         return isset($registration['type']) && 'marketing' == $registration['type'];
+    }
+
+    protected function getDistributorUserService()
+    {
+        return $this->createService('Distributor:DistributorUserService');
     }
 }

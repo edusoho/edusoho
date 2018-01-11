@@ -18,7 +18,7 @@ services:
             - { name: codeages_plugin.event.subscriber }
 
     order_subscriber:
-        class: Biz\OrderFacade\Event\OrderSubscriber
+        class: Biz\Distributor\Event\OrderSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }

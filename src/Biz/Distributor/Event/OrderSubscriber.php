@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\OrderFacade\Event;
+namespace Biz\Distributor\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
@@ -14,6 +14,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         return array(
             'payment_trade.paid' => 'onPaid',
             'payment_trade.refunded' => 'onTradeRefunded',
+            'order.finished' => 'onOrderFinished',
         );
     }
 
@@ -61,6 +62,20 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
             $user = $this->getUserService()->getUser($order['user_id']);
             if (!empty($user) && 'distributor' == $user['type']) {
                 $this->getDistributorOrderService()->createJobData($order);
+            }
+        }
+    }
+
+    public function onOrderFinished(Event $event)
+    {
+        $order = $event->getSubject();
+        foreach ($order['items'] as $item) {
+            $order = $this->getOrderService()->getOrder($item['order_id']);
+            if (!empty($order)) {
+                $user = $this->getUserService()->getUser($order['user_id']);
+                if (!empty($user) && 'distributor' == $user['type']) {
+                    $this->getDistributorOrderService()->createJobData($order);
+                }
             }
         }
     }
