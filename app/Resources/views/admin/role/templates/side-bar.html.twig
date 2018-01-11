@@ -9,6 +9,7 @@
       {% endif %}
 
       <a
+          id="menu_{{ m.code|default() }}"
           title="{{ m.name|trans({}, 'menu') }}"
           class="{{ menuClass }}"
           href="{{ permission_path(tabMenu) }}"
