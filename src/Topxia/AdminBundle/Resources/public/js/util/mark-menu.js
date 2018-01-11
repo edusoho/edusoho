@@ -1,26 +1,44 @@
 define(function(require, exports, module) {
   var markMenus = ['menu_admin_app', 'menu_admin_cloud_data_lab_manage'], ids = '';
-  for (index in markMenus) {
-      ids+= '#'+ markMenus[index]+',';
-  }
+  var localSetting = getLocalSetting(markMenus);
 
-  ids = ids.substring(0,ids.length-1);
-  var $menus = $(ids);
+  clickEvent();
 
-
-  if (window.localStorage) {
-    var localSetting = window.localStorage.getItem('markMenuList');
-    if (!localSetting) {
-      localSetting = '';
+  function clickEvent() {
+    for (index in markMenus) {
+      if ($.inArray(markMenus[index], localSetting) == -1) {
+        ids+= '#'+ markMenus[index]+',';
+      }
     }
-    localSetting = localSetting.split(',') 
 
-    $menus.on('click', function(){
-        localSetting.push(this.id);
-        window.localStorage.setItem('markMenuList', localSetting.join(','));
-    })
+    ids = ids.substring(0,ids.length-1);
+    var $menus = $(ids);
+    $menus.addClass('new');
+    if (window.localStorage) {
+      $menus.on('click', function(){
+          if ($.inArray(this.id, localSetting) == -1) {
+            $(this).removeClass('new');
+            localSetting.push(this.id);
+            window.localStorage.setItem('markMenuList', localSetting.join(','));
+          }
+      })
+    }
   }
 
-  $menus.addClass('new');
+  function getLocalSetting(markMenus) {
+    var newLocalSetting = [];
+    if (window.localStorage) {
+      localSetting = window.localStorage.getItem('markMenuList') ? window.localStorage.getItem('markMenuList') : '';
+      localSetting = localSetting.split(',');
+      var newLocalSetting = [];
+      for (index in localSetting) {
+        if ($.inArray(localSetting[index], markMenus) > -1) {
+          newLocalSetting.push(localSetting[index]);
+        }
+      }
+    }
+
+    return newLocalSetting;
+  }
 });
 
