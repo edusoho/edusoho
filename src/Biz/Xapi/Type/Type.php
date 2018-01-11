@@ -17,7 +17,6 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Context\BizAware;
-use QiQiuYun\SDK\Auth;
 
 abstract class Type extends BizAware
 {
