@@ -33,4 +33,6 @@ interface XapiService
     public function archiveStatement();
 
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0);
+
+    public function getXapiSdk();
 }
