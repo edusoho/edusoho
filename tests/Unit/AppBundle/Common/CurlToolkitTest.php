@@ -33,7 +33,6 @@ class CurlToolkitTest extends BaseTestCase
         }
 
         $result = CurlToolkit::request('PUT', 'http://www.edusoho.com/question/get/token');
-        $this->assertEquals(32, strlen($result));
         if (empty($result)) {
             $this->assertEmpty($result);
         } else {
@@ -41,12 +40,6 @@ class CurlToolkitTest extends BaseTestCase
         }
 
         $result = CurlToolkit::request('PATCH', 'http://www.edusoho.com/question/get/token');
-        $this->assertEquals(32, strlen($result));
-        if (empty($result)) {
-            $this->assertEmpty($result);
-        } else {
-            $this->assertEquals(32, strlen($result));
-        }
         if (empty($result)) {
             $this->assertEmpty($result);
         } else {
@@ -54,7 +47,6 @@ class CurlToolkitTest extends BaseTestCase
         }
 
         $result = CurlToolkit::request('DELETE', 'http://www.edusoho.com/question/get/token');
-        $this->assertEquals(32, strlen($result));
         if (empty($result)) {
             $this->assertEmpty($result);
         } else {
