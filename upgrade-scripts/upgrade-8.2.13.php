@@ -108,6 +108,7 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function xapiStatementPushingToCreated()
     {
         $this->getConnection()->exec("UPDATE `xapi_statement` SET status ='created' WHERE status = 'pushing';");
+        \Biz\Crontab\SystemCrontabInitializer::init();
 
         return 1;
     }
