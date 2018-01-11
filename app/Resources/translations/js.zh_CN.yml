@@ -776,7 +776,7 @@ oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形
 oauth.captcha_code_length_tip: 图形码为5位数
 oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
-oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
+oauth.register.time_limit: 由于您注册次数过多，请稍后尝试
 oauth.register.error_message: 注册出现异常，请联系管理员
 
 

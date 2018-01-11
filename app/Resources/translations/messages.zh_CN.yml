@@ -4108,7 +4108,7 @@ my.teaching.open_course.lesson.header.content.tips: 直播已经开始，直播�
 my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
-my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍候再来：
+my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -7805,7 +7805,7 @@ site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误
 site.register.sensitive_words: 用户名中含有敏感词
-site.register.time_limit: 由于您注册次数过多，请稍候尝试
+site.register.time_limit: 由于您注册次数过多，请稍后尝试
 site.incorrect.username_or_password: 用户名或密码不正确。
 site.illegal.request: 非法请求
 site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
