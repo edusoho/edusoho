@@ -6,7 +6,9 @@
 {% block main %}
   <div class="mtl">
     {% if not xapiSetting.enabled|default() %}
-      <p style="color: red">当前数据分析服务已关闭，报表数据无法更新。可在<a href="{{ path('admin_cloud_data_lab_setting') }}">【设置】</a>中重新启用该服务。</p>
+      <p style="color: red">
+        {{ 'admin.datalab.warning_tip'|trans({'url': path('admin_cloud_data_lab_setting')})|raw }}
+      </p>
     {% endif %}
     <iframe id="xapi-data" name="xapi-data" src="{{ url }}" style="width: 100%;height: 900px;border: none;">
     </iframe>

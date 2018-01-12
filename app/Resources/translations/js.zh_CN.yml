@@ -786,3 +786,5 @@ admin.user.statistics.data.learn_time: 学习时长/分钟
 admin.user.statistics.data.time: 时长
 
 course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
+
+admin.data.lab.setting.error: 发生异常了，请重试！

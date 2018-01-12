@@ -46,11 +46,11 @@
 
 {% set xapiSetting = setting('xapi') %}
 <div class="mtl">
-  开起数据分析服务：
-  <label id="xapi-swith" data-disable="{{ path('admin_cloud_data_lab_setting_disable_modal') }}" data-enabled="{{ path('admin_cloud_data_lab_setting_enable_modal') }}" for="switch" class="form-switch {% if xapiSetting.enabled %}checked{% endif %}">
+  {{ 'admin.datalab.setting.operation_title'|trans }} 
+  <label id="xapi-swith" data-disable="{{ path('admin_cloud_data_lab_setting_disable_modal') }}" data-enabled="{{ path('admin_cloud_data_lab_setting_enable_modal') }}" for="switch" class="mls form-switch {% if xapiSetting.enabled %}checked{% endif %}">
   </label> 
   <a class="mlm" href="http://open.edusoho.com/doc/agreement/privacy-content.html" target="_blank">
-    《用户协议》
+    《{{ 'admin.datalab.setting.agreement'|trans }}》
   </a>
 </div>
 {% endblock %}

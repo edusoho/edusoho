@@ -1,15 +1,14 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
-提示：
+{{ 'admin.datalab.setting.modal_title'|trans }}
 {% endblock %}
 
 {% block body %}
-开启后，将在 24 小时内开始更新数据。
-关闭期内的学习数据无法更新到报表中。
+  {{ 'admin.datalab.setting.modal_enable_body'|trans }}
 {% endblock %}
 
 {% block footer %}
-    <button id="xapi-setting-confirm" class="btn btn-primary pull-right">{{ '确认开启'|trans }}</button>
-    <button type="button"class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
+    <button id="xapi-setting-confirm" class="btn btn-primary pull-right">{{ 'admin.datalab.setting.btn_open'|trans }}</button>
+    <button type="button"class="btn btn-link pull-right" data-dismiss="modal">{{ 'admin.datalab.setting.btn_cancel'|trans }}</button>
 {% endblock %}

@@ -1,5 +1,5 @@
 define(function(require, exports, module){
-
+	var Notify = require('common/bootstrap-notify');
   exports.run = function(){
       var $swith = $('#xapi-swith'), $modal = $('#modal'), url='';
       $swith.on('click', function(){
@@ -12,10 +12,15 @@ define(function(require, exports, module){
 
       $modal.on('click', '#xapi-setting-confirm', function(){
         var $btn = $(this);
-        $.post(url, function(){
+        $.post(url, function(res){
+          if (res.error) {
+              alert(res.error);
+          }
           $swith.toggleClass('checked');
           $modal.modal('hide');
-        })
+        }).error(function() { 
+          Notify.danger(Translator.trans('admin.data.lab.setting.error'));
+         })
       })
   };
 });
