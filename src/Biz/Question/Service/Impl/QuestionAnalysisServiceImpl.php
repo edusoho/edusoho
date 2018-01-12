@@ -4,7 +4,6 @@ namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionAnalysisService;
 
 class QuestionAnalysisServiceImpl extends BaseService implements QuestionAnalysisService

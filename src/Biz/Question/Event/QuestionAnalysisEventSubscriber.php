@@ -12,7 +12,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
     public static function getSubscribedEvents()
     {
         return array(
-            'exam.finish'   => 'onTestpaperQuestionAnalysis',
+            'exam.finish' => 'onTestpaperQuestionAnalysis',
             'exam.reviewed' => 'onTestpaperQuestionAnalysis',
         );
     }
@@ -36,10 +36,11 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
     {
         $items = $this->getTestpaperService()->findItemsByTestId($paperId);
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
-        
+
         foreach ($questions as $key => $question) {
             $questions[$key]['score'] = $items[$question['id']]['score'];
         }
+
         return $questions;
     }
 
@@ -100,7 +101,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
             'userId' => $paperResult['userId'],
             'testId' => $paperResult['testId'],
             'type' => $paperResult['type'],
-            'status' => 'finished'
+            'status' => 'finished',
         );
         $userResultCount = $this->getTestpaperService()->searchTestpaperResultsCount($conditions);
 
@@ -112,7 +113,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
             if (!$userAnswer['answer'] || ($paperResult['type'] != 'testpaper' && $question['type'] == 'essay')) {
                 continue;
             }
-            
+
             $questionAnalysis = empty($existAnalysis[$question['id']]) ? array() : $existAnalysis[$question['id']];
             $questionObj = $this->getQuestionService()->getQuestionConfig($question['type']);
             $userAnswerIndexes = $questionObj->analysisAnswerIndex($question, $userAnswer);
@@ -133,6 +134,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
             'questionIds' => $questionIds,
         );
         $analysis = $this->getQuestionAnalysisService()->searchAnalysis($conditions, array(), 0, PHP_INT_MAX);
+
         return empty($analysis) ? array() : ArrayToolkit::group($analysis, 'questionId');
     }
 

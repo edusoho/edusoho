@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -151,11 +150,11 @@ class HomeworkManageController extends BaseController
 
         return $this->render('homework/manage/result-analysis.html.twig', array(
             'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
-            'paper' => $paper, 
+            'paper' => $paper,
             'questions' => $questions,
             'relatedData' => $relatedData,
-            'targetType' => $targetType
-        )); 
+            'targetType' => $targetType,
+        ));
     }
 
     protected function getCheckedEssayQuestions($questions)

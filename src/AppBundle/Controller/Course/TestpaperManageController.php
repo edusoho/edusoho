@@ -105,7 +105,7 @@ class TestpaperManageController extends BaseController
             'activityId' => $activityId,
             'targetId' => $course['id'],
             'targetType' => 'course',
-            'studentNum' => $course['studentNum']
+            'studentNum' => $course['studentNum'],
         ));
     }
 

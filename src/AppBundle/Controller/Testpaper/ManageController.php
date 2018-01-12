@@ -9,7 +9,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -521,11 +520,11 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/result-analysis.html.twig', array(
             'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
-            'paper' => $paper, 
+            'paper' => $paper,
             'questions' => $questions,
             'questionTypes' => $this->getCheckedQuestionType($paper),
             'relatedData' => $relatedData,
-            'targetType' => $targetType
+            'targetType' => $targetType,
         ));
     }
 
