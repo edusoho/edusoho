@@ -30,11 +30,11 @@ class DistributorSyncJob extends AbstractJob
                 $this->getDistributorService()->batchUpdateStatus($jobData, $status);
 
                 $this->getJobDao()->update(
-                    $this->id, 
+                    $this->id,
                     array(
                         'args' => array(
-                            'type' => $this->getDistributorService()->getNextJobType()
-                        )
+                            'type' => $this->getDistributorService()->getNextJobType(),
+                        ),
                     )
                 );
             }
