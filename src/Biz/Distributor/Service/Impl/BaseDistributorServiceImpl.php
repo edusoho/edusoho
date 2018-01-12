@@ -22,14 +22,10 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
 
     public function createJobData($dataObj)
     {
-        $dependentTarget = $this->getDependentTarget($dataObj);
-
         $result = array(
             'data' => json_encode($this->convertData($dataObj)),
             'jobType' => $this->getJobType(),
-            'status' => empty($dependentTarget) ? DistributorJobStatus::$PENDING : DistributorJobStatus::$DEPENDENT,
-            'dependentTarget' => $dependentTarget,
-            'target' => strtolower($this->getJobType()).':'.$dataObj['id'],
+            'status' => DistributorJobStatus::$PENDING,
             'errMsg' => '',
         );
         $this->getDistributorJobDataDao()->create($result);
@@ -69,11 +65,6 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
     abstract protected function convertData($data);
 
     abstract protected function getJobType();
-
-    protected function getDependentTarget($data)
-    {
-        return '';
-    }
 
     protected function getDistributorJobDataDao()
     {

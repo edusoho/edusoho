@@ -3,7 +3,6 @@
 namespace Biz\Distributor\Service\Impl;
 
 use QiQiuYun\SDK\Auth;
-use Biz\Distributor\Util\DistributorJobStatus;
 
 class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
 {
@@ -42,22 +41,6 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
     protected function getJobType()
     {
         return 'Order';
-    }
-
-    protected function getDependentTarget($order)
-    {
-        $userJobData = $this->getDistributorJobDataDao()->search(
-            array('status' => DistributorJobStatus::$FINISHED, 'target' => 'user:'.$order['user_id']),
-            array('id' => 'DESC'),
-            0,
-            1
-        );
-
-        if (empty($userJobData)) {
-            return '';
-        } else {
-            return 'user:'.$order['userId'];
-        }
     }
 
     private function sign($arr, $time, $once)
