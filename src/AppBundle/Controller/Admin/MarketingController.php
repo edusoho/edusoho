@@ -43,39 +43,26 @@ class MarketingController extends BaseController
             throw new InvalidArgumentException('entry is require');
         }
         $marketingEntry = strtolower($marketingEntry);
-        // $loginDomain = $this->getMarketingDomain($marketingEntry);
-        // $loginPath = $this->getMarketingPath($marketingEntry);
         $site = $this->getSiteInfo();
         $siteDomain = $request->getSchemeAndHttpHost();
         $site['domain'] = $siteDomain;
 
         $storage = $this->getSettingService()->get('storage', array());
-        $site['access_key'] = $storage['cloud_access_key'];
 
         $user = $this->getCurrentUser();
         $user = ['user_source_id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
         ];
-
-        // $spec = new JsonHmacSpecification2('sha1');
-        // $body = $spec->serialize(['user' => $user, 'site' => $site]);
-
-        // $once = $this->makeRequestId();
-        // $deadline = time() + 5 * 60;
-        // $sign = $spec->signature(['secretKey' => $storage['cloud_secret_key']], $loginPath, $body, $deadline, $once);
-        // $sign = "{$storage['cloud_access_key']}:{$deadline}:{$once}:{$sign}";
-        $loginDomain = $this->getMarketingDomain($marketingEntry);
-        $loginPath = $this->getMarketingPath($marketingEntry);
-        $baseURI = $loginDomain.$loginPath;
-        $form = $this->createMarketingService($baseURI)->generateLoginForm($user, $site);
+        $drpDomain = $this->getMarketingDomain($marketingEntry);
+        $form = $this->createDrpService($drpDomain)->generateLoginForm($user, $site);
 
         return $this->render('admin/marketing/login.html.twig', array(
             'form' => $form,
         ));
     }
 
-    public function createMarketingService($baseURI)
+    public function createDrpService($drpDomain)
     {
         $settings = $this->getSettingService()->get('storage', array());
         $siteSettings = $this->getSettingService()->get('site', array());
@@ -86,8 +73,8 @@ class MarketingController extends BaseController
         $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
         $auth = new Auth($accessKey, $secretKey);
 
-        return new \QiQiuYun\SDK\Service\MarketingService($auth, array(
-            'base_uri' => $baseURI, //推送的URL需要配置
+        return new \QiQiuYun\SDK\Service\DrpService($auth, array(
+            'base_uri' => $drpDomain, //推送的URL需要配置
         ));
     }
 

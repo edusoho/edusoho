@@ -1,4 +1,5 @@
 <?php
+
 namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Auth;
@@ -33,7 +34,7 @@ abstract class BaseService
      * @var string
      */
     protected $baseUri;
-    
+
     public function __construct(Auth $auth, $options = array())
     {
         $this->auth = $auth;

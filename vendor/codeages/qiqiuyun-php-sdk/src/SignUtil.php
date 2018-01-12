@@ -23,43 +23,16 @@ class SignUtil
         return $json;
     }
 
-    /**
-     * 给所给的数组，先对里面的每个json对象进行key排序，将整个字符串转化为json, 再截取前100位
-     *
-     * @param $data 格式为
-     *  [
-     *      {
-     *          'd' => 1,
-     *          'a' => 2
-     *      }, ....
-     *  ]
-     */
-    public static function serializeJsonArrayAndCut($data)
+    public static function cut($str, $length = 512)
     {
-        $serializedData = array();
-        foreach ($data as $singleData) {
-            ksort($singleData);
-            array_push($serializedData, $singleData);
-        }
-
-        $jsonStr = json_encode($serializedData);
-
-        return substr($jsonStr, 0, 100);
+        return substr($str, 0, $length);
     }
 
-    public function serializeJsonAndCut($data)
-    {
-        $sortedJsonStr = self::serialize($data);
-        $jsonStr = json_encode($data);
-
-        return substr($jsonStr, 0, 100);
-    }
-
-    public static function sign($auth, $jsonStr)
+    public static function sign($auth, $str)
     {
         $time = time();
         $once = SDK\random_str('16');
-        $signText = implode('\n', array($time, $once, $jsonStr));
+        $signText = implode('\n', array($time, $once, $str));
         $sign = $auth->sign($signText);
         $accessKey = $auth->getAccessKey();
 

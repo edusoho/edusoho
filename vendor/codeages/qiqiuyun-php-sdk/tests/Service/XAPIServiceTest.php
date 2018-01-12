@@ -32,8 +32,8 @@ class ClientTest extends BaseTestCase
             ),
             'video' => array(
                 'id' => '1111',
-                'name' => '测试视频.mp4'
-            )
+                'name' => '测试视频.mp4',
+            ),
         );
         $result = array(
             'duration' => 100,
@@ -47,15 +47,13 @@ class ClientTest extends BaseTestCase
     }
 
     /**
-     * @expectedException QiQiuYun\SDK\Exception\ResponseException
+     * @expectedException \QiQiuYun\SDK\Exception\ResponseException
      * @expectedExceptionCode 9
-     *
-     * @return void
      */
     public function testWatchVideo_Error()
     {
         $service = $this->createXAPIService();
-        
+
         $actor = array(
             'id' => 1,
             'name' => '测试用户',
@@ -70,8 +68,8 @@ class ClientTest extends BaseTestCase
             ),
             'video' => array(
                 'id' => '1111',
-                'name' => '测试视频.mp4'
-            )
+                'name' => '测试视频.mp4',
+            ),
         );
         $result = array(
             'duration' => 100,
@@ -87,7 +85,7 @@ class ClientTest extends BaseTestCase
             'school' => array(
                 'id' => $this->accessKey,
                 'name' => '测试网校',
-            )
+            ),
         ));
     }
 }

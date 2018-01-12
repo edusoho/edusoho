@@ -3,23 +3,23 @@
 namespace QiQiuYun\SDK\Tests\Service;
 
 use QiQiuYun\SDK\Tests\BaseTestCase;
-use QiQiuYun\SDK\Service\MarketingService;
+use QiQiuYun\SDK\Service\DrpService;
 use QiQiuYun\SDK\Tests\Utils\ReflectionUtils;
 use QiQiuYun\SDK\Tests\Service\Tools\Mockedclient;
 
-class MarketingServiceTest extends BaseTestCase
+class DrpServiceTest extends BaseTestCase
 {
     public function setUp()
     {
         $auth = $this->createAuth();
-        $this->marketingService = new MarketingService($auth);
+        $this->drpService = new DrpService($auth,['base_uri'=>'http://fx.yxdev.com']);
     }
 
-    public function testPostDistributorJsonArrayData()
+    public function testPostData()
     {
         $mockedClient = new MockedClient();
-        $this->marketingService = ReflectionUtils::setProperty(
-            $this->marketingService,
+        $this->drpService = ReflectionUtils::setProperty(
+            $this->drpService,
             'client',
             $mockedClient
         );
@@ -28,9 +28,9 @@ class MarketingServiceTest extends BaseTestCase
         for ($i = 0; $i < 100; ++$i) {
             array_push($data, array('id' => $i, 'b' => $i));
         }
-        $result = $this->marketingService->postDistributorJsonArrayData('/test', $data);
+        $result = $this->drpService->postData($data,'user');
 
-        $this->assertEquals('http://fx.yxdev.com/test', $mockedClient->getUrl());
+        $this->assertEquals('http://fx.yxdev.com/post_merchant_data', $mockedClient->getUrl());
         $this->assertEquals('POST', $mockedClient->getMethod());
 
         $sign = $mockedClient->getData()['sign'];

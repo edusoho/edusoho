@@ -1,7 +1,7 @@
 <?php
 
 $filename = __DIR__.preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
-if (php_sapi_name() === 'cli-server' && is_file($filename)) {
+if ('cli-server' === php_sapi_name() && is_file($filename)) {
     return false;
 }
 
@@ -18,7 +18,6 @@ $app->before(function (Request $request) {
         $request->request->replace(is_array($data) ? $data : array());
     }
 });
-
 
 require __DIR__.'/route_xapi.php';
 
