@@ -23,7 +23,7 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
     public function createJobData($dataObj)
     {
         $result = array(
-            'data' => json_encode($this->convertData($dataObj)),
+            'data' => $this->convertData($dataObj),
             'jobType' => $this->getJobType(),
             'status' => DistributorJobStatus::$PENDING,
             'errMsg' => '',
