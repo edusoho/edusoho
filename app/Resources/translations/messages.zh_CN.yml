@@ -1912,17 +1912,6 @@ course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.task.learning.remaining.watch_time: 剩余观看时长
 course.btn.pay_tips: 正在创建订单...
-course.base: 基本信息
-course.base.content_title: 基础信息
-course.base.title: 标题
-course.base.sub_title: 副标题
-course.base.tag: 标签
-course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
-course.base.category: 分类
-course.base.serialize_mode: 连载状态
-course.base.serialize_mode.none: 非连载课程
-course.base.serialize_mode.serialized: 更新中
-course.base.serialize_mode.finished: 已完结
 
 # 文件
 file_chooser.empty: 没有资源...
