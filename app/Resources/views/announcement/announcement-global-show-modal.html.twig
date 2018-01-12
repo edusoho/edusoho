@@ -8,7 +8,7 @@
   <div class="announcement-detail clearfix">
     <div>
       {% if announcement.content | default('') %}
-        {{ announcement.content | raw }}
+        {{ announcement.content|cdn|raw }}
       {% endif %}
     </div>
     <div class="text-muted pull-right mtm">{{'announcement.modal.global.publish_time'|trans({'%createdTime%': announcement.createdTime | date('Y-m-d H:i') })}}</div>
