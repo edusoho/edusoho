@@ -86,6 +86,29 @@ class TestpaperManageController extends BaseController
         ));
     }
 
+    public function resultAnalysisAction(Request $request, $courseId, $activityId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultAnalysis';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultAnalysis';
+        }
+
+        return $this->forward($controller, array(
+            'activityId' => $activityId,
+            'targetId' => $course['id'],
+            'targetType' => 'course',
+            'studentNum' => $course['studentNum']
+        ));
+    }
+
     /**
      * @return CourseService
      */

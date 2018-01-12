@@ -1,0 +1,47 @@
+{% set questionType = question.type %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_body %}
+  <div class="testpaper-preview-answer clearfix mtl mbl">
+    <div class="testpaper-question-result">
+      <div class="testpaper-question-result-suggested">
+        <div class="testpaper-question-result-title">{{'参考答案：'|trans}}</div>
+        <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
+      </div>
+    </div>
+  </div>
+
+  {% if testType|default('testpaper') == 'testpaper' %}
+    <div class="testpaper-question-title hidden-xs">
+      <span class="two">{{ '初次答题'|trans }}</span>
+      <span class="one"></span>
+    </div>
+
+    <ul class="list-unstyled" style="padding-left:50px;">
+      {% for index in [2,1,0] %}
+        {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
+        <li class="question-with-data mbm">
+          {% if index == 2 %}
+            得 {{ question.score }} 分
+          {% elseif index == 1 %}
+            得 0 - {{ question.score }} 分
+          {% else %}
+            得 0 分
+          {% endif %}
+          
+          <span class="two label {% if index == 0 %}label-danger{% else %}label-success{% endif %} hidden-xs">
+            {% if itemKeyAnalysis and firstCount != 0 %}
+              {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+              {{ firstAnswerPercent }}%
+            {% else %}
+              0%
+            {% endif %}
+          </span>
+          <span class="one">
+            {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}人次
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

@@ -1086,6 +1086,30 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function resultAnalysisAction(Request $request, $id, $activityId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultAnalysis';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultAnalysis';
+        }
+
+        return $this->forward($controller, array(
+            'activityId' => $activityId,
+            'targetId' => $id,
+            'targetType' => 'classroom',
+            'studentNum' => $classroom['studentNum']
+        )); 
+    }
+
     private function getTagIdsFromRequest($request)
     {
         $tags = $request->request->get('tags');

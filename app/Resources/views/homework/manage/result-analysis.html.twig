@@ -1,0 +1,49 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/perfect-scrollbar.js','app/js/testpaper/analysis/index.js']) %}
+
+{% set showHeader = 1 %}
+{% set isIframeBody = 0 %}
+
+{% block paper_header %}
+  <div class="es-section testpaper-heading js-testpaper-heading">
+    <div class="testpaper-titlebar clearfix">
+      <h1 class="testpaper-title">{{ paper.name }}</h1>
+      <div class="testpaper-status">
+        <div class="label label-success">{{'试题分析'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
+  </div>
+{% endblock %}
+
+{% block paper_body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ 'course.plan_task.activity_manage.homework.question_total'|trans({'%itemCount%':paper.itemCount})|raw }}
+    </div>
+
+    <div class="panel-body">
+      <div class="question-set-items">
+        {% for question in questions %}
+          {% if question.isDelete|default(false) %}
+            {% include 'question/part/question-delete.html.twig' with {showScore:0,question:question}%}
+          {% else %}
+            {% set questionTemplate = getQuestionTypeTemplate(question.type, 'analysis') %}
+            {% if questionTemplate %}
+              {% set questionAnalysis = analyses[question.id]|default(null) %}
+              {% include questionTemplate with {questionAnalysis:questionAnalysis, question:question, firstCount:relatedData.finished, testType:paper.type, showScore:0} %}
+            {% endif %}
+          {% endif %}
+
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block paper_sidebar %}
+  {% include 'testpaper/analysis-card.html.twig' %}
+{% endblock %}

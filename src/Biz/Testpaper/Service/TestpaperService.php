@@ -134,4 +134,6 @@ interface TestpaperService
      * $maxScore
      */
     public function findTestResultsByTestpaperIdAndUserIds($userIds, $testpaperId);
+
+    public function findExamFirstResults($testId, $type, $activityId);
 }

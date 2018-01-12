@@ -1,0 +1,18 @@
+<div class="testpaper-question testpaper-question-{{ questionType }} js-testpaper-question" id="question{{ question.id }}">
+
+  <div class="testpaper-question-body">
+    {% include 'question/part/question-stem.html.twig' %}
+
+    {% block analysis_body %}
+      <div class="testpaper-question-title hidden-xs">
+        <span class="two">{{ '初次答题'|trans }}</span>
+        <span class="one"></span>
+      </div>
+
+      {% block analysis_content %}{% endblock %}
+    {% endblock %}
+    
+  </div>
+
+  {% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+</div>

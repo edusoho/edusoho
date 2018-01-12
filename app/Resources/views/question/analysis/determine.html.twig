@@ -1,0 +1,30 @@
+{% set questionType = question.type %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_content %}
+  <div class="testpaper-question-determine-inputs" style="float:none">
+    {% for index in [1,0] %}
+      {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
+      <div class="question-with-data mbm">
+        <label class="radio-inline {% if question.answer[0] == index %} active{% endif %}">
+          <input type="radio" data-type="determine" name="{{ question.id }}" value="{{ index }}" {% if question.answer[0] == index %}checked{% endif %} disabled>
+          {% if index == 1 %}{{ '正确'|trans }}{% else %}{{ '错误'|trans }}{% endif %}
+        </label>
+        <span class="two label label-success hidden-xs">
+          {% if itemKeyAnalysis and firstCount != 0 %}
+            {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+            {{ firstAnswerPercent }}%
+          {% else %}
+            0%
+          {% endif %}
+        </span>
+        <span class="one">
+          {% if itemKeyAnalysis %}
+            {{ itemKeyAnalysis.firstAnswerCount }}
+          {% else %}0{% endif %}
+          {{ '人次'|trans }}
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

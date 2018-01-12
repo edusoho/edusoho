@@ -1,0 +1,26 @@
+{% set questionType = question.type %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_content %}
+  <div class="testpaper-question-result" style="float:none">
+    <ul>
+      {% for index, answer in question.answer %}
+        {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
+        <li class="question-with-data mbm">
+          填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+          <span class="two label label-success hidden-xs">
+            {% if itemKeyAnalysis and firstCount != 0 %}
+              {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+              {{ firstAnswerPercent }}%
+            {% else %}
+              0%
+            {% endif %}
+          </span>
+          <span class="one">
+            {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}人次
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

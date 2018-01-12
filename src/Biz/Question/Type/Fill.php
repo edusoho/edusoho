@@ -31,21 +31,8 @@ class Fill extends BaseQuestion implements TypeInterface
             return array('status' => 'wrong', 'score' => 0);
         }
 
-        $rightCount = 0;
-        foreach ($questionAnswers as $index => $rightAnswer) {
-            $expectAnswer = array();
-            foreach ($rightAnswer as $key => $value) {
-                $value = trim($value);
-                $value = preg_replace("/([\x20\s\t]){2,}/", ' ', $value);
-                $expectAnswer[] = $value;
-            }
-
-            $actualAnswer = trim($answer[$index]);
-            $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", ' ', $actualAnswer);
-            if (in_array($actualAnswer, $expectAnswer)) {
-                ++$rightCount;
-            }
-        }
+        $userAnswerIndex = $this->getAnswerIndex($questionAnswers, $answer);
+        $rightCount = count($userAnswerIndex);
 
         if (0 == $rightCount) {
             return array('status' => 'wrong', 'score' => 0);
@@ -79,5 +66,41 @@ class Fill extends BaseQuestion implements TypeInterface
         }
 
         return $fields;
+    }
+
+    public function getAnswerStructure($question)
+    {
+        return $question['answer'];
+    }
+
+    public function analysisAnswerIndex($question, $userAnswer)
+    {
+        $questionAnswers = array_values($question['answer']);
+        $answer = array_values($userAnswer['answer']);
+
+        $userRightAnswerIndex = $this->getAnswerIndex($questionAnswers, $answer);
+        
+        return array($question['id'] => $userRightAnswerIndex);
+    }
+
+    protected function getAnswerIndex($questionAnswers, $answer)
+    {
+        $userRightAnswerIndex = array();
+        foreach ($questionAnswers as $index => $rightAnswer) {
+            $expectAnswer = array();
+            foreach ($rightAnswer as $key => $value) {
+                $value = trim($value);
+                $value = preg_replace("/([\x20\s\t]){2,}/", ' ', $value);
+                $expectAnswer[] = $value;
+            }
+
+            $actualAnswer = trim($answer[$index]);
+            $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", ' ', $actualAnswer);
+            if (in_array($actualAnswer, $expectAnswer)) {
+                $userRightAnswerIndex[] = $index;
+            }
+        }
+
+        return $userRightAnswerIndex;
     }
 }
