@@ -23,6 +23,9 @@ class DistributorJobDataDaoImpl extends GeneralDaoImpl implements DistributorJob
             'orderbys' => array(
                 'id',
             ),
+            'serializes' => array(
+                'data' => 'json',
+            ),
         );
     }
 }

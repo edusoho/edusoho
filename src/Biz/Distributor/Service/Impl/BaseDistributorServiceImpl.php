@@ -25,7 +25,7 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
         $dependentTarget = $this->getDependentTarget($dataObj);
 
         $result = array(
-            'data' => json_encode($this->convertData($dataObj)),
+            'data' => $this->convertData($dataObj),
             'jobType' => $this->getJobType(),
             'status' => empty($dependentTarget) ? DistributorJobStatus::$PENDING : DistributorJobStatus::$DEPENDENT,
             'dependentTarget' => $dependentTarget,
