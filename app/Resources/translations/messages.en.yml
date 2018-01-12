@@ -5019,11 +5019,11 @@ admin.edu_cloud.edu_video.play_water_mark_tips: 'The watermark will be broadcast
 admin.edu_cloud.edu_video.open_embed_watermark: 'Open embedded watermark'
 admin.edu_cloud.edu_video.open_embed_watermark_tips: 'Can better protect the video copyright; upload the watermark embedded in the video encoding, can not be deleted; not embedded in the watermark video will play the player when the watermark.'
 admin.edu_cloud.edu_video.play_water_mark_picture: 'Player Watermark Image'
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150 × 50.'
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px.'
 admin.edu_cloud.edu_video.picture_upload_btn: 'Upload Picture'
 admin.edu_cloud.edu_video.picture_delete_btn: Delete
 admin.edu_cloud.edu_video.play_embed_watermark: 'Video embedded watermark image'
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270 × 90.'
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px.'
 admin.edu_cloud.edu_video.video_embed_watermark_picture: 'Video embedded watermark image'
 admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, the current website domain name and student username will be displayed randomly at random time in the video playback.'
 admin.edu_cloud.edu_video.finger_print_time_label: 'Cloud video fingerprint display duration'
