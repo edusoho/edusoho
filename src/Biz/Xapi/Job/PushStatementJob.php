@@ -16,50 +16,38 @@ class PushStatementJob extends AbstractJob
             return;
         }
 
+        for ($i = 0; $i <= 5; ++$i) {
+            $this->pushStatements(500);
+        }
+    }
+
+    protected function pushStatements($count)
+    {
         try {
             $condition = array(
-                'status' => 'created',
+                'status' => 'converted',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 500);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, $count);
             $statementIds = ArrayToolkit::column($statements, 'id');
+            $uuids = ArrayToolkit::column($statements, 'uuid');
             $statements = ArrayToolkit::index($statements, 'uuid');
 
-            foreach ($statements as &$statement) {
-                $statement['key'] = "{$statement['verb']}_{$statement['target_type']}";
-            }
-
-            $groupStatements = ArrayToolkit::group($statements, 'key');
-            $pushStatements = array();
-            foreach ($groupStatements as $key => $values) {
-                $push = $this->biz["xapi.push.{$key}"];
-                $result = $push->packages($values);
-                if (is_array($result)) {
-                    $pushStatements = array_merge($pushStatements, $result);
-                }
-            }
+            $pushStatements = ArrayToolkit::column($statements, 'data');
 
             if (empty($pushStatements)) {
                 return;
             }
-
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
             $results = $this->createXAPIService()->pushStatements($pushStatements);
 
-            $pushData = array();
+            $callbackIds = array();
             if (is_array($results)) {
-                $pushStatements = ArrayToolkit::index($pushStatements, 'id');
-                foreach ($pushStatements as $key => $data) {
-                    if (!in_array($key, $results)) {
-                        $this->biz['logger']->info($results);
-                        unset($pushStatements[$key]);
-                        continue;
-                    }
-
-                    if (isset($statements[$key])) {
-                        $pushData[$statements[$key]['id']] = $data;
+                foreach ($results as $uuid) {
+                    if (in_array($uuid, $uuids)) {
+                        $callbackIds[] = $uuid;
                     }
                 }
-                $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
+                $this->getXapiService()->updateStatusPushedAndPushedTimeByUuids($callbackIds, time());
             }
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);

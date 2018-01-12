@@ -19,7 +19,6 @@ class JobLogDaoImpl extends GeneralDaoImpl implements JobLogDao
             'orderbys' => array('created_time', 'id'),
             'conditions' => array(
                 'job_fired_id = :job_fired_id ',
-                'name = :name',
             ),
         );
     }

@@ -5,7 +5,6 @@ master
 develop 
 
 [![build](http://coding.codeages.net/edusoho/edusoho/badges/develop/build.svg)](http://coding.codeages.net/edusoho/edusoho/commits/develop) 
-[![coverage](http://coding.codeages.net/edusoho/edusoho/badges/develop/coverage.svg)](http://coding.codeages.net/edusoho/edusoho/commits/develop)
 
 
 EduSoho网络课堂
