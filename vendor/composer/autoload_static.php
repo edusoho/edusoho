@@ -23,9 +23,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
         '5500a79e13a6ff0c087268676dcb4c2f' => __DIR__ . '/..' . '/wenqinruan/omnipay-alipay/src/Common/helpers.php',
-        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
+        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
+        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -70,6 +71,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
         ),
         'O' => 
@@ -89,6 +91,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'G' => 
         array (
             'Gregwar\\Captcha\\' => 16,
+        ),
+        'F' => 
+        array (
+            'Facebook\\' => 9,
         ),
         'E' => 
         array (
@@ -240,6 +246,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -267,6 +277,10 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         'Gregwar\\Captcha\\' => 
         array (
             0 => __DIR__ . '/..' . '/gregwar/captcha',
+        ),
+        'Facebook\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
         'Endroid\\QrCode\\' => 
         array (

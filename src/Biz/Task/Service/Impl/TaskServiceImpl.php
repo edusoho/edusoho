@@ -196,6 +196,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $tasks = $this->findTasksByCourseId($courseId);
+
         if (!empty($tasks)) {
             foreach ($tasks as $task) {
                 if ('published' !== $task['status']) {

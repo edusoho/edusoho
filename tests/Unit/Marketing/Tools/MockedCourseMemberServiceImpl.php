@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Marketing\Tools;
 
-use Biz\Marketing\Service\Impl\MarketingMemberServiceImpl;
+use Biz\Marketing\Service\Impl\MarketingCourseMemberServiceImpl;
 
-class MockedMemberServiceImpl extends MarketingMemberServiceImpl
+class MockedCourseMemberServiceImpl extends MarketingCourseMemberServiceImpl
 {
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
@@ -13,7 +13,7 @@ class MockedMemberServiceImpl extends MarketingMemberServiceImpl
         $this->data = $data;
 
         if ($data['price'] > 0) {
-            $order = $this->createOrder($userId, $userId, $data);
+            $order = $this->createOrder($courseId, $userId, $data);
             $this->order = $order;
         }
 

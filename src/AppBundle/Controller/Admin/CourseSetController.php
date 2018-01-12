@@ -108,11 +108,11 @@ class CourseSetController extends BaseController
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先从班级管理将本课程移除'));
         }
         $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($id, 1);
-        if (!empty($subCourses) || ($courseSet['parentId'] && $courseSet['locked'] == 1)) {
+        if (!empty($subCourses) || ($courseSet['parentId'] && 1 == $courseSet['locked'])) {
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
         }
         try {
-            if ($courseSet['status'] == 'draft') {
+            if ('draft' == $courseSet['status']) {
                 $this->getCourseSetService()->deleteCourseSet($id);
 
                 return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
@@ -135,7 +135,7 @@ class CourseSetController extends BaseController
 
     public function checkPasswordAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $password = $request->request->get('password');
             $currentUser = $this->getUser();
             $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
@@ -156,7 +156,7 @@ class CourseSetController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        if ($courseSet['type'] == 'live') {
+        if ('live' == $courseSet['type']) {
             $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
             if (empty($course['maxStudentNum'])) {
@@ -183,14 +183,14 @@ class CourseSetController extends BaseController
         $ref = $request->query->get('ref');
         $filter = $request->query->get('filter');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $number = $request->request->get('number');
 
             $courseSet = $this->getCourseSetService()->recommendCourse($id, $number);
 
             $user = $this->getUserService()->getUser($courseSet['creator']);
 
-            if ($ref == 'recommendList') {
+            if ('recommendList' == $ref) {
                 return $this->render(
                     'admin/course-set/course-recommend-tr.html.twig',
                     array(
@@ -217,11 +217,11 @@ class CourseSetController extends BaseController
     {
         $this->getCourseSetService()->cancelRecommendCourse($id);
 
-        if ($target == 'recommend_list') {
+        if ('recommend_list' == $target) {
             return $this->createJsonResponse(array('success' => 1));
         }
 
-        if ($target == 'normal_index') {
+        if ('normal_index' == $target) {
             return $this->renderCourseTr($id, $request);
         }
 
@@ -267,11 +267,11 @@ class CourseSetController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if ($filter == 'normal') {
+        if ('normal' == $filter) {
             $conditions['parentId'] = 0;
         }
 
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $conditions['parentId_GT'] = 0;
         }
 
@@ -289,7 +289,7 @@ class CourseSetController extends BaseController
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $classrooms = array();
 
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(
                 ArrayToolkit::column($courseSets, 'id')
             );
@@ -447,7 +447,7 @@ class CourseSetController extends BaseController
         $classrooms = array();
         $vips = array();
 
-        if ($fields['filter'] == 'classroom') {
+        if ('classroom' == $fields['filter']) {
             $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array($courseSet['id']));
             $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
@@ -455,7 +455,7 @@ class CourseSetController extends BaseController
                 $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
-        } elseif ($fields['filter'] == 'vip') {
+        } elseif ('vip' == $fields['filter']) {
             if ($this->isPluginInstalled('Vip')) {
                 $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
                 $vips = ArrayToolkit::index($vips, 'id');
@@ -509,11 +509,11 @@ class CourseSetController extends BaseController
 
             return array('success' => true, 'message' => $message);
         } else {
-            if ($type == 'homeworks' || $type == 'exercises') {
+            if ('homeworks' == $type || 'exercises' == $type) {
                 $message = $dataDictionary[$type].'数据删除失败或插件未安装或插件未升级';
 
                 return array('success' => false, 'message' => $message);
-            } elseif ($type == 'course') {
+            } elseif ('course' == $type) {
                 $message = $dataDictionary[$type].'数据删除';
 
                 return array('success' => false, 'message' => $message);
@@ -530,19 +530,19 @@ class CourseSetController extends BaseController
         $conditions = $request->query->all();
         $conditions['parentId'] = 0;
 
-        if (isset($conditions['categoryId']) && $conditions['categoryId'] == '') {
+        if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
             unset($conditions['categoryId']);
         }
 
-        if (isset($conditions['status']) && $conditions['status'] == '') {
+        if (isset($conditions['status']) && '' == $conditions['status']) {
             unset($conditions['status']);
         }
 
-        if (isset($conditions['title']) && $conditions['title'] == '') {
+        if (isset($conditions['title']) && '' == $conditions['title']) {
             unset($conditions['title']);
         }
 
-        if (isset($conditions['creator']) && $conditions['creator'] == '') {
+        if (isset($conditions['creator']) && '' == $conditions['creator']) {
             unset($conditions['creator']);
         }
 
@@ -604,9 +604,9 @@ class CourseSetController extends BaseController
 
     protected function filterCourseSetConditions($filter, $conditions)
     {
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $conditions['parentId_GT'] = 0;
-        } elseif ($filter == 'vip') {
+        } elseif ('vip' == $filter) {
             $conditions['isVip'] = 1;
             $conditions['parentId'] = 0;
         } else {
@@ -617,6 +617,7 @@ class CourseSetController extends BaseController
 
         if (!empty($conditions['categoryId'])) {
             $categorIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $categorIds[] = $conditions['categoryId'];
             $conditions['categoryIds'] = $categorIds;
             unset($conditions['categoryId']);
         }
@@ -630,7 +631,7 @@ class CourseSetController extends BaseController
         $coursesCount = array();
 
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-        if ($filter == 'classroom') {
+        if ('classroom' == $filter) {
             $classroomCourses = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
 
             $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
@@ -641,7 +642,7 @@ class CourseSetController extends BaseController
                 $course['classroomTitle'] = empty($classrooms[$course['classroomId']]) ? '' : $classrooms[$course['classroomId']]['title'];
             });
             $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseSetId');
-        } elseif ($filter == 'vip') {
+        } elseif ('vip' == $filter) {
             $courseSets = $this->_fillVipCourseSetLevels($courseSets);
         } else {
             $coursesCount = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);

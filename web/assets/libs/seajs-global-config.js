@@ -82,7 +82,7 @@ seajs.config({
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
         'player-new': __URL_PROTOCOL + ':' + app.cloudPlayerSdkUrl,
         'video-player-new': __URL_PROTOCOL + ':' + app.cloudVideoPlayerSdkUrl,
-        'new-uploader':  __URL_PROTOCOL + ':' + app.cloudOldUploaderSdkUrl,
+        'new-uploader':  __URL_PROTOCOL + ':' + app.cloudUploaderSdkUrl,
         'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
