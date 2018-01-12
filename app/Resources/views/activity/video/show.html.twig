@@ -1,4 +1,4 @@
-{% extends 'activity/content-layout.html.twig' %}
+{% extends 'layout-player.html.twig' %}
 
 {% do script(['app/js/activity/video/index.js']) %}
 
@@ -11,7 +11,7 @@
 			     data-watch-url="{{ path('course_acitvity_watch',{courseId: activity.fromCourseId, id: activity.id}) }}"
 			     data-id="{{ activity.id }}">
 				{#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
-				{{ render(controller('AppBundle:Player:show', {id: video.mediaId})) }}
+				{{ render(controller('AppBundle:Player:show', {id: video.mediaId, isPart: true})) }}
 			</div>
 		{% else %}
 			<div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content">

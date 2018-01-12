@@ -45,4 +45,6 @@ interface AccountService
     public function sumColumnByConditions($column, $conditions);
 
     public function countUsersByConditions($conditions);
+
+    public function sumAmountGroupByUserId($conditions);
 }

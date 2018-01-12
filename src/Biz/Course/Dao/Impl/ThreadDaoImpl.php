@@ -61,6 +61,14 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return $this->db()->fetchAll($sql, array($courseId, $type)) ?: array();
     }
 
+    public function findThreadIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('id');
+
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
     public function declares()
     {
         return array(
@@ -83,6 +91,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'title LIKE :title',
                 'content LIKE :content',
                 'courseId IN (:courseIds)',
+                'id IN (:ids)',
                 'private = :private',
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',

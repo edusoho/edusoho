@@ -19,7 +19,7 @@ class Factory
      *
      * @return Exporter
      */
-    public function create($name, $conditions)
+    public function create($name, $conditions = array())
     {
         $export = $this->exportMap($name);
 
@@ -38,6 +38,7 @@ class Factory
             'course-overview-testpaper-task-detail' => 'AppBundle\Component\Export\Course\OverviewTestpaperTaskDetailExporter',
             'bill-cash-flow' => 'AppBundle\Component\Export\Bill\CashBillExporter',
             'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
+            'user-learn-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter',
         );
 
         $names = explode(':', $name);

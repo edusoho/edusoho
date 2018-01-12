@@ -11,7 +11,7 @@
       <span class="color-gray">{{post.createdTime|smart_time}} </span>
       {% if author.badgeTitle|default(null) %}<span class="mll color-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
-    <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}</div>
     <div class="comment-sns">
       {% include 'thread/post-interaction.html.twig' %}
     </div>

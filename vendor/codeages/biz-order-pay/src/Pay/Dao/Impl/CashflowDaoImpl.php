@@ -38,6 +38,15 @@ class CashflowDaoImpl extends GeneralDaoImpl implements CashflowDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function sumAmountGroupByUserId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("sum(amount) as amount, user_id")
+            ->groupBy('user_id');
+
+        return $builder->execute()->fetchAll();
+    }
+
     private function sumColumnWhiteList()
     {
         return array('amount');
@@ -64,9 +73,11 @@ class CashflowDaoImpl extends GeneralDaoImpl implements CashflowDao
             'conditions' => array(
                 'id = :id',
                 'sn = :sn',
+                'action = :action',
                 'user_id != :except_user_id',
                 'user_id = :user_id',
                 'buyer_id = :buyer_id',
+                'user_id IN (:user_ids)',
                 'type = :type',
                 'title LIKE :title_like',
                 'amount > :amount_GT',

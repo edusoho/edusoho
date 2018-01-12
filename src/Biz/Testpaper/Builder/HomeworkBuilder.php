@@ -42,7 +42,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function showTestItems($testId, $resultId = 0)
+    public function showTestItems($testId, $resultId = 0, $options = array())
     {
         $test = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'homework');
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
@@ -119,7 +119,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         return $fields;
     }
 
-    public function updateSubmitedResult($resultId, $usedTime)
+    public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
         $homework = $this->getTestpaperService()->getTestpaperByIdAndType($result['testId'], $result['type']);
@@ -147,7 +147,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
             $fields['passedStatus'] = $this->getPassedStatus($rightPercent, $homework);
         }
 
-        $fields['usedTime'] = $usedTime + $result['usedTime'];
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
 
         return $this->getTestpaperService()->updateTestpaperResult($result['id'], $fields);
@@ -187,7 +187,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
                 continue;
             }
 
-            if ($question['type'] != 'material') {
+            if ('material' != $question['type']) {
                 ++$index;
             }
 
@@ -211,7 +211,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
-            if ($needCount == 0) {
+            if (0 == $needCount) {
                 continue;
             }
 
@@ -219,7 +219,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
                 $missing[$type] = $needCount;
                 continue;
             }
-            if ($type == 'material') {
+            if ('material' == $type) {
                 $validatedMaterialQuestionNum = 0;
                 foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {

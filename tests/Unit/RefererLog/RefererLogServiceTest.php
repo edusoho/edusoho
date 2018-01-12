@@ -115,7 +115,8 @@ class RefererLogServiceTest extends BaseTestCase
 
         $refererLogs = $this->getRefererLogService()->searchRefererLogs(array(), array('createdTime' => 'DESC'), 0, 2);
 
-        $this->assertArrayEquals(array($createRefererLog1, $createRefererLog2), $refererLogs);
+        $this->assertArrayEquals($createRefererLog1, $refererLogs[0]);
+        $this->assertArrayEquals($createRefererLog2, $refererLogs[1]);
     }
 
     public function testSearchRefererCount()

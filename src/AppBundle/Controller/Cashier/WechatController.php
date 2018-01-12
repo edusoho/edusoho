@@ -58,12 +58,33 @@ class WechatController extends PaymentController
         );
 
         $result = $apiKernel->handleApiRequest($apiRequest);
+        if (isset($result['isPaid']) && isset($result['paidSuccessUrl']) && $result['isPaid']) {
+            return $this->redirect($result['paidSuccessUrl']);
+        }
 
         $trade = $this->getPayService()->queryTradeFromPlatform($result['tradeSn']);
 
         return $this->render(
             'cashier/wechat/h5.html.twig',
             array(
+                'trade' => $trade,
+            )
+        );
+    }
+
+    public function wechatAppMwebTradeAction(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+        if ($trade['status'] == 'paid') {
+            return $this->createJsonResponse(array('result' => true, 'message' => '订单已支付！'));
+        }
+        $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($tradeSn);
+
+        return $this->render(
+            'cashier/wechat/redirect.html.twig',
+            array(
+                'mwebUrl' => $platformCreatedResult['mweb_url'],
                 'trade' => $trade,
             )
         );

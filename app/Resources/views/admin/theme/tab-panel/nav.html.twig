@@ -1,0 +1,11 @@
+
+{% do load_script('topxiaadminbundle/controller/theme/theme-setting/nav.js') %}
+<div class="tab-pane" id="top">
+  <div class="panel panel-default">
+      <div class="panel-heading">{{ 'admin.setting.theme.manage.setting_navigation'|trans }}</div>
+      <div class="panel-body ">
+          {{ 'admin.setting.theme.manage.navigation_num_tips'|trans({'%value%': navigation.topNavNum|default(5)})|raw }}
+          <div class="help color-danger hide mtm">{{ 'admin.setting.theme.manage.navigation_num_validation'|trans }}</div>
+      </div>
+  </div>
+</div>

@@ -7,6 +7,8 @@ use DateTimeZone;
 
 class TimeMachine
 {
+    private static $mockedTime = 0;
+
     private $timezone;
 
     const HALF_HOUR = 1800;
@@ -17,9 +19,35 @@ class TimeMachine
 
     const ONE_MONTH = 259200;
 
+    /**
+     * 转化为 时间字符串, 如 2018-12-22 13:33:54
+     *
+     * @dataExpression strtotime 指定的第一个参数， 如 '+1 Day'
+     * @format 时间格式
+     */
+    public static function expressionToStr($dateExpression, $format = 'Y-m-d H:i:s')
+    {
+        $timeMachine = new self('Asia/Shanghai');
+
+        return $timeMachine->format($format, strtotime($dateExpression));
+    }
+
     public function __construct($timezone)
     {
         $this->timezone = $timezone;
+    }
+
+    /**
+     * 单元测试时，解决因为时间引起的测试报错问题
+     */
+    public static function time()
+    {
+        return empty(self::$mockedTime) ? time() : self::$mockedTime;
+    }
+
+    public static function setMockedTime($time)
+    {
+        self::$mockedTime = $time;
     }
 
     public function format($format, $timestamp = null)

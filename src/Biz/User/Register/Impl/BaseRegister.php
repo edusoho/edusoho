@@ -23,10 +23,8 @@ abstract class BaseRegister
         }
 
         $this->validate($registration);
-
-        $user = $this->createUser($registration);
+        list($user, $registration) = $this->createUser($registration);
         $this->createUserProfile($registration, $user);
-
         $this->afterSave($registration, $user);
 
         return array($user, $this->createPerInviteUser($registration, $user));
@@ -92,6 +90,8 @@ abstract class BaseRegister
 
     protected function beforeSave($registration, $user = array())
     {
+        $registration = $this->generatePartnerAuthUser($registration);
+
         foreach ($this->getCreatedUserFields() as $attr => $defaultValue) {
             if (!empty($registration[$attr])) {
                 $user[$attr] = $registration[$attr];
@@ -105,10 +105,7 @@ abstract class BaseRegister
         $user['createdTime'] = time();
 
         $type = empty($registration['providerType']) ? $registration['type'] : $registration['providerType'];
-        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
-            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-        } elseif ('marketing' === $type) {
+        if (in_array($type, array('default', 'phpwind', 'discuz', 'marketing'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
         } else {
@@ -123,11 +120,20 @@ abstract class BaseRegister
             $user['orgCode'] = $registration['orgCode'];
         }
 
-        return $user;
+        return array($user, $registration);
     }
 
     protected function afterSave($registration, $user)
     {
+        //　绑定 discuz　用户
+        if (!empty($registration['partnerAuthUser']['id'])) {
+            $this->getUserService()->bindUser(
+                $this->getAuthService()->getPartnerName(),
+                $registration['partnerAuthUser']['id'],
+                $user['id'],
+                null
+            );
+        }
     }
 
     /**
@@ -136,6 +142,11 @@ abstract class BaseRegister
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->biz->service('User:AuthService');
     }
 
     /**
@@ -185,9 +196,9 @@ abstract class BaseRegister
 
     private function createUser($registration)
     {
-        $user = $this->beforeSave($registration);
+        list($user, $registration) = $this->beforeSave($registration);
 
-        return $this->getUserDao()->create($user);
+        return array($this->getUserDao()->create($user), $registration);
     }
 
     private function createUserProfile($registration, $user)
@@ -235,5 +246,23 @@ abstract class BaseRegister
         }
 
         return $inviteUser;
+    }
+
+    private function generatePartnerAuthUser($registration)
+    {
+        if ($this->getAuthService()->hasPartnerAuth()) {
+            // 从discuz中注册过来
+            if (!empty($registration['token']['userId'])) {
+                $registration['type'] = 'discuz';
+                $registration['partnerAuthUser'] = array(
+                    'id' => $registration['token']['userId'],
+                );
+            } else { // 非discuz注册
+                $provider = $this->getAuthService()->getAuthProvider();
+                $registration['partnerAuthUser'] = $provider->register($registration);
+            }
+        }
+
+        return $registration;
     }
 }

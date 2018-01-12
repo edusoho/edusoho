@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import postal from 'postal';
+import notify from 'common/notify';
 
 class courseInfo {
 
@@ -18,6 +19,7 @@ class courseInfo {
     this.initCkeidtor();
     this.initValidator();
     this.checkBoxChange();
+    this.changeAudioMode();
     this.initDatePicker('#expiryStartDate');
     this.initDatePicker('#expiryEndDate');
     this.renderMultiGroupComponent('course-goals', 'goals');
@@ -28,7 +30,19 @@ class courseInfo {
     CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
+    });
+  }
+
+  changeAudioMode() {
+    $('#audio-modal-id').on('change', "input[name='enableAudio']", function(){
+      let mode = $("#course-audio-mode").data('value');
+      if (mode == 'notAllowed') {
+        notify('info', Translator.trans('course.audio.enable.biz.user'));
+        $("[name='enableAudio']")[1].checked = true;
+        $("[name='enableAudio']")[0].checked = false;
+      }
     });
   }
 

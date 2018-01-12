@@ -31,6 +31,15 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array(), 0);
     }
 
+    public function findUnlockedUsersWithMobile($start, $limit)
+    {
+        $sql = "SELECT * FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != '' AND type <> 'system'";
+
+        $sql = $this->sql($sql, array('createdTime' => 'ASC'), $start, $limit);
+
+        return $this->db()->fetchAll($sql);
+    }
+
     public function getByVerifiedMobile($mobile)
     {
         return $this->getByFields(array('verifiedMobile' => $mobile));
@@ -93,7 +102,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if ($value == '0') {
+            if ('0' == $value) {
                 return true;
             }
 
@@ -109,7 +118,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         }
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            if ($conditions['keywordType'] == 'loginIp') {
+            if ('loginIp' == $conditions['keywordType']) {
                 $conditions[$conditions['keywordType']] = "{$conditions['keyword']}";
             } else {
                 $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
@@ -124,7 +133,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             unset($conditions['keywordUserType']);
         }
 
-        if (!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate') {
+        if (!empty($conditions['datePicker']) && 'longinDate' == $conditions['datePicker']) {
             if (isset($conditions['startDate'])) {
                 $conditions['loginStartTime'] = strtotime($conditions['startDate']);
             }
@@ -134,7 +143,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             }
         }
 
-        if (!empty($conditions['datePicker']) && $conditions['datePicker'] == 'registerDate') {
+        if (!empty($conditions['datePicker']) && 'registerDate' == $conditions['datePicker']) {
             if (isset($conditions['startDate'])) {
                 $conditions['startTime'] = strtotime($conditions['startDate']);
             }
@@ -182,6 +191,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'roles = :role',
                 'UPPER(nickname) LIKE :nickname',
                 'id =: id',
+                'id > :id_GT',
                 'loginIp = :loginIp',
                 'createdIp = :createdIp',
                 'approvalStatus = :approvalStatus',
@@ -204,6 +214,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'id NOT IN ( :excludeIds )',
                 'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
+                'distributorToken = :distributorToken',
             ),
         );
     }

@@ -243,7 +243,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 break;
             case 'update':
                 $exists = $this->getMaterialService()->searchMaterials(
-                    array('lessonId' => $activity['id']),
+                    array(
+                        'lessonId' => $activity['id'],
+                        'type' => 'course',
+                    ),
                     array('createdTime' => 'DESC'),
                     0,
                     PHP_INT_MAX

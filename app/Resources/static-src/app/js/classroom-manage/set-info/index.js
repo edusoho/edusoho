@@ -33,6 +33,7 @@ function initEditor() {
   let editor_classroom_about = CKEDITOR.replace('about', {
     allowedContent: true,
     toolbar: 'Detail',
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
     filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
     filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
   });

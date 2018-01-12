@@ -1,5 +1,5 @@
 import  'bootstrap-datetime-picker';
-import '!style-loader?insertAt=top!css-loader!nodeModulesDir/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css';
+import '!style-loader?insertAt=top!css-loader!node_modules/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css';
 import '!style-loader?insertAt=top!css-loader!less-loader!./index.less';
 
 $.fn.datetimepicker.dates['zh_CN'] = {

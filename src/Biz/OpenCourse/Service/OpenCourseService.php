@@ -120,4 +120,8 @@ interface OpenCourseService
     public function deleteMember($id);
 
     public function setCourseTeachers($courseId, $teachers);
+
+    public function getTodayOpenLiveCourseNumber();
+
+    public function findOpenLiveCourse($conditions, $userId);
 }

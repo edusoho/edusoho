@@ -86,6 +86,26 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         return $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($activityId, $userId);
     }
 
+    public function sumLearnTimeGroupByUserId($conditions)
+    {
+        $result = $this->getActivityLearnLogDao()->search($conditions, array(), 0, PHP_INT_MAX);
+        if (empty($result)) {
+            return array();
+        }
+
+        $users = array();
+        foreach ($result as $value) {
+            $userId = $value['userId'];
+            if (isset($users[$userId])) {
+                $users[$userId]['learnedTime'] += $value['learnedTime'];
+            } else {
+                $users[$userId]['learnedTime'] = $value['learnedTime'];
+            }
+        }
+
+        return $users;
+    }
+
     /**
      * @return ActivityLearnLogDaoImpl
      */

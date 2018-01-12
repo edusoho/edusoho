@@ -15,7 +15,6 @@ use Biz\Testpaper\Dao\TestpaperResultDao;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\Dao\TestpaperItemResultDao;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
-use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
@@ -124,11 +123,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return ArrayToolkit::index($testpapers, 'id');
     }
 
-    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
-    {
-        return $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
-    }
-
     public function searchTestpapers($conditions, $orderBy, $start, $limit)
     {
         return $this->getTestpaperDao()->search($conditions, $orderBy, $start, $limit);
@@ -223,7 +217,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw new ResourceNotFoundException('testpaper', $id);
+            throw $this->createNotFoundException("Testpaper(#{$id}) not found");
         }
 
         if (!in_array($testpaper['status'], array('closed', 'draft'))) {
@@ -243,11 +237,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw new ResourceNotFoundException('testpaper', $id);
+            throw $this->createNotFoundException("Testpaper(#{$id}) not found");
         }
 
         if (!in_array($testpaper['status'], array('open'))) {
-            throw $this->createAccessDeniedException('试卷状态不合法!');
+            throw $this->createServiceException('试卷状态不合法!');
         }
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
@@ -295,6 +289,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function getTestpaperResult($id)
     {
         return $this->getTestpaperResultDao()->get($id);
+    }
+
+    public function findTestpaperResultsByIds($ids)
+    {
+        return $this->getTestpaperResultDao()->findByIds($ids);
     }
 
     public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
@@ -365,7 +364,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpapersScore($conditions)
     {
-        return $this->getTestpaperResultDao()->sumScoreByParames($conditions);
+        return $this->getTestpaperResultDao()->sumScoreByParams($conditions);
     }
 
     public function buildTestpaper($fields, $type)
@@ -391,12 +390,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
         $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
+        $orders = empty($formData['seq']) ? array() : $formData['seq'];
 
         $this->submitAnswers($result['id'], $answers, $attachments);
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
             $result['id'],
-            $formData['usedTime']
+            $formData['usedTime'],
+            array('orders' => $orders)
         );
 
         $this->dispatchEvent('exam.finish', new Event($paperResult));
@@ -408,7 +409,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $total = array();
 
-        if ($testpaper['type'] == 'homework') {
+        if ('homework' == $testpaper['type']) {
             return $total;
         }
 
@@ -417,7 +418,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            if ($type == 'material') {
+            if ('material' == $type) {
                 $materialScore = 0;
 
                 foreach ($items[$type] as $material) {
@@ -483,24 +484,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaperResult;
     }
 
-    protected function completeQuestion($items, $questions)
-    {
-        foreach ($items as $item) {
-            if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))) {
-                $questions[$item['questionId']] = array(
-                    'id' => $item['questionId'],
-                    'isDeleted' => true,
-                    'stem' => '此题已删除',
-                    'score' => 0,
-                    'answer' => '',
-                    'type' => $item['questionType'],
-                );
-            }
-        }
-
-        return $questions;
-    }
-
     public function showTestpaperItems($testId, $resultId = 0)
     {
         $testpaper = $this->getTestpaper($testId);
@@ -522,7 +505,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($items as $item) {
             $itemResult = empty($itemResults[$item['questionId']]) ? array() : $itemResults[$item['questionId']];
 
-            if ($item['parentId'] > 0 || $item['questionType'] == 'material') {
+            if ($item['parentId'] > 0 || 'material' == $item['questionType']) {
                 $accuracy['material'] = empty($accuracy['material']) ? array() : $accuracy['material'];
 
                 $accuracy['material'] = $this->countItemResultStatus($accuracy['material'], $item, $itemResult);
@@ -567,7 +550,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $answerFilter = str_replace('""', '', $userAnswer['answer'][0]);
 
                 if (!empty($answerFilter)) {
-                    if ($paperResult['type'] == 'homework') {
+                    if ('homework' == $paperResult['type']) {
                         $checkedFields['status'] = 'right';
                     } else {
                         $checkedFields['status'] = $checkedFields['score'] == $item['score'] ? 'right' : 'wrong';
@@ -617,7 +600,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $paperItem = empty($paperItems[$questionId]) ? array() : $paperItems[$questionId];
 
                 if (!$question) {
-                    $fields['status'] = 'notFound';
+                    $fields['status'] = 'none';
                     $fields['score'] = 0;
                 } else {
                     $question['score'] = empty($paperItem['score']) ? 0 : $paperItem['score'];
@@ -677,7 +660,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         foreach ($itemResults as $itemResult) {
             $score += $itemResult['score'];
 
-            if ($itemResult['status'] == 'right') {
+            if ('right' == $itemResult['status']) {
                 ++$rightItemCount;
             }
         }
@@ -700,8 +683,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaper($testpaperId);
         $argument = $fields;
 
-        if (empty($testpaperId)) {
-            throw $this->createServiceException();
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException("Testpaper(#{$testpaperId}) not found");
         }
 
         $existItems = $this->findItemsByTestId($testpaperId);
@@ -740,7 +723,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $filter['seq'] = $index;
 
-            if ($question['type'] != 'material') {
+            if ('material' != $question['type']) {
                 ++$index;
             }
 
@@ -773,17 +756,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $type = array();
             $typesCount = array();
             foreach ($items as $item) {
-                if ($item['questionType'] != 'material') {
+                if ('material' != $item['questionType']) {
                     $totalScore += $item['score'];
                 }
 
-                if (!in_array($item['questionType'], $type) && $item['parentId'] != 0) {
+                if (!in_array($item['questionType'], $type) && 0 != $item['parentId']) {
                     $type[] = $item['questionType'];
                 }
 
-                if (isset($typesCount[$item['questionType']]) && $item['parentId'] == 0) {
+                if (isset($typesCount[$item['questionType']]) && 0 == $item['parentId']) {
                     ++$typesCount[$item['questionType']];
-                } elseif ($item['parentId'] == 0) {
+                } elseif (0 == $item['parentId']) {
                     $typesCount[$item['questionType']] = 1;
                 }
             }
@@ -819,23 +802,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             ++$resultStatus['all'];
         }
 
-        if ($item['questionType'] == 'material') {
+        if ('material' == $item['questionType']) {
             return $resultStatus;
         }
 
-        if ($status == 'right') {
+        if ('right' == $status) {
             ++$resultStatus['right'];
         }
 
-        if ($status == 'partRight') {
+        if ('partRight' == $status) {
             ++$resultStatus['partRight'];
         }
 
-        if ($status == 'wrong') {
+        if ('wrong' == $status) {
             ++$resultStatus['wrong'];
         }
 
-        if ($status == 'noAnswer') {
+        if ('noAnswer' == $status) {
             ++$resultStatus['noAnswer'];
         }
 
@@ -870,7 +853,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createNotFoundException('试卷不存在!');
         }
 
-        if ($paperResult['status'] === 'doing' && ($paperResult['userId'] != $user['id'])) {
+        if ('doing' === $paperResult['status'] && ($paperResult['userId'] != $user['id'])) {
             throw $this->createNotFoundException('无权查看此试卷');
         }
 
@@ -881,7 +864,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $course = $this->getCourseService()->getCourse($paperResult['courseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
-        if ($member['role'] === 'teacher') {
+        if ('teacher' === $member['role']) {
             return true;
         }
 
@@ -930,9 +913,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function findTestResultsByTestpaperIdAndUserIds($userIds, $testpaperId)
     {
         $conditions = array(
-        'userIds' => $userIds,
-        'testId' => $testpaperId,
-    );
+            'userIds' => $userIds,
+            'testId' => $testpaperId,
+        );
 
         $results = $this->searchTestpaperResults(
             $conditions,
@@ -965,7 +948,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     private function getUserMaxScore($userResults)
     {
-        if (count($userResults) === 1) {
+        if (1 === count($userResults)) {
             return $userResults[0]['score'];
         }
 
@@ -1059,13 +1042,5 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

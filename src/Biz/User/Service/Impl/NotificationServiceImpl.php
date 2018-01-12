@@ -21,6 +21,17 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return true;
     }
 
+    public function isSelectNotification($notifications, $id)
+    {
+        foreach ($notifications as &$notification) {
+            if ($notification['id'] == $id) {
+                $notification['highLight'] = 1;
+            }
+        }
+
+        return $notifications;
+    }
+
     public function findBatchIdsByUserIdAndType($userId, $type)
     {
         return $this->getNotificationDao()->findBatchIdsByUserIdAndType($userId, $type);

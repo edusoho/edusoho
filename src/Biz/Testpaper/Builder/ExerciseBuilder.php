@@ -40,13 +40,15 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         }
     }
 
-    public function showTestItems($testId, $resultId = 0)
+    public function showTestItems($testId, $resultId = 0, $options = array())
     {
         $exercise = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'exercise');
+        $orders = empty($options['orders']) ? array() : $options['orders'];
 
         $itemResults = array();
         if ($resultId) {
             $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
+            $orders = empty($exerciseResult['metas']['orders']) ? $orders : $exerciseResult['metas']['orders'];
 
             $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id'], true);
             $itemResults = ArrayToolkit::index($itemResults, 'questionId');
@@ -108,12 +110,14 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 0,
                 $count
             );
-            shuffle($questions);
+            if (empty($orders)) {
+                shuffle($questions);
+            }
 
             $questions = array_slice($questions, 0, $exercise['itemCount']);
         }
 
-        return $this->formatQuestions($questions, $itemResults);
+        return $this->formatQuestions($questions, $itemResults, $orders);
     }
 
     public function filterFields($fields, $mode = 'create')
@@ -151,28 +155,34 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $fields;
     }
 
-    public function updateSubmitedResult($resultId, $usedTime)
+    public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+        $orders = empty($options['orders']) ? array() : $options['orders'];
 
         $fields = array(
             'status' => 'finished',
+            'metas' => array('orders' => $orders),
         );
 
         $accuracy = $this->getTestpaperService()->sumScore($itemResults);
         $fields['score'] = $accuracy['sumScore'];
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
-        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
         $fields['checkedTime'] = time();
 
         return $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], $fields);
     }
 
-    protected function formatQuestions($questions, $questionResults)
+    protected function formatQuestions($questions, $questionResults, $orders = array())
     {
+        if (!empty($orders)) {
+            $questions = $this->sortQuestions($questions, $orders);
+        }
+
         $formatQuestions = array();
         $index = 1;
 
@@ -201,6 +211,18 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         return $formatQuestions;
     }
 
+    protected function sortQuestions($questions, $order)
+    {
+        usort($questions, function ($a, $b) use ($order) {
+            $pos_a = array_search($a['id'], $order);
+            $pos_b = array_search($b['id'], $order);
+
+            return $pos_a - $pos_b;
+        });
+
+        return ArrayToolkit::index($questions, 'id');
+    }
+
     protected function getQuestions($options)
     {
         $conditions = array();
@@ -209,7 +231,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $options['range'] = (array) json_decode($options['range']);
         }
 
-        if (!empty($options['range']) && $options['range'] == 'lesson') {
+        if (!empty($options['range']) && 'lesson' == $options['range']) {
             $conditions['lessonId'] = $options['range'];
         }
 

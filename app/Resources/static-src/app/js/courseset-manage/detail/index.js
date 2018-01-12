@@ -19,6 +19,7 @@ class detail {
     CKEDITOR.replace('summary', {
       allowedContent: true,
       toolbar: 'Detail',
+      fileSingleSizeLimit: app.fileSingleSizeLimit,
       filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
     });
   }

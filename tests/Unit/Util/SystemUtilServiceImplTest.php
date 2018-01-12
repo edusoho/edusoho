@@ -8,6 +8,9 @@ class SystemUtilServiceImplTest extends BaseTestCase
 {
     public function testRemoveUnusedUploadFiles()
     {
+        $result = $this->getSystemUtilService()->removeUnusedUploadFiles();
+        $this->assertEquals(0, $result);
+
         $params = array(
             array(
                 'functionName' => 'getCourseIdsWhereCourseHasDeleted',

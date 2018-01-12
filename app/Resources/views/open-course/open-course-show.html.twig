@@ -25,7 +25,6 @@
     <li><a href="{{ path('open_course_explore') }}" >{{ 'open_course'|trans }}</a></li>
     <li>{{ course.title }}</li>
   </ol>
-  {# {% cache 'open/course/' ~ course.id ~ '/header' 600 %} #}
   <div class="open-course-header">
     <div class="row">
 
@@ -51,7 +50,7 @@
     <div class="col-md-9">
       <div class="es-section gray-darker editor-text">
         {% if course.about %}
-          {{ course.about|raw }}
+          {{ course.about|cdn|raw }}
         {% else %}
           <div class="empty">{{ 'my.teaching.open_course.show.about_empty'|trans }}</div>
         {% endif %}
@@ -59,7 +58,6 @@
       {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
     </div>
 
-    {# {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %} #}
     <div class="col-md-3 hidden-sm hidden-xs">
       {{ render(controller('AppBundle:OpenCourse:teachers',{courseId:course.id})) }}
 	    {% if app.user and app.user.id %}

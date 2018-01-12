@@ -4,7 +4,8 @@ namespace Biz\Question\Copy;
 
 use Biz\AbstractCopy;
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use Biz\File\Service\UploadFileService;
+use Biz\Question\Dao\QuestionDao;
 
 class QuestionCopy extends AbstractCopy
 {
@@ -13,6 +14,10 @@ class QuestionCopy extends AbstractCopy
         $newCourseSet = $options['newCourseSet'];
         $this->cloneParentQuestions($source, $newCourseSet);
         $this->cloneChildrenQuestions($source, $newCourseSet);
+        $questions = $this->getQuestionDao()->findQuestionsByCourseSetId($newCourseSet['id']);
+        $questions = ArrayToolkit::index($questions, 'copyId');
+
+        $this->copyAttachments($questions);
     }
 
     protected function getFields()
@@ -96,16 +101,34 @@ class QuestionCopy extends AbstractCopy
         $this->getQuestionDao()->batchCreate($newChildQuestions);
     }
 
-    /**
-     * @return BatchUpdateHelper
-     */
-    protected function getQuestionBatchUpdateHelper()
+    private function copyAttachments($questionMaps)
     {
-        $questionDao = $this->getQuestionDao();
+        if (empty($questionMaps)) {
+            return;
+        }
 
-        $questionUpdateHelper = new BatchUpdateHelper($questionDao);
+        $targetIds = array_keys($questionMaps);
+        $conditions = array(
+            'type' => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds' => $targetIds,
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
 
-        return $questionUpdateHelper;
+        $newAttachments = array();
+        foreach ($attachments as $attachment) {
+            $newTargetId = $questionMaps[$attachment['targetId']]['id'];
+            $newAttachment = array(
+                'type' => 'attachment',
+                'fileId' => $attachment['fileId'],
+                'targetType' => $attachment['targetType'],
+                'targetId' => $newTargetId,
+            );
+
+            $newAttachments[] = $newAttachment;
+        }
+
+        $this->getUploadFileService()->batchCreateUseFiles($newAttachments);
     }
 
     /**
@@ -114,5 +137,13 @@ class QuestionCopy extends AbstractCopy
     protected function getQuestionDao()
     {
         return $this->biz->dao('Question:QuestionDao');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->biz->service('File:UploadFileService');
     }
 }

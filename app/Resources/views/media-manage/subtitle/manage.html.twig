@@ -4,7 +4,7 @@
   {{'course.course_files.subtitle_manage.content_title'|trans}}
 {% endblock %}
 
-{% do script([get_upload_sdk(), 'app/js/media-manage/index.js']) %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/media-manage/index.js']) %}
 
 {% block media_edit %}
 <div class="manage-edit-body">

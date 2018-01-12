@@ -181,7 +181,7 @@ activity.live.ended_notice: 直播已经结束
 activity.live.content_title: 直播说明
 activity.live.entry_live_room: 进入直播教室
 activity.live.count_down_title: 倒计时
-activity.liva.not_created_notice: 直播教室尚未创建
+activity.live.not_created_notice: 直播教室尚未创建
 
 activity.audio_manage.length_required_error_hint: 请输入时长
 activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
@@ -425,6 +425,7 @@ course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
 course.manage.task_unpublish_fail_hint: 取消发布失败
 course.manage.live_replay_generate_success: 生成录制回放成功
+course.manage.live_replay_generate_error: 未开启直播回放或视频正在转码中，请稍后再试
 course.manage.live_replay_upload_error_hint: 请上传录像文件
 course.manage.buy_expiry_time_required_error_hint: 请输入加入截止日期
 course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
@@ -777,3 +778,11 @@ oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
 oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
 oauth.register.error_message: 注册出现异常，请联系管理员
+
+
+## 用户数据统计
+admin.user.statistics.data.learn_total_time: 学习总时长
+admin.user.statistics.data.learn_time: 学习时长/分钟
+admin.user.statistics.data.time: 时长
+
+course.audio.enable.biz.user: 听课模式需要先申请为商业用户!

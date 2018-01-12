@@ -57,7 +57,8 @@ class QqOAuthClient extends AbstractOAuthClient
             'oauth_consumer_key' => isset($token['key']) ? $token['key'] : $this->config['key'], // 因为移动端第三方登录会走此接口，移动端的key和网站的key是不一样的
             'openid' => $token['id'],
             'format' => 'json',
-            'access_token' => $token['access_token'], );
+            'access_token' => $token['access_token'],
+        );
         $result = $this->getRequest(self::USERINFO_URL, $params);
         $info = json_decode($result, true);
         $info['id'] = $token['id'];

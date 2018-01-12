@@ -12,14 +12,14 @@ use AppBundle\Common\ServiceToolkit;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about'
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about',
     );
 
     protected $publicFields = array(
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access'
+        'createdTime', 'updatedTime', 'creator', 'access',
     );
 
     protected function simpleFields(&$data)
@@ -32,18 +32,21 @@ class ClassroomFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if ($data['expiryMode'] == 'date') {
+        if ('date' == $data['expiryMode']) {
             Converter::timestampToDate($data['expiryStartDate']);
         }
 
-        $data['service'] =  AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['service'])));;
+        $data['service'] = AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['service'])));
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filter($data['creator']);
-        $userFilter->filter($data['headTeacher']);
         $userFilter->filters($data['teachers']);
         $userFilter->filters($data['assistants']);
+        if (!empty($data['headTeacher'])) {
+            $userFilter->setMode(Filter::PUBLIC_MODE);
+            $userFilter->filter($data['headTeacher']);
+        }
     }
 
     private function transformCover(&$data)
@@ -54,7 +57,7 @@ class ClassroomFilter extends Filter
         $data['cover'] = array(
             'small' => $data['smallPicture'],
             'middle' => $data['middlePicture'],
-            'large' => $data['largePicture']
+            'large' => $data['largePicture'],
         );
 
         unset($data['smallPicture']);

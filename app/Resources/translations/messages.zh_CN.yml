@@ -241,6 +241,9 @@ date.month: 月
 date.day: 日
 date.format: Y年m月d日
 
+#符号通用
+word.seperator: '、'
+
 #分页
 paginator.firstPage: 首页
 paginator.endPage: 尾页
@@ -972,7 +975,7 @@ course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；管理员在后台关闭课程后，可以修改日期。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
@@ -983,7 +986,7 @@ course.marketing_setup.preview.set_task: 设置免费学习任务
 course.marketing_setup.preview.set_task.task: 任务
 course.marketing_setup.preview.set_task.task_name: %name%任务
 course.marketing_setup.preview.set_task.free: 免费
-course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持图文、视频、音频、flash、文档、PPT
+course.marketing_setup.preview.set_task.free_tips: 免费任务仅支持
 course.marketing_setup.preview.try_watch: 视频试看
 course.marketing_setup.preview.try_watch_tips: 常用于收费视频内容的前几分钟免费试看
 course.marketing_setup.services: 增值服务
@@ -1240,7 +1243,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -1309,6 +1313,7 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
@@ -1581,6 +1586,7 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+course.course_files.re_try_convert_video_to_audio: 重新转码
 
 course.plan_overview: 计划概览
 
@@ -1847,7 +1853,7 @@ course.plan_task.exercise.submit_btn: 提交练习
 course.recommend_course.content_title: 推荐课程
 course.recommend_course.empty_tips: 暂无推荐课程
 
-course.live.enter_classroom_tips: 正在打开教室，请稍后
+course.live.enter_classroom_tips: 正在打开教室，请稍候......
 course.live_lesson_manage.content_title.create: 新增直播课时
 course.live_lesson_manage.content_title.edit: 编辑直播课时
 course.live_lesson_manage.title: 标题
@@ -1895,8 +1901,8 @@ course.live.replay_manage.lesson_add_content_title: 添加回放视频
 course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
-course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
-activity.liva.not_created_notice: 直播教室尚未创建！
+course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
+activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
 course.cover_image: 封面图片
@@ -1942,7 +1948,8 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，课程%title%已关闭！
+course.course_closed_tips: 抱歉，教学计划%title%已关闭！
+course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
@@ -3123,7 +3130,7 @@ user.account_center: 账户中心
 user.menu_heading: 账户中心
 user.account_menu: 我的账户
 user.order_menu: 我的订单
-user.cards_menu: 我的卡包
+user.cards_menu: 优惠券
 user.vip_history_menu: 会员记录
 
 # 账户中心模块-我的账户
@@ -3294,12 +3301,17 @@ homepage.header.register: 注册
 homepage.header.my_course: 我的教学
 homepage.header.my_learning: 我的学习
 homepage.header.notice: 通知
+homepage.header.check_all_notifications: 查看全部通知
+homepage.header.no_new_notifications: 暂无新的通知～
 homepage.header.message: 私信
+homepage.header.check_all_messages: 查看全部私信
+homepage.header.no_new_messages: 暂无新的私信～
 homepage.header.personal_menu: 个人主页
 homepage.header.settings_menu: 个人设置
 homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
+homepage.header.reward: 积分
 homepage.header.admin_menu: 管理后台
 homepage.header.switch_pc: 切换电脑版
 homepage.header.switch_mobile: 切换触屏版
@@ -3792,6 +3804,9 @@ customer_service.customer_email: 反馈邮件
 # 我的教学
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
+my.teaching.live_schedule_menu: 教学课表
+my.teaching.hints_block: (当前仅展示直播课程)
+my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.question_menu: 学员问题
 my.teaching.discussion_menu: 学员话题
@@ -4131,6 +4146,7 @@ my.teaching.open_course.material.upload_time: 上传于
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
+my.learning.live_schedule_menu: 直播课表
 my.learning.classroom_menu: 我的%classroom%
 my.learning.live_menu: 我的直播
 my.learning.question_menu: 我的问答
@@ -4679,8 +4695,8 @@ admin.course_manage.manage.number: 编号
 admin.course_manage.manage.name: 名称
 admin.course_manage.manage.price: 价格
 admin.course_manage.manage.serialize_mode: 连载状态
-admin.course_manage.manage.status: 状态
-admin.course_manage.manage.creator: 创建者
+admin.course_manage.manage.status: 课程状态
+admin.course_manage.manage.creator: 创建者/时间
 admin.course_manage.manage.manage_btn: 管理
 admin.course_manage.manage.empty: 暂无课程记录
 admin.course_manage.manage.category: 分类
@@ -4698,6 +4714,11 @@ admin.course_manage.manage.auth_user: 核实用户
 admin.course_manage.manage.user_passwd: 用户密码
 admin.course_manage.manage.input_passwd_placeholder: 请输入你的登录密码
 admin.course_manage.manage.week_excellent_courses: 每周精品课程
+admin.course_manage.manage.course_num: 计划数
+admin.course_manage.manage.course_list.block_title: 计划详情
+admin.course_manage.manage.course_list.status: 计划状态
+admin.course_manage.manage.course_list.creator: 创建者
+admin.course_manage.manage.course_list.createdTime: 创建时间
 
 # 文件管理
 admin.course_manage.file.name_title: 文件管理
@@ -4800,6 +4821,22 @@ admin.course_manage.statistics.data_detail.study_days: 课程学习天数
 admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
+
+## 用户数据统计
+admin.user.statistics.data_detail.note_number: 笔记数
+admin.user.statistics.data_detail.learning_course_sets: 在学课程
+admin.user.statistics.data_detail.learning_courses: 在学计划
+admin.user.statistics.data_detail.average_process: 平均计划进度
+admin.user.statistics.data_detail.task_rate: 任务完成比
+admin.user.statistics.data_detail.thread_number: 参与话题
+admin.user.statistics.data_detail.review_number: 评价数
+admin.user.statistics.data_detail.active_chart: 活跃度
+admin.user.statistics.data_detail.teaching_plan_name: 计划名
+admin.user.statistics.data_detail.learn_detail: 学习详情
+admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
+admin.user.statistics.data_detail.task_progress_tip: 任务完成比为已完成任务数比总任务数
+admin.user.statistics.data_detail.from_classroom: 来自班级
 
 ## 评论管理
 admin.comment_manage.title: 评论管理
@@ -4983,6 +5020,14 @@ admin.classroom_manage.manage.describe_tips: >
     1. 编号及排序无法修改；<br>
     2. 班级地址规则：域名/classroom/班级编号；
   </div>
+admin.classroom_manage.manage.count: >
+  班级：<strong class="inflow-num">%courseNum%</strong>个
+admin.classroom_manage.manage.published_count: >
+  已发布：<strong class="inflow-num">%publishedNum%</strong>个
+admin.classroom_manage.manage.closed_count: >
+  已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.classroom_manage.manage.unpublish_count: >
+  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.classroom_manage.manage.number_th: %title%编号
 admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
@@ -5275,9 +5320,15 @@ admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
 admin.setting.theme.manage.theme_edit: 主题编辑
+admin.setting.theme.manage: 主题管理
 admin.setting.theme.manage.theme_cancel: 取消
 admin.setting.theme.manage.theme_ok: 应用
 admin.setting.theme.manage.components: 组件
+admin.setting.theme.manage.top: 顶部
+admin.setting.theme.manage.setting_navigation: 导航栏设置
+admin.setting.theme.manage.navigation_num_tips: >
+  导航个数超过 <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> 个时，会通过"..." 收起，避免导航错位。
+admin.setting.theme.manage.navigation_num_validation: 请输入1-99以内的整数
 admin.setting.theme.manage.coloring_scheme_btn: 配色方案
 admin.setting.theme.manage.all_reset: 全部重置
 admin.setting.theme.manage.component_name: 挂件名称
@@ -5289,6 +5340,7 @@ admin.setting.theme.manage.edit_btn: 编辑
 admin.setting.theme.manage.modal.edit: 编辑
 admin.setting.theme.manage.modal.subname: 副标题名称
 admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
+admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
@@ -5303,6 +5355,8 @@ admin.setting.theme.manage.modal.student_comment: 学员评价
 admin.setting.theme.manage.modal.student_dynamic: 学员动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
+
+
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -6102,6 +6156,7 @@ admin.edu_cloud.account.arrears_tips: 您已欠费%arrearageDays%天，教育云
 admin.edu_cloud.account.balance_not_enough: 你的余额不足50元，请尽快充值，以免影响正常使用。
 admin.edu_cloud.overview.locked_tips: 您的教育云服务已被锁定，请联系客服人员
 admin.edu_cloud.overview.disabled_tips: 您的教育云服务已被禁用
+admin.edu_cloud.overview.disabled_recharge_tips: 您可以直接<a href="%rechargeUrl%" target="_blank">充值</a>，或到<a href="%accountUrl%" target="_blank">费用中心</a>查看近期收支明细
 admin.edu_cloud.overview.disabled_contact_tips: 若有疑问，请联系客服人员：4008041114
 admin.edu_cloud.overview.balance: 余额
 admin.edu_cloud.overview.recharge: 充值
@@ -7002,6 +7057,8 @@ admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
+admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
+admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
@@ -7374,6 +7431,11 @@ admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
 admin.payment_setting.llpay_public_key: 公钥
 admin.payment_setting.llpay_private_key: 密钥
+admin.payment_setting.llpay_application_tips: >
+ 使用前提：
+  <p>1、在连连支付平台申请账户并开通，<a target="_blank" href="%qiqiuyuUrl%">点此查看</a>操作。</p>
+  <p>2、在账户开通后，前往连连支付商户站 - 安全中心 - 安全信息 - 商户秘钥维护，选择签名方式为rsa签名方式。</p>
+  <p>3、选择rsa签名方式后，请根据连连支付提示生成对应公钥和密钥文件，将文件内容复制后粘帖至对应处。</p>
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
 admin.payment_setting.quickpay_api_application_word: 下载接口申请说明文档
@@ -7847,11 +7909,12 @@ notification.coupon.receive_discount: 您有一张抵扣为%rate%折的优惠券
 notification.materialLib.share: %who% 已将资料分享给你,%do%。
 notification.materialLib.click_to_view: 点击查看
 
-
 notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
 notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
 notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
+notification.distributor-reward: 恭喜您获得注册成功奖励：%money%元面值抵价优惠券一张，可用于全站消费，已发至【%account%】-【%coupon%】。
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
@@ -8087,6 +8150,7 @@ log.module.homework: 作业
 log.module.question_plus: 题库增强版
 log.module.announcement: 公告
 log.module.open_course: 公开课
+log.module.live: 直播
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8247,6 +8311,8 @@ order.classroom_callback.fail: 订单处理成功，但是用户加入班级失�
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
+log.action.live.update_live_activity: 更新直播活动
+log.action.live.generate_live_replay: 生成录播回放
 
 cashflow.title: 名称
 cashflow.sn: 流水号
@@ -8294,4 +8360,31 @@ site_yes: 是
 site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
+course.to_be.biz.user.first: 需要先申请为商业用户!
+course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.video.convert.audio.status: 当前转音频完成情况
+course.video.convert.audio.detail: 查看详情
+course.video.convert.client.listen: 听
+course.video.convert.client.click.listen: 手机端支持一键听课
+course.video.convert.client.try: '（试一试）'
+course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
+course.task.show.video.convert.client.notify: 不再提醒
+course.info.video.convert.audio.enable: 音频听课（试用）
+course.info.video.convert.audio.start: 开启
+course.info.video.convert.audio.close: 关闭
 
+
+user.learn.statistics.start_time: 起始时间
+user.learn.statistics.end_time: 结束时间
+user.learn.statistics.default.search: 默认排序
+user.learn.statistics.search: 搜索
+user.learn.statistics.nickname: 用户名
+user.learn.statistics.join.classroom.num: 加入班级数
+user.learn.statistics.exit.classroom.num: 退出班级数
+user.learn.statistics.join.course.num: 加入计划数
+user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.finished.task.num: 学完任务数
+user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.actual.amount: 消费总额(元)
+user.learn.statistics.empty: 暂无用户统计数据
+user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）

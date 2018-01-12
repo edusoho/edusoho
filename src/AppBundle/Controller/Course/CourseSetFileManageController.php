@@ -135,6 +135,32 @@ class CourseSetFileManageController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    public function retryTranscodeAction($id, $fileId)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($id);
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException('File Not Found');
+        }
+
+        if (in_array($file['audioConvertStatus'], array('none', 'error'))) {
+            $convertStatus = $this->getUploadFileService()->retryTranscode(array($file['globalId']));
+            if (empty($convertStatus)) {
+                return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
+            }
+            if (isset($convertStatus['error'])) {
+                return $this->createJsonResponse(array('status' => 'error', 'message' => $convertStatus['error']));
+            }
+            if (isset($convertStatus['status']) && $convertStatus['status'] == 'ok') {
+                $this->getUploadFileService()->setAudioConvertStatus($fileId, 'doing');
+            }
+        }
+
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
     public function deleteMaterialsAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);

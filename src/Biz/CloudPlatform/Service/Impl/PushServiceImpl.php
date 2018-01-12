@@ -30,13 +30,16 @@ class PushServiceImpl extends BaseService implements PushService
             'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
         );
 
-        if ($to['type'] == 'user') {
+        if ('user' == $to['type']) {
             $params['toId'] = $to['id'];
         }
 
         if (empty($params['convNo'])) {
             return;
         }
+        $biz = $this->biz;
+        $type = empty($body['type']) ? 'DEFAULT' : $body['type'];
+        $biz['logger']->info("MESSAGE PUSH: {$type}", $params);
 
         try {
             $api = IMAPIFactory::create();

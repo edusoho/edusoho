@@ -44,6 +44,26 @@
             </label>
           </div>
         </div>
+        
+        {% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
+          <div class="form-group" id="audio-modal-id">
+            <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
+            <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
+              <label>
+                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
+                {{ 'course.info.video.convert.audio.start'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
+                {{ 'course.info.video.convert.audio.close'|trans }}
+              </label>
+              <div>
+                <label>1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</label>
+                <label>2.{{ 'course.video.convert.audio.status'|trans }}：{{ video_convert_completion(course.id) }} <a class="ml5" href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}" target="__blank">{{'course.video.convert.audio.detail'|trans }}</a></label>
+              </div>
+            </div>
+          </div>
+        {% endif %}
         {#移动到营销设置#}
         {#<div class="form-group">
           <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>

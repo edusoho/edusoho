@@ -21,4 +21,6 @@ interface MemberOperationService
     public function getJoinReasonByOrderId($orderId);
 
     public function countUserIdsByConditions($conditions);
+
+    public function countGroupByUserId($field, $conditions);
 }

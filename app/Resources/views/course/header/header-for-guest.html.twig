@@ -111,23 +111,33 @@
 				{% endif %}
 				
 				{% if course.showServices | default(1) %}
-          <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
-					{% set serviceTags = services(course.services|default([])) %}
-					{% for tag in serviceTags %}
-            <span
-                class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
-                data-container="body"
-                data-trigger="hover"
-                data-placement="top"
-                data-toggle="popover"
-                title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
-                data-content="{{ tag.summary }}">
-              {{ tag.shortName }}
-            </span>
-					{% endfor %}
+          <div class="mb15">
+            <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
+  					{% set serviceTags = services(course.services|default([])) %}
+  					{% for tag in serviceTags %}
+              <span
+                  class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5 hidden-xs"
+                  data-container="body"
+                  data-trigger="hover"
+                  data-placement="top"
+                  data-toggle="popover"
+                  title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
+                  data-content="{{ tag.summary }}">
+                {{ tag.shortName }}
+              </span>
+  					{% endfor %}
+          </div>
 				{% endif %}
-      
+        
+        {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
+          <div class="">
+            <span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span>
+            {{ 'course.video.convert.client.click.listen'|trans }}
+            <a href="{{ path('mobile') }}" target="__blank">{{ 'course.video.convert.client.try'|trans }}</a>
+          </div>
+        {% endif %}
       </div>
+
       <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
         <ul class="clearfix">
           <!--营销页显示-->

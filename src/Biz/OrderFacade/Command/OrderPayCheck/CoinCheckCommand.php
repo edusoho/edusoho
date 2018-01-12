@@ -4,7 +4,6 @@ namespace Biz\OrderFacade\Command\OrderPayCheck;
 
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
-use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\AccountService;
 
 class CoinCheckCommand extends OrderPayCheckCommand
@@ -56,13 +55,5 @@ class CoinCheckCommand extends OrderPayCheckCommand
     private function getAccountService()
     {
         return $this->biz->service('Pay:AccountService');
-    }
-
-    /**
-     * @return OrderFacadeService
-     */
-    private function getOrderFacadeService()
-    {
-        return $this->biz->service('OrderFacade:OrderFacadeService');
     }
 }

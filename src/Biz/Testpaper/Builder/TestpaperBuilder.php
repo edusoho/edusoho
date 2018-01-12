@@ -26,7 +26,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $result = $testpaperPattern->getTestpaperQuestions($testpaper, $testpaper['metas']);
 
-        if ($result['status'] != 'ok') {
+        if ('ok' != $result['status']) {
             throw new \RuntimeException("Build testpaper #{$result['id']} items error.");
         }
 
@@ -44,7 +44,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    public function showTestItems($testId, $resultId = 0)
+    public function showTestItems($testId, $resultId = 0, $options = array())
     {
         $test = $this->getTestpaperService()->getTestpaperByIdAndType($testId, 'testpaper');
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
@@ -145,7 +145,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         return $fields;
     }
 
-    public function updateSubmitedResult($resultId, $usedTime)
+    public function updateSubmitedResult($resultId, $usedTime, $options = array())
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperResult['testId'], $testpaperResult['type']);
@@ -172,7 +172,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
 
-        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
@@ -188,7 +188,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         foreach ($questions as $item) {
             $item['seq'] = $seq;
 
-            if ($item['questionType'] != 'material') {
+            if ('material' != $item['questionType']) {
                 ++$seq;
             }
             $item['type'] = 'testpaper';
@@ -207,7 +207,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
                 $count += 1;
             }
 
-            if ($item['questionType'] != 'material') {
+            if ('material' != $item['questionType']) {
                 $score += $item['score'];
             }
         });
@@ -245,7 +245,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
-            if ($needCount == 0) {
+            if (0 == $needCount) {
                 continue;
             }
 
@@ -253,7 +253,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
                 $missing[$type] = $needCount;
                 continue;
             }
-            if ($type == 'material') {
+            if ('material' == $type) {
                 $validatedMaterialQuestionNum = 0;
                 foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {

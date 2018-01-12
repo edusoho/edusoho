@@ -974,7 +974,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => 0,
                     'note' => $params['remark'],
                 );
-
                 $this->becomeStudent($classroom['id'], $user['id'], $info);
                 $order = array('id' => 0);
             }
@@ -1628,15 +1627,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
 
+        $reason = array(
+            'reason' => 'course.member.operation.reason.classroom_exit',
+            'reason_type' => 'classroom_exit',
+        );
         foreach ($courseIds as $key => $courseId) {
             $count = 0;
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-
             if ('student' != $courseMember['role']) {
                 continue;
             }
 
-            $this->getCourseMemberService()->removeStudent($courseId, $userId);
+            $this->getCourseMemberService()->removeStudent($courseId, $userId, $reason);
         }
     }
 

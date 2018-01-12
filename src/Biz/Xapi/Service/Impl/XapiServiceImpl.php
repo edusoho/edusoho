@@ -67,8 +67,8 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function updateStatementsPushedAndDataByStatementData($pushStatementsData)
     {
         $batchUpdateHelper = new BatchUpdateHelper($this->getStatementDao());
-        foreach ($pushStatementsData as $statementId => $data) {
-            $batchUpdateHelper->add('id', $statementId, array(
+        foreach ($pushStatementsData as $id => $data) {
+            $batchUpdateHelper->add('id', $id, array(
                 'status' => 'pushed',
                 'push_time' => time(),
                 'data' => $data,
@@ -90,6 +90,11 @@ class XapiServiceImpl extends BaseService implements XapiService
     public function getWatchLog($id)
     {
         return $this->getActivityWatchLogDao()->get($id);
+    }
+
+    public function findWatchLogsByIds($ids)
+    {
+        return $this->getActivityWatchLogDao()->findByIds($ids);
     }
 
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0)
@@ -149,18 +154,17 @@ class XapiServiceImpl extends BaseService implements XapiService
                 1000
             );
 
-            if (empty($statements)) {
-                return;
-            }
-            $archives = array();
-            foreach ($statements as $statement) {
-                $archives[] = ArrayToolkit::parts($statement, array(
-                    'uuid', 'version', 'push_time', 'user_id', 'verb', 'target_id', 'target_type', 'status', 'data', 'occur_time', 'created_time',
-                ));
-            }
-            $this->getStatementArchiveDao()->batchCreate($archives);
-            foreach ($statements as $statement) {
-                $this->getStatementDao()->delete($statement['id']);
+            if (!empty($statements)) {
+                $archives = array();
+                foreach ($statements as $statement) {
+                    $archives[] = ArrayToolkit::parts($statement, array(
+                        'uuid', 'version', 'push_time', 'user_id', 'verb', 'target_id', 'target_type', 'status', 'data', 'occur_time', 'created_time',
+                    ));
+                }
+                $this->getStatementArchiveDao()->batchCreate($archives);
+                foreach ($statements as $statement) {
+                    $this->getStatementDao()->delete($statement['id']);
+                }
             }
 
             $this->commit();

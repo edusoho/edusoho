@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\LearningDataAnalysisDao;
 
@@ -41,7 +40,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
     public function getUserLearningProgressByCourseIds($courseIds, $userId)
     {
-        $statisticData = $this->getLearningDataAnalysisDao()->getStatisticDataByCourseIdsAndUserId($courseIds, $userId);
+        $statisticData = $this->getLearningDataAnalysisDao()->sumStatisticDataByCourseIdsAndUserId($courseIds, $userId);
 
         return $this->makeProgress($statisticData['learnedCompulsoryTaskNum'], $statisticData['compulsoryTaskNum']);
     }
@@ -103,10 +102,10 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     protected function getFinishedTaskPerDay($course, $taskNum)
     {
         //自由式不需要展示每日计划的学习任务数
-        if ($course['learnMode'] === 'freeMode') {
+        if ('freeMode' === $course['learnMode']) {
             return 0;
         }
-        if ($course['expiryMode'] === 'days') {
+        if ('days' === $course['expiryMode']) {
             $finishedTaskPerDay = empty($course['expiryDays']) ? 0 : $taskNum / $course['expiryDays'];
         } else {
             $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
@@ -119,12 +118,12 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
     {
         //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
-        if ($course['learnMode'] === 'freeMode' || empty($taskPerDay)) {
+        if ('freeMode' === $course['learnMode'] || empty($taskPerDay)) {
             return 0;
         }
         //当前时间减去课程
         //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
-        if ($course['expiryMode'] === 'days') {
+        if ('days' === $course['expiryMode']) {
             $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
         } else {
             //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
@@ -149,14 +148,6 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     private function getTaskService()
     {
         return $this->createService('Task:TaskService');
-    }
-
-    /**
-     * @return TaskResultService
-     */
-    private function getTaskResultService()
-    {
-        return $this->createService('Task:TaskResultService');
     }
 
     /**

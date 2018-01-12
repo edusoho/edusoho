@@ -752,6 +752,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $reason = ArrayToolkit::parts($reason, array('reason', 'reason_type'));
+
         $this->removeMember($member, $reason);
 
         $this->getCourseDao()->update(
@@ -1145,7 +1146,19 @@ class MemberServiceImpl extends BaseService implements MemberService
             'data' => $data,
             'order_id' => $member['orderId'],
             'title' => $course['title'],
+            'course_set_id' => $course['courseSetId'],
+            'parent_id' => $course['parentId'],
         );
+        $otherMemberCount = $this->countMembers(array(
+            'excludeIds' => array($member['id']),
+            'courseSetId' => $member['courseSetId'],
+            'userId' => $member['userId'],
+            'role' => 'student',
+        ));
+
+        if (empty($otherMemberCount)) {
+            'join' == $operateType ? $record['join_course_set'] = 1 : $record['exit_course_set'] = 1;
+        }
 
         $record = array_merge($record, $reason);
         $record = $this->getMemberOperationService()->createRecord($record);

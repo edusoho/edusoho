@@ -42,7 +42,12 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->db()->fetchAll($sql, array_merge(array($testId), $courseIds)) ?: array();
     }
 
-    public function sumScoreByParames($conditions)
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
+    public function sumScoreByParams($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(score)');
@@ -52,37 +57,39 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
 
     public function declares()
     {
-        $declares['orderbys'] = array(
-            'id',
-            'testId',
-            'courseId',
-            'lessonId',
-            'beginTime',
-            'endTime',
-            'checkedTime',
-            'updateTime',
+        return array(
+            'orderbys' => array(
+                'id',
+                'testId',
+                'courseId',
+                'lessonId',
+                'beginTime',
+                'endTime',
+                'checkedTime',
+                'updateTime',
+            ),
+            'conditions' => array(
+                'id = :id',
+                'checkTeacherId = :checkTeacherId',
+                'paperName = :paperName',
+                'testId = :testId',
+                'testId IN ( :testIds )',
+                'courseId = :courseId',
+                'userId = :userId',
+                'userId IN (:userIds)',
+                'score = :score',
+                'objectiveScore = :objectiveScore',
+                'subjectiveScore = :subjectiveScore',
+                'rightItemCount = :rightItemCount',
+                'status = :status',
+                'courseId IN ( :courseIds)',
+                'type = :type',
+                'type IN ( :types )',
+                'lessonId = :lessonId',
+            ),
+            'serializes' => array(
+                'metas' => 'json',
+            ),
         );
-
-        $declares['conditions'] = array(
-            'id = :id',
-            'checkTeacherId = :checkTeacherId',
-            'paperName = :paperName',
-            'testId = :testId',
-            'testId IN ( :testIds )',
-            'courseId = :courseId',
-            'userId = :userId',
-            'userId IN (:userIds)',
-            'score = :score',
-            'objectiveScore = :objectiveScore',
-            'subjectiveScore = :subjectiveScore',
-            'rightItemCount = :rightItemCount',
-            'status = :status',
-            'courseId IN ( :courseIds)',
-            'type = :type',
-            'type IN ( :types )',
-            'lessonId = :lessonId',
-        );
-
-        return $declares;
     }
 }

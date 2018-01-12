@@ -1,10 +1,6 @@
 {% for path in script()  %}
   {% if '//' in path %}
-    {% if 'js-sdk' in path %}
-      <script src="{{ path ~ '?' ~ (date().timestamp / 100)|round }}"></script>
-    {% else %}
-      <script src="{{ path ~ '?' ~ asset_version('')}}"></script>
-    {% endif %}
+    <script src="{{ path ~ '?' ~ asset_version('')}}"></script>
   {% else %}
     <script src="{{ asset('static-dist/' ~ path) }}"></script>
   {% endif %}

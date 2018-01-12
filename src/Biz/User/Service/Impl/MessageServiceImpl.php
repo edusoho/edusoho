@@ -40,7 +40,10 @@ class MessageServiceImpl extends BaseService implements MessageService
         $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
-        $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
+        $conversation = $this->getConversationDao()->getByFromIdAndToId($fromId, $toId);
+        if (1 == $conversation['unreadNum']) {
+            $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
+        }
 
         return $message;
     }
@@ -99,6 +102,13 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
 
         return true;
+    }
+
+    public function findNewUserConversations($userId, $start, $limit)
+    {
+        $conditions = array('toId' => $userId, 'lessUnreadNum' => 0);
+
+        return $this->getConversationDao()->search($conditions, array('latestMessageTime' => 'DESC'), $start, $limit);
     }
 
     public function findUserConversations($userId, $start, $limit)

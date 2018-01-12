@@ -20,9 +20,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function listenAudio($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -77,9 +75,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function watchVideo($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -134,9 +130,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function finishActivity($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -193,9 +187,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function finishActivityQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -259,9 +251,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function finishHomework($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -309,9 +299,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function finishExercise($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -359,9 +347,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function finishTestpaper($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -409,9 +395,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function writeNote($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -462,9 +446,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function askQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -506,6 +488,7 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
+
     /**
      * 提交"观看直播"的记录
      *
@@ -515,9 +498,7 @@ class XAPIService extends BaseService
      * @param null $uuid
      * @param null $timestamp
      * @param bool $isPush
-     *
      * @return array
-     *
      * @throws ResponseException
      */
     public function watchLive($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
@@ -596,11 +577,8 @@ class XAPIService extends BaseService
 
     /**
      * 批量提交学习记录
-     *
      * @param $statements
-     *
      * @return mixed
-     *
      * @throws ResponseException
      * @throws \QiQiuYun\SDK\HttpClient\ClientException
      */
@@ -632,9 +610,7 @@ class XAPIService extends BaseService
 
     /**
      * @param $verb
-     *
      * @return string
-     *
      * @throws SDKException
      */
     private function getVerbType($verb)
@@ -673,7 +649,6 @@ class XAPIService extends BaseService
 
     /**
      * @param $minType
-     *
      * @return string
      */
     private function getActivityType($minType)
@@ -721,9 +696,7 @@ class XAPIService extends BaseService
 
     /**
      * @param $type
-     *
      * @return string
-     *
      * @throws SDKException
      */
     private function getExtensionId($type)

@@ -1335,49 +1335,6 @@
         ]
     },
     {
-        "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.0.1",
-        "version_normalized": "0.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "4c5049067a209c4782d43d0bb31886a197e4905b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/4c5049067a209c4782d43d0bb31886a197e4905b",
-            "reference": "4c5049067a209c4782d43d0bb31886a197e4905b",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "psr/log": "^1.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2017-06-22T08:51:47+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/functions.php"
-            ],
-            "psr-4": {
-                "QiQiuYun\\SDK\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com",
-                "homepage": "http://www.codeages.com"
-            }
-        ],
-        "description": "QiQiuYun PHP SDK"
-    },
-    {
         "name": "codeages/rest-api-client",
         "version": "v0.2.2",
         "version_normalized": "0.2.2.0",
@@ -1678,7 +1635,7 @@
         "version_normalized": "1.8.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/endroid/QrCode.git",
+            "url": "https://github.com/endroid/qr-code.git",
             "reference": "5e56697d968ed60fd1b6444d36592fd6333c2724"
         },
         "dist": {
@@ -1732,7 +1689,8 @@
             "qr",
             "qrcode",
             "symfony"
-        ]
+        ],
+        "abandoned": "endroid/qr-code"
     },
     {
         "name": "ezyang/htmlpurifier",
@@ -2923,71 +2881,6 @@
         "keywords": [
             "crontab",
             "scheduling"
-        ]
-    },
-    {
-        "name": "willdurand/js-translation-bundle",
-        "version": "2.6.4",
-        "version_normalized": "2.6.4.0",
-        "target-dir": "Bazinga/Bundle/JsTranslationBundle",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/willdurand/BazingaJsTranslationBundle.git",
-            "reference": "e1f180539da3b6b29dfde51aa2fbc091052dfb9b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/e1f180539da3b6b29dfde51aa2fbc091052dfb9b",
-            "reference": "e1f180539da3b6b29dfde51aa2fbc091052dfb9b",
-            "shasum": ""
-        },
-        "require": {
-            "symfony/console": "~2.7|~3.1",
-            "symfony/finder": "~2.7|~3.1",
-            "symfony/framework-bundle": "~2.7|~3.1",
-            "symfony/intl": "~2.7|~3.1",
-            "symfony/templating": "~2.7|~3.1",
-            "symfony/translation": "~2.7|~3.1"
-        },
-        "replace": {
-            "willdurand/expose-translation-bundle": "2.5.*"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8|~5.7",
-            "symfony/asset": "~2.7|~3.1",
-            "symfony/browser-kit": "~2.7|~3.1",
-            "symfony/phpunit-bridge": "~2.7|~3.1",
-            "symfony/twig-bundle": "~2.7|~3.1",
-            "symfony/yaml": "~2.7|~3.1"
-        },
-        "time": "2017-02-13T14:50:50+00:00",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.7-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Bazinga\\Bundle\\JsTranslationBundle": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "William Durand",
-                "email": "will+git@drnd.me"
-            }
-        ],
-        "description": "A pretty nice way to expose your translation messages to your JavaScript.",
-        "keywords": [
-            "javascript",
-            "symfony",
-            "translation"
         ]
     },
     {
@@ -5483,17 +5376,17 @@
     },
     {
         "name": "codeages/biz-order-pay",
-        "version": "v0.1.9",
-        "version_normalized": "0.1.9.0",
+        "version": "v0.1.10",
+        "version_normalized": "0.1.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "b6911f94676d837ed86f7deb7a9b634a1fca8675"
+            "reference": "2e6c2e30e64411ea5a1ec65750397135fe509a63"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/b6911f94676d837ed86f7deb7a9b634a1fca8675.zip",
-            "reference": "b6911f94676d837ed86f7deb7a9b634a1fca8675",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/2e6c2e30e64411ea5a1ec65750397135fe509a63.zip",
+            "reference": "2e6c2e30e64411ea5a1ec65750397135fe509a63",
             "shasum": ""
         },
         "require": {
@@ -5504,7 +5397,7 @@
         "require-dev": {
             "mockery/mockery": "^0.9.9"
         },
-        "time": "2017-11-22T09:03:55+00:00",
+        "time": "2017-12-07T07:09:05+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -5518,5 +5411,227 @@
             "MIT"
         ],
         "description": "order, pay module"
+    },
+    {
+        "name": "willdurand/js-translation-bundle",
+        "version": "2.6.5",
+        "version_normalized": "2.6.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/willdurand/BazingaJsTranslationBundle.git",
+            "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/d9cb848fc66b502658994cf86e63ed3d940e1095.zip",
+            "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095",
+            "shasum": ""
+        },
+        "require": {
+            "symfony/console": "~2.7|~3.1",
+            "symfony/finder": "~2.7|~3.1",
+            "symfony/framework-bundle": "~2.7|~3.1",
+            "symfony/intl": "~2.7|~3.1",
+            "symfony/templating": "~2.7|~3.1",
+            "symfony/translation": "~2.7|~3.1"
+        },
+        "replace": {
+            "willdurand/expose-translation-bundle": "2.5.*"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8|~5.7",
+            "symfony/asset": "~2.7|~3.1",
+            "symfony/browser-kit": "~2.7|~3.1",
+            "symfony/phpunit-bridge": "~2.7|~3.1",
+            "symfony/twig-bundle": "~2.7|~3.1",
+            "symfony/yaml": "~2.7|~3.1"
+        },
+        "time": "2017-05-17T21:16:31+00:00",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.7-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Bazinga\\Bundle\\JsTranslationBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "William Durand",
+                "email": "will+git@drnd.me"
+            }
+        ],
+        "description": "A pretty nice way to expose your translation messages to your JavaScript.",
+        "keywords": [
+            "javascript",
+            "symfony",
+            "translation"
+        ]
+    },
+    {
+        "name": "facebook/graph-sdk",
+        "version": "5.6.1",
+        "version_normalized": "5.6.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/facebook/php-graph-sdk.git",
+            "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/facebook/php-graph-sdk/2f9639c15ae043911f40ffe44080b32bac2c5280.zip",
+            "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.4|^7.0"
+        },
+        "require-dev": {
+            "guzzlehttp/guzzle": "~5.0",
+            "mockery/mockery": "~0.8",
+            "phpunit/phpunit": "~4.0"
+        },
+        "suggest": {
+            "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
+            "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
+        },
+        "time": "2017-08-16T17:28:07+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "5.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Facebook\\": "src/Facebook/"
+            },
+            "files": [
+                "src/Facebook/polyfills.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Facebook Platform"
+        ],
+        "authors": [
+            {
+                "name": "Facebook",
+                "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
+            }
+        ],
+        "description": "Facebook SDK for PHP",
+        "homepage": "https://github.com/facebook/php-graph-sdk",
+        "keywords": [
+            "facebook",
+            "sdk"
+        ]
+    },
+    {
+        "name": "psr/http-message",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/http-message.git",
+            "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/php-fig/http-message/f6561bf28d520154e4b0ec72be95418abe6d9363.zip",
+            "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-08-06T14:39:51+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Http\\Message\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for HTTP messages",
+        "homepage": "https://github.com/php-fig/http-message",
+        "keywords": [
+            "http",
+            "http-message",
+            "psr",
+            "psr-7",
+            "request",
+            "response"
+        ]
+    },
+    {
+        "name": "codeages/qiqiuyun-php-sdk",
+        "version": "v0.0.6",
+        "version_normalized": "0.0.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
+            "reference": "6fa24884bb34e559649ebabe9fe3f8cd4771d97d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/6fa24884bb34e559649ebabe9fe3f8cd4771d97d.zip",
+            "reference": "6fa24884bb34e559649ebabe9fe3f8cd4771d97d",
+            "shasum": ""
+        },
+        "require": {
+            "facebook/graph-sdk": "^5.6",
+            "php": ">=5.3.3",
+            "psr/http-message": "^1.0",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4 || ^5 || ^6",
+            "silex/silex": "^2.0"
+        },
+        "time": "2018-01-04T13:37:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/functions.php"
+            ],
+            "psr-4": {
+                "QiQiuYun\\SDK\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "QiQiuYun PHP SDK"
     }
 ]

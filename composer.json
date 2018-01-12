@@ -39,7 +39,7 @@
     "gregwar/captcha": "1.1.1",
     "imagine/imagine": "0.6.3",
     "phpoffice/phpexcel": "1.8.1",
-    "willdurand/js-translation-bundle": "2.6.4",
+    "willdurand/js-translation-bundle": "2.6.5",
     "asm89/twig-cache-extension": "1.3.2",
     "bshaffer/oauth2-server-bundle": "v0.4",
     "xxtea/xxtea": "1.0.2",
@@ -52,9 +52,9 @@
     "piwik/device-detector": "3.7.7",
     "codeages/web-lib": "^0.1.1",
     "tiben/crontab-manager": "1.2.1",
-    "codeages/qiqiuyun-php-sdk": "^0.0.1",
+    "codeages/qiqiuyun-php-sdk": "^0.0.6",
     "phpdocumentor/reflection-docblock": "2.0.5",
-    "codeages/biz-order-pay": "^0.1.9"
+    "codeages/biz-order-pay": "0.1.10"
   },
   "require-dev": {
     "sensio/generator-bundle": "3.0.11",

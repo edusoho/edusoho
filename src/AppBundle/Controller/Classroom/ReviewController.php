@@ -90,9 +90,15 @@ class ReviewController extends BaseController
 
         $fields['userId'] = $user['id'];
         $fields['classroomId'] = $id;
-        $this->getClassroomReviewService()->saveReview($fields);
 
-        return $this->createJsonResponse(true);
+        try {
+            $this->getClassroomReviewService()->saveReview($fields);
+            $response = array('code' => 'success', 'message' => '');
+        } catch (\Exception $e) {
+            $response = array('code' => 'error', 'message' => $e->getMessage());
+        }
+
+        return $this->createJsonResponse($response);
     }
 
     public function postAction(Request $request, $id, $reviewId)

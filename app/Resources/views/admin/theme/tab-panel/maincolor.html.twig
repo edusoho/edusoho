@@ -1,0 +1,70 @@
+{% set themeMainColors = {
+  'default': '#46c37b', 
+  'green-light': '#81d867',
+  'purple': '#773cec',
+  'purple-light': '#9e9abd',
+  'orange': '#ff7200',
+  'orange-light': '#f9b469',
+  'blue': '#0081e6',
+  'blue-light': '#4bbbfa',
+  'red': '#cf010e',
+  'red-light': '#fd5f56',
+  } 
+%}
+
+{% set navigationColors = {
+  'default': '#212121', 
+  'white': '#fff',
+  'green': '#46c37b',
+  'green-light': '#81d867',
+  'purple': '#773cec',
+  'purple-light': '#9e9abd',
+  'orange': '#ff7200',
+  'orange-light': '#f9b469',
+  'blue': '#0081e6',
+  'blue-light': '#4bbbfa',
+  'red': '#cf010e',
+  'red-light': '#fd5f56',
+  } 
+%}
+<div class="tab-pane" id="maincolor">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+    {{'admin.setting.theme.manage.main_color'|trans}}
+    </div>
+    <form class="panel-body form-inline radios theme-custom-color-block">
+      <div class="form-group">
+        {% for key, color in themeMainColors %}
+          <div class="col-lg-3">
+            <label class="input-group check-box">
+              <span class="input-group-addon">
+                <input type="radio" {% if key == maincolor %}checked="checked" {% endif %}name="maincolor" value="{{ key }}">
+              </span>
+              <div class="mod-cpanel-basic-color" style="background:{{ color }}; display:table-cell;height:35px"></div>
+            </label>
+          </div>        
+        {% endfor %}
+      </div>
+    </form>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">{{'admin.setting.theme.manage.navigation_color_scheme'|trans}}</div>
+    <form class="panel-body form-inline radios theme-custom-navigationcolor-block">
+      <div class="form-group">
+        {% for key, color in navigationColors %}
+          <div class="col-lg-3">
+            <label class="input-group check-box">
+              <span class="input-group-addon">
+                <input type="radio" {% if key == navigationcolor %}checked="checked" {% endif %} name="navigationcolor" value="{{ key }}">
+              </span>
+              <div class="mod-cpanel-basic-color" style="background:{{ color }}; display:table-cell;height:35px"></div>
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+    </form>
+  </div>
+</div>
+
+{% do load_script('topxiaadminbundle/controller/theme/theme-setting/color.js') %}
