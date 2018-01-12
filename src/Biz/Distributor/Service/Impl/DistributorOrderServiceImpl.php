@@ -20,7 +20,15 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
     protected function convertData($order)
     {
         $item = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-
+        $orderDeducts = $this->getOrderService()->findOrderItemDeductsByOrderId($order['id']);
+        $deduct = array();
+        foreach ($orderDeducts as $orderDeduct) {
+            $deduct[] = array(
+                'type' => $orderDeduct['deduct_type'], 
+                'detail' => '', 
+                'amount' => $orderDeduct['deduct_amount'],
+            );
+        }
         return array(
             'user_source_id' => $order['user_id'],
             'source_id' => $order['id'],
@@ -34,7 +42,7 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
             'refund_deadline' => $order['refund_deadline'],
             'price' => $order['price_amount'],
             'pay_amount' => $order['pay_amount'],
-            'deduction' => $order['price_amount'] - $order['pay_amount'],
+            'deduction' => $deduct,
             'status' => $order['status'],
         );
     }
