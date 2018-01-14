@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\RateLimit;
+namespace Tests\Unit\AppBundle\Component\RateLimit;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\SmsRateLimiter;

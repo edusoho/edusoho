@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\RateLimit;
+namespace Tests\Unit\AppBundle\Component\RateLimit;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\RegisterRateLimiter;
@@ -176,15 +176,5 @@ class RegisterRateLimiterTest extends BaseTestCase
         $captcha->shouldHaveReceived('check')->times(1);
         $request->shouldHaveReceived('getClientIp')->times(2);
         $this->assertNull($result);
-    }
-
-    private function getUserService()
-    {
-        return $this->biz->service('User:UserService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
     }
 }
