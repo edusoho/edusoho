@@ -55,7 +55,7 @@ class UploadFileShareHistoryDaoTest extends BaseDaoTestCase
     {
         return array(
             'sourceUserId' => 2,
-            'targetUserId' => 3, 
+            'targetUserId' => 3,
             'isActive' => 0,
             'createdTime' => 0,
         );

@@ -17,7 +17,7 @@ class UploadFileInitDaoTest extends BaseDaoTestCase
     {
         return array(
             'globalId' => 'id',
-            'targetId' => 2, 
+            'targetId' => 2,
             'storage' => 'local',
             'createdUserId' => 2,
             'createdTime' => 0,

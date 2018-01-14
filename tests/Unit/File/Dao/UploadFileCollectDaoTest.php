@@ -34,10 +34,10 @@ class UploadFileCollectDaoTest extends BaseDaoTestCase
     protected function getDefaultMockFields()
     {
         return array(
-            'fileId' => 2, 
-            'userId' => 2, 
-            'createdTime' => 0, 
-            'updatedTime' => 0
+            'fileId' => 2,
+            'userId' => 2,
+            'createdTime' => 0,
+            'updatedTime' => 0,
         );
     }
 }
