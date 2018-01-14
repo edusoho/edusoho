@@ -15,9 +15,8 @@ class ExceptionPrintingToolkitTest extends BaseTestCase
         } catch (\Exception $e) {
             $result = ExceptionPrintingToolkit::printTraceAsArray($e);
             $msg = $result['previous'][0];
-            $this->assertEquals(
-                '1/1 PHPUnit\Framework\Error\Notice: Undefined variable: b',
-                $msg['message']
+            $this->assertTrue(
+                -1 != strstr($msg['message'], 'Undefined variable: b')
             );
 
             $this->assertEquals(
