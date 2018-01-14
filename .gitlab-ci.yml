@@ -27,7 +27,6 @@ Unit Test With PHP 5.3:
   script:
     - bin/phpunit -c app/
   only:
-    - tags
     - develop
     - master
     - trigger
@@ -41,7 +40,6 @@ Unit Test With PHP 5.3 And Redis:
   script:
     - bin/phpunit -c app/
   only:
-    - tags
     - develop
     - master
     - trigger
@@ -66,7 +64,6 @@ Unit Test With PHP 7.0 For Non-Develop:
     - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/
   only:
-    - tags
     - master
     - release
     - trigger
