@@ -40,7 +40,7 @@ class UploadFileTagDaoTest extends BaseDaoTestCase
     {
         return array(
             'fileId' => 2,
-            'tagId' => 3, 
+            'tagId' => 3,
         );
     }
 }
