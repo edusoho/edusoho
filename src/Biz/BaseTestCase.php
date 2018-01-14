@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Topxia\Service\Common\ServiceKernel;
 use PHPUnit\Framework\TestCase;
+use Biz\TestTool\MockedRequest;
 
 class BaseTestCase extends TestCase
 {
@@ -244,6 +245,20 @@ class BaseTestCase extends TestCase
         $biz['@'.$alias] = $mockObj;
 
         return $mockObj;
+    }
+
+    /**
+     * @param $config 值为
+     *   array(
+     *      'request' => array(
+     *          'username' => 'aok',
+     *          'password' => 'dds',   //$request->request->get('password') 将返回 dss
+     *      )
+     *   )
+     */
+    protected function mockRequest($configs)
+    {
+        return MockedRequest::mockRequest($configs);
     }
 
     protected static function getContainer()
