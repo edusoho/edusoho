@@ -19,14 +19,12 @@ class ExceptionPrintingToolkitTest extends BaseTestCase
                 -1 != strstr($msg['message'], 'Undefined variable: b')
             );
 
-            $this->assertEquals(
-                '1.  in /private/var/www/projects/edusoho_test/tests/Unit/AppBundle/Common/ExceptionPrintingToolkitTest.php line 13',
-                $msg['trace'][0]
+            $this->assertTrue(
+                -1 != strstr($msg['trace'][0], 'ExceptionPrintingToolkitTest.php line 13')
             );
 
-            $this->assertEquals(
-                '12. at PHPUnit\TextUI\Command::main(...args...) in /usr/local/Cellar/phpunit/6.4.4/libexec/phpunit-6.4.4.phar line 566',
-                $msg['trace'][11]
+            $this->assertTrue(
+                -1 != strstr($msg['trace'][0], 'phpunit-6.4.4.phar line 566')
             );
         }
     }
