@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\RateLimit;
+namespace Tests\Unit\AppBundle\Component\RateLimit;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\RateLimit\LoginFailRateLimiter;
@@ -117,10 +117,5 @@ class LoginFailRateLimiterTest extends BaseTestCase
         $rateLimit->shouldHaveReceived('check')->times(1);
 
         $this->assertNull($result);
-    }
-
-    private function getUserService()
-    {
-        return $this->biz->service('User:UserService');
     }
 }
