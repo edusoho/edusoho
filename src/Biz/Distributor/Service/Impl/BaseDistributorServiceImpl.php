@@ -26,7 +26,6 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
             'data' => $this->convertData($dataObj),
             'jobType' => $this->getJobType(),
             'status' => DistributorJobStatus::$PENDING,
-            'errMsg' => '',
         );
         $this->getDistributorJobDataDao()->create($result);
     }

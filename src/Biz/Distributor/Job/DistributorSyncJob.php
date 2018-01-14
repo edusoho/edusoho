@@ -7,43 +7,35 @@ use Biz\Distributor\Util\DistributorJobStatus;
 
 class DistributorSyncJob extends AbstractJob
 {
+    private $distributorServices = array();
+
     public function execute()
     {
-        $drpService = $this->getDistributorService()->getDrpService();
+        $drpService = $this->getDrpService();
         if (!empty($drpService)) {
-            $jobData = $this->getDistributorService()->findJobData();
-            if (!empty($jobData)) {
-                $status = DistributorJobStatus::$ERROR;
-                try {
-                    $result = $drpService->postData($jobData, $this->getDistributorService()->getSendType());
+            $distributorServices = $this->getDistributorServiceList();
 
-                    if ('success' == $result['code']) {
-                        $status = DistributorJobStatus::$FINISHED;
+            foreach ($distributorServices as $service) {
+                $jobData = $service->findJobData();
+                if (!empty($jobData)) {
+                    $status = DistributorJobStatus::$ERROR;
+                    try {
+                        $result = $drpService->postData($jobData, $service->getSendType());
+
+                        if ('success' == $result['code']) {
+                            $status = DistributorJobStatus::$FINISHED;
+                        }
+                    } catch (\Exception $e) {
+                        $this->biz['logger']->error(
+                            'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
+                            array('jobData' => $jobData, 'trace' => $e->getTraceAsString())
+                        );
                     }
-                } catch (\Exception $e) {
-                    $this->biz['logger']->error(
-                        'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
-                        array('jobData' => $jobData, 'trace' => $e->getTraceAsString())
-                    );
+
+                    $this->service->batchUpdateStatus($jobData, $status);
                 }
-
-                $this->getDistributorService()->batchUpdateStatus($jobData, $status);
-
-                $this->getJobDao()->update(
-                    $this->id,
-                    array(
-                        'args' => array(
-                            'type' => $this->getDistributorService()->getNextJobType(),
-                        ),
-                    )
-                );
             }
         }
-    }
-
-    protected function getJobDao()
-    {
-        return $this->biz->dao('Scheduler:JobDao');
     }
 
     protected function getDistributorService()
@@ -51,5 +43,25 @@ class DistributorSyncJob extends AbstractJob
         $args = $this->__get('args');
 
         return $this->biz->service('Distributor:Distributor'.$args['type'].'Service');
+    }
+
+    private function getDistributorServiceList()
+    {
+        if (empty($this->distributorServices)) {
+            $this->distributorServices = array();
+            $types = array('User', 'Order');
+            foreach ($types as $type) {
+                array_push($this->distributorServices, $this->biz->service('Distributor:Distributor'.$type.'Service'));
+            }
+        }
+
+        return $this->distributorServices;
+    }
+
+    protected function getDrpService()
+    {
+        $distributorServices = $this->getDistributorServiceList();
+
+        return $distributorServices[0]->getDrpService();
     }
 }
