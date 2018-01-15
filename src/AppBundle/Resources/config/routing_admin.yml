@@ -2198,13 +2198,13 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
-
 admin_login_marketing:
     path: /login/marketing
     defaults: { _controller: AppBundle:Admin/Marketing:loginMarketing}
+
+admin_login_distributor:
+    path: /login/distributor
+    defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
 
 
 admin_jobs:

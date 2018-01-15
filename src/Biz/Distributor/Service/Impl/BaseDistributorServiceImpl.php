@@ -2,13 +2,11 @@
 
 namespace Biz\Distributor\Service\Impl;
 
-use Biz\BaseService;
 use Biz\Distributor\Service\DistributorService;
-use QiQiuYun\SDK\Service\DrpService;
-use QiQiuYun\SDK\Auth;
 use Biz\Distributor\Util\DistributorJobStatus;
+use Biz\Marketing\Service\Impl\MarketingServiceImpl;
 
-abstract class BaseDistributorServiceImpl extends BaseService implements DistributorService
+abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implements DistributorService
 {
     public function findJobData()
     {
@@ -40,18 +38,12 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
         }
     }
 
-    public function getDrpService()
+    protected function getServerUrlConfig()
     {
-        if (empty($this->drpService)) {
-            $this->drpService = null;
-            $settings = $this->getSettingService()->get('storage', array());
-            if (!empty($settings['cloud_access_key']) && !empty($settings['cloud_secret_key'])) {
-                $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-                $this->drpService = new DrpService($auth);
-            }
-        }
-
-        return $this->drpService;
+        return array(
+            'defaultUrl' => 'http://fx.marketing.com',
+            'developerSettingName' => 'distributor_server',
+        );
     }
 
     /**

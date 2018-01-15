@@ -264,8 +264,8 @@ userType:
     import: 手动导入
     qq: QQ登录
     weixin: 微信登录
-    marketing: '微营销'
-    distributor: '分销平台'
+    marketing: 微营销
+    distributor: 分销
 
 userKeyWordTypes:
     nickname: 用户名
