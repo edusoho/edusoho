@@ -34,7 +34,7 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
             'product_id' => $item[0]['target_id'],
             'title' => $order['title'],
             'sn' => $order['sn'],
-            'order_created_time' => $order['created_time'],
+            'created_time' => $order['created_time'],
             'payment_time' => $order['pay_time'],
             'refund_expiry_day' => $order['expired_refund_days'],
             'refund_deadline' => $order['refund_deadline'],

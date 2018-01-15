@@ -5,6 +5,7 @@ namespace Biz\Distributor\Service\Impl;
 use Biz\Distributor\Service\DistributorService;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Marketing\Service\Impl\MarketingServiceImpl;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implements DistributorService
 {
@@ -33,9 +34,11 @@ abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implement
      */
     public function batchUpdateStatus($jobData, $status)
     {
+        $helper = new BatchUpdateHelper($this->getDistributorJobDataDao());
         foreach ($jobData as $single) {
-            $this->getDistributorJobDataDao()->update($single['id'], array('status' => $status));
+            $helper->add('id', $single['id'], array('status' => $status));
         }
+        $helper->flush();
     }
 
     protected function getServerUrlConfig()
