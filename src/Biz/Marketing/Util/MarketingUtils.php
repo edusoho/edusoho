@@ -43,7 +43,7 @@ class MarketingUtils
      *   'drpService' => $this->getDistributorUserService()
      * )
      */
-    public function generateLoginFormForCurrentUser($config)
+    public static function generateLoginFormForCurrentUser($config)
     {
         $site = self::getSiteInfoWithDomain($config['settingService'], $config['webExtension'], $config['request']);
         $user = array(
