@@ -1788,6 +1788,19 @@ class TestpaperServiceTest extends BaseTestCase
         $this->getTestpaperService()->updateTestpaperItems(123, array('questions' => array(array('id' => 1))));
     }
 
+    public function testFindExamFirstResults()
+    {
+        $testpaper = $this->createTestpaper1();
+        $testpaperResult1 = $this->createTestpaperResult1($testpaper);
+        $testpaperResult2 = $this->createTestpaperResult2($testpaper);
+        $testpaperResult3 = $this->createTestpaperResult3($testpaper);
+
+        $results = $this->getTestpaperService()->findExamFirstResults($testpaper['id'], $testpaper['type'], 1);
+
+        $this->assertArrayEquals($testpaperResult1, $results[1]);
+        $this->assertArrayEquals($testpaperResult2, $results[2]);
+    }
+
     protected function createTestpaper1()
     {
         $fields = array(

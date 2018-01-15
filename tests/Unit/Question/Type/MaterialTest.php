@@ -47,6 +47,22 @@ class MaterialTest extends BaseTestCase
         $this->assertEquals(0, $result['score']);
     }
 
+    public function testGetAnswerStructure()
+    {
+        $typeObj = $this->creatQuestionType();
+        $data = $typeObj->getAnswerStructure(array());
+        
+        $this->assertEmpty($data);
+    }
+
+    public function testAnalysisAnswerIndex()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $data = $typeObj->analysisAnswerIndex(array(), array());
+        $this->assertEmpty($data);
+    }
+
     private function creatQuestionType()
     {
         $biz = $this->getBiz();

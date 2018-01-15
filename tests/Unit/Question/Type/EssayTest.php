@@ -60,6 +60,34 @@ class EssayTest extends BaseTestCase
         $this->assertArrayEquals($fields['answer'], $filter['answer']);
     }
 
+    public function testGetAnswerStructure()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $data = $typeObj->getAnswerStructure(array());
+        
+        $this->assertArrayEquals(array(0,1,2), $data);
+    }
+
+    public function testAnalysisAnswerIndex()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $question = array('id' => 1, 'score' => 3);
+
+        $data = $typeObj->analysisAnswerIndex($question, array('score' => 1));
+        $this->assertArrayHasKey(1, $data);
+        $this->assertArrayEquals(array(1), $data[1]);
+
+        $data = $typeObj->analysisAnswerIndex($question, array('score' => 3));
+        $this->assertArrayHasKey(1, $data);
+        $this->assertArrayEquals(array(2), $data[1]);
+
+        $data = $typeObj->analysisAnswerIndex($question, array('score' => 0));
+        $this->assertArrayHasKey(1, $data);
+        $this->assertArrayEquals(array(0), $data[1]);
+    }
+
     private function creatQuestionType()
     {
         $biz = $this->getBiz();

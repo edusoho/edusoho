@@ -104,6 +104,31 @@ class FillTest extends BaseTestCase
         $this->assertEquals(2, count($filter['answer']));
     }
 
+    public function testGetAnswerStructure()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $answer = array('answer' => array(array('a', 'b')));
+        $data = $typeObj->getAnswerStructure($answer);
+        
+        $this->assertArrayEquals($answer['answer'], $data);
+    }
+
+    public function testAnalysisAnswerIndex()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $question = array('id' => 1, 'answer' => array(array('a', 'b')));
+
+        $data = $typeObj->analysisAnswerIndex($question, array('answer' => array('a')));
+        $this->assertArrayHasKey(1, $data);
+        $this->assertArrayEquals(array(0), $data[1]);
+
+        $data = $typeObj->analysisAnswerIndex($question, array('answer' => array('c')));
+        $this->assertArrayHasKey(1, $data);
+        $this->assertEmpty($data[1]);
+    }
+
     private function creatQuestionType()
     {
         $biz = $this->getBiz();
