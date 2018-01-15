@@ -32,7 +32,7 @@ class DistributorSyncJob extends AbstractJob
                         );
                     }
 
-                    $this->service->batchUpdateStatus($jobData, $status);
+                    $service->batchUpdateStatus($jobData, $status);
                 }
             }
         }

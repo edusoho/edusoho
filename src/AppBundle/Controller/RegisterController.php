@@ -88,8 +88,9 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
 
-                if (!empty($request->cookies->get('distributor-token'))) {
-                    $registration['distributorToken'] = $request->cookies->get('distributor-token');
+                $distributorTokenCookie = $request->cookies->get('distributor-token');
+                if (!empty($distributorTokenCookie)) {
+                    $registration['distributorToken'] = $distributorTokenCookie;
                 }
 
                 $user = $this->getAuthService()->register($registration);
@@ -119,7 +120,7 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                if (!empty($request->cookies->get('distributor-token'))) {
+                if (!empty($distributorTokenCookie)) {
                     $response->headers->setCookie(new Cookie('distributor-token', ''));
                 }
 
