@@ -111,6 +111,15 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.market_fx_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="marketing_fx_domain" value="{{ developerSetting.marketing_fx_domain|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ 'admin.developer_setting.hls_encrypted'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">

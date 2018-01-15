@@ -787,17 +787,33 @@ admin:
                             router_name: admin_setting_cloud
                             disable: true
 
-        admin_marketing_top:
-                    name: admin.marketing.menu
+        admin_marketing_wyx_top:
+                    name: admin.marketing_wyx.menu
                     blank: true
                     children:
-                      _admin_marketing_menu:
-                        name: admin.marketing.menu
+                      _admin_marketing_wyx_menu:
+                        name: admin.marketing_wyx.menu
                         disable: true
                         children:
-                            _marketing_page:
-                                name: admin.marketing.menu
+                            _marketing_wyx_page:
+                                name: admin.marketing_wyx.menu
                                 router_name: admin_marketing
+                                router_params:
+                                  entry: wyx
+        
+        admin_marketing_fx_top:
+                    name: admin.marketing_fx.menu
+                    blank: true
+                    children:
+                      _admin_marketing_fx_menu:
+                        name: admin.marketing_fx.menu
+                        disable: true
+                        children:
+                            _marketing_fx_page:
+                                name: admin.marketing_fx.menu
+                                router_name: admin_login_marketing
+                                router_params:
+                                  entry: fx
 
         admin_system:
             name: admin.nav.system
@@ -1040,20 +1056,6 @@ admin:
                     children:
                         admin_queue_failed_logs:
                             name: 队列错误日志
-
-        admin_marketing_top:
-                    name: admin.marketing.menu
-                    blank: true
-                    children:
-                      _admin_marketing_menu:
-                        name: admin.marketing.menu
-                        disable: true
-                        children:
-                            _marketing_page:
-                                name: admin.marketing.menu
-                                router_name: admin_marketing
-
-
 
 
 web:

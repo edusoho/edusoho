@@ -348,7 +348,8 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
 ##微营销模块
-admin.marketing.menu: 微营销
+admin.marketing_wyx.menu: 微营销
+admin.marketing_fx.menu: 分销
 
 #web模块
 web.course: 课程管理
