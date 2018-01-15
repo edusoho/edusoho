@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\RegisterTypeUtils;
+use AppBundle\Common\TimeMachine;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService
@@ -64,7 +65,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         switch ($type) {
             case 'middle':
                 $condition = array(
-                    'startTime' => time() - 24 * 3600,
+                    'startTime' => TimeMachine::time() - 24 * 3600,
                     'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->countUsers($condition);
 
@@ -75,7 +76,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return true;
             case 'high':
                 $condition = array(
-                    'startTime' => time() - 24 * 3600,
+                    'startTime' => TimeMachine::time() - 24 * 3600,
                     'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->countUsers($condition);
 
@@ -84,7 +85,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 }
 
                 $registerCount = $this->getUserService()->countUsers(array(
-                    'startTime' => time() - 3600,
+                    'startTime' => TimeMachine::time() - 3600,
                     'createdIp' => $ip, ));
 
                 if ($registerCount >= 1) {

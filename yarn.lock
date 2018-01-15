@@ -1782,9 +1782,9 @@ es-ckeditor@4.7.2-patch3:
   version "4.7.2-patch3"
   resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch3.tgz#8fcaa6a09b247312e2c5a79157b439a50156d9e6"
 
-es-fullcalendar@3.7.0-patch1:
-  version "3.7.0-patch1"
-  resolved "https://registry.npmjs.org/es-fullcalendar/-/es-fullcalendar-3.7.0-patch1.tgz#bb72fc6aa6b4fd48cd90a27b0cff2a66ba3d7822"
+es-fullcalendar@3.7.0-patch3:
+  version "3.7.0-patch3"
+  resolved "https://registry.yarnpkg.com/es-fullcalendar/-/es-fullcalendar-3.7.0-patch3.tgz#a9810e27119c8e1360e24f5a9e9e5dfe359b3234"
   dependencies:
     jquery "2 - 3"
     moment "^2.9.0"
@@ -2806,11 +2806,7 @@ jquery@1.12.4, jquery@>=1.10, jquery@>=1.5:
   version "1.12.4"
   resolved "https://registry.npmjs.org/jquery/-/jquery-1.12.4.tgz#01e1dfba290fe73deba77ceeacb0f9ba2fec9e0c"
 
-"jquery@2 - 3":
-  version "3.2.1"
-  resolved "http://registry.npm.taobao.org/jquery/download/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
-
-jquery@>=1.7, "jquery@^1.7 || ^2.0", jquery@^2.1.2:
+"jquery@2 - 3", jquery@>=1.7, "jquery@^1.7 || ^2.0", jquery@^2.1.2:
   version "2.2.4"
   resolved "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
 
@@ -4736,13 +4732,9 @@ typeahead.js@0.11.1:
   dependencies:
     jquery ">=1.7"
 
-ua-parser-js@^0.7.17:
+ua-parser-js@^0.7.17, ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
-
-ua-parser-js@^0.7.9:
-  version "0.7.12"
-  resolved "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.12.tgz#04c81a99bdd5dc52263ea29d24c6bf8d4818a4bb"
 
 uglify-js@^2.6, uglify-js@^2.8.29:
   version "2.8.29"
