@@ -63,8 +63,8 @@ class DetermineTest extends BaseTestCase
     {
         $typeObj = $this->creatQuestionType();
         $data = $typeObj->getAnswerStructure(array());
-        
-        $this->assertArrayEquals(array(0,1), $data);
+
+        $this->assertArrayEquals(array(0, 1), $data);
     }
 
     public function analysisAnswerIndex()
@@ -73,7 +73,7 @@ class DetermineTest extends BaseTestCase
 
         $answer = array('answer' => array(1));
         $data = $typeObj->analysisAnswerIndex(array('id' => 1), $answer);
-        
+
         $this->assertArrayHasKey(1, $data);
         $this->assertArrayEquals($answer['answer'], $data[1]);
     }

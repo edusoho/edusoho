@@ -105,7 +105,7 @@ class UncertainChoiceTest extends BaseTestCase
 
         $question = array('metas' => array('choices' => array('a', 'b', 'c', 'd')));
         $data = $typeObj->getAnswerStructure($question);
-        
+
         $this->assertArrayEquals($question['metas']['choices'], $data);
     }
 
@@ -115,7 +115,7 @@ class UncertainChoiceTest extends BaseTestCase
 
         $answer = array('answer' => array(1));
         $data = $typeObj->analysisAnswerIndex(array('id' => 1), $answer);
-        
+
         $this->assertArrayHasKey(1, $data);
         $this->assertArrayEquals($answer['answer'], $data[1]);
     }

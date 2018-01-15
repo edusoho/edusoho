@@ -51,7 +51,7 @@ class MaterialTest extends BaseTestCase
     {
         $typeObj = $this->creatQuestionType();
         $data = $typeObj->getAnswerStructure(array());
-        
+
         $this->assertEmpty($data);
     }
 

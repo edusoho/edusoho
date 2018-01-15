@@ -110,7 +110,7 @@ class FillTest extends BaseTestCase
 
         $answer = array('answer' => array(array('a', 'b')));
         $data = $typeObj->getAnswerStructure($answer);
-        
+
         $this->assertArrayEquals($answer['answer'], $data);
     }
 

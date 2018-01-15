@@ -65,8 +65,8 @@ class EssayTest extends BaseTestCase
         $typeObj = $this->creatQuestionType();
 
         $data = $typeObj->getAnswerStructure(array());
-        
-        $this->assertArrayEquals(array(0,1,2), $data);
+
+        $this->assertArrayEquals(array(0, 1, 2), $data);
     }
 
     public function testAnalysisAnswerIndex()
