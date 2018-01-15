@@ -17,11 +17,6 @@ class CurlToolkitTest extends BaseTestCase
 
     public function testCurl()
     {
-        $result = CurlToolkit::request('get', 'http://open.edusoho.com/api/v1/context/notice');
-        $this->assertArrayHasKey('content', $result[0]);
-        $this->assertArrayHasKey('publishedTime', $result[0]);
-        $this->assertArrayHasKey('detailUrl', $result[0]);
-
         $result = CurlToolkit::request('get', 'http://open.edusoho.com/api/v1/context/notice?kw=edusoho', array(), array('contentType' => 'plain'));
         $this->assertTrue(is_array(json_decode($result, true)));
 
