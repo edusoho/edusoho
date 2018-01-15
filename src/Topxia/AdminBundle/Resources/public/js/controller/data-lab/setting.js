@@ -12,12 +12,18 @@ define(function(require, exports, module){
 
       $modal.on('click', '#xapi-setting-confirm', function(){
         var $btn = $(this);
+        if ($btn.hasClass('disabled')) {
+          return;
+        }
+
+        $btn.addClass('disabled');
         $.post(url, function(res){
           if (res.error) {
-              alert(res.error);
+              Notify.danger(Translator.trans(res.error));
           }
           $swith.toggleClass('checked');
           $modal.modal('hide');
+          $btn.removeClass('disabled')
         }).error(function() { 
           Notify.danger(Translator.trans('admin.data.lab.setting.error'));
          })
