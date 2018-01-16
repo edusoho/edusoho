@@ -65,7 +65,7 @@ class LatestCourseMembers2DataTagTest extends BaseTestCase
         $datatag = new LatestCourseMembers2DataTag();
         $members = $datatag->getData(array('count' => 5));
         $this->assertEquals(2, count($members));
-        
+
         $members = $datatag->getData(array('count' => 5, 'categoryId' => $category['id']));
         $this->assertEquals(0, count($members));
     }

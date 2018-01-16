@@ -54,7 +54,7 @@ class LatestFinishedLearnsDataTagTest extends BaseTestCase
         $task3 = $this->getTaskDao()->create($fields3);
 
         $user = $this->getCurrentuser();
-        
+
         $result1 = array(
             'activityId' => $task1['activityId'],
             'courseId' => $task1['courseId'],

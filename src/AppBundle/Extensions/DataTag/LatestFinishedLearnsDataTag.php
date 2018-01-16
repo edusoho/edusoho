@@ -2,7 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\ArrayToolkit;
 
 class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag

@@ -65,7 +65,7 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
             'content' => 'content2',
             'rating' => 4,
         ));
-        
+
         $datatag = new LatestCourseReviewsDataTag();
         $reviews = $datatag->getData(array('courseId' => $course1['id'], 'count' => 5));
         $this->assertEquals(2, count($reviews));

@@ -24,7 +24,7 @@ class LatestCourseMembersDataTagTest extends BaseTestCase
         $datatag = new LatestCourseMembersDataTag();
         $datatag->getData(array('count' => 101));
     }
-    
+
     public function testGetData()
     {
         $group = $this->getCategoryService()->addGroup(array('code' => 'course', 'name' => '课程分类', 'depth' => 2));
@@ -65,7 +65,7 @@ class LatestCourseMembersDataTagTest extends BaseTestCase
         $datatag = new LatestCourseMembersDataTag();
         $members = $datatag->getData(array('count' => 5));
         $this->assertEquals(2, count($members));
-        
+
         $members = $datatag->getData(array('count' => 5, 'categoryId' => $category['id']));
         $this->assertEquals(0, count($members));
     }

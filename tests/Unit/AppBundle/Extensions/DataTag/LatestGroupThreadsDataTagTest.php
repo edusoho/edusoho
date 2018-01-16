@@ -3,7 +3,6 @@
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
 use Biz\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Extensions\DataTag\LatestGroupThreadsDataTag;
 
 class LatestGroupThreadsDataTagTest extends BaseTestCase
@@ -55,7 +54,7 @@ class LatestGroupThreadsDataTagTest extends BaseTestCase
             'userId' => $user1['id'],
         ));
         $datatag = new LatestGroupThreadsDataTag();
-        
+
         $threads = $datatag->getData(array('count' => 5));
         $this->assertEquals(3, count($threads));
     }
