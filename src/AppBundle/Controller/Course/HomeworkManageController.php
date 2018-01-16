@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;

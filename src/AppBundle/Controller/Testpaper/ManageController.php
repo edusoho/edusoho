@@ -147,7 +147,7 @@ class ManageController extends BaseController
             'targetId' => $targetId,
             'targetType' => $targetType,
             'tasks' => $tasks,
-            'resultStatusNum' => $resultStatusNum
+            'resultStatusNum' => $resultStatusNum,
         ));
     }
 
@@ -569,18 +569,18 @@ class ManageController extends BaseController
             $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
             $ids = ArrayToolkit::column($testpaperActivities, 'mediaId');
 
-            array_walk($tasks, function(&$task, $key) use ($activities, $testpaperActivities) {
+            array_walk($tasks, function (&$task, $key) use ($activities, $testpaperActivities) {
                 $activity = $activities[$task['activityId']];
                 $task['testId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
             });
         } else {
             $ids = ArrayToolkit::column($activities, 'mediaId');
-            array_walk($tasks, function(&$task, $key) use ($activities) {
+            array_walk($tasks, function (&$task, $key) use ($activities) {
                 $activity = $activities[$task['activityId']];
                 $task['testId'] = $activity['mediaId'];
             });
         }
-        
+
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
 
         if (empty($testpapers)) {

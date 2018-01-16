@@ -1011,7 +1011,7 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
                 'testpaper' => $testpaper,
                 'isTeacher' => true,
-                'activityId' => $activity['id']
+                'activityId' => $activity['id'],
             )
         );
     }
