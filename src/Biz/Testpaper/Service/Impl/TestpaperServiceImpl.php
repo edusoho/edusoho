@@ -317,9 +317,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
     }
 
-    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
+    public function findPaperResultsStatusNumGroupByStatus($testId, $activityId)
     {
-        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
+        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId, $activityId);
         if (!$numInfo) {
             return array();
         }

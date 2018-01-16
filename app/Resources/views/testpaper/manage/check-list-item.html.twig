@@ -48,35 +48,46 @@
   <div class=" testpaper-info col-md-9">
     <div>
       <h3>
-        <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'all'}) }}">{{ testpaper.name }}</a>
+        <a href="">
+          {% if task.isOptional %} 
+            {{ 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) }}
+          {% else %}
+            {{ 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) }}
+          {% endif %}
+        </a>
       </h3>
     </div>
-    <div class="testpaper-describe">{{ testpaper.description|purify_and_trim_html|raw }}</div>
+    <div class="testpaper-describe">
+      {% if testpaper %}{{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+    </div>
     <div class="mvm testpaper-meta">
-      <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ testpaper.createdTime|date('Y-m-d H:i') }}</span>
+      <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ task.createdTime|date('Y-m-d H:i') }}</span>
     </div>
   </div>
-
+  
   <div class="result-info col-md-3 text-center">
-    <div class="row">
-      <div class="count-info pull-left color-primary col-md-4">
-        <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'finished'}) }}">
-          <span class="testpaper-span ">{{'course.testpaper_check.status.check'|trans}}</span><br>
-          <p class="mtm pts">{{ targetResultInfo.finished|default(0) }}</p>
+    {% if testpaper %}
+      <div class="row">
+        <div class="count-info pull-left color-primary col-md-4">
+          <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id, activityId:task.activityId,status:'finished'}) }}">
+            <span class="testpaper-span ">{{'course.testpaper_check.status.check'|trans}}</span><br>
+            <p class="mtm pts">{{ targetResultInfo.finished|default(0) }}</p>
+          </a>
+        </div>
+        <div class="count-info pull-left  color-warning col-md-4">
+          <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'reviewing'}) }}">
+            <span class="testpaper-span">{{'course.testpaper_check.status.not_check'|trans}}</span><br>
+            <p class="mtm pts">{{ targetResultInfo.reviewing|default(0) }}</p>
+          </a>
+        </div>
+        <div class="count-info pull-left color-danger col-md-4">
+        <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'doing'}) }}">
+          <span class="testpaper-span">{{'course.testpaper_check.status.not_submit'|trans}}</span><br>
+          <p class="mtm pts">{{ targetResultInfo.doing|default(0) }}</p>
         </a>
+        </div>
       </div>
-      <div class="count-info pull-left  color-warning col-md-4">
-        <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'reviewing'}) }}">
-          <span class="testpaper-span">{{'course.testpaper_check.status.not_check'|trans}}</span><br>
-          <p class="mtm pts">{{ targetResultInfo.reviewing|default(0) }}</p>
-        </a>
-      </div>
-      <div class="count-info pull-left color-danger col-md-4">
-      <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'doing'}) }}">
-        <span class="testpaper-span">{{'course.testpaper_check.status.not_submit'|trans}}</span><br>
-        <p class="mtm pts">{{ targetResultInfo.doing|default(0) }}</p>
-      </a>
-      </div>
-    </div>
+    {% endif %}
   </div>
+  
 </div>

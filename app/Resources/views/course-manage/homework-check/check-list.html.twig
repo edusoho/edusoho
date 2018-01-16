@@ -11,7 +11,7 @@
         <span class="color-danger">{{'course.homework_check.no_permission_tips'|trans}}</span>
       {% endif %}
 
-      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework',testpaperIds:homeworkIds})) }}
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework'})) }}
     </div>
   </div>
 {% endblock %}

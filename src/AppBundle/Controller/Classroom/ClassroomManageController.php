@@ -981,37 +981,28 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $conditions = array(
-            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
-            'mediaType' => 'testpaper',
-        );
-        $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);
-
-        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
 
         return $this->render(
             'classroom-manage/testpaper/index.html.twig',
             array(
                 'classroom' => $classroom,
-                'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId'),
             )
         );
     }
 
-    public function testpaperResultListAction($id, $testpaperId)
+    public function testpaperResultListAction($id, $testpaperId, $activityId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+        }
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (!$activity) {
+            throw $this->createResourceNotFoundException('activity', $activityId);
         }
 
         return $this->render(
@@ -1020,6 +1011,7 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
                 'testpaper' => $testpaper,
                 'isTeacher' => true,
+                'activityId' => $activity['id']
             )
         );
     }
@@ -1029,27 +1021,11 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $user = $this->getUser();
-
-        if (empty($user)) {
-            return $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
-        }
-
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $conditions = array(
-            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
-            'mediaType' => 'homework',
-        );
-        $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);
-
         return $this->render(
             'classroom-manage/homework/index.html.twig',
             array(
                 'classroom' => $classroom,
                 'isTeacher' => true,
-                'homeworkIds' => ArrayToolkit::column($activities, 'mediaId'),
             )
         );
     }

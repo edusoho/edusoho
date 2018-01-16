@@ -2253,7 +2253,7 @@ course_manage_testpaper_check_list:
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkList }
 
 course_manage_testpaper_result_list:
-  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  path: /course/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultList }
 
 course_manage_testpaper_questions:
@@ -2498,7 +2498,7 @@ classroom_manage_testpaper:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
 
 classroom_manage_testpaper_result_list:
-  path: /classroom/{id}/manage/testpaper/{testpaperId}/result
+  path: /classroom/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
 
 classroom_manage_testpaper_check:
