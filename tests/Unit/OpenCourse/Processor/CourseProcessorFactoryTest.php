@@ -12,10 +12,10 @@ class CourseProcessorFactoryTest extends BaseTestCase
     public function testCreate()
     {
         $class = CourseProcessorFactory::create('normal');
-        $this->assertTrue($class instanceof CourseServiceImpl);
+        $this->assertInstanceOf('Biz\Course\Service\Impl\CourseServiceImpl', $class);
 
         $openCourseClass = CourseProcessorFactory::create('open');
-        $this->assertTrue($openCourseClass instanceof OpenCourseServiceImpl);
+        $this->assertInstanceOf('Biz\OpenCourse\Service\Impl\OpenCourseServiceImpl', $openCourseClass);
     }
 
     /**
