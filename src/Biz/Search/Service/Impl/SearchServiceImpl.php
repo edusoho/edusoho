@@ -23,7 +23,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         $result = $api->get('/search', $conditions);
 
         if (empty($result['success'])) {
-            throw new \RuntimeException('搜索失败，请稍候再试.', 1);
+            throw new \RuntimeException('搜索失败，请稍后再试.', 1);
         }
 
         if (empty($result['body']['datas'])) {
