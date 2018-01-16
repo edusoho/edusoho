@@ -13,7 +13,7 @@ class AddBizOrderItemDeductField extends Migration
         $db = $container['db'];
 
         if (!$this->isFieldExist('biz_order_item_deduct', 'deduct_type_name')) {
-            $db->exec("ALTER TABLE `biz_order_item_deduct` ADD COLUMN `deduct_type_name` varchar(255)  NOT NULL DEFAULT '' COMMENT '促销类型名称' AFTER `deduct_type`");
+            $db->exec("ALTER TABLE `biz_order_item_deduct` ADD COLUMN `deduct_type_name` varchar(255)  NOT NULL DEFAULT '' COMMENT '优惠类型' AFTER `deduct_type`");
         }
     }
 

@@ -21,6 +21,8 @@ use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
+    private $deduct_type_name = array('discount' => '打折', 'coupon' => '优惠券', 'paidCourse' => '班级课程抵扣', 'adjust_price' => '改价');
+
     public function create(Product $product)
     {
         $product->validate();
@@ -87,9 +89,15 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         foreach ($product->pickedDeducts as $deduct) {
             $deduct = MathToolkit::multiply($deduct, array('deduct_amount'), 100);
+            if (in_array($deduct['deduct_type'], array('discount', 'coupon', 'paidCourse', 'adjust_price'))) {
+                $typeName = $this->deduct_type_name[$deduct['deduct_type']];
+            } else {
+                $typeName = empty($deduct['detail']) ? $deduct['detail'] : '';
+            }
             $deducts[] = array(
                 'deduct_id' => $deduct['deduct_id'],
                 'deduct_type' => $deduct['deduct_type'],
+                'deduct_type_name' => $typeName,
                 'deduct_amount' => $deduct['deduct_amount'],
                 'snapshot' => empty($deduct['snapshot']) ? null : $deduct['snapshot'],
             );
