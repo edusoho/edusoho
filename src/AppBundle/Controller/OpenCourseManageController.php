@@ -548,7 +548,7 @@ class OpenCourseManageController extends BaseController
     public function recommendedCoursesSelectAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
+        $this->removeDeletedCourseRelation($id);
         $recommendNum = $this->getOpenCourseRecommendedService()->countRecommends(array('openCourseId' => $id));
 
         $ids = $request->request->get('ids');
@@ -564,6 +564,23 @@ class OpenCourseManageController extends BaseController
         $this->getOpenCourseRecommendedService()->addRecommendedCourses($id, $ids, 'normal');
 
         return $this->createJsonResponse(array('result' => true));
+    }
+
+    private function removeDeletedCourseRelation($openCourseId)
+    {
+        //删除 已经被删除的课程的推荐关系
+        $recommends = $this->getOpenCourseRecommendedService()->searchRecommends(array('openCourseId' => $openCourseId), array(), 0, \PHP_INT_MAX);
+        $recommends = ArrayToolkit::index($recommends, 'recommendCourseId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_keys($recommends));
+
+        $removeIds = array();
+        foreach($recommends as $key => $value) {
+            if (empty($courseSets[$key])) {
+                $removeIds[] =  $value['id'];
+            }
+        }
+
+        $this->getOpenCourseRecommendedService()->deleteBatchRecommendCourses($removeIds);
     }
 
     public function publishAction(Request $request, $id)
