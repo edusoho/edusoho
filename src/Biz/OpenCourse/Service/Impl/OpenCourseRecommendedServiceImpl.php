@@ -100,10 +100,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         if (empty($recommendIds)) {
             return true;
         }
-
-        foreach ($recommendIds as $key => $recommendId) {
-            $this->getRecommendedCourseDao()->delete($recommendId);
-        }
+        $this->getRecommendedCourseDao()->batchDelete(array('ids' => $recommendIds));
 
         return true;
     }
