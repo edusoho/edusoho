@@ -125,7 +125,7 @@ class DrpService extends BaseService
         
         return $this->client->request(
             'POST',
-            $this->baseUri.$this->postDataPath,
+            $this->postDataPath,
             array(
                 'data' => $data,
                 'sign' => $sign,
