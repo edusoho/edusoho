@@ -5112,14 +5112,6 @@ var module = false;
 var exports = false;
 (function() {
 
-/** 新增了 6097 ~ 6102行
- *  if (view.name === 'agendaWeek') {
-            let segs = innerHtml.split(' ');
-            innerHtml = 
-              '<div class="week">' + segs[0] + '</div>' +
-              '<div class="day">' + segs[1] + '</div>';
-    }
- */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(__webpack_require__(0), __webpack_require__("8913a10c9234223f6f73"));
@@ -18951,7 +18943,19 @@ function computeSlotSegCollisions(seg, otherSegs, results) {
 }
 // Do these segments occupy the same vertical space?
 function isSlotSegCollision(seg1, seg2) {
-    return seg1.bottom > seg2.top && seg1.top < seg2.bottom;
+    var s1Height = seg1.bottom - seg1.top;
+    var s2Height = seg2.bottom - seg2.top;
+    var topOffset = s1Height < s2Height ? (20 - s1Height) : (20 - s2Height);
+    var isS1TopLead = (s1Height > 20 && seg1.bottom === seg2.top);
+    var isS2TopLead = (s2Height > 20 && seg2.bottom === seg1.top);
+    if (s1Height < 20 || s2Height < 20)  {
+        if (isS1TopLead || isS2TopLead) {
+        return false;
+        }
+        return seg1.bottom > (seg2.top - topOffset) && (seg1.top - topOffset) < seg2.bottom;
+    } else {
+        return seg1.bottom > seg2.top && seg1.top < seg2.bottom;
+    }
 }
 
 

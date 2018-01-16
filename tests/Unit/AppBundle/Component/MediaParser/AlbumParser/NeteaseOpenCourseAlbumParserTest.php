@@ -76,11 +76,56 @@ class NeteaseOpenCourseAlbumParserTest extends BaseTestCase
         );
     }
 
+    public function testParseInternationalItems()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        $content = '<table id="list2"><div class="u-ctitle">black<a href="http://v.163.com/movie/23"></a></div></table>';
+        $result = ReflectionUtils::invokeMethod($parser, 'parseInternationalItems', array($content));
+
+        $this->assertArrayEquals(
+            array(
+                array(
+                    'id' => false,
+                    'title' => '',
+                    'url' => 'http://v.163.com/movie/23',
+                ),
+            ),
+            $result
+        );
+    }
+
     public function testDetect()
     {
         $parser = new NeteaseOpenCourseAlbumParser();
         $this->assertTrue($parser->detect('http://v.163.com/special/a.html'));
         $this->assertFalse($parser->detect('https://v.163.com/special/a.html'));
         $this->assertFalse($parser->detect('http://v.163.com/special/a'));
+    }
+
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     */
+    public function testParseIdWithException()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        ReflectionUtils::invokeMethod($parser, 'parseId', array('http://www.baidu.com'));
+    }
+
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     */
+    public function testParseInternationalItemsWithExcpetion()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        ReflectionUtils::invokeMethod($parser, 'parseInternationalItems', array('http://www.baidu.com'));
+    }
+
+    /**
+     * @expectedException \AppBundle\Component\MediaParser\ParseException
+     */
+    public function testParseInternationalItemsWithExcpetionPerInnerText()
+    {
+        $parser = new NeteaseOpenCourseAlbumParser();
+        ReflectionUtils::invokeMethod($parser, 'parseInternationalItems', array('<table id="list2"></table>'));
     }
 }
