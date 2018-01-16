@@ -3,9 +3,7 @@
 namespace Tests\Unit\OpenCourse\Processor;
 
 use Biz\BaseTestCase;
-use Biz\Course\Service\Impl\CourseServiceImpl;
 use Biz\OpenCourse\Processor\CourseProcessorFactory;
-use Biz\OpenCourse\Service\Impl\OpenCourseServiceImpl;
 
 class CourseProcessorFactoryTest extends BaseTestCase
 {
