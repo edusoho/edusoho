@@ -29,10 +29,10 @@
           <div class="col-md-9 prevent-copy">
             <div class="testpaper-body js-testpaper-body {{ testpaperBodyClass|default('') }} " data-copy="{{setting('course.testpaperCopy_enabled',0)}}">
               {% block paper_header %}
-                <div class="es-section testpaper-heading js-testpaper-heading">
+                <div class="es-section js-testpaper-heading">
                   <div class="testpaper-titlebar clearfix">
                     <h1 class="testpaper-title">
-                      {% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} <br>
+                      <p class="testpaper-title__content" title="{% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %}">{% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %}</p>
                       <small class="text-sm">
                         {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
                           {{'testpaper.answer.student'|trans}}{{ student.nickname }}

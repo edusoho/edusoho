@@ -10,9 +10,9 @@
       {% set choiceIndex = (65+key)|chr %}
 
       <li class="{{ itemClass }}">
-        <span class="testpaper-question-choice-index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}
-
-        <span class="two label {{ labelClass }} hidden-xs">
+        <span class="testpaper-question-choice-index">{{ choiceIndex }}.</span>
+        <div class="testpaper-question-choice-content">{{ choice|bbCode2Html|raw }}</div>
+        <span class="label testpaper-question-choice__label {{ labelClass }} hidden-xs">
           {% if itemKeyAnalysis and firstCount != 0 %}
             {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
             {{ firstAnswerPercent }}%
@@ -21,7 +21,7 @@
           {% endif %}
         </span>
 
-        <span class="one hidden-xs">
+        <span class="hidden-xs testpaper-question-choice__count">
           {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}人次
         </span>
       </li>
