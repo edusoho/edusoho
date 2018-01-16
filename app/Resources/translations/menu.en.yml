@@ -231,6 +231,8 @@ admin.cloud.attachment_setting_menu: Cloud Attachement Review
 admin.cloud.app_center_menu: ES App Center
 admin.cloud.attachment_menu: Cloud Attachement
 admin.cloud.consult_menu: Cloud Q&A
+admin.cloud.data_lab: 数据实验室
+admin.cloud.data_lab_setting: 设置
 admin.cloud.cloud_setting_menu: License
 
 ##概览模块

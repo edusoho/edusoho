@@ -55,7 +55,7 @@ class XapiController extends BaseController
             $xapiSetting = $request->request->all();
             $default = array(
                 'enabled' => 0,
-                'push_url' => 'http://xapi.edusoho.net',
+                'push_url' => 'https://lrs.qiqiuyun.net/v1/xapi/',
             );
             $xapiSetting = array_merge($default, $xapiSetting);
             $this->getSettingService()->set('xapi', $xapiSetting);

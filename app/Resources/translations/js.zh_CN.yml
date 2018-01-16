@@ -787,6 +787,8 @@ admin.user.statistics.data.time: 时长
 
 course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
 
+admin.data.lab.setting.error: 发生异常了，请重试！
 ## 资讯管理
 admin.article.save.success: 保存文章成功！
 admin.article.choose_column_tip: 请选择所属栏目
+

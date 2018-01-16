@@ -3,6 +3,7 @@
 namespace Tests\Unit\Xapi;
 
 use Biz\BaseTestCase;
+use Biz\Xapi\Service\XapiService;
 use Biz\Xapi\Type\AudioListen;
 
 class AudioListenTest extends BaseTestCase
@@ -20,6 +21,10 @@ class AudioListenTest extends BaseTestCase
                         'course_id' => 2221,
                         'watched_time' => 1231,
                     ),
+                ),
+                array(
+                    'functionName' => 'getXapiSdk',
+                    'returnValue' => $this->getXapiService()->getXapiSdk(),
                 ),
             )
         );
@@ -119,5 +124,13 @@ class AudioListenTest extends BaseTestCase
             array('title' => 'course set title-course title', 'description' => 'course set subtitle'),
             $packageInfo['object']['definition']['extensions']['http://xapi.edusoho.com/extensions/course']
         );
+    }
+
+    /**
+     * @return XapiService
+     */
+    protected function getXapiService()
+    {
+        return $this->createService('Xapi:XapiService');
     }
 }
