@@ -92,7 +92,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             if (in_array($deduct['deduct_type'], array('discount', 'coupon', 'paidCourse', 'adjust_price'))) {
                 $typeName = $this->deduct_type_name[$deduct['deduct_type']];
             } else {
-                $typeName = empty($deduct['detail']) ? $deduct['detail'] : '';
+                $typeName = empty($deduct['detail']) ? '' : $deduct['detail'];
             }
             $deducts[] = array(
                 'deduct_id' => $deduct['deduct_id'],
