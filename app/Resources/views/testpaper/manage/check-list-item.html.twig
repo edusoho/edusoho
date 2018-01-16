@@ -45,11 +45,11 @@
 </style>
 
 <div class="clearfix testpaper-list">
-  <div class=" testpaper-info col-md-9">
+  <div class="testpaper-info col-md-9">
     <div>
       <h3>
         <a href="">
-          {% if task.isOptional %} 
+          {% if task.isOptional %}
             {{ 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) }}
           {% else %}
             {{ 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) }}
@@ -68,13 +68,13 @@
   <div class="result-info col-md-3 text-center">
     {% if testpaper %}
       <div class="row">
-        <div class="count-info pull-left color-primary col-md-4">
+        <div class="count-info pull-left color-success col-md-4">
           <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id, activityId:task.activityId,status:'finished'}) }}">
-            <span class="testpaper-span ">{{'course.testpaper_check.status.check'|trans}}</span><br>
+            <span class="testpaper-span">{{'course.testpaper_check.status.check'|trans}}</span><br>
             <p class="mtm pts">{{ targetResultInfo.finished|default(0) }}</p>
           </a>
         </div>
-        <div class="count-info pull-left  color-warning col-md-4">
+        <div class="count-info pull-left color-warning col-md-4">
           <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'reviewing'}) }}">
             <span class="testpaper-span">{{'course.testpaper_check.status.not_check'|trans}}</span><br>
             <p class="mtm pts">{{ targetResultInfo.reviewing|default(0) }}</p>
