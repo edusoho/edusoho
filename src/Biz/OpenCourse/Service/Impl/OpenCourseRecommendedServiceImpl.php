@@ -161,16 +161,6 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
     }
 
-    protected function getTypeCourseService($type)
-    {
-        return CourseProcessorFactory::create($type);
-    }
-
-    protected function getOpenCourseService()
-    {
-        return $this->createService('OpenCourse:OpenCourseService');
-    }
-
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
