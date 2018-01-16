@@ -23,32 +23,44 @@ class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
             $arguments['count'] = 5;
         }
 
-        $learns = $this->getCourseService()->findLatestFinishedLearns(0, $arguments['count']);
+        $conditions = array(
+            'userId' => $this->getCurrentUser()->id,
+            'status' => 'finish',
+        );
+        $learns = $this->getTaskResultService()->searchTaskResults($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($learns, 'userId'));
+        $userIds = ArrayToolkit::column($learns, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($learns, 'lessonId'));
+        $taskIds = ArrayToolkit::column($learns, 'id');
+        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks = ArrayToolkit::index($tasks, 'id');
 
         foreach ($learns as $key => $learn) {
             if ($learn['userId'] == $users[$learn['userId']]['id']) {
                 $learns[$key]['user'] = $users[$learn['userId']];
             }
 
-            if (!empty($lessons[$learn['lessonId']]['id']) && $learn['lessonId'] == $lessons[$learn['lessonId']]['id']) {
-                $learns[$key]['lesson'] = $lessons[$learn['lessonId']];
+            if (!empty($tasks[$learn['courseTaskId']]['id']) && $learn['courseTaskId'] == $tasks[$learn['courseTaskId']]['id']) {
+                $learns[$key]['lesson'] = $tasks[$learn['courseTaskId']];
             }
         }
 
         return $learns;
     }
 
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
-    }
-
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskResultService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 }

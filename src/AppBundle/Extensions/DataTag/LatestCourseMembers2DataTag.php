@@ -26,6 +26,10 @@ class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag
             $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         }
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 1000);
+        if (empty($courses)) {
+            return array();
+        }
+        
         $courseIds = ArrayToolkit::column($courses, 'id');
         $conditions = array('courseIds' => $courseIds, 'unique' => true, 'role' => 'student');
 
@@ -48,6 +52,6 @@ class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
     }
 }
