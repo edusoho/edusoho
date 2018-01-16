@@ -5,7 +5,6 @@ namespace Biz\OpenCourse\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
-use Biz\OpenCourse\Processor\CourseProcessorFactory;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourseRecommendedService
