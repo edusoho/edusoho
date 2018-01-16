@@ -1762,7 +1762,7 @@ course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
-  作业题目<small class="color-gray">共%itemCount%题</small>
+  作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
