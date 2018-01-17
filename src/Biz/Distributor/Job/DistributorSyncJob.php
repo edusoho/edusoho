@@ -28,12 +28,12 @@ class DistributorSyncJob extends AbstractJob
                         }
                         $this->biz['logger']->info(
                             'distributor send job DistributorSyncJob::execute ',
-                            array('jobData' => $jobData, 'result' => empty($result->getBody()) ? '' : $result->getBody())
+                            array('jobData' => $jobData, 'result' => $result->getBody())
                         );
                     } catch (\Exception $e) {
                         $this->biz['logger']->error(
                             'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
-                            array('jobData' => $jobData, 'result' => empty($result) ? '' : $result, 'trace' => $e->getTraceAsString())
+                            array('jobData' => $jobData, 'result' => empty($result) ? '' : $result->getBody(), 'trace' => $e->getTraceAsString())
                         );
                     }
 
