@@ -5,7 +5,7 @@ namespace Codeages\Biz\Pay\Payment;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
-abstract class AbstractGetway
+abstract class AbstractGateway
 {
     protected $biz;
 

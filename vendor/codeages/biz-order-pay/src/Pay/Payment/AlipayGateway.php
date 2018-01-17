@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Omnipay\Omnipay;
 
-class AlipayGetway extends AbstractGetway
+class AlipayGateway extends AbstractGateway
 {
     public function createTrade($data)
     {
@@ -30,7 +30,7 @@ class AlipayGetway extends AbstractGetway
             throw new InvalidArgumentException("platform_type is invalid, it must be 'web' or 'wap'.");
         }
 
-        $gateway = $this->createGetWay($platformType);
+        $gateway = $this->createGateway($platformType);
         $gateway->setReturnUrl($data['return_url']);
         $gateway->setNotifyUrl($data['notify_url']);
 
@@ -79,7 +79,7 @@ class AlipayGetway extends AbstractGetway
     {
         $platformType = $data['platform_type'];
         unset($data['platform_type']);
-        $gateway = $this->createGetWay($platformType);
+        $gateway = $this->createGateway($platformType);
         $request = $gateway->completePurchase();
         $request->setParams($data);
 
@@ -141,7 +141,7 @@ class AlipayGetway extends AbstractGetway
         return strtotime($data['notify_time']);
     }
 
-    protected function createGetWay($platformType = 'Web')
+    protected function createGateway($platformType = 'Web')
     {
 
         $ominpayType = $platformType == 'Web' ? 'LegacyExpress' : 'LegacyWap';
