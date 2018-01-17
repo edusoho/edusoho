@@ -163,7 +163,7 @@ abstract class Type extends BizAware
             'account' => array(
                 'id' => $currentUser['id'],
                 'name' => $currentUser['nickname'],
-                'email' => empty($userProfile['mobile']) ? '' : md5($currentUser['email']),
+                'email' => empty($currentUser['email']) ? '' : md5($currentUser['email']),
                 'phone' => empty($userProfile['mobile']) ? '' : md5($userProfile['mobile']),
                 'homePage' => $host,
             ),
