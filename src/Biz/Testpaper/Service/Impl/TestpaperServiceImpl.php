@@ -937,7 +937,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $conditions = array(
             'testId' => $testId,
             'lessonId' => $activityId,
-            'type' => 'testpaper',
             'status' => 'finished',
         );
 
@@ -991,6 +990,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'usedTime' => $userFirstResult['usedTime'] ? round($userFirstResult['usedTime'] / 60, 1) : 0,
                 'firstScore' => $userFirstResult['score'],
                 'maxScore' => $this->getUserMaxScore($userResults),
+                'firstPassedStatus' => $userFirstResult['passedStatus'],
+                'maxPassedStatus' => $this->getUserMaxPassedStatus($userResults),
             );
 
             $format[$userId] = $result;
@@ -1009,6 +1010,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $scores = ArrayToolkit::column($userResults, 'score');
 
         return max($scores);
+    }
+
+    protected function getUserMaxPassedStatus($userResults)
+    {
+        if (1 === count($userResults)) {
+            return $userResults[0]['passedStatus'];
+        }
+
+        $passedStatus = ArrayToolkit::column($userResults, 'passedStatus');
+        sort($passedStatus);
+
+        return $passedStatus[0];
     }
 
     /**

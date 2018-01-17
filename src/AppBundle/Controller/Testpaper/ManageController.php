@@ -494,37 +494,34 @@ class ManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if (!$activity || $activity['mediaType'] != 'testpaper') {
-            return $this->createMessageResponse('Argument Invalid');
+            return $this->createMessageResponse('error', 'Argument Invalid');
         }
 
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
 
-        $data = $this->fillGraphData($testpaper, $activity['id']);
-        
+        $data = $this->fillGraphData($testpaper, $userFirstResults);
+        $analysis = $this->analysisFirstResults($userFirstResults);
 
-        $analysis = $this->analysisFirstResults($testpaper['id'], $activity['id']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('testpaper/manage/result-graph-modal.html.twig', array(
             'activity' => $activity,
             'testpaper' => $testpaper,
             'data' => $data,
-            'analysis' => $analysis
+            'analysis' => $analysis,
+            'task' => $task
         ));
     }
 
-    protected function fillGraphData($testpaper, $activityId)
+    protected function fillGraphData($testpaper, $userFirstResults)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
-        if (empty($testpaper)) {
-            return json_encode($data);
-        }
         
         $totalScore  = $testpaper['score'];
         $maxTmpScore = 0;
-
-        $results = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activityId);
 
         $column = $totalScore <= 5 ? ($totalScore / 1) : 5;
         for ($i = 1; $i <= $column; $i++) {
@@ -533,7 +530,7 @@ class ManageController extends BaseController
             $minTmpScore     = $maxTmpScore;
             $maxTmpScore     = $totalScore * ($i / $column);
 
-            foreach ($results as $key => $result) {
+            foreach ($userFirstResults as $result) {
                 if ($maxTmpScore == $totalScore) {
                     if ($result['firstScore'] >=$minTmpScore && $result['firstScore'] <= $maxTmpScore) {
                         $firstScoreCount++;
@@ -561,27 +558,25 @@ class ManageController extends BaseController
         return json_encode($data);
     }
 
-    protected function analysisFirstResults($testpaperId, $activityId)
+    protected function analysisFirstResults($userFirstResults)
     {
-        $firstResults = $this->getTestpaperService()->findFirstResultsGroupByUserId($testpaperId, $activityId);
-
-        if (empty($firstResults)) {
+        if (empty($userFirstResults)) {
             return array();
         }
 
         $data = array();
-        $scores = ArrayToolkit::column($firstResults, 'score');
-        $data['avg'] = round(array_sum($scores) / count($scores), 1);
+        $scores = ArrayToolkit::column($userFirstResults, 'firstScore');
+        $data['avg'] = round(array_sum($scores) / count($userFirstResults), 1);
         $data['maxScore'] = max($scores);
 
         $count = 0;
-        foreach ($firstResults as $result) {
-            if ($result['passedStatus'] != 'unpassed') {
+        foreach ($userFirstResults as $result) {
+            if ($result['firstPassedStatus'] != 'unpassed') {
                 $count++;
             }
         }
 
-        $data['passPercent'] = round($count / count($scores), 1) * 100;
+        $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
 
         return $data;
     }

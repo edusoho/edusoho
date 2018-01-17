@@ -86,8 +86,19 @@ class TestpaperManageController extends BaseController
     public function resultGraphAction(Request $request, $id, $activityId)
     {
         $this->getCourseService()->tryManageCourse($id);
-        
-        return $this->forward('AppBundle:Testpaper/Manage:resultGraph', array(
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['fromCourseId'] != $id) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultGraph';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultGraph';
+        }
+
+        return $this->forward($controller, array(
             'activityId' => $activityId,
         ));
     }

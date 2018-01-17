@@ -18,16 +18,19 @@
           <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ task.createdTime|date('Y-m-d H:i') }}</span>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="testpaper-mark-operation">
-          <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="成绩分布"><i class="es-icon es-icon-check"></i></a></div>
-          <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="答题分布"><i class="es-icon es-icon-check"></i></a></div>
-          <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="批阅" ><i class="es-icon es-icon-check"></i></a></div>
+      {% if testpaper %}
+        <div class="col-md-4">
+          <div class="testpaper-mark-operation">
+            <div class="col-xs-4 text-center mt10">
+              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:task.courseId, activityId:task.activityId}) }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a>
+            </div>
+            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a></div>
+            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check"></i></a></div>
+          </div>
         </div>
-      </div>
+      {% endif %}
     </div>
   </div>
-
 
   <div class="testpaper-mark-status col-md-4 text-center">
     {% if testpaper %}

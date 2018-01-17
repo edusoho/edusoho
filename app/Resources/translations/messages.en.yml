@@ -954,6 +954,12 @@ course.testpaper_check.status.not_check: 'UnCheck'
 course.testpaper_check.status.not_submit: 'Uncommited'
 course.testpaper_check.optional_task_title: Optional Task:%title%
 course.testpaper_check.testpaper_delete: Exam was deleted
+course.testpaper_check.graph_avg_score: Average Score:%avgScore%
+course.testpaper_check.graph_max_score: Max Score:%maxScore% 分
+course.testpaper_check.graph_passed_percent: Percent Of Pass:%percent%%
+course.testpaper_check.btn_score_distribution: Score Distribution
+course.testpaper_check.btn_question_distribution: Question Distribution
+course.testpaper_check.btn_check: Check
 
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
