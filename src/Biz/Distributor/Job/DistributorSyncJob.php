@@ -26,6 +26,10 @@ class DistributorSyncJob extends AbstractJob
                         if ('success' == $resultJson['code']) {
                             $status = DistributorJobStatus::$FINISHED;
                         }
+                        $this->biz['logger']->info(
+                            'distributor send job DistributorSyncJob::execute ',
+                            array('jobData' => $jobData, 'result' => empty($result) ? '' : $result)
+                        );
                     } catch (\Exception $e) {
                         $this->biz['logger']->error(
                             'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
