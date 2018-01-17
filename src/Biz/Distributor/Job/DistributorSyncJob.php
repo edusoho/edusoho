@@ -21,14 +21,14 @@ class DistributorSyncJob extends AbstractJob
                     $status = DistributorJobStatus::$ERROR;
                     try {
                         $result = $drpService->postData($jobData, $service->getSendType());
-                        $resultJson = json_encode($result);
+                        $resultJson = json_encode($result->getBody());
 
                         if ('success' == $resultJson['code']) {
                             $status = DistributorJobStatus::$FINISHED;
                         }
                         $this->biz['logger']->info(
                             'distributor send job DistributorSyncJob::execute ',
-                            array('jobData' => $jobData, 'result' => empty($result) ? '' : $result)
+                            array('jobData' => $jobData, 'result' => empty($result->getBody()) ? '' : $result->getBody())
                         );
                     } catch (\Exception $e) {
                         $this->biz['logger']->error(
