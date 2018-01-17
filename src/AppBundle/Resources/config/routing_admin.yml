@@ -595,6 +595,12 @@ admin_setting_site:
     defaults: { _controller: AppBundle:Admin/SiteSetting:site }
     permissions: [admin_setting_message]
 
+admin_setting_site_save:
+    path:  /setting/site/save
+    defaults: { _controller: AppBundle:Admin/SiteSetting:saveSite }
+    permissions: [admin_setting_message]
+    methods: [POST]
+
 admin_operation_mobile:
     path:  /operation/mobile
     defaults: { _controller: AppBundle:Admin/Mobile:mobile }
