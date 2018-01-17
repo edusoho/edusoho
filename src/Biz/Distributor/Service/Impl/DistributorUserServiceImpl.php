@@ -91,7 +91,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
 
     public function getSendType()
     {
-        return 'student';
+        return 'user';
     }
 
     public function getNextJobType()
