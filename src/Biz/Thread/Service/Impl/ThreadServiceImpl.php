@@ -50,7 +50,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+            throw $this->createServiceException('发帖次数过多，请稍后尝试。');
         }
 
         $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
@@ -324,7 +324,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.post.before_create', $fields);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('回复次数过多，请稍候尝试。');
+            throw $this->createServiceException('回复次数过多，请稍后尝试。');
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');

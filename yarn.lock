@@ -1782,9 +1782,9 @@ es-ckeditor@4.7.2-patch3:
   version "4.7.2-patch3"
   resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch3.tgz#8fcaa6a09b247312e2c5a79157b439a50156d9e6"
 
-es-fullcalendar@3.7.0-patch3:
-  version "3.7.0-patch3"
-  resolved "https://registry.yarnpkg.com/es-fullcalendar/-/es-fullcalendar-3.7.0-patch3.tgz#a9810e27119c8e1360e24f5a9e9e5dfe359b3234"
+es-fullcalendar@3.7.0-patch4:
+  version "3.7.0-patch4"
+  resolved "https://registry.npmjs.org/es-fullcalendar/-/es-fullcalendar-3.7.0-patch4.tgz#a56f9f8d8ff8a918775b0e6777cdb4cde55d2c44"
   dependencies:
     jquery "2 - 3"
     moment "^2.9.0"

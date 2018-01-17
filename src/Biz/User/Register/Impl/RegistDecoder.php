@@ -11,6 +11,11 @@ abstract class RegistDecoder extends BaseRegister
         $this->register = $register;
     }
 
+    public function clearRegister()
+    {
+        $this->register = null;
+    }
+
     /**
      * 用于继承的方法
      */
