@@ -45,6 +45,8 @@ class PushStatementJob extends AbstractJob
                 foreach ($results as $uuid) {
                     if (in_array($uuid, $uuids)) {
                         $callbackIds[] = $uuid;
+                    } else {
+                        $this->biz['logger']->info("XAPI PUSH ERROR:", array('message' => $uuid));
                     }
                 }
                 $this->getXapiService()->updateStatusPushedAndPushedTimeByUuids($callbackIds, time());
