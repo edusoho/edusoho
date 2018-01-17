@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
-class LianlianPayGetway extends AbstractGetway
+class LianlianPayGateway extends AbstractGateway
 {
 //    protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 //    protected $wapUrl = 'https://yintong.com.cn/llpayh5/payment.htm';
