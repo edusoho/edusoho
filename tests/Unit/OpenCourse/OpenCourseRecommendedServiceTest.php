@@ -8,6 +8,31 @@ use AppBundle\Common\ReflectionUtils;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
+    public function testDeleteBatchRecommendCourses()
+    {
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
+        $recommendCourseIds1 = array($course1['id'], $course2['id']);
+        $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
+        $this->getCourseRecommendedService()->deleteBatchRecommendCourses(array($course1['id']));
+        $result = $this->getCourseRecommendedService()->searchRecommends(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals($course2['id'], $result[0]['id']);
+
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
+        $recommendCourseIds1 = array($course1['id'], $course2['id']);
+        $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
+        $this->getCourseRecommendedService()->deleteBatchRecommendCourses(array());
+        $result = $this->getCourseRecommendedService()->searchRecommends(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals(3, count($result));
+
+        $this->getCourseRecommendedService()->deleteBatchRecommendCourses(array($course1['id'], $course2['id']));
+        $result = $this->getCourseRecommendedService()->searchRecommends(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals(1, count($result));
+    }
+
     public function testAddRecommendedCourses()
     {
         $course1 = $this->createCourse('test1');

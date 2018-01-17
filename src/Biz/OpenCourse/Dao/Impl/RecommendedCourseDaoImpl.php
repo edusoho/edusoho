@@ -3,9 +3,9 @@
 namespace Biz\OpenCourse\Dao\Impl;
 
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCourseDao
+class RecommendedCourseDaoImpl extends AdvancedDaoImpl implements RecommendedCourseDao
 {
     protected $table = 'open_course_recommend';
 

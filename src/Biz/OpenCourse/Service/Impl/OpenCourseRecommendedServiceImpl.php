@@ -95,15 +95,12 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return $this->deleteBatchRecommendCourses(array($recommendId));
     }
 
-    protected function deleteBatchRecommendCourses($recommendIds)
+    public function deleteBatchRecommendCourses($recommendIds)
     {
         if (empty($recommendIds)) {
             return true;
         }
-
-        foreach ($recommendIds as $key => $recommendId) {
-            $this->getRecommendedCourseDao()->delete($recommendId);
-        }
+        $this->getRecommendedCourseDao()->batchDelete(array('ids' => $recommendIds));
 
         return true;
     }
