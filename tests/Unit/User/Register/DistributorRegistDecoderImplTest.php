@@ -24,7 +24,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
         $this->assertEquals('distributor', $result['type']);
         $this->assertEquals($token, $result['distributorToken']);
 
-        $settingService->shouldHaveReceived('get')->times(2);
+        $settingService->shouldHaveReceived('get')->times(3);
     }
 
     public function testDealDataAfterSave()
@@ -132,6 +132,11 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
                         'cloud_access_key' => '6uVG1xmibb3EX7XhUV3g6jflPidNhNon',
                         'cloud_secret_key' => 'hj4iRrB2DEGAMDRHzVYFed14weSN1gbi',
                     ),
+                ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('developer', array()),
+                    'returnValue' => array(),
                 ),
             )
         );
