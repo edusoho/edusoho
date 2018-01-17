@@ -1,7 +1,3 @@
-<meta content="yes" name="apple-mobile-web-app-capable" />
-<meta content="black" name="apple-mobile-web-app-status-bar-style" />
-<meta content="telephone=no" name="format-detection" />
-
 {% if is_mobile_client() and isEncryptionPlus %}
   <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
 {% else %}
@@ -55,7 +51,7 @@
           style="height:100%"
         ></div>
       </div>
-      {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
+      {% do script(['libs/base.js','app/js/common.js'], 1000) %}
       <script src="{{ cloud_sdk_url('video') }}"></script>
       {% do script(['app/js/player/index.js']) %}
     {% endif %}

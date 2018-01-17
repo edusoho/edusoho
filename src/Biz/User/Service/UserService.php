@@ -294,4 +294,6 @@ interface UserService
     public function generateNickname($registration, $maxLoop = 100);
 
     public function getUserIdsByKeyword($word);
+
+    public function updateUserNewMessageNum($id, $num);
 }

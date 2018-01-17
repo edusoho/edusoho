@@ -215,6 +215,7 @@ class LoginController extends LoginBindController
 
         if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
             $registerFields['verifiedMobile'] = $oauthUser->account;
+            $registerFields['email'] = $this->getUserService()->generateEmail($registerFields);
         }
 
         $this->getUserService()->register($registerFields, array($oauthUser->accountType, 'binder'));

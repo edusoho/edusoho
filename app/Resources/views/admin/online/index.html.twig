@@ -60,7 +60,9 @@
                       {% endif %}
                     </td>
                     <td>
-                      {{ parse_user_agent(online.user_agent).os.name }}: {{ parse_user_agent(online.user_agent).os.version }}
+                      {% if parse_user_agent(online.user_agent).os  %}
+                        {{ parse_user_agent(online.user_agent).os.name }}: {{ parse_user_agent(online.user_agent).os.version }}
+                      {% endif %}
                     </td>
 
                     <td>

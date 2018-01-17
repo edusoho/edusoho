@@ -20,7 +20,7 @@
       <span class="bullet">•</span>
       <span class="color-gray">{{ post.createdTime|smart_time }}</span>
     </div>
-    <div class="editor-text">{{ post.content|raw }}</div>
+    <div class="editor-text">{{ post.content|cdn|raw }}</div>
     {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread.post', targetId:post.id|default(0)} %}
     {% if app.user.id != author.id %}
     <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >{{'thread.reply'|trans}}</a></div>

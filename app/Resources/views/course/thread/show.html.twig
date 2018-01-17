@@ -33,7 +33,7 @@
 
       </div>
     </div>
-    <div class="thread-body">{{ thread.content|raw }}</div>
+    <div class="thread-body">{{ thread.content|cdn|raw }}</div>
 
     {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread', targetId:thread.id} %}
 

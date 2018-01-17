@@ -21,16 +21,22 @@ class PushStatementJob extends AbstractJob
             $condition = array(
                 'status' => 'created',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, 500);
             $statementIds = ArrayToolkit::column($statements, 'id');
+            $statements = ArrayToolkit::index($statements, 'uuid');
 
+            foreach ($statements as &$statement) {
+                $statement['key'] = "{$statement['verb']}_{$statement['target_type']}";
+            }
+
+            $groupStatements = ArrayToolkit::group($statements, 'key');
             $pushStatements = array();
-            $pushData = array();
-            foreach ($statements as $statement) {
-                $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
-                $pushStatement = $push->package($statement);
-                $pushStatements[] = $pushStatement;
-                $pushData[$statement['id']] = $pushStatement;
+            foreach ($groupStatements as $key => $values) {
+                $push = $this->biz["xapi.push.{$key}"];
+                $result = $push->packages($values);
+                if (is_array($result)) {
+                    $pushStatements = array_merge($pushStatements, $result);
+                }
             }
 
             if (empty($pushStatements)) {
@@ -40,11 +46,18 @@ class PushStatementJob extends AbstractJob
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
             $results = $this->createXAPIService()->pushStatements($pushStatements);
 
+            $pushData = array();
             if (is_array($results)) {
-                foreach ($pushData as $key => $data) {
-                    if (!in_array($data['id'], $results)) {
+                $pushStatements = ArrayToolkit::index($pushStatements, 'id');
+                foreach ($pushStatements as $key => $data) {
+                    if (!in_array($key, $results)) {
                         $this->biz['logger']->info($results);
-                        unset($pushData[$key]);
+                        unset($pushStatements[$key]);
+                        continue;
+                    }
+
+                    if (isset($statements[$key])) {
+                        $pushData[$statements[$key]['id']] = $data;
                     }
                 }
                 $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);

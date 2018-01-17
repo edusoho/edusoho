@@ -39,6 +39,17 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
             return;
         }
 
+        $accessAnnotation = $this->annotationReader->getMethodAnnotation(
+            new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
+            'ApiBundle\Api\Annotation\Access'
+        );
+
+        $biz = $this->container->get('biz');
+        $currentUser = $biz['user'];
+        if ($accessAnnotation && !$accessAnnotation->canAccess($currentUser->getRoles())) {
+            throw new UnauthorizedHttpException('Role', 'Roles are not allow', null, ErrorCode::UNAUTHORIZED);
+        }
+
         $token = $this->tokenStorage->getToken();
 
         if (!$token instanceof TokenInterface || $token instanceof AnonymousToken) {

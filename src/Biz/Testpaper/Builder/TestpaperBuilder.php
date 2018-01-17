@@ -172,7 +172,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
 
-        $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];

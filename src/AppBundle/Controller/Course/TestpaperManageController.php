@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
@@ -49,21 +48,14 @@ class TestpaperManageController extends BaseController
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'testpaper');
-
-        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
-
         return $this->render('course-manage/testpaper-check/check-list.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
             'isTeacher' => $isTeacher,
-            'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId'),
         ));
     }
 
-    public function resultListAction(Request $request, $id, $testpaperId)
+    public function resultListAction(Request $request, $id, $testpaperId, $activityId)
     {
         $course = $this->getCourseService()->getCourse($id);
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
@@ -71,9 +63,13 @@ class TestpaperManageController extends BaseController
         $user = $this->getUser();
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+        }
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (!$activity) {
+            throw $this->createResourceNotFoundException('activity', $activityId);
         }
 
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
@@ -83,6 +79,7 @@ class TestpaperManageController extends BaseController
             'courseSet' => $courseSet,
             'testpaper' => $testpaper,
             'isTeacher' => $isTeacher,
+            'activityId' => $activity['id'],
         ));
     }
 

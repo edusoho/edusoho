@@ -148,6 +148,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const OPEN_COURSE = 'open_course';
 
+    /**
+     * [$LIVE 直播].
+     *
+     * @var string
+     */
+    const LIVE = 'live';
+
     public function getActions()
     {
         return array(
@@ -344,6 +351,10 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'update_teacher',
                 'delete_recommend_course',
             ),
+            self::LIVE => array(
+                'update_live_activity',
+                'generate_live_replay',
+            ),
         );
     }
 
@@ -366,6 +377,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::ANNOUNCEMENT,
             self::NOTIFY,
             self::CRONTAB,
+            self::LIVE,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,
