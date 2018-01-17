@@ -40,6 +40,8 @@ class PushStatementJob extends AbstractJob
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
             $results = $this->createXAPIService()->pushStatements($pushStatements);
 
+            $this->biz['logger']->info('XAPI PUSH RESULT:', $results);
+
             $callbackIds = array();
             if (is_array($results)) {
                 foreach ($results as $uuid) {
