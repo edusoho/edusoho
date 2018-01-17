@@ -6120,11 +6120,11 @@ admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
 admin.edu_cloud.edu_video.open_embed_watermark_tips: >
   能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
 admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持png、gif、jpg格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。
 admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、jpg格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
