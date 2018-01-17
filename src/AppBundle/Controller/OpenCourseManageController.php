@@ -800,16 +800,6 @@ class OpenCourseManageController extends BaseController
     }
 
     /**
-     * @param  $type
-     *
-     * @return mixed
-     */
-    protected function getTypeCourseService($type)
-    {
-        return CourseProcessorFactory::create($type);
-    }
-
-    /**
      * @return UploadFileService
      */
     protected function getUploadFileService()
