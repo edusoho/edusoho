@@ -4,7 +4,7 @@
 {% set side_nav = 'homework-check' %}
 
 {% block main %}
-  <div class="panel panel-default">
+  <div class="panel panel-default testpaper-mark-panel">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}
