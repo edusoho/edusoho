@@ -17,7 +17,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->getBiz()->service('Course:CourseService');
     }
 
     /**
@@ -59,12 +59,12 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Course:ThreadService');
     }
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course:ReviewService');
+        return $this->getServiceKernel()->getBiz()->service('Course:ReviewService');
     }
 
     protected function getActivityService()

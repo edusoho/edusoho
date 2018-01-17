@@ -52,7 +52,7 @@ class CardDaoTest extends BaseDaoTestCase
                 'expectedCount' => 1,
                 ),
             array(
-                'condition' => array('reciveStartTime' => 0, 'reciveEndTime' => strtotime('2018-1-1')),
+                'condition' => array('reciveStartTime' => 0, 'reciveEndTime' => PHP_INT_MAX),
                 'expectedResults' => $expected,
                 'expectedCount' => 5,
                 ),

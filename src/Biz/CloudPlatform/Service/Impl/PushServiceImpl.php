@@ -6,9 +6,18 @@ use Biz\BaseService;
 use Biz\CloudPlatform\IMAPIFactory;
 use Biz\CloudPlatform\Service\PushService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Context\Biz;
 
 class PushServiceImpl extends BaseService implements PushService
 {
+    protected $imApi;
+
+    public function __construct(Biz $biz)
+    {
+        parent::__construct($biz);
+        $this->imApi = IMAPIFactory::create();
+    }
+
     public function push($from, $to, $body)
     {
         $setting = $this->getSettingService()->get('app_im', array());
@@ -30,16 +39,19 @@ class PushServiceImpl extends BaseService implements PushService
             'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
         );
 
-        if ($to['type'] == 'user') {
+        if ('user' == $to['type']) {
             $params['toId'] = $to['id'];
         }
 
         if (empty($params['convNo'])) {
             return;
         }
+        $biz = $this->biz;
+        $type = empty($body['type']) ? 'DEFAULT' : $body['type'];
+        $biz['logger']->info("MESSAGE PUSH: {$type}", $params);
 
         try {
-            $api = IMAPIFactory::create();
+            $api = $this->imApi;
             $result = $api->post('/push', $params);
 
             $setting = $this->getSettingService()->get('developer', array());
@@ -51,9 +63,13 @@ class PushServiceImpl extends BaseService implements PushService
         }
     }
 
-    protected function plainText($text, $count)
+    /**
+     * @param $api
+     * 仅供单元测试使用，正常业务禁止使用
+     */
+    public function setImApi($api)
     {
-        return mb_substr($text, 0, $count, 'utf-8');
+        $this->imApi = $api;
     }
 
     /**

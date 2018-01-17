@@ -214,7 +214,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($fields, array('title', 'courseSetId'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-        $this->validatie($fields);
+        $this->validatie($id, $fields);
 
         $fields = ArrayToolkit::parts(
             $fields,
@@ -318,15 +318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
-
-        if ('published' == $courseSet['status']) {
-            //课程发布不允许修改模式和时间
-            unset($fields['expiryMode']);
-            unset($fields['expiryDays']);
-            unset($fields['expiryStartDate']);
-            unset($fields['expiryEndDate']);
-        } else {
+        if ($oldCourse['status'] != 'published') {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -350,19 +342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
-        if ('published' == $oldCourse['status'] || 'closed' == $oldCourse['status']) {
-            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
-            unset($fields['expiryMode']);
-
-            if ('published' == $courseSet['status']) {
-                //课程计划发布或者关闭，课程也发布，不允许修改时间
-                unset($fields['expiryDays']);
-                unset($fields['expiryStartDate']);
-                unset($fields['expiryEndDate']);
-            }
-        }
-
-        $fields = $this->processFields($id, $fields, $courseSet);
+        $fields = $this->processFields($oldCourse, $fields, $courseSet);
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
 
@@ -377,6 +357,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
         $medias = ArrayToolkit::column($activities, 'ext');
         $this->getUploadFileService()->batchConvertByIds(array_unique(ArrayToolkit::column($medias, 'mediaId')));
+    }
+
+    public function isSupportEnableAudio($enableAudioStatus = false)
+    {
+        if (empty($enableAudioStatus)) {
+            return false;
+        }
+
+        $setting = $this->getSettingService()->get('storage', array());
+
+        if (!empty($setting['upload_mode']) && 'cloud' != $setting['upload_mode']) {
+            return false;
+        }
+
+        return true;
     }
 
     public function convertAudioByCourseIdAndMediaId($courseId, $mediaId)
@@ -480,12 +475,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array($price, $coinPrice);
     }
 
-    protected function validatie($fields)
+    protected function validatie($id, &$fields)
     {
         if (!empty($fields['enableAudio'])) {
-            $audioPerssion = $this->getUploadFileService()->getAudioPerssion();
-            if ('open' != $audioPerssion) {
-                throw $this->createInvalidArgumentException($this->trans('course.to_be.biz.user.first'));
+            $audioServiceStatus = $this->getUploadFileService()->getAudioServiceStatus();
+            if ('opened' != $audioServiceStatus) {
+                $this->getCourseDao()->update($id, array('enableAudio' => '0'));
+                unset($fields['enableAudio']);
             }
         }
     }
@@ -1738,8 +1734,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $orderBy = array('hitNum' => 'DESC');
         } elseif ('recommended' == $sort) {
             $orderBy = array('recommendedTime' => 'DESC');
-        } elseif ('Rating' == $sort) {
-            $orderBy = array('Rating' => 'DESC');
+        } elseif ('rating' == $sort) {
+            $orderBy = array('rating' => 'DESC');
         } elseif ('studentNum' == $sort) {
             $orderBy = array('studentNum' => 'DESC');
         } elseif ('recommendedSeq' == $sort) {
@@ -1900,6 +1896,42 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->dispatch('course.try_free_join', $course);
+    }
+
+    public function findLiveCourse($conditions, $userId, $role)
+    {
+        $liveCourses = array();
+        $tasks = $this->getTaskService()->searchTasks(
+            array('type' => 'live', 'startTime_GE' => $conditions['startTime_GE'], 'endTime_LT' => $conditions['endTime_LT'], 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($tasks as $task) {
+            $members = $this->getMemberDao()->search(array('courseId' => $task['courseId'], 'role' => $role), array(), 0, PHP_INT_MAX);
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($userId, $userIds)) {
+                continue;
+            }
+            $course = $this->getCourse($task['courseId']);
+            if (!empty($course) && 'published' == $course['status']) {
+                $courseSet = $this->getCourseSetDao()->get($course['courseSetId']);
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
+                    $liveCourse = array(
+                        'title' => $courseSet['title'],
+                        'courseId' => $task['courseId'],
+                        'taskId' => $task['id'],
+                        'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
+                        'startTime' => date('Y-m-d H:i:s', $task['startTime']),
+                        'endTime' => date('Y-m-d H:i:s', $task['endTime']),
+                        'date' => date('w', $task['startTime']),
+                    );
+                    array_push($liveCourses, $liveCourse);
+                }
+            }
+        }
+
+        return $liveCourses;
     }
 
     protected function hasAdminRole()
@@ -2140,10 +2172,21 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @return mixed
      */
-    private function processFields($id, $fields, $courseSet)
+    private function processFields($course, $fields, $courseSet)
     {
+        if (in_array($course['status'], array('published', 'closed'))) {
+            //计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $course['status']) {
+                //计划发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
         if (isset($fields['originPrice'])) {
-            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
         if (1 == $fields['isFree']) {

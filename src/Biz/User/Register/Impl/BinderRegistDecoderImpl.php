@@ -9,6 +9,7 @@ class BinderRegistDecoderImpl extends RegistDecoder
     protected function validateBeforeSave($registration)
     {
         $type = $registration['type'];
+
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (empty($thirdLoginInfo["{$type}_enabled"]) ||
                 empty($thirdLoginInfo["{$type}_key"]) ||
@@ -36,9 +37,6 @@ class BinderRegistDecoderImpl extends RegistDecoder
 
     protected function dealDataAfterSave($registration, $user)
     {
-        if (empty($registration['authid']) && !empty($registration['token']['userId'])) {
-            $registration['authid'] = $registration['token']['userId'];
-        }
         $this->getUserService()->bindUser(
             $registration['type'],
             $registration['authid'],

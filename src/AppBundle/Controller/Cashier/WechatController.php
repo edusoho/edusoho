@@ -51,18 +51,45 @@ class WechatController extends PaymentController
                 'type' => 'purchase',
                 'openid' => $openid,
                 'orderSn' => $params['orderSn'],
-                'coinAmount' => $params['coinAmount'],
+                'coinAmount' => empty($params['coinAmount']) ? 0 : $params['coinAmount'],
                 'payPassword' => empty($params['payPassword']) ? '' : $params['payPassword'],
             ),
             array()
         );
 
         $result = $apiKernel->handleApiRequest($apiRequest);
+        if (!empty($result['paidSuccessUrl'])) {
+            return $this->redirect($result['paidSuccessUrl']);
+        }
 
         $trade = $this->getPayService()->queryTradeFromPlatform($result['tradeSn']);
 
         return $this->render(
             'cashier/wechat/h5.html.twig',
+            array(
+                'trade' => $trade,
+            )
+        );
+    }
+
+    public function wechatAppMwebTradeAction(Request $request)
+    {
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
+
+        if ($trade['status'] == 'created' || $trade['status'] == 'paying') {
+            $platformCreatedResult = $this->getPayService()->getCreateTradeResultByTradeSnFromPlatform($tradeSn);
+
+            return $this->render(
+                'cashier/wechat/app-redirect.html.twig',
+                array(
+                    'mwebUrl' => $platformCreatedResult['mweb_url'],
+                    'trade' => $trade,
+                )
+            );
+        }
+
+        return $this->render('cashier/wechat/app-result.html.twig',
             array(
                 'trade' => $trade,
             )

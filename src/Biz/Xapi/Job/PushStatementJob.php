@@ -6,7 +6,6 @@ use Biz\System\Service\SettingService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use AppBundle\Common\ArrayToolkit;
-use QiQiuYun\SDK\Auth;
 
 class PushStatementJob extends AbstractJob
 {
@@ -17,65 +16,50 @@ class PushStatementJob extends AbstractJob
             return;
         }
 
+        for ($i = 0; $i <= 5; ++$i) {
+            $this->pushStatements(500);
+        }
+    }
+
+    protected function pushStatements($count)
+    {
         try {
             $condition = array(
-                'status' => 'created',
+                'status' => 'converted',
             );
-            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'ASC'), 0, 100);
+            $statements = $this->getXapiService()->searchStatements($condition, array('created_time' => 'DESC'), 0, $count);
             $statementIds = ArrayToolkit::column($statements, 'id');
+            $uuids = ArrayToolkit::column($statements, 'uuid');
+            $statements = ArrayToolkit::index($statements, 'uuid');
 
-            $pushStatements = array();
-            $pushData = array();
-            foreach ($statements as $statement) {
-                $push = $this->biz["xapi.push.{$statement['verb']}_{$statement['target_type']}"];
-                $pushStatement = $push->package($statement);
-                $pushStatements[] = $pushStatement;
-                $pushData[$statement['id']] = $pushStatement;
-            }
+            $pushStatements = ArrayToolkit::column($statements, 'data');
 
             if (empty($pushStatements)) {
                 return;
             }
-
             $this->getXapiService()->updateStatementsPushingByStatementIds($statementIds);
             $results = $this->createXAPIService()->pushStatements($pushStatements);
 
+            $callbackIds = array();
             if (is_array($results)) {
-                foreach ($pushData as $key => $data) {
-                    if (!in_array($data['id'], $results)) {
-                        $this->biz['logger']->info($results);
-                        unset($pushData[$key]);
+                foreach ($results as $uuid) {
+                    if (in_array($uuid, $uuids)) {
+                        $callbackIds[] = $uuid;
                     }
                 }
-                $this->getXapiService()->updateStatementsPushedAndDataByStatementData($pushData);
+                $this->getXapiService()->updateStatusPushedAndPushedTimeByUuids($callbackIds, time());
             }
         } catch (\Exception $e) {
             $this->biz['logger']->error($e);
         }
     }
 
+    /**
+     * @return \QiQiuYun\SDK\Service\XAPIService
+     */
     public function createXAPIService()
     {
-        $settings = $this->getSettingService()->get('storage', array());
-        $siteSettings = $this->getSettingService()->get('site', array());
-        $xapiSetting = $this->getSettingService()->get('xapi', array());
-
-        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'http://xapi.qiqiuyu.net/vi/';
-
-        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
-        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth($accessKey, $secretKey);
-
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => $pushUrl,
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
-            ),
-        ));
+        return $this->getXapiService()->getXapiSdk();
     }
 
     /**

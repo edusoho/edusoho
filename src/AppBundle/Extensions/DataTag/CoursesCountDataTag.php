@@ -11,8 +11,6 @@ class CoursesCountDataTag extends CourseBaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $count = $this->getCourseService()->searchCourseCount(array());
-
-        return $count;
+        return $this->getCourseService()->searchCourseCount(array());
     }
 }

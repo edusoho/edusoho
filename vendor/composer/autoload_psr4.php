@@ -35,6 +35,7 @@ return array(
     'Sensio\\Bundle\\DistributionBundle\\' => array($vendorDir . '/sensio/distribution-bundle'),
     'QiQiuYun\\SDK\\' => array($vendorDir . '/codeages/qiqiuyun-php-sdk/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Omnipay\\WechatPay\\' => array($vendorDir . '/canuonifeng/omnipay-wechatpay/src'),
     'Omnipay\\Alipay\\Tests\\' => array($vendorDir . '/wenqinruan/omnipay-alipay/tests'),
@@ -42,6 +43,7 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Incenteev\\ParameterHandler\\' => array($vendorDir . '/incenteev/composer-parameter-handler'),
     'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
+    'Facebook\\' => array($vendorDir . '/facebook/graph-sdk/src/Facebook'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
@@ -60,5 +62,6 @@ return array(
     'Codeages\\Biz\\Pay\\' => array($vendorDir . '/codeages/biz-order-pay/src/Pay'),
     'Codeages\\Biz\\Order\\' => array($vendorDir . '/codeages/biz-order-pay/src/Order'),
     'Codeages\\Biz\\Framework\\' => array($vendorDir . '/codeages/biz-framework/src'),
+    'Bazinga\\Bundle\\JsTranslationBundle\\' => array($vendorDir . '/willdurand/js-translation-bundle'),
     '' => array($vendorDir . '/asm89/twig-cache-extension/lib'),
 );

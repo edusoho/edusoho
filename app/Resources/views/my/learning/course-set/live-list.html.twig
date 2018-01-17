@@ -27,7 +27,7 @@
                 </h4>
                 <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
                 <div class="live-course-lesson mtm">
-                  <span class="color-success fsl mrl">{{ task.startTime|date('site.date_format') }} ~ {{ task.endTime|date('H:i') }}</span>
+                  <span class="color-success fsl mrl">{{ task.startTime|date('site.date_format'|trans) }} ~ {{ task.endTime|date('H:i') }}</span>
                   <span class="color-gray fsl mrl">{{'my.learning.live.course_number'|trans({'%number%': task.number})}}</span>
                 </div>
               </div>

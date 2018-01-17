@@ -16,7 +16,7 @@
   {% endblock %}
   {% include 'common/weixin-share.html.twig' with {
   'title': groupinfo.title,
-  'desc': groupinfo.about,
+  'desc': groupinfo.about|striptags|purify_and_trim_html,
   'link': app.request.uri,
   'imgUrl': fileurl(groupinfo.logo,'course.png'),
   } %}

@@ -1,0 +1,18 @@
+<div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
+  <ul class="nav user-nav">
+    {% if app.user %}
+      {% include 'default/header/part/user-role-manage.html.twig' %}
+      {% include 'default/header/part/user-inform.html.twig' %}
+      {% include 'default/header/part/user-avatar.html.twig' %}
+    {% else %}
+      {% include 'default/header/part/visitor-login.html.twig' %}
+    {% endif %}
+    {#{% include 'default/switch-language.html.twig' %}#}
+  </ul>
+  <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
+    <div class="form-group">
+      <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{ 'homepage.header.search'|trans }}">
+      <button class="button es-icon es-icon-search"></button>
+    </div>
+  </form>
+</div>

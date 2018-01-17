@@ -2,29 +2,44 @@
 
 namespace Biz\Xapi\Type;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
+use Biz\File\Service\UploadFileService;
+use Biz\Marker\Service\QuestionMarkerResultService;
+use Biz\Marker\Service\QuestionMarkerService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Context\BizAware;
-use QiQiuYun\SDK\Auth;
 
 abstract class Type extends BizAware
 {
     abstract public function package($statement);
+
+    abstract public function packages($statements);
 
     protected function createService($alias)
     {
         return $this->biz->service($alias);
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
@@ -54,6 +69,9 @@ abstract class Type extends BizAware
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -72,21 +90,33 @@ abstract class Type extends BizAware
         return $this->createService('Xapi:XapiService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return QuestionMarkerResultService
+     */
     protected function getQuestionMarkerResultService()
     {
         return $this->createService('Marker:QuestionMarkerResultService');
@@ -97,6 +127,9 @@ abstract class Type extends BizAware
         return $this->createService('Marker:MarkerService');
     }
 
+    /**
+     * @return QuestionMarkerService
+     */
     protected function getQuestionMarkerService()
     {
         return $this->createService('Marker:QuestionMarkerService');
@@ -137,25 +170,12 @@ abstract class Type extends BizAware
         );
     }
 
+    /**
+     * @return \QiQiuYun\SDK\Service\XAPIService
+     */
     public function createXAPIService()
     {
-        $settings = $this->getSettingService()->get('storage', array());
-        $siteSettings = $this->getSettingService()->get('site', array());
-
-        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
-        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth('9DdikSDLhmObBhE0t3mhN9UUl8FW2Zdh', 'jNqSV44Fx5kxBFc4VI840pLk8D6QeO86');
-
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => 'http://192.168.4.214:8769/v1/xapi/', //推送的URL需要配置
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
-            ),
-        ));
+        return $this->getXapiService()->getXapiSdk();
     }
 
     protected function num_to_capital($num)

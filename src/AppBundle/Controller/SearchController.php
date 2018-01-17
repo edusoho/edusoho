@@ -155,7 +155,7 @@ class SearchController extends BaseController
                 array(
                     'keywords' => $keywords,
                     'type' => $type,
-                    'errorMessage' => '搜索失败，请稍候再试.',
+                    'errorMessage' => '搜索失败，请稍后再试.',
                 )
             );
         }

@@ -147,7 +147,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
             $fields['passedStatus'] = $this->getPassedStatus($rightPercent, $homework);
         }
 
-        $fields['usedTime'] = $usedTime + $result['usedTime'];
+        $fields['usedTime'] = $usedTime;
         $fields['endTime'] = time();
 
         return $this->getTestpaperService()->updateTestpaperResult($result['id'], $fields);

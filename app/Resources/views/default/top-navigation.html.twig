@@ -1,12 +1,14 @@
+{% set topNavNum = themeConfig.navigation.topNavNum|default(5) %}
+
 {% for nav in navigations if nav.isOpen %}
   {% set subNavs = nav.children|default([]) %}
-  {% if  loop.index == 6  and not isMobile|default(false) %}
+  {% if (loop.index == (topNavNum + 1)) and not isMobile|default(false) %}
     <li class="nav-more nav-hover">
       <a class="more">
         <i class="es-icon es-icon-morehoriz"></i>
       </a>
       <ul class="dropdown-menu" role="menu">
-        {% for nav in navigations[5:]  if nav.isOpen %}
+        {% for nav in navigations[topNavNum:]  if nav.isOpen %}
           {% set subNavs = nav.children|default([]) %}
 
           {% include 'default/navigation-li.html.twig' %}
@@ -15,7 +17,7 @@
     </li>
   {% endif %}
 
-  {% if loop.index < 6 or isMobile|default(false) %}
+  {% if loop.index <= topNavNum or isMobile|default(false) %}
     {% include 'default/navigation-li.html.twig' %}
   {% endif %}
 {% endfor %}

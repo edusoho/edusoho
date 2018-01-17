@@ -394,6 +394,13 @@ convertStatus:
     success: 转码成功
     error: 转码失败
 
+audioConvertStatus:
+    none: 未转音频
+    waiting: 等待转音频
+    doing: 音频转码中
+    success: 转音频成功
+    error: 转音频失败
+
 state:
     banned: 禁用
     replaced: 屏蔽

@@ -17,9 +17,7 @@
         <testsuite name="Project Test Suite">
             <directory>../src/CustomBundle/Tests</directory>
             <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>
-            <directory>../src/AppBundle/Common/Tests</directory>
             <!-- <directory>../src/AppBundle/Extensions/DataTag/Tests</directory> -->
-            <directory>../src/AppBundle/Component/*/Tests</directory>
             <directory>../tests/Unit</directory>
         </testsuite>
     </testsuites>
@@ -31,10 +29,11 @@
     <filter>
         <whitelist>
             <directory suffix=".php">../src/Biz</directory>
-
             <exclude>
                 <directory>../src/Biz/Util/Phpsec</directory>
             </exclude>
+
+            <directory suffix=".php">../src/AppBundle</directory>
 
         </whitelist>
     </filter>

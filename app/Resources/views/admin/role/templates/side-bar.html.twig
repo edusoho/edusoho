@@ -1,5 +1,5 @@
 {% for groupedPermissions in grouped_permissions(menu|parent_permission.code|parent_permission.code|default(null)) %}
-  <div class="list-group">
+  <div class="list-group left-navbar">
     {% for m in groupedPermissions if not m.visable is defined or (m.visable is defined and eval_expression(m.visable)) %}
       {% set menuClass = (m.code == menu|parent_permission.code|default(null) ? 'list-group-item active' : 'list-group-item') %}
 
@@ -9,6 +9,7 @@
       {% endif %}
 
       <a
+          id="menu_{{ m.code|default() }}"
           title="{{ m.name|trans({}, 'menu') }}"
           class="{{ menuClass }}"
           href="{{ permission_path(tabMenu) }}"

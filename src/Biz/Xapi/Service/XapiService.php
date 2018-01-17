@@ -14,6 +14,10 @@ interface XapiService
 
     public function updateStatementsPushedAndDataByStatementData($pushStatementsData);
 
+    public function updateStatementsConvertedAndDataByStatementData($pushStatementsData);
+
+    public function updateStatusPushedAndPushedTimeByUuids($uuids, $pushTime);
+
     public function searchStatements($conditions, $orders, $start, $limit);
 
     public function countStatements($conditions);
@@ -26,9 +30,13 @@ interface XapiService
 
     public function getWatchLog($id);
 
+    public function findWatchLogsByIds($ids);
+
     public function watchTask($taskId, $watchTime);
 
     public function archiveStatement();
 
     public function getLatestWatchLogByUserIdAndActivityId($userId, $activityId, $isPush = 0);
+
+    public function getXapiSdk();
 }

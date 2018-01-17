@@ -44,17 +44,18 @@
             </label>
           </div>
         </div>
-        {% if setting('storage.upload_mode') == 'cloud' and audioPerssion != 'unopen' %}
-          <div class="form-group" id="cc">
-            <label for="" class="col-sm-2 control-label">{{ '音频听课（试用）' }}</label>
-            <div class="col-sm-8 radios" data-value="{{ audioPerssion }}" id="course-audio-mode">
+        
+        {% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
+          <div class="form-group" id="audio-modal-id">
+            <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
+            <div class="col-sm-8 radios" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
               <label>
-                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %} id="aa">
-                {{ '开启' }}
+                <input type="radio" name="enableAudio" value="1" {% if course.enableAudio|default('0') == 1 %}checked{% endif %}>
+                {{ 'course.info.video.convert.audio.start'|trans }}
               </label>
               <label>
-                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %} id="bb">
-                {{ '关闭' }}
+                <input type="radio" name="enableAudio" value="0" {% if course.enableAudio|default('0') == 0 %}checked{% endif %}>
+                {{ 'course.info.video.convert.audio.close'|trans }}
               </label>
               <div>
                 <label>1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</label>

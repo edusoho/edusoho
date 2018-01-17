@@ -38,6 +38,7 @@
   
   app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
 
+  app.fileSingleSizeLimit = {{ setting("magic.file_single_size_limit", 2) }};
   app.uploadUrl = '{{ path("file_upload") }}';
   app.imgCropUrl = '{{ path("file_img_crop") }}';
   app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
@@ -49,14 +50,7 @@
   app.lang = '{{ app.request.locale }}';
 </script>
 
-<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-<script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales=
-{% if app.request.hasSession() %}
-{{ app.request.session.get('_locale',app.request.locale) }}
-{% else %}
-{{ app.request.locale }}
-{% endif %}"></script>
-
+{% include 'script/translation.html.twig' %}
 {% include 'js_loader.html.twig' %}
 
 <script type="text/javascript">

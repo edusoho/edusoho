@@ -23,9 +23,15 @@
       <span class="label label-default">{{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': courseSet.recommendedTime|date('Y-m-d'), '%recommendedSeq%': courseSet.recommendedSeq}) }}</span>
     {% endif %}
   </td>
-  <td>{{ courseSet.minCoursePrice|default() }}</td>
+  <td>
+    {% if courseSet.maxCoursePrice|default(0) == 0 or courseSet.maxCoursePrice|default(0) == courseSet.minCoursePrice|default(0) %}
+      {{ courseSet.maxCoursePrice|default(0) }}
+    {% else %}
+      {{ courseSet.minCoursePrice|default() }}-{{ courseSet.maxCoursePrice|default() }}
+    {% endif %}
+  </td>
   {% if filter == 'normal' %}
-    <td><a href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum }}</a></td>
+    <td><a class="pvs phs" href="javascript:void(0);" data-url="{{ path('admin_course_list', {id:courseSet.id}) }}" data-toggle="modal" data-target="#modal" target="_blank">{{ coursesCount[courseSet.id].courseNum|default(0) }}</a></td>
   {% endif %}
   <td>{{ dict_macro.courseStatus( courseSet.status) }}</td>
 
