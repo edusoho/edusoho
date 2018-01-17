@@ -34,7 +34,7 @@ class DistributorSyncJob extends AbstractJob
                 }
 
                 $result = $drpService->postData($sendedData, $service->getSendType());
-                $resultJson = json_decode($result->getBody());
+                $resultJson = json_decode($result->getBody(), true);
 
                 if ('success' == $resultJson['code']) {
                     $status = DistributorJobStatus::$FINISHED;
@@ -51,6 +51,8 @@ class DistributorSyncJob extends AbstractJob
             }
 
             $service->batchUpdateStatus($jobData, $status);
+        } else {
+            return array('status' => $status, 'result' => 'no sendable data');
         }
 
         return array('status' => $status, 'result' => $result);
