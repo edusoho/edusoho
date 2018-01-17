@@ -16,31 +16,44 @@ class DistributorSyncJob extends AbstractJob
             $distributorServices = $this->getDistributorServiceList();
 
             foreach ($distributorServices as $service) {
-                $jobData = $service->findJobData();
-                if (!empty($jobData)) {
-                    $status = DistributorJobStatus::$ERROR;
-                    try {
-                        $result = $drpService->postData($jobData, $service->getSendType());
-                        $resultJson = json_encode($result->getBody());
-
-                        if ('success' == $resultJson['code']) {
-                            $status = DistributorJobStatus::$FINISHED;
-                        }
-                        $this->biz['logger']->info(
-                            'distributor send job DistributorSyncJob::execute ',
-                            array('jobData' => $jobData, 'result' => $result->getBody())
-                        );
-                    } catch (\Exception $e) {
-                        $this->biz['logger']->error(
-                            'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
-                            array('jobData' => $jobData, 'result' => empty($result) ? '' : $result->getBody(), 'trace' => $e->getTraceAsString())
-                        );
-                    }
-
-                    $service->batchUpdateStatus($jobData, $status);
-                }
+                $this->sendData($drpService, $service);
             }
         }
+    }
+
+    public function sendData($drpService, $service)
+    {
+        $jobData = $service->findJobData();
+        $status = DistributorJobStatus::$ERROR;
+        $result = null;
+        if (!empty($jobData)) {
+            try {
+                $sendedData = array();
+                foreach ($jobData as $data) {
+                    $sendedData[] = $data['data'];
+                }
+
+                $result = $drpService->postData($sendedData, $service->getSendType());
+                $resultJson = json_encode($result->getBody());
+
+                if ('success' == $resultJson['code']) {
+                    $status = DistributorJobStatus::$FINISHED;
+                }
+                $this->biz['logger']->info(
+                    'distributor send job DistributorSyncJob::execute ',
+                    array('jobData' => $jobData, 'result' => $result->getBody())
+                );
+            } catch (\Exception $e) {
+                $this->biz['logger']->error(
+                    'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
+                    array('jobData' => $jobData, 'result' => empty($result) ? '' : $result->getBody(), 'trace' => $e->getTraceAsString())
+                );
+            }
+
+            $service->batchUpdateStatus($jobData, $status);
+        }
+
+        return array('status' => $status, 'result' => $result);
     }
 
     protected function getDistributorService()

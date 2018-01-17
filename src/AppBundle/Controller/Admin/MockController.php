@@ -6,6 +6,7 @@ use AppBundle\Common\TimeMachine;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
+use Biz\Distributor\Job\DistributorSyncJob;
 
 class MockController extends BaseController
 {
@@ -67,26 +68,12 @@ class MockController extends BaseController
         $drpService = $service->getDrpService();
 
         if (!empty($drpService)) {
-            $status = DistributorJobStatus::$ERROR;
-            $jobData = $service->findJobData();
-            if (!empty($jobData)) {
-                try {
-                    $result = $drpService->postData($jobData, $service->getSendType());
-                    $resultJson = json_encode($result->getBody());
-
-                    if ('success' == $resultJson['code']) {
-                        $status = DistributorJobStatus::$FINISHED;
-                    }
-                } catch (\Exception $e) {
-                }
-
-                $service->batchUpdateStatus($jobData, $status);
-
-                if (DistributorJobStatus::$FINISHED == $status) {
-                    return $this->createJsonResponse(array('result' => 'true'));
-                } else {
-                    return $this->createJsonResponse(array('result' => $result->getBody()));
-                }
+            $job = new DistributorSyncJob(array(), $this->getBiz());
+            $result = $job->sendData($drpService, $service);
+            if (DistributorJobStatus::$FINISHED == $result['status']) {
+                return $this->createJsonResponse(array('result' => 'true'));
+            } else {
+                return $this->createJsonResponse(array('result' => $result['result']->getBody()));
             }
         }
     }

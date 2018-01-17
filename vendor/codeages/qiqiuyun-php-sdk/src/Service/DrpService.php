@@ -129,6 +129,7 @@ class DrpService extends BaseService
             array(
                 'json' => array(
                     'data' => $data,
+                    'type' => $type,
                     'sign' => $sign,
                 ),
             )

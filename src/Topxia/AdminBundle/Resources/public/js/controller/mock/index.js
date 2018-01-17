@@ -33,6 +33,7 @@ define(function(require, exports, module) {
     $('.sendBtn').click(
       function() {
         if ($('.sendedType') != '') {
+          $('.sendResult').html('');
           $.post(
             $('.sendBtn').data('url'), { type: $('.sendedType').val() },
             function(data) {
