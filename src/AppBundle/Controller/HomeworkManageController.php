@@ -154,7 +154,7 @@ class HomeworkManageController extends BaseController
             'testpaper' => $testpaper,
             'data' => $data,
             'analysis' => $analysis,
-            'task' => $task
+            'task' => $task,
         ));
     }
 
@@ -228,7 +228,7 @@ class HomeworkManageController extends BaseController
         $count = 0;
         foreach ($userFirstResults as $result) {
             if ($result['firstPassedStatus'] != 'unpassed') {
-                $count++;
+                ++$count;
             }
         }
 

@@ -955,7 +955,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $conditions = array(
             'courseId' => $courseId,
             'lessonId' => $activityId,
-            'type' => $type
+            'type' => $type,
         );
 
         $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC'), 0, 1);
@@ -964,7 +964,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             return $results[0];
         }
 
-        $conditions = array('courseId' => $courseId,'type' => $type);
+        $conditions = array('courseId' => $courseId, 'type' => $type);
         $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC', 'lessonId' => 'ASC'), 0, 1);
 
         if ($results) {

@@ -512,40 +512,40 @@ class ManageController extends BaseController
             'testpaper' => $testpaper,
             'data' => $data,
             'analysis' => $analysis,
-            'task' => $task
+            'task' => $task,
         ));
     }
 
     protected function fillGraphData($testpaper, $userFirstResults)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
-        
-        $totalScore  = $testpaper['score'];
+
+        $totalScore = $testpaper['score'];
         $maxTmpScore = 0;
 
         $column = $totalScore <= 5 ? ($totalScore / 1) : 5;
-        for ($i = 1; $i <= $column; $i++) {
-            $maxScoreCount   = 0;
+        for ($i = 1; $i <= $column; ++$i) {
+            $maxScoreCount = 0;
             $firstScoreCount = 0;
-            $minTmpScore     = $maxTmpScore;
-            $maxTmpScore     = $totalScore * ($i / $column);
+            $minTmpScore = $maxTmpScore;
+            $maxTmpScore = $totalScore * ($i / $column);
 
             foreach ($userFirstResults as $result) {
                 if ($maxTmpScore == $totalScore) {
-                    if ($result['firstScore'] >=$minTmpScore && $result['firstScore'] <= $maxTmpScore) {
-                        $firstScoreCount++;
+                    if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] <= $maxTmpScore) {
+                        ++$firstScoreCount;
                     }
 
                     if ($result['maxScore'] >= $minTmpScore && $result['maxScore'] <= $maxTmpScore) {
-                        $maxScoreCount++;
+                        ++$maxScoreCount;
                     }
                 } else {
                     if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] < $maxTmpScore) {
-                        $firstScoreCount++;
+                        ++$firstScoreCount;
                     }
 
                     if ($result['maxScore'] >= $minTmpScore && $result['maxScore'] < $maxTmpScore) {
-                        $maxScoreCount++;
+                        ++$maxScoreCount;
                     }
                 }
             }
@@ -572,7 +572,7 @@ class ManageController extends BaseController
         $count = 0;
         foreach ($userFirstResults as $result) {
             if ($result['firstPassedStatus'] != 'unpassed') {
-                $count++;
+                ++$count;
             }
         }
 
