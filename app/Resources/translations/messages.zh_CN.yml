@@ -7355,7 +7355,6 @@ admin.article_setting.category.publish.tips: 建议等栏目内容整理编辑�
 admin.article_setting.category.edit: 编辑栏目
 admin.article_setting.category.create: 添加栏目
 
-admin.article_setting.choose_category: 选择所属栏目
 admin.article_setting.tag: TAG标签
 admin.article_setting.content: 正文
 admin.article_setting.property: 资讯属性
