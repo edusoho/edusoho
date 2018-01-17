@@ -15,7 +15,6 @@ use Biz\User\Service\UserFieldService;
 use Biz\File\Service\UploadFileService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\OpenCourse\Processor\CourseProcessorFactory;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseManageController extends BaseController
@@ -814,16 +813,6 @@ class OpenCourseManageController extends BaseController
         }
 
         return $type;
-    }
-
-    /**
-     * @param  $type
-     *
-     * @return mixed
-     */
-    protected function getTypeCourseService($type)
-    {
-        return CourseProcessorFactory::create($type);
     }
 
     /**
