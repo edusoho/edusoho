@@ -27,14 +27,4 @@ class CoinBillExporter extends CashBillExporter
 
         return  $conditions;
     }
-
-    protected function getAccountProxyService()
-    {
-        return $this->getBiz()->service('Account:AccountProxyService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getBiz()->service('User:UserService');
-    }
 }

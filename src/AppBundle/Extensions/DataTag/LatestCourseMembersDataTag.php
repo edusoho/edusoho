@@ -25,12 +25,17 @@ class LatestCourseMembersDataTag extends CourseBaseDataTag implements DataTag
         } else {
             $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         }
+
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 1000);
+        if (empty($courses)) {
+            return array();
+        }
+
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array('courseIds' => $courseIds, 'unique' => true, 'role' => 'student');
         $memberIds = $this->getCourseMemberService()->searchMemberIds($conditions, 'latest', 0, $arguments['count']);
-        $memberIds = ArrayToolkit::column($memberIds, 'userId');
+
         $users = $this->getUserService()->findUsersByIds($memberIds);
         $users = ArrayToolkit::index($users, 'id');
 

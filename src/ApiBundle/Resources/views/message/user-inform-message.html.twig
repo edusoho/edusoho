@@ -1,0 +1,12 @@
+{% for conversation in conversations %}
+  {% set fromUser = users[conversation.fromId]|default(null) %}
+  <a class="inform-dropdown-body__item clearfix inform-message-item" href="{{ path('message_conversation_show', {conversationId:conversation.id })}}">
+    <div class="inform-message-item__avatar">
+      <img src="{{ filepath(fromUser.smallAvatar, 'avatar.png') }}">
+    </div>
+    <div class="inform-message-item__info">
+      <div class="cd-mb8 cd-text-gray">{{ fromUser.nickname }}</div>
+      <div class="cd-text-gray-dark">{{ conversation.latestMessageContent|sub_text(13) }}</div>
+    </div>
+  </a>
+{% endfor %}

@@ -13,7 +13,6 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CouponServiceImpl extends BaseService implements CouponService
@@ -195,12 +194,12 @@ class CouponServiceImpl extends BaseService implements CouponService
             );
         }
 
-        if ($coupon['targetType'] == 'fullDiscount' and $amount < $coupon['fullDiscountPrice']) {
-            return array(
-                'useable' => 'no',
-                'message' => '',
-            );
-        }
+//        if ($coupon['targetType'] == 'fullDiscount' and $amount < $coupon['fullDiscountPrice']) {
+//            return array(
+//                'useable' => 'no',
+//                'message' => '',
+//            );
+//        }
 
         if ($coupon['type'] == 'minus') {
             $coin = $this->getSettingService()->get('coin');
@@ -446,14 +445,6 @@ class CouponServiceImpl extends BaseService implements CouponService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return UserService
-     */
-    private function getUserService()
-    {
-        return $this->createService('User:UserService');
     }
 
     /**

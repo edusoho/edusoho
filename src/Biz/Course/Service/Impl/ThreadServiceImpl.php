@@ -139,7 +139,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('course.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+            throw $this->createServiceException('发帖次数过多，请稍后尝试。');
         }
 
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');

@@ -55,7 +55,7 @@
           style="height:100%"
         ></div>
       </div>
-      {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
+      {% do script(['libs/base.js','app/js/common.js'], 1000) %}
       <script src="{{ cloud_sdk_url('video') }}"></script>
       {% do script(['app/js/player/index.js']) %}
     {% endif %}

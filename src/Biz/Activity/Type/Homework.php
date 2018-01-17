@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use AppBundle\Common\Exception\InvalidArgumentException;
 
 class Homework extends Activity
 {
@@ -39,6 +38,7 @@ class Homework extends Activity
 
         if ($config['isCopy']) {
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+
             $copyIds = ArrayToolkit::column($items, 'questionId');
             $questions = $this->findQuestionsByCopydIdsAndCourseSetId($copyIds, $newActivity['fromCourseSetId']);
             $questionIds = ArrayToolkit::column($questions, 'id');
@@ -111,18 +111,13 @@ class Homework extends Activity
         return false;
     }
 
-    protected function getListeners()
-    {
-        return array();
-    }
-
     protected function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array(
             'finishCondition',
         ))
         ) {
-            throw new InvalidArgumentException('homework fields is invalid');
+            throw $this->createInvalidArgumentException('homework fields is invalid');
         }
 
         $filterFields = ArrayToolkit::parts($fields, array(

@@ -1,5 +1,3 @@
-{% set currentTheme = current_theme() %}
-{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
 {% for config in themeConfig.blocks.left|default([]) %}
     {% set code = config.code %}
     {% if code == 'footer-link' %}

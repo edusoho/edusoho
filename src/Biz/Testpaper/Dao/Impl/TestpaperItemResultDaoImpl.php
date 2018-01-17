@@ -66,7 +66,7 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
         }
     }
 
-    public function updateItemResults($answers, $testPaperResultId)
+    public function updateItemResults($testPaperResultId, $answers)
     {
         if (empty($answers)) {
             return array();
@@ -90,7 +90,7 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
         }
     }
 
-    public function updateItemEssays($answers, $testPaperResultId)
+    public function updateItemEssays($testPaperResultId, $answers)
     {
         if (empty($answers)) {
             return array();
@@ -129,7 +129,7 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
         return $this->db()->fetchAll($sql, $questionIds) ?: array();
     }
 
-    public function findRightItemCountByTestPaperResultId($testPaperResultId)
+    public function countRightItemByTestPaperResultId($testPaperResultId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE resultId = ? AND status = 'right' ";
 
@@ -144,7 +144,7 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
         return $this->db()->fetchAll($sql, array($id)) ?: array();
     }
 
-    public function findWrongResultCountByUserId($id)
+    public function countWrongResultByUserId($id)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
 

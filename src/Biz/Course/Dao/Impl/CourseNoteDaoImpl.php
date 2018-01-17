@@ -49,6 +49,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
             'timestamps' => array('createdTime', 'updatedTime'),
             'orderbys' => array('createdTime', 'updatedTime', 'likeNum'),
             'conditions' => array(
+                'id IN (:ids)',
                 'courseId = :courseId',
                 'userId = :userId',
                 'taskId = :taskId',

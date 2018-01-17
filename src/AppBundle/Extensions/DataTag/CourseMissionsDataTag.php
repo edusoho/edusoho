@@ -103,19 +103,14 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
         return $toLearnTasks;
     }
 
-    protected function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
-    }
-
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->getBiz()->service('Course:CourseService');
     }
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
     }
 
     /**
@@ -123,7 +118,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskResultService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskResultService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskResultService');
     }
 
     /**
@@ -131,6 +126,6 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
      */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 }

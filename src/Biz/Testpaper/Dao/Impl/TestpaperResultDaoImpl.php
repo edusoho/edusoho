@@ -42,7 +42,12 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->db()->fetchAll($sql, array_merge(array($testId), $courseIds)) ?: array();
     }
 
-    public function sumScoreByParames($conditions)
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
+    public function sumScoreByParams($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(score)');

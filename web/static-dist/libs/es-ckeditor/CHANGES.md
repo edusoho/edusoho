@@ -1,3 +1,7 @@
+# es-ckeditor 4.7.2-path3 (2017-12-26)
+
+* 上传单个文件大小可配置
+
 # es-ckeditor 4.7.2-patch2 (2017-11-01)
 
 * 添加对flash的设置

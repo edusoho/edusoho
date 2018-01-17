@@ -377,6 +377,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
         $banner = array();
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
+        $ssl = $this->request->isSecure() ? true : false;
 
         if (empty($mobile)) {
             return array();
@@ -418,6 +419,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor
 
                 if (strpos($bannerIndex, 'http://') !== false || strpos($bannerIndex, 'https://') !== false) {
                     $uri = $bannerIndex;
+                } else if (preg_match('/^\/\/\s*/', $bannerIndex)) {
+                    $uri = ($ssl ? 'https:' : 'http:').$bannerIndex;
                 } else {
                     $uri = $baseUrl.'/'.$bannerIndex;
                 }

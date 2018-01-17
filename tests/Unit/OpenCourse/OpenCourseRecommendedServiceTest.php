@@ -1,13 +1,38 @@
 <?php
 
-namespace Tests\Unit\OpenCourseRecommendedServiceTest;
+namespace Tests\Unit\OpenCourse;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ArrayToolkit;
-use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+use AppBundle\Common\ReflectionUtils;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
+    public function testDeleteBatchRecommendCourses()
+    {
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
+        $recommendCourseIds1 = array($course1['id'], $course2['id']);
+        $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
+        $this->getCourseRecommendedService()->deleteBatchRecommendCourses(array($course1['id']));
+        $result = $this->getCourseRecommendedService()->searchRecommends(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals($course2['id'], $result[0]['id']);
+
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
+        $recommendCourseIds1 = array($course1['id'], $course2['id']);
+        $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
+        $this->getCourseRecommendedService()->deleteBatchRecommendCourses(array());
+        $result = $this->getCourseRecommendedService()->searchRecommends(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals(3, count($result));
+
+        $this->getCourseRecommendedService()->deleteBatchRecommendCourses(array($course1['id'], $course2['id']));
+        $result = $this->getCourseRecommendedService()->searchRecommends(array(), array(), 0, \PHP_INT_MAX);
+        $this->assertEquals(1, count($result));
+    }
+
     public function testAddRecommendedCourses()
     {
         $course1 = $this->createCourse('test1');
@@ -25,6 +50,9 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $this->assertEquals($openCourse['id'], $courses[1]['openCourseId']);
         $this->assertEquals($course1['id'], $courses[0]['recommendCourseId']);
         $this->assertEquals($course2['id'], $courses[1]['recommendCourseId']);
+
+        $result = $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], array(), 'course');
+        $this->assertTrue($result);
     }
 
     public function testUpdateOpenCourseRecommendedCourses()
@@ -42,6 +70,10 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $courses = $this->getCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($openCourse['id']);
 
         $this->assertEquals(1, count($courses));
+
+        $this->getCourseRecommendedService()->updateOpenCourseRecommendedCourses($openCourse['id'], array());
+        $courses = $this->getCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($openCourse['id']);
+        $this->assertEmpty($courses);
     }
 
     public function testFindRecommendedCoursesByOpenCourseId()
@@ -115,6 +147,61 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $this->assertEquals(count($randomCourses), $needNum);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testFindRandomRecommendCoursesError()
+    {
+        $this->getCourseRecommendedService()->findRandomRecommendCourses(1, -1);
+    }
+
+    public function testDeleteRecommendCourse()
+    {
+        $result = $this->getCourseRecommendedService()->deleteRecommendCourse(1);
+        $this->assertTrue($result);
+
+        $fields = array(
+            'recommendCourseId' => 1,
+            'openCourseId' => 1,
+            'type' => 'normal',
+        );
+        $recommendCourse = $this->getRecommendedCourseDao()->create($fields);
+        $this->assertNotNull($recommendCourse);
+
+        $this->getCourseRecommendedService()->deleteRecommendCourse($recommendCourse['id']);
+        $result = $this->getCourseRecommendedService()->getRecommendedCourseByCourseIdAndType(1, $recommendCourse['id'], 'normal');
+
+        $this->assertNull($result);
+    }
+
+    public function testAddRecommendeds()
+    {
+        $recommendedCourseDao = $this->mockBiz(
+            'OpenCourse:RecommendedCourseDao',
+            array(
+                array(
+                    'functionName' => 'create',
+                    'withParamms' => array(
+                        array(
+                            'recommendCourseId' => 12,
+                            'openCourseId' => 123,
+                            'type' => 'live',
+                        ),
+                    ),
+                    'times' => 1,
+                ),
+            )
+        );
+
+        $result = ReflectionUtils::invokeMethod(
+            $this->getCourseRecommendedService(),
+            'addRecommendeds',
+            array(array(12), 123, 'live')
+        );
+        $this->assertTrue($result);
+        $recommendedCourseDao->shouldHaveReceived('create')->times(1);
+    }
+
     protected function createCourse($title)
     {
         $course = array(
@@ -139,6 +226,11 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $createCourse = $this->getOpenCourseService()->createCourse($course);
 
         return $createCourse;
+    }
+
+    protected function getRecommendedCourseDao()
+    {
+        return $this->createDao('OpenCourse:RecommendedCourseDao');
     }
 
     /**

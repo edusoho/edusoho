@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 class MarketingUserController extends BaseController
@@ -16,7 +17,10 @@ class MarketingUserController extends BaseController
                 return $this->createResourceNotFoundException('user', $token['userId']);
             }
             $this->authenticateUser($user);
-            $url = $this->generateUrl('course_show', array('id' => $token['data']['targetId']));
+            if (!in_array($token['data']['targetType'], array('classroom', 'course'))) {
+                throw new InvalidArgumentException('targetType is invalid');
+            }
+            $url = $this->generateUrl($token['data']['targetType'].'_show', array('id' => $token['data']['targetId']));
             $request->getSession()->set('_target_path', $url);
 
             return $this->redirect($url);
