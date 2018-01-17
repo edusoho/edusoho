@@ -952,6 +952,14 @@ admin_mocked_distributor_token:
     path: /mock/distributor_token
     defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
 
+admin_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:getPostData }
+
+admin_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postData }
+
 admin_optimize:
     path:  /setting/optimize
     defaults: { _controller: AppBundle:Admin/Optimize:index }

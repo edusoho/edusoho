@@ -14,6 +14,34 @@ define(function(require, exports, module) {
         );
       }
     );
+
+    $('.sendedType').change(
+      function() {
+        if ($('.sendedType') != '') {
+          $('.sendedData').val('');
+          $.post(
+            $('.sendedType').data('url'), { type: $('.sendedType').val() },
+            function(data) {
+              $('.sendedData').val(data);
+            },
+            'text'
+          );
+        }
+      }
+    );
+
+    $('.sendBtn').click(
+      function() {
+        if ($('.sendedType') != '') {
+          $.post(
+            $('.sendBtn').data('url'), { type: $('.sendedType').val() },
+            function(data) {
+              $('.sendResult').html(data.result);
+            }
+          );
+        }
+      }
+    );
   };
 
 });
