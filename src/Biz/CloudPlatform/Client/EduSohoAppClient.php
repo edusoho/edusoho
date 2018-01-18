@@ -41,7 +41,7 @@ class EduSohoAppClient implements AppClient
         if (!empty($options['apiUrl'])) {
             $this->apiUrl = $options['apiUrl'];
         } else {
-            $protocol = empty($options['protocol']) ? 'http://' : $options['protocol'];
+            $protocol = empty($options['isSecure']) ? 'http://' : 'https://';
             $this->apiUrl = $protocol.$this->apiUrl;
         }
 
