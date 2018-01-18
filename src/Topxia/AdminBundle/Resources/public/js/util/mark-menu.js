@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
   var markMenus = [
-    'menu_admin_cloud_data_lab_manage:menu_admin_app',
+    'menu_admin_cloud_data_lab_manage',
   ], ids = '';
   
   markMenus = handleMenus(markMenus);
