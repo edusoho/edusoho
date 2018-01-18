@@ -21,7 +21,34 @@ class DistributorSyncJob extends AbstractJob
         }
     }
 
-    public function sendData($drpService, $service)
+    protected function getDistributorService()
+    {
+        $args = $this->__get('args');
+
+        return $this->biz->service('Distributor:Distributor'.$args['type'].'Service');
+    }
+
+    private function getDistributorServiceList()
+    {
+        if (empty($this->distributorServices)) {
+            $this->distributorServices = array();
+            $types = array('User', 'Order');
+            foreach ($types as $type) {
+                array_push($this->distributorServices, $this->biz->service('Distributor:Distributor'.$type.'Service'));
+            }
+        }
+
+        return $this->distributorServices;
+    }
+
+    protected function getDrpService()
+    {
+        $distributorServices = $this->getDistributorServiceList();
+
+        return $distributorServices[0]->getDrpService();
+    }
+
+    private function sendData($drpService, $service)
     {
         $jobData = $service->findJobData();
         $status = DistributorJobStatus::$ERROR;
@@ -56,32 +83,5 @@ class DistributorSyncJob extends AbstractJob
         }
 
         return array('status' => $status, 'result' => $result);
-    }
-
-    protected function getDistributorService()
-    {
-        $args = $this->__get('args');
-
-        return $this->biz->service('Distributor:Distributor'.$args['type'].'Service');
-    }
-
-    private function getDistributorServiceList()
-    {
-        if (empty($this->distributorServices)) {
-            $this->distributorServices = array();
-            $types = array('User', 'Order');
-            foreach ($types as $type) {
-                array_push($this->distributorServices, $this->biz->service('Distributor:Distributor'.$type.'Service'));
-            }
-        }
-
-        return $this->distributorServices;
-    }
-
-    protected function getDrpService()
-    {
-        $distributorServices = $this->getDistributorServiceList();
-
-        return $distributorServices[0]->getDrpService();
     }
 }

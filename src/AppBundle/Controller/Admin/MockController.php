@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
+use AppBundle\Common\ReflectionUtils;
 
 class MockController extends BaseController
 {
@@ -69,7 +70,7 @@ class MockController extends BaseController
 
         if (!empty($drpService)) {
             $job = new DistributorSyncJob(array(), $this->getBiz());
-            $result = $job->sendData($drpService, $service);
+            $result = ReflectionUtils::invokeMethod($job, 'sendData', array($drpService, $service));
             if (DistributorJobStatus::$FINISHED == $result['status']) {
                 return $this->createJsonResponse(array('result' => 'true'));
             } else {
