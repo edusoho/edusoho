@@ -9,7 +9,7 @@ class RuleParser
         $parts = explode('|', $rules);
         $rules = array();
         foreach ($parts as $rule) {
-            if (strpos($rule, ':') !== false) {
+            if (false !== strpos($rule, ':')) {
                 list($name, $parameters) = explode(':', $rule, 2);
                 $parameters = str_getcsv($parameters);
                 $rules[] = array_merge(array($name), $parameters);
