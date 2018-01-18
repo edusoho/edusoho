@@ -139,5 +139,5 @@ interface TestpaperService
 
     public function findResultsByTestIdAndActivityId($testId, $activityId);
 
-    public function getNextReviewingResult($courseId, $activityId, $type);
+    public function getNextReviewingResult($courseIds, $activityId, $type);
 }

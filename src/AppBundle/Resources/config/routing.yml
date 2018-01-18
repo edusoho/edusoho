@@ -2244,8 +2244,8 @@ course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
-course_manage_testpaper_result_next_check:
-  path: /course/{id}/manage/testpaper/result/next/check
+course_manage_exam_next_result_check:
+  path: /course/{id}/manage/activity/{activityId}/exam/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultNextCheck }
 
 course_manage_testpaper_result_graph:
@@ -2512,6 +2512,10 @@ classroom_manage_testpaper_result_list:
 classroom_manage_testpaper_check:
   path: /classroom/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
+
+classroom_manage_exam_next_result_check:
+  path: /classroom/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultNextCheck }
 
 classroom_manage_homework:
     path:  /classroom/{id}/manage/homework/list

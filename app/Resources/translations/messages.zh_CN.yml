@@ -2734,6 +2734,7 @@ form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
+form.btn.continue: 完成并继续
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名

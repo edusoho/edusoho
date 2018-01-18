@@ -174,9 +174,16 @@ class ManageController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
+            $isContinue = $formData['isContinue'];
+            unset($formData['isContinue']);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            return $this->createJsonResponse(true);
+            $data = array('success' => true, 'goto' => '');
+            if ($isContinue) {
+                $data['goto'] = $this->generateUrl($source.'_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $result['lessonId']));
+            }
+
+            return $this->createJsonResponse($data);
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $result['id']);

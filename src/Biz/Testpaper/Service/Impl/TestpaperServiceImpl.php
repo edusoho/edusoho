@@ -950,12 +950,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->calculateResultsFirstAndMaxScore($results);
     }
 
-    public function getNextReviewingResult($courseId, $activityId, $type)
+    public function getNextReviewingResult($courseIds, $activityId, $type)
     {
         $conditions = array(
-            'courseId' => $courseId,
+            'courseIds' => $courseIds,
             'lessonId' => $activityId,
             'type' => $type,
+            'status' => 'reviewing'
         );
 
         $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC'), 0, 1);
@@ -964,7 +965,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             return $results[0];
         }
 
-        $conditions = array('courseId' => $courseId, 'type' => $type);
+        unset($conditions['lessonId']);
         $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC', 'lessonId' => 'ASC'), 0, 1);
 
         if ($results) {
