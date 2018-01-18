@@ -77,7 +77,7 @@ interface TestpaperService
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
 
-    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
+    public function findPaperResultsStatusNumGroupByStatus($testId, $activityId);
 
     public function addTestpaperResult($fields);
 
@@ -136,4 +136,10 @@ interface TestpaperService
     public function findTestResultsByTestpaperIdAndUserIds($userIds, $testpaperId);
 
     public function findExamFirstResults($testId, $type, $activityId);
+
+    public function findFirstResultsGroupByUserId($testId, $activityId);
+
+    public function findResultsByTestIdAndActivityId($testId, $activityId);
+
+    public function getNextReviewingResult($courseIds, $activityId, $type);
 }

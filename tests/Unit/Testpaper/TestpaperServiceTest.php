@@ -658,7 +658,7 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testFindPaperResultsStatusNumGroupByStatus()
     {
-        $result = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus(1, array(1));
+        $result = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus(1, 1);
         $this->assertEmpty($result);
 
         $testpaper = $this->createTestpaper1();
@@ -668,7 +668,7 @@ class TestpaperServiceTest extends BaseTestCase
         $paperResult3 = $this->createTestpaperResult3($testpaper);
 
         $courseIds = array(1);
-        $result = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
+        $result = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], 1);
 
         $this->assertEquals(2, $result['doing']);
         $this->assertEquals(1, $result['finished']);

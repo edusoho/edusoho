@@ -26,7 +26,7 @@
       <span class="color-danger">{{'classroom.testpaper_check_tips'|trans({'%typeName%':typeName}) }}</span>
     {% endif %}
 
-    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'classroom',targetId:classroom.id})) }}
+    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'classroom',targetId:classroom.id, activityId: activityId})) }}
 
   </div>
 </div>

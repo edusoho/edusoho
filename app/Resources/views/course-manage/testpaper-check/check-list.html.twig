@@ -10,7 +10,7 @@
       {% if isTeacher is defined and not isTeacher %}
         <span class="color-danger">{{'course.testpaper_check.no_permission_tips'|trans}}</span>
       {% endif %}
-      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,targetType:'course',type:'testpaper',testpaperIds:testpaperIds})) }}
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,targetType:'course',type:'testpaper'})) }}
     </div>
   </div>
 {% endblock %}
