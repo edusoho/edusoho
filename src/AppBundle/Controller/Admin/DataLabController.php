@@ -8,7 +8,6 @@ class DataLabController extends BaseController
 {
     public function dataAction(Request $request)
     {
-        $protocol = $request->isSecure() ? 'https://' : 'http://';
         $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', array(), $request->isSecure());
 
         return $this->render('admin/data-lab/data.html.twig', array(
