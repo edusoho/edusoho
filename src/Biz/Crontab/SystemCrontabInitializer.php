@@ -140,6 +140,10 @@ class SystemCrontabInitializer
                 'expression' => "{$xapiRandNum3} 1-6 * * *",
                 'class' => 'Biz\Xapi\Job\ArchiveStatementJob',
             ),
+            'Xapi_ConvertStatementsJob' => array(
+                'expression' => '*/10 1-6 * * *',
+                'class' => 'Biz\Xapi\Job\ConvertStatementJob',
+            ),
             'SyncUserTotalLearnStatisticsJob' => array(
                 'expression' => '*/3 1-6 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\SyncTotalJob',
