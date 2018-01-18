@@ -6,7 +6,7 @@ namespace Codeages\Biz\Pay\Payment;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
-class IapGetway extends AbstractGetway
+class IapGateway extends AbstractGateway
 {
     public function converterNotify($data)
     {
