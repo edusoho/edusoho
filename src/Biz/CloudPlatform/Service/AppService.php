@@ -80,7 +80,7 @@ interface AppService
 
     public function findInstallApp($code);
 
-    public function getTokenLoginUrl($routingName, $params, $protocol);
+    public function getTokenLoginUrl($routingName, $params, $protocol = 'http://');
 
     public function getAppStatusByCode($code);
 }
