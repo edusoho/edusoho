@@ -16,6 +16,9 @@ class UpdateDeductTypeName extends Migration
             UPDATE  `biz_order_item_deduct` set `deduct_type_name` = '优惠券' where `deduct_type` = 'coupon';
             UPDATE  `biz_order_item_deduct` set `deduct_type_name` = '班级课程抵扣' where `deduct_type` = 'paidCourse';
             UPDATE  `biz_order_item_deduct` set `deduct_type_name` = '改价' where `deduct_type` = 'adjust_price';
+            UPDATE  `biz_order_item_deduct` set `deduct_type_name` = '秒杀' where `deduct_type` = 'seckill';
+            UPDATE  `biz_order_item_deduct` set `deduct_type_name` = '拼团' where `deduct_type` = 'groupon';
+            UPDATE  `biz_order_item_deduct` set `deduct_type_name` = '帮砍价' where `deduct_type` = 'cut';
         ");
     }
 
