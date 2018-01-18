@@ -1029,7 +1029,7 @@ class ClassroomManageController extends BaseController
         }
 
         $checkResult = $this->getTestpaperService()->getNextReviewingResult($courseIds, $activity['id'], $activity['mediaType']);
-        
+
         if (empty($checkResult)) {
             return $this->createMessageResponse('info', '已完成所有批阅');
         }

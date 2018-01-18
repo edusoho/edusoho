@@ -956,7 +956,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'courseIds' => $courseIds,
             'lessonId' => $activityId,
             'type' => $type,
-            'status' => 'reviewing'
+            'status' => 'reviewing',
         );
 
         $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC'), 0, 1);
