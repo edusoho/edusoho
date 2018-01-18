@@ -580,6 +580,26 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals('title', $result[0]['title']);
     }
 
+    public function testBatchUpdateOrg()
+    {
+        $this->mockBiz(
+            'OpenCourse:OpenCourseDao',
+            array(
+                array(
+                    'functionName' => 'update',
+                    'returnValue' => 1,
+                    'withParams' => array(
+                        1,
+                        array(),
+                    ),
+                ),
+            )
+        );
+        $result = $this->getOpenCourseService()->batchUpdateOrg(1, null);
+
+        $this->assertNull($result);
+    }
+
     private function _createLiveOpenCourse()
     {
         $course = array(

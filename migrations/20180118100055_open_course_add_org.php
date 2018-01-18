@@ -30,7 +30,6 @@ class OpenCourseAddOrg extends Migration
      */
     public function down()
     {
-
     }
 
     protected function isFieldExist($table, $filedName)
