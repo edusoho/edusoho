@@ -867,7 +867,7 @@ course.create.finish: 已完成
 course.create.unfinish: 未完成
 course.create.user_avatar: 用户头像
 course.create.upload_tips: >
-  <p class="help-block">请上传jpg, gif, png格式的图片，文件大小不能超过<strong>2M</strong>。</p>
+  <p class="help-block">请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，文件大小不能超过<strong>2M</strong>。</p>
 course.create.upload_btn: 上传新头像
 course.create.rank: 头衔
 course.create.introduction: 自我介绍
@@ -5840,7 +5840,7 @@ admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
-admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，文件大小不能超过
+admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，文件大小不能超过
 admin.user.manage.user_avatar.upload_btn: 上传新头像
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像

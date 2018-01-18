@@ -752,7 +752,7 @@ course.create.setup_introduction: 'Set title and self introduction'
 course.create.finish: Finish
 course.create.unfinish: Unfinish
 course.create.user_avatar: 'User avatar'
-course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Image size should not exceed <strong>2M</strong>.</p>'
+course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Recommend size: 270×270px. Image size should not exceed <strong>2M</strong>.</p>'
 course.create.upload_btn: Upload
 course.create.rank: Title
 course.create.introduction: 'About me'
@@ -4795,7 +4795,7 @@ admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
-admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, the file size can not be exceeded'
+admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded'
 admin.user.manage.user_avatar.upload_btn: 'Upload New Photo'
 admin.user.manage.user_avatar.fields.partner_avatar: 'Forum Avatar'
 admin.user.manage.user_avatar.using_current_avatar_btn: 'Use This Avatar'
