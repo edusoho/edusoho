@@ -4,9 +4,8 @@
     {% include 'question/part/question-stem.html.twig' %}
 
     {% block analysis_body %}
-      <div class="testpaper-question-title hidden-xs">
-        <span class="two">{{ '初次答题'|trans }}</span>
-        <span class="one"></span>
+      <div class="testpaper-question-body__label hidden-xs">
+        <span>{{ '初次答题'|trans }}</span>
       </div>
 
       {% block analysis_content %}{% endblock %}
