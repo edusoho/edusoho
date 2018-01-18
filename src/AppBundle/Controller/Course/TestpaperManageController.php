@@ -101,9 +101,9 @@ class TestpaperManageController extends BaseController
         ));
     }
 
-    public function resultAnalysisAction(Request $request, $courseId, $activityId)
+    public function resultAnalysisAction(Request $request, $id, $activityId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $activity = $this->getActivityService()->getActivity($activityId);
         if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
@@ -123,7 +123,7 @@ class TestpaperManageController extends BaseController
             'studentNum' => $course['studentNum'],
         ));
     }
-    
+
     public function resultNextCheckAction($id, $activityId)
     {
         $this->getCourseService()->tryManageCourse($id);

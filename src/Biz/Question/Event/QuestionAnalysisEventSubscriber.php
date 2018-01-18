@@ -53,7 +53,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         $analysisItems = array();
 
         $questionIds = ArrayToolkit::column($questions, 'id');
-        $analysis = $this->findExistAnalysis($paperResult['testId'], $paperResult['type'], $questionIds);
+        $analysis = $this->findExistAnalysis($paperResult['testId'], $paperResult['type'], $paperResult['lessonId']);
 
         foreach ($questions as $question) {
             $choices = $this->getQuestionChoices($question, $paperResult['type']);
@@ -105,7 +105,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         );
         $userResultCount = $this->getTestpaperService()->searchTestpaperResultsCount($conditions);
 
-        $existAnalysis = $this->findExistAnalysis($paperResult['testId'], $paperResult['type'], ArrayToolkit::column($questions, 'id'));
+        $existAnalysis = $this->findExistAnalysis($paperResult['testId'], $paperResult['type'], $paperResult['lessonId']);
         $userAnswers = $this->getTestpaperService()->findItemResultsByResultId($paperResult['id']);
 
         foreach ($userAnswers as $userAnswer) {
@@ -126,12 +126,12 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         }
     }
 
-    protected function findExistAnalysis($targetId, $targetType, $questionIds)
+    protected function findExistAnalysis($targetId, $targetType, $activityId)
     {
         $conditions = array(
             'targetId' => $targetId,
             'targetType' => $targetType,
-            'questionIds' => $questionIds,
+            'activityId' => $activityId,
         );
         $analysis = $this->getQuestionAnalysisService()->searchAnalysis($conditions, array(), 0, PHP_INT_MAX);
 

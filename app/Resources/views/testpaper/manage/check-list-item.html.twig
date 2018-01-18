@@ -3,6 +3,13 @@
 {% set resultListRout = resultListRout|default('course_manage_testpaper_result_list') %}
 
 {% set taskTitle = task.isOptional ? 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) : 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) %}
+{% if targetType == 'classroom' %}
+  {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+  {% set analysisUrl = path('classroom_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
+{% else %}
+  {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+  {% set analysisUrl = path('course_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
+{% endif %}
 
 <div class="clearfix testpaper-mark-list">
   <div class="testpaper-mark-info col-md-8">
@@ -24,16 +31,11 @@
             <div class="col-xs-4 text-center mt10">
               <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:task.courseId, activityId:task.activityId}) }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a>
             </div>
-            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a></div>
+            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a></div>
             
             <div class="col-xs-4 text-center mt10">
               {% if targetResultInfo.reviewing|default(0) > 0 %}
-                {% if targetType == 'classroom' %}
-                  {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
-                {% else %}
-                  {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
-                {% endif %}
-                <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check"></i></a>
+                <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check"></i></a>
               {% else %}
                 <a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check gray-medium"></i></a>
               {% endif %}

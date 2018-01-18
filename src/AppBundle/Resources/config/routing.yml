@@ -2265,7 +2265,7 @@ course_manage_testpaper_result_list:
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultList }
 
 course_manage_exam_result_anlysis:
-  path: /course/{courseId}/manage/exam/activity/{activityId}/analysis
+  path: /course/{id}/manage/exam/activity/{activityId}/analysis
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultAnalysis }
 
 course_manage_testpaper_questions:
