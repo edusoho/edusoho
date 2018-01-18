@@ -945,7 +945,7 @@ class AppServiceImpl extends BaseService implements AppService
                 'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
                 'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
                 'debug' => empty($developer['debug']) ? false : true,
-                'protocol' => empty($params['protocol']) ? 'http://' : $params['protocol'].'://',
+                'protocol' => empty($params['protocol']) ? 'http://' : $params['protocol'],
             );
 
             $this->client = new EduSohoAppClient($options);
