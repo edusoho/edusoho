@@ -157,6 +157,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 CREATE INDEX job_fired_time_and_status ON biz_scheduler_job_fired(`fired_time`, `status`);
             ');
         }
+
+        return 1;
     }
 
     protected function generateIndex($step, $page)
