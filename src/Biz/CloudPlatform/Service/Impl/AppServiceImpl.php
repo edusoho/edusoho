@@ -687,9 +687,13 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->update($id, array('version' => $version));
     }
 
-    public function getTokenLoginUrl($routingName, $params)
+    public function getTokenLoginUrl($routingName, $params, $protocol = 'http://')
     {
-        $appClient = $this->createAppClient();
+        $appClient = $this->createAppClient(
+            array(
+                'protocol' => $protocol,
+            )
+        );
         $result = $appClient->getTokenLoginUrl($routingName, $params);
 
         return $result;
@@ -930,7 +934,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createDao('CloudPlatform:CloudAppLogDao');
     }
 
-    protected function createAppClient()
+    protected function createAppClient($params = array())
     {
         if (!isset($this->client)) {
             $cloud = $this->getSettingService()->get('storage', array());
@@ -941,6 +945,7 @@ class AppServiceImpl extends BaseService implements AppService
                 'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
                 'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
                 'debug' => empty($developer['debug']) ? false : true,
+                'protocol' => empty($params['protocol']) ? 'http://' : $params['protocol'].'://',
             );
 
             $this->client = new EduSohoAppClient($options);

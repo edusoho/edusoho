@@ -8,7 +8,7 @@ class DataLabController extends BaseController
 {
     public function dataAction(Request $request)
     {
-        $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', array());
+        $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', array(),  $request->getScheme());
 
         return $this->render('admin/data-lab/data.html.twig', array(
             'url' => $url,
