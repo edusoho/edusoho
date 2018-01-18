@@ -1,8 +1,22 @@
 define(function(require, exports, module) {
-  var markMenus = ['menu_admin_app', 'menu_admin_cloud_data_lab_manage'], ids = '';
+  var markMenus = [
+    'menu_admin_cloud_data_lab_manage:menu_admin_app',
+  ], ids = '';
+  
+  markMenus = handleMenus(markMenus);
   var localSetting = getLocalSetting(markMenus);
-
   clickEvent();
+
+  function handleMenus(markMenus) {
+    var useableMenus = [];
+    for (index in markMenus) {
+      var list = markMenus[index].split(':');
+      if ($('#'+list[0]).length > 0) {
+        useableMenus.push.apply(useableMenus, list);
+      }
+    }
+    return useableMenus;
+  }
 
   function clickEvent() {
     for (index in markMenus) {
@@ -17,7 +31,6 @@ define(function(require, exports, module) {
     if (window.localStorage) {
       $menus.on('click', function(){
           if ($.inArray(this.id, localSetting) == -1) {
-            $(this).removeClass('new');
             localSetting.push(this.id);
             window.localStorage.setItem('markMenuList', localSetting.join(','));
           }
