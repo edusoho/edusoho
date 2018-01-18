@@ -6,7 +6,6 @@ use Biz\System\Service\SettingService;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use AppBundle\Common\ArrayToolkit;
-use QiQiuYun\SDK\Auth;
 
 class PushStatementJob extends AbstractJob
 {
@@ -55,28 +54,12 @@ class PushStatementJob extends AbstractJob
         }
     }
 
+    /**
+     * @return \QiQiuYun\SDK\Service\XAPIService
+     */
     public function createXAPIService()
     {
-        $settings = $this->getSettingService()->get('storage', array());
-        $siteSettings = $this->getSettingService()->get('site', array());
-        $xapiSetting = $this->getSettingService()->get('xapi', array());
-
-        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'http://xapi.qiqiuyu.net/vi/';
-
-        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
-        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth($accessKey, $secretKey);
-
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => $pushUrl,
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
-            ),
-        ));
+        return $this->getXapiService()->getXapiSdk();
     }
 
     /**
