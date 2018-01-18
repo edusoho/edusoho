@@ -69,7 +69,9 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'fixOrderStatus'
+            'fixOrderStatus',
+            'openXapiPush',
+            'addIndexToJobFired',
         );
 
         $funcNames = array();
@@ -130,6 +132,31 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec($sql);
 
         return $page + 1;
+    }
+
+    protected function openXapiPush()
+    {
+        $this->getSettingService()->set('xapi', array(
+            'enabled' => 1,
+            'push_url' => 'https://lrs.qiqiuyun.net/v1/xapi/',
+        ));
+
+        return 1;
+    }
+
+    public function addIndexToJobFired()
+    {
+        if (!$this->isIndexExist('biz_scheduler_job_fired', 'job_id', 'job_fired_id_and_status')) {
+            $this->getConnection()->exec('
+                CREATE INDEX job_fired_id_and_status ON biz_scheduler_job_fired(`job_id`, `status`);
+            ');
+        }
+
+        if (!$this->isIndexExist('biz_scheduler_job_fired', 'fired_time', 'job_fired_time_and_status')) {
+            $this->getConnection()->exec('
+                CREATE INDEX job_fired_time_and_status ON biz_scheduler_job_fired(`fired_time`, `status`);
+            ');
+        }
     }
 
     protected function generateIndex($step, $page)
