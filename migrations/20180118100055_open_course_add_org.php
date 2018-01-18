@@ -14,13 +14,13 @@ class OpenCourseAddOrg extends Migration
 
         if (!$this->isFieldExist('open_course', 'orgId')) {
             $db->exec(
-                "ALTER TABLE `open_course` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID';
+                "ALTER TABLE `open_course` ADD COLUMN `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID';
             ");
         }
 
         if (!$this->isFieldExist('open_course', 'orgCode')) {
             $db->exec(
-                "ALTER TABLE `open_course` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码';
+                "ALTER TABLE `open_course` ADD COLUMN `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码';
             ");
         }
     }
