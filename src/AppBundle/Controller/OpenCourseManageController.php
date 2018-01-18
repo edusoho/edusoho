@@ -573,9 +573,9 @@ class OpenCourseManageController extends BaseController
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_keys($recommends));
 
         $removeIds = array();
-        foreach($recommends as $key => $value) {
+        foreach ($recommends as $key => $value) {
             if (empty($courseSets[$key])) {
-                $removeIds[] =  $value['id'];
+                $removeIds[] = $value['id'];
             }
         }
 
