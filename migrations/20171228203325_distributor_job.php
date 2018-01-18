@@ -17,7 +17,7 @@ class DistributorJob extends Migration
                 `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
                 `data` text NOT NULL COMMENT '数据',
                 `jobType` varchar(128) NOT NULL COMMENT '使用的同步类型, 如order为 biz[distributor.sync.order] = Biz\Distributor\Service\Impl\SyncOrderServiceImpl',
-                `status` varchar(32) NOT NULL DEFAULT 'notSend' COMMENT '分为 pending -- 可以发, finished -- 已发送, error -- 错误, dependent -- 依赖于其他任务， 只有 prepared 和 error 才会尝试发送',
+                `status` varchar(32) NOT NULL DEFAULT 'pending' COMMENT '分为 pending -- 可以发, finished -- 已发送, error -- 错误， 只有 pending 和 error 才会尝试发送',
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`)
