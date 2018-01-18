@@ -23,7 +23,7 @@ class SignUtil
         return $json;
     }
 
-    public static function cut($str, $length = 512)
+    public static function cut($str, $length = 1024)
     {
         return substr($str, 0, $length);
     }
