@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Component\OAuthServer\Storage;
+namespace Tests\Unit\AppBundle\Component\OAuthServer\Storage;
 
 use Biz\BaseTestCase;
 use AppBundle\Component\OAuthServer\Storage\UserCredentials;

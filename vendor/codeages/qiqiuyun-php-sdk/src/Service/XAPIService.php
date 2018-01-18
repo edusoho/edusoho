@@ -606,6 +606,39 @@ class XAPIService extends BaseService
         return $response;
     }
 
+
+    /**
+     * @param $type
+     * @param $value
+     * @return mixed
+     * @throws ResponseException
+     * @throws \QiQiuYun\SDK\HttpClient\ClientException
+     */
+    public function setting($type, $value)
+    {
+        $setting = array(
+            'accessKey' => $this->auth->getAccessKey(),
+            'setting' => $type,
+            'value' => $value,
+        );
+
+        $rawResponse = $this->client->request('POST', '/setting', array(
+            'json' => $setting,
+            'headers' => array(
+                'Authorization' => 'Signature '.$this->makeSignature(),
+            )
+        ));
+
+        $response = json_decode($rawResponse->getBody(), true);
+
+        if (isset($response['error'])) {
+            throw new ResponseException($rawResponse);
+        }
+
+        return $response;
+
+    }
+
     /**
      * @param $verb
      * @return string

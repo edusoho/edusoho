@@ -28,4 +28,6 @@ interface OpenCourseRecommendedService
     public function findRandomRecommendCourses($courseId, $num = 3);
 
     public function deleteRecommendCourse($recommendId);
+
+    public function deleteBatchRecommendCourses($recommendIds);
 }

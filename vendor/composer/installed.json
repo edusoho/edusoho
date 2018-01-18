@@ -5375,44 +5375,6 @@
         ]
     },
     {
-        "name": "codeages/biz-order-pay",
-        "version": "v0.1.10",
-        "version_normalized": "0.1.10.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-order-pay.git",
-            "reference": "2e6c2e30e64411ea5a1ec65750397135fe509a63"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/2e6c2e30e64411ea5a1ec65750397135fe509a63.zip",
-            "reference": "2e6c2e30e64411ea5a1ec65750397135fe509a63",
-            "shasum": ""
-        },
-        "require": {
-            "canuonifeng/omnipay-wechatpay": "^1.1",
-            "codeages/biz-framework": "^0.9",
-            "wenqinruan/omnipay-alipay": "^2.3"
-        },
-        "require-dev": {
-            "mockery/mockery": "^0.9.9"
-        },
-        "time": "2017-12-07T07:09:05+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Order\\": "src/Order/",
-                "Codeages\\Biz\\Pay\\": "src/Pay/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "order, pay module"
-    },
-    {
         "name": "willdurand/js-translation-bundle",
         "version": "2.6.5",
         "version_normalized": "2.6.5.0",
@@ -5633,5 +5595,43 @@
             }
         ],
         "description": "QiQiuYun PHP SDK"
+    },
+    {
+        "name": "codeages/biz-order-pay",
+        "version": "v0.1.12",
+        "version_normalized": "0.1.12.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-order-pay.git",
+            "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/92750311508b7d23d6b4f16bbcca8fe245445e33.zip",
+            "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33",
+            "shasum": ""
+        },
+        "require": {
+            "canuonifeng/omnipay-wechatpay": "^1.1",
+            "codeages/biz-framework": "^0.9",
+            "wenqinruan/omnipay-alipay": "^2.3"
+        },
+        "require-dev": {
+            "mockery/mockery": "^0.9.9"
+        },
+        "time": "2018-01-16T12:15:35+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Order\\": "src/Order/",
+                "Codeages\\Biz\\Pay\\": "src/Pay/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "order, pay module"
     }
 ]

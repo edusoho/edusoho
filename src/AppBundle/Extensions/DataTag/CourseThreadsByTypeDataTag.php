@@ -37,22 +37,22 @@ class CourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        $userIds = array_merge(ArrayToolkit::column($threads, 'userId'), ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        $latestPostUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         foreach ($threads as $key => $thread) {
-            if (isset($courses[$thread['courseId']], $courseSets[$thread['courseId']]['courseSetId'])) {
+            if (isset($courses[$thread['courseId']], $courseSets[$thread['courseSetId']])) {
                 $threads[$key]['course'] = $courses[$thread['courseId']];
-                $threads[$key]['courseSet'] = $courseSets[$threads[$key]['course']['courseSetId']];
+                $threads[$key]['courseSet'] = $courseSets[$thread['courseSetId']];
             }
 
             if (isset($users[$thread['userId']]) && $thread['userId'] == $users[$thread['userId']]['id']) {
                 $threads[$key]['user'] = $users[$thread['userId']];
             }
 
-            if ($thread['latestPostUserId'] == $latestPostUsers[$thread['latestPostUserId']]['id']) {
-                $threads[$key]['latestPostUser'] = $latestPostUsers[$thread['latestPostUserId']];
+            if (!empty($thread['latestPostUserId']) && isset($users[$thread['latestPostUserId']])) {
+                $threads[$key]['latestPostUser'] = $users[$thread['latestPostUserId']];
             }
         }
 

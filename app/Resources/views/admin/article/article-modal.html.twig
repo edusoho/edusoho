@@ -39,7 +39,7 @@
         <div class="controls">
           <select class="form-control" id="categoryId" type="text" name="categoryId" required="required" tabindex="2">
             {% if not article|default(false) %}
-              <option value="0">--{{'admin.article_setting.choose_category'|trans}}--</option>
+              <option value="">--{{'admin.article_setting.choose_category'|trans}}--</option>
             {% endif %}
           {% for tree in categoryTree %}
             <option value={{ tree.id }} {% if tree.id == category.id|default()  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>

@@ -22,21 +22,20 @@ class RefundingStatus extends AbstractRefundStatus
             'deal_time' => time(),
             'deal_user_id' => $this->biz['user']['id'],
             'deal_reason' => empty($data['deal_reason']) ? '' : $data['deal_reason'],
-            'status' => self::NAME
+            'status' => self::NAME,
         );
 
         $fields['amount'] = 0;
-        if (!empty($data['refund_cash_amount'])) {
+        if (isset($data['refund_cash_amount'])) {
             $fields['refund_cash_amount'] = $data['refund_cash_amount'];
             $fields['amount'] = $fields['amount'] + $fields['refund_cash_amount'];
         }
 
-        if (!empty($data['refund_coin_amount'])) {
+        if (isset($data['refund_coin_amount'])) {
             $fields['refund_coin_amount'] = $data['refund_coin_amount'];
             $rate = $this->getCoinRate();
-            $fields['amount'] = $fields['amount'] + round($fields['refund_coin_amount']/$rate);
+            $fields['amount'] = $fields['amount'] + round($fields['refund_coin_amount'] / $rate);
         }
-
 
         $orderRefund = $this->getOrderRefundDao()->update($this->orderRefund['id'], $fields);
 
@@ -44,11 +43,11 @@ class RefundingStatus extends AbstractRefundStatus
         $updatedOrderItemRefunds = array();
         foreach ($orderItemRefunds as $orderItemRefund) {
             $updatedOrderItemRefunds[] = $this->getOrderItemRefundDao()->update($orderItemRefund['id'], array(
-                'status' => self::NAME
+                'status' => self::NAME,
             ));
 
             $this->getOrderItemDao()->update($orderItemRefund['order_item_id'], array(
-                'refund_status' => self::NAME
+                'refund_status' => self::NAME,
             ));
         }
 
@@ -60,6 +59,7 @@ class RefundingStatus extends AbstractRefundStatus
     protected function getCoinRate()
     {
         $options = $this->biz['payment.final_options'];
-        return empty($options['coin_rate']) ? 1: $options['coin_rate'];
+
+        return empty($options['coin_rate']) ? 1 : $options['coin_rate'];
     }
 }

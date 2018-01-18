@@ -5,12 +5,14 @@ namespace Biz\Xapi\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Xapi\Dao\ActivityWatchLogDao;
 use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use QiQiuYun\SDK\Auth;
 
 class XapiServiceImpl extends BaseService implements XapiService
 {
@@ -192,6 +194,30 @@ class XapiServiceImpl extends BaseService implements XapiService
         }
     }
 
+    public function getXapiSdk()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        $siteSettings = $this->getSettingService()->get('site', array());
+        $xapiSetting = $this->getSettingService()->get('xapi', array());
+
+        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'https://lrs.qiqiuyun.net/v1/xapi/';
+
+        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
+        $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
+        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
+        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
+        $auth = new Auth($accessKey, $secretKey);
+
+        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
+            'base_uri' => $pushUrl,
+            'school' => array(
+                'accessKey' => $accessKey,
+                'url' => $siteUrl,
+                'name' => $siteName,
+            ),
+        ));
+    }
+
     /**
      * @return StatementDao
      */
@@ -222,5 +248,13 @@ class XapiServiceImpl extends BaseService implements XapiService
     protected function getStatementArchiveDao()
     {
         return $this->createDao('Xapi:StatementArchiveDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
