@@ -49,6 +49,10 @@ class DataLabController extends BaseController
         $xapiSetting['enabled'] = $enable;
         $xapiSetting = $this->getSettingService()->set('xapi', $xapiSetting);
 
+        $user = $this->getUser();
+        $logText = $xapiSdkValue ? 'xapi的设置上报开启' : 'xapi的上报关闭';
+        $this->getLogService()->info('datalab', 'set_xapi_setting', $logText, array('enabled' => $enable, 'userId' => $user['id']));
+
         return $this->createJsonResponse(array('success' => 1));
     }
 
