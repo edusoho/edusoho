@@ -6,9 +6,9 @@
 {% set isIframeBody = 0 %}
 
 {% block paper_header %}
-  <div class="es-section testpaper-heading js-testpaper-heading">
+  <div class="es-section testpaper-heading-section js-testpaper-heading">
     <div class="testpaper-titlebar clearfix">
-      <h1 class="testpaper-title">{{ paper.name }}</h1>
+      <h1 class="testpaper-title testpaper-title--overflow" title="{{ paper.name }}">{{ paper.name }}</h1>
       <div class="testpaper-status">
         <div class="label label-success">{{'试题分析'|trans}}</div>
       </div>
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block paper_body %}
-  <div class="panel panel-default">
+  <div class="panel panel-default testpaper-question-panel">
     <div class="panel-heading">
       {{ 'course.plan_task.activity_manage.homework.question_total'|trans({'%itemCount%':paper.itemCount})|raw }}
     </div>

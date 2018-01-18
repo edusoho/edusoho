@@ -5,6 +5,12 @@
   color: #aaa;
 }
 
+.testpaper-heading-section {
+  .es-box-shadow;
+  border-radius: 2px !important;
+  border: none !important;
+}
+
 .testpaper-titlebar {
   border-bottom: 1px solid #ddd;
   margin-bottom: 20px;
@@ -15,11 +21,37 @@
   font-size: 24px;
   font-weight: bold;
   color: #444;
+  @media (min-width: @screen-md-max) {
+    width: 85%;
+  }
+  @media (min-width: @screen-xs-max) and (max-width: @screen-md-max) {
+    width: 80%;
+  }
+  @media (min-width: @screen-xs-min) and (max-width: @screen-xs-max) {
+    width: 75%;
+  }
+  @media (max-width: @screen-xs-min) {
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+}
+
+.testpaper-title--overflow {
+  @media (min-width: @screen-xs-min) {
+    .text-overflow();
+  }
+}
+
+.testpaper-title__content {
+  .testpaper-title--overflow;
 }
 
 .testpaper-status {
   margin-top: 20px;
   float: right;
+  @media (max-width: @screen-xs-min) {
+    margin-bottom: 20px;
+  }
 }
 
 .testpaper-status .label {
@@ -208,7 +240,6 @@
 
 .testpaper-question-choices li:hover {
   background: #eee;
-  cursor: pointer;
 }
 
 .testpaper-question-choice-index {
@@ -217,6 +248,13 @@
   left: 6px;
   color: #999;
   // margin-right: 20px;
+}
+
+.testpaper-question-choice-content {
+  width: 82%;
+  @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+    width: 78%;
+  }
 }
 
 .testpaper-question-choice-right, 
@@ -497,4 +535,86 @@
 
 .quality-switcher .quality-actions {
   margin-top: 10px;
+}
+
+.testpaper-question-panel {
+  .es-box-shadow;
+  border: none;
+  .border-radius(2px);
+}
+
+.testpaper-question-body__label {
+  position: relative;
+  margin-bottom: 10px;
+  height: 30px;
+  line-height: 30px;
+  span {
+    position: absolute;
+    top: 0;
+    right: 80px;
+  }
+}
+
+.testpaper-question-choice__label {
+  position: absolute;
+  top: 5px;
+  right: 80px;
+}
+
+.testpaper-question-choice__count {
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+.testpaper-card-panel {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 10px 20px !important;
+  .border-radius(2px);
+  .es-box-shadow;
+  border: none;
+  &:after {
+    position: absolute;
+    content: '';
+    top: -32px;
+    right: -32px;
+    width: 134px;
+    height: 134px;
+    z-index: -1;
+    background: url("@{img-src}testpaper/icon_testpaper.png") no-repeat;
+    background-position: 0 -10px;
+  }
+}
+
+.homework-card-panel {
+  &:after {
+    background: url("@{img-src}testpaper/icon_homework.png") no-repeat;
+  }
+}
+
+.testpaper-card-info {
+  &:first-child {
+    margin-top: 10px;
+  }
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+.testpaper-card-info__text {
+  width: 100px;
+  display: inline-block;
+  color: @gray;
+  text-align: right;
+}
+
+.testpaper-card-info__number {
+  display: inline-block;
+  color: @gray-darker;
+  font-size: 22px;
+}
+
+.testpaper-card-info__icon {
+  color: @gray;
 }

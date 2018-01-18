@@ -1,34 +1,25 @@
-<div class="testpaper-card {{testpaperCardClass|default('')}}">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      {% if paper.type == 'testpaper' %}
-        {{'试卷分析'|trans}}
-      {% else %}
-        {{'作业分析'|trans}}
-      {% endif %}
+<div class="panel panel-default testpaper-card-panel {% if paper.type == 'homework' %}homework-card-panel{% endif %}">
+  <div class="panel-body">
+    <div class="testpaper-card-info">
+      <span class="testpaper-card-info__text">
+        {% if targetType|default('classroom') == 'course'%}计划{% else %}班级{% endif %}人数：
+      </span>
+      <span class="testpaper-card-info__number">{{ relatedData.studentNum }}</span>
     </div>
-    <div class="panel-body">
-      <div class="checkbox">
-        <span class="text">
-          {% if targetType|default('classroom') == 'course'%}计划{% else %}班级{% endif %}人数：
-        </span>
-        <span class="number">{{ relatedData.studentNum }}</span>
-      </div>
-      <div class="checkbox">
-        <span class="text">{{ '参加人数：'|trans }}</span>
-        <span class="number">{{ relatedData.total }}</span>
-      </div>
-      <div class="checkbox">
-        <span class="text">{{ '完成人数：'|trans }}</span>
-        <span class="number">{{ relatedData.total }}</span>
-      </div>
-      {% if paper.type == 'testpaper' %}
-        <div class="checkbox">
-          <span class="text">{{ '平均成绩：'|trans }}</span>
-          <span class="number">{{ relatedData.avgScore }}/{{ paper.score }}</span>
-          <span class="glyphicon glyphicon-question-sign text-muted" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="平均成绩以首次提交的成绩计算" data-original-title=""></span>
-        </div>
-      {% endif %}
+    <div class="testpaper-card-info">
+      <span class="testpaper-card-info__text">{{ '参加人数：'|trans }}</span>
+      <span class="testpaper-card-info__number">{{ relatedData.total }}</span>
     </div>
+    <div class="testpaper-card-info">
+      <span class="testpaper-card-info__text">{{ '完成人数：'|trans }}</span>
+      <span class="testpaper-card-info__number">{{ relatedData.total }}</span>
+    </div>
+    {% if paper.type == 'testpaper' %}
+      <div class="testpaper-card-info">
+        <span class="testpaper-card-info__text">{{ '平均成绩：'|trans }}</span>
+        <span class="testpaper-card-info__number">{{ relatedData.avgScore }}/{{ paper.score }}</span>
+        <span class="glyphicon glyphicon-question-sign testpaper-card-info__icon" data-toggle="tooltip" data-placement="bottom" data-container="body" href="javascript:" title="平均成绩以首次提交的成绩计算" data-original-title=""></span>
+      </div>
+    {% endif %}
   </div>
 </div>
