@@ -34,7 +34,7 @@ class DistributorRegistDecoderImpl extends RegistDecoder
         }
 
         if ($splitedInfos['rewardable']) {
-            $this->getCouponService()->generateDistributionCoupon($user['id'], $splitedInfos['couponPrice'], $splitedInfos['couponExpiryDay']);
+            $this->getCouponService()->generateDistributionCoupon($user['id'], $splitedInfos['couponPrice'] / 100, $splitedInfos['couponExpiryDay']);
         } else {
             $errMsg .= 'not rewardable ';
         }
