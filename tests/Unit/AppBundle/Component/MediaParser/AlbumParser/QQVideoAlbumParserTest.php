@@ -67,4 +67,11 @@ class QQVideoAlbumParserTest extends BaseTestCase
             $video
         );
     }
+
+    public function testDetect()
+    {
+        $parser = new QQVideoAlbumParser();
+        $this->assertTrue($parser->detect('http://v.qq.com/cover/'));
+        $this->assertFalse($parser->detect('http://v.qq.com/cover1/'));
+    }
 }

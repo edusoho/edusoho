@@ -110,4 +110,11 @@ class YoukuVideoAlbumParserTest extends BaseTestCase
             $video
         );
     }
+
+    public function testDetect()
+    {
+        $parser = new YoukuVideoAlbumParser();
+        $this->assertTrue($parser->parse('http://www.youku.com/playlist_show/id_121'));
+        $this->assertFalse($parser->parse('http://www.youku.com/playlist_show/id1_121'));
+    }
 }
