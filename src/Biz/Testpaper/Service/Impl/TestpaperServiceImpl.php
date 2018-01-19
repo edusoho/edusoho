@@ -927,11 +927,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->calculateResultsFirstAndMaxScore($results);
     }
 
-    public function findFirstResultsGroupByUserId($testId, $activityId)
-    {
-        return $this->getTestpaperResultDao()->findFirstResultsGroupByUserId($testId, $activityId);
-    }
-
     public function findResultsByTestIdAndActivityId($testId, $activityId)
     {
         $conditions = array(
