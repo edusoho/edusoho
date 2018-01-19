@@ -1,4 +1,4 @@
-<div class="testpaper-question testpaper-question-fill js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-determine js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
 	<div class="testpaper-question-body">
 	  {% include 'question/part/question-stem.html.twig' %}
   </div>
@@ -27,7 +27,7 @@
 		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
 	{% elseif not question.isDeleted|default(0) %}
 		<div class="testpaper-question-footer clearfix">
-		  <div class="testpaper-question-determine-inputs js-testpaper-question-label">
+		  <div class="testpaper-question-determines pull-left js-testpaper-question-label">
 				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'site.question.determine.true'|trans}}</label>
 		 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>{{'site.question.determine.false'|trans}}</label>
 	 		</div>

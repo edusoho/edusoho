@@ -1,0 +1,139 @@
+// 通用
+.testpaper-question-panel {
+  .es-box-shadow;
+  border: none;
+  .border-radius(2px);
+}
+
+.testpaper-question-body__label {
+  position: relative;
+  margin-bottom: 10px;
+  height: 30px;
+  line-height: 30px;
+  span {
+    position: absolute;
+    top: 0;
+    right: 80px;
+  }
+}
+
+.testpaper-question-body-item {
+  position: relative;
+}
+
+.testpaper-question-body-item__index {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+.testpaper-question-body-item__content {
+  width: 82%;
+  @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+    width: 78%;
+  }
+}
+
+.testpaper-question-body-item__label {
+  position: absolute;
+  top: 5px;
+  right: 80px;
+}
+
+.testpaper-question-body-item__count {
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+// 填空题
+.testpaper-question-fill-item {
+  padding: 6px 0 6px 125px;
+  list-style-type: none;
+}
+
+// 选择题
+
+.testpaper-question-choices {
+  margin-left: 50px;
+  padding-left: 0;
+  list-style: none;
+  border-bottom: 1px dashed #ddd;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  img {
+    max-width: 100%;
+  }
+  li {
+    &:hover {
+      background: #eee;
+    }
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.testpaper-question-choice-item {
+  padding: 6px 0 6px 36px;
+  .testpaper-question-body-item__index {
+    color: @gray;
+  }
+  &.testpaper-question-choice-item--right {
+    color: #3c763d;
+    .testpaper-question-body-item__index {
+      color: #3c763d;
+    }
+  }
+}
+
+
+
+
+.testpaper-question-footer__input {
+  margin-left: 50px;
+  label {
+    padding: 8px 20px 8px 30px;
+    display: inline-block;
+    &:hover,
+    &.active {
+      background: #eee;
+    }
+    @media (max-width: @screen-xs-max) {
+      padding: 6px 5px 6px 25px;
+    }
+  }
+}
+
+// 判断题 input
+.testpaper-question-determines {
+  margin-left: 50px;
+}
+
+.testpaper-question-determines label {
+  padding: 8px 20px 8px 30px;
+  display: inline-block;
+  &:hover,
+  &.active {
+    background: #eee;
+  }
+}
+
+// 填空题 input
+.testpaper-question-fill-inputs {
+  margin-left: 50px;
+}
+
+.testpaper-question-fill .testpaper-question-result {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// 问答题 input
+.testpaper-question-essay-inputs {
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
