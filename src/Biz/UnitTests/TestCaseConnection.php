@@ -1,6 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Dao;
+namespace Biz\UnitTests;
+
+use Codeages\Biz\Framework\Dao\Connection;
 
 class TestCaseConnection extends Connection
 {

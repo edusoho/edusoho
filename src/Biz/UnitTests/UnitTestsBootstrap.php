@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\UnitTests;
+namespace Biz\UnitTests;
 
 use Phpmig\Api\PhpmigApplication;
 use Symfony\Component\Console\Output\NullOutput;
@@ -22,12 +22,12 @@ class UnitTestsBootstrap
     {
         if (isset($this->biz['db.options'])) {
             $options = $this->biz['db.options'];
-            $options['wrapperClass'] = 'Codeages\Biz\Framework\Dao\TestCaseConnection';
+            $options['wrapperClass'] = 'Biz\UnitTests\TestCaseConnection';
             $this->biz['db.options'] = $options;
         }
 
-        $clear = new DatabaseDataClearer($this->biz['db']);
-        $clear->clear();
+        BaseTestCase::setBiz($this->biz);
+        BaseTestCase::emptyDatabase(true);
 
         $migration = new MigrationBootstrap($this->biz['db'], $this->biz['migration.directories']);
         $container = $migration->boot();

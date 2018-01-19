@@ -2,7 +2,7 @@
 
 namespace Tests\Example\Tests\Seeder;
 
-use Codeages\Biz\Framework\UnitTests\DatabaseSeeder;
+use Codeages\Biz\Framework\Testing\DatabaseSeeder;
 
 class ExampleSeeder extends DatabaseSeeder
 {

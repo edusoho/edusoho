@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\UnitTests;
+namespace Codeages\Biz\Framework\Testing;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;

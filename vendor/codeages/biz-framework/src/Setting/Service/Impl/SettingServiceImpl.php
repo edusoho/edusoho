@@ -102,7 +102,7 @@ class SettingServiceImpl extends BaseService implements SettingService
     private function splitName($name)
     {
         $parts = explode('.', $name, 2);
-        if (count($parts) == 2) {
+        if (2 == count($parts)) {
             $name = $parts[0];
             $subName = $parts[1];
         } else {

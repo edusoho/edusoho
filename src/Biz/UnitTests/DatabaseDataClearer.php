@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\UnitTests;
+namespace Biz\UnitTests;
 
 class DatabaseDataClearer
 {
