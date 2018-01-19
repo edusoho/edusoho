@@ -63,7 +63,6 @@ class TeacherSearchAdapterTest extends BaseTestCase
                 array(
                     'id' => 2,
                     'userId' => 2,
-                    'largeAvatar' => 'largeAvatar1',
                     'isFollowed' => true,
                     'profile' => array(
                         'id' => 2,
@@ -73,7 +72,6 @@ class TeacherSearchAdapterTest extends BaseTestCase
                 array(
                     'id' => 3,
                     'userId' => 3,
-                    'largeAvatar' => 'largeAvatar2',
                     'isFollowed' => false,
                     'profile' => array(
                         'id' => 3,
