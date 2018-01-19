@@ -7,7 +7,6 @@ use Biz\Sms\SmsProcessor\TaskSmsProcessor;
 use Mockery;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\SmsToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class TaskSmsProcessorTest extends BaseTestCase
 {
@@ -67,7 +66,7 @@ class TaskSmsProcessorTest extends BaseTestCase
         $kernel = self::$appKernel;
         $taskSmsProcessor = new TaskSmsProcessor($this->getBiz());
         $expect = $taskSmsProcessor->getUrls(1, 'sms_vip_buy_notify');
-        
+
         $this->assertArrayEquals(array(
             'count' => 2,
             'urls' => array(
@@ -86,7 +85,7 @@ class TaskSmsProcessorTest extends BaseTestCase
                     'returnValue' => array(
                         'id' => 1,
                         'courseId' => 2,
-                        'fromCourseSetId' =>2,
+                        'fromCourseSetId' => 2,
                         'title' => 'my task title',
                         'startTime' => time(),
                         'type' => 'video',
@@ -146,7 +145,7 @@ class TaskSmsProcessorTest extends BaseTestCase
                         '18435180001',
                         '18435180002',
                     ),
-                    'withParams' => array(array(1,2)),
+                    'withParams' => array(array(1, 2)),
                 ),
             )
         );
@@ -154,7 +153,7 @@ class TaskSmsProcessorTest extends BaseTestCase
             'System:LogService',
             array(
                 array(
-                    'functionName' => 'info'
+                    'functionName' => 'info',
                 ),
             )
         );

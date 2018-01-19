@@ -13,7 +13,7 @@ class JsonToolkitTest extends BaseTestCase
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => array(
-                'key3-1' => 'value3-1'
+                'key3-1' => 'value3-1',
             ),
         );
         $result = JsonToolkit::prettyPrint(json_encode($array));
