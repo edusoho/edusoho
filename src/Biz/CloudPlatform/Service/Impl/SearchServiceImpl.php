@@ -3,15 +3,28 @@
 namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\BaseService;
+use Biz\CloudPlatform\Client\FailoverCloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Context\Biz;
 
 class SearchServiceImpl extends BaseService implements SearchService
 {
+    protected $cloudLeafApi;
+
+    protected $cloudRootApi;
+
+    public function __construct(Biz $biz)
+    {
+        parent::__construct($biz);
+        $this->cloudLeafApi = CloudAPIFactory::create('leaf');
+        $this->cloudRootApi = CloudAPIFactory::create('root');
+    }
+
     public function notifyDelete($params)
     {
-        $api = CloudAPIFactory::create('leaf');
+        $api = $this->getCloudApi('leaf');
 
         $args = array(
             'type' => 'delete',
@@ -27,7 +40,7 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     public function notifyUpdate($params)
     {
-        $api = CloudAPIFactory::create('leaf');
+        $api = $this->getCloudApi('leaf');
 
         $args = array(
             'type' => 'update',
@@ -38,6 +51,29 @@ class SearchServiceImpl extends BaseService implements SearchService
         $result = $api->post('/search/notifications', $args);
 
         return $result;
+    }
+
+    /**
+     * @param $node
+     *
+     * @return FailoverCloudAPI
+     */
+    protected function getCloudApi($node)
+    {
+        $apiProp = 'cloud'.ucfirst($node).'Api';
+
+        return $this->$apiProp;
+    }
+
+    /**
+     * @param $node
+     * @param $api
+     * 仅供单元测试使用，正常业务严禁使用
+     */
+    public function setCloudApi($node, $api)
+    {
+        $apiProp = 'cloud'.ucfirst($node).'Api';
+        $this->$apiProp = $api;
     }
 
     /**

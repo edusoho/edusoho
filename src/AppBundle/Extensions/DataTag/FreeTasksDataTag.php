@@ -31,6 +31,6 @@ class FreeTasksDataTag extends BaseDataTag implements DataTag
      */
     private function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task:TaskService');
+        return $this->getServiceKernel()->getBiz()->service('Task:TaskService');
     }
 }

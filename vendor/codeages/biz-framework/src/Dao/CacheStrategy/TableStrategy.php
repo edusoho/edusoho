@@ -56,7 +56,7 @@ class TableStrategy implements CacheStrategy
     public function afterWave(GeneralDaoInterface $dao, $method, $arguments, $affected)
     {
         $declares = $dao->declares();
-        if ($method === 'wave' && !empty($declares['wave_cahceable_fields'])) {
+        if ('wave' === $method && !empty($declares['wave_cahceable_fields'])) {
             $cacheable = true;
             foreach (array_keys($arguments[1]) as $key) {
                 if (!in_array($key, $declares['wave_cahceable_fields'])) {
@@ -107,7 +107,7 @@ class TableStrategy implements CacheStrategy
         }
 
         $version = $this->redis->get($key);
-        if ($version === false) {
+        if (false === $version) {
             $version = $this->redis->incr($key);
         }
 

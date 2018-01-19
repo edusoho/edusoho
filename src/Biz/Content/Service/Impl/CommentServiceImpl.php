@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Content\Dao\CommentDao;
 use Biz\Content\Service\CommentService;
 use Biz\Course\Service\CourseService;
+use AppBundle\Common\TimeMachine;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
@@ -30,7 +31,7 @@ class CommentServiceImpl extends BaseService implements CommentService
         $fields['objectId'] = $comment['objectId'];
         $fields['content'] = $comment['content'];
         $fields['userId'] = $this->getCurrentUser()->id;
-        $fields['createdTime'] = time();
+        $fields['createdTime'] = TimeMachine::time();
 
         return $this->getCommentDao()->create($fields);
     }

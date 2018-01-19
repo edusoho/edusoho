@@ -9,7 +9,7 @@ class CdnUrl
     public function get($package = 'default')
     {
         try {
-            $cdn = ServiceKernel::instance()->createService('System:SettingService')->get('cdn', array());
+            $cdn = ServiceKernel::instance()->getBiz()->service('System:SettingService')->get('cdn', array());
             $cdnUrls = (empty($cdn['enabled'])) ? array() : array(
                 'defaultUrl' => $this->url($cdn['defaultUrl']),
                 'userUrl' => $this->url($cdn['userUrl']),
@@ -28,9 +28,9 @@ class CdnUrl
 
     private function url($url)
     {
-        if (strpos($url, 'https://') === 0) {
+        if (0 === strpos($url, 'https://')) {
             $url = substr($url, 8);
-        } elseif (strpos($url, 'http://') === 0) {
+        } elseif (0 === strpos($url, 'http://')) {
             $url = substr($url, 7);
         }
 
