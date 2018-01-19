@@ -31,26 +31,4 @@ class ThreadSearchAdapterTest extends BaseTestCase
             $result
         );
     }
-
-    public function testAdaptWithEmptyArticle()
-    {
-        $this->mockBiz(
-            'Article:ArticleService',
-            array(
-                array(
-                    'functionName' => 'getArticle',
-                    'returnValue' => array(),
-                    'withParams' => array(111),
-                ),
-            )
-        );
-        $result = SearchAdapterFactory::create('article')->adapt(array(array(
-            'articleId' => 111,
-            'content' => 'test',
-            'category' => 'category',
-            'updatedTime' => 500000,
-        )));
-
-        $this->assertEquals(500000, $result[0]['publishedTime']);
-    }
 }
