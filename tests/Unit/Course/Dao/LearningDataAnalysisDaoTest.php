@@ -80,5 +80,4 @@ class LearningDataAnalysisDaoTest extends BaseDaoTestCase
     {
         return $this->createDao('Course:CourseDao');
     }
-
 }
