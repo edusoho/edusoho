@@ -58,13 +58,11 @@ class TeacherSearchAdapterTest extends BaseTestCase
             ),
         ));
 
-        var_dump($result);
         $this->assertArrayEquals(
             array(
                 array(
                     'id' => 2,
                     'userId' => 2,
-                    'isFollowed' => true,
                     'profile' => array(
                         'id' => 2,
                         'idcard' => '123',
@@ -73,7 +71,6 @@ class TeacherSearchAdapterTest extends BaseTestCase
                 array(
                     'id' => 3,
                     'userId' => 3,
-                    'isFollowed' => false,
                     'profile' => array(
                         'id' => 3,
                         'idcard' => '222',
