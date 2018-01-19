@@ -73,4 +73,11 @@ class SinaOpenCourseAlbumParserTest extends BaseTestCase
             $video
         );
     }
+
+    public function testDetect()
+    {
+        $parser = new SinaOpenCourseAlbumParser();
+        $this->assertTrue($parser->detect('http://open.sina.com.cn/course/id_1122'));
+        $this->assertFalse($parser->detect('http://open.sina.com.cn/course/id2_1122'));
+    }
 }
