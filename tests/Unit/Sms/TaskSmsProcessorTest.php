@@ -4,7 +4,6 @@ namespace Tests\Unit\Sms;
 
 use Biz\BaseTestCase;
 use Biz\Sms\SmsProcessor\TaskSmsProcessor;
-use Mockery;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\SmsToolkit;
 
