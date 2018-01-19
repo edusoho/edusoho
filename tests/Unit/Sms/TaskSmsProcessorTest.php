@@ -158,8 +158,6 @@ class TaskSmsProcessorTest extends BaseTestCase
             )
         );
 
-        $mockObj = Mockery::mock('AppBundle\Common\SmsToolkit');
-        $mockObj->shouldReceive('getShortLink');
         $this->getSettingService()->set('site', array('url' => 'http://www.edusoho.com'));
         global $kernel;
         $kernel = self::$appKernel;

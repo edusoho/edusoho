@@ -60,7 +60,7 @@ class SmsServiceTest extends BaseTestCase
 
         $smsLastTime = 0;
         $result = $this->getSmsService()->sendVerifySms('sms_bind', $toMobile, $smsLastTime);
-        $this->assertEquals('15869165217', $result['to']);
+        $this->assertEquals($toMobile, $result['to']);
     }
 
     public function testUserPayVerifySms()
@@ -75,7 +75,7 @@ class SmsServiceTest extends BaseTestCase
         $smsLastTime = 0;
         $this->createApiMock();
         $result = $this->getSmsService()->sendVerifySms('sms_user_pay', $toMobile, $smsLastTime);
-        $this->assertEquals('15869165217', $result['to']);
+        $this->assertEquals($toMobile, $result['to']);
     }
 
     public function testForgetPasswordVerifySms()
@@ -90,7 +90,7 @@ class SmsServiceTest extends BaseTestCase
         $smsLastTime = 0;
         $this->createApiMock();
         $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $toMobile, $smsLastTime);
-        $this->assertEquals('15869165217', $result['to']);
+        $this->assertEquals($toMobile, $result['to']);
     }
 
     /**
