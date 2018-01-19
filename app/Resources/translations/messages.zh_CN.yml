@@ -1852,7 +1852,7 @@ course.plan_task.exercise.submit_btn: 提交练习
 course.recommend_course.content_title: 推荐课程
 course.recommend_course.empty_tips: 暂无推荐课程
 
-course.live.enter_classroom_tips: 正在打开教室，请稍后
+course.live.enter_classroom_tips: 正在打开教室，请稍候......
 course.live_lesson_manage.content_title.create: 新增直播课时
 course.live_lesson_manage.content_title.edit: 编辑直播课时
 course.live_lesson_manage.title: 标题
@@ -1900,7 +1900,7 @@ course.live.replay_manage.lesson_add_content_title: 添加回放视频
 course.live.replay_manage.lesson_add_btn: 添加
 
 course.liveroom.content_title: 直播教室
-course.liveroom.open_liveroom_tips: 正在打开教室，请稍后
+course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 
 course.cover: 课程封面
@@ -4108,7 +4108,7 @@ my.teaching.open_course.lesson.header.content.tips: 直播已经开始，直播�
 my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
-my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍候再来：
+my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -5019,6 +5019,14 @@ admin.classroom_manage.manage.describe_tips: >
     1. 编号及排序无法修改；<br>
     2. 班级地址规则：域名/classroom/班级编号；
   </div>
+admin.classroom_manage.manage.count: >
+  班级：<strong class="inflow-num">%courseNum%</strong>个
+admin.classroom_manage.manage.published_count: >
+  已发布：<strong class="inflow-num">%publishedNum%</strong>个
+admin.classroom_manage.manage.closed_count: >
+  已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.classroom_manage.manage.unpublish_count: >
+  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.classroom_manage.manage.number_th: %title%编号
 admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
@@ -7805,7 +7813,7 @@ site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误
 site.register.sensitive_words: 用户名中含有敏感词
-site.register.time_limit: 由于您注册次数过多，请稍候尝试
+site.register.time_limit: 由于您注册次数过多，请稍后尝试
 site.incorrect.username_or_password: 用户名或密码不正确。
 site.illegal.request: 非法请求
 site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
@@ -8377,3 +8385,15 @@ user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+
+
+admin.datalab.setting.modal_title: 提示：
+admin.datalab.setting.modal_enable_body: 开启后，将在 24 小时内开始更新数据。关闭期内的学习数据无法更新到报表中。
+admin.datalab.setting.modal_disable_body: 关闭后，关闭期内的学习数据将无法更新到报表中。您确认要关闭吗？
+admin.datalab.setting.agreement: 用户协议
+admin.datalab.setting.operation_title: '开启数据分析服务:'
+admin.datalab.warning_tip: 当前数据分析服务已关闭，报表数据无法更新。可在<a href="%url%">【设置】</a>中重新启用该服务。
+admin.datalab.setting.btn_cancel: 取消
+admin.datalab.setting.btn_open: 确认开启
+admin.datalab.setting.btn_close: 确认关闭
+admin.datalab.setting.btn_use: 再用用看

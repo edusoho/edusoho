@@ -231,6 +231,8 @@ admin.cloud.attachment_setting_menu: Cloud Attachement Review
 admin.cloud.app_center_menu: ES App Center
 admin.cloud.attachment_menu: Cloud Attachement
 admin.cloud.consult_menu: Cloud Q&A
+admin.cloud.data_lab: 数据实验室
+admin.cloud.data_lab_setting: 设置
 admin.cloud.cloud_setting_menu: License
 
 ##概览模块
@@ -399,3 +401,7 @@ web.classroom.setting.assistants_side_nav: Assistants
 web.classroom.content.courses_side_nav: Courses
 web.classroom.content.students_side_nav: Students
 web.classroom.content.testpaper_check_side_nav: Testpaper Review
+
+## 资讯管理
+admin.article.save.success: 保存文章成功！
+admin.article.choose_column_tip: 请选择所属栏目

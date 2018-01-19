@@ -57,7 +57,7 @@ class SimpleValidator implements Validator
                     $params = $rule;
                 }
 
-                if (!isset($fields[$key]) || is_null($fields[$key]) || (is_string($fields[$key]) && $fields[$key] == '')) {
+                if (!isset($fields[$key]) || is_null($fields[$key]) || (is_string($fields[$key]) && '' == $fields[$key])) {
                     if ($this->inRules('required', $rules)) {
                         $this->addError($key, 'required', $params);
                     }
@@ -155,7 +155,7 @@ class SimpleValidator implements Validator
     {
         if (is_null($value)) {
             return false;
-        } elseif (is_string($value) && trim($value) === '') {
+        } elseif (is_string($value) && '' === trim($value)) {
             return false;
         }
 
@@ -199,12 +199,12 @@ class SimpleValidator implements Validator
      */
     protected function validateInteger($field, $value, $params)
     {
-        return filter_var($value, FILTER_VALIDATE_INT) !== false;
+        return false !== filter_var($value, FILTER_VALIDATE_INT);
     }
 
     protected function validateFloat($field, $value, $params)
     {
-        $isFloat = filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
+        $isFloat = false !== filter_var($value, FILTER_VALIDATE_FLOAT);
         if (!$isFloat) {
             return false;
         }
@@ -216,7 +216,7 @@ class SimpleValidator implements Validator
         $value = (string) $value;
 
         $dotPos = strpos($value, '.');
-        if ($dotPos === false) {
+        if (false === $dotPos) {
             return true;
         }
 
@@ -357,22 +357,22 @@ class SimpleValidator implements Validator
 
     protected function validateEmail($field, $value)
     {
-        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+        return false !== filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 
     protected function validateIp($field, $value)
     {
-        return filter_var($value, \FILTER_VALIDATE_IP) !== false;
+        return false !== filter_var($value, \FILTER_VALIDATE_IP);
     }
 
     protected function validateUrl($field, $value)
     {
-        return filter_var($value, \FILTER_VALIDATE_URL) !== false;
+        return false !== filter_var($value, \FILTER_VALIDATE_URL);
     }
 
     protected function validateHttpUrl($field, $value)
     {
-        if (strpos($value, 'http://') !== 0 && strpos($value, 'https://') !== 0) {
+        if (0 !== strpos($value, 'http://') && 0 !== strpos($value, 'https://')) {
             return false;
         }
 
@@ -390,7 +390,7 @@ class SimpleValidator implements Validator
             return true;
         }
 
-        if ((!is_string($value) && !is_numeric($value)) || strtotime($value) === false) {
+        if ((!is_string($value) && !is_numeric($value)) || false === strtotime($value)) {
             return false;
         }
 

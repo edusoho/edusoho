@@ -53,7 +53,7 @@ class DaoProxy
     protected function getProxyMethod($method)
     {
         foreach (array('get', 'find', 'search', 'count', 'create', 'batchCreate', 'batchUpdate', 'batchDelete', 'update', 'wave', 'delete') as $prefix) {
-            if (strpos($method, $prefix) === 0) {
+            if (0 === strpos($method, $prefix)) {
                 return $prefix;
             }
         }
@@ -67,7 +67,7 @@ class DaoProxy
         reset($arguments);
 
         // lock模式下，因为需要借助mysql的锁，不走cache
-        if (is_array($lastArgument) && isset($lastArgument['lock']) && $lastArgument['lock'] === true) {
+        if (is_array($lastArgument) && isset($lastArgument['lock']) && true === $lastArgument['lock']) {
             $row = $this->callRealDao($method, $arguments);
             $this->unserialize($row);
 
@@ -84,7 +84,7 @@ class DaoProxy
         $strategy = $this->buildCacheStrategy();
         if ($strategy) {
             $cache = $strategy->beforeQuery($this->dao, $method, $arguments);
-            if ($cache !== false) {
+            if (false !== $cache) {
                 return $cache;
             }
         }
@@ -110,14 +110,14 @@ class DaoProxy
         $strategy = $this->buildCacheStrategy();
         if ($strategy) {
             $cache = $strategy->beforeQuery($this->dao, $method, $arguments);
-            if ($cache !== false) {
+            if (false !== $cache) {
                 return $cache;
             }
         }
 
         $rows = $this->callRealDao($method, $arguments);
 
-        if(!empty($rows)) {
+        if (!empty($rows)) {
             $this->unserializes($rows);
         }
 
@@ -133,7 +133,7 @@ class DaoProxy
         $strategy = $this->buildCacheStrategy();
         if ($strategy) {
             $cache = $strategy->beforeQuery($this->dao, $method, $arguments);
-            if ($cache !== false) {
+            if (false !== $cache) {
                 return $cache;
             }
         }
@@ -386,7 +386,7 @@ class DaoProxy
         }
 
         $declares = $this->dao->declares();
-        if (isset($declares['cache']) && $declares['cache'] === false) {
+        if (isset($declares['cache']) && false === $declares['cache']) {
             return null;
         }
 

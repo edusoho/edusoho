@@ -2,6 +2,9 @@
 
 namespace Codeages\Biz\Framework\Util;
 
+/**
+ * @deprecated 2.0
+ */
 class Lock
 {
     private $biz;
@@ -11,7 +14,7 @@ class Lock
         $this->biz = $biz;
     }
 
-    public function get($lockName, $lockTime=30)
+    public function get($lockName, $lockTime = 30)
     {
         $result = $this->getConnection()->fetchAssoc("SELECT GET_LOCK('locker_{$lockName}', {$lockTime}) AS getLock");
 

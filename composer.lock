@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f040071376959f0b01d82f3ee4a17e4d",
+    "content-hash": "c73aaac639018c3d45386a6445ed76c9",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.4",
+            "version": "v0.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "74e7c390a7414022a8f368887eee10b6082cdde6"
+                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/74e7c390a7414022a8f368887eee10b6082cdde6.zip",
-                "reference": "74e7c390a7414022a8f368887eee10b6082cdde6",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/c319ccece125b07da681f4893dfa50bf5bbb99f7.zip",
+                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
                 "shasum": ""
             },
             "require": {
@@ -341,20 +341,20 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-10-25T07:54:56+00:00"
+            "time": "2018-01-18T02:33:43+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.10",
+            "version": "v0.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "2e6c2e30e64411ea5a1ec65750397135fe509a63"
+                "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/2e6c2e30e64411ea5a1ec65750397135fe509a63.zip",
-                "reference": "2e6c2e30e64411ea5a1ec65750397135fe509a63",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/92750311508b7d23d6b4f16bbcca8fe245445e33.zip",
+                "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2017-12-07T07:09:05+00:00"
+            "time": "2018-01-16T12:15:35+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
