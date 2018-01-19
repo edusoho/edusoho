@@ -2,12 +2,10 @@
 {% extends 'question/analysis/analysis-layout.html.twig' %}
 
 {% block analysis_body %}
-  <div class="testpaper-preview-answer clearfix mtl mbl">
-    <div class="testpaper-question-result">
-      <div class="mbl">
-        <div class="mbs">{{'参考答案：'|trans}}</div>
-        <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
-      </div>
+  <div class="testpaper-question-essay__answer">
+    <div class="mbl">
+      <div class="mbs">{{'参考答案：'|trans}}</div>
+      <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
     </div>
   </div>
 
@@ -19,7 +17,7 @@
     <ul class="testpaper-question-choices">
       {% for index in [2,1,0] %}
         {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
-        <li class="pl0 mbm testpaper-question-body-item">
+        <li class="pl0 testpaper-question-body-item testpaper-question-choice-item">
           {% if index == 2 %}
             得 {{ question.score }} 分
           {% elseif index == 1 %}

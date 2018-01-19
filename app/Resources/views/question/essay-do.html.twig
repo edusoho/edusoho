@@ -84,7 +84,7 @@
 	{% elseif not question.isDeleted|default(0) %}
 
 		<div class="testpaper-question-footer clearfix">
-		  <div class="testpaper-question-footer__input mbm" data-role='js-answer-div-{{ question.id }}'>
+		  <div class="mbm" data-role='js-answer-div-{{ question.id }}'>
 		  	<textarea class="form-control essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|bbCode2Html|raw }}{% endif %}</textarea>
 
 				<textarea id="question-input-long-{{ question.id }}" class="form-control essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|default(null)|bbCode2Html|raw }}{% endif %}</textarea>

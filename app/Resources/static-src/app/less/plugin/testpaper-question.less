@@ -53,18 +53,23 @@
   max-width: 100%;
 }
 
-.testpaper-question-actions {
-  @media(max-width: @screen-xs-max) {
-    width: 100%;
-    text-align: right;
+
+.testpaper-question-footer {
+  padding-left: 50px;
+}
+
+.testpaper-question-analysis {
+  margin-left: 50px;
+  img {
+    max-width: 100%;
   }
 }
 
 .testpaper-question-result {
-  margin-left: 50px;
   float: left;
 }
 
+// 编辑区
 .testpaper-question-essay {
   .testpaper-question-result {
     float: none;
@@ -74,9 +79,9 @@
   }
 }
 
-.testpaper-question-analysis {
-  margin-left: 50px;
-  img {
-    max-width: 100%;
+.testpaper-question-actions {
+  @media(max-width: @screen-xs-max) {
+    width: 100%;
+    text-align: right;
   }
 }
