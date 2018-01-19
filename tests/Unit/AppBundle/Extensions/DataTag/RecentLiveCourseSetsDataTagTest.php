@@ -3,34 +3,44 @@
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
 use Biz\BaseTestCase;
-use AppBundle\Extensions\DataTag\RecentLiveTasksDataTag;
+use AppBundle\Extensions\DataTag\RecentLiveCourseSetsDataTag;
 
-class RecentLiveTasksDataTagTest extends BaseTestCase
+class RecentLiveCourseSetsDataTagTest extends BaseTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testCountMissing()
+    public function testGetDataEmpty()
     {
-        $datatag = new RecentLiveTasksDataTag();
-        $datatag->getData(array());
-    }
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('live_course_enabled' => 0)
+            )
+        ));
+        $datatag = new RecentLiveCourseSetsDataTag();
+        $data = $datatag->getData(array());
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testCountError()
-    {
-        $datatag = new RecentLiveTasksDataTag();
-        $datatag->getData(array('count' => 101));
+        $this->assertEmpty($data);
     }
 
     public function testGetData()
     {
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => array('live_course_enabled' => 1)
+            )
+        ));
+
+        $courseSet1 = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
+        $this->getCourseSetService()->publishCourseSet($courseSet1['id']);
+
+        $courseSet2 = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set2 title'));
+        $this->getCourseSetService()->publishCourseSet($courseSet2['id']);
+        $courseSet3 = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set3 title'));
+
         $fields1 = array(
             'title' => 'task1 title',
-            'courseId' => 1,
-            'fromCourseSetId' => 1,
+            'courseId' => $courseSet1['defaultCourseId'],
+            'fromCourseSetId' => $courseSet1['id'],
             'seq' => 1,
             'activityId' => 1,
             'type' => 'live',
@@ -45,8 +55,8 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
 
         $fields2 = array(
             'title' => 'task1 title',
-            'courseId' => 1,
-            'fromCourseSetId' => 1,
+            'courseId' => $courseSet2['defaultCourseId'],
+            'fromCourseSetId' => $courseSet2['id'],
             'seq' => 2,
             'activityId' => 2,
             'type' => 'live',
@@ -61,8 +71,8 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
 
         $fields3 = array(
             'title' => 'task1 title',
-            'courseId' => 2,
-            'fromCourseSetId' => 2,
+            'courseId' => $courseSet3['defaultCourseId'],
+            'fromCourseSetId' => $courseSet3['id'],
             'seq' => 3,
             'activityId' => 3,
             'type' => 'live',
@@ -77,8 +87,8 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
 
         $fields4 = array(
             'title' => 'task1 title',
-            'courseId' => 3,
-            'fromCourseSetId' => 3,
+            'courseId' => $courseSet1['defaultCourseId'],
+            'fromCourseSetId' => $courseSet1['id'],
             'seq' => 4,
             'activityId' => 4,
             'type' => 'live',
@@ -103,29 +113,26 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
             'mode' => '',
             'isFree' => 1,
             'createdUserId' => 1,
+            'status' => 'published'
         );
         $task5 = $this->getTaskDao()->create($fields5);
 
-        $datatag = new RecentLiveTasksDataTag();
-        $tasks = $datatag->getData(array('count' => 5));
-        $this->assertEquals(4, count($tasks));
+        $datatag = new RecentLiveCourseSetsDataTag();
+        $foundCourse = $datatag->getData(array('count' => 5));
+        $this->assertEquals(3, count($foundCourse));
 
-        $this->mockBiz('Course:MemberService', array(
-            array(
-                'functionName' => 'findStudentMemberByUserId',
-                'returnValue' => array(array('id' => 1, 'courseId' => 1), array('id' => 2, 'courseId' => 3))
-            )
-        ));
-
-        $tasks = $datatag->getData(array('count' => 5, 'userId' => 1));
-        $this->assertEquals(3, count($tasks));
+        $foundCourse = $datatag->getData(array('count' => 2));
+        $this->assertEquals(2, count($foundCourse));
     }
 
-    public function testGetDataEmpty()
+    private function getCourseService()
     {
-        $datatag = new RecentLiveTasksDataTag();
-        $tasks = $datatag->getData(array('count' => 5, 'userId' => 1));
-        $this->assertEmpty($tasks);
+        return $this->createService('Course:CourseService');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     private function getTaskDao()
