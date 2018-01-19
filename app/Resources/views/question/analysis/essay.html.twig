@@ -4,8 +4,8 @@
 {% block analysis_body %}
   <div class="testpaper-preview-answer clearfix mtl mbl">
     <div class="testpaper-question-result">
-      <div class="testpaper-question-result-suggested">
-        <div class="testpaper-question-result-title">{{'参考答案：'|trans}}</div>
+      <div class="mbl">
+        <div class="mbs">{{'参考答案：'|trans}}</div>
         <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
       </div>
     </div>

@@ -10,7 +10,7 @@
   or (setting('questions.testpaper_answers_show_mode','submitted') == 'hide'  and paperResult.status|default(null) in ['reviewing', 'finished'] and paperResult.type not in ['testpaper']) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
-		    <ul>
+		    <ul class="testpaper-question-fill__result">
 		      {% for index, answer in question.answer %}
 		        {% set userAnswer = question.testResult.answer[index]|default(null) %}
 			    	<li>

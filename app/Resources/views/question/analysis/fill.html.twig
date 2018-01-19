@@ -5,7 +5,7 @@
   <ul class="testpaper-question-fill">
     {% for index, answer in question.answer %}
       {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
-      <li class="mbm testpaper-question-fill-item testpaper-question-body-item">
+      <li class="testpaper-question-fill-item testpaper-question-body-item">
         <span class="testpaper-question-body-item__index">填空({{index+1}})：正确答案 </span>
         <div class="testpaper-question-body-item__content"><strong class="color-success">{{ answer|join(' 或 ') }}</strong></div>
         <span class="label testpaper-question-body-item__label label-success hidden-xs">

@@ -50,10 +50,29 @@
 .testpaper-question-fill-item {
   padding: 6px 0 6px 125px;
   list-style-type: none;
+  margin-bottom: 10px;
+}
+
+.testpaper-question-fill__result {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// 判断题
+.testpaper-question-determines {
+  margin-left: 50px;
+  label {
+    padding: 8px 20px 8px 30px;
+    display: inline-block;
+    &:hover,
+    &.active {
+      background: #eee;
+    }
+  }
 }
 
 // 选择题
-
 .testpaper-question-choices {
   margin-left: 50px;
   padding-left: 0;
@@ -87,9 +106,7 @@
   }
 }
 
-
-
-
+// 做题时的位置选项
 .testpaper-question-footer__input {
   margin-left: 50px;
   label {
@@ -103,37 +120,4 @@
       padding: 6px 5px 6px 25px;
     }
   }
-}
-
-// 判断题 input
-.testpaper-question-determines {
-  margin-left: 50px;
-}
-
-.testpaper-question-determines label {
-  padding: 8px 20px 8px 30px;
-  display: inline-block;
-  &:hover,
-  &.active {
-    background: #eee;
-  }
-}
-
-// 填空题 input
-.testpaper-question-fill-inputs {
-  margin-left: 50px;
-}
-
-.testpaper-question-fill .testpaper-question-result {
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-}
-
-// 问答题 input
-.testpaper-question-essay-inputs {
-  margin-left: 50px;
-  margin-bottom: 10px;
 }
