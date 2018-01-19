@@ -79,7 +79,7 @@ class Fill extends BaseQuestion implements TypeInterface
         $answer = array_values($userAnswer['answer']);
 
         $userRightAnswerIndex = $this->getAnswerIndex($questionAnswers, $answer);
-        
+
         return array($question['id'] => $userRightAnswerIndex);
     }
 

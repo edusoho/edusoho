@@ -10,3 +10,10 @@ testpaperCardFixed();
 testpaperCardLocation();
 
 new CopyDeny();
+
+$('.js-analysis').click(function(){
+  let self = $(this);
+  self.addClass('hidden');
+  self.siblings('.js-analysis.hidden').removeClass('hidden');
+  self.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
+})

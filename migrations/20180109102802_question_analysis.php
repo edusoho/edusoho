@@ -36,8 +36,8 @@ class QuestionAnalysis extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("
+        $db->exec('
             DROP TABLE `question_analysis`;
-        ");
+        ');
     }
 }
