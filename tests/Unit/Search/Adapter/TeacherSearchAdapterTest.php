@@ -58,6 +58,7 @@ class TeacherSearchAdapterTest extends BaseTestCase
             ),
         ));
 
+        var_dump($result);
         $this->assertArrayEquals(
             array(
                 array(
