@@ -33,13 +33,6 @@ class YoukuVideoAlbumParserTest extends BaseTestCase
     {
         $parser = new YoukuVideoAlbumParser();
 
-        $content = '<title>课程</title>'.
-            '<span class="m-cintro"/><img src="a.html" />'.
-            '<h2>本课程共20分钟</h2>'.
-            '<p>课程介绍</p><p>abcdefg</p>'.
-            '<h2>课程介绍</h2>221w<span class="cdblan">(dfsf)</span>'.
-            '<id="lession-list"><h3><a href="bcd">ok</a></ul>';
-
         $mockedSender = $this->mockBiz(
             'Mocked:MockedSender',
             array(
