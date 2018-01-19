@@ -86,7 +86,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 1
+            'sequence' => 1,
         );
         $navigation2 = $this->getNavigationService()->createNavigation($fileds2);
 
@@ -97,7 +97,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -126,7 +126,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 1
+            'sequence' => 1,
         );
         $navigation2 = $this->getNavigationService()->createNavigation($fileds2);
 
@@ -137,7 +137,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'bottom',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -176,7 +176,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'bottom',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -217,7 +217,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'bottom',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -261,7 +261,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'bottom',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -303,7 +303,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -314,7 +314,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 0,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation4 = $this->getNavigationService()->createNavigation($fileds4);
 
@@ -325,7 +325,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation5 = $this->getNavigationService()->createNavigation($fileds5);
 
@@ -336,7 +336,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation6 = $this->getNavigationService()->createNavigation($fileds6);
 
@@ -347,7 +347,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 0,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation6 = $this->getNavigationService()->createNavigation($fileds6);
 
@@ -387,7 +387,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation3 = $this->getNavigationService()->createNavigation($fileds3);
 
@@ -398,7 +398,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 0,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation4 = $this->getNavigationService()->createNavigation($fileds4);
 
@@ -409,7 +409,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation5 = $this->getNavigationService()->createNavigation($fileds5);
 
@@ -420,7 +420,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation6 = $this->getNavigationService()->createNavigation($fileds6);
 
@@ -431,7 +431,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 0,
             'isNewWin' => 0,
             'type' => 'top',
-            'sequence' => 3
+            'sequence' => 3,
         );
         $navigation6 = $this->getNavigationService()->createNavigation($fileds6);
 
@@ -482,7 +482,7 @@ class NavigationServiceTest extends BaseTestCase
             'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top',
-            'title' => '123'
+            'title' => '123',
         );
 
         $this->getNavigationService()->createNavigation($fileds);
@@ -541,8 +541,8 @@ class NavigationServiceTest extends BaseTestCase
         $this->mockBiz('System:SettingService', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('enable_org' => 1)
-            )
+                'returnValue' => array('enable_org' => 1),
+            ),
         ));
     }
 

@@ -33,7 +33,7 @@ class RecommendClassroomsDataTagTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($classroom2['id']);
         $classroom3 = $this->getClassroomService()->addClassroom(array('title' => 'classroom3', 'private' => 0));
         $this->getClassroomService()->publishClassroom($classroom3['id']);
-        
+
         $this->getClassroomService()->recommendClassroom($classroom1['id'], 11);
         $this->getClassroomService()->recommendClassroom($classroom2['id'], 12);
 

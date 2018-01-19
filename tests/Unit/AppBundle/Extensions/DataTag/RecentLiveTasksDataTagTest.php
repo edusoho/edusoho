@@ -39,7 +39,7 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
             'mode' => '',
             'isFree' => 1,
             'createdUserId' => 1,
-            'status' => 'published'
+            'status' => 'published',
         );
         $task1 = $this->getTaskDao()->create($fields1);
 
@@ -55,7 +55,7 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
             'mode' => '',
             'isFree' => 1,
             'createdUserId' => 1,
-            'status' => 'published'
+            'status' => 'published',
         );
         $task2 = $this->getTaskDao()->create($fields2);
 
@@ -71,7 +71,7 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
             'mode' => '',
             'isFree' => 1,
             'createdUserId' => 1,
-            'status' => 'published'
+            'status' => 'published',
         );
         $task3 = $this->getTaskDao()->create($fields3);
 
@@ -87,7 +87,7 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
             'mode' => '',
             'isFree' => 1,
             'createdUserId' => 1,
-            'status' => 'published'
+            'status' => 'published',
         );
         $task4 = $this->getTaskDao()->create($fields4);
 
@@ -113,8 +113,8 @@ class RecentLiveTasksDataTagTest extends BaseTestCase
         $this->mockBiz('Course:MemberService', array(
             array(
                 'functionName' => 'findStudentMemberByUserId',
-                'returnValue' => array(array('id' => 1, 'courseId' => 1), array('id' => 2, 'courseId' => 3))
-            )
+                'returnValue' => array(array('id' => 1, 'courseId' => 1), array('id' => 2, 'courseId' => 3)),
+            ),
         ));
 
         $tasks = $datatag->getData(array('count' => 5, 'userId' => 1));

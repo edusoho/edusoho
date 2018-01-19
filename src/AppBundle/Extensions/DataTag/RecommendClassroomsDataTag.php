@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**

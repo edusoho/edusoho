@@ -8,7 +8,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceKernel;
 
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
