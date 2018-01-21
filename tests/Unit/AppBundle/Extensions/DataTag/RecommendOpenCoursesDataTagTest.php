@@ -12,13 +12,13 @@ class RecommendOpenCoursesDataTagTest extends BaseTestCase
         $this->mockBiz('Course:CourseSetService', array(
             array(
                 'functionName' => 'findCourseSetsByIds',
-                'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2), 3 => array('id' => 3))
-            )
+                'returnValue' => array(1 => array('id' => 1), 2 => array('id' => 2), 3 => array('id' => 3)),
+            ),
         ));
-        $this->getOpenCourseRecommendService()->addRecommendedCourses(1, array(1,2,3), 'normal');
+        $this->getOpenCourseRecommendService()->addRecommendedCourses(1, array(1, 2, 3), 'normal');
 
         $datatag = new RecommendOpenCoursesDataTag();
-        $courseSets = $datatag->getData(array('courseId' => 1,'count' => 5));
+        $courseSets = $datatag->getData(array('courseId' => 1, 'count' => 5));
         $this->assertEquals(3, count($courseSets));
     }
 
