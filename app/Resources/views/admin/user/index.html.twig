@@ -24,6 +24,11 @@
                value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
       </div>
     </div>
+
+    <div class="form-group">
+      {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    </div>
+
     <div class="form-group">
 
       <select class="form-control" name="roles">
@@ -82,6 +87,8 @@
     {% endfor %}
     </tbody>
   </table>
+
+  {% include 'org/batch-update-org-btn.html.twig' with {module:'user', formId:'user-search-form'} %}
 
   {#{% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}#}
   {{ admin_macro.paginator(paginator) }}

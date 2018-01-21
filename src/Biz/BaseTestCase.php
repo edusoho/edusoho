@@ -2,7 +2,7 @@
 
 namespace Biz;
 
-use Codeages\Biz\Framework\UnitTests\DatabaseDataClearer;
+use Biz\UnitTests\DatabaseDataClearer;
 use Codeages\PluginBundle\Event\LazyDispatcher;
 use CustomBundle\Biz\CustomServiceProvider;
 use Mockery;

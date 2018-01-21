@@ -779,6 +779,15 @@ admin:
                         admin_cloud_consult_setting:
                             name: admin.tab.setting_tab
                             disable: true
+                admin_cloud_data_lab_manage:
+                    name: admin.cloud.data_lab
+                    visable: (cloudStatus())
+                    children:
+                        admin_cloud_data_lab:
+                            name: admin.cloud.data_lab
+                            router_name: admin_cloud_data_lab
+                        admin_cloud_data_lab_setting:
+                            name: admin.cloud.data_lab_setting
                 admin_setting_cloud:
                     name: admin.cloud.cloud_setting_menu
                     children:

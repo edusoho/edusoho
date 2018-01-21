@@ -8,13 +8,13 @@ class Env
     {
         $value = getenv($key);
 
-        if ($value === false) {
+        if (false === $value) {
             return $default;
         }
 
-        if ($value === 'false') {
+        if ('false' === $value) {
             return false;
-        } elseif ($value === 'true') {
+        } elseif ('true' === $value) {
             return true;
         }
 
@@ -24,9 +24,9 @@ class Env
     public static function load(array $env = array())
     {
         foreach ($env as $key => $value) {
-            if ($value === true) {
+            if (true === $value) {
                 $value = 'true';
-            } elseif ($value === false) {
+            } elseif (false === $value) {
                 $value = 'false';
             }
             putenv("$key=$value");
