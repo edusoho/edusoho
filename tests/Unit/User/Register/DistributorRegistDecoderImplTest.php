@@ -43,7 +43,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
                     'functionName' => 'decodeToken',
                     'withParams' => array($token),
                     'returnValue' => array(
-                        'couponPrice' => 100,
+                        'couponPrice' => 10000,
                         'couponExpiryDay' => 1,
                         'registable' => true,
                         'rewardable' => true,
