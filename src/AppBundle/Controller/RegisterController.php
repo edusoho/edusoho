@@ -24,7 +24,6 @@ class RegisterController extends BaseController
     public function distributorIndexAction(Request $request)
     {
         $fields = $request->query->all();
-        // $fields = $request->request->all();
         $registerUrl = $this->generateUrl('register');
         if (!empty($fields['token'])) {
             if ($this->getCurrentUser()->isLogin()) {
