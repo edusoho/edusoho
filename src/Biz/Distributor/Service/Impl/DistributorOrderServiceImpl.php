@@ -9,11 +9,6 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
         return 'order';
     }
 
-    public function getNextJobType()
-    {
-        return 'User';
-    }
-
     protected function convertData($order)
     {
         $item = $this->getOrderService()->findOrderItemsByOrderId($order['id']);

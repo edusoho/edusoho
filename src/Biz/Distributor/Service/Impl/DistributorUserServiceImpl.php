@@ -16,8 +16,8 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
      * array(
      *   'merchant_id' => '123',
      *   'agency_id' => '222',
-     *   'coupon_price' => '222',
-     *   'coupon_expiry_day' => '12',
+     *   'coupon_price' => '222',  // 单位为分
+     *   'coupon_expiry_day' => '12', //单位为天
      * )
      * @param $tokenExpireDateNum unix_time, 如果填了，则使用填写的时间，不填，则使用当前时间
      *
@@ -52,7 +52,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
      * 分销平台的token，只能使用一次
      *
      * @return array(
-     *                'couponPrice' => 123, //优惠券，奖励多少元
+     *                'couponPrice' => 123, //优惠券，奖励多少分 （单位为分）
      *                'couponExpiryDay' => unix_time, //优惠券有效时间
      *                'registable'  => true, //是否可注册，指的是分销平台是否颁发过这个token， 如果为false，则注册的用户不算分销平台用户
      *                'rewardable' => false  //是否有奖励, 当couponPrice或couponExpiryday=0时, 则注册的用户不会发放优惠券
@@ -74,7 +74,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
                 $parsedInfo = $this->getDrpService()->parseToken($token);
                 $tokenInfo['registable'] = true;
                 $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
-                if ($tokenExpireTime > TimeMachine::time()) {
+                if ($tokenExpireTime >= TimeMachine::time()) {
                     $tokenInfo['couponPrice'] = $parsedInfo['couponPrice'];
                     $tokenInfo['couponExpiryDay'] = $parsedInfo['couponExpiryDay'];
                     if (0 != $tokenInfo['couponPrice'] && 0 != $tokenInfo['couponExpiryDay']) {
@@ -92,11 +92,6 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     public function getSendType()
     {
         return 'user';
-    }
-
-    public function getNextJobType()
-    {
-        return 'Order';
     }
 
     protected function convertData($user)

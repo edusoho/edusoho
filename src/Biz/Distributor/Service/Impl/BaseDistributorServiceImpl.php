@@ -54,8 +54,6 @@ abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implement
      */
     abstract public function getSendType();
 
-    abstract public function getNextJobType();
-
     abstract protected function convertData($data);
 
     abstract protected function getJobType();

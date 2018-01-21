@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\CloudFile;
+namespace Tests\Unit\Distributor\Job;
 
 use Biz\BaseTestCase;
 use Biz\Distributor\Job\DistributorSyncJob;
