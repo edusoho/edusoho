@@ -22,13 +22,6 @@ class DistributorSyncJob extends AbstractJob
         }
     }
 
-    protected function getDistributorService()
-    {
-        $args = $this->__get('args');
-
-        return $this->biz->service('Distributor:Distributor'.$args['type'].'Service');
-    }
-
     protected function getDrpService()
     {
         $distributorServices = $this->getDistributorServiceList();
@@ -88,7 +81,7 @@ class DistributorSyncJob extends AbstractJob
 
     private function getAvailableSendTypes()
     {
-        if (!empty($this->mockeSendTypes)) {
+        if (!empty($this->mockedSendTypes)) {
             return $this->mockedSendTypes;
         }
 
