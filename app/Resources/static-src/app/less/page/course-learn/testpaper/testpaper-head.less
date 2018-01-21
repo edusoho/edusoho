@@ -1,18 +1,3 @@
-@import 'testpaper-card.less';
-@import 'question-item.less';
-@import 'testpaper-question.less';
-
-.question-fill-inputs input {
-  margin-bottom: 10px;
-}
-
-.question-stem-fill-blank {
-  padding-left: 15px;
-  padding-right: 15px;
-  border-bottom: 1px solid #999;
-  color: #aaa;
-}
-
 .testpaper-heading-section {
   .es-box-shadow;
   border-radius: 2px !important;
@@ -75,47 +60,10 @@
   }
 }
 
-.testpaper-result-total {
-  width: 160px;
-  float: left;
-  margin-right: 20px;
-  text-align: center;
-  color: #f60;
-  @media (max-width: 767px) {
-    float: none;
-    width: 100%;
-  }
-  .well {
-    padding-top: 33px;
-    padding-bottom: 34px;
-  }
-}
-
-.testpaper-result-total-score {
-  font-size: 40px;
-  margin-bottom: 10px;
-  small {
-    font-size: 16px;
-  }
-}
-
-.testpaper-result-table {
-  th,
-  td {
-    text-align: center;
-    font-weight: normal;
-  }
-  >thead>tr>th {
-    border-bottom: 1px;
-  }
-  .text-score {
-    color: #f60;
-  }
-}
-
+// 各种类型题目tab
 .testpaper-navbar.affix {
   position: static;
-  @media (min-width: 768px) {
+  @media (min-width: @screen-sm-min) {
     z-index: 1030;
     position: fixed;
     margin-left: -11px;
@@ -125,10 +73,10 @@
     border: 1px solid #ddd;
     box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
   }
-  @media (min-width: 992px) {
+  @media (min-width: @screen-md-min) {
     width: 940px;
   }
-  @media (min-width: 1200px) {
+  @media (min-width: @screen-lg-min) {
     width: 1140px;
   }
 }

@@ -1,3 +1,8 @@
+
+
+
+
+
 // 右侧数据统计块
 .testpaper-card-panel {
   position: relative;
@@ -49,43 +54,4 @@
 
 .testpaper-card-info__icon {
   color: @gray;
-}
-
-// 右侧卡片原有样式
-.testpaper-card-explain {
-  small {
-    margin-right: 8px;
-  }
-}
-
-.testpaper-card.affix {
-  position: static;
-  top: 0
-}
-
-@media (max-width: @screen-xs-max) {
-  .testpaper-card.affix,
-  .testpaper-card.affix-bottom {
-    position: relative !important;
-    top: 0 !important;
-  }
-}
-
-@media (min-width: @screen-md-min) {
-  .testpaper-card.affix {
-    position: fixed;
-    top: 0px;
-    width: 220px;
-  }
-  .testpaper-card.affix-bottom {
-    position: absolute;
-    width: 220px;
-  }
-}
-
-@media (min-width: @screen-lg-min) {
-  .testpaper-card.affix,
-  .testpaper-card.affix-bottom {
-    width: 270px;
-  }
 }

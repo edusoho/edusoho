@@ -1,53 +1,11 @@
+@import 'testpaper/testpaper-card.less';
+@import 'testpaper/testpaper-analysis.less';
+@import 'testpaper/testpaper-question.less';
+@import 'testpaper/testpaper-head.less';
+@import 'testpaper/testpaper-result.less';
+
 .task-testpaper-body-iframe {
   position: relative;
   height: 100%;
   overflow: auto;
-}
-
-.testpaper-card {
-  .panel-card  {
-    position: relative;
-    max-height: 290px;
-    overflow: hidden;
-  }
-  .marking-card {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-}
-
-.testpaper-timer {
-  position: relative;
-  background-color: #fff;
-  padding: 15px 44px 15px 20px;
-  margin-bottom: 20px;
-  line-height: 1;
-  .btn-pause {
-    position: absolute;
-    right: 0;
-    top:0;
-    height: 44px;
-    width: 44px;
-    text-align: center;
-    background-color: @brand-primary;
-    color: #fff;
-    i {
-      line-height: 44px;
-    }
-    .pause {
-      display: block;
-    }
-    .play {
-      display: none;
-    }
-    &.open {
-      .pause {
-        display: none;
-      }
-      .play {
-        display: block;
-      }
-    }
-  }
 }

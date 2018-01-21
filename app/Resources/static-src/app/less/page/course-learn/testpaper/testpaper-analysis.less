@@ -1,4 +1,3 @@
-// 通用
 .testpaper-question-panel {
   .es-box-shadow;
   border: none;
@@ -38,6 +37,8 @@
   position: absolute;
   top: 6px;
   right: 80px;
+  height: 16px;
+  line-height: 100%;
 }
 
 .testpaper-question-body-item__count {
@@ -53,10 +54,12 @@
   margin-bottom: 10px;
 }
 
-.testpaper-question-fill__result {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+// 填空题填入内容样式
+.question-stem-fill-blank {
+  padding-left: 15px;
+  padding-right: 15px;
+  border-bottom: 1px solid #999;
+  color: #aaa;
 }
 
 // 判断题
@@ -111,20 +114,5 @@
   margin: 20px 0 20px 50px;
   img {
     max-width: 100%;
-  }
-}
-
-// 做题时的位置选项
-.testpaper-question-footer__input {
-  label {
-    padding: 8px 20px 8px 30px;
-    display: inline-block;
-    &:hover,
-    &.active {
-      background: #eee;
-    }
-    @media (max-width: @screen-xs-max) {
-      padding: 6px 5px 6px 25px;
-    }
   }
 }
