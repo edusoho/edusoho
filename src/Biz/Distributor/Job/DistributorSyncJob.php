@@ -8,6 +8,7 @@ use Biz\Distributor\Util\DistributorJobStatus;
 class DistributorSyncJob extends AbstractJob
 {
     private $distributorServices = array();
+    private $mockedSendTypes = null;
 
     public function execute()
     {
@@ -26,19 +27,6 @@ class DistributorSyncJob extends AbstractJob
         $args = $this->__get('args');
 
         return $this->biz->service('Distributor:Distributor'.$args['type'].'Service');
-    }
-
-    private function getDistributorServiceList()
-    {
-        if (empty($this->distributorServices)) {
-            $this->distributorServices = array();
-            $types = array('User', 'Order');
-            foreach ($types as $type) {
-                array_push($this->distributorServices, $this->biz->service('Distributor:Distributor'.$type.'Service'));
-            }
-        }
-
-        return $this->distributorServices;
     }
 
     protected function getDrpService()
@@ -83,5 +71,27 @@ class DistributorSyncJob extends AbstractJob
         }
 
         return array('status' => $status, 'result' => $result);
+    }
+
+    private function getDistributorServiceList()
+    {
+        if (empty($this->distributorServices)) {
+            $this->distributorServices = array();
+            $types = $this->getAvailableSendTypes();
+            foreach ($types as $type) {
+                array_push($this->distributorServices, $this->biz->service('Distributor:Distributor'.$type.'Service'));
+            }
+        }
+
+        return $this->distributorServices;
+    }
+
+    private function getAvailableSendTypes()
+    {
+        if (!empty($this->mockeSendTypes)) {
+            return $this->mockedSendTypes;
+        }
+
+        return array('User', 'Order');
     }
 }
