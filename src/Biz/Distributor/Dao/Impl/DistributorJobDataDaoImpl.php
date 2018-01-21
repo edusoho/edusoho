@@ -17,8 +17,6 @@ class DistributorJobDataDaoImpl extends AdvancedDaoImpl implements DistributorJo
                 'jobType = :jobType',
                 'status in (:statusArr)',
                 'status = :status',
-                'target = :target',
-                'pendingTarget = :pendingTarget',
             ),
             'orderbys' => array(
                 'id',
