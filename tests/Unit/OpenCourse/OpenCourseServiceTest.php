@@ -585,16 +585,16 @@ class OpenCourseServiceTest extends BaseTestCase
         $magic = $this->getSettingService()->set('magic', array('enable_org' => 1));
         $magic = $this->getSettingService()->get('magic');
 
-        $org1  = $this->mookOrg($name = 'edusoho1');
-        $org1  = $this->getOrgService()->createOrg($org1);
+        $org1 = $this->mookOrg($name = 'edusoho1');
+        $org1 = $this->getOrgService()->createOrg($org1);
 
-        $org2  = $this->mookOrg($name = 'edusoho2');
-        $org2  = $this->getOrgService()->createOrg($org2);
+        $org2 = $this->mookOrg($name = 'edusoho2');
+        $org2 = $this->getOrgService()->createOrg($org2);
 
         $course = array(
-            'type'        => 'open',
-            'title'       => '公开课',
-            'orgCode'     => $org1['orgCode'],
+            'type' => 'open',
+            'title' => '公开课',
+            'orgCode' => $org1['orgCode'],
         );
         $course = $this->getOpenCourseService()->createCourse($course);
 
