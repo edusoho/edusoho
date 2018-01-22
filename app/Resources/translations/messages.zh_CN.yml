@@ -5415,14 +5415,14 @@ admin.block_manage.visual_edit.poster_img_upload: 上传
 admin.block_manage.visual_edit.poster_live_top_banner_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px<br>
-  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+  建议所有海报都选择相同的 [ 布局模式 ]， 并且所有海报的[ 海报尺寸 ] 保持一致。
 admin.block_manage.visual_edit.poster_cloud_search_banner_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：200px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1440px，高：200px<br>
 admin.block_manage.visual_edit.poster_other_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px<br>
-  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+  建议所有海报都选择相同的 [ 布局模式 ]， 并且所有海报的[ 海报尺寸 ] 保持一致。
 admin.block_manage.visual_edit.poster_link_url: 海报链接地址
 admin.block_manage.visual_edit_history.edit_time: 修改时间
 admin.block_manage.visual_edit_history.edit_user: 修改用户
@@ -5431,6 +5431,7 @@ admin.block_manage.visual_edit_history.user_deleted: 用户已删除
 admin.block_manage.visual_edit_history.preview: 预览
 admin.block_manage.visual_edit_history.recovery_content: 恢复此内容
 admin.block_manage.visual_edit_history.empty: 暂无记录
+admin.block_manage.visual_edit_img_compress_url: 图片优化教程
 
 #自定义页面管理
 admin.custom_page_manage.top_button: 添加

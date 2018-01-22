@@ -4417,6 +4417,7 @@ admin.block_manage.visual_edit_history.user_deleted: 'User has been deleted'
 admin.block_manage.visual_edit_history.preview: Preview
 admin.block_manage.visual_edit_history.recovery_content: 'Recover Content'
 admin.block_manage.visual_edit_history.empty: 'No Record'
+admin.block_manage.visual_edit_img_compress_url: 图片优化教程
 admin.custom_page_manage.top_button: Add
 admin.custom_page_manage.all_status_placeholder: 'All Status'
 admin.custom_page_manage.keyword_placeholder: Keywords
