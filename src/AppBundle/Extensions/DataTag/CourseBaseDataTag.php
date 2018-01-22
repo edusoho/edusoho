@@ -8,7 +8,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceKernel;
 
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
@@ -33,7 +32,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
     }
 
     /**
@@ -41,7 +40,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->getBiz()->service('User:UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     /**
