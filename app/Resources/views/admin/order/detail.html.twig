@@ -131,6 +131,11 @@
           </tr>
         {% endif %}
 
+        {% if order.status == 'closed' %}
+          <tr> <td width="25%">{{'order.closed_time'|trans}}</td> 
+          <td width="75%"> {{ order.close_time | date('Y-n-d H:i:s') }}</td> </tr>
+        {% endif %}
+
       </table>
     </div>
 
