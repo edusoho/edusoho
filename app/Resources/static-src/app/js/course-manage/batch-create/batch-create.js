@@ -78,7 +78,7 @@ class BatchCreate {
     }, {});
 
 
-    const uploadProcess = {
+    let uploadProcess = {
       video,
       document: {
         type: 'html',
@@ -90,7 +90,6 @@ class BatchCreate {
         supportMobile: $('[name=support_mobile]').val(),
       };
     }
-
 
     return uploadProcess;
   }
