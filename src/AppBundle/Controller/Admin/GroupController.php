@@ -52,7 +52,7 @@ class GroupController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getThreadService()->searchThreadsCount($conditions),
+            $this->getThreadService()->countThreads($conditions),
             10
         );
 
