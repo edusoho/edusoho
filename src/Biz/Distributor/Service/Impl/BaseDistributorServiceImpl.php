@@ -50,12 +50,19 @@ abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implement
     }
 
     /**
-     * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 student
+     * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 user
      */
     abstract public function getSendType();
 
+    /**
+     * 保存数据时，转化数据用，转为 distributor_job_data 内的data属性
+     */
     abstract protected function convertData($data);
 
+    /**
+     * distributor_job_data的type，及 相应的DistributorService的关键字，
+     *   如 值为User, 则相应的service为 DistributorUserService
+     */
     abstract protected function getJobType();
 
     protected function getDistributorJobDataDao()
