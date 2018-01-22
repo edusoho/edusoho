@@ -18,7 +18,7 @@ myChart.setOption({
   xAxis : [
     {
       type: 'category',
-      name: '分数区间',
+      name: Translator.trans('testpaper_manage.result_graph.score_distribution'),
       nameLocation: 'middle',
       nameGap: 25,
       data: data.xScore,
@@ -30,18 +30,18 @@ myChart.setOption({
   yAxis : [
     {
       type: 'value',
-      name: '人数',
+      name: Translator.trans('testpaper_manage.result_graph.person_num'),
       minInterval: 1
     }
   ],
   series : [
     {
-      name:'首次成绩得分人数',
+      name:Translator.trans('testpaper_manage.result_graph.first_score_num'),
       type:'bar',
       data:data.yFirstNum
     },
     {
-      name:'最优成绩得分人数',
+      name:Translator.trans('testpaper_manage.result_graph.max_score_num'),
       type:'bar',
       data:data.yMaxNum
     }
