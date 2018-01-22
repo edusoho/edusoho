@@ -113,7 +113,7 @@ class TestpaperManageController extends BaseController
         $checkResult = $this->getTestpaperService()->getNextReviewingResult(array($id), $activity['id'], $activity['mediaType']);
 
         if (empty($checkResult)) {
-            return $this->createMessageResponse('info', '已完成所有批阅');
+            return $this->redirect($this->generateUrl('course_manage_'.$activity['mediaType'].'_check_list', array('id' => $id)));
         }
 
         return $this->redirect($this->generateUrl('course_manage_'.$activity['mediaType'].'_check', array('id' => $id, 'resultId' => $checkResult['id'])));

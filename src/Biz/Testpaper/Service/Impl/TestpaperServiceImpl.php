@@ -956,14 +956,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC'), 0, 1);
 
-        if ($results) {
-            return $results[0];
+        if (empty($results)) {
+            unset($conditions['lessonId']);
+            $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC', 'lessonId' => 'ASC'), 0, 1);
         }
 
-        unset($conditions['lessonId']);
-        $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC', 'lessonId' => 'ASC'), 0, 1);
+        if (empty($results)) {
+            return array();
+        }
 
-        if ($results) {
+        $testpaper = $this->getTestpaper($results[0]['testId']);
+        if ($testpaper) {
             return $results[0];
         }
 
