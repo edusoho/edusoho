@@ -52,7 +52,7 @@ class BizSessionAndOnline extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("drop table `biz_session`");
-        $connection->exec("drop table `biz_online`");
+        $connection->exec('drop table `biz_session`');
+        $connection->exec('drop table `biz_online`');
     }
 }

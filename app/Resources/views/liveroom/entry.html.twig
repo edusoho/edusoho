@@ -14,5 +14,5 @@
 {% do script(['app/js/liveroom/index.js']) %}
 
 {% block body %}
-    <div id="entry" data-role="{{ liveRole }}" data-provider="{{ params.provider|default(0) }}" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center color-success">{{'course.liveroom.open_liveroom_tips'|trans}}...</div>
+    <div id="entry" data-role="{{ liveRole }}" data-provider="{{ params.provider|default(0) }}" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center color-success">{{'course.liveroom.open_liveroom_tips'|trans}}</div>
 {% endblock %}

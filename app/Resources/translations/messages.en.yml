@@ -1168,7 +1168,6 @@ course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'enroll for free'
 course.thread: Discussions
 course.task.preview.free_learn_tips: 'Join for free'
-course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
@@ -1664,7 +1663,7 @@ course.live.replay_manage.lesson_edit_content_title: 'Edit playback video'
 course.live.replay_manage.lesson_add_content_title: 'Add playback video'
 course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
-course.liveroom.open_liveroom_tips: 'Live entering, pleas wait ...'
+course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
 activity.live.not_created_notice: Live classroom not yet created!
 course.note.save_btn: Save
 course.note.share_btn: Share
@@ -3989,6 +3988,10 @@ admin.iap_product.empty: 'No Record'
 admin.performance_setting.content_title: 'Static Pages'
 admin.classroom_manage.manage.name_placeholder: '%name% Title'
 admin.classroom_manage.manage.describe_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Class Instruction</span><br>\n  1. Id and sequence cannot be changed；<br>\n  2. Class url format：domain/classroom/id；\n</div>\n"
+admin.classroom_manage.manage.count: "Classrooms：<strong class=\"inflow-num\">%courseNum%</strong>\n"
+admin.classroom_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>个 \n"
+admin.classroom_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
+admin.classroom_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.classroom_manage.manage.number_th: '%title% ID'
 admin.classroom_manage.manage.name_th: '%name% Title'
 admin.classroom_manage.manage.course_number_th: 'Course Number'
@@ -6935,3 +6938,14 @@ user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+
+admin.datalab.setting.modal_title: 提示：
+admin.datalab.setting.modal_enable_body: 开启后，将在 24 小时内开始更新数据。关闭期内的学习数据无法更新到报表中。
+admin.datalab.setting.modal_disable_body: 关闭后，关闭期内的学习数据将无法更新到报表中。您确认要关闭吗？
+admin.datalab.setting.agreement: 用户协议
+admin.datalab.setting.operation_title: '开启数据分析服务:'
+admin.datalab.warning_tip: 当前数据分析服务已关闭，报表数据无法更新。可在<a href="%url%">【设置】</a>中重新启用该服务。
+admin.datalab.setting.btn_cancel: 取消
+admin.datalab.setting.btn_open: 确认开启
+admin.datalab.setting.btn_close: 确认关闭
+admin.datalab.setting.btn_use: 再用用看

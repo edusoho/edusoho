@@ -595,6 +595,12 @@ admin_setting_site:
     defaults: { _controller: AppBundle:Admin/SiteSetting:site }
     permissions: [admin_setting_message]
 
+admin_setting_site_save:
+    path:  /setting/site/save
+    defaults: { _controller: AppBundle:Admin/SiteSetting:saveSite }
+    permissions: [admin_setting_message]
+    methods: [POST]
+
 admin_operation_mobile:
     path:  /operation/mobile
     defaults: { _controller: AppBundle:Admin/Mobile:mobile }
@@ -2297,3 +2303,19 @@ admin_user_learn_chart:
 admin_user_learn_statistics_info:
     path: /user/learn/statistics/info
     defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }
+
+admin_cloud_data_lab:
+    path: /data/lab
+    defaults: { _controller: AppBundle:Admin/DataLab:data }
+
+admin_cloud_data_lab_setting:
+    path: /data/lab/setting
+    defaults: { _controller: AppBundle:Admin/DataLab:settting }
+
+admin_cloud_data_lab_setting_enable_modal:
+    path: /data/lab/setting/modal/enable
+    defaults: { _controller: AppBundle:Admin/DataLab:enableXapiSetting }
+
+admin_cloud_data_lab_setting_disable_modal:
+    path: /data/lab/setting/modal/disable
+    defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }

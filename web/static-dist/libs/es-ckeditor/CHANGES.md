@@ -1,4 +1,8 @@
-# es-ckeditor 4.7.2-path3 (2017-12-26)
+# es-ckeditor 4.7.2-patch4 (2018-01-18)
+
+* 修复https下公式编辑器报错的问题
+
+# es-ckeditor 4.7.2-patch3 (2017-12-26)
 
 * 上传单个文件大小可配置
 

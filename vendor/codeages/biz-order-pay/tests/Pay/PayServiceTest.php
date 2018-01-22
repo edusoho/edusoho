@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use Codeages\Biz\Pay\Payment\IapGetway;
-use Codeages\Biz\Pay\Payment\WechatGetway;
+use Codeages\Biz\Pay\Payment\IapGateway;
+use Codeages\Biz\Pay\Payment\WechatGateway;
 
 class PayServiceTest extends IntegrationTestCase
 {
@@ -278,7 +278,7 @@ class PayServiceTest extends IntegrationTestCase
             'product_id' => 1,
         );
 
-        $mock = \Mockery::mock(IapGetway::class);
+        $mock = \Mockery::mock(IapGateway::class);
         $mock->shouldReceive('converterNotify')->andReturn(array($return, 'success'));
         return $mock;
     }
@@ -420,7 +420,7 @@ class PayServiceTest extends IntegrationTestCase
             $return['trade_sn'] = $notifyData['out_trade_no'];
         }
 
-        $mock = \Mockery::mock(WechatGetway::class);
+        $mock = \Mockery::mock(WechatGateway::class);
         $mock->shouldReceive('converterNotify')->andReturn(array($return, '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'));
         return $mock;
     }
@@ -451,7 +451,7 @@ class PayServiceTest extends IntegrationTestCase
             'result_code' => 'SUCCESS',
         );
 
-        $mock = \Mockery::mock(WechatGetway::class);
+        $mock = \Mockery::mock(WechatGateway::class);
         $mock->shouldReceive('createTrade')->andReturn($return);
         $mock->shouldReceive('closeTrade')->andReturn();
         return $mock;

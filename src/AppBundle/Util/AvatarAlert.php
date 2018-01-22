@@ -13,7 +13,7 @@ class AvatarAlert
             return false;
         }
 
-        if ($setting['avatar_alert'] == 'open' && $user['mediumAvatar'] == '') {
+        if ('open' == $setting['avatar_alert'] && '' == $user['mediumAvatar']) {
             return true;
         }
 
@@ -28,7 +28,7 @@ class AvatarAlert
             return false;
         }
 
-        if ($user['mediumAvatar'] == '') {
+        if ('' == $user['mediumAvatar']) {
             return true;
         }
 
@@ -37,6 +37,6 @@ class AvatarAlert
 
     protected static function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return ServiceKernel::instance()->getBiz()->service('System:SettingService');
     }
 }

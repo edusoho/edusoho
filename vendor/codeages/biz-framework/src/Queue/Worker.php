@@ -121,13 +121,13 @@ class Worker
             $message = '';
         }
 
-        if (empty($code) || $code === Job::FINISHED) {
+        if (empty($code) || Job::FINISHED === $code) {
             $this->queue->delete($job);
 
             return;
         }
 
-        if ($code == Job::FAILED_RETRY) {
+        if (Job::FAILED_RETRY == $code) {
             $executions = $job->getMetadata('executions', 1);
             if ($executions - 1 < $this->options['tries']) {
                 $this->queue->release($job);
@@ -196,7 +196,7 @@ class Worker
             $this->stop();
         }
 
-        if ($this->options['once'] == true) {
+        if (true == $this->options['once']) {
             $this->stop();
         }
 
