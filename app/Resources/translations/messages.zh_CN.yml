@@ -1082,6 +1082,8 @@ course.testpaper_check.start_date: 开始日期
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
+course.testpaper_check.optional_task_title: 选修任务：%title%
+course.testpaper_check.testpaper_delete: 该试卷已删除
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅

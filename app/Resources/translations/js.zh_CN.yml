@@ -18,7 +18,7 @@ site.data.create: 添加
 site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
 site.data.uncheck_name_hint: 未选中任何%name%
-site.data.delete_check_name_hint: 确定要删除选中的条%name%吗？
+site.data.delete_check_name_hint: 确定要删除选中的%name%吗？
 site.data.delete_submiting_hint: 正在删除...
 site.date.year: 年
 site.date.month: 月

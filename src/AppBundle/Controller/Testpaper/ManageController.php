@@ -113,46 +113,41 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type, $testpaperIds = array())
+    public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
-        if (empty($testpaperIds)) {
-            $testpaperIds = array(0);
-        }
-
-        $conditions = array(
-            'status' => 'open',
-            'type' => $type,
-            'ids' => $testpaperIds,
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
-            10
-        );
-
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
         $courseIds = array($targetId);
         if ($targetType === 'classroom') {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
 
-        foreach ($testpapers as $key => $testpaper) {
-            $testpapers[$key]['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
-        }
+        $conditions = array(
+            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
+            'type' => $type,
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTaskService()->countTasks($conditions),
+            10
+        );
+        $tasks = $this->getTaskService()->searchTasks(
+            $conditions,
+            array('seq' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        list($tasks, $testpapers) = $this->findTestpapers($tasks, $type);
+        $resultStatusNum = $this->findTestpapersStatusNum($tasks, $testpapers);
 
         return $this->render('testpaper/manage/check-list.html.twig', array(
-            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
+            'testpapers' => $testpapers,
             'paginator' => $paginator,
             'targetId' => $targetId,
             'targetType' => $targetType,
+            'tasks' => $tasks,
+            'resultStatusNum' => $resultStatusNum,
         ));
     }
 
@@ -207,7 +202,7 @@ class ManageController extends BaseController
         ));
     }
 
-    public function resultListAction(Request $request, $testpaperId, $source, $targetId)
+    public function resultListAction(Request $request, $testpaperId, $source, $targetId, $activityId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
@@ -225,21 +220,14 @@ class ManageController extends BaseController
         if ($status !== 'all') {
             $conditions['status'] = $status;
         }
-        $conditions['type'] = $testpaper['type'];
+        $conditions['lessonId'] = $activityId;
 
         if (!empty($keyword)) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
             $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
         }
 
-        $courseIds = array($targetId);
-        if ($source === 'classroom') {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-        }
-        $conditions['courseIds'] = $courseIds;
-
-        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
+        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $activityId);
 
         $paginator = new Paginator(
             $request,
@@ -565,6 +553,57 @@ class ManageController extends BaseController
         return $courseTasks;
     }
 
+    protected function findTestpapers($tasks, $type)
+    {
+        if (empty($tasks)) {
+            return array($tasks, array());
+        }
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        if ($type == 'testpaper') {
+            $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+            $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
+            $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
+            $ids = ArrayToolkit::column($testpaperActivities, 'mediaId');
+
+            array_walk($tasks, function (&$task, $key) use ($activities, $testpaperActivities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
+            });
+        } else {
+            $ids = ArrayToolkit::column($activities, 'mediaId');
+            array_walk($tasks, function (&$task, $key) use ($activities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $activity['mediaId'];
+            });
+        }
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
+
+        if (empty($testpapers)) {
+            return array($activities, array());
+        }
+
+        return array($tasks, $testpapers);
+    }
+
+    protected function findTestpapersStatusNum($tasks, $testpapers)
+    {
+        $resultStatusNum = array();
+        foreach ($tasks as $task) {
+            if (empty($testpapers[$task['testId']])) {
+                continue;
+            }
+
+            $resultStatusNum[$task['activityId']] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($task['testId'], $task['activityId']);
+        }
+
+        return $resultStatusNum;
+    }
+
     /**
      * @return CourseService
      */
@@ -611,6 +650,14 @@ class ManageController extends BaseController
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     /**

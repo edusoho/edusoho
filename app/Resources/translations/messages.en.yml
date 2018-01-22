@@ -952,6 +952,9 @@ course.testpaper_check.start_date: 'Start date'
 course.testpaper_check.status.check: Checked
 course.testpaper_check.status.not_check: 'UnCheck'
 course.testpaper_check.status.not_submit: 'Uncommited'
+course.testpaper_check.optional_task_title: Optional Task:%title%
+course.testpaper_check.testpaper_delete: Exam was deleted
+
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
 course.assignment_check.no_permission_tips: 'You are not teacher of this course and can not review the testpaper.'
