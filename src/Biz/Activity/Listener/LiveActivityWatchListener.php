@@ -9,7 +9,9 @@ class LiveActivityWatchListener extends Listener
 {
     public function handle($activity, $data)
     {
-        if (!empty($data['watchTime']) && $data['watchTime'] <= TaskService::WATCH_TIME_STEP) {
+        $magicSetting = $this->getSettingService()->get('magic');
+        $watchTimeSec = isset($magicSetting['watch_time_sec']) && !empty($magicSetting['watch_time_sec']) ? $magicSetting['watch_time_sec'] : TaskService::WATCH_TIME_STEP;
+        if (!empty($data['watchTime']) && $data['watchTime'] <= $watchTimeSec) {
             $watchTime = $data['watchTime'];
         } else {
             $watchTime = TaskService::WATCH_TIME_STEP;
@@ -35,5 +37,10 @@ class LiveActivityWatchListener extends Listener
     protected function getXapiService()
     {
         return $this->getBiz()->service('Xapi:XapiService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 }

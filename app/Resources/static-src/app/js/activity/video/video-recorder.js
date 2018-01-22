@@ -3,7 +3,7 @@ import 'store';
 export default class VideoRecorder {
   constructor(container) {
     this.container = container;
-    this.interval = 120;
+    this.interval = $(this.container).data('watchTimeSec');
     this.playerCounter = 0;
     this.activityId = $(this.container).data('id');
   }

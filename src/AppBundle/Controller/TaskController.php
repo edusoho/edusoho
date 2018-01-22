@@ -69,6 +69,7 @@ class TaskController extends BaseController
                 'start',
                 array(
                     'task' => $task,
+                    'taskId' => $task['id'],
                 )
             );
         }

@@ -37,8 +37,10 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         $task = $event->getArgument('task');
         $lastTime = $event->getArgument('lastTime');
         $time = time() - $lastTime;
-        if ($time >= TaskService::LEARN_TIME_STEP) {
-            $time = TaskService::LEARN_TIME_STEP;
+        $magicSetting = $this->getSettingService()->get('magic');
+        $learnTimeSec = isset($magicSetting['learn_time_sec']) && !empty($magicSetting['learn_time_sec']) ? $magicSetting['learn_time_sec'] : TaskService::LEARN_TIME_STEP;
+        if ($time >= $learnTimeSec) {
+            $time = $learnTimeSec;
         }
 
         if (empty($task)) {
@@ -70,6 +72,11 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function dispatch($eventName, $subject)

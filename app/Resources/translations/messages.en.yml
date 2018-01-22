@@ -5626,6 +5626,11 @@ admin.magic_setting.uc_phpwind: 'Turn on phpwind settings'
 admin.magic_setting.login_limit: 'Account and log off the set'
 admin.magic_setting.file_single_size_limit: Single file set upload size
 admin.magic_setting.file_single_size_limit_tip: MByte,be used by editor upload only
+admin.magic_setting.learn_time_sec: learn time report cycle
+admin.magic_setting.learn_time_sec_tip: second
+admin.magic_setting.watch_time_sec: watch time report cycle
+admin.magic_setting.watch_time_sec_tip: second
+
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
 admin.magic_setting.zero_for_open: '0 To enable'

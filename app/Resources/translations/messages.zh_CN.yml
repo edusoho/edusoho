@@ -7057,6 +7057,11 @@ admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
 admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
+admin.magic_setting.learn_time_sec: 学习时长上报周期
+admin.magic_setting.learn_time_sec_tip: 秒为单位
+admin.magic_setting.watch_time_sec: 视频观看时长上报周期
+admin.magic_setting.watch_time_sec_tip: 秒为单位
+
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
