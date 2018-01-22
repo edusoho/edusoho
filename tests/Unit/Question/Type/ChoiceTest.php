@@ -85,6 +85,27 @@ class ChoiceTest extends BaseTestCase
         $this->assertArrayEquals($fields['choices'], $filter['metas']['choices']);
     }
 
+    public function testGetAnswerStructure()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $question = array('metas' => array('choices' => array('a', 'b', 'c', 'd')));
+        $data = $typeObj->getAnswerStructure($question);
+
+        $this->assertArrayEquals($question['metas']['choices'], $data);
+    }
+
+    public function testAnalysisAnswerIndex()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $answer = array('answer' => array(1));
+        $data = $typeObj->analysisAnswerIndex(array('id' => 1), $answer);
+
+        $this->assertArrayHasKey(1, $data);
+        $this->assertArrayEquals($answer['answer'], $data[1]);
+    }
+
     private function creatQuestionType()
     {
         $biz = $this->getBiz();

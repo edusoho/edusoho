@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -133,6 +132,31 @@ class HomeworkManageController extends BaseController
         ));
     }
 
+    public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['mediaType'] != 'homework') {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        $analyses = $this->getQuestionAnalysisService()->searchAnalysis(array('activityId' => $activity['id']), array(), 0, PHP_INT_MAX);
+
+        $paper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
+
+        $relatedData = $this->findRelatedData($activity, $paper);
+        $relatedData['studentNum'] = $studentNum;
+
+        return $this->render('homework/manage/result-analysis.html.twig', array(
+            'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
+            'paper' => $paper,
+            'questions' => $questions,
+            'relatedData' => $relatedData,
+            'targetType' => $targetType,
+        ));
+    }
+
     public function resultGraphAction($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
@@ -201,6 +225,21 @@ class HomeworkManageController extends BaseController
         return $newTypes;
     }
 
+    protected function findRelatedData($activity, $paper)
+    {
+        $relatedData = array();
+        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
+
+        $relatedData['total'] = count($userFirstResults);
+
+        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
+        $finishedResults = empty($userFirstResults['finished']) ? array() : $userFirstResults['finished'];
+
+        $relatedData['finished'] = count($finishedResults);
+
+        return $relatedData;
+    }
+
     protected function fillGraphData($userFirstResults)
     {
         $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
@@ -250,6 +289,11 @@ class HomeworkManageController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    protected function getQuestionAnalysisService()
+    {
+        return $this->createService('Question:QuestionAnalysisService');
+    }
+
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
@@ -273,10 +317,5 @@ class HomeworkManageController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

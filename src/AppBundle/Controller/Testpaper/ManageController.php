@@ -9,7 +9,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -180,7 +179,8 @@ class ManageController extends BaseController
 
             $data = array('success' => true, 'goto' => '');
             if ($isContinue) {
-                $data['goto'] = $this->generateUrl($source.'_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $result['lessonId']));
+                $route = $this->getRedirectRoute('nextCheck', $source);
+                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
             }
 
             return $this->createJsonResponse($data);
@@ -496,6 +496,34 @@ class ManageController extends BaseController
         ));
     }
 
+    public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['mediaType'] != 'testpaper') {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        $analyses = $this->getQuestionAnalysisService()->searchAnalysis(array('activityId' => $activity['id']), array(), 0, PHP_INT_MAX);
+
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $paper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
+
+        $relatedData = $this->findRelatedData($activity, $paper);
+        $relatedData['studentNum'] = $studentNum;
+
+        return $this->render('testpaper/manage/result-analysis.html.twig', array(
+            'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
+            'paper' => $paper,
+            'questions' => $questions,
+            'questionTypes' => $this->getCheckedQuestionType($paper),
+            'relatedData' => $relatedData,
+            'targetType' => $targetType,
+        ));
+    }
+
     public function resultGraphAction($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
@@ -652,6 +680,24 @@ class ManageController extends BaseController
         return $courseTasks;
     }
 
+    protected function findRelatedData($activity, $paper)
+    {
+        $relatedData = array();
+        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
+
+        $relatedData['total'] = count($userFirstResults);
+
+        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
+        $finishedResults = empty($userFirstResults['finished']) ? array() : $userFirstResults['finished'];
+
+        $relatedData['finished'] = count($finishedResults);
+        $scores = array_sum(ArrayToolkit::column($finishedResults, 'score'));
+        $avg = empty($relatedData['finished']) ? 0 : $scores / $relatedData['finished'];
+        $relatedData['avgScore'] = number_format($avg, 1);
+
+        return $relatedData;
+    }
+
     protected function findTestpapers($tasks, $type)
     {
         if (empty($tasks)) {
@@ -703,6 +749,18 @@ class ManageController extends BaseController
         return $resultStatusNum;
     }
 
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'nextCheck' => array(
+                'course' => 'course_manage_exam_next_result_check',
+                'classroom' => 'classroom_manage_exam_next_result_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
+    }
+
     /**
      * @return CourseService
      */
@@ -743,6 +801,11 @@ class ManageController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    protected function getQuestionAnalysisService()
+    {
+        return $this->createService('Question:QuestionAnalysisService');
+    }
+
     /**
      * @return TaskService
      */
@@ -773,13 +836,5 @@ class ManageController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

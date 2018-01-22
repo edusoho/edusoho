@@ -135,6 +135,8 @@ interface TestpaperService
      */
     public function findTestResultsByTestpaperIdAndUserIds($userIds, $testpaperId);
 
+    public function findExamFirstResults($testId, $type, $activityId);
+
     public function findResultsByTestIdAndActivityId($testId, $activityId);
 
     public function getNextReviewingResult($courseIds, $activityId, $type);

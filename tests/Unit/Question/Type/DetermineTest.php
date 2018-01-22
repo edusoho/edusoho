@@ -59,6 +59,25 @@ class DetermineTest extends BaseTestCase
         $this->assertEquals(0, $result['score']);
     }
 
+    public function testGetAnswerStructure()
+    {
+        $typeObj = $this->creatQuestionType();
+        $data = $typeObj->getAnswerStructure(array());
+
+        $this->assertArrayEquals(array(0, 1), $data);
+    }
+
+    public function analysisAnswerIndex()
+    {
+        $typeObj = $this->creatQuestionType();
+
+        $answer = array('answer' => array(1));
+        $data = $typeObj->analysisAnswerIndex(array('id' => 1), $answer);
+
+        $this->assertArrayHasKey(1, $data);
+        $this->assertArrayEquals($answer['answer'], $data[1]);
+    }
+
     private function creatQuestionType()
     {
         $biz = $this->getBiz();
