@@ -78,7 +78,7 @@ class BatchCreate {
     }, {});
 
 
-    const paramManage = {
+    const uploadProcess = {
       video,
       document: {
         type: 'html',
@@ -86,12 +86,12 @@ class BatchCreate {
     };
 
     if($('[name=support_mobile]').length > 0) {
-      paramManage.supportMobile = {
+      uploadProcess.supportMobile = {
         supportMobile: $('[name=support_mobile]').val(),
       };
     }
 
-    let uploadProcess = Object.assign({}, paramManage['document'], paramManage['supportMobile']);
+
     return uploadProcess;
   }
 
