@@ -567,7 +567,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         return $this->createDao('Group:ThreadTradeDao');
     }
-    
+
     /**
      * @return FileService
      */
@@ -575,5 +575,4 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         return $this->biz->service('Content:FileService');
     }
-
 }
