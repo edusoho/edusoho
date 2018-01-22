@@ -53,6 +53,5 @@ class AddMoneyCard extends Migration
      */
     public function down()
     {
-
     }
 }
