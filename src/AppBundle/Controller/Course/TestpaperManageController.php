@@ -136,10 +136,30 @@ class TestpaperManageController extends BaseController
         $checkResult = $this->getTestpaperService()->getNextReviewingResult(array($id), $activity['id'], $activity['mediaType']);
 
         if (empty($checkResult)) {
-            return $this->redirect($this->generateUrl('course_manage_'.$activity['mediaType'].'_check_list', array('id' => $id)));
+            $route = $this->getRedirectRoute('list', $activity['mediaType']);
+
+            return $this->redirect($this->generateUrl($route, array('id' => $id)));
         }
 
-        return $this->redirect($this->generateUrl('course_manage_'.$activity['mediaType'].'_check', array('id' => $id, 'resultId' => $checkResult['id'])));
+        $route = $this->getRedirectRoute('check', $activity['mediaType']);
+
+        return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'list' => array(
+                'testpaper' => 'course_manage_testpaper_check_list',
+                'homework' => 'course_manage_homework_check_list',
+            ),
+            'check' => array(
+                'testpaper' => 'course_manage_testpaper_check',
+                'homework' => 'course_manage_homework_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
     }
 
     /**

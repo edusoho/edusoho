@@ -1031,10 +1031,14 @@ class ClassroomManageController extends BaseController
         $checkResult = $this->getTestpaperService()->getNextReviewingResult($courseIds, $activity['id'], $activity['mediaType']);
 
         if (empty($checkResult)) {
-            return $this->redirect($this->generateUrl('classroom_manage_'.$activity['mediaType'], array('id' => $id)));
+            $route = $this->getRedirectRoute('list', $activity['mediaType']);
+
+            return $this->redirect($this->generateUrl($route, array('id' => $id)));
         }
 
-        return $this->redirect($this->generateUrl('classroom_manage_'.$activity['mediaType'].'_check', array('id' => $id, 'resultId' => $checkResult['id'])));
+        $route = $this->getRedirectRoute('check', $activity['mediaType']);
+
+        return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
     }
 
     public function homeworkAction($id)
@@ -1105,6 +1109,22 @@ class ClassroomManageController extends BaseController
             'targetType' => 'classroom',
             'studentNum' => $classroom['studentNum'],
         ));
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'list' => array(
+                'testpaper' => 'classroom_manage_testpaper',
+                'homework' => 'classroom_manage_homework',
+            ),
+            'check' => array(
+                'testpaper' => 'classroom_manage_testpaper_check',
+                'homework' => 'classroom_manage_homework_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
     }
 
     private function getTagIdsFromRequest($request)

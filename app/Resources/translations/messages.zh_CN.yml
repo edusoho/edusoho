@@ -1573,6 +1573,12 @@ course.testpaper_manage.question.replace_modal.empty: 无题目记录,请先去
 course.testpaper_manage.question.replace_modal.create_btn: 创建题目
 course.testpaper_manage.question.replace_modal.select_all_btn: 全选
 course.testpaper_manage.question.replace_modal.select_btn: 请选择题目
+course.testpaper_manage.analysis_card.course_total_person: 计划人数：
+course.testpaper_manage.analysis_card.classroom_total_person: 班级人数：
+course.testpaper_manage.analysis_card.join_person: 参加人数：
+course.testpaper_manage.analysis_card.complete_person: 完成人数：
+course.testpaper_manage.analysis_card.avg_score: 平均成绩：
+course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 课程文件
 course.course_files.content_title: 课程文件
