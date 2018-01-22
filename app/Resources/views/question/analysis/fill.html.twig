@@ -6,7 +6,7 @@
     {% for index, answer in question.answer %}
       {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
       <li class="testpaper-question-fill-item testpaper-question-body-item">
-        <span class="testpaper-question-body-item__index">填空({{index+1}})：正确答案 </span>
+        <span class="testpaper-question-body-item__index">{{'question.multiple_choice.answer'|trans({'%index%': index+1})}}</span>
         <div class="testpaper-question-body-item__content"><strong class="color-success">{{ answer|join(' 或 ') }}</strong></div>
         <span class="label testpaper-question-body-item__label label-success hidden-xs">
           {% if itemKeyAnalysis and firstCount != 0 %}
@@ -17,7 +17,7 @@
           {% endif %}
         </span>
         <span class="testpaper-question-body-item__count">
-          {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}人次
+          {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}{{ 'course.testpaper_check.number'|trans }}
         </span>
       </li>
     {% endfor %}

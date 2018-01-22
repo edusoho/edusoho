@@ -960,6 +960,10 @@ course.testpaper_check.graph_passed_percent: Percent Of Pass:%percent%%
 course.testpaper_check.btn_score_distribution: Score Distribution
 course.testpaper_check.btn_question_distribution: Question Distribution
 course.testpaper_check.btn_check: Check
+course.testpaper_check.first_answer: 初次答题
+course.testpaper_check.number: 人次
+course.testpaper_check.get_score: 得 %questonScore% 分
+course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
 
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'

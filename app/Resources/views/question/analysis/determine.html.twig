@@ -8,7 +8,7 @@
       <div class="pl0 mbm testpaper-question-body-item">
         <label class="radio-inline {% if question.answer[0] == index %} active{% endif %}">
           <input type="radio" data-type="determine" name="{{ question.id }}" value="{{ index }}" {% if question.answer[0] == index %}checked{% endif %} disabled>
-          {% if index == 1 %}{{ '正确'|trans }}{% else %}{{ '错误'|trans }}{% endif %}
+          {% if index == 1 %}{{ 'testpaper.result.true'|trans }}{% else %}{{ 'testpaper.result.wrong'|trans }}{% endif %}
         </label>
         <span class="label testpaper-question-body-item__label label-success hidden-xs">
           {% if itemKeyAnalysis and firstCount != 0 %}
@@ -22,7 +22,7 @@
           {% if itemKeyAnalysis %}
             {{ itemKeyAnalysis.firstAnswerCount }}
           {% else %}0{% endif %}
-          {{ '人次'|trans }}
+          {{ 'course.testpaper_check.number'|trans }}
         </span>
       </div>
     {% endfor %}
