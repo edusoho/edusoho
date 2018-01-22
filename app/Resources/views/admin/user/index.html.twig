@@ -5,6 +5,11 @@
 {% set script_controller = 'user/list' %}
 
 {% block main %}
+  <style>
+    .select2-drop {
+      min-width: 120px;
+    }
+  </style>
 
   {{ web_macro.flash_messages() }}
 
