@@ -3,8 +3,6 @@
 namespace Tests\Unit\Component\Echarts;
 
 use Biz\BaseTestCase;
-use AppBundle\Common\ReflectionUtils;
-use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Component\Echats\EchartsBuilder;
 
 class EchartsBuilderTest extends BaseTestCase
@@ -16,12 +14,12 @@ class EchartsBuilderTest extends BaseTestCase
             array(array(
                 'id' => 1,
                 'date' => date('Y/m/d', time()),
-                'count' => 14
-            )
-        )));
-        
-        $this->assertTrue(!empty( $result['xAxis']));
-        $this->assertArrayEquals(array(0,0,14), $result['series'][0]);
+                'count' => 14,
+            ),
+        ), ));
+
+        $this->assertTrue(!empty($result['xAxis']));
+        $this->assertArrayEquals(array(0, 0, 14), $result['series'][0]);
     }
 
     public function testCreateBarDefaultData()
@@ -31,37 +29,37 @@ class EchartsBuilderTest extends BaseTestCase
             array(array(
                 'id' => 1,
                 'date' => date('Y/m/d', time()),
-                'count' => 14
-            )
-        )));
+                'count' => 14,
+            ),
+        ), ));
 
-        $this->assertArrayEquals(array(0,0,14), $result['series'][0]);
+        $this->assertArrayEquals(array(0, 0, 14), $result['series'][0]);
     }
 
     public function testGenerateDateRange()
     {
-         $echarts = new EchartsBuilder();
-         $result = $echarts->generateDateRange(7);
-         
-         $this->assertEquals(8, count($result));
-         $this->assertEquals($result[7], date('Y/m/d', time()));
+        $echarts = new EchartsBuilder();
+        $result = $echarts->generateDateRange(7);
+
+        $this->assertEquals(8, count($result));
+        $this->assertEquals($result[7], date('Y/m/d', time()));
     }
 
     public function testGenerateZeroData()
     {
         $echarts = new EchartsBuilder();
-        $result = $echarts->generateZeroData(array('2018/01/22', '2018/01/21'));  
-        
+        $result = $echarts->generateZeroData(array('2018/01/22', '2018/01/21'));
+
         $this->assertArrayEquals(array(
-            "2018-01-22"=> array(
-                "count" => 0,
-                "date" => "2018-01-22"
+            '2018-01-22' => array(
+                'count' => 0,
+                'date' => '2018-01-22',
             ),
-            "2018-01-21" => array(
-                "count" => 0 ,
-                "date" => "2018-01-21"
+            '2018-01-21' => array(
+                'count' => 0,
+                'date' => '2018-01-21',
             ),
-        ),$result);
+        ), $result);
     }
 
     public function testArrayValueRecursive()
@@ -69,18 +67,18 @@ class EchartsBuilderTest extends BaseTestCase
         $echarts = new EchartsBuilder();
         $result = $echarts->arrayValueRecursive(array(
             'test' => array(
-                'id' => 1
+                'id' => 1,
             ),
             'test2' => array(
-                'id' => 2
+                'id' => 2,
             ),
         ), 'id');
 
-        $this->assertArrayEquals(array(1,2), $result);
-        
+        $this->assertArrayEquals(array(1, 2), $result);
+
         $result = $echarts->arrayValueRecursive(array(
             'test' => array(
-                'id' => 1
+                'id' => 1,
             ),
             'test2' => array(
             ),
