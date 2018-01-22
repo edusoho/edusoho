@@ -137,10 +137,12 @@ class TestpaperManageController extends BaseController
 
         if (empty($checkResult)) {
             $route = $this->getRedirectRoute('list', $activity['mediaType']);
+
             return $this->redirect($this->generateUrl($route, array('id' => $id)));
         }
 
         $route = $this->getRedirectRoute('check', $activity['mediaType']);
+
         return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
     }
 
@@ -149,12 +151,12 @@ class TestpaperManageController extends BaseController
         $routes = array(
             'list' => array(
                 'testpaper' => 'course_manage_testpaper_check_list',
-                'homework' => 'course_manage_homework_check_list'
+                'homework' => 'course_manage_homework_check_list',
             ),
             'check' => array(
                 'testpaper' => 'course_manage_testpaper_check',
-                'homework' => 'course_manage_homework_check'
-            )
+                'homework' => 'course_manage_homework_check',
+            ),
         );
 
         return $routes[$mode][$type];

@@ -755,7 +755,7 @@ class ManageController extends BaseController
             'nextCheck' => array(
                 'course' => 'course_manage_exam_next_result_check',
                 'classroom' => 'classroom_manage_exam_next_result_check',
-            )
+            ),
         );
 
         return $routes[$mode][$type];

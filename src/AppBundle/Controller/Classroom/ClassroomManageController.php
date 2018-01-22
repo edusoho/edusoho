@@ -1032,10 +1032,12 @@ class ClassroomManageController extends BaseController
 
         if (empty($checkResult)) {
             $route = $this->getRedirectRoute('list', $activity['mediaType']);
+
             return $this->redirect($this->generateUrl($route, array('id' => $id)));
         }
 
         $route = $this->getRedirectRoute('check', $activity['mediaType']);
+
         return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
     }
 
@@ -1114,12 +1116,12 @@ class ClassroomManageController extends BaseController
         $routes = array(
             'list' => array(
                 'testpaper' => 'classroom_manage_testpaper',
-                'homework' => 'classroom_manage_homework'
+                'homework' => 'classroom_manage_homework',
             ),
             'check' => array(
                 'testpaper' => 'classroom_manage_testpaper_check',
-                'homework' => 'classroom_manage_homework_check'
-            )
+                'homework' => 'classroom_manage_homework_check',
+            ),
         );
 
         return $routes[$mode][$type];
