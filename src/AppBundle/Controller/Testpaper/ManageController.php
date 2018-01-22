@@ -179,7 +179,8 @@ class ManageController extends BaseController
 
             $data = array('success' => true, 'goto' => '');
             if ($isContinue) {
-                $data['goto'] = $this->generateUrl($source.'_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $result['lessonId']));
+                $route = $this->getRedirectRoute('nextCheck', $source);
+                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
             }
 
             return $this->createJsonResponse($data);
@@ -746,6 +747,18 @@ class ManageController extends BaseController
         }
 
         return $resultStatusNum;
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'nextCheck' => array(
+                'course' => 'course_manage_exam_next_result_check',
+                'classroom' => 'classroom_manage_exam_next_result_check',
+            )
+        );
+
+        return $routes[$mode][$type];
     }
 
     /**
