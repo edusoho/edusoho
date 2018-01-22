@@ -18,6 +18,7 @@ onFullScreen();
 function initDocPlayer() {
 	new QiQiuYun.Player({
 		id: 'document-content',
+        playServer: app.cloudPlayServer,
 		resNo: $element.data('resNo'),
 		token: $element.data('token'),
 		user: {

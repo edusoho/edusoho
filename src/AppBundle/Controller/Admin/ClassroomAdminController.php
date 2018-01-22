@@ -52,14 +52,32 @@ class ClassroomAdminController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
+        $classroomStatusNum = $this->getDifferentClassroomNum($conditions);
+
         return $this->render('admin/classroom/index.html.twig', array(
             'classroomInfo' => $classroomInfo,
             'paginator' => $paginator,
+            'classroomStatusNum' => $classroomStatusNum,
             'classroomCoursesNum' => $classroomCoursesNum,
             'priceAll' => $priceAll,
             'coinPriceAll' => $coinPriceAll,
             'categories' => $categories,
         ));
+    }
+
+    protected function getDifferentClassroomNum($conditions)
+    {
+        $total = $this->getClassroomService()->countClassrooms($conditions);
+        $published = $this->getClassroomService()->countClassrooms(array_merge($conditions, array('status' => 'published')));
+        $closed = $this->getClassroomService()->countClassrooms(array_merge($conditions, array('status' => 'closed')));
+        $draft = $this->getClassroomService()->countClassrooms(array_merge($conditions, array('status' => 'draft')));
+
+        return array(
+            'total' => empty($total) ? 0 : $total,
+            'published' => empty($published) ? 0 : $published,
+            'closed' => empty($closed) ? 0 : $closed,
+            'draft' => empty($draft) ? 0 : $draft,
+        );
     }
 
     public function setAction(Request $request)
@@ -72,7 +90,7 @@ class ClassroomAdminController extends BaseController
 
         $classroomSetting = array_merge($default, $classroomSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
 
             $classroomSetting = array_merge($classroomSetting, $set);
@@ -98,7 +116,7 @@ class ClassroomAdminController extends BaseController
             return $this->createMessageResponse('info', 'message_response.only_admin_can_create_class.message');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $myClassroom = $request->request->all();
 
             $title = trim($myClassroom['title']);
@@ -165,12 +183,12 @@ class ClassroomAdminController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $ref = $request->query->get('ref');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $number = $request->request->get('number');
 
             $classroom = $this->getClassroomService()->recommendClassroom($id, $number);
 
-            if ($ref == 'recommendList') {
+            if ('recommendList' == $ref) {
                 return $this->render('admin/classroom/recommend-tr.html.twig', array(
                     'classroom' => $classroom,
                 ));
@@ -190,7 +208,7 @@ class ClassroomAdminController extends BaseController
         $classroom = $this->getClassroomService()->cancelRecommendClassroom($id);
         $ref = $request->query->get('ref');
 
-        if ($ref == 'recommendList') {
+        if ('recommendList' == $ref) {
             return $this->render('admin/classroom/recommend-tr.html.twig', array(
                 'classroom' => $classroom,
             ));
@@ -234,15 +252,15 @@ class ClassroomAdminController extends BaseController
         $conditions = $request->query->all();
         $conditions['parentId'] = 0;
 
-        if (isset($conditions['categoryId']) && $conditions['categoryId'] == '') {
+        if (isset($conditions['categoryId']) && '' == $conditions['categoryId']) {
             unset($conditions['categoryId']);
         }
 
-        if (isset($conditions['status']) && $conditions['status'] == '') {
+        if (isset($conditions['status']) && '' == $conditions['status']) {
             unset($conditions['status']);
         }
 
-        if (isset($conditions['title']) && $conditions['title'] == '') {
+        if (isset($conditions['title']) && '' == $conditions['title']) {
             unset($conditions['title']);
         }
 
@@ -301,7 +319,7 @@ class ClassroomAdminController extends BaseController
     protected function getCashRate()
     {
         $coinSetting = $this->getSettingService()->get('coin');
-        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+        $coinEnable = isset($coinSetting['coin_enabled']) && 1 == $coinSetting['coin_enabled'];
         $cashRate = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting['cash_rate'] : 1;
 
         return $cashRate;

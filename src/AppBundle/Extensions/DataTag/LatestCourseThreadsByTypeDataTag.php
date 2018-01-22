@@ -24,6 +24,7 @@ class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements Data
     {
         $this->checkCount($arguments);
 
+        //查询条件空置会被过滤，会查找出全部的话题
         if (empty($arguments['type'])) {
             $type = '';
         } else {

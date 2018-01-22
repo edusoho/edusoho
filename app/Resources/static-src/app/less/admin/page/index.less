@@ -26,7 +26,8 @@
   }
 }
 
-.navbar-inverse .navbar-nav>li.marketing-li {
+.navbar-inverse .navbar-nav>li.new,
+.left-navbar >.new {
   &:before {
     content: 'New';
     position: absolute;
@@ -38,5 +39,11 @@
     background-color: #ed3e3e;
     border-radius: 20px;
     z-index: 10;
+  }
+}
+.left-navbar >.new {
+  &:before {
+    right: 4px;
+    top: 11px;
   }
 }

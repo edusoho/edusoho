@@ -2,6 +2,9 @@
 
 namespace Codeages\Biz\Framework\Util;
 
+/**
+ * @deprecated 2.0
+ */
 class ArrayToolkit
 {
     public static function get(array $array, $key, $default)
@@ -51,7 +54,7 @@ class ArrayToolkit
             if (!array_key_exists($key, $array)) {
                 return false;
             }
-            if ($strictMode && (is_null($array[$key]) || $array[$key] === '' || $array[$key] === 0)) {
+            if ($strictMode && (is_null($array[$key]) || '' === $array[$key] || 0 === $array[$key])) {
                 return false;
             }
         }

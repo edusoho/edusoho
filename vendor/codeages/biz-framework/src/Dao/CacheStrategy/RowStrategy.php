@@ -31,7 +31,7 @@ class RowStrategy implements CacheStrategy
 
     public function beforeQuery(GeneralDaoInterface $dao, $method, $arguments)
     {
-        if (strpos($method, 'get') !== 0) {
+        if (0 !== strpos($method, 'get')) {
             return false;
         }
 
@@ -43,11 +43,11 @@ class RowStrategy implements CacheStrategy
         }
 
         $cache = $this->redis->get($key);
-        if ($cache === false) {
+        if (false === $cache) {
             return false;
         }
 
-        if ($method === 'get') {
+        if ('get' === $method) {
             return $cache;
         }
 
@@ -59,7 +59,7 @@ class RowStrategy implements CacheStrategy
         if (empty($data)) {
             return;
         }
-        if (strpos($method, 'get') !== 0) {
+        if (0 !== strpos($method, 'get')) {
             return;
         }
 
@@ -70,7 +70,7 @@ class RowStrategy implements CacheStrategy
             return;
         }
 
-        if ($method === 'get') {
+        if ('get' === $method) {
             $this->redis->set($key, $data, self::LIFE_TIME);
         } else {
             $primaryKey = $this->getPrimaryCacheKey($dao, $metadata, $data['id']);

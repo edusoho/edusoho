@@ -6,6 +6,7 @@ use AppBundle\Common\SimpleValidator;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 // TODO
 
@@ -40,6 +41,7 @@ class AuthServiceTest extends BaseTestCase
 
     public function testRegisterLimitValidator()
     {
+        TimeMachine::setMockedTime(1515977986);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 2,
@@ -51,7 +53,7 @@ class AuthServiceTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $condition = array(
-            'startTime' => time() - 24 * 3600,
+            'startTime' => TimeMachine::time() - 24 * 3600,
             'createdIp' => '127.0.0.1',
         );
         $this->mockBiz(
@@ -73,8 +75,9 @@ class AuthServiceTest extends BaseTestCase
 
     public function testProtectiveRule()
     {
+        TimeMachine::setMockedTime(1515977986);
         $condition = array(
-            'startTime' => time() - 24 * 3600,
+            'startTime' => TimeMachine::time() - 24 * 3600,
             'createdIp' => '127.0.0.1',
         );
         $this->mockBiz(
@@ -95,13 +98,13 @@ class AuthServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'countUsers',
                     'returnValue' => 2,
-                    'withParams' => array(array('startTime' => time() - 3600, 'createdIp' => '127.0.0.1')),
+                    'withParams' => array(array('startTime' => TimeMachine::time() - 3600, 'createdIp' => '127.0.0.1')),
                     'runTimes' => 1,
                 ),
                 array(
                     'functionName' => 'countUsers',
                     'returnValue' => 0,
-                    'withParams' => array(array('startTime' => time() - 3600, 'createdIp' => '127.0.0.1')),
+                    'withParams' => array(array('startTime' => TimeMachine::time() - 3600, 'createdIp' => '127.0.0.1')),
                     'runTimes' => 1,
                 ),
             )

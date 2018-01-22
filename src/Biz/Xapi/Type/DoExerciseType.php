@@ -34,7 +34,7 @@ class DoExerciseType extends Type
             return array();
         }
         try {
-            $exerciseResultIds = ArrayToolkit::index($statements, 'target_id');
+            $exerciseResultIds = ArrayToolkit::column($statements, 'target_id');
             $exerciseResults = $this->getTestpaperService()->findTestpaperResultsByIds($exerciseResultIds);
             $exerciseResults = ArrayToolkit::index($exerciseResults, 'id');
 

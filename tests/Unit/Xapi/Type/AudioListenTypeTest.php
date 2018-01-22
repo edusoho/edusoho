@@ -4,6 +4,7 @@ namespace Tests\Unit\Xapi\Type;
 
 use Biz\BaseTestCase;
 use Biz\System\Service\SettingService;
+use Biz\Xapi\Service\XapiService;
 use QiQiuYun\SDK\Auth;
 
 class AudioListenTypeTest extends BaseTestCase
@@ -15,6 +16,7 @@ class AudioListenTypeTest extends BaseTestCase
 
         $this->mockBiz('Xapi:XapiService', array(
             array('functionName' => 'getWatchLog', 'returnValue' => array('id' => 1, 'title' => 'log title', 'content' => 'log content', 'watched_time' => 100, 'task_id' => 1, 'course_id' => 1, 'courseSetId' => 1)),
+            array('functionName' => 'getXapiSdk', 'returnValue' => $this->getXapiService()->getXapiSdk()),
         ));
 
         $this->mockBiz('Task:TaskService', array(
@@ -72,5 +74,13 @@ class AudioListenTypeTest extends BaseTestCase
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return XapiService
+     */
+    protected function getXapiService()
+    {
+        return $this->createService('Xapi:XapiService');
     }
 }

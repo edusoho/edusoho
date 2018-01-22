@@ -16,6 +16,14 @@
     {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.classroom_manage.manage.describe_tips'|trans|raw, placement: 'left'} %}
 
   </form>
+
+  <p class="text-muted">
+    <span class="mrl">{{ 'admin.classroom_manage.manage.count'|trans({'%courseNum%':classroomStatusNum.total})|raw }}</span>
+    <span class="mrl">{{ 'admin.classroom_manage.manage.published_count'|trans({'%publishedNum%':classroomStatusNum.published})|raw }}</span>
+    <span class="mrl">{{ 'admin.classroom_manage.manage.closed_count'|trans({'%closedNum%':classroomStatusNum.closed})|raw }}</span>
+    <span class="mrl">{{ 'admin.classroom_manage.manage.unpublish_count'|trans({'%unPublishedNum%':classroomStatusNum.draft})|raw }}</span>
+  </p>
+  
   {% if classroomInfo%}
   <table class="table table-striped table-hover 111" id="classroom-table">
     <thead>

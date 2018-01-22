@@ -43,6 +43,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'status = :status',
                 'title like :titleLike',
                 'price > :price_GT',
+                'price >= :price_GE',
                 'price = :price',
                 'private = :private',
                 'categoryId IN (:categoryIds)',

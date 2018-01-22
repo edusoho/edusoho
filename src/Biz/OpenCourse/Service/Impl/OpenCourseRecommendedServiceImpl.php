@@ -5,7 +5,6 @@ namespace Biz\OpenCourse\Service\Impl;
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
-use Biz\OpenCourse\Processor\CourseProcessorFactory;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourseRecommendedService
@@ -95,15 +94,12 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return $this->deleteBatchRecommendCourses(array($recommendId));
     }
 
-    protected function deleteBatchRecommendCourses($recommendIds)
+    public function deleteBatchRecommendCourses($recommendIds)
     {
         if (empty($recommendIds)) {
             return true;
         }
-
-        foreach ($recommendIds as $key => $recommendId) {
-            $this->getRecommendedCourseDao()->delete($recommendId);
-        }
+        $this->getRecommendedCourseDao()->batchDelete(array('ids' => $recommendIds));
 
         return true;
     }
@@ -159,16 +155,6 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $courseSetIds = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
 
         return $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-    }
-
-    protected function getTypeCourseService($type)
-    {
-        return CourseProcessorFactory::create($type);
-    }
-
-    protected function getOpenCourseService()
-    {
-        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     protected function getCourseSetService()
