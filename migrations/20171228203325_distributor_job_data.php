@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class DistributorJob extends Migration
+class DistributorJobData extends Migration
 {
     /**
      * Do the migration
