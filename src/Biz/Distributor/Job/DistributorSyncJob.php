@@ -32,7 +32,7 @@ class DistributorSyncJob extends AbstractJob
     private function sendData($drpService, $service)
     {
         $jobData = $service->findJobData();
-        $status = DistributorJobStatus::$ERROR;
+        $status = DistributorJobStatus::ERROR;
         $result = null;
         if (!empty($jobData)) {
             try {
@@ -45,7 +45,7 @@ class DistributorSyncJob extends AbstractJob
                 $resultJson = json_decode($result->getBody(), true);
 
                 if ('success' == $resultJson['code']) {
-                    $status = DistributorJobStatus::$FINISHED;
+                    $status = DistributorJobStatus::FINISHED;
                 }
                 $this->biz['logger']->info(
                     'distributor send job DistributorSyncJob::execute ',

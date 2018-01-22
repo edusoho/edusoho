@@ -24,13 +24,13 @@ abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implement
         $result = array(
             'data' => $this->convertData($dataObj),
             'jobType' => $this->getJobType(),
-            'status' => DistributorJobStatus::$PENDING,
+            'status' => DistributorJobStatus::PENDING,
         );
         $this->getDistributorJobDataDao()->create($result);
     }
 
     /**
-     * @param status 见 DistributorJobStatus.php 如 DistributorJobStatus::$PENDING
+     * @param status 见 DistributorJobStatus.php 如 DistributorJobStatus::PENDING
      */
     public function batchUpdateStatus($jobData, $status)
     {

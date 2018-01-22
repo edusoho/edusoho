@@ -71,7 +71,7 @@ class MockController extends BaseController
         if (!empty($drpService)) {
             $job = new DistributorSyncJob(array(), $this->getBiz());
             $result = ReflectionUtils::invokeMethod($job, 'sendData', array($drpService, $service));
-            if (DistributorJobStatus::$FINISHED == $result['status']) {
+            if (DistributorJobStatus::FINISHED == $result['status']) {
                 return $this->createJsonResponse(array('result' => 'true'));
             } else {
                 return $this->createJsonResponse(array('result' => $result['result']->getBody()));
