@@ -174,9 +174,16 @@ class ManageController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
+            $isContinue = $formData['isContinue'];
+            unset($formData['isContinue']);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            return $this->createJsonResponse(true);
+            $data = array('success' => true, 'goto' => '');
+            if ($isContinue) {
+                $data['goto'] = $this->generateUrl($source.'_manage_exam_next_result_check', array('id' => $targetId, 'activityId' => $result['lessonId']));
+            }
+
+            return $this->createJsonResponse($data);
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $result['id']);
@@ -487,6 +494,98 @@ class ManageController extends BaseController
             'attachments' => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
         ));
+    }
+
+    public function resultGraphAction($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (!$activity || $activity['mediaType'] != 'testpaper') {
+            return $this->createMessageResponse('error', 'Argument Invalid');
+        }
+
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
+
+        $data = $this->fillGraphData($testpaper, $userFirstResults);
+        $analysis = $this->analysisFirstResults($userFirstResults);
+
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
+        return $this->render('testpaper/manage/result-graph-modal.html.twig', array(
+            'activity' => $activity,
+            'testpaper' => $testpaper,
+            'data' => $data,
+            'analysis' => $analysis,
+            'task' => $task,
+        ));
+    }
+
+    protected function fillGraphData($testpaper, $userFirstResults)
+    {
+        $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
+
+        $totalScore = $testpaper['score'];
+        $maxTmpScore = 0;
+
+        $column = $totalScore <= 5 ? ($totalScore / 1) : 5;
+        for ($i = 1; $i <= $column; ++$i) {
+            $maxScoreCount = 0;
+            $firstScoreCount = 0;
+            $minTmpScore = $maxTmpScore;
+            $maxTmpScore = $totalScore * ($i / $column);
+
+            foreach ($userFirstResults as $result) {
+                if ($maxTmpScore == $totalScore) {
+                    if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] <= $maxTmpScore) {
+                        ++$firstScoreCount;
+                    }
+
+                    if ($result['maxScore'] >= $minTmpScore && $result['maxScore'] <= $maxTmpScore) {
+                        ++$maxScoreCount;
+                    }
+                } else {
+                    if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] < $maxTmpScore) {
+                        ++$firstScoreCount;
+                    }
+
+                    if ($result['maxScore'] >= $minTmpScore && $result['maxScore'] < $maxTmpScore) {
+                        ++$maxScoreCount;
+                    }
+                }
+            }
+
+            $data['xScore'][] = $minTmpScore.'-'.$maxTmpScore;
+            $data['yFirstNum'][] = $firstScoreCount;
+            $data['yMaxNum'][] = $maxScoreCount;
+        }
+
+        return json_encode($data);
+    }
+
+    protected function analysisFirstResults($userFirstResults)
+    {
+        if (empty($userFirstResults)) {
+            return array();
+        }
+
+        $data = array();
+        $scores = ArrayToolkit::column($userFirstResults, 'firstScore');
+        $data['avg'] = round(array_sum($scores) / count($userFirstResults), 1);
+        $data['maxScore'] = max($scores);
+
+        $count = 0;
+        foreach ($userFirstResults as $result) {
+            if ($result['firstPassedStatus'] != 'unpassed') {
+                ++$count;
+            }
+        }
+
+        $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
+
+        return $data;
     }
 
     protected function getCheckedEssayQuestions($questions)

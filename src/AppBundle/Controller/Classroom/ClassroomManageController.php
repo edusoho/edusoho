@@ -1016,6 +1016,27 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function resultNextCheckAction($id, $activityId)
+    {
+        $this->getClassroomService()->tryHandleClassroom($id);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || !in_array($activity['fromCourseId'], $courseIds)) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        $checkResult = $this->getTestpaperService()->getNextReviewingResult($courseIds, $activity['id'], $activity['mediaType']);
+
+        if (empty($checkResult)) {
+            return $this->redirect($this->generateUrl('classroom_manage_'.$activity['mediaType'], array('id' => $id)));
+        }
+
+        return $this->redirect($this->generateUrl('classroom_manage_'.$activity['mediaType'].'_check', array('id' => $id, 'resultId' => $checkResult['id'])));
+    }
+
     public function homeworkAction($id)
     {
         $this->getClassroomService()->tryHandleClassroom($id);

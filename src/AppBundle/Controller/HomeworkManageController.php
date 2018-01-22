@@ -133,6 +133,31 @@ class HomeworkManageController extends BaseController
         ));
     }
 
+    public function resultGraphAction($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (!$activity || $activity['mediaType'] != 'homework') {
+            return $this->createMessageResponse('Argument Invalid');
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
+
+        $data = $this->fillGraphData($userFirstResults);
+        $analysis = $this->analysisFirstResults($userFirstResults);
+
+        $task = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
+        return $this->render('homework/manage/result-graph-modal.html.twig', array(
+            'activity' => $activity,
+            'testpaper' => $testpaper,
+            'data' => $data,
+            'analysis' => $analysis,
+            'task' => $task,
+        ));
+    }
+
     protected function getCheckedEssayQuestions($questions)
     {
         $essayQuestions = array();
@@ -176,6 +201,42 @@ class HomeworkManageController extends BaseController
         return $newTypes;
     }
 
+    protected function fillGraphData($userFirstResults)
+    {
+        $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
+        $status = $this->get('codeages_plugin.dict_twig_extension')->getDict('passedStatus');
+
+        $firstStatusGroup = ArrayToolkit::group($userFirstResults, 'firstPassedStatus');
+        $maxStatusGroup = ArrayToolkit::group($userFirstResults, 'maxPassedStatus');
+
+        foreach ($status as $key => $name) {
+            $data['xScore'][] = $name;
+            $data['yFirstNum'][] = empty($firstStatusGroup[$key]) ? 0 : count($firstStatusGroup[$key]);
+            $data['yMaxNum'][] = empty($maxStatusGroup[$key]) ? 0 : count($maxStatusGroup[$key]);
+        }
+
+        return json_encode($data);
+    }
+
+    protected function analysisFirstResults($userFirstResults)
+    {
+        if (empty($userFirstResults)) {
+            return array('passPercent' => 0);
+        }
+
+        $data = array();
+        $count = 0;
+        foreach ($userFirstResults as $result) {
+            if ($result['firstPassedStatus'] != 'unpassed') {
+                ++$count;
+            }
+        }
+
+        $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
+
+        return $data;
+    }
+
     /**
      * @return TestpaperService
      */
@@ -207,6 +268,11 @@ class HomeworkManageController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     protected function getServiceKernel()

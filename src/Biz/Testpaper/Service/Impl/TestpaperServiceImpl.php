@@ -924,6 +924,57 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             PHP_INT_MAX
         );
 
+        return $this->calculateResultsFirstAndMaxScore($results);
+    }
+
+    public function findResultsByTestIdAndActivityId($testId, $activityId)
+    {
+        $conditions = array(
+            'testId' => $testId,
+            'lessonId' => $activityId,
+            'status' => 'finished',
+        );
+
+        $results = $this->searchTestpaperResults(
+            $conditions,
+            array('beginTime' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        return $this->calculateResultsFirstAndMaxScore($results);
+    }
+
+    public function getNextReviewingResult($courseIds, $activityId, $type)
+    {
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'lessonId' => $activityId,
+            'type' => $type,
+            'status' => 'reviewing',
+        );
+
+        $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC'), 0, 1);
+
+        if (empty($results)) {
+            unset($conditions['lessonId']);
+            $results = $this->searchTestpaperResults($conditions, array('beginTime' => 'ASC', 'lessonId' => 'ASC'), 0, 1);
+        }
+
+        if (empty($results)) {
+            return array();
+        }
+
+        $testpaper = $this->getTestpaper($results[0]['testId']);
+        if ($testpaper) {
+            return $results[0];
+        }
+
+        return array();
+    }
+
+    protected function calculateResultsFirstAndMaxScore($results)
+    {
         if (empty($results)) {
             return array();
         }
@@ -938,6 +989,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'usedTime' => $userFirstResult['usedTime'] ? round($userFirstResult['usedTime'] / 60, 1) : 0,
                 'firstScore' => $userFirstResult['score'],
                 'maxScore' => $this->getUserMaxScore($userResults),
+                'firstPassedStatus' => $userFirstResult['passedStatus'],
+                'maxPassedStatus' => $this->getUserMaxPassedStatus($userResults),
             );
 
             $format[$userId] = $result;
@@ -956,6 +1009,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $scores = ArrayToolkit::column($userResults, 'score');
 
         return max($scores);
+    }
+
+    protected function getUserMaxPassedStatus($userResults)
+    {
+        if (1 === count($userResults)) {
+            return $userResults[0]['passedStatus'];
+        }
+
+        $passedStatus = ArrayToolkit::column($userResults, 'passedStatus');
+        sort($passedStatus);
+
+        return $passedStatus[0];
     }
 
     /**

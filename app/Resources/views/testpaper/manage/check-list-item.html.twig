@@ -4,7 +4,6 @@
 
 {% set taskTitle = task.isOptional ? 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) : 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) %}
 
-
 <div class="clearfix testpaper-mark-list">
   <div class="testpaper-mark-info col-md-8">
     <div class="row">
@@ -19,16 +18,31 @@
           <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ task.createdTime|date('Y-m-d H:i') }}</span>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="testpaper-mark-operation">
-          <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="成绩分布"><i class="es-icon es-icon-check"></i></a></div>
-          <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="答题分布"><i class="es-icon es-icon-check"></i></a></div>
-          <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="批阅" ><i class="es-icon es-icon-check"></i></a></div>
+      {% if testpaper %}
+        <div class="col-md-4">
+          <div class="testpaper-mark-operation">
+            <div class="col-xs-4 text-center mt10">
+              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:task.courseId, activityId:task.activityId}) }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a>
+            </div>
+            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a></div>
+            
+            <div class="col-xs-4 text-center mt10">
+              {% if targetResultInfo.reviewing|default(0) > 0 %}
+                {% if targetType == 'classroom' %}
+                  {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+                {% else %}
+                  {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+                {% endif %}
+                <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check"></i></a>
+              {% else %}
+                <a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check gray-medium"></i></a>
+              {% endif %}
+            </div>
+          </div>
         </div>
-      </div>
+      {% endif %}
     </div>
   </div>
-
 
   <div class="testpaper-mark-status col-md-4 text-center">
     {% if testpaper %}

@@ -14,8 +14,7 @@ class TestpaperManageController extends BaseController
 {
     public function checkAction(Request $request, $id, $resultId)
     {
-        $course = $this->getCourseService()->getCourse($id);
-        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         return $this->forward('AppBundle:Testpaper/Manage:check', array(
             'request' => $request,
@@ -42,8 +41,7 @@ class TestpaperManageController extends BaseController
 
     public function checkListAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
-        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->tryManageCourse($id);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
@@ -81,6 +79,44 @@ class TestpaperManageController extends BaseController
             'isTeacher' => $isTeacher,
             'activityId' => $activity['id'],
         ));
+    }
+
+    public function resultGraphAction(Request $request, $id, $activityId)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['fromCourseId'] != $id) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultGraph';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultGraph';
+        }
+
+        return $this->forward($controller, array(
+            'activityId' => $activityId,
+        ));
+    }
+
+    public function resultNextCheckAction($id, $activityId)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['fromCourseId'] != $id) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        $checkResult = $this->getTestpaperService()->getNextReviewingResult(array($id), $activity['id'], $activity['mediaType']);
+
+        if (empty($checkResult)) {
+            return $this->redirect($this->generateUrl('course_manage_'.$activity['mediaType'].'_check_list', array('id' => $id)));
+        }
+
+        return $this->redirect($this->generateUrl('course_manage_'.$activity['mediaType'].'_check', array('id' => $id, 'resultId' => $checkResult['id'])));
     }
 
     /**
