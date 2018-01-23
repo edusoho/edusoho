@@ -169,6 +169,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         return array(array(
             'detail' => $deduct['detail'],
             'deduct_type' => $deduct['deduct_type'],
+            'deduct_type_name' => $deduct['detail'],
             'deduct_amount' => $deduct['deduct_amount'],  //原价和现价 都需要除以 100，deduct不需要除以 100
             'user_id' => $userId,
         ));

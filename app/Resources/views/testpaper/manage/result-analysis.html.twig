@@ -1,0 +1,52 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/perfect-scrollbar.js','app/js/testpaper/analysis/index.js']) %}
+
+{% set showHeader = 1 %}
+{% set isIframeBody = 0 %}
+
+{% block paper_header %}
+  <div class="es-section testpaper-heading-section js-testpaper-heading">
+    <div class="testpaper-titlebar clearfix">
+      <h1 class="testpaper-title testpaper-title--overflow" title="{{ paper.name }}">{{ paper.name }}</h1>
+      <div class="testpaper-status">
+        <div class="label label-success">{{'试题分析'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
+  </div>
+{% endblock %}
+
+{% block paper_body %}
+  {% set questionTypeDict = getQuestionTypes() %}
+
+  {% for type in questionTypes|default([]) if questions[type]|default(null) %}
+    <div class="panel panel-default testpaper-question-panel js-testpaper-question-block" id="testpaper-questions-{{ type }}">
+      <div class="panel-heading">
+        <strong class="">{{ questionTypeDict[type] }}</strong>
+      </div>
+      <div class="panel-body">
+        {% for question in questions[type]|default(null) %}
+          {% if question.isDeleted|default(null) %}
+            {% include 'question/part/question-delete.html.twig' with {question:question}%}
+          {% else %}
+            {% set questionTemplate = getQuestionTypeTemplate(question.type, 'analysis') %}
+            {% if questionTemplate %}
+              {% set questionAnalysis = analyses[question.id]|default(null) %}
+              {% include questionTemplate with {questionAnalysis:questionAnalysis, question:question, firstCount:relatedData.finished, testType:paper.type} %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block paper_sidebar %}
+  {% if showCard|default(1) %}
+    <div class="testpaper-card {{ testpaperCardClass|default('') }}" >
+      {% include 'testpaper/analysis-card.html.twig' %}
+    </div>
+  {% endif %}
+{% endblock %}

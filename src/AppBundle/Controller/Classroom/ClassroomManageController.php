@@ -981,37 +981,28 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $conditions = array(
-            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
-            'mediaType' => 'testpaper',
-        );
-        $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);
-
-        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
-
-        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
 
         return $this->render(
             'classroom-manage/testpaper/index.html.twig',
             array(
                 'classroom' => $classroom,
-                'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId'),
             )
         );
     }
 
-    public function testpaperResultListAction($id, $testpaperId)
+    public function testpaperResultListAction($id, $testpaperId, $activityId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
-
         if (!$testpaper) {
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+        }
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (!$activity) {
+            throw $this->createResourceNotFoundException('activity', $activityId);
         }
 
         return $this->render(
@@ -1020,8 +1011,34 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
                 'testpaper' => $testpaper,
                 'isTeacher' => true,
+                'activityId' => $activity['id'],
             )
         );
+    }
+
+    public function resultNextCheckAction($id, $activityId)
+    {
+        $this->getClassroomService()->tryHandleClassroom($id);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || !in_array($activity['fromCourseId'], $courseIds)) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        $checkResult = $this->getTestpaperService()->getNextReviewingResult($courseIds, $activity['id'], $activity['mediaType']);
+
+        if (empty($checkResult)) {
+            $route = $this->getRedirectRoute('list', $activity['mediaType']);
+
+            return $this->redirect($this->generateUrl($route, array('id' => $id)));
+        }
+
+        $route = $this->getRedirectRoute('check', $activity['mediaType']);
+
+        return $this->redirect($this->generateUrl($route, array('id' => $id, 'resultId' => $checkResult['id'])));
     }
 
     public function homeworkAction($id)
@@ -1029,27 +1046,11 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $user = $this->getUser();
-
-        if (empty($user)) {
-            return $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
-        }
-
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $conditions = array(
-            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
-            'mediaType' => 'homework',
-        );
-        $activities = $this->getActivityService()->search($conditions, null, 0, PHP_INT_MAX);
-
         return $this->render(
             'classroom-manage/homework/index.html.twig',
             array(
                 'classroom' => $classroom,
                 'isTeacher' => true,
-                'homeworkIds' => ArrayToolkit::column($activities, 'mediaId'),
             )
         );
     }
@@ -1084,6 +1085,46 @@ class ClassroomManageController extends BaseController
                 'targetId' => $classroom['id'],
             )
         );
+    }
+
+    public function resultAnalysisAction(Request $request, $id, $activityId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if (empty($activity) || !in_array($activity['mediaType'], array('homework', 'testpaper'))) {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultAnalysis';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultAnalysis';
+        }
+
+        return $this->forward($controller, array(
+            'activityId' => $activityId,
+            'targetId' => $id,
+            'targetType' => 'classroom',
+            'studentNum' => $classroom['studentNum'],
+        ));
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'list' => array(
+                'testpaper' => 'classroom_manage_testpaper',
+                'homework' => 'classroom_manage_homework',
+            ),
+            'check' => array(
+                'testpaper' => 'classroom_manage_testpaper_check',
+                'homework' => 'classroom_manage_homework_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
     }
 
     private function getTagIdsFromRequest($request)

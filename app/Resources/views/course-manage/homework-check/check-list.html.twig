@@ -4,14 +4,14 @@
 {% set side_nav = 'homework-check' %}
 
 {% block main %}
-  <div class="panel panel-default">
+  <div class="panel panel-default testpaper-mark-panel">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}
         <span class="color-danger">{{'course.homework_check.no_permission_tips'|trans}}</span>
       {% endif %}
 
-      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework',testpaperIds:homeworkIds})) }}
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id, targetType: 'course',type:'homework'})) }}
     </div>
   </div>
 {% endblock %}
