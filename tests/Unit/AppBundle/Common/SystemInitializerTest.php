@@ -8,6 +8,101 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SystemInitializerTest extends BaseTestCase
 {
+    public function testInitFile()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initFile', array());
+
+        $result = $this->getFileService()->getAllFileGroups();
+
+        $this->assertArrayEquals(array(
+            array(
+                'name' => '默认文件组',
+                'code' => 'default',
+                'public' => 1,
+            ),
+            array(
+                'name' => '缩略图',
+                'code' => 'thumb',
+                'public' => 1,
+            ),
+            array(
+                'name' => '课程',
+                'code' => 'course',
+                'public' => 1,
+            ),
+            array(
+                'name' => '用户',
+                'code' => 'user',
+                'public' => 1,
+            ),
+            array(
+                'name' => '课程私有文件',
+                'code' => 'course_private',
+                'public' => 0,
+            ),
+            array(
+                'name' => '资讯',
+                'code' => 'article',
+                'public' => 1,
+            ),
+            array(
+                'name' => '临时目录',
+                'code' => 'tmp',
+                'public' => 1,
+            ),
+            array(
+                'name' => '全局设置文件',
+                'code' => 'system',
+                'public' => 1,
+            ),
+            array(
+                'name' => '小组',
+                'code' => 'group',
+                'public' => 1,
+            ),
+            array(
+                'name' => '编辑区',
+                'code' => 'block',
+                'public' => 1,
+            ),
+            array(
+                'name' => '班级',
+                'code' => 'classroom',
+                'public' => 1,
+            ),
+        ), $result);
+    }
+
+    public function testInitCategory()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+
+        ReflectionUtils::invokeMethod($initializer, '_initCategory', array());
+        $courseGroup = $this->getCategoryService()->getGroupByCode('course');
+        $courseCategory = $this->getCategoryService()->getCategoryByCode('default');
+        $classroomGroup = $this->getCategoryService()->getGroupByCode('classroom');
+        $classroomCategory = $this->getCategoryService()->getCategoryByCode('classroomdefault');
+
+        $this->assertNotTrue(empty($courseGroup));
+        $this->assertNotTrue(empty($courseCategory));
+        $this->assertNotTrue(empty($classroomGroup));
+        $this->assertNotTrue(empty($classroomCategory));
+    }
+
+    public function testInitTag()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+
+        ReflectionUtils::invokeMethod($initializer, '_initTag', array());
+        $result = $this->getTagService()->getTagByName('默认标签');
+
+        $this->assertNotTrue(empty($result));
+    }
+
     public function testInitRegisterSetting()
     {
         $output = new ConsoleOutput();
@@ -242,5 +337,31 @@ EOD;
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return TagService
+     */
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
+    }
+
+    protected function getCategoryDao()
+    {
+        return $this->createDao('Article:CategoryDao');
+    }
+
+    private function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 }
