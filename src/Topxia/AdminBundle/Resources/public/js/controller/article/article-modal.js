@@ -82,7 +82,7 @@ define(function(require, exports, module) {
       },
       multiple: true,
       maximumSelectionSize: 20,
-      placeholder: Translator.trans('请输入标签'),
+      placeholder: Translator.trans('validate.tag_required_hint'),
       width: 'off',
       createSearchChoice: function() {
         return null;
@@ -102,16 +102,16 @@ define(function(require, exports, module) {
     });
 
     $('#article_thumb_remove').on('click', function() {
-      if (!confirm(Translator.trans('确认要删除吗？'))) return false;
+      if (!confirm(Translator.trans('site.delete.confirm_hint'))) return false;
       var $btn = $(this);
       $.post($btn.data('url'), function() {
         $('#article-thumb-container').html('');
         $form.find('[name=thumb]').val('');
         $form.find('[name=originalThumb]').val('');
         $btn.hide();
-        Notify.success(Translator.trans('删除成功！'));
+        Notify.success(Translator.trans('site.delete_success_hint'));
       }).error(function() {
-        Notify.danger(Translator.trans('删除失败！'));
+        Notify.danger(Translator.trans('site.delete_fail_hint'));
       });
     });
 
@@ -128,7 +128,7 @@ define(function(require, exports, module) {
           return false;
         }
         $('#article-operate-save').button('loading').addClass('disabled');
-        Notify.success(Translator.trans('保存文章成功！'));
+        Notify.success(Translator.trans('admin.article.save.success'));
       }
     });
 
@@ -146,7 +146,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '[name=categoryId]',
       required: true,
-      errormessageRequired: '请选择分类',
+      errormessageRequired: Translator.trans('admin.article.choose_column_tip'),
     });
 
     validator.addItem({

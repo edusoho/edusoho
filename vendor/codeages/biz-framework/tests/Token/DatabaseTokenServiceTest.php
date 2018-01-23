@@ -30,7 +30,7 @@ class DatabaseTokenServiceTest extends IntegrationTestCase
         $tokens = $this->seed('Tests\Token\TokenSeeder');
 
         $expectedToken = $tokens->filter(function ($token) {
-            return $token['_key'] == 'unit_test_key_no_expired';
+            return 'unit_test_key_no_expired' == $token['_key'];
         })->first();
 
         $verified = $this->getTokenService()->verify('unit_test', 'unit_test_key_no_expired');

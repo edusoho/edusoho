@@ -7,8 +7,6 @@ t.add("plugin_faq.validate.end_version", "\u7ec8\u6b62\u7248\u672c\u53f7", "js",
 t.add("plugin_faq.category.hint", "\u8bf7\u9009\u62e9\u5206\u7c7b", "js", "zh_CN");
 t.add("plugin_faq.validate.es_version", "ES\u7248\u672c\u53f7", "js", "zh_CN");
 t.add("plugin_faq.validate.compare_version.hint", "\u8d77\u59cb\u7248\u672c\u53f7\u5fc5\u987b\u5c0f\u4e8e\u7b49\u4e8e\u7ec8\u6b62\u7248\u672c\u53f7", "js", "zh_CN");
-t.add("log.action.vip.create_level", 123, "js", "zh_CN");
-t.add("notify.reward_point", "\u79ef\u5206", "js", "zh_CN");
 t.add("site.flash_not_install_hint", "\u60a8\u7684\u6d4f\u89c8\u5668\u672a\u88c5Flash\u64ad\u653e\u5668\u6216\u7248\u672c\u592a\u4f4e\uff0c\u8bf7\u5148\u5b89\u88c5Flash\u64ad\u653e\u5668\u3002<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">\u70b9\u51fb\u5b89\u88c5<\/a>", "js", "zh_CN");
 t.add("site.date_format_dhis", "%days%\u5929%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
 t.add("site.date_format_his", "%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
@@ -565,6 +563,7 @@ t.add("notify.copy_succeed.message", "\u590d\u5236\u6210\u529f\uff01", "js", "zh
 t.add("notify.pay_failed.message", "\u652f\u4ed8\u5931\u8d25", "js", "zh_CN");
 t.add("notify.share_success.message", "\u5206\u4eab\u6210\u529f", "js", "zh_CN");
 t.add("notify.share_fail.message", "\u5206\u4eab\u5931\u8d25", "js", "zh_CN");
+t.add("notify.reward_point", "\u79ef\u5206", "js", "zh_CN");
 t.add("json_response.nickname_can_use.message", "\u8be5\u6635\u79f0\u53ef\u4ee5\u4f7f\u7528", "js", "zh_CN");
 t.add("json_response.verification_code_error.message", "\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("json_response.verification_code_correct.message", "\u9a8c\u8bc1\u7801\u6b63\u786e", "js", "zh_CN");
@@ -647,10 +646,13 @@ t.add("oauth.refresh.captcha_code_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u5
 t.add("oauth.captcha_code_length_tip", "\u56fe\u5f62\u7801\u4e3a5\u4f4d\u6570", "js", "zh_CN");
 t.add("oauth.captcha_code_expired_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u8fc7\u671f", "js", "zh_CN");
 t.add("oauth.captcha_code_error_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
-t.add("oauth.register.time_limit", "\u7531\u4e8e\u60a8\u6ce8\u518c\u6b21\u6570\u8fc7\u591a\uff0c\u8bf7\u7a0d\u5019\u5c1d\u8bd5", "js", "zh_CN");
+t.add("oauth.register.time_limit", "\u7531\u4e8e\u60a8\u6ce8\u518c\u6b21\u6570\u8fc7\u591a\uff0c\u8bf7\u7a0d\u540e\u5c1d\u8bd5", "js", "zh_CN");
 t.add("oauth.register.error_message", "\u6ce8\u518c\u51fa\u73b0\u5f02\u5e38\uff0c\u8bf7\u8054\u7cfb\u7ba1\u7406\u5458", "js", "zh_CN");
 t.add("admin.user.statistics.data.learn_total_time", "\u5b66\u4e60\u603b\u65f6\u957f", "js", "zh_CN");
 t.add("admin.user.statistics.data.learn_time", "\u5b66\u4e60\u65f6\u957f\/\u5206\u949f", "js", "zh_CN");
 t.add("admin.user.statistics.data.time", "\u65f6\u957f", "js", "zh_CN");
 t.add("course.audio.enable.biz.user", "\u542c\u8bfe\u6a21\u5f0f\u9700\u8981\u5148\u7533\u8bf7\u4e3a\u5546\u4e1a\u7528\u6237!", "js", "zh_CN");
+t.add("admin.data.lab.setting.error", "\u53d1\u751f\u5f02\u5e38\u4e86\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
+t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "zh_CN");
 })(Translator);

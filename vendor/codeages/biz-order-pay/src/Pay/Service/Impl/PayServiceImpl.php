@@ -136,15 +136,12 @@ class PayServiceImpl extends BaseService implements PayService
             }
 
             $trade = $this->getTradeContext($trade['id'])->closing();
-
             if($this->isCloseByPayment()){
                 $this->closeByPayment($trade);
-            } else {
-                $data = array(
-                    'sn' => $trade['trade_sn'],
-                );
-                $this->notifyClosed($data);
-            }
+            } 
+
+            $data = array('sn' => $trade['trade_sn']);
+            $this->notifyClosed($data);
         }
     }
 
@@ -222,9 +219,17 @@ class PayServiceImpl extends BaseService implements PayService
         return empty($this->biz['payment.final_options']['closed_by_notify']) ? false : $this->biz['payment.final_options']['closed_by_notify'];
     }
 
-    protected function closeByPayment($trade)
+    protected function closeByPayment($data)
     {
-        return $this->getPayment($trade['platform'])->closeTrade($trade);
+        $response = $this->getPayment($data['platform'])->closeTrade($data);
+        if (!$response->isSuccessful()) {
+            $failData = $response->getFailData();
+            $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.close_failed', $data['trade_sn'], "交易号{$data['trade_sn']}关闭失败,{$failData},(order_sn:{$data['order_sn']})", $data);
+        }else{
+            $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.close', $data['trade_sn'], "交易号{$data['trade_sn']}关闭成功。(order_sn:{$data['order_sn']})", $data);
+        }
+
+        return $response;
     }
 
     protected function updateTradeToPaidAndTransferAmount($data)
@@ -326,8 +331,8 @@ class PayServiceImpl extends BaseService implements PayService
 
     protected function refundPlatformTrade($trade)
     {
-        $paymentGetWay = $this->getPayment($trade['platform']);
-        $response = $paymentGetWay->applyRefund($trade);
+        $paymentGateway = $this->getPayment($trade['platform']);
+        $response = $paymentGateway->applyRefund($trade);
 
         if (!$response->isSuccessful()) {
             return $trade;
@@ -344,8 +349,8 @@ class PayServiceImpl extends BaseService implements PayService
 
     public function notifyRefunded($payment, $data)
     {
-        $paymentGetWay = $this->getPayment($payment);
-        list($result, $response) = $paymentGetWay->converterRefundNotify($data);
+        $paymentGateway = $this->getPayment($payment);
+        list($result, $response) = $paymentGateway->converterRefundNotify($data);
         $tradeSn = $result['trade_sn'];
 
         $this->updateTradeToRefunded($tradeSn, $data);

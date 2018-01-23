@@ -2,13 +2,12 @@
 
 namespace Biz\Distributor\Service\Impl;
 
-use Biz\BaseService;
 use Biz\Distributor\Service\DistributorService;
-use QiQiuYun\SDK\Service\DrpService;
-use QiQiuYun\SDK\Auth;
 use Biz\Distributor\Util\DistributorJobStatus;
+use Biz\Marketing\Service\Impl\MarketingServiceImpl;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-abstract class BaseDistributorServiceImpl extends BaseService implements DistributorService
+abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implements DistributorService
 {
     public function findJobData()
     {
@@ -22,58 +21,49 @@ abstract class BaseDistributorServiceImpl extends BaseService implements Distrib
 
     public function createJobData($dataObj)
     {
-        $dependentTarget = $this->getDependentTarget($dataObj);
-
         $result = array(
             'data' => $this->convertData($dataObj),
             'jobType' => $this->getJobType(),
-            'status' => empty($dependentTarget) ? DistributorJobStatus::$PENDING : DistributorJobStatus::$DEPENDENT,
-            'dependentTarget' => $dependentTarget,
-            'target' => strtolower($this->getJobType()).':'.$dataObj['id'],
-            'errMsg' => '',
+            'status' => DistributorJobStatus::PENDING,
         );
         $this->getDistributorJobDataDao()->create($result);
     }
 
     /**
-     * @param status 见 DistributorJobStatus.php 如 DistributorJobStatus::$PENDING
+     * @param status 见 DistributorJobStatus.php 如 DistributorJobStatus::PENDING
      */
     public function batchUpdateStatus($jobData, $status)
     {
+        $helper = new BatchUpdateHelper($this->getDistributorJobDataDao());
         foreach ($jobData as $single) {
-            $this->getDistributorJobDataDao()->update($single['id'], array('status' => $status));
+            $helper->add('id', $single['id'], array('status' => $status));
         }
+        $helper->flush();
     }
 
-    public function getDrpService()
+    protected function getServerUrlConfig()
     {
-        if (empty($this->drpService)) {
-            $this->drpService = null;
-            $settings = $this->getSettingService()->get('storage', array());
-            if (!empty($settings['cloud_access_key']) && !empty($settings['cloud_secret_key'])) {
-                $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-                $this->drpService = new DrpService($auth);
-            }
-        }
-
-        return $this->drpService;
+        return array(
+            'defaultUrl' => 'http://fx.marketing.com',
+            'developerSettingName' => 'distributor_server',
+        );
     }
 
     /**
-     * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 student
+     * 定时任务用， 发送给 营销平台的 type, 订单为 order, 用户 为 user
      */
     abstract public function getSendType();
 
-    abstract public function getNextJobType();
-
+    /**
+     * 保存数据时，转化数据用，转为 distributor_job_data 内的data属性
+     */
     abstract protected function convertData($data);
 
+    /**
+     * distributor_job_data的type，及 相应的DistributorService的关键字，
+     *   如 值为User, 则相应的service为 DistributorUserService
+     */
     abstract protected function getJobType();
-
-    protected function getDependentTarget($data)
-    {
-        return '';
-    }
 
     protected function getDistributorJobDataDao()
     {

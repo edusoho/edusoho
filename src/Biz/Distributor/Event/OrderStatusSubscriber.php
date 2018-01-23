@@ -19,8 +19,8 @@ class OrderStatusSubscriber extends EventSubscriber implements EventSubscriberIn
 
     public function onOrderChangeStatus(Event $event)
     {
-        $order = $event->getSubject();
-        foreach ($order['items'] as $item) {
+        $orders = $event->getSubject();
+        foreach ($orders['items'] as $item) {
             $order = $this->getOrderService()->getOrder($item['order_id']);
             if (!empty($order)) {
                 $user = $this->getUserService()->getUser($order['user_id']);

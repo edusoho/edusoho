@@ -24,7 +24,6 @@ class RegisterController extends BaseController
     public function distributorIndexAction(Request $request)
     {
         $fields = $request->query->all();
-        // $fields = $request->request->all();
         $registerUrl = $this->generateUrl('register');
         if (!empty($fields['token'])) {
             if ($this->getCurrentUser()->isLogin()) {
@@ -87,8 +86,10 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
-                if (!empty($_COOKIE['distributor-token'])) {
-                    $registration['distributorToken'] = $_COOKIE['distributor-token'];
+
+                $distributorTokenCookie = $request->cookies->get('distributor-token');
+                if (!empty($distributorTokenCookie)) {
+                    $registration['distributorToken'] = $distributorTokenCookie;
                 }
 
                 $user = $this->getAuthService()->register($registration);
@@ -118,7 +119,7 @@ class RegisterController extends BaseController
                 }
 
                 $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-                if (!empty($_COOKIE['distributor-token'])) {
+                if (!empty($distributorTokenCookie)) {
                     $response->headers->setCookie(new Cookie('distributor-token', ''));
                 }
 

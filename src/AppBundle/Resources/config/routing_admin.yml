@@ -595,6 +595,12 @@ admin_setting_site:
     defaults: { _controller: AppBundle:Admin/SiteSetting:site }
     permissions: [admin_setting_message]
 
+admin_setting_site_save:
+    path:  /setting/site/save
+    defaults: { _controller: AppBundle:Admin/SiteSetting:saveSite }
+    permissions: [admin_setting_message]
+    methods: [POST]
+
 admin_operation_mobile:
     path:  /operation/mobile
     defaults: { _controller: AppBundle:Admin/Mobile:mobile }
@@ -951,6 +957,14 @@ admin_mocked:
 admin_mocked_distributor_token:
     path: /mock/distributor_token
     defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+
+admin_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:getPostData }
+
+admin_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postData }
 
 admin_optimize:
     path:  /setting/optimize
@@ -2198,9 +2212,14 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
-admin_marketing:
-    path: /marketing
-    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
+admin_login_marketing:
+    path: /login/marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:loginMarketing}
+
+admin_login_distributor:
+    path: /login/distributor
+    defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
+
 
 admin_jobs:
     path: /jobs
@@ -2305,3 +2324,19 @@ admin_user_learn_chart:
 admin_user_learn_statistics_info:
     path: /user/learn/statistics/info
     defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }
+
+admin_cloud_data_lab:
+    path: /data/lab
+    defaults: { _controller: AppBundle:Admin/DataLab:data }
+
+admin_cloud_data_lab_setting:
+    path: /data/lab/setting
+    defaults: { _controller: AppBundle:Admin/DataLab:settting }
+
+admin_cloud_data_lab_setting_enable_modal:
+    path: /data/lab/setting/modal/enable
+    defaults: { _controller: AppBundle:Admin/DataLab:enableXapiSetting }
+
+admin_cloud_data_lab_setting_disable_modal:
+    path: /data/lab/setting/modal/disable
+    defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }

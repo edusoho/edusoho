@@ -22,6 +22,7 @@ class Auth
     public function sign($signingText)
     {
         $signature = hash_hmac('sha1', $signingText, $this->secretKey, true);
+
         return  str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
     }
 }

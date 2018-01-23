@@ -3,9 +3,9 @@
 namespace Biz\Distributor\Dao\Impl;
 
 use Biz\Distributor\Dao\DistributorJobDataDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class DistributorJobDataDaoImpl extends GeneralDaoImpl implements DistributorJobDataDao
+class DistributorJobDataDaoImpl extends AdvancedDaoImpl implements DistributorJobDataDao
 {
     protected $table = 'distributor_job_data';
 
@@ -17,8 +17,6 @@ class DistributorJobDataDaoImpl extends GeneralDaoImpl implements DistributorJob
                 'jobType = :jobType',
                 'status in (:statusArr)',
                 'status = :status',
-                'target = :target',
-                'pendingTarget = :pendingTarget',
             ),
             'orderbys' => array(
                 'id',

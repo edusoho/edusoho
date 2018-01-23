@@ -1313,7 +1313,6 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
-course.task.classroom_sync_job_executing_tips: 班级课程同步中，请稍后发布
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
@@ -4109,7 +4108,7 @@ my.teaching.open_course.lesson.header.content.tips: 直播已经开始，直播�
 my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
-my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍候再来：
+my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -7025,7 +7024,8 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 微营销地址
+admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
+admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
@@ -7814,7 +7814,7 @@ site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误
 site.register.sensitive_words: 用户名中含有敏感词
-site.register.time_limit: 由于您注册次数过多，请稍候尝试
+site.register.time_limit: 由于您注册次数过多，请稍后尝试
 site.incorrect.username_or_password: 用户名或密码不正确。
 site.illegal.request: 非法请求
 site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
@@ -8387,3 +8387,15 @@ user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+
+
+admin.datalab.setting.modal_title: 提示：
+admin.datalab.setting.modal_enable_body: 开启后，将在 24 小时内开始更新数据。关闭期内的学习数据无法更新到报表中。
+admin.datalab.setting.modal_disable_body: 关闭后，关闭期内的学习数据将无法更新到报表中。您确认要关闭吗？
+admin.datalab.setting.agreement: 用户协议
+admin.datalab.setting.operation_title: '开启数据分析服务:'
+admin.datalab.warning_tip: 当前数据分析服务已关闭，报表数据无法更新。可在<a href="%url%">【设置】</a>中重新启用该服务。
+admin.datalab.setting.btn_cancel: 取消
+admin.datalab.setting.btn_open: 确认开启
+admin.datalab.setting.btn_close: 确认关闭
+admin.datalab.setting.btn_use: 再用用看

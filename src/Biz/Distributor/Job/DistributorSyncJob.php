@@ -7,49 +7,84 @@ use Biz\Distributor\Util\DistributorJobStatus;
 
 class DistributorSyncJob extends AbstractJob
 {
+    private $distributorServices = array();
+    private $mockedSendTypes = null;
+
     public function execute()
     {
-        $drpService = $this->getDistributorService()->getDrpService();
+        $drpService = $this->getDrpService();
         if (!empty($drpService)) {
-            $jobData = $this->getDistributorService()->findJobData();
-            if (!empty($jobData)) {
-                $status = DistributorJobStatus::$ERROR;
-                try {
-                    $result = $drpService->postData($jobData, $this->getDistributorService()->getSendType());
+            $distributorServices = $this->getDistributorServiceList();
 
-                    if ('success' == $result['code']) {
-                        $status = DistributorJobStatus::$FINISHED;
-                    }
-                } catch (\Exception $e) {
-                    $this->biz['logger']->error(
-                        'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
-                        array('jobData' => $jobData, 'trace' => $e->getTraceAsString())
-                    );
-                }
-
-                $this->getDistributorService()->batchUpdateStatus($jobData, $status);
-
-                $this->getJobDao()->update(
-                    $this->id, 
-                    array(
-                        'args' => array(
-                            'type' => $this->getDistributorService()->getNextJobType()
-                        )
-                    )
-                );
+            foreach ($distributorServices as $service) {
+                $this->sendData($drpService, $service);
             }
         }
     }
 
-    protected function getJobDao()
+    protected function getDrpService()
     {
-        return $this->biz->dao('Scheduler:JobDao');
+        $distributorServices = $this->getDistributorServiceList();
+
+        return $distributorServices[0]->getDrpService();
     }
 
-    protected function getDistributorService()
+    private function sendData($drpService, $service)
     {
-        $args = $this->__get('args');
+        $jobData = $service->findJobData();
+        $status = DistributorJobStatus::ERROR;
+        $result = null;
+        if (!empty($jobData)) {
+            try {
+                $sendedData = array();
+                foreach ($jobData as $data) {
+                    $sendedData[] = $data['data'];
+                }
 
-        return $this->biz->service('Distributor:Distributor'.$args['type'].'Service');
+                $result = $drpService->postData($sendedData, $service->getSendType());
+                $resultJson = json_decode($result->getBody(), true);
+
+                if ('success' == $resultJson['code']) {
+                    $status = DistributorJobStatus::FINISHED;
+                }
+                $this->biz['logger']->info(
+                    'distributor send job DistributorSyncJob::execute ',
+                    array('jobData' => $jobData, 'result' => $result->getBody())
+                );
+            } catch (\Exception $e) {
+                $this->biz['logger']->error(
+                    'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
+                    array('jobData' => $jobData, 'result' => empty($result) ? '' : $result->getBody(), 'trace' => $e->getTraceAsString())
+                );
+            }
+
+            $service->batchUpdateStatus($jobData, $status);
+        } else {
+            return array('status' => $status, 'result' => 'no sendable data');
+        }
+
+        return array('status' => $status, 'result' => $result);
+    }
+
+    private function getDistributorServiceList()
+    {
+        if (empty($this->distributorServices)) {
+            $this->distributorServices = array();
+            $types = $this->getAvailableSendTypes();
+            foreach ($types as $type) {
+                array_push($this->distributorServices, $this->biz->service('Distributor:Distributor'.$type.'Service'));
+            }
+        }
+
+        return $this->distributorServices;
+    }
+
+    private function getAvailableSendTypes()
+    {
+        if (!empty($this->mockedSendTypes)) {
+            return $this->mockedSendTypes;
+        }
+
+        return array('User', 'Order');
     }
 }

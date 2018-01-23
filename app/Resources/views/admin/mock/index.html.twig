@@ -3,11 +3,11 @@
 {% set menu = 'admin_setting_message' %}
 {% set script_controller = 'mock/index' %}
 
-{% block main %}
+{% block content %}
   分销平台token伪造
   <form id="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token')}}">
     <div>
-      优惠券金额(元): <input type="text" name="couponPrice" value="100"></input>
+      优惠券金额(分): <input type="text" name="couponPrice" value="10000"></input>
     </div>
     <div>
       优惠卷有效期(天): <input type="text" name="couponExpiryDay" value="{{couponExpireDateStr}}"></input>
@@ -21,4 +21,23 @@
   <div>
     <input type="button" value="提交" id="tokenGeneratorBtn"></input>
   </div>
+
+  <br/><br/>
+  发送
+  <div>
+    类型: 
+    <select class="sendedType" data-url="{{ path('admin_mocked_distributor_get_post_data') }}">
+      <option value="">----</option>
+      <option value="User">用户</option>
+      <option value="Order">订单</opiton>
+    </select>
+  </div>
+
+  <div>
+    发送的数据 <br/>
+    <textarea type="text" class="sendedData" readonly style="width: 1000px; height: 200px;" data-url="{{ path('admin_mocked_distributor_post_data') }}"></textarea>
+    <br/>发送结果 <span class="sendResult"></span>
+  </div>
+
+  <input type="button" value="发送" class="sendBtn" data-url="{{ path('admin_mocked_distributor_post_data') }}"></input>
 {% endblock %}

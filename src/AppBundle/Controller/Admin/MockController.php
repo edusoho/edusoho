@@ -5,6 +5,9 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\TimeMachine;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\AccessDeniedException;
+use Biz\Distributor\Util\DistributorJobStatus;
+use Biz\Distributor\Job\DistributorSyncJob;
+use AppBundle\Common\ReflectionUtils;
 
 class MockController extends BaseController
 {
@@ -42,8 +45,47 @@ class MockController extends BaseController
         ));
     }
 
+    public function getPostDataAction(Request $request)
+    {
+        if (!$this->getCurrentUser()->isSuperAdmin()) {
+            throw new AccessDeniedException();
+        }
+
+        $type = $request->request->get('type');
+        $service = $this->getDistributorService($type);
+        $jobData = $service->findJobData();
+
+        return $this->createJsonResponse($jobData);
+    }
+
+    public function postDataAction(Request $request)
+    {
+        if (!$this->getCurrentUser()->isSuperAdmin()) {
+            throw new AccessDeniedException();
+        }
+
+        $type = $request->request->get('type');
+        $service = $this->getDistributorService($type);
+        $drpService = $service->getDrpService();
+
+        if (!empty($drpService)) {
+            $job = new DistributorSyncJob(array(), $this->getBiz());
+            $result = ReflectionUtils::invokeMethod($job, 'sendData', array($drpService, $service));
+            if (DistributorJobStatus::FINISHED == $result['status']) {
+                return $this->createJsonResponse(array('result' => 'true'));
+            } else {
+                return $this->createJsonResponse(array('result' => $result['result']->getBody()));
+            }
+        }
+    }
+
     protected function getDistributorUserService()
     {
         return $this->createService('Distributor:DistributorUserService');
+    }
+
+    protected function getDistributorService($type)
+    {
+        return $this->createService("Distributor:Distributor{$type}Service");
     }
 }

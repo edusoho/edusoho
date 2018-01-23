@@ -15,7 +15,7 @@
   <tr id="order_refund-table-{{orderRefund.id}}">
     <td>{{ orderRefund.title }}</td>
     <td>{{ orders[orderRefund.order_id].sn }}<br>{{ orderRefund.sn }}</td>
-    <td class="text-right">{{ orders[orderRefund.order_id].pay_amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
+    <td class="text-right">{{ orderRefund.amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
     <td>{{ orderRefund.created_time|date('Y-n-d') }}</td>
     <td>{{ dict_text('refundStatus', orderRefund.status) }}</td>
     <td>
