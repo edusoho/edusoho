@@ -27,5 +27,6 @@ class UpdateDeductTypeName extends Migration
      */
     public function down()
     {
+
     }
 }
