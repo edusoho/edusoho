@@ -24,7 +24,7 @@ services:
             - { name: codeages_plugin.event.subscriber }
 
     user_message_subscriber:
-        class: Biz\Distributor\Event\UserMessageSubscriber
+        class: Biz\Distributor\Event\UserSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }

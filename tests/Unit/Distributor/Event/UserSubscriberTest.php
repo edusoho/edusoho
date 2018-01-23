@@ -3,23 +3,23 @@
 namespace Tests\Unit\Distributor\Event;
 
 use Biz\BaseTestCase;
-use Biz\Distributor\Event\UserMessageSubscriber;
+use Biz\Distributor\Event\UserSubscriber;
 use Codeages\Biz\Framework\Event\Event;
 
-class UserMessageSubscriberTest extends BaseTestCase
+class UserSubscriberTest extends BaseTestCase
 {
     public function testGetSubscribedEvents()
     {
-        $subscriber = new UserMessageSubscriber($this->getBiz());
+        $subscriber = new UserSubscriber($this->getBiz());
         $this->assertArrayEquals(
             array(
-                'user.change_nickname' => 'onChangeUserMessage',
-                'user.change_mobile' => 'onChangeUserMessage',
+                'user.change_nickname' => 'onChangeUser',
+                'user.change_mobile' => 'onChangeUser',
             ), $subscriber->getSubscribedEvents()
         );
     }
 
-    public function testOnChangeUserMessage()
+    public function testOnChangeUser()
     {
         $userService = $this->mockBiz(
             'User:UserService',
@@ -47,8 +47,8 @@ class UserMessageSubscriberTest extends BaseTestCase
             )
         );
 
-        $subscriber = new UserMessageSubscriber($this->getBiz());
-        $result = $subscriber->onChangeUserMessage($event);
+        $subscriber = new UserSubscriber($this->getBiz());
+        $result = $subscriber->onChangeUser($event);
 
         $this->assertNull($result);
         $userService->shouldHaveReceived('getUser')->times(1);
