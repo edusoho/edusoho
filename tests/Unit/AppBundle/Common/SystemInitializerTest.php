@@ -3,25 +3,61 @@
 namespace AppBundle\Common\Tests;
 
 use Biz\BaseTestCase;
-use AppBundle\Common\SystemInitializer;
 use AppBundle\Common\ReflectionUtils;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SystemInitializerTest extends BaseTestCase
 {
+    public function testInitRegisterSetting()
+    {
+        $output = new ConsoleOutput();
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
+
+        ReflectionUtils::invokeMethod($initializer, 'initRegisterSetting', array(array('nickname' => 'test')));
+        $result = $this->getSettingService()->get('auth');
+
+        $emailBody = <<<'EOD'
+Hi, {{nickname}}
+
+欢迎加入{{sitename}}!
+
+请点击下面的链接完成注册：
+
+{{verifyurl}}
+
+如果以上链接无法点击，请将上面的地址复制到你的浏览器(如IE)的地址栏中打开，该链接地址24小时内打开有效。
+
+感谢对{{sitename}}的支持！
+
+{{sitename}} {{siteurl}}
+
+(这是一封自动产生的email，请勿回复。)
+EOD;
+        $this->assertArrayEquals(array(
+            'register_mode' => 'email',
+            'email_activation_title' => '请激活您的{{sitename}}帐号',
+            'email_activation_body' => trim($emailBody),
+            'welcome_enabled' => 'opened',
+            'welcome_sender' => 'test',
+            'welcome_methods' => array(),
+            'welcome_title' => '欢迎加入{{sitename}}',
+            'welcome_body' => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。',
+        ), $result);
+    }
+
     public function testInitStorageSetting()
     {
         $output = new ConsoleOutput();
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initStorageSetting', array());
-        $result = $this->getSettingService()->get('storage'); 
-        $this->assertArrayEquals( array(
+        $result = $this->getSettingService()->get('storage');
+        $this->assertArrayEquals(array(
             'upload_mode' => 'local',
             'cloud_api_server' => 'http://api.edusoho.net',
             'cloud_access_key' => '',
             'cloud_secret_key' => '',
-        ), $result); 
+        ), $result);
     }
 
     public function testInitDefaultSetting()
@@ -30,14 +66,14 @@ class SystemInitializerTest extends BaseTestCase
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initDefaultSetting', array());
-        $result = $this->getSettingService()->get('default'); 
+        $result = $this->getSettingService()->get('default');
         $this->assertArrayEquals(array(
-            'chapter_name' => "章",
-            'user_name' => "学员",
-            'part_name' => "节",
-        ), $result);  
+            'chapter_name' => '章',
+            'user_name' => '学员',
+            'part_name' => '节',
+        ), $result);
 
-        $result = $this->getSettingService()->get('post_num_rules'); 
+        $result = $this->getSettingService()->get('post_num_rules');
         $this->assertArrayEquals(array(
             'rules' => array(
                 'thread' => array(
@@ -55,13 +91,13 @@ class SystemInitializerTest extends BaseTestCase
             ),
         ), $result);
 
-        $result = $this->getSettingService()->get('developer'); 
-        $this->assertArrayEquals(array(), $result);  
+        $result = $this->getSettingService()->get('developer');
+        $this->assertArrayEquals(array(), $result);
 
-        $result = $this->getSettingService()->get('developer'); 
+        $result = $this->getSettingService()->get('developer');
         $this->assertArrayEquals(array(
-            'cloud_api_failover' => 1
-        ), $result);  
+            'cloud_api_failover' => 1,
+        ), $result);
     }
 
     public function testInitPaymentSetting()
@@ -70,7 +106,7 @@ class SystemInitializerTest extends BaseTestCase
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initPaymentSetting', array());
-        $result = $this->getSettingService()->get('payment'); 
+        $result = $this->getSettingService()->get('payment');
         $this->assertArrayEquals(array(
             'enabled' => 0,
             'bank_gateway' => 'none',
@@ -78,7 +114,7 @@ class SystemInitializerTest extends BaseTestCase
             'alipay_key' => '',
             'alipay_accessKey' => '',
             'alipay_secretKey' => '',
-        ), $result);  
+        ), $result);
     }
 
     public function testInitSiteSetting()
@@ -87,7 +123,7 @@ class SystemInitializerTest extends BaseTestCase
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initSiteSetting', array());
-        $result = $this->getSettingService()->get('site'); 
+        $result = $this->getSettingService()->get('site');
         $this->assertArrayEquals(array(
             'name' => 'EDUSOHO测试站',
             'slogan' => '强大的在线教育解决方案',
@@ -100,30 +136,31 @@ class SystemInitializerTest extends BaseTestCase
             'analytics' => '',
             'status' => 'open',
             'closed_note' => '',
-        ), $result);    
+        ), $result);
     }
 
     public function testInitRefundSetting()
     {
-         $output = new ConsoleOutput();
+        $output = new ConsoleOutput();
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initRefundSetting', array());
-        $result = $this->getSettingService()->get('refund'); 
+        $result = $this->getSettingService()->get('refund');
         $this->assertArrayEquals(array(
             'maxRefundDays' => 10,
             'applyNotification' => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
             'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
             'failedNotification' => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。',
-        ), $result);    
+        ), $result);
     }
+
     public function testInitConsultSetting()
     {
         $output = new ConsoleOutput();
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initConsultSetting', array());
-        $result = $this->getSettingService()->get('contact'); 
+        $result = $this->getSettingService()->get('contact');
         $this->assertArrayEquals(array(
             'enabled' => 0,
             'worktime' => '9:00 - 17:00',
@@ -139,7 +176,7 @@ class SystemInitializerTest extends BaseTestCase
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',
-        ), $result);    
+        ), $result);
     }
 
     public function testInitMagicSetting()
@@ -148,12 +185,12 @@ class SystemInitializerTest extends BaseTestCase
         $initializer = new \AppBundle\Common\SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initMagicSetting', array());
-        $result = $this->getSettingService()->get('magic'); 
+        $result = $this->getSettingService()->get('magic');
         $this->assertArrayEquals(array(
             'export_allow_count' => 100000,
             'export_limit' => 10000,
             'enable_org' => 0,
-        ), $result);    
+        ), $result);
     }
 
     public function testInitMailerSetting()
@@ -182,12 +219,12 @@ class SystemInitializerTest extends BaseTestCase
         $fields = array(
             'email' => 'test@edusoho.com',
             'password' => 'test',
-            'nickname' => 'testnickname'
+            'nickname' => 'testnickname',
         );
         $result = $initializer->initAdminUser($fields);
 
-        $this->assertEquals('test@edusoho.com',$result['email']);
-        $this->assertEquals('testnickname',$result['nickname']);
+        $this->assertEquals('test@edusoho.com', $result['email']);
+        $this->assertEquals('testnickname', $result['nickname']);
         $this->assertArrayEquals(array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN'), $result['roles']);
     }
 
@@ -206,5 +243,4 @@ class SystemInitializerTest extends BaseTestCase
     {
         return $this->createService('System:SettingService');
     }
-
 }
