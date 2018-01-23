@@ -206,12 +206,8 @@ class StringToolkit
         return $content;
     }
 
-    public static function appendGzipResponseHeader($header)
+    public static function appendGzipResponseHeader($header = array())
     {
-        if (empty($header)) {
-            $header = array();
-        }
-
         if (self::isCompressable()) {
             $header['Content-Encoding'] = 'gzip';
             $header['Vary'] = 'Accept-Encoding';
