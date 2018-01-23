@@ -85,8 +85,8 @@ class BatchCreate {
       },
     };
 
-    if($('[name=support_mobile]').length > 0) {
-      uploadProcess.supportMobile = {
+    if ($('[name=support_mobile]').length > 0) {
+      uploadProcess.common = {
         supportMobile: $('[name=support_mobile]').val(),
       };
     }
