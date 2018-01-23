@@ -12,13 +12,11 @@
 {% endblock %}
 
 {% block body %}
-
-
-<div class="testpaper-mark-graph">
-  <div class="testpaper-mark-graph__data">{{ 'course.testpaper_check.graph_passed_percent'|trans({'%percent%':analysis.passPercent|default(0)}) }}</div>
-  <div class="testpaper-mark-graph__chart" id="line-data"></div>
-  <input id="data" type="hidden" value='{% if data %}{{data}}{% endif %}'>
-</div>
+  <div class="testpaper-mark-graph">
+    <div class="testpaper-mark-graph__data">{{ 'course.testpaper_check.graph_passed_percent'|trans({'%percent%':analysis.passPercent|default(0)}) }}</div>
+    <div class="testpaper-mark-graph__chart" id="line-data"></div>
+    <input id="data" type="hidden" value='{% if data %}{{data}}{% endif %}'>
+  </div>
 {% endblock %}
 
 {% block footer %}{% endblock %}
