@@ -1,0 +1,17 @@
+<div class="material">
+  <div class="well testpaper-question-stem-material" id="question{{ question.id }}">
+    {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+    {% include 'attachment/widget/list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
+  </div>
+  <div class="mbm">
+    {% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+  </div>
+
+  {% for subQuestion in question.subs|default([]) %}
+    {% set questionTemplate = getQuestionTypeTemplate(subQuestion.type,'analysis') %}
+    {% if questionTemplate %}
+      {% set questionAnalysis = analyses[subQuestion.id]|default(null) %}
+      {% include questionTemplate with {question:subQuestion, parentQuestion:question, questionAnalysis:questionAnalysis, firstCount:firstCount, testType:subQuestion.type} %}
+    {% endif %}
+  {% endfor %}
+</div>

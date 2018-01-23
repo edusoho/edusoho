@@ -4,6 +4,8 @@ namespace Tests\Unit\User;
 
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
+use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserActiveServiceTest extends BaseTestCase
 {
@@ -79,8 +81,13 @@ class UserActiveServiceTest extends BaseTestCase
 
     public function testWriteToFile()
     {
-        $result = $this->getUserActiveService()->writeToFile(__DIR__.'/File/test.txt', 2);
+        $path = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/files/test/test.txt';
+        $result = $this->getUserActiveService()->writeToFile($path, 2);
         $this->assertTrue($result);
+        $fileSystem = new Filesystem();
+        if (file_exists(dirname($path))) {
+            $fileSystem->remove(dirname($path));
+        }
     }
 
     protected function getUserActiveService()
