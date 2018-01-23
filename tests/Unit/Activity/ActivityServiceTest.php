@@ -6,6 +6,7 @@ use Biz\BaseTestCase;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Activity\Service\ActivityService;
+use AppBundle\Common\ArrayToolkit;
 
 class ActivityServiceTest extends BaseTestCase
 {
@@ -109,7 +110,111 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertNull($savedActivity);
     }
 
-    public function testFinishTrigger()
+    public function testTriggerStart()
+    {
+        $savedTask = $this->handleTriggerData();
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals($activity['event'], 'start');
+        $this->assertEquals($activity['learnedTime'], 0);
+    }
+
+    public function testTriggerDoing()
+    {
+        $savedTask = $this->handleTriggerData();
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'doTask',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'isFinished',
+                    'returnValue' => 0,
+                ),
+            )
+        );
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+            'lastTime' => time()-60,
+            'events' => array(),
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals($activity['event'], 'doing');
+        $this->assertEquals($activity['learnedTime'], 60);
+    }
+
+    public function testTriggerWatching()
+    {
+        $savedTask = $this->handleTriggerData();
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'doTask',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'isFinished',
+                    'returnValue' => 0,
+                ),
+            )
+        );
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+            'lastTime' => time()-60,
+            'events' => array(
+                'watching' => array('watchTime' => 120)
+            ),
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $learnLogs = $this->getActivityLearnLogService()->search(
+            array('activityId' => $savedTask['activityId'], 'userId' => 1),
+            array('createdTime' => 'DESC'),
+            0,
+            10
+        );
+        $learnLogs = ArrayToolKit::index($learnLogs, 'event');
+        $this->assertArrayHasKey('doing', $learnLogs);
+        $this->assertEquals($learnLogs['doing']['learnedTime'], 60);
+        $this->assertArrayHasKey('watching', $learnLogs);
+        $this->assertEquals($learnLogs['watching']['learnedTime'], 120);
+    }
+
+    public function testTriggerFinish()
+    {
+        $savedTask = $this->handleTriggerData();
+        $data = array(
+            'task' => $savedTask,
+            'taskId' => $savedTask['id'],
+            'lastTime' => time()-60,
+            'events' => array(
+                'finish' => array('data' => array('stop' => true))
+            ),
+        );
+
+        $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals($activity['event'], 'finish');
+        $this->assertEquals($activity['learnedTime'], 0);
+    }
+
+    protected function handleTriggerData()
     {
         $course = array(
             'id' => 1,
@@ -135,6 +240,14 @@ class ActivityServiceTest extends BaseTestCase
                     'returnValue' => 1,
                 ),
                 array(
+                    'functionName' => 'tryTakeCourse',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'canTakeCourse',
+                    'returnValue' => 1,
+                ),
+                array(
                     'functionName' => 'getCourse',
                     'returnValue' => $course,
                 ),
@@ -152,14 +265,7 @@ class ActivityServiceTest extends BaseTestCase
             'fromCourseSetId' => 1,
         );
         $savedTask = $this->getTaskService()->createTask($task);
-
-        $data = array(
-            'task' => $savedTask,
-        );
-
-        $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
-        $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
+        return $savedTask;
     }
 
     public function testSearch()
@@ -495,5 +601,10 @@ class ActivityServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }

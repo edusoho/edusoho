@@ -106,6 +106,10 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         return $users;
     }
 
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getActivityLearnLogDao()->search($conditions, $orderBy, $start, $limit);
+    }
     /**
      * @return ActivityLearnLogDaoImpl
      */
