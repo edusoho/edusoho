@@ -37,7 +37,7 @@
               {% if targetResultInfo.reviewing|default(0) > 0 %}
                 <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check"></i></a>
               {% else %}
-                <a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check gray-medium"></i></a>
+                <a class="testpaper-mark-operation__link testpaper-mark-operation__link--disabled" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check gray-medium"></i></a>
               {% endif %}
             </div>
           </div>
