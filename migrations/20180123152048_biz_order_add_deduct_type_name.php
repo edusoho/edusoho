@@ -25,7 +25,7 @@ class BizOrderAddDeductTypeName extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("ALTER TABLE `biz_order_item_deduct` DROP COLUMN `deduct_type_name`;");
+        $connection->exec('ALTER TABLE `biz_order_item_deduct` DROP COLUMN `deduct_type_name`;');
     }
 
     protected function isFieldExist($table, $filedName)
