@@ -17,7 +17,7 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
         foreach ($orderDeducts as $orderDeduct) {
             $deduct[] = array(
                 'type' => $orderDeduct['deduct_type'],
-                'detail' => '',
+                'detail' => $orderDeduct['deduct_type_name'],
                 'amount' => $orderDeduct['deduct_amount'],
             );
         }
