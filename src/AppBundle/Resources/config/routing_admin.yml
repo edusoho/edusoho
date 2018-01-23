@@ -950,21 +950,22 @@ admin_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:Admin/CdnSetting:index }
 
-admin_mocked:
-    path: /mock
-    defaults: { _controller: AppBundle:Admin/Mock:index }
+# 临时隐藏 distributor
+#admin_mocked:
+#    path: /mock
+#    defaults: { _controller: AppBundle:Admin/Mock:index }
 
-admin_mocked_distributor_token:
-    path: /mock/distributor_token
-    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+#admin_mocked_distributor_token:
+#    path: /mock/distributor_token
+#    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
 
-admin_mocked_distributor_get_post_data:
-    path: /mock/distributor_get_post_data
-    defaults: { _controller: AppBundle:Admin/Mock:getPostData }
+#admin_mocked_distributor_get_post_data:
+#    path: /mock/distributor_get_post_data
+#    defaults: { _controller: AppBundle:Admin/Mock:getPostData }
 
-admin_mocked_distributor_post_data:
-    path: /mock/distributor_post_data
-    defaults: { _controller: AppBundle:Admin/Mock:postData }
+#admin_mocked_distributor_post_data:
+#    path: /mock/distributor_post_data
+#    defaults: { _controller: AppBundle:Admin/Mock:postData }
 
 admin_optimize:
     path:  /setting/optimize
@@ -2216,9 +2217,10 @@ admin_login_marketing:
     path: /login/marketing
     defaults: { _controller: AppBundle:Admin/Marketing:loginMarketing}
 
-admin_login_distributor:
-    path: /login/distributor
-    defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
+# 临时隐藏 distributor
+# admin_login_distributor:
+#    path: /login/distributor
+#    defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
 
 
 admin_jobs:
