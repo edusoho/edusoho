@@ -8,7 +8,6 @@ define(function(require, exports, module) {
   require('jquery.select2');
   require('es-ckeditor');
 
-  require('../widget/category-select').run('article');
   require('../attachment/upload-form.js').run();
 
   exports.run = function() {
@@ -22,7 +21,7 @@ define(function(require, exports, module) {
       ckeditor.updateElement();
     });
 
-    _initTagSelect($form);
+    _initSelect($form);
 
   };
 
@@ -33,7 +32,7 @@ define(function(require, exports, module) {
     content: $('#article-property-tips-html').html()
   });
 
-  function _initTagSelect($form) {
+  function _initSelect($form) {
     $('#article-tags').select2({
 
       ajax: {
@@ -87,6 +86,13 @@ define(function(require, exports, module) {
       createSearchChoice: function() {
         return null;
       }
+    });
+
+    $('#categoryId').select2({
+      treeview: true,
+      dropdownAutoWidth: true,
+      treeviewInitState: 'collapsed',
+      placeholder: Translator.trans('admin.article_setting.choose_category'),
     });
   }
 

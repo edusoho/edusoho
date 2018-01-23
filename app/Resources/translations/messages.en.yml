@@ -5877,7 +5877,6 @@ admin.article_setting.category.publish: Enable
 admin.article_setting.category.publish.tips: 'Turn on when the content is ready'
 admin.article_setting.category.edit: 'Edit Column'
 admin.article_setting.category.create: 'Add column'
-admin.article_setting.choose_category: 'Choose column'
 admin.article_setting.tag: 'TAG tag'
 admin.article_setting.content: Content
 admin.article_setting.property: 'Article property'
