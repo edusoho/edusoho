@@ -589,14 +589,8 @@ class UserServiceImpl extends BaseService implements UserService
         $this->updateUserProfile($id, array(
             'mobile' => $mobile,
         ));
-
         $user = $this->getUser($id);
-        if (!empty($user) && 'distributor' == $user['type']) {
-            $user['token'] = $user['distributorToken'];
-            $this->getDistributorUserService()->createJobData($user);
-        }
-
-        $this->dispatchEvent('mobile.change', new Event($user));
+        $this->dispatchEvent('user.change_mobile', new Event($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
