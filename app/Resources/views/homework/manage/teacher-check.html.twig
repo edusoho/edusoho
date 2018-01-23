@@ -85,6 +85,7 @@
           {% endif %}
           <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
           <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ app.request.server.get('HTTP_REFERER') }}" data-role="finish-check" data-loading-text="{{'course.homework_check.finish_check_submiting'|trans}}...">{{'course.homework_check.finish_check'|trans}}</button>
+          <button type="button" class="btn btn-success js-next-check" data-post-url="{{ postUrl }}" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.continue'|trans}}</button>
         </div>
       </div>
     </div>
