@@ -509,6 +509,10 @@ class ManageController extends BaseController
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         $paper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        if (empty($paper)) {
+            return $this->createMessageResponse('info', "Paper not found");
+        }
+
         $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
 
         $relatedData = $this->findRelatedData($activity, $paper);
