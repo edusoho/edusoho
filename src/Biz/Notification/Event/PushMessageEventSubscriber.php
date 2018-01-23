@@ -254,7 +254,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
     public function onUserChangeMobile(Event $event)
     {
-        $user = $event->getSubject();
+        $context = $event->getSubject();
+        $user = $this->getUserService()->getUser($context['id']);
         if (!empty($user) && 'distributor' == $user['type']) {
             $user['token'] = $user['distributorToken'];
             $this->getDistributorUserService()->createJobData($user);

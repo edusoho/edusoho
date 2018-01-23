@@ -639,6 +639,99 @@ class PushMessageEventSubscriberTest extends BaseTestCase
         );
     }
 
+    public function testOnUserChangeNickname()
+    {
+        $this->enableCloudSearch();
+        $distributorUserService = $this->mockBiz(
+            'Distributor:DistributorUserService',
+            array(
+                array(
+                    'functionName' => 'createJobData',
+                    'withParams' => array(
+                        array(
+                            'id' => 2,
+                            'type' => 'distributor',
+                            'distributorToken' => 'test',
+                            'token' => 'test',
+                        )
+                    ),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'createJobData',
+                    'withParams' => array(
+                        array(
+                            'id' => 2,
+                            'type' => 'distributor',
+                            'distributorToken' => 'test',
+                            'token' => 'test',
+                            'user' => array(),
+                        )
+                    ),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $event = new Event(
+            array(
+                'id' => 2,
+                'type' => 'distributor',
+                'distributorToken' => 'test',
+            )
+        );
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $result = $subscriber->onUserChangeNickname($event);
+        $this->assertNull($result);
+        $distributorUserService->shouldHaveReceived('createJobData');
+
+        $event = new Event(
+            array(
+                'id' => 2,
+                'type' => 'distributor',
+                'distributorToken' => 'test',
+                'user' => array(),
+            )
+        );
+        $result = $subscriber->onUserChangeNickname($event);
+        $this->assertNull($result);
+        $distributorUserService->shouldHaveReceived('createJobData');
+    }
+
+    public function testOnUserChangeMobile()
+    {
+        $distributorUserService = $this->mockBiz(
+            'Distributor:DistributorUserService',
+            array(
+                array(
+                    'functionName' => 'createJobData',
+                    'withParams' => array(
+                        array(
+                            'name' => 'test',
+                            'type' => 'distributor',
+                            'distributorToken' => 'test',
+                            'token' => 'test',
+                        )
+                    ),
+                ),
+            )
+        );
+        $userService = $this->mockBiz(
+            'User:UserService',
+            array(
+                array(
+                    'functionName' => 'getUser',
+                    'withParams' => array(2),
+                    'returnValue' => array('name' => 'test', 'type' => 'distributor', 'distributorToken' => 'test'),
+                ),
+            )
+        );
+        $event = new Event(array('id' => 2));
+        $subscriber = $this->getEventSubscriberWithMockedQueue();
+        $result = $subscriber->onUserChangeMobile($event);
+        $this->assertNull($result);
+        $distributorUserService->shouldHaveReceived('createJobData');
+    }
+
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
