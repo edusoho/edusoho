@@ -10,7 +10,7 @@
 		{% endif %}
 		<div class="homework-question-fill question-fill-inputs">
 			{% for index,answer in question.answer %}
-				<input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="{{'question.fill.input_placeholder'|trans({'%index%':loop.index})}}" value="" />
+				<input class="form-control mbm" type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="{{'question.fill.input_placeholder'|trans({'%index%':loop.index})}}" value="" />
 			{% endfor %}
 		</div>
 	</div>

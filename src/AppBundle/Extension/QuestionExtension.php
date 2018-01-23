@@ -27,6 +27,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/single-choice-do.html.twig',
+                    'analysis' => 'question/analysis/single-choice.html.twig',
                 ),
                 'hasMissScore' => 0,
             ),
@@ -39,6 +40,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/choice-do.html.twig',
+                    'analysis' => 'question/analysis/choice.html.twig',
                 ),
                 'hasMissScore' => 1,
             ),
@@ -51,6 +53,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/essay-do.html.twig',
+                    'analysis' => 'question/analysis/essay.html.twig',
                 ),
                 'hasMissScore' => 0,
             ),
@@ -63,6 +66,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/uncertain-choice-do.html.twig',
+                    'analysis' => 'question/analysis/uncertain_choice.html.twig',
                 ),
                 'hasMissScore' => 1,
             ),
@@ -75,6 +79,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/determine-do.html.twig',
+                    'analysis' => 'question/analysis/determine.html.twig',
                 ),
                 'hasMissScore' => 0,
             ),
@@ -87,6 +92,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/fill-do.html.twig',
+                    'analysis' => 'question/analysis/fill.html.twig',
                 ),
                 'hasMissScore' => 0,
             ),
@@ -99,6 +105,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 ),
                 'templates' => array(
                     'do' => 'question/material-do.html.twig',
+                    'analysis' => 'question/analysis/material.html.twig',
                 ),
                 'hasMissScore' => 0,
             ),

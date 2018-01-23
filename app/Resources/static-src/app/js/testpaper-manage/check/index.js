@@ -30,6 +30,7 @@ class CheckTest
     this._init();
     this._initValidate();
     testpaperCardFixed();
+    this.isContinue = false;
   }
 
   _initEvent() {
@@ -37,6 +38,7 @@ class CheckTest
     this.$container.on('click','[data-role="check-submit"]',event=>this._submitValidate(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
     this.$dialog.on('click','[data-role="finish-check"]',event=>this._submit(event));
+    this.$dialog.on('click','.js-next-check',event=>this._continue(event));
     this.$dialog.on('change','select',event=>this._teacherSayFill(event));
   }
 
@@ -155,6 +157,11 @@ class CheckTest
 
   }
 
+  _continue(event) {
+    this.isContinue = true;
+    this._submit(event);
+  }
+
   _submit(event) {
 
     let $target = $(event.currentTarget);
@@ -162,8 +169,12 @@ class CheckTest
     let passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
 
     $target.button('loading');
-    $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
+    $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus,isContinue:this.isContinue}, function(response) {
+      if (response.goto != '') {
+        window.location.href = response.goto;
+      } else {
         window.location.reload();
+      }
     })
   }
 
