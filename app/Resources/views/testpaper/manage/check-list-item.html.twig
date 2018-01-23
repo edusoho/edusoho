@@ -15,9 +15,7 @@
   <div class="testpaper-mark-info col-md-8">
     <div class="row">
       <div class="col-md-8">
-        <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">
-          <a class="link-darker" href="#">{{ taskTitle }}</a>
-        </div>
+        <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
           {% if testpaper %}{{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
         </div>
