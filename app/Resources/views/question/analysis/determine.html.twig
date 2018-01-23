@@ -10,7 +10,7 @@
           <input type="radio" data-type="determine" name="{{ question.id }}" value="{{ index }}" {% if question.answer[0] == index %}checked{% endif %} disabled>
           {% if index == 1 %}{{ 'testpaper.result.true'|trans }}{% else %}{{ 'testpaper.result.wrong'|trans }}{% endif %}
         </label>
-        <span class="label testpaper-question-body-item__label label-success hidden-xs">
+        <span class="label testpaper-question-body-item__label {% if index == 0 %}label-danger{% else %}label-success{% endif %} hidden-xs">
           {% if itemKeyAnalysis and firstCount != 0 %}
             {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
             {{ firstAnswerPercent }}%
