@@ -101,6 +101,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
             'userId' => $paperResult['userId'],
             'testId' => $paperResult['testId'],
             'type' => $paperResult['type'],
+            'lessonId' => $paperResult['lessonId'],
             'status' => 'finished',
         );
         $userResultCount = $this->getTestpaperService()->searchTestpaperResultsCount($conditions);
