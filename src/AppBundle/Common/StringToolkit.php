@@ -177,17 +177,44 @@ class StringToolkit
 
     /**
      * gzip 方式压缩字符串, 注意，压缩出来的是 byte 数据，不能直接转化为 string, 转化为字符串，需要转为base64
+     * 注意， 只有 php5.5或以上版本才支持压缩，已做判断，如果是php5.3, 不会压缩
      *
      * @param $content 待压缩的内容
      * @param $level 压缩等级， 范围 0 ~ 9， 最低为0，不压缩，最高为9，最消耗cpu资源， 默认为5
      */
     public static function compress($content, $level = 5)
     {
-        return gzdeflate($content, $level);
+        if (self::isCompressable()) {
+            return gzdeflate($content, $level);
+        }
+
+        return $content;
     }
 
+    /**
+     * gzip 方式解压字符串, 注意，参数为 压缩后的内容，为byte数据
+     * 注意， 只有 php5.5或以上版本才支持解压，已做判断，如果是php5.3, 不会解压
+     *
+     * @param $content 待解缩的内容
+     */
     public static function uncompress($content)
     {
-        return gzinflate($content);
+        if (self::isCompressable()) {
+            return gzinflate($content);
+        }
+
+        return $content;
+    }
+
+    public static function isCompressable()
+    {
+        $segs = explode('.', PHP_VERSION);
+        if (count($segs) > 1) {  //版本号至少为 2位
+            if ($segs[0] > 5 || $segs[1] > 4) {   //php5.5 或 以上版本
+                return true;
+            }
+        }
+
+        return false;
     }
 }
