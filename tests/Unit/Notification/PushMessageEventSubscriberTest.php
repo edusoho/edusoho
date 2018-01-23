@@ -653,7 +653,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                             'type' => 'distributor',
                             'distributorToken' => 'test',
                             'token' => 'test',
-                        )
+                        ),
                     ),
                     'runTimes' => 1,
                 ),
@@ -666,7 +666,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                             'distributorToken' => 'test',
                             'token' => 'test',
                             'user' => array(),
-                        )
+                        ),
                     ),
                     'runTimes' => 1,
                 ),
@@ -710,7 +710,7 @@ class PushMessageEventSubscriberTest extends BaseTestCase
                             'type' => 'distributor',
                             'distributorToken' => 'test',
                             'token' => 'test',
-                        )
+                        ),
                     ),
                 ),
             )
