@@ -65,6 +65,7 @@ class DistributorOrderServiceTest extends BaseTestCase
                         array(
                             'deduct_type' => 'discount',
                             'deduct_amount' => 1100,
+                            'deduct_type_name' => '折扣',
                         ),
                     ),
                 ),
@@ -93,7 +94,7 @@ class DistributorOrderServiceTest extends BaseTestCase
                             'deduction' => array(
                                 array(
                                     'type' => 'discount',
-                                    'detail' => '',
+                                    'detail' => '折扣',
                                     'amount' => 1100,
                                 ),
                             ),
