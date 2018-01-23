@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use Biz\Course\Service\CourseSetService;
-use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Content\Service\FileService;
@@ -171,16 +170,11 @@ class OpenCourseManageController extends BaseController
             );
         }
 
-        //获取直播供应商
-        $client = new EdusohoLiveClient();
-        $capacity = $client->getCapacity();
-
         return $this->render(
             'open-course-manage/teachers.html.twig',
             array(
                 'course' => $course,
-                'teacherIds' => $teacherIds,
-                'capacity' => $capacity,
+                'teacherIds' => $teacherIds
             )
         );
     }
