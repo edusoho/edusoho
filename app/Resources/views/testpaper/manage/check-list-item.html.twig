@@ -22,7 +22,13 @@
           {% if testpaper %}{{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
         </div>
         <div class="mbm color-gray">
-          <span class="mrl">{{'course.testpaper_check.start_date'|trans}}:{{ task.createdTime|date('Y-m-d H:i') }}</span>
+          <span class="mrl">{{'course.testpaper_check.start_date'|trans}}
+            {% if task.startTime %}
+              {{ task.startTime|date('Y-m-d H:i') }}
+            {% else %}
+              {{ task.createdTime|date('Y-m-d H:i') }}
+            {% endif %}
+          </span>
         </div>
       </div>
       {% if testpaper %}
