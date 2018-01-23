@@ -2015,14 +2015,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getKernel()->createService('Org:OrgService');
     }
 
-    /**
-     * @return \Biz\Distributor\Service\DistributorUserService
-     */
-    protected function getDistributorUserService()
-    {
-        return $this->createService('Distributor:DistributorUserService');
-    }
-
     public function getKernel()
     {
         return ServiceKernel::instance();

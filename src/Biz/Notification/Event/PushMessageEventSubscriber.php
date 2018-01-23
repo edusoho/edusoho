@@ -2175,6 +2175,9 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         return $this->createService('Queue:QueueService');
     }
 
+    /**
+     * @return \Biz\Distributor\Service\DistributorUserService
+     */
     protected function getDistributorUserService()
     {
         return $this->createService('Distributor:DistributorUserService');
