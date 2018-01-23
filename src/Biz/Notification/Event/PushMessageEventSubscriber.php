@@ -44,8 +44,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'user.unlock' => 'onUserCreate',
             'user.lock' => 'onUserDelete',
             'user.update' => 'onUserUpdate',
-            'user.change_nickname' => 'onUserChangeNickname',
-            'user.change_mobile' => 'onUserChangeMobile',
+            'user.change_nickname' => 'onUserUpdate',
             'user.follow' => 'onUserFollow',
             'user.unfollow' => 'onUserUnFollow',
 
@@ -230,35 +229,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'category' => 'user',
             );
             $this->createSearchJob('update', $args);
-        }
-    }
-
-    public function onUserChangeNickname(Event $event)
-    {
-        $context = $event->getSubject();
-        if (!empty($context) && 'distributor' == $context['type']) {
-            $context['token'] = $context['distributorToken'];
-            $this->getDistributorUserService()->createJobData($context);
-        }
-        if ($this->isCloudSearchEnabled()) {
-            if (!isset($context['user'])) {
-                return;
-            }
-
-            $args = array(
-                'category' => 'user',
-            );
-            $this->createSearchJob('update', $args);
-        }
-    }
-
-    public function onUserChangeMobile(Event $event)
-    {
-        $context = $event->getSubject();
-        $user = $this->getUserService()->getUser($context['id']);
-        if (!empty($user) && 'distributor' == $user['type']) {
-            $user['token'] = $user['distributorToken'];
-            $this->getDistributorUserService()->createJobData($user);
         }
     }
 
@@ -2173,14 +2143,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     protected function getQueueService()
     {
         return $this->createService('Queue:QueueService');
-    }
-
-    /**
-     * @return \Biz\Distributor\Service\DistributorUserService
-     */
-    protected function getDistributorUserService()
-    {
-        return $this->createService('Distributor:DistributorUserService');
     }
 
     protected function createService($alias)
