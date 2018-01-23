@@ -54,4 +54,14 @@ class Choice extends BaseQuestion implements TypeInterface
 
         return parent::filter($fields);
     }
+
+    public function getAnswerStructure($question)
+    {
+        return $question['metas']['choices'];
+    }
+
+    public function analysisAnswerIndex($question, $userAnswer)
+    {
+        return array($question['id'] => $userAnswer['answer']);
+    }
 }

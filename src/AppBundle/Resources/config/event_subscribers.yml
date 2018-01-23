@@ -285,3 +285,9 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+
+    question_analysis_envet_subscriber:
+        class: Biz\Question\Event\QuestionAnalysisEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }

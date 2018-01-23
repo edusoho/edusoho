@@ -37,4 +37,23 @@ class Essay extends BaseQuestion implements TypeInterface
     {
         return array('status' => 'none', 'score' => 0);
     }
+
+    public function getAnswerStructure($question)
+    {
+        //问答题0：0分; 1:0到满分之间; 2：满分
+        return array(0, 1, 2);
+    }
+
+    public function analysisAnswerIndex($question, $userAnswer)
+    {
+        if ($userAnswer['score'] == $question['score']) {
+            $answerIndex = 2;
+        } elseif ($userAnswer['score'] > 0 && $userAnswer['score'] < $question['score']) {
+            $answerIndex = 1;
+        } else {
+            $answerIndex = 0;
+        }
+
+        return array($question['id'] => array($answerIndex));
+    }
 }

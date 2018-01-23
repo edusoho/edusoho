@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\AppBundle\Component\RateLimit;
+namespace Tests\Unit\AppBundle\Util;
 
 use Biz\BaseTestCase;
 use AppBundle\Util\CdnUrl;

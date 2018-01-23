@@ -34,7 +34,6 @@ class SiteSettingController extends BaseController
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
-
         $default = array(
             'name' => '',
             'slogan' => '',
@@ -50,18 +49,21 @@ class SiteSettingController extends BaseController
             'favicon' => '',
             'copyright' => '',
         );
-
         $site = array_merge($default, $site);
-
-        if ($request->getMethod() == 'POST') {
-            $site = $request->request->all();
-            $this->getSettingService()->set('site', $site);
-            $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
-            $this->setFlashMessage('success', 'site.save.success');
-        }
 
         return $this->render('admin/system/site.html.twig', array(
             'site' => $site,
+        ));
+    }
+
+    public function saveSiteAction(Request $request)
+    {
+        $site = $request->request->all();
+        $this->getSettingService()->set('site', $site);
+        $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
+
+        return $this->createJsonResponse(array(
+            'message' => $this->trans('site.save.success'),
         ));
     }
 

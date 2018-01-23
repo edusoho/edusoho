@@ -2,7 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
+use Biz\UnitTests\UnitTestsBootstrap;
 
 $loader = require __DIR__.'/../app/autoload.php';
 

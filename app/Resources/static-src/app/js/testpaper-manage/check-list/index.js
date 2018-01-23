@@ -1,0 +1,1 @@
+$('[data-tooltip="tooltip"]').tooltip()

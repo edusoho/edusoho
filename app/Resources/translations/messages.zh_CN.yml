@@ -1078,10 +1078,22 @@ course.members_manage.join_records.date: 加入日期
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
 course.testpaper_check.empty: 暂无数据
-course.testpaper_check.start_date: 开始日期
+course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
+course.testpaper_check.optional_task_title: 选修任务：%title%
+course.testpaper_check.testpaper_delete: 该试卷已删除
+course.testpaper_check.graph_avg_score: 平均分：%avgScore% 分
+course.testpaper_check.graph_max_score: 最高分：%maxScore% 分
+course.testpaper_check.graph_passed_percent: 合格率：%percent%%
+course.testpaper_check.btn_score_distribution: 成绩分布
+course.testpaper_check.btn_question_distribution: 答题分布
+course.testpaper_check.btn_check: 批阅
+course.testpaper_check.first_answer: 初次答题
+course.testpaper_check.number: 人次
+course.testpaper_check.get_score: 得 %questonScore% 分
+course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
@@ -1561,6 +1573,12 @@ course.testpaper_manage.question.replace_modal.empty: 无题目记录,请先去
 course.testpaper_manage.question.replace_modal.create_btn: 创建题目
 course.testpaper_manage.question.replace_modal.select_all_btn: 全选
 course.testpaper_manage.question.replace_modal.select_btn: 请选择题目
+course.testpaper_manage.analysis_card.course_total_person: 计划人数：
+course.testpaper_manage.analysis_card.classroom_total_person: 班级人数：
+course.testpaper_manage.analysis_card.join_person: 参加人数：
+course.testpaper_manage.analysis_card.complete_person: 完成人数：
+course.testpaper_manage.analysis_card.avg_score: 平均成绩：
+course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 课程文件
 course.course_files.content_title: 课程文件
@@ -1761,7 +1779,7 @@ course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
-  作业题目<small class="color-gray">共%itemCount%题</small>
+  作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
@@ -2726,6 +2744,7 @@ form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
+form.btn.continue: 完成并继续
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
@@ -4108,7 +4127,7 @@ my.teaching.open_course.lesson.header.content.tips: 直播已经开始，直播�
 my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
-my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍候再来：
+my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
@@ -7355,7 +7374,6 @@ admin.article_setting.category.publish.tips: 建议等栏目内容整理编辑�
 admin.article_setting.category.edit: 编辑栏目
 admin.article_setting.category.create: 添加栏目
 
-admin.article_setting.choose_category: 选择所属栏目
 admin.article_setting.tag: TAG标签
 admin.article_setting.content: 正文
 admin.article_setting.property: 资讯属性
@@ -7813,7 +7831,7 @@ site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误
 site.register.sensitive_words: 用户名中含有敏感词
-site.register.time_limit: 由于您注册次数过多，请稍候尝试
+site.register.time_limit: 由于您注册次数过多，请稍后尝试
 site.incorrect.username_or_password: 用户名或密码不正确。
 site.illegal.request: 非法请求
 site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
@@ -8385,3 +8403,15 @@ user.learn.statistics.learned.econds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
+
+
+admin.datalab.setting.modal_title: 提示：
+admin.datalab.setting.modal_enable_body: 开启后，将在 24 小时内开始更新数据。关闭期内的学习数据无法更新到报表中。
+admin.datalab.setting.modal_disable_body: 关闭后，关闭期内的学习数据将无法更新到报表中。您确认要关闭吗？
+admin.datalab.setting.agreement: 用户协议
+admin.datalab.setting.operation_title: '开启数据分析服务:'
+admin.datalab.warning_tip: 当前数据分析服务已关闭，报表数据无法更新。可在<a href="%url%">【设置】</a>中重新启用该服务。
+admin.datalab.setting.btn_cancel: 取消
+admin.datalab.setting.btn_open: 确认开启
+admin.datalab.setting.btn_close: 确认关闭
+admin.datalab.setting.btn_use: 再用用看
