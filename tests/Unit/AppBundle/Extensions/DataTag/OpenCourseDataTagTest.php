@@ -19,14 +19,13 @@ class OpenCourseDataTagTest extends BaseTestCase
         $course = $this->getOpenCourseService()->createCourse(array('title' => 'open course title', 'type' => 'open', 'about' => 'open course about', 'categoryId' => 1));
 
         $dataTag = new OpenCourseDataTag();
-        
+
         $result = $dataTag->getData(array('courseId' => $course['id']));
         $this->assertEquals($course['id'], $result['id']);
         $this->assertArrayHasKey('teachers', $result);
         $this->assertArrayHasKey('category', $result);
     }
 
-    
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse:OpenCourseService');
