@@ -239,14 +239,25 @@ class StringToolkitTest extends BaseTestCase
 
     public function testUncompress()
     {
-        $base64EncodedCompressContent = '1ZpZb1RHEEbf8yuiIOUJz9TStbQlFDlmAg6b8EJIXlCvMYllAwbJ/Pu0wyVSmJHyEulyvciaey1PzVH56zrdc2fz8vQJn33z7fRxZzzee7n3YnN8cvTs6T5/eeP04PjB5vT+2fHB6e191C9/4eDx42e/7B0eHD7c7P+6Ofny9pPN/aODvZPN87PN08PNPnx5/9Hm1/0nm9OHz+7fO9ic7CH53bPjo3vfnb9//2Z/vX7/7qOuWv1wfXV+tSqX6/OL63Vw5HW5aH39y8Nsr8OPV4fnB79fvT1+VJ/9dnj08vmLm5M/2+XZDX139+jFPbihaoWStpp7BRfIUDEJpNqYrOi/azp6+tM+4soB7v5zfSqmXTdKnLFwpfpm782HvLr9fvv67esPHz9cri7b+zUxMq29QyJLFaBpCO4OLL1rNclGCeP64vL0+bvnN2z9jwfvfr4pe9f11XX7/RW8auMlvoqjOqo/XJfzq6uLo3rv77/6fX990R5cXOV0e+m/nmIO0KV6zSEkyzknaILSTGNFJ+hBctgGDSuYBzR+Ag1mQH15oFMM0NGbK4RI1RGlji8etY4K4zbosDKdBTRNHQ0txbw40CHm6uC5mAqlFqUSoloAu309NW2BDiuap6H5E2eNffzvLY5zHdmsHSxw0x4LtCIliyYbSYgZdkQ0rHQe0GECrc0gLg50LwQlD0LRMkRRZ62ZGbJn4dE6W6DjXJzlE+fQ0QItjnO2LjFlQU+NRDQCxvFIm+dMWHxXQ8s8Ca2fQCfIsS0vOThAqTLyInHRToV7GUUCU4HiSbYbGmUlNAtom5ZCYtblzRzu5NgbhZriaGKPPXSVUEsJOeZCW6B9BWEWzj4lNKVoYXGcY0PoCd1KTTxmOh8XKEeuTaNrt69oiI5TREd1XF5yjCUPuoXYDKGYkHKV1LrFMYOkivUrAo2fvbAYeFkc6dBAx6LXcmcZwt1CYMvjRxruFVPcoSvzkf4shp2j8uJIRzaJURv3ysZQ1MacmhRDaH1kdNkiLXPtdOAkhimj4/LmaMKahC0pgQwZTJ1GXYyW2tCv1ndudeg8yyFOalhDpCUaS+g9dvHsxfl2RDWQLiROkW8HqR3GMld2TGrYs8S8vL2O2i2NJw85h1SSDFLRR5CEVq2q2jZo5BX5PKQnORzDPvPyJo/QR0a0sQiac4TMpHH098DFrbJI20V6plkaJzuMIzuyLo60l1RK5dhiLTxeQeZSio7ZumUKibf3lWQV55FDnOwQwTEsLzwAQZJ2RAUtFT2Z5lxpLIbIPcEODccVzBQekx+W7nGB2kK9S8Uwnr7KUHHubjEH5NyspWC8RdpWNFN2TH7IY5SGtjjQplVGTnBzHr1NXSCM1FAKNSvt3ioN83Q0TXo4Ck20PNBQffhhTN4NAEtJgGnMHQV1lDlq3bUczrQpTZMeFmUvyxNxRSqaBiVnikFBgmSSYEZtfOq2iNsqzJMdNOlhYal5edJixZ1y72lkdcam2W14eFSRHNkVd2THXB392Q4pBPbFgS4eS6IQG9UUINWR04UhpHp7PFvbtof7XBseNNkhYZa8PNCeTdm8NC4SUHrMrecqNHKkosiOAy2cy1lIPi+HYn152UFQjLyQFR7pEdGIsmUYswiGJFF3kZ4rPCY7zALdlnekVZKr5A4lxC4ltlKijiuFXDyYbB9pzdjTkx6WPLpheYMHQGzWi2KLXDGptdbEUvY6iqq+Y29pthMAmvSQkViXd3zodYzNHEZU9MS37wnDzti1iETXEraPD32udyzRpIexNzNZHOietbZonoiHEA5pYTe3HAJaBZFdoGeaPHjSQwpd/f/dWto8vf/46OT0Lw==';
+        $base64EncodedCompressContent = 'H4sIAAAAAAAAE9WaWW9URxBG3/MroiDlCc/U0rW0JRQ5ZgIOm/BCSF5QrzGJZQMGyfz7tMMlUpiR8hLpcr3ImnstT81R+es63XNn8/L0CZ998+30cWc83nu592JzfHL07Ok+f3nj9OD4web0/tnxwentfdQvf+Hg8eNnv+wdHhw+3Oz/ujn58vaTzf2jg72TzfOzzdPDzT58ef/R5tf9J5vTh8/u3zvYnOwh+d2z46N7352/f/9mf71+/+6jrlr9cH11frUql+vzi+t1cOR1uWh9/cvDbK/Dj1eH5we/X709flSf/XZ49PL5i5uTP9vl2Q19d/foxT24oWqFkraaewUXyFAxCaTamKzov2s6evrTPuLKAe7+c30qpl03SpyxcKX6Zu/Nh7y6/X77+u3rDx8/XK4u2/s1MTKtvUMiSxWgaQjuDiy9azXJRgnj+uLy9Pm75zds/Y8H736+KXvX9dV1+/0VvGrjJb6KozqqP1yX86uri6N67++/+n1/fdEeXFzldHvpv55iDtCles0hJMs5J2iC0kxjRSfoQXLYBg0rmAc0fgINZkB9eaBTDNDRmyuESNURpY4vHrWOCuM26LAynQU0TR0NLcW8ONAh5urguZgKpRalEqJaALt9PTVtgQ4rmqeh+RNnjX387y2Ocx3ZrB0scNMeC7QiJYsmG0mIGXZENKx0HtBhAq3NIC4OdC8EJQ9C0TJEUWetmRmyZ+HROlug41yc5RPn0NECLY5zti4xZUFPjUQ0AsbxSJvnTFh8V0PLPAmtn0AnyLEtLzk4QKky8iJx0U6FexlFAlOB4km2GxplJTQLaJuWQmLW5c0c7uTYG4Wa4mhijz10lVBLCTnmQlugfQVhFs4+JTSlaGFxnGND6AndSk08ZjofFyhHrk2ja7evaIiOU0RHdVxecowlD7qF2AyhmJByldS6xTGDpIr1KwKNn72wGHhZHOnQQMei13JnGcLdQmDL40ca7hVT3KEr85H+LIado/LiSEc2iVEb98rGUNTGnJoUQ2h9ZHTZIi1z7XTgJIYpo+Py5mjCmoQtKYEMGUydRl2MltrQr9Z3bnXoPMshTmpYQ6QlGkvoPXbx7MX5dkQ1kC4kTpFvB6kdxjJXdkxq2LPEvLy9jtotjScPOYdUkgxS0UeQhFatqto2aOQV+TykJzkcwz7z8iaP0EdGtLEImnOEzKRx9PfAxa2ySNtFeqZZGic7jCM7si6OtJdUSuXYYi08XkHmUoqO2bplCom395VkFeeRQ5zsEMExLC88AEGSdkQFLRU9meZcaSyGyD3BDg3HFcwUHpMflu5xgdpCvUvFMJ6+ylBx7m4xB+TcrKVgvEXaVjRTdkx+yGOUhrY40KZVRk5wcx69TV0gjNRQCjUr7d4qDfN0NE16OApNtDzQUH34YUzeDQBLSYBpzB0FdZQ5at21HM60KU2THhZlL8sTcUUqmgYlZ4pBQYJkkmBGbXzqtojbKsyTHTTpYWGpeXnSYsWdcu9pZHXGptlteHhUkRzZFXdkx1wd/dkOKQT2xYEuHkuiEBvVFCDVkdOFIaR6ezxb27aH+1wbHjTZIWGWvDzQnk3ZvDQuElB6zK3nKjRypKLIjgMtnMtZSD4vh2J9edlBUIy8kBUe6RHRiLJlGLMIhiRRd5GeKzwmO8wC3ZZ3pFWSq+QOJcQuJbZSoo4rhVw8mGwfac3Y05Meljy6YXmDB0Bs1otii1wxqbXWxFL2OoqqvmNvabYTAJr0kJFYl3d86HWMzRxGVPTEt+8Jw87YtYhE1xK2jw99rncs0aSHsTczWRzonrW2aJ6IhxAOaWE3txwCWgWRXaBnmjx40kMKXf3/3VraPL3/+Ojk9C9Heug4ViwAAA==';
         $result = StringToolkit::uncompress(base64_decode($base64EncodedCompressContent));
-        $this->assertEquals(1848, strlen($base64EncodedCompressContent));
+        $this->assertEquals(1872, strlen($base64EncodedCompressContent));
 
         if (StringToolkit::isCompressable()) {
             $this->assertEquals(11350, strlen($result));
         } else {
             $this->assertEquals(1384, strlen($result));
         }
+    }
+
+    public function testAppendGzipResponseHeader()
+    {
+        $this->assertArrayEquals(
+            array(
+                'Content-Encoding' => 'gzip',
+                'Vary' => 'Accept-Encoding',
+            ),
+            StringToolkit::appendGzipResponseHeader()
+        );
     }
 }
