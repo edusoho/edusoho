@@ -487,6 +487,7 @@ order.refund_feedback: 反馈信息
 order.refund.id: 退款号
 order.created_time: 创建时间
 order.pay_time: 付款时间
+order.closed_time: 关闭时间
 order.status: 订单状态
 order.deduct: 优惠抵扣
 order.item_type: 订单类型
