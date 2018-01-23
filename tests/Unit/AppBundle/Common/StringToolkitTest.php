@@ -229,7 +229,12 @@ class StringToolkitTest extends BaseTestCase
 
         $result = StringToolkit::compress($m3u8Content);
         $compressRate = strlen($result) / strlen($m3u8Content);
-        $this->assertTrue($compressRate < 0.13);
+
+        if (StringToolkit::isCompressable()) {
+            $this->assertTrue($compressRate < 0.13);
+        } else {
+            $this->assertTrue(1 == $compressRate);
+        }
     }
 
     public function testUncompress()
@@ -237,6 +242,11 @@ class StringToolkitTest extends BaseTestCase
         $base64EncodedCompressContent = '1ZpZb1RHEEbf8yuiIOUJz9TStbQlFDlmAg6b8EJIXlCvMYllAwbJ/Pu0wyVSmJHyEulyvciaey1PzVH56zrdc2fz8vQJn33z7fRxZzzee7n3YnN8cvTs6T5/eeP04PjB5vT+2fHB6e191C9/4eDx42e/7B0eHD7c7P+6Ofny9pPN/aODvZPN87PN08PNPnx5/9Hm1/0nm9OHz+7fO9ic7CH53bPjo3vfnb9//2Z/vX7/7qOuWv1wfXV+tSqX6/OL63Vw5HW5aH39y8Nsr8OPV4fnB79fvT1+VJ/9dnj08vmLm5M/2+XZDX139+jFPbihaoWStpp7BRfIUDEJpNqYrOi/azp6+tM+4soB7v5zfSqmXTdKnLFwpfpm782HvLr9fvv67esPHz9cri7b+zUxMq29QyJLFaBpCO4OLL1rNclGCeP64vL0+bvnN2z9jwfvfr4pe9f11XX7/RW8auMlvoqjOqo/XJfzq6uLo3rv77/6fX990R5cXOV0e+m/nmIO0KV6zSEkyzknaILSTGNFJ+hBctgGDSuYBzR+Ag1mQH15oFMM0NGbK4RI1RGlji8etY4K4zbosDKdBTRNHQ0txbw40CHm6uC5mAqlFqUSoloAu309NW2BDiuap6H5E2eNffzvLY5zHdmsHSxw0x4LtCIliyYbSYgZdkQ0rHQe0GECrc0gLg50LwQlD0LRMkRRZ62ZGbJn4dE6W6DjXJzlE+fQ0QItjnO2LjFlQU+NRDQCxvFIm+dMWHxXQ8s8Ca2fQCfIsS0vOThAqTLyInHRToV7GUUCU4HiSbYbGmUlNAtom5ZCYtblzRzu5NgbhZriaGKPPXSVUEsJOeZCW6B9BWEWzj4lNKVoYXGcY0PoCd1KTTxmOh8XKEeuTaNrt69oiI5TREd1XF5yjCUPuoXYDKGYkHKV1LrFMYOkivUrAo2fvbAYeFkc6dBAx6LXcmcZwt1CYMvjRxruFVPcoSvzkf4shp2j8uJIRzaJURv3ysZQ1MacmhRDaH1kdNkiLXPtdOAkhimj4/LmaMKahC0pgQwZTJ1GXYyW2tCv1ndudeg8yyFOalhDpCUaS+g9dvHsxfl2RDWQLiROkW8HqR3GMld2TGrYs8S8vL2O2i2NJw85h1SSDFLRR5CEVq2q2jZo5BX5PKQnORzDPvPyJo/QR0a0sQiac4TMpHH098DFrbJI20V6plkaJzuMIzuyLo60l1RK5dhiLTxeQeZSio7ZumUKibf3lWQV55FDnOwQwTEsLzwAQZJ2RAUtFT2Z5lxpLIbIPcEODccVzBQekx+W7nGB2kK9S8Uwnr7KUHHubjEH5NyspWC8RdpWNFN2TH7IY5SGtjjQplVGTnBzHr1NXSCM1FAKNSvt3ioN83Q0TXo4Ck20PNBQffhhTN4NAEtJgGnMHQV1lDlq3bUczrQpTZMeFmUvyxNxRSqaBiVnikFBgmSSYEZtfOq2iNsqzJMdNOlhYal5edJixZ1y72lkdcam2W14eFSRHNkVd2THXB392Q4pBPbFgS4eS6IQG9UUINWR04UhpHp7PFvbtof7XBseNNkhYZa8PNCeTdm8NC4SUHrMrecqNHKkosiOAy2cy1lIPi+HYn152UFQjLyQFR7pEdGIsmUYswiGJFF3kZ4rPCY7zALdlnekVZKr5A4lxC4ltlKijiuFXDyYbB9pzdjTkx6WPLpheYMHQGzWi2KLXDGptdbEUvY6iqq+Y29pthMAmvSQkViXd3zodYzNHEZU9MS37wnDzti1iETXEraPD32udyzRpIexNzNZHOietbZonoiHEA5pYTe3HAJaBZFdoGeaPHjSQwpd/f/dWto8vf/46OT0Lw==';
         $result = StringToolkit::uncompress(base64_decode($base64EncodedCompressContent));
         $this->assertEquals(1848, strlen($base64EncodedCompressContent));
-        $this->assertEquals(11350, strlen($result));
+
+        if (StringToolkit::isCompressable()) {
+            $this->assertEquals(11350, strlen($result));
+        } else {
+            $this->assertEquals(1384, strlen($result));
+        }
     }
 }
