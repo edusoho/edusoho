@@ -34,11 +34,20 @@
 }
 
 .testpaper-mark-operation__link {
+  font-size: 24px;
   i {
     font-size: 24px;
     color: @gray-dark;
     &:hover {
       cursor: pointer;
+    }
+  }
+}
+
+.testpaper-mark-operation__link--disabled {
+  i {
+    &:hover {
+      cursor: not-allowed;
     }
   }
 }

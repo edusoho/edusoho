@@ -1090,6 +1090,10 @@ course.testpaper_check.graph_passed_percent: 合格率：%percent%%
 course.testpaper_check.btn_score_distribution: 成绩分布
 course.testpaper_check.btn_question_distribution: 答题分布
 course.testpaper_check.btn_check: 批阅
+course.testpaper_check.first_answer: 初次答题
+course.testpaper_check.number: 人次
+course.testpaper_check.get_score: 得 %questonScore% 分
+course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅

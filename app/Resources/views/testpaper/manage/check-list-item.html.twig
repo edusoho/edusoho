@@ -29,15 +29,15 @@
         <div class="col-md-4">
           <div class="testpaper-mark-operation">
             <div class="col-xs-4 text-center mt10">
-              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:task.courseId, activityId:task.activityId}) }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a>
+              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:task.courseId, activityId:task.activityId}) }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
             </div>
-            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-check"></i></a></div>
+            <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
             
             <div class="col-xs-4 text-center mt10">
               {% if targetResultInfo.reviewing|default(0) > 0 %}
-                <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check"></i></a>
+                <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check"></i></a>
               {% else %}
-                <a class="testpaper-mark-operation__link" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-check gray-medium"></i></a>
+                <a class="testpaper-mark-operation__link testpaper-mark-operation__link--disabled" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check gray-medium"></i></a>
               {% endif %}
             </div>
           </div>
