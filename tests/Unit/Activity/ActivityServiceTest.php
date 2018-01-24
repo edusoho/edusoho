@@ -433,15 +433,13 @@ class ActivityServiceTest extends BaseTestCase
     public function testGetMaterialsFromActivity()
     {
         $result1 = $this->getActivityService()->getMaterialsFromActivity(
-            array('materials' => '{"id" : 1}'),
-            'text'
+            array('materials' => '{"id" : 1}')
         );
 
         $this->assertEquals(1, $result1['id']);
 
         $result2 = $this->getActivityService()->getMaterialsFromActivity(
-            array('media' => '{"id" : 1}'),
-            'text'
+            array('media' => '{"id" : 1}')
         );
 
         $this->assertEquals(1, $result2[0]['id']);

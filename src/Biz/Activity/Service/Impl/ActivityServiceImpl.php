@@ -139,12 +139,18 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
-        $materials = $this->getMaterialsFromActivity($fields, $activityConfig);
+        $materials = $this->getMaterialsFromActivity($fields);
 
-        $media = $activityConfig->create($fields);
+        if (!empty($activityConfig)) {
+            $media = $activityConfig->create($fields);
 
-        if (!empty($media)) {
-            $fields['mediaId'] = $media['id'];
+            if (!empty($media)) {
+                $fields['mediaId'] = $media['id'];
+            }
+        }
+
+        if (empty($fields['mediaId'])) {
+            throw $this->createInvalidArgumentException('activity is invalid');
         }
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
@@ -173,7 +179,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
 
-        $materials = $this->getMaterialsFromActivity($fields, $realActivity);
+        $materials = $this->getMaterialsFromActivity($fields);
         if (!empty($materials)) {
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
@@ -399,7 +405,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      *
      * @return array 多维数组
      */
-    public function getMaterialsFromActivity($fields, $activityConfig)
+    public function getMaterialsFromActivity($fields)
     {
         if (!empty($fields['materials'])) {
             return json_decode($fields['materials'], true);
