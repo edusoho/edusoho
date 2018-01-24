@@ -54,6 +54,8 @@ class UserUtil
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
+        $registration['type'] = $type;
+        $registration['authid'] = $oauthUser['id'];
 
         if ($this->getSettingService()->get("auth.register_mode", "email") == "email_or_mobile") {
             $registration['emailOrMobile'] = $registration['email'];
