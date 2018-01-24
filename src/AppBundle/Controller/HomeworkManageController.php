@@ -107,9 +107,17 @@ class HomeworkManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
+            $isContinue = $formData['isContinue'];
+            unset($formData['isContinue']);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            return $this->createJsonResponse(true);
+            $data = array('success' => true, 'goto' => '');
+            if ($isContinue) {
+                $route = $this->getRedirectRoute('nextCheck', $source);
+                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
+            }
+
+            return $this->createJsonResponse($data);
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
@@ -274,6 +282,18 @@ class HomeworkManageController extends BaseController
         $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
 
         return $data;
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'nextCheck' => array(
+                'course' => 'course_manage_exam_next_result_check',
+                'classroom' => 'classroom_manage_exam_next_result_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
     }
 
     /**

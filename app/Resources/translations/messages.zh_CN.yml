@@ -1079,7 +1079,7 @@ course.members_manage.join_records.date: 加入日期
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
 course.testpaper_check.empty: 暂无数据
-course.testpaper_check.start_date: 开始日期
+course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
