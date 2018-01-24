@@ -246,18 +246,22 @@ class StringToolkitTest extends BaseTestCase
         if (StringToolkit::isCompressable()) {
             $this->assertEquals(11350, strlen($result));
         } else {
-            $this->assertEquals(1384, strlen($result));
+            $this->assertEquals(1402, strlen($result));
         }
     }
 
     public function testAppendGzipResponseHeader()
     {
-        $this->assertArrayEquals(
-            array(
-                'Content-Encoding' => 'gzip',
-                'Vary' => 'Accept-Encoding',
-            ),
-            StringToolkit::appendGzipResponseHeader()
-        );
+        if (StringToolkit::isCompressable()) {
+            $this->assertArrayEquals(
+                array(
+                    'Content-Encoding' => 'gzip',
+                    'Vary' => 'Accept-Encoding',
+                ),
+                StringToolkit::appendGzipResponseHeader()
+            );
+        } else {
+            $this->assertEmpty(StringToolkit::appendGzipResponseHeader());
+        }
     }
 }
