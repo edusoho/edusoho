@@ -12,15 +12,15 @@
 {% endblock %}
 
 {% block body %}
-<div>
-  {{ 'course.testpaper_check.graph_avg_score'|trans({'%avgScore%':analysis.avg|default(0)}) }}
-  {{ 'course.testpaper_check.graph_max_score'|trans({'%maxScore%':analysis.maxScore|default(0)}) }}
-  {{ 'course.testpaper_check.graph_passed_percent'|trans({'%percent%':analysis.passPercent|default(0)}) }}
-</div>
-<div class="col-md-12">  
-  <div id="line-data" style="width: 100%;height:400px;"></div>
-  <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>  
-</div>
+  <div class="testpaper-mark-graph">
+    <div class="testpaper-mark-graph__data">
+      {{ 'course.testpaper_check.graph_avg_score'|trans({'%avgScore%':analysis.avg|default(0)}) }}
+      {{ 'course.testpaper_check.graph_max_score'|trans({'%maxScore%':analysis.maxScore|default(0)}) }}
+      {{ 'course.testpaper_check.graph_passed_percent'|trans({'%percent%':analysis.passPercent|default(0)}) }}
+    </div>
+    <div class="testpaper-mark-graph__chart" id="line-data"></div>
+    <input id="data" type="hidden" value='{% if data %}{{data}}{% endif %}'>
+  </div>
 {% endblock %}
 
 {% block footer %}{% endblock %}

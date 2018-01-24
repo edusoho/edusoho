@@ -15,9 +15,7 @@
   <div class="testpaper-mark-info col-md-8">
     <div class="row">
       <div class="col-md-8">
-        <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">
-          <a class="link-darker" href="#">{{ taskTitle }}</a>
-        </div>
+        <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
           {% if testpaper %}{{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
         </div>
@@ -63,13 +61,13 @@
         </div>
         <div class="col-xs-4">
           <a class="testpaper-mark-warning-status" href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'reviewing'}) }}">
-            <span class="testpaper-span">{{'course.testpaper_check.status.not_check'|trans}}</span><br>
+            <span class="testpaper-mark-status__text">{{'course.testpaper_check.status.not_check'|trans}}</span><br>
             <p class="mtm pts">{{ targetResultInfo.reviewing|default(0) }}</p>
           </a>
         </div>
         <div class="col-xs-4">
           <a class="testpaper-mark-danger-status" href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'doing'}) }}">
-            <span class="testpaper-span">{{'course.testpaper_check.status.not_submit'|trans}}</span><br>
+            <span class="testpaper-mark-status__text">{{'course.testpaper_check.status.not_submit'|trans}}</span><br>
             <p class="mtm pts">{{ targetResultInfo.doing|default(0) }}</p>
           </a>
         </div>
