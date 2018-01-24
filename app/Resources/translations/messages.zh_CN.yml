@@ -1094,6 +1094,7 @@ course.testpaper_check.first_answer: 初次答题
 course.testpaper_check.number: 人次
 course.testpaper_check.get_score: 得 %questonScore% 分
 course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
+course.testpaper_check.testpaper_analysis: 试题分析
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
@@ -1843,7 +1844,7 @@ course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
 course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
 course.plan_task.activity_manage.video.code_convert_tips: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/885" target="__blank">查看</a>编码转换说明。
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
 course.plan_task.activity_manage.video.time_finish_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>至少学习%finishDetail%分钟。
 course.plan_task.activity_manage.video.last_finish_tips: >
@@ -3975,7 +3976,7 @@ my.teaching.open_course.lesson.modal.lesson_content: 内容
 my.teaching.open_course.lesson.modal.lesson_content.tips: 您有一段自动保存内容，继续编辑请点击
 my.teaching.open_course.lesson.modal.media_dialog: 视频字幕
 my.teaching.open_course.lesson.modal.media_dialog.help_block: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/article/885" target="__blank">查看</a>编码转换说明。
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
 my.teaching.open_course.lesson.modal.upload.tips: 请等待视频上传完之后再添加字幕
 my.teaching.open_course.lesson.modal.video_length: 视频时长
 my.teaching.open_course.lesson.modal.audio_length: 音频时长
