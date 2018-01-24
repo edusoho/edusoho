@@ -141,16 +141,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
         $materials = $this->getMaterialsFromActivity($fields);
 
-        if (!empty($activityConfig)) {
-            $media = $activityConfig->create($fields);
+        $media = $activityConfig->create($fields);
 
-            if (!empty($media)) {
-                $fields['mediaId'] = $media['id'];
-            }
-        }
-
-        if (empty($fields['mediaId'])) {
-            throw $this->createInvalidArgumentException('activity is invalid');
+        if (!empty($media)) {
+            $fields['mediaId'] = $media['id'];
         }
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
