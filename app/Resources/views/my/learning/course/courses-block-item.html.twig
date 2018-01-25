@@ -34,7 +34,7 @@
       <ul class="my-course-item__dropdown dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
         {% for course in currentCourses %}
           {% set member = members[course.id]|default(null) %}
-          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{  member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-text-gray-light">/{{ course.compulsoryTaskNum }}</span></span></a></li>
+          <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{  member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-dark-assist">/{{ course.compulsoryTaskNum }}</span></span></a></li>
         {% endfor %}
       </ul>
     </div>
