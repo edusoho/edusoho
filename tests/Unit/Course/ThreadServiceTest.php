@@ -5,7 +5,6 @@ namespace Tests\Unit\Course;
 use Biz\BaseTestCase;
 use Biz\Course\Service\ThreadService;
 use AppBundle\Common\ReflectionUtils;
-use Biz\User\CurrentUser;
 
 class ThreadServiceTest extends BaseTestCase
 {

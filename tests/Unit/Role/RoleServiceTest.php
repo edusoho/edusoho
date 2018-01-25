@@ -39,7 +39,7 @@ class RoleServiceTest extends BaseTestCase
         $adminPermissions = array_diff($superAdminPermissions, $adminForbiddenPermissions);
 
         $teacherRoleTree = $permissionTree->find(function ($tree) {
-            return $tree->data['code'] === 'web';
+            return 'web' === $tree->data['code'];
         });
 
         $this->getRoleService()->refreshRoles();
