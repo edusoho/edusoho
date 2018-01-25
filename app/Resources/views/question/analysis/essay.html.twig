@@ -1,0 +1,44 @@
+{% set questionType = question.type %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_body %}
+  <div class="testpaper-question-essay__answer">
+    <div class="mbl">
+      <div class="mbs">{{'course.question_manage.manage.refer_answer'|trans}}：</div>
+      <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
+    </div>
+  </div>
+
+  {% if testType|default('testpaper') == 'testpaper' %}
+    <div class="testpaper-question-body__label hidden-xs">
+      <span>{{ 'course.testpaper_check.first_answer'|trans }}</span>
+    </div>
+
+    <ul class="testpaper-question-choices">
+      {% for index in [2,1,0] %}
+        {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
+        <li class="pl0 testpaper-question-body-item testpaper-question-choice-item">
+          {% if index == 2 %}
+            {{ 'course.testpaper_check.get_score'|trans({'%questonScore%':question.score}) }}
+          {% elseif index == 1 %}
+            {{ 'course.testpaper_check.get_score_range'|trans({'%questonScore%':question.score}) }}
+          {% else %}
+            {{ 'course.testpaper_check.get_score'|trans({'%questonScore%':0}) }}
+          {% endif %}
+
+          <span class="label testpaper-question-body-item__label {% if index == 0 %}label-danger{% else %}label-success{% endif %} hidden-xs">
+            {% if itemKeyAnalysis and firstCount != 0 %}
+              {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+              {{ firstAnswerPercent }}%
+            {% else %}
+              0%
+            {% endif %}
+          </span>
+          <span class="testpaper-question-body-item__count">
+            {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}{{ 'course.testpaper_check.number'|trans }}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

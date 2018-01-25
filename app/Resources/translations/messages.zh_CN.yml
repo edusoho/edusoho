@@ -1079,10 +1079,22 @@ course.members_manage.join_records.date: 加入日期
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
 course.testpaper_check.empty: 暂无数据
-course.testpaper_check.start_date: 开始日期
+course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
 course.testpaper_check.status.not_submit: 未交
+course.testpaper_check.optional_task_title: 选修任务：%title%
+course.testpaper_check.testpaper_delete: 该试卷已删除
+course.testpaper_check.graph_avg_score: 平均分：%avgScore% 分
+course.testpaper_check.graph_max_score: 最高分：%maxScore% 分
+course.testpaper_check.graph_passed_percent: 合格率：%percent%%
+course.testpaper_check.btn_score_distribution: 成绩分布
+course.testpaper_check.btn_question_distribution: 答题分布
+course.testpaper_check.btn_check: 批阅
+course.testpaper_check.first_answer: 初次答题
+course.testpaper_check.number: 人次
+course.testpaper_check.get_score: 得 %questonScore% 分
+course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
 
 course.homepage.re_try_btn: 再次尝试
 course.homework_check: 作业批阅
@@ -1562,6 +1574,12 @@ course.testpaper_manage.question.replace_modal.empty: 无题目记录,请先去
 course.testpaper_manage.question.replace_modal.create_btn: 创建题目
 course.testpaper_manage.question.replace_modal.select_all_btn: 全选
 course.testpaper_manage.question.replace_modal.select_btn: 请选择题目
+course.testpaper_manage.analysis_card.course_total_person: 计划人数：
+course.testpaper_manage.analysis_card.classroom_total_person: 班级人数：
+course.testpaper_manage.analysis_card.join_person: 参加人数：
+course.testpaper_manage.analysis_card.complete_person: 完成人数：
+course.testpaper_manage.analysis_card.avg_score: 平均成绩：
+course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
 course.course_files: 课程文件
 course.course_files.content_title: 课程文件
@@ -1762,7 +1780,7 @@ course.plan_task.activity_manage.homework.start_btn: 开始做题
 course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
-  作业题目<small class="color-gray">共%itemCount%题</small>
+  作业题目 <small class="color-gray">共%itemCount%题</small>
 course.plan_task.activity_manage.homework.confirm_submit: 确认提交
 course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
@@ -2727,6 +2745,7 @@ form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
+form.btn.continue: 完成并继续
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
@@ -7356,7 +7375,6 @@ admin.article_setting.category.publish.tips: 建议等栏目内容整理编辑�
 admin.article_setting.category.edit: 编辑栏目
 admin.article_setting.category.create: 添加栏目
 
-admin.article_setting.choose_category: 选择所属栏目
 admin.article_setting.tag: TAG标签
 admin.article_setting.content: 正文
 admin.article_setting.property: 资讯属性

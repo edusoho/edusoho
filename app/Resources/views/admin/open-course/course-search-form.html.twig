@@ -1,4 +1,5 @@
 <form id="message-search-form" class="form-inline well well-sm" action="{{ actionUrl|default('')}}" method="get" novalidate>
+  {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
   <div class="form-group">
     <select style="max-width:150px;" class="form-control" name="categoryId">
       {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.open_manage.category_placeholder'|trans) }}

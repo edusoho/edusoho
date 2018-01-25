@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
@@ -34,13 +33,10 @@ class HomeworkManageController extends BaseController
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'homework');
-
         return $this->render('course-manage/homework-check/check-list.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
             'isTeacher' => $isTeacher,
-            'homeworkIds' => ArrayToolkit::column($activities, 'mediaId'),
         ));
     }
 

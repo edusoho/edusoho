@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f11b215d680f27dffdaffcf3cce0253e",
+    "content-hash": "ad4701aa0f225e79d8742b88990b23e7",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -221,7 +221,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/canuonifeng/omnipay-wechatpay/d0503c495b621bd4fda4290d8342009bd57c7222.zip",
+                "url": "https://api.github.com/repos/canuonifeng/omnipay-wechatpay/zipball/d0503c495b621bd4fda4290d8342009bd57c7222",
                 "reference": "d0503c495b621bd4fda4290d8342009bd57c7222",
                 "shasum": ""
             },
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.4",
+            "version": "v0.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "74e7c390a7414022a8f368887eee10b6082cdde6"
+                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/74e7c390a7414022a8f368887eee10b6082cdde6.zip",
-                "reference": "74e7c390a7414022a8f368887eee10b6082cdde6",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/c319ccece125b07da681f4893dfa50bf5bbb99f7",
+                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
                 "shasum": ""
             },
             "require": {
@@ -341,20 +341,20 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-10-25T07:54:56+00:00"
+            "time": "2018-01-18T02:33:43+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.12",
+            "version": "v0.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33"
+                "reference": "373e2f38b6e6754c73bf6a7c74577b626c0cd43f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/92750311508b7d23d6b4f16bbcca8fe245445e33.zip",
-                "reference": "92750311508b7d23d6b4f16bbcca8fe245445e33",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/373e2f38b6e6754c73bf6a7c74577b626c0cd43f",
+                "reference": "373e2f38b6e6754c73bf6a7c74577b626c0cd43f",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-01-16T12:15:35+00:00"
+            "time": "2018-01-23T02:43:24+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -471,7 +471,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/6fa24884bb34e559649ebabe9fe3f8cd4771d97d.zip",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/6fa24884bb34e559649ebabe9fe3f8cd4771d97d",
                 "reference": "6fa24884bb34e559649ebabe9fe3f8cd4771d97d",
                 "shasum": ""
             },
@@ -886,7 +886,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/cache/b3217d58609e9c8e661cd41357a54d926c4a2a1a.zip",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "shasum": ""
             },
@@ -960,7 +960,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/collections/a01ee38fcd999f34d9bfbcee59dbda5105449cbf.zip",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/a01ee38fcd999f34d9bfbcee59dbda5105449cbf",
                 "reference": "a01ee38fcd999f34d9bfbcee59dbda5105449cbf",
                 "shasum": ""
             },
@@ -1252,7 +1252,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/DoctrineCacheBundle/9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1.zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineCacheBundle/zipball/9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1",
                 "reference": "9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1",
                 "shasum": ""
             },
@@ -1340,7 +1340,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/inflector/e11d84c6e018beedd929cff5220969a3c6d1d462.zip",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
                 "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
                 "shasum": ""
             },
@@ -1534,7 +1534,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/QrCode/zipball/5e56697d968ed60fd1b6444d36592fd6333c2724",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/5e56697d968ed60fd1b6444d36592fd6333c2724",
                 "reference": "5e56697d968ed60fd1b6444d36592fd6333c2724",
                 "shasum": ""
             },
@@ -1642,7 +1642,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/facebook/php-graph-sdk/2f9639c15ae043911f40ffe44080b32bac2c5280.zip",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
                 "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
                 "shasum": ""
             },
@@ -1748,7 +1748,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/guzzle/guzzle3/0645b70d953bc1c067bbc8d5bc53194706b628d9.zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
                 "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
                 "shasum": ""
             },
@@ -2293,7 +2293,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/thephpleague/omnipay-common/54910f2ece6b1be64f5e53e2111dd1254d50ee49.zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-common/zipball/54910f2ece6b1be64f5e53e2111dd1254d50ee49",
                 "reference": "54910f2ece6b1be64f5e53e2111dd1254d50ee49",
                 "shasum": ""
             },
@@ -2695,7 +2695,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/php-fig/http-message/f6561bf28d520154e4b0ec72be95418abe6d9363.zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
                 "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
                 "shasum": ""
             },
@@ -3347,7 +3347,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-apcu/04f62674339602def515bff4bc6901fc1d4951e8.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-apcu/zipball/04f62674339602def515bff4bc6901fc1d4951e8",
                 "reference": "04f62674339602def515bff4bc6901fc1d4951e8",
                 "shasum": ""
             },
@@ -3403,7 +3403,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-intl-icu/d2bb2ef00dd8605d6fbd4db53ed4af1395953497.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/d2bb2ef00dd8605d6fbd4db53ed4af1395953497",
                 "reference": "d2bb2ef00dd8605d6fbd4db53ed4af1395953497",
                 "shasum": ""
             },
@@ -3461,7 +3461,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-mbstring/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
                 "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
                 "shasum": ""
             },
@@ -3520,7 +3520,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php54/d7810a14b2c6c1aff415e1bb755f611b3d5327bc.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/d7810a14b2c6c1aff415e1bb755f611b3d5327bc",
                 "reference": "d7810a14b2c6c1aff415e1bb755f611b3d5327bc",
                 "shasum": ""
             },
@@ -3578,7 +3578,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php55/b64e7f0c37ecf144ecc16668936eef94e628fbfd.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/b64e7f0c37ecf144ecc16668936eef94e628fbfd",
                 "reference": "b64e7f0c37ecf144ecc16668936eef94e628fbfd",
                 "shasum": ""
             },
@@ -3634,7 +3634,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php56/265fc96795492430762c29be291a371494ba3a5b.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/265fc96795492430762c29be291a371494ba3a5b",
                 "reference": "265fc96795492430762c29be291a371494ba3a5b",
                 "shasum": ""
             },
@@ -3690,7 +3690,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/symfony/polyfill-php70/0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff.zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff",
                 "reference": "0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff",
                 "shasum": ""
             },
@@ -4214,7 +4214,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/wenqinruan/omnipay-alipay/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25.zip",
+                "url": "https://api.github.com/repos/wenqinruan/omnipay-alipay/zipball/0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
                 "reference": "0bd24ae441ddb3aa5973a2888206c7fe2a71ef25",
                 "shasum": ""
             },
@@ -4268,7 +4268,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/d9cb848fc66b502658994cf86e63ed3d940e1095.zip",
+                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/d9cb848fc66b502658994cf86e63ed3d940e1095",
                 "reference": "d9cb848fc66b502658994cf86e63ed3d940e1095",
                 "shasum": ""
             },

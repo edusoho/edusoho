@@ -2244,6 +2244,14 @@ course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
+course_manage_exam_next_result_check:
+  path: /course/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultNextCheck }
+
+course_manage_testpaper_result_graph:
+  path: /course/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultGraph }
+
 testpaper_check:
   path: /testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }
@@ -2253,8 +2261,12 @@ course_manage_testpaper_check_list:
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkList }
 
 course_manage_testpaper_result_list:
-  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  path: /course/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultList }
+
+course_manage_exam_result_anlysis:
+  path: /course/{id}/manage/exam/activity/{activityId}/analysis
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultAnalysis }
 
 course_manage_testpaper_questions:
   path: /course/{courseId}/manage/testpaper/{testpaperId}/items
@@ -2310,7 +2322,6 @@ course_manage_homework_check_list:
 course_manage_homework_check:
   path: /course/{id}/manage/homework/{resultId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
-
 
 homework_start_do:
   path: /lesson/{lessonId}/homework/{homeworkId}/startDo
@@ -2498,12 +2509,20 @@ classroom_manage_testpaper:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
 
 classroom_manage_testpaper_result_list:
-  path: /classroom/{id}/manage/testpaper/{testpaperId}/result
+  path: /classroom/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
 
 classroom_manage_testpaper_check:
   path: /classroom/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
+
+classroom_manage_exam_result_anlysis:
+  path: /classroom/{id}/manage/exam/activity/{activityId}/analysis
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultAnalysis }
+
+classroom_manage_exam_next_result_check:
+  path: /classroom/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultNextCheck }
 
 classroom_manage_homework:
     path:  /classroom/{id}/manage/homework/list

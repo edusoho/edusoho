@@ -69,10 +69,10 @@ class DynamicQueryBuilder extends QueryBuilder
         $conditionName = $this->getConditionName($where);
 
         //PRE_LIKE
-        if ($likeType == 'pre_like') {
+        if ('pre_like' == $likeType) {
             $where = preg_replace('/pre_like/i', 'LIKE', $where, 1);
             $this->conditions[$conditionName] = "{$this->conditions[$conditionName]}%";
-        } elseif ($likeType == 'suf_like') {
+        } elseif ('suf_like' == $likeType) {
             $where = preg_replace('/suf_like/i', 'LIKE', $where, 1);
             $this->conditions[$conditionName] = "%{$this->conditions[$conditionName]}";
         } else {

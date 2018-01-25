@@ -27,6 +27,7 @@ class TableCommand extends AbstractCommand
             'scheduler_add_retry_num_and_job_detail',
             'scheduler_update_job_detail',
             'scheduler_update_pool',
+            'scheduler_add_job_fired_index',
         );
 
         foreach ($migrations as $migration) {

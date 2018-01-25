@@ -3,7 +3,6 @@
 namespace Biz\Search\Adapter;
 
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class TeacherSearchAdapter extends AbstractSearchAdapter
 {
@@ -39,6 +38,6 @@ class TeacherSearchAdapter extends AbstractSearchAdapter
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }
