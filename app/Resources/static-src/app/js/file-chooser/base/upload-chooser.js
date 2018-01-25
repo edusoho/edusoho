@@ -46,7 +46,7 @@ export default class UploaderChooser extends Chooser {
 
   _getUploadProcess() {
 
-    let video = $('.js-upload-params').get().reduce((prams, dom) => {
+    let video = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
     }, {});
