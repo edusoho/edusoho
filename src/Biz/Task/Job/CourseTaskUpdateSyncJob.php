@@ -84,7 +84,7 @@ class CourseTaskUpdateSyncJob extends AbstractJob
 
     private function syncTestpaper($activity, $copiedCourse)
     {
-        if ($activity['mediaType'] != 'testpaper') {
+        if ('testpaper' != $activity['mediaType']) {
             return array();
         }
 
