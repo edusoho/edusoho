@@ -5,12 +5,12 @@
   </a>
   <div class="my-course-item__info">
     <div class="my-course-item__title text-overflow">
-      <a class="cd-link-gray-dark" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+      <a class="cd-link-major" href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
     </div>
 
     {% if classroom|default(null) %}
       <div class="my-course-item__classroom">
-        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-gray" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
+        <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-minor" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title }}</a></span>
       </div>
     {% endif %}
 

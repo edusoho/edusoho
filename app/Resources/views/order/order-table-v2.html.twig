@@ -18,11 +18,11 @@
     <tr id="order-table-{{order.id}}">
       <td>
         {% if order.item.target_type == 'course' %}
-          <a class="cd-link-gray-dark" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+          <a class="cd-link-major" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
         {% elseif order.item.target_type == 'vip' %}
-          <a class="cd-link-gray-dark" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+          <a class="cd-link-major" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
         {% elseif order.item.target_type == 'classroom' %}
-          <a class="cd-link-gray-dark" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+          <a class="cd-link-major" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
         {% else %}
           {{order.title}}
         {% endif %}
@@ -64,7 +64,7 @@
                 {% if order.refund_deadline > date().timestamp %}
                   <br>
                   <div class="table-action__item">
-                    <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'order.refund.apply_for_btn'|trans}}</a>
+                    <a href="javascript:;" class="cd-link-minor" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'order.refund.apply_for_btn'|trans}}</a>
                   </div>
                 {% endif %}
               {% endif %}
@@ -72,7 +72,7 @@
             {% if order.status in ['refunded', 'refunding', 'success', 'closed', 'finished'] and order.refund.status|default('') in ['auditing', 'refunding', 'refunded', 'refused'] %}
               <br>
               <div class="table-action__item">
-                <a href="javascript:;" class="cd-link-gray" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'order.show_refund_detail'|trans}}</a>
+                <a href="javascript:;" class="cd-link-minor" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'order.show_refund_detail'|trans}}</a>
               </div>
             {% endif %}
           {% endif %}
