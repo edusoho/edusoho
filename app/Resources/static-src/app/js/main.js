@@ -68,13 +68,9 @@ $(document).ajaxSend(function (a, b, c) {
   let $dom = $(`[data-url="${url}"]`);
   if ($dom.data('loading')) {
     let loading;
-    if ($dom.data('loading-class')) {
-      loading = cd.loading({
-        loadingClass: $dom.data('loading-class')
-      });
-    } else {
-      loading = cd.loading();
-    }
+    loading = cd.loading({
+      isFixed: $dom.data('is-fixed')
+    });
 
     let loadingBox = $($dom.data('target') || $dom);
     loadingBox.html(loading);
