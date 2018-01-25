@@ -115,6 +115,7 @@ class ManageController extends BaseController
     public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
         $courseIds = array($targetId);
+        $courses = array();
         if ($targetType === 'classroom') {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
@@ -147,6 +148,7 @@ class ManageController extends BaseController
             'targetType' => $targetType,
             'tasks' => $tasks,
             'resultStatusNum' => $resultStatusNum,
+            'courses' => ArrayToolkit::index($courses, 'id'),
         ));
     }
 
@@ -510,7 +512,7 @@ class ManageController extends BaseController
 
         $paper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
         if (empty($paper)) {
-            return $this->createMessageResponse('info', "Paper not found");
+            return $this->createMessageResponse('info', 'Paper not found');
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
