@@ -3943,7 +3943,7 @@ admin.live_manage.status: Status
 admin.live_manage.logo: 'Live LOGO'
 admin.live_manage.live_student_limit: 'Max Online Student Number'
 admin.live_manage.live_student_limit_tips: 'To extend the limitation, please contact：4008041114'
-admin.live_manage.logo_tips: "<b>Only For New Live Strategy.</b><br> Please upload file with png, gif, jpg format。LOGO should not exceed 100*23。\n"
+admin.live_manage.logo_tips: "<b>Only For New Live Strategy.</b><br> Please upload file with png, gif, jpg format。LOGO should not exceed 100×23px。\n"
 admin.live_manage.edu_cloud_closed: 'Edu cloud is not enabled，you cannot use live service.'
 admin.live_manage.show_detail: 'View Detail'
 admin.live_manage.cloud_live_closed: 'Edu cloud is not enabled，you cannot create live course.'
@@ -4188,7 +4188,7 @@ admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
-admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 100*23 '
+admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Please upload images with format of ICO. Recommended image size is 16×16px or 32×32px.'
@@ -5078,8 +5078,8 @@ admin.edu_cloud.edu_live.live_logo_web: 'Live Logo web'
 admin.edu_cloud.edu_live.live_logo_app: 'Live Logo Huantuo client'
 admin.edu_cloud.edu_live.upload_btn: Upload
 admin.edu_cloud.edu_live.delete_btn: Delete
-admin.edu_cloud.edu_live.upload_web_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 60.'
-admin.edu_cloud.edu_live.upload_app_tips: 'Please upload png format and transparent image file. LOGO pictures need 280 * 40.'
+admin.edu_cloud.edu_live.upload_web_tips: 'Please upload png format and transparent image file. LOGO pictures need 280×60px.'
+admin.edu_cloud.edu_live.upload_app_tips: 'Please upload png format and transparent image file. LOGO pictures need 280×40px.'
 #TODO trans
 admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
 admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
@@ -5828,7 +5828,7 @@ admin.coin_setting.description: Description
 admin.coin_setting.description_hint: 'Virtual coin can be usd as payment in the site'
 admin.coin_setting.promotion_proposal: 'Promotion recommendation'
 admin.coin_setting.promotion_proposal_hint: '1 Virtual coin can be used to price the courses; <br>2 Virtual coin recharge can enhance customer loyalty; <br>3 Virtual coin is recommended to use with recharge cards (business applications); <br>'
-admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50*50. Or the picture will not be able to upload'
+admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload'
 admin.coin_setting.coin_description: 'Virtual coin Description'
 admin.coin_setting.content_hint: 'It can be used to describe virtual coin''s usage, access methods and other related content'
 admin.coin_setting.update_submit_btn: 'Submit updates'
