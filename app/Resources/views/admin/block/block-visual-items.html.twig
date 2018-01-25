@@ -5,7 +5,9 @@
         <strong>{{ item.title }}</strong>
         <p class="text-muted">{{ item.desc }}
           {% if code == 'carousel' %}
-          <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>{% endif %}</p>
+            <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
+          {% endif %}
+        </p>
       </div>
 
       <div class="panel-group sortable-list" id="js-accordion-{{ code }}" data-code="{{ code }}"
