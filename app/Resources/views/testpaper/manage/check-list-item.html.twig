@@ -7,6 +7,7 @@
   {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
   {% set graphUrl = path('classroom_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
   {% set analysisUrl = path('classroom_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
+  {% set taskTitle = courses[task.courseId].title|default(null) ~ ' ' ~ taskTitle %}
 {% else %}
   {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
   {% set graphUrl = path('course_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
