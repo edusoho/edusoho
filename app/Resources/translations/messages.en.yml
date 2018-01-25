@@ -1403,6 +1403,7 @@ course.testpaper_manage.analysis_card.course_total_person: 'Course Person:'
 course.testpaper_manage.analysis_card.classroom_total_person: 'Classroom Person:'
 course.testpaper_manage.analysis_card.join_person: 'Join Person:'
 course.testpaper_manage.analysis_card.complete_person: 'Completed Person:'
+course.testpaper_manage.analysis_card.total_score: 'Score:'
 course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
 course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
 

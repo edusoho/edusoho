@@ -1578,6 +1578,7 @@ course.testpaper_manage.analysis_card.course_total_person: 计划人数：
 course.testpaper_manage.analysis_card.classroom_total_person: 班级人数：
 course.testpaper_manage.analysis_card.join_person: 参加人数：
 course.testpaper_manage.analysis_card.complete_person: 完成人数：
+course.testpaper_manage.analysis_card.total_score: 总分：
 course.testpaper_manage.analysis_card.avg_score: 平均成绩：
 course.testpaper_manage.analysis_card.avg_score_tip: 平均成绩以首次提交的成绩计算
 
