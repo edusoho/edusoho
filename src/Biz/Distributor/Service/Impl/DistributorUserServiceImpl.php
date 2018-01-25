@@ -102,6 +102,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
            'mobile' => $user['verifiedMobile'],
            'registered_time' => $user['createdTime'],
            'token' => $user['token'],
+           'updated_time' => $user['updatedTime'],
         );
     }
 
