@@ -48,8 +48,8 @@ class OrderStatusSubscriberTest extends BaseTestCase
             'Distributor:DistributorOrderService',
             array(
                 array(
-                    'functionName' => 'createJobData',
-                    'withParams' => array(array('user_id' => 12322)),
+                    'functionName' => 'batchCreateJobData',
+                    'withParams' => array(array(array('user_id' => 12322))),
                 ),
             )
         );
@@ -68,6 +68,6 @@ class OrderStatusSubscriberTest extends BaseTestCase
         $this->assertNull($result);
         $orderService->shouldHaveReceived('findOrdersByIds')->times(1);
         $userService->shouldHaveReceived('findUsersByIds')->times(1);
-        $distributorOrderService->shouldHaveReceived('createJobData')->times(1);
+        $distributorOrderService->shouldHaveReceived('batchCreateJobData')->times(1);
     }
 }
