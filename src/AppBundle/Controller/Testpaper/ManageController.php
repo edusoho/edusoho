@@ -617,7 +617,7 @@ class ManageController extends BaseController
             }
         }
 
-        $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
+        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
 
         return $data;
     }
