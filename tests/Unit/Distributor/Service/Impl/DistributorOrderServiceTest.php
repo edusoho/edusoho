@@ -4,6 +4,7 @@ namespace Tests\Unit\Distributor\Service\Impl;
 
 use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 class DistributorOrderServiceTest extends BaseTestCase
 {
@@ -47,6 +48,7 @@ class DistributorOrderServiceTest extends BaseTestCase
 
     public function testCreateJobData()
     {
+        TimeMachine::setMockedTime(1516863690);
         $orderService = $this->mockBiz(
             'Order:OrderService',
             array(
@@ -91,6 +93,7 @@ class DistributorOrderServiceTest extends BaseTestCase
                             'refund_deadline' => 32222,
                             'price' => 100,
                             'pay_amount' => 90,
+                            'updated_time' => TimeMachine::time(),
                             'deduction' => array(
                                 array(
                                     'type' => 'discount',
@@ -121,6 +124,7 @@ class DistributorOrderServiceTest extends BaseTestCase
                 'price_amount' => 100,
                 'pay_amount' => 90,
                 'status' => 'finished',
+                'updated_time' => TimeMachine::time(),
             )
         );
 

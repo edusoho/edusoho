@@ -37,6 +37,7 @@ class DistributorOrderServiceImpl extends BaseDistributorServiceImpl
             'pay_amount' => $order['pay_amount'],
             'deduction' => $deduct,
             'status' => $order['status'],
+            'updated_time' => $order['updated_time'],
         );
     }
 

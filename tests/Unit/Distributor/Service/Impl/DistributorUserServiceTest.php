@@ -77,8 +77,8 @@ class DistributorUserServiceTest extends BaseTestCase
             array(
                 'registable' => true,
                 'rewardable' => true,
-                'coupon_price' => '1000',
-                'coupon_expiry_day' => '1',
+                'couponPrice' => '1000',
+                'couponExpiryDay' => '1',
             ),
             $result
         );
@@ -104,6 +104,7 @@ class DistributorUserServiceTest extends BaseTestCase
             'verifiedMobile' => '1232',
             'createdTime' => TimeMachine::time(),
             'token' => 'token',
+            'updatedTime' => TimeMachine::time(),
         );
 
         $result = ReflectionUtils::invokeMethod($this->getDistributorUserService(), 'convertData', array($user));
