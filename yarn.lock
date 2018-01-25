@@ -1281,9 +1281,9 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/code-point-at/download/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeages-design@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.npmjs.org/codeages-design/-/codeages-design-0.1.1.tgz#0b77f4f759b1de784906dd6815e53ddae68f6a33"
+codeages-design@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/codeages-design/-/codeages-design-0.1.2.tgz#a433cb0466931d02a939314203a7bbe7d2435fee"
   dependencies:
     jquery "^3.2.1"
 
