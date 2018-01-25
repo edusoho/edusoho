@@ -83,8 +83,8 @@
 						<div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
 							<label class="control-label required" for="sms_code">{{'user.settings.security.sms_code'|trans}}</label>
 							<div class="controls row" >
-								<div class = "col-xs-7" >
-									<input type="number" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+								<div class="col-xs-7">
+									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
 									<p class="help-block"> </p>
 								</div>
 								<div class="col-xs-5">
