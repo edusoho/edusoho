@@ -176,6 +176,24 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
         );
     }
 
+    public function testExecuteWithError()
+    {
+        $job = new CourseTaskCreateSyncJob();
+        ReflectionUtils::setProperty($job, 'biz', $this->biz);
+        $job->args = array('taskId' => 110);
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'getTask',
+                    'withParams' => array(110),
+                    'throwException' => new \Exception('error'),
+                ),
+            )
+        );
+        $job->execute();
+    }
+
     public function testCreateMaterials()
     {
         $material = $this->getMaterialDao()->create(
