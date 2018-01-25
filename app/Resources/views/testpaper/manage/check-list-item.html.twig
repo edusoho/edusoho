@@ -5,9 +5,12 @@
 {% set taskTitle = task.isOptional ? 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) : 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number, '%taskTitle%':task.title}) %}
 {% if targetType == 'classroom' %}
   {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+  {% set graphUrl = path('classroom_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
   {% set analysisUrl = path('classroom_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
+  {% set taskTitle = courses[task.courseId].title|default(null) ~ ' ' ~ taskTitle %}
 {% else %}
   {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+  {% set graphUrl = path('course_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
   {% set analysisUrl = path('course_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
 {% endif %}
 
@@ -33,7 +36,7 @@
         <div class="col-md-4">
           <div class="testpaper-mark-operation">
             <div class="col-xs-4 text-center mt10">
-              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_testpaper_result_graph', {id:task.courseId, activityId:task.activityId}) }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
+              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ graphUrl }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
             </div>
             <div class="col-xs-4 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
             
