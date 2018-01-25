@@ -28,7 +28,7 @@ class SmsSendOneDayJob extends AbstractJob
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", $e->getMessage());
+                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", array('error' => $e->getMessage()));
             }
         }
     }
