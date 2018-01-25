@@ -7,6 +7,7 @@ use AppBundle\Common\Tree;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
+use AppBundle\Common\ReflectionUtils;
 
 class RoleServiceTest extends BaseTestCase
 {
@@ -111,6 +112,65 @@ class RoleServiceTest extends BaseTestCase
         $role = $this->getRoleService()->createRole($role);
         $result = $this->getRoleService()->updateRole($role['id'], array('data' => 'test', 'code' => 'ROLE_TEST'));
         $this->assertEquals('test', $result['data']);
+    }
+
+    public function testDeleteRole()
+    {
+        $role = array('name' => 'test', 'code' => 'ROLE_TEST', 'data' => '');
+        $role = $this->getRoleService()->createRole($role);
+        $this->getRoleService()->deleteRole($role['id']);
+        $result = $this->getRoleService()->getRole($role['id']);
+        $this->assertNull($result);
+    }
+
+    public function testSearchRoles()
+    {
+        $role = array('name' => 'test', 'code' => 'ROLE_TEST', 'data' => '');
+        $role = $this->getRoleService()->createRole($role);
+        $result = $this->getRoleService()->searchRoles(array('nameLike' => 'test'), 'createdByAsc', 0, 10);
+        $this->assertEquals($role, $result[0]);
+    }
+
+    public function testSearchRolesCount()
+    {
+        $result = $this->getRoleService()->searchRolesCount(array('nextExcutedStartTime' => 0, 'nextExcutedEndTime' => 0));
+        $this->assertEquals(4, $result);
+    }
+
+    public function testFindRolesByCodes()
+    {
+        $result = $this->getRoleService()->findRolesByCodes(array());
+        $this->assertEquals(array(), $result);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     */
+    public function testCheckChangeRole()
+    {
+        $service = $this->getRoleService();
+        $result = ReflectionUtils::invokeMethod($service, 'checkChangeRole', array(1));
+    }
+
+    public function testIsRoleNameAvalieable()
+    {
+        $result = $this->getRoleService()->isRoleNameAvalieable('');
+        $this->assertFalse($result);
+
+        $result = $this->getRoleService()->isRoleNameAvalieable('test', 'test');
+        $this->assertTrue($result);
+
+        $result = $this->getRoleService()->isRoleNameAvalieable('学员');
+        $this->assertFalse($result);
+    }
+
+    public function testIsRoleCodeAvalieable()
+    {
+        $result = $this->getRoleService()->isRoleCodeAvalieable('test', 'test');
+        $this->assertTrue($result);
+
+        $result = $this->getRoleService()->isRoleCodeAvalieable('ROLE_USER');
+        $this->assertFalse($result);
     }
 
     /**
