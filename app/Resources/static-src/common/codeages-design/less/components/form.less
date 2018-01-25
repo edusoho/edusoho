@@ -51,18 +51,18 @@
     font-size: 12px;
     line-height: 20px;
     margin-top: 0;
-    color: @cd-gray-light;
+    color: @cd-dark-assist;
   }
   > label {
     font-weight: 400;
-    color: @cd-gray;
+    color: @cd-dark-minor;
     line-height: 1;
     margin-bottom: 0;
     font-size: 12px;
     display: block;
     &.readonly,
     &.disabled {
-      color: @cd-gray-light;
+      color: @cd-dark-assist;
     }
     &.required {
       &:after {
@@ -85,7 +85,7 @@
     padding: 5px 0;
     line-height: 20px;
     height: 30px;
-    color: @cd-gray-dark;
+    color: @cd-dark-major;
     // fix: ios没有下投影的问题
     -webkit-appearance: none;
     appearance: none;
@@ -98,22 +98,22 @@
       font-size: 12px;
     }
     &::-webkit-input-placeholder {
-      color: @cd-gray-light;
+      color: @cd-dark-assist;
     }
     &:-moz-placeholder {
-      color: @cd-gray-light;
+      color: @cd-dark-assist;
     }
     &::-moz-placeholder {
-      color: @cd-gray-light;
+      color: @cd-dark-assist;
     }
     &:-ms-input-placeholder {
-      color: @cd-gray-light;
+      color: @cd-dark-assist;
     }
   }
   .form-control[disabled], 
   .form-control[readonly] {
     background: none;
-    color: @cd-gray-light;
+    color: @cd-dark-assist;
     cursor: not-allowed;
     &:focus {
       .cd-box-shadow-general(inset 0 -1px 0 0 rgba(0,0,0,0.08));
@@ -169,7 +169,7 @@
   .static-text {
     margin-top: 8px;
     line-height: 1;
-    color: @cd-gray-dark;
+    color: @cd-dark-major;
     i {
       font-size: 12px;
     }
@@ -201,7 +201,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid @cd-gray-light;
+    border: 1px solid @cd-dark-assist;
     border-radius: 50%;
     width: 14px;
     height: 14px;

@@ -2,7 +2,7 @@ import Swiper from 'swiper';
 import Cookies from 'js-cookie';
 
 // import 'common/codeages-design/js/codeages-design';
-import cd from 'codeages-design';
+import * as cd from 'codeages-design';
 import 'common/tabs-lavalamp';
 import 'common/card';
 import 'common/bootstrap-modal-hack';
