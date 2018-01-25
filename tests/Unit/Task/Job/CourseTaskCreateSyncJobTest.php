@@ -191,7 +191,10 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
                 ),
             )
         );
+        $count = $this->getLogDao()->count(array());
         $job->execute();
+        $result = $this->getLogDao()->count(array());
+        $this->assertEquals($count + 1, $result);
     }
 
     public function testCreateMaterials()
@@ -280,5 +283,13 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
     private function getActivityDao()
     {
         return $this->biz->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return LogDao
+     */
+    protected function getLogDao()
+    {
+        return $this->createDao('System:LogDao');
     }
 }
