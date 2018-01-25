@@ -26,9 +26,9 @@ class OrderStatusSubscriberTest extends BaseTestCase
             'Order:OrderService',
             array(
                 array(
-                    'functionName' => 'getOrder',
-                    'withParams' => array(123),
-                    'returnValue' => array('user_id' => 12322),
+                    'functionName' => 'findOrdersByIds',
+                    'withParams' => array(array(123)),
+                    'returnValue' => array(array('user_id' => 12322)),
                 ),
             )
         );
@@ -37,9 +37,9 @@ class OrderStatusSubscriberTest extends BaseTestCase
             'User:UserService',
             array(
                 array(
-                    'functionName' => 'getUser',
-                    'withParams' => array(12322),
-                    'returnValue' => array('name' => 'order name', 'type' => 'distributor'),
+                    'functionName' => 'findUsersByIds',
+                    'withParams' => array(array(12322)),
+                    'returnValue' => array('12322' => array('name' => 'order name', 'type' => 'distributor')),
                 ),
             )
         );
@@ -66,8 +66,8 @@ class OrderStatusSubscriberTest extends BaseTestCase
         $result = $subscriber->onOrderChangeStatus($event);
 
         $this->assertNull($result);
-        $orderService->shouldHaveReceived('getOrder')->times(1);
-        $userService->shouldHaveReceived('getUser')->times(1);
+        $orderService->shouldHaveReceived('findOrdersByIds')->times(1);
+        $userService->shouldHaveReceived('findUsersByIds')->times(1);
         $distributorOrderService->shouldHaveReceived('createJobData')->times(1);
     }
 }
