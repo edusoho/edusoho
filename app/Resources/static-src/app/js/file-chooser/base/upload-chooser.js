@@ -58,7 +58,7 @@ export default class UploaderChooser extends Chooser {
       },
     };
 
-    if ($('[name=support_mobile]').length > 0) {
+    if (this.element.find('[name=support_mobile]').length > 0) {
       uploadProcess.common = {
         supportMobile: $('[name=support_mobile]').val(),
       };
