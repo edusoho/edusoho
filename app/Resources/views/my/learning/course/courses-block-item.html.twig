@@ -15,12 +15,16 @@
     {% endif %}
 
     {% set percent = courseSet.percent ~ '%' %}
-    <div class="my-course-item__progress cd-mt24">
-      <span>{{ 'course.members_manage.official_student.progress'|trans }}</span>
-      <div class="cd-progress cd-progress-xs">
-        <div class="progress-bar cd-progress-bar progress-bar-success" style="width: {{ percent }};"></div>
+    <div class="my-course-item__progress cd-mt24 cd-clearfix">
+      <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
+      <div class="cd-progress cd-progress-sm">
+        <div class="progress-bar">
+          <div class="progress-outer">
+            <div class="progress-inner" style="width: {{ percent }};"></div> 
+          </div>
+        </div>
+        <div class="progress-text">{{ percent }}</div>
       </div>
-      <span>{{ percent }}</span>
     </div>
   </div>
 
