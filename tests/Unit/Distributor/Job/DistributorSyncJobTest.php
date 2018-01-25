@@ -21,17 +21,6 @@ class DistributorSyncJobTest extends BaseTestCase
             ),
         );
 
-        $response = $this->mockBiz(
-            'Response:Response',
-            array(
-                array(
-                    'functionName' => 'getBody',
-                    'withParam' => array(),
-                    'returnValue' => json_encode(array('code' => 'success')),
-                ),
-            )
-        );
-
         $drpService = $this->mockBiz(
             'Drp:DrpService',
             array(
@@ -40,7 +29,7 @@ class DistributorSyncJobTest extends BaseTestCase
                     'withParam' => array(
                         array('sendData1', 'sendData2'), 'User',
                     ),
-                    'returnValue' => $response,
+                    'returnValue' => json_encode(array('code' => 'success')),
                 ),
             )
         );
@@ -75,7 +64,6 @@ class DistributorSyncJobTest extends BaseTestCase
 
         $this->assertNull($result);
 
-        $response->shouldHaveReceived('getBody')->times(2);
         $drpService->shouldHaveReceived('postData')->times(1);
         $distributorUserService->shouldHaveReceived('getDrpService')->times(1);
         $distributorUserService->shouldHaveReceived('findJobData')->times(1);
