@@ -2,6 +2,7 @@
 
 namespace Biz\Distributor\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,12 +20,17 @@ class OrderStatusSubscriber extends EventSubscriber implements EventSubscriberIn
 
     public function onOrderChangeStatus(Event $event)
     {
-        $orders = $event->getSubject();
-        foreach ($orders['items'] as $item) {
-            $order = $this->getOrderService()->getOrder($item['order_id']);
-            if (!empty($order)) {
-                $user = $this->getUserService()->getUser($order['user_id']);
-                if (!empty($user) && 'distributor' == $user['type']) {
+        $context = $event->getSubject();
+        $orderIds = ArrayToolkit::column($context['items'], 'order_id');
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+
+        $userIds = ArrayToolkit::column($orders, 'user_id');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        foreach ($orders as $order) {
+            if (!empty($users[$order['user_id']])) {
+                $user = $users[$order['user_id']];
+                if ('distributor' == $user['type']) {
                     $this->getDistributorOrderService()->createJobData($order);
                 }
             }
