@@ -24,10 +24,10 @@
         <span class="setting-action">
           {% if client.status|default(null) == 'bind' %}
             <span class="cd-setting-status cd-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</span>
-            <a class="btn cd-btn cd-btn-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
+            <a class="btn cd-btn cd-btn-ghost-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
           {% else %}
             <span class="cd-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
-            <a class="btn cd-btn cd-btn-default" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
+            <a class="btn cd-btn cd-btn-ghost-default" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
           {% endif %}
         </span>
       </div>
