@@ -6,6 +6,7 @@ use Biz\Distributor\Service\DistributorService;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Marketing\Service\Impl\MarketingServiceImpl;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 
 abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implements DistributorService
 {
@@ -37,6 +38,20 @@ abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implement
         $helper = new BatchUpdateHelper($this->getDistributorJobDataDao());
         foreach ($jobData as $single) {
             $helper->add('id', $single['id'], array('status' => $status));
+        }
+        $helper->flush();
+    }
+
+    public function batchCreateJobData($jobData)
+    {
+        $helper = new BatchCreateHelper($this->getDistributorJobDataDao());
+        foreach ($jobData as $single) {
+            $result = array(
+                'data' => $this->convertData($single),
+                'jobType' => $this->getJobType(),
+                'status' => DistributorJobStatus::PENDING,
+            );
+            $helper->add($result);
         }
         $helper->flush();
     }
