@@ -14,4 +14,6 @@ interface DistributorService
     public function batchUpdateStatus($jobData, $status);
 
     public function getDrpService();
+
+    public function batchCreateJobData($jobData);
 }
