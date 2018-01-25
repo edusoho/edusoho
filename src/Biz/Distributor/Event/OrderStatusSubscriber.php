@@ -27,14 +27,16 @@ class OrderStatusSubscriber extends EventSubscriber implements EventSubscriberIn
         $userIds = ArrayToolkit::column($orders, 'user_id');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
+        $data = array();
         foreach ($orders as $order) {
             if (!empty($users[$order['user_id']])) {
                 $user = $users[$order['user_id']];
                 if ('distributor' == $user['type']) {
-                    $this->getDistributorOrderService()->createJobData($order);
+                    $data[] = $order;
                 }
             }
         }
+        $this->getDistributorOrderService()->batchCreateJobData($data);
     }
 
     protected function getOrderService()
