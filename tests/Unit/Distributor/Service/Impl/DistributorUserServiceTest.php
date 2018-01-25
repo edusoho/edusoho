@@ -77,8 +77,8 @@ class DistributorUserServiceTest extends BaseTestCase
             array(
                 'registable' => true,
                 'rewardable' => true,
-                'couponPrice' => '1000',
-                'couponExpiryDay' => '1',
+                'coupon_price' => '1000',
+                'coupon_expiry_day' => '1',
             ),
             $result
         );

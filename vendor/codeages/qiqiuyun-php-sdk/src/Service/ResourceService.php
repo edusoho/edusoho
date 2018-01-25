@@ -5,6 +5,8 @@ namespace QiQiuYun\SDK\Service;
 use QiQiuYun\SDK\Exception\SDKException;
 use QiQiuYun\SDK\TokenGenerator\TokenGenerator;
 use QiQiuYun\SDK\TokenGenerator\PublicTokenGenerator;
+use QiQiuYun\SDK\HttpClient\Client;
+use QiQiuYun\SDK\Exception\ResponseException;
 
 class ResourceService
 {
@@ -93,5 +95,40 @@ class ResourceService
         );
 
         return $src.'?'.http_build_query($params);
+    }
+
+    /**
+     * 获取云资源的播放元信息
+     *
+     * @param $string $resNo
+     * @param int  $lifetime
+     * @param bool $once
+     *
+     * @return array 资源播放元信息
+     */
+    public function getPlayMeta($resNo, $lifetime = 600, $once = true)
+    {
+        $url = "http://{$this->playHost}/js/v1/play";
+        $params = array(
+            'resNo' => $resNo,
+            'token' => $this->generatePlayToken($resNo, $lifetime, $once),
+        );
+
+        $url = $url.'?'.http_build_query($params);
+
+        $response = $this->createPlayClient()->request('GET', $url);
+
+        $result = json_decode($response->getBody(), true);
+
+        if (200 != $response->getHttpResponseCode() || empty($result) || isset($result['error'])) {
+            throw new ResponseException($response);
+        }
+
+        return $result;
+    }
+
+    protected function createPlayClient()
+    {
+        return new Client();
     }
 }

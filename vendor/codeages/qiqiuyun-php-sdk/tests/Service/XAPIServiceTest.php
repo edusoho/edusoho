@@ -81,7 +81,7 @@ class ClientTest extends BaseTestCase
     protected function createXAPIService()
     {
         return new XAPIService($this->auth, array(
-            'base_uri' => 'http://localhost:8000/xapi/',
+            'base_uri' => 'http://localhost:8001/xapi/',
             'school' => array(
                 'id' => $this->accessKey,
                 'name' => '测试网校',

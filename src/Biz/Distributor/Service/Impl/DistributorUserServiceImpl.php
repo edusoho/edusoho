@@ -71,12 +71,12 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
             $drpService = $this->getDrpService();
             if (!empty($drpService)) {
                 $this->validateExistedToken($token);
-                $parsedInfo = $this->getDrpService()->parseToken($token);
+                $parsedInfo = $this->getDrpService()->parseRegisterToken($token);
                 $tokenInfo['registable'] = true;
                 $tokenExpireTime = strtotime('+1 day', intval($parsedInfo['time']));
                 if ($tokenExpireTime >= TimeMachine::time()) {
-                    $tokenInfo['couponPrice'] = $parsedInfo['couponPrice'];
-                    $tokenInfo['couponExpiryDay'] = $parsedInfo['couponExpiryDay'];
+                    $tokenInfo['couponPrice'] = $parsedInfo['coupon_price'];
+                    $tokenInfo['couponExpiryDay'] = $parsedInfo['coupon_expiry_day'];
                     if (0 != $tokenInfo['couponPrice'] && 0 != $tokenInfo['couponExpiryDay']) {
                         $tokenInfo['rewardable'] = true;
                     }

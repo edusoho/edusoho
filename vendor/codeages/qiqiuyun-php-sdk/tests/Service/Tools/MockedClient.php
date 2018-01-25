@@ -4,13 +4,15 @@ namespace QiQiuYun\SDK\Tests\Service\Tools;
 
 class MockedClient
 {
+    protected $response;
+
     public function request($method, $url, $data)
     {
         $this->method = $method;
         $this->url = $url;
         $this->data = $data;
 
-        return 'request finished';
+        return $this->response;
     }
 
     public function getMethod()
