@@ -74,7 +74,7 @@ class MockController extends BaseController
             if (DistributorJobStatus::FINISHED == $result['status']) {
                 return $this->createJsonResponse(array('result' => 'true'));
             } else {
-                return $this->createJsonResponse(array('result' => $result['result']->getBody()));
+                return $this->createJsonResponse(array('result' => $result['result']));
             }
         }
     }

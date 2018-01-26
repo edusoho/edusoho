@@ -349,7 +349,8 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
-##微营销模块
+
+##营销模块
 admin.marketing.menu: 微营销
 admin.distributor.menu: 分销
 

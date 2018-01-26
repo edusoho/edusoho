@@ -2,6 +2,9 @@
 
 namespace QiQiuYun\SDK\HttpClient;
 
+use Psr\Log\LoggerInterface;
+
+
 class Client
 {
     /**
@@ -11,15 +14,23 @@ class Client
      */
     private $options;
 
-    public function __construct($options = array())
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct($options = array(), LoggerInterface $logger = null)
     {
         $this->options = array_merge(array(
             'timeout' => 300,
         ), $options);
+
+        $this->logger = $logger;
     }
 
     public function request($method, $uri = '', array $options = array())
     {
+        $method = strtoupper($method);
         $options = $this->prepareDefaults($options);
 
         $headers = isset($options['headers']) ? $options['headers'] : array();
@@ -45,6 +56,11 @@ class Client
             $options[CURLOPT_POSTFIELDS] = $body;
         }
 
+        $this->logger && $this->logger->info("HTTP {$method} {$uri}", array(
+            'headers' => $options[CURLOPT_HTTPHEADER],
+            'body' => $body,
+        ));
+
         $curl = curl_init();
         curl_setopt_array($curl, $options);
 
@@ -58,6 +74,11 @@ class Client
         curl_close($curl);
 
         list($rawHeaders, $rawBody) = $this->extractResponseHeadersAndBody($rawResponse);
+
+        $this->logger && $this->logger->info("HTTP Response", array(
+            'headers' => $rawHeaders,
+            'body' => $rawBody,
+        ));
 
         return new Response($rawHeaders, $rawBody);
     }

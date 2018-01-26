@@ -5,6 +5,7 @@ namespace QiQiuYun\SDK\Tests;
 use PHPUnit\Framework\TestCase;
 use QiQiuYun\SDK\Service\ResourceService;
 use QiQiuYun\SDK;
+use QiQiuYun\SDK\TokenGenerator\PublicTokenGenerator;
 
 class ResourceServiceTest extends TestCase
 {
@@ -46,16 +47,41 @@ class ResourceServiceTest extends TestCase
         $this->assertStringStartsWith('//play.dev/player', $src);
     }
 
+    public function testGetPlayMeta()
+    {
+        $service = $this->createResourceService([
+            'play_host' => 'localhost:8001',
+            'access_key' => 'local_dev_access_key_1',
+            'secret_key' => 'local_dev_secret_key_1',
+        ]);
+        $meta = $service->getPlayMeta('test_video_resource_no', 3600);
+
+        $this->assertEquals('video', $meta['player']);
+    }
+
+    public function testCreateServiceWithTokenGenerator()
+    {
+        $tokenGenerator = new PublicTokenGenerator('test_access_key', 'test_secret_key');
+
+        $service = new ResourceService([
+            'token_generator' => $tokenGenerator,
+        ]);
+
+        $this->assertNotNull($service);
+
+        
+    }
+
     /**
      * @return ResourceService
      */
-    protected function createResourceService(array $config = array())
+    protected function createResourceService(array $options = array())
     {
-        $config = array_merge(array(
+        $options = array_replace(array(
             'access_key' => 'test_access_key',
             'secret_key' => 'test_secret_key',
-        ), $config);
+        ), $options);
 
-        return new ResourceService($config);
+        return new ResourceService($options);
     }
 }

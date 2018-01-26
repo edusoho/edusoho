@@ -1,6 +1,6 @@
 <?php
 
-namespace QiQiuYun\SDK;
+namespace QiQiuYun\SDK\Util;
 
 use QiQiuYun\SDK;
 

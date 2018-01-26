@@ -85,7 +85,9 @@ class Manage {
       },
       type: 'sub',
       process: {
-        videoNo: videoNo
+        common: {
+          videoNo: videoNo
+        }
       }
     });
 

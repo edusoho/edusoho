@@ -3,7 +3,7 @@
 namespace QiQiuYun\SDK\Tests;
 
 use PHPUnit\Framework\TestCase;
-use QiQiuYun\SDK\SignUtil;
+use QiQiuYun\SDK\Util\SignUtil;
 
 class SignUtilTest extends TestCase
 {

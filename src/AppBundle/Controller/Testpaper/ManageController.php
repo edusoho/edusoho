@@ -115,7 +115,8 @@ class ManageController extends BaseController
     public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
         $courseIds = array($targetId);
-        if ('classroom' === $targetType) {
+        $courses = array();
+        if ($targetType === 'classroom') {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
@@ -147,6 +148,7 @@ class ManageController extends BaseController
             'targetType' => $targetType,
             'tasks' => $tasks,
             'resultStatusNum' => $resultStatusNum,
+            'courses' => ArrayToolkit::index($courses, 'id'),
         ));
     }
 
@@ -615,7 +617,7 @@ class ManageController extends BaseController
             }
         }
 
-        $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
+        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
 
         return $data;
     }

@@ -104,6 +104,7 @@ class DistributorUserServiceTest extends BaseTestCase
             'verifiedMobile' => '1232',
             'createdTime' => TimeMachine::time(),
             'token' => 'token',
+            'updatedTime' => TimeMachine::time(),
         );
 
         $result = ReflectionUtils::invokeMethod($this->getDistributorUserService(), 'convertData', array($user));

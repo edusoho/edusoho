@@ -26,6 +26,7 @@ class MarketingHelper
                     <input type='hidden' name='sign' class='form-control' value='{$sign}'>
                     <button type='submit' class='btn btn-primary'>提交</button>
                 </form>";
+
         return $loginTitle.$form.$submitJs;
     }
 }

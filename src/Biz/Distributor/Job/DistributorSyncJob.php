@@ -33,7 +33,7 @@ class DistributorSyncJob extends AbstractJob
     {
         $jobData = $service->findJobData();
         $status = DistributorJobStatus::ERROR;
-        $result = null;
+        $resultJson = null;
         if (!empty($jobData)) {
             try {
                 $sendedData = array();
@@ -41,20 +41,19 @@ class DistributorSyncJob extends AbstractJob
                     $sendedData[] = $data['data'];
                 }
 
-                $result = $drpService->postData($sendedData, $service->getSendType());
-                $resultJson = json_decode($result->getBody(), true);
+                $resultJson = $drpService->postData($sendedData, $service->getSendType());
 
-                if ('success' == $resultJson['code']) {
+                if ($resultJson['success']) {
                     $status = DistributorJobStatus::FINISHED;
                 }
                 $this->biz['logger']->info(
                     'distributor send job DistributorSyncJob::execute ',
-                    array('jobData' => $jobData, 'result' => $result->getBody())
+                    array('jobData' => $jobData, 'result' => $resultJson)
                 );
             } catch (\Exception $e) {
                 $this->biz['logger']->error(
                     'distributor send job error DistributorSyncJob::execute '.$e->getMessage(),
-                    array('jobData' => $jobData, 'result' => empty($result) ? '' : $result->getBody(), 'trace' => $e->getTraceAsString())
+                    array('jobData' => $jobData, 'result' => empty($resultJson) ? '' : $resultJson, 'trace' => $e->getTraceAsString())
                 );
             }
 
@@ -63,7 +62,7 @@ class DistributorSyncJob extends AbstractJob
             return array('status' => $status, 'result' => 'no sendable data');
         }
 
-        return array('status' => $status, 'result' => $result);
+        return array('status' => $status, 'result' => $resultJson);
     }
 
     private function getDistributorServiceList()

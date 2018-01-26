@@ -20,5 +20,7 @@ $app->before(function (Request $request) {
 });
 
 require __DIR__.'/route_xapi.php';
+require __DIR__.'/route_play.php';
+require __DIR__.'/route_sms.php';
 
 $app->run();

@@ -1,5 +1,4 @@
 <?php
-
 namespace QiQiuYun\SDK\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -11,5 +10,6 @@ class ClientTest extends TestCase
     {
         $client = new Client();
         $response = $client->request('GET', 'https://www.baidu.com');
+        $this->assertInstanceOf("QiQiuYun\\SDK\\HttpClient\\Response", $response);
     }
 }
