@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -108,9 +107,17 @@ class HomeworkManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
+            $isContinue = $formData['isContinue'];
+            unset($formData['isContinue']);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            return $this->createJsonResponse(true);
+            $data = array('success' => true, 'goto' => '');
+            if ($isContinue) {
+                $route = $this->getRedirectRoute('nextCheck', $source);
+                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
+            }
+
+            return $this->createJsonResponse($data);
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
@@ -130,6 +137,56 @@ class HomeworkManageController extends BaseController
             'isTeacher' => true,
             'total' => array(),
             'action' => $request->query->get('action', ''),
+        ));
+    }
+
+    public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['mediaType'] != 'homework') {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        $analyses = $this->getQuestionAnalysisService()->searchAnalysis(array('activityId' => $activity['id']), array(), 0, PHP_INT_MAX);
+
+        $paper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
+
+        $relatedData = $this->findRelatedData($activity, $paper);
+        $relatedData['studentNum'] = $studentNum;
+
+        return $this->render('homework/manage/result-analysis.html.twig', array(
+            'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
+            'paper' => $paper,
+            'questions' => $questions,
+            'relatedData' => $relatedData,
+            'targetType' => $targetType,
+        ));
+    }
+
+    public function resultGraphAction($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (!$activity || $activity['mediaType'] != 'homework') {
+            return $this->createMessageResponse('Argument Invalid');
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
+
+        $data = $this->fillGraphData($userFirstResults);
+        $analysis = $this->analysisFirstResults($userFirstResults);
+
+        $task = $this->getCourseTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
+        return $this->render('homework/manage/result-graph-modal.html.twig', array(
+            'activity' => $activity,
+            'testpaper' => $testpaper,
+            'data' => $data,
+            'analysis' => $analysis,
+            'task' => $task,
         ));
     }
 
@@ -176,6 +233,69 @@ class HomeworkManageController extends BaseController
         return $newTypes;
     }
 
+    protected function findRelatedData($activity, $paper)
+    {
+        $relatedData = array();
+        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
+
+        $relatedData['total'] = count($userFirstResults);
+
+        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
+        $finishedResults = empty($userFirstResults['finished']) ? array() : $userFirstResults['finished'];
+
+        $relatedData['finished'] = count($finishedResults);
+
+        return $relatedData;
+    }
+
+    protected function fillGraphData($userFirstResults)
+    {
+        $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
+        $status = $this->get('codeages_plugin.dict_twig_extension')->getDict('passedStatus');
+
+        $firstStatusGroup = ArrayToolkit::group($userFirstResults, 'firstPassedStatus');
+        $maxStatusGroup = ArrayToolkit::group($userFirstResults, 'maxPassedStatus');
+
+        foreach ($status as $key => $name) {
+            $data['xScore'][] = $name;
+            $data['yFirstNum'][] = empty($firstStatusGroup[$key]) ? 0 : count($firstStatusGroup[$key]);
+            $data['yMaxNum'][] = empty($maxStatusGroup[$key]) ? 0 : count($maxStatusGroup[$key]);
+        }
+
+        return json_encode($data);
+    }
+
+    protected function analysisFirstResults($userFirstResults)
+    {
+        if (empty($userFirstResults)) {
+            return array('passPercent' => 0);
+        }
+
+        $data = array();
+        $count = 0;
+        foreach ($userFirstResults as $result) {
+            if ($result['firstPassedStatus'] != 'unpassed') {
+                ++$count;
+            }
+        }
+
+        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
+
+        return $data;
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'nextCheck' => array(
+                'course' => 'course_manage_exam_next_result_check',
+                'classroom' => 'classroom_manage_exam_next_result_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
+    }
+
     /**
      * @return TestpaperService
      */
@@ -187,6 +307,11 @@ class HomeworkManageController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getQuestionAnalysisService()
+    {
+        return $this->createService('Question:QuestionAnalysisService');
     }
 
     protected function getCourseSetService()
@@ -209,8 +334,8 @@ class HomeworkManageController extends BaseController
         return $this->createService('User:UserService');
     }
 
-    protected function getServiceKernel()
+    protected function getActivityService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Activity:ActivityService');
     }
 }

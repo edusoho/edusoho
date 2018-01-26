@@ -5,10 +5,7 @@ define(function(require, exports, module) {
     var Uploader = require('upload');
 
     exports.run = function() {
-
         var $form = $("#site-form");
-
-
         var uploader = new WebUploader({
             element: '#site-logo-upload'
         });
@@ -65,6 +62,11 @@ define(function(require, exports, module) {
             });
         });
 
+      $('#save-site').on('click', function(){
+        $.post($form.data('saveUrl'), $form.serialize(), function(data){
+            Notify.success(data.message);
+        })
+      })
     };
 
 });
