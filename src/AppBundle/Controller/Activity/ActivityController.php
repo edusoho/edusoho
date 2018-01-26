@@ -38,7 +38,7 @@ class ActivityController extends BaseController
 
     public function updateAction($id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id, true);
 
         $container = $this->get('activity_runtime_container');
 

@@ -2,15 +2,15 @@
 
 namespace Biz\Activity\Config;
 
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Biz\Activity\Listener\Listener;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Dao\DaoProxy;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class Activity
 {

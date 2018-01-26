@@ -18,8 +18,10 @@ class DocController extends BaseActivityController implements ActivityActionInte
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
 
+        list($file, $error) = $this->getDocFilePlayer($doc);
+
         $ssl = $request->isSecure() ? true : false;
-        list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         return $this->render('activity/new-doc/show.html.twig', array(
             'doc' => $doc,
@@ -37,8 +39,10 @@ class DocController extends BaseActivityController implements ActivityActionInte
         }
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
+        list($file, $error) = $this->getDocFilePlayer($doc);
+
         $ssl = $request->isSecure() ? true : false;
-        list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         return $this->render('activity/new-doc/preview.html.twig', array(
             'doc' => $doc,
@@ -79,12 +83,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
         ));
     }
 
-    /**
-     * @param  $doc
-     *
-     * @return array result and error tuple
-     */
-    protected function getDocFilePlayer($doc, $ssl)
+    protected function getDocFilePlayer($doc)
     {
         $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
@@ -97,8 +96,6 @@ class DocController extends BaseActivityController implements ActivityActionInte
         if ($file['type'] != 'document') {
             throw $this->createAccessDeniedException('file type error, expect document');
         }
-
-        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != FileImplementor::CONVERT_STATUS_SUCCESS;
 
@@ -113,7 +110,7 @@ class DocController extends BaseActivityController implements ActivityActionInte
             $error = array();
         }
 
-        return array($result, $error);
+        return array($file, $error);
     }
 
     /**

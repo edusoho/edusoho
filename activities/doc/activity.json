@@ -1,0 +1,23 @@
+{
+  "name": "course.activity.doc",
+  "type": "doc",
+  "description": "",
+  "authors": [
+    {
+      "name": "EduSoho",
+      "email": "edusoho@howzhi.com"
+    }
+  ],
+  "version": "1.0.0",
+  "ltc_version": "1.0.0",
+  "icon": {
+    "type": "font",
+    "value": "es-icon es-icon-graphicclass"
+  },
+  "routes": {
+    "create": "create_or_update.html.twig",
+    "show": "show.html.twig",
+    "update": "create_or_update.html.twig",
+    "finish_tip": "finish_tip.html.twig"
+  }
+}
