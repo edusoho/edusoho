@@ -67,6 +67,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'initBlock',
+            'updateJianmoParameters',
         );
 
         $funcNames = array();
@@ -111,6 +112,26 @@ class EduSohoUpgrade extends AbstractUpdater
         BlockToolkit::init("{$themeDir}/default-b/block.json");
         BlockToolkit::init("{$themeDir}/autumn/block.json");
         BlockToolkit::init("{$themeDir}/jianmo/block.json");
+
+        return 1;
+    }
+
+    protected function updateJianmoParameters()
+    {
+        $theme = $this->getThemeConfigDao()->getThemeConfigByName('简墨');
+        if (!empty($theme['confirmConfig']['blocks']['left'])) {
+            $left = ArrayToolkit::index($theme['confirmConfig']['blocks']['left'], 'id');
+            if (!empty($left['middle-banner'])) {
+                $left['middle-banner']['defaultTitle'] = '首页中部.横幅';
+            }
+
+            if (!empty($left['advertisement-banner'])) {
+                $left['advertisement-banner']['defaultTitle'] = '中部广告';
+            }
+            $theme['confirmConfig']['blocks']['left'] = $left;
+        }
+
+        $this->getThemeConfigDao()->updateThemeConfigByName('简墨', array('confirmConfig' => $theme['confirmConfig']));
 
         return 1;
     }
@@ -186,6 +207,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getFileUsedDao()
     {
         return $this->createDao('File:FileUsedDao');
+    }
+
+    protected function getThemeConfigDao()
+    {
+        return $this->createDao('Theme:ThemeConfigDao');
     }
 
     /**
