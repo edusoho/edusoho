@@ -8,7 +8,6 @@ use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
-use Symfony\Component\Validator\Constraints\Valid;
 
 class MockController extends BaseController
 {
