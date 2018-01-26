@@ -34,7 +34,7 @@ class DiscuzAuthProviderTest extends BaseTestCase
         $provider = $this->mockDiscuzClient();
 
         $registration = array(
-            'nickname' => 'discuz-nickname(-1)',
+            'nickname' => '-1',
             'password' => 'discuz-password',
             'email' => 'discuz-email',
         );
