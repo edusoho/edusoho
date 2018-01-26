@@ -1721,7 +1721,7 @@ class TestpaperServiceTest extends BaseTestCase
             'lessonId' => 1,
             'type' => 'testpaper',
             'score' => 1,
-            'passedStatus' => 'passed'
+            'passedStatus' => 'passed',
         );
         $this->getTestpaperService()->addTestpaperResult($fields);
 
@@ -1738,7 +1738,7 @@ class TestpaperServiceTest extends BaseTestCase
             'lessonId' => 1,
             'type' => 'testpaper',
             'score' => 2,
-            'passedStatus' => 'good'
+            'passedStatus' => 'good',
         );
         $this->getTestpaperService()->addTestpaperResult($fields);
 
@@ -1755,7 +1755,7 @@ class TestpaperServiceTest extends BaseTestCase
             'lessonId' => 1,
             'type' => 'testpaper',
             'score' => 3,
-            'passedStatus' => 'none'
+            'passedStatus' => 'none',
         );
         $this->getTestpaperService()->addTestpaperResult($fields);
 
@@ -1778,7 +1778,7 @@ class TestpaperServiceTest extends BaseTestCase
 
     public function testGetNextReviewingResult()
     {
-        $results = $this->getTestpaperService()->getNextReviewingResult(array(1,2), 1, 'testpaper');
+        $results = $this->getTestpaperService()->getNextReviewingResult(array(1, 2), 1, 'testpaper');
         $this->assertEmpty($results);
 
         $fields = array(
