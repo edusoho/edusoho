@@ -180,6 +180,7 @@ class Activity
 
     /**
      * @param $realDao
+     *
      * @return mixed
      */
     protected function createDao($realDao)
