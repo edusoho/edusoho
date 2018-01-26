@@ -84,7 +84,7 @@ class RedisTokenServiceImpl extends BaseService implements TokenService
             }
         }
 
-        if ($token['times'] > 0 && $token['remaining_times'] == 0) {
+        if ($token['times'] > 0 && 0 == $token['remaining_times']) {
             $this->redis->del($key);
         }
 

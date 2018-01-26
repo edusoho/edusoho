@@ -8,7 +8,7 @@ class DataLabController extends BaseController
 {
     public function dataAction(Request $request)
     {
-        $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', array());
+        $url = $this->getAppService()->getTokenLoginUrl('data_lab_esiframe', array(), $request->isSecure());
 
         return $this->render('admin/data-lab/data.html.twig', array(
             'url' => $url,
@@ -47,6 +47,10 @@ class DataLabController extends BaseController
         $xapiSetting = $this->getSettingService()->get('xapi', array());
         $xapiSetting['enabled'] = $enable;
         $xapiSetting = $this->getSettingService()->set('xapi', $xapiSetting);
+
+        $user = $this->getUser();
+        $logText = $xapiSdkValue ? 'xapi的设置上报开启' : 'xapi的上报关闭';
+        $this->getLogService()->info('datalab', 'set_xapi_setting', $logText, array('enabled' => $enable, 'userId' => $user['id']));
 
         return $this->createJsonResponse(array('success' => 1));
     }

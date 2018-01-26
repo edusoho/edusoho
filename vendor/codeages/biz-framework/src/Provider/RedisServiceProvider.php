@@ -53,7 +53,7 @@ class RedisServiceProvider implements ServiceProviderInterface
                 $multRedis[$name] = function () use ($options) {
                     $hosts = explode(',', $options['host']);
 
-                    if (count($hosts) == 1) {
+                    if (1 == count($hosts)) {
                         list($host, $port) = explode(':', $hosts[0]);
                         $redis = new Redis();
 

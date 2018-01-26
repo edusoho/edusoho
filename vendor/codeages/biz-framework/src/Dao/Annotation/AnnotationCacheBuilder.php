@@ -73,14 +73,14 @@ class AnnotationCacheBuilder
 
     public function getNamespaceDirectories($namespace)
     {
-        if (substr($namespace, -1) !== '\\') {
+        if ('\\' !== substr($namespace, -1)) {
             $namespace .= '\\';
         }
 
         $directories = array();
         $prefixes = $this->loader->getPrefixesPsr4();
         foreach ($prefixes as $prefix => $prefixDirectories) {
-            if (strpos($namespace, $prefix) !== 0) {
+            if (0 !== strpos($namespace, $prefix)) {
                 continue;
             }
             $relativeDirectory = str_replace('\\', DIRECTORY_SEPARATOR, substr($namespace, strlen($prefix)));

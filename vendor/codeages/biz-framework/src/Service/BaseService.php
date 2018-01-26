@@ -88,5 +88,4 @@ abstract class BaseService
     {
         return new ServiceException($message, $code);
     }
-
 }

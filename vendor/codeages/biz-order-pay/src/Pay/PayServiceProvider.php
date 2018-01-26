@@ -43,7 +43,7 @@ class PayServiceProvider implements ServiceProviderInterface
     {
         $paymentDefaultPlatforms = array(
             'wechat' => array(
-                'class' => '\Codeages\Biz\Pay\Payment\WechatGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\WechatGateway',
                 'appid' => '',
                 'mch_id' => '',
                 'key' => '',
@@ -51,16 +51,16 @@ class PayServiceProvider implements ServiceProviderInterface
                 'key_path' => '',
             ),
             'alipay' => array(
-                'class' => '\Codeages\Biz\Pay\Payment\AlipayGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\AlipayGateway',
                 'seller_email' => '',
                 'partner' => '',
                 'key' => '',
             ),
             'iap' => array(
-                'class' => '\Codeages\Biz\Pay\Payment\IapGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\IapGateway',
             ),
             'lianlianpay' => array(
-                'class' => '\Codeages\Biz\Pay\Payment\LianlianPayGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\LianlianPayGateway',
                 'secret' => '',
                 'oid_partner' => '',
                 'signatureToolkit' => new SignatureToolkit(),

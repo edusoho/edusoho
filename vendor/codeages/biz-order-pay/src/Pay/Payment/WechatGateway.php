@@ -4,14 +4,14 @@ namespace Codeages\Biz\Pay\Payment;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Pay\Exception\PayGetwayException;
+use Codeages\Biz\Pay\Exception\PayGatewayException;
 use Omnipay\Omnipay;
 
-class WechatGetway extends AbstractGetway
+class WechatGateway extends AbstractGateway
 {
     public function converterNotify($data)
     {
-        $gateway = $this->createGetWay('WechatPay');
+        $gateway = $this->createGateway('WechatPay');
         $request = $gateway->completePurchase(array(
             'request_params' => $data
         ));
@@ -36,7 +36,7 @@ class WechatGetway extends AbstractGetway
 
     public function queryTrade($tradeSn)
     {
-        $response = $this->createGetWay("WechatPay")->query(array('out_trade_no' => $tradeSn))->send();
+        $response = $this->createGateway("WechatPay")->query(array('out_trade_no' => $tradeSn))->send();
         $data = $response->getData();
         if ($response->isSuccessful() && $data['trade_state'] == 'SUCCESS') {
             $result = $this->converterTradeResponse($data);
@@ -94,7 +94,7 @@ class WechatGetway extends AbstractGetway
         }
 
         $platformType = ucfirst($data['platform_type']);
-        $gateway = $this->createGetWay("WechatPay_{$platformType}");
+        $gateway = $this->createGateway("WechatPay_{$platformType}");
 
         $order['body'] = $data['goods_title'];
         $order['detail'] = $data['goods_detail'];
@@ -119,7 +119,7 @@ class WechatGetway extends AbstractGetway
             }
         } else {
             $data = $response->getData();
-            throw new PayGetwayException($data['return_msg']);
+            throw new PayGatewayException($data['return_msg']);
         }
 
 
@@ -127,7 +127,7 @@ class WechatGetway extends AbstractGetway
 
     public function applyRefund($trade)
     {
-        $gateway = $this->createGetWay("WechatPay");
+        $gateway = $this->createGateway("WechatPay");
 
         $response = $gateway->refund(array(
             'transaction_id' => $trade['platform_sn'],
@@ -141,9 +141,20 @@ class WechatGetway extends AbstractGetway
         return $response;
     }
 
+    public function closeTrade($trade)
+    {
+        $gateway = $this->createGateway("WechatPay");
+
+        $response = $gateway->close(array(
+            'out_trade_no' => $trade['trade_sn']
+        ))->send();
+
+        return $response;
+    }
+
     public function converterRefundNotify($data)
     {
-        $gateway = $this->createGetWay('WechatPay');
+        $gateway = $this->createGateway('WechatPay');
         $request = $gateway->completeRefund(array(
             'request_params' => $data
         ));
@@ -174,7 +185,7 @@ class WechatGetway extends AbstractGetway
         );
     }
 
-    protected function createGetWay($type)
+    protected function createGateway($type)
     {
         $config = $this->getSetting();
         $gateway = Omnipay::create($type);

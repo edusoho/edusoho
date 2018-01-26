@@ -2,7 +2,7 @@
 
 namespace Tests\Token;
 
-use Codeages\Biz\Framework\UnitTests\DatabaseSeeder;
+use Codeages\Biz\Framework\Testing\DatabaseSeeder;
 
 class TokenSeeder extends DatabaseSeeder
 {

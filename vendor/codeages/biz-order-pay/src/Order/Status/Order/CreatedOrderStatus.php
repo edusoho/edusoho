@@ -14,7 +14,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return self::NAME;
     }
 
-    public function process($data = array())
+    public function process($data)
     {
         $orderItems = $this->validateFields($data['order'], $data['orderItems']);
         $order = ArrayToolkit::parts($data['order'], array(
@@ -45,6 +45,21 @@ class CreatedOrderStatus extends AbstractOrderStatus
         $order = $this->createOrderItems($order, $data['orderItems']);
 
         return $order;
+    }
+
+    public function closed($data = array())
+    {
+        return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);
+    }
+
+    public function paid($data = array())
+    {
+        return $this->getOrderStatus(PaidOrderStatus::NAME)->process($data);
+    }
+
+    public function paying($data = array())
+    {
+        return $this->getOrderStatus(PayingOrderStatus::NAME)->process($data);
     }
 
     protected function validateFields($order, $orderItems)
@@ -102,6 +117,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return $priceAmount;
     }
 
+    // TODO: 不暴露方法
     public static function countOrderPayAmount($payAmount, $orderDeducts, $items)
     {
         foreach ($orderDeducts as $deduct) {
@@ -181,18 +197,5 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return $savedDeducts;
     }
 
-    public function closed($data = array())
-    {
-        return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);
-    }
 
-    public function paid($data = array())
-    {
-        return $this->getOrderStatus(PaidOrderStatus::NAME)->process($data);
-    }
-
-    public function paying($data = array())
-    {
-        return $this->getOrderStatus(PayingOrderStatus::NAME)->process($data);
-    }
 }
