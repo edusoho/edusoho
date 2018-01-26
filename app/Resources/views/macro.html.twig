@@ -101,7 +101,7 @@
 {% macro paginator(paginator, class) %}
   {% if paginator|default() and paginator.lastPage > 1 %}
     <nav class=" {{ class|default('text-center') }}">
-      <ul class="pagination">
+      <ul class="pagination cd-pagination">
         {% if paginator.currentPage != paginator.firstPage %}
           <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}"><i class="cd-icon cd-icon-first-page"></i></a></li>
           <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
@@ -146,7 +146,7 @@
 
   {% if paginator.lastPage > 1 %}
     <nav class="{{ class|default('text-center') }}">
-      <ul class="pagination">
+      <ul class="pagination cd-pagination">
         {% if paginator.currentPage != paginator.firstPage %}
           <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><a href="javascript:;"><i class="cd-icon cd-icon-first-page"></i></a></li>
           <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
