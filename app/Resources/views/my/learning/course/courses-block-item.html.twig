@@ -29,9 +29,9 @@
   </div>
 
   {% if currentCourses|length > 1 %}
-    <div class="my-course-item__btn dropdown">
-      <a class="btn cd-btn cd-btn-primary cd-btn-lg dropdown-toggle" href="javascript:;" data-toggle="dropdown">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
-      <ul class="my-course-item__dropdown dropdown-menu cd-dropdown-menu cd-dropdown-menu-right" role="menu">
+    <div class="my-course-item__btn my-course-item__dropdown cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+      <a class="btn cd-btn cd-btn-primary cd-btn-lg dropdown-toggle" href="javascript:;">{% if type == 'learned' %}{{ 'course.block_grid.view_course_btn'|trans }}{% else %}{{ 'course.block_grid.countinue_learn_btn'|trans }}{% endif %}</a>
+      <ul class="dropdown-menu" role="menu">
         {% for course in currentCourses %}
           {% set member = members[course.id]|default(null) %}
           <li><a class="clearfix" href="{{ path('my_course_show', {id:course.id}) }}">{{ course.title|sub_text(10) }}<span class="pull-right">{{  member.learnedCompulsoryTaskNum|default(0) }}&nbsp;<span class="cd-dark-assist">/{{ course.compulsoryTaskNum }}</span></span></a></li>

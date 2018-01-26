@@ -169,12 +169,12 @@
 {% endmacro %}
 
 {% macro table_filter(header, choices, key, dataTarget, selectedChoice, default = '') %}
-  <div class="dropdown">
+  <div class="cd-dropdown cd-dropdown-filter" data-toggle="cd-dropdown">
     {{ header }}
-    <a href="javascript:;" class="{% if selectedChoice == '' %}cd-link-assist{% else %}cd-link-primary{% endif %}" data-toggle="dropdown">
+    <a href="javascript:;" class="{% if selectedChoice == '' %}cd-link-assist{% else %}cd-link-primary{% endif %}">
       <i class="cd-icon cd-icon-filter cd-text-xs"></i>
     </a>
-    <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">
+    <ul class="dropdown-menu">
       {% if default %}
         <li class="{% if selectedChoice == '' %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="">{{ default }}</a></li>
       {% endif %}
