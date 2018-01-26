@@ -55,6 +55,8 @@ class FavoriteDaoTest extends BaseDaoTestCase
                 'expectedCount' => 1,
             ),
         );
+
+        $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
     public function testGetByUserIdAndCourseSetId()
@@ -78,6 +80,43 @@ class FavoriteDaoTest extends BaseDaoTestCase
         $this->assertEquals(2, $res);
     }
 
+    public function testSearchByUserId()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('userId' => 2));
+        $result = $this->getDao()->searchByUserId(2, 0, 5);
+        $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
+    }
+
+    public function testFindCourseFavoritesNotInClassroomByUserId()
+    {
+        $courseSet = $this->mockCourseSet();
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('createdTime' => 1000));
+        $expected[] = $this->mockDataObject();
+        $result = $this->getDao()->findCourseFavoritesNotInClassroomByUserId(1, 0, 5);
+        $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
+    }
+
+    public function testFindUserFavoriteCoursesNotInClassroomWithCourseType()
+    {
+        $courseSet = $this->mockCourseSet();
+        $course = $this->mockCourse();
+        $expected = $this->mockDataObject();
+        $result = $this->getDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(1, 'course', 0, 5);
+        $this->assertEquals(1, $result[0]['id']);
+    }
+
+    public function testCountUserFavoriteCoursesNotInClassroomWithCourseType()
+    {
+        $courseSet = $this->mockCourseSet();
+        $course = $this->mockCourse();
+        $expected = $this->mockDataObject();
+        $result = $this->getDao()->countUserFavoriteCoursesNotInClassroomWithCourseType(1, 'course');
+        $this->assertEquals(1, $result);
+    }
+
     protected function getDefaultMockFields()
     {
         return array(
@@ -86,5 +125,47 @@ class FavoriteDaoTest extends BaseDaoTestCase
             'type' => 'course',
             'courseSetId' => 1,
         );
+    }
+
+    private function mockCourseSet($fields = array())
+    {
+        $defaultFields = array(
+            'type' => 'course',
+            'title' => 'hmm',
+            'subtitle' => 'oh',
+            'status' => 'draft',
+            'serializeMode' => 'none',
+            'ratingNum' => 1,
+            'rating' => 1,
+            'noteNum' => 1,
+            'studentNum' => 1,
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+
+        return $this->getCourseSetDao()->create($fields);
+    }
+
+    private function mockCourse($fields = array())
+    {
+        $defaultFields = array(
+            'courseSetId' => 1,
+            'title' => 'a',
+            'address' => 'a',
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+
+        return $this->getCourseDao()->create($fields);
+    }
+
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 }

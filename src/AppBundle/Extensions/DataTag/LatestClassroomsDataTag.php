@@ -25,7 +25,7 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 0,
                 $arguments['count']
         );
@@ -48,11 +48,6 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 }

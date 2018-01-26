@@ -9,6 +9,7 @@ use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Common\StringToolkit;
 
 abstract class HLSBaseController extends BaseController
 {
@@ -221,10 +222,15 @@ abstract class HLSBaseController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
-        return $this->responseEnhanced($stream['stream'], array(
-            'Content-Type' => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="stream.m3u8"',
-        ));
+        return $this->responseEnhanced(
+            StringToolkit::compress($stream['stream']),
+            StringToolkit::appendGzipResponseHeader(
+                array(
+                    'Content-Type' => 'application/vnd.apple.mpegurl',
+                    'Content-Disposition' => 'inline; filename="stream.m3u8"',
+                )
+            )
+        );
     }
 
     public function clefAction(Request $request, $id, $token)

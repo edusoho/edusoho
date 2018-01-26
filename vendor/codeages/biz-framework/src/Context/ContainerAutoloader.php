@@ -30,7 +30,7 @@ class ContainerAutoloader
             return $this->container["@{$alias}"];
         }
 
-        if (count($parts) === 1) {
+        if (1 === count($parts)) {
             $prefix = '';
             $middle = array();
             $name = $parts[0];

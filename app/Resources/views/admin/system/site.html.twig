@@ -8,7 +8,7 @@
 
 {{ web_macro.flash_messages() }}
 
-<form class="form-horizontal" id="site-form" method="post">
+<form class="form-horizontal" id="site-form" method="post" data-save-url="{{ path('admin_setting_site_save') }}">
 
   <fieldset>
 
@@ -163,7 +163,7 @@
 
   <div class="row form-group">
     <div class="controls col-md-offset-2 col-md-8">
-      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      <button type="button" class="btn btn-primary" id="save-site">{{'form.btn.submit'|trans}}</button>
     </div>
   </div>
 

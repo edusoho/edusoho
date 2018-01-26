@@ -1,0 +1,30 @@
+{% set questionType = 'choice' %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_content %}
+  <ul class="testpaper-question-choices js-testpaper-question-list">
+    {% for key, choice in question.metas.choices|default() %}
+      {% set itemClass =  ( key in question.answer ) ? 'testpaper-question-choice-item--right' : '' %}
+      {% set labelClass = ( key in question.answer ) ? 'label-success' : 'label-danger' %}
+      {% set itemKeyAnalysis = questionAnalysis[key]|default(null) %}
+      {% set choiceIndex = (65+key)|chr %}
+
+      <li class="{{ itemClass }} testpaper-question-body-item testpaper-question-choice-item">
+        <span class="testpaper-question-body-item__index">{{ choiceIndex }}.</span>
+        <div class="testpaper-question-body-item__content">{{ choice|bbCode2Html|raw }}</div>
+        <span class="label testpaper-question-body-item__label {{ labelClass }} hidden-xs">
+          {% if itemKeyAnalysis and firstCount != 0 %}
+            {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+            {{ firstAnswerPercent }}%
+          {% else %}
+            0.0%
+          {% endif %}
+        </span>
+
+        <span class="hidden-xs testpaper-question-body-item__count">
+          {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}人次
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

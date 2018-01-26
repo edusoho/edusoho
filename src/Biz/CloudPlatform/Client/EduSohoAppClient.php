@@ -12,7 +12,7 @@ class EduSohoAppClient implements AppClient
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://open.edusoho.com/app_api';
+    private $apiUrl = 'open.edusoho.com/app_api';
 
     private $debug = false;
 
@@ -40,6 +40,9 @@ class EduSohoAppClient implements AppClient
 
         if (!empty($options['apiUrl'])) {
             $this->apiUrl = $options['apiUrl'];
+        } else {
+            $protocol = empty($options['isSecure']) ? 'http://' : 'https://';
+            $this->apiUrl = $protocol.$this->apiUrl;
         }
 
         $this->debug = empty($options['debug']) ? false : true;

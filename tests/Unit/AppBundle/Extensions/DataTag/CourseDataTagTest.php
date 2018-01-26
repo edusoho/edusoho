@@ -23,7 +23,7 @@ class CourseDataTagTest extends BaseTestCase
 
         $datatag = new CourseDataTag();
         $foundCourse = $datatag->getData(array('courseId' => $course['id']));
-        $this->assertArrayEquals($course, $foundCourse);
+        $this->assertEquals($course['id'], $foundCourse['id']);
 
         $foundCourse = $datatag->getData(array('courseId' => $course['id'], 'fetchCourseSet' => 1));
         $this->assertEquals($courseSet['id'], $foundCourse['courseSet']['id']);

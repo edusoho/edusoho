@@ -49,13 +49,11 @@
 
 	{% elseif not question.isDeleted|default(0) %}
 	  <div class="testpaper-question-footer clearfix">
-		  <div class="testpaper-question-fill-inputs">
-				{% set input_index = 1 %}
-				{% for answer in question.answer %}
-					<input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="{{'question.multiple_choice.check_answer'|trans({'%input_index%': input_index})}}" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
-					{% set input_index = input_index + 1 %}
-				{% endfor %}
-			</div>
+			{% set input_index = 1 %}
+			{% for answer in question.answer %}
+				<input class="form-control mbm" type="text" data-type="fill" name="{{ question.id }}" placeholder="{{'question.multiple_choice.check_answer'|trans({'%input_index%': input_index})}}" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
+				{% set input_index = input_index + 1 %}
+			{% endfor %}
 
 			<div class="testpaper-question-actions pull-right mts">
 		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}

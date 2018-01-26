@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SmsToolkit
 {
+    private static $mockedRequest = null;
+
     public static function smsCheck($request, $scenario)
     {
         $mobile = $request->request->get('mobile');
@@ -123,6 +125,10 @@ class SmsToolkit
 
     public static function getShortLink($url, $conditions = array())
     {
+        // 为方便单元测试
+        if (!empty(self::$mockedRequest)) {
+            return self::$mockedRequest->getShortLink($url, $conditions);
+        }
         $apis = array(
             'eduCloud' => 'http://kzedu.cc/app/shorturl',
             'baidu' => 'http://dwz.cn/create.php',

@@ -90,9 +90,9 @@ class AskQuestionType extends Type
                 try {
                     $thread = $threads[$statement['target_id']];
                     $course = $courses[$thread['courseId']];
-                    $task = $tasks[$thread['taskId']];
-                    $activity = $activities[$task['activityId']];
-                    if (!empty($activity['ext']['mediaId'])) {
+                    $task = empty($tasks[$thread['taskId']]) ? array() : $tasks[$thread['taskId']];
+                    $activity = (empty($task) || empty($activities[$task['activityId']])) ? array() : $activities[$task['activityId']];
+                    if (!empty($activity) && !empty($activity['ext']['mediaId'])) {
                         $resource = empty($resources[$activity['ext']['mediaId']]) ? array() : $resources[$activity['ext']['mediaId']];
                     } else {
                         $resource = array();
@@ -100,7 +100,7 @@ class AskQuestionType extends Type
                     $object = array(
                         'id' => $thread['id'],
                         'course' => $course,
-                        'definitionType' => $this->convertMediaType($task['type']),
+                        'definitionType' => empty($task['type']) ? 'null' : $this->convertMediaType($task['type']),
                         'resource' => empty($resource) ? array() : $resource,
                     );
                     $actor = $this->getActor($statement['user_id']);

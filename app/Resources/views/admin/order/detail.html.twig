@@ -52,7 +52,7 @@
           </tr>
           {% for orderDeduct in orderDeducts %}
             <tr>
-              <td width="25%" class="text-muted" style="text-align: right">{{ dict_text('orderDeductType', orderDeduct.deduct_type) }}</td>
+              <td width="25%" class="text-muted" style="text-align: right">{{ orderDeduct.deduct_type_name|trans }}</td>
               <td width="75%">
                 <span class="text-muted">-{{ orderDeduct.deduct_amount|to_cash(0) }} {{ 'site.currency.CNY'|trans }}</span>
                 {#{% if orderDeduct.snapshot.couponCode|default('') %}#}
@@ -129,6 +129,11 @@
               {% endif %}
             </td>
           </tr>
+        {% endif %}
+
+        {% if order.status == 'closed' %}
+          <tr> <td width="25%">{{'order.closed_time'|trans}}</td> 
+          <td width="75%"> {{ order.close_time | date('Y-n-d H:i:s') }}</td> </tr>
         {% endif %}
 
       </table>

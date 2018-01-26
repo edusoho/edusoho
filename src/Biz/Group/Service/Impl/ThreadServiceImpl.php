@@ -8,7 +8,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Dao\ThreadCollectDao;
 use Biz\Group\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -70,7 +69,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function threadCollect($userId, $threadId)
     {
         $thread = $this->getThread($threadId);
-
         if (empty($thread)) {
             throw $this->createNotFoundException('Thread Not Found');
         }
@@ -113,11 +111,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         return $this->getThreadCollectDao()->deleteByUserIdAndThreadId($userId, $threadId);
-    }
-
-    public function searchThreadsCount($conditions)
-    {
-        return $this->getThreadDao()->count($conditions);
     }
 
     public function getTradeByUserIdAndGoodsId($userId, $goodsId)
@@ -247,11 +240,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
             $this->getThreadGoodsDao()->create($attach);
         }
-    }
-
-    public function waveGoodsHitNum($goodsId)
-    {
-        return $this->getThreadGoodsDao()->wave(array($goodsId), array('hitnum', 1));
     }
 
     protected function hideThings($content, $id)
@@ -536,7 +524,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getSensitiveService()
     {
-        return ServiceKernel::instance()->createService('Sensitive:SensitiveService');
+        return $this->biz->service('Sensitive:SensitiveService');
     }
 
     protected function getGroupService()
@@ -578,5 +566,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getThreadTradeDao()
     {
         return $this->createDao('Group:ThreadTradeDao');
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->biz->service('Content:FileService');
     }
 }

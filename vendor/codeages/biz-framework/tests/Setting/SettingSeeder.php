@@ -2,7 +2,7 @@
 
 namespace Tests\Setting;
 
-use Codeages\Biz\Framework\UnitTests\DatabaseSeeder;
+use Codeages\Biz\Framework\Testing\DatabaseSeeder;
 
 class SettingSeeder extends DatabaseSeeder
 {

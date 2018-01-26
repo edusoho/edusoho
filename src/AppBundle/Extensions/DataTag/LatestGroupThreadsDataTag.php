@@ -2,7 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Common\ArrayToolkit;
 
 class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
@@ -24,11 +23,7 @@ class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
             'status' => 'open',
         );
 
-        $orderBys = array(
-            array('createdTime', 'Desc'),
-        );
-
-        $threads = $this->getThreadService()->searchThreads($conditions, $orderBys, 0, $arguments['count']);
+        $threads = $this->getThreadService()->searchThreads($conditions, array('createdTime' => 'Desc'), 0, $arguments['count']);
 
         $userIds = ArrayToolkit::column($threads, 'userId');
         $userIds = array_merge($userIds, ArrayToolkit::column($threads, 'lastPostMemberId'));
@@ -48,16 +43,16 @@ class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
 
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group:ThreadService');
+        return $this->getServiceKernel()->getBiz()->service('Group:ThreadService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 
     private function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group:GroupService');
+        return $this->getServiceKernel()->getBiz()->service('Group:GroupService');
     }
 }

@@ -414,7 +414,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'clone_course_set', "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", $e->getMessage());
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'clone_course_set', "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", array('error' => $e->getMessage()));
 
             throw $e;
         }

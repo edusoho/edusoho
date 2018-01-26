@@ -98,6 +98,11 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         return $this->getJobFiredDao()->findByJobId($jobId);
     }
 
+    public function findExecutingJobFiredByJobId($jobId)
+    {
+        return $this->getJobFiredDao()->findByJobIdAndStatus($jobId, static::EXECUTING);
+    }
+
     public function deleteJob($id)
     {
         $job = $this->getJobDao()->get($id);
@@ -126,7 +131,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     protected function checkExecuting($jobFired)
     {
-        $jobFireds = $this->findJobFiredsByJobId($jobFired['job_id']);
+        $jobFireds = $this->findExecutingJobFiredByJobId($jobFired['job_id']);
         foreach ($jobFireds as $item) {
             if ($item['id'] == $jobFired['id']) {
                 continue;
@@ -155,12 +160,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     protected function jobExecuted($jobFired, $result)
     {
-        if ($result == 'success') {
+        if ('success' == $result) {
             $this->getJobFiredDao()->update($jobFired['id'], array(
                 'status' => 'success',
             ));
             $this->createJobLog($jobFired, 'success');
-        } elseif ($result == 'retry') {
+        } elseif ('retry' == $result) {
             if ($jobFired['retry_num'] < $this->getMaxRetryNum()) {
                 $this->getJobFiredDao()->update($jobFired['id'], array(
                     'retry_num' => $jobFired['retry_num'] + 1,
@@ -227,7 +232,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
         $this->createJobLog($jobFired, $result);
 
-        if ($result == self::EXECUTING) {
+        if (self::EXECUTING == $result) {
             $this->dispatch('scheduler.job.executing', $jobFired);
 
             return $jobFired;
@@ -395,7 +400,6 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             if ($jobFired['job_detail']['name'] != 'Scheduler_MarkExecutingTimeoutJob') {
                 $this->markTimout($jobFired);
             }
-
         }
     }
 

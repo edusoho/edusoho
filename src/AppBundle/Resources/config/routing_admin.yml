@@ -101,27 +101,6 @@ admin_content:
     path:  /content
     defaults: { _controller: AppBundle:Admin/Content:index }
 
-admin_dictionary:
-    path:  /dictionary
-    defaults: { _controller: AppBundle:Admin/Dictionary:index }
-
-admin_dictionary_create:
-    path: /dictionary/create/{type}
-    defaults: { _controller: AppBundle:Admin/Dictionary:create }
-
-admin_dictionary_delete:
-    path:  /dictionary/{id}/delete
-    defaults: { _controller: AppBundle:Admin/Dictionary:delete }
-    methods: [POST]
-
-admin_dictionary_edit:
-    path:  /dictionary/{id}/edit
-    defaults: { _controller: AppBundle:Admin/Dictionary:edit }
-
-admin_dictionary_name_check:
-    path:  /dictionary/{id}/name_check
-    defaults: { _controller: AppBundle:Admin/Dictionary:checkName }
-
 admin_content_create:
     path:  /content/create/{type}
     defaults: { _controller: AppBundle:Admin/Content:create }
@@ -594,6 +573,12 @@ admin_setting_site:
     path:  /setting/site
     defaults: { _controller: AppBundle:Admin/SiteSetting:site }
     permissions: [admin_setting_message]
+
+admin_setting_site_save:
+    path:  /setting/site/save
+    defaults: { _controller: AppBundle:Admin/SiteSetting:saveSite }
+    permissions: [admin_setting_message]
+    methods: [POST]
 
 admin_operation_mobile:
     path:  /operation/mobile
@@ -2297,3 +2282,19 @@ admin_user_learn_chart:
 admin_user_learn_statistics_info:
     path: /user/learn/statistics/info
     defaults: { _controller: AppBundle:Admin/UserLearnStatistics:syncInfo }
+
+admin_cloud_data_lab:
+    path: /data/lab
+    defaults: { _controller: AppBundle:Admin/DataLab:data }
+
+admin_cloud_data_lab_setting:
+    path: /data/lab/setting
+    defaults: { _controller: AppBundle:Admin/DataLab:settting }
+
+admin_cloud_data_lab_setting_enable_modal:
+    path: /data/lab/setting/modal/enable
+    defaults: { _controller: AppBundle:Admin/DataLab:enableXapiSetting }
+
+admin_cloud_data_lab_setting_disable_modal:
+    path: /data/lab/setting/modal/disable
+    defaults: { _controller: AppBundle:Admin/DataLab:disableXapiSetting }
