@@ -9,7 +9,10 @@ function uc_user_register($nickname, $password, $email)
     if ('discuz-nickname' == $nickname && 'discuz-password' == $password && $email = 'discuz-email') {
         return 0;
     } else {
-        return explode(')', explode('discuz-nickname(', $nickname)[1])[0];
+        $nicknameSeqs = explode('iscuz-nickname(', $nickname);
+        $nicknameSeq = $nicknameSeqs[1];
+
+        return explode(')', $nicknameSeq)[0];
     }
 
     throw new \RuntimeException('MockedDiscuzClient parameters error');
