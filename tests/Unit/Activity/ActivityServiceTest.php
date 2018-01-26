@@ -144,7 +144,7 @@ class ActivityServiceTest extends BaseTestCase
         $data = array(
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
-            'lastTime' => time()-60,
+            'lastTime' => time() - 60,
             'events' => array(),
         );
 
@@ -174,9 +174,9 @@ class ActivityServiceTest extends BaseTestCase
         $data = array(
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
-            'lastTime' => time()-60,
+            'lastTime' => time() - 60,
             'events' => array(
-                'watching' => array('watchTime' => 120)
+                'watching' => array('watchTime' => 120),
             ),
         );
 
@@ -201,9 +201,9 @@ class ActivityServiceTest extends BaseTestCase
         $data = array(
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
-            'lastTime' => time()-60,
+            'lastTime' => time() - 60,
             'events' => array(
-                'finish' => array('data' => array('stop' => true))
+                'finish' => array('data' => array('stop' => true)),
             ),
         );
 
@@ -265,6 +265,7 @@ class ActivityServiceTest extends BaseTestCase
             'fromCourseSetId' => 1,
         );
         $savedTask = $this->getTaskService()->createTask($task);
+
         return $savedTask;
     }
 

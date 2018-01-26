@@ -18,5 +18,4 @@ interface ActivityLearnLogService
     public function sumLearnTimeGroupByUserId($conditions);
 
     public function search($conditions, $orderBy, $start, $limit);
-
 }
