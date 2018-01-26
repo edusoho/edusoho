@@ -8,6 +8,7 @@ use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class MockController extends BaseController
 {
@@ -74,7 +75,7 @@ class MockController extends BaseController
             if (DistributorJobStatus::FINISHED == $result['status']) {
                 return $this->createJsonResponse(array('result' => 'true'));
             } else {
-                return $this->createJsonResponse(array('result' => $result['result']->getBody()));
+                return $this->createJsonResponse(array('result' => $result['result']));
             }
         }
     }

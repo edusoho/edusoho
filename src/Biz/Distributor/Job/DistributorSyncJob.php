@@ -43,7 +43,7 @@ class DistributorSyncJob extends AbstractJob
 
                 $resultJson = $drpService->postData($sendedData, $service->getSendType());
 
-                if ('success' == $resultJson['code']) {
+                if ($resultJson['success']) {
                     $status = DistributorJobStatus::FINISHED;
                 }
                 $this->biz['logger']->info(
