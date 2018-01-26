@@ -46,7 +46,7 @@ Unit Test With PHP 5.3 And Redis:
 
 Unit Test With PHP 5.5:
   stage: test
-  image: codeages/ci-php:5.5-5
+  image: codeages/ci-php:5.3-2
   services:
     - mysql:5.5
     - redis:latest
