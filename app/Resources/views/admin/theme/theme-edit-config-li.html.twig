@@ -6,7 +6,8 @@
       <span class="glyphicon glyphicon-lock  edit-sort"></span>
     {% endif %}
     <label>
-      <input type="checkbox" data-component-id="{{ pendant.id }}" class="check-block" {% if isChoiced|default(null) %}checked{% endif %}><span class="default-title">{{ pendant.defaultTitle }}</span>
+      <input type="checkbox" data-component-id="{{ pendant.id }}" class="check-block" {% if isChoiced|default(null) %}checked{% endif %}>
+      <span class="default-title">{{ orginAllConfig[key].defaultTitle }}</span>
     </label>
   </div>
   <div class="col-md-5">
