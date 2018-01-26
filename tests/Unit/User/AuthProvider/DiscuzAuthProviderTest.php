@@ -210,9 +210,10 @@ class DiscuzAuthProviderTest extends BaseTestCase
 
     private function mockDiscuzClient()
     {
-        $mockedDiscuzClientPath = $this->getBiz()['topxia.upload.private_directory'].
+        $biz = $this->getBiz();
+        $mockedDiscuzClientPath = $biz['topxia.upload.private_directory'].
             '/../../../tests/Unit/User/AuthProvider/Tools/MockedDiscuzClient.php';
-        $provider = new DiscuzAuthProvider($this->getBiz());
+        $provider = new DiscuzAuthProvider($biz);
         $provider = ReflectionUtils::setProperty(
             $provider,
             'mockedDiscusClientPath',
