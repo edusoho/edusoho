@@ -9,8 +9,7 @@ function uc_user_register($nickname, $password, $email)
     if ('discuz-nickname' == $nickname && 'discuz-password' == $password && $email = 'discuz-email') {
         return 0;
     } else {
-        $nicknameSeqs = explode('discuz-nickname(', $nickname);
-        var_dump($nicknameSeqs);
+        $nicknameSeqs = explode('iscuz-nickname(', $nickname);
 
         return explode(')', $nicknameSeqs[1])[0];
     }

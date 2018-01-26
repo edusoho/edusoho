@@ -46,11 +46,12 @@ Unit Test With PHP 5.3 And Redis:
 
 Unit Test With PHP 5.5:
   stage: test
-  image: codeages/ci-php:5.3-2
+  image: codeages/ci-php:5.5-5
   services:
     - mysql:5.5
     - redis:latest
   script:
+    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit -c app/
 
 Unit Test With PHP 7.0 For Non-Develop:
