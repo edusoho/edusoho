@@ -401,6 +401,7 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.created_time: 'Create time'
 order.pay_time: 'Payment time'
+order.closed_time: 'Closed time'
 order.status: 'Order status'
 order.deduct: Order deduct
 order.item_type: Order type

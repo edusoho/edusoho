@@ -20,8 +20,6 @@ class RecentLiveTasksDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        $filters['type'] = 'live';
-
         if (isset($arguments['userId'])) {
             $userId = $arguments['userId'];
             //普通课程也包含直播任务

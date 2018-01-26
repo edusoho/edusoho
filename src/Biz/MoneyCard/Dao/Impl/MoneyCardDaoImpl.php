@@ -19,6 +19,7 @@ class MoneyCardDaoImpl extends GeneralDaoImpl implements MoneyCardDao
                 'id = :id',
                 'rechargeUserId = :rechargeUserId',
                 'cardId = :cardId',
+                'cardId in ( :cardIds)',
                 'cardStatus = :cardStatus',
                 'deadline = :deadline',
                 'batchId = :batchId',
@@ -41,11 +42,11 @@ class MoneyCardDaoImpl extends GeneralDaoImpl implements MoneyCardDao
 
     public function isCardIdAvailable($moneyCardIds)
     {
-        $marks = str_repeat('?,', count($moneyCardIds) - 1).'?';
-        $sql = 'select COUNT(id) from '.$this->table.' where cardId in ('.$marks.')';
-        $result = $this->db()->fetchAll($sql, $moneyCardIds);
+        $result = $this->count(array(
+            'cardIds' => $moneyCardIds,
+        ));
 
-        return $result[0]['COUNT(id)'] == 0 ? true : false;
+        return empty($result) ? true : false;
     }
 
     public function updateBatchByCardStatus($identifier, $fields)
@@ -56,11 +57,5 @@ class MoneyCardDaoImpl extends GeneralDaoImpl implements MoneyCardDao
     public function deleteMoneyCardsByBatchId($id)
     {
         return $this->db()->delete($this->table, array('batchId' => $id));
-    }
-
-    public function deleteBatchByCardStatus($fields)
-    {
-        $sql = 'DELETE FROM '.$this->table.' WHERE batchId = ? AND cardStatus != ?';
-        $this->db()->executeUpdate($sql, $fields);
     }
 }

@@ -14,7 +14,5 @@ interface MoneyCardDao extends GeneralDaoInterface
 
     public function deleteMoneyCardsByBatchId($ids);
 
-    public function deleteBatchByCardStatus($fields);
-
     public function isCardIdAvailable($ids);
 }

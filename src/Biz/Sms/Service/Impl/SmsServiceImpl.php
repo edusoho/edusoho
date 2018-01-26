@@ -157,7 +157,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode)
     {
         if (0 == strlen($actualSmsCode) || 0 == strlen($expectedSmsCode)) {
-            $result = array('success' => false, 'message' => '验证码错误');
+            return array('success' => false, 'message' => '验证码错误');
         }
 
         if ('' != $actualMobile && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
@@ -171,11 +171,6 @@ class SmsServiceImpl extends BaseService implements SmsService
         }
 
         return $result;
-    }
-
-    public function getProcessor($type)
-    {
-        return $this->biz["sms_processor.{$type}"];
     }
 
     protected function checkSmsType($smsType, $user)
