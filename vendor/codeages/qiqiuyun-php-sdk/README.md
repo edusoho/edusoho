@@ -7,7 +7,6 @@
 * 启动API Mock Server
 
 ```
-php -S localhost:8001 -t tests/MockServer tests/MockServer/index.php
+php -S localhost:8001 -t tests/MockServer
 ```
-
 
