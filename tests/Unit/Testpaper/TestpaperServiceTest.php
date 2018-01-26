@@ -1706,6 +1706,121 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(2, $results[2]['maxScore']);
     }
 
+    public function testFindResultsByTestIdAndActivityId()
+    {
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 1,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'finished',
+            'usedTime' => 30,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 1,
+            'passedStatus' => 'passed'
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 2,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'finished',
+            'usedTime' => 20,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 2,
+            'passedStatus' => 'good'
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 1,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 10,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 3,
+            'passedStatus' => 'none'
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $results = $this->getTestpaperService()->findResultsByTestIdAndActivityId(1, 1);
+
+        $this->assertEquals(2, count($results));
+
+        $this->assertEquals(0.5, $results[1]['usedTime']);
+        $this->assertEquals(1, $results[1]['firstScore']);
+        $this->assertEquals(1, $results[1]['maxScore']);
+        $this->assertEquals('passed', $results[1]['firstPassedStatus']);
+        $this->assertEquals('passed', $results[1]['maxPassedStatus']);
+
+        $this->assertEquals(0.3, $results[2]['usedTime']);
+        $this->assertEquals(2, $results[2]['firstScore']);
+        $this->assertEquals(2, $results[2]['maxScore']);
+        $this->assertEquals('good', $results[2]['firstPassedStatus']);
+        $this->assertEquals('good', $results[2]['maxPassedStatus']);
+    }
+
+    public function testGetNextReviewingResult()
+    {
+        $results = $this->getTestpaperService()->getNextReviewingResult(array(1,2), 1, 'testpaper');
+        $this->assertEmpty($results);
+
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => 1,
+            'userId' => 2,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 20,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 1,
+            'type' => 'testpaper',
+            'score' => 2,
+        );
+        $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $results = $this->getTestpaperService()->getNextReviewingResult(array(1), 1, 'testpaper');
+        $this->assertEmpty($results);
+
+        $testpaper = $this->createTestpaper1();
+        $fields = array(
+            'paperName' => 'testpaper name',
+            'testId' => $testpaper['id'],
+            'userId' => 2,
+            'limitedTime' => 0,
+            'beginTime' => time(),
+            'status' => 'reviewing',
+            'usedTime' => 20,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 2,
+            'type' => 'testpaper',
+            'score' => 2,
+        );
+        $result = $this->getTestpaperService()->addTestpaperResult($fields);
+
+        $next = $this->getTestpaperService()->getNextReviewingResult(array(1), 2, 'testpaper');
+        $this->assertArrayEquals($result, $next);
+    }
+
     public function testUpdateTestpaperItems()
     {
         $result = $this->getTestpaperService()->updateTestpaperItems(123, array('questions' => array()));
