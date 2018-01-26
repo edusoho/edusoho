@@ -1718,7 +1718,7 @@ class WebExtension extends \Twig_Extension
         $paths = array(
             'player' => 'js-sdk/sdk-v1.js',
             'video' => 'js-sdk/video-player/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-v2.js',
+            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',

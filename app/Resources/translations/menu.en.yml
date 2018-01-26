@@ -401,7 +401,3 @@ web.classroom.setting.assistants_side_nav: Assistants
 web.classroom.content.courses_side_nav: Courses
 web.classroom.content.students_side_nav: Students
 web.classroom.content.testpaper_check_side_nav: Testpaper Review
-
-## 资讯管理
-admin.article.save.success: 保存文章成功！
-admin.article.choose_column_tip: 请选择所属栏目

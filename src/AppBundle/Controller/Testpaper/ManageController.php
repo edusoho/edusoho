@@ -9,7 +9,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -113,46 +112,43 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type, $testpaperIds = array())
+    public function checkListAction(Request $request, $targetId, $targetType, $type)
     {
-        if (empty($testpaperIds)) {
-            $testpaperIds = array(0);
-        }
-
-        $conditions = array(
-            'status' => 'open',
-            'type' => $type,
-            'ids' => $testpaperIds,
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getTestpaperService()->searchTestpaperCount($conditions),
-            10
-        );
-
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
         $courseIds = array($targetId);
+        $courses = array();
         if ($targetType === 'classroom') {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
 
-        foreach ($testpapers as $key => $testpaper) {
-            $testpapers[$key]['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
-        }
+        $conditions = array(
+            'courseIds' => empty($courseIds) ? array(-1) : $courseIds,
+            'type' => $type,
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTaskService()->countTasks($conditions),
+            10
+        );
+        $tasks = $this->getTaskService()->searchTasks(
+            $conditions,
+            array('seq' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        list($tasks, $testpapers) = $this->findTestpapers($tasks, $type);
+        $resultStatusNum = $this->findTestpapersStatusNum($tasks, $testpapers);
 
         return $this->render('testpaper/manage/check-list.html.twig', array(
-            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
+            'testpapers' => $testpapers,
             'paginator' => $paginator,
             'targetId' => $targetId,
             'targetType' => $targetType,
+            'tasks' => $tasks,
+            'resultStatusNum' => $resultStatusNum,
+            'courses' => ArrayToolkit::index($courses, 'id'),
         ));
     }
 
@@ -179,9 +175,17 @@ class ManageController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
+            $isContinue = $formData['isContinue'];
+            unset($formData['isContinue']);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            return $this->createJsonResponse(true);
+            $data = array('success' => true, 'goto' => '');
+            if ($isContinue) {
+                $route = $this->getRedirectRoute('nextCheck', $source);
+                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
+            }
+
+            return $this->createJsonResponse($data);
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id'], $result['id']);
@@ -207,7 +211,7 @@ class ManageController extends BaseController
         ));
     }
 
-    public function resultListAction(Request $request, $testpaperId, $source, $targetId)
+    public function resultListAction(Request $request, $testpaperId, $source, $targetId, $activityId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
@@ -225,21 +229,14 @@ class ManageController extends BaseController
         if ($status !== 'all') {
             $conditions['status'] = $status;
         }
-        $conditions['type'] = $testpaper['type'];
+        $conditions['lessonId'] = $activityId;
 
         if (!empty($keyword)) {
             $searchUser = $this->getUserService()->getUserByNickname($keyword);
             $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
         }
 
-        $courseIds = array($targetId);
-        if ($source === 'classroom') {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-        }
-        $conditions['courseIds'] = $courseIds;
-
-        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
+        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $activityId);
 
         $paginator = new Paginator(
             $request,
@@ -501,6 +498,130 @@ class ManageController extends BaseController
         ));
     }
 
+    public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || $activity['mediaType'] != 'testpaper') {
+            return $this->createMessageResponse('error', 'Argument invalid');
+        }
+
+        $analyses = $this->getQuestionAnalysisService()->searchAnalysis(array('activityId' => $activity['id']), array(), 0, PHP_INT_MAX);
+
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $paper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        if (empty($paper)) {
+            return $this->createMessageResponse('info', 'Paper not found');
+        }
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($paper['id']);
+
+        $relatedData = $this->findRelatedData($activity, $paper);
+        $relatedData['studentNum'] = $studentNum;
+
+        return $this->render('testpaper/manage/result-analysis.html.twig', array(
+            'analyses' => ArrayToolkit::groupIndex($analyses, 'questionId', 'choiceIndex'),
+            'paper' => $paper,
+            'questions' => $questions,
+            'questionTypes' => $this->getCheckedQuestionType($paper),
+            'relatedData' => $relatedData,
+            'targetType' => $targetType,
+        ));
+    }
+
+    public function resultGraphAction($activityId)
+    {
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (!$activity || $activity['mediaType'] != 'testpaper') {
+            return $this->createMessageResponse('error', 'Argument Invalid');
+        }
+
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+        $userFirstResults = $this->getTestpaperService()->findResultsByTestIdAndActivityId($testpaper['id'], $activity['id']);
+
+        $data = $this->fillGraphData($testpaper, $userFirstResults);
+        $analysis = $this->analysisFirstResults($userFirstResults);
+
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
+        return $this->render('testpaper/manage/result-graph-modal.html.twig', array(
+            'activity' => $activity,
+            'testpaper' => $testpaper,
+            'data' => $data,
+            'analysis' => $analysis,
+            'task' => $task,
+        ));
+    }
+
+    protected function fillGraphData($testpaper, $userFirstResults)
+    {
+        $data = array('xScore' => array(), 'yFirstNum' => array(), 'yMaxNum' => array());
+
+        $totalScore = $testpaper['score'];
+        $maxTmpScore = 0;
+
+        $column = $totalScore <= 5 ? ($totalScore / 1) : 5;
+        for ($i = 1; $i <= $column; ++$i) {
+            $maxScoreCount = 0;
+            $firstScoreCount = 0;
+            $minTmpScore = $maxTmpScore;
+            $maxTmpScore = $totalScore * ($i / $column);
+
+            foreach ($userFirstResults as $result) {
+                if ($maxTmpScore == $totalScore) {
+                    if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] <= $maxTmpScore) {
+                        ++$firstScoreCount;
+                    }
+
+                    if ($result['maxScore'] >= $minTmpScore && $result['maxScore'] <= $maxTmpScore) {
+                        ++$maxScoreCount;
+                    }
+                } else {
+                    if ($result['firstScore'] >= $minTmpScore && $result['firstScore'] < $maxTmpScore) {
+                        ++$firstScoreCount;
+                    }
+
+                    if ($result['maxScore'] >= $minTmpScore && $result['maxScore'] < $maxTmpScore) {
+                        ++$maxScoreCount;
+                    }
+                }
+            }
+
+            $data['xScore'][] = $minTmpScore.'-'.$maxTmpScore;
+            $data['yFirstNum'][] = $firstScoreCount;
+            $data['yMaxNum'][] = $maxScoreCount;
+        }
+
+        return json_encode($data);
+    }
+
+    protected function analysisFirstResults($userFirstResults)
+    {
+        if (empty($userFirstResults)) {
+            return array();
+        }
+
+        $data = array();
+        $scores = ArrayToolkit::column($userFirstResults, 'firstScore');
+        $data['avg'] = round(array_sum($scores) / count($userFirstResults), 1);
+        $data['maxScore'] = max($scores);
+
+        $count = 0;
+        foreach ($userFirstResults as $result) {
+            if ($result['firstPassedStatus'] != 'unpassed') {
+                ++$count;
+            }
+        }
+
+        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
+
+        return $data;
+    }
+
     protected function getCheckedEssayQuestions($questions)
     {
         $essayQuestions = array();
@@ -565,6 +686,87 @@ class ManageController extends BaseController
         return $courseTasks;
     }
 
+    protected function findRelatedData($activity, $paper)
+    {
+        $relatedData = array();
+        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
+
+        $relatedData['total'] = count($userFirstResults);
+
+        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
+        $finishedResults = empty($userFirstResults['finished']) ? array() : $userFirstResults['finished'];
+
+        $relatedData['finished'] = count($finishedResults);
+        $scores = array_sum(ArrayToolkit::column($finishedResults, 'score'));
+        $avg = empty($relatedData['finished']) ? 0 : $scores / $relatedData['finished'];
+        $relatedData['avgScore'] = number_format($avg, 1);
+
+        return $relatedData;
+    }
+
+    protected function findTestpapers($tasks, $type)
+    {
+        if (empty($tasks)) {
+            return array($tasks, array());
+        }
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        if ($type == 'testpaper') {
+            $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+            $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
+            $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
+            $ids = ArrayToolkit::column($testpaperActivities, 'mediaId');
+
+            array_walk($tasks, function (&$task, $key) use ($activities, $testpaperActivities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $testpaperActivities[$activity['mediaId']]['mediaId'];
+            });
+        } else {
+            $ids = ArrayToolkit::column($activities, 'mediaId');
+            array_walk($tasks, function (&$task, $key) use ($activities) {
+                $activity = $activities[$task['activityId']];
+                $task['testId'] = $activity['mediaId'];
+            });
+        }
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($ids);
+
+        if (empty($testpapers)) {
+            return array($activities, array());
+        }
+
+        return array($tasks, $testpapers);
+    }
+
+    protected function findTestpapersStatusNum($tasks, $testpapers)
+    {
+        $resultStatusNum = array();
+        foreach ($tasks as $task) {
+            if (empty($testpapers[$task['testId']])) {
+                continue;
+            }
+
+            $resultStatusNum[$task['activityId']] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($task['testId'], $task['activityId']);
+        }
+
+        return $resultStatusNum;
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'nextCheck' => array(
+                'course' => 'course_manage_exam_next_result_check',
+                'classroom' => 'classroom_manage_exam_next_result_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
+    }
+
     /**
      * @return CourseService
      */
@@ -605,12 +807,25 @@ class ManageController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    protected function getQuestionAnalysisService()
+    {
+        return $this->createService('Question:QuestionAnalysisService');
+    }
+
     /**
      * @return TaskService
      */
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
@@ -627,13 +842,5 @@ class ManageController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ServiceKernel
-     */
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

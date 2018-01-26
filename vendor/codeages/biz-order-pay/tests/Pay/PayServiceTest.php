@@ -161,10 +161,6 @@ class PayServiceTest extends IntegrationTestCase
         $this->assertEquals(20, $userBalance['locked_amount']);
 
         $this->getPayService()->closeTradesByOrderSn($trade['order_sn']);
-        $data = array(
-            'sn' => $trade['trade_sn']
-        );
-        $this->getPayService()->notifyClosed($data);
 
         $userBalance = $this->getAccountService()->getUserBalanceByUserId($this->biz['user']['id']);
         $this->assertEquals(100, $userBalance['amount']);
@@ -453,7 +449,7 @@ class PayServiceTest extends IntegrationTestCase
 
         $mock = \Mockery::mock(WechatGateway::class);
         $mock->shouldReceive('createTrade')->andReturn($return);
-        $mock->shouldReceive('closeTrade')->andReturn();
+        $mock->shouldReceive('closeTrade')->andReturn(new CloseOrderResponseTest());
         return $mock;
     }
 
@@ -485,5 +481,16 @@ class PayServiceTest extends IntegrationTestCase
     protected function getAccountService()
     {
         return $this->biz->service('Pay:AccountService');
+    }
+}
+
+class CloseOrderResponseTest
+{
+    public function isSuccessful(){
+        return true;
+    }
+
+    public function getFailData(){
+        return '错误码：666，错误原因：系统错误';
     }
 }
