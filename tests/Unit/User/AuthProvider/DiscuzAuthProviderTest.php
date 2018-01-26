@@ -122,6 +122,92 @@ class DiscuzAuthProviderTest extends BaseTestCase
         $settingService->shouldNotHaveReceived('get');
     }
 
+    public function testCheckConnect()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+        $this->assertTrue($provider->checkConnect());
+        $settingService->shouldHaveReceived('get')->times(1);
+    }
+
+    public function testCheckPassword()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+        $this->assertTrue($provider->checkPassword(123, 'password'));
+        $settingService->shouldHaveReceived('get')->times(1);
+    }
+
+    public function testCheckLoginById()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+        $this->assertArrayEquals(
+            array(
+                'id' => 1,
+                'nickname' => 'nickname',
+                'email' => 'email@howzhi.com',
+                'createdTime' => '',
+                'createdIp' => '',
+            ),
+            $provider->checkLoginById(123, 'password')
+        );
+        $settingService->shouldHaveReceived('get')->times(1);
+    }
+
+    public function testCheckLoginByNickname()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+        $this->assertArrayEquals(
+            array(
+                'id' => 1,
+                'nickname' => 'nickname',
+                'email' => 'email@howzhi.com',
+                'createdTime' => '',
+                'createdIp' => '',
+            ),
+            $provider->checkLoginByNickname('nickname', 'password')
+        );
+        $settingService->shouldHaveReceived('get')->times(1);
+    }
+
+    public function testCheckLoginByEmail()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+        $this->assertArrayEquals(
+            array(
+                'id' => 1,
+                'nickname' => 'nickname',
+                'email' => 'email@howzhi.com',
+                'createdTime' => '',
+                'createdIp' => '',
+            ),
+            $provider->checkLoginByEmail('email', 'password')
+        );
+        $settingService->shouldHaveReceived('get')->times(1);
+    }
+
+    public function testGetAvatar()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+        $this->assertEquals(
+            'UC_API_VALUE/avatar.php?uid=123&type=virtual&size=middle',
+            $provider->getAvatar('123', 'middle')
+        );
+        $settingService->shouldHaveReceived('get')->times(1);
+    }
+
+    public function testGetProviderName()
+    {
+        $settingService = $this->mockSettingService();
+        $provider = $this->mockDiscuzClient();
+
+        $this->assertEquals('discuz', $provider->getProviderName());
+    }
+
     private function mockDiscuzClient()
     {
         $mockedDiscuzClientPath = $this->getBiz()['topxia.upload.private_directory'].
@@ -140,6 +226,7 @@ class DiscuzAuthProviderTest extends BaseTestCase
     {
         if (!defined('UC_CHARSET')) {
             define('UC_CHARSET', 'gbk');
+            define('UC_API', 'UC_API_VALUE');
         }
 
         $randConfig = $this->createRandConfig();

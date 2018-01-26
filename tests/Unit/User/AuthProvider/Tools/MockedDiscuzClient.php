@@ -66,3 +66,26 @@ function uc_user_edit($userId, $param1, $newPassword, $newEmail, $param3)
 
     return 0;
 }
+
+function uc_app_ls()
+{
+    return 'abc';
+}
+
+function uc_user_login($keyword, $password, $param1 = 100)
+{
+    if (123 == $keyword && 'password' == $password && 1 == $param1) {
+        return array(1, 'nickname', null, 'email@howzhi.com');
+    } elseif ('nickname' == $keyword && 'password' == $password && 100 == $param1) {
+        return array(1, 'nickname', null, 'email@howzhi.com');
+    } elseif ('email' == $keyword && 'password' == $password && 2 == $param1) {
+        return array(1, 'nickname', null, 'email@howzhi.com');
+    } else {
+        return array(0);
+    }
+}
+
+function uc_check_avatar($userId)
+{
+    return 123 == $userId;
+}
