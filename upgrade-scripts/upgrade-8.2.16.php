@@ -107,8 +107,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $themeDir = $this->biz['root_directory'].'/web/themes/';
 
-        BlockToolkit::init("{$themeDir}/block.json");
         BlockToolkit::init("{$themeDir}/default/block.json");
+        BlockToolkit::init("{$themeDir}/default-b/block.json");
         BlockToolkit::init("{$themeDir}/autumn/block.json");
         BlockToolkit::init("{$themeDir}/jianmo/block.json");
 
