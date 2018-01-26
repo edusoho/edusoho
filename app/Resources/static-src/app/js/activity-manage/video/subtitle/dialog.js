@@ -73,7 +73,9 @@ class SubtitleDialog {
       },
       type: 'sub',
       process: {
-        videoNo: globalId,
+        common: {
+          videoNo: globalId,
+        }
       },
       locale: document.documentElement.lang
     });

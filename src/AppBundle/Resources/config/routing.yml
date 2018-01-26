@@ -2528,6 +2528,10 @@ classroom_manage_exam_next_result_check:
   path: /classroom/{id}/manage/activity/{activityId}/exam/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultNextCheck }
 
+classroom_manage_testpaper_result_graph:
+  path: /classroom/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultGraph }
+
 classroom_manage_homework:
     path:  /classroom/{id}/manage/homework/list
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:homework }
