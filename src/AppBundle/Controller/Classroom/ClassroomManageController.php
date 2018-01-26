@@ -1087,9 +1087,32 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function resultGraphAction(Request $request, $id, $activityId)
+    {
+        $this->getClassroomService()->tryHandleClassroom($id);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || !in_array($activity['fromCourseId'], $courseIds)) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultGraph';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultGraph';
+        }
+
+        return $this->forward($controller, array(
+            'activityId' => $activityId,
+        ));
+    }
+
     public function resultAnalysisAction(Request $request, $id, $activityId)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
+        $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $activity = $this->getActivityService()->getActivity($activityId);

@@ -965,6 +965,7 @@ course.testpaper_check.first_answer: 初次答题
 course.testpaper_check.number: 人次
 course.testpaper_check.get_score: 得 %questonScore% 分
 course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
+course.testpaper_check.testpaper_analysis: 试题分析
 
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
@@ -1403,6 +1404,7 @@ course.testpaper_manage.analysis_card.course_total_person: 'Course Person:'
 course.testpaper_manage.analysis_card.classroom_total_person: 'Classroom Person:'
 course.testpaper_manage.analysis_card.join_person: 'Join Person:'
 course.testpaper_manage.analysis_card.complete_person: 'Completed Person:'
+course.testpaper_manage.analysis_card.total_score: 'Score:'
 course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
 course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
 
