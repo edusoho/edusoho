@@ -21,7 +21,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
     {
         $paperResult = $event->getSubject();
 
-        if ($paperResult['status'] != 'finished' || !in_array($paperResult['type'], array('testpaper', 'homework'))) {
+        if ('finished' != $paperResult['status'] || !in_array($paperResult['type'], array('testpaper', 'homework'))) {
             return;
         }
 
@@ -87,7 +87,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
         $questionObj = $this->getQuestionService()->getQuestionConfig($question['type']);
         $choices = $questionObj->getAnswerStructure($question);
 
-        if ($targetType == 'homework' && $question['type'] == 'essay') {
+        if ('homework' == $targetType && 'essay' == $question['type']) {
             return array();
         }
 
@@ -111,7 +111,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
 
         foreach ($userAnswers as $userAnswer) {
             $question = $questions[$userAnswer['questionId']];
-            if (!$userAnswer['answer'] || ($paperResult['type'] != 'testpaper' && $question['type'] == 'essay')) {
+            if (!$userAnswer['answer'] || ('testpaper' != $paperResult['type'] && 'essay' == $question['type'])) {
                 continue;
             }
 
@@ -154,7 +154,7 @@ class QuestionAnalysisEventSubscriber extends EventSubscriber implements EventSu
             }
 
             $fields = array('totalAnswerCount' => 1);
-            if ($userResultCount == 1) {
+            if (1 == $userResultCount) {
                 $fields['firstAnswerCount'] = 1;
             }
             $this->getQuestionAnalysisService()->waveCount($existAnalysis[$index]['id'], $fields);
