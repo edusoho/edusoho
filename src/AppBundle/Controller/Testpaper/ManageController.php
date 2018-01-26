@@ -70,7 +70,7 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
 
             $fields['courseSetId'] = $courseSet['id'];
@@ -169,11 +169,11 @@ class ManageController extends BaseController
             throw $this->createResourceNotFoundException('testpaper', $result['id']);
         }
 
-        if ($result['status'] !== 'reviewing') {
+        if ('reviewing' !== $result['status']) {
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $result['id'])));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
             $isContinue = $formData['isContinue'];
             unset($formData['isContinue']);
@@ -226,7 +226,7 @@ class ManageController extends BaseController
         }
 
         $conditions = array('testId' => $testpaper['id']);
-        if ($status !== 'all') {
+        if ('all' !== $status) {
             $conditions['status'] = $status;
         }
         $conditions['lessonId'] = $activityId;
@@ -291,7 +291,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
             $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
 
@@ -392,11 +392,11 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ($testpaper['status'] != 'draft') {
+        if ('draft' != $testpaper['status']) {
             return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
 
             if (empty($fields['questions'])) {
@@ -477,7 +477,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ($testpaper['status'] === 'closed') {
+        if ('closed' === $testpaper['status']) {
             return $this->createMessageResponse('warning', 'testpaper already closed');
         }
 
@@ -502,7 +502,7 @@ class ManageController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($activityId);
 
-        if (empty($activity) || $activity['mediaType'] != 'testpaper') {
+        if (empty($activity) || 'testpaper' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument invalid');
         }
 
@@ -534,7 +534,7 @@ class ManageController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($activityId);
 
-        if (!$activity || $activity['mediaType'] != 'testpaper') {
+        if (!$activity || 'testpaper' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument Invalid');
         }
 
@@ -612,7 +612,7 @@ class ManageController extends BaseController
 
         $count = 0;
         foreach ($userFirstResults as $result) {
-            if ($result['firstPassedStatus'] != 'unpassed') {
+            if ('unpassed' != $result['firstPassedStatus']) {
                 ++$count;
             }
         }
@@ -714,7 +714,7 @@ class ManageController extends BaseController
         $activities = $this->getActivityService()->findActivities($activityIds);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        if ($type == 'testpaper') {
+        if ('testpaper' == $type) {
             $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
             $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
             $testpaperActivities = ArrayToolkit::index($testpaperActivities, 'id');
