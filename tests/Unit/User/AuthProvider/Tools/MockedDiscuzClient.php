@@ -10,8 +10,9 @@ function uc_user_register($nickname, $password, $email)
         return 0;
     } else {
         $nicknameSeqs = explode('iscuz-nickname(', $nickname);
+        $nicknameSeq = $nicknameSeqs[1];
 
-        return explode(')', $nicknameSeqs[1])[0];
+        return explode(')', $nicknameSeq)[0];
     }
 
     throw new \RuntimeException('MockedDiscuzClient parameters error');
