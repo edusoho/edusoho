@@ -14,8 +14,8 @@ class DownloadTest extends BaseTypeTestCase
                     'functionName' => 'create',
                     'returnValue' => array(
                         'id' => 1,
-                    )
-                )
+                    ),
+                ),
             )
         );
 
@@ -40,8 +40,8 @@ class DownloadTest extends BaseTypeTestCase
                     'returnValue' => array(
                         'id' => 2,
                         'mediaCount' => 2,
-                        'fileIds' => array(1,2)
-                    )
+                        'fileIds' => array(1, 2),
+                    ),
                 ),
                 array(
                     'functionName' => 'get',
@@ -49,8 +49,8 @@ class DownloadTest extends BaseTypeTestCase
                     'returnValue' => array(
                         'id' => 1,
                         'mediaCount' => 2,
-                        'fileIds' => array(1,2)
-                    )
+                        'fileIds' => array(1, 2),
+                    ),
                 ),
             )
         );
@@ -71,8 +71,8 @@ class DownloadTest extends BaseTypeTestCase
                     'returnValue' => array(
                         'id' => 2,
                         'mediaCount' => 2,
-                        'fileIds' => array(1,2)
-                    )
+                        'fileIds' => array(1, 2),
+                    ),
                 ),
                 array(
                     'functionName' => 'get',
@@ -80,8 +80,8 @@ class DownloadTest extends BaseTypeTestCase
                     'returnValue' => array(
                         'id' => 1,
                         'mediaCount' => 2,
-                        'fileIds' => array(1,2)
-                    )
+                        'fileIds' => array(1, 2),
+                    ),
                 ),
                 array(
                     'functionName' => 'get',
@@ -89,8 +89,8 @@ class DownloadTest extends BaseTypeTestCase
                     'returnValue' => array(
                         'id' => 2,
                         'mediaCount' => 1,
-                        'fileIds' => array(1)
-                    )
+                        'fileIds' => array(1),
+                    ),
                 ),
             )
         );
@@ -110,8 +110,8 @@ class DownloadTest extends BaseTypeTestCase
                     'returnValue' => array(
                         'id' => 2,
                         'mediaCount' => 2,
-                        'fileIds' => array(1,2)
-                    )
+                        'fileIds' => array(1, 2),
+                    ),
                 ),
             )
         );
@@ -135,7 +135,7 @@ class DownloadTest extends BaseTypeTestCase
                 array(
                     'functionName' => 'delete',
                     'withParams' => array(2),
-                    'returnValue' => true
+                    'returnValue' => true,
                 ),
             )
         );
@@ -146,5 +146,58 @@ class DownloadTest extends BaseTypeTestCase
         $this->assertEquals(true, $result);
     }
 
+    public function testGet()
+    {
+        $this->mockBiz('Activity:DownloadActivityDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array(2),
+                    'returnValue' => array(
+                        'id' => 2,
+                        'mediaCount' => 1,
+                        'fileIds' => array(1),
+                    ),
+                ),
+            )
+        );
 
+        $type = $this->getActivityConfig(self::TYPE);
+        $downloadActivity = $type->get(2);
+
+        $this->assertEquals(2, $downloadActivity['id']);
+    }
+
+    public function testFind()
+    {
+        $this->mockBiz('Activity:DownloadActivityDao',
+            array(
+                array(
+                    'functionName' => 'findByIds',
+                    'withParams' => array(array(2)),
+                    'returnValue' => array(
+                        0 => array(
+                            'id' => 2,
+                            'mediaCount' => 1,
+                            'fileIds' => array(1),
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $type = $this->getActivityConfig(self::TYPE);
+        $downloadActivities = $type->find(array(2));
+        $downloadActivity = reset($downloadActivities);
+
+        $this->assertEquals(2, $downloadActivity['id']);
+    }
+
+    public function testMaterialSupported()
+    {
+        $type = $this->getActivityConfig(self::TYPE);
+        $result = $type->materialSupported();
+
+        $this->assertEquals(true, $result);
+    }
 }
