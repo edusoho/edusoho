@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\MoneyCard\Dao;
 
-use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 
 class MoneyCardDaoImplTest extends BaseTestCase
@@ -10,15 +9,18 @@ class MoneyCardDaoImplTest extends BaseTestCase
     public function testDeleteMoneyCardsByBatchId()
     {
         $card = $this->getMoneyCardDao()->create(array('cardId' => 4, 'password' => 'aas', 'deadline' => 1,  'cardStatus' => 'invalid', 'batchId' => 1));
-        $card1 = $this->getMoneyCardDao()->create(array('cardId' => 4, 'password' => 'aas', 'deadline' => 1,  'cardStatus' => 'normal', 'batchId' => 2));       
+        $card1 = $this->getMoneyCardDao()->create(array('cardId' => 4, 'password' => 'aas', 'deadline' => 1,  'cardStatus' => 'normal', 'batchId' => 2));
         $this->getMoneyCardDao()->deleteMoneyCardsByBatchId(2);
 
-        $this->assertTrue(empty($this->getMoneyCardDao()->get($card1['id'])));
-        $this->assertTrue(!empty($this->getMoneyCardDao()->get($card['id'])));
+        $result = $this->getMoneyCardDao()->get($card1['id']);
+        $this->assertTrue(empty($result));
+
+        $result = $this->getMoneyCardDao()->get($card['id']);
+        $this->assertNotTrue(empty($result));
     }
 
     public function testUpdateBatchByCardStatus()
-    { 
+    {
         $card = $this->getMoneyCardDao()->create(array('cardId' => 4, 'password' => 'aas', 'deadline' => 1,  'cardStatus' => 'invalid'));
         $card1 = $this->getMoneyCardDao()->create(array('cardId' => 4, 'password' => 'aas', 'deadline' => 1,  'cardStatus' => 'normal'));
         $this->getMoneyCardDao()->updateBatchByCardStatus(
@@ -29,7 +31,7 @@ class MoneyCardDaoImplTest extends BaseTestCase
         );
 
         $result = $this->getMoneyCardDao()->get($card['id']);
-        
+
         $this->assertEquals('normal', $result['cardStatus']);
     }
 
@@ -62,7 +64,7 @@ class MoneyCardDaoImplTest extends BaseTestCase
 
     public function testDeclares()
     {
-        $declares =  array(
+        $declares = array(
             'timestamps' => array(),
             'serializes' => array(),
             'orderbys' => array('id', 'createdTime'),
@@ -81,7 +83,7 @@ class MoneyCardDaoImplTest extends BaseTestCase
         );
 
         $result = $this->getMoneyCardDao()->declares();
-        
+
         $this->assertArrayEquals($declares, $result);
     }
 

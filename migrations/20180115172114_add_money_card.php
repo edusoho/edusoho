@@ -35,6 +35,7 @@ class AddMoneyCard extends Migration
             `token` varchar(64) NOT NULL DEFAULT '0',
             `deadline` varchar(19) CHARACTER SET latin1 NOT NULL,
             `money` INT(8) NOT NULL DEFAULT 0,
+            `batchStatus` ENUM('invalid','normal') NOT NULL DEFAULT 'normal',
             `coin` int NOT NULL DEFAULT 0,
             `userId` INT(11) NOT NULL DEFAULT 0,
             `createdTime` INT(11) NOT NULL DEFAULT 0,
@@ -52,6 +53,5 @@ class AddMoneyCard extends Migration
      */
     public function down()
     {
-
     }
 }

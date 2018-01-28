@@ -22,11 +22,11 @@ class UncertainChoice extends BaseQuestion implements TypeInterface
 
     public function judge($question, $answer)
     {
-        if (count(array_diff($question['answer'], $answer)) == 0 && count(array_diff($answer, $question['answer'])) == 0) {
+        if (0 == count(array_diff($question['answer'], $answer)) && 0 == count(array_diff($answer, $question['answer']))) {
             return array('status' => 'right', 'score' => $question['score']);
         }
 
-        if (count(array_diff($answer, $question['answer'])) == 0) {
+        if (0 == count(array_diff($answer, $question['answer']))) {
             $percentage = intval(count($answer) / count($question['answer']) * 100);
 
             return array(

@@ -176,6 +176,27 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
         );
     }
 
+    public function testExecuteWithError()
+    {
+        $job = new CourseTaskCreateSyncJob();
+        ReflectionUtils::setProperty($job, 'biz', $this->biz);
+        $job->args = array('taskId' => 110);
+        $this->mockBiz(
+            'Task:TaskService',
+            array(
+                array(
+                    'functionName' => 'getTask',
+                    'withParams' => array(110),
+                    'throwException' => new \Exception('error'),
+                ),
+            )
+        );
+        $count = $this->getLogDao()->count(array());
+        $job->execute();
+        $result = $this->getLogDao()->count(array());
+        $this->assertEquals($count + 1, $result);
+    }
+
     public function testCreateMaterials()
     {
         $material = $this->getMaterialDao()->create(
@@ -262,5 +283,13 @@ class CourseTaskCreateSyncJobTest extends BaseTestCase
     private function getActivityDao()
     {
         return $this->biz->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return LogDao
+     */
+    protected function getLogDao()
+    {
+        return $this->createDao('System:LogDao');
     }
 }
