@@ -9,7 +9,8 @@ use QiQiuYun\SDK\Exception\SDKException;
 
 class DrpService extends BaseService
 {
-    protected $baseUri = 'http://test.fx.edusoho.cn';
+    protected $host = 'test.fx.edusoho.cn';
+
     private $loginPath = '/merchant/login';
     private $postDataPath = '/merchant_data/actions/report';
 
@@ -35,12 +36,13 @@ class DrpService extends BaseService
      */
     public function generateLoginForm($user, $site)
     {
-        $jsonStr = SignUtil::serialize(array('user' => $user, 'site' => $site));
-        $jsonStr = SignUtil::cut($jsonStr);
-        $sign = SignUtil::sign($this->auth, $jsonStr);
-        $action = $this->baseUri.$this->loginPath;
+        ksort($user);
+        ksort($site);
 
-        return MarketingHelper::generateLoginForm($action, $user, $site, $sign);
+        $signingText = json_encode(array('site' => $site, 'user' => $user));
+        $signature = $this->auth->makeRequestAuthorization($this->loginPath, $signingText);
+        $action = $this->getRequestUri($this->loginPath);
+        return MarketingHelper::generateLoginForm($action, $user, $site, $signature);
     }
 
     /**
@@ -60,7 +62,7 @@ class DrpService extends BaseService
     {
         $token = explode(':', $token);
         if (7 !== count($token)) {
-            throw new DrpException('非法请求:token格式不合法');
+            throw new SDKException('非法请求:token格式不合法');
         }
 
         list($merchantId, $agencyId, $couponPrice, $couponExpiryDay, $time, $nonce, $expectSign) = $token;
@@ -107,40 +109,12 @@ class DrpService extends BaseService
      *
      * @throws DrpException 上报数据异常
      */
-    public function postData($type, $data)
+    public function postData($type, array $data)
     {
-        if (empty($data) || empty($type)) {
+        if (empty($type) || empty($data)) {
             throw new SDKException("Required 'data' and 'type'");
         }
-        if (!is_array($data)) {
-            throw new SDKException("'data' must be instanceof Array");
-        }
 
-        return $this->doPost($type, $data);
-    }
-
-    private function doPost($type, $data)
-    {
-        $jsonStr = SignUtil::serialize(array('data' => $data, 'type' => $type));
-        $jsonStr = SignUtil::cut($jsonStr);
-        $sign = SignUtil::sign($this->auth, $jsonStr);
-
-        $response = $this->client->request(
-            'POST',
-            $this->postDataPath,
-            array(
-                'json' => array(
-                    'data' => $data,
-                    'type' => $type,
-                    'sign' => $sign,
-                ),
-            )
-        );
-        $result = json_decode($response->getBody(), true);
-        if (isset($result['error'])) {
-            throw new DrpException($result['error']['message'], $result['error']['code']);
-        }
-
-        return $result;
+        return $this->request('POST', $this->postDataPath, array('type' => $type, 'data' => $data));
     }
 }

@@ -7,7 +7,7 @@ use QiQiuYun\SDK\Exception\SDKException;
 
 class XAPIService extends BaseService
 {
-    protected $baseUri = 'http://xapi.qiqiuyun.net';
+    protected $host = 'xapi.qiqiuyun.net';
 
     protected $defaultLang = 'zh-CN';
 
@@ -572,26 +572,7 @@ class XAPIService extends BaseService
      */
     public function pushStatement($statement)
     {
-        $statement['context'] = array(
-            'extensions' => array(
-                'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
-            ),
-        );
-
-        $rawResponse = $this->client->request('POST', '/statements', array(
-            'json' => array($statement),
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature(),
-            ),
-        ));
-
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-
-        return $statement;
+        return $this->pushStatements(array($statement));
     }
 
     /**
@@ -606,28 +587,21 @@ class XAPIService extends BaseService
      */
     public function pushStatements($statements)
     {
+        $school = array(
+            'id' => $this->auth->getAccessKey(),
+            'name' => $this->options['school_name'],
+        );
         foreach ($statements as &$statement) {
             $statement['context'] = array(
                 'extensions' => array(
-                    'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
+                    'http://xapi.edusoho.com/extensions/school' => $school,
                 ),
             );
         }
 
-        $rawResponse = $this->client->request('POST', '/statements', array(
-            'json' => $statements,
-            'headers' => array(
-                'Authorization' => 'Signature '.$this->makeSignature(),
-            ),
+        return $this->request('POST', '/statements', $statements, array(
+            'Authorization' => $this->auth->makeXAPIRequestAuthorization(),
         ));
-
-        $response = json_decode($rawResponse->getBody(), true);
-
-        if (isset($response['error'])) {
-            throw new ResponseException($rawResponse);
-        }
-
-        return $response;
     }
 
     /**
@@ -757,15 +731,6 @@ class XAPIService extends BaseService
         return $id;
     }
 
-    protected function makeSignature()
-    {
-        $deadline = strtotime(date('Y-m-d H:0:0', strtotime('+2 hours')));
-        $signingText = $this->auth->getAccessKey()."\n".$deadline;
-        $signingText = $this->auth->getAccessKey().':'.$deadline.':'.$this->auth->sign($signingText);
-
-        return $signingText;
-    }
-
     protected function getTime($timestamp, $format = 'iso8601')
     {
         switch ($format) {
@@ -824,5 +789,15 @@ class XAPIService extends BaseService
     protected function getIsoTime($timestamp = null)
     {
         return empty($timestamp) ? date('c') : date('c', $timestamp);
+    }
+
+    protected function filterOptions(array $options = array())
+    {
+        $options = parent::filterOptions($options);
+        if (empty($options['school_name'])) {
+            throw new SDKException('Option `school_name` is missing.');
+        }
+
+        return $options;
     }
 }
