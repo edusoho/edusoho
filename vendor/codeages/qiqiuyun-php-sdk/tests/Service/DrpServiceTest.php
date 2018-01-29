@@ -3,6 +3,7 @@
 namespace QiQiuYun\SDK\Tests\Service;
 
 use QiQiuYun\SDK\Tests\BaseTestCase;
+use QiQiuYun\SDK\Service\DrpService;
 
 class DrpServiceTest extends BaseTestCase
 {
@@ -12,5 +13,28 @@ class DrpServiceTest extends BaseTestCase
 
     public function testParseRegisterToken_normal()
     {
+        $data = array(
+            'agency_id' => '120', 
+            'merchant_id' => '110', 
+            'coupon_price' => '100', 
+            'coupon_expiry_day' => '5');
+        $nonce = 'abcedf';
+        $time = time();
+        ksort($data);
+        $dataStr = json_encode($data);
+        $signingText = implode('\n', array($nonce, $time, $dataStr));
+        $sign =  $this->auth->makeSignature($signingText);
+
+        $token = "{$data['merchant_id']}:{$data['agency_id']}:{$data['coupon_price']}:{$data['coupon_expiry_day']}:{$time}:{$nonce}:{$sign}";
+        $actualData = $this->getDrpService()->parseRegisterToken($token);
+
+        $this->assertEquals($data['coupon_price'],$actualData['coupon_price']);
+        $this->assertEquals($data['coupon_expiry_day'], $actualData['coupon_expiry_day']);
+        $this->assertEquals($time, $actualData['time']);
+        $this->assertEquals($nonce, $actualData['nonce']);
+    }
+
+    private function getDrpService(){
+        return new DrpService($this->auth);
     }
 }

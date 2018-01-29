@@ -4,7 +4,6 @@ namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Util\SignUtil;
 use QiQiuYun\SDK\Helper\MarketingHelper;
-use QiQiuYun\SDK\Exception\DrpException;
 use QiQiuYun\SDK\Exception\SDKException;
 
 class DrpService extends BaseService
@@ -56,7 +55,7 @@ class DrpService extends BaseService
      *               - time 链接生成时间
      *               - nonce 参与签名计算的随机字符串
      *
-     * @throws DrpException 签名不通过
+     * @throws SDKException 签名不通过
      */
     public function parseRegisterToken($token)
     {
@@ -64,14 +63,16 @@ class DrpService extends BaseService
         if (7 !== count($token)) {
             throw new SDKException('非法请求:token格式不合法');
         }
-
         list($merchantId, $agencyId, $couponPrice, $couponExpiryDay, $time, $nonce, $expectSign) = $token;
 
-        $json = SignUtil::serialize(array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay));
-        $signText = implode('\n', array($time, $nonce, $json));
-        $actualSign = $this->auth->sign($signText);
+        $data = array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay);
+        ksort($data);
+        $dataStr = json_encode($data);
+        $signingText = implode('\n', array($nonce, $time, $dataStr));
+
+        $actualSign = $this->auth->makeSignature($signingText);
         if ($expectSign != $actualSign) {
-            throw new DrpException('非法请求:sign值不一致');
+            throw new SDKException('非法请求:sign值不一致');
         }
 
         return array('coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay, 'time' => $time, 'nonce' => $nonce);
