@@ -41,7 +41,7 @@ class DistributorSyncJob extends AbstractJob
                     $sendedData[] = $data['data'];
                 }
 
-                $resultJson = $drpService->postData($sendedData, $service->getSendType());
+                $resultJson = $drpService->postData($service->getSendType(), $sendedData);
 
                 if ($resultJson['success']) {
                     $status = DistributorJobStatus::FINISHED;
