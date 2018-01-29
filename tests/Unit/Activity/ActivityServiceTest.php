@@ -7,6 +7,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ReflectionUtils;
 
 class ActivityServiceTest extends BaseTestCase
 {
@@ -571,6 +572,31 @@ class ActivityServiceTest extends BaseTestCase
         $results = $this->getActivityService()->fetchMedias('text', array(array('mediaId' => 1)));
 
         $this->assertArrayHasKey('ext', $results[0]);
+    }
+
+    public function testBuildMaterial()
+    {
+        $material = array(
+            'id' => 1,
+            'name' => 'material',
+            'summary' => 'summary',
+            'link' => 'www.edusoho.com',
+        );
+        $activity = array(
+            'fromCourseId' => 2,
+            'fromCourseSetId' => 3,
+            'id' => 4,
+            'mediaType' => 'video',
+        );
+        $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'buildMaterial', array($material, $activity));
+        $this->assertEquals($result['fileId'], 1);
+        $this->assertEquals($result['courseId'], 2);
+        $this->assertEquals($result['courseSetId'], 3);
+        $this->assertEquals($result['lessonId'], 4);
+        $this->assertEquals($result['title'], 'material');
+        $this->assertEquals($result['description'], 'summary');
+        $this->assertEquals($result['source'], 'courseactivity');
+        $this->assertEquals($result['link'], 'www.edusoho.com');
     }
 
     /**
