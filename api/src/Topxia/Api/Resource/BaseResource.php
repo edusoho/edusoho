@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use AppBundle\Util\CdnUrl;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
@@ -193,13 +194,20 @@ abstract class BaseResource
             return $text;
         }
         foreach ($matches[1] as $url) {
-            $text = str_replace($url, $this->getFileUrl($url), $text);
+            $text = str_replace($url, $this->getFileUrl($url, '', 'content'), $text);
         }
 
         return $text;
     }
 
-    public function getFileUrl($path, $defaultKey = '')
+    /**
+     * @param $path
+     * @param string $defaultKey
+     * @param string $cdnType
+     *
+     * @return mixed|string
+     */
+    public function getFileUrl($path, $defaultKey = '', $cdnType = 'default')
     {
         if (empty($path)) {
             if (empty($defaultKey)) {
@@ -210,7 +218,7 @@ abstract class BaseResource
             if (('course.png' == $defaultKey && !empty($defaultSetting['defaultCoursePicture'])) || 'avatar.png' == $defaultKey && !empty($defaultSetting['defaultAvatar']) && empty($defaultSetting[$defaultKey])) {
                 $path = $defaultSetting[$defaultKey];
             } else {
-                return $this->getHttpHost().'/assets/img/default/'.$defaultKey;
+                return $this->getBaseUrl($cdnType).'/assets/img/default/'.$defaultKey;
             }
         }
 
@@ -224,7 +232,7 @@ abstract class BaseResource
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
         $files = 0 == strpos($path, '/') ? '/files' : '/files/';
-        $path = $this->getHttpHost().$files."{$path}";
+        $path = $this->getBaseUrl($cdnType).$files."{$path}";
 
         return $path;
     }
@@ -234,7 +242,7 @@ abstract class BaseResource
         if (empty($path)) {
             return '';
         }
-        $path = $this->getHttpHost()."/assets/{$path}";
+        $path = $this->getBaseUrl()."/assets/{$path}";
 
         return $path;
     }
@@ -254,14 +262,21 @@ abstract class BaseResource
         return 'http';
     }
 
-    protected function getCdn()
+    protected function getCdn($type = 'default')
     {
-        $cdn = $this->getSettingService()->get('cdn');
-        if (!empty($cdn['enabled'])) {
-            return $this->getSchema().$cdn['url'];
+        $cdn = new CdnUrl();
+
+        return $cdn->get($type);
+    }
+
+    protected function getBaseUrl($type = 'default')
+    {
+        $cdnUrl = $this->getCdn($type);
+        if (!empty($cdnUrl)) {
+            return $this->getSchema().':'.$cdnUrl;
         }
 
-        return false;
+        return $this->getHttpHost();
     }
 
     protected function generateUrl($route, $parameters = array())
