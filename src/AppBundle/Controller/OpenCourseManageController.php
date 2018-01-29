@@ -174,7 +174,7 @@ class OpenCourseManageController extends BaseController
             'open-course-manage/teachers.html.twig',
             array(
                 'course' => $course,
-                'teacherIds' => $teacherIds
+                'teacherIds' => $teacherIds,
             )
         );
     }
