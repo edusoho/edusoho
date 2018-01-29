@@ -334,7 +334,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('bazingajstranslation', 'framework', 'topxiaadmin', 'topxiaweb');
+        $needs = array('translations', 'framework', 'topxiaadmin', 'topxiaweb');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {
