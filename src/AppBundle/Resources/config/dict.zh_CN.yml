@@ -265,7 +265,9 @@ userType:
     qq: QQ登录
     weixin: 微信登录
     marketing: 微营销
-    distributor: 分销
+
+# 临时隐藏 distributor
+#    distributor: 分销
 
 userKeyWordTypes:
     nickname: 用户名
