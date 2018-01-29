@@ -72,15 +72,25 @@ class BatchCreate {
   }
 
   getUploadProcess() {
-    let uploadProcess = $('.js-upload-params').get().reduce((prams, dom) => {
+    let video = $('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
     }, {});
 
-    if($('[name=support_mobile]').length > 0){
-      uploadProcess.supportMobile = $('[name=support_mobile]').val();
+
+    let uploadProcess = {
+      video,
+      document: {
+        type: 'html',
+      },
+    };
+
+    if ($('[name=support_mobile]').length > 0) {
+      uploadProcess.common = {
+        supportMobile: $('[name=support_mobile]').val(),
+      };
     }
-    console.log(uploadProcess);
+
     return uploadProcess;
   }
 

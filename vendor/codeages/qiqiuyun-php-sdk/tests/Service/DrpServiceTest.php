@@ -33,7 +33,7 @@ class DrpServiceTest extends BaseTestCase
         for ($i = 0; $i < 100; ++$i) {
             array_push($data, array('id' => $i, 'b' => $i));
         }
-        $result = $this->drpService->postData($data, 'user');
+        $result = $this->drpService->postData('user', $data);
 
         $this->assertEquals('POST', $mockedClient->getMethod());
         $sign = $mockedClient->getData()['json']['sign'];

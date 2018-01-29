@@ -71,11 +71,6 @@ class MarketingController extends BaseController
         return $client;
     }
 
-    public function canOpenMarketing(Request $request)
-    {
-        return true;
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

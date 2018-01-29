@@ -5,6 +5,7 @@ namespace QiQiuYun\SDK\Tests;
 use PHPUnit\Framework\TestCase;
 use QiQiuYun\SDK\Service\ResourceService;
 use QiQiuYun\SDK;
+use QiQiuYun\SDK\TokenGenerator\PublicTokenGenerator;
 
 class ResourceServiceTest extends TestCase
 {
@@ -56,6 +57,19 @@ class ResourceServiceTest extends TestCase
         $meta = $service->getPlayMeta('test_video_resource_no', 3600);
 
         $this->assertEquals('video', $meta['player']);
+    }
+
+    public function testCreateServiceWithTokenGenerator()
+    {
+        $tokenGenerator = new PublicTokenGenerator('test_access_key', 'test_secret_key');
+
+        $service = new ResourceService([
+            'token_generator' => $tokenGenerator,
+        ]);
+
+        $this->assertNotNull($service);
+
+        
     }
 
     /**
