@@ -5,6 +5,7 @@ namespace QiQiuYun\SDK;
 use Psr\Log\LoggerInterface;
 use QiQiuYun\SDK\HttpClient\ClientInterface;
 use QiQiuYun\SDK\Exception\SDKException;
+use QiQiuYun\SDK\HttpClient\Client;
 
 class QiQiuYunSDK
 {

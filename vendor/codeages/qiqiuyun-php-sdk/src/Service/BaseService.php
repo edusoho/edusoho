@@ -106,7 +106,7 @@ abstract class BaseService
 
         $options['headers'] = $headers;
 
-        $response = $this->client->request($method, $this->getRequestUri($uri), $options);
+        $response = $this->createClient()->request($method, $this->getRequestUri($uri), $options);
 
         return $this->extractResultFromResponse($response);
     }

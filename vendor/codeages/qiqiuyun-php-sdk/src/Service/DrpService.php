@@ -35,10 +35,9 @@ class DrpService extends BaseService
      */
     public function generateLoginForm($user, $site)
     {
-        ksort($user);
-        ksort($site);
-
-        $signingText = json_encode(array('site' => $site, 'user' => $user));
+        $data = array('site' => $site, 'user' => $user);
+        ksort($data);
+        $signingText = json_encode($data);
         $signature = $this->auth->makeRequestAuthorization($this->loginPath, $signingText);
         $action = $this->getRequestUri($this->loginPath);
         return MarketingHelper::generateLoginForm($action, $user, $site, $signature);
@@ -115,7 +114,9 @@ class DrpService extends BaseService
         if (empty($type) || empty($data)) {
             throw new SDKException("Required 'data' and 'type'");
         }
+        $data = array('type' => $type, 'data' => $data);
+        ksort($data);
 
-        return $this->request('POST', $this->postDataPath, array('type' => $type, 'data' => $data));
+        return $this->request('POST', $this->postDataPath, $data);
     }
 }
