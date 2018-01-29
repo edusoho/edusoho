@@ -77,7 +77,7 @@ class InitWebsiteCommand extends BaseCommand
                 'site' => array('name' => $siteName),
             );
         }
-        
+
         $this->initSetting($setting);
         $this->logger('网校设置授权成功', $output);
 
@@ -201,6 +201,7 @@ class InitWebsiteCommand extends BaseCommand
                 $sql = file_get_contents($file);
                 $result = $db->exec($sql);
             }
+
             return '创建演示数据成功';
         } else {
             return '无演示数据脚本文件';
