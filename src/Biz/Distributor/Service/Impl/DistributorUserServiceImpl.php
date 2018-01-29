@@ -124,7 +124,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         $settings = $this->getSettingService()->get('storage', array());
         $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
 
-        return $auth->sign($json);
+        return $auth->makeSignature($json);
     }
 
     private function validateExistedToken($token)

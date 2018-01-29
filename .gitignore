@@ -57,3 +57,4 @@ deployment-config.json
 .webpack-watch.log
 /web/MP_*
 yarn-error.log
+vendor/codeages/qiqiuyun-php-sdk/*
