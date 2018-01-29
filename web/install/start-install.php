@@ -175,26 +175,18 @@ function install_step3($init_data = 0)
         $biz['user.register.email'] = new \Biz\User\Register\Impl\EmailRegistDecoderImpl($biz);
         try {
             if (!empty($init_data)) {
-                // $biz['db']->exec('delete from `user` where id=1;');
-                // $biz['db']->exec('delete from `user_profile` where id=1;');
                 $biz['db']->exec('update user set roles ="|ROLE_USER|ROLE_TEACHER|" where id = 1');
             }
             $admin = $initializer->initAdminUser($_POST);
-            /*if (empty($init_data)) {
-                $initializer->init();
-                _init_setting($admin);
-            } else {*/
-                $service = ServiceKernel::instance()->createService('System:SettingService');
-                $settings = $service->get('storage', array());
-                if (!empty($settings['cloud_key_applied'])) {
-                    unset($settings['cloud_access_key']);
-                    unset($settings['cloud_secret_key']);
-                    unset($settings['cloud_key_applied']);
-                    $service->set('storage', $settings);
-                }
-                /*$biz['db']->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
-                $biz['db']->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");*/
-            //}
+
+            $service = ServiceKernel::instance()->createService('System:SettingService');
+            $settings = $service->get('storage', array());
+            if (!empty($settings['cloud_key_applied'])) {
+                unset($settings['cloud_access_key']);
+                unset($settings['cloud_secret_key']);
+                unset($settings['cloud_key_applied']);
+                $service->set('storage', $settings);
+            }
 
             $initializer->initFolders();
             $initializer->initLockFile();
