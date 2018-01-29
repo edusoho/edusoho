@@ -599,6 +599,37 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertEquals($result['link'], 'www.edusoho.com');
     }
 
+    public function testDiffMaterials()
+    {
+        $arr1 = array(
+            array(
+                'fileId' => 0,
+                'link' => 'www.edusoho.com0',
+            ),
+            array(
+                'fileId' => 1,
+                'link' => 'www.edusoho.com1',
+            ),
+        );
+        $arr2 = array();
+        $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'diffMaterials', array($arr1, $arr2));
+        $this->assertEquals($result[0]['link'], 'www.edusoho.com0');
+
+        $arr2 = array(
+            array(
+                'fileId' => 0,
+                'link' => 'www.edusoho.com0',
+            ),
+            array(
+                'fileId' => 2,
+                'link' => 'www.edusoho.com1',
+            ),
+        );
+        $result = ReflectionUtils::invokeMethod($this->getActivityService(), 'diffMaterials', array($arr1, $arr2));
+        $this->assertEquals($result[0]['fileId'], 1);
+        $this->assertEquals($result[0]['link'], 'www.edusoho.com1');
+    }
+
     /**
      * @return ActivityService
      */
