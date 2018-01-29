@@ -96,19 +96,20 @@
   &:after {
     position: absolute;
     content: '';
-    top: -32px;
-    right: -32px;
-    width: 134px;
-    height: 134px;
+    top: 0;
+    right: -80px;
+    width: 158px;
+    height: 158px;
     z-index: -1;
     background: url("@{img-src}testpaper/icon_testpaper.png") no-repeat;
-    background-position: 0 -10px;
+    background-image: -webkit-image-set(url("@{img-src}testpaper/icon_testpaper.png") 1x,url("@{img-src}testpaper/icon_testpaper@2x.png") 2x);
   }
 }
 
 .homework-card-panel {
   &:after {
     background: url("@{img-src}testpaper/icon_homework.png") no-repeat;
+    background-image: -webkit-image-set(url("@{img-src}testpaper/icon_homework.png") 1x,url("@{img-src}testpaper/icon_homework@2x.png") 2x);
   }
 }
 

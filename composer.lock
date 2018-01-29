@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad4701aa0f225e79d8742b88990b23e7",
+    "content-hash": "5184abf4815a4bf1d411e4c65ed72a8e",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -345,16 +345,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.13",
+            "version": "v0.1.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "373e2f38b6e6754c73bf6a7c74577b626c0cd43f"
+                "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/373e2f38b6e6754c73bf6a7c74577b626c0cd43f",
-                "reference": "373e2f38b6e6754c73bf6a7c74577b626c0cd43f",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
+                "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-01-23T02:43:24+00:00"
+            "time": "2018-01-25T02:38:55+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -4383,7 +4383,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/doctrine/instantiator/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda.zip",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "shasum": ""
             },
