@@ -174,9 +174,10 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             'service' => array(
                 'drp' => array(
                     'host' => $developerSetting['distributor_server'],
-                )
-            )
+                ),
+            ),
         ));
+
         return $sdk;
     }
 
