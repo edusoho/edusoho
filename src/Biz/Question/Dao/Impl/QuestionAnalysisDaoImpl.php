@@ -9,27 +9,6 @@ class QuestionAnalysisDaoImpl extends AdvancedDaoImpl implements QuestionAnalysi
 {
     protected $table = 'question_analysis';
 
-    public function getAnalysisItem($targetId, $targetType, $questionId, $choiceIndex)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetId = ? AND targetType = ? AND questionId = ? AND choiceIndex = ?";
-
-        return $this->db()->fetchAssoc($sql, array($targetId, $targetType, $questionId, $choiceIndex));
-    }
-
-    public function findByTargetIdAndTargetType($targetId, $targetType)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetId = ? AND targetType = ?";
-
-        return $this->db()->fetchAll($sql, array($targetId, $targetType));
-    }
-
-    public function findByTargetIdAndTargetTypeAndQuestionId($targetId, $targetType, $questionId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetId = ? AND targetType = ? AND questionId = ?";
-
-        return $this->db()->fetchAll($sql, array($targetId, $targetType, $questionId));
-    }
-
     public function declares()
     {
         $declares = array(

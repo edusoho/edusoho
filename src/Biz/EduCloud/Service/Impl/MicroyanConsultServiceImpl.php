@@ -9,18 +9,16 @@ use Biz\System\Service\SettingService;
 
 class MicroyanConsultServiceImpl extends BaseService implements ConsultService
 {
+    private $cloudApi = null;
+
     public function getAccount()
     {
-        $api = CloudAPIFactory::create('root');
-
-        return $api->post('/robot/login_url');
+        return $this->createCloudApi()->post('/robot/login_url');
     }
 
     public function getJsResource()
     {
-        $api = CloudAPIFactory::create('root');
-
-        return $api->post('/robot/install');
+        return $this->createCloudApi()->post('/robot/install');
     }
 
     public function buildCloudConsult($account, $jsResource)
@@ -47,9 +45,26 @@ class MicroyanConsultServiceImpl extends BaseService implements ConsultService
             $cloudConsult['cloud_consult_js'] = $jsResource['install'];
         }
 
-        $cloudConsult = array_merge($defaultSetting, $cloudConsult);
+        return array_merge($defaultSetting, $cloudConsult);
+    }
 
-        return $cloudConsult;
+    /**
+     * only for mock.
+     *
+     * @param [type] $cloudApi [description]
+     */
+    public function setCloudApi($cloudApi)
+    {
+        return $this->cloudApi = $cloudApi;
+    }
+
+    protected function createCloudApi()
+    {
+        if (empty($this->cloudApi)) {
+            $this->cloudApi = CloudAPIFactory::create('root');
+        }
+
+        return $this->cloudApi;
     }
 
     /**
