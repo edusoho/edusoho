@@ -184,3 +184,15 @@
     </ul>
   </div>
 {% endmacro %}
+
+{% macro cd_select(options, checkedOption, name, className = '', id = '') %}
+  <div class="cd-select {{ className }}" id="{{ id }}">
+    <input type="hidden" value="{{ checkedOption }}" name="{{name}}" />
+    <div class="select-value">{{ options[checkedOption]|default('') }}</div>
+    <ul class="select-options">
+      {% for optionKey, option in options %}
+        <li class="{% if optionKey == checkedOption %}checked{% endif %}" data-value="{{optionKey}}">{{ option }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endmacro %}
