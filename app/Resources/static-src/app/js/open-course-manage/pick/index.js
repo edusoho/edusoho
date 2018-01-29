@@ -3,9 +3,10 @@ import notify from 'common/notify';
 
 let ids = [];
 let $searchForm = $('.form-search');
+let $sure = $('#sure');
 
-$('#sure').on('click', function () {
-  $('#sure').button('submiting').addClass('disabled');
+$sure.on('click', function () {
+  $sure.button('submiting').addClass('disabled');
 
   $.ajax({
     type: "post",
@@ -14,7 +15,8 @@ $('#sure').on('click', function () {
     async: false,
     success: function (response) {
       if (!response['result']) {
-	      notify('danger',response['message']);
+        $sure.removeClass('disabled');
+        notify('danger',response['message']);
       } else {
         $('.modal').modal('hide');
         window.location.reload();

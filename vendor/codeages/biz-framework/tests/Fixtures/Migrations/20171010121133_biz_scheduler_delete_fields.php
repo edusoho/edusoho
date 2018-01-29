@@ -13,11 +13,11 @@ class BizSchedulerDeleteFields extends Migration
         $connection = $biz['db'];
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted')) {
-            $connection->exec("ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted`;");
+            $connection->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted`;');
         }
 
         if ($this->isFieldExist('biz_scheduler_job', 'deleted_time')) {
-            $connection->exec("ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;");
+            $connection->exec('ALTER TABLE `biz_scheduler_job` DROP COLUMN `deleted_time`;');
         }
     }
 

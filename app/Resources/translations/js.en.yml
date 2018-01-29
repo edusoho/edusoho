@@ -632,6 +632,14 @@ testpaper.widget.save_success_hint: Saved
 
 testpaper_manage.save_error_hint:  Operation failed
 testpaper_manage.save_success_hint:  Operation succeeded
+testpaper_manage.result_graph.score_distribution: Score Distribution
+testpaper_manage.result_graph.person_num: Number
+testpaper_manage.result_graph.first_score_num: Number of first score
+testpaper_manage.result_graph.max_score_num: Number of max score
+
+homework_manage.result_graph.status_distribution: Result Distribution
+homework_manage.result_graph.first_status_num: Number of first result
+homework_manage.result_graph.max_status_num: Number of max result
 
 intro.confirm_hint: I know
 
@@ -846,3 +854,8 @@ admin.user.statistics.data.time: 时长
 course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
 
 admin.data.lab.setting.error: 发生异常了，请重试！
+
+## 资讯管理
+admin.article.save.success: 保存文章成功！
+admin.article.choose_column_tip: 请选择所属栏目
+admin.article_setting.choose_category: 'Choose column'

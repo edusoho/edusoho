@@ -401,6 +401,7 @@ order.refund_feedback: feedback
 order.refund.id: Refund id
 order.created_time: 'Create time'
 order.pay_time: 'Payment time'
+order.closed_time: 'Closed time'
 order.status: 'Order status'
 order.deduct: Order deduct
 order.item_type: Order type
@@ -948,10 +949,24 @@ course.members_manage.join_records.date: 加入日
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
-course.testpaper_check.start_date: 'Start date'
+course.testpaper_check.start_date: 'Start date:'
 course.testpaper_check.status.check: Checked
 course.testpaper_check.status.not_check: 'UnCheck'
 course.testpaper_check.status.not_submit: 'Uncommited'
+course.testpaper_check.optional_task_title: Optional Task:%title%
+course.testpaper_check.testpaper_delete: Exam was deleted
+course.testpaper_check.graph_avg_score: Average Score:%avgScore%
+course.testpaper_check.graph_max_score: Max Score:%maxScore% 分
+course.testpaper_check.graph_passed_percent: Percent Of Pass:%percent%%
+course.testpaper_check.btn_score_distribution: Score Distribution
+course.testpaper_check.btn_question_distribution: Question Distribution
+course.testpaper_check.btn_check: Check
+course.testpaper_check.first_answer: 初次答题
+course.testpaper_check.number: 人次
+course.testpaper_check.get_score: 得 %questonScore% 分
+course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
+course.testpaper_check.testpaper_analysis: 试题分析
+
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
 course.assignment_check.no_permission_tips: 'You are not teacher of this course and can not review the testpaper.'
@@ -1385,6 +1400,14 @@ course.testpaper_manage.question.replace_modal.empty: 'There is no question, ple
 course.testpaper_manage.question.replace_modal.create_btn: 'Create question'
 course.testpaper_manage.question.replace_modal.select_all_btn: 'Select All'
 course.testpaper_manage.question.replace_modal.select_btn: Select
+course.testpaper_manage.analysis_card.course_total_person: 'Course Person:'
+course.testpaper_manage.analysis_card.classroom_total_person: 'Classroom Person:'
+course.testpaper_manage.analysis_card.join_person: 'Join Person:'
+course.testpaper_manage.analysis_card.complete_person: 'Completed Person:'
+course.testpaper_manage.analysis_card.total_score: 'Score:'
+course.testpaper_manage.analysis_card.avg_score: 'Avg Score:'
+course.testpaper_manage.analysis_card.avg_score_tip: Figure up first submited score
+
 course.course_files: 'Files'
 course.course_files.content_title: 'Files'
 course.course_files.create_btn: 'Add'
@@ -2147,6 +2170,7 @@ form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
+form.btn.continue: Continue
 
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
@@ -5865,7 +5889,6 @@ admin.article_setting.category.publish: Enable
 admin.article_setting.category.publish.tips: 'Turn on when the content is ready'
 admin.article_setting.category.edit: 'Edit Column'
 admin.article_setting.category.create: 'Add column'
-admin.article_setting.choose_category: 'Choose column'
 admin.article_setting.tag: 'TAG tag'
 admin.article_setting.content: Content
 admin.article_setting.property: 'Article property'

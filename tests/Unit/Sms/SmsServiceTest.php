@@ -60,6 +60,61 @@ class SmsServiceTest extends BaseTestCase
 
         $smsLastTime = 0;
         $result = $this->getSmsService()->sendVerifySms('sms_bind', $toMobile, $smsLastTime);
+        $this->assertEquals($toMobile, $result['to']);
+    }
+
+    public function testUserPayVerifySms()
+    {
+        $smsSetting = $this->setSmsSetting();
+        $smsSetting['sms_user_pay'] = 'on';
+        $this->getSettingService()->set('cloud_sms', $smsSetting);
+
+        $toMobile = '15869165217';
+        $currentUser = $this->getCurrentUser();
+        $currentUser['verifiedMobile'] = $toMobile;
+        $smsLastTime = 0;
+        $this->createApiMock();
+        $result = $this->getSmsService()->sendVerifySms('sms_user_pay', $toMobile, $smsLastTime);
+        $this->assertEquals($toMobile, $result['to']);
+    }
+
+    public function testForgetPasswordVerifySms()
+    {
+        $smsSetting = $this->setSmsSetting();
+        $smsSetting['sms_forget_password'] = 'on';
+        $this->getSettingService()->set('cloud_sms', $smsSetting);
+
+        $toMobile = '15869165217';
+        $this->createUser('user1', $toMobile);
+
+        $smsLastTime = 0;
+        $this->createApiMock();
+        $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $toMobile, $smsLastTime);
+        $this->assertEquals($toMobile, $result['to']);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
+     */
+    public function testSendException()
+    {
+        $this->createUser('user1', '');
+        $this->getSmsService()->sendVerifySms('sms_forget_password', '18435180000', 0);
+    }
+
+    public function testSendError()
+    {
+        $smsSetting = $this->setSmsSetting();
+        $smsSetting['sms_user_pay'] = 'on';
+        $this->getSettingService()->set('cloud_sms', $smsSetting);
+
+        $toMobile = '15869165217';
+        $currentUser = $this->getCurrentUser();
+        $currentUser['verifiedMobile'] = $toMobile;
+        $smsLastTime = 0;
+        $this->createApiMock(array('error' => '测试发送失败'));
+        $result = $this->getSmsService()->sendVerifySms('sms_user_pay', $toMobile, $smsLastTime);
+        $this->assertEquals('发送失败, 测试发送失败', $result['error']);
     }
 
     public function testCheckVerifySms()
@@ -74,6 +129,28 @@ class SmsServiceTest extends BaseTestCase
         $this->assertTrue($result['success']);
     }
 
+    public function testCheckVerifySmsWithError()
+    {
+        $actualMobile = '15869165217';
+        $expectedMobile = '15869165217';
+        $actualSmsCode = '';
+        $expectedSmsCode = '';
+
+        $result = $this->getSmsService()->checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode);
+        $this->assertEquals('验证码错误', $result['message']);
+
+        $actualSmsCode = 's2b5s1';
+        $expectedSmsCode = 's2b5s2';
+
+        $result = $this->getSmsService()->checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode);
+        $this->assertEquals('验证码错误', $result['message']);
+
+        $actualMobile = '15869165217';
+        $expectedMobile = '15869165212';
+        $result = $this->getSmsService()->checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode);
+        $this->assertEquals('验证码和手机号码不匹配', $result['message']);
+    }
+
     protected function createUser($user, $phone)
     {
         $userInfo = array();
@@ -86,11 +163,12 @@ class SmsServiceTest extends BaseTestCase
         return $this->getUserService()->register($userInfo);
     }
 
-    protected function createApiMock()
+    protected function createApiMock($return = null)
     {
+        $return = isset($return) ? $return : array('status' => 'ok');
         $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array('status' => 'ok'));
+        $mockObject->shouldReceive('post')->times(1)->andReturn($return);
         $this->getSmsService()->setCloudeApi($mockObject);
     }
 

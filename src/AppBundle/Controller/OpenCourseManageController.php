@@ -305,15 +305,19 @@ class OpenCourseManageController extends BaseController
             $liveLesson['length'] = $liveLessonFields['timeLength'];
             $liveLesson['title'] = $liveCourse['title'];
 
+            $routes = array(
+                'authUrl' => $this->generateUrl('live_auth', array(), true),
+                'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveCourse['id']), true)
+            );
             if ($openLiveLesson) {
-                $live = $this->getLiveCourseService()->editLiveRoom($liveCourse, $liveLesson, $this->container);
+                $live = $this->getLiveCourseService()->editLiveRoom($liveCourse, $liveLesson, $routes);
                 $liveLesson = $this->getOpenCourseService()->updateLesson(
                     $liveLesson['courseId'],
                     $liveLesson['id'],
                     $liveLesson
                 );
             } else {
-                $live = $this->getLiveCourseService()->createLiveRoom($liveCourse, $liveLesson, $this->container);
+                $live = $this->getLiveCourseService()->createLiveRoom($liveCourse, $liveLesson, $routes);
 
                 $liveLesson['mediaId'] = $live['id'];
                 $liveLesson['liveProvider'] = $live['provider'];
@@ -573,9 +577,9 @@ class OpenCourseManageController extends BaseController
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_keys($recommends));
 
         $removeIds = array();
-        foreach($recommends as $key => $value) {
+        foreach ($recommends as $key => $value) {
             if (empty($courseSets[$key])) {
-                $removeIds[] =  $value['id'];
+                $removeIds[] = $value['id'];
             }
         }
 

@@ -56,7 +56,7 @@ class DatabaseTokenServiceImpl extends BaseService implements TokenService
             $token['remaining_times'] -= 1;
         }
 
-        if ($token['times'] > 0 && $token['remaining_times'] == 0) {
+        if ($token['times'] > 0 && 0 == $token['remaining_times']) {
             $this->getTokenDao()->delete($token['id']);
         }
 

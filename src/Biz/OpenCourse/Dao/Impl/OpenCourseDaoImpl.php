@@ -38,6 +38,7 @@ class OpenCourseDaoImpl extends GeneralDaoImpl implements OpenCourseDao
                 'id IN ( :openCourseIds )',
                 'recommended = :recommended',
                 'locked = :locked',
+                'orgCode PRE_LIKE :likeOrgCode',
             ),
         );
     }

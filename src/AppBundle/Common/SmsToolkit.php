@@ -6,12 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SmsToolkit
 {
+    private static $mockedRequest = null;
+
     public static function smsCheck($request, $scenario)
     {
         $mobile = $request->request->get('mobile');
         $postSmsCode = $request->request->get('sms_code');
         $ratelimiterResult = self::smsCheckRatelimiter($request, $scenario, $postSmsCode);
-        if ($ratelimiterResult && $ratelimiterResult['success'] === false) {
+        if ($ratelimiterResult && false === $ratelimiterResult['success']) {
             return array(false, null, null);
         }
 
@@ -36,7 +38,7 @@ class SmsToolkit
             $remain = (int) $remain - 1;
             self::updateSmsSessionRemain($request, $type, $remain);
         }
-        if ($remain == 0) {
+        if (0 == $remain) {
             self::clearSmsSession($request, $type);
 
             return array('success' => false, 'message' => '错误次数已经超过最大次数，请重新获取');
@@ -77,7 +79,7 @@ class SmsToolkit
     private static function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
         $smsType = $sessionField['sms_type'];
-        if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
+        if ((0 == strlen($smsType)) || (0 == strlen($scenario))) {
             return false;
         }
         if ($smsType != $scenario) {
@@ -86,13 +88,13 @@ class SmsToolkit
 
         $currentTime = time();
         $smsLastTime = $sessionField['sms_last_time'];
-        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
+        if ((0 == strlen($smsLastTime)) || (($currentTime - $smsLastTime) > $allowedTime)) {
             return false;
         }
 
         $smsCode = $sessionField['sms_code'];
         $smsCodePosted = $requestField['sms_code'];
-        if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
+        if ((0 == strlen($smsCodePosted)) || (0 == strlen($smsCode))) {
             return false;
         }
         if ($smsCode != $smsCodePosted) {
@@ -101,7 +103,7 @@ class SmsToolkit
 
         $to = $sessionField['to'];
         $mobile = $requestField['mobile'];
-        if ((strlen($to) == 0) || (strlen($mobile) == 0)) {
+        if ((0 == strlen($to)) || (0 == strlen($mobile))) {
             return false;
         }
         if ($to != $mobile) {
@@ -123,6 +125,10 @@ class SmsToolkit
 
     public static function getShortLink($url, $conditions = array())
     {
+        // 为方便单元测试
+        if (!empty(self::$mockedRequest)) {
+            return self::$mockedRequest->getShortLink($url, $conditions);
+        }
         $apis = array(
             'eduCloud' => 'http://kzedu.cc/app/shorturl',
             'baidu' => 'http://dwz.cn/create.php',
@@ -131,7 +137,7 @@ class SmsToolkit
 
         foreach ($apis as $key => $api) {
             $response = CurlToolkit::request('POST', $api, array('url' => $url), $conditions);
-            if ($key == 'eduCloud') {
+            if ('eduCloud' == $key) {
                 if (isset($response['short_url'])) {
                     return $response['short_url'];
                 } else {
@@ -139,15 +145,15 @@ class SmsToolkit
                 }
             }
 
-            if ($response['status'] != 0) {
+            if (0 != $response['status']) {
                 continue;
             }
 
-            if ($key == 'baidu') {
+            if ('baidu' == $key) {
                 return $response['tinyurl'];
             }
 
-            if ($key == 'qq') {
+            if ('qq' == $key) {
                 return $response['short_url'];
             }
         }

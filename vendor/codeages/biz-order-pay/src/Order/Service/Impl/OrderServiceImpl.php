@@ -16,7 +16,7 @@ use Codeages\Biz\Order\Status\Order\PayingOrderStatus;
 class OrderServiceImpl extends BaseService implements OrderService
 {
     private $allowed_deducts_fields = array(
-        'order_id', 'item_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', 'detail', 'seller_id', 'snapshot'
+        'order_id', 'item_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id', 'detail', 'seller_id', 'snapshot', 'deduct_type_name'
     );
 
     public function findOrderItemDeductsByOrderId($orderId)

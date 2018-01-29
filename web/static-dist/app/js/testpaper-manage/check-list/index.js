@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/testpaper-manage/check-list/index"],{"9ca4e076db1607975f11":function(t,e,a){"use strict";$('[data-tooltip="tooltip"]').tooltip({trigger:"hover"})}},["9ca4e076db1607975f11"]);
