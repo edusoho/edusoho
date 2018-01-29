@@ -67,7 +67,7 @@ class DrpService extends BaseService
         $data = array('merchant_id' => $merchantId, 'agency_id' => $agencyId, 'coupon_price' => $couponPrice, 'coupon_expiry_day' => $couponExpiryDay);
         ksort($data);
         $dataStr = json_encode($data);
-        $signingText = implode('\n', array($nonce, $time, $dataStr));
+        $signingText = implode("\n", array($nonce, $time, $dataStr));
 
         $actualSign = $this->auth->makeSignature($signingText);
         if ($expectSign != $actualSign) {

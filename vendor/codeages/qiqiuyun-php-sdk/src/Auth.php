@@ -49,7 +49,7 @@ class Auth
     {
         $nonce = $useNonce ? SDK\random_str('16') : 'no';
         $deadline = time() + $lifetime;
-        $signature = $this->makeSignature("{$nonce}\\n{$deadline}\\n{$uri}\\n{$body}");
+        $signature = $this->makeSignature("{$nonce}\n{$deadline}\n{$uri}\n{$body}");
 
         return "Signature {$this->accessKey}:{$deadline}:{$nonce}:{$signature}";
     }
