@@ -117,7 +117,8 @@ class ActivityServiceTest extends BaseTestCase
             'task' => $savedTask,
             'taskId' => $savedTask['id'],
         );
-
+        $result = $this->getActivityService()->trigger(-1, 'start', $data);
+        $this->assertEquals($result, false);
         $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
         $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);

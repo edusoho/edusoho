@@ -77,7 +77,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         if (empty($activity)) {
-            return;
+            return false;
         }
 
         if ('start' == $eventName) {
@@ -105,6 +105,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ('doing' == $eventName) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
+
+        return true;
     }
 
     protected function triggerActivityLearnLogListener($activity, $eventName, $data)
