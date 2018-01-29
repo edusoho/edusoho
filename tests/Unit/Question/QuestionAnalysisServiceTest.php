@@ -97,7 +97,7 @@ class QuestionAnalysisServiceTest extends BaseTestCase
     public function testBatchCreate()
     {
         $rows = array();
-        for($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 4; ++$i) {
             $fields = array(
                 'targetId' => 1,
                 'targetType' => 'testpaper',
