@@ -218,15 +218,13 @@ class StringToolkit
 
     public static function isCompressable()
     {
-        return false;
-        // 开启后，会导致app无法下载视频
-        // $segs = explode('.', PHP_VERSION);
-        // if (count($segs) > 1) {  //版本号至少为 2位
-        //     if ($segs[0] > 5 || $segs[1] > 4) {   //php5.5 或 以上版本
-        //         return true;
-        //     }
-        // }
+        $segs = explode('.', PHP_VERSION);
+        if (count($segs) > 1) {  //版本号至少为 2位
+            if ($segs[0] > 5 || $segs[1] > 4) {   //php5.5 或 以上版本
+                return true;
+            }
+        }
 
-        // return false;
+        return false;
     }
 }
