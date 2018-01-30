@@ -8,6 +8,8 @@ use Biz\Role\Util\PermissionBuilder;
 use Biz\Marketing\Service\MarketingService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use QiQiuYun\SDK\Auth;
+use QiQiuYun\SDK\Service\DrpService;
 
 class MarketingServiceImpl extends BaseService implements MarketingService
 {
@@ -124,6 +126,42 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         $response['msg'] = "把用户,{$user['id']}添加到班级成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}";
 
         return $response;
+    }
+
+    public function getDrpService()
+    {
+        if (empty($this->drpService)) {
+            $developerSetting = $this->getSettingService()->get('developer', array());
+            $config = $this->getServerUrlConfig();
+            $serverUrl = $config['defaultUrl'];
+            if (!empty($developerSetting[$config['developerSettingName']])) {
+                $serverUrl = $developerSetting[$config['developerSettingName']];
+            }
+
+            $this->drpService = null;
+            $settings = $this->getSettingService()->get('storage', array());
+            if (!empty($settings['cloud_access_key']) && !empty($settings['cloud_secret_key'])) {
+                $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
+                $this->drpService = new DrpService($auth, array('base_uri' => $serverUrl));
+            }
+        }
+
+        return $this->drpService;
+    }
+
+    /**
+     * @return array(
+     *                'defaultUrl' => 'http://wyx.marketing.com',
+     *                'developerSettingName' => 'marketing_domain',
+     *                );
+     *                如果 developer setting 内有 相应属性，则使用该属性，否则，使用defaultUrl
+     */
+    protected function getServerUrlConfig()
+    {
+        return array(
+            'defaultUrl' => 'http://wyx.marketing.com',
+            'developerSettingName' => 'marketing_domain',
+        );
     }
 
     private function getUserOrderDeduct($userId, $deduct)

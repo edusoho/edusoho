@@ -800,13 +800,26 @@ admin:
                     name: admin.marketing.menu
                     blank: true
                     children:
-                      _admin_marketing_menu:
+                      _admin_marketing_marketing_menu:
                         name: admin.marketing.menu
                         disable: true
                         children:
-                            _marketing_page:
+                            _marketing_marketing_page:
                                 name: admin.marketing.menu
-                                router_name: admin_marketing
+                                router_name: admin_login_marketing
+        
+        # 临时隐藏 distributor
+        #admin_distributor_top:
+        #            name: admin.distributor.menu
+        #            blank: true
+        #            children:
+        #              _admin_distributor_menu:
+        #                name: admin.distributor.menu
+        #                disable: true
+        #                children:
+        #                    _distributor_page:
+        #                        name: admin.distributor.menu
+        #                        router_name: admin_login_distributor
 
         admin_system:
             name: admin.nav.system
@@ -1049,20 +1062,6 @@ admin:
                     children:
                         admin_queue_failed_logs:
                             name: 队列错误日志
-
-        admin_marketing_top:
-                    name: admin.marketing.menu
-                    blank: true
-                    children:
-                      _admin_marketing_menu:
-                        name: admin.marketing.menu
-                        disable: true
-                        children:
-                            _marketing_page:
-                                name: admin.marketing.menu
-                                router_name: admin_marketing
-
-
 
 
 web:

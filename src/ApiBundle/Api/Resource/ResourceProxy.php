@@ -47,7 +47,5 @@ class ResourceProxy
         } else {
             $this->getFieldFilter($method)->filter($result);
         }
-
     }
-
 }

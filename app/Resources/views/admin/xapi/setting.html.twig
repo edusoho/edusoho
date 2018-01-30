@@ -2,8 +2,6 @@
 
 {% set menu = 'admin_xapi_setting' %}
 
-{% set script_controller='xapi/index' %}
-
 {% block main %}
   {{ web_macro.flash_messages() }}
   <form action="{{ path('admin_xapi_setting') }}" method="post" id="xapi-setting-form" class="form-horizontal">

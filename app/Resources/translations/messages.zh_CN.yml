@@ -3013,7 +3013,7 @@ user.account_center: 账户中心
 user.menu_heading: 账户中心
 user.account_menu: 我的账户
 user.order_menu: 我的订单
-user.cards_menu: 我的卡包
+user.cards_menu: 优惠券
 user.vip_history_menu: 会员记录
 
 # 账户中心模块-我的账户
@@ -6909,7 +6909,8 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 微营销地址
+admin.developer_setting.market_address: 微营销地址(http://wyx.marketing.com)
+admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
@@ -7787,11 +7788,12 @@ notification.coupon.receive_discount: 您有一张抵扣为%rate%折的优惠券
 notification.materialLib.share: %who% 已将资料分享给你,%do%。
 notification.materialLib.click_to_view: 点击查看
 
-
 notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
 notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
 notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
+
+notification.distributor-reward: 恭喜您获得注册成功奖励：%money%元面值抵价优惠券一张，可用于全站消费，已发至【%account%】-【%coupon%】。
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生

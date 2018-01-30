@@ -7,5 +7,4 @@ class LianlianPayWapTrade extends LianlianPayWebTrade
     protected $payment = 'lianlianpay';
 
     protected $platformType = 'Wap';
-
 }

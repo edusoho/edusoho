@@ -348,8 +348,9 @@ admin.system.logs.logs_prod_tab: Program Log
 ##组织机构管理模块
 admin.system.org.basic_tab: Organization
 
-##微营销模块
+##营销模块
 admin.marketing.menu: Marketing
+admin.distributor.menu: 分销
 
 #web模块
 web.course: Courses

@@ -17,6 +17,18 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    order_status_subscriber:
+        class: Biz\Distributor\Event\OrderStatusSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_message_subscriber:
+        class: Biz\Distributor\Event\UserSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     order_subscriber:
         class: Codeages\Biz\Order\Subscriber\OrderSubscriber
         arguments: ['@biz']

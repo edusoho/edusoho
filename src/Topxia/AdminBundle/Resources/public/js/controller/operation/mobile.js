@@ -13,7 +13,7 @@
         });
 
         uploader1.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner1-container").html('<img src="' + response.url + '">');
+          $("#mobile-banner1-container").html('<img src="' + response.uri + '">');
           $form.find('[name=banner1]').val(response.url);
           $("#mobile-banner1-remove").show();
           $form.find('div[role="banner1-setting"]').show();
@@ -116,7 +116,7 @@
         });
 
         uploader2.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner2-container").html('<img src="' + response.url + '">');
+          $("#mobile-banner2-container").html('<img src="' + response.uri + '">');
           $form.find('[name=banner2]').val(response.url);
           $("#mobile-banner2-remove").show();
           $form.find('div[role="banner2-setting"]').show();
@@ -151,7 +151,7 @@
         });
 
         uploader3.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner3-container").html('<img src="' + response.url + '">');
+          $("#mobile-banner3-container").html('<img src="' + response.uri + '">');
           $form.find('[name=banner3]').val(response.url);
           $("#mobile-banner3-remove").show();
           $form.find('div[role="banner3-setting"]').show();
@@ -185,7 +185,7 @@
         });
 
         uploader4.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner4-container").html('<img src="' + response.url + '">');
+          $("#mobile-banner4-container").html('<img src="' + response.uri + '">');
           $form.find('[name=banner4]').val(response.url);
           $("#mobile-banner4-remove").show();
           $form.find('div[role="banner4-setting"]').show();
@@ -219,7 +219,7 @@
         });
 
         uploader5.on('uploadSuccess', function(file, response ) {
-          $("#mobile-banner5-container").html('<img src="' + response.url + '">');
+          $("#mobile-banner5-container").html('<img src="' + response.uri + '">');
           $form.find('[name=banner5]').val(response.url);
           $("#mobile-banner5-remove").show();
           $form.find('div[role="banner5-setting"]').show();

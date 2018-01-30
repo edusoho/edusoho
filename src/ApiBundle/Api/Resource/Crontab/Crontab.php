@@ -8,8 +8,6 @@ use AppBundle\System;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use TiBeN\CrontabManager\CrontabAdapter;
-use TiBeN\CrontabManager\CrontabRepository;
 
 class Crontab extends AbstractResource
 {
@@ -20,7 +18,7 @@ class Crontab extends AbstractResource
         }
 
         $crontabStatus = array(
-            'enabled' => false
+            'enabled' => false,
         );
 
         if (System::getOS() === System::OS_WIN) {
@@ -29,7 +27,6 @@ class Crontab extends AbstractResource
         }
 
         if (System::getOS() === System::OS_OSX || System::OS_LINUX) {
-
             $crontabJobs = SystemCrontabInitializer::findCrontabJobs();
 
             $crontabStatus['enabled'] = count($crontabJobs) > 0;
