@@ -103,4 +103,17 @@ abstract class Filter
 
         return $html;
     }
+
+    protected function convertFilePath($filePath)
+    {
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get('content');
+        if (!empty($cdnUrl)) {
+            $url = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($filePath, '/');
+        } else {
+            $url = AssetHelper::uriForPath('/'.ltrim($filePath, '/'));
+        }
+
+        return $url;
+    }
 }
