@@ -2,6 +2,8 @@
 
 namespace Topxia\MobileBundleV2\Processor;
 
+use AppBundle\Util\CdnUrl;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
@@ -11,6 +13,9 @@ class BaseProcessor
 
     public $formData;
     public $controller;
+    /**
+     * @var Request
+     */
     public $request;
     protected $delegator;
 
@@ -306,7 +311,7 @@ class BaseProcessor
         $mobile = $this->controller->getSettingService()->get('mobile', array());
 
         if (!empty($mobile['logo'])) {
-            $logo = $request->getSchemeAndHttpHost().'/'.$mobile['logo'];
+            $logo = $this->getBaseUrl().'/'.$mobile['logo'];
         } else {
             $logo = '';
         }
@@ -315,13 +320,13 @@ class BaseProcessor
 
         for ($i = 1; $i < 6; ++$i) {
             if (!empty($mobile['splash'.$i])) {
-                $splashs[] = $request->getSchemeAndHttpHost().'/'.$mobile['splash'.$i];
+                $splashs[] = $this->getBaseUrl().'/'.$mobile['splash'.$i];
             }
         }
 
         return array(
             'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
+            'url' => $this->getBaseUrl().'/mapi_v'.$version,
             'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
@@ -361,7 +366,7 @@ class BaseProcessor
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
 
-        if (strtoupper($method) == 'POST') {
+        if ('POST' == strtoupper($method)) {
             curl_setopt($curl, CURLOPT_POST, 1);
             $params = http_build_query($params);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
@@ -377,6 +382,34 @@ class BaseProcessor
         curl_close($curl);
 
         return $response;
+    }
+
+    protected function getBaseUrl($type = 'default')
+    {
+        $cdnUrl = $this->getCdn($type);
+
+        if (!empty($cdnUrl)) {
+            return $this->request->getScheme().':'.$cdnUrl;
+        }
+
+        return $this->request->getSchemeAndHttpHost();
+    }
+
+    protected function getCdn($type = 'default')
+    {
+        $cdn = new CdnUrl();
+
+        return $cdn->get($type);
+    }
+
+    protected function getScheme()
+    {
+        return $this->request->getScheme();
+    }
+
+    protected function isAbsoluteUrl($url)
+    {
+        return false !== strpos($url, '://') || '//' === substr($url, 0, 2);
     }
 
     /**
