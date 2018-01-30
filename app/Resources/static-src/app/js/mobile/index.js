@@ -1,9 +1,3 @@
-import { Browser } from 'common/utils';
-
-if (Browser.ie9) {
-  $('.js-ie9-show').addClass('opacity-ie9');
-}
-
 $('.js-mobile-item').waypoint(function() {
   $(this).addClass('active');
 }, { offset:500 });
