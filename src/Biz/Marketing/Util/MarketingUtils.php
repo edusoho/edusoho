@@ -8,10 +8,11 @@ class MarketingUtils
     {
         $site = $settingService->get('site', array());
 
-        $site['logo'] = preg_replace('#files/#', '', $site['logo'], 1);
+        $pattern = '/^files\//s';  //内容包含 files/
+        $site['logo'] = preg_replace($pattern, '', $site['logo'], 1);  // system/2018/01-30/0951528997cd687447.png
         $consult = $settingService->get('consult', array());
         $wechatFile = isset($consult['webchatURI']) ? $consult['webchatURI'] : '';
-        $consult['webchatURI'] = preg_replace('#files/#', '', $wechatFile, 1);
+        $consult['webchatURI'] = preg_replace($pattern, '', $wechatFile, 1);
 
         $siteInfo = array(
             'name' => $site['name'],
