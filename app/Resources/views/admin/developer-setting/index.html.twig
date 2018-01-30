@@ -111,6 +111,15 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.distributor_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="distributor_server" value="{{ developerSetting.distributor_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ 'admin.developer_setting.hls_encrypted'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">

@@ -589,7 +589,8 @@ class UserServiceImpl extends BaseService implements UserService
         $this->updateUserProfile($id, array(
             'mobile' => $mobile,
         ));
-        $this->dispatchEvent('mobile.change', new Event($user));
+
+        $this->dispatchEvent('user.change_mobile', new Event($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
@@ -731,134 +732,6 @@ class UserServiceImpl extends BaseService implements UserService
     public function getUserByType($type)
     {
         return $this->getUserDao()->getUserByType($type);
-    }
-
-    public function oldRegister($registration, $type = 'default')
-    {
-        $this->validateNickname($registration['nickname']);
-
-        if (!$this->isNicknameAvaliable($registration['nickname'])) {
-            throw $this->createInvalidArgumentException('Nickname Occupied');
-        }
-
-        if (!SimpleValidator::email($registration['email'])) {
-            throw $this->createInvalidArgumentException('Invalid Email');
-        }
-
-        if (!$this->isEmailAvaliable($registration['email'])) {
-            throw $this->createInvalidArgumentException('Email Occupied');
-        }
-
-        $user = array();
-
-        if (isset($registration['verifiedMobile'])) {
-            $user['verifiedMobile'] = $registration['verifiedMobile'];
-        } else {
-            $user['verifiedMobile'] = '';
-        }
-
-        $user['email'] = $registration['email'];
-        $user['emailVerified'] = isset($registration['emailVerified']) ? $registration['emailVerified'] : 0;
-        $user['nickname'] = $registration['nickname'];
-        $user['roles'] = array('ROLE_USER');
-        $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
-        $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
-        if (isset($registration['guid'])) {
-            $user['guid'] = $registration['guid'];
-        }
-
-        $user['createdTime'] = time();
-        $user['registeredWay'] = isset($registration['registeredWay']) ? $registration['registeredWay'] : '';
-
-        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
-
-        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
-            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-            $user['setup'] = 1;
-        } elseif (in_array($type, array('qq', 'weibo', 'renren', 'weixinweb', 'weixinmob')) && isset($thirdLoginInfo["{$type}_set_fill_account"]) && $thirdLoginInfo["{$type}_set_fill_account"]) {
-            $user['salt'] = '';
-            $user['password'] = '';
-            $user['setup'] = 1;
-        } elseif ('marketing' === $type) {
-            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-            $user['setup'] = 0;
-        } else {
-            $user['salt'] = '';
-            $user['password'] = '';
-            $user['setup'] = 0;
-        }
-        if (isset($registration['orgId'])) {
-            $user['orgId'] = $registration['orgId'];
-            $user['orgCode'] = $registration['orgCode'];
-        }
-        $user = $this->getUserDao()->create($user);
-
-        if (!empty($registration['invite_code'])) {
-            $inviteUser = $this->getUserDao()->getByInviteCode($registration['invite_code']);
-        }
-
-        if (!empty($inviteUser)) {
-            $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
-            $invitedCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
-
-            if (!empty($invitedCoupon)) {
-                $card = $this->getCardService()->getCardByCardId($invitedCoupon['id']);
-                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
-            }
-
-            $this->dispatchEvent(
-                'user.register',
-                new Event(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
-            );
-        }
-
-        if (isset($registration['mobile']) && '' != $registration['mobile'] && !SimpleValidator::mobile($registration['mobile'])) {
-            throw $this->createInvalidArgumentException('Invalid Mobile');
-        }
-
-        if (isset($registration['idcard']) && '' != $registration['idcard'] && !SimpleValidator::idcard($registration['idcard'])) {
-            throw $this->createInvalidArgumentException('Invalid ID number');
-        }
-
-        if (isset($registration['truename']) && '' != $registration['truename'] && !SimpleValidator::truename($registration['truename'])) {
-            throw $this->createInvalidArgumentException('Invalid truename');
-        }
-
-        $profile = array();
-        $profile['id'] = $user['id'];
-        $profile['mobile'] = empty($registration['mobile']) ? '' : $registration['mobile'];
-        $profile['idcard'] = empty($registration['idcard']) ? '' : $registration['idcard'];
-        $profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
-        $profile['company'] = empty($registration['company']) ? '' : $registration['company'];
-        $profile['job'] = empty($registration['job']) ? '' : $registration['job'];
-        $profile['weixin'] = empty($registration['weixin']) ? '' : $registration['weixin'];
-        $profile['weibo'] = empty($registration['weibo']) ? '' : $registration['weibo'];
-        $profile['qq'] = empty($registration['qq']) ? '' : $registration['qq'];
-        $profile['site'] = empty($registration['site']) ? '' : $registration['site'];
-        $profile['gender'] = empty($registration['gender']) ? 'secret' : $registration['gender'];
-
-        for ($i = 1; $i <= 5; ++$i) {
-            $profile['intField'.$i] = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
-            $profile['dateField'.$i] = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
-            $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
-        }
-
-        for ($i = 1; $i <= 10; ++$i) {
-            $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? '' : $registration['varcharField'.$i];
-            $profile['textField'.$i] = empty($registration['textField'.$i]) ? '' : $registration['textField'.$i];
-        }
-
-        $this->getProfileDao()->create($profile);
-
-        if ('default' != $type) {
-            $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
-        }
-
-        $this->dispatchEvent('user.registered', new Event($user));
-
-        return $user;
     }
 
     /**

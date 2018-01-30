@@ -30,6 +30,9 @@ use Biz\User\Register\RegisterFactory;
 use Biz\User\Register\Impl\EmailRegistDecoderImpl;
 use Biz\User\Register\Impl\MobileRegistDecoderImpl;
 use Biz\User\Register\Impl\BinderRegistDecoderImpl;
+use Biz\User\Register\Impl\DistributorRegistDecoderImpl;
+use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
+use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -127,6 +130,18 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['user.register.binder'] = function ($biz) {
             return new BinderRegistDecoderImpl($biz);
+        };
+
+        $biz['user.register.distributor'] = function ($biz) {
+            return new DistributorRegistDecoderImpl($biz);
+        };
+
+        $biz['distributor.sync.user'] = function ($biz) {
+            return new SyncUserServiceImpl($biz);
+        };
+
+        $biz['distributor.sync.order'] = function ($biz) {
+            return new SyncOrderServiceImpl($biz);
         };
 
         $biz['biz_captcha'] = $biz->factory(function ($biz) {

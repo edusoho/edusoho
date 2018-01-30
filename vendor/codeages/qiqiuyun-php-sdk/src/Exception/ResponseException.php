@@ -1,4 +1,5 @@
 <?php
+
 namespace QiQiuYun\SDK\Exception;
 
 use QiQiuYun\SDK\HttpClient\Response;

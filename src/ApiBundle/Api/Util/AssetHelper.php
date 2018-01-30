@@ -21,6 +21,11 @@ class AssetHelper
         return self::$container->get('request')->getUriForPath($path);
     }
 
+    public static function getScheme()
+    {
+        return self::$container->get('request')->getScheme();
+    }
+
     public static function callAppExtensionMethod($method, $params)
     {
         return call_user_func_array(array(self::$container->get('web.twig.app_extension'), $method), $params);

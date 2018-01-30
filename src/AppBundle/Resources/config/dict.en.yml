@@ -246,6 +246,10 @@ userType:
     renren: Renren connected
     qq: QQ connected
     weixin: Wechat connected
+    marketing: 微营销
+
+# 临时隐藏 distributor
+#    distributor: 分销
 
 userKeyWordTypes:
     nickname: Nickname
