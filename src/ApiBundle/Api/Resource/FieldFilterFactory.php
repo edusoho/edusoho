@@ -30,10 +30,11 @@ class FieldFilterFactory
             if ($mode) {
                 $fieldFilter->setMode($mode);
             }
+
             return $fieldFilter;
         }
 
-       $filterClass = get_class($resource).'Filter';
+        $filterClass = get_class($resource).'Filter';
         if (class_exists($filterClass)) {
             return new $filterClass();
         }

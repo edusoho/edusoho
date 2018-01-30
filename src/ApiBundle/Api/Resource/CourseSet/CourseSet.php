@@ -54,7 +54,6 @@ class CourseSet extends AbstractResource
             );
         }
 
-
         $this->getOCUtil()->multiple($courseSets, array('creator', 'teacherIds'));
 
         $total = $this->getCourseSetService()->countCourseSets($conditions);
@@ -149,6 +148,6 @@ class CourseSet extends AbstractResource
      */
     private function getCourseSetService()
     {
-       return $this->service('Course:CourseSetService');
+        return $this->service('Course:CourseSetService');
     }
 }

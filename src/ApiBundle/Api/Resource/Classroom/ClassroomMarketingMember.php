@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Marketing\Service\MarketingService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class ClassroomMarketingMember extends AbstractResource
 {
@@ -40,11 +41,38 @@ class ClassroomMarketingMember extends AbstractResource
     }
 
     /**
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Classroom\ClassroomMemberFilter", mode="public")
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     */
+    public function get(ApiRequest $request, $classroomId, $phoneNumber)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (empty($classroom)) {
+            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
+        }
+
+        $user = $this->getUserService()->getUserByVerifiedMobile($phoneNumber);
+        if (empty($user)) {
+            return null;
+        }
+
+        $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
+        $this->getOCUtil()->single($classroomMember, array('userId'));
+
+        return $classroomMember;
+    }
+
+    /**
      * @return MarketingService
      */
     protected function getMarketingService()
     {
         return $this->service('Marketing:MarketingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 
     /**

@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\StudentLiveCourse;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 use ApiBundle\Api\Exception\ErrorCode;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -25,9 +24,10 @@ class StudentLiveCourse extends AbstractResource
         foreach ($liveCourses as &$liveCourse) {
             $liveCourse['url'] = $this->generateUrl('course_task_show', array(
                 'courseId' => $liveCourse['courseId'],
-                'id' => $liveCourse['taskId']
+                'id' => $liveCourse['taskId'],
             ));
         }
+
         return array('data' => $liveCourses);
     }
 

@@ -40,7 +40,7 @@ class Course extends AbstractResource
 
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
-        
+
         $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
         $course = $this->convertFields($course);
 
@@ -55,7 +55,6 @@ class Course extends AbstractResource
 
         return $course;
     }
-
 
     protected function joinCourseMemberByClassroomId($courseId, $classroomId)
     {
@@ -123,5 +122,4 @@ class Course extends AbstractResource
     {
         return $this->service('Course:MemberService');
     }
-
 }
