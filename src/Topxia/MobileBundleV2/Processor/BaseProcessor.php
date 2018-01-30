@@ -326,7 +326,7 @@ class BaseProcessor
 
         return array(
             'name' => $site['name'],
-            'url' => $this->getBaseUrl().'/mapi_v'.$version,
+            'url' => $request->getSchemeAndHttpHost() .'/mapi_v'.$version,
             'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
