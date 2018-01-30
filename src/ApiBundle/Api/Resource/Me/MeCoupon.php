@@ -14,7 +14,7 @@ class MeCoupon extends AbstractResource
         $conditions = array(
             'userId' => $this->getCurrentUser()->getId(),
             'status' => 'receive',
-            'cardType' => 'coupon'
+            'cardType' => 'coupon',
         );
 
         $myCards = $this->getCardService()->searchCards(

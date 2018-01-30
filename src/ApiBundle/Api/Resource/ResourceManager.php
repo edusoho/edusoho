@@ -31,7 +31,9 @@ class ResourceManager
 
     /**
      * 复写的API优先查找
+     *
      * @param PathMeta $meta
+     *
      * @return string
      */
     private function getClassName(PathMeta $meta)
