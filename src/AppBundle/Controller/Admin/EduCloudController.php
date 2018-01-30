@@ -208,6 +208,7 @@ class EduCloudController extends BaseController
         $default = array(
             'upload_mode' => 'local',
             'support_mobile' => 0,
+            'video_h5_enable' => 0,
             'enable_playback_rates' => 0,
             'video_quality' => 'high',
             'video_audio_quality' => 'high',
