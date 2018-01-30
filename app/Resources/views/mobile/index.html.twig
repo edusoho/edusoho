@@ -9,8 +9,8 @@
 {% block full_content %}
   <div class="js-mobile-item mobile-first">
     <div class="container">
-      <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
-      <div class="img-two hidden-xs">
+      <img class="img-one js-ie9-show hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
+      <div class="img-two js-ie9-show hidden-xs">
         <img class="img-two-bg" src="{{asset("assets/v2/img/mobile/phone_white_bg.png")}}" alt="">
         {% if setting('mobile.appcover') %}
         <img class="img-two-content" src="{{asset(setting('mobile.appcover'))}}" alt="">
@@ -19,7 +19,7 @@
         {% endif %}
       </div>
       <div class="mobile-content">
-        <div class="title">
+        <div class="title js-ie9-show">
           {% if setting('mobile.applogo') %}
             <img src="{{asset(setting('mobile.applogo'))}}" alt="">
           {% else %}
@@ -32,17 +32,17 @@
             {{'mobile.app_name'|trans}}
           {% endif %}
         </div>
-        <div class="subtitle">
+        <div class="subtitle js-ie9-show">
           {% if not isEsApp %}
             {{mobileSetting.appabout|default('mobile.app_tips'|trans)}}
           {% else %}
               {{'mobile.app_tips'|trans}}
           {% endif %}
         </div>
-        <a class="btn-mobile js-btn-mobile" href="javascript:;" data-url=".mobile-second">{{'mobile.app_download_btn'|trans}}<i class="es-icon es-icon-filedownload"></i></a>
+        <a class="btn-mobile js-ie9-show js-btn-mobile" href="javascript:;" data-url=".mobile-second">{{'mobile.app_download_btn'|trans}}<i class="es-icon es-icon-filedownload"></i></a>
 
         {% if isEsApp %}
-        <a class="btn-mobile js-btn-mobile" href="javascript:;" data-url=".mobile-third">{{'mobile.app_login_btn'|trans}}<i class="es-icon es-icon-phone1"></i></a>
+        <a class="btn-mobile js-ie9-show js-btn-mobile" href="javascript:;" data-url=".mobile-third">{{'mobile.app_login_btn'|trans}}<i class="es-icon es-icon-phone1"></i></a>
         {% endif %}
       </div>
     </div>
@@ -74,7 +74,7 @@
       </div>
       <div class="row">
         <div class="col-sm-6 text-center">
-          <img class="thumb" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
+          <img class="thumb js-ie9-show" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
         </div>
         <div class="col-sm-6 text-center">
           <div class="qrcode">
