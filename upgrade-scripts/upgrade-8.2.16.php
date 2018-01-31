@@ -68,6 +68,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'initBlock',
             'updateJianmoParameters',
+            'distributorJobData',
+            'userDistributorToken',
+            'openCourseAddOrg',
+            'bizSchedulerAddMessageAndTrace',
+            'bizSchedulerAddJobProcess',
         );
 
         $funcNames = array();
@@ -104,6 +109,123 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    protected function bizSchedulerAddJobProcess()
+    {
+        $this->getConnection()->exec("
+          CREATE TABLE IF NOT EXISTS `biz_scheduler_job_process` (
+          `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `pid` varchar(32) NOT NULL DEFAULT '' COMMENT '进程组ID',
+          `start_time` bigint(15) unsigned NOT NULL DEFAULT '0' COMMENT '起始时间/毫秒',
+          `end_time` bigint(15) unsigned NOT NULL DEFAULT '0' COMMENT '终止时间/毫秒',
+          `cost_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '花费时间/毫秒',
+          `peak_memory` bigint(15) unsigned NOT NULL DEFAULT '0' COMMENT '内存峰值/byte',
+          `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+        if (!$this->isFieldExist('biz_scheduler_job_fired', 'process_id')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_fired` 
+                ADD `process_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'jobProcessId' AFTER `status`,
+                ADD `cost_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '花费时间/毫秒' AFTER `status`,
+                ADD `end_time` bigint(15) unsigned NOT NULL DEFAULT '0' COMMENT '终止时间/毫秒' AFTER `status`,
+                ADD `start_time` bigint(15) unsigned NOT NULL DEFAULT '0' COMMENT '起始时间/毫秒' AFTER `status`,
+                ADD `peak_memory` bigint(15) unsigned NOT NULL DEFAULT '0' COMMENT '内存峰值/byte' AFTER `status`;");
+        }
+
+        return 1;
+    }
+
+    protected function bizSchedulerAddMessageAndTrace()
+    {
+        if (!$this->isFieldExist('biz_scheduler_job_log', 'message')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_log` ADD COLUMN `message` longtext COLLATE utf8_unicode_ci COMMENT '日志信息';");
+        }
+        if (!$this->isFieldExist('biz_scheduler_job_log', 'trace')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_scheduler_job_log` ADD COLUMN `trace` longtext COLLATE utf8_unicode_ci COMMENT '异常追踪信息';");
+        }
+
+        return 1;
+    }
+
+    protected function distributorJobData()
+    {
+        $this->getConnection()->exec("
+            CREATE TABLE IF NOT EXISTS `distributor_job_data` (
+                `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+                `data` text NOT NULL COMMENT '数据',
+                `jobType` varchar(128) NOT NULL COMMENT '使用的同步类型, 如order为 biz[distributor.sync.order] = Biz\Distributor\Service\Impl\SyncOrderServiceImpl',
+                `status` varchar(32) NOT NULL DEFAULT 'pending' COMMENT '分为 pending -- 可以发, finished -- 已发送, error -- 错误， 只有 pending 和 error 才会尝试发送',
+                `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
+                `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+
+        if (!$this->isJobExist('DistributorSyncJob')) {
+            $this->getConnection()->exec("
+                INSERT INTO `biz_scheduler_job` (
+                    `name`,
+                    `expression`,
+                    `class`,
+                    `args`,
+                    `priority`,
+                    `next_fire_time`,
+                    `misfire_threshold`,
+                    `misfire_policy`,
+                    `enabled`,
+                    `creator_id`,
+                    `updated_time`,
+                    `created_time`
+                ) VALUES
+                (
+                    'DistributorSyncJob',
+                    '*/19 * * * *',
+                    'Biz\\\\Distributor\\\\Job\\\\DistributorSyncJob',
+                    '',
+                    '100',
+                    '{$currentTime}',
+                    '300',
+                    'missed',
+                    '1',
+                    '0',
+                    '{$currentTime}',
+                    '{$currentTime}'
+                );
+            ");
+        }
+
+        return 1;
+    }
+
+    protected function userDistributorToken()
+    {
+        if(!$this->isFieldExist('user', 'distributorToken')) {
+            $this->getConnection()->exec("ALTER TABLE `user` ADD `distributorToken` varchar(255) NOT NULL DEFAULT '' COMMENT '分销平台token';");
+        }
+        if(!$this->isIndexExist('user', 'distributorToken', 'distributorToken')) {
+            $this->getConnection()->exec('ALTER TABLE `user` ADD INDEX `distributorToken` (`distributorToken`);');
+        }
+
+        return 1;
+    }
+
+    protected function openCourseAddOrg()
+    {
+        if (!$this->isFieldExist('open_course', 'orgId')) {
+            $this->getConnection()->exec(
+                "ALTER TABLE `open_course` ADD COLUMN `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID';
+            ");
+        }
+
+        if (!$this->isFieldExist('open_course', 'orgCode')) {
+            $this->getConnection()->exec(
+                "ALTER TABLE `open_course` ADD COLUMN `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码';
+            ");
+        }
+
+        return 1;
+    }
+
     protected function initBlock()
     {
         $themeDir = $this->biz['root_directory'].'/web/themes/';
@@ -129,9 +251,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 $left['advertisement-banner']['defaultTitle'] = '中部广告';
             }
             $theme['confirmConfig']['blocks']['left'] = $left;
+            $this->getThemeConfigDao()->updateThemeConfigByName('简墨', array('confirmConfig' => $theme['confirmConfig']));
         }
 
-        $this->getThemeConfigDao()->updateThemeConfigByName('简墨', array('confirmConfig' => $theme['confirmConfig']));
 
         return 1;
     }
