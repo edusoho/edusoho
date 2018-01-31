@@ -68,7 +68,7 @@ class TaskManageController extends BaseController
 
     protected function prepareRenderTaskForDefaultCourseType($courseType, $task, $isOnlyTask)
     {
-        if (CourseService::NORMAL_COURSE_TYPE == $courseType) {
+        if (CourseService::NORMAL__COURSE_TYPE == $courseType) {
             if (!$isOnlyTask) {
                 $chapter = $this->getChapterDao()->get($task['categoryId']);
                 $task['chapter'] = $chapter;
