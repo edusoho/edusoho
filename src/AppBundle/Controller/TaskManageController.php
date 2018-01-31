@@ -157,7 +157,7 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
-        $isOnlyTask = empty($task['categoryId']) ? 0 : 1; 
+        $isOnlyTask = empty($task['categoryId']) ? 0 : 1;
 
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 

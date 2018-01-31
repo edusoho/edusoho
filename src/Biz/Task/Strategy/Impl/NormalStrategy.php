@@ -186,7 +186,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             $chapter = $this->getCourseService()->createChapter($chapter);
         }
         $task['categoryId'] = $chapter['id'];
-        
+
         return parent::createTask($task);
     }
 }
