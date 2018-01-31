@@ -31,7 +31,7 @@ PHP 5.3:
     - master
     - trigger
 
-PHP 5.3 And Redis:
+PHP 5.3 with Redis:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
@@ -44,7 +44,7 @@ PHP 5.3 And Redis:
     - master
     - trigger
 
-PHP 5.5:
+PHP 5.5 with php-cs-fixer:
   stage: test
   image: codeages/ci-php:5.5-5
   services:
