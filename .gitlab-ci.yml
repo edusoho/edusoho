@@ -51,7 +51,7 @@ Unit Test With PHP 5.5:
     - mysql:5.5
     - redis:latest
   script:
-    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+    - bin/php-cs-fix-validate
     - bin/phpunit -c app/
 
 Unit Test With PHP 7.0 For Non-Develop:
