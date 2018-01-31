@@ -23,6 +23,7 @@ class CdnSetting extends AbstractResource
         );
 
         $this->getSettingService()->set('cdn', $cdn);
+        return array('code' => 'success', 'msg' => "设置cdn, enabled:{$cdn['enabled']}, defaultUrl:{$cdn['defaultUrl']},userUrl:{$cdn['userUrl']}, contentUrl:{$cdn['contentUrl']}");
     }
 
     /**
