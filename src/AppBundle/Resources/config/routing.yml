@@ -89,6 +89,11 @@ user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
 
+# 临时隐藏 distributor
+#distributor_register:
+#    path:  /distributor_register
+#    defaults: { _controller: AppBundle:Register:distributorIndex }
+
 register:
     path:  /register
     defaults: { _controller: AppBundle:Register:index }
@@ -2971,6 +2976,10 @@ _oauth2_token:
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
 marketing_user_login:
+    path: /marketing/user/login
+    defaults: { _controller: AppBundle:MarketingUser:login }
+
+user_login_marketing:
     path: /marketing/user/login
     defaults: { _controller: AppBundle:MarketingUser:login }
 

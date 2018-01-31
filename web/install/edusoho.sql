@@ -633,7 +633,9 @@ CREATE TABLE `biz_scheduler_job_fired` (
   `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',
   `retry_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '重试次数',
   `job_detail` text COMMENT 'job的详细信息，是biz_job表中冗余数据',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `job_fired_id_and_status` (`job_id`,`status`),
+  KEY `job_fired_time_and_status` (`fired_time`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_scheduler_job_log`;
@@ -1764,6 +1766,7 @@ CREATE TABLE `course_v8` (
   `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...',
   `rewardPoint` int(10) NOT NULL DEFAULT '0' COMMENT '课程积分',
   `taskRewardPoint` int(10) NOT NULL DEFAULT '0' COMMENT '任务积分',
+  `enableAudio` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `courseSetId` (`courseSetId`),
   KEY `courseSetId_status` (`courseSetId`,`status`)
@@ -2153,8 +2156,12 @@ CREATE TABLE `member_operation_record` (
   `member_id` int(10) unsigned NOT NULL COMMENT '成员ID',
   `member_type` varchar(32) NOT NULL DEFAULT 'student' COMMENT '成员身份',
   `target_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类型ID',
+  `parent_id` int(10) NOT NULL DEFAULT '0' COMMENT '班级课程的被复制的计划Id',
+  `course_set_id` int(10) NOT NULL DEFAULT '0' COMMENT '课程Id',
   `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型（classroom, course）',
   `operate_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型（join, exit）',
+  `exit_course_set` tinyint(1) NOT NULL DEFAULT '0' COMMENT '退出的课程的最后教学计划，算退出课程',
+  `join_course_set` tinyint(1) NOT NULL DEFAULT '0' COMMENT '加入的课程的第一个教学计划，算加入课程',
   `operate_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
   `operator_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户ID',
   `data` text COMMENT 'extra data',
@@ -3072,6 +3079,7 @@ CREATE TABLE `testpaper_result_v8` (
   `beginTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `metas` text COMMENT '练习的题型排序等附属信息',
   `active` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `status` enum('doing','paused','reviewing','finished') NOT NULL COMMENT '状态',
   `target` varchar(255) NOT NULL DEFAULT '',
@@ -3305,6 +3313,7 @@ CREATE TABLE `upload_files` (
   `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '文件最后更新时间',
   `createdUserId` int(10) unsigned NOT NULL COMMENT '文件上传人',
   `createdTime` int(10) unsigned NOT NULL COMMENT '文件上传时间',
+  `audioConvertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '视频转音频的状态',
   PRIMARY KEY (`id`),
   UNIQUE KEY `convertHash` (`convertHash`(64)),
   UNIQUE KEY `hashId` (`hashId`(120))
@@ -3480,6 +3489,56 @@ CREATE TABLE `user_fortune_log` (
   `createdTime` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_learn_statistics_daily`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_learn_statistics_daily` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
+  `joinedClassroomNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当天加入的班级数',
+  `joinedCourseSetNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当天加入的非班级课程数',
+  `joinedCourseNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当天加入的非班级计划数',
+  `exitClassroomNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT ' 当天退出的班级数',
+  `exitCourseSetNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当天退出的非班级课程数',
+  `exitCourseNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '当天退出的非班级计划数',
+  `learnedSeconds` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时长',
+  `finishedTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT ' 当天学完的任务数量',
+  `paidAmount` int(10) NOT NULL DEFAULT '0' COMMENT '支付金额',
+  `refundAmount` int(10) NOT NULL DEFAULT '0' COMMENT '退款金额',
+  `actualAmount` int(10) NOT NULL DEFAULT '0' COMMENT '实付金额',
+  `recordTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '记录时间, 当天同步时间的0点',
+  `isStorage` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否存储到total表',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userId` (`userId`,`recordTime`),
+  KEY `index_user_id` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_learn_statistics_total`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_learn_statistics_total` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
+  `joinedClassroomNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入的班级数',
+  `joinedCourseSetNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入的非班级课程数',
+  `joinedCourseNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入的非班级计划数',
+  `exitClassroomNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退出的班级数',
+  `exitCourseSetNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退出的非班级课程数',
+  `exitCourseNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退出的非班级计划数',
+  `learnedSeconds` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时长',
+  `finishedTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完的任务数量',
+  `paidAmount` int(10) NOT NULL DEFAULT '0' COMMENT '支付金额',
+  `refundAmount` int(10) NOT NULL DEFAULT '0' COMMENT '退款金额',
+  `actualAmount` int(10) NOT NULL DEFAULT '0' COMMENT '实付金额',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userId` (`userId`),
+  KEY `index_user_id` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_pay_agreement`;

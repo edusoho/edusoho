@@ -7,11 +7,8 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Biz\Order\Service\OrderService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeCourseMember extends AbstractResource
 {
@@ -45,7 +42,7 @@ class MeCourseMember extends AbstractResource
         }
 
         $this->getCourseMemberService()->removeStudent($courseId, $user->getId(), array(
-           'reason' => $reason
+           'reason' => $reason,
         ));
 
         return array('success' => true);

@@ -1,4 +1,5 @@
 <?php
+
 namespace QiQiuYun\SDK\Tests;
 
 use PHPUnit\Framework\TestCase;

@@ -11,12 +11,13 @@ class LianlianPayWebTrade extends BaseTrade
     public function getCustomFields($params)
     {
         $user = $this->getUser();
+
         return array(
             'attach' => array(
                 'user_id' => $user['id'],
                 'user_created_time' => $user['createdTime'],
                 'identify_user_id' => $this->getIdentify().'_'.$user['id'],
-            )
+            ),
         );
     }
 

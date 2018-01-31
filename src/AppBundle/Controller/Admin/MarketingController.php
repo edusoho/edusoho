@@ -5,17 +5,19 @@ namespace AppBundle\Controller\Admin;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
+use Biz\Marketing\Util\MarketingUtils;
 
 class MarketingController extends BaseController
 {
-    public function toMarketingAction(Request $request)
+    public function loginMarketingAction(Request $request)
     {
         $merchantUrl = $request->getSchemeAndHttpHost();
         $user = $this->getCurrentUser();
 
         $client = $this->createMarketingClient();
 
-        $siteInfo = $this->getSiteInfo();
+        $siteInfo = MarketingUtils::getSiteInfo($this->getSettingService(), $this->getWebExtension());
+        $entry = $request->query->get('entry');
 
         try {
             $login = $client->post('/login', array(
@@ -24,12 +26,28 @@ class MarketingController extends BaseController
                 'user_id' => $user['id'],
                 'user_name' => $user['nickname'],
                 'user_avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png'),
+                'entry' => $entry,
             ));
 
             return  $this->redirect($login['url']);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
+    }
+
+    public function loginDistributorAction(Request $request)
+    {
+        $form = MarketingUtils::generateLoginFormForCurrentUser(array(
+            'settingService' => $this->getSettingService(),
+            'webExtension' => $this->getWebExtension(),
+            'request' => $request,
+            'currentUser' => $this->getCurrentUser(),
+            'drpService' => $this->getDistributorUserService()->getDrpService(),
+        ));
+
+        return $this->render('admin/marketing/login.html.twig', array(
+            'form' => $form,
+        ));
     }
 
     private function createMarketingClient()
@@ -53,39 +71,18 @@ class MarketingController extends BaseController
         return $client;
     }
 
-    private function getSiteInfo()
-    {
-        $site = $this->getSettingService()->get('site', array());
-
-        $site['logo'] = preg_replace('#files/#', '', $site['logo'], 1);
-        $consult = $this->getSettingService()->get('consult', array());
-        $wechatFile = isset($consult['webchatURI']) ? $consult['webchatURI'] : '';
-        $consult['webchatURI'] = preg_replace('#files/#', '', $wechatFile, 1);
-
-        $siteInfo = array(
-            'name' => $site['name'],
-            'logo' => empty($site['logo']) ? '' : $this->getWebExtension()->getFurl($site['logo']),
-            'about' => $site['slogan'],
-            'wechat' => empty($consult['webchatURI']) ? '' : $this->getWebExtension()->getFurl($consult['webchatURI']),
-            'qq' => empty($consult['qq']) ? '' : $consult['qq'][0]['number'],
-            'telephone' => empty($consult['phone']) ? '' : $consult['phone'][0]['number'],
-        );
-
-        return $siteInfo;
-    }
-
-    public function canOpenMarketing(Request $request)
-    {
-        return true;
-    }
-
-    protected function getFileService()
-    {
-        return $this->createService('Content:FileService');
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getMarketingService()
+    {
+        return $this->createService('Marketing:MarketingService');
+    }
+
+    protected function getDistributorUserService()
+    {
+        return $this->createService('Distributor:DistributorUserService');
     }
 }

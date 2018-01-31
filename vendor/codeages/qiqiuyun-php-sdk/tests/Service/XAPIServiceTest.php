@@ -4,8 +4,10 @@ namespace QiQiuYun\SDK\Tests\Service;
 
 use QiQiuYun\SDK\Tests\BaseTestCase;
 use QiQiuYun\SDK\Service\XAPIService;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
-class ClientTest extends BaseTestCase
+class XAPIServiceTest extends BaseTestCase
 {
     protected $auth;
 
@@ -32,8 +34,8 @@ class ClientTest extends BaseTestCase
             ),
             'video' => array(
                 'id' => '1111',
-                'name' => '测试视频.mp4'
-            )
+                'name' => '测试视频.mp4',
+            ),
         );
         $result = array(
             'duration' => 100,
@@ -47,15 +49,13 @@ class ClientTest extends BaseTestCase
     }
 
     /**
-     * @expectedException QiQiuYun\SDK\Exception\ResponseException
+     * @expectedException \QiQiuYun\SDK\Exception\ResponseException
      * @expectedExceptionCode 9
-     *
-     * @return void
      */
     public function testWatchVideo_Error()
     {
         $service = $this->createXAPIService();
-        
+
         $actor = array(
             'id' => 1,
             'name' => '测试用户',
@@ -70,8 +70,8 @@ class ClientTest extends BaseTestCase
             ),
             'video' => array(
                 'id' => '1111',
-                'name' => '测试视频.mp4'
-            )
+                'name' => '测试视频.mp4',
+            ),
         );
         $result = array(
             'duration' => 100,
@@ -82,12 +82,15 @@ class ClientTest extends BaseTestCase
 
     protected function createXAPIService()
     {
+        $logger = new Logger('UnitTest');
+        $logger->pushHandler(new StreamHandler(dirname(dirname(__DIR__)).'/var/log/unittest.log', Logger::DEBUG));
+
         return new XAPIService($this->auth, array(
-            'base_uri' => 'http://localhost:8000/xapi/',
+            'base_uri' => 'http://localhost:8001/xapi/',
             'school' => array(
                 'id' => $this->accessKey,
                 'name' => '测试网校',
-            )
-        ));
+            ),
+        ), $logger);
     }
 }

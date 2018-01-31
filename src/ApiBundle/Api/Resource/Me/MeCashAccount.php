@@ -12,6 +12,7 @@ class MeCashAccount extends AbstractResource
     public function search(ApiRequest $request)
     {
         $balanceAccount = $this->getAccountService()->getUserBalanceByUserId($this->getCurrentUser()->getId());
+
         return array(
             'userId' => $balanceAccount['user_id'],
             'cash' => strval(MathToolkit::simple($balanceAccount['amount'], 0.01)),
