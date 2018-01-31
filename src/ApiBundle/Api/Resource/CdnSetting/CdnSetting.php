@@ -3,10 +3,8 @@
 namespace ApiBundle\Api\Resource\CdnSetting;
 
 use ApiBundle\Api\Annotation\Access;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 
 class CdnSetting extends AbstractResource
 {
