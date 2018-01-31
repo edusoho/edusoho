@@ -22,12 +22,12 @@ class ClassroomMember extends AbstractResource
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
         if (!$member || $member['role'] == array('auditor')) {
-
             $member = $this->tryJoin($classroom);
         }
 
         if ($member) {
             $this->getOCUtil()->single($member, array('userId'));
+
             return $member;
         }
 
