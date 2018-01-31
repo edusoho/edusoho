@@ -66,11 +66,17 @@ class TaskManageController extends BaseController
         );
     }
 
-    protected function prepareRenderTaskForDefaultCourseType($courseType, $task)
+    protected function prepareRenderTaskForDefaultCourseType($courseType, $task, $isOnlyTask)
     {
-        if (CourseService::DEFAULT_COURSE_TYPE != $courseType) {
+        if (CourseService::NORMAL_COURSE_TYPE == $courseType) {
+            if (!$isOnlyTask) {
+                $chapter = $this->getChapterDao()->get($task['categoryId']);
+                $task['chapter'] = $chapter;
+            }
+
             return $task;
         }
+
         $chapter = $this->getChapterDao()->get($task['categoryId']);
         $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
         $chapter['tasks'] = $tasks;
@@ -151,6 +157,7 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
+        $isOnlyTask = empty($task['categoryId']) ? 0 : 1; 
 
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
@@ -163,7 +170,7 @@ class TaskManageController extends BaseController
             );
         }
 
-        $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task);
+        $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task, $isOnlyTask);
 
         $html = $this->renderView(
             $this->createCourseStrategy($course)->getTaskItemTemplate(),

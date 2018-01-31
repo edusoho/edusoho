@@ -10,7 +10,7 @@
         <div class="pull-right">
           <button class="btn btn-primary btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
             <i class="es-icon es-icon-anonymous-iconfont"></i>
-            {{'course.plan_task.create_btn'|trans}}
+            {{'course.lesson'|trans}}
           </button>
           {% if courseSet.type|default('') == 'normal'  %}
             <button class="btn btn-default btn-sm js-batch-add

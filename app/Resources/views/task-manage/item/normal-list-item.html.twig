@@ -1,6 +1,12 @@
+<!-- 添加课时时展示 -->
+{% if task.chapter|default(null) %}
+  {% include 'course-manage/chapter/normal-list-item.html.twig' with {chapter:task.chapter, course:course} %}
+{% endif %}
+<!-- 添加课时时展示 end -->
+
 {% set file =  files[task.activityId]|default(null) %}
 <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
-  <div class="item-line"></div>
+  
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
     {% if task.isOptional %}

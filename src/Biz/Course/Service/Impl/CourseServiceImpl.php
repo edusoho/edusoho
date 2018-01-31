@@ -910,6 +910,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getChapterDao()->delete($deletedChapter['id']);
 
+        if ($deletedChapter['type'] == 'lesson') {
+            $this->getTaskService()->deleteTasksByCategoryId($courseId, $deletedChapter['id']);
+        }
+
         $this->dispatchEvent('course.chapter.delete', new Event($deletedChapter));
 
         $this->getLogService()->info('course', 'delete_chapter', "删除章节(#{$chapterId})", $deletedChapter);

@@ -1478,6 +1478,7 @@ course.plan_task.convert_failed: 'Transcode Failed'
 course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
 course.plan_task.which_part: "</i>No.<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
 course.plan_task.which_task: "</i>No.<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
+course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：%title%'
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.create_task: 'Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
@@ -1512,6 +1513,10 @@ course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Pl
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
 course.plan_task.activity_manage.create: 'Add'
 course.plan_task.activity_manage.modify: 'Edit'
+
+course.lesson: Lesson
+course.manage.create_lesson: Add Lesson
+
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
 course.plan_task.activity_manage.audio.converting: 'Transcoding, please wait.'

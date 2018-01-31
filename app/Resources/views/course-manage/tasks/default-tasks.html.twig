@@ -10,7 +10,7 @@
         {{'course.plan_task.total_tasks'|trans}}<span class="color-warning space" id="task-num">{{ course.taskNum }}</span>  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}
         <div class="pull-right">
           <button class="btn btn-primary btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson'}) }}"> <i class="es-icon es-icon-anonymous-iconfont"></i>
-            {{'course.plan_task.create_btn'|trans}}
+            {{'course.lesson'|trans}}
           </button>
           {% if courseSet.type|default('') == 'normal'  %}
           <button class="btn btn-default btn-sm js-batch-add

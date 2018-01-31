@@ -62,8 +62,7 @@ class ChapterManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $chapterId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $this->getCourseService()->deleteChapter($course['id'], $chapterId);
+        $this->getCourseService()->deleteChapter($courseId, $chapterId);
 
         return $this->createJsonResponse(array('success' => true));
     }

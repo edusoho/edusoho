@@ -79,6 +79,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
     {
         $chapterNumber = 1;
         $unitNumber = 1;
+        $lessonNumber = 1;
         $needResetUnitNumber = false;
         $seq = 1;
         $taskNumber = 1;
@@ -90,7 +91,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             switch ($chapter['type']) {
                 case 'chapter':
                 case 'unit':
-                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $needResetUnitNumber);
+                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $lessonNumber, $needResetUnitNumber);
                     break;
                 case 'lesson':
                     $fields['seq'] = $seq;
@@ -173,6 +174,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
     {
         $chapterNumber = 1;
         $unitNumber = 1;
+        $lessonNumber = 1;
         $needResetUnitNumber = false;
         $seq = 1;
         $taskNumber = 1;
@@ -182,7 +184,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             switch ($type) {
                 case 'chapter':
                     $chapter = $this->getChapter($chapterIdOrTaskId);
-                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $needResetUnitNumber);
+                    $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $lessonNumber, $needResetUnitNumber);
 
                     break;
                 case 'task':
@@ -267,7 +269,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
         unset($copiedChapters);
     }
 
-    private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$needResetUnitNumber)
+    private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$lessonNumber, &$needResetUnitNumber)
     {
         $fields = array(
             'seq' => $seq,
@@ -289,6 +291,12 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             ++$seq;
             $fields['number'] = $unitNumber;
             ++$unitNumber;
+        }
+
+        if ($chapter['type'] == 'lesson') {
+            ++$seq;
+            $fields['number'] = $lessonNumber;
+            ++$lessonNumber;
         }
 
         $this->chapterBatchUpdateHelper->add('id', $chapter['id'], $fields);

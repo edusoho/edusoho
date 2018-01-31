@@ -19,8 +19,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
 
     public function createTask($field)
     {
-        $task = parent::createTask($field);
-
+        $task = $this->_createLesson($field);
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
 
         return $task;
@@ -169,5 +168,25 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     public function unpublishTask($task)
     {
         return $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
+    }
+
+    private function _createLesson($task)
+    {
+        if (!empty($task['categoryId'])) {
+            $chapter = $this->getCourseService()->getChapter($task['fromCourseId'], $task['categoryId']);
+            if (empty($chapter)) {
+                throw $this->createInvalidArgumentException('CategoryId Invalid');
+            }
+        } else {
+            $chapter = array(
+                'courseId' => $task['fromCourseId'],
+                'title' => $task['title'],
+                'type' => 'lesson',
+            );
+            $chapter = $this->getCourseService()->createChapter($chapter);
+        }
+        $task['categoryId'] = $chapter['id'];
+        
+        return parent::createTask($task);
     }
 }
