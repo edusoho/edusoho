@@ -16,7 +16,9 @@ class ClassroomMemberFilter extends Filter
         if ($data['deadline']) {
             $data['deadline'] = date('c', $data['deadline']);
         }
-        $userFilter = new UserFilter();
-        $userFilter->filter($data['user']);
+        if (!empty($data['user'])) {
+            $userFilter = new UserFilter();
+            $userFilter->filter($data['user']);
+        }
     }
 }
