@@ -19,7 +19,7 @@ before_script:
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
 
-PHP 5.3:
+5.3 with nothing:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
@@ -31,7 +31,7 @@ PHP 5.3:
     - master
     - trigger
 
-PHP 5.3 And Redis:
+5.3 with Redis:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
@@ -44,17 +44,17 @@ PHP 5.3 And Redis:
     - master
     - trigger
 
-PHP 5.5:
+5.5 with php-cs-fixer:
   stage: test
   image: codeages/ci-php:5.5-5
   services:
     - mysql:5.5
     - redis:latest
   script:
-    - bin/php-cs-fix-validate
+    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit -c app/
 
-PHP 7.0 For Non-Develop:
+7.0 For Non-Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
@@ -68,7 +68,7 @@ PHP 7.0 For Non-Develop:
     - release
     - trigger
 
-PHP 7.0 For Develop:
+7.0 For Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
