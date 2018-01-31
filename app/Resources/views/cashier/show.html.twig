@@ -118,7 +118,7 @@
       <div class="order-center-price">
         <div class="order-center-price__title">
           {% if currency == 'coin' %}
-            <i class="cd-icon cd-icon-help cd-text-xs cd-dark-assist" data-toggle="tooltip" data-placement="top"
+            <i class="cd-icon cd-icon-help cd-text-sm cd-dark-assist" data-toggle="tooltip" data-placement="top"
               title="{{ 'order.confirm.rate_change'|trans({ '%coin_name%': setting('coin.coin_name'), '%rmb_unit%': (1 / setting('coin.cash_rate')) }) }}">
             </i>
           {% endif %}
