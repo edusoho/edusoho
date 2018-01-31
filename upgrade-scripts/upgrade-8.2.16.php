@@ -71,6 +71,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'distributorJobData',
             'userDistributorToken',
             'openCourseAddOrg',
+            'turncateJobLog',
+            'deleteSuccessJobFired',
             'bizSchedulerAddMessageAndTrace',
             'bizSchedulerAddJobProcess',
         );
@@ -226,6 +228,19 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return 1;
     }
+
+    protected function turncateJobLog()
+    {
+        $this->getConnection()->exec("TRUNCATE TABLE `biz_scheduler_job_log`;");
+        return 1;
+    }
+
+    protected function deleteSuccessJobFired()
+    {
+        $this->getConnection()->exec("DELETE FROM `biz_scheduler_job_fired` WHERE status = 'success';");
+        return 1;
+    }
+
 
     protected function initBlock()
     {
