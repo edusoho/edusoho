@@ -149,6 +149,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function distributorJobData()
     {
+        $currentTime = time();
         $this->getConnection()->exec("
             CREATE TABLE IF NOT EXISTS `distributor_job_data` (
                 `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
