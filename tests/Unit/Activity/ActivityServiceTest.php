@@ -141,6 +141,10 @@ class ActivityServiceTest extends BaseTestCase
                     'functionName' => 'isFinished',
                     'returnValue' => 0,
                 ),
+                array(
+                    'functionName' => 'getTimeSec',
+                    'returnValue' => 200,
+                ),
             )
         );
         $data = array(
@@ -170,6 +174,10 @@ class ActivityServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'isFinished',
                     'returnValue' => 0,
+                ),
+                array(
+                    'functionName' => 'getTimeSec',
+                    'returnValue' => 200,
                 ),
             )
         );

@@ -9,18 +9,13 @@ class VideoActivityWatchListener extends Listener
 {
     public function handle($activity, $data)
     {
-        $magicSetting = $this->getSettingService()->get('magic');
-        $watchTimeSec = isset($magicSetting['watch_time_sec']) && !empty($magicSetting['watch_time_sec']) ? $magicSetting['watch_time_sec'] : TaskService::WATCH_TIME_STEP;
-        if (!empty($data['watchTime']) && $data['watchTime'] <= $watchTimeSec) {
-            $watchTime = $data['watchTime'];
-        } else {
-            $watchTime = TaskService::WATCH_TIME_STEP;
-        }
         if (empty($data['task'])) {
             return;
         }
-        $this->getXapiService()->watchTask($data['task']['id'], $watchTime);
-        $this->getTaskService()->watchTask($data['task']['id'], $watchTime);
+        $watchTimeSec = $this->getTaskService()->getTimeSec('watch');
+        $data['watchTime'] = $data['watchTime'] > $watchTimeSec ? $watchTimeSec : $data['watchTime'];
+        $this->getXapiService()->watchTask($data['task']['id'], $data['watchTime']);
+        $this->getTaskService()->watchTask($data['task']['id'], $data['watchTime']);
     }
 
     /**
@@ -37,10 +32,5 @@ class VideoActivityWatchListener extends Listener
     protected function getXapiService()
     {
         return $this->getBiz()->service('Xapi:XapiService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
     }
 }
