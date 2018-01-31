@@ -35,6 +35,7 @@ class MeLiveCourseSet extends AbstractResource
 
         $uniqueMemberIds = $this->getUniqueCourseSetIds($members);
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($uniqueMemberIds);
+
         return array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds));
     }
 

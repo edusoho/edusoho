@@ -221,8 +221,11 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $url = '';
         }
 
-        $baseUrl = $this->request->getSchemeAndHttpHost();
-        $url = empty($url) ? '' : $baseUrl.'/'.$url;
+        if ($this->isAbsoluteUrl($url)) {
+            $url = $this->request->getScheme().':'.ltrim($url, ':');
+        } else {
+            $url = $this->getBaseUrl().$url;
+        }
 
         return $url;
     }

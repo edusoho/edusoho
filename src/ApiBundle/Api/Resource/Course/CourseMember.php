@@ -45,6 +45,7 @@ class CourseMember extends AbstractResource
     {
         $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
         $this->getOCUtil()->single($courseMember, array('userId'));
+
         return $courseMember;
     }
 
@@ -64,6 +65,7 @@ class CourseMember extends AbstractResource
 
         if ($member) {
             $this->getOCUtil()->single($member, array('userId'));
+
             return $member;
         }
 
