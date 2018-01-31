@@ -298,17 +298,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.9.9",
-        "version_normalized": "0.9.9.0",
+        "version": "v0.9.10",
+        "version_normalized": "0.9.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
+            "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/c319ccece125b07da681f4893dfa50bf5bbb99f7",
-            "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/6d8a27d1a77da92aab9942bc9739bed051fe7b57",
+            "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57",
             "shasum": ""
         },
         "require": {
@@ -330,7 +330,7 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "^4.8|^5.7|^6.0"
         },
-        "time": "2018-01-18T02:33:43+00:00",
+        "time": "2018-01-30T03:05:11+00:00",
         "bin": [
             "bin/biz"
         ],
@@ -473,6 +473,51 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "codeages/qiqiuyun-php-sdk",
+        "version": "v0.1.0",
+        "version_normalized": "0.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
+            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
+            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "monolog/monolog": "^1.18",
+            "phpunit/phpunit": "^4 || ^5 || ^6",
+            "silex/silex": "^2.0"
+        },
+        "time": "2018-01-26T03:47:46+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/functions.php"
+            ],
+            "psr-4": {
+                "QiQiuYun\\SDK\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "QiQiuYun PHP SDK"
     },
     {
         "name": "codeages/rate-limiter",
@@ -2738,7 +2783,8 @@
             "spreadsheet",
             "xls",
             "xlsx"
-        ]
+        ],
+        "abandoned": "phpoffice/phpspreadsheet"
     },
     {
         "name": "phpspec/prophecy",
@@ -5587,50 +5633,5 @@
             "security",
             "xxtea"
         ]
-    },
-    {
-        "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.1.0",
-        "version_normalized": "0.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0.zip",
-            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "psr/log": "^1.0"
-        },
-        "require-dev": {
-            "monolog/monolog": "^1.18",
-            "phpunit/phpunit": "^4 || ^5 || ^6",
-            "silex/silex": "^2.0"
-        },
-        "time": "2018-01-26T03:47:46+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/functions.php"
-            ],
-            "psr-4": {
-                "QiQiuYun\\SDK\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com",
-                "homepage": "http://www.codeages.com"
-            }
-        ],
-        "description": "QiQiuYun PHP SDK"
     }
 ]

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "74a429ffafe8faadd141ce290caa8750",
+    "content-hash": "ae5c137838bacee319c90aa7d333af0f",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -293,16 +293,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.9",
+            "version": "v0.9.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7"
+                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/c319ccece125b07da681f4893dfa50bf5bbb99f7",
-                "reference": "c319ccece125b07da681f4893dfa50bf5bbb99f7",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/6d8a27d1a77da92aab9942bc9739bed051fe7b57",
+                "reference": "6d8a27d1a77da92aab9942bc9739bed051fe7b57",
                 "shasum": ""
             },
             "require": {
@@ -341,7 +341,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2018-01-18T02:33:43+00:00"
+            "time": "2018-01-30T03:05:11+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -471,7 +471,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0.zip",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
                 "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
                 "shasum": ""
             },
@@ -2474,6 +2474,7 @@
                 "xls",
                 "xlsx"
             ],
+            "abandoned": "phpoffice/phpspreadsheet",
             "time": "2015-05-01T07:00:55+00:00"
         },
         {
