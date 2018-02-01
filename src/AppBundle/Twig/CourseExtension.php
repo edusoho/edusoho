@@ -45,7 +45,13 @@ class CourseExtension extends \Twig_Extension
             //课程视频转音频完成率
             new \Twig_SimpleFunction('video_convert_completion', array($this, 'getAudioConvertionStatus')),
             new \Twig_SimpleFunction('is_support_enable_audio', array($this, 'isSupportEnableAudio')),
+            new \Twig_SimpleFunction('get_course', array($this, 'getCourse')),
         );
+    }
+
+    public function getCourse($id)
+    {
+        return $this->getCourseService()->getCourse($id);
     }
 
     public function isSupportEnableAudio($enableAudioStatus)
