@@ -10,8 +10,6 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Marketing\Service\MarketingService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ApiBundle\Api\Annotation\ResponseFilter;
-use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomMarketingMember extends AbstractResource
 {
@@ -24,12 +22,6 @@ class ClassroomMarketingMember extends AbstractResource
      */
     public function add(ApiRequest $request, $classroomId)
     {
-        $fileSystem = new Filesystem();
-        $path = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/files/test/test.txt';
-        if (!file_exists(dirname($path))) {
-            $fileSystem->mkdir(dirname($path));
-        }
-        file_put_contents($path, $request->headers, FILE_APPEND);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if (empty($classroom)) {
             throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
