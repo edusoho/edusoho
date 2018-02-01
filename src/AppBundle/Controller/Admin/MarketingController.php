@@ -76,11 +76,6 @@ class MarketingController extends BaseController
         return $this->createService('System:SettingService');
     }
 
-    protected function getMarketingService()
-    {
-        return $this->createService('Marketing:MarketingService');
-    }
-
     protected function getDistributorUserService()
     {
         return $this->createService('Distributor:DistributorUserService');

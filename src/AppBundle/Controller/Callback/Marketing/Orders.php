@@ -21,7 +21,7 @@ class Orders extends MarketingBase
             $logger->debug('准备验证auth');
             $authentication->auth($request);
 
-            return $this->getMarketingService()->addUserToCourse($postData);
+            return $this->getMarketingCourseService()->join($postData);
         } catch (\Exception $e) {
             $logger->error($e);
 
@@ -29,8 +29,8 @@ class Orders extends MarketingBase
         }
     }
 
-    protected function getMarketingService()
+    protected function getMarketingCourseService()
     {
-        return $this->createService('Marketing:MarketingService');
+        return $this->createService('Marketing:MarketingCourseService');
     }
 }
