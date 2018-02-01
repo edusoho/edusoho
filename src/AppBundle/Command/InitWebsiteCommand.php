@@ -107,7 +107,7 @@ class InitWebsiteCommand extends BaseCommand
     {
         $registerUser = array(
             'nickname' => $user['username'],
-            'emailOrMobile' => $user['email'],
+            'email' => $user['email'],
             'password' => $user['password'],
         );
         $registerUser = $this->getAuthService()->register($registerUser);
