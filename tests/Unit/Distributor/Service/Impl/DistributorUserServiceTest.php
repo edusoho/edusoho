@@ -37,7 +37,7 @@ class DistributorUserServiceTest extends BaseTestCase
         );
 
         $this->assertEquals(
-            '123:222:1000:1:1516421750:11f75a4d43ba172ef4cd7d378bc47bd8:dPwjgZTHe6zrsdlQzyRA2ztEkhw=',
+            '123:222:1000:1:1516421750:11f75a4d43ba172ef4cd7d378bc47bd8:SnmFGWnTcR6LPqBqocJ1_n3rfg4=',
             $result
         );
 

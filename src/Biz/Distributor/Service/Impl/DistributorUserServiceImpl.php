@@ -119,7 +119,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
     private function sign($arr, $time, $once)
     {
         ksort($arr);
-        $json = implode('\n', array($time, $once, json_encode($arr)));
+        $json = implode("\n", array($time, $once, json_encode($arr)));
 
         $settings = $this->getSettingService()->get('storage', array());
         $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
