@@ -5,11 +5,13 @@ namespace Tests\Unit\Marketing;
 use Biz\BaseTestCase;
 use Tests\Unit\Marketing\Tools\MockedClassroomMemberServiceImpl;
 use Tests\Unit\Marketing\Tools\MockedCourseMemberServiceImpl;
+use AppBundle\Common\TimeMachine;
 
 class MarketingServiceTest extends BaseTestCase
 {
     public function testAddUserToCourse()
     {
+        TimeMachine::setMockedTime(1517401609);
         $postData = array(
             'mobile' => '13675641112',
             'user_id' => 12,
@@ -37,6 +39,7 @@ class MarketingServiceTest extends BaseTestCase
             ),
             'target_type' => 'course',
             'target_id' => 12,
+            'order_pay_time' => TimeMachine::time(),
         );
 
         $user = $this->getUserDao()->create(
@@ -53,7 +56,7 @@ class MarketingServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $biz['@Marketing:MarketingCourseMemberService'] = new MockedCourseMemberServiceImpl($this->getBiz());
 
-        $result = $this->getMarketingService()->addUserToCourse($postData);
+        $result = $this->getMarketingCourseService()->join($postData);
 
         $this->assertEquals('3', $this->getCourseMemberService()->getUserId());
         $this->assertEquals(12, $this->getCourseMemberService()->getCourseId());
@@ -97,6 +100,7 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals('11000', $order['price_amount']);
         $this->assertEquals('1', $order['pay_amount']);
         $this->assertEquals('course', $order['create_extra']['targetType']);
+        $this->assertEquals(TimeMachine::time(), $order['pay_time']);
     }
 
     public function testAddUserToClassroom()
@@ -128,6 +132,7 @@ class MarketingServiceTest extends BaseTestCase
             ),
             'target_type' => 'classroom',
             'target_id' => 12,
+            'order_pay_time' => TimeMachine::time(),
         );
 
         $user = $this->getUserDao()->create(
@@ -149,7 +154,7 @@ class MarketingServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $biz['@Marketing:MarketingClassroomMemberService'] = new MockedClassroomMemberServiceImpl($this->getBiz());
 
-        $result = $this->getMarketingService()->addUserToClassroom($postData);
+        $result = $this->getMarketingClassroomService()->join($postData);
 
         $this->assertEquals('3', $this->getClassroomMemberService()->getUserId());
         $this->assertEquals(12, $this->getClassroomMemberService()->getClassroomId());
@@ -193,11 +198,17 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals('11000', $order['price_amount']);
         $this->assertEquals('1', $order['pay_amount']);
         $this->assertEquals('classroom', $order['create_extra']['targetType']);
+        $this->assertEquals(TimeMachine::time(), $order['pay_time']);
     }
 
-    protected function getMarketingService()
+    protected function getMarketingCourseService()
     {
-        return $this->createService('Marketing:MarketingService');
+        return $this->createService('Marketing:MarketingCourseService');
+    }
+
+    protected function getMarketingClassroomService()
+    {
+        return $this->createService('Marketing:MarketingClassroomService');
     }
 
     protected function getUserDao()
