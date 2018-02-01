@@ -22,6 +22,7 @@ class SyncDaily extends AbstractJob
             $conditions = array(
                 'createdTime_GE' => $cursor,
                 'createdTime_LT' => $nextCursor,
+                'event_EQ' => 'doing',
             );
 
             if ($cursor == $learnSetting['currentTime']) {

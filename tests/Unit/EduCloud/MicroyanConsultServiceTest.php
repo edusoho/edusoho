@@ -60,7 +60,6 @@ class MicroyanConsultServiceTest extends BaseTestCase
         return $mockObject;
     }
 
-
     protected function getMicroyanConsultService()
     {
         return $this->createService('EduCloud:MicroyanConsultService');
