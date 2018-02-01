@@ -143,7 +143,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $data = array(
             'trade_sn' => '',
-            'pay_time' => 0,
+            'pay_time' => empty($params['pay_time']) ? 0 : $params['pay_time'],
             'order_sn' => $order['sn'],
         );
         $order = $this->getWorkflowService()->paid($data);

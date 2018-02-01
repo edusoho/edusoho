@@ -4,11 +4,11 @@ namespace Biz\Distributor\Service\Impl;
 
 use Biz\Distributor\Service\DistributorService;
 use Biz\Distributor\Util\DistributorJobStatus;
-use Biz\Marketing\Service\Impl\MarketingServiceImpl;
+use Biz\Marketing\Service\Impl\MarketingCourseServiceImpl;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 
-abstract class BaseDistributorServiceImpl extends MarketingServiceImpl implements DistributorService
+abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl implements DistributorService
 {
     public function findJobData()
     {
