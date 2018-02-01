@@ -27,7 +27,7 @@ class MarketingCourseServiceImpl extends MarketingBaseServiceImpl implements Mar
 
     protected function getTargetType()
     {
-        return 'MarketingClassroom';
+        return 'MarketingCourse';
     }
 
     /**
