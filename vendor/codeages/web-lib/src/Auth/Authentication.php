@@ -3,8 +3,6 @@
 namespace Codeages\Weblib\Auth;
 
 use Codeages\Weblib\Error\ErrorCode;
-use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\ServiceKernel;
 
 class Authentication
 {
@@ -60,12 +58,7 @@ class Authentication
                 throw new AuthException("Your ip `{$ip}` is not allowed.", ErrorCode::FORBIDDEN);
             }
         }
-        $fileSystem = new Filesystem();
-        $path = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/files/test/test.txt';
-        if (!file_exists(dirname($path))) {
-            $fileSystem->mkdir(dirname($path));
-        }
-        file_put_contents($path, $this->getRequestText($request));
+
         $strategy->check($token, $key, $this->getRequestText($request));
 
         if ($key->isInactive()) {
