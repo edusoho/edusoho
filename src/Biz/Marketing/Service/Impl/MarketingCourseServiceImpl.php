@@ -12,8 +12,8 @@ class MarketingCourseServiceImpl extends MarketingBaseServiceImpl implements Mar
     }
 
     /**
-     * 记录debug日志用
-     * $logger->debug("准备把用户,{$user['id']}添加到班级");
+     * 记录日志用
+     * $logger->info("准备把用户,{$user['id']}添加到班级");
      */
     protected function getPreparedDebugInfo($user)
     {

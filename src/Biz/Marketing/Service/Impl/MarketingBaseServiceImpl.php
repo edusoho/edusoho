@@ -49,12 +49,11 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
     public function join($postData)
     {
         $logger = $this->biz['logger'];
-        $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
-        $logger->debug(json_encode($postData));
+        $logger->info(json_encode($postData));
 
         list($isNew, $user, $password) = $this->createUserIfNeed($postData, $logger);
 
-        $logger->debug($this->getPreparedDebugInfo($user));
+        $logger->info($this->getPreparedDebugInfo($user));
         $orderInfo = array(
             'marketingOrderId' => $postData['order_id'],
             'marketingOrderPriceAmount' => $postData['order_price_amount'] / 100,  //原价和现价 都需要除以 100，deduct不需要除以 100
@@ -63,7 +62,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
             'marketingActivityName' => $postData['activity_name'],
             'deducts' => $this->getUserOrderDeduct($user['id'], $postData['deduct']),
             'targetType' => $this->getTargetType(),
-            'pay_time' => $postData['order_pay_time'],
+            'pay_time' => empty($postData['order_pay_time']) ? 0 : $postData['order_pay_time'],
         );
         $target = array(
             'type' => $postData['target_type'],
@@ -71,7 +70,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         );
         list($classroom, $member, $order) = $this->makeUserJoin($user['id'], $target['id'], $orderInfo);
         $logMsg = $this->getFinishedInfo($user, $classroom, $member, $order);
-        $logger->debug($logMsg);
+        $logger->info($logMsg);
 
         $response = array();
         $response['code'] = 'success';
@@ -110,14 +109,14 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
     abstract protected function joinTarget($targetId, $userId, $data);
 
     /**
-     * @return 如 "准备把用户,{$user['id']}添加到班级"，用于记录debug日志，如下
-     *             $logger->debug("准备把用户,{$user['id']}添加到班级");
+     * @return 如 "准备把用户,{$user['id']}添加到班级"，用于记录info日志，如下
+     *             $logger->info("准备把用户,{$user['id']}添加到班级");
      */
     abstract protected function getPreparedDebugInfo($user);
 
     /**
      * @return 如 "把用户,{$user['id']}添加到课程成功,课程ID：{$target['id']},memberId:{$member['id']},订单Id:{$order['id']}"，
-     *             用于返回信息及记录debug日志
+     *             用于返回信息及记录info日志
      */
     abstract protected function getFinishedInfo($user, $target, $member, $order);
 
@@ -182,7 +181,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         $password = '';
         if (empty($user)) {
-            $logger->debug('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
+            $logger->info('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
             $isNew = true;
             $password = substr($mobile, mt_rand(0, 4), 6);
             $postData['password'] = $password;
@@ -222,9 +221,9 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $registration['verifiedMobile'] = $postData['mobile'];
         $registration['mobile'] = $postData['mobile'];
         $registration['nickname'] = $postData['nickname'];
-        $logger->debug('Marketing用户名：'.$registration['nickname']);
+        $logger->info('Marketing用户名：'.$registration['nickname']);
         $registration['nickname'] = $this->getUserService()->generateNickname($registration);
-        $logger->debug('ES用户名：'.$registration['nickname']);
+        $logger->info('ES用户名：'.$registration['nickname']);
         $registration['registeredWay'] = 'web';
         $registration['createdIp'] = isset($postData['client_ip']) ? $postData['client_ip'] : '';
         $registration['password'] = $postData['password'];
