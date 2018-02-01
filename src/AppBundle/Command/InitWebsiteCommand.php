@@ -54,7 +54,7 @@ class InitWebsiteCommand extends BaseCommand
             $this->initTopBanner();
             $initializer->initRegisterSetting($user);
             $setting = array(
-                'auth' => array('register_mode' => 'email_or_mobile'),
+                'auth' => array('register_mode' => 'email'),
                 'storage' => array('upload_mode' => 'cloud',
                                    'cloud_access_key' => $accessKey,
                                    'cloud_secret_key' => $secretKey,
