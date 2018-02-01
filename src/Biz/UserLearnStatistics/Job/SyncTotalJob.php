@@ -36,6 +36,7 @@ class SyncTotalJob extends AbstractJob
                 'createdTime_LT' => $learnSetting['currentTime'],
                 'userIds' => $userIds,
                 'skipSyncCourseSetNum' => true,
+                'event_EQ' => 'doing',
             );
             $this->getLearnStatisticsService()->batchCreateTotalStatistics($conditions);
             $endUser = end($users);

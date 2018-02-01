@@ -6943,6 +6943,11 @@ admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
 admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
+admin.magic_setting.learn_time_sec: 学习时长上报周期
+admin.magic_setting.learn_time_sec_tip: 秒为单位
+admin.magic_setting.watch_time_sec: 视频观看时长上报周期
+admin.magic_setting.watch_time_sec_tip: 秒为单位
+
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
@@ -8264,7 +8269,7 @@ user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
 user.learn.statistics.exit.course.num: 退出计划数
 user.learn.statistics.finished.task.num: 学完任务数
-user.learn.statistics.learned.econds: 学习时长(分)
+user.learn.statistics.learned.seconds: 学习时长(分)
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
