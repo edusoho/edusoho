@@ -176,10 +176,10 @@
     </a>
     <ul class="dropdown-menu">
       {% if default %}
-        <li class="{% if selectedChoice == '' %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="">{{ default }}</a></li>
+        <li class="{% if selectedChoice == '' %}active{% endif %}"><a href="javascript:;" data-toggle="cd-table-filter" data-target="{{ dataTarget }}" data-filter-key="{{ key }}" data-filter-value="">{{ default }}</a></li>
       {% endif %}
       {% for choiceKey,choice in choices %}
-        <li class="{% if selectedChoice == choiceKey %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="{{ key }}={{ choiceKey }}">{{ choice }}</a></li>
+        <li class="{% if selectedChoice == choiceKey %}active{% endif %}"><a href="javascript:;" data-toggle="cd-table-filter" data-target="{{ dataTarget }}" data-filter-key="{{ key }}"  data-filter-value="{{ choiceKey }}">{{ choice }}</a></li>
       {% endfor %}
     </ul>
   </div>
