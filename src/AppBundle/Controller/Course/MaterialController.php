@@ -83,7 +83,7 @@ class MaterialController extends CourseBaseController
             throw $this->createNotFoundException();
         }
 
-        if ($material['source'] == 'courselesson' || !$material['lessonId']) {
+        if ($material['source'] == 'courseactivity' || !$material['lessonId']) {
             return $this->createMessageResponse('error', '无权下载该资料');
         }
 

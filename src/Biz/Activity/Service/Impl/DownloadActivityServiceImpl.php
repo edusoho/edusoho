@@ -47,6 +47,10 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
 
         $downloadAvtivity = $activity['ext'];
 
+        if (!isset($downloadAvtivity['fileIds'])) {
+            throw $this->createInvalidArgumentException('not download activity');
+        }
+
         if (!in_array($material['fileId'], $downloadAvtivity['fileIds'])) {
             throw $this->createNotFoundException('not activity file');
         }
