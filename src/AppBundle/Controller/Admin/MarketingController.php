@@ -55,10 +55,8 @@ class MarketingController extends BaseController
         $storage = $this->getSettingService()->get('storage', array());
         $developerSetting = $this->getSettingService()->get('developer', array());
 
-        $marketingDomain = (
-                            isset($developerSetting['marketing_domain']) &&
-                            !empty($developerSetting['marketing_domain'])
-                        ) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
+        $marketingDomain = !empty($developerSetting['marketing_domain']) ?
+            $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
 
         $config = array(
             'accessKey' => $storage['cloud_access_key'],

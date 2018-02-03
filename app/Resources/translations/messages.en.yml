@@ -5628,6 +5628,7 @@ admin.developer_setting.im_api_address: 'IMAPI Address'
 admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN address'
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
 admin.developer_setting.market_address: 'Marketing platform address'
+admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.magic_setting.need_careful_tips: Attention
