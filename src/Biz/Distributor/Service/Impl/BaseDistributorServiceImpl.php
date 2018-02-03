@@ -56,12 +56,9 @@ abstract class BaseDistributorServiceImpl extends MarketingCourseServiceImpl imp
         $helper->flush();
     }
 
-    protected function getServerUrlConfig()
+    public function getDrpService()
     {
-        return array(
-            'defaultUrl' => 'http://fx.marketing.com',
-            'developerSettingName' => 'distributor_server',
-        );
+        return $this->biz['qiQiuYunSdk.drp'];
     }
 
     /**

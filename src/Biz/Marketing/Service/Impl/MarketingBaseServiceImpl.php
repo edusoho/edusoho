@@ -8,8 +8,6 @@ use Biz\Role\Util\PermissionBuilder;
 use Biz\Marketing\Service\MarketingService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
-use QiQiuYun\SDK\Auth;
-use QiQiuYun\SDK\Service\DrpService;
 
 abstract class MarketingBaseServiceImpl extends BaseService implements MarketingService
 {
@@ -83,11 +81,6 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $response['msg'] = $logMsg;
 
         return $response;
-    }
-
-    public function getDrpService()
-    {
-        return $this->getQiQiuYunSDK()->getDrpService();
     }
 
     abstract protected function joinTarget($targetId, $userId, $data);

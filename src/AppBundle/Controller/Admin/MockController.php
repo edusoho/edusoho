@@ -13,9 +13,7 @@ class MockController extends BaseController
 {
     public function indexAction()
     {
-        if (!$this->getCurrentUser()->isSuperAdmin()) {
-            throw new AccessDeniedException();
-        }
+        $this->validate();
         $tokenExpireDateStr = TimeMachine::expressionToStr('+2 day');
 
         return $this->render('admin/mock/index.html.twig', array(
@@ -26,9 +24,7 @@ class MockController extends BaseController
 
     public function mockDistributorTokenAction(Request $request)
     {
-        if (!$this->getCurrentUser()->isSuperAdmin()) {
-            throw new AccessDeniedException();
-        }
+        $this->validate();
 
         $data = array(
             'merchant_id' => '123',
@@ -47,9 +43,7 @@ class MockController extends BaseController
 
     public function getPostDataAction(Request $request)
     {
-        if (!$this->getCurrentUser()->isSuperAdmin()) {
-            throw new AccessDeniedException();
-        }
+        $this->validate();
 
         $type = $request->request->get('type');
         $service = $this->getDistributorService($type);
@@ -60,9 +54,7 @@ class MockController extends BaseController
 
     public function postDataAction(Request $request)
     {
-        if (!$this->getCurrentUser()->isSuperAdmin()) {
-            throw new AccessDeniedException();
-        }
+        $this->validate();
 
         $type = $request->request->get('type');
         $service = $this->getDistributorService($type);
@@ -87,5 +79,22 @@ class MockController extends BaseController
     protected function getDistributorService($type)
     {
         return $this->createService("Distributor:Distributor{$type}Service");
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
+    }
+
+    private function validate()
+    {
+        $storage = $this->getSettingService()->get('storage', array());
+        if (empty($storage['cloud_access_key'])) {
+            throw new AccessDeniedException('未设置教育云授权码！！！');
+        }
+
+        if (!$this->getCurrentUser()->isSuperAdmin()) {
+            throw new AccessDeniedException();
+        }
     }
 }

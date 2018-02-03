@@ -43,7 +43,7 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
             $resultStr .= $value;
         }
 
-        $resultStr .= ":{$time}:{$once}:{$this->sign($data, $time, $once)}";
+        $resultStr .= ":{$time}:{$once}:{$this->sign($once, $time, $data)}";
 
         return $resultStr;
     }
@@ -116,13 +116,14 @@ class DistributorUserServiceImpl extends BaseDistributorServiceImpl
         return $this->createService('User:UserService');
     }
 
-    private function sign($arr, $time, $once)
+    private function sign($once, $time, $arr)
     {
         ksort($arr);
         $json = implode("\n", array($once, $time, json_encode($arr)));
 
         $settings = $this->getSettingService()->get('storage', array());
         $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
+
         return $auth->makeSignature($json);
     }
 
