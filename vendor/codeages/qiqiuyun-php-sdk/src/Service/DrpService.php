@@ -68,7 +68,6 @@ class DrpService extends BaseService
         ksort($data);
         $dataStr = json_encode($data);
         $signingText = implode("\n", array($nonce, $time, $dataStr));
-
         $actualSign = $this->auth->makeSignature($signingText);
         if ($expectSign != $actualSign) {
             throw new SDKException('非法请求:sign值不一致');

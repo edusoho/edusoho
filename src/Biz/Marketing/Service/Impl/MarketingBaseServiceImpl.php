@@ -87,23 +87,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
 
     public function getDrpService()
     {
-        // if (empty($this->drpService)) {
-        //     $developerSetting = $this->getSettingService()->get('developer', array());
-        //     $config = $this->getServerUrlConfig();
-        //     $serverUrl = $config['defaultUrl'];
-        //     if (!empty($developerSetting[$config['developerSettingName']])) {
-        //         $serverUrl = $developerSetting[$config['developerSettingName']];
-        //     }
-
-        //     $this->drpService = null;
-        //     $settings = $this->getSettingService()->get('storage', array());
-        //     if (!empty($settings['cloud_access_key']) && !empty($settings['cloud_secret_key'])) {
-        //         $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-        //         $this->drpService = new DrpService($auth, array('base_uri' => $serverUrl));
-        //     }
-        // }
         return $this->getQiQiuYunSDK()->getDrpService();
-        // return $this->drpService;
     }
 
     abstract protected function joinTarget($targetId, $userId, $data);

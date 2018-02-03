@@ -24,7 +24,7 @@ class DistributorRegistDecoderImplTest extends BaseTestCase
         $this->assertEquals('distributor', $result['type']);
         $this->assertEquals($token, $result['distributorToken']);
 
-        $settingService->shouldHaveReceived('get')->times(3);
+        $settingService->shouldHaveReceived('get')->times(5);
     }
 
     public function testDealDataAfterSave()
