@@ -14,7 +14,7 @@ class DownloadActivityServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'getActivity',
-                    'returnValue' => array('id' => 11, 'fromCourseId' => 12),
+                    'returnValue' => array('id' => 11, 'fromCourseId' => 12, 'ext' => array('fileIds' => array(111, 222))),
                     'withParams' => array(22, true),
                 ),
             )
@@ -31,7 +31,7 @@ class DownloadActivityServiceTest extends BaseTestCase
             )
         );
 
-        $result = $this->getDownloadActivityService()->downloadActivityFile(22, 33);
+        $result = $this->getDownloadActivityService()->downloadActivityFile(12, 22, 33);
 
         $this->assertEquals(array('id' => 111, 'fileId' => 111, 'link' => 'test'), $result);
     }
