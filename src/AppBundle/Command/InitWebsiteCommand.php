@@ -219,6 +219,7 @@ class InitWebsiteCommand extends BaseCommand
     protected function getDb()
     {
         $pdo = new \PDO("mysql:host={$this->db_host};port={$this->db_port}", "{$this->db_user}", "{$this->db_password}");
+        $pdo->exec('SET NAMES utf8');
         $pdo->exec("USE `{$this->db_name}`;");
 
         return $pdo;
