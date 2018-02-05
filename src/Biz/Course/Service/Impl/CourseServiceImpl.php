@@ -649,7 +649,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $tasks = $this->findTasksByCourseId($course);
 
-        return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
+        return $this->createCourseStrategy($course)->findCourseItems($courseId, $tasks, $limitNum);
     }
 
     protected function findTasksByCourseId($course)

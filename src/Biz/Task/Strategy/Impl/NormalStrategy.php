@@ -27,12 +27,12 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTasksTemplate()
     {
-        return 'course-manage/tasks/normal-tasks.html.twig';
+        return 'lesson-manage/normal-tasks.html.twig';
     }
 
     public function getTaskItemTemplate()
     {
-        return 'task-manage/item/normal-list-item.html.twig';
+        return 'lesson-manage/normal-list-item.html.twig';
     }
 
     public function deleteTask($task)
@@ -120,6 +120,30 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         );
 
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
+    }
+
+    public function findCourseItems($courseId, $tasks)
+    {
+        $items = array();
+        uasort(
+            $tasks,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
+        foreach ($chapters as $index => $chapter) {
+            $chapterId = $chapter['id'];
+            if (!empty($tasks[$chapterId])) {
+                $chapter['tasks'] = $tasks[$chapterId];
+            }
+            $items[] = $chapter;
+        } 
+
+        return $items;
     }
 
     public function prepareCourseItems($courseId, $tasks, $limitNum)
