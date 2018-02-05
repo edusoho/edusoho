@@ -478,7 +478,7 @@ class TaskController extends BaseController
             }
             //任务每分钟只允许触发一次，这里用设定周期-5秒作为标准判断，以应对网络延迟
             $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
-            if ($now - $taskStore['lastTriggerTime'] < $learnTimeSec-5) {
+            if ($now - $taskStore['lastTriggerTime'] < $learnTimeSec - 5) {
                 return false;
             }
             $taskStore['lastTriggerTime'] = $now;
