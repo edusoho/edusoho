@@ -64,11 +64,11 @@ class TaskController extends BaseController
         $activityConfig = $this->getActivityConfigByTask($task);
 
         if (null !== $member && 'student' === $member['role'] && $activityConfig->allowTaskAutoStart($task)) {
-            $this->getActivityService()->trigger(
-                $task['activityId'],
+            $this->getTaskService()->trigger(
+                $task['id'],
                 'start',
                 array(
-                    'task' => $task,
+                    'taskId' => $task['id'],
                 )
             );
         }

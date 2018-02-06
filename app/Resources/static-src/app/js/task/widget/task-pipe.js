@@ -6,6 +6,7 @@ export default class TaskPipe {
   constructor(element) {
     this.element = $(element);
     this.eventUrl = this.element.data('eventUrl');
+    this.learnTimeSec = this.element.data('learnTimeSec');
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -59,8 +60,7 @@ export default class TaskPipe {
       this._flush();
     }
     this._clearInterval();
-    let minute = 60 * 1000;
-    this.intervalId = setInterval(() => this._flush(), minute);
+    this.intervalId = setInterval(() => this._flush(), this.learnTimeSec*1000);
   }
 
   _clearInterval() {

@@ -844,6 +844,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $toLearnTasks;
     }
 
+    public function getTimeSec($type)
+    {
+        $magicSetting = $this->getSettingService()->get('magic');
+        $default = 'watch' == $type ? TaskService::WATCH_TIME_STEP : TaskService::LEARN_TIME_STEP;
+
+        return empty($magicSetting[$type.'_time_sec']) ? $default : $magicSetting[$type.'_time_sec'];
+    }
+
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $finishedTasks = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);

@@ -30,6 +30,7 @@ class SyncDailyPastDataJob extends AbstractJob
                 'createdTime_GE' => $nextCursor,
                 'createdTime_LT' => $cursor,
                 'skipSyncCourseSetNum' => true,
+                'event_EQ' => 'doing',
             );
             $this->getLearnStatisticsService()->batchCreatePastDailyStatistics($conditions);
 
