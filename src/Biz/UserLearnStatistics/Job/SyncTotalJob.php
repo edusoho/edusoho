@@ -13,7 +13,7 @@ class SyncTotalJob extends AbstractJob
         try {
             $lastUserId = $this->getLastUserId();
             $magic = $this->getSettingService()->get('magic');
-            $limit = empty($magic['user_sync_learn_total_data_limit']) ? 100 : $magic['user_sync_learn_total_data_limit'];
+            $limit = empty($magic['user_sync_learn_total_data_limit']) ? 30 : $magic['user_sync_learn_total_data_limit'];
             $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id' => 'asc'), 0, $limit);
             $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
 
