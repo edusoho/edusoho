@@ -222,7 +222,7 @@ class XapiServiceImpl extends BaseService implements XapiService
             $this->biz['logger'],
             new Client(array(
                 array(
-                    'base_uri' => $pushUrl
+                    'base_uri' => $pushUrl,
                 ),
             ))
         );
