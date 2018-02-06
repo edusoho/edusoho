@@ -605,6 +605,32 @@ class XAPIService extends BaseService
     }
 
     /**
+     * @param $type
+     * @param $value
+     * @return array
+     */
+    public function setting($type, $value)
+    {
+        $setting = array(
+            'accessKey' => $this->auth->getAccessKey(),
+            'setting' => $type,
+            'value' => $value,
+        );
+
+        $response = $this->request('POST', '/setting',
+            array(
+                'json' => $setting,
+            ),
+            array(
+                'Authorization' => $this->auth->makeXAPIRequestAuthorization(),
+            )
+        );
+
+        return $response;
+
+    }
+
+    /**
      * @param $verb
      *
      * @return string
