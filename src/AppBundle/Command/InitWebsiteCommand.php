@@ -54,7 +54,7 @@ class InitWebsiteCommand extends BaseCommand
             $this->initTopBanner();
             $initializer->initRegisterSetting($user);
             $setting = array(
-                'auth' => array('register_mode' => 'email_or_mobile'),
+                'auth' => array('register_mode' => 'email'),
                 'storage' => array('upload_mode' => 'cloud',
                                    'cloud_access_key' => $accessKey,
                                    'cloud_secret_key' => $secretKey,
@@ -107,7 +107,7 @@ class InitWebsiteCommand extends BaseCommand
     {
         $registerUser = array(
             'nickname' => $user['username'],
-            'emailOrMobile' => $user['email'],
+            'email' => $user['email'],
             'password' => $user['password'],
         );
         $registerUser = $this->getAuthService()->register($registerUser);
@@ -219,6 +219,7 @@ class InitWebsiteCommand extends BaseCommand
     protected function getDb()
     {
         $pdo = new \PDO("mysql:host={$this->db_host};port={$this->db_port}", "{$this->db_user}", "{$this->db_password}");
+        $pdo->exec('SET NAMES utf8');
         $pdo->exec("USE `{$this->db_name}`;");
 
         return $pdo;
