@@ -21,6 +21,7 @@ class Show {
     this.url = container.data('url');
     this.videoHeaderLength = container.data('videoHeaderLength');
     this.enablePlaybackRates = container.data('enablePlaybackRates');
+    this.videoH5 = container.data('videoH5');
     this.watermark = container.data('watermark');
     this.accesskey = container.data('accessKey');
     this.fingerprint = container.data('fingerprint');
@@ -70,6 +71,7 @@ class Show {
         agentInWhiteList: this.agentInWhiteList,
         timelimit: this.timelimit,
         enablePlaybackRates: this.enablePlaybackRates,
+        videoH5: this.videoH5,
         controlBar: {
           disableVolumeButton: this.disableVolumeButton,
           disablePlaybackButton: this.disablePlaybackButton,
