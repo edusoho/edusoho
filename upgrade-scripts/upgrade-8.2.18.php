@@ -106,14 +106,18 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function deleteCloudSearchBanner()
     {
-         $this->getConnection()->exec("DELETE FROM `block_template` WHERE code = 'cloud_search_banner' and category ='system';");
+        $this->getConnection()->exec("DELETE FROM `block_template` WHERE code = 'cloud_search_banner' and category ='system';");
+        
+        return 1;
     }
 
     protected function updateStorage()
     {
-         $storageSetting = $this->getSettingService()->get('storage', array());
-         $storageSetting['video_h5_enable'] = 1;
-         $storageSetting = $this->getSettingService()->set('storage');
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting['video_h5_enable'] = 1;
+        $storageSetting = $this->getSettingService()->set('storage');
+
+        return 1;
     }
 
     protected function generateIndex($step, $page)
