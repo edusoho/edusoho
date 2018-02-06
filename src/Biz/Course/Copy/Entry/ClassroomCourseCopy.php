@@ -42,6 +42,7 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['creator'] = $user['id'];
         $newCourse['status'] = 'published';
         $newCourse['teacherIds'] = array($user['id']);
+        $newCourse['isShowUnpublish'] = $course['isShowUnpublish'];
 
         $newCourse = $this->getCourseDao()->create($newCourse);
 

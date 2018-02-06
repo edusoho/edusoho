@@ -34,10 +34,14 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             //章节的更新和删除会比较麻烦，因为还涉及子节点（比如task的引用也要切换）的处理
             'course.chapter.update' => 'onCourseChapterUpdate',
             'course.chapter.delete' => 'onCourseChapterDelete',
+            'course.chapter.publish' => 'onCourseChapterUpdate',
+            'course.chapter.unpublish' => 'onCourseChapterUpdate',
             //同步新建的任务时同步新增material记录即可，这里无需处理
             // 'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
             'course.material.delete' => 'onCourseMaterialDelete',
+
+            'course.change.showPublishLesson' => 'onCourseUpdate',
         );
     }
 
@@ -141,6 +145,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'rewardPoint',
             'taskRewardPoint',
             'maxStudentNum',
+            'isShowUnpublish'
         ));
         $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
     }

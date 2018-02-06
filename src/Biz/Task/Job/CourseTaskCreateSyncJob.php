@@ -55,10 +55,10 @@ class CourseTaskCreateSyncJob extends AbstractJob
                     'length' => $task['length'],
                 );
 
-                if (!empty($task['mode'])) {
+                //if (!empty($task['mode'])) {
                     $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
                     $newTask['categoryId'] = $newChapter['id'];
-                }
+                //}
 
                 $taskHelper->add($newTask);
             }

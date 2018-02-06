@@ -1120,6 +1120,14 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function showPublishAction(Request $request, $courseId)
+    {
+        $status = $request->request->get('status', 1);
+        $this->getCourseService()->changeShowPublishLesson($courseId, $status);
+
+        return $this->createJsonResponse(true);
+    }
+
     private function sortMarkerStats(&$stats, $request)
     {
         $order = $request->query->get('order', '');
