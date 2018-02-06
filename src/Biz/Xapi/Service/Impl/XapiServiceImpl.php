@@ -12,7 +12,7 @@ use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use QiQiuYun\SDK\Auth;
+use QiQiuYun\SDK\QiQiuYunSDK;
 
 class XapiServiceImpl extends BaseService implements XapiService
 {
@@ -206,16 +206,19 @@ class XapiServiceImpl extends BaseService implements XapiService
         $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
         $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
         $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth($accessKey, $secretKey);
 
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => $pushUrl,
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
+        $qiqiuyunSdk = new QiQiuYunSDK(array(
+            'host' => $pushUrl,
+            'access_key' => $accessKey,
+            'secret_key' => $secretKey,
+            'service' => array(
+                'xapi' => array(
+                    'school_name' => $siteName,
+                ),
             ),
         ));
+
+        return $qiqiuyunSdk->getXAPIService();
     }
 
     /**
