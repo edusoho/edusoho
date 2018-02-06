@@ -204,8 +204,8 @@ class XapiServiceImpl extends BaseService implements XapiService
 
         $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
         $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
+        $accessKey = empty($settings['cloud_access_key']) ? 'none' : $settings['cloud_access_key'];
+        $secretKey = empty($settings['cloud_secret_key']) ? 'none' : $settings['cloud_secret_key'];
 
         $qiqiuyunSdk = new QiQiuYunSDK(array(
             'host' => $pushUrl,
