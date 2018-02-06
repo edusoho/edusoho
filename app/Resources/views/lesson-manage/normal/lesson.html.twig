@@ -1,0 +1,30 @@
+<li id="chapter-{{chapter.id}}" class="task-manage-item drag task-manage-{{chapter.type}} js-task-manage-{{chapter.type}}  clearfix" style="border: none;">
+  <div class="chapter-item clearfix mbm" style="border: 1px solid #c1c1c1;">
+    <div class="item-content">
+      {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':chapter.number, '%title%':chapter.title|sub_text(30)})|raw }}
+    </div>
+    <div class="item-actions">
+      <span class="dropdown">
+        <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#">
+          <i class="es-icon es-icon-anonymous-iconfont mrs"></i>
+          {{ 'course.plan_task.add_task_btn'|trans }}
+        </a>
+        <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
+          <li>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,categoryId:chapter.id}) }}">{{'course.plan_task.create_task'|trans }}</a>
+          </li>
+        </ul>
+      </span>
+
+      <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_edit', {chapterId:chapter.id,courseId:course.id}) }}">
+        <i class="es-icon es-icon-edit mrs"></i>
+        {{'course.plan_task.edit_btn'|trans}}
+      </a>
+      <a href="javascript:;" class="btn gray-darker delete-item" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
+        <i class="es-icon es-icon-delete mrs"></i>
+        {{'course.plan_task.delete_btn'|trans}}
+      </a>
+    </div>
+  </div>
+  {% include 'lesson-manage/normal/tasks.html.twig' with {tasks: chapter.tasks|default()} %}
+</li>

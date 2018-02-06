@@ -1,12 +1,8 @@
-<!-- 添加课时时展示 -->
-{% if lesson|default(null) %}
-  {% include 'course-manage/chapter/normal-list-item.html.twig' with {chapter: lesson, course:course} %}
-  {% if lesson.tasks|default() %}
-    <ul>
-      {% for task in lesson.tasks %}
+  {% if tasks|default() %}
+    <ul  style="list-style-type: none;">
+      {% for task in tasks %}
       {% set file =  files[task.activityId]|default(null) %}
-        <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
-          
+        <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}" >
           <div class="item-content  js-item-content text-overflow">
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
             {% if task.isOptional %}
@@ -92,12 +88,7 @@
               </ul>
             </span>
           </div>
-
         </li>
       {% endfor %}
     </ul>
-  {% endif %}
-{% endif %}
-<!-- 添加课时时展示 end -->
-
-
+  {% endif %} 
