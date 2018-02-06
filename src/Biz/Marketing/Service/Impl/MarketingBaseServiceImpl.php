@@ -8,8 +8,6 @@ use Biz\Role\Util\PermissionBuilder;
 use Biz\Marketing\Service\MarketingService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
-use QiQiuYun\SDK\Auth;
-use QiQiuYun\SDK\Service\DrpService;
 
 abstract class MarketingBaseServiceImpl extends BaseService implements MarketingService
 {
@@ -83,27 +81,6 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
         $response['msg'] = $logMsg;
 
         return $response;
-    }
-
-    public function getDrpService()
-    {
-        if (empty($this->drpService)) {
-            $developerSetting = $this->getSettingService()->get('developer', array());
-            $config = $this->getServerUrlConfig();
-            $serverUrl = $config['defaultUrl'];
-            if (!empty($developerSetting[$config['developerSettingName']])) {
-                $serverUrl = $developerSetting[$config['developerSettingName']];
-            }
-
-            $this->drpService = null;
-            $settings = $this->getSettingService()->get('storage', array());
-            if (!empty($settings['cloud_access_key']) && !empty($settings['cloud_secret_key'])) {
-                $auth = new Auth($settings['cloud_access_key'], $settings['cloud_secret_key']);
-                $this->drpService = new DrpService($auth, array('base_uri' => $serverUrl));
-            }
-        }
-
-        return $this->drpService;
     }
 
     abstract protected function joinTarget($targetId, $userId, $data);

@@ -12,7 +12,8 @@ use Biz\Xapi\Dao\StatementArchiveDao;
 use Biz\Xapi\Dao\StatementDao;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use QiQiuYun\SDK\Auth;
+use QiQiuYun\SDK\HttpClient\Client;
+use QiQiuYun\SDK\QiQiuYunSDK;
 
 class XapiServiceImpl extends BaseService implements XapiService
 {
@@ -202,20 +203,31 @@ class XapiServiceImpl extends BaseService implements XapiService
 
         $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'https://lrs.qiqiuyun.net/v1/xapi/';
 
-        $siteName = empty($siteSettings['name']) ? '' : $siteSettings['name'];
+        $siteName = empty($siteSettings['name']) ? 'none' : $siteSettings['name'];
         $siteUrl = empty($siteSettings['url']) ? '' : $siteSettings['url'];
-        $accessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
-        $secretKey = empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'];
-        $auth = new Auth($accessKey, $secretKey);
+        $accessKey = empty($settings['cloud_access_key']) ? 'none' : $settings['cloud_access_key'];
+        $secretKey = empty($settings['cloud_secret_key']) ? 'none' : $settings['cloud_secret_key'];
 
-        return new \QiQiuYun\SDK\Service\XAPIService($auth, array(
-            'base_uri' => $pushUrl,
-            'school' => array(
-                'accessKey' => $accessKey,
-                'url' => $siteUrl,
-                'name' => $siteName,
+        $qiqiuyunSdk = new QiQiuYunSDK(
+            array(
+                'host' => $siteUrl,
+                'access_key' => $accessKey,
+                'secret_key' => $secretKey,
+                'service' => array(
+                    'xapi' => array(
+                        'school_name' => $siteName,
+                    ),
+                ),
             ),
-        ));
+            $this->biz['logger'],
+            new Client(array(
+                array(
+                    'base_uri' => $pushUrl,
+                ),
+            ))
+        );
+
+        return $qiqiuyunSdk->getXAPIService();
     }
 
     /**
