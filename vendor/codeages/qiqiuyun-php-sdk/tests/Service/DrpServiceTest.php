@@ -22,7 +22,7 @@ class DrpServiceTest extends BaseTestCase
         $time = time();
         ksort($data);
         $dataStr = json_encode($data);
-        $signingText = implode('\n', array($nonce, $time, $dataStr));
+        $signingText = implode("\n", array($nonce, $time, $dataStr));
         $sign =  $this->auth->makeSignature($signingText);
 
         $token = "{$data['merchant_id']}:{$data['agency_id']}:{$data['coupon_price']}:{$data['coupon_expiry_day']}:{$time}:{$nonce}:{$sign}";

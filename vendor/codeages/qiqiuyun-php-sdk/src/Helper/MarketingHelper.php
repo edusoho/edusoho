@@ -6,7 +6,7 @@ class MarketingHelper
 {
     public static function generateLoginForm($action, $user, $site, $sign)
     {
-        $loginTitle = "<div align='center'> 正在登录中......</div>";
+        $loginTitle = "<div align='center'> 正在登陆中......</div>";
         $submitJs = "<script type='text/javascript'>
                         window.onload = function(){
                             document.getElementById('login-form').submit()

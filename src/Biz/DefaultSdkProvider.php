@@ -53,7 +53,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         if (empty($hostUrl)) {
-            $hostUrl = 'fx.marketing.com';
+            $hostUrl = '';
         }
 
         return array('drp' => array('host' => $hostUrl));
