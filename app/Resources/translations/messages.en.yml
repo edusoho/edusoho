@@ -5662,7 +5662,9 @@ admin.magic_setting.zero_for_open: '0 To enable'
 admin.magic_setting.zero_for_close: '0 Is off'
 admin.magic_setting.true_for_open: 'True For open'
 admin.magic_setting.false_for_close: 'False Is off'
-admin.magic_setting.export_max_limit_tips: 'The recommended maximum of not more than 20000'
+admin.magic_setting.max_limit_tips: 'The recommended maximum of not more than %number%'
+admin.magic_setting.sync_user_data: 同步用户学习的总量数据分页
+
 admin.redis_setting.need_careful_tips: 'Matters needing attention'
 admin.redis_setting.redis_config_case: 'Redis Configuration example'
 admin.redis_setting.redis_cluster_config_case: 'Redis Cluster configuration example'

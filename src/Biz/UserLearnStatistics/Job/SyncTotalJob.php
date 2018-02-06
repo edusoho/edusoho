@@ -12,7 +12,9 @@ class SyncTotalJob extends AbstractJob
         //生成用户总量学习数据
         try {
             $lastUserId = $this->getLastUserId();
-            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id' => 'asc'), 0, 200);
+            $magic = $this->getSettingService()->get('magic');
+            $limit = empty($magic['user_sync_learn_total_data_limit']) ? 30 : $magic['user_sync_learn_total_data_limit'];
+            $users = $this->getUserService()->searchUsers(array('id_GT' => $lastUserId), array('id' => 'asc'), 0, $limit);
             $learnSetting = $this->getLearnStatisticsService()->getStatisticsSetting();
 
             if (empty($users)) {
