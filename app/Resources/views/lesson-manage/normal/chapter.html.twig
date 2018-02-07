@@ -1,10 +1,6 @@
 <li id="chapter-{{chapter.id}}" class="task-manage-item drag task-manage-{{chapter.type}} js-task-manage-{{chapter.type}}  clearfix">
   <div class="item-content">
-    {% if chapter.type == 'chapter' %}
-      {{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias('chapter')|default('site.data.chapter'|trans), '%title%':chapter.title|sub_text(30)})|raw }}
-    {% elseif chapter.type == 'unit' %}
-      {{'course.plan_task.which_part'|trans({'%chapterNumber%':chapter.number, '%part%':course_chapter_alias('part')|default('site.data.part'|trans), '%title%':chapter.title|sub_text(30)})|raw }}
-    {% endif %}
+    {{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%title%':chapter.title|sub_text(30)})|raw }}
   </div>
   <div class="item-actions">
     <span class="dropdown">
@@ -14,7 +10,7 @@
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
           <li>
             <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">
-              {{'course.plan_task.create_part'|trans({'%partName%':course_chapter_alias('part')|default('site.data.part'|trans)}) }}
+              {{'course.plan_task.create_part'|trans({'%partName%': course_chapter_alias('unit')|trans}) }}        
             </a>
           </li>
           <li>

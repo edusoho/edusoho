@@ -29,7 +29,7 @@
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
               <i class="es-icon es-icon-anonymous-iconfont"></i>
-              {{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}/{{ course_chapter_alias('part')|default('site.data.part'|trans) }}
+              {{ course_chapter_alias('chapter')|trans }}/{{ course_chapter_alias('unit')|trans }}
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
@@ -37,14 +37,14 @@
                 <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
                   data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
-                  {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|default('site.data.chapter'|trans)}) }}
+                  {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|trans}) }}
                 </a>
               </li>
               <li>
                 <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
                   data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
-                  {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('part')|default('site.data.part'|trans)}) }}
+                  {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('unit')|trans}) }}
                 </a>
               </li>
             </ul>

@@ -12,11 +12,11 @@
   {% endif %}
 
   {% if type == 'unit' %}
-    {{ course_chapter_alias('part')|default('site.data.part'|trans) }}
+    {{ course_chapter_alias('part')|trans }}
   {% elseif type == 'lesson' %}
     {{'site.data.task'|trans}}
   {% else %}
-    {{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}
+    {{ course_chapter_alias('chapter')|trans }}
   {% endif %}
 {% endblock %}
 
