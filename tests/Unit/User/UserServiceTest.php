@@ -2319,6 +2319,131 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($result);
     }
 
+    public function testGetSmsCaptchaStatusWithLowProtective()
+    {
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth', array()),
+                    'returnValue' => array(
+                        'register_mode' => 'mobile',
+                        'register_protective' => 'low',
+                    ),
+                ),
+            )
+        );
+
+        $this->assertEquals(
+            'captchaIgnored',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+        );
+
+        $this->assertEquals(
+            'captchaIgnored',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', true)
+        );
+
+        $this->assertEquals(
+            'captchaRequired',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+        );
+
+        $settingService->shouldHaveReceived('get')->times(3);
+    }
+
+    public function testGetSmsCaptchaStatusWithNoneProtective()
+    {
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth', array()),
+                    'returnValue' => array(
+                        'register_mode' => 'mobile',
+                        'register_protective' => 'none',
+                    ),
+                ),
+            )
+        );
+
+        $this->assertEquals(
+            'captchaIgnored',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+        );
+
+        $this->assertEquals(
+            'captchaIgnored',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', true)
+        );
+
+        $this->assertEquals(
+            'captchaIgnored',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+        );
+        $settingService->shouldHaveReceived('get')->times(3);
+    }
+
+    public function testGetSmsCaptchaStatusWithNoneMobile()
+    {
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth', array()),
+                    'returnValue' => array(
+                        'register_mode' => 'email',
+                        'register_protective' => 'high',
+                    ),
+                ),
+            )
+        );
+
+        $this->assertEquals(
+            'captchaIgnored',
+            $this->getUserService()->updateSmsRegistrationCaptchaCode('128.3.2.1')
+        );
+
+        $this->assertEquals(
+            'captchacaptchaIgnoredRequired',
+            $this->getUserService()->updateSmsRegistrationCaptchaCode('128.3.2.1')
+        );
+
+        $settingService->shouldHaveReceived('get')->times(2);
+    }
+
+    public function testUpdateSmsRegistrationCaptchaCode()
+    {
+        $settingService = $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array('auth', array()),
+                    'returnValue' => array(
+                        'register_mode' => 'mobile',
+                        'register_protective' => 'high',
+                    ),
+                ),
+            )
+        );
+
+        $this->assertEquals(
+            'captchaRequired',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+        );
+
+        $this->assertEquals(
+            'captchaRequired',
+            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', true)
+        );
+
+        $settingService->shouldHaveReceived('get')->times(2);
+    }
+
     protected function createUser($user)
     {
         $userInfo = array();

@@ -1846,7 +1846,8 @@ class UserServiceImpl extends BaseService implements UserService
             if (in_array($registerProtective, array('middle', 'low'))) {
                 $factory = $this->biz->offsetGet('ratelimiter.factory');
                 $rateLimiter = $factory('sms_registration_captcha_code', 1, 3600);
-                $leftTriedCount = $rateLimiter->check($clientIp, $updateCount);
+                $used = $updateCount ? 1 : 0;
+                $leftTriedCount = $rateLimiter->check($clientIp, $used);
                 if ($leftTriedCount <= 0) {
                     return 'captchaRequired';
                 } else {
@@ -1864,7 +1865,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function updateSmsRegistrationCaptchaCode($clientIp)
     {
-        $this->getSmsCaptchaStatus($clientIp, true);
+        return $this->getSmsCaptchaStatus($clientIp, true);
     }
 
     protected function _prepareApprovalConditions($conditions)

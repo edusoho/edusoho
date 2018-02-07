@@ -38,15 +38,14 @@ class RateLimiter
                 $allowance = $this->maxAllowance;
             }
 
-            $intAllowance = (int) floor($allowance);
-            if ($intAllowance < $use || 0 == $intAllowance) {
+            if ($allowance < $use) {
                 $this->storage->set($key, $this->packValue($allowance, time()), $this->period);
 
                 return 0;
             } else {
                 $this->storage->set($key, $this->packValue($allowance - $use, time()), $this->period);
 
-                return $intAllowance;
+                return (int) floor($allowance);
             }
         } else {
             $this->storage->set($key, $this->packValue($this->maxAllowance - $use, time()), $this->period);
