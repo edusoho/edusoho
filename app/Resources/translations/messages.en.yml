@@ -753,7 +753,7 @@ course.create.setup_introduction: 'Set title and self introduction'
 course.create.finish: Finish
 course.create.unfinish: Unfinish
 course.create.user_avatar: 'User avatar'
-course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Recommend size: 270×270px. Image size should not exceed <strong>2M</strong>.</p>'
+course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Recommend size: 270×270px. Image size should not exceed <strong>2MB</strong>.</p>'
 course.create.upload_btn: Upload
 course.create.rank: Title
 course.create.introduction: 'About me'
@@ -1071,7 +1071,7 @@ course.teach_plan_manage: 'Programs'
 course.cover: 'Course cover'
 course.cover_image: 'Cover'
 course.cover_image.content_title: 'Cover'
-course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2M</strong>.\n"
+course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
@@ -1963,7 +1963,7 @@ classroom.thread.create.event_time: 'Activity Time'
 classroom.thread.create.event_start_time: 'Activity start time'
 classroom.thread.create.event_location: 'Activity Location'
 classroom.thread.create.cover_image: 'Cover'
-classroom.thread.create.cover_image.placeholder: 'Recommended image size 200×112px'
+classroom.thread.create.cover_image.placeholder: 'Recommended image size 200×112px, image size should not exceed 2MB'
 classroom.thread.create.views_btn: View...
 classroom.thread.create.maxUsers: 'Maximum people'
 classroom.thread.create.maxUsers.placeholder: Unlimited
@@ -2080,7 +2080,7 @@ classroom.category: Category
 classroom.price_label: Price(CNY)
 classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
 classroom.amount: "Equals to%price%\n"
-classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525×350px. <br> The file limits to <strong>2M</strong>.\n"
+classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525×350px. <br> The file limits to <strong>2MB</strong>.\n"
 classroom.commitment_service_label: Commitment
 classroom.activiy: Activity
 classroom.activity_tips: "Arrange online and offline %name% activities, make the learning with more fun and keep closer relationships with your classmates.\n"
@@ -2874,11 +2874,11 @@ group.detail.group_settings.group_edit.name: 'Group name'
 group.detail.group_settings.group_edit.introduction: 'Group Info'
 group.detail.group_settings.logo_setup: 'Image setting'
 group.detail.group_settings.logo_setup.current_logo: 'Current image'
-group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size: 180×180px. \n"
+group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2MB</strong>. Recommend size: 180×180px. \n"
 group.detail.group_settings.logo_setup.upload_btn: 'Upload new image'
 group.detail.group_settings.background_image_setup: 'Background setting'
 group.detail.group_settings.background_image_setup.current_image: 'Current background'
-group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>. Recommend size: 1140×150px. \n"
+group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2MB</strong>. Recommend size: 1140×150px. \n"
 group.detail.new_group_members: 'New member'
 group.detail.new_group_members.empty: 'No member'
 group.detail.hot_group: 'Popular group'
@@ -3161,7 +3161,7 @@ my.teaching.open_course.Basic_Info.category: Category
 my.teaching.open_course.Basic_Info.about: About
 my.teaching.open_course.Basic_Info.about.help_block: 'Please config the IFrame whitelist in [admin center] - [system] - [site setting] - [security] if you need'
 my.teaching.open_course.course_picture.title: 'Course Cover'
-my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270px. <br>File size shouldn't larger than ##你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过\n"
+my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270px. <br>File size shouldn't larger than \n"
 my.teaching.open_course.lesson.add_btn: 'Add lesson'
 my.teaching.open_course.lesson.tips: 'Open course can only add one lesson'
 my.teaching.open_course.lesson.manage: 'Lessons'
@@ -4823,7 +4823,7 @@ admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
-admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded'
+admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded <strong>2MB</strong>. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.user.manage.user_avatar.upload_btn: 'Upload New Photo'
 admin.user.manage.user_avatar.fields.partner_avatar: 'Forum Avatar'
 admin.user.manage.user_avatar.using_current_avatar_btn: 'Use This Avatar'
@@ -5550,7 +5550,7 @@ admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
-admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px.'
+admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.role_manage.keyword_type: '-- Keyword type--'
 admin.role_manage.nameLike: 'Role name'
 admin.role_manage.codeLike: Coding
@@ -5611,7 +5611,7 @@ admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
-admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px.'
+admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.setting_course.classroom.setting_classroom_name: 'Class''s name'
 admin.setting_course.classroom.setting_classroom_name.help_block: 'Users will see is the class''s name'
 admin.setting_course.classroom.setting_classroom_name.tips: 'Please note: The following settings related to the basic mode of class operation, be care or your settings, and do not change it often!'
@@ -5907,7 +5907,7 @@ admin.article_setting.publish_time_tips: 'Content show in chronological order'
 admin.article_setting.image.content_title: 'Set thumbnail'
 admin.article_setting.image: Thumbnail
 admin.article_setting.image.tips: 'Tip: Select the crop area.'
-admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2M.'
+admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>'
 admin.article_setting.image.choose_btn: 'Select upload file'
 admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
