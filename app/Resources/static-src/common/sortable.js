@@ -9,7 +9,8 @@ const sortList = (options, callback = (data) => {}) => {
   };
 
   let settings = Object.assign({}, defaultOptions, options);
-  let $list = $(settings.element).sortable(Object.assign({}, settings, {
+  let $element = settings.element instanceof jQuery ? settings.element : $(settings.element);
+  let $list = $element.sortable(Object.assign({}, settings, {
     onDrop: function (item, container, _super) {
       _super(item, container);
       let data = $list.sortable("serialize").get();
@@ -20,11 +21,9 @@ const sortList = (options, callback = (data) => {}) => {
         });
       }
     },
-
     serialize: function(parent, children, isContainer) {
       return isContainer ? children : parent.attr('id');
     }
-
   }));
 };
 

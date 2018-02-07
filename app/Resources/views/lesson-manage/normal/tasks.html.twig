@@ -1,5 +1,5 @@
   {% if tasks|default() %}
-    <ul  style="list-style-type: none;">
+    <ul style="list-style-type: none;" class="js-lesson-box">
       {% for task in tasks %}
       {% set file =  files[task.activityId]|default(null) %}
         <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}" >

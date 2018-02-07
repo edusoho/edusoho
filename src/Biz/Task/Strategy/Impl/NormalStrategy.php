@@ -134,7 +134,12 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-
+        uasort(
+            $chapters,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
         foreach ($chapters as $index => $chapter) {
             $chapterId = $chapter['id'];
             if (!empty($tasks[$chapterId])) {

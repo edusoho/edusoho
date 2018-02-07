@@ -16,7 +16,7 @@ import { toggleIcon } from 'app/common/widget/chapter-animate';
 $('[data-help="popover"]').popover();
 
 let sortableList = '#sortable-list';
-taskSortable(sortableList);
+// taskSortable(sortableList);
 updateTaskNum(sortableList);
 closeCourse();
 deleteCourse();

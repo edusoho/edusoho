@@ -9,19 +9,6 @@
   {% block course_header %}
     {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
   {% endblock %}
-  {#<div class="intro-fixed-group js-intro-btn-group ">#}
-    {#<span type="button" class="intro-btn" data-container=".intro-btn"#}
-    {#data-trigger="click" data-placement="left"#}
-    {#data-content="<div class='text-center'><p><a class='btn btn-success js-reset-intro '>查看引导</a></p><a class='btn btn-info'>完整教程</a></div>">#}
-    {#改版引导#}
-    {#</span>#}
-  {#</div>#}
-  {#链接还没有#}
-  {#<div class="intro-fixed-group js-intro-btn-group ">#}
-    {#<a type="button" class="intro-btn" href="http://www.qiqiuyu.com/" target="_blank">#}
-    {#{{ 'course.btn.edit_help_btn'|trans }}#}
-    {#</a>#}
-  {#</div>#}
   <div class="row">
     <div class="col-md-3">
       {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
