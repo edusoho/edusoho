@@ -2309,6 +2309,7 @@ user.settings.email_menu: Email
 user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
+user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.

@@ -2775,6 +2775,7 @@ user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
+user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
