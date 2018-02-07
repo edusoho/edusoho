@@ -21,6 +21,6 @@ class CourseAddIsShowUnpublish extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("ALTER TABLE `course_v8` DROP COLUMN `isShowUnpublish`;");
+        $db->exec('ALTER TABLE `course_v8` DROP COLUMN `isShowUnpublish`;');
     }
 }

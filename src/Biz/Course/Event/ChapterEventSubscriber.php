@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,7 +19,7 @@ class ChapterEventSubscriber extends EventSubscriber implements EventSubscriberI
     public function onCourseChpaterPublish(Event $event)
     {
         $chapter = $event->getSubject();
-        
+
         $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
 
         if (empty($tasks)) {
@@ -35,7 +34,7 @@ class ChapterEventSubscriber extends EventSubscriber implements EventSubscriberI
     public function onCourseChpaterUnPublish(Event $event)
     {
         $chapter = $event->getSubject();
-        
+
         $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
 
         if (empty($tasks)) {

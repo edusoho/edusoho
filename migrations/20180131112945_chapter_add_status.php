@@ -21,6 +21,6 @@ class ChapterAddStatus extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("ALTER TABLE `course_chapter` DROP COLUMN `status`;");
+        $db->exec('ALTER TABLE `course_chapter` DROP COLUMN `status`;');
     }
 }
