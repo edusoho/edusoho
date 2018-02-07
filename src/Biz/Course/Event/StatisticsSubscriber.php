@@ -20,8 +20,11 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.task.create' => 'onTaskCreate',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
-            'course.task.publish' => 'onPublishTaskNumberChange',
-            'course.task.unpublish' => 'onPublishTaskNumberChange',
+            //'course.task.publish' => 'onPublishTaskNumberChange',
+            //'course.task.unpublish' => 'onPublishTaskNumberChange',
+
+            'course.chapter.publish' => array('onPublishChapterNumberChange', -100),
+            'course.chapter.unpublish' => array('onPublishChapterNumberChange', -100),
 
             'course.thread.create' => 'onCourseThreadChange',
             'course.thread.delete' => 'onCourseThreadChange',
@@ -77,6 +80,14 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
+            'compulsoryTaskNum',
+        ));
+    }
+
+    public function onPublishChapterNumberChange(Event $event)
+    {
+        $chapter = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($chapter['courseId'], array(
             'compulsoryTaskNum',
         ));
     }

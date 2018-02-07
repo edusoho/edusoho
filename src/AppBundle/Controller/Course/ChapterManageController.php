@@ -67,6 +67,22 @@ class ChapterManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function publishAction(Request $request, $courseId, $chapterId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseService()->publishChapter($chapterId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function unpublishAction(Request $request, $courseId, $chapterId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseService()->unpublishChapter($chapterId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
     /**
      * @return CourseService
      */

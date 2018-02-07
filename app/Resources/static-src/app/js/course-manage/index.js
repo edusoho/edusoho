@@ -12,6 +12,7 @@ import {
 } from './help';
 
 import { toggleIcon } from 'app/common/widget/chapter-animate';
+import notify from "common/notify";
 
 $('[data-help="popover"]').popover();
 
@@ -33,6 +34,19 @@ $('#sortable-list').on('click', '.js-chapter-toggle-show', (event) => {
   $chapter.nextUntil('.js-task-manage-chapter').animate({ height: 'toggle', opacity: 'toggle' }, "normal");
   toggleIcon($chapter, 'es-icon-keyboardarrowdown', 'es-icon-keyboardarrowup');
 });
+
+$('input[name="isShowPublish"]').change(function(){
+  let url = $(this).data('url');
+
+  let status = $(this).is(':checked') ? 0 : 1;
+  $.post(url, {status:status})
+  .success(function(response) {
+    notify('success', Translator.trans('site.save_success_hint'));
+  })
+  .error(function(response){
+    notify('error', response.error.message);
+  })
+})
 
 
 

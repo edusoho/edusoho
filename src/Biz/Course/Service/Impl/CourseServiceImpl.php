@@ -930,6 +930,30 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
+    public function publishChapter($chapterId)
+    {
+        $chapter = $this->getChapterDao()->get($chapterId);
+        if (empty($chapter) && $chapter['type'] != 'lesson') {
+            throw new $this->createInvalidArgumentException('Argument Invalid');
+        }
+
+        $this->getChapterDao()->update($chapterId, array('status' => 'published'));
+
+        $this->dispatchEvent('course.chapter.publish', new Event($chapter));
+    }
+
+    public function unpublishChapter($chapterId)
+    {
+        $chapter = $this->getChapterDao()->get($chapterId);
+        if (empty($chapter) && $chapter['type'] != 'lesson') {
+            throw new $this->createInvalidArgumentException('Argument Invalid');
+        }
+
+        $this->getChapterDao()->update($chapterId, array('status' => 'unpublished'));
+
+        $this->dispatchEvent('course.chapter.unpublish', new Event($chapter));
+    }
+
     public function countUserLearningCourses($userId, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
@@ -1936,6 +1960,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $liveCourses;
+    }
+
+    public function changeShowPublishLesson($courseId, $status)
+    {
+        $this->tryManageCourse($courseId);
+
+        $course = $this->getCourseDao()->update($courseId, array('isShowUnpublish' => $status));
+
+        $this->dispatch('course.change.showPublishLesson', new Event($course));
     }
 
     protected function hasAdminRole()
