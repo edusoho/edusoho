@@ -40,4 +40,56 @@ class SmsServiceTest extends BaseTestCase
         $this->assertEquals('success', $result['status']);
         $this->assertEquals('20000', $result['sn']);
     }
+
+    public function testAddSign()
+    {
+        $httpClient = $this->mockHttpClient(array(
+            'id' => 1,
+            'userId' => 1,
+            'name' => 'signName',
+            'status' => 'auditing',
+            'usedNow' => 1,
+            'createdTime' => time(),
+            'updatedTime' => time(),
+        ));
+
+        $service = new SmsService($this->auth, array(), null, $httpClient);
+        $result = $service->addSign(array(
+            'sign' => 'signName',
+            'usedNow' => 1,
+        ));
+        $this->assertEquals(1, $result['id']);
+        $this->assertEquals(1, $result['userId']);
+        $this->assertEquals('signName', $result['name']);
+        $this->assertEquals('auditing', $result['status']);
+        $this->assertEquals(1, $result['usedNow']);
+        $this->assertNotNull($result['createdTime']);
+        $this->assertNotNull($result['updatedTime']);
+    }
+
+    public function testAddTemplate()
+    {
+        $httpClient = $this->mockHttpClient(array(
+            'id' => 1,
+            'userId' => 1,
+            'status' => 'auditing',
+            'content' => 'contentxxx',
+            'scene' => 'verifyCode',
+            'createdTime' => time(),
+            'updatedTime' => time(),
+        ));
+
+        $service = new SmsService($this->auth, array(), null, $httpClient);
+        $result = $service->addTemplate(array(
+            'content' => 'contentxxx',
+            'scene' => 'verifyCode',
+        ));
+        $this->assertEquals(1, $result['id']);
+        $this->assertEquals(1, $result['userId']);
+        $this->assertEquals('auditing', $result['status']);
+        $this->assertEquals('contentxxx', $result['content']);
+        $this->assertEquals('verifyCode', $result['scene']);
+        $this->assertNotNull($result['createdTime']);
+        $this->assertNotNull($result['updatedTime']);
+    }
 }
