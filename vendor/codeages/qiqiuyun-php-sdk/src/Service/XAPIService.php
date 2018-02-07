@@ -607,6 +607,7 @@ class XAPIService extends BaseService
     /**
      * @param $type
      * @param $value
+     *
      * @return array
      */
     public function setting($type, $value)
@@ -616,18 +617,11 @@ class XAPIService extends BaseService
             'setting' => $type,
             'value' => $value,
         );
-
-        $response = $this->request('POST', '/setting',
-            array(
-                'json' => $setting,
-            ),
-            array(
-                'Authorization' => $this->auth->makeXAPIRequestAuthorization(),
-            )
-        );
+        $response = $this->request('POST', '/setting', $setting, array(
+            'Authorization' => $this->auth->makeXAPIRequestAuthorization(),
+        ));
 
         return $response;
-
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
 
@@ -9,18 +10,29 @@ class DefaultSdkProvider implements ServiceProviderInterface
 {
     public function register(Container $biz)
     {
-        $biz['qiQiuYunSdk.drp'] = function ($biz) {
+        $that = $this;
+        $biz['qiQiuYunSdk.drp'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $this->generateSdk($biz, $this->getDrpConfig($biz));
+            $sdk = $that->generateSdk($biz, $that->getDrpConfig($biz));
             if (!empty($sdk)) {
                 $service = $sdk->getDrpService();
             }
 
             return $service;
         };
+
+        $biz['qiQiuYunSdk.xapi'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, $that->getXAPIConfig($biz));
+            if (!empty($sdk)) {
+                $service = $sdk->getXAPIService();
+            }
+
+            return $service;
+        };
     }
 
-    private function generateSdk($biz, $serviceConfig)
+    public function generateSdk($biz, $serviceConfig)
     {
         $setting = $biz->service('System:SettingService');
 
@@ -40,7 +52,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
         return $sdk;
     }
 
-    private function getDrpConfig($biz)
+    public function getDrpConfig($biz)
     {
         $setting = $biz->service('System:SettingService');
         $developerSetting = $setting->get('developer', array());
@@ -57,5 +69,25 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return array('drp' => array('host' => $hostUrl));
+    }
+
+    public function getXAPIConfig(Biz $biz)
+    {
+        $settingService = $biz->service('System:SettingService');
+        $siteSettings = $settingService->get('site', array());
+        $xapiSetting = $settingService->get('xapi', array());
+        $pushUrl = !empty($xapiSetting['push_url']) ? $xapiSetting['push_url'] : 'lrs.qiqiuyun.net/v1/xapi/';
+        $pushUrl = ltrim($pushUrl, ' ');
+        $pushUrl = rtrim($pushUrl, '/');
+        $pushUrl = ltrim($pushUrl, 'http://');
+        $pushUrl = ltrim($pushUrl, 'https://');
+        $siteName = empty($siteSettings['name']) ? 'none' : $siteSettings['name'];
+
+        return array(
+            'xapi' => array(
+                'host' => $pushUrl,
+                'school_name' => $siteName,
+            ),
+        );
     }
 }

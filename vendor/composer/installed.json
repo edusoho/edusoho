@@ -475,6 +475,51 @@
         ]
     },
     {
+        "name": "codeages/qiqiuyun-php-sdk",
+        "version": "v0.2.3",
+        "version_normalized": "0.2.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
+            "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7be9669159fc6de4279aeb1ae754f6b52352f1d8.zip",
+            "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "monolog/monolog": "^1.18",
+            "phpunit/phpunit": "^4 || ^5 || ^6"
+        },
+        "time": "2018-02-06T08:30:40+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/functions.php"
+            ],
+            "psr-4": {
+                "QiQiuYun\\SDK\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "QiQiuYun PHP SDK"
+    },
+    {
         "name": "codeages/rate-limiter",
         "version": "0.1.3",
         "version_normalized": "0.1.3.0",
@@ -2738,7 +2783,8 @@
             "spreadsheet",
             "xls",
             "xlsx"
-        ]
+        ],
+        "abandoned": "phpoffice/phpspreadsheet"
     },
     {
         "name": "phpspec/prophecy",
@@ -3240,7 +3286,7 @@
         "version_normalized": "3.7.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/piwik/device-detector.git",
+            "url": "https://github.com/matomo-org/device-detector.git",
             "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30"
         },
         "dist": {
@@ -5587,50 +5633,5 @@
             "security",
             "xxtea"
         ]
-    },
-    {
-        "name": "codeages/qiqiuyun-php-sdk",
-        "version": "v0.1.0",
-        "version_normalized": "0.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0.zip",
-            "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "psr/log": "^1.0"
-        },
-        "require-dev": {
-            "monolog/monolog": "^1.18",
-            "phpunit/phpunit": "^4 || ^5 || ^6",
-            "silex/silex": "^2.0"
-        },
-        "time": "2018-01-26T03:47:46+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/functions.php"
-            ],
-            "psr-4": {
-                "QiQiuYun\\SDK\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com",
-                "homepage": "http://www.codeages.com"
-            }
-        ],
-        "description": "QiQiuYun PHP SDK"
     }
 ]

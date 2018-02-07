@@ -32,4 +32,28 @@ class SmsService extends BaseService
     {
         return $this->request('POST', '/messages/batch_messages', $params);
     }
+
+    /**
+     * 添加签名
+     *
+     * @see http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
+     *
+     * @param $params array 签名参数
+     */
+    public function addSign(array $params)
+    {
+        return $this->request('POST', '/signs', $params);
+    }
+
+    /**
+     * 添加签名
+     *
+     * @see http://qiqiuyun.pages.codeages.net/api-doc/v1/resource/sms-service.html
+     *
+     * @param $params array 模板参数
+     */
+    public function addTemplate(array $params)
+    {
+        return $this->request('POST', '/templates', $params);
+    }
 }
