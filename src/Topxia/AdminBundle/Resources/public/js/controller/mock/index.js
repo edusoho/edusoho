@@ -56,9 +56,9 @@ define(function(require, exports, module) {
       function() {
         $('.sendMarketingResult').html('');
         $.post(
-          $('.sendMarketingBtn').data('url'), { 'url': $('.defaultUrl').val(), 'body': $('.sendedMarketingData').html() },
+          $('.sendMarketingBtn').data('url'), { 'url': $('.defaultUrl').val(), 'body': $('.sendedMarketingData').val() },
           function(data) {
-            $('.ssendMarketingResult').html(data.result);
+            $('.sendMarketingResult').html(data.result);
           }
         );
       }

@@ -149,8 +149,6 @@ class MockController extends BaseController
         $response = curl_exec($curl);
         curl_close($curl);
 
-        $body = json_decode($response, true);
-
-        return $body;
+        return $response;
     }
 }
