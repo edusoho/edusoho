@@ -35,6 +35,18 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return 'lesson-manage/normal/lesson.html.twig';
     }
 
+    public function getJsonTemplate($task)
+    {
+        if (!empty($task['categoryId'])) {
+            $chapter = $this->getChapterDao()->get($task['categoryId']);
+            if ('lesson' == $chapter['type']) {
+                 return 'lesson-manage/normal/tasks.html.twig';
+            }
+        }
+
+        return 'lesson-manage/normal/lesson.html.twig';
+    }
+
     public function deleteTask($task)
     {
         if (empty($task)) {

@@ -66,25 +66,6 @@ class TaskManageController extends BaseController
         );
     }
 
-    protected function prepareRenderTaskForDefaultCourseType($courseType, $task, $isOnlyTask)
-    {
-        if (CourseService::NORMAL__COURSE_TYPE == $courseType) {
-            if (!$isOnlyTask) {
-                $chapter = $this->getChapterDao()->get($task['categoryId']);
-                $task['chapter'] = $chapter;
-            }
-
-            return $task;
-        }
-
-        $chapter = $this->getChapterDao()->get($task['categoryId']);
-        $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
-        $chapter['tasks'] = $tasks;
-        $chapter['mode'] = $task['mode'];
-
-        return $chapter;
-    }
-
     public function batchCreateTasksAction(Request $request, $courseId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -157,11 +138,8 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
-        $isOnlyTask = empty($task['categoryId']) ? 0 : 1;
-
-        $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
-
-        if (CourseService::DEFAULT_COURSE_TYPE == $course['courseType'] && isset($task['mode']) && 'lesson' != $task['mode']) {
+        $template = $this->createCourseStrategy($course)->getJsonTemplate($task);
+        if (empty($template)) {
             return $this->createJsonResponse(
                 array(
                     'append' => false,
@@ -170,24 +148,24 @@ class TaskManageController extends BaseController
             );
         }
 
-        $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task, $isOnlyTask);
-
-        // $html = $this->renderView(
-        //     $this->createCourseStrategy($course)->getTaskItemTemplate(),
-        //     array(
-        //         'course' => $course,
-        //         'task' => $task,
-        //         'chapter' => $chapter,
-        //     )
-        // );
-        $html = '';
+        $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
+        $lesson = $this->getChapterDao()->get($task['categoryId']);
+        $lesson['tasks'] = array($task);
+        // $tasks = $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($lesson['id']);
+        $html = $this->renderView(
+            $template,
+            array(
+                'course' => $course,
+                'chapter' => $lesson,
+            )
+        );
 
         return $this->createJsonResponse(
             array(
                 'append' => true,
-                'html' => $html,
+                'html' => $html
             )
-        );
+        ); 
     }
 
     public function updateAction(Request $request, $courseId, $id)

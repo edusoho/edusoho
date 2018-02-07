@@ -33,6 +33,15 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return 'task-manage/item/default-list-item.html.twig';
     }
 
+    public function getJsonTemplate($task)
+    {
+        if ('lesson' != $task['mode']) {
+            return '';
+        }
+
+         
+    }
+
     public function createTask($field)
     {
         $this->validateTaskMode($field);

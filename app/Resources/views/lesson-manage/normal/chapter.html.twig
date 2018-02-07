@@ -13,10 +13,14 @@
       </a>
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">{{'course.plan_task.create_part'|trans({'%partName%':course_chapter_alias('part')|default('site.data.part'|trans)}) }}</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">
+              {{'course.plan_task.create_part'|trans({'%partName%':course_chapter_alias('part')|default('site.data.part'|trans)}) }}
+            </a>
           </li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson', chapterId:'chapter-'~chapter.id}) }}">{{'course.manage.create_lesson'|trans }}</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson', chapterId:'chapter-'~chapter.id}) }}">
+              {{'course.manage.create_lesson'|trans }}
+            </a>
           </li>
       </ul>
     </span>

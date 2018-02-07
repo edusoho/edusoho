@@ -26,5 +26,7 @@
       </a>
     </div>
   </div>
-  {% include 'lesson-manage/normal/tasks.html.twig' with {tasks: chapter.tasks|default()} %}
+  <ul style="list-style-type: none;" class="js-lesson-box">
+    {% include 'lesson-manage/normal/tasks.html.twig' with {tasks: chapter.tasks|default()} %}
+  </ul>
 </li>
