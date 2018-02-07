@@ -1,0 +1,57 @@
+{% set taskMode = taskMode|default('') %}
+
+<div class="task-list-header clearfix js-task-list-header">
+  {{'course.plan_task.total_tasks'|trans}}
+  <span class="color-warning space" id="task-num">{{ course.taskNum }}</span>
+  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}
+  <span>前端不展示未发布的课时</span>
+  <label for="switch-1" class="form-switch">
+    <input type="checkbox" name="isShowPublish" {% if not course.isShowUnpublish %}checked{% endif %} value="0" id="switch-1" data-toggle="switch" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
+  </label>
+
+  <div class="pull-right">
+    <button class="btn btn-primary btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id, type:taskMode}) }}">
+      <i class="es-icon es-icon-anonymous-iconfont"></i>
+      {{'course.lesson'|trans}}
+    </button>
+    {% if courseSet.type|default('') == 'normal'  %}
+      <button class="btn btn-default btn-sm js-batch-add
+        {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
+        disabled
+        {% endif %}"
+        {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
+          data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
+          data-content="{{'course.plan_task.batch_create_tips'|trans}}"
+        {% else %}
+          data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" 
+          data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
+        {% endif %}>
+        <i class="es-icon es-icon-anonymous-iconfont"></i>
+        {{'course.plan_task.batch_create_btn'|trans}}
+      </button>
+    {% endif %}
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="es-icon es-icon-anonymous-iconfont"></i>
+        {{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}/{{ course_chapter_alias('part')|default('site.data.part'|trans) }}
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
+            data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}">
+            <i class="es-icon es-icon-anonymous-iconfont"></i>
+            {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|default('site.data.chapter'|trans)}) }}
+          </a>
+        </li>
+        <li>
+          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
+            data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+            <i class="es-icon es-icon-anonymous-iconfont"></i>
+            {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('part')|default('site.data.part'|trans)}) }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

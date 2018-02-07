@@ -182,10 +182,12 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
                 'courseId' => $task['fromCourseId'],
                 'title' => $task['title'],
                 'type' => 'lesson',
+                'status' => 'created',
             );
             $chapter = $this->getCourseService()->createChapter($chapter);
         }
         $task['categoryId'] = $chapter['id'];
+        $task['status'] = $chapter['status'];
 
         return parent::createTask($task);
     }
