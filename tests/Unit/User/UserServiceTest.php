@@ -202,6 +202,15 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
+    public function testGetUserByUUID()
+    {
+        $registeredUser = $this->createFromUser();
+
+        $foundUser = $this->getUserService()->getUserByUUID($registeredUser['uuid']);
+
+        $this->assertArrayEquals($registeredUser, $foundUser);
+    }
+
     public function testGetUserByLoginField()
     {
         $userInfo = array(
@@ -2317,6 +2326,22 @@ class UserServiceTest extends BaseTestCase
         );
         $result = $this->getUserService()->updateUserNewMessageNum(2, 1);
         $this->assertNull($result);
+    }
+
+    public function testMakeUUID()
+    {
+        $uuid = $this->getUserService()->makeUUID();
+
+        $this->assertNotNull($uuid);
+        $this->assertEquals(40, strlen($uuid));
+    }
+
+    public function testGenerateUUID()
+    {
+        $uuid = $this->getUserService()->generateUUID();
+
+        $this->assertNotNull($uuid);
+        $this->assertEquals(40, strlen($uuid));
     }
 
     protected function createUser($user)

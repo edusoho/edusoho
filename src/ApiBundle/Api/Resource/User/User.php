@@ -31,6 +31,9 @@ class User extends AbstractResource
             case 'nickname':
                 $user = $this->getUserService()->getUserByNickname($identify);
                 break;
+            case 'token':
+                $user = $this->getUserService()->getUserByUUID($identify);
+                break;
             default:
                 break;
         }
