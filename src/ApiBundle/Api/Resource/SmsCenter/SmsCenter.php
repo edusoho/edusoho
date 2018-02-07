@@ -28,7 +28,7 @@ class SmsCenter extends AbstractResource
         $type = $this->convertType($type);
 
         $smsToken = $this->getBizSms()->send($type, $mobile);
-        $this->getUserService()->updateSmsRegistrationCaptchaCode($request->getHttpRequest()->getClientIp());
+        $this->getUserService()->updateSmsRegisterCaptchaStatus($request->getHttpRequest()->getClientIp());
 
         return array(
             'smsToken' => $smsToken['token'],

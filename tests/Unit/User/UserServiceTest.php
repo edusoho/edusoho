@@ -2337,17 +2337,17 @@ class UserServiceTest extends BaseTestCase
 
         $this->assertEquals(
             'captchaIgnored',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', false)
         );
 
         $this->assertEquals(
             'captchaIgnored',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', true)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', true)
         );
 
         $this->assertEquals(
             'captchaRequired',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', false)
         );
 
         $settingService->shouldHaveReceived('get')->times(3);
@@ -2371,17 +2371,17 @@ class UserServiceTest extends BaseTestCase
 
         $this->assertEquals(
             'captchaIgnored',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', false)
         );
 
         $this->assertEquals(
             'captchaIgnored',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', true)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', true)
         );
 
         $this->assertEquals(
             'captchaIgnored',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', false)
         );
         $settingService->shouldHaveReceived('get')->times(3);
     }
@@ -2404,12 +2404,12 @@ class UserServiceTest extends BaseTestCase
 
         $this->assertEquals(
             'smsUnsendable',
-            $this->getUserService()->updateSmsRegistrationCaptchaCode('128.3.2.1')
+            $this->getUserService()->updateSmsRegisterCaptchaStatus('128.3.2.1')
         );
 
         $this->assertEquals(
             'smsUnsendable',
-            $this->getUserService()->updateSmsRegistrationCaptchaCode('128.3.2.1')
+            $this->getUserService()->updateSmsRegisterCaptchaStatus('128.3.2.1')
         );
 
         $settingService->shouldHaveReceived('get')->times(2);
@@ -2433,12 +2433,12 @@ class UserServiceTest extends BaseTestCase
 
         $this->assertEquals(
             'captchaRequired',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', false)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', false)
         );
 
         $this->assertEquals(
             'captchaRequired',
-            $this->getUserService()->getSmsCaptchaStatus('128.3.2.1', true)
+            $this->getUserService()->getSmsRegisterCaptchaStatus('128.3.2.1', true)
         );
 
         $settingService->shouldHaveReceived('get')->times(2);

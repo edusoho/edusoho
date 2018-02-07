@@ -164,7 +164,7 @@ class LoginController extends LoginBindController
             $oauthUser->displayCaptcha = true;
             if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {
                 $oauthUser->displayCaptcha =
-                    'captchaRequired' == $this->getUserService()->getSmsCaptchaStatus($request->getClientIp());
+                    'captchaRequired' == $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
             }
 
             return $this->render('oauth2/create-account.html.twig', array(

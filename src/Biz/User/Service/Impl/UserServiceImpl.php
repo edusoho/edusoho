@@ -1835,7 +1835,7 @@ class UserServiceImpl extends BaseService implements UserService
      *  2. captchaIgnored  不需要图形验证码
      *  3. smsUnsendable 不能发送短信
      */
-    public function getSmsCaptchaStatus($clientIp, $updateCount = false)
+    public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false)
     {
         $registerSetting = $this->getSettingService()->get('auth', array());
         if (!empty($registerSetting['register_mode']) &&
@@ -1863,9 +1863,9 @@ class UserServiceImpl extends BaseService implements UserService
         return 'smsUnsendable';
     }
 
-    public function updateSmsRegistrationCaptchaCode($clientIp)
+    public function updateSmsRegisterCaptchaStatus($clientIp)
     {
-        return $this->getSmsCaptchaStatus($clientIp, true);
+        return $this->getSmsRegisterCaptchaStatus($clientIp, true);
     }
 
     protected function _prepareApprovalConditions($conditions)

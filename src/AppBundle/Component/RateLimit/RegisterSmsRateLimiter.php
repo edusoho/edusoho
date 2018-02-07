@@ -8,7 +8,7 @@ class RegisterSmsRateLimiter extends SmsRateLimiter
 {
     public function handle(Request $request)
     {
-        if ('captchaRequired' == $this->getUserService()->getSmsCaptchaStatus($request->getClientIp())) {
+        if ('captchaRequired' == $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp())) {
             $this->validateCaptcha($request);
         }
 

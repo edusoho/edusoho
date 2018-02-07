@@ -25,7 +25,7 @@ class EduCloudController extends BaseController
     {
         $smsType = 'sms_registration';
 
-        $status = $this->getUserService()->getSmsCaptchaStatus($request->getClientIp());
+        $status = $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
         if ('captchaRequired' == $status) {
             if (empty($request->request->get('captcha_num'))) {
                 return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
@@ -39,7 +39,7 @@ class EduCloudController extends BaseController
         $result = $this->sendSms($request, $smsType);
 
         if (!empty($result['ACK']) && 'ok' == $result['ACK']) {
-            $this->getUserService()->updateSmsRegistrationCaptchaCode($request->getClientIp());
+            $this->getUserService()->updateSmsRegisterCaptchaStatus($request->getClientIp());
         }
 
         return $this->createJsonResponse($result);

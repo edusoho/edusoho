@@ -302,7 +302,7 @@ interface UserService
      *
      * @param clientIp 用户ip
      */
-    public function getSmsCaptchaStatus($clientIp, $updateCount = false);
+    public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
 
-    public function updateSmsRegistrationCaptchaCode($clientIp);
+    public function updateSmsRegisterCaptchaStatus($clientIp);
 }

@@ -36,7 +36,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
             'User:UserService',
             array(
                 array(
-                    'functionName' => 'getSmsCaptchaStatus',
+                    'functionName' => 'getSmsRegisterCaptchaStatus',
                     'withParams' => array('128.2.2.1'),
                     'returnValue' => 'captchaRequired',
                 ),
@@ -49,7 +49,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
 
         $captcha->shouldHaveReceived('check')->times(1);
         $request->shouldHaveReceived('getClientIp')->times(2);
-        $userService->shouldHaveReceived('getSmsCaptchaStatus')->times(1);
+        $userService->shouldHaveReceived('getSmsRegisterCaptchaStatus')->times(1);
         $this->assertNull($result);
     }
 
@@ -81,7 +81,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
             'User:UserService',
             array(
                 array(
-                    'functionName' => 'getSmsCaptchaStatus',
+                    'functionName' => 'getSmsRegisterCaptchaStatus',
                     'withParams' => array('128.2.2.1'),
                     'returnValue' => 'captchaIgnore',
                 ),
@@ -94,7 +94,7 @@ class RegisterSmsRateLimiterTest extends BaseTestCase
 
         $captcha->shouldNotHaveReceived('check');
         $request->shouldHaveReceived('getClientIp')->times(2);
-        $userService->shouldHaveReceived('getSmsCaptchaStatus')->times(1);
+        $userService->shouldHaveReceived('getSmsRegisterCaptchaStatus')->times(1);
         $this->assertNull($result);
     }
 }
