@@ -28,7 +28,7 @@ class RateLimiter
 
         $key = $this->getKey($id);
         $value = $this->storage->get($key);
-        if (false !== $value) {
+        if ($value !== false) {
             list($allowance, $lastCheckTime) = $this->unpackValue($value);
 
             $timePassed = time() - $lastCheckTime;
@@ -58,7 +58,7 @@ class RateLimiter
     {
         $this->check($id, 0);
         $value = $this->storage->get($this->getKey($id));
-        if (false !== $value) {
+        if ($value !== false) {
             list($allowance) = $this->unpackValue($value);
 
             return floor($allowance);

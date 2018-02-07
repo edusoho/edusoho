@@ -297,11 +297,6 @@ interface UserService
 
     public function updateUserNewMessageNum($id, $num);
 
-    /**
-     * 当
-     *
-     * @param clientIp 用户ip
-     */
     public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
 
     public function updateSmsRegisterCaptchaStatus($clientIp);
