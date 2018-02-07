@@ -2403,12 +2403,12 @@ class UserServiceTest extends BaseTestCase
         );
 
         $this->assertEquals(
-            'captchaIgnored',
+            'smsUnsendable',
             $this->getUserService()->updateSmsRegistrationCaptchaCode('128.3.2.1')
         );
 
         $this->assertEquals(
-            'captchacaptchaIgnoredRequired',
+            'smsUnsendable',
             $this->getUserService()->updateSmsRegistrationCaptchaCode('128.3.2.1')
         );
 
