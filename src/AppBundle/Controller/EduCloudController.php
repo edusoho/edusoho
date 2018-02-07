@@ -16,64 +16,33 @@ class EduCloudController extends BaseController
 {
     public function smsSendAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
-        $currentTime = time();
-
         $smsType = $request->request->get('sms_type');
-        $to = $request->get('to');
 
-        $errorMsg = $this->checkErrorMsg($currentUser, $currentTime, $smsType, $request);
+        return $this->createJsonResponse($this->sendSms($request, $smsType));
+    }
 
-        if (!empty($errorMsg)) {
-            return $this->createJsonResponse(array('error' => $errorMsg));
+    public function smsSendRegistrationAction(Request $request)
+    {
+        $smsType = 'sms_registration';
+
+        $status = $this->getUserService()->getSmsCaptchaStatus($request->getClientIp());
+        if ('captchaRequired' == $status) {
+            if (empty($request->request->get('captcha_num'))) {
+                return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
+            } elseif (!$this->validateCaptcha($request)) {
+                return $this->createJsonResponse(array('error' => '验证码错误'));
+            }
+        } elseif ('smsUnsendable' == $status) {
+            return;
         }
 
-        $description = $this->generateDescription($smsType);
-        $smsCode = $this->generateSmsCode();
+        $result = $this->sendSms($request, $smsType);
 
-        try {
-            $api = CloudAPIFactory::create('leaf');
-            $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
-                    'mobile' => $to,
-                    'category' => $smsType,
-                    'sendStyle' => 'templateId',
-                    'description' => $description,
-                    'verify' => $smsCode,
-                ));
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-
-            return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $message)));
-        }
-        if (isset($result['error'])) {
-            return $this->createJsonResponse(array('error' => sprintf('发送失败, %s', $result['error'])));
+        if (!empty($result['ACK']) && 'ok' == $result['ACK']) {
+            $this->getUserService()->updateSmsRegistrationCaptchaCode($request->getClientIp());
         }
 
-        $result['to'] = $to;
-        $result['smsCode'] = $smsCode;
-        $result['userId'] = $currentUser['id'];
-
-        if ($currentUser['id'] != 0) {
-            $result['nickname'] = $currentUser['nickname'];
-        }
-
-        $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
-
-        $request->getSession()->set($smsType, array(
-            'to' => $to,
-            'sms_code' => $smsCode,
-            'sms_last_time' => $currentTime,
-        ));
-
-        if ($currentUser->isLogin()) {
-            $key = $currentUser['email'];
-        } else {
-            $key = $to.$request->getClientIp();
-        }
-
-        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($key);
-
-        return $this->createJsonResponse(array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance));
+        return $this->createJsonResponse($result);
     }
 
     public function smsCheckAction(Request $request, $type)
@@ -83,17 +52,17 @@ class EduCloudController extends BaseController
         $postSmsCode = $request->query->get('value', '');
 
         $ratelimiterResult = SmsToolkit::smsCheckRatelimiter($request, $type, $postSmsCode);
-        if ($ratelimiterResult && $ratelimiterResult['success'] === false) {
+        if ($ratelimiterResult && false === $ratelimiterResult['success']) {
             return $this->createJsonResponse($ratelimiterResult);
         }
 
-        if ((string) $postSmsCode === '' || (string) $targetSession['sms_code'] === '') {
+        if ('' === (string) $postSmsCode || '' === (string) $targetSession['sms_code']) {
             $response = array('success' => false, 'message' => 'json_response.verification_code_error.message');
         }
 
         $mobile = $request->query->get('mobile', '');
 
-        if ($mobile != '' && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
+        if ('' != $mobile && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
             return $this->createJsonResponse(array('success' => false, 'message' => 'json_response.verification_code_not_match.message'));
         }
 
@@ -200,7 +169,7 @@ class EduCloudController extends BaseController
 
     protected function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
     {
-        if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
+        if (!((0 == strlen($smsLastTime)) || (($currentTime - $smsLastTime) > $allowedTime))) {
             return false;
         }
 
@@ -217,7 +186,7 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('用户未登录');
         }
 
-        if ($this->setting("cloud_sms.{$smsType}") != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
+        if ('on' != $this->setting("cloud_sms.{$smsType}") && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
     }
@@ -257,19 +226,15 @@ class EduCloudController extends BaseController
         $errorMsg = '';
         $to = $request->get('to');
         $this->checkSmsType($smsType, $user);
-        if ($this->setting('cloud_sms.sms_enabled') != '1') {
+        if ('1' != $this->setting('cloud_sms.sms_enabled')) {
             $errorMsg = '短信服务未开启，请联系网校管理员';
 
             return $errorMsg;
         }
 
-        if (!in_array($smsType, array('sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'))) {
-            $captchaNum = strtolower($request->request->get('captcha_num'));
-
-            if ($request->getSession()->get('captcha_code') != $captchaNum) {
-                $errorMsg = '验证码错误';
-
-                return $errorMsg;
+        if (!in_array($smsType, array('sms_registration', 'sms_user_pay', 'system_remind', 'sms_bind', 'sms_forget_pay_password', 'sms_forget_password'))) {
+            if ($this->validateCaptcha($request)) {
+                return '验证码错误';
             }
         }
 
@@ -284,7 +249,7 @@ class EduCloudController extends BaseController
         }
 
         if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
-            if ($smsType == 'sms_bind') {
+            if ('sms_bind' == $smsType) {
                 $description = '手机绑定';
             } else {
                 $description = '用户注册';
@@ -305,7 +270,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        if ($smsType == 'sms_forget_password') {
+        if ('sms_forget_password' == $smsType) {
             $description = '登录密码重置';
             $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
@@ -315,7 +280,7 @@ class EduCloudController extends BaseController
                 return  $errorMsg;
             }
 
-            if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
+            if ((!isset($targetUser['verifiedMobile']) || (0 == strlen($targetUser['verifiedMobile'])))) {
                 $errorMsg = '用户没有被绑定的手机号';
 
                 return  $errorMsg;
@@ -329,13 +294,13 @@ class EduCloudController extends BaseController
         }
 
         if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
-            if ($smsType == 'sms_user_pay') {
+            if ('sms_user_pay' == $smsType) {
                 $description = '网站余额支付';
             } else {
                 $description = '支付密码重置';
             }
 
-            if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
+            if ((!isset($user['verifiedMobile']) || (0 == strlen($user['verifiedMobile'])))) {
                 $errorMsg = '用户没有被绑定的手机号';
 
                 return  $errorMsg;
@@ -367,7 +332,7 @@ class EduCloudController extends BaseController
         // send 6 times in an hour
         $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->check($key);
 
-        if ($maxAllowance == 0) {
+        if (0 == $maxAllowance) {
             $errorMsg = '暂停发送验证码短信，请稍后再试';
 
             return $errorMsg;
@@ -410,5 +375,72 @@ class EduCloudController extends BaseController
         $factory = $this->getBiz()->offsetGet('ratelimiter.factory');
 
         return $factory($id, $maxAllowance, $period);
+    }
+
+    private function sendSms(Request $request, $smsType)
+    {
+        $currentUser = $this->getCurrentUser();
+        $currentTime = time();
+        $to = $request->get('to');
+
+        $errorMsg = $this->checkErrorMsg($currentUser, $currentTime, $smsType, $request);
+
+        if (!empty($errorMsg)) {
+            return array('error' => $errorMsg);
+        }
+
+        $description = $this->generateDescription($smsType);
+        $smsCode = $this->generateSmsCode();
+
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array(
+                    'mobile' => $to,
+                    'category' => $smsType,
+                    'sendStyle' => 'templateId',
+                    'description' => $description,
+                    'verify' => $smsCode,
+                ));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            return array('error' => sprintf('发送失败, %s', $message));
+        }
+        if (isset($result['error'])) {
+            return array('error' => sprintf('发送失败, %s', $result['error']));
+        }
+
+        $result['to'] = $to;
+        $result['smsCode'] = $smsCode;
+        $result['userId'] = $currentUser['id'];
+
+        if (0 != $currentUser['id']) {
+            $result['nickname'] = $currentUser['nickname'];
+        }
+
+        $this->getLogService()->info('sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
+
+        $request->getSession()->set($smsType, array(
+            'to' => $to,
+            'sms_code' => $smsCode,
+            'sms_last_time' => $currentTime,
+        ));
+
+        if ($currentUser->isLogin()) {
+            $key = $currentUser['email'];
+        } else {
+            $key = $to.$request->getClientIp();
+        }
+
+        $maxAllowance = $this->getRateLimiter($smsType, 6, 3600)->getAllow($key);
+
+        return array('ACK' => 'ok', 'allowance' => ($maxAllowance > 3) ? 0 : $maxAllowance);
+    }
+
+    private function validateCaptcha(Request $request)
+    {
+        $captchaNum = strtolower($request->request->get('captcha_num'));
+
+        return !empty($captchaNum) && $request->getSession()->get('captcha_code') == $captchaNum;
     }
 }

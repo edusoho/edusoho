@@ -28,7 +28,7 @@ class RateLimiter
 
         $key = $this->getKey($id);
         $value = $this->storage->get($key);
-        if ($value !== false) {
+        if (false !== $value) {
             list($allowance, $lastCheckTime) = $this->unpackValue($value);
 
             $timePassed = time() - $lastCheckTime;
@@ -38,14 +38,15 @@ class RateLimiter
                 $allowance = $this->maxAllowance;
             }
 
-            if ($allowance < $use) {
+            $intAllowance = (int) floor($allowance);
+            if ($intAllowance < $use || 0 == $intAllowance) {
                 $this->storage->set($key, $this->packValue($allowance, time()), $this->period);
 
                 return 0;
             } else {
                 $this->storage->set($key, $this->packValue($allowance - $use, time()), $this->period);
 
-                return (int) floor($allowance);
+                return $intAllowance;
             }
         } else {
             $this->storage->set($key, $this->packValue($this->maxAllowance - $use, time()), $this->period);
@@ -58,7 +59,7 @@ class RateLimiter
     {
         $this->check($id, 0);
         $value = $this->storage->get($this->getKey($id));
-        if ($value !== false) {
+        if (false !== $value) {
             list($allowance) = $this->unpackValue($value);
 
             return floor($allowance);
