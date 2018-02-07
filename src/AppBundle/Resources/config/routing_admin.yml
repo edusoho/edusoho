@@ -965,10 +965,12 @@ admin_mocked_distributor_get_post_data:
 admin_mocked_distributor_post_data:
     path: /mock/distributor_post_data
     defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
+    methods: [POST]
 
 admin_mocked_marketing_post_data:
     path: /mock/marketing_post_data
     defaults: { _controller: AppBundle:Admin/Mock:postMarketingData }
+    methods: [POST]
 
 admin_optimize:
     path:  /setting/optimize
