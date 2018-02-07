@@ -8,6 +8,7 @@ use AppBundle\Common\Exception\AccessDeniedException;
 use Biz\Distributor\Util\DistributorJobStatus;
 use Biz\Distributor\Job\DistributorSyncJob;
 use AppBundle\Common\ReflectionUtils;
+use Codeages\Weblib\Auth\SignatureTokenAlgo;
 
 class MockController extends BaseController
 {
@@ -41,7 +42,7 @@ class MockController extends BaseController
         ));
     }
 
-    public function getPostDataAction(Request $request)
+    public function getPostDistributorDataAction(Request $request)
     {
         $this->validate();
 
@@ -52,7 +53,7 @@ class MockController extends BaseController
         return $this->createJsonResponse($jobData);
     }
 
-    public function postDataAction(Request $request)
+    public function postDistributorDataAction(Request $request)
     {
         $this->validate();
 
@@ -69,6 +70,18 @@ class MockController extends BaseController
                 return $this->createJsonResponse(array('result' => $result['result']));
             }
         }
+    }
+
+    public function postMarketingDataAction(Request $request)
+    {
+        $this->validate();
+
+        $url = $request->request->get('url');
+        $bodyStr = $request->request->get('body');
+
+        $result = $this->post($url, $bodyStr, $this->generateToken($url, $bodyStr));
+
+        return $this->createJsonResponse(array('result' => $result));
     }
 
     protected function getDistributorUserService()
@@ -96,5 +109,48 @@ class MockController extends BaseController
         if (!$this->getCurrentUser()->isSuperAdmin()) {
             throw new AccessDeniedException();
         }
+    }
+
+    private function generateToken($url, $body)
+    {
+        $strategy = new SignatureTokenAlgo();
+
+        $deadline = TimeMachine::time() + 600;
+        $once = 'test_once';
+
+        $signText = "{$url}\n{$body}";
+
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $cloudAccessKey = $storageSetting['cloud_access_key'];
+
+        $signatureText = $strategy->signature(
+            "{$once}\n{$deadline}\n{$signText}",
+            $storageSetting['cloud_secret_key']
+        );
+
+        return "{$cloudAccessKey}:{$deadline}:{$once}:{$signatureText}";
+    }
+
+    private function post($url, $bodyStr, $token)
+    {
+        $url = 'http://127.0.0.1'.$url;
+
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 1);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyStr);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Authorization: Signature '.$token,
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $body = json_decode($response, true);
+
+        return $body;
     }
 }
