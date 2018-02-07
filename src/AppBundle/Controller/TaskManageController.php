@@ -172,13 +172,15 @@ class TaskManageController extends BaseController
 
         $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task, $isOnlyTask);
 
-        $html = $this->renderView(
-            $this->createCourseStrategy($course)->getTaskItemTemplate(),
-            array(
-                'course' => $course,
-                'task' => $task,
-            )
-        );
+        // $html = $this->renderView(
+        //     $this->createCourseStrategy($course)->getTaskItemTemplate(),
+        //     array(
+        //         'course' => $course,
+        //         'task' => $task,
+        //         'chapter' => $chapter,
+        //     )
+        // );
+        $html = '';
 
         return $this->createJsonResponse(
             array(
