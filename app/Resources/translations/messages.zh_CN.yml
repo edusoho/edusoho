@@ -5171,10 +5171,10 @@ admin.setting.site.slogan: 网站副标题
 admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
-admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过 250×50px。网校 logo 设置后将显示顶部导航左侧，
+admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>网校 logo 设置后将显示顶部导航左侧，
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
-admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。
+admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
 admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
 admin.setting.site.seo_description: SEO描述信息
@@ -5499,11 +5499,11 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
-admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片尺寸为 750×300px，格式支持jpg、png。
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，请上传jpg, png格式的图片。建议图片尺寸为 750×300px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
-admin.mobile_manage.img_tips: 请上传jpg, gif, png格式的图片。
+admin.mobile_manage.img_tips: 请上传jpg, png格式的图片。
 admin.mobile_manage.default_click_radio: 默认（无触发动作）
 admin.mobile_manage.goto_link_radio: 跳转到连接地址
 admin.mobile_manage.goto_inside_course_radio: 跳转到内部课程
@@ -6150,11 +6150,11 @@ admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
 admin.edu_cloud.edu_video.open_embed_watermark_tips: >
   能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
 admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
@@ -7194,7 +7194,7 @@ admin.coin_setting.promotion_proposal_hint: >
   2、 网校可鼓励学员充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
-  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片
+  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.coin_setting.coin_description: 虚拟币说明
 admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
 admin.coin_setting.update_submit_btn: 提交更新
@@ -7374,7 +7374,7 @@ admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
 admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图片。
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
-admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。
+admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
@@ -7383,7 +7383,7 @@ admin.mobile_setting.app_custom_logo_hint: 请上传jpg, gif, png格式的图片
 admin.mobile_setting.app_custom_cover: APP封面
 admin.mobile_setting.app_custom_cover_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 225×400px。
 admin.mobile_setting.splash_setting: 设置启动图
-admin.mobile_setting.splash_setting_hint: 最多设置5张启动图，建议图片尺寸为 640×960px，用户首次登录网校时会显示启动图。
+admin.mobile_setting.splash_setting_hint: 请上传jpg, gif, png格式的图片。最多设置5张启动图，建议图片尺寸为 640×960px，建议图片大小不超过2MB。用户首次登录网校时会显示启动图。
 admin.mobile_setting.splash: 启动图%splashNum%
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
