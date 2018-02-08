@@ -53,6 +53,8 @@ class MarketingServiceTest extends BaseTestCase
             )
         );
 
+        $this->getSettingService()->set('refund', array('maxRefundDays' => 2));
+
         $biz = $this->getBiz();
         $biz['@Marketing:MarketingCourseMemberService'] = new MockedCourseMemberServiceImpl($this->getBiz());
 
@@ -101,10 +103,14 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals('1', $order['pay_amount']);
         $this->assertEquals('course', $order['create_extra']['targetType']);
         $this->assertEquals(TimeMachine::time(), $order['pay_time']);
+        $this->assertEquals('1', $order['paid_cash_amount']);
+        $this->assertEquals('2', $order['expired_refund_days']);
+        $this->assertEquals(1517574409, $order['refund_deadline']);
     }
 
     public function testAddUserToClassroom()
     {
+        TimeMachine::setMockedTime(1517401609);
         $postData = array(
             'mobile' => '13675641112',
             'user_id' => 12,
@@ -145,6 +151,8 @@ class MarketingServiceTest extends BaseTestCase
                 'roles' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'),
             )
         );
+
+        $this->getSettingService()->set('refund', array('maxRefundDays' => 2));
 
         $this->mockBiz('Classroom:ClassroomService', array(
             array('functionName' => 'getClassroom', 'returnValue' => array(
@@ -199,6 +207,9 @@ class MarketingServiceTest extends BaseTestCase
         $this->assertEquals('1', $order['pay_amount']);
         $this->assertEquals('classroom', $order['create_extra']['targetType']);
         $this->assertEquals(TimeMachine::time(), $order['pay_time']);
+        $this->assertEquals('1', $order['paid_cash_amount']);
+        $this->assertEquals('2', $order['expired_refund_days']);
+        $this->assertEquals(1517574409, $order['refund_deadline']);
     }
 
     protected function getMarketingCourseService()
@@ -227,5 +238,10 @@ class MarketingServiceTest extends BaseTestCase
     protected function getClassroomMemberService()
     {
         return $this->createService('Marketing:MarketingClassroomMemberService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
