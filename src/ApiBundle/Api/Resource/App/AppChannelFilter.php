@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\Filter;
 class AppChannelFilter extends Filter
 {
     protected $publicFields = array(
-        'title', 'type', 'data', 'showCount', 'actualCount', 'orderType', 'categoryId'
+        'title', 'type', 'data', 'showCount', 'actualCount', 'orderType', 'categoryId',
     );
 
     protected function publicFields(&$data)

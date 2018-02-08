@@ -2,11 +2,8 @@
 
 namespace ApiBundle\Api\Resource\Notification;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Notification extends AbstractResource
 {
@@ -63,7 +60,7 @@ class Notification extends AbstractResource
                 'test-paper',
                 'thread',
                 'vip',
-                'vip-deadline'
+                'vip-deadline',
             ),
         );
 

@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Util\CdnUrl;
 
 abstract class Filter
 {
@@ -56,7 +57,6 @@ abstract class Filter
         if ($filteredData) {
             $data = $filteredData;
         }
-
     }
 
     public function filters(&$dataSet)
@@ -70,7 +70,7 @@ abstract class Filter
                 $this->filter($data);
             }
         } else {
-            foreach($dataSet as &$data) {
+            foreach ($dataSet as &$data) {
                 $this->filter($data);
             }
         }
@@ -89,12 +89,31 @@ abstract class Filter
 
     protected function convertAbsoluteUrl($html)
     {
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) {
-            $absoluteUrl = AssetHelper::uriForPath('/'.ltrim($matches[1], '/'));
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) {
+            $cdn = new CdnUrl();
+            $cdnUrl = $cdn->get('content');
+            if (!empty($cdnUrl)) {
+                $absoluteUrl = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($matches[1], '/');
+            } else {
+                $absoluteUrl = AssetHelper::uriForPath('/'.ltrim($matches[1], '/'));
+            }
+
             return "src=\"{$absoluteUrl}\"";
         }, $html);
 
         return $html;
+    }
 
+    protected function convertFilePath($filePath)
+    {
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get('content');
+        if (!empty($cdnUrl)) {
+            $url = AssetHelper::getScheme().':'.rtrim($cdnUrl, '/').'/'.ltrim($filePath, '/');
+        } else {
+            $url = AssetHelper::uriForPath('/'.ltrim($filePath, '/'));
+        }
+
+        return $url;
     }
 }

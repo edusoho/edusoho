@@ -9,7 +9,7 @@ class QQVideoAlbumParser extends AbstractAlbumParser
     public function parse($url)
     {
         $response = $this->fetchUrl($url);
-        if ($response['code'] != 200) {
+        if (200 != $response['code']) {
             throw new ParseException(array('获取QQ视频专辑(%url%)页面内容失败！', array('%url%' => $url)));
         }
 
@@ -63,10 +63,5 @@ class QQVideoAlbumParser extends AbstractAlbumParser
     public function detect($url)
     {
         return (bool) preg_match('/^http\:\/\/v\.qq\.com\/cover\//s', $url);
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

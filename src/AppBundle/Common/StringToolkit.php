@@ -185,7 +185,7 @@ class StringToolkit
     public static function compress($content, $level = 5)
     {
         if (self::isCompressable()) {
-            return gzdeflate($content, $level);
+            return gzencode($content, $level);
         }
 
         return $content;
@@ -200,10 +200,20 @@ class StringToolkit
     public static function uncompress($content)
     {
         if (self::isCompressable()) {
-            return gzinflate($content);
+            return gzdecode($content);
         }
 
         return $content;
+    }
+
+    public static function appendGzipResponseHeader($header = array())
+    {
+        if (self::isCompressable()) {
+            $header['Content-Encoding'] = 'gzip';
+            $header['Vary'] = 'Accept-Encoding';
+        }
+
+        return $header;
     }
 
     public static function isCompressable()

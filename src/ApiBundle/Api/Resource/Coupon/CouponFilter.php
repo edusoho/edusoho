@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class CouponFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId'
+        'id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId',
     );
 
     protected function publicFields(&$data)

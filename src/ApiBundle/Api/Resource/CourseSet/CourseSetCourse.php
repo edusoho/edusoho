@@ -37,7 +37,7 @@ class CourseSetCourse extends AbstractResource
     {
         foreach ($courses as &$course) {
             $course['access'] = $this->getCourseService()->canJoinCourse($course['id']);
-            
+
             $enableAudioStatus = $this->getCourseService()->isSupportEnableAudio($course['enableAudio']);
             $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
             unset($course['enableAudio']);
@@ -51,6 +51,7 @@ class CourseSetCourse extends AbstractResource
     {
         return $this->service('Course:CourseSetService');
     }
+
     /**
      * @return CourseService
      */

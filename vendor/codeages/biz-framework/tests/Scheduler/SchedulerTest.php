@@ -257,6 +257,24 @@ class SchedulerTest extends IntegrationTestCase
         $this->assertEquals('timeout', $jobFireds[0]['status']);
     }
 
+    public function testCreateErrorLog()
+    {
+        $job = array(
+            'id' => 22,
+            'name' => 'test',
+            'source' => 'MAIN',
+            'expression' => '0 17 * * *',
+            'class' => 'Tests\\Example\\Job\\ExampleJob',
+            'args' => array('courseId' => 1),
+            'priority' => 100,
+            'misfire_threshold' => 3000,
+            'misfire_policy' => 'missed',
+        );
+        $this->getSchedulerService()->createErrorLog(array('job_detail' => $job), 'error', 'error');
+        $result = $this->getJobLogDao()->search(array('job_fired_id' => 0), array('created_time' => 'DESC'), 0, PHP_INT_MAX);
+        $this->assertEquals('error', $result[0]['message']);
+    }
+
     protected function wavePoolNum($id, $diff)
     {
         $ids = array($id);
@@ -288,6 +306,11 @@ class SchedulerTest extends IntegrationTestCase
     protected function getJobFiredDao()
     {
         return $this->biz->dao('Scheduler:JobFiredDao');
+    }
+
+    protected function getJobLogDao()
+    {
+        return $this->biz->dao('Scheduler:JobLogDao');
     }
 
     protected function getSchedulerService()

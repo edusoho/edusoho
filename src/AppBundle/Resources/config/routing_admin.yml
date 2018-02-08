@@ -101,27 +101,6 @@ admin_content:
     path:  /content
     defaults: { _controller: AppBundle:Admin/Content:index }
 
-admin_dictionary:
-    path:  /dictionary
-    defaults: { _controller: AppBundle:Admin/Dictionary:index }
-
-admin_dictionary_create:
-    path: /dictionary/create/{type}
-    defaults: { _controller: AppBundle:Admin/Dictionary:create }
-
-admin_dictionary_delete:
-    path:  /dictionary/{id}/delete
-    defaults: { _controller: AppBundle:Admin/Dictionary:delete }
-    methods: [POST]
-
-admin_dictionary_edit:
-    path:  /dictionary/{id}/edit
-    defaults: { _controller: AppBundle:Admin/Dictionary:edit }
-
-admin_dictionary_name_check:
-    path:  /dictionary/{id}/name_check
-    defaults: { _controller: AppBundle:Admin/Dictionary:checkName }
-
 admin_content_create:
     path:  /content/create/{type}
     defaults: { _controller: AppBundle:Admin/Content:create }
@@ -949,6 +928,7 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     path:  /setting/cdn
     defaults: { _controller: AppBundle:Admin/CdnSetting:index }
+
 
 admin_mocked:
     path: /mock
@@ -2223,8 +2203,8 @@ admin_login_marketing:
     defaults: { _controller: AppBundle:Admin/Marketing:loginMarketing}
 
 admin_login_distributor:
-    path: /login/distributor
-    defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
+   path: /login/distributor
+   defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
 
 
 admin_jobs:

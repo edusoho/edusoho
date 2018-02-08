@@ -23,7 +23,7 @@ class WriteNoteType extends Type
         }
 
         $object = array(
-            'id' => $note['id'],
+            'id' => $activity['id'],
             'course' => $course,
             'definitionType' => $this->convertMediaType($task['type']),
             'resource' => empty($resource) ? array() : $resource,

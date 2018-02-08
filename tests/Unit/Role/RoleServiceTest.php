@@ -82,6 +82,37 @@ class RoleServiceTest extends BaseTestCase
         $this->assertCount(1, $result2);
     }
 
+    public function testGetRole()
+    {
+        $this->mockBiz(
+            'Role:RoleDao',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('id' => 1, 'title' => 'role1'),
+                    'withParams' => array(1),
+                ),
+            )
+        );
+        $result = $this->getRoleService()->getRole(1);
+        $this->assertEquals(array('id' => 1, 'title' => 'role1'), $result);
+    }
+
+    public function testCreateRole()
+    {
+        $role = array('name' => 'test', 'code' => 'ROLE_TEST', 'data' => '');
+        $result = $this->getRoleService()->createRole($role);
+        $this->assertEquals('test', $result['name']);
+    }
+
+    public function testUpdateRole()
+    {
+        $role = array('name' => 'test', 'code' => 'ROLE_TEST', 'data' => '');
+        $role = $this->getRoleService()->createRole($role);
+        $result = $this->getRoleService()->updateRole($role['id'], array('data' => 'test', 'code' => 'ROLE_TEST'));
+        $this->assertEquals('test', $result['data']);
+    }
+
     /**
      * @return RoleService
      */

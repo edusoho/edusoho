@@ -30,7 +30,7 @@ class OrderInfoFilter extends Filter
             'unitType' => isset($data['unitType']) ? $data['unitType'] : '',
             'duration' => isset($data['duration']) ? $data['duration'] : '',
             'buyType' => isset($data['buyType']) ? $data['buyType'] : '',
-            'fullCoinPayable' => $this->fullCoinPayable($data)
+            'fullCoinPayable' => $this->fullCoinPayable($data),
         );
 
         $data = $orderInfo;

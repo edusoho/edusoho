@@ -18,5 +18,4 @@ class CourseTaskResult extends AbstractResource
 
         return $this->service('Task:TaskResultService')->findUserTaskResultsByCourseId($courseId);
     }
-
 }

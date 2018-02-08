@@ -38,6 +38,8 @@ class OpenCourseController extends BaseController
             }
         }
 
+        $conditions = $this->fillOrgCode($conditions);
+
         $count = $this->getOpenCourseService()->countCourses($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
