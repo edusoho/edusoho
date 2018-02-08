@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae5c137838bacee319c90aa7d333af0f",
+    "content-hash": "05df29a1909c9029415e87b3896a31ac",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -345,16 +345,16 @@
         },
         {
             "name": "codeages/biz-order-pay",
-            "version": "v0.1.14",
+            "version": "v0.1.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed"
+                "reference": "52f71578e425471a6b57ab40f37acb87beb655e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
-                "reference": "6676c72f89fd0e0efda9c23d9ff7b3455ccd13ed",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-order-pay/52f71578e425471a6b57ab40f37acb87beb655e5.zip",
+                "reference": "52f71578e425471a6b57ab40f37acb87beb655e5",
                 "shasum": ""
             },
             "require": {
@@ -363,13 +363,15 @@
                 "wenqinruan/omnipay-alipay": "^2.3"
             },
             "require-dev": {
-                "mockery/mockery": "^0.9.9"
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "4.8.36"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Codeages\\Biz\\Order\\": "src/Order/",
-                    "Codeages\\Biz\\Pay\\": "src/Pay/"
+                    "Codeages\\Biz\\Pay\\": "src/Pay/",
+                    "Codeages\\Biz\\Invoice\\": "src/Invoice/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -377,7 +379,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2018-01-25T02:38:55+00:00"
+            "time": "2018-02-07T03:54:31+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -2532,7 +2534,7 @@
             "version": "3.7.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/piwik/device-detector.git",
+                "url": "https://github.com/matomo-org/device-detector.git",
                 "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30"
             },
             "dist": {
