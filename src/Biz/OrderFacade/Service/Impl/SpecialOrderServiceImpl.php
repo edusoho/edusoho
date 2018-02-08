@@ -3,8 +3,9 @@
 namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\OrderFacade\Service\SpecialOrderService;
+use Biz\BaseService;
 
-class SpecialOrderServiceImpl extends SpecialOrderService
+class SpecialOrderServiceImpl extends BaseService implements SpecialOrderService
 {
     public function beforeCreateOrder($orderFields, $params)
     {
