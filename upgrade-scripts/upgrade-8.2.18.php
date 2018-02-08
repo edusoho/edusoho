@@ -67,7 +67,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'deleteCloudSearchBanner',
-            'updateStorage'
+            'updateStorage',
+            'addInvoiceSnForOrder'
         );
 
         $funcNames = array();
@@ -117,6 +118,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $storageSetting['video_h5_enable'] = 1;
         $storageSetting = $this->getSettingService()->set('storage');
 
+        return 1;
+    }
+
+    protected function addInvoiceSnForOrder()
+    {
+        $this->getConnection()->exec("
+            ALTER TABLE `biz_order` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn';
+        ");
+        
         return 1;
     }
 
