@@ -2343,7 +2343,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertNotNull($uuid);
         $this->assertEquals(40, strlen($uuid));
     }
-    
+
     public function testGetSmsCaptchaStatusWithLowProtective()
     {
         $settingService = $this->mockBiz(
