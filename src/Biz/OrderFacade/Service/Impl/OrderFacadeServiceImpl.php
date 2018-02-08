@@ -46,7 +46,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    protected function getRefundDays()
+    public function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
 
@@ -117,8 +117,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
     }
 
-    public function createSpecialOrder(Product $product, $userId, $params = array())
+    /**
+     * @param $type 用于查找相应的实现类， 目前分为 'OrderFacade' 和 'Marketing'
+     */
+    public function createSpecialOrder(Product $product, $userId, $params = array(), $type = 'OrderFacade')
     {
+        $sepcialOrderService = $this->createService($type.':SpecialOrderService');
+
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
@@ -129,7 +134,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'deducts' => empty($params['deducts']) ? array() : $params['deducts'],
         );
 
-        $orderFields = $this->beforeCreateOrder($orderFields, $params);
+        $orderFields = $sepcialOrderService->beforeCreateOrder($orderFields, $params);
 
         $orderItems = $this->makeOrderItems($product);
 
@@ -149,7 +154,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'order_sn' => $order['sn'],
         );
 
-        $data = $this->beforePayOrder($data, $params);
+        $data = $sepcialOrderService->beforePayOrder($data, $params);
 
         $order = $this->getWorkflowService()->paid($data);
 
@@ -246,16 +251,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01) * 10 / $adjustDeduct['payAmountExcludeAdjust'], 2);
 
         return $adjustDeduct;
-    }
-
-    protected function beforeCreateOrder($orderFields, $params)
-    {
-        return $orderFields;
-    }
-
-    protected function beforePayOrder($orderFields, $params)
-    {
-        return $orderFields;
     }
 
     private function getTotalDeductExcludeAdjust($deducts)
