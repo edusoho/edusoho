@@ -116,16 +116,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $storageSetting = $this->getSettingService()->get('storage', array());
         $storageSetting['video_h5_enable'] = 1;
-        $storageSetting = $this->getSettingService()->set('storage');
+        $storageSetting = $this->getSettingService()->set('storage', $storageSetting);
 
         return 1;
     }
 
     protected function addInvoiceSnForOrder()
     {
-        $this->getConnection()->exec("
-            ALTER TABLE `biz_order` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn';
-        ");
+        if (!$this->isFieldExist('biz_order', 'invoice_sn')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `biz_order` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn';
+            ");
+        }
         
         return 1;
     }
