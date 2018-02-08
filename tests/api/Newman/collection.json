@@ -4973,9 +4973,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"join classroom success !\"] = (jsonData.courseId === data.vipCourseId)&(jsonData.user.id === data.userId);"
+									"tests[\"responseBody===\"+responseBody] = false;"
 								],
 								"type": "text/javascript"
 							}
