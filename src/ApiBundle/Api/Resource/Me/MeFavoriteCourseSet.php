@@ -15,15 +15,17 @@ class MeFavoriteCourseSet extends AbstractResource
     public function search(ApiRequest $request)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $favorites = $this->getCourseSetService()->searchUserFavorites($this->getCurrentUser()->getId(),$offset, $limit);
+        $favorites = $this->getCourseSetService()->searchUserFavorites($this->getCurrentUser()->getId(), $offset, $limit);
         $total = $this->getCourseSetService()->countUserFavorites($this->getCurrentUser()->getId());
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_column($favorites, 'courseSetId'));
+
         return $this->makePagingObject(array_values($courseSets), $total, $offset, $limit);
     }
 
     public function get(ApiRequest $request, $courseSetId)
     {
         $isFavorite = $this->getCourseSetService()->isUserFavorite($this->getCurrentUser()->getId(), $courseSetId);
+
         return array('isFavorite' => $isFavorite);
     }
 
@@ -31,12 +33,14 @@ class MeFavoriteCourseSet extends AbstractResource
     {
         $courseSetId = $request->request->get('courseSetId');
         $success = $this->getCourseSetService()->favorite($courseSetId);
+
         return array('success' => $success);
     }
 
     public function remove(ApiRequest $request, $courseSetId)
     {
         $success = $this->getCourseSetService()->unfavorite($courseSetId);
+
         return array('success' => $success);
     }
 

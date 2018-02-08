@@ -179,6 +179,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'promoted',
                 'promotedSeq',
                 'nickname',
+                'loginTime',
             ),
             'timestamps' => array(
                 'createdTime',
@@ -214,6 +215,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'id NOT IN ( :excludeIds )',
                 'orgCode PRE_LIKE :likeOrgCode',
                 'orgCode = :orgCode',
+                'distributorToken = :distributorToken',
             ),
         );
     }

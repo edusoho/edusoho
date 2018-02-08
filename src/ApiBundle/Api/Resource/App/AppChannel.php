@@ -5,15 +5,14 @@ namespace ApiBundle\Api\Resource\App;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Course\Course;
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
 use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
-use Biz\System\Service\SettingService;
 use ApiBundle\Api\Annotation\ApiConf;
 
 class AppChannel extends AbstractResource
 {
-    CONST DEFAULT_DISPLAY_COUNT = 6;
+    const DEFAULT_DISPLAY_COUNT = 6;
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
@@ -24,6 +23,7 @@ class AppChannel extends AbstractResource
         if (!$channel) {
             return $this->getDefaultChannel();
         }
+
         return $channel;
     }
 
@@ -33,7 +33,7 @@ class AppChannel extends AbstractResource
             'status' => 'published',
             'parentId' => 0,
             'showable' => 1,
-            'type' => 'normal'
+            'type' => 'normal',
         );
         $latestCourseSets = $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
@@ -50,8 +50,8 @@ class AppChannel extends AbstractResource
                 'orderType' => 'new',
                 'showCount' => self::DEFAULT_DISPLAY_COUNT,
                 'data' => $latestCourseSets,
-                'actualCount' => self::DEFAULT_DISPLAY_COUNT
-            )
+                'actualCount' => self::DEFAULT_DISPLAY_COUNT,
+            ),
         );
 
         return $defaultChannel;

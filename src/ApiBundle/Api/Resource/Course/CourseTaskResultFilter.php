@@ -7,10 +7,10 @@ use ApiBundle\Api\Resource\Filter;
 class CourseTaskResultFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'status'
+        'id', 'status',
     );
 
     protected $publicFields = array(
-        'activityId', 'courseId', 'courseTaskId', 'createdTime', 'finishedTime', 'updatedTime', 'userId'
+        'activityId', 'courseId', 'courseTaskId', 'createdTime', 'finishedTime', 'updatedTime', 'userId',
     );
 }

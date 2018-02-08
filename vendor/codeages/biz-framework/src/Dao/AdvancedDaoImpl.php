@@ -56,7 +56,7 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
             foreach ($pageRows as $key => $row) {
                 $marks = str_repeat('?,', count($row) - 1).'?';
 
-                if ($key != 0) {
+                if (0 != $key) {
                     $sql .= ',';
                 }
                 $sql .= "({$marks})";
@@ -111,7 +111,7 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
             $caseWhenSql = "{$updateColumn} = CASE {$identifyColumn} ";
 
             foreach ($identifies as $identifyIndex => $identify) {
-                $caseWhenSql .= " WHEN ? THEN ? ";
+                $caseWhenSql .= ' WHEN ? THEN ? ';
                 $params[] = $identify;
                 $params[] = $updateColumnsList[$identifyIndex][$updateColumn];
                 if ($identifyIndex === count($identifies) - 1) {

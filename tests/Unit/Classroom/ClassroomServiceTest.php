@@ -1831,7 +1831,7 @@ class ClassroomServiceTest extends BaseTestCase
         ));
         $classroom1 = $this->getClassroomService()->updateClassroom($classroom1['id'], array(
             'expiryMode' => 'date',
-            'expiryValue' => time(),
+            'expiryValue' => time() + 1,
         ));
         $this->getClassroomService()->publishClassroom($classroom1['id']);
 
@@ -1852,7 +1852,7 @@ class ClassroomServiceTest extends BaseTestCase
         $result = $this->getClassroomService()->canJoinClassroom($classroom['id']);
         $this->assertEquals($result['code'], 'success');
 
-        sleep(1);
+        sleep(3);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
         $this->assertEquals($result1['code'], 'classroom.expired');
     }

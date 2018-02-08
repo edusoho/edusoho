@@ -6,6 +6,7 @@ use AppBundle\Common\SimpleValidator;
 use Biz\BaseTestCase;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\TimeMachine;
 
 // TODO
 
@@ -40,6 +41,7 @@ class AuthServiceTest extends BaseTestCase
 
     public function testRegisterLimitValidator()
     {
+        TimeMachine::setMockedTime(1515977986);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 2,
@@ -51,7 +53,7 @@ class AuthServiceTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $condition = array(
-            'startTime' => time() - 24 * 3600,
+            'startTime' => TimeMachine::time() - 24 * 3600,
             'createdIp' => '127.0.0.1',
         );
         $this->mockBiz(
@@ -73,8 +75,9 @@ class AuthServiceTest extends BaseTestCase
 
     public function testProtectiveRule()
     {
+        TimeMachine::setMockedTime(1515977986);
         $condition = array(
-            'startTime' => time() - 24 * 3600,
+            'startTime' => TimeMachine::time() - 24 * 3600,
             'createdIp' => '127.0.0.1',
         );
         $this->mockBiz(
@@ -95,13 +98,13 @@ class AuthServiceTest extends BaseTestCase
                 array(
                     'functionName' => 'countUsers',
                     'returnValue' => 2,
-                    'withParams' => array(array('startTime' => time() - 3600, 'createdIp' => '127.0.0.1')),
+                    'withParams' => array(array('startTime' => TimeMachine::time() - 3600, 'createdIp' => '127.0.0.1')),
                     'runTimes' => 1,
                 ),
                 array(
                     'functionName' => 'countUsers',
                     'returnValue' => 0,
-                    'withParams' => array(array('startTime' => time() - 3600, 'createdIp' => '127.0.0.1')),
+                    'withParams' => array(array('startTime' => TimeMachine::time() - 3600, 'createdIp' => '127.0.0.1')),
                     'runTimes' => 1,
                 ),
             )
@@ -303,7 +306,7 @@ class AuthServiceTest extends BaseTestCase
 
     public function testCheckUserNameWithUnexistName()
     {
-        $result = $this->getAuthService()->checkUserName('yyy');
+        $result = $this->getAuthService()->checkUserName('testUsername');
         $this->assertEquals('success', $result[0]);
         $this->assertEquals('', $result[1]);
     }
@@ -331,8 +334,8 @@ class AuthServiceTest extends BaseTestCase
 
     public function testCheckUserNameWithWrongUserName()
     {
-        $result = $this->getAuthService()->checkUserName('11111111111');
-        $this->assertEquals(array('error_mismatching', '用户名不允许以1开头的11位纯数字!'), $result);
+        $result = $this->getAuthService()->checkUserName('🦌');
+        $this->assertEquals(array('error_mismatching', '用户名不合法!'), $result);
     }
 
     public function testCheckEmailWithUnexistEmail()

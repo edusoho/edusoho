@@ -20,6 +20,10 @@ class RegisterTypeUtils
             $regTypes[] = 'binder';
         }
 
+        if (!empty($registrations['distributorToken'])) {
+            $regTypes[] = 'distributor';
+        }
+
         return $regTypes;
     }
 }

@@ -202,8 +202,6 @@ class InviteRecordsExporterTest extends BaseTestCase
             'user.account.my_invite_code.invite_time',
         );
 
-        $title = $expoter->getTitles();
-
         $this->assertArrayEquals($expoter->getTitles(), $title);
     }
 

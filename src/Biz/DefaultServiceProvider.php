@@ -30,6 +30,10 @@ use Biz\User\Register\RegisterFactory;
 use Biz\User\Register\Impl\EmailRegistDecoderImpl;
 use Biz\User\Register\Impl\MobileRegistDecoderImpl;
 use Biz\User\Register\Impl\BinderRegistDecoderImpl;
+use Biz\User\Register\Impl\DistributorRegistDecoderImpl;
+use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
+use Biz\Distributor\Service\Impl\SyncOrderServiceImpl;
+use AppBundle\Component\RateLimit\RegisterSmsRateLimiter;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -129,6 +133,18 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new BinderRegistDecoderImpl($biz);
         };
 
+        $biz['user.register.distributor'] = function ($biz) {
+            return new DistributorRegistDecoderImpl($biz);
+        };
+
+        $biz['distributor.sync.user'] = function ($biz) {
+            return new SyncUserServiceImpl($biz);
+        };
+
+        $biz['distributor.sync.order'] = function ($biz) {
+            return new SyncOrderServiceImpl($biz);
+        };
+
         $biz['biz_captcha'] = $biz->factory(function ($biz) {
             $bizCaptcha = new BizCaptcha();
             $bizCaptcha->setBiz($biz);
@@ -142,6 +158,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             $bizSms->setBiz($biz);
 
             return $bizSms;
+        };
+
+        $biz['register_sms_rate_limiter'] = function ($biz) {
+            return new RegisterSmsRateLimiter($biz);
         };
     }
 }

@@ -46,13 +46,22 @@ export default class UploaderChooser extends Chooser {
 
   _getUploadProcess() {
 
-    let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
+    let video = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
-    },{});
+    }, {});
 
-    if(this.element.find('[name=support_mobile]').length > 0){
-      uploadProcess.supportMobile = this.element.find('[name=support_mobile]').val();
+    let uploadProcess = {
+      video,
+      document: {
+        type: 'html',
+      },
+    };
+    const $supportMobileDom = this.element.find('[name=support_mobile]');
+    if ($supportMobileDom.length > 0) {
+      uploadProcess.common = {
+        supportMobile: $supportMobileDom.val(),
+      };
     }
     console.log(uploadProcess);
     return uploadProcess;

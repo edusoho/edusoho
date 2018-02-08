@@ -10,7 +10,7 @@
     {{'classroom.my_check'|trans}}
   </div>
   <div class="panel-body">
-    {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'testpaper',testpaperIds:testpaperIds})) }}
+    {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'testpaper'})) }}
   </div>
 </div>
 {% endblock %}

@@ -33,24 +33,18 @@ class Order extends AbstractResource
             if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
                 return array(
                     'id' => $order['id'],
-                    'sn' => $order['sn']
+                    'sn' => $order['sn'],
                 );
             } else {
-                $params['gateway'] = 'Alipay_LegacyWap';
-                $params['type'] = 'purchase';
-                $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
-                $params['orderSn'] = $order['sn'];
-                $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
-                $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+                $this->handleParams($params, $order);
                 $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
                 $trade = $this->invokeResource($apiRequest);
 
                 return array(
                     'id' => $trade['tradeSn'],
-                    'sn' => $trade['tradeSn']
+                    'sn' => $trade['tradeSn'],
                 );
             }
-
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }
@@ -69,6 +63,18 @@ class Order extends AbstractResource
 
         if (isset($params['unencryptedPayPassword'])) {
             $params['payPassword'] = $params['unencryptedPayPassword'];
+        }
+    }
+
+    public function handleParams(&$params, $order)
+    {
+        $params['gateway'] = (!empty($params['payment']) && $params['payment'] == 'wechat') ? 'WechatPay_MWeb' : 'Alipay_LegacyWap';
+        $params['type'] = 'purchase';
+        $params['app_pay'] = isset($params['appPay']) && 'Y' == $params['appPay'] ? 'Y' : 'N';
+        $params['orderSn'] = $order['sn'];
+        if ($params['gateway'] == 'Alipay_LegacyWap') {
+            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
+            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), true);
         }
     }
 

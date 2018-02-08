@@ -18,7 +18,7 @@ site.data.create: 添加
 site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
 site.data.uncheck_name_hint: 未选中任何%name%
-site.data.delete_check_name_hint: 确定要删除选中的条%name%吗？
+site.data.delete_check_name_hint: 确定要删除选中的%name%吗？
 site.data.delete_submiting_hint: 正在删除...
 site.date.year: 年
 site.date.month: 月
@@ -577,6 +577,14 @@ testpaper.widget.save_success_hint: 已保存
 
 testpaper_manage.save_error_hint: 操作失败
 testpaper_manage.save_success_hint: 操作成功
+testpaper_manage.result_graph.score_distribution: 分数区间
+testpaper_manage.result_graph.person_num: 人数
+testpaper_manage.result_graph.first_score_num: 首次成绩得分人数
+testpaper_manage.result_graph.max_score_num: 最优成绩得分人数
+
+homework_manage.result_graph.status_distribution: 结果区间
+homework_manage.result_graph.first_status_num: 首次成绩结果人数
+homework_manage.result_graph.max_status_num: 最优成绩结果人数
 
 intro.confirm_hint: 我知道了
 
@@ -773,10 +781,11 @@ oauth.send.validate_message: 发送验证
 oauth.send.error_message_tip: 请求发送次数过多，请稍后尝试
 oauth.send.sms_code_error_tip: 您输入的短信验证码不正确
 oauth.refresh.captcha_code_tip: 图形验证码已失效，请重新输入图形验证码
+oauth.refresh.captcha_code_required_tip: 请输入图形验证码
 oauth.captcha_code_length_tip: 图形码为5位数
 oauth.captcha_code_expired_tip: 图形验证码已过期
 oauth.captcha_code_error_tip: 图形验证码错误
-oauth.register.time_limit: 由于您注册次数过多，请稍候尝试
+oauth.register.time_limit: 由于您注册次数过多，请稍后尝试
 oauth.register.error_message: 注册出现异常，请联系管理员
 
 
@@ -786,3 +795,9 @@ admin.user.statistics.data.learn_time: 学习时长/分钟
 admin.user.statistics.data.time: 时长
 
 course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
+
+admin.data.lab.setting.error: 发生异常了，请重试！
+## 资讯管理
+admin.article.save.success: 保存文章成功！
+admin.article.choose_column_tip: 请选择所属栏目
+admin.article_setting.choose_category: --选择所属栏目--

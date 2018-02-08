@@ -77,18 +77,9 @@ oauth2_login_success:
     path:  /oauth2/login/success
     defaults: { _controller: AppBundle:OAuth2/Login:success }
 
-login_bind_new:
-    path:  /login/bind/{type}/new
-    defaults: { _controller: AppBundle:LoginBind:new }
-    methods: [POST]
-
 login_check_email:
     path:  /login/check/email
     defaults: { _controller: AppBundle:Login:checkEmail }
-
-login_bind_change:
-    path: /login/bind/{type}/changetoexist
-    defaults: { _controller: AppBundle:LoginBind:changeToExist }
 
 common_qrcode:
     path:  /common/qrcode
@@ -97,6 +88,11 @@ common_qrcode:
 user_terms:
     path:  /userterms
     defaults: { _controller: AppBundle:Register:userTerms }
+
+# 临时隐藏 distributor
+#distributor_register:
+#    path:  /distributor_register
+#    defaults: { _controller: AppBundle:Register:distributorIndex }
 
 register:
     path:  /register
@@ -1015,6 +1011,10 @@ cashier_wechat_js_pay:
     path:   /pay/center/wxpay
     defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
 
+cashier_wechat_mweb_app_trade:
+    path:   /pay/center/wxpay_mweb_app_trade
+    defaults: { _controller: AppBundle:Cashier/Wechat:wechatAppMwebTrade }
+
 cashier_password_check:
     path:  /cashier/password/check
     defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
@@ -1176,6 +1176,11 @@ vip_upgrade:
 edu_cloud_sms_send:
     path:  /edu_cloud/sms_send
     defaults: { _controller: AppBundle:EduCloud:smsSend }
+    methods: [POST]
+
+edu_cloud_sms_send_registration:
+    path:  /edu_cloud/sms_send_registration
+    defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
     methods: [POST]
 
 edu_cloud_sms_check:
@@ -2249,6 +2254,14 @@ course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
+course_manage_exam_next_result_check:
+  path: /course/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultNextCheck }
+
+course_manage_testpaper_result_graph:
+  path: /course/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultGraph }
+
 testpaper_check:
   path: /testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }
@@ -2258,8 +2271,12 @@ course_manage_testpaper_check_list:
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkList }
 
 course_manage_testpaper_result_list:
-  path: /course/{id}/manage/testpaper/{testpaperId}/result
+  path: /course/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Course/TestpaperManage:resultList }
+
+course_manage_exam_result_anlysis:
+  path: /course/{id}/manage/exam/activity/{activityId}/analysis
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultAnalysis }
 
 course_manage_testpaper_questions:
   path: /course/{courseId}/manage/testpaper/{testpaperId}/items
@@ -2315,7 +2332,6 @@ course_manage_homework_check_list:
 course_manage_homework_check:
   path: /course/{id}/manage/homework/{resultId}/check
   defaults: { _controller: AppBundle:Course/HomeworkManage:check }
-
 
 homework_start_do:
   path: /lesson/{lessonId}/homework/{homeworkId}/startDo
@@ -2503,12 +2519,24 @@ classroom_manage_testpaper:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
 
 classroom_manage_testpaper_result_list:
-  path: /classroom/{id}/manage/testpaper/{testpaperId}/result
+  path: /classroom/{id}/manage/testpaper/{testpaperId}/{activityId}/result
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
 
 classroom_manage_testpaper_check:
   path: /classroom/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
+
+classroom_manage_exam_result_anlysis:
+  path: /classroom/{id}/manage/exam/activity/{activityId}/analysis
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultAnalysis }
+
+classroom_manage_exam_next_result_check:
+  path: /classroom/{id}/manage/activity/{activityId}/exam/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultNextCheck }
+
+classroom_manage_testpaper_result_graph:
+  path: /classroom/{id}/activity/{activityId}/testpaper/graph
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:resultGraph }
 
 classroom_manage_homework:
     path:  /classroom/{id}/manage/homework/list
@@ -2953,6 +2981,10 @@ _oauth2_token:
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
 marketing_user_login:
+    path: /marketing/user/login
+    defaults: { _controller: AppBundle:MarketingUser:login }
+
+user_login_marketing:
     path: /marketing/user/login
     defaults: { _controller: AppBundle:MarketingUser:login }
 

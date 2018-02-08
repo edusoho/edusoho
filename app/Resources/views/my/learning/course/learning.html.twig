@@ -10,10 +10,8 @@
   <div class="panel panel-default panel-col">
 
     <div class="panel-heading">
-      <span class="pull-right">
-        <a id="create-course" href="{{ path('my_courses_live_calendar') }}" class="btn btn-info btn-sm">{{ 'my.teaching.live_schedule_menu'|trans }}</a>
-      </span>
       {{ 'my.learning.course'|trans }}
+      <a class="btn cd-btn cd-btn-info cd-btn-sm pull-right" href="{{ path('my_courses_live_calendar') }}">{{ 'my.learning.live_schedule_menu'|trans }}</a>
     </div>
 
     <div class="panel-body">

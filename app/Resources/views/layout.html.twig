@@ -11,8 +11,9 @@
 
 {% set lang = app.request.getLocale() %}
 {% set mobile = is_show_mobile_page() %}
+
 {% set currentTheme = current_theme() %}
-{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
+{% set themeConfig = app.request.get('themeEditing')|default(false) ? currentTheme.config  : currentTheme.confirmConfig %}
 {% set maincolor = themeConfig.maincolor|default('default') %}
 {% set navigationcolor = themeConfig.navigationcolor|default('default') %}
 

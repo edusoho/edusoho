@@ -82,7 +82,7 @@ seajs.config({
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
         'player-new': __URL_PROTOCOL + ':' + app.cloudPlayerSdkUrl,
         'video-player-new': __URL_PROTOCOL + ':' + app.cloudVideoPlayerSdkUrl,
-        'new-uploader':  __URL_PROTOCOL + ':' + app.cloudOldUploaderSdkUrl,
+        'new-uploader':  __URL_PROTOCOL + ':' + app.cloudUploaderSdkUrl,
         'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
@@ -92,7 +92,8 @@ seajs.config({
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
         'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
-        'g2':'g2/1.2.4/index.js'
+        'g2':'g2/1.2.4/index.js',
+        'jquery.serializeJSON': 'jquery.serializeJSON/jquery.serializejson.min.js',
     },
 
     // 预加载项

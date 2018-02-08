@@ -91,7 +91,7 @@ function asyncLoadFiles() {
       }
       if (file.type == 'video' && file.metas2) {
         if (file.metas2.shd) {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_sd.message') + '</span>');
+          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_shd.message') + '</span>');
         } else if (file.metas2.hd) {
           $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after('<span class="label label-info mr5 tip">' + Translator.trans('page.video_hd.message') + '</span>');
         } else if (file.metas2.sd) {

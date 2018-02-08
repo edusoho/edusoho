@@ -54,9 +54,6 @@
       <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.upload_doc_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}
     </a>
     </div>
-    <select name="type" class="js-upload-params" hidden>
-      <option value="html" selected></option>
-    </select>
   {% endif %}
 
   {% if mediaType|default(null) == 'ppt' and setting('storage.upload_mode', 'local') != 'local'  %}

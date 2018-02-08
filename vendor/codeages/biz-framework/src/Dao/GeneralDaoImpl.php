@@ -75,7 +75,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function get($id, array $options = array())
     {
-        $lock = isset($options['lock']) && $options['lock'] === true;
+        $lock = isset($options['lock']) && true === $options['lock'];
         $sql = "SELECT * FROM {$this->table()} WHERE id = ?".($lock ? ' FOR UPDATE' : '');
 
         return $this->db()->fetchAssoc($sql, array($id)) ?: null;
@@ -176,8 +176,8 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             throw $this->createDaoException('SQL Limit must can be cast to integer');
         }
 
-        $onlySetStart = $start !== null && $limit === null;
-        $onlySetLimit = $limit !== null && $start === null;
+        $onlySetStart = null !== $start && null === $limit;
+        $onlySetLimit = null !== $limit && null === $start;
 
         if ($onlySetStart || $onlySetLimit) {
             throw $this->createDaoException('start and limit need to be assigned');
@@ -248,7 +248,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         $conditions = array_filter(
             $conditions,
             function ($value) {
-                if ($value === '' || $value === null) {
+                if ('' === $value || null === $value) {
                     return false;
                 }
 
@@ -290,11 +290,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             return null;
         }
 
-        if ($mode == 'created') {
+        if ('created' == $mode) {
             return isset($this->timestamps[0]) ? $this->timestamps[0] : null;
         }
 
-        if ($mode == 'updated') {
+        if ('updated' == $mode) {
             return isset($this->timestamps[1]) ? $this->timestamps[1] : null;
         }
 

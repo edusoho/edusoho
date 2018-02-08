@@ -240,7 +240,7 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 'refundAmount',
                 'actualAmount',
             );
-            foreach ($dailyData as $data) {
+            foreach ($dailyData as $key => $data) {
                 unset($data['recordTime']);
                 unset($data['isStorage']);
                 if (in_array($data['userId'], $totalUserIds)) {
@@ -255,7 +255,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
                 } else {
                     //无数据，做新增
                     unset($data['id']);
-                    $addTotalData[] = $data;
+                    if (isset($addTotalData[$data['userId']])) {
+                        unset($dailyData[$key]);
+                        continue;
+                    }
+                    $addTotalData[$data['userId']] = $data;
                 }
             }
             if (!empty($addTotalData)) {
@@ -268,8 +272,9 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $this->updateStorageByIds(ArrayToolkit::column($dailyData, 'id'));
             $this->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage(), $conditions);
+            $this->getLogger()->error('storageDailyStatistics:'.$e->getMessage());
             $this->rollback();
+
             throw $e;
         }
     }

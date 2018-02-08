@@ -149,7 +149,10 @@
       {{ setting('site.analytics')|raw }}
     {% endblock %}
 
-    {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+    {% block scriptBoot %}
+      {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+    {% endblock %}
+    
     <div id="modal" class="modal" ></div>
     <div id="attachment-modal" class="modal" ></div>
     {% if setting('copyright.thirdCopyright') != 1 %}
@@ -165,7 +168,7 @@
       {% if setting('copyright.thirdCopyright')|default(0) != 1 %}
         <script aysnc="aysnc" src="{{ cloud_sdk_url('faq') }}"></script>
         <script aysnc="aysnc">
-          {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : 'http://www.qiqiuyu.com' %}
+          {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : app.request.getScheme() ~ '://www.qiqiuyu.com' %}
           new FaqSDK({
             id: 'faq-sdk',
             apiUrl: '{{ faqApiServer }}/faq/api/hotlist?version={{ asset_version('/') }}&host={{ app.request.getHost() }}&url={{ app.request.getRequestUri() }}',

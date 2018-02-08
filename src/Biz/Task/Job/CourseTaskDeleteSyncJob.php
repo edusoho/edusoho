@@ -28,7 +28,7 @@ class CourseTaskDeleteSyncJob extends AbstractJob
 
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', array('taskId' => $taskId));
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', $e->getMessage());
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', array('error' => $e->getMessage()));
         }
     }
 

@@ -408,7 +408,8 @@ $.validator.addMethod('es_remote', function(value, element, params) {
   let cacheKey = url + type + JSON.stringify(data);
   
   if (cacheKey in this.valueCache) {
-    return this.optional(element) || this.valueCache[cacheKey];
+    $.validator.messages.es_remote = this.valueCache[cacheKey].message;
+    return this.optional(element) || this.valueCache[cacheKey].isSuccess;
   }
 
   $.ajax({
@@ -418,22 +419,30 @@ $.validator.addMethod('es_remote', function(value, element, params) {
     data: data,
     dataType: 'json'
   }).success((response) => {
+    this.valueCache[cacheKey] = {};
+
     if (axis.isObject(response)) {
       isSuccess = response.success;
       $.validator.messages.es_remote = Translator.trans(response.message);
+      this.valueCache[cacheKey].message = $.validator.messages.es_remote;
 
     } else if (axis.isString(response)) {
       isSuccess = false;
       $.validator.messages.es_remote = Translator.trans(response);
+      this.valueCache[cacheKey].message = $.validator.messages.es_remote;
+
     } else if (axis.isBoolean(response)) {
       isSuccess = response;
+      this.valueCache[cacheKey].message = Translator.trans('validate.es_remote.message');
     }
-    if (callback) {
+
+    this.valueCache[cacheKey].isSuccess = isSuccess;
+
+    if (typeof callback === 'function') {
       callback(isSuccess);
     }
   })
-
-  this.valueCache[cacheKey] = isSuccess;
+  
   return this.optional(element) || isSuccess;
 
 }, Translator.trans('validate.es_remote.message'));

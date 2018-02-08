@@ -109,7 +109,7 @@
     <td>
     {% if profile.about %}
         <div class="editor-text">
-        {{ profile.about | raw }}
+        {{ profile.about|cdn|raw }}
         </div>
       {% else %}
         {{'暂无'|trans}}

@@ -1,4 +1,5 @@
 <?php
+
 namespace QiQiuYun\SDK\Service;
 
 use QiQiuYun\SDK\Exception\ResponseException;
@@ -10,7 +11,20 @@ class XAPIService extends BaseService
 
     protected $defaultLang = 'zh-CN';
 
-    //提交"听音频"的学习记录
+    /**
+     * 提交"听音频"的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function listenAudio($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -22,8 +36,8 @@ class XAPIService extends BaseService
             'id' => 'http://activitystrea.ms/schema/1.0/listen',
             'display' => array(
                 'zh-CN' => '听了',
-                'en-US' => 'listened'
-            )
+                'en-US' => 'listened',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
@@ -32,7 +46,7 @@ class XAPIService extends BaseService
                 'name' => array(
                     $this->defaultLang => $object['name'],
                 ),
-                'extensions' => array (
+                'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
@@ -40,10 +54,10 @@ class XAPIService extends BaseService
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
-                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
-                    )
-                )
-            )
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename'],
+                    ),
+                ),
+            ),
         );
 
         $statement['result'] = array(
@@ -54,7 +68,20 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    //提交“观看视频”的学习记录
+    /**
+     * 提交“观看视频”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function watchVideo($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -66,8 +93,8 @@ class XAPIService extends BaseService
             'id' => 'https://w3id.org/xapi/acrossx/verbs/watched',
             'display' => array(
                 'zh-CN' => '观看了',
-                'en-US' => 'watched'
-            )
+                'en-US' => 'watched',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
@@ -76,7 +103,7 @@ class XAPIService extends BaseService
                 'name' => array(
                     $this->defaultLang => $object['name'],
                 ),
-                'extensions' => array (
+                'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
@@ -84,10 +111,10 @@ class XAPIService extends BaseService
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
-                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
-                    )
-                )
-            )
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename'],
+                    ),
+                ),
+            ),
         );
 
         $statement['result'] = array(
@@ -98,7 +125,20 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    //提交“完成任务”的学习记录
+    /**
+     * 提交“完成任务”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function finishActivity($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -110,8 +150,8 @@ class XAPIService extends BaseService
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
                 'zh-CN' => '完成了',
-                'en-US' => 'completed'
-            )
+                'en-US' => 'completed',
+            ),
         );
 
         $statement['object'] = array(
@@ -119,7 +159,7 @@ class XAPIService extends BaseService
             'definition' => array(
                 'type' => $this->getActivityType($object['definitionType']),
                 'name' => array(
-                    $this->defaultLang => $object['name']
+                    $this->defaultLang => $object['name'],
                 ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
@@ -129,14 +169,14 @@ class XAPIService extends BaseService
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
-                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
-                    )
-                )
-            )
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename'],
+                    ),
+                ),
+            ),
         );
 
         $statement['result'] = array(
-            'success' => true
+            'success' => true,
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -144,7 +184,20 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    //提交“完成任务的弹题”的学习记录
+    /**
+     * 提交“完成任务的弹题”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function finishActivityQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -155,8 +208,8 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/answered',
             'display' => array(
-                'zh-CN' => '回答了'
-            )
+                'zh-CN' => '回答了',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
@@ -176,20 +229,20 @@ class XAPIService extends BaseService
                     ),
                     'http://xapi.edusoho.com/extensions/activity' => array(
                         'id' => $object['activity']['id'],
-                        'title' => $object['activity']['title']
+                        'title' => $object['activity']['title'],
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
-                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
-                    )
-                )
-            )
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename'],
+                    ),
+                ),
+            ),
         );
 
         $statement['result'] = array(
             'success' => $result['success'],
             'response' => $result['response'],
-            'duration' => empty($result['duration']) ? '' : $this->convertTime($result['duration'])
+            'duration' => empty($result['duration']) ? '' : $this->convertTime($result['duration']),
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -197,7 +250,20 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    //提交“完成作业”的学习记录
+    /**
+     * 提交“完成作业”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function finishHomework($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -208,15 +274,15 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
-                'zh-CN' => '完成了'
-            )
+                'zh-CN' => '完成了',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
             'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/homework',
                 'name' => array(
-                    $this->defaultLang => $object['name']
+                    $this->defaultLang => $object['name'],
                 ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
@@ -224,17 +290,30 @@ class XAPIService extends BaseService
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
-                )
+                ),
             ),
         );
-        $statement['result'] = empty($result) ? (object)$result : $result;
+        $statement['result'] = empty($result) ? (object) $result : $result;
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    //提交“完成练习”的学习记录
+    /**
+     * 提交“完成练习”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function finishExercise($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -245,15 +324,15 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
-                'zh-CN' => '完成了'
-            )
+                'zh-CN' => '完成了',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
             'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/exercise',
                 'name' => array(
-                    $this->defaultLang => $object['name']
+                    $this->defaultLang => $object['name'],
                 ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
@@ -261,18 +340,30 @@ class XAPIService extends BaseService
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
-                )
+                ),
             ),
         );
-        $statement['result'] = empty($result) ? (object)$result : $result;
+        $statement['result'] = empty($result) ? (object) $result : $result;
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-
-    //提交“完成考试”的学习记录
+    /**
+     * 提交“完成考试”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function finishTestpaper($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -283,15 +374,15 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/completed',
             'display' => array(
-                'zh-CN' => '完成了'
-            )
+                'zh-CN' => '完成了',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
             'definition' => array(
                 'type' => 'http://xapi.edusoho.com/activities/testpaper',
                 'name' => array(
-                    $this->defaultLang => $object['name']
+                    $this->defaultLang => $object['name'],
                 ),
                 'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
@@ -299,18 +390,30 @@ class XAPIService extends BaseService
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
                     ),
-                )
+                ),
             ),
         );
-        $statement['result'] = empty($result) ? (object)$result : $result;
+        $statement['result'] = empty($result) ? (object) $result : $result;
 
         $statement['timestamp'] = $this->getTime($timestamp);
 
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-
-    //提交“记笔记”的学习记录
+    /**
+     * 提交“记笔记”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function writeNote($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -321,8 +424,8 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'https://w3id.org/xapi/adb/verbs/noted',
             'display' => array(
-                'zh-CN' => '记录'
-            )
+                'zh-CN' => '记录',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
@@ -336,13 +439,13 @@ class XAPIService extends BaseService
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
-                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
-                    )
-                )
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename'],
+                    ),
+                ),
             ),
         );
         $statement['result'] = array(
-            'response' => $result['content']
+            'response' => $result['content'],
         );
 
         $statement['timestamp'] = $this->getTime($timestamp);
@@ -350,7 +453,20 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-    //提交“提问题”的学习记录
+    /**
+     * 提交“提问题”的学习记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function askQuestion($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -361,8 +477,8 @@ class XAPIService extends BaseService
         $statement['verb'] = array(
             'id' => 'http://adlnet.gov/expapi/verbs/asked',
             'display' => array(
-                'zh-CN' => '提问了'
-            )
+                'zh-CN' => '提问了',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
@@ -376,10 +492,10 @@ class XAPIService extends BaseService
                     ),
                     'http://xapi.edusoho.com/extensions/resource' => array(
                         'id' => empty($object['resource']['globalId']) ? 0 : $object['resource']['globalId'],
-                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename']
-                    )
-                )
-            )
+                        'name' => empty($object['resource']['filename']) ? '' : $object['resource']['filename'],
+                    ),
+                ),
+            ),
         );
         $statement['result'] = array(
             'response' => $result['title'].'-'.htmlspecialchars_decode($result['content']),
@@ -390,8 +506,20 @@ class XAPIService extends BaseService
         return $isPush ? $this->pushStatement($statement) : $statement;
     }
 
-
-    //提交"观看直播"的记录
+    /**
+     * 提交"观看直播"的记录
+     *
+     * @param $actor
+     * @param $object
+     * @param $result
+     * @param null $uuid
+     * @param null $timestamp
+     * @param bool $isPush
+     *
+     * @return array
+     *
+     * @throws ResponseException
+     */
     public function watchLive($actor, $object, $result, $uuid = null, $timestamp = null, $isPush = true)
     {
         $statement = array();
@@ -403,8 +531,8 @@ class XAPIService extends BaseService
             'id' => 'https://w3id.org/xapi/acrossx/verbs/watched',
             'display' => array(
                 'zh-CN' => '观看了',
-                'en-US' => 'watched'
-            )
+                'en-US' => 'watched',
+            ),
         );
         $statement['object'] = array(
             'id' => $object['id'],
@@ -413,14 +541,14 @@ class XAPIService extends BaseService
                 'name' => array(
                     $this->defaultLang => $object['name'],
                 ),
-                'extensions' => array (
+                'extensions' => array(
                     'http://xapi.edusoho.com/extensions/course' => array(
                         'id' => empty($object['course']['id']) ? 0 : $object['course']['id'],
                         'title' => empty($object['course']['title']) ? '' : $object['course']['title'],
                         'description' => empty($object['course']['description']) ? '' : $object['course']['description'],
-                    )
-                )
-            )
+                    ),
+                ),
+            ),
         );
 
         $statement['result'] = array(
@@ -430,23 +558,31 @@ class XAPIService extends BaseService
         $statement['timestamp'] = $this->getTime($timestamp);
 
         return $isPush ? $this->pushStatement($statement) : $statement;
-
     }
 
-    //提交学习记录
+    /**
+     * 提交学习记录
+     *
+     * @param $statement
+     *
+     * @return mixed
+     *
+     * @throws ResponseException
+     * @throws \QiQiuYun\SDK\HttpClient\ClientException
+     */
     public function pushStatement($statement)
     {
         $statement['context'] = array(
-            'extensions' => array (
+            'extensions' => array(
                 'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
-            )
+            ),
         );
 
         $rawResponse = $this->client->request('POST', '/statements', array(
             'json' => array($statement),
             'headers' => array(
                 'Authorization' => 'Signature '.$this->makeSignature(),
-            )
+            ),
         ));
 
         $response = json_decode($rawResponse->getBody(), true);
@@ -458,19 +594,59 @@ class XAPIService extends BaseService
         return $statement;
     }
 
-    //批量提交学习记录
+    /**
+     * 批量提交学习记录
+     *
+     * @param $statements
+     *
+     * @return mixed
+     *
+     * @throws ResponseException
+     * @throws \QiQiuYun\SDK\HttpClient\ClientException
+     */
     public function pushStatements($statements)
     {
         foreach ($statements as &$statement) {
             $statement['context'] = array(
-                'extensions' => array (
+                'extensions' => array(
                     'http://xapi.edusoho.com/extensions/school' => $this->options['school'],
-                )
+                ),
             );
         }
 
         $rawResponse = $this->client->request('POST', '/statements', array(
             'json' => $statements,
+            'headers' => array(
+                'Authorization' => 'Signature '.$this->makeSignature(),
+            ),
+        ));
+
+        $response = json_decode($rawResponse->getBody(), true);
+
+        if (isset($response['error'])) {
+            throw new ResponseException($rawResponse);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param $type
+     * @param $value
+     * @return mixed
+     * @throws ResponseException
+     * @throws \QiQiuYun\SDK\HttpClient\ClientException
+     */
+    public function setting($type, $value)
+    {
+        $setting = array(
+            'accessKey' => $this->auth->getAccessKey(),
+            'setting' => $type,
+            'value' => $value,
+        );
+
+        $rawResponse = $this->client->request('POST', '/setting', array(
+            'json' => $setting,
             'headers' => array(
                 'Authorization' => 'Signature '.$this->makeSignature(),
             )
@@ -483,8 +659,16 @@ class XAPIService extends BaseService
         }
 
         return $response;
+
     }
 
+    /**
+     * @param $verb
+     *
+     * @return string
+     *
+     * @throws SDKException
+     */
     private function getVerbType($verb)
     {
         switch ($verb) {
@@ -515,9 +699,15 @@ class XAPIService extends BaseService
             default:
                 throw new SDKException('Please input correct verb');
         }
+
         return $verbType;
     }
 
+    /**
+     * @param $minType
+     *
+     * @return string
+     */
     private function getActivityType($minType)
     {
         switch ($minType) {
@@ -559,9 +749,15 @@ class XAPIService extends BaseService
         }
 
         return $activityType;
-
     }
 
+    /**
+     * @param $type
+     *
+     * @return string
+     *
+     * @throws SDKException
+     */
     private function getExtensionId($type)
     {
         switch ($type) {
@@ -598,6 +794,7 @@ class XAPIService extends BaseService
         $deadline = strtotime(date('Y-m-d H:0:0', strtotime('+2 hours')));
         $signingText = $this->auth->getAccessKey()."\n".$deadline;
         $signingText = $this->auth->getAccessKey().':'.$deadline.':'.$this->auth->sign($signingText);
+
         return $signingText;
     }
 
@@ -605,7 +802,7 @@ class XAPIService extends BaseService
     {
         switch ($format) {
             case 'iso8601':
-                $result = $this->get_iso8601_time($timestamp);
+                $result = $this->getIsoTime($timestamp);
                 break;
             default:
                 $result = $timestamp;
@@ -618,7 +815,7 @@ class XAPIService extends BaseService
     {
         switch ($format) {
             case 'iso8601':
-                $result = $this->time_to_iso8601_duration($time);
+                $result = $this->timeToIsoDuration($time);
                 break;
             default:
                 $result = $time;
@@ -627,38 +824,37 @@ class XAPIService extends BaseService
         return $result;
     }
 
-    protected function time_to_iso8601_duration($time)
+    protected function timeToIsoDuration($time)
     {
         $units = array(
-            "Y" => 365*24*3600,
-            "D" => 24*3600,
-            "H" => 3600,
-            "M" => 60,
-            "S" => 1,
+            'Y' => 365 * 24 * 3600,
+            'D' => 24 * 3600,
+            'H' => 3600,
+            'M' => 60,
+            'S' => 1,
         );
 
-        $str = "P";
+        $str = 'P';
         $isTime = false;
 
         foreach ($units as $unitName => &$unit) {
-            $quot  = intval($time / $unit);
+            $quot = intval($time / $unit);
             $time -= $quot * $unit;
-            $unit  = $quot;
+            $unit = $quot;
             if ($unit > 0) {
-                if (!$isTime && in_array($unitName, array("H", "M", "S"))) {
-                    $str .= "T";
+                if (!$isTime && in_array($unitName, array('H', 'M', 'S'))) {
+                    $str .= 'T';
                     $isTime = true;
                 }
-                $str .= strval($unit) . $unitName;
+                $str .= strval($unit).$unitName;
             }
         }
 
         return $str;
     }
 
-    protected function get_iso8601_time($timestamp = null)
+    protected function getIsoTime($timestamp = null)
     {
         return empty($timestamp) ? date('c') : date('c', $timestamp);
     }
-
 }

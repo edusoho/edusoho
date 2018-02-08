@@ -50,7 +50,7 @@
     <div class="col-md-9">
       <div class="es-section gray-darker editor-text">
         {% if course.about %}
-          {{ course.about|raw }}
+          {{ course.about|cdn|raw }}
         {% else %}
           <div class="empty">{{ 'my.teaching.open_course.show.about_empty'|trans }}</div>
         {% endif %}

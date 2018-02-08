@@ -1,0 +1,82 @@
+.testpaper-heading-section {
+  .es-box-shadow;
+  border-radius: 2px !important;
+  border: none !important;
+}
+
+.testpaper-titlebar {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.testpaper-title {
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  color: #444;
+  @media (min-width: @screen-md-max) {
+    width: 85%;
+  }
+  @media (min-width: @screen-xs-max) and (max-width: @screen-md-max) {
+    width: 80%;
+  }
+  @media (min-width: @screen-xs-min) and (max-width: @screen-xs-max) {
+    width: 75%;
+  }
+  @media (max-width: @screen-xs-min) {
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+}
+
+.testpaper-title--overflow {
+  @media (min-width: @screen-xs-min) {
+    .text-overflow();
+  }
+}
+
+.testpaper-title__content {
+  .testpaper-title--overflow;
+}
+
+.testpaper-status {
+  margin-top: 20px;
+  float: right;
+  @media (max-width: @screen-xs-min) {
+    margin-bottom: 20px;
+  }
+  .label {
+    padding: 5px 25px;
+    border-radius: 3px;
+    font-size: 100%;
+  }
+}
+
+.testpaper-description {
+  color: #444;
+  font-size: 14px;
+  img {
+    max-width: 100%;
+  }
+}
+
+// 各种类型题目tab
+.testpaper-navbar.affix {
+  position: static;
+  @media (min-width: @screen-sm-min) {
+    z-index: 1030;
+    position: fixed;
+    margin-left: -11px;
+    top: 0px;
+    width: 720px;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
+  }
+  @media (min-width: @screen-md-min) {
+    width: 940px;
+  }
+  @media (min-width: @screen-lg-min) {
+    width: 1140px;
+  }
+}

@@ -58,8 +58,21 @@ abstract class HLSBaseController extends BaseController
                     'duration' => 3600,
                 );
 
+                if (!empty($token['data']['replayId'])) {
+                    $tokenFields['data']['replayId'] = $token['data']['replayId'];
+                    $tokenFields['data']['type'] = $token['data']['type'];
+                }
+
                 if (!empty($token['userId'])) {
                     $tokenFields['userId'] = $token['userId'];
+                }
+
+                if (isset($token['data']['watchTimeLimit'])) {
+                    $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
+                }
+
+                if (isset($token['data']['hideBeginning'])) {
+                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -208,10 +221,13 @@ abstract class HLSBaseController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
-        return $this->responseEnhanced($stream['stream'], array(
-            'Content-Type' => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="stream.m3u8"',
-        ));
+        return $this->responseEnhanced(
+            $stream['stream'],
+            array(
+                'Content-Type' => 'application/vnd.apple.mpegurl',
+                'Content-Disposition' => 'inline; filename="stream.m3u8"',
+            )
+        );
     }
 
     public function clefAction(Request $request, $id, $token)

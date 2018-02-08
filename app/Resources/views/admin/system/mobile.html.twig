@@ -78,12 +78,12 @@
 <form class="form-horizontal" id="mobile-form" method="post">
 
   <fieldset>
-    <div class="help-block">{{'admin.mobile_manage.head_tips'|trans}}</div>
+    <div class="help-block">{{'admin.mobile_manage.head_tips'|trans|raw}}</div>
     {% for i in 1..5 %}
       {% set banner = 'banner'~ i %}
       <div class="form-group">
         <div class="col-md-2 control-label">
-          <label for="banner1">{{'admin.mobile_manage.banner_label'|trans~i}}</label>
+          <label for="{{ banner }}">{{'admin.mobile_manage.banner_label'|trans~i}}</label>
         </div>
         <div class="col-md-8 controls">
           {% set moobileId = 'mobile-banner' ~ i %}

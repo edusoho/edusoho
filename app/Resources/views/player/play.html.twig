@@ -20,6 +20,7 @@
           data-file-type="{{file.type}}"
           data-url="{{url}}"
           data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
+          data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
           data-player="{{player}}"
           data-agentInWhiteList="{{agentInWhiteList}}"
@@ -55,7 +56,7 @@
           style="height:100%"
         ></div>
       </div>
-      {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
+      {% do script(['libs/base.js','app/js/common.js'], 1000) %}
       <script src="{{ cloud_sdk_url('video') }}"></script>
       {% do script(['app/js/player/index.js']) %}
     {% endif %}

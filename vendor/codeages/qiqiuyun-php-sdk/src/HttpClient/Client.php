@@ -2,7 +2,8 @@
 
 namespace QiQiuYun\SDK\HttpClient;
 
-use QiQiuYun\SDK\HttpClient\ClientException;
+use Psr\Log\LoggerInterface;
+
 
 class Client
 {
@@ -13,15 +14,23 @@ class Client
      */
     private $options;
 
-    public function __construct($options = array())
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct($options = array(), LoggerInterface $logger = null)
     {
         $this->options = array_merge(array(
             'timeout' => 300,
         ), $options);
+
+        $this->logger = $logger;
     }
 
     public function request($method, $uri = '', array $options = array())
     {
+        $method = strtoupper($method);
         $options = $this->prepareDefaults($options);
 
         $headers = isset($options['headers']) ? $options['headers'] : array();
@@ -43,11 +52,14 @@ class Client
             CURLOPT_HEADER => true, // Enable header processing
         );
 
-
-
-        if ($method !== 'GET') {
+        if ('GET' !== $method) {
             $options[CURLOPT_POSTFIELDS] = $body;
         }
+
+        $this->logger && $this->logger->info("HTTP {$method} {$uri}", array(
+            'headers' => $options[CURLOPT_HTTPHEADER],
+            'body' => $body,
+        ));
 
         $curl = curl_init();
         curl_setopt_array($curl, $options);
@@ -62,6 +74,11 @@ class Client
         curl_close($curl);
 
         list($rawHeaders, $rawBody) = $this->extractResponseHeadersAndBody($rawResponse);
+
+        $this->logger && $this->logger->info("HTTP Response", array(
+            'headers' => $rawHeaders,
+            'body' => $rawBody,
+        ));
 
         return new Response($rawHeaders, $rawBody);
     }
@@ -78,7 +95,7 @@ class Client
         $defaults = $this->options;
 
         if (array_key_exists('headers', $options)) {
-            if ($options['headers'] === null) {
+            if (null === $options['headers']) {
                 unset($options['headers']);
             } elseif (!is_array($options['headers'])) {
                 throw new \InvalidArgumentException('headers must be an array');
@@ -90,7 +107,7 @@ class Client
 
         // Remove null values.
         foreach ($result as $k => $v) {
-            if ($v === null) {
+            if (null === $v) {
                 unset($result[$k]);
             }
         }
@@ -112,7 +129,7 @@ class Client
         $return = array();
 
         foreach ($headers as $key => $value) {
-            $return[] = $key . ': ' . $value;
+            $return[] = $key.': '.$value;
         }
 
         return $return;

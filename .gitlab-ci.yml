@@ -19,7 +19,7 @@ before_script:
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
 
-Unit Test With PHP 5.3:
+5.3 with nothing:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
@@ -27,12 +27,11 @@ Unit Test With PHP 5.3:
   script:
     - bin/phpunit -c app/
   only:
-    - tags
     - develop
     - master
     - trigger
 
-Unit Test With PHP 5.3 And Redis:
+5.3 with Redis:
   stage: test
   image: codeages/ci-php:5.3-2
   services:
@@ -41,12 +40,11 @@ Unit Test With PHP 5.3 And Redis:
   script:
     - bin/phpunit -c app/
   only:
-    - tags
     - develop
     - master
     - trigger
 
-Unit Test With PHP 5.5:
+5.5 with php-cs-fixer:
   stage: test
   image: codeages/ci-php:5.5-5
   services:
@@ -56,7 +54,7 @@ Unit Test With PHP 5.5:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - bin/phpunit -c app/
 
-Unit Test With PHP 7.0 For Non-Develop:
+7.0 For Non-Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
@@ -64,20 +62,20 @@ Unit Test With PHP 7.0 For Non-Develop:
     - redis:latest
   script:
     - bin/phpunit -c app/
+
   only:
-    - tags
     - master
     - release
     - trigger
 
-Unit Test With PHP 7.0 For Develop:
+7.0 For Develop:
   stage: test
   image: codeages/ci-php:7.0-7
   services:
     - mysql:5.5
     - redis:latest
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 5000M/g' /etc/php/7.0/phpdbg/php.ini
     - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
     - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
     - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties

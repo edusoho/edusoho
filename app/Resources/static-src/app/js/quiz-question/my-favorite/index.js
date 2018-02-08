@@ -1,11 +1,6 @@
-$('body').on('click', '.showQuestion', function () {
-  $(this).parent().find('.panel').toggle();
-});
-
-$('body').on('click', '.unfavorite-btn', function () {
-  $btn = $(this);
-
-  $.post($(this).data('url'), function () {
+$('body').on('click', '.js-cancel-btn', (event) => {
+  const $btn = $(event.currentTarget);
+  $.post($btn.data('url'), () => {
     $btn.parents('tr').hide();
   });
 });

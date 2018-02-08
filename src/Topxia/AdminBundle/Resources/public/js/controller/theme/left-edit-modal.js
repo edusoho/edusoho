@@ -1,65 +1,21 @@
 define(function(require, exports, module) {
 
-    var themeManage = $('body').data('themeManage'); 
-
+    require('jquery.serializeJSON');
     exports.run = function() {
-
-        var $currentItem = themeManage.getCurrentItem();
-        var currentConfig = $currentItem.data('config');
-        formInit($(".item-config-form"), currentConfig);
-
-        $("#save-btn").on('click', function(){
-            var config = formSerialize($($(this).data('form')));
-
-            var code = $currentItem.data('code').split('_').pop();
-            config.code = code;
-            config.defaultTitle = currentConfig.defaultTitle;
-            config.defaultSubTitle = currentConfig.defaultSubTitle;
-            config.id = $currentItem.attr('id');
-
-            $("#"+$currentItem.attr('id')).data('config', config);
-
-            themeManage.getElement().trigger('save_config');
-
-            $("#modal").modal('hide');
+      var $themeEditContent = $('#theme-edit-content');
+      $("#save-btn").on('click', function(){
+        var $form = $($(this).data('form'));
+        var config = $form.serializeJSON();
+        // 多选项为空时，置空
+        var checkboxSetting = {};
+        var $checkbox = $form.find("input[type='checkbox']");
+        $checkbox.each(function(){
+          checkboxSetting[$(this).attr('name')] = '';
         });
-        $("#edit-left-course-form").on("click", 'input[type=checkbox]', function(){
-            if($(this).is(':checked')) {
-                $(this).val('checked');
-            } else {
-                $(this).val('');
-            }
-        });
-
-        $("#edit-left-course-form").on("click", 'input[type=radio]', function(){ 
-            var $this = $(this); 
-            if ($this.attr("checked")=="checked") {
-            $(".check-box").find('input[name=background]').val($this.val());
-            } else {
-                $(".check-box").find('input[name=background]').val($this.val());
-                $this.attr("checked","checked").parent().siblings().find("input").removeAttr("checked"); 
-            }
-        });
-
+        config = $.extend(checkboxSetting, config);
+        console.log(config);
+        $themeEditContent.trigger('save_part_config', config);
+        $("#modal").modal('hide');
+      });
     };
-
-    var formInit = function ($form, obj) {
-        $.each(obj, function(key, item){
-            var $item = $form.find('[name=' + key + ']');
-            if ($item.length > 0) {
-                $item.val(item);
-            }
-        });
-    }
-
-    var formSerialize = function($form) {
-        var config = {};
-        $form.find('[name]').each(function(){
-            var key = $(this).attr('name');
-            var value = $(this).val();
-            config[key] = value;
-        });
-        return config;
-    }
-
 });

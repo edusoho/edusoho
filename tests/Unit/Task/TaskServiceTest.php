@@ -743,6 +743,106 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(1, count($result));
     }
 
+    public function testGetTodayLiveCourseNumber()
+    {
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $endToday = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+        $this->mockBiz(
+            'Task:TaskDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(
+                        array('id' => 2, 'courseId' => 2),
+                        array('id' => 3, 'courseId' => 3),
+                    ),
+                    'withParams' => array(
+                        array('type' => 'live', 'startTime_GE' => $beginToday, 'endTime_LT' => $endToday, 'status' => 'published'),
+                        array(),
+                        0,
+                        PHP_INT_MAX,
+                    ),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseMemberDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array()),
+                    'withParams' => array(array('courseId' => 2, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+                array(
+                    'functionName' => 'search',
+                    'returnValue' => array(array('id' => 2, 'userId' => 1)),
+                    'withParams' => array(array('courseId' => 3, 'role' => 'teacher'), array(), 0, PHP_INT_MAX),
+                    'runTimes' => 1,
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'getCourse',
+                    'returnValue' => array('id' => 3, 'status' => 'published', 'title' => 'title', 'courseSetId' => 3),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $this->mockBiz(
+            'Course:CourseSetService',
+            array(
+                array(
+                    'functionName' => 'getCourseSet',
+                    'returnValue' => array('id' => 3, 'status' => 'published', 'title' => 'title'),
+                    'withParams' => array(3),
+                ),
+            )
+        );
+        $result = $this->getTaskService()->getTodayLiveCourseNumber();
+        $this->assertEquals(1, $result);
+    }
+
+    public function testGetTimeSec()
+    {
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array(),
+                    'withParams' => array('magic'),
+                ),
+            )
+        );
+
+        $watchTimeSec = $this->getTaskService()->getTimeSec('watch');
+        $this->assertEquals(120, $watchTimeSec);
+
+        $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
+        $this->assertEquals(60, $learnTimeSec);
+
+        $this->mockBiz(
+            'System:SettingService',
+            array(
+                array(
+                    'functionName' => 'get',
+                    'returnValue' => array('watch_time_sec' => 170, 'learn_time_sec' => 70),
+                    'withParams' => array('magic'),
+                ),
+            )
+        );
+
+        $watchTimeSec = $this->getTaskService()->getTimeSec('watch');
+        $this->assertEquals(170, $watchTimeSec);
+
+        $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
+        $this->assertEquals(70, $learnTimeSec);
+    }
+
     protected function mockSimpleTask($courseId = 1, $courseSetId = 1)
     {
         return array(

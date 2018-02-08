@@ -7,23 +7,35 @@ use AppBundle\Extensions\DataTag\CourseDataTag;
 
 class CourseDataTagTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testEmptyCourseId()
+    {
+        $datatag = new CourseDataTag();
+        $datatag->getData(array());
+    }
+
     public function testGetData()
     {
-        // $course = array(
-        //     'type' => 'online',
-        //     'title' => 'online test course 1',
-        // );
-
-        // $course = $this->getCourseService()->createCourse($course);
+        $courseSet = $this->getCourseSetService()->createCourseSet(array('type' => 'normal', 'title' => 'course set1 title'));
+        $course = $this->getCourseService()->createCourse(array('title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'default'));
 
         $datatag = new CourseDataTag();
-        // $foundCourse = $datatag->getData(array('courseId' => $course['id']));
-        // $this->assertEquals($course['id'], $foundCourse['id']);
-        $this->assertTrue(true);
+        $foundCourse = $datatag->getData(array('courseId' => $course['id']));
+        $this->assertEquals($course['id'], $foundCourse['id']);
+
+        $foundCourse = $datatag->getData(array('courseId' => $course['id'], 'fetchCourseSet' => 1));
+        $this->assertEquals($courseSet['id'], $foundCourse['courseSet']['id']);
     }
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

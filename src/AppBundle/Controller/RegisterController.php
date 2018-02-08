@@ -13,10 +13,32 @@ use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class RegisterController extends BaseController
 {
+    /**
+     * 分销平台分享后，进入的注册页面，需要记录token 到 cookie， 注册成功后，清除
+     */
+    public function distributorIndexAction(Request $request)
+    {
+        $fields = $request->query->all();
+        $registerUrl = $this->generateUrl('register');
+        if (!empty($fields['token'])) {
+            if ($this->getCurrentUser()->isLogin()) {
+                $response = $this->redirect($this->generateUrl('logout').'?goto='.$registerUrl);
+            } else {
+                $response = $this->redirect($registerUrl);
+            }
+            $cookie = new Cookie('distributor-token', $fields['token'], time() + 604800);
+            $response->headers->setCookie($cookie); //有效期7天
+            return $response;
+        }
+
+        return $this->redirect($registerUrl);
+    }
+
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
@@ -32,7 +54,7 @@ class RegisterController extends BaseController
             return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->getTargetPath($request));
         }
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             try {
                 $registration = $request->request->all();
                 unset($registration['type']);
@@ -65,11 +87,16 @@ class RegisterController extends BaseController
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
 
+                $distributorTokenCookie = $request->cookies->get('distributor-token');
+                if (!empty($distributorTokenCookie)) {
+                    $registration['distributorToken'] = $distributorTokenCookie;
+                }
+
                 $user = $this->getAuthService()->register($registration);
 
                 if (($authSettings
                         && isset($authSettings['email_enabled'])
-                        && $authSettings['email_enabled'] === 'closed')
+                        && 'closed' === $authSettings['email_enabled'])
                     || !$this->isEmptyVeryfyMobile($user)
                 ) {
                     $this->authenticateUser($user);
@@ -91,7 +118,12 @@ class RegisterController extends BaseController
                     $goto = $this->generateUrl('partner_login', array('goto' => $goto));
                 }
 
-                return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+                $response = $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+                if (!empty($distributorTokenCookie)) {
+                    $response->headers->setCookie(new Cookie('distributor-token', ''));
+                }
+
+                return $response;
             } catch (ServiceException $se) {
                 $this->setFlashMessage('danger', $se->getMessage());
             } catch (\Exception $e) {
@@ -191,9 +223,9 @@ class RegisterController extends BaseController
             return $this->redirect($this->getTargetPath($request));
         }
 
-        if ($auth && $auth['register_mode'] !== 'mobile'
+        if ($auth && 'mobile' !== $auth['register_mode']
             && array_key_exists('email_enabled', $auth)
-            && ($auth['email_enabled'] === 'opened')
+            && ('opened' === $auth['email_enabled'])
         ) {
             return $this->render('register/email-verify.html.twig', array(
                 'user' => $user,
@@ -214,7 +246,7 @@ class RegisterController extends BaseController
         if (empty($token)) {
             $currentUser = $this->getCurrentUser();
 
-            if (empty($currentUser) || $currentUser['id'] == 0) {
+            if (empty($currentUser) || 0 == $currentUser['id']) {
                 return $this->render('register/email-verify-error.html.twig');
             }
 
@@ -230,7 +262,7 @@ class RegisterController extends BaseController
         $this->authenticateUser($user);
         $this->getUserService()->setEmailVerified($user['id']);
 
-        if (strtoupper($request->getMethod()) === 'POST') {
+        if ('POST' === strtoupper($request->getMethod())) {
             $this->getUserService()->deleteToken('email-verify', $token['token']);
 
             return $this->createJsonResponse(true);
@@ -375,7 +407,7 @@ class RegisterController extends BaseController
     protected function validateResult($result, $message)
     {
         $response = true;
-        if ($result !== 'success') {
+        if ('success' !== $result) {
             $response = $message;
         }
 
@@ -426,11 +458,11 @@ class RegisterController extends BaseController
     {
         $host = substr($email, strpos($email, '@') + 1);
 
-        if ($host === 'hotmail.com') {
+        if ('hotmail.com' === $host) {
             return 'http://www.'.$host;
         }
 
-        if ($host === 'gmail.com') {
+        if ('gmail.com' === $host) {
             return 'http://mail.google.com';
         }
 
@@ -469,7 +501,7 @@ class RegisterController extends BaseController
             return false;
         }
 
-        if ($auth['welcome_enabled'] !== 'opened') {
+        if ('opened' !== $auth['welcome_enabled']) {
             return false;
         }
 
@@ -539,7 +571,7 @@ class RegisterController extends BaseController
     //validate captcha
     protected function captchaEnabledValidator($authSettings, $registration, Request $request)
     {
-        if (array_key_exists('captcha_enabled', $authSettings) && ($authSettings['captcha_enabled'] == 1) && !isset($registration['mobile'])) {
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && !isset($registration['mobile'])) {
             $captchaCodePostedByUser = strtolower($registration['captcha_code']);
             $captchaCode = $request->getSession()->get('captcha_code');
 
@@ -565,7 +597,7 @@ class RegisterController extends BaseController
         if (
             in_array($authSettings['register_mode'], array('mobile', 'email_or_mobile'))
             && isset($registration['mobile']) && !empty($registration['mobile'])
-            && $this->setting('cloud_sms.sms_enabled') == '1'
+            && '1' == $this->setting('cloud_sms.sms_enabled')
         ) {
             return true;
         }
@@ -617,5 +649,13 @@ class RegisterController extends BaseController
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    /**
+     * @return DistributorService
+     */
+    protected function getDistributorService()
+    {
+        return $this->getBiz()->service('Distributor:DistributorService');
     }
 }

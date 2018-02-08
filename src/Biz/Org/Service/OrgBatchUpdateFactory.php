@@ -47,6 +47,11 @@ class OrgBatchUpdateFactory
                 'service' => 'Announcement:AnnouncementService',
                 'method' => 'countAnnouncements',
             ),
+            'openCourse' => array(
+                'protocol' => 'biz',
+                'service' => 'OpenCourse:OpenCourseService',
+                'method' => 'countCourses',
+            ),
         );
     }
 

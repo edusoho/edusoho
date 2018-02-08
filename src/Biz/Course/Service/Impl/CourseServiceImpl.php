@@ -318,15 +318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
-
-        if ('published' == $courseSet['status']) {
-            //课程发布不允许修改模式和时间
-            unset($fields['expiryMode']);
-            unset($fields['expiryDays']);
-            unset($fields['expiryStartDate']);
-            unset($fields['expiryEndDate']);
-        } else {
+        if ($oldCourse['status'] != 'published') {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -350,19 +342,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
-        if ('published' == $oldCourse['status'] || 'closed' == $oldCourse['status']) {
-            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
-            unset($fields['expiryMode']);
-
-            if ('published' == $courseSet['status']) {
-                //课程计划发布或者关闭，课程也发布，不允许修改时间
-                unset($fields['expiryDays']);
-                unset($fields['expiryStartDate']);
-                unset($fields['expiryEndDate']);
-            }
-        }
-
-        $fields = $this->processFields($id, $fields, $courseSet);
+        $fields = $this->processFields($oldCourse, $fields, $courseSet);
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
 
@@ -1754,8 +1734,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $orderBy = array('hitNum' => 'DESC');
         } elseif ('recommended' == $sort) {
             $orderBy = array('recommendedTime' => 'DESC');
-        } elseif ('Rating' == $sort) {
-            $orderBy = array('Rating' => 'DESC');
+        } elseif ('rating' == $sort) {
+            $orderBy = array('rating' => 'DESC');
         } elseif ('studentNum' == $sort) {
             $orderBy = array('studentNum' => 'DESC');
         } elseif ('recommendedSeq' == $sort) {
@@ -1920,36 +1900,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findLiveCourse($conditions, $userId, $role)
     {
-        $members = $this->getMemberDao()->search(
-            array('userId' => $userId, 'role' => $role), array(), 0, PHP_INT_MAX
-        );
-        $courseIds = ArrayToolkit::column($members, 'courseId');
         $liveCourses = array();
-        if (!empty($courseIds)) {
-            $tasks = $this->getTaskService()->searchTasks(
-                array('courseIds' => $courseIds, 'type' => 'live', 'startTime_GE' => $conditions['createdTime_GE'], 'endTime_LT' => $conditions['createdTime_LT'], 'status' => 'published'),
-                array(),
-                0,
-                PHP_INT_MAX
-            );
-            foreach ($tasks as $task) {
-                $course = $this->searchCourses(
-                    array('id' => $task['courseId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
-                );
-                if (!empty($course)) {
-                    $courseSet = $this->getCourseSetDao()->search(
-                        array('id' => $course[0]['courseSetId'], 'status' => 'published'), array(), 0, PHP_INT_MAX
+        $tasks = $this->getTaskService()->searchTasks(
+            array('type' => 'live', 'startTime_GE' => $conditions['startTime_GE'], 'endTime_LT' => $conditions['endTime_LT'], 'status' => 'published'),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        foreach ($tasks as $task) {
+            $members = $this->getMemberDao()->search(array('courseId' => $task['courseId'], 'role' => $role), array(), 0, PHP_INT_MAX);
+            $userIds = ArrayToolkit::column($members, 'userId');
+            if (empty($userIds) || !in_array($userId, $userIds)) {
+                continue;
+            }
+            $course = $this->getCourse($task['courseId']);
+            if (!empty($course) && 'published' == $course['status']) {
+                $courseSet = $this->getCourseSetDao()->get($course['courseSetId']);
+                if (!empty($courseSet) && 'published' == $courseSet['status']) {
+                    $liveCourse = array(
+                        'title' => $courseSet['title'],
+                        'courseId' => $task['courseId'],
+                        'taskId' => $task['id'],
+                        'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
+                        'startTime' => date('Y-m-d H:i:s', $task['startTime']),
+                        'endTime' => date('Y-m-d H:i:s', $task['endTime']),
+                        'date' => date('w', $task['startTime']),
                     );
-                    if (!empty($courseSet)) {
-                        $liveCourse = array();
-                        $liveCourse['title'] = $courseSet[0]['title'];
-                        $liveCourse['courseId'] = $task['courseId'];
-                        $liveCourse['taskId'] = $task['id'];
-                        $liveCourse['event'] = $courseSet[0]['title'].'-'.$course[0]['title'].'-'.$task['title'];
-                        $liveCourse['startTime'] = date('Y-m-d H:i:s', $task['startTime']);
-                        $liveCourse['endTime'] = date('Y-m-d H:i:s', $task['endTime']);
-                        array_push($liveCourses, $liveCourse);
-                    }
+                    array_push($liveCourses, $liveCourse);
                 }
             }
         }
@@ -2195,10 +2172,21 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @return mixed
      */
-    private function processFields($id, $fields, $courseSet)
+    private function processFields($course, $fields, $courseSet)
     {
+        if (in_array($course['status'], array('published', 'closed'))) {
+            //计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+            if ('published' == $course['status']) {
+                //计划发布后，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
         if (isset($fields['originPrice'])) {
-            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($id, $fields['originPrice']);
+            list($fields['price'], $fields['coinPrice']) = $this->calculateCoursePrice($course['id'], $fields['originPrice']);
         }
 
         if (1 == $fields['isFree']) {

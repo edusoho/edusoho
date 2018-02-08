@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\User\Service\AuthService;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\RegisterTypeUtils;
+use AppBundle\Common\TimeMachine;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService
@@ -28,8 +29,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-            $registration['type'] = $type;
-
+            $registration['providerType'] = $this->getAuthProvider()->getProviderName();
             $newUser = $this->getUserService()->register(
                 $registration,
                 RegisterTypeUtils::getRegisterTypes($registration)
@@ -65,7 +65,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         switch ($type) {
             case 'middle':
                 $condition = array(
-                    'startTime' => time() - 24 * 3600,
+                    'startTime' => TimeMachine::time() - 24 * 3600,
                     'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->countUsers($condition);
 
@@ -76,7 +76,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return true;
             case 'high':
                 $condition = array(
-                    'startTime' => time() - 24 * 3600,
+                    'startTime' => TimeMachine::time() - 24 * 3600,
                     'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->countUsers($condition);
 
@@ -85,7 +85,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 }
 
                 $registerCount = $this->getUserService()->countUsers(array(
-                    'startTime' => time() - 3600,
+                    'startTime' => TimeMachine::time() - 3600,
                     'createdIp' => $ip, ));
 
                 if ($registerCount >= 1) {
@@ -154,7 +154,6 @@ class AuthServiceImpl extends BaseService implements AuthService
                 $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
             }
         }
-
         $this->getUserService()->changeNickname($userId, $newName);
     }
 
@@ -214,8 +213,8 @@ class AuthServiceImpl extends BaseService implements AuthService
                 return $result;
             }
 
-            if (preg_match('/^1\d{10}$/', $username)) {
-                return array('error_mismatching', '用户名不允许以1开头的11位纯数字!');
+            if (!SimpleValidator::nickname($username)) {
+                return array('error_mismatching', '用户名不合法!');
             }
 
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);

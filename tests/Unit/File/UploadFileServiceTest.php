@@ -58,34 +58,34 @@ class UploadFileServiceTest extends BaseTestCase
         unset($biz['@File:FileUploadFileDao']);
     }
 
-    // public function testGetAudioServiceStatus()
-    // {
-    //     $settingParams = array(
-    //         array(
-    //             'functionName' => 'get',
-    //             'runTimes' => 1,
-    //             'returnValue' => array(
-    //                 'cloud_access_key' => 'abbbcc',
-    //                 'cloud_secret_key' => 'testddd',
-    //             ),
-    //         ),
-    //     );
-    //     $this->mockBiz('System:SettingService', $settingParams);
+    public function testGetAudioServiceStatus()
+    {
+        $settingParams = array(
+            array(
+                'functionName' => 'get',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'cloud_access_key' => 'abbbcc',
+                    'cloud_secret_key' => 'testddd',
+                ),
+            ),
+        );
+        $this->mockBiz('System:SettingService', $settingParams);
 
-    //     $params = array(
-    //         array(
-    //             'functionName' => 'getAudioServiceStatus',
-    //             'runTimes' => 1,
-    //             'returnValue' => array(
-    //                 'audioService' => 'opened',
-    //             ),
-    //         ),
-    //     );
-    //     $this->mockBiz('File:CloudFileImplementor', $params);
+        $params = array(
+            array(
+                'functionName' => 'getAudioServiceStatus',
+                'runTimes' => 1,
+                'returnValue' => array(
+                    'audioService' => 'opened',
+                ),
+            ),
+        );
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
-    //     $status = $this->getUploadFileService()->getAudioServiceStatus();
-    //     $this->assertEquals($status, 'opened');
-    // }
+        $status = $this->getUploadFileService()->getAudioServiceStatus();
+        $this->assertEquals($status, 'opened');
+    }
 
     public function testGetFullFile()
     {
