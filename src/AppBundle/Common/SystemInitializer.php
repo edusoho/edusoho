@@ -43,7 +43,6 @@ class SystemInitializer
         $this->_initJob();
         $this->_initOrg();
         $this->_initRole();
-        $this->_initDictionary();
         $this->_initUserBalance();
 
         $this->_initDefaultSetting();
@@ -67,32 +66,6 @@ class SystemInitializer
         } catch (\Exception $e) {
             $this->output->write('  定制初始化的数据异常'.$e->getMessage());
         }
-    }
-
-    protected function _initDictionary()
-    {
-        $this->output->write('  初始化字典  ');
-
-        $dictionary = $this->getDictionaryService()->addDictionary(array(
-            'name' => '退学原因',
-            'type' => 'refund_reason',
-        ));
-
-        $this->getDictionaryService()->addDictionaryItem(array(
-            'type' => $dictionary['type'],
-            'name' => '课程内容质量差',
-            'createdTime' => time(),
-            'updateTime' => time(),
-        ));
-
-        $this->getDictionaryService()->addDictionaryItem(array(
-            'type' => $dictionary['type'],
-            'name' => '老师服务态度不好',
-            'createdTime' => time(),
-            'updateTime' => time(),
-        ));
-
-        $this->output->writeln(' ...<info>成功</info>');
     }
 
     public function initAdminUser($fields)

@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
-use ApiBundle\Api\Resource\Course\CourseMemberFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 

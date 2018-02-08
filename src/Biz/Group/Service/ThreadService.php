@@ -61,8 +61,6 @@ interface ThreadService
 
     public function waveHitNum($threadId);
 
-    public function waveGoodsHitNum($goodsId);
-
     public function sumGoodsCoinsByThreadId($id);
 
     public function updatePost($id, $post);

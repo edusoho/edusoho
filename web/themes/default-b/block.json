@@ -8,7 +8,7 @@
             "carousel":
             {
                 "title": "轮播图",
-                "desc": "建议使用1200x256大小的图片，最多可添加５张图片。",
+                "desc": "建议图片尺寸为1200x256px，最多可添加５张图片。",
                 "count": 5,
                 "type": "imglink",
                 "default": [

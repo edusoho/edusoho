@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Resource\Course\CourseReviewFilter;
 use ApiBundle\Api\Resource\Filter;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseSetReviewFilter extends Filter
 {

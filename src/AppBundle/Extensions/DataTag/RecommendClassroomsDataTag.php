@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Service\Common\ServiceKernel;
-
 class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -57,16 +55,11 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->getBiz()->service('User:UserService');
     }
 }

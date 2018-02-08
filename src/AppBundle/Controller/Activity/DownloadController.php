@@ -43,7 +43,7 @@ class DownloadController extends BaseActivityController implements ActivityActio
         $this->getCourseService()->tryTakeCourse($courseId);
 
         $materialId = $request->query->get('materialId');
-        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $materialId);
+        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($courseId, $activityId, $materialId);
 
         if (!empty($downloadFile['link'])) {
             return $this->redirect($downloadFile['link']);

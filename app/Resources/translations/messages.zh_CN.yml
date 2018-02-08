@@ -487,6 +487,7 @@ order.refund_feedback: 反馈信息
 order.refund.id: 退款号
 order.created_time: 创建时间
 order.pay_time: 付款时间
+order.closed_time: 关闭时间
 order.status: 订单状态
 order.deduct: 优惠抵扣
 order.item_type: 订单类型
@@ -867,7 +868,7 @@ course.create.finish: 已完成
 course.create.unfinish: 未完成
 course.create.user_avatar: 用户头像
 course.create.upload_tips: >
-  <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>
+  <p class="help-block">请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，文件大小不能超过<strong>2M</strong>。</p>
 course.create.upload_btn: 上传新头像
 course.create.rank: 头衔
 course.create.introduction: 自我介绍
@@ -1216,7 +1217,7 @@ course.cover: 课程封面
 course.cover_image: 封面图片
 course.cover_image.content_title: 封面图片
 course.cover_image.upload_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>文件大小不能超过<strong>2M</strong>。
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
@@ -1409,7 +1410,7 @@ course.base.serialize_mode.serialized: 更新中
 course.base.serialize_mode.finished: 已完结
 course.mask.rating_num: (%ratingNum%人评价)
 
-course.teach_plan_manage: 教学计划管理
+
 
 course.detail: 详细信息
 course.detail.content_title: 详细信息
@@ -1923,152 +1924,14 @@ course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 
-course.cover: 课程封面
-course.cover_image: 封面图片
-course.cover_image.content_title: 封面图片
-course.cover_image.upload_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。
-course.cover_image.upload_btn: 选择要上传的图片
 
-course.expiry_date: 学习有效期
-course.expiry_date.days_mode: >
-  %expiryDays% 天（随到随学）
-course.expiry_date.days_mode.total_days: 共%expiryDays%天
-course.expiry_date.end_date_mode: >
-  截止：%expiryEndDate%（随到随学）
-course.expiry_date.date_mode: >
-  开始：%expiryStartDate% &nbsp;
-  截止：%expiryEndDate%
-course.expiry_date.forever_mode: 永久有效
-course.expiry_date.expiryStartDate: >
-  课程将于%expiryStartDate%开始授课，请耐心等待
-course.expiry_date.overdue: （已到期）
-course.expiry_date.today_will_overdue: （今日过期）
-course.expiry_date.tomorrow_will_overdue: （明日过期）
-course.expiry_date.days_remaining: （剩余 %lastDays% 天）
 
-course.buy_expiry_date: 购买有效期
-course.buy_expiry_date.buy_expiry_time: >
-  <span class="course-detail-title ">购买截止日期</span>
-  <span class="gray-dark mrl">%buyExpiryTime% 23:59</span>
 
-course.showServices: 承诺服务
-course.showServices.empty: 暂未提供
-course.status.followed: 已收藏
-course.status.follow: 收藏
-course.status.closed: 已关闭
-course.status.unpublished: 未发布
-course.status.serialized: 更新中
-course.status.finished: 已完结
-course.status.published: 已发布
-course.share: 分享
-course.belong_to_classroom_tips: >
-  该课程属于
-  <a href="%classroomUrl%">%classroomTitle%</a>
-  请加入后再学习
-course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
-course.course_closed_tips: 抱歉，教学计划%title%已关闭！
-course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
-course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
-course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
-course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
-course.introduction: 介绍
-course.introduction.more_teaching_plan: >
-  想查看更多教学计划？<a href="%courseUrl%">返回课程宣传页</a>
-course.introduction.course_introduction: 课程介绍
-course.introduction.course_target: 课程目标
-course.introduction.course_target_empty: 为设置目标
-course.introduction.audiences: 适合人群
-course.introduction.audiences_empty: 为设置目标
-course.catalogue.content_title: 目录
-course.catalogue.task.preview_btn: 预览
-course.catalogue.task.try_look_btn: 试看
-course.catalogue.task.join_btn: 加入
-course.catalogue.task.buy_btn: 购买
-course.catalogue.task.name: %name%任务
-course.catalogue.task_status.task: 任务%taskNumber%： %taskTitle%
-course.catalogue.task_status.free: 免费
-course.catalogue.task_status.try_lookable: 试看
-course.catalogue.task_status.is_optional: 选修
-course.catalogue.task_status.looking_forward: 敬请期待
-course.catalogue.view_all_btn: 查看全部  &gt;
-course.reviews.teaching_plan: 教学计划
-course.reviews.additional_reviews_btn: 追评
-course.reviews.expand_btn: 展开全文
-course.reviews.reply_btn: 回复
-course.reviews.content: 内容
-course.reviews.delete_btn: 删除
-course.reviews.cancel_reply_btn: 收起
-course.reviews.collapse_btn: 收起全文
-course.reviews.teaching_plan_progress: 完成进度
-course.reviews.all_catagory: 全部
-course.reviews.review_again: 重新评价
-course.reviews.mark: 请打分：
-course.reviews.detail: 评价详细内容
-course.reviews.success_tips: 评价已保存！
-course.reviews.empty: 暂无评价
-course.teacher: 教师：
-course.teacher.content_title: 授课教师
-course.characteristic.content_title: 课程特色
-course.newest_students.content_title: 最新学员
-course.students_dynamic.content_title: 学员动态
-course.students_dynamic.empty: 还没有动态
 course.note.expand_btn: '[展开全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
-course.note.mission_delete_tips: · 该任务已被删除
-course.note.empty: 暂无笔记
-course.task: 任务
-course.task.lock_tips: 需要解锁上一个任务才能学习
-course.task.learning: 任务学习
-course.task.learning.back_course_btn: 返回课程
-course.task.learning.finish_condition: 任务完成条件
-course.task.learning.finish_btn: 任务完成
-course.task.learning.learned_btn: 学过了
-course.task.preview.content_title: 任务预览
-course.task.preview.login_and_learn_tips: 登录后加入学习
-course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
-course.task.preview.free_join_tips: 觉得不错？点击加入此课程
-course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
-course.task.preview.free_learn_tips: 免费加入学习
 course.task.learning.remaining.watch_time: 剩余观看时长
-course.thread: 讨论区
-course.thread.empty: >
-  还没有%thread%，赶快添加一个吧！
-course.thread.hit_times: %hitNum%次浏览
-course.thread.mission_seq: 任务%seq%
-course.thread.teacher_answer: 教师的答案
-course.material.unpublished_tips: 任务未发布，不能下载该资料
-course.material.links: 网络链接资料
-course.material.upload_time: 上传于%createdTime%
-course.material.empty: 课程暂无资料
-course.btn.learn: 去学习
-course.btn.join: 加入学习
-course.btn.free_join: 免费加入
 course.btn.pay_tips: 正在创建订单...
-course.btn.pay: 去支付
-course.btn.buy: 购买课程
-course.btn.announcement: 公告
-course.btn.start_learning: 开始学习
-course.btn.continue_learning_btn: 继续学习
-course.btn.edit_help_btn: 编辑帮助
-course.btn.back_course_homepage: 返回课程主页
-course.btn.back_course_edit: 返回课程编辑
-course.btn.preview: 预览
-course.btn.more: 更多
-course.btn.publish: 发布课程
-course.btn.publish_task: 发布教学计划
-course.base: 基本信息
-course.base.content_title: 基础信息
-course.base.title: 标题
-course.base.sub_title: 副标题
-course.base.tag: 标签
-course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
-course.base.category: 分类
-course.base.serialize_mode: 连载状态
-course.base.serialize_mode.none: 非连载课程
-course.base.serialize_mode.serialized: 更新中
-course.base.serialize_mode.finished: 已完结
 
 # 文件
 file_chooser.empty: 没有资源...
@@ -2391,7 +2254,7 @@ classroom.thread.create.event_time: 活动时间
 classroom.thread.create.event_start_time: 活动开始时间
 classroom.thread.create.event_location: 活动地点
 classroom.thread.create.cover_image: 封面图片
-classroom.thread.create.cover_image.placeholder: 推荐图片大小200*112
+classroom.thread.create.cover_image.placeholder: 建议图片尺寸为 200×112px
 classroom.thread.create.views_btn: 浏览...
 classroom.thread.create.maxUsers: 最大人数
 classroom.thread.create.maxUsers.placeholder: 不限
@@ -2557,7 +2420,7 @@ classroom.price_tips: >
 classroom.amount: >
   相当于%price%
 classroom.picture_tips: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为525x350。<br>文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 525×350px。<br>文件大小不能超过<strong>2M</strong>。
 classroom.upload_picture_btn: 上传新图片
 classroom.commitment_service_label: 承诺提供服务
 classroom.activiy: 活动
@@ -3104,7 +2967,7 @@ user.settings.avatar.content_title: 头像设置
 user.settings.avatar.current_avatar: 当前头像
 user.settings.avatar.partner_avatar: 论坛头像
 user.settings.avatar.upload_hint: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片，文件大小不能超过<strong>2M</strong>。
 user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
@@ -3592,12 +3455,12 @@ group.detail.group_settings.group_edit.introduction: 小组介绍
 group.detail.group_settings.logo_setup: 图标设置
 group.detail.group_settings.logo_setup.current_logo: 当前图标
 group.detail.group_settings.logo_setup.tips: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（180*180）
+  请上传jpg, gif, png格式的图片，建议图片尺寸为 180×180px。文件大小不能超过2M。
 group.detail.group_settings.logo_setup.upload_btn: 上传新图标
 group.detail.group_settings.background_image_setup: 背景设置
 group.detail.group_settings.background_image_setup.current_image: 当前背景
 group.detail.group_settings.background_image_setup.tips: >
-  你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（1140*150）
+  请上传jpg, gif, png格式的图片，建议图片尺寸为 1140×150px。文件大小不能超过2M。
 group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
@@ -3950,7 +3813,7 @@ my.teaching.open_course.Basic_Info.about: 课程简介
 my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
 my.teaching.open_course.course_picture.title: 课程图片
 my.teaching.open_course.course_picture.title.help_block: >
-  你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>文件大小不能超过
 my.teaching.open_course.lesson.add_btn: 课时
 my.teaching.open_course.lesson.tips: 公开课当前仅支持添加一个课时！
 my.teaching.open_course.lesson.manage: 课时管理
@@ -4996,7 +4859,7 @@ admin.live_manage.live_student_limit: 同时在线人数上限
 admin.live_manage.live_student_limit_tips: 扩充在线人数，请联系客服：4008041114
 admin.live_manage.logo_tips: >
   <b>只针对直播新方案。</b><br>
-  请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。
+  请上传jpg, gif, png格式的图片。logo 图片建议尺寸不要超过 100×23px。
 admin.live_manage.edu_cloud_closed: 尚未接入教育云，不能使用直播服务
 admin.live_manage.show_detail: 查看详情
 admin.live_manage.cloud_live_closed: 尚未启用云直播服务，不能创建直播课程
@@ -5308,10 +5171,10 @@ admin.setting.site.slogan: 网站副标题
 admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
-admin.setting.site.logo.help_block: 请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。网校logo设置后显示顶部导航左上角,
+admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过 250×50px。网校 logo 设置后将显示顶部导航左侧，
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
-admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议大小16*16或者32*32。
+admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。
 admin.setting.site.seo_keywords: SEO关键词
 admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
 admin.setting.site.seo_description: SEO描述信息
@@ -5489,7 +5352,7 @@ admin.setting.consult.Contact: 联系人
 admin.setting.consult.phone: 联系电话
 admin.setting.consult.other_setting: 其他设置
 admin.setting.consult.WeChat_QR_code: 微信二维码
-admin.setting.consult.other_setting.help_block: 请上传png, gif, jpg格式的图片文件。
+admin.setting.consult.other_setting.help_block: 请上传jpg, gif, png格式的图片。
 admin.setting.consult.work_email: 工作邮箱
 admin.setting.es_bar.esbar_function: 侧边栏功能
 admin.setting.es_bar.esbar_function.open: 开启
@@ -5581,14 +5444,14 @@ admin.block_manage.visual_edit.poster_img_upload: 上传
 admin.block_manage.visual_edit.poster_live_top_banner_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px<br>
-  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+  建议所有海报都选择相同的 [ 布局模式 ]， 并且所有海报的[ 海报尺寸 ] 保持一致。
 admin.block_manage.visual_edit.poster_cloud_search_banner_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：200px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1440px，高：200px<br>
 admin.block_manage.visual_edit.poster_other_tips: >
   [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px<br>
   [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px<br>
-  建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+  建议所有海报都选择相同的 [ 布局模式 ]， 并且所有海报的[ 海报尺寸 ] 保持一致。
 admin.block_manage.visual_edit.poster_link_url: 海报链接地址
 admin.block_manage.visual_edit_history.edit_time: 修改时间
 admin.block_manage.visual_edit_history.edit_user: 修改用户
@@ -5597,6 +5460,7 @@ admin.block_manage.visual_edit_history.user_deleted: 用户已删除
 admin.block_manage.visual_edit_history.preview: 预览
 admin.block_manage.visual_edit_history.recovery_content: 恢复此内容
 admin.block_manage.visual_edit_history.empty: 暂无记录
+admin.block_manage.visual_edit_img_compress_url: 图片优化教程
 
 #自定义页面管理
 admin.custom_page_manage.top_button: 添加
@@ -5635,11 +5499,11 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
-admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片尺寸为 750×300px，格式支持jpg、png。
 admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
-admin.mobile_manage.img_tips: 请上传png, gif, jpg格式的图片文件。
+admin.mobile_manage.img_tips: 请上传jpg, gif, png格式的图片。
 admin.mobile_manage.default_click_radio: 默认（无触发动作）
 admin.mobile_manage.goto_link_radio: 跳转到连接地址
 admin.mobile_manage.goto_inside_course_radio: 跳转到内部课程
@@ -6006,7 +5870,7 @@ admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
-admin.user.manage.user_avatar.upload_hint: 你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过
+admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，文件大小不能超过
 admin.user.manage.user_avatar.upload_btn: 上传新头像
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
@@ -6286,11 +6150,11 @@ admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
 admin.edu_cloud.edu_video.open_embed_watermark_tips: >
   能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
 admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸150×50。
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。
 admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
@@ -6356,9 +6220,9 @@ admin.edu_cloud.edu_live.live_logo_app: 直播LOGO 欢拓客户端
 admin.edu_cloud.edu_live.upload_btn: 上传
 admin.edu_cloud.edu_live.delete_btn: 删除
 admin.edu_cloud.edu_live.upload_web_tips: >
-  上传尺寸大小必须为280*60，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+  上传尺寸大小必须为 280×60px，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
 admin.edu_cloud.edu_live.upload_app_tips: >
-  上传尺寸大小必须为280*40，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
+  上传尺寸大小必须为 280×40px，格式为.png的图片。<br>建议您上传背景色为透明的logo图片。
 admin.edu_cloud.edu_live.logo_url: 'LOGO链接'
 admin.edu_cloud.edu_live.logo_url_tips: '以http://或https://开头，设置此项后，用户点击logo图将会跳转到您指定的链接。'
 admin.edu_cloud.edu_live.upgrade: 升级
@@ -6955,9 +6819,9 @@ admin.user_fields.modal.float_fields.tips: 还可以添加%floatCount%个字段,
 admin.user_fields.modal.date_fields: 日期
 admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
-admin.user_avatar.customer_default_avatar.help_block: 你可以上传JPG、GIF或PNG格式的文件
+admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
-admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）
+admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -7025,7 +6889,7 @@ admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显�
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
-admin.setting_course.course_avatar.tips: 支持jpg、gif、png格式的图片，建议尺寸：480*270px.
+admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。
 admin.setting_course.classroom.setting_classroom_name: 班级称谓设置
 admin.setting_course.classroom.setting_classroom_name.help_block: 用户所能看到的是这里设置的称谓
 admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
@@ -7324,7 +7188,7 @@ admin.coin_setting.promotion_proposal_hint: >
   2、 网校可鼓励学员充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
-  请上传png, gif, jpg格式的大于等于50*50的<span class="text-danger">等比例</span>图片，否则无法上传
+  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片
 admin.coin_setting.coin_description: 虚拟币说明
 admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
 admin.coin_setting.update_submit_btn: 提交更新
@@ -7387,14 +7251,14 @@ admin.article_setting.source_address: 来源地址
 admin.article_setting.thumb_setting: 设置缩略图
 admin.article_setting.thumb_setting.upload_btn: 上传
 admin.article_setting.thumb_setting.upload_tips: >
-  <p class="help-block">请上传png, gif, jpg格式的图片文件</p>
-  <p class="help-block mbs">请推荐尺寸754*424px。
+  <p class="help-block">请上传jpg, gif, png格式的图片</p>
+  <p class="help-block mbs">建议图片尺寸为 754×424px。
 admin.article_setting.publish_time: 发布时间
 admin.article_setting.publish_time_tips: 内容条目默认按发布时间的倒序显示
 admin.article_setting.image.content_title: 设置资讯图片
 admin.article_setting.image: 资讯图片
 admin.article_setting.image.tips: 提示：请选择图片裁剪区域。
-admin.article_setting.image.upload_tips: 你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过2M。
+admin.article_setting.image.upload_tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 754×424px，文件大小不能超过2M。
 admin.article_setting.image.choose_btn: 选择上传的文件
 
 admin.group_settings.homepage_show_group: 首页显示小组信息
@@ -7502,23 +7366,19 @@ admin.mobile_setting.mobile_homepage_set_hint: >
   1.开启后，可将<a target="_blank" href="%mobileHomepage%">移动端首页</a>（域名/mobile）地址添加到网站顶部导航中
 admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
-admin.mobile_setting.splash_pic_setting_hint: 请上传png, gif, jpg格式的图片文件。
+admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图片。
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
-admin.mobile_setting.online_school_logo_hint: 请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。
+admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
 admin.mobile_setting.app_custom_logo: APP图标
-admin.mobile_setting.app_custom_logo_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸 120*120。
+admin.mobile_setting.app_custom_logo_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 120×120px。
 admin.mobile_setting.app_custom_cover: APP封面
-admin.mobile_setting.app_custom_cover_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。
+admin.mobile_setting.app_custom_cover_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 225×400px。
 admin.mobile_setting.splash_setting: 设置启动图
-admin.mobile_setting.splash_setting_hint: 最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。
-admin.mobile_setting.splash1: 启动图1
-admin.mobile_setting.splash2: 启动图2
-admin.mobile_setting.splash3: 启动图3
-admin.mobile_setting.splash4: 启动图4
-admin.mobile_setting.splash5: 启动图5
+admin.mobile_setting.splash_setting_hint: 最多设置5张启动图，建议图片尺寸为 640×960px，用户首次登录网校时会显示启动图。
+admin.mobile_setting.splash: 启动图%splashNum%
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
   <br>
@@ -8024,7 +7884,7 @@ admin.reward_point_product.product_img: 商品图片
 admin.reward_point_product.product_price: 商品价格
 admin.reward_point_product.product_introduction: 商品简介
 admin.reward_point_product.product_delivery_information: 发货信息
-admin.reward_point_product.cover_message: 你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为360x360。文件大小不能超过2M。
+admin.reward_point_product.cover_message: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 360×360px。文件大小不能超过2M。
 admin.reward_point_product.edit_product: 编辑商品
 admin.reward_point_product.add_product: 添加商品
 admin.reward_point_product.cover_crop: 图片裁剪
