@@ -116,7 +116,7 @@ class ManageController extends BaseController
     {
         $courseIds = array($targetId);
         $courses = array();
-        if ($targetType === 'classroom') {
+        if ('classroom' === $targetType) {
             $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }

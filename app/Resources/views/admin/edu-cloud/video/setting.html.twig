@@ -253,6 +253,16 @@
         {{ radios('video_audio_quality', {'low':'admin.edu_cloud.edu_video.low'|trans, 'normal':'admin.edu_cloud.edu_video.normal'|trans, 'high': 'admin.edu_cloud.edu_video.high'|trans}, storageSetting.video_audio_quality) }}
       </div>
     </div>
+
+    <div class="row form-group hidden">
+      <div class="col-md-3 control-label">
+        <label for="enable_playback_rates">{{'H5播放：'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('video_h5_enable', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, storageSetting.video_h5_enable) }}
+      </div>
+    </div>
+
     <div class="row form-group">
       <div class="col-md-3 control-label">
         <label for="enable_playback_rates">{{'admin.edu_cloud.edu_video.play_speed'|trans}}</label>
@@ -264,6 +274,7 @@
         </div>
       </div>
     </div>
+
     <div class="upload-mode">
     </div>
 
@@ -353,7 +364,7 @@
         <button class="btn btn-primary" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}"
         {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>{{ 'admin.edu_cloud.edu_video.picture_delete_btn'|trans }}</button>
         <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img src="{{ filepath(storageSetting.video_watermark_image) }}">{% endif %}</div>
-        <div class="text-muted mts">{{ 'admin.edu_cloud.edu_video.play_water_mark_picture_tips'|trans }}</div>
+        <div class="text-muted mts">{{ 'admin.edu_cloud.edu_video.play_water_mark_picture_tips'|trans|raw }}</div>
         <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
       </div>
     </div>
@@ -366,7 +377,7 @@
         <button class="btn btn-primary" id="cloud-video-embed-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_remove') }}" {% if not storageSetting.video_embed_watermark_image %}style="display:none;"{% endif %}>{{ 'admin.edu_cloud.edu_video.picture_delete_btn'|trans }}</button>
         <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img  src="{{ filepath(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
 
-        <div class="text-muted mts">{{ 'admin.edu_cloud.edu_video.play_embed_watermark_picture_tips'|trans }}</div>
+        <div class="text-muted mts">{{ 'admin.edu_cloud.edu_video.play_embed_watermark_picture_tips'|trans|raw }}</div>
         <input type="hidden" name="video_embed_watermark_image" value="{{ storageSetting.video_embed_watermark_image }}">
       </div>
     </div>

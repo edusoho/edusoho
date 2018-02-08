@@ -20,6 +20,7 @@
           data-file-type="{{file.type}}"
           data-url="{{url}}"
           data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
+          data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
           data-player="{{player}}"
           data-agentInWhiteList="{{agentInWhiteList}}"

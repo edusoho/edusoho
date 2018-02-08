@@ -645,6 +645,7 @@ t.add("oauth.send.validate_message", "\u53d1\u9001\u9a8c\u8bc1", "js", "zh_CN");
 t.add("oauth.send.error_message_tip", "\u8bf7\u6c42\u53d1\u9001\u6b21\u6570\u8fc7\u591a\uff0c\u8bf7\u7a0d\u540e\u5c1d\u8bd5", "js", "zh_CN");
 t.add("oauth.send.sms_code_error_tip", "\u60a8\u8f93\u5165\u7684\u77ed\u4fe1\u9a8c\u8bc1\u7801\u4e0d\u6b63\u786e", "js", "zh_CN");
 t.add("oauth.refresh.captcha_code_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u5931\u6548\uff0c\u8bf7\u91cd\u65b0\u8f93\u5165\u56fe\u5f62\u9a8c\u8bc1\u7801", "js", "zh_CN");
+t.add("oauth.refresh.captcha_code_required_tip", "\u8bf7\u8f93\u5165\u56fe\u5f62\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("oauth.captcha_code_length_tip", "\u56fe\u5f62\u7801\u4e3a5\u4f4d\u6570", "js", "zh_CN");
 t.add("oauth.captcha_code_expired_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u8fc7\u671f", "js", "zh_CN");
 t.add("oauth.captcha_code_error_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");

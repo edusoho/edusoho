@@ -258,7 +258,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 $coin = 0;
             }
 
-            if ($coin >= 0 && $title != '') {
+            if ($coin >= 0 && '' != $title) {
                 $hide = array(
                     'title' => $title,
                     'type' => 'content',
@@ -388,7 +388,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getGroupService()->waveGroup($groupId, 'postNum', +1);
         $this->getGroupService()->waveMember($groupId, $memberId, 'postNum', +1);
 
-        if ($postId == 0) {
+        if (0 == $postId) {
             $this->waveThread($threadId, 'postNum', +1);
         }
 

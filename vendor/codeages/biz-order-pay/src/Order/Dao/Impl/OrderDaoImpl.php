@@ -12,7 +12,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function getBySn($sn, array $options = array())
     {
-        $lock = isset($options['lock']) && $options['lock'] === true;
+        $lock = isset($options['lock']) && true === $options['lock'];
 
         $forUpdate = '';
 
@@ -33,6 +33,13 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function findBySns(array $orderSns)
     {
         return $this->findInField('sn', $orderSns);
+    }
+
+    public function findByInvoiceSn($invoiceSn)
+    {
+        return $this->findByFields(array(
+            'invoice_sn' => $invoiceSn,
+        ));
     }
 
     public function count($conditions)
@@ -62,9 +69,9 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
     public function sumPaidAmount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount");
+            ->select('sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount');
 
-        return $builder->execute()->fetch();  
+        return $builder->execute()->fetch();
     }
 
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
@@ -112,6 +119,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
+
         return false;
     }
 
@@ -122,6 +130,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
+
         return false;
     }
 
@@ -177,7 +186,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'pay_time > :pay_time_GT',
                 'pay_amount > :pay_amount_GT',
                 'price_amount > :price_amount_GT',
-                'source = :source', 
+                'source = :source',
                 'status = :status',
                 'status IN (:statuses)',
                 'seller_id = :seller_id',
@@ -186,6 +195,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'title LIKE :title_like',
                 'updated_time >= :updated_time_GE',
                 'refund_deadline < :refund_deadline_LT',
+                'invoice_sn = :invoice_sn',
             ),
         );
     }

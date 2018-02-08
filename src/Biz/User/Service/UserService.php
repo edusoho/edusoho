@@ -296,4 +296,8 @@ interface UserService
     public function getUserIdsByKeyword($word);
 
     public function updateUserNewMessageNum($id, $num);
+
+    public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
+
+    public function updateSmsRegisterCaptchaStatus($clientIp);
 }
