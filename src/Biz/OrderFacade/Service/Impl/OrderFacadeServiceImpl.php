@@ -46,7 +46,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    private function getRefundDays()
+    public function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
 
@@ -117,8 +117,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
     }
 
-    public function createSpecialOrder(Product $product, $userId, $params = array())
+    /**
+     * @param $type 用于查找相应的实现类， 目前分为 'OrderFacade' 和 'Marketing'
+     */
+    public function createSpecialOrder(Product $product, $userId, $params = array(), $type = 'OrderFacade')
     {
+        $sepcialOrderService = $this->createService($type.':SpecialOrderService');
+
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
@@ -129,9 +134,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'deducts' => empty($params['deducts']) ? array() : $params['deducts'],
         );
 
-        if (!empty($params['pay_time'])) {
-            $orderFields['expired_refund_days'] = $this->getRefundDays();
-        }
+        $orderFields = $sepcialOrderService->beforeCreateOrder($orderFields, $params);
 
         $orderItems = $this->makeOrderItems($product);
 
@@ -147,12 +150,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $data = array(
             'trade_sn' => '',
-            'pay_time' => empty($params['pay_time']) ? 0 : $params['pay_time'],
+            'pay_time' => 0,
             'order_sn' => $order['sn'],
         );
-        if (!empty($params['pay_time'])) {
-            $data['paid_cash_amount'] = $price * 100; //此时 price 单位为元，但paid_cash_amount单位为分
-        }
+
+        $data = $sepcialOrderService->beforePayOrder($data, $params);
 
         $order = $this->getWorkflowService()->paid($data);
 

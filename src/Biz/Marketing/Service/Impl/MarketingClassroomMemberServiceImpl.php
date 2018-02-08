@@ -25,6 +25,6 @@ class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
             'pay_time' => $data['pay_time'],
         );
 
-        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
+        return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params, 'Marketing');
     }
 }
