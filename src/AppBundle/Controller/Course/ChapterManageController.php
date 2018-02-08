@@ -18,9 +18,14 @@ class ChapterManageController extends BaseController
         $parentId = $request->query->get('parentId');
         
         if ($request->getMethod() == 'POST') {
-            $chapter = $request->request->all();
-            $chapter['courseId'] = $courseId;
-            $chapter = $this->getCourseService()->createChapter($chapter);
+            if (empty($chapter)) {
+                $chapter = $request->request->all();
+                $chapter['courseId'] = $courseId;
+                $chapter = $this->getCourseService()->createChapter($chapter);  
+            } else {
+                $title = $request->request->get('title');
+                $chapter = $this->getCourseService()->updateChapter($courseId, $chapterId, array('title' => $title));
+            }
 
             return $this->render('course-manage/chapter/list-item.html.twig', array(
                 'course' => $course,

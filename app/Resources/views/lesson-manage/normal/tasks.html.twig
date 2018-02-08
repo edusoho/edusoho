@@ -72,7 +72,7 @@
             </li>
             {{ slot('task.menu.extension', {'task': task}) }}
             <li>
-              <a class='delete-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
+              <a class='js-task-delete {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
                 data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
                 <i class="es-icon es-icon-delete mrs"></i>
                 {{'course.plan_task.delete_btn'|trans}}

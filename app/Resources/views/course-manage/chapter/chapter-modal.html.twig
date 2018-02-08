@@ -1,7 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% do script(['libs/jquery-validation.js', 'app/js/course-chapter-manage/index.js']) %}
 {% set chapter = chapter|default(null) %}
-
+{% set type = chapter.type|default(type) %}
 {% block title %}
   {% if chapter %}
     {{ 'form.btn.edit'|trans }}

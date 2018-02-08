@@ -16,6 +16,27 @@ export default class Manage {
     this.$element.on('addItem', function(e, $elm){
       sortList();
     });
+    this._deleteChapter();
+  }
+
+  _deleteChapter() {
+    let self = this;
+    this.$element.on('click', '.js-chapter-delete', function(evt){
+      let $this = $(this);
+      let $parent = $this.closest('.task-manage-item');
+
+      if (!confirm(Translator.trans('course.manage.chapter_delete_hint',{name: $this.data('name')}))) {
+        return;
+      }
+      $.post($this.data('url'), function (data) {
+        $parent.remove();
+        self.sortList();
+      });
+    });
+  }
+
+  _deleteTask() {
+    
   }
 
   _sort() {

@@ -21,5 +21,9 @@
       </ul>
     </span>
     {% include 'lesson-manage/normal/chapter-action.html.twig' with {courseId: course.id, chapterId: chapter.id} %}
+    <a href="javascript:;" class="btn gray-darker js-chapter-toggle-show">
+      <i class="es-icon es-icon-keyboardarrowup mr5 js-remove-icon"></i>
+      <span class="js-remove-text" >{{'site.btn.collapse'|trans}}</span>
+    </a>
   </div>
 </li>

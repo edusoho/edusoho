@@ -18,10 +18,10 @@ $('[data-help="popover"]').popover();
 
 let sortableList = '#sortable-list';
 // taskSortable(sortableList);
-updateTaskNum(sortableList);
+// updateTaskNum(sortableList);
 closeCourse();
 deleteCourse();
-deleteTask();
+// deleteTask();
 publishTask();
 unpublishTask();
 showSettings();
