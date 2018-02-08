@@ -6684,11 +6684,16 @@ admin.user_auth.Protection.none: 无
 admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
-admin.user_auth.Protection.low.Explanation: 方案说明：
-admin.user_auth.Protection.low.Verification_code: 注册时需填写图形验证码。
-admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
-admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
-admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
+admin.user_auth.Protection.Explaination: 方案说明：
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
+admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
+admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+                                           
+admin.user_auth.Protection.low.sign_up_count.mobile:
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
