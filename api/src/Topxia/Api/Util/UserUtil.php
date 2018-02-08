@@ -17,7 +17,7 @@ class UserUtil
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
 
         if (empty($oauthUser['name'])) {
-            $oauthUser['name'] = "{$type}" . substr($randString, 9, 3);
+            $oauthUser['name'] = "{$type}".substr($randString, 9, 3);
         }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
@@ -34,9 +34,9 @@ class UserUtil
                 $oauthUser['name'] .= substr($randString, 0, 3);
             }
             $nicknames[] = $oauthUser['name'];
-            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
-            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);
-            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 0, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 3, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 6, 3);
 
             foreach ($nicknames as $name) {
                 if (ServiceKernel::instance()->createService('User:UserService')->isNicknameAvaliable($name)) {
@@ -49,35 +49,37 @@ class UserUtil
                 return null;
             }
 
-            $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
+            $registration['email'] = 'u_'.substr($randString, 0, 12).'@edusoho.net';
         }
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
+        $registration['type'] = $type;
+        $registration['authid'] = $oauthUser['id'];
 
-        if ($this->getSettingService()->get("auth.register_mode", "email") == "email_or_mobile") {
+        if ('email_or_mobile' == $this->getSettingService()->get('auth.register_mode', 'email')) {
             $registration['emailOrMobile'] = $registration['email'];
             unset($registration['email']);
         }
 
         $user = ServiceKernel::instance()->createService('User:AuthService')->register($registration, $type);
+
         return $user;
     }
-
 
     public function fillUserAttr($userId, $userInfo)
     {
         $user = ServiceKernel::instance()->createService('User:UserService')->getUser($userId);
         if (!empty($userInfo['avatar'])) {
             $curl = curl_init($userInfo['avatar']);
-            
-            $smallName = date("Ymdhis")."_small.jpg";
-            $mediumName = date("Ymdhis")."_medium.jpg";
-            $largeName = date("Ymdhis")."_large.jpg";
 
-            $smallPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $smallName;
-            $mediumPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $mediumName;
-            $largePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $largeName;
+            $smallName = date('Ymdhis').'_small.jpg';
+            $mediumName = date('Ymdhis').'_medium.jpg';
+            $largeName = date('Ymdhis').'_large.jpg';
+
+            $smallPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory').'/tmp/'.$smallName;
+            $mediumPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory').'/tmp/'.$mediumName;
+            $largePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory').'/tmp/'.$largeName;
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
             $imageData = curl_exec($curl);
@@ -95,22 +97,23 @@ class UserUtil
             $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($smallPath));
             $fields[] = array(
                 'type' => 'large',
-                'id' => $file['id']
+                'id' => $file['id'],
             );
-            
+
             $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($mediumPath));
             $fields[] = array(
                 'type' => 'medium',
-                'id' => $file['id']
+                'id' => $file['id'],
             );
 
             $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($largePath));
             $fields[] = array(
                 'type' => 'small',
-                'id' => $file['id']
+                'id' => $file['id'],
             );
             $user = ServiceKernel::instance()->createService('User:UserService')->changeAvatar($userId, $fields);
         }
+
         return $user;
     }
 

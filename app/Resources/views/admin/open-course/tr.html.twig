@@ -2,6 +2,7 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% set target = ''~filter~'_index' %}
 <tr id="course-tr-{{ course.id }}">
+  {% include 'org/parts/table-body-checkbox.html.twig' %}
   <td>{{ course.id }}</td>
   <td>
     <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
@@ -18,6 +19,7 @@
   </td>
     
   <td>{{ dict_macro.courseStatus(course.status) }}</td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: course.orgCode} %}
   <td>
     {{ admin_macro.user_link(user) }}
     <br>

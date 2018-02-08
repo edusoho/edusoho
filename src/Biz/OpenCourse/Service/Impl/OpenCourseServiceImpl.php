@@ -161,6 +161,19 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->update($id, array('status' => 'closed'));
     }
 
+    public function batchUpdateOrg($openCourseIds, $orgCode)
+    {
+        if (!is_array($openCourseIds)) {
+            $openCourseIds = array($openCourseIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($openCourseIds as $openCourseId) {
+            $this->getOpenCourseDao()->update($openCourseId, $fields);
+        }
+    }
+
     public function tryManageOpenCourse($courseId)
     {
         $user = $this->getCurrentUser();

@@ -23,6 +23,7 @@ class MaterialCopyTest extends BaseTestCase
             'title' => '常用的邮箱服务器SMTP地址.pdf',
             'source' => 'coursematerial',
             'courseSetId' => 3,
+            'fileId' => '1',
         );
         $this->getMaterialDao()->create($material);
         $source = array('id' => 3);

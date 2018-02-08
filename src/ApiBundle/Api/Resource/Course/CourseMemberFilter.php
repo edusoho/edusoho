@@ -8,11 +8,11 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class CourseMemberFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'courseId', 'deadline', 'courseSetId'
+        'id', 'courseId', 'deadline', 'courseSetId',
     );
 
     protected $publicFields = array(
-        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access'
+        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access',
     );
 
     protected function simpleFields(&$data)
