@@ -6958,7 +6958,8 @@ admin.magic_setting.zero_for_open: 0为启用
 admin.magic_setting.zero_for_close: 0为关闭
 admin.magic_setting.true_for_open: true为开启
 admin.magic_setting.false_for_close: false为关闭
-admin.magic_setting.export_max_limit_tips: 建议最大值不超过20000
+admin.magic_setting.max_limit_tips: 建议最大值不超过%number%
+admin.magic_setting.sync_user_data: 同步用户学习的总量数据分页
 
 admin.redis_setting.need_careful_tips: 注意事项
 admin.redis_setting.redis_config_case: redis配置案例：
