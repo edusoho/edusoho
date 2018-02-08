@@ -47,15 +47,15 @@ class MarketingServiceImpl extends BaseService implements MarketingService
     public function addUserToCourse($postData)
     {
         $logger = $this->biz['logger'];
-        $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
-        $logger->debug(json_encode($postData));
+        $logger->info('验证请求的auth通过，请求认定为合法，处理相应逻辑');
+        $logger->info(json_encode($postData));
 
         $response = array();
         $response['is_new'] = false;
         $mobile = $postData['mobile'];
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         if (empty($user)) {
-            $logger->debug('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
+            $logger->info('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
             $response['is_new'] = true;
             $password = substr($mobile, mt_rand(0, 4), 6);
             $postData['password'] = $password;
@@ -64,7 +64,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         }
         $response['user_id'] = $user['id'];
 
-        $logger->debug("准备把用户,{$user['id']}添加到课程");
+        $logger->info("准备把用户,{$user['id']}添加到课程");
         $orderInfo = array(
             'marketingOrderId' => $postData['order_id'],
             'marketingOrderPriceAmount' => $postData['order_price_amount'] / 100,  //原价和现价 都需要除以 100，deduct不需要除以 100
@@ -79,7 +79,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
             'id' => $postData['target_id'],
         );
         list($course, $member, $order) = $this->makeUserJoinCourse($user['id'], $target['id'], $orderInfo);
-        $logger->debug("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
+        $logger->info("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
         $response['code'] = 'success';
         $response['msg'] = "把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}";
 
@@ -89,15 +89,15 @@ class MarketingServiceImpl extends BaseService implements MarketingService
     public function addUserToClassroom($postData)
     {
         $logger = $this->biz['logger'];
-        $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
-        $logger->debug(json_encode($postData));
+        $logger->info('验证请求的auth通过，请求认定为合法，处理相应逻辑');
+        $logger->info(json_encode($postData));
 
         $response = array();
         $response['is_new'] = false;
         $mobile = $postData['mobile'];
         $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
         if (empty($user)) {
-            $logger->debug('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
+            $logger->info('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
             $response['is_new'] = true;
             $password = substr($mobile, mt_rand(0, 4), 6);
             $postData['password'] = $password;
@@ -106,7 +106,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         }
         $response['user_id'] = $user['id'];
 
-        $logger->debug("准备把用户,{$user['id']}添加到班级");
+        $logger->info("准备把用户,{$user['id']}添加到班级");
         $orderInfo = array(
             'marketingOrderId' => $postData['order_id'],
             'marketingOrderPriceAmount' => $postData['order_price_amount'] / 100,  //原价和现价 都需要除以 100，deduct不需要除以 100
@@ -121,7 +121,7 @@ class MarketingServiceImpl extends BaseService implements MarketingService
             'id' => $postData['target_id'],
         );
         list($classroom, $member, $order) = $this->makeUserJoinClassroom($user['id'], $target['id'], $orderInfo);
-        $logger->debug("把用户,{$user['id']}添加到班级成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}");
+        $logger->info("把用户,{$user['id']}添加到班级成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}");
         $response['code'] = 'success';
         $response['msg'] = "把用户,{$user['id']}添加到班级成功,班级ID：{$classroom['id']},memberId:{$member['id']},订单Id:{$order['id']}";
 
@@ -194,9 +194,9 @@ class MarketingServiceImpl extends BaseService implements MarketingService
         $registration['verifiedMobile'] = $postData['mobile'];
         $registration['mobile'] = $postData['mobile'];
         $registration['nickname'] = $postData['nickname'];
-        $logger->debug('Marketing用户名：'.$registration['nickname']);
+        $logger->info('Marketing用户名：'.$registration['nickname']);
         $registration['nickname'] = $this->getUserService()->generateNickname($registration);
-        $logger->debug('ES用户名：'.$registration['nickname']);
+        $logger->info('ES用户名：'.$registration['nickname']);
         $registration['registeredWay'] = 'web';
         $registration['createdIp'] = isset($postData['client_ip']) ? $postData['client_ip'] : '';
         $registration['password'] = $postData['password'];

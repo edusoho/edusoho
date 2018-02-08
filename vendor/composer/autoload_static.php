@@ -109,6 +109,7 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
             'Codeages\\Biz\\RateLimiter\\' => 25,
             'Codeages\\Biz\\Pay\\' => 17,
             'Codeages\\Biz\\Order\\' => 19,
+            'Codeages\\Biz\\Invoice\\' => 21,
             'Codeages\\Biz\\Framework\\' => 23,
         ),
         'B' => array(
@@ -281,6 +282,9 @@ class ComposerStaticInit68093f1a9756d047f749afafb6a650b9
         ),
         'Codeages\\Biz\\Order\\' => array(
             0 => __DIR__.'/..'.'/codeages/biz-order-pay/src/Order',
+        ),
+        'Codeages\\Biz\\Invoice\\' => array(
+            0 => __DIR__.'/..'.'/codeages/biz-order-pay/src/Invoice',
         ),
         'Codeages\\Biz\\Framework\\' => array(
             0 => __DIR__.'/..'.'/codeages/biz-framework/src',

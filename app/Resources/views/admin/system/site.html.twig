@@ -50,7 +50,7 @@
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{ path('admin_setting_logo_upload') }}">{{'form.btn.upload'|trans}}</a>
         <button class="btn btn-default" id="site-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not site.logo %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-        <p class="help-block">{{'admin.setting.site.logo.help_block'|trans}}<a href="{{ path('homepage') }}" target="_blank">{{ 'admin.setting.site.logo.view_btn'|trans }}</a></p>
+        <p class="help-block">{{'admin.setting.site.logo.help_block'|trans|raw}}<a href="{{ path('homepage') }}" target="_blank">{{ 'admin.setting.site.logo.view_btn'|trans }}</a></p>
         <input type="hidden" name="logo" value="{{ site.logo }}">
       </div>
     </div>
@@ -68,7 +68,7 @@
         <button class="btn btn-default"
         id="site-favicon-remove"
         type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-        <p class="help-block">{{'admin.setting.site.favicon.help_block'|trans}}</p>
+        <p class="help-block">{{'admin.setting.site.favicon.help_block'|trans|raw}}</p>
         <input type="hidden" name="favicon" value="{{ site.favicon }}">
       </div>
     </div>

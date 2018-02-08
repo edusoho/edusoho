@@ -868,7 +868,7 @@ course.create.finish: 已完成
 course.create.unfinish: 未完成
 course.create.user_avatar: 用户头像
 course.create.upload_tips: >
-  <p class="help-block">请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，文件大小不能超过<strong>2M</strong>。</p>
+  <p class="help-block">请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>。</p>
 course.create.upload_btn: 上传新头像
 course.create.rank: 头衔
 course.create.introduction: 自我介绍
@@ -1217,7 +1217,7 @@ course.cover: 课程封面
 course.cover_image: 封面图片
 course.cover_image.content_title: 封面图片
 course.cover_image.upload_tips: >
-  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>建议图片大小不超过<strong>2MB</strong>。
 course.cover_image.upload_btn: 选择要上传的图片
 
 course.expiry_date: 学习有效期
@@ -2254,7 +2254,7 @@ classroom.thread.create.event_time: 活动时间
 classroom.thread.create.event_start_time: 活动开始时间
 classroom.thread.create.event_location: 活动地点
 classroom.thread.create.cover_image: 封面图片
-classroom.thread.create.cover_image.placeholder: 建议图片尺寸为 200×112px
+classroom.thread.create.cover_image.placeholder: 建议图片尺寸为 200×112px，建议图片大小不超过2MB。
 classroom.thread.create.views_btn: 浏览...
 classroom.thread.create.maxUsers: 最大人数
 classroom.thread.create.maxUsers.placeholder: 不限
@@ -2420,7 +2420,7 @@ classroom.price_tips: >
 classroom.amount: >
   相当于%price%
 classroom.picture_tips: >
-  请上传jpg, gif, png格式的图片, 建议图片尺寸为 525×350px。<br>文件大小不能超过<strong>2M</strong>。
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 525×350px。<br>建议图片大小不超过<strong>2MB</strong>。
 classroom.upload_picture_btn: 上传新图片
 classroom.commitment_service_label: 承诺提供服务
 classroom.activiy: 活动
@@ -2775,6 +2775,7 @@ user.settings.teachers_qualification_menu: 教师资格申请
 user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
+user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
 
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
@@ -3455,12 +3456,12 @@ group.detail.group_settings.group_edit.introduction: 小组介绍
 group.detail.group_settings.logo_setup: 图标设置
 group.detail.group_settings.logo_setup.current_logo: 当前图标
 group.detail.group_settings.logo_setup.tips: >
-  请上传jpg, gif, png格式的图片，建议图片尺寸为 180×180px。文件大小不能超过2M。
+  请上传jpg, gif, png格式的图片，建议图片尺寸为 180×180px。建议图片大小不超过2MB。
 group.detail.group_settings.logo_setup.upload_btn: 上传新图标
 group.detail.group_settings.background_image_setup: 背景设置
 group.detail.group_settings.background_image_setup.current_image: 当前背景
 group.detail.group_settings.background_image_setup.tips: >
-  请上传jpg, gif, png格式的图片，建议图片尺寸为 1140×150px。文件大小不能超过2M。
+  请上传jpg, gif, png格式的图片，建议图片尺寸为 1140×150px。建议图片大小不超过2MB。
 group.detail.new_group_members: 新加组员
 group.detail.new_group_members.empty: 还没有小组成员！
 group.detail.hot_group: 热门小组
@@ -3813,7 +3814,7 @@ my.teaching.open_course.Basic_Info.about: 课程简介
 my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
 my.teaching.open_course.course_picture.title: 课程图片
 my.teaching.open_course.course_picture.title.help_block: >
-  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>文件大小不能超过
+  请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>建议图片大小不超过
 my.teaching.open_course.lesson.add_btn: 课时
 my.teaching.open_course.lesson.tips: 公开课当前仅支持添加一个课时！
 my.teaching.open_course.lesson.manage: 课时管理
@@ -5171,10 +5172,10 @@ admin.setting.site.slogan: 网站副标题
 admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
-admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过 250×50px。网校 logo 设置后将显示顶部导航左侧，
+admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>网校 logo 设置后将显示顶部导航左侧，
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
-admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。
+admin.setting.site.favicon.help_block: 请上传ico格式的图标文件, 建议尺寸为 16×16px 或 32×32px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
 admin.setting.site.seo_keywords.help_block: 设置多个关键词请用半角逗号","隔开。
 admin.setting.site.seo_description: SEO描述信息
@@ -5499,11 +5500,11 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
-admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片尺寸为 750×300px，格式支持jpg、png。
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，请上传jpg, png格式的图片。建议图片尺寸为 750×300px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
-admin.mobile_manage.img_tips: 请上传jpg, gif, png格式的图片。
+admin.mobile_manage.img_tips: 请上传jpg, png格式的图片。
 admin.mobile_manage.default_click_radio: 默认（无触发动作）
 admin.mobile_manage.goto_link_radio: 跳转到连接地址
 admin.mobile_manage.goto_inside_course_radio: 跳转到内部课程
@@ -5870,7 +5871,7 @@ admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
-admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，文件大小不能超过
+admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
@@ -6150,11 +6151,11 @@ admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
 admin.edu_cloud.edu_video.open_embed_watermark_tips: >
   能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
 admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
@@ -6684,11 +6685,15 @@ admin.user_auth.Protection.none: 无
 admin.user_auth.Protection.low: 低
 admin.user_auth.Protection.middle: 中
 admin.user_auth.Protection.high: 高
-admin.user_auth.Protection.low.Explanation: 方案说明：
-admin.user_auth.Protection.low.Verification_code: 注册时需填写图形验证码。
-admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
-admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
-admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
+admin.user_auth.Protection.Explaination: 方案说明：
+admin.user_auth.Protection.low.Verification_code.email: 邮箱注册时需填写图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip1: 手机注册首次获取短信验证码时无图形验证码。
+admin.user_auth.Protection.low.Verification_code.mobile.tip2: 60分钟内，同一IP地址第二次获取短信验证码时，需要填写图形验证码。
+admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次。
+admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
+admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
+admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时需填写图形验证码。
+                                           
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
@@ -6821,7 +6826,7 @@ admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
-admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px
+admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 
 # 角色管理
 admin.role_manage.keyword_type: --关键词类型--
@@ -6889,7 +6894,7 @@ admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显�
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
-admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。
+admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting_course.classroom.setting_classroom_name: 班级称谓设置
 admin.setting_course.classroom.setting_classroom_name.help_block: 用户所能看到的是这里设置的称谓
 admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
@@ -6954,7 +6959,8 @@ admin.magic_setting.zero_for_open: 0为启用
 admin.magic_setting.zero_for_close: 0为关闭
 admin.magic_setting.true_for_open: true为开启
 admin.magic_setting.false_for_close: false为关闭
-admin.magic_setting.export_max_limit_tips: 建议最大值不超过20000
+admin.magic_setting.max_limit_tips: 建议最大值不超过%number%
+admin.magic_setting.sync_user_data: 同步用户学习的总量数据分页
 
 admin.redis_setting.need_careful_tips: 注意事项
 admin.redis_setting.redis_config_case: redis配置案例：
@@ -7193,7 +7199,7 @@ admin.coin_setting.promotion_proposal_hint: >
   2、 网校可鼓励学员充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
-  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片
+  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.coin_setting.coin_description: 虚拟币说明
 admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
 admin.coin_setting.update_submit_btn: 提交更新
@@ -7263,7 +7269,7 @@ admin.article_setting.publish_time_tips: 内容条目默认按发布时间的倒
 admin.article_setting.image.content_title: 设置资讯图片
 admin.article_setting.image: 资讯图片
 admin.article_setting.image.tips: 提示：请选择图片裁剪区域。
-admin.article_setting.image.upload_tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 754×424px，文件大小不能超过2M。
+admin.article_setting.image.upload_tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 754×424px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.article_setting.image.choose_btn: 选择上传的文件
 
 admin.group_settings.homepage_show_group: 首页显示小组信息
@@ -7373,7 +7379,7 @@ admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
 admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图片。
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
-admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。
+admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_custom_name: APP名称
 admin.mobile_setting.app_custom_about: APP简介
@@ -7382,7 +7388,7 @@ admin.mobile_setting.app_custom_logo_hint: 请上传jpg, gif, png格式的图片
 admin.mobile_setting.app_custom_cover: APP封面
 admin.mobile_setting.app_custom_cover_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 225×400px。
 admin.mobile_setting.splash_setting: 设置启动图
-admin.mobile_setting.splash_setting_hint: 最多设置5张启动图，建议图片尺寸为 640×960px，用户首次登录网校时会显示启动图。
+admin.mobile_setting.splash_setting_hint: 请上传jpg, gif, png格式的图片。最多设置5张启动图，建议图片尺寸为 640×960px，建议图片大小不超过2MB。用户首次登录网校时会显示启动图。
 admin.mobile_setting.splash: 启动图%splashNum%
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
