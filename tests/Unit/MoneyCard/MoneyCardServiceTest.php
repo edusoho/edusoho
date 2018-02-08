@@ -149,7 +149,7 @@ class MoneyCardServiceTest extends BaseTestCase
             'number' => 123,
             'cardPrefix' => 'pre',
             'passwordLength' => 6,
-            'deadline' => time(),
+            'deadline' => date('Y-m-d', time()),
         ));
 
         $this->assertEquals($this->getFakeMoneyCardBatch(), $batch);

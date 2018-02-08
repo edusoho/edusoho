@@ -1826,6 +1826,48 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    /**
+     * @param $clientIp 客户端ip
+     * @param $updateCount 默认为false，为true时，表示 在能发送短信的情况下， 查询后会变为必须填图形验证码
+     *
+     * @return
+     *  1. captchaRequired  必须填图形验证码
+     *  2. captchaIgnored  不需要图形验证码
+     *  3. smsUnsendable 不能发送短信
+     */
+    public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false)
+    {
+        $registerSetting = $this->getSettingService()->get('auth', array());
+        if (!empty($registerSetting['register_mode']) &&
+                in_array($registerSetting['register_mode'], array('mobile', 'email_or_mobile'))) {
+            $registerProtective = empty($registerSetting['register_protective']) ?
+                    'none' : $registerSetting['register_protective'];
+
+            if (in_array($registerProtective, array('middle', 'low'))) {
+                $factory = $this->biz->offsetGet('ratelimiter.factory');
+                $rateLimiter = $factory('sms_registration_captcha_code', 1, 3600);
+                $used = $updateCount ? 1 : 0;
+                $leftTriedCount = $rateLimiter->check($clientIp, $used);
+                if ($leftTriedCount <= 0) {
+                    return 'captchaRequired';
+                } else {
+                    return 'captchaIgnored';
+                }
+            } elseif ('high' == $registerProtective) {
+                return 'captchaRequired';
+            } else {
+                return 'captchaIgnored';
+            }
+        }
+
+        return 'smsUnsendable';
+    }
+
+    public function updateSmsRegisterCaptchaStatus($clientIp)
+    {
+        return $this->getSmsRegisterCaptchaStatus($clientIp, true);
+    }
+
     protected function _prepareApprovalConditions($conditions)
     {
         if (!empty($conditions['keywordType']) && 'truename' == $conditions['keywordType']) {

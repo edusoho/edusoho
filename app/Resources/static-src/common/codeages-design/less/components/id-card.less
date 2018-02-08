@@ -82,4 +82,17 @@
       display: none;
     }
   }
+  .card-img-tip {
+    position: absolute;
+    left: 0;
+    bottom: -40px;
+    text-align: left;
+    line-height: 1;
+    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+      bottom: -50px;
+    }
+    @media (max-width: @screen-sm-max) {
+      bottom: -30px;
+    }
+  }
 }

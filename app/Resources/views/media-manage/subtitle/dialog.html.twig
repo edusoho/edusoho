@@ -1,8 +1,8 @@
 <div class="js-subtitle-dialog" data-media-id={{media.id}}>
   <ul class="list-unstyled plm js-media-subtitle-list">
     {% for subtitle in subtitles %}
-      <li class="pvs">
-        <span class="subtitle-name prl">{{ subtitle.name }}</span>
+      <li class="pvs mtm">
+        <span class="subtitle-name prl pull-left">{{ subtitle.name }}</span>
         <span class="subtitle-transcode-status {{ subtitle.convertStatus }}">
         {{ dict_text('convertStatus', subtitle.convertStatus) }}</span>
         <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" 
