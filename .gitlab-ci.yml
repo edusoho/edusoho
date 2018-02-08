@@ -156,3 +156,4 @@ Api Test With 5.5:
   only:
     - develop
     - feature/36515
+    - feature/add-new-apicase
