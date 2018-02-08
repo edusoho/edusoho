@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\EncryptionToolkit;
 use Biz\Theme\Service\ThemeService;
 use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
@@ -62,7 +61,7 @@ class DefaultController extends BaseController
             );
         }
 
-        if (isset($teacher['locked']) && $teacher['locked'] !== '0') {
+        if (isset($teacher['locked']) && '0' !== $teacher['locked']) {
             $teacher = null;
         }
 
@@ -156,8 +155,8 @@ class DefaultController extends BaseController
             $config = $config['confirmConfig']['blocks']['left'];
 
             foreach ($config as $template) {
-                if (($template['code'] == 'course-grid-with-condition-index' && $courseType == 'course')
-                    || ($template['code'] == 'open-course' && $courseType == 'open-course')) {
+                if (('course-grid-with-condition-index' == $template['code'] && 'course' == $courseType)
+                    || ('open-course' == $template['code'] && 'open-course' == $courseType)) {
                     $config = $template;
                 }
             }
@@ -195,7 +194,7 @@ class DefaultController extends BaseController
     private function getMeCount()
     {
         $meCount = $this->setting('meCount', false);
-        if ($meCount === false) {
+        if (false === $meCount) {
             //判断是否是定制用户
             $result = CloudAPIFactory::create('leaf')->get('/me');
             $this->getSettingService()->set('meCount', $result);
