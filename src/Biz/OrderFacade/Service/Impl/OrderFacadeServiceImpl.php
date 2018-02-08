@@ -150,6 +150,9 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'pay_time' => empty($params['pay_time']) ? 0 : $params['pay_time'],
             'order_sn' => $order['sn'],
         );
+        if (!empty($params['pay_time'])) {
+            $data['paid_cash_amount'] = $price * 100; //此时 price 单位为元，但paid_cash_amount单位为分
+        }
 
         $order = $this->getWorkflowService()->paid($data);
 
