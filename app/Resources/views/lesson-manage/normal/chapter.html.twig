@@ -9,29 +9,17 @@
       </a>
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">
               {{'course.plan_task.create_part'|trans({'%partName%': course_chapter_alias('unit')|trans}) }}        
             </a>
           </li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson', chapterId:'chapter-'~chapter.id}) }}">
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id,type:'lesson', chapterId:'chapter-'~chapter.id}) }}">
               {{'course.manage.create_lesson'|trans }}
             </a>
           </li>
       </ul>
     </span>
-
-    <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_edit', {chapterId:chapter.id,courseId:course.id}) }}">
-      <i class="es-icon es-icon-edit mrs"></i>
-      {{'course.plan_task.edit_btn'|trans}}
-    </a>
-    <a href="javascript:;" class="btn gray-darker delete-item" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
-      <i class="es-icon es-icon-delete mrs"></i>
-      {{'course.plan_task.delete_btn'|trans}}
-    </a>
-    <a href="javascript:;" class="btn gray-darker js-chapter-toggle-show">
-      <i class="es-icon es-icon-keyboardarrowup mr5 js-remove-icon"></i>
-      <span class="js-remove-text" >{{'site.btn.collapse'|trans}}</span>
-    </a>
+    {% include 'lesson-manage/normal/chapter-action.html.twig' with {courseId: course.id, chapterId: chapter.id} %}
   </div>
 </li>

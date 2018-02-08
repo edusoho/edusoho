@@ -8,6 +8,34 @@ use AppBundle\Controller\BaseController;
 
 class ChapterManageController extends BaseController
 {
+    public function manageAction(Request $request, $courseId, $chapterId = 0)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
+
+        $type = $request->query->get('type');
+        $type = in_array($type, array('chapter', 'unit', 'lesson')) ? $type : 'chapter';
+        $parentId = $request->query->get('parentId');
+        
+        if ($request->getMethod() == 'POST') {
+            $chapter = $request->request->all();
+            $chapter['courseId'] = $courseId;
+            $chapter = $this->getCourseService()->createChapter($chapter);
+
+            return $this->render('course-manage/chapter/list-item.html.twig', array(
+                'course' => $course,
+                'chapter' => $chapter,
+            ));
+        }
+
+        return $this->render('course-manage/chapter/chapter-modal.html.twig', array(
+            'course' => $course,
+            'type' => $type,
+            'chapter' => $chapter,
+            'parentId' => $parentId,
+        ));    
+    }
+
     public function createAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);

@@ -63,6 +63,9 @@ class CourseExtension extends \Twig_Extension
 
     public function getCourseChapterAlias($type)
     {
+        if ('lesson' == $type) {
+            return 'site.data.lesson';
+        }
         $defaultCourseChapterAlias = array(
             'chapter' => 'site.data.chapter',
             'unit' => 'site.data.part',

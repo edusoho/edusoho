@@ -35,14 +35,14 @@
             <ul class="dropdown-menu" role="menu">
               <li>
                 <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
-                  data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}">
+                  data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id}) }}">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
                   {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|trans}) }}
                 </a>
               </li>
               <li>
                 <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
-                  data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+                  data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
                   {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('unit')|trans}) }}
                 </a>
