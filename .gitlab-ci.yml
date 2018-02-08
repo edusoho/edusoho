@@ -19,106 +19,106 @@ before_script:
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
 
-PHP 5.3:
-  stage: test
-  image: codeages/ci-php:5.3-2
-  services:
-    - mysql:5.5
-  script:
-    - bin/phpunit -c app/
-  only:
-    - develop
-    - master
-    - trigger
-
-PHP 5.3 And Redis:
-  stage: test
-  image: codeages/ci-php:5.3-2
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - bin/phpunit -c app/
-  only:
-    - develop
-    - master
-    - trigger
-
-PHP 5.5:
-  stage: test
-  image: codeages/ci-php:5.5-5
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - bin/phpunit -c app/
-
-PHP 7.0 For Non-Develop:
-  stage: test
-  image: codeages/ci-php:7.0-7
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/
-  only:
-    - master
-    - release
-    - trigger
-
-PHP 7.0 For Develop:
-  stage: test
-  image: codeages/ci-php:7.0-7
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
-    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
-    - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
-    - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
-    - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
-    - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
-    - /opt/sonar-scanner/bin/sonar-scanner
-  only:
-    - develop
-
-
-AT With Java And Selenium:
-  stage: automation
-  image: ruanwenqin/ci:php5.5-jdk8
-
-  services:
-    - mysql:5.7
-    - selenium/standalone-chrome:latest
-  script:
-    # 修改配置文件
-    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
-    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
-    # 启动web服务
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
-    # 安装插件
-    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
-    - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
-    - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
-    - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
-    - bin/phpmig migrate
-    - app/console server:start $SERVICE_IP:8000
-    - cd GUIAutomation2
-    - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
-    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
-  only:
-      - schedules
-      - triggers
-      - web
-      - api
+#5.3 with nothing:
+#  stage: test
+#  image: codeages/ci-php:5.3-2
+#  services:
+#    - mysql:5.5
+#  script:
+#    - bin/phpunit -c app/
+#  only:
+#    - develop
+#    - master
+#    - trigger
+#
+#5.3 with Redis:
+#  stage: test
+#  image: codeages/ci-php:5.3-2
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - bin/phpunit -c app/
+#  only:
+#    - develop
+#    - master
+#    - trigger
+#
+#5.5 with php-cs-fixer:
+#  stage: test
+#  image: codeages/ci-php:5.5-5
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+#    - bin/phpunit -c app/
+#
+#7.0 For Non-Develop:
+#  stage: test
+#  image: codeages/ci-php:7.0-7
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - sed -i 's/memory_limit.*/memory_limit = 3072M/g' /etc/php/7.0/phpdbg/php.ini
+#    - phpdbg -qrr bin/phpunit -c app/
+#  only:
+#    - master
+#    - release
+#    - trigger
+#
+#7.0 For Develop:
+#  stage: test
+#  image: codeages/ci-php:7.0-7
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - sed -i 's/memory_limit.*/memory_limit = 5000M/g' /etc/php/7.0/phpdbg/php.ini
+#    - phpdbg -qrr bin/phpunit -c app/ --coverage-text --colors=never --coverage-clover reports/phpunit.coverage.xml --log-junit reports/phpunit.xml
+#    - echo "sonar.links.ci=$SONAR_LINKS_CI" >> sonar-project.properties
+#    - echo "sonar.links.issue=$SONAR_LINKS_ISSUE" >> sonar-project.properties
+#    - echo "sonar.host.url=$SONAR_HOST" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+#    - echo "sonar.login=$SONAR_TOKEN" >> /opt/sonar-scanner/conf/sonar-scanner.properties
+#    - /opt/sonar-scanner/bin/sonar-scanner
+#  only:
+#    - develop
+#
+#
+#AT With Java And Selenium:
+#  stage: automation
+#  image: ruanwenqin/ci:php5.5-jdk8
+#
+#  services:
+#    - mysql:5.7
+#    - selenium/standalone-chrome:latest
+#  script:
+#    # 修改配置文件
+#    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+#    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+#    # 启动web服务
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
+#    # 安装插件
+#    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusoho/GUIAutomation2.git
+#    - mysql -uroot --password="" -h mysql edusoho_test < GUIAutomation2/src/main/resources/fixtures/try3.sql
+#    - tar xzf GUIAutomation2/src/main/resources/fixtures/file.tar.gz
+#    - export SERVICE_IP=$(getent hosts $HOSTNAME | awk '{ print $1 }')
+#    - bin/phpmig migrate
+#    - app/console server:start $SERVICE_IP:8000
+#    - cd GUIAutomation2
+#    - sed -i "s/homePage\.url.*/homePage\.url=http\:\/\/$SERVICE_IP\:8000/g" src/main/resources/testdata_common.properties
+#    - /opt/apache-maven-3.5.2/bin/mvn -B -Dmaven.repo.local=/cache/.m2 clean test -DseleniumBrowserType=chrome -DseleniumHubUrl="http://selenium__standalone-chrome:4444/wd/hub" -DisLocal=false
+#  only:
+#      - schedules
+#      - triggers
+#      - web
+#      - api
 
 Api Test With 5.5:
   stage: test
@@ -139,11 +139,14 @@ Api Test With 5.5:
     - app/console server:start
 
     # install plugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/chargecoin\.git} plugins/ChargeCoinPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/coupon\.git} plugins/CouponPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin
-#    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/vip.git           plugins/VipPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/chargecoin.git    plugins/ChargeCoinPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/coupon.git        plugins/CouponPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/discount.git      plugins/DiscountPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/moneycard.git     plugins/MoneyCardPlugin
+    - git clone -b develop --single-branch http://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HOST}/edusohoplugin/userimporter.git  plugins/UserImporterPlugin
+    - wget -O app/config/plugin.php http://download-devtest.codeages.net/api-test-data/20180209/plugin.php
+    - wget -O app/config/routing_plugins.yml http://download-devtest.codeages.net/api-test-data/20180209/routing_plugins.yml
 
     # 执行codeception的A PI 单元测试
     - bin/codecept run api
@@ -152,3 +155,4 @@ Api Test With 5.5:
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
     - develop
+    - feature/36515
