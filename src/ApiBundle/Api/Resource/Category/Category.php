@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Category extends AbstractResource
 {
     private $allowedGroupCodes = array(
-        'course', 'classroom'
+        'course', 'classroom',
     );
 
     /**

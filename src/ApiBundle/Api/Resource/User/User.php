@@ -37,6 +37,7 @@ class User extends AbstractResource
             default:
                 break;
         }
+
         return $user;
     }
 

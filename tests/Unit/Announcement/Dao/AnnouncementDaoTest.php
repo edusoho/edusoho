@@ -9,8 +9,8 @@ class AnnouncementDaoTest extends BaseDaoTestCase
     public function testSearch()
     {
         $expected = array();
-        $expected[] = $this->mockDataObject(array('startTime' => 2, 'content' => 'char'));
-        $expected[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 3, 'orgCode' => 'char'));
+        $expected[] = $this->mockDataObject(array('startTime' => 200, 'content' => 'char'));
+        $expected[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 300, 'orgCode' => 'char'));
         $expected[] = $this->mockDataObject(array('targetType' => 'int', 'targetId' => 2, 'copyId' => 2));
 
         $testConditions = array(

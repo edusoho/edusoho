@@ -5,9 +5,7 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Util\Money;
 use AppBundle\Common\MathToolkit;
-use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -40,7 +38,7 @@ class OrderInfo extends AbstractResource
     private function getOrderInfoFromProduct(Product $product)
     {
         $biz = $this->getBiz();
-        /** @var  $currency  Currency */
+        /** @var $currency Currency */
         $currency = $biz['currency'];
 
         $user = $this->getCurrentUser();
@@ -56,7 +54,7 @@ class OrderInfo extends AbstractResource
             'totalPrice' => $product->getPayablePrice(),
             'availableCoupons' => array(),
             'coinName' => '',
-            'cashRate' => "1",
+            'cashRate' => '1',
             'buyType' => '',
             'priceType' => $currency->isoCode == 'CNY' ? 'RMB' : 'Coin',
             'coinPayAmount' => 0,
@@ -94,7 +92,7 @@ class OrderInfo extends AbstractResource
         if ($orderInfo['priceType'] == 'Coin') {
             $orderInfo['totalPrice'] = $currency->convertToCoin($orderInfo['totalPrice']);
         }
-        
+
         return $orderInfo;
     }
 

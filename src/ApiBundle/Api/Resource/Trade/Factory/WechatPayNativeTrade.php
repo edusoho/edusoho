@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
-
 use AppBundle\Common\MathToolkit;
 
 class WechatPayNativeTrade extends BaseTrade

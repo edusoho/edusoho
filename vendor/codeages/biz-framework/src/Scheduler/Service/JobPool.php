@@ -3,7 +3,6 @@
 namespace Codeages\Biz\Framework\Scheduler\Service;
 
 use Codeages\Biz\Framework\Scheduler\Job;
-use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class JobPool
@@ -30,7 +29,8 @@ class JobPool
         try {
             $result = $job->execute();
         } catch (\Exception $e) {
-            $this->getTargetlogService()->log(TargetlogService::ERROR, 'job', $this->id, $e->getMessage());
+            $this->release($job);
+            throw $e;
         }
 
         $this->release($job);
@@ -102,11 +102,6 @@ class JobPool
     protected function getJobPoolDao()
     {
         return $this->biz->dao('Scheduler:JobPoolDao');
-    }
-
-    protected function getTargetlogService()
-    {
-        return $this->biz->service('Targetlog:TargetlogService');
     }
 
     public function __get($name)

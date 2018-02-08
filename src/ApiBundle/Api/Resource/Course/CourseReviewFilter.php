@@ -4,13 +4,12 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseReviewFilter extends Filter
 {
     protected $publicFields = array(
         'id', 'title', 'content', 'rating', 'private', 'createdTime', 'parentId',
-        'updatedTime', 'courseSetId', 'user', 'course'
+        'updatedTime', 'courseSetId', 'user', 'course',
     );
 
     protected function publicFields(&$data)

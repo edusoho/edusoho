@@ -78,6 +78,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'num' => $product->num,
             'unit' => $product->unit,
             'create_extra' => $product->getCreateExtra(),
+            'snapshot' => $product->getSnapShot(),
         );
 
         $orderItem = MathToolkit::multiply(

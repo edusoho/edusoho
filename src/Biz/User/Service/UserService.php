@@ -302,4 +302,8 @@ interface UserService
     public function makeUUID();
 
     public function generateUUID();
+
+    public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
+
+    public function updateSmsRegisterCaptchaStatus($clientIp);
 }
