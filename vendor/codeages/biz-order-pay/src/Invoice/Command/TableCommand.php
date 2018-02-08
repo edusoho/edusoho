@@ -1,19 +1,19 @@
 <?php
 
-namespace Codeages\Biz\Order\Command;
+namespace Codeages\Biz\Invoice\Command;
 
 use Codeages\Biz\Framework\Context\AbstractCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class TableCommand extends AbstractCommand
 {
     protected function configure()
     {
         $this
-            ->setName('order:table')
-            ->setDescription('Create a migration for the order database table')
+            ->setName('invoice:table')
+            ->setDescription('Create a migration for the invoice database table')
             ->addArgument('directory', InputArgument::REQUIRED, 'Migration base directory.', null);
     }
 
@@ -22,9 +22,7 @@ class TableCommand extends AbstractCommand
         $directory = $input->getArgument('directory');
 
         $migrations = array(
-            'order',
-            'order_add_invoice_sn',
-            'order_add_deduct_type_name',
+            'invoice',
         );
 
         foreach ($migrations as $migration) {
