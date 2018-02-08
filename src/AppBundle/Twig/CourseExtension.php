@@ -66,6 +66,7 @@ class CourseExtension extends \Twig_Extension
         $defaultCourseChapterAlias = array(
             'chapter' => 'site.data.chapter',
             'unit' => 'site.data.part',
+            'part' => 'site.data.part',
         );
 
         $courseSetting = $this->getSettingService()->get('course');

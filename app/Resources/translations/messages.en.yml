@@ -239,6 +239,7 @@ form.field.create: Add
 form.field.amount: Amount
 form.field.cut: Cut
 form.btn.create: Add
+form.btn.edit: Edit
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify

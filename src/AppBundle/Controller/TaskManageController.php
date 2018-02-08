@@ -43,8 +43,11 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
+   
         $categoryId = $request->query->get('categoryId');
+        //categoryId  所属课时
         $chapterId = $request->query->get('chapterId');
+         //chapterId 决定在那里插入创建的节点
         $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task = $request->request->all();

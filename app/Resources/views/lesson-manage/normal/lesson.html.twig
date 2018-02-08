@@ -11,7 +11,9 @@
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,categoryId:chapter.id}) }}">{{'course.plan_task.create_task'|trans }}</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId:chapter.id}) }}">
+            {{'course.plan_task.create_task'|trans }}
+            </a>
           </li>
         </ul>
       </span>

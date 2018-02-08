@@ -317,6 +317,7 @@ form.field.create: 添加
 form.field.amount: 数量
 form.field.cut: 扣除
 form.btn.create: 创建
+form.btn.edit: 编辑
 form.btn.back_to_homepage: 返回首页
 form.btn.register: 注册
 form.btn.verify: 验证
@@ -347,8 +348,6 @@ form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.delete: 删除
-form.btn.create: 创建
-form.btn.import: 导入
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
@@ -2566,9 +2565,7 @@ form.btn.return: 返回
 form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
-form.btn.delete: 删除
 form.btn.not_delete: 不删除
-form.btn.create: 创建
 form.btn.import: 导入
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
