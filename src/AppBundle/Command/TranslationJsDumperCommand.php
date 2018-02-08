@@ -26,7 +26,7 @@ class TranslationJsDumperCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $code = $input->getOption('code', '');
-        $output->writeln('<info>开始生出js翻译文件</info>');
+        $output->writeln('<info>开始生成js翻译文件</info>');
         $this->dump($code);
         $output->writeln('<info>成功</info>');
     }
@@ -85,13 +85,13 @@ class TranslationJsDumperCommand extends BaseCommand
                 continue;
             }
 
-            // if (!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
-            //     continue;
-            // }
+            if (!empty($code) && 0 !== strpos($filename, $rootDirectory.'/plugins/'.ucfirst($code).'Plugin')) {
+                continue;
+            }
 
-            // if (empty($code) && 0 === strpos($filename, $rootDirectory.'/plugins/')) {
-            //     continue;
-            // }
+            if (empty($code) && 0 === strpos($filename, $rootDirectory.'/plugins/')) {
+                continue;
+            }
 
             if (!isset($translations[$locale])) {
                 $translations[$locale] = array();

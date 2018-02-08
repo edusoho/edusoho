@@ -14,7 +14,14 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             swf: CKEDITOR.getUrl('plugins/uploadpictures/webuploader/Uploader.swf'),
             server: uploadUrl,
             pick: '.' + editor.id + ' .ckeditor-uploadpictures-pick-btn',
-            compress: false,
+            compress: {
+                width: 1200,
+                height: 1200,
+                quality: 90,
+                allowMagnify: false,
+                crop: false,
+                preserveHeaders: true
+            },
             resize: false,
             fileNumLimit: 10,
             threads: 1,

@@ -137,7 +137,7 @@
     {
         "title": "云搜索背景图",
         "category": "system",
-        "templateName": "TopxiaWebBundle:Block:cloud_search_banner.template.html.twig",
+        "templateName": "block/cloud-search-banner.template.html.twig",
         "items": {
             "posters":
             {

@@ -1781,9 +1781,9 @@ error-stack-parser@^2.0.0:
   dependencies:
     stackframe "^1.0.3"
 
-es-ckeditor@4.7.2-patch4:
-  version "4.7.2-patch4"
-  resolved "http://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-patch4.tgz#67a51d7ec3bb0aa73e1d2a68cdd9aae24db56f84"
+es-ckeditor@4.7.2-patch5:
+  version "4.7.2-patch5"
+  resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-4.7.2-patch5.tgz#96f420eb4ecefa670cf20733fe7841c9df37edcb"
 
 es-fullcalendar@3.7.0-patch4:
   version "3.7.0-patch4"

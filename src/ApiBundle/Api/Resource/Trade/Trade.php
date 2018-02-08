@@ -24,14 +24,16 @@ class Trade extends AbstractResource
             'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
         );
     }
-    
+
     /**
      * gateway 支付网关
      * type 交易类型
      * orderSn 订单号
      * coinAmount 使用多少虚拟币
      * payPassword 支付密码
+     *
      * @param \ApiBundle\Api\ApiRequest $request
+     *
      * @return array
      */
     public function add(ApiRequest $request)
