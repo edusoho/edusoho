@@ -22,10 +22,6 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $password = EncryptionToolkit::XXTEAencrypt('edusoho504', '127.0.0.1');
-        var_dump(base64_encode($password));
-        $password = EncryptionToolkit::XXTEADecrypt(base64_decode(base64_encode($password)), $request->getHost());
-        var_dump($password);
         $user = $this->getCurrentUser();
 
         if (!empty($user['id'])) {
