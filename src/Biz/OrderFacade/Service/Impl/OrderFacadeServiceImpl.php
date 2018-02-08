@@ -46,7 +46,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    private function getRefundDays()
+    protected function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
 
@@ -129,9 +129,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'deducts' => empty($params['deducts']) ? array() : $params['deducts'],
         );
 
-        if (!empty($params['pay_time'])) {
-            $orderFields['expired_refund_days'] = $this->getRefundDays();
-        }
+        $orderFields = $this->beforeCreateOrder($orderFields, $params);
 
         $orderItems = $this->makeOrderItems($product);
 
@@ -147,12 +145,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $data = array(
             'trade_sn' => '',
-            'pay_time' => empty($params['pay_time']) ? 0 : $params['pay_time'],
+            'pay_time' => 0,
             'order_sn' => $order['sn'],
         );
-        if (!empty($params['pay_time'])) {
-            $data['paid_cash_amount'] = $price * 100; //此时 price 单位为元，但paid_cash_amount单位为分
-        }
+
+        $data = $this->beforePayOrder($data, $params);
 
         $order = $this->getWorkflowService()->paid($data);
 
@@ -249,6 +246,16 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $adjustDeduct['adjustDiscount'] = empty($adjustDeduct['deduct_amount']) ? '' : round(MathToolkit::simple($order['pay_amount'], 0.01) * 10 / $adjustDeduct['payAmountExcludeAdjust'], 2);
 
         return $adjustDeduct;
+    }
+
+    protected function beforeCreateOrder($orderFields, $params)
+    {
+        return $orderFields;
+    }
+
+    protected function beforePayOrder($orderFields, $params)
+    {
+        return $orderFields;
     }
 
     private function getTotalDeductExcludeAdjust($deducts)

@@ -27,4 +27,9 @@ class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
 
         return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params);
     }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('Marketing:MarketingOrderFacadeService');
+    }
 }
