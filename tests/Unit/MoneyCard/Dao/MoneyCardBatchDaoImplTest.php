@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\MoneyCard\Dao;
 
-use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 
 class MoneyCardBatchDaoImplTest extends BaseTestCase
@@ -18,7 +17,7 @@ class MoneyCardBatchDaoImplTest extends BaseTestCase
 
         $result = $this->getMoneyCardBatchDao()->getBatchByToken('asdf');
         $this->assertEquals($card['id'], $result['id']);
-        
+
         $result = $this->getMoneyCardBatchDao()->getBatchByToken('asdf', array('lock' => true));
         $this->assertEquals($card['id'], $result['id']);
     }
