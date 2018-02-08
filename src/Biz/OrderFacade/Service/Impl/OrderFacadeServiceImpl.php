@@ -129,6 +129,10 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'deducts' => empty($params['deducts']) ? array() : $params['deducts'],
         );
 
+        if (!empty($params['pay_time'])) {
+            $orderFields['expired_refund_days'] = $this->getRefundDays();
+        }
+
         $orderItems = $this->makeOrderItems($product);
 
         $order = $this->getWorkflowService()->start($orderFields, $orderItems);
@@ -146,6 +150,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'pay_time' => empty($params['pay_time']) ? 0 : $params['pay_time'],
             'order_sn' => $order['sn'],
         );
+
         $order = $this->getWorkflowService()->paid($data);
 
         return $order;
