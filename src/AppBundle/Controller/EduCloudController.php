@@ -27,7 +27,8 @@ class EduCloudController extends BaseController
 
         $status = $this->getUserService()->getSmsRegisterCaptchaStatus($request->getClientIp());
         if ('captchaRequired' == $status) {
-            if (empty($request->request->get('captcha_num'))) {
+            $captchaNum = $request->request->get('captcha_num');
+            if (empty($captchaNum)) {
                 return $this->createJsonResponse(array('ACK' => 'captchaRequired'));
             } elseif (!$this->validateCaptcha($request)) {
                 return $this->createJsonResponse(array('error' => '验证码错误'));
