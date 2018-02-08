@@ -6,7 +6,7 @@
       "enabled": true,
       "key": "url",
       "type": "text",
-      "value": "http://localhost:8000"
+      "value": "http://127.0.0.1:8000"
     },
     {
       "enabled": true,

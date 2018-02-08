@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\EncryptionToolkit;
 use Biz\Theme\Service\ThemeService;
 use Biz\Content\Service\BlockService;
 use Biz\Course\Service\CourseService;
@@ -21,6 +22,10 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $password = EncryptionToolkit::XXTEAencrypt('edusoho504', '127.0.0.1');
+        var_dump(base64_encode($password));
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode(base64_encode($password)), $request->getHost());
+        var_dump($password);
         $user = $this->getCurrentUser();
 
         if (!empty($user['id'])) {
