@@ -32,6 +32,8 @@ interface OrderService
 
     public function findOrdersBySns(array $orderSns);
 
+    public function findOrdersByInvoiceSn($invoiceSn);
+
     public function findOrderItemDeductsByOrderId($orderId);
 
     public function findOrderLogsByOrderId($orderId);
@@ -49,4 +51,6 @@ interface OrderService
     public function addOrderItemDeduct($deduct);
 
     public function updateOrderItemDeduct($deductId, $updateFields);
+
+    public function updateOrderInvoiceSnByOrderId($orderId, $invoiceSn);
 }

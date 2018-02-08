@@ -11,7 +11,7 @@
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8 radios" id="default-avatar" >
         {{ radios('avatar', {1:'admin.user_avatar.customer_default_avatar'|trans, 0:'admin.user_avatar.system_default_avatar'|trans}, defaultSetting.defaultAvatar|default(0)) }}
-        <p>{{'admin.user_avatar.avatar.tips'|trans}}</p>    
+        <p>{{'admin.user_avatar.avatar.tips'|trans|raw}}</p>
         {% include 'admin/system/default-avatar.html.twig' %}
       </div>
     </div>

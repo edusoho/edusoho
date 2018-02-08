@@ -11,7 +11,7 @@ class Orders extends MarketingBase
     {
         $biz = $this->getBiz();
         $logger = $biz['logger'];
-        $logger->info('微营销通知处理订单');
+        $logger->info('微营销通知处理课程订单');
         $content = $request->getContent();
         $postData = json_decode($content, true);
 

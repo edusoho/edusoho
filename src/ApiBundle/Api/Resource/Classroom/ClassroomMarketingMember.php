@@ -27,7 +27,7 @@ class ClassroomMarketingMember extends AbstractResource
         }
         $biz = $this->getBiz();
         $logger = $biz['logger'];
-        $logger->debug('微营销通知处理订单');
+        $logger->info('微营销通知处理班级订单');
         $postData = $request->request->all();
 
         try {

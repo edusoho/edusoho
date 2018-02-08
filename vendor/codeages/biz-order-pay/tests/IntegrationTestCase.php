@@ -6,8 +6,8 @@ use Codeages\Biz\Framework\Dao\ArrayStorage;
 use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Order\OrderServiceProvider;
 use Codeages\Biz\Pay\PayServiceProvider;
+use Codeages\Biz\Invoice\InvoiceServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
-use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
 use Codeages\Biz\Framework\Provider\SessionServiceProvider;
 use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
@@ -38,29 +38,18 @@ class IntegrationTestCase extends TestCase
      */
     protected $db;
 
-    /**
-     * @var \Redis|\RedisArray
-     */
-    protected $redis;
-
     public function setUp()
     {
         $this->biz = $this->createBiz();
         $this->db = $this->biz['db'];
-
-        $this->redis = $this->biz['redis'];
-
         $this->db->beginTransaction();
-        $this->redis->flushDB();
     }
 
     public function tearDown()
     {
         $this->db->rollBack();
-        $this->redis->close();
 
         unset($this->db);
-        unset($this->redis);
         unset($this->biz);
     }
 
@@ -93,9 +82,6 @@ class IntegrationTestCase extends TestCase
                 'driver' => 'pdo_mysql',
                 'charset' => 'utf8',
             ),
-            'redis.options' => array(
-                'host' => getenv('REDIS_HOST'),
-            ),
             'debug' => true,
         );
         $options = array_merge($defaultOptions, $options);
@@ -103,7 +89,6 @@ class IntegrationTestCase extends TestCase
         $biz = new Biz($options);
         $biz['autoload.aliases']['Example'] = 'Tests\\Example';
         $biz->register(new DoctrineServiceProvider());
-        $biz->register(new RedisServiceProvider());
         $biz->register(new TargetlogServiceProvider());
         $biz->register(new TokenServiceProvider());
         $biz->register(new SchedulerServiceProvider());
@@ -112,16 +97,17 @@ class IntegrationTestCase extends TestCase
         $biz->register(new SettingServiceProvider());
         $biz->register(new QueueServiceProvider());
         $biz->register(new SessionServiceProvider());
+        $biz->register(new InvoiceServiceProvider());
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
-        if (getenv('CACHE_ENABLED') === 'true') {
+        if ('true' === getenv('CACHE_ENABLED')) {
             $biz['dao.cache.enabled'] = true;
             $biz['dao.cache.annotation'] = true;
         }
 
         if (getenv('CACHE_STRATEGY_DEFAULT')) {
-            if (getenv('CACHE_STRATEGY_DEFAULT') == 'null') {
+            if ('null' == getenv('CACHE_STRATEGY_DEFAULT')) {
                 $biz['dao.cache.strategy.default'] = null;
             } else {
                 $biz['dao.cache.strategy.default'] = getenv('CACHE_STRATEGY_DEFAULT');

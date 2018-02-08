@@ -51,7 +51,7 @@
       <div id="mobile-logo-container">{% if mobile.logo %}<img src="{{ asset(mobile.logo) }}">{% endif %}</div>
       <a class="btn btn-default btn-sm" id="mobile-logo-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'logo'}) }}">{{'form.btn.upload'|trans}}</a>
       <button class="btn btn-default btn-sm" id="mobile-logo-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'logo'}) }}" {% if not mobile.logo %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-      <p class="help-block">{{'admin.mobile_setting.online_school_logo_hint'|trans}}</p>
+      <p class="help-block">{{'admin.mobile_setting.online_school_logo_hint'|trans|raw}}</p>
       <input type="hidden" name="logo" value="{{ mobile.logo }}">
     </div>
   </div>

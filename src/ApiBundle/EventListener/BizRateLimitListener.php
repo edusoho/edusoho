@@ -15,14 +15,13 @@ class BizRateLimitListener
     }
 
     private $ruleMap = array(
-        array('SmsCenter', 'post', 'SmsRateLimiter'),
+        array('SmsCenter', 'post', 'register_sms_rate_limiter'),
     );
 
     public function handle(ResourceEvent $event)
     {
         $request = $event->getRequest();
         foreach ($this->ruleMap as $rule) {
-
             if ($this->isRateLimitApi($rule, $event)) {
                 $rateLimiter = $this->getRateLimiter($rule[2]);
                 $rateLimiter->handle($request);
@@ -36,13 +35,15 @@ class BizRateLimitListener
         $resourceProxy = $event->getResourceProxy();
         $class = get_class($resourceProxy->getResource());
         $className = $this->getClassName($class);
-        return strcasecmp($rule[0], $className) === 0
-            && strcasecmp($rule[1], $request->getMethod()) === 0;
+
+        return 0 === strcasecmp($rule[0], $className)
+            && 0 === strcasecmp($rule[1], $request->getMethod());
     }
 
     private function getClassName($class)
     {
         $path = explode('\\', $class);
+
         return array_pop($path);
     }
 
@@ -51,15 +52,6 @@ class BizRateLimitListener
      */
     private function getRateLimiter($name)
     {
-        $limiter = null;
-        switch ($name) {
-            case 'SmsRateLimiter':
-                $limiter = new \AppBundle\Component\RateLimit\SmsRateLimiter($this->biz);
-                break;
-            default:
-                throw new \RuntimeException();
-        }
-
-        return $limiter;
+        return $this->biz[$name];
     }
 }

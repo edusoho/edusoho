@@ -26,7 +26,9 @@ class ApiRequest
 
     private $method;
 
-    public function __construct($pathInfo, $method, $query = array(), $request = array(), $headers = null)
+    private $httpRequest;
+
+    public function __construct($pathInfo, $method, $query = array(), $request = array(), $headers = null, $httpRequest = null)
     {
         $this->pathInfo = $pathInfo;
         $this->method = $method;
@@ -43,6 +45,8 @@ class ApiRequest
         } else {
             $this->request = new ParameterBag($request);
         }
+
+        $this->httpRequest = $httpRequest;
     }
 
     public function getPathInfo()
@@ -53,5 +57,10 @@ class ApiRequest
     public function getMethod()
     {
         return $this->method;
+    }
+
+    public function getHttpRequest()
+    {
+        return $this->httpRequest;
     }
 }
