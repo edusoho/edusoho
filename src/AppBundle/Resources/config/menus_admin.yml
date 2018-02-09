@@ -808,17 +808,18 @@ admin:
                                 name: admin.marketing.menu
                                 router_name: admin_login_marketing
         
-        admin_distributor_top:
-                   name: admin.distributor.menu
-                   blank: true
-                   children:
-                     _admin_distributor_menu:
-                       name: admin.distributor.menu
-                       disable: true
-                       children:
-                           _distributor_page:
-                               name: admin.distributor.menu
-                               router_name: admin_login_distributor
+        # 临时隐藏 distributor
+        # admin_distributor_top:
+        #     name: admin.distributor.menu
+        #     blank: true
+        #     children:
+        #         _admin_distributor_menu:
+        #         name: admin.distributor.menu
+        #         disable: true
+        #         children:
+        #             _distributor_page:
+        #                 name: admin.distributor.menu
+        #                 router_name: admin_login_distributor
 
         admin_system:
             name: admin.nav.system

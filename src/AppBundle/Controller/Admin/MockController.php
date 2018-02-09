@@ -101,6 +101,12 @@ class MockController extends BaseController
 
     private function validate()
     {
+        $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost');
+        $host = $_SERVER['HTTP_HOST'];
+        if (!in_array($host, $validHosts)) {
+            throw new AccessDeniedException($host.'不允许使用此功能！！！');
+        }
+
         $storage = $this->getSettingService()->get('storage', array());
         if (empty($storage['cloud_access_key'])) {
             throw new AccessDeniedException('未设置教育云授权码！！！');
