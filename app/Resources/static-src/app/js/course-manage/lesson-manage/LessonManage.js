@@ -1,4 +1,6 @@
 import sortList from 'common/sortable';
+import { toggleIcon } from 'app/common/widget/chapter-animate';
+
 export default class Manage {
   constructor(element) {
     this.$element = $(element);
@@ -8,9 +10,6 @@ export default class Manage {
   
   _event() {
     let self = this;
-    this.$element.on('sort', function(){
-      self.sortList();
-    });
 
     this.$element.on('addItem', function(e, elm){
       self.addItem(elm);
@@ -23,6 +22,22 @@ export default class Manage {
       self.type = $this.data('type');
     });
     this._deleteChapter();
+    this._collapse();
+  }
+
+  _collapse() {
+    let collapseTexts = [
+      '<i class="es-icon es-icon-keyboardarrowup mr5"></i>'+Translator.trans('site.data.expand'),
+      '<i class="es-icon es-icon-keyboardarrowdown mr5"></i>'+Translator.trans('site.data.collapse')
+    ]
+    this.$element.on('click', '.js-chapter-toggle-show', (event) => {
+      let $this = $(event.currentTarget);
+      $this.toggleClass('toogle-hide');
+      let $chapter = $this.closest('.task-manage-item');
+      let until = $chapter.hasClass('js-task-manage-chapter') ? '.js-task-manage-chapter' : '.js-task-manage-chapter,.js-task-manage-unit';
+      $chapter.nextUntil(until).animate({ height: 'toggle', opacity: 'toggle' }, "normal");
+      $this.hasClass('toogle-hide') ? $this.html(collapseTexts[0]) :  $this.html(collapseTexts[1]);
+    });
   }
 
   addItem(elm) {
@@ -30,23 +45,25 @@ export default class Manage {
     switch(this.type)
     {
       case 'chapter':
-        let $position = this.$element.find('#chapter-'+this.position).nextAll('.task-manage-chapter').eq(0);
-        if ($position.length == 0) {
+        let $position = this.$element.find('#chapter-'+this.position);
+        $position = $position.nextUntil('.js-task-manage-chapter').last();
+        if (0 == $position.length) {
           this.$element.append(elm);
         } else {
-          $position.before(elm);
+          $position.after(elm);
         }
         break;
       case 'task':
         this.$element.find('#chapter-'+this.position+' .js-lesson-box').append(elm);
         break;
       case 'lesson':
-        $position = this.$element.find('#chapter-'+this.position).next();
-        while ($position.length && $position.hasClass('task-manage-lesson'))
-        {
-          $position = $position.next();
+        $position = this.$element.find('#chapter-'+this.position);
+        $position = $position.nextUntil('.task-manage-unit,.js-task-manage-chapter').last();
+        if (0 == $position.length) {
+          $position.append(elm);
+        } else {
+          $position.after(elm);
         }
-        $position.before(elm);
         break;
       default:
         this.$element.append(elm);
@@ -95,8 +112,9 @@ export default class Manage {
       ajax: false,
       group: 'nested',
       isValidTarget: function ($item, container) {
-        // 任务只能挂在课时下
-        if ($item.hasClass('js-task-manage-item') && !container.target.hasClass('js-lesson-box')) {
+        // 任务课时内拖动
+        if ($item.hasClass('js-task-manage-item') && 
+          container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
             return false;
         }
         // 章节只能挂在总节点下

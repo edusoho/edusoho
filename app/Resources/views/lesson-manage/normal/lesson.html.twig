@@ -7,10 +7,15 @@
       <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-type="task" data-position="{{chapter.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: chapter.id}) }}">
         <i class="es-icon es-icon-anonymous-iconfont mrs"></i> {{'course.plan_task.create_task'|trans }}
       </a>
-    {% include 'lesson-manage/chapter/action.html.twig' with {courseId: course.id, chapterId: chapter.id} %}
+    {% include 'lesson-manage/chapter/action.html.twig' with {
+      courseId: course.id, 
+      chapterId: chapter.id,
+      collapse: 0,
+      } %}
     </div>
   </div>
   <ul style="list-style-type: none;" class="js-lesson-box">
-    {% include 'lesson-manage/normal/tasks.html.twig' with {tasks: chapter.tasks|default()} %}
+    {% include 'lesson-manage/normal/tasks.html.twig' with {
+      tasks: chapter.tasks|default(),} %}
   </ul>
 </li>
