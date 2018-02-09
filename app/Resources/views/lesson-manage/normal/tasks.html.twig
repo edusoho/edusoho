@@ -1,5 +1,5 @@
 
-    <ul style="list-style-type: none;" class="js-lesson-box">
+    <ul class="js-lesson-box task-manage-lesson-tasks">
       {% if tasks|default() %}
       {% for task in tasks %}
       {% set file =  files[task.activityId]|default(null) %}
@@ -46,8 +46,8 @@
                   class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true"
                   aria-expanded="false"></i>{{ 'course.plan_task.more_btn'|trans }}
               </a>
-              <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
-                aria-labelledby="dLabel" style="display:none;">
+              <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu"
+                aria-labelledby="dLabel">
 
                 {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
                   {% set file = task.activity.ext.file|default(null) %}

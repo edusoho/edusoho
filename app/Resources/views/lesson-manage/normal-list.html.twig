@@ -6,13 +6,15 @@
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       <div class="task-list-header clearfix js-task-list-header">
-        {{'course.plan_task.total_tasks'|trans}}<span class="color-warning space" id="task-num">{{ course.taskNum }}</span>  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}
+        {{'course.plan_task.total_tasks'|trans}}<span class="cd-mr24" id="task-num">{{ course.taskNum }}</span>  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}
+        <span class="cd-text-gray-light">隐藏未发布任务</span>
         <div class="pull-right">
-          <button class="btn btn-primary btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
-            <i class="es-icon es-icon-anonymous-iconfont"></i>
-            {{'course.lesson'|trans}}
+          <button class="btn cd-btn cd-btn-primary cd-btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+            添加课时
+            {# <i class="es-icon es-icon-anonymous-iconfont"></i> #}
+            {# {{'course.lesson'|trans}} #}
           </button>
-          <button class="btn btn-default btn-sm js-batch-add
+          <button class="btn cd-btn cd-btn-default cd-btn-sm js-batch-add
             {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
             disabled
             {% endif %}"
@@ -23,13 +25,14 @@
               data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" 
               data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
             {% endif %}>
-            <i class="es-icon es-icon-anonymous-iconfont"></i>
+            {# <i class="es-icon es-icon-anonymous-iconfont"></i> #}
             {{'course.plan_task.batch_create_btn'|trans}}
           </button>
           <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-              <i class="es-icon es-icon-anonymous-iconfont"></i>
-              {{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}/{{ course_chapter_alias('part')|default('site.data.part'|trans) }}
+            <button type="button" class="btn cd-btn cd-btn-default cd-btn-sm {# btn btn-sm btn-default #} dropdown-toggle" data-toggle="dropdown">
+              添加章节
+              {# <i class="es-icon es-icon-anonymous-iconfont"></i> #}
+              {# {{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}/{{ course_chapter_alias('part')|default('site.data.part'|trans) }} #}
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
