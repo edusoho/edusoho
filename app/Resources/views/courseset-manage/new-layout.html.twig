@@ -1,0 +1,35 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% set bodyClass = 'cd-design' %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+  <div class="container cd-container">
+    {% block course_header %}
+      {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+    {% endblock %}
+
+    <div class="cd-content">
+      {% block sidebar %}
+        {% include 'v2/sidebar.html.twig' with { side_nav: side_nav|default('') } %}
+      {% endblock %}
+
+      {% block main %}
+        <div class="cd-main">
+          <div class="cd-main__heading">
+            {% block main_heading %}
+              <div class="cd-main__title">
+                {% block page_title %}{% endblock %}
+              </div>
+            {% endblock %}
+          </div>
+          <div class="cd-main__body">
+            {% block main_body %}
+            {% endblock %}
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
