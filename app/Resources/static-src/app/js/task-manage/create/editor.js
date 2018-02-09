@@ -89,49 +89,11 @@ class Editor {
         const needAppend = response.append;
         const html = response.html;
         this.$element.modal('hide');
-        if(!$('.js-task-empty').hasClass('hidden') ){
-            $('.js-task-empty').addClass('hidden');
+        if (needAppend) {
+          $('#sortable-list').trigger('addItem', html)
         }
-        if (needAppend === false) {
-          // @TODO这里也需要返回html,进行替换   
-          document.location.reload();
-        }
-
-        let chapterId = postData.find(function (input) {
-          return input.name == 'chapterId';
-        });
-
-        let add = 0;
-        let $parent = $('#' + chapterId.value);
-        let $item = null;
-
-        if ($parent.length) {
-          $parent.nextAll().each(function () {
-            if ($(this).hasClass('task-manage-chapter')) {
-              $(this).before(html);
-              add = 1;
-              sortablelist('#sortable-list');
-              return false;
-            }
-            if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
-              $(this).before(html);
-              add = 1;
-              sortablelist('#sortable-list');
-              return false;
-            }
-          });
-          if (add != 1) {
-            $item = $(html);
-            $("#sortable-list").append($item);
-            add = 1;
-          }
-        } else {
-          $item = $(html);
-          $("#sortable-list").append($item);
-        }
-        this.showDefaultSetting($item);
-        this.initIntro();
-        sortablelist('#sortable-list');
+        // this.showDefaultSetting($item);
+        // this.initIntro();
       })
       .fail((response) => {
         let msg = '';

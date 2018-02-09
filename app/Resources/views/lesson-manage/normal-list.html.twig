@@ -58,7 +58,7 @@
           {% if item.type == 'lesson' %}
             {% include 'lesson-manage/normal/lesson.html.twig' with {chapter:item, course:course} %}
           {% else %}
-            {% include 'lesson-manage/normal/chapter.html.twig' with {chapter:item, course:course} %}
+            {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
           {% endif %}
         {% endfor %}
       </ul>

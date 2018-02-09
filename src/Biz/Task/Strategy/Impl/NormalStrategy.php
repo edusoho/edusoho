@@ -40,7 +40,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         if (!empty($task['categoryId'])) {
             $chapter = $this->getChapterDao()->get($task['categoryId']);
             if ('lesson' == $chapter['type']) {
-                 return 'lesson-manage/normal/tasks.html.twig';
+                return 'lesson-manage/normal/tasks.html.twig';
             }
         }
 

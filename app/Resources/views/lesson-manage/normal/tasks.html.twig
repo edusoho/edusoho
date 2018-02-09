@@ -10,9 +10,7 @@
       {{'site.data.task'|trans}}<span class="number">{{ task.number }}</span>：
       {% endif %}
       {{ task.title|sub_text(30) }}
-      <span class="color-warning publish-status {% if task.status == 'published' %}
-        hidden {% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>
-
+      
       {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
         <span class="label label-danger ml5">{{'course.plan_task.convert_failed'|trans}}</span>
       {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
@@ -46,7 +44,6 @@
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
           aria-labelledby="dLabel" style="display:none;">
-
           {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
             {% set file = task.activity.ext.file|default(null) %}
             {% if  file.storage|default(null) == 'cloud' %}
@@ -58,30 +55,12 @@
             <li class="divider mark-manage-divider" style="display:none;"></li>
             {% endif %}
           {% endif %}
-
-          {% if task.status|default('create') == 'published' %}
-            {% set status = 1 %}
-          {% else %}
-            {% set status = 0 %}
-          {% endif %}
-            <li>
-              <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
-                data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
-                <i class="es-icon es-icon--check-circle mrs"></i>{{'course.plan_task.publish_btn'|trans}}
-              </a>
-            </li>
             {{ slot('task.menu.extension', {'task': task}) }}
             <li>
-              <a class='js-task-delete {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
+              <a class='js-delete' href="javascript:;" data-type="task"
                 data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
                 <i class="es-icon es-icon-delete mrs"></i>
                 {{'course.plan_task.delete_btn'|trans}}
-              </a>
-            </li>
-            <li>
-              <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
-                data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
-                <i class="es-icon es-icon-close01 mrm"></i>{{'course.plan_task.unpublish_btn'|trans}}
               </a>
             </li>
         </ul>

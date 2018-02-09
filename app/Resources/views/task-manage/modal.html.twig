@@ -3,7 +3,7 @@
 {% do script(['libs/jquery-validation.js','libs/iframe-resizer.js','app/js/task-manage/create/index.js']) %}
 
 {% block task_create_type %}
-  <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}" data-chapterId="#{{ chapterId|default(null) }}" data-course-type="{{ course.type }}"
+  <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}" data-course-type="{{ course.type }}"
       {% if mode == 'edit' %}
     data-editor-type="{{ currentType }}"
     data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"

@@ -1,4 +1,5 @@
 import notify from "common/notify";
+let $sortableList = $('#sortable-list');
 
 $('#chapter-title-field').on('keypress', function (e) {
   if ((e.keyCode || e.which) === 13) {
@@ -24,7 +25,7 @@ $('#course-chapter-btn').on('click', function () {
       if (chapterId > 0) {
         $('#chapter-'+chapterId).find('.title').text(title);
       } else {
-        
+        $sortableList.trigger('addItem', html);
       }
     },
   });

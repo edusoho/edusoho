@@ -1,5 +1,3 @@
-
-
 import sortList from 'common/sortable';
 export default class Manage {
   constructor(element) {
@@ -9,37 +7,88 @@ export default class Manage {
   }
   
   _event() {
+    let self = this;
     this.$element.on('sort', function(){
-      sortList();
+      self.sortList();
     });
 
-    this.$element.on('addItem', function(e, $elm){
-      sortList();
+    this.$element.on('addItem', function(e, elm){
+      self.addItem(elm);
+      self.sortList();
+    });
+
+    this.$element.on('click','[data-toggle]', function(e){
+      let $this = $(this);
+      self.position = $this.data('position');
+      self.type = $this.data('type');
     });
     this._deleteChapter();
   }
 
+  addItem(elm) {
+    //添加章节课时
+    switch(this.type)
+    {
+      case 'chapter':
+        let $position = this.$element.find('#chapter-'+this.position).nextAll('.task-manage-chapter').eq(0);
+        if ($position.length == 0) {
+          this.$element.append(elm);
+        } else {
+          $position.before(elm);
+        }
+        break;
+      case 'task':
+        this.$element.find('#chapter-'+this.position+' .js-lesson-box').append(elm);
+        break;
+      case 'lesson':
+        $position = this.$element.find('#chapter-'+this.position).next();
+        while ($position.length && $position.hasClass('task-manage-lesson'))
+        {
+          $position = $position.next();
+        }
+        $position.before(elm);
+        break;
+      default:
+        this.$element.append(elm);
+    }
+    this.handleEmptyShow();
+    this._clearPosition();
+  }
+
+  _clearPosition() {
+    this.position = '';
+    this.type = '';
+  }
+
   _deleteChapter() {
+    //删除章节课时
     let self = this;
-    this.$element.on('click', '.js-chapter-delete', function(evt){
+    this.$element.on('click', '.js-delete', function(evt){
       let $this = $(this);
       let $parent = $this.closest('.task-manage-item');
-
-      if (!confirm(Translator.trans('course.manage.chapter_delete_hint',{name: $this.data('name')}))) {
+      let text = self._getDeleteText($this);
+      if (!confirm(text)) {
         return;
       }
+      
+      $parent.remove();
+      self.sortList();
+      self.handleEmptyShow();
       $.post($this.data('url'), function (data) {
-        $parent.remove();
-        self.sortList();
       });
     });
   }
 
-  _deleteTask() {
-    
+  _getDeleteText($element) {
+    // 获得删除章节课时时，提示文案
+    if ('task' == $element.data('type')) {
+      return Translator.trans('course.manage.task_delete_hint');
+    }
+    return Translator.trans('course.manage.chapter_delete_hint',{name: $element.data('name')});
   }
 
   _sort() {
+    // 拖动，及拖动规则
     let self = this;
     sortList({
       element: self.$element,
@@ -68,8 +117,16 @@ export default class Manage {
     });
   }
 
+  handleEmptyShow() {
+    if (0 === $('#sortable-list').find('li').length) {
+      $('.js-task-empty').removeClass('hidden');
+    } else {
+      $('.js-task-empty').addClass('hidden');
+    }
+  }
+
   sortList() {
-    // 排序seq值
+    // 后台排序seq值
     let ids = [];
     this.$element.find('.task-manage-item').each(function(){
         ids.push($(this).attr('id'));
@@ -80,7 +137,7 @@ export default class Manage {
   }
 
   sortablelist() {
-    // 排序 章，课时，任务 的序号
+    // 前台排序 章，课时，任务 的序号
     let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item'];
     for(let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
@@ -89,6 +146,7 @@ export default class Manage {
   }
 
   _sortNumberByClassName(name) {
+    //前台排序 num 通用方法
     let num = 1;
     this.$element.find(name).each(function(){
       let $item = $(this);
@@ -98,12 +156,11 @@ export default class Manage {
 
   _sortUnitNumber() {
      // 排序 节 的序号
-    let unitClass = 'js-task-manage-unit';
     let num = 1;
-    this.$element.find('.'+unitClass).each(function(){
+    this.$element.find('.js-task-manage-unit').each(function(){
       let $item = $(this);
       $item.find('.number').text(num);
-      num = $item.next().hasClass(unitClass) ? num+1 : 1;
+      num = $item.next().hasClass('task-manage-chapter') ? 1 : num+1;
     });
   }
 }

@@ -1709,8 +1709,8 @@ course_task_plugin_thread_answer:
   methods: [POST]
 
 course_manage_chapter_manage:
-    path:  /course/{courseId}/manage/chapter/manage/{chapterId}
-    defaults: { _controller: AppBundle:Course/ChapterManage:manage, chapterId: 0}
+    path:  /course/{courseId}/manage/chapter/manage
+    defaults: { _controller: AppBundle:Course/ChapterManage:manage}
 
 #course_chapter
 course_manage_chapter_create:

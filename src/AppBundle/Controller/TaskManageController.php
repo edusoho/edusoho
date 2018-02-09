@@ -46,8 +46,6 @@ class TaskManageController extends BaseController
    
         $categoryId = $request->query->get('categoryId');
         //categoryId  所属课时
-        $chapterId = $request->query->get('chapterId');
-         //chapterId 决定在那里插入创建的节点
         $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task = $request->request->all();
@@ -63,7 +61,6 @@ class TaskManageController extends BaseController
                 'course' => $course,
                 'courseSet' => $courseSet,
                 'categoryId' => $categoryId,
-                'chapterId' => $chapterId,
                 'taskMode' => $taskMode,
             )
         );
@@ -141,6 +138,7 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
+
         $template = $this->createCourseStrategy($course)->getJsonTemplate($task);
         if (empty($template)) {
             return $this->createJsonResponse(
@@ -160,6 +158,7 @@ class TaskManageController extends BaseController
             array(
                 'course' => $course,
                 'chapter' => $lesson,
+                'tasks' => array($task),
             )
         );
 

@@ -1,8 +1,0 @@
-<a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_manage', {chapterId:chapter.id, courseId:course.id}) }}">
-  <i class="es-icon es-icon-edit mrs"></i>
-  {{'course.plan_task.edit_btn'|trans}}
-</a>
-<a href="javascript:;" class="btn gray-darker js-chapter-delete" data-name="{{ ('site.data.' ~ chapter.type)|trans }}" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id, courseId:course.id}) }}">
-  <i class="es-icon es-icon-delete mrs"></i>
-  {{'course.plan_task.delete_btn'|trans}}
-</a>

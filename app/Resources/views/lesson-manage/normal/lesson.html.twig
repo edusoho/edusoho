@@ -4,20 +4,10 @@
       {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':chapter.number, '%title%':chapter.title|sub_text(30)})|raw }}
     </div>
     <div class="item-actions">
-      <span class="dropdown">
-        <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#">
-          <i class="es-icon es-icon-anonymous-iconfont mrs"></i>
-          {{ 'course.plan_task.add_task_btn'|trans }}
-        </a>
-        <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
-          <li>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId:chapter.id}) }}">
-            {{'course.plan_task.create_task'|trans }}
-            </a>
-          </li>
-        </ul>
-      </span>
-    {% include 'lesson-manage/normal/chapter-action.html.twig' with {courseId: course.id, chapterId: chapter.id} %}
+      <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-type="task" data-position="{{chapter.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: chapter.id}) }}">
+        <i class="es-icon es-icon-anonymous-iconfont mrs"></i> {{'course.plan_task.create_task'|trans }}
+      </a>
+    {% include 'lesson-manage/chapter/action.html.twig' with {courseId: course.id, chapterId: chapter.id} %}
     </div>
   </div>
   <ul style="list-style-type: none;" class="js-lesson-box">
