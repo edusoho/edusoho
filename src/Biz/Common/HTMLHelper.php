@@ -31,6 +31,7 @@ class HTMLHelper
         } else {
             $safeDomains = array();
         }
+
         $config = array(
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
             'safeIframeDomains' => $safeDomains,
@@ -41,10 +42,13 @@ class HTMLHelper
 
         $html = $purifier->purify($html);
         $html = str_replace('http-equiv', '', $html);
+        $result = preg_match('/\<img.*?src\s*=\s*[\'\"](http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
+        if ($result && !in_array($matches[2], $safeDomains)) {
+            $html = preg_replace('/\<img.*?src\s*=\s*[\'\"](http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', '', $html);
+        }
         if (!$trusted) {
             return $html;
         }
-
         $styles = $purifier->context->get('StyleBlocks');
         if ($styles) {
             $html = implode("\n", array(
