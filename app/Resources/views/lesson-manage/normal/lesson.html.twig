@@ -1,5 +1,6 @@
 <li id="chapter-{{chapter.id}}" class="task-manage-item drag task-manage-{{chapter.type}} js-task-manage-{{chapter.type}}  clearfix" style="border: none;">
-  <div class="chapter-item clearfix mbm" style="border: 1px solid #c1c1c1;">
+  <div class="chapter-item clearfix mbm">
+    <div class="item-line"></div>
     <div class="item-content">
       {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':chapter.number, '%title%':chapter.title|sub_text(30)})|raw }}
     </div>
