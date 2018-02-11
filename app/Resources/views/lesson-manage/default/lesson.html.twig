@@ -1,6 +1,5 @@
-{% set chapter = task %}
-<li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ chapter.id }}">
-  {% set tasks = array_index(chapter.tasks, 'mode') %}
+<li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ lesson.id }}">
+  {% set tasks = array_index(lesson.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
@@ -11,10 +10,10 @@
         {% endif %}">
       </i>
 
-      {% if chapter.number == 0 %}
+      {% if lesson.number == 0 %}
         <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
-        {{'site.data.task'|trans}}<span class="number">{{ chapter.number }}</span>：
+        {{'site.data.task'|trans}}<span class="number">{{ lesson.number }}</span>：
       {% endif %}
 
       {{ task.title|sub_text(30) }}
@@ -38,6 +37,7 @@
          {{'course.plan_task.task_unpublished'|trans}}
       </span>
     </div>
+
     <div class="item-actions">
       <a class="btn gray-darker" data-role='update-task' href="javascript:;"
         data-toggle="modal" data-target="#modal"
@@ -92,102 +92,7 @@
         </ul>
       </span>
     </div>
-  </div>
-  <div class="settings-list js-settings-list clearfix">
-    <div class="settings-item {% if tasks.preparation|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal"
-        data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
-        {% if not tasks.preparation|default(null) %}
-          data-content="{{'course.plan_task.preparation_tips'|trans}}"
-          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'preparation', categoryId: chapter.id}) }}">
-        {% else %}
-          data-content="<i class='mr10 es-icon
-            {% if activity_metas(tasks.preparation.type) %}
-              {{ activity_metas(tasks.preparation.type).icon }}
-            {% endif %}'></i>{{tasks.preparation.title|trans}}"
-          data-url= "{{ path('course_manage_task_update', {id:tasks.preparation.id,courseId:tasks.preparation.courseId, type:'preparation', categoryId: chapter.id}) }}">
-        {% endif %}
-        <i class="mrm es-icon es-icon-yulan "
-          {% if tasks.preparation.id|default(null) %}
-            data-role="task"
-          {% endif %}>
-        </i>
-        {{'course.plan_task.preparation'|trans}}
-      </a>
-      <i class="es-icon es-icon-angledoubleright after"></i>
-    </div>
-    <div class="settings-item js-settings-item active">
-      <a href="javascript:;" data-role='update-task'
-        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"
-        data-toggle="modal" data-target="#modal"
-        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
-        data-content="<i class='mr10 es-icon
-          {% if activity_metas(task.activity.mediaType) %}
-            {{ activity_metas(task.activity.mediaType).icon }}
-          {% endif %} '></i>{{task.title|trans}}">
-        <i class="es-icon es-icon-book mrm" data-role="task"></i>
-        {{'course.plan_task.task'|trans}}
-      </a>
-      <i class="es-icon es-icon-angledoubleright after"></i>
-    </div>
-    <div class="settings-item {% if tasks.exercise|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
-        {% if not tasks.exercise|default(null) %}
-          data-content="{{'course.plan_task.practice_tips'|trans}}"
-          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'exercise', categoryId: chapter.id}) }}">
-        {% else %}
-          data-content="<i class='mr10 es-icon
-            {% if activity_metas(tasks.exercise.type) %}
-              {{ activity_metas(tasks.exercise.type).icon }}
-            {% endif %}
-          '></i>{{tasks.exercise.title|trans}}"
-          data-url="{{ path('course_manage_task_update', {id:tasks.exercise.id,courseId:tasks.exercise.courseId, type:'exercise', categoryId: chapter.id}) }}">
-        {% endif %}
-        <i class="es-icon es-icon-mylibrarybooks mrm" {% if tasks.exercise.id|default(null) %}data-role="task"{% endif %}></i>
-        {{'course.plan_task.practice'|trans}}
-      </a>
-      <i class="es-icon es-icon-angledoubleright after"></i>
-    </div>
-    <div class="settings-item {% if tasks.homework|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal"
-        data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
-        {% if not tasks.homework|default(null) %}
-          data-content="{{'course.plan_task.homework_tips'|trans}}"
-          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'homework', categoryId: chapter.id}) }}">
-        {% else %}
-          data-content="<i class='mr10 es-icon
-            {% if activity_metas(tasks.homework.type) %}
-              {{ activity_metas(tasks.homework.type).icon }}
-            {% endif %}
-          '></i>{{tasks.homework.title|trans}}"
-          data-url="{{ path('course_manage_task_update', {id:tasks.homework.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
-        {% endif %}
-       <i class="es-icon es-icon-writefill mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
-        {{'course.plan_task.homework'|trans}}
-      </a>
-      <i class="es-icon es-icon-angledoubleright after"></i>
-    </div>
-    <div class="settings-item {% if tasks.extraClass|default(null) %} active {% endif %}">
-      <a href="javascript:;" data-toggle="modal" data-target="#modal"
-        data-backdrop="static" data-keyboard="false"
-        data-help="popover" data-placement="top" data-html="true" data-trigger="hover"
-        {% if not  tasks.extraClass|default(null) %}
-          data-content="{{'course.plan_task.extra_class_tips'|trans}}"
-          data-url="{{ path('course_manage_task_create', {courseId:course.id, type: 'extraClass', categoryId: chapter.id}) }}">
-        {% else %}
-          data-content="<i class='mr10 es-icon
-          {% if activity_metas(tasks.extraClass.type) %}
-            {{ activity_metas(tasks.extraClass.type).icon }}
-          {% endif %}
-          '></i>{{tasks.extraClass.title|trans}}"
-          data-url="{{ path('course_manage_task_update', {id:tasks.extraClass.id,courseId:tasks.extraClass.courseId, type:'extraClass', categoryId: chapter.id}) }}">
-        {% endif %}
-        <i class="es-icon es-icon-sun mrm" {% if tasks.extraClass.id|default(null) %}data-role="task"{% endif %}></i>
-        {{'course.plan_task.extra_class'|trans}}
-      </a>
-    </div>
-  </div>
+  </div> 
+
+  {% include 'lesson-manage/default/tasks.html.twig' %}
 </li>

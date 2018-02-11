@@ -210,7 +210,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         );
         $chapter = $this->getCourseService()->createChapter($chapter);
         $task['categoryId'] = $chapter['id'];
-
+        $task['mode'] = 'lesson';
         return parent::createTask($task);
     }
 
