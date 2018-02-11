@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "05df29a1909c9029415e87b3896a31ac",
+    "content-hash": "d71700b94a1ff73aceb4f7d827d43844",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -465,26 +465,26 @@
         },
         {
             "name": "codeages/qiqiuyun-php-sdk",
-            "version": "v0.1.0",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0"
+                "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
-                "reference": "80c35a9e2d661af7fe1c4ba9163862f931e7ffc0",
+                "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/7be9669159fc6de4279aeb1ae754f6b52352f1d8.zip",
+                "reference": "7be9669159fc6de4279aeb1ae754f6b52352f1d8",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
                 "php": ">=5.3.3",
                 "psr/log": "^1.0"
             },
             "require-dev": {
                 "monolog/monolog": "^1.18",
-                "phpunit/phpunit": "^4 || ^5 || ^6",
-                "silex/silex": "^2.0"
+                "phpunit/phpunit": "^4 || ^5 || ^6"
             },
             "type": "library",
             "autoload": {
@@ -504,7 +504,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2018-01-26T03:47:46+00:00"
+            "time": "2018-02-06T08:30:40+00:00"
         },
         {
             "name": "codeages/rate-limiter",

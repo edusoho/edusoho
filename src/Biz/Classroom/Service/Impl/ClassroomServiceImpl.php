@@ -26,6 +26,7 @@ use Biz\Classroom\Dao\ClassroomMemberDao;
 use Biz\Taxonomy\Service\CategoryService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
+use AppBundle\Common\TimeMachine;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -1346,7 +1347,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId' => 0,
             'role' => array('teacher'),
             'remark' => '',
-            'createdTime' => time(),
+            'createdTime' => TimeMachine::time(),
         );
 
         $member = $this->getClassroomMemberDao()->create($fields);

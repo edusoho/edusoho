@@ -90,7 +90,7 @@ user_terms:
     defaults: { _controller: AppBundle:Register:userTerms }
 
 # 临时隐藏 distributor
-#distributor_register:
+# distributor_register:
 #    path:  /distributor_register
 #    defaults: { _controller: AppBundle:Register:distributorIndex }
 
