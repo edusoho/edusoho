@@ -35,21 +35,23 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function getJsonTemplate($task)
     {
-        if ('lesson' != $task['mode']) {
+        if (empty($task['mode']) || 'lesson' != $task['mode']) {
             return '';
-        }   
+        }
+
+        return 'lesson-manage/normal/lesson.html.twig';
     }
 
     public function createTask($field)
     {
         $this->validateTaskMode($field);
 
-        if ($field['mode'] == 'lesson') {
-            // 创建课时
-            return $this->_createLesson($field);
-        } else {
+        if (isset($field['mode']) && 'lesson' != $field['mode']) {
             // 创建课时中的环节
             return $this->_createLessonLink($field);
+        } else {
+            // 创建课时
+            return $this->_createLesson($field);
         }
     }
 
@@ -100,7 +102,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     protected function validateTaskMode($field)
     {
-        if (empty($field['mode']) || !in_array(
+        if (!empty($field['mode']) && !in_array(
                 $field['mode'],
                 array('preparation', 'lesson', 'exercise', 'homework', 'extraClass')
             )

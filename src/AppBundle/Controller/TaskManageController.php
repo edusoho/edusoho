@@ -140,6 +140,7 @@ class TaskManageController extends BaseController
         $task['fromCourseSetId'] = $course['courseSetId'];
 
         $template = $this->createCourseStrategy($course)->getJsonTemplate($task);
+        $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
         if (empty($template)) {
             return $this->createJsonResponse(
                 array(
@@ -148,8 +149,7 @@ class TaskManageController extends BaseController
                 )
             );
         }
-
-        $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
+        
         $lesson = $this->getChapterDao()->get($task['categoryId']);
         $lesson['tasks'] = array($task);
         // $tasks = $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($lesson['id']);

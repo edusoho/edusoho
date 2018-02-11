@@ -2,7 +2,8 @@
   {{'course.plan_task.total_tasks'|trans}}<span class="cd-mr24" id="task-num">{{ course.taskNum }}</span>  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}
   <span class="cd-text-gray-light">隐藏未发布任务</span>
   <div class="pull-right">
-    <button class="btn cd-btn cd-btn-primary cd-btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+    <button class="btn cd-btn cd-btn-primary cd-btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" 
+      data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
       添加课时
     </button>
     <button class="btn cd-btn cd-btn-default cd-btn-sm js-batch-add
