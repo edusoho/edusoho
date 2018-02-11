@@ -95,6 +95,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
                     break;
                 case 'lesson':
                     $fields['seq'] = $seq;
+                    ++$seq;
                     $fields['number'] = $this->updateTaskSeq($chapterId, $taskNumber, $seq);
                     $this->chapterBatchUpdateHelper->add('id', $chapterId, $fields);
                     break;
