@@ -86,8 +86,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $conditions = array(
             'targetId' => $targetId,
-            'targetTypes' => array('question.stem','question.analysis'),
-            'type' => 'attachment'
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'type' => 'attachment',
         );
 
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
@@ -120,14 +120,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->deleteCourseMaterial($courseId);
 
             $this->deleteCourseChapter($courseId);
-            
+
             $this->deleteTask($courseId);
             $this->deleteTaskResult($courseId);
 
             $this->deleteCourseMember($courseId);
 
             $this->deleteCourseJob($courseId);
-            
+
             $this->deleteCourseNote($courseId);
 
             $this->deleteCourseThread($courseId);
@@ -229,7 +229,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_task_'.$task['id']);
         $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_task_'.$task['id']);
 
-        $this->getLogService()->info('course', 'delete_course_job', "删除直播任务的推送及发送短信的定时任务");
+        $this->getLogService()->info('course', 'delete_course_job', '删除直播任务的推送及发送短信的定时任务');
     }
 
     protected function deleteCourseJob($courseId)

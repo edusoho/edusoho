@@ -207,9 +207,11 @@ class TaskCopy extends AbstractEntityCopy
 
     /**
      * [当有直播任务时，修改该课时及所包含的所有任务状态为未发布]
-     * @param  [type] $courseId   [description]
-     * @param  [type] $chapterIds 包含直播任务的课时ids
-     * @return [type]             [description]
+     *
+     * @param [type] $courseId   [description]
+     * @param [type] $chapterIds 包含直播任务的课时ids
+     *
+     * @return [type] [description]
      */
     protected function updateChapter($courseId, $chapterIds)
     {
