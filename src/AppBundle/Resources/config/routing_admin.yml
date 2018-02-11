@@ -934,19 +934,18 @@ admin_mocked:
     path: /mock
     defaults: { _controller: AppBundle:Admin/Mock:index }
 
-# 临时隐藏 distributor
-# admin_mocked_distributor_token:
-#     path: /mock/distributor_token
-#     defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
+admin_mocked_distributor_token:
+    path: /mock/distributor_token
+    defaults: { _controller: AppBundle:Admin/Mock:mockDistributorToken }
 
-# admin_mocked_distributor_get_post_data:
-#     path: /mock/distributor_get_post_data
-#     defaults: { _controller: AppBundle:Admin/Mock:getPostDistributorData }
+admin_mocked_distributor_get_post_data:
+    path: /mock/distributor_get_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:getPostDistributorData }
 
-# admin_mocked_distributor_post_data:
-#     path: /mock/distributor_post_data
-#     defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
-#     methods: [POST]
+admin_mocked_distributor_post_data:
+    path: /mock/distributor_post_data
+    defaults: { _controller: AppBundle:Admin/Mock:postDistributorData }
+    methods: [POST]
 
 admin_mocked_marketing_post_data:
     path: /mock/marketing_post_data
