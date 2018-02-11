@@ -30,7 +30,6 @@
       </a>
     {% endif %}
 
-
-    {% include 'lesson-manage/chapter/action.html.twig' with {courseId: course.id, chapterId: chapter.id} %}
+    {% include 'lesson-manage/chapter/action.html.twig' with {course: course, chapter: chapter} %}
   </div>
 </li>

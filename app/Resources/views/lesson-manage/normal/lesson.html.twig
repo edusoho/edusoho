@@ -10,8 +10,8 @@
       </a>
     {% include 'lesson-manage/chapter/action.html.twig' with {
       chapter: lesson,
-      courseId: course.id, 
       chapterId: lesson.id,
+      course: course, 
       collapse: 0,
       } %}
     </div>

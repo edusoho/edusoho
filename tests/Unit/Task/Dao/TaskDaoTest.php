@@ -14,6 +14,17 @@ class TaskDaoTest extends BaseDaoTestCase
         $this->assertNull($result);
     }
 
+    public function testDeleteByCourseId()
+    {
+        $expected = $this->mockDataObject();
+        $this->assertNotNull($expected);
+
+        $this->getDao()->deleteByCourseId(2);
+
+        $result = $this->getDao()->get($expected['id']);
+        $this->assertNull($result);
+    }
+
     public function testFindByCourseId()
     {
         $expected = array();
