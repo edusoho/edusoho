@@ -25,7 +25,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTasksTemplate()
     {
-        return 'course-manage/tasks/default-tasks.html.twig';
+        return 'lesson-manage/default-list.html.twig';
     }
 
     public function getTaskItemTemplate()
@@ -37,9 +37,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         if ('lesson' != $task['mode']) {
             return '';
-        }
-
-         
+        }   
     }
 
     public function createTask($field)

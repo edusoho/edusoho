@@ -1,18 +1,18 @@
 {% extends 'course-manage/tasks/layout.html.twig' %}
-{% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/normal/index.js']) %}
+{% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/default/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
-      {% include 'lesson-manage/header.html.twig' %}
+      {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
       <ul id="sortable-list" class="task-manage-list sortable-list"
           data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
         {% for key, item in items %}
           {% if item.type == 'lesson' %}
-            {% include 'lesson-manage/normal/lesson.html.twig' with {chapter:item, course:course} %}
+            {% include 'task-manage/item/default-list-item.html.twig' with {task:item} %}
           {% else %}
-            {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
+            {% include 'course-manage/chapter/list-item.html.twig' with {chapter:item, course:course} %}
           {% endif %}
         {% endfor %}
       </ul>

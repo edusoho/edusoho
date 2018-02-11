@@ -134,7 +134,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function findCourseItems($courseId, $tasks)
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
         $items = array();
         uasort(
@@ -163,7 +163,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $items;
     }
 
-    public function prepareCourseItems($courseId, $tasks, $limitNum)
+    public function oldPrepareCourseItems($courseId, $tasks, $limitNum)
     {
         $items = array();
         foreach ($tasks as $task) {

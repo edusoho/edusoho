@@ -3,7 +3,7 @@
 {% block title %}{{'course.course_manage'|trans}} - {{ parent() }}{% endblock %}
 {% set use_webapck_loader = true %}
 
-{% do script(['libs/jquery-intro.js','app/js/courseset-manage/index.js']) %}
+{% do script(['libs/jquery-intro.js']) %}
 
 {% block content %}
   {% block course_header %}
