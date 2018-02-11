@@ -1,5 +1,6 @@
 import sortList from 'common/sortable';
 import { toggleIcon } from 'app/common/widget/chapter-animate';
+import notify from 'common/notify';
 
 export default class Manage {
   constructor(element) {
@@ -23,6 +24,7 @@ export default class Manage {
     });
     this._deleteChapter();
     this._collapse();
+    this._publish();
   }
 
   _collapse() {
@@ -180,5 +182,30 @@ export default class Manage {
       $item.find('.number').text(num);
       num = $item.next().hasClass('task-manage-chapter') ? 1 : num+1;
     });
+  }
+
+  _publish() {
+    this.$element.on('click', '.unpublish-item', (event) => {
+      let $this = $(event.target);
+      $.post($this.data('url'), function (data) {   
+        let $parentLi = $this.closest('.js-task-manage-item');
+        $parentLi.find('.publish-item, .js-delete, .publish-status').removeClass('hidden');
+        $parentLi.find('.unpublish-item').addClass('hidden');
+        notify('success', Translator.trans('course.manage.task_unpublish_success_hint'));
+      }).fail(function(data){
+        notify('danger', Translator.trans('course.manage.task_unpublish_fail_hint') + ':' + data.responseJSON.error.message);
+      });
+    })
+
+    this.$element.on('click', '.publish-item', (event) => {
+      $.post($(event.target).data('url'), function (data) {
+        let $parentLi = $(event.target).closest('.task-manage-item');
+        notify('success', Translator.trans('course.manage.task_publish_success_hint'));
+        $parentLi.find('.publish-item, .js-delete, .publish-status').addClass('hidden')
+        $parentLi.find('.unpublish-item').removeClass('hidden')
+      }).fail(function(data){
+        notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
+      });
+    })
   }
 }
