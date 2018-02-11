@@ -25,6 +25,26 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
+    public function updateTask($id, $fields)
+    {
+        $task = parent::updateTask($id, $fields);
+
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'categoryId' => $task['categoryId'],
+        );
+        $categoryTaskCount = $this->getTaskService()->countTasks($conditions);
+        if ($categoryTaskCount <= 1) {
+            $this->getCourseService()->updateChapter(
+                $task['courseId'],
+                $task['categoryId'],
+                array('title' => $task['title'])
+            );
+        }
+
+        return $task;
+    }
+
     public function getTasksTemplate()
     {
         return 'course-manage/tasks/normal-tasks.html.twig';
@@ -47,6 +67,16 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             $this->getTaskDao()->delete($task['id']);
             $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
             $this->getActivityService()->deleteActivity($task['activityId']);
+
+            //课时下面只有一个任务时，则把课时也删除
+            $conditions = array(
+                'courseId' => $task['courseId'],
+                'categoryId' => $task['categoryId'],
+            );
+            $categoryTaskCount = $this->getTaskDao()->count($conditions);
+            if (empty($categoryTaskCount)) {
+                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+            }
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {

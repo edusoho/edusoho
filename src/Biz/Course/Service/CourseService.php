@@ -55,6 +55,8 @@ interface CourseService
 
     public function publishChapter($chapterId);
 
+    public function publishChapterByCourseId($courseId);
+
     public function unpublishChapter($chapterId);
 
     public function findChaptersByCourseId($courseId);
