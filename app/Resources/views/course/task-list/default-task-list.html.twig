@@ -4,6 +4,19 @@
     <a class="js-up-more-link link-gray center-block text-center" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">{{ 'my.learning.course.click_loading_more'|trans }}</a>
   {% endif %}
 
+  <div class="js-infinite-item-template" style="display: none">
+    <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
+        display-condition-attr="itemClass" display-condition="chapter"><i class="es-icon es-icon-menu left-menu"></i>
+      <a href="javascript:" class="title gray-dark">{chapterInfo}</a>
+      <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+    </li>
+
+    <li class="task-item color-gray bg-gray-lighter infinite-item"
+        display-condition-attr="itemClass" display-condition="unit">
+      <span class="title">{{ 'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title}) }}</span>
+    </li>
+  </div>
+
   <ul class="task-list task-list-md task-list-hover infinite-container">
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
       {% set file = item.activity.ext.file|default() %}

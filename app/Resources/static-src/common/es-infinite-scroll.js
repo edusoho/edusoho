@@ -16,17 +16,21 @@ export default class ESInfiniteScroll extends Emitter {
           //json数组，有值则不从ajax中获取, 格式为
             [
               {
-                'color': 'grey',
+                'itemType': 'chapter',
               },
               {
-                'color': 'grey',
+                'itemType': 'unit',
               }
             ]
    *    'dataSourceMapping': jsonData,
           //json, 用于将dataSource中的值做转换
           {
-            'color': {
-              '1' => 'grey'
+            'itemClass': {
+              'itemType': {
+                'chapter': 'bg-gray-lighter js-task-chapter',
+                'unit': 'color-gray bg-gray-lighter',
+                'task': 'task-content mouse-control'
+              }
             }
           }
    *    'dataSourceTemplateNode': '.infiniteScrollTemplate',  
