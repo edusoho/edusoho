@@ -35,10 +35,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function getJsonTemplate($task)
     {
-        if (empty($task['mode']) || 'lesson' != $task['mode']) {
+        if (!empty($task['mode']) && 'lesson' != $task['mode']) {
             return '';
         }
-
+        
         return 'lesson-manage/normal/lesson.html.twig';
     }
 

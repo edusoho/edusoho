@@ -1,4 +1,4 @@
-<li class="task-manage-item js-task-manage-item drag clearfix " id="chapter-{{ lesson.id }}">
+<li id="chapter-{{ lesson.id }}" class="task-manage-item js-task-manage-item drag clearfix">
   {% set tasks = array_index(lesson.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
   <div class="item-default-header clearfix">
@@ -9,7 +9,6 @@
           {{ activity_metas(task.activity.mediaType).icon }}
         {% endif %}">
       </i>
-
       {% if lesson.number == 0 %}
         <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
