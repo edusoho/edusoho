@@ -86,10 +86,9 @@ class Editor {
 
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
-        const needAppend = response.append;
         const html = response.html;
         this.$element.modal('hide');
-        if (needAppend) {
+        if (html) {
           $('#sortable-list').trigger('addItem', html)
         }
         // this.showDefaultSetting($item);

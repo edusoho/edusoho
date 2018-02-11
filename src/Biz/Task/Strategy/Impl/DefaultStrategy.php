@@ -28,18 +28,13 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return 'lesson-manage/default-list.html.twig';
     }
 
-    public function getTaskItemTemplate()
-    {
-        return 'task-manage/item/default-list-item.html.twig';
-    }
-
     public function getJsonTemplate($task)
     {
         if (!empty($task['mode']) && 'lesson' != $task['mode']) {
             return '';
         }
         
-        return 'lesson-manage/normal/lesson.html.twig';
+        return 'lesson-manage/default/lesson.html.twig';
     }
 
     public function createTask($field)

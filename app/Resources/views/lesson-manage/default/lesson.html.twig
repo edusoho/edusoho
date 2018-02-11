@@ -1,8 +1,8 @@
 <li id="chapter-{{ lesson.id }}" class="task-manage-item js-task-manage-item drag clearfix">
   {% set tasks = array_index(lesson.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
+
   <div class="item-default-header clearfix">
-    <div class="item-line"></div>
     <div class="item-content text-overflow js-item-content">
       <i class="mrm es-icon
         {% if activity_metas(task.activity.mediaType) %}
@@ -14,8 +14,8 @@
       {% else %}
         {{'site.data.task'|trans}}<span class="number">{{ lesson.number }}</span>：
       {% endif %}
+      {{ lesson.title|sub_text(30) }}
 
-      {{ task.title|sub_text(30) }}
       {% if task.activity.mediaType is same as('live') %}
         {% if not task.activity.ext.roomCreated|default(true) %}
           <span class="color-warning">{{ 'course.plan_task.edit_tips'|trans }}</span>
@@ -30,7 +30,7 @@
           （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
       {% endif %}
       <span class="color-warning publish-status
-        {% if task.status == 'published' %}
+        {% if lesson.status == 'published' %}
           hidden
         {% endif %}">
          {{'course.plan_task.task_unpublished'|trans}}
@@ -40,20 +40,24 @@
     <div class="item-actions">
       <a class="btn gray-darker" data-role='update-task' href="javascript:;"
         data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
+        data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
         <i class="es-icon es-icon-edit mrs"></i>{{'course.plan_task.edit_btn'|trans}}
       </a>
-      <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
-        target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>{{'course.plan_task.preview_btn'|trans}}</a>
+      <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id, courseId:task.courseId, preview:1}) }}"
+        target="_blank">
+        <i class="es-icon es-icon-removeredeye mrs"></i>
+        {{'course.plan_task.preview_btn'|trans}}
+      </a>
+
       <span class="dropdown">
         <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#">
-          <i class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true" aria-expanded="false"></i>{{ 'course.plan_task.more_btn'|trans }}
+          <i class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true" aria-expanded="false"></i>
+          {{ 'course.plan_task.more_btn'|trans }}
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
           aria-labelledby="dLabel" style="display:none;">
           {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
             {% set file = task.activity.ext.file|default(null) %}
-
             {% if  file.storage|default(null) == 'cloud' %}
               <li class="mark-manage">
             <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
@@ -64,27 +68,27 @@
             {% endif %}
           {% endif %}
 
-          {% if task.status|default('create') == 'published' %}
-            {% set status = 1 %}
+          {% if lesson.status|default('create') == 'published' %}
+            {% set isPublish = true %}
           {% else %}
-            {% set status = 0 %}
+            {% set isPublish = 0 %}
           {% endif %}
             <li>
-            <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
-              data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
+            <a class='unpublish-item {% if not isPublish %}hidden{% endif %}' href="javascript:;"
+              data-url="{{ path('course_manage_chapter_unpublish', {chapterId:lesson.id, courseId:task.courseId}) }}">
               <i class="es-icon es-icon-close01 mrm"></i>{{'course.plan_task.unpublish_btn'|trans}}
             </a>
           </li>
             <li>
-              <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
-                data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
+              <a class='publish-item {% if isPublish %}hidden{% endif %}' href="javascript:;"
+                data-url="{{ path('course_manage_chapter_publish', {chapterId:lesson.id, courseId:task.courseId}) }}">
                 <i class="es-icon es-icon--check-circle mrm"></i>{{'course.plan_task.publish_btn'|trans}}
               </a>
             </li>
             {{ slot('task.menu.extension', {'task': task}) }}
             <li>
-            <a class='delete-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
-              data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+            <a class='js-delete {% if isPublish %}hidden{% endif %}' href="javascript:;" data-name="{{ ('site.data.lesson')|trans }}" 
+              data-url="{{ path('course_manage_chapter_delete', {chapterId:lesson.id, courseId:task.courseId}) }}">
               <i class="es-icon es-icon-delete mrm"></i>{{'course.plan_task.delete_btn'|trans}}
             </a>
           </li>

@@ -142,12 +142,7 @@ class TaskManageController extends BaseController
         $template = $this->createCourseStrategy($course)->getJsonTemplate($task);
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
         if (empty($template)) {
-            return $this->createJsonResponse(
-                array(
-                    'append' => false,
-                    'html' => '',
-                )
-            );
+            return $this->createJsonResponse(true);
         }
         
         $lesson = $this->getChapterDao()->get($task['categoryId']);
@@ -164,7 +159,6 @@ class TaskManageController extends BaseController
 
         return $this->createJsonResponse(
             array(
-                'append' => true,
                 'html' => $html
             )
         ); 
