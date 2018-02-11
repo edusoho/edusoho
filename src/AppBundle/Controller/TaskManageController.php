@@ -147,12 +147,13 @@ class TaskManageController extends BaseController
         
         $lesson = $this->getChapterDao()->get($task['categoryId']);
         $lesson['tasks'] = array($task);
+
         // $tasks = $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($lesson['id']);
         $html = $this->renderView(
             $template,
             array(
                 'course' => $course,
-                'chapter' => $lesson,
+                'lesson' => $lesson,
                 'tasks' => array($task),
             )
         );
@@ -161,7 +162,7 @@ class TaskManageController extends BaseController
             array(
                 'html' => $html
             )
-        ); 
+        );
     }
 
     public function updateAction(Request $request, $courseId, $id)
