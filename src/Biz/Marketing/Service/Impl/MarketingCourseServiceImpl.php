@@ -25,11 +25,6 @@ class MarketingCourseServiceImpl extends MarketingBaseServiceImpl implements Mar
         return "把用户,{$user['id']}添加到课程成功,课程ID：{$target['id']},memberId:{$member['id']},订单Id:{$order['id']}";
     }
 
-    protected function getTargetType()
-    {
-        return 'MarketingCourse';
-    }
-
     /**
      * @return MarketingCourseMemberServiceImpl
      */

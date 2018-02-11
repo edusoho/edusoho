@@ -59,7 +59,6 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
             'marketingActivityId' => $postData['activity_id'],
             'marketingActivityName' => $postData['activity_name'],
             'deducts' => $this->getUserOrderDeduct($user['id'], $postData['deduct']),
-            'targetType' => $this->getTargetType(),
             'pay_time' => empty($postData['order_pay_time']) ? 0 : $postData['order_pay_time'],
         );
         $target = array(
