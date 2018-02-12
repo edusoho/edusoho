@@ -8,7 +8,7 @@ use ApiBundle\Api\Util\AssetHelper;
 class UserFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
+        'id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar','uuid',
     );
 
     protected $publicFields = array(
