@@ -27,49 +27,40 @@ export default class Create {
   initValidator() {
     const self = this;
     const $smsCode = $('.js-sms-send');
-    this.validator = this.$form.validate({
-      rules: {
-        username: {
-          required: true,
-          byte_minlength: 4,
-          byte_maxlength: 18,
-          nickname: true,
-          chinese_alphanumeric: true,
-          es_remote: {
-            type: 'get',
-          }
-        },
-        password: {
-          required: true,
-          minlength: 5,
-          maxlength: 20,
-        },
-        confirmPassword: {
-          required: true,
-          equalTo: '#password',
-        },
-        captcha_code: {
-          required: true,
-          alphanumeric: true,
-          captcha_checkout: {
-            callback: function(bool) {
-              if (bool) {
-                $smsCode.removeAttr('disabled');
-              } else {
-                $smsCode.attr('disabled', true);
-                let changeToken = self.initCaptchaCode();
-                self.captchaToken = changeToken;
-                return self.captchaToken;
-              }
-            }
-          }
-        },
-        sms_code: {
-          required: true,
-          unsigned_integer: true,
-          rangelength: [6, 6],
-        },
+
+    this.rules = {
+      username: {
+        required: true,
+        byte_minlength: 4,
+        byte_maxlength: 18,
+        nickname: true,
+        chinese_alphanumeric: true,
+        es_remote: {
+          type: 'get',
+        }
       },
+      password: {
+        required: true,
+        minlength: 5,
+        maxlength: 20,
+      },
+      confirmPassword: {
+        required: true,
+        equalTo: '#password',
+      },
+      sms_code: {
+        required: true,
+        unsigned_integer: true,
+        rangelength: [6, 6],
+      },
+    };
+
+    if (!$('.js-captcha').hasClass('hidden')) {
+      this.rules['captcha_code'] = this.getCaptchaCodeRule();
+    }
+
+    this.validator = this.$form.validate({
+      rules: this.rules,
       messages: {
         sms_code: {
           required: Translator.trans('site.captcha_code.required'),
@@ -116,7 +107,7 @@ export default class Create {
       return;
     }
     Api.captcha.get({ async: false, promise: false }).done(res => {
-    $getCodeNum.attr('src', res.image);
+      $getCodeNum.attr('src', res.image);
       this.captchaToken = res.captchaToken;
     }).error(res => {
       console.log('catch', res.responseJSON.error.message);
@@ -143,12 +134,18 @@ export default class Create {
         countDown(120);
       }).catch((res) => {
         const code = res.responseJSON.error.code;
-        switch(code) {
+        switch (code) {
           case 30001:
-            notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
-            $captchaCode.val('');
+            if ($('.js-captcha').hasClass('hidden')) {
+              $('.js-captcha').removeClass('hidden');
+              notify('danger', Translator.trans('oauth.refresh.captcha_code_required_tip'));
+              $("[name='captcha_code']").rules('add', this.getCaptchaCodeRule());
+            } else {
+              notify('danger', Translator.trans('oauth.refresh.captcha_code_tip'));
+              $captchaCode.val('');
+              this.initCaptchaCode();
+            }
             $target.attr('disabled', true);
-            this.initCaptchaCode();
             break;
           case 30002:
             notify('danger', Translator.trans('oauth.send.error_message_tip'));
@@ -220,6 +217,26 @@ export default class Create {
         $tip.remove();
       }
     })
+  }
+
+  getCaptchaCodeRule() {
+    var self = this;
+    return {
+      required: true,
+      alphanumeric: true,
+      captcha_checkout: {
+        callback: function(bool) {
+          if (bool) {
+            $('.js-sms-send').removeAttr('disabled');
+          } else {
+            $('.js-sms-send').attr('disabled', true);
+            let changeToken = self.initCaptchaCode();
+            self.captchaToken = changeToken;
+            return self.captchaToken;
+          }
+        }
+      }
+    };
   }
 
 }

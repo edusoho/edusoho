@@ -4,5 +4,5 @@ namespace Biz\Activity\Service;
 
 interface DownloadActivityService
 {
-    public function downloadActivityFile($activityId, $materialId);
+    public function downloadActivityFile($courseId, $activityId, $materialId);
 }

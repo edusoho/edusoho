@@ -37,8 +37,9 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         $task = $event->getArgument('task');
         $lastTime = $event->getArgument('lastTime');
         $time = time() - $lastTime;
-        if ($time >= TaskService::LEARN_TIME_STEP) {
-            $time = TaskService::LEARN_TIME_STEP;
+        $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
+        if ($time >= $learnTimeSec) {
+            $time = $learnTimeSec;
         }
 
         if (empty($task)) {

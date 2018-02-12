@@ -25,9 +25,9 @@ class EnvWriteCommand extends Command
         $file = $input->getArgument('file');
         $key = $input->getArgument('key');
         $value = $input->getArgument('value');
-        if ($value == 'true') {
+        if ('true' == $value) {
             $value = true;
-        } elseif ($value == 'false') {
+        } elseif ('false' == $value) {
             $value = false;
         }
 

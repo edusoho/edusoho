@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\Util\ExceptionUtil;
@@ -76,7 +75,8 @@ class ResourceKernel
     {
         $pathInfo = $request->getPathInfo();
         $pathInfo = str_replace(ApiBundle::API_PREFIX, '', $pathInfo);
-        return $pathInfo == '/batch';
+
+        return '/batch' == $pathInfo;
     }
 
     private function batchRequest(Request $request)
@@ -97,16 +97,15 @@ class ResourceKernel
                 $successResponse = $this->handleApiRequest($apiRequest);
                 $result[] = array(
                     'code' => 200,
-                    'body' => $successResponse
+                    'body' => $successResponse,
                 );
             } catch (\Exception $e) {
                 list($error, $httpCode) = ExceptionUtil::getErrorAndHttpCodeFromException($e, $this->isDebug());
                 $result[] = array(
                     'code' => $httpCode,
-                    'body' => array('error' => $error)
+                    'body' => array('error' => $error),
                 );
             }
-
         }
 
         return $result;
@@ -114,8 +113,9 @@ class ResourceKernel
 
     private function isDebug()
     {
-        $env = $this->container->get( 'kernel' )->getEnvironment();
-        return $env == 'dev';
+        $env = $this->container->get('kernel')->getEnvironment();
+
+        return 'dev' == $env;
     }
 
     private function validateJsonRequests($jsonRequests)
@@ -133,7 +133,8 @@ class ResourceKernel
 
     private function singleRequest(Request $request)
     {
-        $apiRequest = new ApiRequest($request->getPathInfo(), $request->getMethod(), $request->query, $request->request, $request->headers);
+        $apiRequest = new ApiRequest($request->getPathInfo(), $request->getMethod(), $request->query, $request->request, $request->headers, $request);
+
         return $this->handleApiRequest($apiRequest);
     }
 
@@ -156,12 +157,14 @@ class ResourceKernel
         }
 
         $params = array_merge(array($apiRequest), $pathMeta->getSlugs());
+
         return call_user_func_array(array($resource, $resMethod), $params);
     }
 
     /**
      * @param Request $request
      * @param $jsonRequest
+     *
      * @return ApiRequest
      */
     private function makeApiRequestFromJsonRequest(Request $request, $jsonRequest)

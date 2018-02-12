@@ -26,7 +26,7 @@ abstract class AbstractResource
     const METHOD_ADD = 'add';
     const METHOD_REMOVE = 'remove';
     const METHOD_UPDATE = 'update';
-    
+
     const DEFAULT_PAGING_LIMIT = 10;
     const DEFAULT_PAGING_OFFSET = 0;
     const MAX_PAGING_LIMIT = 100;
@@ -129,7 +129,7 @@ abstract class AbstractResource
             static::METHOD_GET,
             static::METHOD_SEARCH,
             static::METHOD_UPDATE,
-            static::METHOD_REMOVE
+            static::METHOD_REMOVE,
         );
     }
 
@@ -151,10 +151,11 @@ abstract class AbstractResource
         return $this->container->get('request')->getClientIp();
     }
 
-    public function invokeResource(ApiRequest $apiRequest) {
+    public function invokeResource(ApiRequest $apiRequest)
+    {
         return $this->container->get('api_resource_kernel')->handleApiRequest($apiRequest);
     }
-    
+
     protected function makePagingObject($objects, $total, $offset, $limit)
     {
         return array(
@@ -162,8 +163,8 @@ abstract class AbstractResource
             'paging' => array(
                 'total' => $total,
                 'offset' => $offset,
-                'limit' => $limit
-            )
+                'limit' => $limit,
+            ),
         );
     }
 
@@ -173,6 +174,7 @@ abstract class AbstractResource
     protected function getCurrentUser()
     {
         $biz = $this->getBiz();
+
         return $biz['user'];
     }
 }

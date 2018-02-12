@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Shanghai');
 // 尚存在问题：
 // 1.vendor不存在导致升级检测失败报错
 // 2.topxia:build命令没有打包新的api目录，打包6.5.5时需要修改该命令
