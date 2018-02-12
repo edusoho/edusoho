@@ -1372,7 +1372,7 @@ course.btn.back_course_edit: 返回课程编辑
 course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
-course.btn.publish_task: 发布教学计划
+course.btn.publish_task: 发布计划
 
 # 课程扩展
 course.tab.tasks: '目录'
@@ -1608,7 +1608,7 @@ course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
 course.course_files.re_try_convert_video_to_audio: 重新转码
 
-course.plan_overview: 计划概览
+course.plan_overview: 教学统计
 
 course.plan_task: 计划任务
 course.plan_task.deadline_learn_tips: >
