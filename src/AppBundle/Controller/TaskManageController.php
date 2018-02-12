@@ -43,7 +43,7 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
-   
+
         $categoryId = $request->query->get('categoryId');
         //categoryId  所属课时
         $taskMode = $request->query->get('type');
@@ -145,7 +145,7 @@ class TaskManageController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $tasks = 'normal' == $course['courseType'] ? array($task) :  $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
+        $tasks = 'normal' == $course['courseType'] ? array($task) : $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
         $lesson = $this->getChapterDao()->get($task['categoryId']);
         $lesson['tasks'] = $tasks;
 
@@ -160,7 +160,7 @@ class TaskManageController extends BaseController
 
         return $this->createJsonResponse(
             array(
-                'html' => $html
+                'html' => $html,
             )
         );
     }
