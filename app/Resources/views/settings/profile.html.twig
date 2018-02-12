@@ -43,7 +43,9 @@
         <div class="static-text input-edit__static-dom">
           <span class="input-edit__static-text">{{app.user.nickname}}</span>
           {% if setting('user_partner.nickname_enabled') %}
-            <i class="cd-icon cd-icon-edit cd-icon-hover input-edit__edit-btn"></i>
+            <a href="javascript:;" class="input-edit__edit-btn cd-link-minor">
+              <i class="cd-icon cd-icon-edit"></i>
+            </a>
           {% endif %}
         </div>
 

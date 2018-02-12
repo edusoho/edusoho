@@ -5,7 +5,7 @@
   <div class="dropdown-menu user-dropdown hidden-sm hidden-xs hidden-md js-user-nav-dropdown">
     <div class="user-dropdown-info cd-mb24">
       <a class="user-dropdown-info__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
-        <img class="cd-avatar cd-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+        <img class="cd-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
       </a>
       <div class="user-dropdown-profile">
         <div class="user-dropdown-profile__nickname">
@@ -15,13 +15,13 @@
       </div>
     </div>
     <div class="user-dropdown__link cd-mb24">
-      <a class="cd-link-gray" href="{{ path('my_orders') }}"><i class="cd-icon cd-icon-payment"></i>{{ 'homepage.header.account_menu'|trans }}</a>
-      <a class="cd-link-gray" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
+      <a class="cd-link-minor" href="{{ path('my_orders') }}"><i class="cd-icon cd-icon-payment"></i>{{ 'homepage.header.account_menu'|trans }}</a>
+      <a class="cd-link-minor" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
     </div>
-    <div class="user-dropdown__logout"><a class="cd-link-gray" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
+    <div class="user-dropdown__logout"><a class="cd-link-minor" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
   </div>
   <ul class="dropdown-menu hidden-lg" role="menu">
-    <div class="dropdown-header"><a class="cd-link-gray" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
+    <div class="dropdown-header"><a class="cd-link-minor" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
     <li><a href="{{path('my_orders')}}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
     <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
     {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>

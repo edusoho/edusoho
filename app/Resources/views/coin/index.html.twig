@@ -11,7 +11,7 @@
 {% block main_body %}
   <div class="row cd-row">
     <div class="col-md-7">
-      <div class="cd-colorful-card cd-colorful-card-danger">
+      <div class="es-colorful-card es-colorful-card-danger">
         <div class="card-icon"><i class="es-icon es-icon-money"></i></div>
         <div class="card-body">
           <p>{{'finance.balance'|trans}}</p>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="col-md-5">
-      <div class="cd-data-card">
+      <div class="es-data-card">
         <div class="card-item">
           <div class="card-item-label">{{'finance.total_income'|trans}}</div>
           <div class="card-item-value"><span>{% if amountInflow %}+{% endif %}{{ amountInflow|to_coin(0) }}</span></div>

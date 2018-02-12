@@ -8,7 +8,7 @@
       let $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')));
 
       let loading = cd.loading({
-        loadingClass: 'cd-loading-fixed'
+        isFixed: true
       });
       $target.html(loading);
 
