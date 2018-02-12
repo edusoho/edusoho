@@ -81,11 +81,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         try {
             $this->beginTransaction();
             $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data);
-
-            // 微营销过来的订单没有交易记录，需要能支持退款
-            if (empty($order['trade_sn'])) {
-                $this->getWorkflowService()->setRefunded($orderItem['refund_id'], $data);
-            }
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
