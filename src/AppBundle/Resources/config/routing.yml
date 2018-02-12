@@ -1713,6 +1713,10 @@ course_task_plugin_thread_answer:
   defaults: { _controller: AppBundle:TaskPlugin:answerQuestion }
   methods: [POST]
 
+course_manage_chapter_manage:
+    path:  /course/{courseId}/manage/chapter/manage
+    defaults: { _controller: AppBundle:Course/ChapterManage:manage}
+
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create
@@ -1725,6 +1729,19 @@ course_manage_chapter_edit:
 course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete
     defaults: { _controller: AppBundle:Course/ChapterManage:delete }
+    methods: [POST]
+
+course_manage_chapter_publish:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/publish
+    defaults: { _controller: AppBundle:Course/ChapterManage:publish }
+
+course_manage_chapter_unpublish:
+    path:  /course/{courseId}/manage/chapter/{chapterId}/unpublish
+    defaults: { _controller: AppBundle:Course/ChapterManage:unpublish }
+
+course_manage_change_lesson_show_status:
+    path:  /course/{courseId}/manage/change/lesson/show/status
+    defaults: { _controller: AppBundle:Course/CourseManage:showPublish }
     methods: [POST]
 
 #course

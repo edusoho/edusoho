@@ -8,6 +8,38 @@ use AppBundle\Controller\BaseController;
 
 class ChapterManageController extends BaseController
 {
+    public function manageAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $chapterId = $request->query->get('chapterId', 0);
+        $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
+
+        $type = $request->query->get('type');
+        $type = in_array($type, array('chapter', 'unit', 'lesson')) ? $type : 'chapter';
+      
+        if ($request->getMethod() == 'POST') {
+            if (empty($chapter)) {
+                $chapter = $request->request->all();
+                $chapter['courseId'] = $courseId;
+                $chapter = $this->getCourseService()->createChapter($chapter);  
+            } else {
+                $title = $request->request->get('title');
+                $chapter = $this->getCourseService()->updateChapter($courseId, $chapterId, array('title' => $title));
+            }
+
+            return $this->render('lesson-manage/chapter/item.html.twig', array(
+                'course' => $course,
+                'chapter' => $chapter,
+            ));
+        }
+
+        return $this->render('lesson-manage/chapter/modal.html.twig', array(
+            'course' => $course,
+            'type' => $type,
+            'chapter' => $chapter,
+        ));    
+    }
+
     public function createAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -62,8 +94,23 @@ class ChapterManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $chapterId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $this->getCourseService()->deleteChapter($course['id'], $chapterId);
+        $this->getCourseService()->deleteChapter($courseId, $chapterId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function publishAction(Request $request, $courseId, $chapterId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseService()->publishChapter($chapterId);
+
+        return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function unpublishAction(Request $request, $courseId, $chapterId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getCourseService()->unpublishChapter($chapterId);
 
         return $this->createJsonResponse(array('success' => true));
     }

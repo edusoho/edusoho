@@ -5,15 +5,16 @@ export const sortablelist = (list) => {
   let $list = $(list);
   let data = $list.sortable("serialize").get();
 
-  let lessonNum = 0,
+  let taskNum = 0,
     chapterNum = 0,
-    unitNum = 0;
+    unitNum = 0,
+    lessonNum = 0;
   $list.find('.task-manage-item').each(function () {
     let $item = $(this);
     if ($item.hasClass('js-task-manage-item')) {
       if ($item.find('.number').length > 0) {
-        lessonNum++;
-        $item.find('.number').text(lessonNum);
+        taskNum++;
+        $item.find('.number').text(taskNum);
       }
     } else if ($item.hasClass('task-manage-unit')) {
       unitNum++;
@@ -22,6 +23,9 @@ export const sortablelist = (list) => {
       chapterNum++;
       unitNum = 0;
       $item.find('.number').text(chapterNum);
+    } else if ($item.hasClass('task-manage-lesson')) {
+      lessonNum++;
+      $item.find('.number').text(lessonNum);
     }
   });
 

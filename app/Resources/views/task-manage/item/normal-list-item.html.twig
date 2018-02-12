@@ -1,6 +1,12 @@
+<!-- 添加课时时展示 -->
+{% if task.chapter|default(null) %}
+  {% include 'course-manage/chapter/normal-list-item.html.twig' with {chapter:task.chapter, course:course} %}
+{% endif %}
+<!-- 添加课时时展示 end -->
+
 {% set file =  files[task.activityId]|default(null) %}
 <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
-  <div class="item-line"></div>
+  
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
     {% if task.isOptional %}
@@ -9,8 +15,8 @@
      {{'site.data.task'|trans}}<span class="number">{{ task.number }}</span>：
     {% endif %}
     {{ task.title|sub_text(30) }}
-    <span class="color-warning publish-status {% if task.status == 'published' %}
-      hidden {% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>
+    {#<span class="color-warning publish-status {% if task.status == 'published' %}
+      hidden {% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>#}
 
     {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
       <span class="label label-danger ml5">{{'course.plan_task.convert_failed'|trans}}</span>
@@ -63,12 +69,12 @@
         {% else %}
           {% set status = 0 %}
         {% endif %}
-          <li>
+          {#<li>
             <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon--check-circle mrs"></i>{{'course.plan_task.publish_btn'|trans}}
             </a>
-          </li>
+          </li>#}
           {{ slot('task.menu.extension', {'task': task}) }}
           <li>
             <a class='delete-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
@@ -77,12 +83,12 @@
               {{'course.plan_task.delete_btn'|trans}}
             </a>
           </li>
-          <li>
+          {#<li>
             <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="task"
               data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon-close01 mrm"></i>{{'course.plan_task.unpublish_btn'|trans}}
             </a>
-          </li>
+          </li>#}
       </ul>
     </span>
   </div>

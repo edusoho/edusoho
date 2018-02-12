@@ -13,12 +13,10 @@
         {% block course_header %}
           {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
         {% endblock %}
-
         {% block navbar %}
           {% include 'courseset-manage/navbar.html.twig' %}
         {% endblock %}
       </div>
-
     </div>
   {% endblock %}
   <div class="container cd-container">

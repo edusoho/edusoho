@@ -281,6 +281,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
+    public function deleteTasksByCategoryId($courseId, $categoryId)
+    {
+        $lessonTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($courseId, $categoryId);
+        if (empty($lessonTasks)) {
+            return;
+        }
+        foreach ($lessonTasks as $task) {
+            $this->deleteTask($task['id']);
+        }
+    }
+
     public function findTasksByCourseId($courseId)
     {
         return $this->getTaskDao()->findByCourseId($courseId);
