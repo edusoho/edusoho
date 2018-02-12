@@ -1,21 +1,11 @@
 //课程管理头部
 .course-manage-header {
   position: relative;
-  top: -40px;
   margin-bottom: 0;
   padding: 21px 24px;
   .cd-box-shadow-z(8px);
   .cd-border-radius;
   background-color: #fff;
-
-  .teachers {
-    color: @gray;
-    font-size: 13px;
-    a {
-      margin-right: 10px;
-      color: @gray-dark;
-    }
-  }
 }
 
 .course-manage-header-info {
@@ -83,11 +73,6 @@
 .course-publish-status--published {
   background-color: #18ad3b;
 }
-
-.course-manage-body {
-  margin-top: -16px !important;
-}
-
 
 .courseset-manage-header {
   position: relative;
@@ -173,5 +158,54 @@
   margin-left: 24px;
   @media (max-width: @screen-sm-max) {
     margin-left: 0;
+  }
+}
+
+
+.course-header-section,
+.courseset-header-section {
+  padding-top: 8px;
+  background-color: #fff;
+}
+
+.course-header-section {
+  margin-bottom: 40px;
+  height: 110px;
+}
+
+.courseset-header-section-nav.nav {
+  margin-bottom: 0;
+  border: none;
+  > li  {
+    margin-right: 80px;
+    &.active > a {
+      color: @cd-gray-dark;
+    }
+    > a {
+      padding: 0 0 20px 0;
+      line-height: 1;
+      color: @cd-gray;
+      &:hover,
+      &:focus {
+        color: @cd-gray-dark;
+      }
+      i {
+        font-size: 20px;
+      }
+    }
+    .courseset-header-section-nav__link {
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 104px;
+        width: 1px;
+        height: 16px;
+        background-color: rgba(0, 0, 0, 0.16);
+      }
+    }
+  }
+  .highlight {
+    border-width: 4px;
   }
 }
