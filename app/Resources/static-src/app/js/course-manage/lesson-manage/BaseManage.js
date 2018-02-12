@@ -86,15 +86,22 @@ export default class Manage {
       let $this = $(this);
       let $parent = $this.closest('.task-manage-item');
       let text = self._getDeleteText($this);
-      if (!confirm(text)) {
-        return;
-      }
-      
-      $parent.remove();
-      self.sortList();
-      self.handleEmptyShow();
-      $.post($this.data('url'), function (data) {
-      });
+
+      cd.confirm({
+        title: Translator.trans('site.delete'),
+        content: text,
+        confirmText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close'),
+        confirm() {
+          $parent.remove();
+          self.sortList();
+          self.handleEmptyShow();
+          
+          $.post($this.data('url'), function (data) {
+          });
+        }
+      })
+
     });
   }
 
@@ -188,7 +195,8 @@ export default class Manage {
     this.$element.on('click', '.unpublish-item', (event) => {
       let $this = $(event.target);
       $.post($this.data('url'), function (data) {   
-        let $parentLi = $this.closest('.js-task-manage-item');
+        let $parentLi = $this.closest('.task-manage-item');
+
         $parentLi.find('.publish-item, .js-delete, .publish-status').removeClass('hidden');
         $parentLi.find('.unpublish-item').addClass('hidden');
         notify('success', Translator.trans('course.manage.task_unpublish_success_hint'));

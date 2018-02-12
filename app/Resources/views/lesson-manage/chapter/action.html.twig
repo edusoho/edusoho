@@ -23,7 +23,7 @@
         </a>
       </li>
       <li>
-        <a href="javascript:;" class="delete-item {% if status == 1 %}hidden{% endif %}" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
+        <a href="javascript:;" class="js-delete {% if status == 1 %}hidden{% endif %}" data-type="chapter" data-name="{{ ('site.data.' ~ chapter.type)|trans }}" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
           <i class="es-icon es-icon-delete mrs"></i>
           {{'form.btn.delete'|trans}}
         </a>
@@ -36,7 +36,7 @@
     </ul>
   </span>
 {% else %}
-  <a href="javascript:;" class="btn gray-darker delete-item" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
+  <a href="javascript:;" class="btn gray-darker js-delete" data-name="{{ ('site.data.' ~ chapter.type)|trans }}" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
     <i class="es-icon es-icon-delete mrs"></i>
     {{'form.btn.delete'|trans}}
   </a>

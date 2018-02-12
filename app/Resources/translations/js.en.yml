@@ -55,6 +55,8 @@ site.form.submit_error: Form submit error
 site.cancel: Cancel
 site.confirm: Confirm
 site.close: Close
+site.delete: Delete
+
 site.response_error: Response error
 site.loading: loading...
 site.loading_error: loading error...

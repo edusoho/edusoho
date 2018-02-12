@@ -41,6 +41,7 @@ site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
 site.close: 关闭
+site.delete: 删除
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功

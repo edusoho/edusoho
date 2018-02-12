@@ -3,6 +3,7 @@
     <div class="item-line"></div>
     <div class="item-content">
       {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':chapter.number, '%title%':chapter.title|sub_text(30)})|raw }}
+      <span class="color-warning publish-status {% if chapter.status == 'published' %}hidden{% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>
     </div>
     <div class="item-actions">
       <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-type="task" data-position="{{chapter.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: chapter.id}) }}">
