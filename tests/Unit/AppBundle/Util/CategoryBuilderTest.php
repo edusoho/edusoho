@@ -15,7 +15,7 @@ class CategoryBuilderTest extends BaseTestCase
                 array(
                     'functionName' => 'getGroupByCode',
                     'withParams' => array('xxx'),
-                    'returnValue' => null
+                    'returnValue' => null,
                 ),
                 array(
                     'functionName' => 'getGroupByCode',
@@ -24,8 +24,8 @@ class CategoryBuilderTest extends BaseTestCase
                         'id' => 1,
                         'code' => 'course',
                         'name' => '课程分类',
-                        'depth' => 3
-                    )
+                        'depth' => 3,
+                    ),
                 ),
                 array(
                     'functionName' => 'getCategoryTree',
@@ -55,14 +55,13 @@ class CategoryBuilderTest extends BaseTestCase
                         "orgCode": "1.",
                         "description": "",
                         "depth": 2
-                    }]', true)
+                    }]', true),
                 ),
             )
         );
         $builder = new CategoryBuilder();
         $result = $builder->buildChoices('xxx');
         $this->assertEmpty($result);
-
 
         $result = $builder->buildChoices('course');
         $this->assertEquals('默认分类', $result[1]);
