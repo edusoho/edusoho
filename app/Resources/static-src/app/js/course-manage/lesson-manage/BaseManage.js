@@ -1,5 +1,4 @@
 import sortList from 'common/sortable';
-import { toggleIcon } from 'app/common/widget/chapter-animate';
 import notify from 'common/notify';
 
 export default class Manage {

@@ -148,7 +148,6 @@ class TaskManageController extends BaseController
         $lesson = $this->getChapterDao()->get($task['categoryId']);
         $lesson['tasks'] = array($task);
 
-        // $tasks = $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($lesson['id']);
         $html = $this->renderView(
             $template,
             array(
