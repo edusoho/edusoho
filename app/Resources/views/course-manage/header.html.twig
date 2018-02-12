@@ -26,9 +26,6 @@
   </div>
 
   <div class="pull-right hidden-xs">
-    <a class="btn cd-btn cd-btn-primary" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">
-      {{'course.btn.back_course_edit'|trans}}
-    </a>
     {# 发布状态 #}
     {% if course.status == 'published' %}
       <div class="btn-group">
@@ -39,13 +36,23 @@
     {# 未发布状态 #}
     {% if course.status != 'published' %}
 
-      <div class="btn-group">
-        <a class="btn cd-btn cd-btn-primary" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{'course.btn.preview'|trans}}</a>
+      <button class="cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
+
+      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+        <button class="cd-btn cd-btn-primary course-manage-header-more">
+          <i class="es-icon es-icon-morehoriz"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{'预览计划'|trans}}</a>
+          </li>
+          <li>
+            <a href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{'course.btn.back_course_edit'|trans}}</a>
+          </li>
+        </ul>
       </div>
-      <div class="btn-group">
-        <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
-      </div>
-      <button class="btn cd-btn cd-btn-primary"><i class="es-icon es-icon-morehoriz"></i></button>
+
+
     {% endif %}
   </div>
 </div>

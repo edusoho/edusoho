@@ -38,22 +38,23 @@
 
   {# 课程发布按钮 #}
   <div class="courseset-manage-header-btn hidden-xs">
-    {% if course.courseSetId|default(null) and course_count(course.courseSetId)|default(0) > 1 %}
-      <a class="btn cd-btn cd-btn-primary" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{'course.btn.back_course_edit'|trans}}</a>
-    {% endif %}
 
     {% if courseSet.status == 'published' %}
-      <div class="btn-group">
-        <a class="btn cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
-      </div>
+      <a class="cd-btn cd-btn-primary" href="{{basepath}}">{{'course.btn.back_course_homepage'|trans}}</a>
     {% endif %}
 
     {% if courseSet.status != 'published' %}
-      <div class="btn-group">
-        <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
-      </div>
-      <div class="btn-group">
-        <a class="btn cd-btn cd-btn-primary" target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}"><i class="es-icon es-icon-morehoriz"></i></a>
+      <button class="btn cd-btn cd-btn-primary course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'course.btn.publish'|trans}}</button>
+
+      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+        <button class="cd-btn cd-btn-primary course-manage-header-more">
+          <i class="es-icon es-icon-morehoriz"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a target="_blank" href="{{ path('course_show', {id: courseSet.defaultCourseId, 'previewAs':'guest'}) }}">{{'预览课程'|trans}}</a>
+          </li>
+        </ul>
       </div>
     {% endif %}
   </div>
