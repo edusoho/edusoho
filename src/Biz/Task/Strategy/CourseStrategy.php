@@ -25,5 +25,5 @@ interface CourseStrategy
 
     public function getTasksTemplate();
 
-    public function getTaskItemTemplate();
+    public function getJsonTemplate($task);
 }

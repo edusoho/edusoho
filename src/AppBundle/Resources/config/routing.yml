@@ -1708,6 +1708,10 @@ course_task_plugin_thread_answer:
   defaults: { _controller: AppBundle:TaskPlugin:answerQuestion }
   methods: [POST]
 
+course_manage_chapter_manage:
+    path:  /course/{courseId}/manage/chapter/manage
+    defaults: { _controller: AppBundle:Course/ChapterManage:manage}
+
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create

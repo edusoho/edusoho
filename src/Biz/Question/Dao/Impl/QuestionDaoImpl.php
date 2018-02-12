@@ -34,6 +34,11 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
     }
 
+    public function deleteByCourseSetId($courseSetId)
+    {
+        return $this->db()->delete($this->table(), array('courseSetId' => $courseSetId));
+    }
+
     public function copyQuestionsUpdateSubCount($parentId, $subCount)
     {
         $sql = "UPDATE {$this->table()} SET subCount = ? WHERE copyId = ?";

@@ -41,6 +41,7 @@ site.video.quality.high: 精细
 site.cancel: 取消
 site.confirm: 确定
 site.close: 关闭
+site.delete: 删除
 
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
@@ -419,7 +420,7 @@ course.manage.close_success_hint: 关闭成功
 course.manage.close_fail_hint: 关闭失败
 course.manage.delete_hint: 是否确定删除该教学计划？
 course.manage.task_delete_hint: 是否确定删除该任务吗？
-course.manage.chapter_delete_hint: 是否确定删除该章节吗？
+course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功

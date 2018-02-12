@@ -1,0 +1,20 @@
+<li id="chapter-{{lesson.id}}" class="task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}}  clearfix" style="border: none;">
+  <div class="chapter-item clearfix mbm">
+    <div class="item-line"></div>
+    <div class="item-content">
+      {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':lesson.number, '%title%':lesson.title|sub_text(30)})|raw }}
+      <span class="color-warning publish-status {% if lesson.status == 'published' %}hidden{% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>
+    </div>
+    <div class="item-actions">
+      <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
+        <i class="es-icon es-icon-anonymous-iconfont mrs"></i> {{'course.plan_task.create_task'|trans }}
+      </a>
+      
+     {% include 'lesson-manage/normal/lesson-manage.html.twig' %}
+    </div>
+  </div>
+  <ul style="list-style-type: none;" class="js-lesson-box">
+    {% include 'lesson-manage/normal/tasks.html.twig' with {
+      tasks: lesson.tasks|default(),} %}
+  </ul>
+</li>

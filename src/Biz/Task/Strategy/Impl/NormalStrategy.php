@@ -25,14 +25,41 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
-    public function getTasksTemplate()
+    public function updateTask($id, $fields)
     {
-        return 'course-manage/tasks/normal-tasks.html.twig';
+        $task = parent::updateTask($id, $fields);
+
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'categoryId' => $task['categoryId'],
+        );
+        $categoryTaskCount = $this->getTaskService()->countTasks($conditions);
+        if ($categoryTaskCount <= 1) {
+            $this->getCourseService()->updateChapter(
+                $task['courseId'],
+                $task['categoryId'],
+                array('title' => $task['title'])
+            );
+        }
+
+        return $task;
     }
 
-    public function getTaskItemTemplate()
+    public function getTasksTemplate()
     {
-        return 'task-manage/item/normal-list-item.html.twig';
+        return 'lesson-manage/normal-list.html.twig';
+    }
+
+    public function getJsonTemplate($task)
+    {
+        if (!empty($task['categoryId'])) {
+            $chapter = $this->getChapterDao()->get($task['categoryId']);
+            if ('lesson' == $chapter['type']) {
+                return 'lesson-manage/normal/tasks.html.twig';
+            }
+        }
+
+        return 'lesson-manage/normal/lesson.html.twig';
     }
 
     public function deleteTask($task)
@@ -47,6 +74,16 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             $this->getTaskDao()->delete($task['id']);
             $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
             $this->getActivityService()->deleteActivity($task['activityId']);
+
+            //课时下面只有一个任务时，则把课时也删除
+            $conditions = array(
+                'courseId' => $task['courseId'],
+                'categoryId' => $task['categoryId'],
+            );
+            $categoryTaskCount = $this->getTaskDao()->count($conditions);
+            if (empty($categoryTaskCount)) {
+                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+            }
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {
@@ -123,6 +160,35 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     }
 
     public function prepareCourseItems($courseId, $tasks, $limitNum)
+    {
+        $items = array();
+        uasort(
+            $tasks,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+        $tasks = ArrayToolkit::group($tasks, 'categoryId');
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        uasort(
+            $chapters,
+            function ($item1, $item2) {
+                return $item1['seq'] > $item2['seq'];
+            }
+        );
+        foreach ($chapters as $index => $chapter) {
+            $chapterId = $chapter['id'];
+            if (!empty($tasks[$chapterId])) {
+                $chapter['tasks'] = $tasks[$chapterId];
+            }
+            $items[] = $chapter;
+        } 
+
+        return $items;
+    }
+
+    public function oldPrepareCourseItems($courseId, $tasks, $limitNum)
     {
         $items = array();
         foreach ($tasks as $task) {

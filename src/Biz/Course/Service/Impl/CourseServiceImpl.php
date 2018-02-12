@@ -546,8 +546,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $result = $this->getCourseDeleteService()->deleteCourse($id);
 
-        $this->getCourseDao()->delete($id);
-
         $this->dispatchEvent('course.delete', new Event($course));
 
         return $result;
@@ -589,7 +587,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $this->dispatchEvent('course.publish', $course);
 
-        $this->getTaskService()->publishTasksByCourseId($id);
+        $this->publishChapterByCourseId($course['id']);
     }
 
     protected function validateExpiryMode($course)
@@ -904,8 +902,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
-        if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
+        if (empty($deletedChapter)) {
+            return;
+        }
+
+        if ($deletedChapter['courseId'] != $courseId) {
+            throw $this->createNotFoundException('Argument Invalid');
         }
 
         $this->getChapterDao()->delete($deletedChapter['id']);
@@ -940,6 +942,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getChapterDao()->update($chapterId, array('status' => 'published'));
 
         $this->dispatchEvent('course.chapter.publish', new Event($chapter));
+    }
+
+    public function publishChapterByCourseId($courseId)
+    {
+        $chapters = $this->getChapterDao()->findLessonsByCourseId($courseId);
+
+        if (empty($chapters)) {
+            return;
+        }
+
+        foreach ($chapters as $chapter) {
+            $this->publishChapter($chapter['id']);
+        }
     }
 
     public function unpublishChapter($chapterId)

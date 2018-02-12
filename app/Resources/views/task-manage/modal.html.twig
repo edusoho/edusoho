@@ -3,7 +3,7 @@
 {% do script(['libs/jquery-validation.js','libs/iframe-resizer.js','app/js/task-manage/create/index.js']) %}
 
 {% block task_create_type %}
-  <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}"
+  <div id="task-create-type" class="hidden" data-editor-mode="{{ mode }}" data-course-type="{{ course.type }}"
       {% if mode == 'edit' %}
     data-editor-type="{{ currentType }}"
     data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
@@ -30,7 +30,6 @@
           <input name="mediaType" id="mediaType" class="type-hidden">
           <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
           <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
-          <input class="js-hidden-data" type="hidden" name="chapterId" value="{{ chapterId|default(null) }}">
           <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
           <input class="js-hidden-data" type="hidden" name="courseSetType" id="courseSetType" value="{{ courseSet.type }}">
           <input type="hidden" id="courseExpiryMode" value="{{ course.expiryMode }}">

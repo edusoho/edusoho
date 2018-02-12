@@ -43,8 +43,9 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
+
         $categoryId = $request->query->get('categoryId');
-        $chapterId = $request->query->get('chapterId');
+        //categoryId  所属课时
         $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task = $request->request->all();
@@ -60,29 +61,9 @@ class TaskManageController extends BaseController
                 'course' => $course,
                 'courseSet' => $courseSet,
                 'categoryId' => $categoryId,
-                'chapterId' => $chapterId,
                 'taskMode' => $taskMode,
             )
         );
-    }
-
-    protected function prepareRenderTaskForDefaultCourseType($courseType, $task, $isOnlyTask)
-    {
-        if (CourseService::NORMAL__COURSE_TYPE == $courseType) {
-            if (!$isOnlyTask) {
-                $chapter = $this->getChapterDao()->get($task['categoryId']);
-                $task['chapter'] = $chapter;
-            }
-
-            return $task;
-        }
-
-        $chapter = $this->getChapterDao()->get($task['categoryId']);
-        $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
-        $chapter['tasks'] = $tasks;
-        $chapter['mode'] = $task['mode'];
-
-        return $chapter;
     }
 
     public function batchCreateTasksAction(Request $request, $courseId)
@@ -157,32 +138,28 @@ class TaskManageController extends BaseController
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
-        $isOnlyTask = empty($task['categoryId']) ? 0 : 1;
 
+        $template = $this->createCourseStrategy($course)->getJsonTemplate($task);
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
-
-        if (CourseService::DEFAULT_COURSE_TYPE == $course['courseType'] && isset($task['mode']) && 'lesson' != $task['mode']) {
-            return $this->createJsonResponse(
-                array(
-                    'append' => false,
-                    'html' => '',
-                )
-            );
+        if (empty($template)) {
+            return $this->createJsonResponse(true);
         }
 
-        $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task, $isOnlyTask);
+        $tasks = 'normal' == $course['courseType'] ? array($task) : $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($task['categoryId']);
+        $lesson = $this->getChapterDao()->get($task['categoryId']);
+        $lesson['tasks'] = $tasks;
 
         $html = $this->renderView(
-            $this->createCourseStrategy($course)->getTaskItemTemplate(),
+            $template,
             array(
                 'course' => $course,
-                'task' => $task,
+                'lesson' => $lesson,
+                'tasks' => $tasks,
             )
         );
 
         return $this->createJsonResponse(
             array(
-                'append' => true,
                 'html' => $html,
             )
         );
@@ -206,7 +183,7 @@ class TaskManageController extends BaseController
 
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
 
-            return $this->createJsonResponse(array('append' => false, 'html' => ''));
+            return $this->createJsonResponse(true);
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -278,9 +255,6 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($taskId);
-        if (isset($task['mode']) && 'lesson' == $task['mode']) {
-            $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
-        }
 
         return $this->createJsonResponse(array('success' => true));
     }

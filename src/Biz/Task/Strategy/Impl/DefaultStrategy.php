@@ -25,24 +25,28 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function getTasksTemplate()
     {
-        return 'course-manage/tasks/default-tasks.html.twig';
+        return 'lesson-manage/default-list.html.twig';
     }
 
-    public function getTaskItemTemplate()
+    public function getJsonTemplate($task)
     {
-        return 'task-manage/item/default-list-item.html.twig';
+        if (!empty($task['mode']) && 'lesson' != $task['mode']) {
+            return '';
+        }
+        
+        return 'lesson-manage/default/lesson.html.twig';
     }
 
     public function createTask($field)
     {
         $this->validateTaskMode($field);
 
-        if ($field['mode'] == 'lesson') {
-            // 创建课时
-            return $this->_createLesson($field);
-        } else {
+        if (isset($field['mode']) && 'lesson' != $field['mode']) {
             // 创建课时中的环节
             return $this->_createLessonLink($field);
+        } else {
+            // 创建课时
+            return $this->_createLesson($field);
         }
     }
 
@@ -84,6 +88,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $this->getActivityService()->deleteActivity($_task['activityId']);
             }
 
+            if ($task['mode'] == 'lesson') {
+                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+            }
+
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
@@ -93,7 +101,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     protected function validateTaskMode($field)
     {
-        if (empty($field['mode']) || !in_array(
+        if (!empty($field['mode']) && !in_array(
                 $field['mode'],
                 array('preparation', 'lesson', 'exercise', 'homework', 'extraClass')
             )
@@ -201,7 +209,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         );
         $chapter = $this->getCourseService()->createChapter($chapter);
         $task['categoryId'] = $chapter['id'];
-
+        $task['mode'] = 'lesson';
         return parent::createTask($task);
     }
 

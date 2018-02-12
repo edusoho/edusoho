@@ -16,7 +16,9 @@ site.date.second: Second
 site.data.people: Person
 site.data.empty: Empty
 site.data.chapter: Chapter
+site.data.lesson: Lesson
 site.data.task: Task
+site.data.unit: unit
 site.data.part: Part
 site.data.title: Title
 site.data.score: Score
@@ -239,6 +241,7 @@ form.field.create: Add
 form.field.amount: Amount
 form.field.cut: Cut
 form.btn.create: Add
+form.btn.edit: Edit
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
@@ -1475,10 +1478,8 @@ course.plan_task.edit_tips: 'Create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
-course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
-course.plan_task.which_part: "</i>No.<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
-course.plan_task.which_task: "</i>No.<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
-course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：%title%'
+course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：<span class="title">%title%</span>\n"
+course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.create_task: 'Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
