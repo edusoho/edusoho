@@ -1,0 +1,138 @@
+{#
+  es-infinite-scroll.js 内的数据源
+  {
+    'global': {
+      'member': {
+        ...
+      },
+      'course': {
+        'buyExpiryTime': unix_time(),
+        'expiryEndDate': unit_time(),
+        'status': 'published',
+      },
+      'currentTime': unix_time(),
+    },
+    'dataSource': [
+      {
+        'itemType': 'chapter',  //chapter, unit, task
+        'name': '任务1： movie',
+        'locked': true,
+        'watchLimitRemaining': 30,
+        'isOptional': true,
+        'result': {
+          'status': 'start',
+        },
+      },
+      {
+        ...
+      },
+      ....
+    ],
+    'dataSourceMap': {
+      'taskClass': function(source, global) {
+        let task = source;
+        let taskClass = 'es-icon left-menu ';
+        if (task.locked) {
+          taskClass .= 'es-icon-lock';
+        } else if (!task.result || !global.member) {
+          taskClass .= 'es-icon-undone-check color-gray';
+        } else if (task.result.status == 'start') {
+          taskClass .= 'es-icon-doing color-primary';
+        } else if (task.result.status == 'finish') {
+          taskClass .= 'es-icon-iccheckcircleblack24px color-primary';
+        }
+        return taskClass;
+      },
+      'taskTip': function(source, global) {
+
+      },
+      'isOvertime': function(source, global) {
+        return (global.course.buyExpiryTime && global.course.buyExpiryTime < global.currentTime)
+          || (global.course.expiryEndDate && global.course.expiryEndDate < global.currentTime)
+      },
+      'isTaskPublished': function(source, global) {
+        let task = source;
+        return task.status == 'published' && global.course.status=='published';
+      },
+      'isMember': function(source, global) {
+        return global.member;
+      },
+      'isOptional': function(source, global) {
+        return source.itemType == 'task' && source.isOptional;
+      },
+    }
+  }
+#}
+
+<div class="js-infinite-item-template" style="display: none">
+  <tmp display-if="!{isOptional}>
+    <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
+        display-if="{itemType} == 'chapter'"><i class="es-icon es-icon-menu left-menu"></i>
+      <a href="javascript:" class="title gray-dark">{name}</a>
+      <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+    </li>
+  
+    <li class="task-item color-gray bg-gray-lighter infinite-item"
+      display-if="{itemType} == 'unit'">
+      <span class="title">{name}</span>
+    </li>
+
+    <li class="task-item task-content mouse-control infinite-item"
+        display-if="{itemType} == 'task'">
+      <i class="{taskClass}"></i>
+      {% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
+
+      <tmp display-if="{isTaskPublished}">
+        <tmp display-if="{isMember}">
+          <a class="title" href="<!-- path('course_task_show',{courseId:task.courseId, id: task.id}) -->">
+            <-- include 'course/task-list/parts/list-li-title.html.twig' -->
+          </a>
+        </tmp>
+
+        <tmp display-if="{isOvertime}">
+          <a class="title" href="#modal" data-toggle="modal"
+            data-url="<-- path('course_task_preview',{courseId:task.courseId, id: task.id}) -->"
+            style="margin-top:-8px"><-- include 'course/task-list/parts/list-li-title.html.twig' --></a>
+        </tmp>
+          
+        <tmp display-if="!{isMember} || !{isOvertime}">
+          <a class="title" href="javascript:;" data-toggle="modal"
+            style="margin-top:-8px"><-- include 'course/task-list/parts/list-li-title.html.twig' --></a>
+        </tmp>
+
+        <-- include 'course/task-list/parts/task-length.html.twig'  -->
+        <span class="right-menu mouse-enter">
+          {% if not member and not isOvertime and courseSet.status | default('published') == 'published' %}
+            {% if task.isFree %}
+              <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                  data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                  style="margin-top:-8px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
+            {% elseif task.tryLookable %}
+              <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                  data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                  style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
+            {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
+              {% if course.isFree %}
+                <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.join_btn'|trans }}
+                </a>
+              {% else %}
+                <a style="margin-top:-8px" class="btn btn-primary js-task-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
+              {% endif %}
+            {% endif %}
+
+          {% endif %}
+        </span>
+      </tmp>
+
+      <tmp display-if="{isTaskPublished} == false">
+        <span class="title">
+          <!-- include 'course/task-list/parts/list-li-title.html.twig' -->
+        </span>
+        <span class="right-menu color-gray">
+          {{ 'course.catalogue.task_status.looking_forward'|trans }}
+        </span>
+      </tmp>
+    </li>
+  </tmp>
+  
+</div>
