@@ -907,7 +907,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($deletedChapter['courseId'] != $courseId) {
-            throw $this->createNotFoundException("Argument Invalid");
+            throw $this->createNotFoundException('Argument Invalid');
         }
 
         $this->getChapterDao()->delete($deletedChapter['id']);
