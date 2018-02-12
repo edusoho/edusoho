@@ -4,7 +4,6 @@ import BaseManage from './../BaseManage';
 class DefaultManage extends BaseManage {
   constructor($container) {
     super($container);
-
     this._defaultEvent();
   }
 
@@ -14,7 +13,7 @@ class DefaultManage extends BaseManage {
 
   _showLesson() {
     this.$element.find('.js-task-manage-item').first().addClass('active').find('.js-settings-list').stop().slideDown(500);
-     this.$element.on('click', '.js-item-content', (event) => {
+    this.$element.on('click', '.js-item-content', (event) => {
       let $this = $(event.currentTarget);
       let $li = $this.closest('.js-task-manage-item');
       if ($li.hasClass('active')) {

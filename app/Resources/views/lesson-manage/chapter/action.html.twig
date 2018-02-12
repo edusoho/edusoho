@@ -3,47 +3,10 @@
   <i class="es-icon es-icon-edit mrs"></i>
   {{'course.plan_task.edit_btn'|trans}}
 </a>
-{#<a href="javascript:;" class="btn gray-darker js-delete" data-name="{{ ('site.data.' ~ chapter.type)|trans }}" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id, courseId:course.id}) }}">
+<a href="javascript:;" class="btn gray-darker js-delete" data-name="{{ course_chapter_alias(chapter.type)|trans }}" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id, courseId:course.id}) }}">
   <i class="es-icon es-icon-delete mrs"></i>
-  {{'course.plan_task.delete_btn'|trans}}
-</a>#}
-
-
-{% if chapter.type == 'lesson' %}
-  <span class="dropdown">
-    <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#">
-      <i class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true" aria-expanded="false"></i>{{ 'course.plan_task.more_btn'|trans }}
-    </a>
-    <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
-
-      {% set status = chapter.status|default('create') == 'published' ? 1 : 0 %}
-      <li>
-        <a class='publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_chapter_publish', {courseId:course.id, chapterId:chapter.id}) }}">
-          <i class="es-icon es-icon--check-circle mrs"></i>{{'course.plan_task.publish_btn'|trans}}
-        </a>
-      </li>
-      <li>
-        <a href="javascript:;" class="delete-item {% if status == 1 %}hidden{% endif %}" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
-          <i class="es-icon es-icon-delete mrs"></i>
-          {{'form.btn.delete'|trans}}
-        </a>
-      </li>
-      <li>
-        <a class='unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_chapter_unpublish', {courseId:course.id, chapterId:chapter.id}) }}">
-          <i class="es-icon es-icon-close01 mrm"></i>{{'course.plan_task.unpublish_btn'|trans}}
-        </a>
-      </li>
-    </ul>
-  </span>
-{% else %}
-  <a href="javascript:;" class="btn gray-darker delete-item" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
-    <i class="es-icon es-icon-delete mrs"></i>
-    {{'form.btn.delete'|trans}}
-  </a>
-{% endif %}
-
-{% if collapse|default(1) %}
-  <a href="javascript:;" class="btn gray-darker js-chapter-toggle-show">
-    <i class="es-icon es-icon-keyboardarrowup mr5 "></i>{{'site.btn.collapse'|trans}}
-  </a>
-{% endif %}
+  {{'form.btn.delete'|trans}}
+</a>
+<a href="javascript:;" class="btn gray-darker js-chapter-toggle-show">
+  <i class="es-icon es-icon-keyboardarrowup mr5 "></i>{{'site.btn.collapse'|trans}}
+</a>
