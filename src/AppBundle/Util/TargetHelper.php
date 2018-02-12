@@ -4,6 +4,7 @@ namespace AppBundle\Util;
 
 use Topxia\Service\Common\ServiceKernel;
 
+//可能已弃用
 class TargetHelper
 {
     protected $container;
@@ -34,7 +35,7 @@ class TargetHelper
     {
         $groupedTargets = array();
         foreach ($targets as $target) {
-            if ($target['type'] == 'unknow') {
+            if ('unknow' == $target['type']) {
                 continue;
             }
             if (empty($groupedTargets[$target['type']])) {
@@ -61,7 +62,7 @@ class TargetHelper
             $explodedTarget = explode('/', $target);
             $lastTarget = end($explodedTarget);
 
-            if (strpos($lastTarget, '-') === false) {
+            if (false === strpos($lastTarget, '-')) {
                 $parsedTargets[$target] = array('type' => 'unknow', 'id' => 0);
             } else {
                 list($type, $id) = explode('-', $lastTarget);
