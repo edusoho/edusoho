@@ -29,7 +29,7 @@
       {% if courseSet.type != 'normal' %}
         [{{ dict('courseType')[courseSet.type] }}]
       {% endif %}
-      <a class="cd-link-gray-dark text-overflow" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      <a class="cd-link-major text-overflow" href="{{basepath}}" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
     </div>
     <div class="courseset-manage-header-info__price color-danger">
       ¥99～¥199
@@ -39,7 +39,7 @@
   {# 课程发布按钮 #}
   <div class="courseset-manage-header-btn hidden-xs">
     {% if course.courseSetId|default(null) and course_count(course.courseSetId)|default(0) > 1 %}
-      <a class="btn btn-default btn-sm " href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{'course.btn.back_course_edit'|trans}}</a>
+      <a class="btn cd-btn cd-btn-primary" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">{{'course.btn.back_course_edit'|trans}}</a>
     {% endif %}
 
     {% if courseSet.status == 'published' %}
