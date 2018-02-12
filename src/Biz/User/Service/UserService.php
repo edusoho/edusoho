@@ -16,6 +16,8 @@ interface UserService
 
     public function getUserByType($type);
 
+    public function getUserByUUID($uuid);
+
     public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
@@ -296,6 +298,10 @@ interface UserService
     public function getUserIdsByKeyword($word);
 
     public function updateUserNewMessageNum($id, $num);
+
+    public function makeUUID();
+
+    public function generateUUID();
 
     public function getSmsRegisterCaptchaStatus($clientIp, $updateCount = false);
 
