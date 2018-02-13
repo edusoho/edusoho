@@ -1,32 +1,37 @@
-<li id="chapter-{{chapter.id}}" class="task-manage-item drag js-task-manage-{{chapter.type}}  clearfix">
+<li id="chapter-{{chapter.id}}" class="task-manage-item drag js-task-manage-{{chapter.type}} task-manage-{{ chapter.type }} clearfix">
+  {% if chapter.type == 'unit' %}
+    <div class="item-line"></div>
+  {% endif %}
   <div class="item-content">
+    <a class="js-chapter-toggle-show cd-link-assist" href="javascript:;">
+      <i class="es-icon es-icon-keyboardarrowup mrs"></i>
+    </a>
     {{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%title%':chapter.title|sub_text(30)})|raw }}
   </div>
   {# 章可以创建课时，节
   节只能创建课时 #}
   <div class="item-actions">
     {% if chapter.type == 'chapter' %}
-      <span class="dropdown">
-        <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#">
-          <i class="es-icon es-icon-anonymous-iconfont mrs"></i>
+      <div class="cd-dropdown cd-dropdown-right cd-mr24" data-toggle="cd-dropdown" data-trigger="hover">
+        <a class="cd-link-assist" href="javascript:;">
+          <i class="cd-icon cd-icon-add"></i>
         </a>
-        <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
-            <li>
-              <a href="#" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
-                {{'course.plan_task.create_part'|trans({'%partName%': course_chapter_alias('unit')|trans}) }}        
-              </a>
-            </li>
-            <li>
-              <a href="#" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
-                {{'course.manage.create_lesson'|trans }}
-              </a>
-            </li>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="javascript:;" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
+              {{'course.plan_task.create_part'|trans({'%partName%': course_chapter_alias('unit')|trans}) }}
+            </a>
+          </li>
+          <li>
+            <a href="javascript:;" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+              {{'course.manage.create_lesson'|trans }}
+            </a>
+          </li>
         </ul>
-      </span>
+      </div>
     {% else %}
-      <a class="btn gray-darker" data-position="{{ chapter.id }}" data-type="lesson"  href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
-        <i class="es-icon es-icon-anonymous-iconfont mrs"></i>
-        {{'course.lesson'|trans}}
+      <a class="cd-mr24" data-position="{{ chapter.id }}" data-type="lesson" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
+        <i class="cd-icon cd-icon-add"></i>
       </a>
     {% endif %}
 
