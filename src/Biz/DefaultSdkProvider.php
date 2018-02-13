@@ -30,6 +30,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['qiQiuYunSdk.play'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateSdk($biz, array());
+            if (!empty($sdk)) {
+                $service = $sdk->getPlayService();
+            }
+
+            return $service;
+        };
     }
 
     public function generateSdk($biz, $serviceConfig)
