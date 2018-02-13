@@ -35,7 +35,10 @@ class UploaderTokenTest extends BaseTestCase
         $this->assertNull($result);
 
         //传入不符合sign的token
-        $result = $uploaderToken->parse('MXxjb3Vyc2VsZXNzb258M3xwcml2YXRlfDE1MTg1MTMzMjJ8NTc4NDYwMjU2MDllMzQwZWQxMDA0OWFlM2ZkN2M5M2U');
+        $token = $uploaderToken->make('courselesson', 3, 'private');
+        $result = base64_decode($token);
+        $contents = explode('|', $result);
+        $result = $uploaderToken->parse(base64_encode($contents[0].'|'.$contents[1].'|'.$contents[2].'|'.$contents[3].'|'.$contents[4].'|'.$contents[5].'extractstr'));
         $this->assertNull($result);
 
         //正常传入的token
