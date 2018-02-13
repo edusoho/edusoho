@@ -28,8 +28,8 @@ export default class Manage {
 
   _collapse() {
     let collapseTexts = [
-      '<i class="es-icon es-icon-keyboardarrowup mr5"></i>'+Translator.trans('site.data.expand'),
-      '<i class="es-icon es-icon-keyboardarrowdown mr5"></i>'+Translator.trans('site.data.collapse')
+      '<i class="es-icon es-icon-keyboardarrowup mr5"></i>',
+      '<i class="es-icon es-icon-keyboardarrowdown mr5"></i>'
     ]
     this.$element.on('click', '.js-chapter-toggle-show', (event) => {
       let $this = $(event.currentTarget);
