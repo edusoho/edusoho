@@ -1,25 +1,21 @@
 {% extends 'course-manage/tasks/layout.html.twig' %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/normal/index.js']) %}
 
-{% block main %}
-  <div class="panel panel-default">
-    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
-    <div class="panel-body">
-      {% include 'lesson-manage/header.html.twig' %}
-      <ul id="sortable-list" class="task-manage-list sortable-list"
-          data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
-        {% for key, item in items %}
-          {% if item.type == 'lesson' %}
-            {% include 'lesson-manage/normal/lesson.html.twig' with {lesson:item, course:course} %}
-          {% else %}
-            {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
-          {% endif %}
-        {% endfor %}
-      </ul>
-      <div class="empty task-empty js-task-empty {% if items %}  hidden {% endif %}">
-        <i class="es-icon es-icon-book task-empty-icon"></i>
-        {{'course.plan_task.empty'|trans}}
-      </div>
-    </div>
+{% block page_title %}课时管理{% endblock %}
+{% block main_body %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
+  {% include 'lesson-manage/header.html.twig' %}
+  <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
+    {% for key, item in items %}
+      {% if item.type == 'lesson' %}
+        {% include 'lesson-manage/normal/lesson.html.twig' with {lesson:item, course:course} %}
+      {% else %}
+        {% include 'lesson-manage/chapter/item.html.twig' with {chapter:item, course:course} %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+  <div class="empty task-empty js-task-empty {% if items %} hidden {% endif %}">
+    <i class="es-icon es-icon-book task-empty-icon"></i>
+    {{'course.plan_task.empty'|trans}}
   </div>
 {% endblock %}
