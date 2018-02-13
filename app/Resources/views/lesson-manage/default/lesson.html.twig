@@ -38,20 +38,17 @@
     </div>
 
     <div class="item-actions">
-      <a class="btn gray-darker" data-role='update-task' href="javascript:;"
-        data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
-        <i class="es-icon es-icon-edit mrs"></i>{{'course.plan_task.edit_btn'|trans}}
+      <a class="cd-mr24" data-role='update-task' href="javascript:;"
+        data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id, courseId:task.courseId}) }}">
+        <i class="es-icon es-icon-edit mrs"></i>
       </a>
-      <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id, courseId:task.courseId, preview:1}) }}"
-        target="_blank">
+      <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id, courseId:task.courseId, preview:1}) }}" target="_blank">
         <i class="es-icon es-icon-removeredeye mrs"></i>
-        {{'course.plan_task.preview_btn'|trans}}
       </a>
 
       {% include 'lesson-manage/default/lesson-manage.html.twig' %}
     </div>
-  </div> 
+  </div>
 
   {% include 'lesson-manage/default/tasks.html.twig' %}
 </li>
