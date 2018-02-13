@@ -64,6 +64,7 @@ class CategoryBuilderTest extends BaseTestCase
         $this->assertEmpty($result);
 
         $result = $builder->buildChoices('course');
+        var_dump($result);
         $this->assertEquals('默认分类', $result[1]);
         $this->assertEquals('　子分类', $result[3]);
     }
