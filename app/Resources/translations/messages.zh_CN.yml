@@ -1655,7 +1655,7 @@ course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
 course.plan_task.empty: 什么都没有，快去添加一个学习任务!
 course.plan_task.add_task_btn: 任务
-course.plan_task.task_unpublished: （未发布）
+course.plan_task.task_unpublished: 未发布
 course.plan_task.is_optional_task: 选修
 course.plan_task.edit_tips: 编辑以创建直播教室
 course.plan_task.live_finish_tips: 直播已经结束

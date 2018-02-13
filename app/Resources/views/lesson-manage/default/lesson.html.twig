@@ -4,7 +4,12 @@
 
   <div class="item-default-header clearfix">
     <div class="item-content text-overflow js-item-content">
-      <i class="mrm es-icon
+      <span class="lesson-unpublish-status
+        {% if lesson.status == 'published' %}
+          hidden
+        {% endif %}">
+         {{'course.plan_task.task_unpublished'|trans}}
+      </span><i class="mrm es-icon
         {% if activity_metas(task.activity.mediaType) %}
           {{ activity_metas(task.activity.mediaType).icon }}
         {% endif %}">
@@ -29,12 +34,6 @@
         {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="color-gray mls">
           （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
       {% endif %}
-      <span class="color-warning publish-status
-        {% if lesson.status == 'published' %}
-          hidden
-        {% endif %}">
-         {{'course.plan_task.task_unpublished'|trans}}
-      </span>
     </div>
 
     <div class="item-actions">

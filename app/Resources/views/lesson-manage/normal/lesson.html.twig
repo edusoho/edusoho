@@ -2,8 +2,7 @@
   <div class="chapter-item clearfix mbm">
     <div class="item-line"></div>
     <div class="item-content">
-      {{'course.plan_task.which_lesson'|trans({'%chapterNumber%':lesson.number, '%title%':lesson.title|sub_text(30)})|raw }}
-      <span class="color-warning publish-status {% if lesson.status == 'published' %}hidden{% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>
+      <span class="lesson-unpublish-status {% if lesson.status == 'published' %}hidden{% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>{{'course.plan_task.which_lesson'|trans({'%chapterNumber%':lesson.number, '%title%':lesson.title|sub_text(30)})|raw }}
     </div>
     <div class="item-actions">
       <a class="cd-mr24" href="javascript:;" data-toggle="modal" data-target="#modal" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
