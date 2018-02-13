@@ -114,84 +114,10 @@
   }
 }
 
+// 默认计划的样式
 .task-manage-list {
-  margin: 0 10px 0 40px;
-  padding: 0;
-  list-style: none;
-  border-left: 1px solid @gray-medium;
-  .task-manage-item  {
-    border: 1px solid @gray-medium;
-    background: #fff;
-    line-height: 42px;
-    margin-bottom: 15px;
-    margin-left: 20px;
-    cursor: move;
-    word-wrap: break-word;
-    word-break: break-all;
-    &:hover,
-    &.active {
-      background: #f3f3f3;
-      .item-actions {
-        visibility: visible;;
-      }
-    }
-    &.active {
-      .item-default-header  {
-        border-color: @gray-medium;
-      }
-    }
-  }
-  .task-manage-chapter {
-    position: relative;
-    margin-left: -40px;
-  }
-  .task-manage-unit {
-    margin-left: -20px;
-  }
-  .item-line {
-    border-bottom: 1px solid @gray-medium;
-    vertical-align: top;
-    display: inline-block;
-    height: 21px;
-    width: 21px;
-    margin-left: -21px;
-    float: left;
-  }
-  .item-content {
-    padding-left: 10px;
-    overflow: hidden;
-    height: 42px;
-    line-height: 42px;
-    float: left;
-    width: 100%;
-  }
-  .item-actions {
-    position: absolute;
-    right: 11px;
-    padding-right: 0;
-    // visibility: hidden;
-    // background: #f3f3f3;
-    // border-left: 1px solid #ddd;
-    .btn,
-    .dropdown-menu > li > a {
-      -webkit-transition: none;
-      -o-transition: none;
-      -moz-transition: none;
-      transition: none;
-    }
-    a.dropdown-toggle:hover,
-    a.dropdown-toggle:focus,
-    .btn-link:hover,
-     .btn-link:hover {
-      text-decoration: none;
-    }
-  }
-  .item-default-header {
-    border-bottom: 1px solid transparent;
-  }
   .settings-list {
     padding: 0;
-    // border-top: 1px solid @gray-medium;
     display: none;
     list-style: none;
     background-color: #f3f3f3;
