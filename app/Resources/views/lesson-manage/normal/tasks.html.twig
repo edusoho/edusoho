@@ -1,16 +1,15 @@
-
 {% for task in tasks|default() %}
 {% set file =  files[task.activityId]|default(null) %}
   <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}" >
-    <div class="item-content  js-item-content text-overflow">
+    <div class="item-content js-item-content text-overflow">
       <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
       {% if task.isOptional %}
         <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
-      {{'site.data.task'|trans}}<span class="number">{{ task.number }}</span>：
+        {{'course.activity'|trans}}<span class="number mls">{{ task.number }}</span>：
       {% endif %}
       {{ task.title|sub_text(30) }}
-      
+
       {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
         <span class="label label-danger ml5">{{'course.plan_task.convert_failed'|trans}}</span>
       {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
@@ -32,39 +31,39 @@
       {% endif %}
     </div>
     <div class="item-actions">
-      <a class="btn gray-darker" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
-        data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}"><i
-          class="es-icon es-icon-edit mrs"></i>{{'course.plan_task.edit_btn'|trans}}</a>
-      <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
-        target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>{{'course.plan_task.preview_btn'|trans}}</a>
-      <span class="dropdown">
-        <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#"><i
-            class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true"
-            aria-expanded="false"></i>{{ 'course.plan_task.more_btn'|trans }}
+      <a class="cd-mr24" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}">
+        <i class="es-icon es-icon-edit"></i>
+      </a>
+      <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
+        <i class="es-icon es-icon-removeredeye"></i>
+      </a>
+
+      <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+        <a  class="cd-link-assist" href="javascript:;">
+          <i class="es-icon es-icon-morehoriz"></i>
         </a>
-        <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
-          aria-labelledby="dLabel" style="display:none;">
+        <ul class="dropdown-menu">
+          <li>
+            <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+              <i class="es-icon es-icon-delete mrs"></i>
+              {{'course.plan_task.delete_btn'|trans}}
+            </a>
+          </li>
           {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
             {% set file = task.activity.ext.file|default(null) %}
-            {% if  file.storage|default(null) == 'cloud' %}
-            <li class="mark-manage" >
-            <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
-            <span class="glyphicon glyphicon-list prs"></span>{{'course.plan_task.lesson-marker_btn'|trans}}
-            </a>
-            </li>
-            <li class="divider mark-manage-divider" style="display:none;"></li>
+            {% if file.storage|default(null) == 'cloud' %}
+              <li class="mark-manage">
+                <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank">
+                <span class="glyphicon glyphicon-list prs"></span>{{'course.plan_task.lesson-marker_btn'|trans}}
+                </a>
+              </li>
+              <li class="divider mark-manage-divider" style="display:none;"></li>
             {% endif %}
           {% endif %}
-            {{ slot('task.menu.extension', {'task': task}) }}
-            <li>
-              <a class='js-delete' href="javascript:;" data-type="task"
-                data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
-                <i class="es-icon es-icon-delete mrs"></i>
-                {{'course.plan_task.delete_btn'|trans}}
-              </a>
-            </li>
+          {{ slot('task.menu.extension', {'task': task}) }}
         </ul>
-      </span>
+      </div>
+
     </div>
   </li>
 {% endfor %}

@@ -12,7 +12,7 @@
       {% if lesson.number == 0 %}
         <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
-        {{'site.data.task'|trans}}<span class="number">{{ lesson.number }}</span>：
+        {{'course.activity'|trans}}<span class="number mls">{{ lesson.number }}</span>：
       {% endif %}
       {{ lesson.title|sub_text(30) }}
 
