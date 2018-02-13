@@ -4,12 +4,14 @@ namespace Tests\Unit\AppBundle\Util;
 
 use Biz\BaseTestCase;
 use AppBundle\Util\UploadToken;
+use AppBundle\Common\TimeMachine;
 
 class UploadTokenTest extends BaseTestCase
 {
     public function testMake()
     {
         $user = $this->getCurrentUser();
+        TimeMachine::setMockedTime(time());
         $uploadToken = new UploadToken();
         $token = $uploadToken->make('course');
         $result = base64_decode($token);
@@ -17,13 +19,14 @@ class UploadTokenTest extends BaseTestCase
         $this->assertEquals($user['id'], $contents[0]);
         $this->assertEquals('course', $contents[1]);
         $this->assertEquals('image', $contents[2]);
-        $this->assertEquals(time() + 18000, $contents[3]);
+        $this->assertEquals(TimeMachine::time() + 18000, $contents[3]);
         $secret = $this->getServiceKernel()->getParameter('secret');
         $this->assertEquals(md5("{$user['id']}|course|image|".(time() + 18000)."|$secret"), $contents[4]);
     }
 
     public function testParse()
     {
+        TimeMachine::setMockedTime(time());
         $uploadToken = new UploadToken();
         //传入空
         $result = $uploadToken->parse(null);
