@@ -1456,7 +1456,7 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Tasks in total:'
+course.plan_task.total_tasks: 'Activities in total:'
 course.plan_task.everyday_finish_tasks: ''
 course.plan_task.create_btn: Add
 course.plan_task.batch_create_btn: 'Add Files'
