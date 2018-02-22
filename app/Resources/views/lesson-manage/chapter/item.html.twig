@@ -14,7 +14,7 @@
         <a class="cd-link-assist" href="javascript:;">
           <i class="cd-icon cd-icon-add"></i>
         </a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu task-manage-item__dropdown">
           <li>
             <a href="javascript:;" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
               {{'course.plan_task.create_part'|trans({'%partName%': course_chapter_alias('unit')|trans}) }}

@@ -6,10 +6,9 @@
   <a class="cd-link-assist" href="javascript:;">
     <i class="es-icon es-icon-morehoriz"></i>
   </a>
-  <ul class="dropdown-menu">
+  <ul class="dropdown-menu task-manage-item__dropdown">
     <li>
       <a class="js-delete" href="javascript:;" data-name="{{ course_chapter_alias(chapter.type)|trans }}" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id, courseId:course.id}) }}">
-        <i class="es-icon es-icon-delete mrs"></i>
         {{ 'form.btn.delete'|trans }}
       </a>
     </li>
