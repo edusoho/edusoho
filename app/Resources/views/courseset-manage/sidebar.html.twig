@@ -95,9 +95,6 @@
             <hr class="mv5 mh10 bg-border-color"/>
           {% endif %} #}
           {% set showMenu = menuType == 'courseSet' or coursesLength <= 1 %}
-          {% if not showMenu %}
-            <li class="cd-sidebar__heading">教学内容</li>
-          {% endif %}
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'tasks' %}active{% endif %}" id="step-1">
             {% if courseSet.locked %}
               <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
@@ -160,7 +157,7 @@
           </li>
 
           {% if not showMenu %}
-            <li class="cd-sidebar__heading">教学服务</li>
+            <li class="cd-sidebar__heading"><hr class="mv5 mh10 bg-border-color"/></li>
           {% endif %}
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'students' %}active{% endif %}">
             <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
@@ -176,7 +173,7 @@
             </a>
           </li>
           {% if not showMenu %}
-            <li class="cd-sidebar__heading">数据统计</li>
+            <li class="cd-sidebar__heading"><hr class="mv5 mh10 bg-border-color"/></li>
           {% endif %}
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'overview' %}active{% endif %}" id="step-0">
             <a href="{{ path('course_set_manage_course_overview', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
