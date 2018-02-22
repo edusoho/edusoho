@@ -31,12 +31,20 @@ export default class Manage {
       '<i class="es-icon es-icon-keyboardarrowup mr5"></i>'+Translator.trans('site.data.expand'),
       '<i class="es-icon es-icon-keyboardarrowdown mr5"></i>'+Translator.trans('site.data.collapse')
     ]
-    this.$element.on('click', '.js-chapter-toggle-show', (event) => {
+    this.$element.on('click', '.js-toggle-show', (event) => {
       let $this = $(event.currentTarget);
       $this.toggleClass('toogle-hide');
       let $chapter = $this.closest('.task-manage-item');
       let until = $chapter.hasClass('js-task-manage-chapter') ? '.js-task-manage-chapter' : '.js-task-manage-chapter,.js-task-manage-unit';
-      $chapter.nextUntil(until).animate({ height: 'toggle', opacity: 'toggle' }, "normal");
+      let $hideElements = $chapter.nextUntil(until);
+      // $hideElements.has('.toogle-hide').toggleClass('hide');
+      if ($this.hasClass('js-toggle-unit')) {
+        $hideElements.toggleClass('toogle-hide');
+      } else {
+        // $hideElements.filter('.toogle-hide').toggleClass('hide');
+      }
+      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, "normal");
+
       $this.hasClass('toogle-hide') ? $this.html(collapseTexts[0]) :  $this.html(collapseTexts[1]);
     });
   }
@@ -58,12 +66,12 @@ export default class Manage {
         this.$element.find('#chapter-'+this.position+' .js-lesson-box').append(elm);
         break;
       case 'lesson':
-        $position = this.$element.find('#chapter-'+this.position);
-        $position = $position.nextUntil('.task-manage-unit,.js-task-manage-chapter').last();
-        if (0 == $position.length) {
-          $position.append(elm);
+        let $unit = this.$element.find('#chapter-'+this.position);
+        let $lesson = $unit.nextUntil('.js-task-manage-unit,.js-task-manage-chapter').last();
+        if (0 == $lesson.length) {
+          $unit.after(elm);
         } else {
-          $position.after(elm);
+          $lesson.after(elm);
         }
         break;
       default:
