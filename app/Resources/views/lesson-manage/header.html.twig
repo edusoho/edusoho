@@ -23,22 +23,20 @@
         data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
       {% endif %}>
       {{'course.plan_task.batch_create_btn'|trans}}
-    </button><div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+    </button><div class="cd-dropdown" data-toggle="cd-dropdown">
       <button class="cd-btn cd-btn-default cd-btn-sm">
         {{ 'form.field.create'|trans }}{{ course_chapter_alias('chapter')|trans }} / {{ course_chapter_alias('unit')|trans }}<span class="caret"></span>
       </button>
 
-      <ul class="dropdown-menu" role="menu">
+      <ul class="dropdown-menu task-list-header__dropdown" role="menu">
         <li>
-          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
+          <a href="javascript:;" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static"
             data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id}) }}">
-            <i class="es-icon es-icon-anonymous-iconfont"></i>
             {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|trans}) }}
           </a>
         </li>
         <li>
           <a href="javascript:;" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
-            <i class="es-icon es-icon-anonymous-iconfont"></i>
             {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('unit')|trans}) }}
           </a>
         </li>
