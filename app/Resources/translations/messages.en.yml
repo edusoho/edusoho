@@ -1438,7 +1438,7 @@ course.course_files.re_try_convert_video_to_audio: 'Re-Conversion To Audio'
 
 course.plan_overview: 'Tasks Overview'
 
-course.plan_task: Tasks
+course.plan_task: Lessons
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
@@ -1446,7 +1446,7 @@ course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Config
 course.plan_task.publish_btn: Publish
 course.plan_task.manage: 'Programs'
-course.plan_task.content_title: Tasks
+course.plan_task.content_title: Lessons
 course.plan_task.locked.task_locked: 'Task locked'
 course.plan_task.task: Task
 course.plan_task.practice: Exercise

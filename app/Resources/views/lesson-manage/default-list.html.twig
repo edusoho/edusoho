@@ -1,7 +1,7 @@
 {% extends 'course-manage/tasks/layout.html.twig' %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/lesson-manage/default/index.js']) %}
 
-{% block page_title %}课时管理{% endblock %}
+{% block page_title %}{{ 'course.plan_task.content_title'|trans }}{% endblock %}
 {% block main_body %}
   {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
   {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}

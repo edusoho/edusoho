@@ -1611,7 +1611,7 @@ course.course_files.re_try_convert_video_to_audio: 重新转码
 
 course.plan_overview: 教学统计
 
-course.plan_task: 计划任务
+course.plan_task: 课时管理
 course.plan_task.deadline_learn_tips: >
   在
   <input class="form-control width-150" id="deadline" name="deadline" value="">
@@ -1626,7 +1626,7 @@ course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
 course.plan_task.publish_btn: 发布
 course.plan_task.manage: 教训计划管理
-course.plan_task.content_title: 计划任务
+course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: 任务未解锁
 course.plan_task.task: 任务学习
 course.plan_task.practice: 练习
