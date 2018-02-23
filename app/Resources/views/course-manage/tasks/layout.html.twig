@@ -1,5 +1,7 @@
-{% extends course_count(course.courseSetId) > 1 ? 'course-manage/tasks/new-layout.html.twig' : 'courseset-manage/layout.html.twig' %}
+{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
 
 {% block title %}{{'计划任务'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'tasks' %}
 
+{% block main %}
+{% endblock %}
