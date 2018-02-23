@@ -1000,7 +1000,7 @@ course.marketing_setup.study_award:　学习奖励
 course.marketing_setup.task_award: 完成单个任务
 course.marketing_setup.course_award: 完成教学计划
 
-course.teacher_setup: 教师设置
+course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
 
@@ -1185,7 +1185,7 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
 course.members_manage.import_failed_tips: 课程未发布,不可导入学员
-course.order: 订单查询
+course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
 course.order.conditions: 筛选条件

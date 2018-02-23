@@ -3,7 +3,6 @@
 
 {% block page_title %}{{ 'course.plan_task.content_title'|trans }}{% endblock %}
 {% block main_body %}
-  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
   {% include 'lesson-manage/header.html.twig' with {taskMode:'lesson'}  %}
   <ul id="sortable-list" class="task-manage-list sortable-list" data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
     {% for key, item in items %}
