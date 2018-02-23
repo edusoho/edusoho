@@ -83,18 +83,12 @@
         </li>
         {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
       {% endif %}
-      
+
       {#不为courseSet 或者 长度小于 1 #}
       {% if isShowCourseMenu %}
         <div class="js-sidenav-course-menu">
-          {# {% if coursesLength > 1 and not courseListIntroCookie %}
-            <li class="list-group-heading">
-              {{ curCourse.title }}
-            </li>
-          {% else %}
-            <hr class="mv5 mh10 bg-border-color"/>
-          {% endif %} #}
           {% set showMenu = menuType == 'courseSet' or coursesLength <= 1 %}
+
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'tasks' %}active{% endif %}" id="step-1">
             {% if courseSet.locked %}
               <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'tasks'}) }}">
@@ -144,6 +138,11 @@
               </a>
             {% endif %}
           </li>
+
+          {% if not showMenu %}
+            <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
+          {% endif %}
+
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'teachers' %}active{% endif %}">
             {% if courseSet.locked %}
               <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'teachers'}) }}">
@@ -156,14 +155,16 @@
             {% endif %}
           </li>
 
-          {% if not showMenu %}
-            <li class="cd-sidebar__heading"><hr class="mv5 mh10 bg-border-color"/></li>
-          {% endif %}
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'students' %}active{% endif %}">
             <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
               {{ 'course.student_manage'|trans }}
             </a>
           </li>
+
+          {% if not showMenu %}
+            <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
+          {% endif %}
+
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'testpaper-check' %}active{% endif %}">
             <a href="{{ path('course_manage_testpaper_check_list', {id: curCourse.id}) }}">{{ 'course.testpaper_check'|trans }}
             </a>
@@ -173,7 +174,7 @@
             </a>
           </li>
           {% if not showMenu %}
-            <li class="cd-sidebar__heading"><hr class="mv5 mh10 bg-border-color"/></li>
+            <li class="cd-sidebar__heading"><hr class="mt0 mb0 mh10 bg-border-color"/></li>
           {% endif %}
           <li class="{% if showMenu %}list-group-item {% else %}cd-sidebar__item{% endif %} {% if side_nav == 'overview' %}active{% endif %}" id="step-0">
             <a href="{{ path('course_set_manage_course_overview', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
