@@ -1,10 +1,120 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
+import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 import { buyBtn } from 'app/common/widget/btn-util';
 
-new ESInfiniteScroll();
+new ESInfiniteCachedScroll({
+  'data': $.parseJSON($('.hiddenData').html().replace(/[\r\n]/g, "")),
+
+  'context': {
+    'course': $.parseJSON($('.hiddenCourseInfo').html().replace(/[\r\n]/g, "")),
+
+    'i18n': $.parseJSON($('.hiddenI18n').html().replace(/[\r\n]/g, "")),
+
+    'metas': $.parseJSON($('.hiddenActivityMetas').html().replace(/[\r\n]/g, "")),
+
+    'currentTimeStamp': $('.currentTimeStamp').html(),
+
+    'isChapter': function(data, context) {
+      return 'chapter' == data.itemType;
+    },
+
+    'isUnit': function(data, context) {
+      return 'unit' == data.itemType;
+    },
+
+    'isTask': function(data, context) {
+      return 'task' == data.itemType;
+    },
+
+    'chapterName': function(data, context) {
+      return Translator.trans('course.chapter', { chapter_name: context.i18n.i18nChapterName, number: data.number, title: data.title });
+    },
+
+    'unitName': function(data, context) {
+      return Translator.trans('course.unit', { part_name: context.i18n.i18nUnitName, number: data.number, title: data.title });
+    },
+
+    'taskName': function(data, context) {
+      return Translator.trans('course.catalogue.task_status.task', { taskNumber: data.number, taskTitle: data.title });
+    },
+
+    'hasWatchLimitRemaining': function(data, context) {
+      return data.watchLimitRemaining != '';
+    },
+
+    'taskClass': function(data, context) {
+      let classNames = 'es-icon left-menu';
+      if (context.isTaskLocked(data, context)) {
+        classNames += ' es-icon-lock';
+      } else if (data.result == '' || context.course.isMember == 'false') {
+        classNames += ' es-icon-undone-check color-gray';
+      } else if (data.resultStatus == 'start') {
+        classNames += ' es-icon-doing color-primary';
+      } else if (data.resultStatus == 'finish') {
+        classNames += ' es-icon-iccheckcircleblack24px color-primary';
+      }
+      return classNames;
+    },
+
+    'isTaskLocked': function(data, context) {
+      return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' && data.lock == 'true';
+    },
+
+    'isPublished': function(data, context) {
+      return 'published' == context.course.status && 'published' == data.status;
+    },
+
+    'isCloudVideo': function(data, context) {
+      return 'video' == data.type && 'cloud' == data.fileStorage;
+    },
+
+    'getMetaIcon': function(data, context) {
+      if (typeof context.metas[data.type] != 'undefined') {
+        return context.metas[data.type]['icon'];
+      }
+      return '';
+    },
+
+    'getMetaName': function(data, context) {
+      if (typeof context.metas[data.type] != 'undefined') {
+        return context.metas[data.type]['name'];
+      }
+      return '';
+    },
+
+    'isLiveReplayGenerated': function(data, context) {
+      return 'ungenerated' != data.replayStatus;
+    },
+
+    'isLive': function(data, context) {
+      return 'live' == data.type;
+    },
+
+    'isLiveNotStarted': function(data, context) {
+      return context.isLive(data, context) && context.currentTimeStamp < data.activityStartTime;
+    },
+
+    'isLiveStarting': function(data, context) {
+      return context.isLive(data, context) && context.currentTimeStamp >= data.activityStartTime &&
+        context.currentTimeStamp <= data.activityEndTime;
+    },
+
+    'isLiveFinished': function(data, context) {
+      return context.isLive(data, context) && context.currentTimeStamp > data.activityEndTime;
+    },
+
+    'hasParentId': function(data, context) {
+      return 0 != context.course.parentId;
+    }
+  },
+
+  'dataTemplateNode': '.js-infinite-item-template'
+});
+
+// new ESInfiniteScroll();
 
 echo.init();
 chapterAnimate();
@@ -29,7 +139,7 @@ function initTaskLearnChart() {
     scaleColor: false,
     lineWidth: 14,
     size: 145,
-    onStep: function (from, to, percent) {
+    onStep: function(from, to, percent) {
       $('canvas').css('height', '146px');
       $('canvas').css('width', '146px');
       if (Math.round(percent) == 100) {
@@ -57,7 +167,7 @@ function initTaskLearnChart() {
     scaleColor: false,
     lineWidth: 14,
     size: 145,
-    onStep: function (from, to, percent) {
+    onStep: function(from, to, percent) {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
@@ -76,12 +186,12 @@ function remainTime() {
   var remainTime = parseInt($('#discount-endtime-countdown').data('remaintime'));
   if (remainTime >= 0) {
     var endtime = new Date(new Date().valueOf() + remainTime * 1000);
-    $('#discount-endtime-countdown').countdown(endtime, function (event) {
+    $('#discount-endtime-countdown').countdown(endtime, function(event) {
       var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format_hint')));
-    }).on('finish.countdown', function () {
+    }).on('finish.countdown', function() {
       $(this).html(Translator.trans('course_set.show.time_finish_hint'));
-      setTimeout(function () {
-        $.post(app.crontab, function () {
+      setTimeout(function() {
+        $.post(app.crontab, function() {
           window.location.reload();
         });
       }, 2000);

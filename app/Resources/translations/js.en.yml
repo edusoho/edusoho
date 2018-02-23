@@ -395,6 +395,10 @@ coin.invite_url_copy_success_hint: The link was copied successfully
 course.buy.discount_hint: Dicounted
 course.buy.price_free_hint: Go study
 
+course.chapter: '%chapter_name% %number% : %title%'
+course.unit: '%part_name% %number% : %title%'
+course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
+
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
 

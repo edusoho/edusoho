@@ -1,20 +1,20 @@
 <div class="course-detail-content">
+
   {% if courseItems and courseItems[0]['seq'] != 1 %}
     <a class="js-up-more-link link-gray center-block text-center" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">{{ 'my.learning.course.click_loading_more'|trans }}</a>
   {% endif %}
 
-  <!-- lesson info -->
   <ul class="task-list task-list-md task-list-hover infinite-container">
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
       {% set file = item.activity.ext.file|default() %}
       {% if item.itemType == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter infinite-item"><i class="es-icon es-icon-menu left-menu"></i>
-          <a href="javascript:" class="title gray-dark">{{ 'course.chapter'|trans({'%chapter_name%':course_chapter_alias('chapter')|default('章'),'%number%':item.number, '%title%':item.title}) }}</a>
+          <a href="javascript:" class="title gray-dark">{{ 'course.chapter'|trans({'%chapter_name%':course_chapter_alias('chapter')|trans,'%number%':item.number, '%title%':item.title}) }}</a>
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.itemType == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter infinite-item">
-          <span class="title">{{ 'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title}) }}</span>
+          <span class="title">{{ 'course.unit'|trans({'%part_name%':course_chapter_alias('part')|trans,'%number%':item.number, '%title%':item.title}) }}</span>
         </li>
       {% elseif item.itemType == 'task' %}
         {% set task = item %}
