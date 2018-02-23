@@ -8,9 +8,8 @@ export default class ShowUnpublish {
 
   _event() {
     this.$element.on('change', function(){
-      let url = $(this).data('url');
-
-      let status = $(this).is(':checked') ? 0 : 1;
+      const url = $(this).data('url');
+      const status = $(this).parent('.js-switch').hasClass('checked') ? 0 : 1;
       $.post(url, {status:status})
       .success(function(response) {
         notify('success', Translator.trans('site.save_success_hint'));
