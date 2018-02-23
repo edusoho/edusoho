@@ -8,13 +8,12 @@
         {#payment:request.get('payment'),#}
         {#keywordType:request.get('keywordType'),#}
         {#keyword:request.get('keyword')}) }}"><i class="glyphicon glyphicon-export"></i> {{'order.export_btn'|trans}}</a>#}
-
   {% include 'export/export-btn.html.twig' with
-  {
-  'exportFileName' : 'order',
-  'targetFormId': 'user-search-form',
-  'exportClass': 'btn-sm pull-right',
-  'exportWebpack': 'ture'
-  }
+    {
+      'exportFileName' : 'order',
+      'targetFormId': 'user-search-form',
+      'exportClass': 'cd-btn cd-btn-primary cd-btn-sm',
+      'exportWebpack': 'ture'
+    }
   %}
 {% endif %}
