@@ -74,7 +74,6 @@ export default class ESInfiniteCachedScroll extends Emitter {
 
     this._options = options;
     this._initConfig();
-    this._displayData();
 
     this._initUpLoading();
   }
