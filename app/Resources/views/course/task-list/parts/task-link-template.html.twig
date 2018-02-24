@@ -2,11 +2,11 @@
 
 <tmp display-if="{isPublished}">
   {% if member %}
-    <a display-if="{isTaskLocked}" class="title" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
+    <a hide-if="{isTaskLocked}" class="title" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </a>
 
-    <span hide-if="{isTaskLocked}" class="title">
+    <span display-if="{isTaskLocked}" class="title">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </span>
   {% elseif not isOvertime %}
