@@ -1,8 +1,9 @@
-<li id="chapter-{{ lesson.id }}" class="task-manage-item js-task-manage-item drag clearfix">
+<li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix">
   {% set tasks = array_index(lesson.tasks, 'mode') %}
   {% set task = tasks.lesson|default(null) %}
 
   <div class="item-default-header clearfix">
+    <div class="item-line"></div>
     <div class="item-content text-overflow js-item-content">
       <span class="lesson-unpublish-status
         {% if lesson.status == 'published' %}
