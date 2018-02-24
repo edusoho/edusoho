@@ -3,20 +3,19 @@
 <div class="js-infinite-item-template hidden">
   <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
       display-if="{isChapter}"><i class="es-icon es-icon-menu left-menu"></i>
-    <a href="javascript:" class="title gray-dark">{chapterName}</a>
+    <a href="javascript:" class="title gray-dark">{getChapterName}</a>
     <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
   </li>
 
   <li class="task-item color-gray bg-gray-lighter infinite-item"
     display-if="{isUnit}">
-    <span class="title">{unitName}</span>
+    <span class="title">{getUnitName}</span>
   </li>
 
   <li class="task-item task-content mouse-control infinite-item"
       display-if="{isTask}">
     <i display-if="{isTaskLocked}" class="{taskClass}" data-toggle="tooltip" data-trigger="hover" 
       data-placement="top" title="{{ 'course.task.lock_tips'|trans }}">
-      locked
     </i>
 
     <i hide-if="{isTaskLocked}" class="{taskClass}">
@@ -24,7 +23,6 @@
 
     {% include 'course/task-list/parts/task-link-template.html.twig' %}
 
-    {% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
   </li>
 
 </div>
@@ -33,12 +31,10 @@
 <div class="hidden hiddenCourseInfo">
   {
     "id": "{{course.id}}",
-    "isCourseFree": "{{course.isFree}}",
     "isDefault": "{{course.isDefault}}",
     "learnMode": "{{course.learnMode}}",
     "isMember": "{{member|default('')}}",
-    "status": "{{course.status}}",
-    "parentId": "{{course.parentId|default(0)}}"
+    "status": "{{course.status}}"
   }
 </div>
 
@@ -74,7 +70,8 @@
         "activityStartTime": "{{item.activity.startTime|default(0)}}",
         "activityEndTime": "{{item.activity.endTime|default(0)}}",
         "activityLength": "{{item.activity.length|default(0)|activity_length_format(item.activity.mediaType|default('video'))}}",
-        "fileStorage": "{{item.activity.ext.file.storage|default('')}}"
+        "fileStorage": "{{item.activity.ext.file.storage|default('')}}",
+        "isTaskTryLookable": "{{item.tryLookable|default('')}}"
       }
     {% endfor %}
   ]
@@ -96,6 +93,4 @@
   }
 </div>
 
-<div class="hidden currentTimeStamp">
-{{ date().timestamp }}
-</div>
+<div class="hidden currentTimeStamp">{{ date().timestamp }}</div>

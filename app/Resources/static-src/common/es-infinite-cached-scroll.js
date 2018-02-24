@@ -13,7 +13,7 @@ import Emitter from "common/es-event-emitter";
         如果没有此方法，则去data中找到相应属性
         2. display-if 如果结果为0或false, 则删除该节点
         3. hide-if 如果结果为1或true, 则删除该节点
-        4. tmp节点，会将tmp节点删除掉，但是tmp内的内容不会被删除
+        4. tmp节点, 一般用于处理 display-if 和 hide-if，会移除
      -->
      <div class="js-infinite-item-template hidden">
       <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
@@ -21,6 +21,10 @@ import Emitter from "common/es-event-emitter";
         <a href="javascript:" class="title gray-dark">{chapterName}</a>
         <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
+
+      <tmp hide-if="{isChapter}">
+        not chapter
+      </tmp>
     </div>
 
      <!-- 
@@ -151,6 +155,14 @@ export default class ESInfiniteCachedScroll extends Emitter {
     tempNode.find('[display-if=0]').remove();
     tempNode.find('[hide-if=1]').remove();
     tempNode.find('[hide-if=true]').remove();
+    tempNode.find('tmp :first-child').each(
+      function() {
+        if (!$(this).hasClass('ignoreRemove') && $(this).parent()[0].nodeName == 'TMP') {
+          $(this).unwrap();
+        }
+      }
+    );
+
     $('.infinite-container').append(tempNode.html());
   }
 

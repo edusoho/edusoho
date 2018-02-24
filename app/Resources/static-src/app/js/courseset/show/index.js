@@ -15,7 +15,7 @@ new ESInfiniteCachedScroll({
 
     'metas': $.parseJSON($('.hiddenActivityMetas').html().replace(/[\r\n]/g, "")),
 
-    'currentTimeStamp': $('.currentTimeStamp').html(),
+    'currentTimeStamp': parseInt($('.currentTimeStamp').html(), 10),
 
     'isChapter': function(data, context) {
       return 'chapter' == data.itemType;
@@ -29,15 +29,15 @@ new ESInfiniteCachedScroll({
       return 'task' == data.itemType;
     },
 
-    'chapterName': function(data, context) {
+    'getChapterName': function(data, context) {
       return Translator.trans('course.chapter', { chapter_name: context.i18n.i18nChapterName, number: data.number, title: data.title });
     },
 
-    'unitName': function(data, context) {
+    'getUnitName': function(data, context) {
       return Translator.trans('course.unit', { part_name: context.i18n.i18nUnitName, number: data.number, title: data.title });
     },
 
-    'taskName': function(data, context) {
+    'getTaskName': function(data, context) {
       return Translator.trans('course.catalogue.task_status.task', { taskNumber: data.number, taskTitle: data.title });
     },
 
@@ -60,7 +60,8 @@ new ESInfiniteCachedScroll({
     },
 
     'isTaskLocked': function(data, context) {
-      return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' && data.lock == 'true';
+      return context.course.isDefault == '0' && context.course.learnMode == 'lockMode' &&
+        (data.lock == 'true' || !context.course.member);
     },
 
     'isPublished': function(data, context) {
@@ -94,20 +95,20 @@ new ESInfiniteCachedScroll({
     },
 
     'isLiveNotStarted': function(data, context) {
-      return context.isLive(data, context) && context.currentTimeStamp < data.activityStartTime;
+      return context.isLive(data, context) && context.currentTimeStamp < context.toInt(data.activityStartTime);
     },
 
     'isLiveStarting': function(data, context) {
-      return context.isLive(data, context) && context.currentTimeStamp >= data.activityStartTime &&
-        context.currentTimeStamp <= data.activityEndTime;
+      return context.isLive(data, context) && context.currentTimeStamp >= context.toInt(data.activityStartTime) &&
+        context.currentTimeStamp <= context.toInt(data.activityEndTime);
     },
 
     'isLiveFinished': function(data, context) {
-      return context.isLive(data, context) && context.currentTimeStamp > data.activityEndTime;
+      return context.isLive(data, context) && context.currentTimeStamp > context.toInt(data.activityEndTime);
     },
 
-    'hasParentId': function(data, context) {
-      return 0 != context.course.parentId;
+    'toInt': function(timestampStr) {
+      return parseInt(timestampStr, 10);
     }
   },
 
