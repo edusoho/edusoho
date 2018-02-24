@@ -28,7 +28,7 @@ export default class Manage {
 
   _collapse() {
     let collapseTexts = [
-      '<i class="es-icon es-icon-keyboardarrowup cd-mr16"></i>',
+      '<i class="es-icon es-icon-chevronright cd-mr16"></i>',
       '<i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i>'
     ]
     this.$element.on('click', '.js-chapter-toggle-show', (event) => {
