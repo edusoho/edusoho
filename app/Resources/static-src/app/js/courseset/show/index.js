@@ -2,7 +2,6 @@ import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
-import ESInfiniteScroll from 'common/es-infinite-scroll';
 import { buyBtn } from 'app/common/widget/btn-util';
 
 new ESInfiniteCachedScroll({
@@ -114,8 +113,6 @@ new ESInfiniteCachedScroll({
 
   'dataTemplateNode': '.js-infinite-item-template'
 });
-
-// new ESInfiniteScroll();
 
 echo.init();
 chapterAnimate();
