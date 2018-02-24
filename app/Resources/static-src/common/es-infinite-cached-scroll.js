@@ -8,28 +8,31 @@ import Emitter from "common/es-event-emitter";
  *     及 app/Resources/views/course/task-list/default-task-list.html.twig
  * 
      <!-- 
-      模板, 有class js-infinite-item-template
-        1. 变量以 {chapterName} 的方式生成，chapterName是变量，会先从 context 中找chapterName方法(参数当前行data和context),
+      必须通过模板来生成节点, 模板由dataTemplateNode自定义（见构造函数）
+        1. 变量以 {chapterName} 的方式生成，chapterName是变量，会先从 context 中找chapterName方法(参数为当前行data和context),
         如果没有此方法，则去data中找到相应属性
         2. display-if 如果结果为0或false, 则删除该节点
         3. hide-if 如果结果为1或true, 则删除该节点
-        4. tmp节点, 一般用于处理 display-if 和 hide-if，会移除
+        4. tmp节点, 一般用于处理 display-if 和 hide-if，会移除, 通过子节点unwrap的方式移除，如果没有子节点，无法移除
      -->
      <div class="js-infinite-item-template hidden">
       <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
-          display-if="{isChapter}"><i class="es-icon es-icon-menu left-menu"></i>
+          display-if="{isChapter}">
+        <i class="es-icon es-icon-menu left-menu"></i>
         <a href="javascript:" class="title gray-dark">{chapterName}</a>
         <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
 
       <tmp hide-if="{isChapter}">
-        not chapter
+        <tmp display-if="{isUnit}">
+          // 节信息
+        </tmp>
       </tmp>
     </div>
 
      <!-- 
-       容器, 有class infinite-container, 
-       根据所给的值，会将模板内的节点生成并显示到容器内（不包含js-infinite-item-template节点本身）
+       显示节点的容器, 必须要有class "infinite-container", 
+       根据所给的值，会将模板内的节点生成并显示到容器内（不包含模板节点本身）
      -->
      <ul class="task-list task-list-md task-list-hover infinite-container">
      </ul>
@@ -54,7 +57,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
               }
             ]
    *    'context': jsonData,
-          //json, 用于将data中的值做转换
+          //json, 用于将data中的值做转换, 或设置一些公共变量
           // 支持普通数组和方法
           {
             'course': {
@@ -65,10 +68,11 @@ export default class ESInfiniteCachedScroll extends Emitter {
               return 'chapter' == data.itemType;
             },
           }
-   *    'dataTemplateNode': '.infiniteScrollTemplate',  
-   *       //会通过 $(dataTemplateNode)来找到模板, 模板格式为
-            <div class="js-infinite-item-template hidden">  # 本行必须
-              <i class="es-icon es-icon-undone-check color-{color} left-menu"></i> ## 实际显示的节点
+   *    'dataTemplateNode': '.js-infinite-item-template',  
+   *        //会通过 $(dataTemplateNode)来找到模板, 只会生成 dataTemplateNode 指定节点内的内容（不包括该节点本身）,
+   *        // 模板如下
+            <div class="js-infinite-item-template hidden">  
+              <i class="es-icon es-icon-undone-check color-{color} left-menu"></i> // 实际显示的节点
             </div>
    *  }
    */
