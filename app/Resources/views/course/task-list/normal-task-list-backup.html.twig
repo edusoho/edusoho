@@ -3,7 +3,6 @@
   {% if courseItems and courseItems[0]['seq'] != 1 %}
     <a class="js-up-more-link link-gray center-block text-center" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">{{ 'my.learning.course.click_loading_more'|trans }}</a>
   {% endif %}
-
   <ul class="task-list task-list-md task-list-hover js-task-list-ul infinite-container">
     {# 选修任务不显示 #}
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
@@ -27,16 +26,17 @@
           {% set task_lock = (course.learnMode == 'lockMode')and task.lock %}
         {% endif %}
         <li class="task-item task-content mouse-control infinite-item">
-          <i class="es-icon
-            {% if task_lock %}
-            es-icon-lock
-            {% elseif  not task.result|default(null)  or (member is empty) %}
-            es-icon-undone-check color-gray
-            {% elseif task.result.status == 'start' %}
-            es-icon-doing color-primary
-            {% elseif task.result.status == 'finish' %}
-            es-icon-iccheckcircleblack24px color-primary
-            {% endif %}
+          <i
+            class="es-icon
+              {% if task_lock %}
+              es-icon-lock
+              {% elseif  not task.result|default(null)  or (member is empty) %}
+              es-icon-undone-check color-gray
+              {% elseif task.result.status == 'start' %}
+              es-icon-doing color-primary
+              {% elseif task.result.status == 'finish' %}
+              es-icon-iccheckcircleblack24px color-primary
+              {% endif %}
               left-menu"
             {% if  task_lock %}
               data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans }}"
