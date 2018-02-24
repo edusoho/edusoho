@@ -1,11 +1,11 @@
 {% if member is empty %}
   <span display-if="{isTaskFree}" class="label label-success mr10">{{ 'course.catalogue.task_status.free'|trans }}</span>
   
-  <tmp hide-if="{isTaskFree}">
-    {% if course.tryLookable %}
+  {% if course.tryLookable %}
+    <tmp hide-if="{isTaskFree}">
       <span display-if="{isCloudVideo}" class="label label-warning mrm">{{ 'course.catalogue.task_status.try_lookable'|trans }}</span>
-    {% endif %}
-  </tmp>
+    </tmp>
+  {% endif %}
 
 {% else %}
   <span display-if="{isOptional}" class="label label-info mr10">{{ 'course.catalogue.task_status.is_optional'|trans }}</span>
