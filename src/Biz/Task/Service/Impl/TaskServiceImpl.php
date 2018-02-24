@@ -181,7 +181,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ('published' === $task['status']) {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+            return;
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
