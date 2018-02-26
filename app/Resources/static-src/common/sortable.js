@@ -21,7 +21,6 @@ const sortList = (options, callback = (data) => {}) => {
           settings.success ? settings.success(response) : document.location.reload();
         });
       }
-      item.removeClass('task-dragged-rotate');
     },
     serialize: function(parent, children, isContainer) {
       return isContainer ? children : parent.attr('id');
@@ -34,7 +33,6 @@ const sortList = (options, callback = (data) => {}) => {
         left: pointer.left - offset.left,
         top: pointer.top - offset.top
       };
-      item.addClass('task-dragged-rotate');
       _super(item, container);
     },
     onDrag: function (item, position) {
