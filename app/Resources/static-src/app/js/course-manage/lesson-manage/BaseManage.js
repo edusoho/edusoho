@@ -37,14 +37,14 @@ export default class Manage {
       let $chapter = $this.closest('.task-manage-item');
       let until = $chapter.hasClass('js-task-manage-chapter') ? '.js-task-manage-chapter' : '.js-task-manage-chapter,.js-task-manage-unit';
       let $hideElements = $chapter.nextUntil(until);
-      // $hideElements.has('.toogle-hide').toggleClass('hide');
-      if ($this.hasClass('js-toggle-unit')) {
-        $hideElements.toggleClass('toogle-hide');
-      } else {
-        // $hideElements.filter('.toogle-hide').toggleClass('hide');
-      }
-      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, "normal");
 
+      if ($this.hasClass('js-toggle-unit')) {
+        $hideElements.toggleClass('unit-hide');
+      } else {
+        $hideElements = $hideElements.not('.unit-hide');
+      }
+
+      $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, "normal");
       $this.hasClass('toogle-hide') ? $this.html(collapseTexts[0]) :  $this.html(collapseTexts[1]);
     });
   }
