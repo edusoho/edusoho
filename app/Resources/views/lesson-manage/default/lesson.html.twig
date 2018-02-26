@@ -5,20 +5,20 @@
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
     <div class="item-content text-overflow js-item-content">
-      <span class="lesson-unpublish-status
+      <i class="mrs es-icon
+        {% if activity_metas(task.activity.mediaType) %}
+          {{ activity_metas(task.activity.mediaType).icon }}
+        {% endif %}">
+      </i><span class="lesson-unpublish-status
         {% if lesson.status == 'published' %}
           hidden
         {% endif %}">
          {{'course.plan_task.task_unpublished'|trans}}
-      </span><i class="mrm es-icon
-        {% if activity_metas(task.activity.mediaType) %}
-          {{ activity_metas(task.activity.mediaType).icon }}
-        {% endif %}">
-      </i>
+      </span>
       {% if lesson.number == 0 %}
         <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
-        {{'course.activity'|trans}}<span class="number mls">{{ lesson.number }}</span>：
+        {{'course.lesson'|trans}}<span class="number mls">{{ lesson.number }}</span>：
       {% endif %}
       {{ lesson.title|sub_text(30) }}
 
