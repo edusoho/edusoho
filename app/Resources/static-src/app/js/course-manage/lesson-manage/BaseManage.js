@@ -127,6 +127,7 @@ export default class Manage {
       element: self.$element,
       ajax: false,
       group: 'nested',
+      placeholder: '<li class="placeholder task-dragged-placeholder"></li>',
       isValidTarget: function ($item, container) {
         // 任务课时内拖动
         if ($item.hasClass('js-task-manage-item') && 
@@ -137,7 +138,7 @@ export default class Manage {
         if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
           if(!container.target.hasClass('sortable-list')) {
             return false;
-          }   
+          }
         }
         // 课时不能不能在课时下
         if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
