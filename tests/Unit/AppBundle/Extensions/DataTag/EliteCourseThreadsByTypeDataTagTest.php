@@ -29,13 +29,24 @@ class EliteCourseThreadsByTypeDataTagTest extends BaseTestCase
             ),
             array(
                 'functionName' => 'findUsersByIds',
+                'withParams' => array(array(1, 1)),
+                'returnValue' => array(1 => array('id' => 1)),
+            ),
+            array(
+                'functionName' => 'findUsersByIds',
                 'withParams' => array(array(0)),
+                'returnValue' => array(),
+            ),
+            array(
+                'functionName' => 'findUsersByIds',
+                'withParams' => array(array(0, 0)),
                 'returnValue' => array(),
             ),
         ));
         $thread1 = $this->getThreadDao()->create(array('title' => 'thread1 title', 'content' => 'thread1 content', 'type' => 'question', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'isElite' => 1));
-        $thread2 = $this->getThreadDao()->create(array('title' => 'thread2 title', 'content' => 'thread2 content', 'type' => 'question', 'courseId' => 2, 'userId' => 1, 'courseSetId' => 2));
-        $thread3 = $this->getThreadDao()->create(array('title' => 'thread3 title', 'content' => 'thread3 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 2, 'courseSetId' => 1));
+        $thread2 = $this->getThreadDao()->create(array('title' => 'thread2 title', 'content' => 'thread2 content', 'type' => 'question', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1));
+        $thread3 = $this->getThreadDao()->create(array('title' => 'thread3 title', 'content' => 'thread3 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1, 'isElite' => 1));
+        $thread4 = $this->getThreadDao()->create(array('title' => 'thread4 title', 'content' => 'thread4 content', 'type' => 'discussion', 'courseId' => 1, 'userId' => 1, 'courseSetId' => 1));
         $datatag = new EliteCourseThreadsByTypeDataTag();
         //1.count异常情况
         $arguments = array();
@@ -56,12 +67,22 @@ class EliteCourseThreadsByTypeDataTagTest extends BaseTestCase
         $this->assertTrue($hasException);
 
         //2.正常访问
+        //2.1.无type
         $arguments = array(
             'count' => 10,
-            'type' => 'question',
         );
         $result = $datatag->getData($arguments);
         $this->assertEquals('thread1 title', $result[0]['title']);
+        $this->assertEquals('thread3 title', $result[1]['title']);
+        $this->assertEquals(2, count($result));
+
+        //2.2.有type
+        $arguments = array(
+            'count' => 10,
+            'type' => 'discussion',
+        );
+        $result = $datatag->getData($arguments);
+        $this->assertEquals('thread3 title', $result[0]['title']);
         $this->assertEquals(1, count($result));
     }
 
