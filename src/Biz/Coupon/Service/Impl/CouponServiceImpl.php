@@ -413,7 +413,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             array(
                 'type' => 'marketingCoupon',
                 'userId' => $userId,
-                'price' => $rate,
+                'price' => $rate / 100,
                 'expireDayCount' => $expireDay,
             )
         );
