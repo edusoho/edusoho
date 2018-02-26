@@ -407,6 +407,20 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $coupon;
     }
 
+    public function generateMarketingCoupon($userId, $rate, $expireDay)
+    {
+        $coupon = $this->generateCoupon(
+            array(
+                'type' => 'marketingCoupon',
+                'userId' => $userId,
+                'price' => $rate,
+                'expireDayCount' => $expireDay,
+            )
+        );
+
+        return $coupon;
+    }
+
     /**
      * @return CardService
      */

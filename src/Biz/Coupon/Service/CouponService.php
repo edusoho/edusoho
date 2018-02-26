@@ -50,4 +50,6 @@ interface CouponService
     public function getCouponStateById($couponId);
 
     public function generateDistributionCoupon($userId, $rate, $expireDay);
+
+    public function generateMarketingCoupon($userId, $rate, $expireDay);
 }
