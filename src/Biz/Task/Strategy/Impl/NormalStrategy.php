@@ -45,21 +45,39 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
-    public function getTasksListJsonData()
+    public function getTasksListJsonData($courseId)
     {
-        return 'lesson-manage/normal-list.html.twig';
+        $course = $this->getCourseService()->getCourse($courseId);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $items =  $this->prepareCourseItems($course['id'], $tasks);
+
+        return array(
+            'data' => array(
+                'items' => $items,
+            ),
+            'template' => 'lesson-manage/normal-list.html.twig'
+        );
     }
 
     public function getTasksJsonData($task)
     {
-        if (!empty($task['categoryId'])) {
-            $chapter = $this->getChapterDao()->get($task['categoryId']);
-            if ('lesson' == $chapter['type']) {
-                return 'lesson-manage/normal/tasks.html.twig';
-            }
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $taskNum = $this->getTaskService()->countTasksByChpaterId($task['categoryId']);
+        $chapter = $this->getChapterDao()->get($task['categoryId']);
+        $chapter['tasks'] =  array($task);
+        if (1 == $taskNum) {
+            $template =  'lesson-manage/normal/lesson.html.twig';
+        } else {
+            $template = 'lesson-manage/normal/tasks.html.twig';
         }
-
-        return 'lesson-manage/normal/lesson.html.twig';
+        
+        return array(
+            'data' => array(
+                'course' => $course,
+                'lesson' => $chapter,
+            ),
+            'template' =>  $template,
+        );
     }
 
     public function deleteTask($task)
@@ -159,7 +177,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function prepareCourseItems($courseId, $tasks, $limitNum)
+    public function prepareCourseItems($courseId, $tasks, $limitNum = 0)
     {
         $items = array();
         uasort(

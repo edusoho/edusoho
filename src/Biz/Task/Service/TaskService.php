@@ -222,4 +222,6 @@ interface TaskService
     public function findPublishedTasksByCourseSetId($courseSetId);
 
     public function getTodayLiveCourseNumber();
+
+    public function countTasksByChpaterId($chapterId);
 }
