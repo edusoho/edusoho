@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Coupon\Service\CouponService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,7 +18,6 @@ class MarketingCoupon extends AbstractResource
      *
      * @return mixed
      * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
-     * @ResponseFilter(class="ApiBundle\Api\Resource\Coupon\CouponFilter", mode="public")
      */
     public function add(ApiRequest $request)
     {
@@ -38,6 +38,9 @@ class MarketingCoupon extends AbstractResource
 
         $response = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
         $response['password'] = $password;
+        $response['deadline'] = date('c', $response['deadline']);
+
+        $response = ArrayToolkit::parts($response, array('id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'password'));
 
         return $response;
     }
