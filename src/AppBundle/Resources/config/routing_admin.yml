@@ -2202,10 +2202,9 @@ admin_login_marketing:
     path: /login/marketing
     defaults: { _controller: AppBundle:Admin/Marketing:loginMarketing}
 
-# 临时隐藏 distributor
-# admin_login_distributor:
-#    path: /login/distributor
-#    defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
+admin_login_distributor:
+   path: /login/distributor
+   defaults: { _controller: AppBundle:Admin/Marketing:loginDistributor}
 
 
 admin_jobs:
