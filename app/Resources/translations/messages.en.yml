@@ -1457,7 +1457,9 @@ course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
 course.plan_task.total_tasks: 'Activities in total:'
-course.plan_task.everyday_finish_tasks: ''
+course.plan_task.everyday_finish_tasks: >
+  日均约需完成：<span class="color-warning">%taskPerDay%</span> 个任务
+course.plan_lesson.hidden: 前台隐藏未发布课时
 course.plan_task.create_btn: Add
 course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'

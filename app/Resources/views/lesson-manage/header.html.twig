@@ -1,5 +1,5 @@
 <div class="task-list-header clearfix js-task-list-header cd-mt16">
-  {{'course.plan_task.total_tasks'|trans}}<span class="cd-mr24" id="task-num">{{ course.taskNum }}</span>{% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}<span class="cd-dark-assist cd-mr8">前台隐藏未发布课时</span>
+  {{'course.plan_task.total_tasks'|trans}}<span class="cd-mr16" id="task-num">{{ course.taskNum }}</span>{% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}<span class="cd-dark-assist cd-mr8 cd-ml8">{{ 'course.plan_lesson.hidden'|trans }}</span>
 
   <label class="cd-switch task-list-header__switch js-switch {% if not course.isShowUnpublish %}checked{% endif %}">
     <input type="checkbox" name="isShowPublish" data-toggle="cd-switch" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
