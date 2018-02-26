@@ -14,6 +14,7 @@ import Emitter from "common/es-event-emitter";
         2. display-if 如果结果为0或false, 则删除该节点
         3. hide-if 如果结果为1或true, 则删除该节点
         4. tmp节点, 一般用于处理 display-if 和 hide-if，会移除, 通过子节点unwrap的方式移除，如果没有子节点，无法移除
+           如果tmp节点上有 js-ignore-remove, 则不会被删除
      -->
      <div class="js-infinite-item-template hidden">
       <li class="task-item bg-gray-lighter js-task-chapter infinite-item" 
@@ -147,6 +148,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
       }
     );
 
+    //%7B %7D 是转义后的 { 和 }
     replacedHtml = replacedHtml.replace(
       /(%7B\w+%7D)/g,
       function(param) {
@@ -155,17 +157,8 @@ export default class ESInfiniteCachedScroll extends Emitter {
     );
 
     let tempNode = $('<div>').append(replacedHtml);
-    tempNode.find('[display-if=false]').remove();
-    tempNode.find('[display-if=0]').remove();
-    tempNode.find('[hide-if=1]').remove();
-    tempNode.find('[hide-if=true]').remove();
-    tempNode.find('tmp :first-child').each(
-      function() {
-        if (!$(this).hasClass('ignoreRemove') && $(this).parent()[0].nodeName == 'TMP') {
-          $(this).unwrap();
-        }
-      }
-    );
+
+    this._removeUnNeedNodes(tempNode);
 
     $('.infinite-container').append(tempNode.html());
   }
@@ -183,5 +176,22 @@ export default class ESInfiniteCachedScroll extends Emitter {
       return currentData[paramName];
     }
     return param;
+  }
+
+  _removeUnNeedNodes(tempNode) {
+    tempNode.find('[display-if=false]').remove();
+    tempNode.find('[display-if=0]').remove();
+    tempNode.find('[hide-if=1]').remove();
+    tempNode.find('[hide-if=true]').remove();
+
+    // 调试用， tmp node如果有 js-ignore-remove class, 不会自动删除
+    tempNode.find('tmp :first-child').each(
+      function() {
+        let parentNode = $(this).parent();
+        if (!parentNode.hasClass('js-ignore-remove') && parentNode[0].nodeName == 'TMP') {
+          $(this).unwrap();
+        }
+      }
+    );
   }
 }
