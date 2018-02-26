@@ -64,7 +64,9 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $taskNum = $this->getTaskService()->countTasksByChpaterId($task['categoryId']);
         $chapter = $this->getChapterDao()->get($task['categoryId']);
-        $chapter['tasks'] =  array($task);
+
+        $tasks = array($task);
+        $chapter['tasks'] = $tasks;
         if (1 == $taskNum) {
             $template =  'lesson-manage/normal/lesson.html.twig';
         } else {
@@ -75,6 +77,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             'data' => array(
                 'course' => $course,
                 'lesson' => $chapter,
+                'tasks' => $tasks
             ),
             'template' =>  $template,
         );

@@ -101,22 +101,22 @@ export default class Manage {
       let $this = $(this);
       let $parent = $this.closest('.task-manage-item');
       let text = self._getDeleteText($this);
-
+      
       cd.confirm({
         title: Translator.trans('site.delete'),
         content: text,
-        confirmText: Translator.trans('site.confirm'),
-        cancelText: Translator.trans('site.close'),
-        confirm() {
-          $parent.remove();
-          self.sortList();
-          self.handleEmptyShow();
-          
-          $.post($this.data('url'), function (data) {
-          });
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.close')
+      }).on('ok', () => {
+        if ('task' == $this.data('type') &&  $parent.siblings().length == 0) {
+          $parent.closest('.js-task-manage-lesson').remove();
         }
+        $parent.remove();
+        self.sortList();
+        self.handleEmptyShow();
+        $.post($this.data('url'), function (data) {
+        });
       })
-
     });
   }
 
@@ -216,7 +216,7 @@ export default class Manage {
       $.post($this.data('url'), function (data) {   
         let $parentLi = $this.closest('.task-manage-item');
 
-        $parentLi.find('.publish-item, .js-delete, .publish-status').removeClass('hidden');
+        $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').removeClass('hidden');
         $parentLi.find('.unpublish-item').addClass('hidden');
         notify('success', Translator.trans('course.manage.task_unpublish_success_hint'));
       }).fail(function(data){
@@ -228,7 +228,7 @@ export default class Manage {
       $.post($(event.target).data('url'), function (data) {
         let $parentLi = $(event.target).closest('.task-manage-item');
         notify('success', Translator.trans('course.manage.task_publish_success_hint'));
-        $parentLi.find('.publish-item, .js-delete, .publish-status').addClass('hidden')
+        $parentLi.find('.publish-item, .js-delete, .lesson-unpublish-status').addClass('hidden')
         $parentLi.find('.unpublish-item').removeClass('hidden')
       }).fail(function(data){
         notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
