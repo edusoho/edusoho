@@ -30,6 +30,8 @@ class MarketingCoupon extends AbstractResource
         $user = $this->getUserService()->getUserByVerifiedMobile($postData['mobile']);
 
         if (empty($user)) {
+            $password = substr($postData['mobile'], mt_rand(0, 4), 6);
+            $postData['password'] = $password;
             $apiRequest = new ApiRequest('/api/marketing_user', 'POST', array(), $postData);
             $user = $this->invokeResource($apiRequest);
         }
