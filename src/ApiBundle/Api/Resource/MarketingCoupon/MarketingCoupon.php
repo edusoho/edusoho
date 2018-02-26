@@ -28,21 +28,24 @@ class MarketingCoupon extends AbstractResource
 
         $user = $this->getUserService()->getUserByVerifiedMobile($postData['mobile']);
 
+        $isNew = false;
         if (empty($user)) {
             $password = substr($postData['mobile'], mt_rand(0, 4), 6);
             $postData['password'] = $password;
             $apiRequest = new ApiRequest('/api/marketing_user', 'POST', array(), $postData);
             $user = $this->invokeResource($apiRequest);
+            $isNew = true;
         }
 
         $response = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
-        if (isset($password)) {
+        if ($isNew) {
             $response['password'] = $password;
         }
+        $response['isNew'] = $isNew;
 
         $response['deadline'] = date('c', $response['deadline']);
 
-        $response = ArrayToolkit::parts($response, array('id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'password'));
+        $response = ArrayToolkit::parts($response, array('id', 'code', 'type', 'status', 'rate', 'userId', 'deadline', 'targetType', 'targetId', 'password', 'isNew'));
 
         return $response;
     }
