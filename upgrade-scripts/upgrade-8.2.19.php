@@ -124,14 +124,14 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $limit = 1000;
         $start = ($page - 1) * $limit;
-        $sql = "SELECT COUNT(id) FROM USER WHERE uuid = '';"; 
+        $sql = "SELECT COUNT(id) FROM `user` WHERE uuid = '';"; 
         $count = $this->getConnection()->fetchColumn($sql);
 
         if (empty($count)) {
             return 1;
         }
 
-        $sql = "SELECT id FROM USER WHERE uuid = '' LIMIT {$start}, {$limit};";
+        $sql = "SELECT id FROM `user` WHERE uuid = '' LIMIT {$start}, {$limit};";
         $users = $this->getConnection()->fetchAll($sql);
 
         foreach ($users as $user) {
