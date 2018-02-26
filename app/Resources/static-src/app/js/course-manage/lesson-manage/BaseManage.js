@@ -86,6 +86,7 @@ export default class Manage {
         this.$element.append(elm);
     }
     this.handleEmptyShow();
+    this._flushTaskNumber();
     this._clearPosition();
   }
 
@@ -116,6 +117,7 @@ export default class Manage {
         self.handleEmptyShow();
         $.post($this.data('url'), function (data) {
         });
+        self._flushTaskNumber();
       })
     });
   }
@@ -184,7 +186,7 @@ export default class Manage {
 
   sortablelist() {
     // 前台排序 章，课时，任务 的序号
-    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item'];
+    let sortableElements = ['.js-task-manage-lesson', '.js-task-manage-chapter', '.js-task-manage-item:not(.js-optional-task)'];
     for(let j = 0; j < sortableElements.length; j++) {
       this._sortNumberByClassName(sortableElements[j]);
     } 
@@ -234,5 +236,14 @@ export default class Manage {
         notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.responseJSON.error.message);
       });
     })
+  }
+
+  _flushTaskNumber() {
+    if (!this.$taskNumber) {
+      this.$taskNumber = $('#task-num');
+    }
+    
+    let num = $('.js-settings-item.active').length;
+    this.$taskNumber.text(num);
   }
 }

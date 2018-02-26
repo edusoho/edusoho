@@ -1,6 +1,6 @@
 {% for task in tasks|default() %}
 {% set file =  files[task.activityId]|default(null) %}
-  <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}" >
+  <li class="task-manage-item js-task-manage-item drag clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
     <div class="item-content js-item-content text-overflow">
       <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrs" data-role="task"></i>
       {% if task.isOptional %}
