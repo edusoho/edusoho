@@ -36,9 +36,10 @@ class MarketingCoupon extends AbstractResource
             $user = $this->invokeResource($apiRequest);
         }
 
-        $coupon = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
+        $response = $this->getCouponService()->generateMarketingCoupon($user['id'], $postData['price'], $postData['expire_day']);
+        $response['password'] = $password;
 
-        return $coupon;
+        return $response;
     }
 
     /**
