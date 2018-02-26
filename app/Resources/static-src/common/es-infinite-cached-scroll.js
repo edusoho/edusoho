@@ -58,7 +58,7 @@ export default class ESInfiniteCachedScroll extends Emitter {
             ]
    *    'context': jsonData,
           //json, 用于将data中的值做转换, 或设置一些公共变量
-          // 支持普通数组和方法
+          // 支持普通json和方法
           {
             'course': {
               'id': 1,
