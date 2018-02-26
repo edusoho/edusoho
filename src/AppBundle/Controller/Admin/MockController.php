@@ -103,7 +103,7 @@ class MockController extends BaseController
     {
         $validHosts = array('local', 'try6.edusoho.cn', 'dev', 'esdev.com', 'localhost');
         $host = $_SERVER['HTTP_HOST'];
-        if (!in_array($host, $validHosts)) {
+        if (!in_array($host, $validHosts) && false === strpos($host, '.st.edusoho.cn')) {
             throw new AccessDeniedException($host.'不允许使用此功能！！！');
         }
 
