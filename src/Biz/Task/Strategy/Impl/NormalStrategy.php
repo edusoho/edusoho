@@ -45,12 +45,12 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $task;
     }
 
-    public function getTasksTemplate()
+    public function getTasksListJsonData()
     {
         return 'lesson-manage/normal-list.html.twig';
     }
 
-    public function getJsonTemplate($task)
+    public function getTasksJsonData($task)
     {
         if (!empty($task['categoryId'])) {
             $chapter = $this->getChapterDao()->get($task['categoryId']);

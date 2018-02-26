@@ -1,6 +1,12 @@
 <div class="task-list-header clearfix js-task-list-header cd-mt16">
-  {{'course.plan_task.total_tasks'|trans}}<span class="cd-mr16" id="task-num">{{ course.taskNum }}</span>{% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}<span class="cd-dark-assist cd-mr8 cd-ml8">{{ 'course.plan_lesson.hidden'|trans }}</span>
-
+  {{'course.plan_task.total_tasks'|trans}}<span class="cd-mr16" id="task-num">{{ course.taskNum }}</span>
+  {% set taskPerDay = course_daily_tasks_num(course.id) %}
+  {% if taskPerDay|default(false) %}
+  {{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}
+  {% endif %}
+  <span class="cd-dark-assist cd-mr8 cd-ml8">
+    {{ 'course.plan_lesson.hidden'|trans }}
+  </span>
   <label class="cd-switch task-list-header__switch js-switch {% if not course.isShowUnpublish %}checked{% endif %}">
     <input type="checkbox" name="isShowPublish" data-toggle="cd-switch" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
   </label>
@@ -9,19 +15,22 @@
     <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
       data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
       {{ 'course.manage.create_lesson'|trans }}
-    </button><button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add
-      {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
-      disabled
-      {% endif %}"
-      {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
-        data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
-        data-content="{{'course.plan_task.batch_create_tips'|trans}}"
-      {% else %}
-        data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-        data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
-      {% endif %}>
-      {{'course.plan_task.batch_create_btn'|trans}}
-    </button><div class="cd-dropdown" data-toggle="cd-dropdown">
+    </button>
+
+    {% if courseSet.type|default('') == 'normal' %}
+      <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add"
+        {% if setting('storage.upload_mode', 'local') == 'local' %}
+          data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
+          data-content="{{'course.plan_task.batch_create_tips'|trans}}"
+        {% else %}
+          data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+          data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
+        {% endif %}>
+        {{'course.plan_task.batch_create_btn'|trans}}
+      </button>
+    {% endif %}
+
+    <div class="cd-dropdown" data-toggle="cd-dropdown">
       <button class="cd-btn cd-btn-default cd-btn-sm">
         {{ 'form.field.create'|trans }}{{ course_chapter_alias('chapter')|trans }} / {{ course_chapter_alias('unit')|trans }}<span class="caret"></span>
       </button>

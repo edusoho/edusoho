@@ -11,6 +11,10 @@ class DefaultManage extends BaseManage {
     this._showLesson();
   }
 
+  _sortRules($item, container) {
+    return true;
+  }
+
   _showLesson() {
     this.$element.find('.js-task-manage-item').first().addClass('active').find('.js-settings-list').stop().slideDown(500);
     this.$element.on('click', '.js-item-content', (event) => {

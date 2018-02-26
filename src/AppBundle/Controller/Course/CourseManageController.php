@@ -411,37 +411,22 @@ class CourseManageController extends BaseController
                 )
             );
         }
-
+        
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
-        $files = $this->prepareTaskActivityFiles($tasks);
-
-        $courseItems = $this->getCourseService()->findCourseItems($courseId);
-        $taskPerDay = $this->getFinishedTaskPerDay($course, $tasks);
+        //normal 会用到
+        //$files = $this->prepareTaskActivityFiles($tasks);
+        $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
 
         return $this->render(
-            $this->createCourseStrategy($course)->getTasksTemplate(),
-            array(
-                'files' => $files,
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'items' => $courseItems,
-                'taskPerDay' => $taskPerDay,
+            $tasksListJsonData['template'],
+            array_merge(
+                array(
+                    'courseSet' => $courseSet,
+                    'course' => $course,
+                ),
+                $tasksListJsonData['data']
             )
         );
-    }
-
-    protected function getFinishedTaskPerDay($course, $tasks)
-    {
-        $taskNum = $course['taskNum'];
-        if ('days' == $course['expiryMode']) {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
-        } else {
-            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
-        }
-
-        return round($finishedTaskPerDay, 0);
     }
 
     public function prepareExpiryMode($data)

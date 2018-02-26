@@ -50,6 +50,14 @@ export default class Manage {
   }
 
   addItem(elm) {
+    let $elm = $(elm);
+    let $exsit = $('#'+$elm.attr('id'));
+
+    if ($exsit.length > 0) {
+      $exsit.replaceWith(elm);
+
+      return;
+    }
     //添加章节课时
     switch(this.type)
     {
@@ -128,27 +136,31 @@ export default class Manage {
       ajax: false,
       group: 'nested',
       isValidTarget: function ($item, container) {
-        // 任务课时内拖动
-        if ($item.hasClass('js-task-manage-item') && 
-          container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
-            return false;
-        }
-        // 章节只能挂在总节点下
-        if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
-          if(!container.target.hasClass('sortable-list')) {
-            return false;
-          }   
-        }
-        // 课时不能不能在课时下
-        if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
-            return false;
-        }
-
-        return true;
+        return self._sortRules($item, container);
       }
     }, (data) => {
       self.sortList();
     });
+  }
+
+  _sortRules($item, container) {
+    // 任务课时内拖动
+    if ($item.hasClass('js-task-manage-item') && 
+      container.target.closest('.task-manage-lesson').attr('id') != $item.closest('.task-manage-lesson').attr('id')) {
+        return false;
+    }
+    // 章节只能挂在总节点下
+    if ($item.hasClass('js-task-manage-unit') || $item.hasClass('js-task-manage-chapter')) {
+      if(!container.target.hasClass('sortable-list')) {
+        return false;
+      }   
+    }
+    // 课时不能不能在课时下
+    if ($item.hasClass('js-task-manage-lesson') && container.target.hasClass('js-lesson-box')) {
+        return false;
+    }
+
+    return true;
   }
 
   handleEmptyShow() {
