@@ -28,7 +28,7 @@
 </div>
 
 
-<div class="hidden hiddenCourseInfo">
+<div class="hidden js-hidden-course-info">
   {
     "id": "{{course.id}}",
     "isDefault": "{{course.isDefault}}",
@@ -38,14 +38,14 @@
   }
 </div>
 
-<div class="hidden hiddenI18n">
+<div class="hidden js-hidden-i18n">
   {
     "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
     "i18nUnitName": "{{course_chapter_alias('part')|trans}}"
   }
 </div>
 
-<div class="hidden hiddenData">
+<div class="hidden js-hidden-data">
   [
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
       {% if not loop.first %}
@@ -77,7 +77,7 @@
   ]
 </div>
 
-<div class="hidden hiddenActivityMetas">
+<div class="hidden js-hidden-activity-metas">
   {
     {% set allMetas = activity_meta() %}
     {% for key, item in allMetas %}
@@ -93,4 +93,4 @@
   }
 </div>
 
-<div class="hidden currentTimeStamp">{{ date().timestamp }}</div>
+<div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>

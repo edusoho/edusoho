@@ -5,16 +5,16 @@ import ESInfiniteCachedScroll from 'common/es-infinite-cached-scroll';
 import { buyBtn } from 'app/common/widget/btn-util';
 
 new ESInfiniteCachedScroll({
-  'data': $.parseJSON($('.hiddenData').html().replace(/[\r\n]/g, "")),
+  'data': $.parseJSON($('.js-hidden-data').html().replace(/[\r\n]/g, "")),
 
   'context': {
-    'course': $.parseJSON($('.hiddenCourseInfo').html().replace(/[\r\n]/g, "")),
+    'course': $.parseJSON($('.js-hidden-course-info').html().replace(/[\r\n]/g, "")),
 
-    'i18n': $.parseJSON($('.hiddenI18n').html().replace(/[\r\n]/g, "")),
+    'i18n': $.parseJSON($('.js-hidden-i18n').html().replace(/[\r\n]/g, "")),
 
-    'metas': $.parseJSON($('.hiddenActivityMetas').html().replace(/[\r\n]/g, "")),
+    'metas': $.parseJSON($('.js-hidden-activity-metas').html().replace(/[\r\n]/g, "")),
 
-    'currentTimeStamp': parseInt($('.currentTimeStamp').html(), 10),
+    'currentTimeStamp': parseInt($('.js-hidden-current-timestamp').html(), 10),
 
     'isChapter': function(data, context) {
       return 'chapter' == data.itemType;
