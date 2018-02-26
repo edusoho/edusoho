@@ -38,18 +38,30 @@
   }
   .task-manage-lesson {
     margin-left: 40px;
+    .cd-box-shadow-z(3px);
+    .cd-border-radius;
     .item-line {
       margin-left: -40px;
       width: 40px;
     }
+    .item-content {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
   .task-manage-lesson-tasks {
+    padding: 0 24px 24px 24px;
     list-style-type: none;
-    padding-left: 0;
-    background-color: #fff;
-    .cd-border-radius;
     .item-content {
+      margin-top: 16px;
+      padding: 0;
+      height: 22px;
+      line-height: 22px;
       color: @cd-dark-minor;
+      background-color: #fff;
+    }
+    .task-manage-item {
+      margin-bottom: 0;
     }
   }
   .task-manage-item {

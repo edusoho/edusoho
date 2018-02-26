@@ -1,5 +1,5 @@
 <li id="chapter-{{lesson.id}}" class="task-manage-item drag task-manage-{{lesson.type}} js-task-manage-{{lesson.type}} clearfix">
-  <div class="chapter-item clearfix mbm">
+  <div class="chapter-item clearfix">
     <div class="item-line"></div>
     <div class="item-content">
       <span class="lesson-unpublish-status {% if lesson.status == 'published' %}hidden{% endif %}">{{'course.plan_task.task_unpublished'|trans}}</span>{{'course.plan_task.which_lesson'|trans({'%chapterNumber%':lesson.number, '%title%':lesson.title|sub_text(30)})|raw }}

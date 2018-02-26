@@ -2,7 +2,7 @@
 {% set file =  files[task.activityId]|default(null) %}
   <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}" >
     <div class="item-content js-item-content text-overflow">
-      <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
+      <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrs" data-role="task"></i>
       {% if task.isOptional %}
         <span class="cd-tag cd-tag-blue mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
