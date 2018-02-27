@@ -3,7 +3,6 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
 use AppBundle\Common\ReflectionUtils;
 
 class CourseDeleteServiceTest extends BaseTestCase
@@ -32,7 +31,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     public function testDeleteCourseSetMaterial()
     {
-        $material = $this->getCourseMaterialDao()->create(array('courseId'=>1,'title'=>'material title', 'fileId' => 1, 'fileSize'=>'1024','source' => 'coursematerial','type' => 'course', 'courseSetId' => 1));
+        $material = $this->getCourseMaterialDao()->create(array('courseId' => 1, 'title' => 'material title', 'fileId' => 1, 'fileSize' => '1024', 'source' => 'coursematerial', 'type' => 'course', 'courseSetId' => 1));
         $this->assertNotNull($material);
 
         ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteCourseSetMaterial', array(1));
@@ -60,7 +59,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteQuestion', array(1));
         $this->assertEmpty($result);
 
-        $question = $this->getQuestionDao()->create(array('type' => 'single_choice', 'stem' => 'question a', 'score' => '2.0','answer' => array(1), 'analysis' => 'analysis', 'courseSetId' => 1));
+        $question = $this->getQuestionDao()->create(array('type' => 'single_choice', 'stem' => 'question a', 'score' => '2.0', 'answer' => array(1), 'analysis' => 'analysis', 'courseSetId' => 1));
         ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteQuestion', array(1));
 
         $result = $this->getQuestionDao()->get($question['id']);
@@ -72,7 +71,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteAttachment', array(1));
         $this->assertTrue($result);
 
-        $result = $this->getFileUsedDao()->create(array('type' => 'attachment','targetId' => 100, 'targetType' => 'question.stem', 'fileId' => 1));
+        $result = $this->getFileUsedDao()->create(array('type' => 'attachment', 'targetId' => 100, 'targetType' => 'question.stem', 'fileId' => 1));
         $this->assertNotNull($result);
 
         ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteAttachment', array(100));
@@ -102,8 +101,8 @@ class CourseDeleteServiceTest extends BaseTestCase
         $this->mockBiz('System:Setting', array(
             array(
                 'functionName' => 'get',
-                'returnValue' => array('courseIds' => array(2,3)),
-            )
+                'returnValue' => array('courseIds' => array(2, 3)),
+            ),
         ));
 
         $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'updateMobileSetting', array(1));
@@ -115,7 +114,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteCourseMaterial', array(1));
         $this->assertEmpty($result);
 
-        $material = $this->getCourseMaterialDao()->create(array('courseId'=>1,'title'=>'material title', 'fileId' => 1, 'fileSize'=>'1024','source' => 'coursematerial','type' => 'course', 'courseSetId' => 1));
+        $material = $this->getCourseMaterialDao()->create(array('courseId' => 1, 'title' => 'material title', 'fileId' => 1, 'fileSize' => '1024', 'source' => 'coursematerial', 'type' => 'course', 'courseSetId' => 1));
         $this->assertNotNull($material);
 
         ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteCourseMaterial', array(1));
@@ -141,13 +140,12 @@ class CourseDeleteServiceTest extends BaseTestCase
         $member = $this->getCourseMemberDao()->create(array('courseId' => $course['id'], 'joinedType' => 'course', 'role' => 'student', 'userId' => $this->getCurrentUser()->getId(), 'courseSetId' => 1));
 
         $activity = $this->getActivityDao()->create(array('title' => 'activity title', 'mediaId' => 1, 'mediaType' => 'text', 'content' => 'activity content', 'fromCourseId' => $course['id'], 'fromCourseSetId' => $course['courseSetId'], 'fromUserId' => $this->getCurrentUser()->getId()));
-        $task = $this->getTaskDao()->create(array('courseId' => $course['id'], 'fromCourseSetId' => 1, 'title' => 'task name', 'seq' => 1, 'activityId' => 1, 'type' => 'text','createdUserId'=>2));
-
+        $task = $this->getTaskDao()->create(array('courseId' => $course['id'], 'fromCourseSetId' => 1, 'title' => 'task name', 'seq' => 1, 'activityId' => 1, 'type' => 'text', 'createdUserId' => 2));
 
         $this->assertNotNull($task);
 
         ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteTask', array(1));
-        
+
         $result = $this->getTaskDao()->get($task['id']);
         $this->assertNull($result);
     }
@@ -168,7 +166,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteJob', array(array('type' => 'text')));
         $this->assertEmpty($result);
 
-        $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteJob', array(array('id' => 1,'type' => 'live')));
+        $result = ReflectionUtils::invokeMethod($this->getCourseDeleteService(), 'deleteJob', array(array('id' => 1, 'type' => 'live')));
         $this->assertTrue(true);
     }
 
@@ -201,7 +199,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $this->assertNotNull($result);
 
         $result = $this->getCourseDeleteService()->deleteCourseAnnouncement(100);
-        
+
         $result = $this->getAnnouncementDao()->get($result['id']);
         $this->assertNull($result);
     }
