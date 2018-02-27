@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Course\Service\LessonService;
 

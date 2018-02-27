@@ -46,7 +46,7 @@ class TaskManageController extends BaseController
 
         $categoryId = $request->query->get('categoryId', 0);
 
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'],'categoryId' => $categoryId));
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'categoryId' => $categoryId));
         if ($taskCount >= 5) {
             return $this->createJsonResponse(array('code' => false, 'message' => 'lesson_tasks_no_more_than_5'));
         }

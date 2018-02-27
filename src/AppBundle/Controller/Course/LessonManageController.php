@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\InvalidArgumentException;
 use AppBundle\Controller\BaseController;
 
 class LessonManageController extends BaseController
