@@ -31,6 +31,7 @@ class HTMLHelper
         } else {
             $safeDomains = array();
         }
+
         $config = array(
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
             'safeIframeDomains' => $safeDomains,
@@ -41,10 +42,11 @@ class HTMLHelper
 
         $html = $purifier->purify($html);
         $html = str_replace('http-equiv', '', $html);
+        $html = $this->handleOuterLink($html, $safeDomains);
+
         if (!$trusted) {
             return $html;
         }
-
         $styles = $purifier->context->get('StyleBlocks');
         if ($styles) {
             $html = implode("\n", array(
@@ -53,6 +55,25 @@ class HTMLHelper
                 '</style>',
                 $html,
             ));
+        }
+
+        return $html;
+    }
+
+    protected function handleOuterLink($html, $safeDomains)
+    {
+        preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
+        foreach ($matches[1] as $key => $matche) {
+            $needReplaceFlag = true;
+            foreach ($safeDomains as $safeDomain) {
+                if (false !== strpos($matche, $safeDomain)) {
+                    $needReplaceFlag = false;
+                }
+            }
+            //存在于白名单内就不进行替换移除
+            if ($needReplaceFlag) {
+                $html = str_replace($matches[0][$key], '', $html);
+            }
         }
 
         return $html;

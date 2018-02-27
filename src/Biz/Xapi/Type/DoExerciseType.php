@@ -23,7 +23,7 @@ class DoExerciseType extends Type
         );
 
         $actor = $this->getActor($statement['user_id']);
-        $result = array();
+        $result = array('success' => true);
 
         return $this->createXAPIService()->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
     }
@@ -67,7 +67,7 @@ class DoExerciseType extends Type
                     );
 
                     $actor = $this->getActor($statement['user_id']);
-                    $result = array();
+                    $result = array('success' => true);
 
                     $pushStatements[] = $sdk->finishExercise($actor, $object, $result, $statement['uuid'], $statement['occur_time'], false);
                 } catch (\Exception $e) {

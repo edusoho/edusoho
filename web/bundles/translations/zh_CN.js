@@ -2,11 +2,6 @@
 t.fallback = 'zh_CN';
 t.defaultDomain = 'js';
 // zh_CN
-t.add("plugin_faq.validate.from_version", "\u8d77\u59cb\u7248\u672c\u53f7", "js", "zh_CN");
-t.add("plugin_faq.validate.end_version", "\u7ec8\u6b62\u7248\u672c\u53f7", "js", "zh_CN");
-t.add("plugin_faq.category.hint", "\u8bf7\u9009\u62e9\u5206\u7c7b", "js", "zh_CN");
-t.add("plugin_faq.validate.es_version", "ES\u7248\u672c\u53f7", "js", "zh_CN");
-t.add("plugin_faq.validate.compare_version.hint", "\u8d77\u59cb\u7248\u672c\u53f7\u5fc5\u987b\u5c0f\u4e8e\u7b49\u4e8e\u7ec8\u6b62\u7248\u672c\u53f7", "js", "zh_CN");
 t.add("site.flash_not_install_hint", "\u60a8\u7684\u6d4f\u89c8\u5668\u672a\u88c5Flash\u64ad\u653e\u5668\u6216\u7248\u672c\u592a\u4f4e\uff0c\u8bf7\u5148\u5b89\u88c5Flash\u64ad\u653e\u5668\u3002<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">\u70b9\u51fb\u5b89\u88c5<\/a>", "js", "zh_CN");
 t.add("site.date_format_dhis", "%days%\u5929%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
 t.add("site.date_format_his", "%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
@@ -27,7 +22,7 @@ t.add("site.data.create", "\u6dfb\u52a0", "js", "zh_CN");
 t.add("site.data.not_found", "\u672a\u627e\u5230...", "js", "zh_CN");
 t.add("site.data.delete_name_hint", "\u771f\u7684\u8981\u5220\u9664\u8be5%name%\u5417\uff1f", "js", "zh_CN");
 t.add("site.data.uncheck_name_hint", "\u672a\u9009\u4e2d\u4efb\u4f55%name%", "js", "zh_CN");
-t.add("site.data.delete_check_name_hint", "\u786e\u5b9a\u8981\u5220\u9664\u9009\u4e2d\u7684\u6761%name%\u5417\uff1f", "js", "zh_CN");
+t.add("site.data.delete_check_name_hint", "\u786e\u5b9a\u8981\u5220\u9664\u9009\u4e2d\u7684%name%\u5417\uff1f", "js", "zh_CN");
 t.add("site.data.delete_submiting_hint", "\u6b63\u5728\u5220\u9664...", "js", "zh_CN");
 t.add("site.date.year", "\u5e74", "js", "zh_CN");
 t.add("site.date.month", "\u6708", "js", "zh_CN");
@@ -465,6 +460,13 @@ t.add("task_manage.delete_failed_hint", "\u5220\u9664\u5931\u8d25", "js", "zh_CN
 t.add("testpaper.widget.save_success_hint", "\u5df2\u4fdd\u5b58", "js", "zh_CN");
 t.add("testpaper_manage.save_error_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
 t.add("testpaper_manage.save_success_hint", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
+t.add("testpaper_manage.result_graph.score_distribution", "\u5206\u6570\u533a\u95f4", "js", "zh_CN");
+t.add("testpaper_manage.result_graph.person_num", "\u4eba\u6570", "js", "zh_CN");
+t.add("testpaper_manage.result_graph.first_score_num", "\u9996\u6b21\u6210\u7ee9\u5f97\u5206\u4eba\u6570", "js", "zh_CN");
+t.add("testpaper_manage.result_graph.max_score_num", "\u6700\u4f18\u6210\u7ee9\u5f97\u5206\u4eba\u6570", "js", "zh_CN");
+t.add("homework_manage.result_graph.status_distribution", "\u7ed3\u679c\u533a\u95f4", "js", "zh_CN");
+t.add("homework_manage.result_graph.first_status_num", "\u9996\u6b21\u6210\u7ee9\u7ed3\u679c\u4eba\u6570", "js", "zh_CN");
+t.add("homework_manage.result_graph.max_status_num", "\u6700\u4f18\u6210\u7ee9\u7ed3\u679c\u4eba\u6570", "js", "zh_CN");
 t.add("intro.confirm_hint", "\u6211\u77e5\u9053\u4e86", "js", "zh_CN");
 t.add("validate.required.message", "\u8bf7\u8f93\u5165%display%", "js", "zh_CN");
 t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
@@ -643,6 +645,7 @@ t.add("oauth.send.validate_message", "\u53d1\u9001\u9a8c\u8bc1", "js", "zh_CN");
 t.add("oauth.send.error_message_tip", "\u8bf7\u6c42\u53d1\u9001\u6b21\u6570\u8fc7\u591a\uff0c\u8bf7\u7a0d\u540e\u5c1d\u8bd5", "js", "zh_CN");
 t.add("oauth.send.sms_code_error_tip", "\u60a8\u8f93\u5165\u7684\u77ed\u4fe1\u9a8c\u8bc1\u7801\u4e0d\u6b63\u786e", "js", "zh_CN");
 t.add("oauth.refresh.captcha_code_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u5931\u6548\uff0c\u8bf7\u91cd\u65b0\u8f93\u5165\u56fe\u5f62\u9a8c\u8bc1\u7801", "js", "zh_CN");
+t.add("oauth.refresh.captcha_code_required_tip", "\u8bf7\u8f93\u5165\u56fe\u5f62\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("oauth.captcha_code_length_tip", "\u56fe\u5f62\u7801\u4e3a5\u4f4d\u6570", "js", "zh_CN");
 t.add("oauth.captcha_code_expired_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u8fc7\u671f", "js", "zh_CN");
 t.add("oauth.captcha_code_error_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
@@ -655,4 +658,5 @@ t.add("course.audio.enable.biz.user", "\u542c\u8bfe\u6a21\u5f0f\u9700\u8981\u514
 t.add("admin.data.lab.setting.error", "\u53d1\u751f\u5f02\u5e38\u4e86\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
 t.add("admin.article.save.success", "\u4fdd\u5b58\u6587\u7ae0\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.article.choose_column_tip", "\u8bf7\u9009\u62e9\u6240\u5c5e\u680f\u76ee", "js", "zh_CN");
+t.add("admin.article_setting.choose_category", "--\u9009\u62e9\u6240\u5c5e\u680f\u76ee--", "js", "zh_CN");
 })(Translator);

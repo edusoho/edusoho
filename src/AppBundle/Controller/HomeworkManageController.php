@@ -97,19 +97,27 @@ class HomeworkManageController extends BaseController
             return $this->createMessageResponse('warning', '没有权限查看');
         }
 
-        if ($result['status'] == 'doing') {
+        if ('doing' == $result['status']) {
             throw $this->createNotFoundException('您所批阅的作业不存在！');
         }
 
-        if ($result['status'] == 'finished') {
+        if ('finished' == $result['status']) {
             return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $result['id'])));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $formData = $request->request->all();
+            $isContinue = $formData['isContinue'];
+            unset($formData['isContinue']);
             $this->getTestpaperService()->checkFinish($result['id'], $formData);
 
-            return $this->createJsonResponse(true);
+            $data = array('success' => true, 'goto' => '');
+            if ($isContinue) {
+                $route = $this->getRedirectRoute('nextCheck', $source);
+                $data['goto'] = $this->generateUrl($route, array('id' => $targetId, 'activityId' => $result['lessonId']));
+            }
+
+            return $this->createJsonResponse($data);
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($homework['id'], $result['id']);
@@ -136,7 +144,7 @@ class HomeworkManageController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($activityId);
 
-        if (empty($activity) || $activity['mediaType'] != 'homework') {
+        if (empty($activity) || 'homework' != $activity['mediaType']) {
             return $this->createMessageResponse('error', 'Argument invalid');
         }
 
@@ -161,7 +169,7 @@ class HomeworkManageController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($activityId);
 
-        if (!$activity || $activity['mediaType'] != 'homework') {
+        if (!$activity || 'homework' != $activity['mediaType']) {
             return $this->createMessageResponse('Argument Invalid');
         }
 
@@ -187,9 +195,9 @@ class HomeworkManageController extends BaseController
         $essayQuestions = array();
 
         foreach ($questions as $question) {
-            if ($question['type'] == 'essay' && !$question['parentId']) {
+            if ('essay' == $question['type'] && !$question['parentId']) {
                 $essayQuestions[$question['id']] = $question;
-            } elseif ($question['type'] == 'material') {
+            } elseif ('material' == $question['type']) {
                 $types = ArrayToolkit::column($question['subs'], 'type');
                 if (in_array('essay', $types)) {
                     $essayQuestions[$question['id']] = $question;
@@ -266,14 +274,26 @@ class HomeworkManageController extends BaseController
         $data = array();
         $count = 0;
         foreach ($userFirstResults as $result) {
-            if ($result['firstPassedStatus'] != 'unpassed') {
+            if ('unpassed' != $result['firstPassedStatus']) {
                 ++$count;
             }
         }
 
-        $data['passPercent'] = round($count / count($userFirstResults), 1) * 100;
+        $data['passPercent'] = round($count / count($userFirstResults) * 100, 1);
 
         return $data;
+    }
+
+    protected function getRedirectRoute($mode, $type)
+    {
+        $routes = array(
+            'nextCheck' => array(
+                'course' => 'course_manage_exam_next_result_check',
+                'classroom' => 'classroom_manage_exam_next_result_check',
+            ),
+        );
+
+        return $routes[$mode][$type];
     }
 
     /**

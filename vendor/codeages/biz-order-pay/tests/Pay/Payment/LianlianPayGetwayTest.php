@@ -10,13 +10,13 @@ class LianlianPayGetwayTest extends IntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        $signatureToolkit = \Mockery::mock(SignatureToolkit::class);
+        $signatureToolkit = \Mockery::mock('Codeages\\Biz\\Pay\\Payment\\SignatureToolkit');
         $this->biz['payment.platforms'] = array(
             'lianlianpay' => array(
                 'secret' => 'secret',
                 'accessKey' => 'accessKey',
                 'oid_partner' => 'oid_partner',
-                'signatureToolkit' => $signatureToolkit
+                'signatureToolkit' => $signatureToolkit,
             ),
         );
     }
@@ -76,7 +76,7 @@ class LianlianPayGetwayTest extends IntegrationTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCreateTradeWithInvalidArguments()
     {

@@ -7,6 +7,8 @@ use Biz\System\Service\SettingService;
 
 class DiscuzAuthProvider extends BaseService implements AuthProvider
 {
+    private $mockedDiscusClientPath = null;
+
     public function register($registration)
     {
         $this->initDiscuzApi();
@@ -53,7 +55,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         $user = uc_get_user($userId, 1);
         $result = uc_user_edit($user[1], null, null, $newEmail, 1);
 
-        return $result == 1;
+        return 1 == $result;
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)
@@ -62,7 +64,7 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
         $user = uc_get_user($userId, 1);
         $result = uc_user_edit($user[1], null, $newPassword, null, 1);
 
-        return $result == 1;
+        return 1 == $result;
     }
 
     public function checkUsername($username)
@@ -203,7 +205,11 @@ class DiscuzAuthProvider extends BaseService implements AuthProvider
             define(strtoupper($key), $value);
         }
 
-        require_once __DIR__.'/../../../../vendor_user/uc_client/client.php';
+        if (empty($this->mockedDiscusClientPath)) {
+            require_once __DIR__.'/../../../../vendor_user/uc_client/client.php';
+        } else {
+            require_once $this->mockedDiscusClientPath;
+        }
     }
 
     protected function convertApiResult($result)

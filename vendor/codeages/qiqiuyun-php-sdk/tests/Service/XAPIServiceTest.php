@@ -5,19 +5,10 @@ namespace QiQiuYun\SDK\Tests\Service;
 use QiQiuYun\SDK\Tests\BaseTestCase;
 use QiQiuYun\SDK\Service\XAPIService;
 
-class ClientTest extends BaseTestCase
+class XAPIServiceTest extends BaseTestCase
 {
-    protected $auth;
-
-    public function setUp()
-    {
-        $this->auth = $this->createAuth();
-    }
-
     public function testWatchVideo_Success()
     {
-        $service = $this->createXAPIService();
-
         $actor = array(
             'id' => 1,
             'name' => '测试用户',
@@ -32,12 +23,20 @@ class ClientTest extends BaseTestCase
             ),
             'video' => array(
                 'id' => '1111',
-                'name' => '测试视频.mp4'
-            )
+                'name' => '测试视频.mp4',
+            ),
         );
         $result = array(
             'duration' => 100,
         );
+
+        $httpClient = $this->mockHttpClient(array(
+            'actor' => $actor,
+            'object' => $object,
+            'result' => $result,
+        ));
+
+        $service = $this->createXAPIService($httpClient);
 
         $statement = $service->watchVideo($actor, $object, $result);
 
@@ -47,15 +46,11 @@ class ClientTest extends BaseTestCase
     }
 
     /**
-     * @expectedException QiQiuYun\SDK\Exception\ResponseException
+     * @expectedException \QiQiuYun\SDK\Exception\ResponseException
      * @expectedExceptionCode 9
-     *
-     * @return void
      */
     public function testWatchVideo_Error()
     {
-        $service = $this->createXAPIService();
-        
         $actor = array(
             'id' => 1,
             'name' => '测试用户',
@@ -70,24 +65,28 @@ class ClientTest extends BaseTestCase
             ),
             'video' => array(
                 'id' => '1111',
-                'name' => '测试视频.mp4'
-            )
+                'name' => '测试视频.mp4',
+            ),
         );
         $result = array(
             'duration' => 100,
         );
 
+        $httpClient = $this->mockHttpClient(array(
+            'error' => array(
+                'code' => 9,
+                'message' => 'invalid argument',
+            ),
+        ));
+
+        $service = $this->createXAPIService($httpClient);
         $statement = $service->watchVideo($actor, $object, $result);
     }
 
-    protected function createXAPIService()
+    protected function createXAPIService($httpClient = null)
     {
         return new XAPIService($this->auth, array(
-            'base_uri' => 'http://localhost:8000/xapi/',
-            'school' => array(
-                'id' => $this->accessKey,
-                'name' => '测试网校',
-            )
-        ));
+            'school_name' => '测试网校',
+        ), null, $httpClient);
     }
 }

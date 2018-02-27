@@ -1,3 +1,5 @@
+import SmsSender from 'app/common/widget/sms-sender';
+
 export default class Register {
   constructor() {
     this.initDate();
@@ -6,7 +8,8 @@ export default class Register {
     this.initCaptchaCode();
     this.initRegisterTypeRule();
     this.initInviteCodeRule();
-    this.intiUserTermsRule();
+    this.initUserTermsRule();
+    this.initMobileMsgVeriCodeSendBtn();
   }
 
   initValidator() {
@@ -29,7 +32,7 @@ export default class Register {
       },
     });
 
-    $.validator.addMethod("email_or_mobile_check", function (value, element, params) {
+    $.validator.addMethod("email_or_mobile_check", function(value, element, params) {
       let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       var reg_mobile = /^1\d{10}$/;
       var result = false;
@@ -74,7 +77,7 @@ export default class Register {
   initCaptchaCode() {
     let $getCodeNum = $('#getcode_num');
     if ($getCodeNum.length > 0) {
-      $getCodeNum.click(function () {
+      $getCodeNum.click(function() {
         $(this).attr("src", $getCodeNum.data("url") + "?" + Math.random());
       });
       this.initCaptchaCodeRule();
@@ -103,11 +106,11 @@ export default class Register {
         email_or_mobile_check: true,
         es_remote: {
           type: 'get',
-          callback: function (bool) {
+          callback: function(bool) {
             if (bool) {
-              $('.js-sms-send').removeClass('disabled');
+              $('.js-sms-send-btn').removeClass('disabled');
             } else {
-              $('.js-sms-send').addClass('disabled');
+              $('.js-sms-send-btn').addClass('disabled');
             }
           }
         },
@@ -125,11 +128,11 @@ export default class Register {
         phone: true,
         es_remote: {
           type: 'get',
-          callback: function (bool) {
+          callback: function(bool) {
             if (bool) {
-              $('.js-sms-send').removeClass('disabled');
+              $('.js-sms-send-btn').removeClass('disabled');
             } else {
-              $('.js-sms-send').addClass('disabled');
+              $('.js-sms-send-btn').addClass('disabled');
             }
           }
         },
@@ -153,7 +156,7 @@ export default class Register {
     }
   }
 
-  intiUserTermsRule() {
+  initUserTermsRule() {
     if ($('#user_terms').length) {
       $('#user_terms').rules('add', {
         required: true,
@@ -163,13 +166,14 @@ export default class Register {
       })
     }
   }
+
   initCaptchaCodeRule() {
     $('[name="captcha_code"]').rules('add', {
       required: true,
       alphanumeric: true,
       es_remote: {
         type: 'get',
-        callback: function (bool) {
+        callback: function(bool) {
           if (!bool) {
             $('#getcode_num').attr("src", $('#getcode_num').data("url") + "?" + Math.random());
           }
@@ -177,9 +181,11 @@ export default class Register {
       },
     })
   }
+
   initSmsCodeRule() {
     $('[name="sms_code"]').rules('add', {
       required: true,
+      unsigned_integer: true,
       rangelength: [6, 6],
       es_remote: {
         type: 'get',
@@ -188,6 +194,33 @@ export default class Register {
         rangelength: Translator.trans('validate.sms_code.message')
       }
     })
+  }
+
+  initMobileMsgVeriCodeSendBtn() {
+    $('.js-sms-send-btn').click(function() {
+      let fieldName = 'emailOrMobile';
+      if ($("[name='verifiedMobile']").length > 0) {
+        fieldName = 'verifiedMobile';
+      }
+
+      new SmsSender({
+        element: '.js-sms-send',
+        url: $('.js-sms-send').data('smsUrl'),
+        smsType: 'sms_registration',
+        dataTo: fieldName,
+        captcha: false,
+        preSmsSend: function() {
+          return true;
+        },
+        additionalAction: function(ackResponse) {
+          if (ackResponse == 'captchaRequired') {
+            $('.js-sms-send').click();
+            return true;
+          }
+          return false;
+        }
+      });
+    });
   }
 
   emSmsCodeValidate(mobile) {

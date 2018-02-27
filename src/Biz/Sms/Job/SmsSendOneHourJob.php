@@ -29,7 +29,7 @@ class SmsSendOneHourJob extends AbstractJob
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
             } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", $e->getMessage());
+                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", array('error' => $e->getMessage()));
             }
         }
     }

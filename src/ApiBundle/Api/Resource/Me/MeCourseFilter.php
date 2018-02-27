@@ -11,7 +11,7 @@ class MeCourseFilter extends Filter
      * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
      */
     protected $publicFields = array(
-        'id', 'title', 'learnedNum', 'courseSet', 'compulsoryTaskNum', 'publishedTaskNum', 'learnedCompulsoryTaskNum'
+        'id', 'title', 'learnedNum', 'courseSet', 'compulsoryTaskNum', 'publishedTaskNum', 'learnedCompulsoryTaskNum',
     );
 
     protected function publicFields(&$data)

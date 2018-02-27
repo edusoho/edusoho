@@ -381,7 +381,7 @@ class ClassroomManageController extends BaseController
         );
 
         $file = '';
-        if ($start == 0) {
+        if (0 == $start) {
             $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $title);
         }
 
@@ -415,7 +415,7 @@ class ClassroomManageController extends BaseController
 
         $condition = array(
             'classroomId' => $classroom['id'],
-            'role' => $role == 'student' ? 'student' : 'auditor',
+            'role' => 'student' == $role ? 'student' : 'auditor',
         );
 
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
@@ -495,7 +495,7 @@ class ClassroomManageController extends BaseController
             unset($classroom['service']['studyPlan']);
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
             $data['service'] = empty($data['service']) ? null : $data['service'];
@@ -581,7 +581,7 @@ class ClassroomManageController extends BaseController
 
         $fields = array();
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
             if (isset($data['teacherIds'])) {
@@ -634,7 +634,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $headTeacherId = empty($data['ids']) ? 0 : $data['ids'][0];
             $this->getClassroomService()->addHeadTeacher($id, $headTeacherId);
@@ -668,7 +668,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $userIds = empty($data['ids']) ? array() : $data['ids'];
 
@@ -710,9 +710,9 @@ class ClassroomManageController extends BaseController
 
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
-            if ($class['expiryMode'] === 'date') {
+            if ('date' === $class['expiryMode']) {
                 $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
-            } elseif ($class['expiryMode'] === 'forever') {
+            } elseif ('forever' === $class['expiryMode']) {
                 $class['expiryValue'] = 0;
             }
 
@@ -738,7 +738,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $class = $request->request->all();
 
             $this->setFlashMessage('success', 'site.save.success');
@@ -795,7 +795,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $options = $request->request->all();
             $this->getClassroomService()->changePicture($classroom['id'], $options['images']);
 
@@ -838,7 +838,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $courseIds = $request->request->get('courseIds', array());
 
             $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
@@ -887,7 +887,7 @@ class ClassroomManageController extends BaseController
         $data = $request->request->all();
 
         $courseIds = array();
-        if (isset($data['ids']) && $data['ids'] != '') {
+        if (isset($data['ids']) && '' != $data['ids']) {
             $ids = $data['ids'];
             $ids = explode(',', $ids);
             foreach ($ids as $cid) {
@@ -917,7 +917,7 @@ class ClassroomManageController extends BaseController
         $nickName = $request->request->get('name');
         $user = array();
 
-        if ($nickName != '') {
+        if ('' != $nickName) {
             $user = $this->getUserService()->searchUsers(
                 array('nickname' => $nickName, 'roles' => 'ROLE_TEACHER'),
                 array('createdTime' => 'DESC'),
@@ -963,7 +963,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($classroom['status'] != 'published') {
+        if ('published' != $classroom['status']) {
             throw $this->createNotFoundException('未发布班级不能导入学员!');
         }
 
@@ -1087,9 +1087,32 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function resultGraphAction(Request $request, $id, $activityId)
+    {
+        $this->getClassroomService()->tryHandleClassroom($id);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        if (empty($activity) || !in_array($activity['fromCourseId'], $courseIds)) {
+            return $this->createMessageResponse('error', 'Activity not found');
+        }
+
+        if ($activity['mediaType'] == 'homework') {
+            $controller = 'AppBundle:HomeworkManage:resultGraph';
+        } else {
+            $controller = 'AppBundle:Testpaper/Manage:resultGraph';
+        }
+
+        return $this->forward($controller, array(
+            'activityId' => $activityId,
+        ));
+    }
+
     public function resultAnalysisAction(Request $request, $id, $activityId)
     {
-        $this->getClassroomService()->tryManageClassroom($id);
+        $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $activity = $this->getActivityService()->getActivity($activityId);
@@ -1097,7 +1120,7 @@ class ClassroomManageController extends BaseController
             return $this->createMessageResponse('error', 'Argument invalid');
         }
 
-        if ($activity['mediaType'] == 'homework') {
+        if ('homework' == $activity['mediaType']) {
             $controller = 'AppBundle:HomeworkManage:resultAnalysis';
         } else {
             $controller = 'AppBundle:Testpaper/Manage:resultAnalysis';
@@ -1139,7 +1162,7 @@ class ClassroomManageController extends BaseController
     protected function getCashRate()
     {
         $coinSetting = $this->getSettingService()->get('coin');
-        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+        $coinEnable = isset($coinSetting['coin_enabled']) && 1 == $coinSetting['coin_enabled'];
         $cashRate = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting['cash_rate'] : 1;
 
         return $cashRate;

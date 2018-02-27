@@ -1,7 +1,9 @@
 <?php
+
 namespace QiQiuYun\SDK\Exception;
 
 use QiQiuYun\SDK\HttpClient\Response;
+use QiQiuYun\SDK;
 
 class ResponseException extends SDKException
 {
@@ -12,7 +14,7 @@ class ResponseException extends SDKException
     public function __construct(Response $response)
     {
         $this->response = $response;
-        $this->responseData = json_decode($response->getBody(), true);
+        $this->responseData = SDK\json_decode($response->getBody(), true);
 
         $errorCode = $this->get('code', -1);
         $errorMessage = $this->get('message', 'Unknow error');

@@ -21,6 +21,8 @@ use Codeages\Biz\Order\Status\Order\SuccessOrderStatus;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
+    private $deductTypeName = array('discount' => '打折', 'coupon' => '优惠券', 'paidCourse' => '班级课程抵扣', 'adjust_price' => '改价');
+
     public function create(Product $product)
     {
         $product->validate();
@@ -44,7 +46,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    private function getRefundDays()
+    public function getRefundDays()
     {
         $refundSetting = $this->getSettingService()->get('refund');
 
@@ -76,6 +78,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'num' => $product->num,
             'unit' => $product->unit,
             'create_extra' => $product->getCreateExtra(),
+            'snapshot' => $product->getSnapShot(),
         );
 
         $orderItem = MathToolkit::multiply(
@@ -87,9 +90,15 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         foreach ($product->pickedDeducts as $deduct) {
             $deduct = MathToolkit::multiply($deduct, array('deduct_amount'), 100);
+            if (in_array($deduct['deduct_type'], array_keys($this->deductTypeName))) {
+                $typeName = $this->deductTypeName[$deduct['deduct_type']];
+            } else {
+                $typeName = empty($deduct['deduct_type_name']) ? '' : $deduct['deduct_type_name'];
+            }
             $deducts[] = array(
                 'deduct_id' => $deduct['deduct_id'],
                 'deduct_type' => $deduct['deduct_type'],
+                'deduct_type_name' => $typeName,
                 'deduct_amount' => $deduct['deduct_amount'],
                 'snapshot' => empty($deduct['snapshot']) ? null : $deduct['snapshot'],
             );
@@ -109,8 +118,13 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
     }
 
-    public function createSpecialOrder(Product $product, $userId, $params = array())
+    /**
+     * @param $type 用于查找相应的实现类， 目前分为 'OrderFacade' 和 'Marketing'
+     */
+    public function createSpecialOrder(Product $product, $userId, $params = array(), $type = 'OrderFacade')
     {
+        $sepcialOrderService = $this->createService($type.':SpecialOrderService');
+
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
@@ -120,6 +134,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'create_extra' => empty($params['create_extra']) ? '' : $params['create_extra'],
             'deducts' => empty($params['deducts']) ? array() : $params['deducts'],
         );
+
+        $orderFields = $sepcialOrderService->beforeCreateOrder($orderFields, $params);
 
         $orderItems = $this->makeOrderItems($product);
 
@@ -138,6 +154,9 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'pay_time' => 0,
             'order_sn' => $order['sn'],
         );
+
+        $data = $sepcialOrderService->beforePayOrder($data, $params);
+
         $order = $this->getWorkflowService()->paid($data);
 
         return $order;

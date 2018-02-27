@@ -83,15 +83,17 @@
 						<div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
 							<label class="control-label required" for="sms_code">{{'user.settings.security.sms_code'|trans}}</label>
 							<div class="controls row" >
-								<div class = "col-xs-7" >
-									<input type="number" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+								<div class="col-xs-7">
+									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
 									<p class="help-block"> </p>
 								</div>
 								<div class="col-xs-5">
-									<a href="#modal" data-toggle="modal" class="btn btn-default btn-lg js-sms-send disabled" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send') }}">
+									<a href="javascript:;" class="btn btn-default btn-lg js-sms-send-btn disabled">
 										<span id="js-time-left"></span>
 										<span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
 									</a>
+
+									<a href="#modal" data-toggle="modal" class="js-sms-send hidden" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send_registration') }}"></a>
 								</div>
 							</div>
 						</div>

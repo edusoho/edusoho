@@ -47,10 +47,12 @@
           <p class="text-success">
             {% if block.code == 'live_top_banner' %}
               {{'admin.block_manage.visual_edit.poster_live_top_banner_tips'|trans|raw}}
+              <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
             {% elseif block.code == 'cloud_search_banner' %}
               {{'admin.block_manage.visual_edit.poster_cloud_search_banner_tips'|trans|raw}}
             {% else %}
               {{'admin.block_manage.visual_edit.poster_other_tips'|trans|raw}}
+              <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
             {% endif %}
           </p>
           <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">

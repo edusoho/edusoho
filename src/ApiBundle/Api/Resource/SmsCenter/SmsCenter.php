@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class SmsCenter extends AbstractResource
 {
     private $smsType = array(
-        'register' => BizSms::SMS_BIND_TYPE
+        'register' => BizSms::SMS_BIND_TYPE,
     );
 
     /**
@@ -28,9 +28,10 @@ class SmsCenter extends AbstractResource
         $type = $this->convertType($type);
 
         $smsToken = $this->getBizSms()->send($type, $mobile);
+        $this->getUserService()->updateSmsRegisterCaptchaStatus($request->getHttpRequest()->getClientIp());
 
         return array(
-            'smsToken' => $smsToken['token']
+            'smsToken' => $smsToken['token'],
         );
     }
 
@@ -49,5 +50,10 @@ class SmsCenter extends AbstractResource
     private function getBizSms()
     {
         return $this->biz['biz_sms'];
+    }
+
+    private function getUserService()
+    {
+        return $this->biz->service('User:UserService');
     }
 }

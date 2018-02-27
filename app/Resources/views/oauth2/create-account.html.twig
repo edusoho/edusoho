@@ -36,22 +36,20 @@
         <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
       </div>
 
-      {% if oauthUser.captchaEnabled %}
-        <div class="form-group cd-form-group third-party-captcha-form-group js-captcha">
-          <label class="third-party-form__label" for="captcha_code">{{'form.captcha_code'|trans}}</label>
-          <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
-          <div class="third-party-captcha">
-            <img class="third-party-captcha__img" src="{{ asset('static-dist/app/img/captcha.png') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}">
-          </div>
+      <div class="form-group cd-form-group third-party-captcha-form-group js-captcha {% if oauthUser.displayCaptcha == false %} hidden {% endif %}">
+        <label class="third-party-form__label" for="captcha_code">{{'form.captcha_code'|trans}}</label>
+        <input class="form-control" type="text" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.oauth.register.input_captcha_code_placeholder'|trans}}">
+        <div class="third-party-captcha">
+          <img class="third-party-captcha__img" src="{{ asset('static-dist/app/img/captcha.png') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}">
         </div>
-      {% endif %}
+      </div>
 
       {% if oauthUser.accountType == "mobile" %}
         <div class="form-group cd-form-group third-party-sms-form-group cd-mb32">
           <label for="sms_code">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
           <input class="form-control" type="text" maxlength="6" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
           <div class="third-part-action-button">
-            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" disabled>
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send" {% if oauthUser.displayCaptcha %}disabled{% endif %}>
               <span class="js-time-left"></span>
               <span class="js-fetch-btn-text">{{ 'user.oauth.register.send_sms'|trans }}</span>
             </button>
