@@ -64,7 +64,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $taskNum = $this->getTaskService()->countTasksByChpaterId($task['categoryId']);
         $chapter = $this->getChapterDao()->get($task['categoryId']);
-
+        $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $tasks = array($task);
         $chapter['tasks'] = $tasks;
         if (1 == $taskNum) {
