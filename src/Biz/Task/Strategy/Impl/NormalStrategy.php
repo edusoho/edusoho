@@ -49,7 +49,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        $items =  $this->prepareCourseItems($course['id'], $tasks);
+        $items =  $this->getTasksAndChapters($course['id'], $tasks);
 
         return array(
             'data' => array(
@@ -180,7 +180,15 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function prepareCourseItems($courseId, $tasks, $limitNum = 0)
+    // 获得章，节，课时，任务
+    // return  array(
+    //     'chapter',
+    //     'unit',
+    //     'lesson' => array(
+    //         'task'
+    //     )
+    // )
+    protected function getTasksAndChapters($courseId, $tasks)
     {
         $items = array();
         uasort(
@@ -209,7 +217,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return $items;
     }
 
-    public function oldPrepareCourseItems($courseId, $tasks, $limitNum)
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
         $items = array();
         foreach ($tasks as $task) {
