@@ -23,18 +23,6 @@ class DefaultStrategyTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testGetTasksTemplate()
-    {
-        $result = $this->getDefaultStrategy()->getTasksTemplate();
-        $this->assertEquals('course-manage/tasks/default-tasks.html.twig', $result);
-    }
-
-    public function testGetTaskItemTemplate()
-    {
-        $result = $this->getDefaultStrategy()->getTaskItemTemplate();
-        $this->assertEquals('task-manage/item/default-list-item.html.twig', $result);
-    }
-
     public function testCreateTask()
     {
         $field = array(
